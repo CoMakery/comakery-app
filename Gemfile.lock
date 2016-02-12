@@ -82,6 +82,9 @@ GEM
     domain_name (0.5.20160128)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
+    ethereum (0.4.95)
+      activesupport
+      sha3-pure-ruby
     execjs (2.6.0)
     faker (1.6.1)
       i18n (~> 0.5)
@@ -299,6 +302,7 @@ GEM
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     sexp_processor (4.6.1)
+    sha3-pure-ruby (0.1.1)
     shellany (0.0.1)
     simplecov (0.11.2)
       docile (~> 1.1.0)
@@ -352,6 +356,7 @@ DEPENDENCIES
   awesome_print
   coffee-rails
   compass-rails (< 3)
+  ethereum
   faker
   fortitude
   foundation-icons-sass-rails
