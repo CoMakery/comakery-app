@@ -3,9 +3,10 @@ Rails.application.routes.draw do
 
   get 'take_action' => "logged_out#take_action"
 
-  resources :accounts, only: [:new, :create, :edit, :update]
-  resource :session, only: [:new, :create, :destroy]
-  resources :password_resets, only: [:new, :create, :edit, :update]
+  resources :accounts, only: %i[new create edit update]
+  resource :session, only: %i[new create destroy]
+  resources :password_resets, only: %i[new create edit update]
+  resources :projects, only: %i[show edit update]
 
   get 'my_account' => 'logged_in#landing'
 
