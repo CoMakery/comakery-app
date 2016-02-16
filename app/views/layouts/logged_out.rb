@@ -1,7 +1,7 @@
 class Views::Layouts::LoggedOut < Views::Base
   def content
-    # content_for :footer do
-    # end
-    render template: 'layouts/raw'
+    a(href: "/auth/slack") do
+      text "Log in"
+    end
   end
 end

@@ -31,9 +31,6 @@ RSpec.configure do |config|
 
   config.include FeatureHelper, type: :feature
 
-  config.include Sorcery::TestHelpers::Rails::Controller, type: :controller
-  config.include Sorcery::TestHelpers::Rails::Integration, type: :feature
-
   config.include ActiveSupport::Testing::TimeHelpers
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

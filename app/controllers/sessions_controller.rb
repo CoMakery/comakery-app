@@ -6,16 +6,25 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if @account = login(params[:email], params[:password])
-      redirect_back_or_to my_account_path
+    @account = Account.find_or_create_from_auth_hash(params)
+    p "account #{@account}"
+    if @account
+      session[:account_id] = @account.id
+      redirect_to my_account_url
     else
-      flash.now.alert = "Email or password is invalid"
-      render :new
+      flash.now.alert = "Failed authentication"
+      redirect_to root_url
     end
   end
 
   def destroy
-    logout
+    session[:account_id] = nil
     redirect_to root_path, notice: "You have been logged out."
+  end
+
+  protected
+
+  def auth_hash
+    request.env['omniauth.auth']
   end
 end

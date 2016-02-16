@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   respond_to :html
   layout 'logged_in'
 
-  include Pundit
+  # include Pundit
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -23,18 +23,22 @@ class ApplicationController < ActionController::Base
 
   # called from before_filter :require_login
   def not_authenticated
-    redirect_to new_session_path
+    redirect_to root_path
   end
 
   # called when a policy authorization fails
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   def not_authorized
-    redirect_to new_session_path
+    redirect_to root_path
   end
 
   # use like: before_filter :require_admin
   def require_admin
     authorize :application, :admin?
+  end
+
+  def require_login
+    not_authenticated unless session[:account_id]
   end
 
   def login_without_credentials(account)
@@ -43,6 +47,6 @@ class ApplicationController < ActionController::Base
   end
 
   def current_account
-    current_user
+    @current_account ||= Account.find(session[:account_id])
   end
 end

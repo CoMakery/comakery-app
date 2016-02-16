@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
+
   root 'logged_out#index'
+
+  get "/auth/:provider/callback" => "sessions#create"
 
   get 'take_action' => "logged_out#take_action"
 
-  resources :accounts, only: %i[new create edit update]
-  resource :session, only: %i[new create destroy]
+  # resources :accounts, only: %i[new create edit update]
+  # resource :session, only: %i[new create destroy]
+  # get '/auth/:provider/callback', to: 'sessions#create'
+
   resources :password_resets, only: %i[new create edit update]
   resources :projects, only: %i[show edit update]
 
