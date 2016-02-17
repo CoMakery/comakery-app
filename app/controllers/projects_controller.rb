@@ -1,4 +1,14 @@
 class ProjectsController < ApplicationController
+  def new
+    @project = Project.new
+  end
+
+  def create
+    project = Project.create!(project_params)
+    flash[:notice] = "Project created"
+    redirect_to project_path(project)
+  end
+
   def show
     @project = Project.find(params[:id])
   end
@@ -20,6 +30,6 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit(:name)
+    params.require(:project).permit(:title, :description)
   end
 end

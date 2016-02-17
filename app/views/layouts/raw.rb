@@ -63,13 +63,6 @@ class Views::Layouts::Raw < Views::Base
           end
         }
 
-        p(class: "notice") do
-          text notice
-        end
-        p(class: "alert") do
-          text alert
-        end
-
         content_for?(:body) ? yield(:body) : yield
 
         if content_for?(:footer)
