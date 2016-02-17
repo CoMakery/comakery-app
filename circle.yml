@@ -13,4 +13,4 @@ deployment:
   autodeploy:
     branch: master
     commands:
-      - bin/deploy citizen-rails-template $CIRCLE_SHA1
+      - bin/deploy smarmbot-production $CIRCLE_SHA1
