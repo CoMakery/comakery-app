@@ -1,10 +1,17 @@
 require "rails_helper"
 
 describe ProjectsController do
-  let(:project) { create :project }
+  let!(:project) { create :project }
 
-  before do
-    login
+  before { login }
+
+  describe "#index" do
+    it "lists the projects" do
+      get :index
+
+      expect(response.status).to eq(200)
+      expect(assigns[:projects].to_a).to eq([project])
+    end
   end
 
   describe "#new" do

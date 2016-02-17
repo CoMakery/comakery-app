@@ -12,7 +12,7 @@ class Views::Projects::Show < Views::Base
       text project.repo
     }
     full_row {
-      a("New Project", href: new_project_path)
+      a("Back", class: buttonish(:small), href: projects_path)
     }
   end
 end

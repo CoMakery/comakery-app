@@ -26,8 +26,7 @@ ActiveRecord::Schema.define(version: 20160216195525) do
   add_index "account_roles", ["account_id", "role_id"], name: "index_account_roles_on_account_id_and_role_id", unique: true, using: :btree
 
   create_table "accounts", force: :cascade do |t|
-    t.string   "email
-"
+    t.string   "email"
     t.string   "crypted_password"
     t.string   "salt"
     t.datetime "created_at"

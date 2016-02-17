@@ -18,7 +18,7 @@ class Mom
     Authentication.new(provider: provider, uid: uid, account_id: account_id)
   end
 
-  def project(text: "Uber for Cats")
+  def project(text = "Uber for Cats")
     Project.new title: text, description: "We are going to build #{text}", repo: "https://github.com/example/#{text.parameterize}"
   end
 

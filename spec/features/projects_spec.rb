@@ -1,14 +1,22 @@
 require "rails_helper"
 
-describe "editing a project" do
-  let!(:project) { create :project }
+describe "viewing projects, creating and editing" do
+  let!(:project) { create :project, "Project 1" }
   let!(:account) { create :account }
   let!(:authentication) { create :authentication, account_id: account.id }
 
   specify do
     page.set_rack_session(account_id: account.id)
 
-    visit project_path(project)
+    visit projects_path
+
+    expect(page).to have_content "Project 1"
+
+    within "#project-#{project.to_param}" do
+      click_link "View"
+    end
+
+    click_link "Back"
 
     click_link "New Project"
 
