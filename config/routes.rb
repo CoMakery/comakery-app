@@ -8,8 +8,6 @@ Rails.application.routes.draw do
 
   # resources :accounts, only: %i[new create edit update]
   resource :session, only: %i[create destroy]
-  # get '/auth/:provider/callback', to: 'sessions#create'
-
   resources :projects
 
   get 'my_account' => 'logged_in#landing'

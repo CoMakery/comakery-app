@@ -12,7 +12,7 @@ describe SessionsController do
 
     context 'with valid login credentials' do
       it 'succeeds' do
-        request.env['omniauth.auth'] = {provider: 'slack', uid: 'FOOOO', extra: {user_info: {user: {profile: {email: "bob@example.com"}}}}}
+        request.env['omniauth.auth'] = {'provider' => 'slack', 'uid' => 'FOOOO', 'extra' => {'user_info' => {'user' => {'profile' => {'email' => "bob@example.com"}}}}}
 
         post :create
 

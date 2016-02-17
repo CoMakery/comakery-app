@@ -4,9 +4,9 @@ describe Authentication do
   describe ".find_or_create_from_auth_hash" do
     let(:auth_hash) {
       {
-          provider: "slack",
-          uid: "this is a uid",
-          extra: {user_info: {user: {profile: {email: "bob@example.com"}}}}
+          'provider' => "slack",
+          'uid' => "this is a uid",
+          'extra' => {'user_info' => {'user' => {'profile' => {'email' => "bob@example.com"}}}}
       }
     }
 

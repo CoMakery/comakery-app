@@ -25,10 +25,6 @@ class ProjectsController < ApplicationController
 
   private
 
-  def current_account
-    @current_account
-  end
-
   def project_params
     params.require(:project).permit(:title, :description, :repo)
   end

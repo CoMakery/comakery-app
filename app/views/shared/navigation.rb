@@ -9,13 +9,13 @@ class Views::Shared::Navigation < Views::Base
           }
           ul(class: "dropdown") {
             if current_account
-              if policy(:application).admin?
-                li { link_to 'Admin', admin_path }
-              end
+              # if policy(:application).admin?
+              #   li { link_to 'Admin', admin_path }
+              # end
 
-              li {
-                link_to 'Profile', edit_account_path(current_account)
-              }
+              # li {
+              #   link_to 'Profile', edit_account_path(current_account)
+              # }
 
               li {
                 link_to 'Log out', session_path, method: :delete
