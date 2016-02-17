@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root 'logged_out#index'
+  root 'projects#index'
 
   get "/auth/:provider/callback" => "sessions#create"
 

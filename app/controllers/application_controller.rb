@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
 
   # called from before_filter :require_login
   def not_authenticated
-    redirect_to root_path
+    redirect_to take_action_path
   end
 
   # called when a policy authorization fails

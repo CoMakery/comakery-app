@@ -17,7 +17,7 @@ describe SessionsController do
         post :create
 
         assert_response :redirect
-        assert_redirected_to my_account_path
+        assert_redirected_to root_path
         expect(session[:account_id]).to eq(account.id)
       end
     end

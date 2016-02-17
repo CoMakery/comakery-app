@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
     @account = Authentication.find_or_create_from_auth_hash(request.env['omniauth.auth'])
     if @account
       session[:account_id] = @account.id
-      redirect_to my_account_url
+      redirect_to root_path
     else
       flash['alert'] = "Failed authentication"
       redirect_to root_url
@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:account_id] = nil
-    redirect_to root_path, notice: "You have been logged out."
+    redirect_to root_path
   end
 
   protected
