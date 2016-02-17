@@ -13,4 +13,4 @@ deployment:
   autodeploy:
     branch: master
     commands:
-      - bin/deploy smarmbot-production $CIRCLE_SHA1
+      - bin/deploy swarmbot-production $CIRCLE_SHA1
