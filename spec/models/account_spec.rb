@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Account do
-  subject(:account) { create :account }
+  subject(:account) { create :account, password: "12345678" }
   let(:role1) { create :role, name: 'Fun 1' }
   let(:role2) { create :role, name: 'Fun 2' }
 
@@ -11,7 +11,7 @@ describe Account do
 
   it 'enforces unique emails, case-insensitively' do
     alice1 = create :account, email: 'alice@example.com'
-    expect { create :account, email: 'Alice@example.com' }.to raise_error(ActiveRecord::RecordInvalid)
+    expect { create :account, email: 'Alice@example.com' }.to raise_error(ActiveRecord::RecordNotUnique)
   end
 
   # this is kind of unfortunate --

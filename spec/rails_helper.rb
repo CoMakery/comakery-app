@@ -3,6 +3,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+require "rack_session_access/capybara"
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -68,4 +69,11 @@ end
 
 def login_account(account)
   session[:account_id] = account.id  
+end
+
+def login
+  account = create(:account)
+  create(:authentication, account_id: account.id)
+  session[:account_id] = account.id
+  account
 end

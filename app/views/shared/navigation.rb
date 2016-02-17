@@ -10,13 +10,13 @@ class Views::Shared::Navigation < Views::Base
             text "Account"
           }
           ul(class: "dropdown") {
-            if logged_in?
+            if current_account
               if policy(:application).admin?
                 li { link_to 'Admin', admin_path }
               end
 
               li {
-                link_to 'Profile', edit_account_path(current_user)
+                link_to 'Profile', edit_account_path(current_account)
               }
 
               li {

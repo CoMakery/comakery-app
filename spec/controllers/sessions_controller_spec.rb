@@ -7,44 +7,31 @@ describe SessionsController do
   end
 
   describe '#create' do
-    let!(:account) { create(:account, email: 'bob@example.com', password: 'password') }
+    let!(:account) { create(:account, email: "bob@example.com") }
+    let!(:authentication) { create(:authentication, provider: "slack", uid: "FOOOO", account_id: account.id) }
 
     context 'with valid login credentials' do
-      before {
-        session['omniauth.auth'] = {provider: 'slack', uid: 'FOOOO'} 
+      it 'succeeds' do
+        request.env['omniauth.auth'] = {provider: 'slack', uid: 'FOOOO', extra: {user_info: {user: {profile: {email: "bob@example.com"}}}}}
+
         post :create
-      }
-      it 'succeeds' do
+
         assert_response :redirect
         assert_redirected_to my_account_path
-        expect(logged_in?).to eq(true)
+        expect(session[:account_id]).to eq(account.id)
       end
     end
-    context 'with valid mixed-case login credentials' do
-      before { post :create, {email: 'Bob@example.Com', password: 'password'} }
-      it 'succeeds' do
+
+    context 'with missing credentials' do
+      it 'fails' do
+        request.env['omniauth.auth'] = nil
+
+        post :create
+
         assert_response :redirect
-        assert_redirected_to my_account_path
-        expect(logged_in?).to eq(true)
-      end
-    end
-    context 'with invalid mixed-case login credentials' do
-      before { post :create, {email: 'bob@example.com', password: 'NOTTHEPASSWORD'} }
-      it 'fails' do
-        assert_response :success
-        assert_template 'sessions/new'
-        expect(flash.now[:alert]).not_to be_blank
-        expect(logged_in?).to eq(false)
-      end
-    end
-    context 'with an unknown user' do
-      before { post :create, {email: 'notbob@example.com', password: 'password'} }
-      it 'fails' do
-        post :create, {email: 'notbob@example.com', password: 'password'}
-        assert_response :success
-        assert_template 'sessions/new'
-        expect(flash.now[:alert]).not_to be_blank
-        expect(logged_in?).to eq(false)
+        assert_redirected_to root_path
+        expect(flash['alert']).not_to be_blank
+        expect(session[:account_id]).to be_nil
       end
     end
   end

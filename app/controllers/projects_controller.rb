@@ -1,6 +1,4 @@
 class ProjectsController < ApplicationController
-  skip_before_filter :require_login
-
   def show
     @project = Project.find(params[:id])
   end
@@ -16,6 +14,10 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def current_account
+    @current_account
+  end
 
   def project_params
     params.require(:project).permit(:name)

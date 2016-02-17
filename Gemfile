@@ -28,12 +28,14 @@ gem 'uglifier'
 
 group(:development, :test) do
   gem 'awesome_print'
+  gem "capybara"
   gem 'dotenv-rails'
   gem 'faker'
   gem 'fuubar'
   gem 'guard-rspec', require: false
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'rack_session_access'
   gem 'rspec-rails'
   gem 'simplecov'
 end

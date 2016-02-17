@@ -5,7 +5,10 @@ describe ProjectsController do
 
   describe "#show" do
     specify do
+      login
+
       get :show, id: project.to_param
+
       expect(response.code).to eq "200"
       expect(assigns(:project)).to eq project
     end

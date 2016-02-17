@@ -14,6 +14,10 @@ class Mom
     role name: 'Admin', key: Role::ADMIN_ROLE_KEY
   end
 
+  def authentication(provider:"slack", uid: "this is a generic uid", account_id:)
+    Authentication.new(provider: provider, uid: uid, account_id: account_id)
+  end
+
   def project(subject="Uber for Cats")
     Project.new title: subject, description: "We are going to build #{subject}", repo: "https://github.com/example/#{subject.parameterize}"
   end
