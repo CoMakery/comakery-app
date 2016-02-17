@@ -1,11 +1,6 @@
 require 'rails_helper'
 
 describe SessionsController do
-  it "should get login" do
-    get :new
-    assert_response :success
-  end
-
   it "should get logout" do
     get :destroy
     assert_response :redirect
@@ -15,7 +10,10 @@ describe SessionsController do
     let!(:account) { create(:account, email: 'bob@example.com', password: 'password') }
 
     context 'with valid login credentials' do
-      before { post :create, {email: 'bob@example.com', password: 'password'} }
+      before {
+        session['omniauth.auth'] = {provider: 'slack', uid: 'FOOOO'} 
+        post :create
+      }
       it 'succeeds' do
         assert_response :redirect
         assert_redirected_to my_account_path

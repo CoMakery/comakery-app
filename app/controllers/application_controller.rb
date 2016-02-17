@@ -41,10 +41,10 @@ class ApplicationController < ActionController::Base
     not_authenticated unless session[:account_id]
   end
 
-  def login_without_credentials(account)
-    auto_login(account)
-    after_login!(account)
-  end
+  # def login_without_credentials(account)
+  #   auto_login(account)
+  #   after_login!(account)
+  # end
 
   def current_account
     @current_account ||= Account.find(session[:account_id])

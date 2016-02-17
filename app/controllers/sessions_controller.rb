@@ -2,12 +2,9 @@ class SessionsController < ApplicationController
   skip_before_filter :require_login
   layout 'layouts/logged_out'
 
-  def new
-  end
-
   def create
-    @account = Account.find_or_create_from_auth_hash(params)
-    p "account #{@account}"
+    @account = Account.find_or_create_from_auth_hash(env['omniauth.auth'])
+    p "account #{@account.inspect}"
     if @account
       session[:account_id] = @account.id
       redirect_to my_account_url

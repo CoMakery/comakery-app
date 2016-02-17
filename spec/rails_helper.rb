@@ -65,3 +65,7 @@ RSpec.configure do |config|
     "railties",
     "zeus"
 end
+
+def login_account(account)
+  session[:account_id] = account.id  
+end

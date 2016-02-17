@@ -3,7 +3,7 @@ class Mom
     email: Faker::Internet.safe_email,
     password: valid_password
   )
-    Account.new email: email, password: password
+    Account.new email: email
   end
 
   def account_role(account, role)
