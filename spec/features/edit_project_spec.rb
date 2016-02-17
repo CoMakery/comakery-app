@@ -14,10 +14,13 @@ describe "editing a project" do
 
     fill_in "Title", with: "This is a project"
     fill_in "Description", with: "This is a project description which is very informative"
-    click_on "Create"
+    fill_in "Repository", with: "http://github.com/here/is/my/tracker"
+
+    click_on "Save"
 
     expect(page).to have_content "Project created"
     expect(page).to have_content "This is a project"
     expect(page).to have_content "This is a project description which is very informative"
+    expect(page).to have_content "http://github.com/here/is/my/tracker"
   end
 end

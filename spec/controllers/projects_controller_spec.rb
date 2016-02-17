@@ -18,13 +18,14 @@ describe ProjectsController do
   describe "#create" do
     it "creates a project" do
       expect do
-        post :create, project: {title: "Project title here", description: "Project description here"}
+        post :create, project: {title: "Project title here", description: "Project description here", repo: "http://github.com/here/is/my/tracker"}
         expect(response.status).to eq(302)
       end.to change { Project.count }.by(1)
 
       project = Project.last
       expect(project.title).to eq("Project title here")
       expect(project.description).to eq("Project description here")
+      expect(project.repo).to eq("http://github.com/here/is/my/tracker")
     end
   end
 

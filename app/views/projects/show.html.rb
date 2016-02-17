@@ -9,6 +9,9 @@ class Views::Projects::Show < Views::Base
       text project.description
     }
     full_row {
+      text project.repo
+    }
+    full_row {
       a("New Project", href: new_project_path)
     }
   end

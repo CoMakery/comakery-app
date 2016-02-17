@@ -1,8 +1,6 @@
 class Views::Shared::Navigation < Views::Base
   def content
     section(class: "top-bar-section") {
-      # Right Nav Section
-
       ul(class: "right") {
         li(class: "has-dropdown") {
           a {

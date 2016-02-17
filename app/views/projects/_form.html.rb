@@ -18,7 +18,13 @@ module Views
                 f.text_field :description
               }
             }
-            f.submit "Create", class: buttonish(:small, :expand)
+            with_errors(project, :repo) {
+              label {
+                text "Repository"
+                f.text_field :repo
+              }
+            }
+            f.submit "Save", class: buttonish(:small, :expand)
           end
         }
       end
