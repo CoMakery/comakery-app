@@ -46,7 +46,6 @@ i {
 .app-content-wide {
   @include grid-column($columns: 12);
   @include padding-leader(.5);
-  background-color: yellow;
 }
 
 .app-aside {
