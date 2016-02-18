@@ -5,19 +5,8 @@ class Views::Layouts::LoggedIn < Views::Base
     end
 
     content_for :body do
-      div(class: "app-container") {
-        div(class: "app-nav") {
-          yield :app_navigation
-        }
-
-
-        if content_for?(:app_aside)
-          div(class: "app-content") { yield }
-
-          div(class: "app-aside") { yield :app_aside }
-        else
-          div(class: "app-content-wide") { yield }
-        end
+      div(class: "app-container row") {
+        div(class: "app-content-wide") { yield }
       }
     end
 
