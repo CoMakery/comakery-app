@@ -19,7 +19,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = Project.find(params[:id])
+    @project = Project.includes(:reward_types).find(params[:id])
   end
 
   def update
@@ -32,6 +32,6 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :tracker, :public, reward_types_attributes: [:name, :suggested_amount])
+    params.require(:project).permit(:title, :description, :tracker, :public, reward_types_attributes: [:id, :name, :suggested_amount])
   end
 end
