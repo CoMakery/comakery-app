@@ -24,7 +24,8 @@ class ProjectsController < ApplicationController
   def update
     @project = Project.find(params[:id])
     @project.update(project_params)
-    respond_with @project, location: root_path
+    flash[:notice] = "Project updated"
+    respond_with @project, location: project_path(@project)
   end
 
   private

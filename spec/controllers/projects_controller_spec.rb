@@ -36,6 +36,34 @@ describe ProjectsController do
     end
   end
 
+  describe "#edit" do
+    it "works" do
+      project = create(:project)
+
+      get :edit, id: project.to_param
+
+      expect(response.status).to eq(200)
+      expect(assigns[:project]).to eq(project)
+    end
+  end
+
+  describe "#update" do
+    it "updates a project" do
+      project = create(:project)
+
+      expect do
+        put :update, id: project.to_param, project: {title: "updated Project title here", description: "updated Project description here", tracker: "http://github.com/here/is/my/tracker/updated"}
+        expect(response.status).to eq(302)
+      end.to change { Project.count }.by(0)
+
+      expect(flash[:notice]).to eq("Project updated")
+      project.reload
+      expect(project.title).to eq("updated Project title here")
+      expect(project.description).to eq("updated Project description here")
+      expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
+    end
+  end
+
   describe "#show" do
     specify do
       get :show, id: project.to_param

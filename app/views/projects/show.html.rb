@@ -12,6 +12,7 @@ class Views::Projects::Show < Views::Base
       a "Project Tasks »", class: buttonish, href: project.tracker
     }
     full_row {
+      a("Edit", class: buttonish, href: edit_project_path(project))
       a("Back", class: buttonish, href: projects_path)
     }
   end
