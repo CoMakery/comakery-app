@@ -18,10 +18,10 @@ module Views
                 f.text_field :description
               }
             }
-            with_errors(project, :repo) {
+            with_errors(project, :tracker) {
               label {
-                text "Repository"
-                f.text_field :repo
+                text "Project Tracker"
+                f.text_field :tracker
               }
             }
             f.submit "Save", class: buttonish(:small, :expand)

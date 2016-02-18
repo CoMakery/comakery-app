@@ -19,7 +19,7 @@ class Mom
   end
 
   def project(text = "Uber for Cats")
-    Project.new title: text, description: "We are going to build #{text}", repo: "https://github.com/example/#{text.parameterize}"
+    Project.new title: text, description: "We are going to build #{text}", tracker: "https://github.com/example/#{text.parameterize}"
   end
 
   def role(name: 'A Role', key: nil)

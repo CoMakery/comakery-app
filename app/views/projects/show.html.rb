@@ -9,10 +9,10 @@ class Views::Projects::Show < Views::Base
       text project.description
     }
     full_row {
-      text project.repo
+      a "Project Tasks »", class: buttonish, href: project.tracker
     }
     full_row {
-      a("Back", class: buttonish(:small), href: projects_path)
+      a("Back", class: buttonish, href: projects_path)
     }
   end
 end

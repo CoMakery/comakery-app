@@ -22,13 +22,13 @@ describe "viewing projects, creating and editing" do
 
     fill_in "Title", with: "This is a project"
     fill_in "Description", with: "This is a project description which is very informative"
-    fill_in "Repository", with: "http://github.com/here/is/my/tracker"
+    fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
 
     click_on "Save"
 
     expect(page).to have_content "Project created"
     expect(page).to have_content "This is a project"
     expect(page).to have_content "This is a project description which is very informative"
-    expect(page).to have_content "http://github.com/here/is/my/tracker"
+    expect(page).to have_link "Project Tasks »"
   end
 end
