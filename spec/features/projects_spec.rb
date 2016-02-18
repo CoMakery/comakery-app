@@ -23,24 +23,29 @@ describe "viewing projects, creating and editing" do
     fill_in "Title", with: "This is a project"
     fill_in "Description", with: "This is a project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
+    check "Public"
 
     click_on "Save"
 
     expect(page).to have_content "Project created"
     expect(page).to have_content "This is a project"
     expect(page).to have_content "This is a project description which is very informative"
+    expect(page).to have_content "Visibility: Public"
     expect(page).to have_link "Project Tasks »"
 
     click_on "Edit"
 
+    expect(page).to have_checked_field("Public")
     fill_in "Title", with: "This is an edited project"
     fill_in "Description", with: "This is an edited project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker/edit"
+    uncheck "Public"
 
     click_on "Save"
 
     expect(page).to have_content "Project updated"
     expect(page).to have_content "This is an edited project"
     expect(page).to have_content "This is an edited project description which is very informative"
+    expect(page).to have_content "Visibility: Private"
   end
 end

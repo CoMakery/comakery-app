@@ -24,6 +24,12 @@ module Views
                 f.text_field :tracker
               }
             }
+            with_errors(project, :public) {
+              label {
+                text "Public"
+                f.check_box :public
+              }
+            }
             f.submit "Save", class: buttonish(:small, :expand)
           end
         }

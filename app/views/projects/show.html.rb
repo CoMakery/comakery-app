@@ -9,6 +9,9 @@ class Views::Projects::Show < Views::Base
       text project.description
     }
     full_row {
+      text "Visibility: #{project.public? ? "Public" : "Private"}"
+    }
+    full_row {
       a "Project Tasks »", class: buttonish, href: project.tracker
     }
     full_row {
