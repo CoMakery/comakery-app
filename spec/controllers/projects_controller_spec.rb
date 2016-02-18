@@ -20,6 +20,7 @@ describe ProjectsController do
 
       expect(response.status).to eq(200)
       expect(assigns[:project]).to be_a_new_record
+      expect(assigns[:project].reward_types.size).to eq(3)
       expect(assigns[:project].reward_types.first).to be_a_new_record
     end
   end
@@ -35,6 +36,7 @@ describe ProjectsController do
                           reward_types_attributes: [
                               {name: "Small Reward", suggested_amount: 1000},
                               {name: "Big Reward", suggested_amount: 2000},
+                              {name: "", suggested_amount: ""},
                           ]
                       }
           expect(response.status).to eq(302)

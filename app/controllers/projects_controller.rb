@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
 
   def new
     @project = Project.new
-    @project.reward_types.build
+    3.times { @project.reward_types.build }
   end
 
   def create
