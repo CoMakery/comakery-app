@@ -5,6 +5,7 @@ class ProjectsController < ApplicationController
 
   def new
     @project = Project.new
+    @project.reward_types.build
   end
 
   def create
@@ -31,6 +32,6 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :tracker, :public)
+    params.require(:project).permit(:title, :description, :tracker, :public, reward_types_attributes: [:name, :suggested_amount])
   end
 end

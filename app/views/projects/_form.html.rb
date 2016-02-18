@@ -4,8 +4,8 @@ module Views
       needs :project
 
       def content
-        row {
-          form_for project do |f|
+        form_for project do |f|
+          row {
             with_errors(project, :title) {
               label {
                 text "Title"
@@ -30,9 +30,36 @@ module Views
                 f.check_box :public
               }
             }
+          }
+
+          row {
+            column("small-4") {
+              text "Reward Names"
+            }
+            column("small-4") {
+              text "Suggested Value"
+            }
+            column("small-4") {
+            }
+          }
+          div(class: "reward-types") {
+            f.fields_for :reward_types do |ff|
+              row {
+                column("small-4") {
+                  ff.text_field :name
+                }
+                column("small-4") {
+                  ff.text_field :suggested_amount
+                }
+                column("small-4") {
+                }
+              }
+            end
+          }
+          row {
             f.submit "Save", class: buttonish(:small, :expand)
-          end
-        }
+          }
+        end
       end
     end
   end

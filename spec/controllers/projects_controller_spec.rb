@@ -19,20 +19,33 @@ describe ProjectsController do
       get :new
 
       expect(response.status).to eq(200)
+      expect(assigns[:project]).to be_a_new_record
+      expect(assigns[:project].reward_types.first).to be_a_new_record
     end
   end
 
   describe "#create" do
     it "creates a project" do
       expect do
-        post :create, project: {title: "Project title here", description: "Project description here", tracker: "http://github.com/here/is/my/tracker"}
-        expect(response.status).to eq(302)
-      end.to change { Project.count }.by(1)
+        expect do
+          post :create, project: {
+                          title: "Project title here",
+                          description: "Project description here",
+                          tracker: "http://github.com/here/is/my/tracker",
+                          reward_types_attributes: [
+                            {name: "Small Reward", suggested_amount: 1000},
+                            {name: "Big Reward", suggested_amount: 2000},
+                          ]
+                      }
+          expect(response.status).to eq(302)
+        end.to change { Project.count }.by(1)
+      end.to change { RewardType.count }.by(2)
 
       project = Project.last
       expect(project.title).to eq("Project title here")
       expect(project.description).to eq("Project description here")
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
+      expect(project.reward_types.first.name).to eq("Small Reward")
     end
   end
 

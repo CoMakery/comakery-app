@@ -25,6 +25,9 @@ describe "viewing projects, creating and editing" do
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
     check "Public"
 
+    page.find("input#project_reward_types_attributes_0_name").set "This is a small reward type"
+    page.find("input#project_reward_types_attributes_0_suggested_amount").set "1000"
+
     click_on "Save"
 
     expect(page).to have_content "Project created"
@@ -32,6 +35,10 @@ describe "viewing projects, creating and editing" do
     expect(page).to have_content "This is a project description which is very informative"
     expect(page).to have_content "Visibility: Public"
     expect(page).to have_link "Project Tasks »"
+
+    reward_type_rows = page.all(".reward-types .row")
+    expect(reward_type_rows[0]).to have_content "This is a small reward type"
+    expect(reward_type_rows[0]).to have_content "1000"
 
     click_on "Edit"
 
