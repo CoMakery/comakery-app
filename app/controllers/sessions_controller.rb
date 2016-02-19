@@ -1,7 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_filter :require_login
-  skip_after_action :verify_authorized # should be fixed
-  skip_after_action :verify_policy_scoped # should be fixed
+  skip_after_action :verify_authorized, :verify_policy_scoped
 
   layout 'layouts/logged_out'
 

@@ -1,18 +1,9 @@
 require "rails_helper"
 
 describe ProjectsController do
-  let!(:project) { create :project }
+  let!(:account) { create(:account) }
 
-  before { login }
-
-  describe "#index" do
-    it "lists the projects" do
-      get :index
-
-      expect(response.status).to eq(200)
-      expect(assigns[:projects].to_a).to eq([project])
-    end
-  end
+  before { login(account) }
 
   describe "#new" do
     it "works" do
@@ -26,7 +17,7 @@ describe ProjectsController do
   end
 
   describe "#create" do
-    it "creates a project" do
+    it "creates a project and associates it with the current account" do
       expect do
         expect do
           post :create, project: {
@@ -48,65 +39,76 @@ describe ProjectsController do
       expect(project.description).to eq("Project description here")
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
       expect(project.reward_types.first.name).to eq("Small Reward")
+      expect(project.owner_account_id).to eq(account.id)
     end
   end
 
-  describe "#edit" do
-    it "works" do
-      project = create(:project)
+  context "with a project" do
+    let!(:project) { create(:project, title: "Cats", owner_account: account) }
 
-      get :edit, id: project.to_param
+    describe "#index" do
+      it "lists the projects" do
+        get :index
 
-      expect(response.status).to eq(200)
-      expect(assigns[:project]).to eq(project)
+        expect(response.status).to eq(200)
+        expect(assigns[:projects].map(&:title)).to eq(["Cats"])
+      end
     end
-  end
 
-  describe "#update" do
-    it "updates a project" do
-      project = create(:project)
-      small_reward_type = project.reward_types.create!(name: "Small Reward", suggested_amount: 100)
-      medium_reward_type = project.reward_types.create!(name: "Medium Reward", suggested_amount: 300)
+    describe "#edit" do
+      it "works" do
+        get :edit, id: project.to_param
 
-      expect do
+        expect(response.status).to eq(200)
+        expect(assigns[:project]).to eq(project)
+      end
+    end
+
+    describe "#update" do
+      it "updates a project" do
+        small_reward_type = project.reward_types.create!(name: "Small Reward", suggested_amount: 100)
+        medium_reward_type = project.reward_types.create!(name: "Medium Reward", suggested_amount: 300)
+
         expect do
-          put :update, id: project.to_param,
-              project: {
-                  title: "updated Project title here",
-                  description: "updated Project description here",
-                  tracker: "http://github.com/here/is/my/tracker/updated",
-                  reward_types_attributes: [
-                      {id: small_reward_type.to_param, name: "Small Reward", suggested_amount: 150},
-                      {name: "Big Reward", suggested_amount: 500},
-                  ]
-              }
-          expect(response.status).to eq(302)
-        end.to change { Project.count }.by(0)
-      end.to change { RewardType.count }.by(1)
+          expect do
+            put :update, id: project.to_param,
+                project: {
+                    title: "updated Project title here",
+                    description: "updated Project description here",
+                    tracker: "http://github.com/here/is/my/tracker/updated",
+                    reward_types_attributes: [
+                        {id: small_reward_type.to_param, name: "Small Reward", suggested_amount: 150},
+                        {name: "Big Reward", suggested_amount: 500},
+                    ]
+                }
+            expect(response.status).to eq(302)
+          end.to change { Project.count }.by(0)
+        end.to change { RewardType.count }.by(1)
 
-      expect(flash[:notice]).to eq("Project updated")
-      project.reload
-      expect(project.title).to eq("updated Project title here")
-      expect(project.description).to eq("updated Project description here")
-      expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
+        expect(flash[:notice]).to eq("Project updated")
+        project.reload
+        expect(project.title).to eq("updated Project title here")
+        expect(project.description).to eq("updated Project description here")
+        expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
 
-      reward_types = project.reward_types.order(:suggested_amount)
-      expect(reward_types.size).to eq(3)
-      expect(reward_types.first.name).to eq("Small Reward")
-      expect(reward_types.first.suggested_amount).to eq(150)
-      expect(reward_types.second.name).to eq("Medium Reward")
-      expect(reward_types.second.suggested_amount).to eq(300)
-      expect(reward_types.third.name).to eq("Big Reward")
-      expect(reward_types.third.suggested_amount).to eq(500)
+        reward_types = project.reward_types.order(:suggested_amount)
+        expect(reward_types.size).to eq(3)
+        expect(reward_types.first.name).to eq("Small Reward")
+        expect(reward_types.first.suggested_amount).to eq(150)
+        expect(reward_types.second.name).to eq("Medium Reward")
+        expect(reward_types.second.suggested_amount).to eq(300)
+        expect(reward_types.third.name).to eq("Big Reward")
+        expect(reward_types.third.suggested_amount).to eq(500)
+      end
     end
-  end
 
-  describe "#show" do
-    specify do
-      get :show, id: project.to_param
+    describe "#show" do
+      specify do
+        get :show, id: project.to_param
 
-      expect(response.code).to eq "200"
-      expect(assigns(:project)).to eq project
+        expect(response.code).to eq "200"
+        expect(assigns(:project)).to eq project
+      end
     end
   end
 end

@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "viewing projects, creating and editing", :js do
-  let!(:project) { create(:project, "Project 1") }
+  let!(:project) { create(:project, title: "Project 1", owner_account: account) }
   let!(:account) { create(:account).tap{|a| create(:authentication, account_id: a.id)} }
 
   specify do

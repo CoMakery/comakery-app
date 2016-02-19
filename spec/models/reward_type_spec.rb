@@ -11,7 +11,7 @@ describe RewardType do
 
   describe "associations" do
     it "belongs to a project" do
-      project = create(:project)
+      project = create(:project, owner_account: create(:account))
       reward_type = RewardType.create!(project: project, name: "Bob", suggested_amount: 6)
       expect(reward_type.project).to eq(project)
     end

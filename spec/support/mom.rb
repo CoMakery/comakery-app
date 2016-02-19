@@ -18,8 +18,13 @@ class Mom
     Authentication.new(provider: provider, uid: uid, account_id: account_id)
   end
 
-  def project(text = "Uber for Cats")
-    Project.new title: text, description: "We are going to build #{text}", tracker: "https://github.com/example/#{text.parameterize}"
+  def project(**attrs)
+    defaults = {
+        title: "Uber for Cats",
+        description: "We are going to build amazing",
+        tracker: "https://github.com/example/uber_for_cats"
+    }
+    Project.new(defaults.merge(attrs))
   end
 
   def role(name: 'A Role', key: nil)

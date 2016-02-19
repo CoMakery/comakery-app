@@ -1,9 +1,8 @@
 class ProjectsController < ApplicationController
-  skip_after_action :verify_authorized # should be fixed
-  skip_after_action :verify_policy_scoped # should be fixed
+  skip_after_action :verify_authorized, :verify_policy_scoped
 
   def index
-    @projects = Project.all
+    @projects = policy_scope(Project)
   end
 
   def new
@@ -12,7 +11,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    project = Project.create!(project_params)
+    project = Project.create!(project_params.merge(owner_account: current_account))
     flash[:notice] = "Project created"
     redirect_to project_path(project)
   end
