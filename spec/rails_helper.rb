@@ -70,3 +70,10 @@ end
 def login_account(account)
   session[:account_id] = account.id  
 end
+
+def login
+  account = create(:account)
+  create(:authentication, account_id: account.id)
+  session[:account_id] = account.id
+  account
+end
