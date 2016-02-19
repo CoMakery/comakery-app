@@ -33,12 +33,20 @@ group(:development, :test) do
   gem 'faker'
   gem 'fuubar'
   gem 'guard-rspec', require: false
+  gem 'poltergeist'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rack_session_access'
   gem 'rspec-rails'
+  gem 'selenium-webdriver'
   gem 'simplecov'
+  gem 'typhoeus'
+  gem 'database_cleaner'
 end
+
+# group(:test) do
+  # gem 'webmock'
+# end
 
 group(:development) do
   gem 'git-storyid'

@@ -17,3 +17,12 @@
 
 $ ->
   $(document).foundation()
+
+  $("*[data-duplicate]").click (e)->
+    e.preventDefault()
+    templateSelector = $(e.target).attr('data-duplicate')
+    template = $(templateSelector)
+    newElement = template.clone()
+    newElement.removeClass('hide')
+    newElement.removeClass(templateSelector.replace('.',''))
+    template.parent().append(newElement)

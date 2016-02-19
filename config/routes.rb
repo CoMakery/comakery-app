@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root 'projects#index'
 
   get "/auth/:provider/callback" => "sessions#create"
+  get '/session' => "sessions#create"
 
   get 'take_action' => "logged_out#take_action"
 

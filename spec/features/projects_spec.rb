@@ -1,12 +1,11 @@
 require "rails_helper"
 
-describe "viewing projects, creating and editing" do
-  let!(:project) { create :project, "Project 1" }
-  let!(:account) { create :account }
-  let!(:authentication) { create :authentication, account_id: account.id }
+describe "viewing projects, creating and editing", :js do
+  let!(:project) { create(:project, "Project 1") }
+  let!(:account) { create(:account).tap{|a| create(:authentication, account_id: a.id)} }
 
   specify do
-    page.set_rack_session(account_id: account.id)
+    page.set_rack_session(:account_id => account.id)
 
     visit projects_path
 
@@ -25,8 +24,23 @@ describe "viewing projects, creating and editing" do
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
     check "Public"
 
-    page.find("input#project_reward_types_attributes_0_name").set "This is a small reward type"
-    page.find("input#project_reward_types_attributes_0_suggested_amount").set "1000"
+
+    reward_type_inputs = page.all(".reward-type-row")
+    reward_type_inputs[0].all("input")[0].set "This is a small reward type"
+    reward_type_inputs[0].all("input")[1].set "1000"
+    reward_type_inputs[1].all("input")[0].set "This is a medium reward type"
+    reward_type_inputs[1].all("input")[1].set "2000"
+    reward_type_inputs[2].all("input")[0].set "This is a large reward type"
+    reward_type_inputs[2].all("input")[1].set "3000"
+
+    expect(reward_type_inputs.size).to eq(3)
+
+    click_link "+ add reward type"
+
+    reward_type_inputs = page.all(".reward-type-row")
+    expect(reward_type_inputs.size).to eq(4)
+    reward_type_inputs[3].all("input")[0].set "This is a super big reward type"
+    reward_type_inputs[3].all("input")[1].set "5000"
 
     click_on "Save"
 
@@ -36,9 +50,20 @@ describe "viewing projects, creating and editing" do
     expect(page).to have_content "Visibility: Public"
     expect(page).to have_link "Project Tasks »"
 
-    reward_type_rows = page.all(".reward-types .row")
+    reward_type_rows = page.all(".reward-type-row")
+    expect(reward_type_rows.size).to eq(4)
+
     expect(reward_type_rows[0]).to have_content "This is a small reward type"
     expect(reward_type_rows[0]).to have_content "1000"
+
+    expect(reward_type_rows[1]).to have_content "This is a medium reward type"
+    expect(reward_type_rows[1]).to have_content "2000"
+
+    expect(reward_type_rows[2]).to have_content "This is a large reward type"
+    expect(reward_type_rows[2]).to have_content "3000"
+
+    expect(reward_type_rows[3]).to have_content "This is a super big reward type"
+    expect(reward_type_rows[3]).to have_content "5000"
 
     click_on "Edit"
 

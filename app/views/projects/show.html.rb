@@ -27,7 +27,7 @@ class Views::Projects::Show < Views::Base
     }
     div(class: "reward-types") {
       project.reward_types.each do |reward_type|
-        row {
+        row(class: "reward-type-row") {
           column("small-4") {
             text reward_type.name
           }

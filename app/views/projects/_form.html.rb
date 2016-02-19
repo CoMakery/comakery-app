@@ -43,23 +43,33 @@ module Views
             }
           }
           div(class: "reward-types") {
-            f.fields_for :reward_types do |ff|
-              row {
-                column("small-4") {
-                  ff.text_field :name
-                }
-                column("small-4") {
-                  ff.text_field :suggested_amount
-                }
-                column("small-4") {
-                }
-              }
+            project.reward_types.each do |reward_type|
+              reward_type_content(reward_type)
             end
+            reward_type_content(nil, "hide reward-type-template ")
+          }
+
+          row {
+            p { a("+ add reward type", href:"#", 'data-duplicate': '.reward-type-template') }
           }
           row {
             f.submit "Save", class: buttonish(:small, :expand)
           }
         end
+      end
+
+      def reward_type_content(reward_type, classes="")
+        row(class: "reward-type-row #{classes}") {
+          hidden_field_tag :'project[reward_types_attributes][][id]', reward_type.try(:to_param)
+          column("small-4") {
+            text_field_tag :'project[reward_types_attributes][][name]', reward_type.try(:name)
+          }
+          column("small-4") {
+            text_field_tag :'project[reward_types_attributes][][suggested_amount]', reward_type.try(:suggested_amount)
+          }
+          column("small-4") {
+          }
+        }
       end
     end
   end
