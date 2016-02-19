@@ -11,8 +11,6 @@ Rails.application.routes.draw do
   resource :session, only: %i[create destroy]
   resources :projects
 
-  get 'my_account' => 'logged_in#landing'
-
   namespace :admin do
     get '/' => 'admin#index'
     resources :accounts
