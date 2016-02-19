@@ -5,7 +5,7 @@ describe "viewing projects, creating and editing", :js do
   let!(:account) { create(:account).tap{|a| create(:authentication, account_id: a.id)} }
 
   specify do
-    page.set_rack_session(:account_id => account.id)
+    login(account)
 
     visit projects_path
 
