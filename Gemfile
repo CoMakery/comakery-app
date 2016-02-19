@@ -28,11 +28,13 @@ gem 'uglifier'
 
 group(:development, :test) do
   gem 'awesome_print'
-  gem "capybara"
+  gem 'capybara'
+  gem 'database_cleaner'
   gem 'dotenv-rails'
   gem 'faker'
   gem 'fuubar'
   gem 'guard-rspec', require: false
+  gem 'phantomjs', :require => 'phantomjs/poltergeist'
   gem 'poltergeist'
   gem 'pry-byebug'
   gem 'pry-rails'
@@ -41,7 +43,6 @@ group(:development, :test) do
   gem 'selenium-webdriver'
   gem 'simplecov'
   gem 'typhoeus'
-  gem 'database_cleaner'
 end
 
 # group(:test) do
