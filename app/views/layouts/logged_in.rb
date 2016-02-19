@@ -6,7 +6,7 @@ class Views::Layouts::LoggedIn < Views::Base
 
     content_for :body do
       div(class: "app-container row") {
-        div(class: "app-content-wide") { yield }
+        div(class: "large-8 large-centered columns") { yield }
       }
     end
 

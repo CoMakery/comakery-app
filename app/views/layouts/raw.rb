@@ -26,7 +26,7 @@ class Views::Layouts::Raw < Views::Base
       body(class: "#{controller_name}-#{action_name}") {
         # div(class: "top-bar-margin") {
         div(class: "contain-to-grid") {
-          nav(class: "top-bar", "data-topbar" => "", role: "navigation") {
+          nav(class: "top-bar large-8 large-centered columns", "data-topbar" => "", role: "navigation") {
             ul(class: "title-area") {
               li(class: "name") {
                 h1 {
