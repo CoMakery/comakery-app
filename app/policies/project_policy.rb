@@ -1,8 +1,9 @@
 class ProjectPolicy < ApplicationPolicy
-  attr_reader :account
+  attr_reader :account, :project
 
-  def initialize(account)
+  def initialize(account, project)
     @account = account
+    @project = project
   end
 
   class Scope < Scope
@@ -20,7 +21,10 @@ class ProjectPolicy < ApplicationPolicy
     end
   end
 
-  # def index?
-  #   user.admin? or not post.published?
-  # end
+  def allow?
+    account.present? && (project.public? || project.owner_account_id == account.try(:id))
+  end
+  alias :edit? :allow?
+  alias :show? :allow?
+  alias :update? :allow?
 end

@@ -43,5 +43,24 @@ class ApplicationPolicy
       scope.none
     end
   end
-end
 
+  def show?
+    account.present?
+  end
+
+  def new?
+    account.present?
+  end
+
+  def create?
+    account.present?
+  end
+
+  def edit?
+    account.present?
+  end
+
+  def update?
+    account.present?
+  end
+end

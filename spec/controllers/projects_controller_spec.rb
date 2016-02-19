@@ -103,10 +103,19 @@ describe ProjectsController do
     end
 
     describe "#show" do
-      specify do
+      it "allows owners to view projects" do
         get :show, id: project.to_param
 
         expect(response.code).to eq "200"
+        expect(assigns(:project)).to eq project
+      end
+
+      it "only denies non-owners to view projects" do
+        project.update(owner_account: create(:account))
+
+        get :show, id: project.to_param
+
+        expect(response.code).to eq "302"
         expect(assigns(:project)).to eq project
       end
     end
