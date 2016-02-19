@@ -9,6 +9,9 @@ Rails.application.routes.draw do
 
   # resources :accounts, only: %i[new create edit update]
   resource :session, only: %i[create destroy]
+  get '/log_out', to: "sessions#destroy"
+  get '/logout', to: "sessions#destroy"
+
   resources :projects
 
   namespace :admin do

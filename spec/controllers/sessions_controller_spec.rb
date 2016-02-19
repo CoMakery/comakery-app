@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 describe SessionsController do
+  describe "routes", type: :routing do
+    it "routes logout to destroy" do
+      expect(get("/log_out")).to route_to("sessions#destroy")
+      expect(get("/logout")).to route_to("sessions#destroy")
+    end
+  end
+
   it "should get logout" do
     get :destroy
     assert_response :redirect
