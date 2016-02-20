@@ -25,6 +25,10 @@ i {
   max-width: initial;
 }
 
+.app-container.row {
+  padding: rem-calc(20);
+}
+
 .app-container {
   @include grid-row($behavior: collapse);
 }
