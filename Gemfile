@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.3.0'
 
 gem 'airbrake', '< 5'
-gem 'celluloid-io'  # used by slack-ruby-client
+gem 'celluloid-io', require: 'celluloid/current'  # used by slack-ruby-client
 gem 'coffee-rails'
 gem 'compass-rails', '< 3'
 gem 'ethereum'
@@ -36,7 +36,7 @@ group(:development, :test) do
   gem 'faker'
   gem 'fuubar'
   gem 'guard-rspec', require: false
-  gem 'phantomjs', :require => 'phantomjs/poltergeist'
+  gem 'phantomjs', require: 'phantomjs/poltergeist'
   gem 'poltergeist'
   gem 'pry-byebug'
   gem 'pry-rails'
