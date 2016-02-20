@@ -26,7 +26,7 @@ module Views
             }
             with_errors(project, :public) {
               label {
-                f.check_box :public
+                f.check_box :public, checked: "checked"
                 text " Public"
               }
             }
