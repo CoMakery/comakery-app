@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '2.3.0'
 
 gem 'airbrake', '< 5'
+gem 'celluloid-io'  # used by slack-ruby-client
 gem 'coffee-rails'
 gem 'compass-rails', '< 3'
 gem 'ethereum'
