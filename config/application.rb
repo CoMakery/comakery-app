@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module CitizenRails
+module Swarmbot
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -22,16 +22,16 @@ module CitizenRails
 
     # one HTTP auth password for the entire site
     config.require_site_login = false # disabled by default
-    config.site_username = 'citizen'
-    config.site_password = 'code'
+    config.site_username = 'foo'
+    config.site_password = 'bar'
 
     config.allow_signup = true
-    config.company_name = "##company_name##"
-    config.project_name = "##company_name##"
-    config.project_slug = "##company_name##".downcase.split(/[^a-z0-9]/).reject(&:blank?).join("_")
+    config.company_name = "CoMakery"
+    config.project_name = "Swarmbot"
+    config.project_slug = "swarmbot"
     # appears in main layout meta tag
-    config.project_description = "##project_description##"
-    config.contact_email = "##contact_email##"
+    config.project_description = "Coin distribution for synamic equity organizations"
+    config.contact_email = "hello@comakery.com"
 
     # lib/ is for code that is entirely independent of your Rails app
     # app/lib/ is for code that expects Rails (esp. models) but which is not itself a model

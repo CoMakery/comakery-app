@@ -1,5 +1,11 @@
 namespace :citizen_rails do
   desc "Creates Staging and Production servers"
+  task :replace do
+    replace_strings("company_name")
+    replace_strings("project_description")
+    replace_strings("contact_email")
+  end
+
   task :configure_heroku_servers, [:project_name] do |t, args|
     create_stack(args[:project_name])
   end
