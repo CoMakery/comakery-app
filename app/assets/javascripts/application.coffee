@@ -26,3 +26,10 @@ $ ->
     newElement.removeClass('hide')
     newElement.removeClass(templateSelector.replace('.',''))
     template.parent().append(newElement)
+
+  $(document).on "click", "*[data-mark-and-hide]", (e)->
+    e.preventDefault()
+    removeSelector = $(e.target).attr('data-mark-and-hide')
+    removeElement = $(e.target).closest(removeSelector)
+    removeElement.hide()
+    removeElement.find("input[data-destroy]").val("1")

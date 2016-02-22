@@ -21,6 +21,9 @@ describe Project do
       expect(project.reward_types.first.name).to eq("Small reward")
       expect(project.reward_types.first.suggested_amount).to eq(1000)
       expect(project.slack_team_id).to eq("123")
+
+      project.update(reward_types_attributes: {id: project.reward_types.first.id, _destroy: true})
+      expect(project.reward_types.count).to eq(0)
     end
   end
 end

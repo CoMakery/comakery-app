@@ -46,7 +46,7 @@ module Views
             project.reward_types.each do |reward_type|
               reward_type_content(reward_type)
             end
-            reward_type_content(nil, "hide reward-type-template ")
+            reward_type_content(nil, "hide reward-type-template")
           }
 
           row {
@@ -61,6 +61,7 @@ module Views
       def reward_type_content(reward_type, classes="")
         row(class: "reward-type-row #{classes}") {
           hidden_field_tag :'project[reward_types_attributes][][id]', reward_type.try(:to_param)
+          hidden_field_tag :'project[reward_types_attributes][][_destroy]', false, 'data-destroy': ''
           column("small-4") {
             text_field_tag :'project[reward_types_attributes][][name]', reward_type.try(:name)
           }
@@ -68,6 +69,7 @@ module Views
             text_field_tag :'project[reward_types_attributes][][suggested_amount]', reward_type.try(:suggested_amount)
           }
           column("small-4") {
+            a("×", href:"#", 'data-mark-and-hide': '.reward-type-row')
           }
         }
       end

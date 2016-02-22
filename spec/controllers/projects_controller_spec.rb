@@ -81,6 +81,7 @@ describe ProjectsController do
       it "updates a project" do
         small_reward_type = project.reward_types.create!(name: "Small Reward", suggested_amount: 100)
         medium_reward_type = project.reward_types.create!(name: "Medium Reward", suggested_amount: 300)
+        destroy_me_reward_type = project.reward_types.create!(name: "Destroy Me Reward", suggested_amount: 300)
 
         expect do
           expect do
@@ -91,12 +92,13 @@ describe ProjectsController do
                     tracker: "http://github.com/here/is/my/tracker/updated",
                     reward_types_attributes: [
                         {id: small_reward_type.to_param, name: "Small Reward", suggested_amount: 150},
+                        {id: destroy_me_reward_type.to_param, _destroy: true},
                         {name: "Big Reward", suggested_amount: 500},
                     ]
                 }
             expect(response.status).to eq(302)
           end.to change { Project.count }.by(0)
-        end.to change { RewardType.count }.by(1)
+        end.to change { RewardType.count }.by(0) # +1 and -1
 
         expect(flash[:notice]).to eq("Project updated")
         project.reload

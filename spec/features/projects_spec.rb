@@ -27,7 +27,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
     expect(find_field("Public")).to be_checked
 
-    reward_type_inputs = page.all(".reward-type-row")
+    reward_type_inputs = page.all(".reward-type-row", visible: true)
     reward_type_inputs[0].all("input")[0].set "This is a small reward type"
     reward_type_inputs[0].all("input")[1].set "1000"
     reward_type_inputs[1].all("input")[0].set "This is a medium reward type"
@@ -39,10 +39,20 @@ describe "viewing projects, creating and editing", :js do
 
     click_link "+ add reward type"
 
-    reward_type_inputs = page.all(".reward-type-row")
+    reward_type_inputs = page.all(".reward-type-row", visible: true)
     expect(reward_type_inputs.size).to eq(4)
     reward_type_inputs[3].all("input")[0].set "This is a super big reward type"
     reward_type_inputs[3].all("input")[1].set "5000"
+
+    click_link "+ add reward type"
+
+    reward_type_inputs = page.all(".reward-type-row", visible: true)
+    expect(reward_type_inputs.size).to eq(5)
+
+    reward_type_inputs[4].all("a[data-mark-and-hide]")[0].click
+
+    reward_type_inputs = page.all(".reward-type-row", visible: true)
+    expect(reward_type_inputs.size).to eq(4)
 
     click_on "Save"
 
@@ -75,12 +85,26 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker/edit"
     uncheck "Public"
 
+    reward_type_inputs = page.all(".reward-type-row", visible: true)
+    expect(reward_type_inputs.size).to eq(4)
+
+    reward_type_inputs[0].all("a[data-mark-and-hide]")[0].click
+    reward_type_inputs = page.all(".reward-type-row", visible: true)
+    expect(reward_type_inputs.size).to eq(3)
+
     click_on "Save"
 
     expect(page).to have_content "Project updated"
     expect(page).to have_content "This is an edited project"
     expect(page).to have_content "This is an edited project description which is very informative"
     expect(page).to have_content "Visibility: Private"
+
+    reward_type_inputs = page.all(".reward-type-row")
+    expect(reward_type_inputs.size).to eq(3)
+    expect(page).not_to have_content "This is a small reward type"
+    expect(page).not_to have_content "1000"
+
+    expect(reward_type_inputs.size).to eq(3)
 
     visit("/projects")
 
