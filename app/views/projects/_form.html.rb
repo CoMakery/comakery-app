@@ -27,7 +27,7 @@ module Views
             with_errors(project, :public) {
               label {
                 f.check_box :public
-                text " Public"
+                text " Set project as public (display in CoMakery index)"
               }
             }
           }

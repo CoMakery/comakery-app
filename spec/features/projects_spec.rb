@@ -25,7 +25,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Title", with: "This is a project"
     fill_in "Description", with: "This is a project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
-    expect(find_field("Public")).to be_checked
+    expect(find_field("Set project as public (display in CoMakery index)")).to be_checked
 
     reward_type_inputs = page.all(".reward-type-row", visible: true)
     reward_type_inputs[0].all("input")[0].set "This is a small reward type"
@@ -79,11 +79,11 @@ describe "viewing projects, creating and editing", :js do
 
     click_on "Edit"
 
-    expect(page).to have_checked_field("Public")
+    expect(page).to have_checked_field("Set project as public (display in CoMakery index)")
     fill_in "Title", with: "This is an edited project"
     fill_in "Description", with: "This is an edited project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker/edit"
-    uncheck "Public"
+    uncheck "Set project as public (display in CoMakery index)"
 
     reward_type_inputs = page.all(".reward-type-row", visible: true)
     expect(reward_type_inputs.size).to eq(4)
