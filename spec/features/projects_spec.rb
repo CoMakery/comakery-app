@@ -24,8 +24,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Title", with: "This is a project"
     fill_in "Description", with: "This is a project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
-    check "Public"
-
+    expect(find_field("Public")).to be_checked
 
     reward_type_inputs = page.all(".reward-type-row")
     reward_type_inputs[0].all("input")[0].set "This is a small reward type"

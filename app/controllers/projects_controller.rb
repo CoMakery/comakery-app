@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    @project = Project.new
+    @project = Project.new(public: true)
     authorize @project
     3.times { @project.reward_types.build }
   end

@@ -11,6 +11,7 @@ describe ProjectsController do
 
       expect(response.status).to eq(200)
       expect(assigns[:project]).to be_a_new_record
+      expect(assigns[:project]).to be_public
       expect(assigns[:project].reward_types.size).to eq(3)
       expect(assigns[:project].reward_types.first).to be_a_new_record
     end
