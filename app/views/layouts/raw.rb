@@ -47,7 +47,7 @@ class Views::Layouts::Raw < Views::Base
               ul(class: "right") {
                 li(class: "active") {
                   a(href: logged_out_path) {
-                    text "Take Action"
+                    text "Home"
                   }
                 }
               }
