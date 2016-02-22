@@ -2,10 +2,10 @@ source 'https://rubygems.org'
 ruby '2.3.0'
 
 gem 'airbrake', '< 5'
-gem 'celluloid-io', require: 'celluloid/current'  # used by slack-ruby-client
 gem 'coffee-rails'
 gem 'compass-rails', '< 3'
 gem 'ethereum'
+gem 'faye-websocket'  # used by slack-ruby-client for concurrency
 gem 'fortitude'
 gem 'foundation-icons-sass-rails'
 gem 'foundation-rails', '< 6'
