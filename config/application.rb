@@ -30,7 +30,7 @@ module Swarmbot
     config.project_name = "Swarmbot"
     config.project_slug = "swarmbot"
     # appears in main layout meta tag
-    config.project_description = "Coin distribution for synamic equity organizations"
+    config.project_description = "Coin distribution for dynamic equity organizations"
     config.contact_email = "hello@comakery.com"
 
     # lib/ is for code that is entirely independent of your Rails app
