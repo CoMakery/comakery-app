@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160219195555) do
+ActiveRecord::Schema.define(version: 20160220002456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,12 +54,18 @@ ActiveRecord::Schema.define(version: 20160219195555) do
   add_index "accounts", ["reset_password_token"], name: "index_accounts_on_reset_password_token", using: :btree
 
   create_table "authentications", force: :cascade do |t|
-    t.integer  "account_id", null: false
-    t.string   "provider",   null: false
-    t.string   "uid",        null: false
+    t.integer  "account_id",      null: false
+    t.string   "provider",        null: false
+    t.string   "uid"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "slack_team_name", null: false
+    t.string   "slack_team_id",   null: false
+    t.string   "slack_user_id",   null: false
+    t.string   "slack_token",     null: false
   end
+
+  add_index "authentications", ["slack_team_id"], name: "index_authentications_on_slack_team_id", using: :btree
 
   create_table "projects", force: :cascade do |t|
     t.string   "title"
@@ -69,9 +75,11 @@ ActiveRecord::Schema.define(version: 20160219195555) do
     t.datetime "updated_at",                       null: false
     t.boolean  "public",           default: false, null: false
     t.integer  "owner_account_id",                 null: false
+    t.string   "slack_team_id",                    null: false
   end
 
   add_index "projects", ["owner_account_id"], name: "index_projects_on_owner_account_id", using: :btree
+  add_index "projects", ["slack_team_id"], name: "index_projects_on_slack_team_id", using: :btree
 
   create_table "reward_types", force: :cascade do |t|
     t.integer  "project_id",       null: false

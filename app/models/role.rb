@@ -1,5 +1,5 @@
 class Role < ActiveRecord::Base
-  has_many :account_roles
+  has_many :account_roles, dependent: :destroy
   has_many :accounts, through: :account_roles
 
   validates :key, uniqueness: true

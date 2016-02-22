@@ -1,8 +1,10 @@
 require "rails_helper"
 
 describe "viewing projects, creating and editing", :js do
-  let!(:project) { create(:project, title: "Project 1", owner_account: account) }
-  let!(:account) { create(:account).tap{|a| create(:authentication, account_id: a.id)} }
+  let!(:project) { create(:project, title: "Project 1", owner_account: account, slack_team_id: "citizencode") }
+  let!(:account) { create(:account).tap{|a| create(:authentication, account_id: a.id, slack_team_id: "citizencode")} }
+  let!(:same_team_account) { create(:account).tap{|a| create(:authentication, account_id: a.id, slack_team_id: "citizencode")} }
+  let!(:other_team_account) { create(:account).tap{|a| create(:authentication, account_id: a.id, slack_team_id: "comakery")} }
 
   specify do
     login(account)
@@ -79,5 +81,21 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "This is an edited project"
     expect(page).to have_content "This is an edited project description which is very informative"
     expect(page).to have_content "Visibility: Private"
+
+    visit("/projects")
+
+    expect(page).to have_content "This is an edited project"
+
+    login(same_team_account)
+
+    visit("/projects")
+
+    expect(page).to have_content "This is an edited project"
+
+    login(other_team_account)
+
+    visit("/projects")
+
+    expect(page).not_to have_content "This is an edited project"
   end
 end

@@ -1,9 +1,10 @@
 class Mom
-  def account(
-    email: Faker::Internet.safe_email,
-    password: valid_password
-  )
-    Account.new email: email
+  def account(**attrs)
+    defaults = {
+        email: Faker::Internet.safe_email,
+        password: valid_password
+    }
+    Account.new(defaults.merge(attrs))
   end
 
   def account_role(account, role)
@@ -14,15 +15,24 @@ class Mom
     role name: 'Admin', key: Role::ADMIN_ROLE_KEY
   end
 
-  def authentication(provider:"slack", uid: "this is a generic uid", account_id:)
-    Authentication.new(provider: provider, uid: uid, account_id: account_id)
+  def authentication(**attrs)
+    defaults = {
+        provider: "slack",
+        uid: "this is a generic uid",
+        slack_token: "slack token",
+        slack_user_id: "slack user id",
+        slack_team_name: "Slack Team",
+        slack_team_id: "citizen code id",
+    }
+    Authentication.new(defaults.merge(attrs))
   end
 
   def project(**attrs)
     defaults = {
         title: "Uber for Cats",
         description: "We are going to build amazing",
-        tracker: "https://github.com/example/uber_for_cats"
+        tracker: "https://github.com/example/uber_for_cats",
+        slack_team_id: "citizen code id",
     }
     Project.new(defaults.merge(attrs))
   end

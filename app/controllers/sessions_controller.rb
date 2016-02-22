@@ -5,11 +5,11 @@ class SessionsController < ApplicationController
   layout 'layouts/logged_out'
 
   def create
-    @account = Authentication.find_or_create_from_auth_hash(request.env['omniauth.auth'])
-    if @account
+    begin
+      @account = Authentication.find_or_create_from_auth_hash!(request.env['omniauth.auth'])
       session[:account_id] = @account.id
       redirect_to root_path
-    else
+    rescue Authentication::MissingAuthParamException
       flash['alert'] = "Failed authentication"
       redirect_to root_url
     end

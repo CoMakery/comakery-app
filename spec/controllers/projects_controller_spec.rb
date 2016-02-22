@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe ProjectsController do
-  let!(:account) { create(:account) }
+  let!(:account) { create(:account).tap{|a| create(:authentication, account: a)} }
 
   before { login(account) }
 
@@ -40,6 +40,7 @@ describe ProjectsController do
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
       expect(project.reward_types.first.name).to eq("Small Reward")
       expect(project.owner_account_id).to eq(account.id)
+      expect(project.slack_team_id).to eq(account.authentications.first.slack_team_id)
     end
   end
 
@@ -103,7 +104,7 @@ describe ProjectsController do
     end
 
     describe "#show" do
-      it "allows owners to view projects" do
+      it "allows team members to view projects" do
         get :show, id: project.to_param
 
         expect(response.code).to eq "200"
@@ -111,7 +112,7 @@ describe ProjectsController do
       end
 
       it "only denies non-owners to view projects" do
-        project.update(owner_account: create(:account))
+        project.update(slack_team_id: "some other team")
 
         get :show, id: project.to_param
 

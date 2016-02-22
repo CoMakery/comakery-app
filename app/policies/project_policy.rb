@@ -16,15 +16,16 @@ class ProjectPolicy < ApplicationPolicy
 
     def resolve
       projects = Project.arel_table
-
-      scope.where(projects[:public].eq(true).or(projects[:owner_account_id].eq(account.id)))
+      scope.where(projects[:public].eq(true).or(projects[:slack_team_id].in(@account.authentications.pluck(:slack_team_id))))
     end
   end
 
-  def allow?
-    account.present? && (project.public? || project.owner_account_id == account.try(:id))
+  def show?
+    account.present? && (project.public? || account.authentications.pluck(:slack_team_id).include?(project.slack_team_id))
   end
-  alias :edit? :allow?
-  alias :show? :allow?
-  alias :update? :allow?
+
+  def edit?
+    account.present? && account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
+  end
+  alias :update? :edit?
 end

@@ -10,7 +10,12 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    project = Project.new(project_params.merge(owner_account: current_account))
+    # there could be multiple authentications... maybe this should be a drop down box to select which team
+    # you are creating this project for if we actually allow multiple, simultaneous auths
+    # instead of assuming its the first in db order
+    slack_team_id = current_account.authentications.find_by(provider: "slack").slack_team_id
+
+    project = Project.new(project_params.merge(owner_account: current_account, slack_team_id: slack_team_id))
     authorize project
     project.save!
     flash[:notice] = "Project created"
