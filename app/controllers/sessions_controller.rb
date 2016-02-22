@@ -4,6 +4,11 @@ class SessionsController < ApplicationController
 
   layout 'layouts/logged_out'
 
+  def oauth_failure
+    flash[:error] = "Oauth failed"
+    redirect_to logged_out_url
+  end
+
   def create
     begin
       @account = Authentication.find_or_create_from_auth_hash!(request.env['omniauth.auth'])

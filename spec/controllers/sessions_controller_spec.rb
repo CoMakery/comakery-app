@@ -46,4 +46,13 @@ describe SessionsController do
       end
     end
   end
+
+  describe "#oauth_failure" do
+    it "redirects to logged out and shows error message" do
+      get :oauth_failure
+
+      expect(response.status).to eq(302)
+      expect(flash[:error]).to eq("Oauth failed")
+    end
+  end
 end

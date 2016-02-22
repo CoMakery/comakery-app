@@ -3,10 +3,7 @@ class LoggedOutController < ApplicationController
   before_filter :skip_authorization
   layout 'layouts/logged_out'
 
-  def take_action
-  end
-
-  def index
+  def show
   end
 
   def not_found

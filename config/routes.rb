@@ -5,10 +5,11 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback" => "sessions#create"
   get '/session' => "sessions#create"
 
-  get 'take_action' => "logged_out#take_action"
+  get '/home', to: "logged_out#show", as: :logged_out
 
-  # resources :accounts, only: %i[new create edit update]
-  resource :session, only: %i[create destroy]
+  resource :session, only: %i[create destroy] do
+    get "oauth_failure"
+  end
   get '/log_out', to: "sessions#destroy"
   get '/logout', to: "sessions#destroy"
 
