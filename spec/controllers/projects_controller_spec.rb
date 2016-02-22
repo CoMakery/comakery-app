@@ -13,7 +13,18 @@ describe ProjectsController do
       expect(assigns[:project]).to be_a_new_record
       expect(assigns[:project]).to be_public
       expect(assigns[:project].reward_types.size).to eq(3)
+
       expect(assigns[:project].reward_types.first).to be_a_new_record
+      expect(assigns[:project].reward_types.first.name).to eq("Thanks")
+      expect(assigns[:project].reward_types.first.suggested_amount).to eq(10)
+
+      expect(assigns[:project].reward_types.second).to be_a_new_record
+      expect(assigns[:project].reward_types.second.name).to eq("Small Contribution")
+      expect(assigns[:project].reward_types.second.suggested_amount).to eq(100)
+
+      expect(assigns[:project].reward_types.third).to be_a_new_record
+      expect(assigns[:project].reward_types.third.name).to eq("Contribution")
+      expect(assigns[:project].reward_types.third.suggested_amount).to eq(1000)
     end
   end
 

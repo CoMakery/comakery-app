@@ -6,7 +6,9 @@ class ProjectsController < ApplicationController
   def new
     @project = Project.new(public: true)
     authorize @project
-    3.times { @project.reward_types.build }
+    @project.reward_types.build(name: "Thanks", suggested_amount: 10)
+    @project.reward_types.build(name: "Small Contribution", suggested_amount: 100)
+    @project.reward_types.build(name: "Contribution", suggested_amount: 1000)
   end
 
   def create
