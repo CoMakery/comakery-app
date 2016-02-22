@@ -40,7 +40,7 @@ class Views::Projects::Show < Views::Base
       end
     }
     full_row {
-      a("Edit", class: buttonish, href: edit_project_path(project))
+      a("Edit", class: buttonish, href: edit_project_path(project)) if policy(project).edit?
       a("Back", class: buttonish, href: projects_path)
     }
   end
