@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   layout 'layouts/logged_out'
 
   def oauth_failure
-    flash[:error] = "Oauth failed"
+    flash[:error] = "Sorry, logging in failed... please try again, or email us at dev@comakery.com"
     redirect_to logged_out_url
   end
 

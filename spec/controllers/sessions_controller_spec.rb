@@ -52,7 +52,7 @@ describe SessionsController do
       get :oauth_failure
 
       expect(response.status).to eq(302)
-      expect(flash[:error]).to eq("Oauth failed")
+      expect(flash[:error]).to match(/logging in failed/)
     end
   end
 end
