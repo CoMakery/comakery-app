@@ -1,7 +1,7 @@
 Airbrake.configure do |config|
   config.project_id = ENV['AIRBRAKE_PROJECT_ID']  # needed for JS error reporting
   config.api_key = ENV['AIRBRAKE_API_KEY']
-  config.environment_name = ENV['AIRBRAKE_ENV'] || ENV['RAILS_ENV'] || ENV['RACK_ENV']
+  config.environment_name = ENV['APP_NAME'] || ENV['RAILS_ENV'] || ENV['RACK_ENV']
 end
 
 if Rails.env.production?
@@ -13,4 +13,3 @@ if Rails.env.production?
     Airbrake.notify(Exception.new("Error reporting for Javascript is not set up!  Please set , ENV['AIRBRAKE_PROJECT_ID'] to the project ID (found in the Airbrake admin interface URL)"))
   end
 end
-
