@@ -29,11 +29,7 @@ class Views::Layouts::Raw < Views::Base
           nav(class: "top-bar large-8 large-centered columns", "data-topbar" => "", role: "navigation") {
             ul(class: "title-area") {
               li(class: "name") {
-                h1 {
-                  a(href: "/") {
-                    image_tag "http://placekitten.com/g/90/57", class: "logo", alt: "#{Rails.application.config.project_name} Logo"
-                  }
-                }
+                h1 "Swarmbot"
               }
 
               li(class: "toggle-topbar menu-icon") {
