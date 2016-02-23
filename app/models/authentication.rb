@@ -17,10 +17,18 @@ class Authentication < ActiveRecord::Base
 
     account = Account.find_or_create_by!(email: email_address)
 
-    authentication = Authentication.find_or_initialize_by(provider: provider,
-                                                          account_id: account.id,
-                                                          slack_user_id: slack_user_id)
-    authentication.update!(uid: uid, slack_team_id: slack_team_id, slack_team_name: slack_team_name, slack_token: slack_token)
+    # find the "slack" authentication if exists
+    authentication = Authentication.find_or_initialize_by(provider: provider)
+
+    # update it, possibly logging them out of any other slack teams, and into this one
+    authentication.update!(
+      account_id: account.id,
+      slack_user_id: slack_user_id,
+      uid: uid,
+      slack_team_id: slack_team_id,
+      slack_team_name: slack_team_name,
+      slack_token: slack_token
+    )
     account
   end
 end
