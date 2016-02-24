@@ -21,6 +21,9 @@ gem 'puma'
 gem 'pundit'
 gem 'rails_12factor', group: :production
 gem 'rails', '4.2.4'
+gem "refile", require: "refile/rails"
+gem "refile-mini_magick"
+gem "refile-s3"
 gem 'responders'
 gem 'sass-rails'
 gem 'sdoc',          group: :doc

@@ -1,4 +1,6 @@
 class Project < ActiveRecord::Base
+  attachment :image
+
   has_many :reward_types, inverse_of: :project, dependent: :destroy
   accepts_nested_attributes_for :reward_types, reject_if: :invalid_params, allow_destroy: true
 

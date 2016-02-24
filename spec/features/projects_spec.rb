@@ -43,6 +43,7 @@ describe "viewing projects, creating and editing", :js do
 
     fill_in "Title", with: "This is a project"
     fill_in "Description", with: "This is a project description which is very informative"
+    attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
     expect(find_field("Set project as public (display in CoMakery index)")).to be_checked
 
@@ -78,8 +79,9 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Project created"
     expect(page).to have_content "This is a project"
     expect(page).to have_content "This is a project description which is very informative"
-    expect(page).to have_content "Visibility: Public"
+    expect(page.find(".project_image")[:src]).to match(/\/attachments\/[A-Za-z0-9\/]+\/image/)
     expect(page).to have_link "Project Tasks »"
+    expect(page).to have_content "Visibility: Public"
 
     reward_type_rows = page.all(".reward-type-row")
     expect(reward_type_rows.size).to eq(4)
@@ -97,6 +99,8 @@ describe "viewing projects, creating and editing", :js do
     expect(reward_type_rows[3]).to have_content "5000"
 
     click_on "Edit"
+
+    expect(page.find(".project_image")[:src]).to match(/\/attachments\/[A-Za-z0-9\/]+\/image/)
 
     expect(page).to have_checked_field("Set project as public (display in CoMakery index)")
     fill_in "Title", with: "This is an edited project"

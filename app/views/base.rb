@@ -2,6 +2,8 @@ module Views
   class Base < Fortitude::Widget
     doctype :html5
 
+    helper :attachment_field, :transform => :output_return_value
+
     private
 
     def row(args = {}, &block)

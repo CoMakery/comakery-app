@@ -2,20 +2,18 @@ class Views::Projects::Show < Views::Base
   needs :project
 
   def content
-    full_row {
-      h1 project.title
-    }
-    full_row {
-      text project.description
-    }
-    full_row {
-      text "Visibility: #{project.public? ? "Public" : "Private"}"
-    }
-    full_row {
-      a "Project Tasks »", class: buttonish, href: project.tracker
+    row {
+      column("small-3") {
+        img(src: attachment_url(project, :image), class: "project_image")
+      }
+      column("small-9") {
+        h1 project.title
+        p project.description
+        a "Project Tasks »", class: buttonish, href: project.tracker
+      }
     }
 
-    row {
+    full_row {
       column("small-4") {
         text "Reward Names"
       }
@@ -25,7 +23,7 @@ class Views::Projects::Show < Views::Base
       column("small-4") {
       }
     }
-    div(class: "reward-types") {
+    row(class: "reward-types") {
       project.reward_types.each do |reward_type|
         row(class: "reward-type-row") {
           column("small-4") {
@@ -38,6 +36,9 @@ class Views::Projects::Show < Views::Base
           }
         }
       end
+    }
+    full_row {
+      p "Visibility: #{project.public? ? "Public" : "Private"}"
     }
     full_row {
       a("Edit", class: buttonish, href: edit_project_path(project)) if policy(project).edit?

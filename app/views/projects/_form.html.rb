@@ -24,6 +24,13 @@ module Views
                 f.text_field :tracker
               }
             }
+            with_errors(project, :image) {
+              label {
+                text "Project Image"
+                text f.attachment_field(:image)
+              }
+              img(src: attachment_url(project, :image), class: "project_image", width: 300)
+            }
             with_errors(project, :public) {
               label {
                 f.check_box :public
@@ -50,7 +57,7 @@ module Views
           }
 
           row {
-            p { a("+ add reward type", href:"#", 'data-duplicate': '.reward-type-template') }
+            p { a("+ add reward type", href: "#", 'data-duplicate': '.reward-type-template') }
           }
           row {
             f.submit "Save", class: buttonish(:small, :expand)
@@ -69,7 +76,7 @@ module Views
             text_field_tag :'project[reward_types_attributes][][suggested_amount]', reward_type.try(:suggested_amount)
           }
           column("small-4") {
-            a("×", href:"#", 'data-mark-and-hide': '.reward-type-row')
+            a("×", href: "#", 'data-mark-and-hide': '.reward-type-row')
           }
         }
       end

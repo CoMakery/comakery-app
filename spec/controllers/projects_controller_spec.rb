@@ -49,6 +49,7 @@ describe ProjectsController do
           post :create, project: {
                           title: "Project title here",
                           description: "Project description here",
+                          image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
                           tracker: "http://github.com/here/is/my/tracker",
                           reward_types_attributes: [
                               {name: "Small Reward", suggested_amount: 1000},
@@ -63,6 +64,7 @@ describe ProjectsController do
       project = Project.last
       expect(project.title).to eq("Project title here")
       expect(project.description).to eq("Project description here")
+      expect(project.image).to be_a(Refile::File)
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
       expect(project.reward_types.first.name).to eq("Small Reward")
       expect(project.owner_account_id).to eq(account.id)
