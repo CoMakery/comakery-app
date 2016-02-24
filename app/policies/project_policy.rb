@@ -28,4 +28,8 @@ class ProjectPolicy < ApplicationPolicy
     account.present? && account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
   end
   alias :update? :edit?
+
+  def send_reward?
+    project.owner_account == account
+  end
 end

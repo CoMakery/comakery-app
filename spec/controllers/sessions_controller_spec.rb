@@ -22,7 +22,7 @@ describe SessionsController do
         request.env['omniauth.auth'] = {'provider' => 'slack',
                                         'credentials' => { 'token' => 'these are credentials' },
                                         'uid' => 'FOOOO',
-                                        'info' => {'team' => "Citizen Code", 'team_id' => 'T00000000', 'user_id' => 'U00000000'},
+                                        'info' => {'team' => "Citizen Code", 'team_id' => 'T00000000', 'user_id' => 'U00000000', 'name' => 'Red Man'},
                                         'extra' => {'user_info' => {'user' => {'profile' => {'email' => "bob@example.com"}}}}}
 
         post :create

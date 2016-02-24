@@ -1,7 +1,10 @@
 class Mom
   def account(**attrs)
+    @@account_count ||= 0
+    @@account_count += 1
     defaults = {
         email: Faker::Internet.safe_email,
+        name: "Bob #{@@account_count}",
         password: valid_password
     }
     Account.new(defaults.merge(attrs))
@@ -27,14 +30,26 @@ class Mom
     Authentication.new(defaults.merge(attrs))
   end
 
-  def project(**attrs)
+  def project(owner_account = create(:account), **attrs)
     defaults = {
         title: "Uber for Cats",
         description: "We are going to build amazing",
         tracker: "https://github.com/example/uber_for_cats",
         slack_team_id: "citizen code id",
+        owner_account: owner_account
     }
     Project.new(defaults.merge(attrs))
+  end
+
+  def reward(account = create(:account), project = create(:project), issuer = create(:account), **attrs)
+    defaults = {
+        account: account,
+        project: project,
+        issuer: issuer,
+        amount: 1337,
+        description: "Great work",
+    }
+    Reward.new(defaults.merge(attrs))
   end
 
   def role(name: 'A Role', key: nil)

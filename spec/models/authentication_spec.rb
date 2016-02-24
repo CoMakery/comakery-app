@@ -10,7 +10,7 @@ describe Authentication do
               "token" => "xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa"
           },
           'extra' => {'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com'}}}},
-          'info' => {'user_id' => 'slack user id', 'team' => "Citizen Code", 'team_id' => 'slack team id'}
+          'info' => {'user_id' => 'slack user id', 'team' => "Citizen Code", 'team_id' => 'slack team id', 'name' => "Bob Johnson"}
       }
     }
 

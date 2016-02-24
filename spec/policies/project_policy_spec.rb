@@ -21,6 +21,14 @@ describe ProjectPolicy do
     end
   end
 
+  describe "#award?" do
+    it "returns true if an account is the owner of a project and false otherwise" do
+      expect(ProjectPolicy.new(account, my_public_project).send_reward?).to be true
+      expect(ProjectPolicy.new(other_team_member, my_public_project).send_reward?).to be false
+      expect(ProjectPolicy.new(different_team_account, my_public_project).send_reward?).to be false
+    end
+  end
+
   describe "#show? #edit? #update?" do
     it "only allows viewing of projects that are public or are owned by the current account" do
       [:show?, :edit?, :update?].each do |action|

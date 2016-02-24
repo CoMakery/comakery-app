@@ -7,6 +7,8 @@ class Account < ActiveRecord::Base
   attr_accessor :password, :password_required
   validates :password, length: {minimum: 8}, if: :password_required
 
+  validates_presence_of :email, :name
+
   before_save :downcase_email
 
   def downcase_email
@@ -14,6 +16,6 @@ class Account < ActiveRecord::Base
   end
 
   def slack_auth
-    authentications.where(provider: 'slack').first
+    authentications.find_by(provider: "slack")
   end
 end
