@@ -1,4 +1,10 @@
 class ProjectsController < ApplicationController
+  def landing
+    skip_authorization
+    @private_projects = Project.where(slack_team_id: current_account.slack_auth.slack_team_id).limit(6)
+    @public_projects = Project.where(public: true).limit(6)
+  end
+
   def index
     @projects = policy_scope(Project)
   end

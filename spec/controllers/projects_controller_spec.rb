@@ -1,9 +1,23 @@
 require "rails_helper"
 
 describe ProjectsController do
-  let!(:account) { create(:account).tap{|a| create(:authentication, account: a)} }
+  let!(:account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "itsa me") } }
 
   before { login(account) }
+
+  describe "#landing" do
+    let!(:other_public_project) { create(:project, slack_team_id: "somebody else", public: true, title: "other_public_project") }
+    let!(:other_private_project) { create(:project, slack_team_id: "somebody else", public: false, title: "other_private_project") }
+    let!(:my_private_project) { create(:project, slack_team_id: "itsa me", title: "my_private_project") }
+
+    it "works" do
+      get :landing
+
+      expect(response.status).to eq(200)
+      expect(assigns[:private_projects].map(&:title)).to eq(["my_private_project"])
+      expect(assigns[:public_projects].map(&:title)).to eq(["other_public_project"])
+    end
+  end
 
   describe "#new" do
     it "works" do

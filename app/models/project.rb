@@ -5,7 +5,7 @@ class Project < ActiveRecord::Base
   has_many :rewards, inverse_of: :project, dependent: :destroy
 
   belongs_to :owner_account, class_name: Account
-  validates_presence_of :owner_account
+  validates_presence_of :owner_account, :title
 
   def invalid_params(attributes)
     RewardType.invalid_params(attributes)

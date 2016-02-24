@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   get '/home', to: "logged_out#show", as: :logged_out
 
-  root 'projects#index'
+  root 'projects#landing'
 
   get '/log_out', to: "sessions#destroy"
   get '/logout', to: "sessions#destroy"
@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   post '/slack/command' => "slack#command"
 
   resources :projects do
+    collection do
+      get :landing
+    end
     resources :rewards, only: [:new, :create]
   end
 end

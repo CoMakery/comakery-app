@@ -1,18 +1,11 @@
-class Views::Projects::Index < Views::Base
+class Views::Projects::Index < Views::Projects::Base
   needs :projects
 
   def content
     full_row { h1 "Projects" }
 
     projects.each do |project|
-      row(id: "project-#{project.to_param}") {
-        column("small-8") {
-          text project.title
-        }
-        column("small-4") {
-          a("View", class: buttonish(:small), href: project_path(project))
-        }
-      }
+      project_block(project)
     end
 
     full_row {

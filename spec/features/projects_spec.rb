@@ -1,11 +1,30 @@
 require "rails_helper"
 
 describe "viewing projects, creating and editing", :js do
-  let!(:project) { create(:project, title: "Project 1", owner_account: account, slack_team_id: "citizencode") }
+  let!(:project) { create(:project, title: "Project 1", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode") }
   let!(:project2) { create(:project, title: "Public Project", owner_account: account, slack_team_id: "citizencode", public: true) }
-  let!(:account) { create(:account).tap{|a| create(:authentication, account_id: a.id, slack_team_id: "citizencode")} }
-  let!(:same_team_account) { create(:account).tap{|a| create(:authentication, account_id: a.id, slack_team_id: "citizencode")} }
-  let!(:other_team_account) { create(:account).tap{|a| create(:authentication, account_id: a.id, slack_team_id: "comakery")} }
+  let!(:account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode") } }
+  let!(:same_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode") } }
+  let!(:other_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "comakery") } }
+
+  describe "landing and searching" do
+    it "shows some projects" do
+      login(account)
+
+      7.times {|i| create(:project, title: "Public Project #{i}", public: true) }
+      7.times {|i| create(:project, title: "Private Project #{i}", public: false, slack_team_id: "citizencode") }
+
+      visit root_path
+
+      expect(page.all(".project").size).to eq(12)
+      expect(page).to have_content "Public Project"
+
+      click_link "Browse All"
+
+      expect(page.all(".project").size).to eq(16)
+      expect(page).to have_content "Public Project"
+    end
+  end
 
   specify do
     login(account)
