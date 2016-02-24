@@ -12,4 +12,8 @@ class Account < ActiveRecord::Base
   def downcase_email
     self.email = email.try(:downcase)
   end
+
+  def slack_auth
+    authentications.where(provider: 'slack').first
+  end
 end

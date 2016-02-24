@@ -15,6 +15,9 @@ Rails.application.routes.draw do
 
   resources :projects
 
+  post '/slack/command' => "slack#command"
+  # get '/slack/debug' => "slack#debug"
+
   namespace :admin do
     get '/' => 'admin#index'
     resources :accounts

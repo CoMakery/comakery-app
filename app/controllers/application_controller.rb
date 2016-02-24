@@ -54,4 +54,21 @@ class ApplicationController < ActionController::Base
   helper_method :current_account
   alias :current_user :current_account
   helper_method :current_user
+
+  def d the_proc
+    return if Rails.env.test?
+    unless the_proc.instance_of?(Proc)
+      return STDERR.puts("d expected an instance of Proc, got #{the_proc.try(:inspect)}")
+    end
+    source = the_proc.try(:source).try(:match, /\s*proc { (.+) }\s*/).try(:[], 1)
+    print "#{source} ===>>> " if source
+    value = the_proc.call
+    begin
+      value = JSON.pretty_generate value, indent: '    '
+      puts "\n#{value}"
+    rescue JSON::GeneratorError
+      p value
+    end
+  end
+
 end
