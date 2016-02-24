@@ -4,7 +4,7 @@ class SlackController < ApplicationController
   protect_from_forgery with: :null_session
 
   def command *args
-    d proc { args }
+  #   d proc { args }
     render json: {
       response_type: "in_channel",
       attachments: [
@@ -15,22 +15,8 @@ class SlackController < ApplicationController
         }
       ]
     }
-
-    # # response:
-    # {
-    #   "token"=>"hhIovbbUAcZJEbiVlpZqCmGX",
-    #   "team_id"=>"T0C4D2FMZ",
-    #   "team_domain"=>"swarmbot",
-    #   "channel_id"=>"C0N8Z204C",
-    #   "channel_name"=>"bot-testing",
-    #   "user_id"=>"U0JRWMCGM",
-    #   "user_name"=>"harlan",
-    #   "command"=>"/swarmbot",
-    #   "text"=>"help",
-    #   "response_url"=>"https://hooks.slack.com/commands/T0C4D2FMZ/22602907041/yZcAZJe4dqgcWRZavYEDA8pe"
-    # }
-
   end
+
 
   # def debug
   #
