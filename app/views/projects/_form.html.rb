@@ -21,7 +21,7 @@ module Views
             with_errors(project, :tracker) {
               label {
                 text "Project Tracker"
-                f.text_field :tracker
+                f.text_field :tracker, placeholder: "https://pivotaltracker.com"
               }
             }
             with_errors(project, :image) {

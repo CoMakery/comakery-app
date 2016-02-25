@@ -44,7 +44,6 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Title", with: "This is a project"
     fill_in "Description", with: "This is a project description which is very informative"
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
-    fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
     expect(find_field("Set project as public (display in CoMakery index)")).to be_checked
 
     reward_type_inputs = page.all(".reward-type-row", visible: true)
@@ -80,7 +79,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "This is a project"
     expect(page).to have_content "This is a project description which is very informative"
     expect(page.find(".project-image")[:src]).to match(/\/attachments\/[A-Za-z0-9\/]+\/image/)
-    expect(page).to have_link "Project Tasks »"
+    expect(page).not_to have_link "Project Tasks »"
     expect(page).to have_content "Visibility: Public"
 
     reward_type_rows = page.all(".reward-type-row")
@@ -105,7 +104,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_checked_field("Set project as public (display in CoMakery index)")
     fill_in "Title", with: "This is an edited project"
     fill_in "Description", with: "This is an edited project description which is very informative"
-    fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker/edit"
+    fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
     uncheck "Set project as public (display in CoMakery index)"
 
     reward_type_inputs = page.all(".reward-type-row", visible: true)
@@ -121,6 +120,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "This is an edited project"
     expect(page).to have_content "This is an edited project description which is very informative"
     expect(page).to have_content "Visibility: Private"
+    expect(page).to have_link "Project Tasks »"
 
     reward_type_inputs = page.all(".reward-type-row")
     expect(reward_type_inputs.size).to eq(3)

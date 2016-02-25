@@ -9,7 +9,7 @@ class Views::Projects::Show < Views::Base
       column("small-9") {
         h1 project.title
         p project.description
-        a "Project Tasks »", class: buttonish, href: project.tracker
+        a "Project Tasks »", class: buttonish, href: project.tracker if project.tracker
       }
     }
 

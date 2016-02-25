@@ -203,6 +203,9 @@ GEM
     multipart-post (2.0.0)
     nenv (0.2.0)
     netrc (0.11.0)
+    nilify_blanks (1.2.1)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     nokogiri-happymapper (0.5.9)
@@ -454,6 +457,7 @@ DEPENDENCIES
   jquery-rails
   letter_opener
   meta_request
+  nilify_blanks
   nokogiri
   omniauth
   omniauth-slack

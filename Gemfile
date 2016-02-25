@@ -11,6 +11,7 @@ gem 'foundation-icons-sass-rails'
 gem 'foundation-rails', '< 6'
 gem 'jbuilder'
 gem 'jquery-rails'
+gem "nilify_blanks"
 gem 'nokogiri'
 gem 'omniauth-slack'
 gem 'omniauth'
