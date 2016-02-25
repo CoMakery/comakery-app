@@ -6,6 +6,12 @@ describe Project do
       expect(Project.new.tap(&:valid?).errors.full_messages.sort).to eq(["Owner account can't be blank",
                                                                          "Title can't be blank"])
     end
+
+    it "requires the tracker url be valid if present" do
+      project = Project.new(owner_account: create(:account), title: "title", tracker: "foo")
+      expect(project).not_to be_valid
+      expect(project.errors.full_messages).to eq(["Tracker must be a valid url"])
+    end
   end
 
   describe 'associations' do

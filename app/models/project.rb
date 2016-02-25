@@ -9,8 +9,16 @@ class Project < ActiveRecord::Base
   belongs_to :owner_account, class_name: Account
   validates_presence_of :owner_account, :title
 
+  validate :valid_tracker_url, if: :tracker
+
   def invalid_params(attributes)
     RewardType.invalid_params(attributes)
   end
 
+  private
+
+  def valid_tracker_url
+    uri = URI.parse(tracker)
+    errors[:tracker] << "must be a valid url" unless uri.absolute?
+  end
 end
