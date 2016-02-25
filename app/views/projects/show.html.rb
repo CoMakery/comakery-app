@@ -4,7 +4,7 @@ class Views::Projects::Show < Views::Base
   def content
     row {
       column("small-3") {
-        img(src: attachment_url(project, :image), class: "project_image")
+        img(src: attachment_url(project, :image), class: "project-image")
       }
       column("small-9") {
         h1 project.title

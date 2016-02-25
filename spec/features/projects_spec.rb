@@ -34,7 +34,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Project 1"
 
     within "#project-#{project.to_param}" do
-      click_link "View"
+      click_link project.title
     end
 
     click_link "Back"
@@ -79,7 +79,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Project created"
     expect(page).to have_content "This is a project"
     expect(page).to have_content "This is a project description which is very informative"
-    expect(page.find(".project_image")[:src]).to match(/\/attachments\/[A-Za-z0-9\/]+\/image/)
+    expect(page.find(".project-image")[:src]).to match(/\/attachments\/[A-Za-z0-9\/]+\/image/)
     expect(page).to have_link "Project Tasks »"
     expect(page).to have_content "Visibility: Public"
 
@@ -100,7 +100,7 @@ describe "viewing projects, creating and editing", :js do
 
     click_on "Edit"
 
-    expect(page.find(".project_image")[:src]).to match(/\/attachments\/[A-Za-z0-9\/]+\/image/)
+    expect(page.find(".project-image")[:src]).to match(/\/attachments\/[A-Za-z0-9\/]+\/image/)
 
     expect(page).to have_checked_field("Set project as public (display in CoMakery index)")
     fill_in "Title", with: "This is an edited project"
@@ -147,7 +147,7 @@ describe "viewing projects, creating and editing", :js do
 
     expect(page).to have_content "Public Project"
 
-    click_link "View"
+    click_link "Public Project"
 
     expect(page).not_to have_content "Edit"
   end
