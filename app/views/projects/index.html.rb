@@ -2,14 +2,17 @@ class Views::Projects::Index < Views::Projects::Base
   needs :projects
 
   def content
-    full_row { h1 "Projects" }
+    row {
+      column("small-8") {
+        h1 "Projects"
+      }
+      column("small-4") {
+        a("New Project", class: buttonish(:small), href: new_project_path)
+      }
+    }
 
     projects.each do |project|
       project_block(project)
     end
-
-    full_row {
-      a("New Project", class: buttonish(:small), href: new_project_path)
-    }
   end
 end
