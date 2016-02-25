@@ -14,7 +14,15 @@ class Authentication < ActiveRecord::Base
     slack_token = auth_hash.dig('credentials', 'token')
     email_address = auth_hash.dig('extra', 'user_info', 'user', 'profile', 'email')
 
-    raise MissingAuthParamException.new unless provider && email_address && name && slack_team_id && slack_team_name && slack_user_id && slack_token
+    unless provider && email_address && name && slack_team_id && slack_team_name && slack_user_id && slack_token
+      raise MissingAuthParamException.new({provider: provider,
+                                          email_address: email_address,
+                                          name: name,
+                                          slack_team_id: slack_team_id,
+                                          slack_team_name: slack_team_name,
+                                          slack_user_id: slack_user_id,
+                                          slack_token: slack_token}.to_json)
+    end
 
     account = Account.find_or_initialize_by(email: email_address)
     account.update!(name: name)

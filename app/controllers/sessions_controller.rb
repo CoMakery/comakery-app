@@ -15,7 +15,8 @@ class SessionsController < ApplicationController
       @account = Authentication.find_or_create_from_auth_hash!(request.env['omniauth.auth'])
       session[:account_id] = @account.id
       redirect_to root_path
-    rescue Authentication::MissingAuthParamException
+    rescue Authentication::MissingAuthParamException => e
+      d proc { e.message }
       flash['alert'] = "Failed authentication"
       redirect_to root_url
     end
