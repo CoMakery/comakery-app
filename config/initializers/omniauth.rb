@@ -4,7 +4,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     'commands',        # slash commands
     'chat:write:bot',  # write to any channel or PM user (in their Slackbot PM channel)
     'users:read',      # get user email address
-    # 'team:read',
+    'team:read',       # ? - required though
     # identify
   ] * ','
 
