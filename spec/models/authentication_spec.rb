@@ -1,6 +1,24 @@
 require 'rails_helper'
 
 describe Authentication do
+
+  describe ".get_name" do
+    it "finds name from ->info->name" do
+      auth_hash =  { 'info' => { 'name' => "Bob Johnson" } }
+      expect(Authentication.get_name(auth_hash)).to eq 'Bob Johnson'
+    end
+
+    it "finds name from ->info->nickname" do
+      auth_hash =  { 'info' => { 'nickname' => "Bob Johnson" } }
+      expect(Authentication.get_name(auth_hash)).to eq 'Bob Johnson'
+    end
+
+    it "finds name from ->info->user" do
+      auth_hash =  { 'info' => { 'user' => "Bob Johnson" } }
+      expect(Authentication.get_name(auth_hash)).to eq 'Bob Johnson'
+    end
+  end
+
   describe ".find_or_create_from_auth_hash" do
     let(:auth_hash) {
       {
@@ -10,7 +28,12 @@ describe Authentication do
               "token" => "xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa"
           },
           'extra' => {'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com'}}}},
-          'info' => {'user_id' => 'slack user id', 'team' => "Citizen Code", 'team_id' => 'slack team id', 'name' => "Bob Johnson"}
+          'info' => {
+            'user_id' => 'slack user id',
+            'team' => "Citizen Code",
+            'team_id' => 'slack team id',
+            'name' => "Bob Johnson"
+          }
       }
     }
 

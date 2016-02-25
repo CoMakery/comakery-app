@@ -7,7 +7,7 @@ class Authentication < ActiveRecord::Base
     auth_hash = auth_hash.to_h
     provider = auth_hash['provider']
     uid = auth_hash['uid']
-    name = auth_hash.dig('info', 'name')
+    name = get_name(auth_hash)
     slack_user_id = auth_hash.dig('info', 'user_id')
     slack_team_id = auth_hash.dig('info', 'team_id')
     slack_team_name = auth_hash.dig('info', 'team')
@@ -41,4 +41,9 @@ class Authentication < ActiveRecord::Base
     )
     account
   end
+
+  def self.get_name(auth_hash)
+    auth_hash.dig('info', 'name').presence || auth_hash.dig('info', 'nickname').presence || auth_hash.dig('info', 'user')
+  end
+
 end
