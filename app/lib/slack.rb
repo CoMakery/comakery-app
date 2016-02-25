@@ -3,6 +3,8 @@ module Swarmbot
 
     include ::Rails.application.routes.url_helpers
 
+    AVATAR = 'https://s3.amazonaws.com/swarmbot-production/spacekitty.jpg'
+
     def initialize(authentication)
       @client = ::Slack::Web::Client.new token: authentication.slack_token
     end
@@ -17,11 +19,11 @@ module Swarmbot
       }.strip.gsub(/\s+/, ' ')
 
       @client.chat_postMessage(
-        channel: '#general', # todo: project.slack_channel
+        channel: '#general',
         text: text,
-        as_user: false,      # don't post as *authed user*
-        username: 'swarmbot' # post as swarmbot
-        # icon_url: asset_url (...)
+        as_user: false,       # don't post as *authed user*
+        username: 'swarmbot', # post as swarmbot
+        icon_url: AVATAR
       )
     end
   end
