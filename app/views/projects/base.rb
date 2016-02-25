@@ -18,9 +18,9 @@ class Views::Projects::Base < Views::Base
         img(src: attachment_url(project, :image, :fill, 100, 100), class: "small-margin", width: 100, height: 100)
       }
       column("small-8") {
-        div(class: "small-margin") {
+        div(class: "margin-small") {
           p { a(project.title, href: project_path(project)) }
-          p project.description.truncate(70)
+          p project.description.try(:truncate, 70)
         }
       }
     }
