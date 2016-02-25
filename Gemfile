@@ -50,10 +50,6 @@ group(:development, :test) do
   gem 'typhoeus'
 end
 
-# group(:test) do
-  # gem 'webmock'
-# end
-
 group(:development) do
   gem 'git-storyid'
   gem 'html2fortitude'

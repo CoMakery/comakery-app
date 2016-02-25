@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 describe Account do
-  subject(:account) { create :account, password: "12345678" }
+  subject(:account) { create :account, password: '12345678' }
   let(:role1) { create :role, name: 'Fun 1' }
   let(:role2) { create :role, name: 'Fun 2' }
 
-  describe "validations" do
-    it "requires many attributes" do
-      expect(Account.new.tap{|a|a.valid?}.errors.full_messages.sort).to eq(["Email can't be blank", "Name can't be blank"])
+  describe 'validations' do
+    it 'requires many attributes' do
+      expect(Account.new.tap(&:valid?).errors.full_messages.sort).to eq(["Email can't be blank", "Name can't be blank"])
     end
   end
 
@@ -28,12 +28,43 @@ describe Account do
     expect(alice.email).to eq('alice@example.com')
   end
 
-  describe "#slack_auth" do
-    let!(:slack_authentication) { create(:authentication, provider: 'slack', account: subject)}
-    let!(:other_authentication) { create(:authentication, provider: 'other', account: subject)}
+  describe '#slack' do
+    context 'creates a new Slack instance if none exists' do
+      before do
+        create :authentication, provider: 'slack', account: subject
+        subject.instance_variable_set(:@slack, nil)
+      end
+      specify do
+        expect(subject.slack).to be_instance_of Swarmbot::Slack
+      end
+    end
+
+    context 'returns Slack instance if exists' do
+      let!(:slack) { build :slack }
+      before { subject.instance_variable_set(:@slack, slack) }
+      specify do
+        expect(subject.slack).to eq slack
+      end
+    end
+  end
+
+  describe '#slack_auth' do
+    let!(:slack_authentication) { create(:authentication, provider: 'slack', account: subject) }
+    let!(:other_authentication) { create(:authentication, provider: 'other', account: subject) }
 
     it "returns the authentication associated with this account that is from the 'slack' provider" do
       expect(subject.slack_auth).to eq(slack_authentication)
+    end
+  end
+
+  describe '#send_reward_notifications' do
+    before do
+      create :authentication, provider: 'slack', account: subject
+    end
+    it 'sends a Slack notification' do
+      allow(subject.slack).to receive(:send_reward_notifications)
+      subject.send_reward_notifications
+      expect(subject.slack).to have_received(:send_reward_notifications)
     end
   end
 end

@@ -21,12 +21,13 @@ describe RewardsController do
   end
 
   describe "#create" do
+
     it "records a reward being created" do
+      expect_any_instance_of(Account).to receive(:send_reward_notifications)
       expect do
         post :create, project_id: project.to_param, reward: {
                         account_id: receiver_account.id,
                         amount: 3000,
-                        issuer: issuer,
                         description: "This rocks!!11"
                     }
         expect(response.status).to eq(302)

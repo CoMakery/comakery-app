@@ -12,4 +12,5 @@ class Project < ActiveRecord::Base
   def invalid_params(attributes)
     RewardType.invalid_params(attributes)
   end
+
 end

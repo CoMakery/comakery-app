@@ -12,6 +12,7 @@ class RewardsController < ApplicationController
     authorize reward
     reward.save!
     flash[:notice] = "Successfully sent reward to #{reward.account.name}"
+    current_account.send_reward_notifications(project: @project, reward: reward)
     redirect_to project_path(@project)
   end
 

@@ -11,7 +11,7 @@ class SlackController < ApplicationController
         {
         text: %{ Hi!  Swarmbot helps you share equity with your team.
           For more intel, drop by #{request.protocol}#{request.host_with_port}
-          }.strip.gsub(/\s{2,}/, ' ')
+        }.strip.gsub(/\s+/, ' ')
         }
       ]
     }

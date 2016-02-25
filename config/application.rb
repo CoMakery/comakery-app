@@ -40,5 +40,8 @@ module Swarmbot
     # e-mail
     config.action_mailer.delivery_method = :postmark
     config.action_mailer.postmark_settings = { :api_key => ENV['POSTMARK_API_KEY'] }
+
+    routes.default_url_options[:host] = ENV['APP_HOST'] || 'localhost:3000'
+    routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'] || 'http://'
   end
 end

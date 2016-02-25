@@ -20,6 +20,7 @@ class Mom
 
   def authentication(**attrs)
     defaults = {
+        account: create(:account),
         provider: "slack",
         uid: "this is a generic uid",
         slack_token: "slack token",
@@ -50,6 +51,10 @@ class Mom
         description: "Great work",
     }
     Reward.new(defaults.merge(attrs))
+  end
+
+  def slack(authentication = create(:authentication))
+    Swarmbot::Slack.new(authentication)
   end
 
   def role(name: 'A Role', key: nil)
