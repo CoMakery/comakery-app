@@ -7,7 +7,14 @@ class Views::Projects::Show < Views::Base
         img(src: attachment_url(project, :image), class: "project-image")
       }
       column("small-9") {
-        h1 project.title
+        row {
+          column("small-9") {
+            h1 project.title
+          }
+          column("small-3") {
+            a "Edit", class: buttonish, href: edit_project_path(project) if policy(project).edit?
+          }
+        }
         p project.description
         a "Project Tasks »", class: buttonish, href: project.tracker if project.tracker
       }
@@ -73,7 +80,6 @@ class Views::Projects::Show < Views::Base
       p "Visibility: #{project.public? ? "Public" : "Private"}"
     }
     full_row {
-      a("Edit", class: buttonish << "margin-small", href: edit_project_path(project)) if policy(project).edit?
       a("Back", class: buttonish << "margin-small", href: projects_path)
     }
   end
