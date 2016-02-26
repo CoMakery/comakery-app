@@ -37,6 +37,7 @@ class Mom
         description: "We are going to build amazing",
         tracker: "https://github.com/example/uber_for_cats",
         slack_team_id: "citizen code id",
+        slack_team_name: "Citizen Code",
         owner_account: owner_account
     }
     Project.new(defaults.merge(attrs))
