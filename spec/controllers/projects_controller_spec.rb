@@ -9,12 +9,13 @@ describe ProjectsController do
     let!(:other_public_project) { create(:project, slack_team_id: "somebody else", public: true, title: "other_public_project") }
     let!(:other_private_project) { create(:project, slack_team_id: "somebody else", public: false, title: "other_private_project") }
     let!(:my_private_project) { create(:project, slack_team_id: "foo", title: "my_private_project") }
+    let!(:my_public_project) { create(:project, slack_team_id: "foo", title: "my_public_project") }
 
-    it "works" do
+    it "returns your private projects, and public projects that *do not* belong to you" do
       get :landing
 
       expect(response.status).to eq(200)
-      expect(assigns[:private_projects].map(&:title)).to eq(["my_private_project"])
+      expect(assigns[:private_projects].map(&:title)).to eq(["my_private_project", "my_public_project"])
       expect(assigns[:public_projects].map(&:title)).to eq(["other_public_project"])
     end
   end

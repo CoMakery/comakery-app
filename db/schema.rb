@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160226173914) do
+ActiveRecord::Schema.define(version: 20160226192556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(version: 20160226173914) do
 
   add_index "projects", ["owner_account_id"], name: "index_projects_on_owner_account_id", using: :btree
   add_index "projects", ["public"], name: "index_projects_on_public", using: :btree
-  add_index "projects", ["slack_team_id"], name: "index_projects_on_slack_team_id", using: :btree
+  add_index "projects", ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public", using: :btree
 
   create_table "reward_types", force: :cascade do |t|
     t.integer  "project_id", null: false
