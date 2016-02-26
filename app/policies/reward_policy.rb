@@ -6,7 +6,13 @@ class RewardPolicy < ApplicationPolicy
     @reward = reward
   end
 
-  def new?
-    @reward.project.owner_account == @account
+  def create?
+    # project = @reward&.reward_type&.project
+    # @account &&
+    # project&.owner_account == @account &&
+    # project&.accounts&.include?(reward.account) &&
+    # project.reward_types.include?(reward.reward_type)
+    #
+    @account && @reward&.reward_type&.project&.owner_account == @account
   end
 end

@@ -42,14 +42,14 @@ describe Project do
           owner_account: create(:account),
           slack_team_id: '123',
           reward_types_attributes: [
-              {'name' => 'Small reward', 'suggested_amount' => '1000'},
-              {'name' => '', 'suggested_amount' => '1000'},
-              {'name' => 'Reward', 'suggested_amount' => ''}
+              {'name' => 'Small reward', 'amount' => '1000'},
+              {'name' => '', 'amount' => '1000'},
+              {'name' => 'Reward', 'amount' => ''}
           ])
 
       expect(project.reward_types.count).to eq(1)
       expect(project.reward_types.first.name).to eq('Small reward')
-      expect(project.reward_types.first.suggested_amount).to eq(1000)
+      expect(project.reward_types.first.amount).to eq(1000)
       expect(project.slack_team_id).to eq('123')
 
       project.update(reward_types_attributes: {id: project.reward_types.first.id, _destroy: true})

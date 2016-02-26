@@ -9,12 +9,12 @@ class Swarmbot::Slack
     @client = ::Slack::Web::Client.new token: authentication.slack_token
   end
 
-  def send_reward_notifications(project:, reward:)
+  def send_reward_notifications(reward:)
     text = %{
       Sweet! @#{reward.account.name}
-      received #{pluralize(reward.amount, "project coin")}
+      received #{pluralize(reward.reward_type.amount, "project coin")}
       for "#{reward.description}" in
-      <#{project_url(reward.project)}|#{reward.project.title}>
+      <#{project_url(reward.reward_type.project)}|#{reward.reward_type.project.title}>
     }.strip.gsub(/\s+/, ' ')
 
     @client.chat_postMessage(

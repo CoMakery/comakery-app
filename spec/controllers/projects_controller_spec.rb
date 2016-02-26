@@ -1,14 +1,14 @@
 require "rails_helper"
 
 describe ProjectsController do
-  let!(:account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "itsa me") } }
+  let!(:account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo") } }
 
   before { login(account) }
 
   describe "#landing" do
     let!(:other_public_project) { create(:project, slack_team_id: "somebody else", public: true, title: "other_public_project") }
     let!(:other_private_project) { create(:project, slack_team_id: "somebody else", public: false, title: "other_private_project") }
-    let!(:my_private_project) { create(:project, slack_team_id: "itsa me", title: "my_private_project") }
+    let!(:my_private_project) { create(:project, slack_team_id: "foo", title: "my_private_project") }
 
     it "works" do
       get :landing
@@ -30,15 +30,15 @@ describe ProjectsController do
 
       expect(assigns[:project].reward_types.first).to be_a_new_record
       expect(assigns[:project].reward_types.first.name).to eq("Thanks")
-      expect(assigns[:project].reward_types.first.suggested_amount).to eq(10)
+      expect(assigns[:project].reward_types.first.amount).to eq(10)
 
       expect(assigns[:project].reward_types.second).to be_a_new_record
       expect(assigns[:project].reward_types.second.name).to eq("Small Contribution")
-      expect(assigns[:project].reward_types.second.suggested_amount).to eq(100)
+      expect(assigns[:project].reward_types.second.amount).to eq(100)
 
       expect(assigns[:project].reward_types.third).to be_a_new_record
       expect(assigns[:project].reward_types.third.name).to eq("Contribution")
-      expect(assigns[:project].reward_types.third.suggested_amount).to eq(1000)
+      expect(assigns[:project].reward_types.third.amount).to eq(1000)
     end
   end
 
@@ -52,9 +52,9 @@ describe ProjectsController do
                           image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
                           tracker: "http://github.com/here/is/my/tracker",
                           reward_types_attributes: [
-                              {name: "Small Reward", suggested_amount: 1000},
-                              {name: "Big Reward", suggested_amount: 2000},
-                              {name: "", suggested_amount: ""},
+                              {name: "Small Reward", amount: 1000},
+                              {name: "Big Reward", amount: 2000},
+                              {name: "", amount: ""},
                           ]
                       }
           expect(response.status).to eq(302)
@@ -95,9 +95,9 @@ describe ProjectsController do
 
     describe "#update" do
       it "updates a project" do
-        small_reward_type = project.reward_types.create!(name: "Small Reward", suggested_amount: 100)
-        medium_reward_type = project.reward_types.create!(name: "Medium Reward", suggested_amount: 300)
-        destroy_me_reward_type = project.reward_types.create!(name: "Destroy Me Reward", suggested_amount: 300)
+        small_reward_type = project.reward_types.create!(name: "Small Reward", amount: 100)
+        medium_reward_type = project.reward_types.create!(name: "Medium Reward", amount: 300)
+        destroy_me_reward_type = project.reward_types.create!(name: "Destroy Me Reward", amount: 300)
 
         expect do
           expect do
@@ -107,9 +107,9 @@ describe ProjectsController do
                     description: "updated Project description here",
                     tracker: "http://github.com/here/is/my/tracker/updated",
                     reward_types_attributes: [
-                        {id: small_reward_type.to_param, name: "Small Reward", suggested_amount: 150},
+                        {id: small_reward_type.to_param, name: "Small Reward", amount: 150},
                         {id: destroy_me_reward_type.to_param, _destroy: true},
-                        {name: "Big Reward", suggested_amount: 500},
+                        {name: "Big Reward", amount: 500},
                     ]
                 }
             expect(response.status).to eq(302)
@@ -122,23 +122,29 @@ describe ProjectsController do
         expect(project.description).to eq("updated Project description here")
         expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
 
-        reward_types = project.reward_types.order(:suggested_amount)
+        reward_types = project.reward_types.order(:amount)
         expect(reward_types.size).to eq(3)
         expect(reward_types.first.name).to eq("Small Reward")
-        expect(reward_types.first.suggested_amount).to eq(150)
+        expect(reward_types.first.amount).to eq(150)
         expect(reward_types.second.name).to eq("Medium Reward")
-        expect(reward_types.second.suggested_amount).to eq(300)
+        expect(reward_types.second.amount).to eq(300)
         expect(reward_types.third.name).to eq("Big Reward")
-        expect(reward_types.third.suggested_amount).to eq(500)
+        expect(reward_types.third.amount).to eq(500)
       end
     end
 
     describe "#show" do
+      let!(:receiver_account) { create(:account, name: "Receiver").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
+      let!(:other_account) { create(:account, name: "Other").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
+      let!(:different_team_account) { create(:account, name: "Other").tap { |a| create(:authentication, slack_team_id: "bar", account: a) } }
+
       it "allows team members to view projects" do
         get :show, id: project.to_param
 
         expect(response.code).to eq "200"
         expect(assigns(:project)).to eq project
+        expect(assigns[:reward]).to be_new_record
+        expect(assigns[:rewardable_accounts].map(&:name).sort).to eq([account.name, other_account.name, receiver_account.name])
       end
 
       it "only denies non-owners to view projects" do

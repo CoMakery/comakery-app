@@ -73,7 +73,7 @@ module Views
             text_field_tag :'project[reward_types_attributes][][name]', reward_type.try(:name)
           }
           column("small-4") {
-            text_field_tag :'project[reward_types_attributes][][suggested_amount]', reward_type.try(:suggested_amount)
+            text_field_tag :'project[reward_types_attributes][][amount]', reward_type.try(:amount)
           }
           column("small-4") {
             a("×", href: "#", 'data-mark-and-hide': '.reward-type-row')

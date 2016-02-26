@@ -12,9 +12,9 @@ class ProjectsController < ApplicationController
   def new
     @project = Project.new(public: true)
     authorize @project
-    @project.reward_types.build(name: "Thanks", suggested_amount: 10)
-    @project.reward_types.build(name: "Small Contribution", suggested_amount: 100)
-    @project.reward_types.build(name: "Contribution", suggested_amount: 1000)
+    @project.reward_types.build(name: "Thanks", amount: 10)
+    @project.reward_types.build(name: "Small Contribution", amount: 100)
+    @project.reward_types.build(name: "Contribution", amount: 1000)
   end
 
   def create
@@ -33,6 +33,8 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.find(params[:id])
     authorize @project
+    @reward = Reward.new
+    @rewardable_accounts = policy_scope(Account)
   end
 
   def edit
@@ -52,6 +54,6 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :image, :tracker, :public, reward_types_attributes: [:id, :name, :suggested_amount, :_destroy])
+    params.require(:project).permit(:title, :description, :image, :tracker, :public, reward_types_attributes: [:id, :name, :amount, :_destroy])
   end
 end

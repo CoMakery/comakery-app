@@ -1,5 +1,5 @@
 class Views::Projects::Show < Views::Base
-  needs :project
+  needs :project, :reward, :rewardable_accounts
 
   def content
     row {
@@ -20,29 +20,58 @@ class Views::Projects::Show < Views::Base
       column("small-4") {
         text "Suggested Value"
       }
-      column("small-4") {
-      }
     }
-    row(class: "reward-types") {
-      project.reward_types.each do |reward_type|
-        row(class: "reward-type-row") {
-          column("small-4") {
-            text reward_type.name
+    form_for [project, reward] do |f|
+      row(class: "reward-types") {
+        project.reward_types.each do |reward_type|
+          row(class: "reward-type-row") {
+            column("small-4") {
+              with_errors(project, :account_id) {
+                label {
+                  f.radio_button(:reward_type_id, reward_type.to_param)
+                  text reward_type.name
+                }
+              }
+            }
+            column("small-4") {
+              text reward_type.amount
+            }
+            column("small-4") {
+            }
           }
+        end
+        row {
           column("small-4") {
-            text reward_type.suggested_amount
-          }
-          column("small-4") {
+            with_errors(project, :account_id) {
+              label {
+                text "User"
+                f.select(:account_id, rewardable_accounts.map { |a| [a.name, a.id] })
+              }
+            }
           }
         }
-      end
-    }
+        row {
+          column("small-4") {
+            with_errors(project, :description) {
+              label {
+                text "Description"
+                f.text_area(:description)
+              }
+            }
+          }
+        }
+        row {
+          column("small-4") {
+            f.submit("Send Reward", class: buttonish)
+          }
+        }
+      }
+    end
     full_row {
       p "Visibility: #{project.public? ? "Public" : "Private"}"
     }
     full_row {
       a("Edit", class: buttonish << "margin-small", href: edit_project_path(project)) if policy(project).edit?
-      a("Send Reward", class: buttonish << "margin-small", href: new_project_reward_path(project)) if policy(project).send_reward?
       a("Back", class: buttonish << "margin-small", href: projects_path)
     }
   end

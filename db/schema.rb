@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160224202923) do
+ActiveRecord::Schema.define(version: 20160225234122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,25 +84,23 @@ ActiveRecord::Schema.define(version: 20160224202923) do
   add_index "projects", ["slack_team_id"], name: "index_projects_on_slack_team_id", using: :btree
 
   create_table "reward_types", force: :cascade do |t|
-    t.integer  "project_id",       null: false
-    t.string   "name",             null: false
-    t.integer  "suggested_amount", null: false
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.integer  "project_id", null: false
+    t.string   "name",       null: false
+    t.integer  "amount",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "rewards", force: :cascade do |t|
-    t.integer  "account_id",  null: false
-    t.integer  "project_id",  null: false
-    t.integer  "issuer_id",   null: false
-    t.integer  "amount",      null: false
+    t.integer  "account_id",     null: false
+    t.integer  "issuer_id",      null: false
     t.text     "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "reward_type_id", null: false
   end
 
   add_index "rewards", ["account_id"], name: "index_rewards_on_account_id", using: :btree
-  add_index "rewards", ["project_id", "account_id"], name: "index_rewards_on_project_id_and_account_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name",       null: false
