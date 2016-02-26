@@ -7,12 +7,6 @@ class RewardPolicy < ApplicationPolicy
   end
 
   def create?
-    # project = @reward&.reward_type&.project
-    # @account &&
-    # project&.owner_account == @account &&
-    # project&.accounts&.include?(reward.account) &&
-    # project.reward_types.include?(reward.reward_type)
-    #
-    @account && @reward&.reward_type&.project&.owner_account == @account
+    @account && @account == @reward&.reward_type&.project&.owner_account
   end
 end
