@@ -16,7 +16,6 @@ describe "viewing projects, creating and editing", :js do
 
       visit root_path
 
-      wut
       expect(page.all(".project").size).to eq(12)
       expect(page).to have_content "Public Project"
       expect(page).to have_content "This is a slack team name"
