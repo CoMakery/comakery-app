@@ -1,13 +1,14 @@
 Rails.application.config.middleware.use OmniAuth::Builder do
   # provider :developer
   provider :slack, ENV["SLACK_API_KEY"], ENV["SLACK_API_SECRET"], scope: [
-    'commands',        # slash commands
-    'chat:write:bot',  # write to any channel or PM user (in their Slackbot PM channel)
-    # 'users:read',      # get user email address
-    # 'team:read',       # ? - required though
-    # identify
+    'commands',            # slash commands
+    'chat:write:bot',      # write to any channel or PM user (in their Slackbot PM channel)
+    'reactions:write',     # create "reaction" emoticons
+    # 'reactions:read',
+    # 'users:read',        # get user email address
+    # 'team:read',         # ? - required though
+    # 'identify',
   ] * ','
-
 end
 
 OmniAuth.configure do |config|
