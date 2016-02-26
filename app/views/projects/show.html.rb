@@ -13,12 +13,14 @@ class Views::Projects::Show < Views::Base
       }
     }
 
-    full_row {
+    row {
       column("small-4") {
         text "Reward Names"
       }
       column("small-4") {
         text "Suggested Value"
+      }
+      column("small-4") {
       }
     }
     form_for [project, reward] do |f|
