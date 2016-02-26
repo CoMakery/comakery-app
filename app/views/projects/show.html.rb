@@ -29,7 +29,7 @@ class Views::Projects::Show < Views::Base
               with_errors(project, :account_id) {
                 label {
                   f.radio_button(:reward_type_id, reward_type.to_param)
-                  text reward_type.name
+                  span(reward_type.name, class: "margin-small")
                 }
               }
             }
