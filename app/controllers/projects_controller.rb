@@ -22,13 +22,16 @@ class ProjectsController < ApplicationController
     # you are creating this project for if we actually allow multiple, simultaneous auths
     # instead of assuming its the first in db order
     auth = current_account.authentications.find_by(provider: "slack")
-    project = Project.new(project_params.merge(owner_account: current_account,
-                                               slack_team_id: auth.slack_team_id,
-                                               slack_team_name: auth.slack_team_name))
-    authorize project
-    project.save!
-    flash[:notice] = "Project created"
-    redirect_to project_path(project)
+    @project = Project.new(project_params.merge(owner_account: current_account,
+                                                slack_team_id: auth.slack_team_id,
+                                                slack_team_name: auth.slack_team_name))
+    authorize @project
+    if @project.save
+      flash[:notice] = "Project created"
+      redirect_to project_path(@project)
+    else
+      render :new
+    end
   end
 
   def show

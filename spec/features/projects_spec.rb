@@ -42,7 +42,6 @@ describe "viewing projects, creating and editing", :js do
 
     click_link "New Project"
 
-    fill_in "Title", with: "This is a project"
     fill_in "Description", with: "This is a project description which is very informative"
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public (display in CoMakery index)")).to be_checked
@@ -73,6 +72,12 @@ describe "viewing projects, creating and editing", :js do
 
     reward_type_inputs = page.all(".reward-type-row", visible: true)
     expect(reward_type_inputs.size).to eq(4)
+
+    click_on "Save"
+
+    expect(page).to have_content "Title can't be blank"
+
+    fill_in "Title", with: "This is a project"
 
     click_on "Save"
 
