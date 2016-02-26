@@ -13,5 +13,4 @@ deployment:
   autodeploy:
     branch: master
     commands:
-      - bin/deploy swarmbot-staging $CIRCLE_SHA1
       - bin/deploy swarmbot-production $CIRCLE_SHA1
