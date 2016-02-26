@@ -18,7 +18,7 @@ class Swarmbot::Slack
     }.strip.gsub(/\s+/, ' ')
 
     @client.chat_postMessage(
-      channel: '#general', # '#bot-testing',
+      channel: '#bot-testing',  # '#general', #
       text: text,
       as_user: false,       # don't post as *authed user*
       username: 'swarmbot', # post as swarmbot
