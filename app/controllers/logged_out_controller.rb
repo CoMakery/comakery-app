@@ -4,6 +4,7 @@ class LoggedOutController < ApplicationController
   layout 'layouts/logged_out'
 
   def show
+    redirect_to projects_url if session[:account_id]
   end
 
   def not_found
