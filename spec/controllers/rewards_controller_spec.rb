@@ -6,7 +6,7 @@ describe RewardsController do
   let!(:other_account) { create(:account, name: "Other").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
   let!(:different_team_account) { create(:account, name: "Other").tap { |a| create(:authentication, slack_team_id: "bar", account: a) } }
 
-  let(:project) { create(:project, owner_account: issuer) }
+  let(:project) { create(:project, owner_account: issuer, slack_team_id: "foo") }
 
   before { login(issuer) }
 

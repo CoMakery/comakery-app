@@ -7,6 +7,7 @@ class RewardPolicy < ApplicationPolicy
   end
 
   def create?
-    @account && @account == @reward&.reward_type&.project&.owner_account
+    project = @reward&.reward_type&.project
+    @account && @account == project&.owner_account && project.slack_team_id == @reward&.account&.slack_auth&.slack_team_id
   end
 end
