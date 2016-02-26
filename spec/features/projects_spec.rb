@@ -11,13 +11,15 @@ describe "viewing projects, creating and editing", :js do
     it "shows some projects" do
       login(account)
 
-      7.times {|i| create(:project, title: "Public Project #{i}", public: true) }
-      7.times {|i| create(:project, title: "Private Project #{i}", public: false, slack_team_id: "citizencode") }
+      7.times {|i| create(:project, title: "Public Project #{i}", public: true, slack_team_name: "This is a slack team name") }
+      7.times {|i| create(:project, title: "Private Project #{i}", public: false, slack_team_id: "citizencode", slack_team_name: "This is a slack team name") }
 
       visit root_path
 
+      wut
       expect(page.all(".project").size).to eq(12)
       expect(page).to have_content "Public Project"
+      expect(page).to have_content "This is a slack team name"
 
       click_link "Browse All"
 

@@ -19,8 +19,9 @@ class Views::Projects::Base < Views::Base
       }
       column("small-8") {
         div(class: "margin-small") {
-          p { a(project.title, href: project_path(project)) }
-          p project.description.try(:truncate, 70)
+          b { a(project.title, href: project_path(project)) }
+          div project.description.try(:truncate, 35)
+          i project.slack_team_name
         }
       }
     }

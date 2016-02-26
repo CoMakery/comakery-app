@@ -69,6 +69,7 @@ describe ProjectsController do
       expect(project.reward_types.first.name).to eq("Small Reward")
       expect(project.owner_account_id).to eq(account.id)
       expect(project.slack_team_id).to eq(account.authentications.first.slack_team_id)
+      expect(project.slack_team_name).to eq(account.authentications.first.slack_team_name)
     end
   end
 
