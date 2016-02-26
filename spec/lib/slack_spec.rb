@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'slack'
 
 describe Swarmbot::Slack do
   let (:authentication) { create :authentication, slack_token: 'xyz' }

@@ -1,5 +1,3 @@
-require 'slack'
-
 class Account < ActiveRecord::Base
   has_many :account_roles, dependent: :destroy
   has_many :authentications, dependent: :destroy
