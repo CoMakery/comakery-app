@@ -24,6 +24,10 @@ describe "viewing projects, creating and editing", :js do
 
     visit project_path(project)
 
+    click_button "Send"
+
+    expect(page).to have_content "Failed sending reward"
+
     choose "Small"
 
     expect(page.all("select#reward_account_id option").map(&:text).sort).to eq(["Hubert", "Sherman"])
