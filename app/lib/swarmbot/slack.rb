@@ -14,10 +14,12 @@ class Swarmbot::Slack
 
   def send_reward_notifications(reward:)
     text = %{
-      Sweet! @#{reward.account.name}
-      received #{pluralize(reward.reward_type.amount, "project coin")}
-      for "#{reward.description}" in
+      @#{reward.account.name} received a
+      #{reward.reward_type.amount} coin #{reward.reward_type.name}
+      #{'for "' + reward.description + '"' if reward.description.present?}"
+      on the
       <#{project_url(reward.reward_type.project)}|#{reward.reward_type.project.title}>
+      project.
     }.strip.gsub(/\s+/, ' ')
 
     message_response = @client.chat_postMessage(
