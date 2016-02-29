@@ -68,15 +68,19 @@ module Views
       def reward_type_content(reward_type, classes="")
         row(class: "reward-type-row #{classes}") {
           hidden_field_tag :'project[reward_types_attributes][][id]', reward_type.try(:to_param)
-          hidden_field_tag :'project[reward_types_attributes][][_destroy]', false, 'data-destroy': ''
+          hidden_field_tag :'project[reward_types_attributes][][_destroy]', reward_type.try(:_destroy), 'data-destroy': ''
           column("small-4") {
             text_field_tag :'project[reward_types_attributes][][name]', reward_type.try(:name)
           }
           column("small-4") {
-            text_field_tag :'project[reward_types_attributes][][amount]', reward_type.try(:amount)
+            text_field_tag :'project[reward_types_attributes][][amount]', reward_type.try(:amount), type: :number
           }
           column("small-4") {
-            a("×", href: "#", 'data-mark-and-hide': '.reward-type-row')
+            if reward_type && reward_type.rewards.count > 0
+              text "(#{pluralize(reward_type.rewards.count, "reward")} sent)"
+            else
+              a("×", href: "#", 'data-mark-and-hide': '.reward-type-row')
+            end
           }
         }
       end

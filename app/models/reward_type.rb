@@ -1,6 +1,6 @@
 class RewardType < ActiveRecord::Base
   belongs_to :project
-  has_many :rewards, dependent: :destroy
+  has_many :rewards, dependent: :restrict_with_exception
 
   validates_presence_of :project, :name, :amount
 

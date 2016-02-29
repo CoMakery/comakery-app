@@ -91,6 +91,7 @@ describe ProjectsController do
         end.not_to change { Project.count }
       end.not_to change { RewardType.count }
 
+      expect(flash[:error]).to eq("Project saving failed, please correct the errors below")
       project = assigns[:project]
       expect(project.description).to eq("Project description here")
       expect(project.image).to be_a(Refile::File)
@@ -161,6 +162,46 @@ describe ProjectsController do
         expect(reward_types.second.amount).to eq(300)
         expect(reward_types.third.name).to eq("Big Reward")
         expect(reward_types.third.amount).to eq(500)
+      end
+
+      it "re-renders with errors when updating fails" do
+        small_reward_type = project.reward_types.create!(name: "Small Reward", amount: 100)
+        medium_reward_type = project.reward_types.create!(name: "Medium Reward", amount: 300)
+        destroy_me_reward_type = project.reward_types.create!(name: "Destroy Me Reward", amount: 400)
+
+        expect do
+          expect do
+            put :update, id: project.to_param,
+                project: {
+                    title: "",
+                    description: "updated Project description here",
+                    tracker: "http://github.com/here/is/my/tracker/updated",
+                    reward_types_attributes: [
+                        {id: small_reward_type.to_param, name: "Small Reward", amount: 150},
+                        {id: destroy_me_reward_type.to_param, _destroy: true},
+                        {name: "Big Reward", amount: 500},
+                    ]
+                }
+            expect(response.status).to eq(200)
+          end.not_to change { Project.count }
+        end.not_to change { RewardType.count }
+
+        project = assigns[:project]
+        expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
+        expect(project.title).to eq("")
+        expect(project.description).to eq("updated Project description here")
+        expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
+
+        reward_types = project.reward_types.sort_by(&:amount)
+        expect(reward_types.size).to eq(4)
+        expect(reward_types.first.name).to eq("Small Reward")
+        expect(reward_types.first.amount).to eq(150)
+        expect(reward_types.second.name).to eq("Medium Reward")
+        expect(reward_types.second.amount).to eq(300)
+        expect(reward_types.third.name).to eq("Destroy Me Reward")
+        expect(reward_types.third.amount).to eq(400)
+        expect(reward_types.fourth.name).to eq("Big Reward")
+        expect(reward_types.fourth.amount).to eq(500)
       end
     end
 

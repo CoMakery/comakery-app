@@ -30,6 +30,7 @@ class ProjectsController < ApplicationController
       flash[:notice] = "Project created"
       redirect_to project_path(@project)
     else
+      flash[:error] = "Project saving failed, please correct the errors below"
       render :new
     end
   end
@@ -50,14 +51,19 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     @project.attributes = project_params
     authorize @project
-    @project.save!
-    flash[:notice] = "Project updated"
-    respond_with @project, location: project_path(@project)
+    if @project.save
+      flash[:notice] = "Project updated"
+      respond_with @project, location: project_path(@project)
+    else
+      flash[:error] = "Project updating failed, please correct the errors below"
+      render :edit
+    end
   end
 
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :image, :tracker, :public, reward_types_attributes: [:id, :name, :amount, :_destroy])
+    params.require(:project).permit(:title, :description, :image, :tracker, :public,
+                                    reward_types_attributes: [:id, :name, :amount, :_destroy])
   end
 end

@@ -1,5 +1,13 @@
 require "rails_helper"
 
+def get_reward_type_rows
+  page.all(".reward-type-row", visible: true)
+end
+
+def click_remove(reward_type_row)
+  reward_type_row.find("a[data-mark-and-hide]").click
+end
+
 describe "viewing projects, creating and editing", :js do
   let!(:project) { create(:project, title: "Project 1", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode") }
   let!(:project2) { create(:project, title: "Public Project", owner_account: account, slack_team_id: "citizencode", public: true) }
@@ -27,6 +35,25 @@ describe "viewing projects, creating and editing", :js do
     end
   end
 
+  describe "removing reward types on projects where there have been rewards sent already" do
+    it "prevents destroying the reward types" do
+      login(account)
+
+      reward_type = create(:reward_type, project: project, name: "Big ol' reward", amount: 40000)
+
+      visit edit_project_path(project)
+
+      expect(page.all("a[data-mark-and-hide]").size).to eq(1)
+
+      create(:reward, reward_type: reward_type, account: same_team_account)
+
+      visit edit_project_path(project)
+
+      expect(page.all("a[data-mark-and-hide]").size).to eq(0)
+      expect(page).to have_content "(1 reward sent)"
+    end
+  end
+
   specify do
     login(account)
 
@@ -46,7 +73,8 @@ describe "viewing projects, creating and editing", :js do
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public (display in CoMakery index)")).to be_checked
 
-    reward_type_inputs = page.all(".reward-type-row", visible: true)
+    reward_type_inputs = get_reward_type_rows
+    expect(reward_type_inputs.size).to eq(3)
     reward_type_inputs[0].all("input")[0].set "This is a small reward type"
     reward_type_inputs[0].all("input")[1].set "1000"
     reward_type_inputs[1].all("input")[0].set "This is a medium reward type"
@@ -54,23 +82,22 @@ describe "viewing projects, creating and editing", :js do
     reward_type_inputs[2].all("input")[0].set "This is a large reward type"
     reward_type_inputs[2].all("input")[1].set "3000"
 
-    expect(reward_type_inputs.size).to eq(3)
-
     click_link "+ add reward type"
 
-    reward_type_inputs = page.all(".reward-type-row", visible: true)
+    reward_type_inputs = get_reward_type_rows
     expect(reward_type_inputs.size).to eq(4)
+
     reward_type_inputs[3].all("input")[0].set "This is a super big reward type"
     reward_type_inputs[3].all("input")[1].set "5000"
 
     click_link "+ add reward type"
 
-    reward_type_inputs = page.all(".reward-type-row", visible: true)
+    reward_type_inputs = get_reward_type_rows
     expect(reward_type_inputs.size).to eq(5)
 
-    reward_type_inputs[4].all("a[data-mark-and-hide]")[0].click
+    click_remove(reward_type_inputs.last)
 
-    reward_type_inputs = page.all(".reward-type-row", visible: true)
+    reward_type_inputs = get_reward_type_rows
     expect(reward_type_inputs.size).to eq(4)
 
     click_on "Save"
@@ -113,11 +140,11 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
     uncheck "Set project as public (display in CoMakery index)"
 
-    reward_type_inputs = page.all(".reward-type-row", visible: true)
+    reward_type_inputs = get_reward_type_rows
     expect(reward_type_inputs.size).to eq(4)
 
     reward_type_inputs[0].all("a[data-mark-and-hide]")[0].click
-    reward_type_inputs = page.all(".reward-type-row", visible: true)
+    reward_type_inputs = get_reward_type_rows
     expect(reward_type_inputs.size).to eq(3)
 
     click_on "Save"
