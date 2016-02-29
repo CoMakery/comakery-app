@@ -30,11 +30,10 @@ class Swarmbot::Slack
       icon_url: AVATAR
     )
 
-    reaction_response = @client.reactions_add(
+    @client.reactions_add(
       channel: message_response[:channel],         # must be channel ID, not #channel-name
       timestamp: message_response[:message][:ts],  # timestamp
       name: 'thumbsup'
     )
-
   end
 end
