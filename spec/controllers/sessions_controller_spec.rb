@@ -10,7 +10,9 @@ describe SessionsController do
 
   it "should get logout" do
     get :destroy
+
     assert_response :redirect
+    expect(response).to redirect_to(logged_out_url)
   end
 
   describe '#create' do

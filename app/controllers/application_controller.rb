@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
   # end
 
   def current_account
-    @current_account ||= Account.find(session[:account_id])
+    @current_account ||= Account.find_by_id(session[:account_id])
   end
   helper_method :current_account
   alias :current_user :current_account

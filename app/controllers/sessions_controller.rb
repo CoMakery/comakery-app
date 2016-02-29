@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:account_id] = nil
-    redirect_to root_path
+    redirect_to logged_out_url
   end
 
   protected

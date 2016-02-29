@@ -76,3 +76,7 @@ def login(account)
   session[:account_id] = account.id
   account
 end
+
+def logout
+  session[:account_id] = nil
+end

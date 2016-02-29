@@ -18,6 +18,12 @@ describe ProjectPolicy do
 
         expect(projects.map(&:title).sort).to eq([my_private_project, others_private_project, my_public_project, others_public_project].map(&:title))
       end
+
+      it "returns all public projects if account is nil" do
+        projects = ProjectPolicy::Scope.new(nil, Project).resolve
+
+        expect(projects.map(&:title).sort).to eq([my_public_project, others_public_project].map(&:title))
+      end
     end
   end
 

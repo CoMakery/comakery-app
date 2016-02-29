@@ -6,7 +6,9 @@ describe "logging in and out" do
   let!(:authentication) { create :authentication, account_id: account.id }
 
   specify do
-    visit project_path(project)
+    page.set_rack_session(account_id: nil)
+
+    visit logged_out_path(project)
 
     expect(page).to have_content "Log in"
 

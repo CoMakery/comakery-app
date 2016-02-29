@@ -1,8 +1,15 @@
 class ProjectsController < ApplicationController
+  skip_before_filter :require_login
+
   def landing
     skip_authorization
-    @private_projects = Project.where(slack_team_id: current_account.slack_auth.slack_team_id).limit(6)
-    @public_projects = Project.where(public: true).where.not(slack_team_id: current_account.slack_auth.slack_team_id).limit(6)
+    if current_account
+      @private_projects = Project.where(slack_team_id: current_account.slack_auth.slack_team_id).limit(6)
+      @public_projects = Project.where(public: true).where.not(slack_team_id: current_account.slack_auth.slack_team_id).limit(6)
+    else
+      @private_projects = []
+      @public_projects = policy_scope(Project).limit(6)
+    end
   end
 
   def index

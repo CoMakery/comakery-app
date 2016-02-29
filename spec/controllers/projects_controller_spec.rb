@@ -9,7 +9,7 @@ describe ProjectsController do
     let!(:other_public_project) { create(:project, slack_team_id: "somebody else", public: true, title: "other_public_project") }
     let!(:other_private_project) { create(:project, slack_team_id: "somebody else", public: false, title: "other_private_project") }
     let!(:my_private_project) { create(:project, slack_team_id: "foo", title: "my_private_project") }
-    let!(:my_public_project) { create(:project, slack_team_id: "foo", title: "my_public_project") }
+    let!(:my_public_project) { create(:project, slack_team_id: "foo", public: true, title: "my_public_project") }
 
     it "returns your private projects, and public projects that *do not* belong to you" do
       get :landing
@@ -17,6 +17,16 @@ describe ProjectsController do
       expect(response.status).to eq(200)
       expect(assigns[:private_projects].map(&:title)).to eq(["my_private_project", "my_public_project"])
       expect(assigns[:public_projects].map(&:title)).to eq(["other_public_project"])
+    end
+
+    it "renders nicely even if you are not logged in" do
+      logout
+
+      get :landing
+
+      expect(response.status).to eq(200)
+      expect(assigns[:private_projects].map(&:title)).to eq([])
+      expect(assigns[:public_projects].map(&:title)).to match_array(["my_public_project", "other_public_project"])
     end
   end
 
