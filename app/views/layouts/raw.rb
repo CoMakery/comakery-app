@@ -29,7 +29,7 @@ class Views::Layouts::Raw < Views::Base
           nav(class: "top-bar large-8 large-centered columns", "data-topbar" => "", role: "navigation") {
             ul(class: "title-area") {
               li(class: "name") {
-                h1 "Swarmbot"
+                a(href: logged_out_path) { h1 "Swarmbot" }
               }
 
               li(class: "toggle-topbar menu-icon") {
@@ -39,15 +39,15 @@ class Views::Layouts::Raw < Views::Base
               }
             }
 
-            section(class: "top-bar-section") {
-              ul(class: "right") {
-                li(class: "active") {
-                  a(href: logged_out_path) {
-                    text "Home"
-                  }
-                }
-              }
-            }
+            # section(class: "top-bar-section") {
+            #   ul(class: "right") {
+            #     li(class: "active") {
+            #       a(href: logged_out_path) {
+            #         text "Home"
+            #       }
+            #     }
+            #   }
+            # }
 
             yield :navigation
           }
