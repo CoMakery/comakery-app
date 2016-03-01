@@ -17,6 +17,10 @@ describe "viewing projects, creating and editing", :js do
 
   describe "landing and searching" do
     it "shows some projects" do
+      visit projects_path
+
+      expect(page).not_to have_content "New Project"
+
       login(account)
 
       7.times {|i| create(:project, title: "Public Project #{i}", public: true, slack_team_name: "This is a slack team name") }

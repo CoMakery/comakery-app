@@ -7,7 +7,7 @@ class Views::Projects::Index < Views::Projects::Base
         h1 "Projects"
       }
       column("small-4") {
-        a("New Project", class: buttonish(:small), href: new_project_path)
+        a("New Project", class: buttonish(:small), href: new_project_path) if policy(Project).new?
       }
     }
 
