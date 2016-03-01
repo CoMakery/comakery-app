@@ -5,9 +5,9 @@ class Swarmbot::Slack
 
   AVATAR = 'https://s3.amazonaws.com/swarmbot-production/spacekitty.jpg'
 
-  def initialize(authentication)
+  def initialize(token)
     @client = ::Slack::Web::Client.new(
-      token: authentication.slack_token,
+      token: token,
       logger: Rails.logger
     )
   end

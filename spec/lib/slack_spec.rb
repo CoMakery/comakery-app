@@ -7,12 +7,12 @@ describe Swarmbot::Slack do
   let!(:project) { create :project, slack_team_id: 'a team' }
   let!(:reward_type) { create :reward_type, project: project }
   let!(:reward) { create :reward, reward_type: reward_type, account: recipient }
-  let!(:slack) { Swarmbot::Slack.new(sender_authentication) }
+  let!(:slack) { Swarmbot::Slack.new(sender_authentication.slack_token) }
 
   describe '.initialize' do
     it 'should create a new client' do
       allow(Slack::Web::Client).to receive(:new).and_return('the client')
-      slack = Swarmbot::Slack.new(sender_authentication)
+      slack = Swarmbot::Slack.new(sender_authentication.slack_token)
       expect(Slack::Web::Client).to have_received(:new).with(hash_including(token: 'xyz'))
       expect(slack.instance_variable_get(:@client)).to eq('the client')
     end
