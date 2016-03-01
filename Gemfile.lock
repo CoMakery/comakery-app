@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:ageweke/fortitude.git
+  remote: https://github.com/ageweke/fortitude.git
   revision: 3de1286652874506802a75befde0f11d79a0ec67
   specs:
     fortitude (0.9.5)

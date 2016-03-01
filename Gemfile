@@ -6,7 +6,7 @@ gem 'coffee-rails'
 gem 'compass-rails', '< 3'
 gem 'ethereum'
 gem 'faye-websocket'  # used by slack-ruby-client for concurrency
-gem 'fortitude', git: "git@github.com:ageweke/fortitude.git"
+gem 'fortitude', git: "https://github.com/ageweke/fortitude.git"  # change when gem released
 gem 'foundation-icons-sass-rails'
 gem 'foundation-rails', '< 6'
 gem 'jbuilder'
