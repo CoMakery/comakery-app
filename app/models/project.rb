@@ -19,10 +19,15 @@ class Project < ActiveRecord::Base
     RewardType.invalid_params(attributes)
   end
 
+  def owner_slack_user_name
+    owner_account.slack_auth(slack_team_id: slack_team_id).slack_user_name
+  end
+
   private
 
   def valid_tracker_url
     uri = URI.parse(tracker || "")
     errors[:tracker] << "must be a valid url" unless uri.absolute?
   end
+
 end

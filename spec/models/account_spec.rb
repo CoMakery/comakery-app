@@ -7,7 +7,7 @@ describe Account do
 
   describe 'validations' do
     it 'requires many attributes' do
-      expect(Account.new.tap(&:valid?).errors.full_messages.sort).to eq(["Email can't be blank", "Name can't be blank"])
+      expect(Account.new.tap(&:valid?).errors.full_messages.sort).to eq(["Email can't be blank"])
     end
   end
 

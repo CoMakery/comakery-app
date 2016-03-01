@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe ProjectsController do
-  let!(:account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo") } }
+  let!(:account) { create(:account, email: 'account@z.co').tap { |a| create(:authentication, account: a, slack_team_id: "foo") } }
 
   before { login(account) }
 
@@ -115,7 +115,7 @@ describe ProjectsController do
   end
 
   context "with a project" do
-    let!(:project) { create(:project, title: "Cats", owner_account: account) }
+    let!(:project) { create(:project, title: "Cats", owner_account: account, slack_team_id: 'foo' ) }
 
     describe "#index" do
       it "lists the projects" do
@@ -216,9 +216,9 @@ describe ProjectsController do
     end
 
     describe "#show" do
-      let!(:receiver_account) { create(:account, name: "Receiver").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
-      let!(:other_account) { create(:account, name: "Other").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
-      let!(:different_team_account) { create(:account, name: "Other").tap { |a| create(:authentication, slack_team_id: "bar", account: a) } }
+      let!(:receiver_account) { create(:account, email: "receiver@x.co").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
+      let!(:other_account) { create(:account, email: "other@x.co").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
+      let!(:different_team_account) { create(:account, email: "different@x.co").tap { |a| create(:authentication, slack_team_id: "bar", account: a) } }
 
       it "allows team members to view projects" do
         get :show, id: project.to_param
@@ -226,7 +226,7 @@ describe ProjectsController do
         expect(response.code).to eq "200"
         expect(assigns(:project)).to eq project
         expect(assigns[:reward]).to be_new_record
-        expect(assigns[:rewardable_accounts].map(&:name).sort).to eq([account.name, other_account.name, receiver_account.name])
+        expect(assigns[:rewardable_accounts].map(&:email).sort).to eq([account.email, other_account.email, receiver_account.email])
       end
 
       it "only denies non-owners to view projects" do

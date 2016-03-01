@@ -8,11 +8,10 @@ class RewardsController < ApplicationController
     reward = Reward.new(reward_params.merge(issuer: current_account))
     authorize reward
     reward.save!
-
+    flash[:notice] = "Successfully sent reward to @#{reward.recipient_slack_user_name}"
     current_account.send_reward_notifications(reward: reward)
-    flash[:notice] = "Successfully sent reward to #{reward.account.name}"
     redirect_to project_rewards_path(reward.reward_type.project)
-  rescue NotAuthorizedError
+  rescue Pundit::NotAuthorizedError
     flash[:error] = "Failed sending reward"
     redirect_to(:back)
   end

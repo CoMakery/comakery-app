@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 describe RewardsController do
-  let!(:issuer) { create(:account, name: "Issuer").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
-  let!(:receiver_account) { create(:account, name: "Receiver").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
-  let!(:other_account) { create(:account, name: "Other").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
-
-  let!(:different_team_account) { create(:account, name: "Other").tap { |a| create(:authentication, slack_team_id: "bar", account: a) } }
+  let(:issuer) { create(:account, email: "issuer@z.co").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
+  let!(:receiver_account) { create(:account, email: "receiver@z.co").tap { |a| create(:authentication, slack_team_id: "foo", slack_user_name: 'happyguy', account: a) } }
+  let!(:other_account) { create(:account, email: "other@z.co").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
+  let!(:different_team_account) { create(:account, email: "different@z.co").tap { |a| create(:authentication, slack_team_id: "bar", account: a) } }
 
   let(:project) { create(:project, owner_account: issuer, slack_team_id: "foo") }
 
@@ -13,7 +12,7 @@ describe RewardsController do
 
   describe "#index" do
     it "shows rewards for current project" do
-      reward = create(:reward, reward_type: create(:reward_type, project: project), account: other_account)
+      reward = create(:reward, reward_type: create(:reward_type, project: project), account: other_account, issuer: issuer)
 
       get :index, project_id: project.to_param
 
@@ -40,7 +39,7 @@ describe RewardsController do
       end.to change { project.rewards.count }.by(1)
 
       expect(response).to redirect_to(project_rewards_path(project))
-      expect(flash[:notice]).to eq("Successfully sent reward to Receiver")
+      expect(flash[:notice]).to eq("Successfully sent reward to @happyguy")
 
       reward = Reward.last
       expect(reward.reward_type).to eq(reward_type)

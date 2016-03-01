@@ -7,8 +7,8 @@ class Authentication < ActiveRecord::Base
     auth_hash = auth_hash.to_h
     provider = auth_hash['provider']
     uid = auth_hash['uid']
-    name = get_name(auth_hash)
     slack_user_id = auth_hash.dig('info', 'user_id')
+    slack_user_name = auth_hash.dig('info', 'user').presence || auth_hash.dig('extra', 'user_info', 'name').presence || auth_hash.dig('extra', 'raw_info', 'user')
     slack_team_id = auth_hash.dig('info', 'team_id')
     slack_team_name = auth_hash.dig('info', 'team')
     slack_token = auth_hash.dig('credentials', 'token')
@@ -24,26 +24,24 @@ class Authentication < ActiveRecord::Base
                                           slack_token: slack_token}.to_json)
     end
 
-    account = Account.find_or_initialize_by(email: email_address)
-    account.update!(name: name)
+    account = Account.find_or_create_by(email: email_address)
 
-    # find the "slack" authentication if exists
-    authentication = Authentication.find_or_initialize_by(provider: provider)
-
-    # update it, possibly logging them out of any other slack teams, and into this one
+    # find the "slack" authentication *for the given slack user* if exists
+    # note that we persist an authentication for every team
+    authentication = Authentication.find_or_initialize_by(
+      provider: provider,
+      slack_user_id: slack_user_id,
+      slack_team_id: slack_team_id
+    )
     authentication.update!(
       account_id: account.id,
-      slack_user_id: slack_user_id,
       uid: uid,
-      slack_team_id: slack_team_id,
+      slack_user_name: slack_user_name,
       slack_team_name: slack_team_name,
       slack_token: slack_token
     )
-    account
-  end
 
-  def self.get_name(auth_hash)
-    auth_hash.dig('info', 'name').presence || auth_hash.dig('info', 'nickname').presence || auth_hash.dig('info', 'user')
+    account
   end
 
 end

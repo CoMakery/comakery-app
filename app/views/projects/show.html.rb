@@ -34,7 +34,7 @@ class Views::Projects::Show < Views::Base
           column("small-4") {
             p {
               text "Project owner: "
-              b "#{project.owner_account.name}"
+              b "#{project.owner_slack_user_name}"
             }
           }
         }
@@ -76,7 +76,7 @@ class Views::Projects::Show < Views::Base
                   with_errors(project, :account_id) {
                     label {
                       text "User"
-                      f.select(:account_id, [[nil, nil]].concat(rewardable_accounts.map { |a| [a.name, a.id] }))
+                      f.select(:account_id, [[nil, nil]].concat(rewardable_accounts.map { |a| [a.email, a.id] }))
                     }
                   }
                 }

@@ -4,7 +4,6 @@ class Mom
     @@account_count += 1
     defaults = {
         email: Faker::Internet.safe_email,
-        name: "Bob #{@@account_count}",
         password: valid_password
     }
     Account.new(defaults.merge(attrs))
@@ -27,6 +26,7 @@ class Mom
         slack_user_id: "slack user id",
         slack_team_name: "Slack Team",
         slack_team_id: "citizen code id",
+        slack_user_name: "johndoe"
     }
     Authentication.new(defaults.merge(attrs))
   end

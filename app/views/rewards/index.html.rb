@@ -21,13 +21,13 @@ module Views
               text number_with_delimiter(reward.reward_type.amount, :delimiter => ',')
             }
             column("small-2") {
-              text reward.account.name
+              text reward.recipient_slack_user_name
             }
             column("small-4") {
               text reward.description
             }
             column("small-2") {
-              text reward.issuer.name
+              text reward.issuer_slack_user_name
             }
           }
         end

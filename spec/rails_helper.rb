@@ -68,11 +68,11 @@ RSpec.configure do |config|
 end
 
 def login_account(account)
-  session[:account_id] = account.id  
+  session[:account_id] = account.id
 end
 
 def login(account)
-  create(:authentication, account_id: account.id)
+  authentication = account.authentications.first || create(:authentication, account_id: account.id)
   session[:account_id] = account.id
   account
 end

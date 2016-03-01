@@ -60,4 +60,15 @@ describe Project do
     end
   end
 
+  describe "#owner_slack_user_name" do
+    let!(:owner) { create :account }
+    let!(:authentication) { create :authentication, account: owner, slack_team_id: 'reds', slack_user_name: 'johnny' }
+    let!(:project) { create :project, owner_account: owner, slack_team_id: 'reds' }
+
+    it "returns the user name" do
+      expect(project.owner_slack_user_name).to eq('johnny')
+    end
+  end
+
+
 end
