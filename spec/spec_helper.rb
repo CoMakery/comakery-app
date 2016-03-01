@@ -15,8 +15,8 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-# require 'webmock/rspec'
-# WebMock.disable_net_connect!(allow_localhost: true)
+require 'webmock/rspec'
+WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience

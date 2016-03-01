@@ -32,6 +32,11 @@ gem 'slack-ruby-client'
 gem 'sucker_punch'
 gem 'uglifier'
 
+group(:test) do
+  gem 'webmock'
+  gem 'vcr'
+end
+
 group(:development, :test) do
   gem 'awesome_print'
   gem 'capybara'

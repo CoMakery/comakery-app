@@ -154,6 +154,7 @@ GEM
       rspec (>= 2.99.0, < 4.0)
     haml (4.0.7)
       tilt
+    hashdiff (0.3.0)
     hashie (3.4.3)
     hike (1.2.3)
     html2fortitude (0.0.1)
@@ -418,10 +419,15 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
+    vcr (3.0.1)
     web-console (3.1.1)
       activemodel (>= 4.2)
       debug_inspector
       railties (>= 4.2)
+    webmock (1.23.0)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff
     websocket (1.2.2)
     websocket-driver (0.6.3)
       websocket-extensions (>= 0.1.0)
@@ -490,7 +496,9 @@ DEPENDENCIES
   sucker_punch
   typhoeus
   uglifier
+  vcr
   web-console
+  webmock
   xray-rails
 
 BUNDLED WITH
