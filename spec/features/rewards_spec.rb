@@ -25,6 +25,14 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
     visit project_path(project)
 
+    click_link "Award History >>"
+
+    expect(page).to have_content("Award History")
+
+    click_link "Back to project"
+
+    expect(page).to have_content("Project that needs rewards")
+
     click_button "Send"
 
     expect(page).to have_content "Failed sending reward"

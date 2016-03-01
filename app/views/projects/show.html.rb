@@ -16,68 +16,68 @@ class Views::Projects::Show < Views::Base
           }
         }
         p project.description
+        p "Visibility: #{project.public? ? "Public" : "Private"}"
         a "Project Tasks »", class: buttonish, href: project.tracker if project.tracker
       }
     }
-
     row {
-      column("small-4") {
-        text "Reward Names"
-      }
-      column("small-4") {
-        text "Suggested Value"
-      }
-      column("small-4") {
-      }
-    }
-    form_for [project, reward] do |f|
-      row(class: "reward-types") {
-        project.reward_types.each do |reward_type|
-          row(class: "reward-type-row") {
-            column("small-4") {
-              with_errors(project, :account_id) {
-                label {
-                  f.radio_button(:reward_type_id, reward_type.to_param)
-                  span(reward_type.name, class: "margin-small")
+      column("small-6") {
+        fieldset {
+          row {
+            column("small-6") {
+              text "Reward Names"
+            }
+            column("small-6") {
+              text "Suggested Value"
+            }
+          }
+          form_for [project, reward] do |f|
+            row(class: "reward-types") {
+              project.reward_types.each do |reward_type|
+                row(class: "reward-type-row") {
+                  column("small-6") {
+                    with_errors(project, :account_id) {
+                      label {
+                        f.radio_button(:reward_type_id, reward_type.to_param)
+                        span(reward_type.name, class: "margin-small")
+                      }
+                    }
+                  }
+                  column("small-6") {
+                    text reward_type.amount
+                  }
+                }
+              end
+              row {
+                column("small-8") {
+                  with_errors(project, :account_id) {
+                    label {
+                      text "User"
+                      f.select(:account_id, [[nil, nil]].concat(rewardable_accounts.map { |a| [a.name, a.id] }))
+                    }
+                  }
                 }
               }
-            }
-            column("small-4") {
-              text reward_type.amount
-            }
-            column("small-4") {
-            }
-          }
-        end
-        row {
-          column("small-4") {
-            with_errors(project, :account_id) {
-              label {
-                text "User"
-                f.select(:account_id, [[nil, nil]].concat(rewardable_accounts.map { |a| [a.name, a.id] }))
+              row {
+                column("small-8") {
+                  with_errors(project, :description) {
+                    label {
+                      text "Description"
+                      f.text_area(:description)
+                    }
+                  }
+                }
+              }
+              full_row {
+                f.submit("Send Reward", class: buttonish << "right")
               }
             }
-          }
-        }
-        row {
-          column("small-4") {
-            with_errors(project, :description) {
-              label {
-                text "Description"
-                f.text_area(:description)
-              }
-            }
-          }
-        }
-        row {
-          column("small-4") {
-            f.submit("Send Reward", class: buttonish)
-          }
+          end
         }
       }
-    end
-    full_row {
-      p "Visibility: #{project.public? ? "Public" : "Private"}"
+      column("small-6") {
+        a(href: project_rewards_path(project)) { text "Award History >>" }
+      }
     }
     full_row {
       a("Back", class: buttonish << "margin-small", href: projects_path)
