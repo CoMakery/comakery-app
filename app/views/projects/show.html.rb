@@ -15,9 +15,32 @@ class Views::Projects::Show < Views::Base
             a "Edit", class: buttonish, href: edit_project_path(project) if policy(project).edit?
           }
         }
-        p project.description
-        p "Visibility: #{project.public? ? "Public" : "Private"}"
-        a "Project Tasks »", class: buttonish, href: project.tracker if project.tracker
+        full_row {
+          text project.description
+        }
+        row {
+          column("small-4") {
+            p {
+              text "Visibility: "
+              b "#{project.public? ? "Public" : "Private"}"
+            }
+          }
+          column("small-4") {
+            p {
+              text "Team name: "
+              b "#{project.slack_team_name}"
+            }
+          }
+          column("small-4") {
+            p {
+              text "Project owner: "
+              b "#{project.owner_account.name}"
+            }
+          }
+        }
+        full_row {
+          a "Project Tasks »", class: buttonish, href: project.tracker if project.tracker
+        }
       }
     }
     row {
