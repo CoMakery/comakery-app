@@ -17,14 +17,13 @@ describe SessionsController do
 
   describe '#create' do
     let!(:account) { create(:account, email: "bob@example.com") }
-    let!(:authentication) { create(:authentication, provider: "slack", uid: "FOOOO", account_id: account.id) }
+    let!(:authentication) { create(:authentication, provider: "slack", account_id: account.id) }
 
     context 'with valid login credentials' do
       it 'succeeds' do
         request.env['omniauth.auth'] = {
           'provider' => 'slack',
           'credentials' => { 'token' => 'these are credentials' },
-          'uid' => 'FOOOO',
           'info' => {'team' => "Citizen Code", 'team_id' => 'T00000000', 'user_id' => 'U00000000', 'user' => 'redman'},
           'extra' => {'user_info' => {'user' => {'profile' => {'email' => "bob@example.com"}}}}}
 

@@ -21,7 +21,6 @@ class Mom
     defaults = {
         account: create(:account),
         provider: "slack",
-        uid: "this is a generic uid",
         slack_token: "slack token",
         slack_user_id: "slack user id",
         slack_team_name: "Slack Team",

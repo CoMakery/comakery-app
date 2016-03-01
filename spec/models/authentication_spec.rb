@@ -5,7 +5,6 @@ describe Authentication do
   describe ".find_or_create_from_auth_hash" do
     let(:auth_hash) {
       {
-          'uid' => 'this is a uid',
           'provider' => 'slack',
           "credentials" => {
               "token" => "xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa"
@@ -26,7 +25,6 @@ describe Authentication do
 
         expect(account.email).to eq("bob@example.com")
         expect(account.authentications.first.provider).to eq("slack")
-        expect(account.authentications.first.uid).to eq("this is a uid")
         expect(account.authentications.first.slack_user_name).to eq("bobroberts")
         expect(account.authentications.first.slack_team_name).to eq("CoMakery")
         expect(account.authentications.first.slack_team_id).to eq("slack team id")

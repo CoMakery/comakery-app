@@ -6,7 +6,6 @@ class Authentication < ActiveRecord::Base
   def self.find_or_create_from_auth_hash!(auth_hash)
     auth_hash = auth_hash.to_h
     provider = auth_hash['provider']
-    uid = auth_hash['uid']
     slack_user_id = auth_hash.dig('info', 'user_id')
     slack_user_name = auth_hash.dig('info', 'user').presence || auth_hash.dig('extra', 'user_info', 'name').presence || auth_hash.dig('extra', 'raw_info', 'user')
     slack_team_id = auth_hash.dig('info', 'team_id')
@@ -35,7 +34,6 @@ class Authentication < ActiveRecord::Base
     )
     authentication.update!(
       account_id: account.id,
-      uid: uid,
       slack_user_name: slack_user_name,
       slack_team_name: slack_team_name,
       slack_token: slack_token
