@@ -1,4 +1,4 @@
-(c) 2015 CoMakery, Inc
+(c) 2016 CoMakery, Inc
 
 ## NOTE
 
