@@ -26,6 +26,6 @@ Rails.application.routes.draw do
     collection do
       get :landing
     end
-    resources :rewards, only: [:create]
+    resources :rewards, only: [:index, :create]
   end
 end

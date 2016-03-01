@@ -1,14 +1,27 @@
 require 'rails_helper'
 
 describe RewardsController do
-  let(:issuer) { create(:account, name: "Issuer").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
+  let!(:issuer) { create(:account, name: "Issuer").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
   let!(:receiver_account) { create(:account, name: "Receiver").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
   let!(:other_account) { create(:account, name: "Other").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
+
   let!(:different_team_account) { create(:account, name: "Other").tap { |a| create(:authentication, slack_team_id: "bar", account: a) } }
 
   let(:project) { create(:project, owner_account: issuer, slack_team_id: "foo") }
 
   before { login(issuer) }
+
+  describe "#index" do
+    it "shows rewards for current project" do
+      reward = create(:reward, reward_type: create(:reward_type, project: project), account: other_account)
+
+      get :index, project_id: project.to_param
+
+      expect(response.status).to eq(200)
+      expect(assigns[:project]).to eq(project)
+      expect(assigns[:rewards]).to match_array([reward])
+    end
+  end
 
   describe "#create" do
     let(:reward_type) { create(:reward_type, project: project) }
@@ -26,7 +39,7 @@ describe RewardsController do
         expect(response.status).to eq(302)
       end.to change { project.rewards.count }.by(1)
 
-      expect(response).to redirect_to(project_path(project))
+      expect(response).to redirect_to(project_rewards_path(project))
       expect(flash[:notice]).to eq("Successfully sent reward to Receiver")
 
       reward = Reward.last

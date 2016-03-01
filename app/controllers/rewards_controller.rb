@@ -1,14 +1,19 @@
 class RewardsController < ApplicationController
+  def index
+    @project = policy_scope(Project).find(params[:project_id])
+    @rewards = policy_scope(Reward)
+  end
+
   def create
     reward = Reward.new(reward_params.merge(issuer: current_account))
     authorize reward
     reward.save!
 
-    flash[:notice] = "Successfully sent reward to #{reward.account.name}"
     current_account.send_reward_notifications(reward: reward)
-  rescue
+    flash[:notice] = "Successfully sent reward to #{reward.account.name}"
+    redirect_to project_rewards_path(reward.reward_type.project)
+  rescue NotAuthorizedError
     flash[:error] = "Failed sending reward"
-  ensure
     redirect_to(:back)
   end
 

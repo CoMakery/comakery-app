@@ -54,7 +54,7 @@ class Views::Projects::Show < Views::Base
             with_errors(project, :account_id) {
               label {
                 text "User"
-                f.select(:account_id, rewardable_accounts.map { |a| [a.name, a.id] })
+                f.select(:account_id, [[nil, nil]].concat(rewardable_accounts.map { |a| [a.name, a.id] }))
               }
             }
           }

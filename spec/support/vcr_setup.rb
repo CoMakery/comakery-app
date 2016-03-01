@@ -2,7 +2,7 @@ VCR.configure do |c|
   c.ignore_localhost = true
   c.cassette_library_dir = 'spec/vcr'
   # your HTTP request service. You can also use fakeweb, webmock, and more
-  c.hook_into :webmock
+  c.hook_into :faraday
 end
 
 RSpec.configure do |config|

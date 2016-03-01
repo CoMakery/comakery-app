@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 describe RewardPolicy do
-  let(:project) { create(:project, owner_account: account) }
+  let!(:account) { create(:account).tap{|a| create(:authentication, account: a, slack_team_id: "lots of sweet rewards")} }
+  let!(:project) { create(:project, owner_account: account, slack_team_id: "lots of sweet rewards") }
   let(:reward_type_with_project) { create(:reward_type, project: project) }
   let(:reward_with_project) { build(:reward, reward_type: reward_type_with_project, account: receiving_account) }
-  let(:account) { create(:account) }
-  let(:receiving_account) { create(:account).tap{|a|create(:authentication, account: a)} }
+  let(:receiving_account) { create(:account).tap{|a|create(:authentication, account: a, slack_team_id: "lots of sweet rewards")} }
 
-  let(:other_account) { create(:account).tap{|a| create(:authentication, slack_team_id: "other team")} }
+  let(:other_account) { create(:account).tap{|a| create(:authentication, account: a, slack_team_id: "other team")} }
   let(:unowned_project) { create(:project, owner_account: other_account) }
 
   let(:different_team_account) { create(:account) }
@@ -15,6 +15,18 @@ describe RewardPolicy do
   let(:reward_type_for_unowned_project) { create(:reward_type, project: unowned_project)}
   let(:reward_for_unowned_project) { build(:reward, reward_type: reward_type_for_unowned_project)}
 
+  describe RewardPolicy::Scope do
+    it "returns rewards that belong to projects that the specified account belongs to" do
+      reward_with_project.save!
+      reward_for_unowned_project.save!
+      expect(reward_type_for_unowned_project.project.slack_team_id).not_to eq(project.slack_team_id)
+
+      create(:authentication, slack_team_id: project.slack_team_id, account: account)
+
+      rewards = RewardPolicy::Scope.new(account, Reward).resolve
+      expect(rewards).to match_array([reward_with_project])
+    end
+  end
 
   describe "create?" do
     # sender account -> owner_account -> project <- reward_type <- reward <- receiver account
