@@ -6,7 +6,7 @@ gem 'coffee-rails'
 gem 'compass-rails', '< 3'
 gem 'ethereum'
 gem 'faye-websocket'  # used by slack-ruby-client for concurrency
-gem 'fortitude'
+gem 'fortitude', git: "git@github.com:ageweke/fortitude.git"
 gem 'foundation-icons-sass-rails'
 gem 'foundation-rails', '< 6'
 gem 'jbuilder'
@@ -21,7 +21,7 @@ gem 'premailer-rails'
 gem 'puma'
 gem 'pundit'
 gem 'rails_12factor', group: :production
-gem 'rails', '4.2.4'
+gem 'rails', '4.2.5.2'
 gem "refile", require: "refile/rails"
 gem "refile-mini_magick"
 gem "refile-s3"
