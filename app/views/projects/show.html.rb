@@ -73,11 +73,12 @@ class Views::Projects::Show < Views::Base
               end
               row {
                 column("small-8") {
-                  with_errors(project, :account_id) {
-                    label {
-                      text "User"
-                      f.select(:account_id, [[nil, nil]].concat(rewardable_accounts.map { |a| [a.email, a.id] }))
-                    }
+                  label {
+                    text "User"
+                    options = capture do
+                      options_for_select([[nil, nil]].concat(rewardable_accounts))
+                    end
+                    select_tag "reward[slack_user_id]", options, html: {id: "reward_slack_user_id"}
                   }
                 }
               }

@@ -5,7 +5,10 @@ class RewardsController < ApplicationController
   end
 
   def create
-    reward = Reward.new(reward_params.merge(issuer: current_account))
+    account = Authentication.includes(:account).find_by(slack_user_id: reward_params[:slack_user_id]).try(:account)
+    reward = Reward.new(reward_params
+                            .except(:slack_user_id)
+                            .merge(issuer: current_account, account: account))
     authorize reward
     reward.save!
     flash[:notice] = "Successfully sent reward to @#{reward.recipient_slack_user_name}"
@@ -19,6 +22,6 @@ class RewardsController < ApplicationController
   private
 
   def reward_params
-    params.require(:reward).permit(:account_id, :reward_type_id, :description)
+    params.require(:reward).permit(:slack_user_id, :reward_type_id, :description)
   end
 end

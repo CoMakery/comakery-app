@@ -18,11 +18,13 @@ class Mom
   end
 
   def authentication(**attrs)
+    @@authentication_count ||= 0
+    @@authentication_count += 1
     defaults = {
         account: create(:account),
         provider: "slack",
         slack_token: "slack token",
-        slack_user_id: "slack user id",
+        slack_user_id: "slack user id #{@@authentication_count}",
         slack_team_name: "Slack Team",
         slack_team_id: "citizen code id",
         slack_user_name: "johndoe"

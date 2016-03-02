@@ -1,0 +1,44 @@
+{
+  "ok": true,
+  "members": [
+    {
+      "id": "U9999UVMH",
+      "team_id": "T9999S99P",
+      "name": "bobjohnson",
+      "deleted": true,
+      "profile": {
+        "first_name": "Bob",
+        "last_name": "Johnson",
+        "real_name": "Bob Johnson",
+        "real_name_normalized": "Bob Johnson",
+        "email": "bobjohnson@example.com",
+        "image_24": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+        "image_32": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+        "image_48": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+        "image_72": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+        "image_192": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+        "image_512": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg"
+      }
+    },
+    {
+      "id": "U9998UVMH",
+      "team_id": "T9998S99P",
+      "name": "billmurray",
+      "deleted": true,
+      "profile": {
+        "first_name": "Bill",
+        "last_name": "Murray",
+        "real_name": "Bill Murray",
+        "real_name_normalized": "Bill Murray",
+        "email": "billmurray@example.com",
+        "image_24": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+        "image_32": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+        "image_48": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+        "image_72": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+        "image_192": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+        "image_512": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg"
+      }
+    }
+  ],
+  "cache_ts": 1456871359
+}

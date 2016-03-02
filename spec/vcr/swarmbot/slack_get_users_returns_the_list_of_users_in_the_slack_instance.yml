@@ -1,0 +1,128 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://slack.com/api/users.list
+    body:
+      encoding: UTF-8
+      string: token=token
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/0.6.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: 
+    headers: {}
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "ok": true,
+          "members": [
+            {
+              "id": "U9999UVMH",
+              "team_id": "T9999S99P",
+              "name": "bobjohnson",
+              "deleted": true,
+              "profile": {
+                "first_name": "Bob",
+                "last_name": "Johnson",
+                "real_name": "Bob Johnson",
+                "real_name_normalized": "Bob Johnson",
+                "email": "bobjohnson@example.com",
+                "image_24": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+                "image_32": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+                "image_48": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+                "image_72": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+                "image_192": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+                "image_512": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg"
+              }
+            },
+            {
+              "id": "U9998UVMH",
+              "team_id": "T9998S99P",
+              "name": "billmurray",
+              "deleted": true,
+              "profile": {
+                "first_name": "Bill",
+                "last_name": "Murray",
+                "real_name": "Bill Murray",
+                "real_name_normalized": "Bill Murray",
+                "email": "billmurray@example.com",
+                "image_24": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+                "image_32": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+                "image_48": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+                "image_72": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+                "image_192": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg",
+                "image_512": "https://secure.gravatar.com/avatar/this_is_a_uid.jpg"
+              }
+            }
+          ],
+          "cache_ts": 1456871359
+        }
+    http_version: 
+  recorded_at: Wed, 02 Mar 2016 18:12:04 GMT
+- request:
+    method: post
+    uri: https://slack.com/api/users.info
+    body:
+      encoding: UTF-8
+      string: token=token&user=foobar
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/0.6.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: 
+    headers: {}
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "ok": true,
+          "user": {
+            "id": "U99M9QYFQ",
+            "team_id": "T9999S99P",
+            "name": "glenn",
+            "deleted": false,
+            "status": null,
+            "color": "b14cbc",
+            "real_name": "Glenn Spanky",
+            "tz": "America/Los_Angeles",
+            "tz_label": "Pacific Standard Time",
+            "tz_offset": -28800,
+            "profile": {
+              "first_name": "Glenn",
+              "last_name": "Jahnke",
+              "image_24": "https://avatars.slack-edge.com/2015-11-11/foo_bar.jpg",
+              "image_32": "https://avatars.slack-edge.com/2015-11-11/foo_bar.jpg",
+              "image_48": "https://avatars.slack-edge.com/2015-11-11/foo_bar.jpg",
+              "image_72": "https://avatars.slack-edge.com/2015-11-11/foo_bar.jpg",
+              "image_192": "https://avatars.slack-edge.com/2015-11-11/foo_bar.jpg",
+              "image_original": "https://avatars.slack-edge.com/2015-11-11/foo_bar.jpg",
+              "real_name": "Glenn Spanky",
+              "real_name_normalized": "Glenn Spanky",
+              "email": "glenn@example.com"
+            },
+            "is_admin": false,
+            "is_owner": false,
+            "is_primary_owner": false,
+            "is_restricted": false,
+            "is_ultra_restricted": false,
+            "is_bot": false,
+            "has_2fa": false
+          }
+        }
+    http_version: 
+  recorded_at: Wed, 02 Mar 2016 18:12:05 GMT
+recorded_with: VCR 3.0.1

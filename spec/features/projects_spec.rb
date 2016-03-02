@@ -8,7 +8,7 @@ def click_remove(reward_type_row)
   reward_type_row.find("a[data-mark-and-hide]").click
 end
 
-describe "viewing projects, creating and editing", :js do
+describe "viewing projects, creating and editing", :js, :vcr do
   let!(:project) { create(:project, title: "Project 1", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode") }
   let!(:project2) { create(:project, title: "Public Project", owner_account: account, slack_team_id: "citizencode", public: true) }
   let!(:account) { create(:account, email: "gleenn@z.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_user_name: 'gleenn') } }
@@ -23,8 +23,8 @@ describe "viewing projects, creating and editing", :js do
 
       login(account)
 
-      7.times {|i| create(:project, title: "Public Project #{i}", public: true, slack_team_name: "This is a slack team name") }
-      7.times {|i| create(:project, title: "Private Project #{i}", public: false, slack_team_id: "citizencode", slack_team_name: "This is a slack team name") }
+      7.times { |i| create(:project, title: "Public Project #{i}", public: true, slack_team_name: "This is a slack team name") }
+      7.times { |i| create(:project, title: "Private Project #{i}", public: false, slack_team_id: "citizencode", slack_team_name: "This is a slack team name") }
 
       visit root_path
 
@@ -58,7 +58,9 @@ describe "viewing projects, creating and editing", :js do
     end
   end
 
-  specify do
+  it "does the happy path" do
+    stub_request(:post, /slack\.com/).to_return(body: '{"ok": true, "members": []}')
+
     login(account)
 
     visit projects_path

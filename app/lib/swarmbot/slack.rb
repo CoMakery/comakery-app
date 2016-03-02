@@ -5,6 +5,10 @@ class Swarmbot::Slack
 
   AVATAR = 'https://s3.amazonaws.com/swarmbot-production/spacekitty.jpg'
 
+  def self.get(token)
+    new(token)
+  end
+
   def initialize(token)
     @client = ::Slack::Web::Client.new(
       token: token,
@@ -35,5 +39,13 @@ class Swarmbot::Slack
       timestamp: message_response[:message][:ts],  # timestamp
       name: 'thumbsup'
     )
+  end
+
+  def get_users
+    @client.users_list.members
+  end
+
+  def get_user_info(slack_user_id)
+    @client.users_info(user: slack_user_id).user
   end
 end

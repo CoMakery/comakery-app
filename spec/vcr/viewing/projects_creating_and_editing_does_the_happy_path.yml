@@ -1,0 +1,52 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://slack.com/api/users.list
+    body:
+      encoding: UTF-8
+      string: token=slack+token
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/0.6.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 200
+      message: 
+    headers:
+      content-type:
+      - application/json; charset=utf-8
+      content-length:
+      - '35'
+      connection:
+      - keep-alive
+      access-control-allow-origin:
+      - "*"
+      content-security-policy:
+      - referrer no-referrer;
+      date:
+      - Wed, 02 Mar 2016 19:12:40 GMT
+      server:
+      - Apache
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-content-type-options:
+      - nosniff
+      x-xss-protection:
+      - '0'
+      x-cache:
+      - Miss from cloudfront
+      via:
+      - 1.1 94d845a21f25a66078fff94422aeb496.cloudfront.net (CloudFront)
+      x-amz-cf-id:
+      - a8BpCN6AGwFe6Thmxx7pM60MHbqr6i6AwHnc9TdNPKFKNzDLv7IjAg==
+    body:
+      encoding: UTF-8
+      string: '{"ok": true,"members": []}'
+    http_version: 
+  recorded_at: Wed, 02 Mar 2016 19:12:40 GMT
+recorded_with: VCR 3.0.1

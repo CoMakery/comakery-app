@@ -21,11 +21,39 @@ describe Swarmbot::Slack do
   describe '#send_reward_notifications' do
     it 'should send a notification to Slack' do
       client = slack.instance_variable_get(:@client)
-      allow(client).to receive(:chat_postMessage) { {channel: 'C001', message: { ts: '1234' } } }
+      allow(client).to receive(:chat_postMessage) { {channel: 'C001', message: {ts: '1234'}} }
       allow(client).to receive(:reactions_add)
       slack.send_reward_notifications(reward: reward)
       expect(client).to have_received(:chat_postMessage)
-      expect(client).to have_received(:reactions_add).with({ channel: 'C001', timestamp: '1234', name: 'thumbsup' })
+      expect(client).to have_received(:reactions_add).with({channel: 'C001', timestamp: '1234', name: 'thumbsup'})
+    end
+  end
+
+  describe "#get_users", :vcr do
+    it "returns the list of users in the slack instance" do
+      stub_request(:post, "https://slack.com/api/users.list").
+          with(body: {"token": "token"}, headers: {'Accept': 'application/json; charset=utf-8'}).
+          to_return(status: 200, body: File.read(Rails.root.join("spec/fixtures/users_list_response.json")), headers: {})
+
+      response = Swarmbot::Slack.new("token").get_users
+
+      expect(response[0][:name]).to eq("bobjohnson")
+    end
+  end
+
+  describe "#get_users", :vcr do
+    it "returns the list of users in the slack instance" do
+      stub_request(:post, "https://slack.com/api/users.info").
+        with(body: {"token" => "token", "user" => "foobar"},
+             headers: {'Accept' => 'application/json; charset=utf-8', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type' => 'application/x-www-form-urlencoded'}).
+        to_return(status: 200, body: File.read(Rails.root.join("spec/fixtures/users_info_response.json")), headers: {})
+
+      response = Swarmbot::Slack.new("token").get_user_info("foobar")
+
+      expect(response[:profile][:email]).to eq("glenn@example.com")
+      expect(response[:id]).to eq("U99M9QYFQ")
+      expect(response[:name]).to eq("glenn")
+      expect(response[:team_id]).to eq("T9999S99P")
     end
   end
 end

@@ -1,7 +1,6 @@
 require 'capybara/rspec'
 require 'capybara/poltergeist'
 
-
 # Driver for remote debugging
 Capybara.register_driver :poltergeist_debug do |app|
  Capybara::Poltergeist::Driver.new(app, :inspector => true)

@@ -69,6 +69,4 @@ describe Project do
       expect(project.owner_slack_user_name).to eq('johnny')
     end
   end
-
-
 end

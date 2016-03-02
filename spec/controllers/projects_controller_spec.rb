@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe ProjectsController do
-  let!(:account) { create(:account, email: 'account@z.co').tap { |a| create(:authentication, account: a, slack_team_id: "foo") } }
+  let!(:account) { create(:account, email: 'account@example.com').tap { |a| create(:authentication, account: a, slack_team_id: "foo", slack_user_name: "account", slack_user_id: "account slack_user_id") } }
 
   before { login(account) }
 
@@ -115,7 +115,7 @@ describe ProjectsController do
   end
 
   context "with a project" do
-    let!(:project) { create(:project, title: "Cats", owner_account: account, slack_team_id: 'foo' ) }
+    let!(:project) { create(:project, title: "Cats", owner_account: account, slack_team_id: 'foo') }
 
     describe "#index" do
       it "lists the projects" do
@@ -216,17 +216,33 @@ describe ProjectsController do
     end
 
     describe "#show" do
-      let!(:receiver_account) { create(:account, email: "receiver@x.co").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
-      let!(:other_account) { create(:account, email: "other@x.co").tap { |a| create(:authentication, slack_team_id: "foo", account: a) } }
-      let!(:different_team_account) { create(:account, email: "different@x.co").tap { |a| create(:authentication, slack_team_id: "bar", account: a) } }
+      let!(:receiver_account) { create(:account, email: "receiver@example.com").tap { |a| create(:authentication, slack_user_id: "U8888UVMH", slack_team_id: "foo", account: a, slack_user_name: "receiver") } }
+      let!(:other_account) { create(:account, email: "other@example.com").tap { |a| create(:authentication, slack_user_id: "other id", slack_team_id: "foo", account: a, slack_user_name: "other") } }
+      let!(:different_team_account) { create(:account, email: "different@example.com").tap { |a| create(:authentication, slack_team_id: "bar", account: a, slack_user_name: "otherteam") } }
 
-      it "allows team members to view projects" do
+      it "allows team members to view projects and assigns rewardable accounts from slack api and db and de-dups" do
+        slack_double = double("slack")
+        expect(Swarmbot::Slack).to receive(:get).and_return(slack_double)
+        expect(slack_double).to receive(:get_users).and_return([{"id": "U9999UVMH",
+                                                                 "team_id": "foo",
+                                                                 "name": "bobjohnson",
+                                                                 "profile": {"email": "bobjohnson@example.com"}
+                                                                },
+                                                                {"id": "U8888UVMH",
+                                                                 "team_id": "foo",
+                                                                 "name": "receiver",
+                                                                 "profile": {"email": "receiver@example.com"}
+                                                                }])
+
         get :show, id: project.to_param
 
         expect(response.code).to eq "200"
         expect(assigns(:project)).to eq project
         expect(assigns[:reward]).to be_new_record
-        expect(assigns[:rewardable_accounts].map(&:email).sort).to eq([account.email, other_account.email, receiver_account.email])
+        expect(assigns[:rewardable_accounts].sort).to match_array([["account", "account slack_user_id"],
+                                                                   ["bobjohnson", "U9999UVMH"],
+                                                                   ["other", "other id"],
+                                                                   ["receiver", "U8888UVMH"]])
       end
 
       it "only denies non-owners to view projects" do
