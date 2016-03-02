@@ -16,7 +16,7 @@ class Swarmbot::Slack
     text = %{
       @#{reward.recipient_slack_user_name} received a
       #{reward.reward_type.amount} coin #{reward.reward_type.name}
-      #{'for "' + reward.description + '"' if reward.description.present?}"
+      #{'for "' + reward.description + '"' if reward.description.present?}
       on the
       <#{project_url(reward.reward_type.project)}|#{reward.reward_type.project.title}>
       project.
