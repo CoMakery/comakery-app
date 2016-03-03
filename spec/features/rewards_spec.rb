@@ -97,7 +97,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "Award History"
     expect(page).to have_content "Feb 29"
     expect(page).to have_content "1,000"
-    expect(page).to have_content 'Super fantastic fabulous programatic work on teh things, A++'
+    expect(page).to have_content "Small"
+    expect(page).to have_content "Super fantastic fabulous programatic work on teh things, A++"
     expect(page).to have_content "Hubert Sherbert"
 
     click_link "Back to project"

@@ -24,7 +24,8 @@ module Views
               text reward.recipient_slack_user_name
             }
             column("small-4") {
-              text reward.description
+              div reward.reward_type.name
+              div(class: "text-gray") { text reward.description }
             }
             column("small-2") {
               text reward.issuer_slack_user_name
