@@ -4,7 +4,7 @@ class Authentication < ActiveRecord::Base
   validates_presence_of :account, :provider, :slack_team_name, :slack_team_id, :slack_user_id, :slack_user_name, :slack_team_name
 
   def display_name
-    return "#{slack_first_name} #{slack_last_name}" if slack_first_name && slack_last_name
+    return "#{slack_first_name} #{slack_last_name}" if slack_first_name.present? && slack_last_name.present?
     "@#{slack_user_name}"
   end
 
