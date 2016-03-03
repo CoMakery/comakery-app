@@ -44,8 +44,7 @@ describe Swarmbot::Slack do
   describe "#get_users", :vcr do
     it "returns the list of users in the slack instance" do
       stub_request(:post, "https://slack.com/api/users.info").
-        with(body: {"token" => "token", "user" => "foobar"},
-             headers: {'Accept' => 'application/json; charset=utf-8', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type' => 'application/x-www-form-urlencoded'}).
+        with(body: {"token" => "token", "user" => "foobar"}).
         to_return(status: 200, body: File.read(Rails.root.join("spec/fixtures/users_info_response.json")), headers: {})
 
       response = Swarmbot::Slack.new("token").get_user_info("foobar")

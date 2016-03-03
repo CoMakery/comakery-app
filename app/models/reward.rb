@@ -18,5 +18,4 @@ class Reward < ActiveRecord::Base
   def slack_team_id
     reward_type.project.slack_team_id
   end
-
 end

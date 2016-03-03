@@ -60,7 +60,7 @@ describe RewardsController do
                     }
         expect(response.status).to eq(302)
       end.not_to change { project.rewards.count }
-      expect(flash[:error]).to eq("Failed sending reward")
+      expect(flash[:error]).to eq("Failed sending reward - Not authorized")
     end
 
     it "renders error if you specify a slack user id that doesn't belong to a project" do
@@ -75,7 +75,7 @@ describe RewardsController do
                     }
         expect(response.status).to eq(302)
       end.not_to change { project.rewards.count }
-      expect(flash[:error]).to eq("Failed sending reward")
+      expect(flash[:error]).to eq("Failed sending reward - Not authorized")
     end
 
     it "redirects back to projects show if error saving" do
@@ -90,7 +90,7 @@ describe RewardsController do
       end.not_to change { project.rewards.count }
 
       expect(response).to redirect_to(project_path(project))
-      expect(flash[:error]).to eq("Failed sending reward")
+      expect(flash[:error]).to eq("Failed sending reward - Reward type can't be blank")
     end
   end
 end

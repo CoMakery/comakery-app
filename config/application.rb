@@ -36,6 +36,7 @@ module Swarmbot
     # lib/ is for code that is entirely independent of your Rails app
     # app/lib/ is for code that expects Rails (esp. models) but which is not itself a model
     config.autoload_paths << Rails.root.join("app", "lib")
+    config.autoload_paths << Rails.root.join("app", "interactors")
 
     # e-mail
     config.action_mailer.delivery_method = :postmark
