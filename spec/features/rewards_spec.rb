@@ -6,7 +6,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
   let!(:small_reward_type) { create(:reward_type, project: project, name: "Small", amount: 1000) }
   let!(:large_reward_type) { create(:reward_type, project: project, name: "Large", amount: 3000) }
 
-  let!(:owner_account) { create(:account, email: "hubert@example.com").tap { |a| create(:authentication, slack_user_name: 'hubert', slack_user_id: 'hubert id', account_id: a.id, slack_team_id: "team id") } }
+  let!(:owner_account) { create(:account, email: "hubert@example.com").tap { |a| create(:authentication, slack_user_name: 'hubert', slack_first_name: 'Hubert', slack_last_name: 'Sherbert', slack_user_id: 'hubert id', account_id: a.id, slack_team_id: "team id") } }
   let!(:other_account) { create(:account, email: "sherman@example.com").tap { |a| create(:authentication, slack_user_name: 'sherman', slack_user_id: 'sherman id', account_id: a.id, slack_team_id: "team id") } }
 
   before do
@@ -93,12 +93,12 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
     click_button "Send"
 
-    expect(page).to have_content "Successfully sent reward to @sherman"
+    expect(page).to have_content "Successfully sent reward to John Doe"
     expect(page).to have_content "Award History"
     expect(page).to have_content "Feb 29"
     expect(page).to have_content "1,000"
     expect(page).to have_content 'Super fantastic fabulous programatic work on teh things, A++'
-    expect(page).to have_content "hubert"
+    expect(page).to have_content "Hubert Sherbert"
 
     click_link "Back to project"
 

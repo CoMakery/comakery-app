@@ -25,10 +25,12 @@ describe SessionsController do
             'name' => 'bob',
             'provider' => 'slack',
             'credentials' => {'token' => 'these are credentials'},
-            'info' => {'team' => "Citizen Code", 'team_id' => 'T00000000', 'user_id' => 'U00000000', 'user' => 'redman'},
+            'info' => {'team' => "Citizen Code", 'team_id' => 'T00000000', 'user_id' => 'U00000000', 'user' => 'redman', 'first_name' => "Red", 'last_name' => "Man"},
             'extra' => {'user_info' => {'user' => {'profile' => {'email' => "bob@example.com"}}}}}
 
-        post :create
+        expect do
+          post :create
+        end.to change { Authentication.count }.by(1)
 
         assert_response :redirect
         assert_redirected_to root_path

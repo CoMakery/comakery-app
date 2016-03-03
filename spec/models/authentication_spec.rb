@@ -18,7 +18,7 @@ describe Authentication do
   describe "#display_name" do
     it "returns the first and last name and falls back to the user name" do
       expect(build(:authentication, slack_first_name: "Bob", slack_last_name: "Johnson", slack_user_name: "bj").display_name).to eq("Bob Johnson")
-      expect(build(:authentication, slack_first_name: nil, slack_last_name: "Johnson", slack_user_name: "bj").display_name).to eq("bj")
+      expect(build(:authentication, slack_first_name: nil, slack_last_name: "Johnson", slack_user_name: "bj").display_name).to eq("@bj")
     end
   end
 
@@ -32,6 +32,8 @@ describe Authentication do
           'extra' => {'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com'}}}},
           'info' => {
             'name' => "Bob Roberts",
+            'first_name' => "Bob",
+            'last_name' => "Roberts",
             'user_id' => 'slack user id',
             'team' => "CoMakery",
             'team_id' => 'slack team id',
@@ -45,12 +47,17 @@ describe Authentication do
         account = Authentication.find_or_create_from_auth_hash!(auth_hash)
 
         expect(account.email).to eq("bob@example.com")
-        expect(account.authentications.first.provider).to eq("slack")
-        expect(account.authentications.first.slack_user_name).to eq("bobroberts")
-        expect(account.authentications.first.slack_team_name).to eq("CoMakery")
-        expect(account.authentications.first.slack_team_id).to eq("slack team id")
-        expect(account.authentications.first.slack_user_id).to eq("slack user id")
-        expect(account.authentications.first.slack_token).to eq("xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa")
+
+        auth = account.authentications.first
+
+        expect(auth.provider).to eq("slack")
+        expect(auth.slack_user_name).to eq("bobroberts")
+        expect(auth.slack_first_name).to eq("Bob")
+        expect(auth.slack_last_name).to eq("Roberts")
+        expect(auth.slack_team_name).to eq("CoMakery")
+        expect(auth.slack_team_id).to eq("slack team id")
+        expect(auth.slack_user_id).to eq("slack user id")
+        expect(auth.slack_token).to eq("xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa")
       end
     end
 

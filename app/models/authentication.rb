@@ -5,7 +5,7 @@ class Authentication < ActiveRecord::Base
 
   def display_name
     return "#{slack_first_name} #{slack_last_name}" if slack_first_name && slack_last_name
-    slack_user_name
+    "@#{slack_user_name}"
   end
 
   def self.find_or_create_from_auth_hash!(auth_hash)
@@ -23,6 +23,8 @@ class Authentication < ActiveRecord::Base
     authentication.update!(
       account_id: account.id,
       slack_user_name: slack_auth_hash.slack_user_name,
+      slack_first_name: slack_auth_hash.slack_first_name,
+      slack_last_name: slack_auth_hash.slack_last_name,
       slack_team_name: slack_auth_hash.slack_team_name,
       slack_token: slack_auth_hash.slack_token
     )

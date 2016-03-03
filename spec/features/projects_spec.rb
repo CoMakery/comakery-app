@@ -11,7 +11,7 @@ end
 describe "viewing projects, creating and editing", :js, :vcr do
   let!(:project) { create(:project, title: "Project 1", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode") }
   let!(:project2) { create(:project, title: "Public Project", owner_account: account, slack_team_id: "citizencode", public: true) }
-  let!(:account) { create(:account, email: "gleenn@z.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_user_name: 'gleenn') } }
+  let!(:account) { create(:account, email: "gleenn@z.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_user_name: 'gleenn', slack_first_name: "Glenn", slack_last_name: "Spanky") } }
   let!(:same_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code") } }
   let!(:other_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "comakery", slack_team_name: "CoMakery") } }
 
@@ -121,7 +121,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).not_to have_link "Project Tasks »"
     expect(page).to have_content "Visibility: Public"
 
-    expect(page).to have_content "Project owner: gleenn"
+    expect(page).to have_content "Project owner: Glenn Spanky"
     expect(page).to have_content "Team name: Citizen Code"
 
     reward_type_rows = page.all(".reward-type-row")

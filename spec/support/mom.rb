@@ -27,7 +27,9 @@ class Mom
         slack_user_id: "slack user id #{@@authentication_count}",
         slack_team_name: "Slack Team",
         slack_team_id: "citizen code id",
-        slack_user_name: "johndoe"
+        slack_user_name: "johndoe",
+        slack_first_name: "John",
+        slack_last_name: "Doe"
     }
     Authentication.new(defaults.merge(attrs))
   end

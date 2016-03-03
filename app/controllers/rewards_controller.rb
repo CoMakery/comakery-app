@@ -20,7 +20,7 @@ class RewardsController < ApplicationController
       return
     end
 
-    flash[:notice] = "Successfully sent reward to @#{reward.recipient_slack_user_name}"
+    flash[:notice] = "Successfully sent reward to #{reward.recipient_slack_user_name}"
     current_account.send_reward_notifications(reward: reward)
     redirect_to project_rewards_path(reward.reward_type.project)
   rescue Pundit::NotAuthorizedError

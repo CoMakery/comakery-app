@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe RewardsController do
   let(:issuer) { create(:account, email: "issuer@example.com").tap { |a| create(:authentication, slack_team_id: "foo", account: a, slack_user_id: 'issuer id') } }
-  let!(:receiver_account) { create(:account, email: "receiver@example.com").tap { |a| create(:authentication, slack_team_id: "foo", slack_user_name: 'receiver', slack_user_id: 'receiver id', account: a) } }
+  let!(:receiver_account) { create(:account, email: "receiver@example.com").tap { |a| create(:authentication, slack_first_name: "Rece", slack_last_name: "Iver", slack_team_id: "foo", slack_user_name: 'receiver', slack_user_id: 'receiver id', account: a) } }
   let!(:other_account) { create(:account, email: "other@example.com").tap { |a| create(:authentication, slack_team_id: "foo", account: a, slack_user_id: 'other id') } }
   let!(:different_team_account) { create(:account, email: "different@example.com").tap { |a| create(:authentication, slack_team_id: "bar", account: a, slack_user_id: 'different team member id') } }
 
@@ -39,7 +39,7 @@ describe RewardsController do
       end.to change { project.rewards.count }.by(1)
 
       expect(response).to redirect_to(project_rewards_path(project))
-      expect(flash[:notice]).to eq("Successfully sent reward to @receiver")
+      expect(flash[:notice]).to eq("Successfully sent reward to Rece Iver")
 
       reward = Reward.last
       expect(reward.reward_type).to eq(reward_type)
