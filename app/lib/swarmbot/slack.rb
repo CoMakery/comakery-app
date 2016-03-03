@@ -36,7 +36,7 @@ class Swarmbot::Slack
 
     @client.reactions_add(
       channel: message_response[:channel],         # must be channel ID, not #channel-name
-      timestamp: message_response[:message][:ts],  # timestamp
+      timestamp: message_response[:message][:ts],
       name: 'thumbsup'
     )
   end
