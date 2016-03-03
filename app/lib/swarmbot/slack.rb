@@ -18,7 +18,7 @@ class Swarmbot::Slack
 
   def send_reward_notifications(reward:)
     text = %{
-      @#{reward.recipient_slack_user_name} received a
+      #{reward.recipient_slack_user_name} received a
       #{reward.reward_type.amount} coin #{reward.reward_type.name}
       #{'for "' + reward.description + '"' if reward.description.present?}
       on the
