@@ -3,6 +3,11 @@ class Authentication < ActiveRecord::Base
   has_many :projects, foreign_key: :slack_team_id, primary_key: :slack_team_id
   validates_presence_of :account, :provider, :slack_team_name, :slack_team_id, :slack_user_id, :slack_user_name, :slack_team_name
 
+  def display_name
+    return "#{slack_first_name} #{slack_last_name}" if slack_first_name && slack_last_name
+    slack_user_name
+  end
+
   def self.find_or_create_from_auth_hash!(auth_hash)
     slack_auth_hash = SlackAuthHash.new(auth_hash)
 
@@ -24,5 +29,4 @@ class Authentication < ActiveRecord::Base
 
     account
   end
-
 end

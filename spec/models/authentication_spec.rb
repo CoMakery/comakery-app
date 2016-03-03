@@ -15,6 +15,13 @@ describe Authentication do
     end
   end
 
+  describe "#display_name" do
+    it "returns the first and last name and falls back to the user name" do
+      expect(build(:authentication, slack_first_name: "Bob", slack_last_name: "Johnson", slack_user_name: "bj").display_name).to eq("Bob Johnson")
+      expect(build(:authentication, slack_first_name: nil, slack_last_name: "Johnson", slack_user_name: "bj").display_name).to eq("bj")
+    end
+  end
+
   describe ".find_or_create_from_auth_hash" do
     let(:auth_hash) {
       {

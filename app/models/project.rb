@@ -20,7 +20,7 @@ class Project < ActiveRecord::Base
   end
 
   def owner_slack_user_name
-    owner_account.slack_auth(slack_team_id: slack_team_id).slack_user_name
+    owner_account.slack_auth(slack_team_id: slack_team_id).display_name
   end
 
   private

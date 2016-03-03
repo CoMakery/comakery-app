@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302230227) do
+ActiveRecord::Schema.define(version: 20160303022746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,15 +51,17 @@ ActiveRecord::Schema.define(version: 20160302230227) do
   add_index "accounts", ["reset_password_token"], name: "index_accounts_on_reset_password_token", using: :btree
 
   create_table "authentications", force: :cascade do |t|
-    t.integer  "account_id",                   null: false
-    t.string   "provider",                     null: false
+    t.integer  "account_id",                    null: false
+    t.string   "provider",                      null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "slack_team_name",              null: false
-    t.string   "slack_team_id",                null: false
-    t.string   "slack_user_id",                null: false
-    t.string   "slack_token",     default: ""
-    t.string   "slack_user_name",              null: false
+    t.string   "slack_team_name",               null: false
+    t.string   "slack_team_id",                 null: false
+    t.string   "slack_user_id",                 null: false
+    t.string   "slack_token",      default: ""
+    t.string   "slack_user_name",               null: false
+    t.string   "slack_first_name"
+    t.string   "slack_last_name"
   end
 
   add_index "authentications", ["slack_team_id"], name: "index_authentications_on_slack_team_id", using: :btree
