@@ -12,10 +12,10 @@ module Views
           column("small-4") { div(class: "header") { text "Contribution"} }
           column("small-2") { div(class: "header") { text "Sender"} }
         }
-        rewards.each do |reward|
+        rewards.sort_by(&:created_at).reverse.each do |reward|
           row(class: "reward-row") {
             column("small-2") {
-              text reward.created_at.strftime("%b %d")
+              text reward.created_at.strftime("%b %d, %Y")
             }
             column("small-2") {
               text number_with_delimiter(reward.reward_type.amount, :delimiter => ',')
