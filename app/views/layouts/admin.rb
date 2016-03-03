@@ -1,5 +1,5 @@
 class Views::Layouts::Admin < Views::Base
   def content
-    render template: 'layouts/logged_in'
+    render template: 'layouts/raw'
   end
 end

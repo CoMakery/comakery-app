@@ -29,7 +29,7 @@ class Views::Layouts::Raw < Views::Base
           nav(class: "top-bar large-8 large-centered columns", "data-topbar" => "", role: "navigation") {
             ul(class: "title-area") {
               li(class: "name") {
-                a(href: logged_out_path) { h1 "Swarmbot" }
+                a(href: root_path) { h1 "Swarmbot" }
               }
 
               li(class: "toggle-topbar menu-icon") {
@@ -39,17 +39,7 @@ class Views::Layouts::Raw < Views::Base
               }
             }
 
-            # section(class: "top-bar-section") {
-            #   ul(class: "right") {
-            #     li(class: "active") {
-            #       a(href: logged_out_path) {
-            #         text "Home"
-            #       }
-            #     }
-            #   }
-            # }
-
-            yield :navigation
+            render partial: 'shared/navigation'
           }
 
           flash.each do |name, msg|
@@ -60,7 +50,13 @@ class Views::Layouts::Raw < Views::Base
           end
         }
 
-        content_for?(:body) ? yield(:body) : yield
+        div(class: "app-container row") {
+          div(class: "large-8 large-centered columns") {
+
+            content_for?(:body) ? yield(:body) : yield
+
+          }
+        }
 
         if content_for?(:footer)
           footer(class: 'fat-footer') {

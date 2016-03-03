@@ -6,13 +6,11 @@ Rails.application.routes.draw do
     resources :roles
   end
 
-  get "/auth/:provider/callback" => "sessions#create"
-
-  get '/home', to: "logged_out#show", as: :logged_out
+  get "/auth/slack/callback" => "sessions#create"
+  get "/auth/slack" => "sessions#create", as: :slack_auth
 
   root 'projects#landing'
 
-  get '/log_out', to: "sessions#destroy"
   get '/logout', to: "sessions#destroy"
 
   resource :session, only: %i[create destroy] do

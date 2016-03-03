@@ -2,11 +2,9 @@ class SessionsController < ApplicationController
   skip_before_filter :require_login
   skip_after_action :verify_authorized, :verify_policy_scoped
 
-  layout 'layouts/logged_out'
-
   def oauth_failure
     flash[:error] = "Sorry, logging in failed... please try again, or email us at dev@comakery.com"
-    redirect_to logged_out_url
+    redirect_to root_path
   end
 
   def create
@@ -23,7 +21,7 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:account_id] = nil
-    redirect_to logged_out_url
+    redirect_to root_path
   end
 
   protected

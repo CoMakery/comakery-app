@@ -3,7 +3,7 @@ require "application_responder"
 class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
-  layout 'logged_in'
+  layout 'raw'
 
   include Pundit
   after_action :verify_authorized, except: :index
@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
 
   # called from before_filter :require_login
   def not_authenticated
-    redirect_to logged_out_path
+    redirect_to root_path
   end
 
   # called when a policy authorization fails

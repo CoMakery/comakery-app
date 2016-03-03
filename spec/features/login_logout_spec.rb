@@ -15,7 +15,7 @@ describe "logging in and out", :vcr do
   specify do
     page.set_rack_session(account_id: nil)
 
-    visit logged_out_path(project)
+    visit root_path
 
     expect(page).to have_content "Log in"
 
