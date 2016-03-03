@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://slack.com/api/chat.postMessage
+    body:
+      encoding: UTF-8
+      string: as_user=false&channel=%23bot-testing&icon_url=https%3A%2F%2Fs3.amazonaws.com%2Fswarmbot-production%2Fspacekitty.jpg&text=John+Doe+received+a+1337+coin+Contribution+for+%22Great+work%22+on+the+%3Chttp%3A%2F%2Flocalhost%3A3000%2Fprojects%2F3%7CUber+for+Cats%3E+project.&token=token&username=swarmbot
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/0.6.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '35'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - referrer no-referrer;
+      Date:
+      - Thu, 03 Mar 2016 22:10:54 GMT
+      Server:
+      - Apache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 0cf1d7257c633ae75623c5e75bf3805e.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - KaWftP4nZ9GAyaDs0O_CG-PbGyZikYHXN0fhyISJHFNhk_4qaKyOJg==
+    body:
+      encoding: UTF-8
+      string: '{"ok":false,"error":"invalid_auth"}'
+    http_version: 
+  recorded_at: Thu, 03 Mar 2016 22:10:55 GMT
+recorded_with: VCR 3.0.1

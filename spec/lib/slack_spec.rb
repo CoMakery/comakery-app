@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Swarmbot::Slack do
+describe Swarmbot::Slack, :vcr do
   let!(:recipient) { create :account }
   let!(:sender_authentication) { create :authentication, slack_token: 'xyz', slack_team_id: 'a team' }
   let!(:recipient_authentication) { create :authentication, account: recipient, slack_token: 'abc', slack_team_id: 'a team' }
@@ -9,27 +9,23 @@ describe Swarmbot::Slack do
   let!(:reward) { create :reward, reward_type: reward_type, account: recipient }
   let!(:slack) { Swarmbot::Slack.new(sender_authentication.slack_token) }
 
-  describe '.initialize' do
-    it 'should create a new client' do
-      allow(Slack::Web::Client).to receive(:new).and_return('the client')
-      slack = Swarmbot::Slack.new(sender_authentication.slack_token)
-      expect(Slack::Web::Client).to have_received(:new).with(hash_including(token: 'xyz'))
-      expect(slack.instance_variable_get(:@client)).to eq('the client')
-    end
-  end
-
   describe '#send_reward_notifications' do
-    it 'should send a notification to Slack' do
-      client = slack.instance_variable_get(:@client)
-      allow(client).to receive(:chat_postMessage) { {channel: 'C001', message: {ts: '1234'}} }
-      allow(client).to receive(:reactions_add)
-      slack.send_reward_notifications(reward: reward)
-      expect(client).to have_received(:chat_postMessage)
-      expect(client).to have_received(:reactions_add).with({channel: 'C001', timestamp: '1234', name: 'thumbsup'})
+    it 'should send a notification to Slack with correct params' do
+      expected_text = "John Doe received a 1337 coin Contribution for \"Great work\" on the <http://localhost:3000/projects/#{project.id}|Uber for Cats> project."
+      stub_request(:post, "https://slack.com/api/chat.postMessage").
+          # with(body: hash_including({text: expected_text, token: "token", channel: "#bot-testing", username: "swarmbot", icon_url: Swarmbot::Slack::AVATAR, as_user: "false"})).
+          with(body: hash_including({text: expected_text, token: "token", channel: "#bot-testing", username: "swarmbot", icon_url: Swarmbot::Slack::AVATAR, as_user: "false"})).
+          to_return(status: 200, body: {ok: true, channel: "channel id", message: {ts: 'this is a timestamp'}}.to_json)
+
+      stub_request(:post, "https://slack.com/api/reactions.add").
+          with(body: hash_including({channel: "channel id", timestamp: "this is a timestamp", name: 'thumbsup'})).
+          to_return(status: 200, body: {ok: true}.to_json)
+
+      Swarmbot::Slack.new("token").send_reward_notifications(reward: reward)
     end
   end
 
-  describe "#get_users", :vcr do
+  describe "#get_users" do
     it "returns the list of users in the slack instance" do
       stub_request(:post, "https://slack.com/api/users.list").
           with(body: {"token": "token"}, headers: {'Accept': 'application/json; charset=utf-8'}).
@@ -41,11 +37,11 @@ describe Swarmbot::Slack do
     end
   end
 
-  describe "#get_users", :vcr do
+  describe "#get_users" do
     it "returns the list of users in the slack instance" do
       stub_request(:post, "https://slack.com/api/users.info").
-        with(body: {"token" => "token", "user" => "foobar"}).
-        to_return(status: 200, body: File.read(Rails.root.join("spec/fixtures/users_info_response.json")), headers: {})
+          with(body: {"token" => "token", "user" => "foobar"}).
+          to_return(status: 200, body: File.read(Rails.root.join("spec/fixtures/users_info_response.json")), headers: {})
 
       response = Swarmbot::Slack.new("token").get_user_info("foobar")
 
