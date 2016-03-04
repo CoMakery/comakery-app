@@ -11,10 +11,10 @@ class GetRewardableAccounts
     context.rewardable_accounts = (db_slack_users + api_slack_users).to_h.invert.to_a
   end
 
-  private
+  protected
 
   def api_formatted_name(user)
-    if user[:profile][:first_name] && user[:profile][:last_name]
+    if user[:profile][:first_name].present? && user[:profile][:last_name].present?
       "#{user[:profile][:first_name]} #{user[:profile][:last_name]} - #{user[:name]}"
     else
       user[:name]
@@ -22,7 +22,7 @@ class GetRewardableAccounts
   end
 
   def db_formatted_name(auth)
-    if auth.slack_first_name && auth.slack_last_name
+    if auth.slack_first_name.present? && auth.slack_last_name.present?
       "#{auth.slack_first_name} #{auth.slack_last_name} - #{auth.slack_user_name}"
     else
       auth.slack_user_name
