@@ -34,7 +34,7 @@ describe GetRewardableAccounts do
                                                               }])
 
       result = GetRewardableAccounts.call(current_account: current_account, accounts: [account1, account2])
-      expect(result.rewardable_accounts).to eq([["johndoe", "slack user id 1"], ["Joe Bill - johndoe", "slack user id 2"], ["blah", "47"], ["receiver", "U8888UVMH"], ["Bob Johnson - bobjohnson", "U9999UVMH"]])
+      expect(result.rewardable_accounts).to eq([["@johndoe", "slack user id 1"], ["Joe Bill - @johndoe", "slack user id 2"], ["@blah", "47"], ["@receiver", "U8888UVMH"], ["Bob Johnson - @bobjohnson", "U9999UVMH"]])
     end
   end
 end

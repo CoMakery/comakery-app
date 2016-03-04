@@ -44,7 +44,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
       visit project_path(project)
 
       choose "Small"
-      expect(page.all("select#reward_slack_user_id option").map(&:text).sort).to eq(["", "Hubert Sherbert - hubert", "Sherman Yessir - sherman", "bobjohnson"])
+      expect(page.all("select#reward_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson", "Hubert Sherbert - @hubert", "Sherman Yessir - @sherman"])
       select "bobjohnson", from: "User"
 
       click_button "Send"
@@ -58,7 +58,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       visit project_rewards_path(bobjohnsons_auth.projects.first)
 
-      expect(page).to have_content "bobjohnson"
+      expect(page).to have_content "@bobjohnson"
     end
   end
 
@@ -89,8 +89,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
     choose "Small"
 
-    expect(page.all("select#reward_slack_user_id option").map(&:text).sort).to eq(["", "Hubert Sherbert - hubert", "Sherman Yessir - sherman", "bobjohnson"])
-    select "sherman", from: "User"
+    expect(page.all("select#reward_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson", "Hubert Sherbert - @hubert", "Sherman Yessir - @sherman"])
+    select "@sherman", from: "User"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
 
     click_button "Send"

@@ -15,17 +15,17 @@ class GetRewardableAccounts
 
   def api_formatted_name(user)
     if user[:profile][:first_name].present? && user[:profile][:last_name].present?
-      "#{user[:profile][:first_name]} #{user[:profile][:last_name]} - #{user[:name]}"
+      "#{user[:profile][:first_name]} #{user[:profile][:last_name]} - @#{user[:name]}"
     else
-      user[:name]
+      "@#{user[:name]}"
     end
   end
 
   def db_formatted_name(auth)
     if auth.slack_first_name.present? && auth.slack_last_name.present?
-      "#{auth.slack_first_name} #{auth.slack_last_name} - #{auth.slack_user_name}"
+      "#{auth.slack_first_name} #{auth.slack_last_name} - @#{auth.slack_user_name}"
     else
-      auth.slack_user_name
+      "@#{auth.slack_user_name}"
     end
   end
 end

@@ -239,10 +239,10 @@ describe ProjectsController do
         expect(response.code).to eq "200"
         expect(assigns(:project)).to eq project
         expect(assigns[:reward]).to be_new_record
-        expect(assigns[:rewardable_accounts].sort).to match_array([["John Doe - account", "account slack_user_id"],
-                                                                   ["John Doe - other", "other id"],
-                                                                   ["bobjohnson", "U9999UVMH"],
-                                                                   ["receiver", "U8888UVMH"]])
+        expect(assigns[:rewardable_accounts].sort).to match_array([["John Doe - @account", "account slack_user_id"],
+                                                                   ["John Doe - @other", "other id"],
+                                                                   ["@bobjohnson", "U9999UVMH"],
+                                                                   ["@receiver", "U8888UVMH"]])
       end
 
       it "only denies non-owners to view projects" do
