@@ -62,11 +62,15 @@ describe Project do
 
   describe "#owner_slack_user_name" do
     let!(:owner) { create :account }
-    let!(:authentication) { create :authentication, account: owner, slack_team_id: 'reds', slack_first_name: "John", slack_last_name: "Doe", slack_user_name: 'johnny' }
     let!(:project) { create :project, owner_account: owner, slack_team_id: 'reds' }
 
     it "returns the user name" do
+      create(:authentication, account: owner, slack_team_id: 'reds', slack_first_name: "John", slack_last_name: "Doe", slack_user_name: 'johnny')
       expect(project.owner_slack_user_name).to eq('John Doe')
+    end
+
+    it "doesn't blow up if the isn't an auth" do
+      expect(project.owner_slack_user_name).to be_nil
     end
   end
 end
