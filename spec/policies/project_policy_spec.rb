@@ -35,9 +35,25 @@ describe ProjectPolicy do
     end
   end
 
+  describe "#show?" do
+    it "allows viewing of projects that are public or are owned by the current account" do
+      expect(ProjectPolicy.new(nil, my_public_project).show?).to be true
+
+      expect(ProjectPolicy.new(account, my_public_project).show?).to be true
+      expect(ProjectPolicy.new(account, my_private_project).show?).to be true
+      expect(ProjectPolicy.new(account, others_private_project).show?).to be true
+
+      expect(ProjectPolicy.new(other_team_member, others_public_project).show?).to be true
+      expect(ProjectPolicy.new(other_team_member, my_private_project).show?).to be true
+
+      expect(ProjectPolicy.new(different_team_account, my_public_project).show?).to be true
+      expect(ProjectPolicy.new(different_team_account, my_private_project).show?).to be false
+    end
+  end
+
   describe "#show? #edit? #update?" do
     it "only allows viewing of projects that are public or are owned by the current account" do
-      [:show?, :edit?, :update?].each do |action|
+      [:edit?, :update?].each do |action|
         expect(ProjectPolicy.new(nil, my_public_project).send(action)).to be false
 
         expect(ProjectPolicy.new(account, my_public_project).send(action)).to be true

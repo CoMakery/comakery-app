@@ -45,8 +45,11 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
     @reward = Reward.new
-    result = GetRewardableAccounts.call(current_account: current_account, accounts: policy_scope(Account.includes(:authentications)))
-    @rewardable_accounts = result.rewardable_accounts
+    if current_account
+      @rewardable_accounts = GetRewardableAccounts.call(current_account: current_account, accounts: policy_scope(Account.includes(:authentications))).rewardable_accounts
+    else
+      @rewardable_accounts = nil
+    end
   end
 
   def edit

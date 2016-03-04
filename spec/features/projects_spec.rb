@@ -9,18 +9,33 @@ def click_remove(reward_type_row)
 end
 
 describe "viewing projects, creating and editing", :js, :vcr do
-  let!(:project) { create(:project, title: "Project 1", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode") }
+  let!(:project) { create(:project, title: "Project 1", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false) }
   let!(:project2) { create(:project, title: "Public Project", owner_account: account, slack_team_id: "citizencode", public: true) }
   let!(:account) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_user_name: 'gleenn', slack_first_name: "Glenn", slack_last_name: "Spanky") } }
   let!(:same_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code") } }
   let!(:other_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "comakery", slack_team_name: "CoMakery") } }
 
-  describe "landing and searching" do
-    it "shows some projects" do
-      visit projects_path
+  describe "while logged out" do
+    it "allows viewing public projects index and show" do
+      visit root_path
+
+      expect(page).not_to have_content "Project 1"
+      expect(page).to have_content "Public Project"
 
       expect(page).not_to have_content "New Project"
 
+      click_link "Public Project"
+
+      expect(page).to have_current_path(project_path(project2))
+
+      expect(page).to have_content "Public Project"
+      expect(page).to have_content "Visibility: Public"
+      expect(page).to have_content "Team name: Citizen Code"
+    end
+  end
+
+  describe "landing and searching" do
+    it "shows some projects" do
       login(account)
 
       7.times { |i| create(:project, title: "Public Project #{i}", public: true, slack_team_name: "This is a slack team name") }

@@ -72,7 +72,7 @@ def login_account(account)
 end
 
 def login(account)
-  authentication = account.authentications.first || create(:authentication, account_id: account.id)
+  account.authentications.first || create(:authentication, account_id: account.id)
   session[:account_id] = account.id
   account
 end
