@@ -48,54 +48,68 @@ class Views::Projects::Show < Views::Base
         fieldset {
           row {
             column("small-6") {
-              text "Reward Names"
+              span(class: "underline") { text "Reward Names" }
             }
             column("small-6") {
-              text "Suggested Value"
+              span(class: "underline") { text "Suggested Value" }
             }
           }
-          form_for [project, reward] do |f|
-            row(class: "reward-types") {
-              project.reward_types.each do |reward_type|
-                row(class: "reward-type-row") {
-                  column("small-6") {
-                    with_errors(project, :account_id) {
+
+          if !policy(project).send_reward?
+            project.reward_types.each do |reward_type|
+              row {
+                column("small-6") {
+                  span(reward_type.name)
+                }
+                column("small-6") {
+                  text reward_type.amount
+                }
+              }
+            end
+          else
+            form_for [project, reward] do |f|
+              row(class: "reward-types") {
+                project.reward_types.each do |reward_type|
+                  row(class: "reward-type-row") {
+                    column("small-6") {
+                      with_errors(project, :account_id) {
+                        label {
+                          f.radio_button(:reward_type_id, reward_type.to_param)
+                          span(reward_type.name, class: "margin-small")
+                        }
+                      }
+                    }
+                    column("small-6") {
+                      text reward_type.amount
+                    }
+                  }
+                end
+                row {
+                  column("small-8") {
+                    label {
+                      text "User"
+                      options = capture do
+                        options_for_select([[nil, nil]].concat(rewardable_accounts))
+                      end
+                      select_tag "reward[slack_user_id]", options, html: {id: "reward_slack_user_id"}
+                    }
+                  }
+                }
+                row {
+                  column("small-8") {
+                    with_errors(project, :description) {
                       label {
-                        f.radio_button(:reward_type_id, reward_type.to_param)
-                        span(reward_type.name, class: "margin-small")
+                        text "Description"
+                        f.text_area(:description)
                       }
                     }
                   }
-                  column("small-6") {
-                    text reward_type.amount
-                  }
                 }
-              end
-              row {
-                column("small-8") {
-                  label {
-                    text "User"
-                    options = capture do
-                      options_for_select([[nil, nil]].concat(rewardable_accounts))
-                    end
-                    select_tag "reward[slack_user_id]", options, html: {id: "reward_slack_user_id"}
-                  }
+                full_row {
+                  f.submit("Send Reward", class: buttonish << "right")
                 }
               }
-              row {
-                column("small-8") {
-                  with_errors(project, :description) {
-                    label {
-                      text "Description"
-                      f.text_area(:description)
-                    }
-                  }
-                }
-              }
-              full_row {
-                f.submit("Send Reward", class: buttonish << "right")
-              }
-            }
+            end
           end
         }
       }

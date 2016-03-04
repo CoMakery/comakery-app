@@ -67,7 +67,9 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
     visit project_path(project)
 
+    expect(page).to have_content("Project that needs rewards")
     expect(page).not_to have_content("Send Reward")
+    expect(page).not_to have_content("User")
 
     login(owner_account)
 
