@@ -45,9 +45,8 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
     @reward = Reward.new
-    db_slack_users = policy_scope(Account.includes(:authentications)).map { |a| [a.slack_auth.slack_user_id, a.slack_auth.slack_user_name] }
-    api_slack_users = Swarmbot::Slack.get(current_account.slack_auth.slack_token).get_users.map{|user| [user[:id], user[:name]]}
-    @rewardable_accounts = (db_slack_users + api_slack_users).to_h.invert.to_a
+    result = GetRewardableAccounts.call(current_account: current_account, accounts: policy_scope(Account.includes(:authentications)))
+    @rewardable_accounts = result.rewardable_accounts
   end
 
   def edit

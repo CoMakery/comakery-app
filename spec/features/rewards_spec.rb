@@ -7,7 +7,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
   let!(:large_reward_type) { create(:reward_type, project: project, name: "Large", amount: 3000) }
 
   let!(:owner_account) { create(:account, email: "hubert@example.com").tap { |a| create(:authentication, slack_user_name: 'hubert', slack_first_name: 'Hubert', slack_last_name: 'Sherbert', slack_user_id: 'hubert id', account_id: a.id, slack_team_id: "team id") } }
-  let!(:other_account) { create(:account, email: "sherman@example.com").tap { |a| create(:authentication, slack_user_name: 'sherman', slack_user_id: 'sherman id', account_id: a.id, slack_team_id: "team id") } }
+  let!(:other_account) { create(:account, email: "sherman@example.com").tap { |a| create(:authentication, slack_user_name: 'sherman', slack_user_id: 'sherman id', slack_first_name: "Sherman", slack_last_name: "Yessir", account_id: a.id, slack_team_id: "team id") } }
 
   before do
     travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))
@@ -44,7 +44,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
       visit project_path(project)
 
       choose "Small"
-      expect(page.all("select#reward_slack_user_id option").map(&:text).sort).to eq(["", "bobjohnson", "hubert", "sherman"])
+      expect(page.all("select#reward_slack_user_id option").map(&:text).sort).to eq(["", "Hubert Sherbert - hubert", "Sherman Yessir - sherman", "bobjohnson"])
       select "bobjohnson", from: "User"
 
       click_button "Send"
@@ -87,13 +87,13 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
     choose "Small"
 
-    expect(page.all("select#reward_slack_user_id option").map(&:text).sort).to eq(["", "bobjohnson", "hubert", "sherman"])
+    expect(page.all("select#reward_slack_user_id option").map(&:text).sort).to eq(["", "Hubert Sherbert - hubert", "Sherman Yessir - sherman", "bobjohnson"])
     select "sherman", from: "User"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
 
     click_button "Send"
 
-    expect(page).to have_content "Successfully sent reward to John Doe"
+    expect(page).to have_content "Successfully sent reward to Sherman Yessir"
     expect(page).to have_content "Award History"
     expect(page).to have_content "Feb 29"
     expect(page).to have_content "1,000"

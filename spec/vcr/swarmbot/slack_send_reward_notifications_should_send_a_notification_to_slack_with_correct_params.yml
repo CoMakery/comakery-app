@@ -2,59 +2,6 @@
 http_interactions:
 - request:
     method: post
-    uri: https://slack.com/api/reactions.add
-    body:
-      encoding: UTF-8
-      string: channel=foo&name=thumbsup&timestamp=this+is+a+timestamp&token=token
-    headers:
-      Accept:
-      - application/json; charset=utf-8
-      User-Agent:
-      - Slack Ruby Client/0.6.0
-      Content-Type:
-      - application/x-www-form-urlencoded
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      Access-Control-Allow-Origin:
-      - "*"
-      Content-Security-Policy:
-      - referrer no-referrer;
-      Date:
-      - Thu, 03 Mar 2016 22:30:59 GMT
-      Server:
-      - Apache
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubDomains; preload
-      Vary:
-      - Accept-Encoding
-      X-Content-Type-Options:
-      - nosniff
-      X-Xss-Protection:
-      - '0'
-      X-Cache:
-      - Miss from cloudfront
-      Via:
-      - 1.1 9552af4ceb2e0dd55964a80d1e549fd5.cloudfront.net (CloudFront)
-      X-Amz-Cf-Id:
-      - QCesrlL4mi0WfOMatJY66TdPkyVkrSufkP6qYOggh7RJNlwEQtSSXQ==
-    body:
-      encoding: ASCII-8BIT
-      string: '{"ok":false,"error":"invalid_auth"}'
-    http_version: 
-  recorded_at: Thu, 03 Mar 2016 22:30:59 GMT
-- request:
-    method: post
     uri: https://slack.com/api/channels.list
     body:
       encoding: UTF-8
@@ -108,10 +55,10 @@ http_interactions:
   recorded_at: Thu, 03 Mar 2016 22:32:00 GMT
 - request:
     method: post
-    uri: https://slack.com/api/chat.postMessage
+    uri: https://slack.com/api/reactions.add
     body:
       encoding: UTF-8
-      string: as_user=false&channel=%23bot-testing&icon_url=https%3A%2F%2Fs3.amazonaws.com%2Fswarmbot-production%2Fspacekitty.jpg&text=John+Doe+received+a+1337+coin+Contribution+for+%22Great+work%22+on+the+%3Chttp%3A%2F%2Flocalhost%3A3000%2Fprojects%2F1%7CUber+for+Cats%3E+project.&token=token&username=swarmbot
+      string: channel=channel+id&name=thumbsup&timestamp=this+is+a+timestamp&token=token
     headers:
       Accept:
       - application/json; charset=utf-8
@@ -137,7 +84,7 @@ http_interactions:
       Content-Security-Policy:
       - referrer no-referrer;
       Date:
-      - Thu, 03 Mar 2016 23:39:51 GMT
+      - Fri, 04 Mar 2016 00:36:37 GMT
       Server:
       - Apache
       Strict-Transport-Security:
@@ -151,12 +98,65 @@ http_interactions:
       X-Cache:
       - Miss from cloudfront
       Via:
-      - 1.1 1f704b27116e702aafd345b43c8facde.cloudfront.net (CloudFront)
+      - 1.1 58e118efe44a48bd4718ad162e451e3d.cloudfront.net (CloudFront)
       X-Amz-Cf-Id:
-      - EulQNjlDpvPOlugB5A_Nx7r6WvZC2sZY_ZgJNL-JHNESajc0ltYSwQ==
+      - dpTHfYjZAgK9HtW-SP0MCK7fMjIZIi3h0ldEVKg8fuDaCCKhkX3voQ==
     body:
       encoding: ASCII-8BIT
       string: '{"ok":false,"error":"invalid_auth"}'
     http_version: 
-  recorded_at: Thu, 03 Mar 2016 23:39:52 GMT
+  recorded_at: Fri, 04 Mar 2016 00:36:38 GMT
+- request:
+    method: post
+    uri: https://slack.com/api/chat.postMessage
+    body:
+      encoding: UTF-8
+      string: as_user=false&channel=%23bot-testing&icon_url=https%3A%2F%2Fs3.amazonaws.com%2Fswarmbot-production%2Fspacekitty.jpg&text=John+John+received+a+1337+coin+Contribution+for+%22Great+work%22+on+the+%3Chttp%3A%2F%2Flocalhost%3A3000%2Fprojects%2F1%7CUber+for+Cats%3E+project.&token=token&username=swarmbot
+    headers:
+      Accept:
+      - application/json; charset=utf-8
+      User-Agent:
+      - Slack Ruby Client/0.6.0
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - referrer no-referrer;
+      Date:
+      - Fri, 04 Mar 2016 00:37:19 GMT
+      Server:
+      - Apache
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Vary:
+      - Accept-Encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      X-Cache:
+      - Miss from cloudfront
+      Via:
+      - 1.1 9c5cd47dcde21cddfc2c9e279d0a3a56.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - SO7yFF8GLXFe2SHxCdtbMo1u0Yiwk6VnYwKCZyniv2jQy0NJy0uw7w==
+    body:
+      encoding: ASCII-8BIT
+      string: '{"ok":false,"error":"invalid_auth"}'
+    http_version: 
+  recorded_at: Fri, 04 Mar 2016 00:37:19 GMT
 recorded_with: VCR 3.0.1

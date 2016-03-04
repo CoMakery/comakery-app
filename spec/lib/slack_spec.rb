@@ -13,7 +13,6 @@ describe Swarmbot::Slack, :vcr do
     it 'should send a notification to Slack with correct params' do
       expected_text = "John Doe received a 1337 coin Contribution for \"Great work\" on the <http://localhost:3000/projects/#{project.id}|Uber for Cats> project."
       stub_request(:post, "https://slack.com/api/chat.postMessage").
-          # with(body: hash_including({text: expected_text, token: "token", channel: "#bot-testing", username: "swarmbot", icon_url: Swarmbot::Slack::AVATAR, as_user: "false"})).
           with(body: hash_including({text: expected_text, token: "token", channel: "#bot-testing", username: "swarmbot", icon_url: Swarmbot::Slack::AVATAR, as_user: "false"})).
           to_return(status: 200, body: {ok: true, channel: "channel id", message: {ts: 'this is a timestamp'}}.to_json)
 

@@ -27,10 +27,10 @@ class Mom
         slack_user_id: "slack user id #{@@authentication_count}",
         slack_team_name: "Slack Team",
         slack_team_id: "citizen code id",
-        slack_user_name: "johndoe",
-        slack_first_name: "John",
-        slack_last_name: "Doe"
+        slack_user_name: "johndoe"
     }
+    defaults[:slack_first_name] = "John" unless attrs.has_key?(:slack_first_name) && attrs[:slack_first_name] == nil
+    defaults[:slack_last_name] = "Doe" unless attrs.has_key?(:slack_last_name) && attrs[:slack_last_name] == nil
     Authentication.new(defaults.merge(attrs))
   end
 

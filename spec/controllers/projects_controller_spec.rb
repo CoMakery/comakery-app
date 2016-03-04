@@ -239,9 +239,9 @@ describe ProjectsController do
         expect(response.code).to eq "200"
         expect(assigns(:project)).to eq project
         expect(assigns[:reward]).to be_new_record
-        expect(assigns[:rewardable_accounts].sort).to match_array([["account", "account slack_user_id"],
+        expect(assigns[:rewardable_accounts].sort).to match_array([["John Doe - account", "account slack_user_id"],
+                                                                   ["John Doe - other", "other id"],
                                                                    ["bobjohnson", "U9999UVMH"],
-                                                                   ["other", "other id"],
                                                                    ["receiver", "U8888UVMH"]])
       end
 
