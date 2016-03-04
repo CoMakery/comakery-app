@@ -1,6 +1,5 @@
 class Project < ActiveRecord::Base
   include SlackDomainable
-
   nilify_blanks
   attachment :image
 
