@@ -30,7 +30,8 @@ class ProjectsController < ApplicationController
     auth = current_account.authentications.find_by(provider: "slack")
     @project = Project.new(project_params.merge(owner_account: current_account,
                                                 slack_team_id: auth.slack_team_id,
-                                                slack_team_name: auth.slack_team_name))
+                                                slack_team_name: auth.slack_team_name,
+                                                slack_team_domain: auth.slack_team_domain))
     authorize @project
     if @project.save
       flash[:notice] = "Project created"

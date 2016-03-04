@@ -26,7 +26,8 @@ class Authentication < ActiveRecord::Base
       slack_first_name: slack_auth_hash.slack_first_name,
       slack_last_name: slack_auth_hash.slack_last_name,
       slack_team_name: slack_auth_hash.slack_team_name,
-      slack_token: slack_auth_hash.slack_token
+      slack_token: slack_auth_hash.slack_token,
+      slack_team_domain: slack_auth_hash.slack_team_domain
     )
 
     account

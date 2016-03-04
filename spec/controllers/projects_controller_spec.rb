@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe ProjectsController do
-  let!(:account) { create(:account, email: 'account@example.com').tap { |a| create(:authentication, account: a, slack_team_id: "foo", slack_user_name: "account", slack_user_id: "account slack_user_id") } }
+  let!(:account) { create(:account, email: 'account@example.com').tap { |a| create(:authentication, account: a, slack_team_id: "foo", slack_user_name: "account", slack_user_id: "account slack_user_id", slack_team_domain: "foobar") } }
 
   before { login(account) }
 
@@ -103,13 +103,18 @@ describe ProjectsController do
 
       expect(flash[:error]).to eq("Project saving failed, please correct the errors below")
       project = assigns[:project]
+
       expect(project.description).to eq("Project description here")
       expect(project.image).to be_a(Refile::File)
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
       expect(project.reward_types.first.name).to eq("Small Reward")
       expect(project.owner_account_id).to eq(account.id)
-      expect(project.slack_team_id).to eq(account.authentications.first.slack_team_id)
-      expect(project.slack_team_name).to eq(account.authentications.first.slack_team_name)
+
+      account_slack_auth = account.authentications.first
+
+      expect(project.slack_team_id).to eq(account_slack_auth.slack_team_id)
+      expect(project.slack_team_name).to eq(account_slack_auth.slack_team_name)
+      expect(project.slack_team_domain).to eq("foobar")
       expect(project.reward_types.size).to eq(2)
     end
   end

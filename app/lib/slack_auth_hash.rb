@@ -46,6 +46,10 @@ class SlackAuthHash
     @slack_token ||= @auth_hash.dig('credentials', 'token')
   end
 
+  def slack_team_domain
+    @slack_team_domain ||= @auth_hash.dig('info', 'team_domain')
+  end
+
   def email_address
     @email_address ||= @auth_hash.dig('info', 'email').presence || @auth_hash.dig('extra', 'user_info', 'user', 'profile', 'email')
   end

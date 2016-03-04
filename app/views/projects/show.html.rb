@@ -38,13 +38,23 @@ class Views::Projects::Show < Views::Base
             }
           }
         }
-        full_row {
-          if project.tracker
-            a(href: project.tracker) do
-              i(class:"fa fa-tasks")
-              text " Project Tasks"
+        row {
+          column("small-6") {
+            if project.tracker
+              a(href: project.tracker) do
+                i(class: "fa fa-tasks")
+                text " Project Tasks"
+              end
             end
-          end
+          }
+          column("small-6") {
+            if project.slack_team_domain
+              a(href: "https://#{project.slack_team_domain}.slack.com") do
+                i(class: "fa fa-slack")
+                text " Project Slack Channel"
+              end
+            end
+          }
         }
       }
     }

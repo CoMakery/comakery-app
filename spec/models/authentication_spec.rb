@@ -37,7 +37,8 @@ describe Authentication do
             'user_id' => 'slack user id',
             'team' => "CoMakery",
             'team_id' => 'slack team id',
-            'user' => "bobroberts"
+            'user' => "bobroberts",
+            'team_domain' => "bobrobertsdomain"
           }
       }
     }
@@ -58,6 +59,7 @@ describe Authentication do
         expect(auth.slack_team_id).to eq("slack team id")
         expect(auth.slack_user_id).to eq("slack user id")
         expect(auth.slack_token).to eq("xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa")
+        expect(auth.slack_team_domain).to eq("bobrobertsdomain")
       end
     end
 
