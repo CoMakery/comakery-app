@@ -133,10 +133,10 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "This is a project"
     expect(page).to have_content "This is a project description which is very informative"
     expect(page.find(".project-image")[:src]).to match(/\/attachments\/[A-Za-z0-9\/]+\/image/)
-    expect(page).not_to have_link "Project Tasks »"
+    expect(page).not_to have_link "Project Tasks"
     expect(page).to have_content "Visibility: Public"
 
-    expect(page).to have_content "Project owner: Glenn Spanky"
+    expect(page).to have_content "Owner: Glenn Spanky"
     expect(page).to have_content "Team name: Citizen Code"
 
     reward_type_rows = page.all(".reward-type-row")
@@ -177,7 +177,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "This is an edited project"
     expect(page).to have_content "This is an edited project description which is very informative"
     expect(page).to have_content "Visibility: Private"
-    expect(page).to have_link "Project Tasks »"
+    expect(page).to have_link "Project Tasks"
 
     reward_type_inputs = page.all(".reward-type-row")
     expect(reward_type_inputs.size).to eq(3)

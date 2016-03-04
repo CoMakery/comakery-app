@@ -19,7 +19,7 @@ class Views::Projects::Show < Views::Base
           text project.description
         }
         row {
-          column("small-4") {
+          column("small-3") {
             p {
               text "Visibility: "
               b "#{project.public? ? "Public" : "Private"}"
@@ -31,15 +31,20 @@ class Views::Projects::Show < Views::Base
               b "#{project.slack_team_name}"
             }
           }
-          column("small-4") {
+          column("small-5") {
             p {
-              text "Project owner: "
+              text "Owner: "
               b "#{project.owner_slack_user_name}"
             }
           }
         }
         full_row {
-          a "Project Tasks »", class: buttonish, href: project.tracker if project.tracker
+          if project.tracker
+            a(href: project.tracker) do
+              i(class:"fa fa-tasks")
+              text " Project Tasks"
+            end
+          end
         }
       }
     }
