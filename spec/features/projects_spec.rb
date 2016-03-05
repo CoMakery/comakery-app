@@ -19,6 +19,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
     it "allows viewing public projects index and show" do
       visit root_path
 
+      expect(page).not_to have_content "My Projects"
+
       expect(page).not_to have_content "Project 1"
       expect(page).to have_content "Public Project"
 
