@@ -9,4 +9,5 @@ if !Rails.env.development? && !Rails.env.test?
   }
   Refile.cache = Refile::S3.new(prefix: "cache", max_size: 10.megabytes, **aws)
   Refile.store = Refile::S3.new(prefix: "store", max_size: 10.megabytes, **aws)
+  Refile.cdn_host = ENV['REFILE_CLOUDFRONT_HOST']
 end
