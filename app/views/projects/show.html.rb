@@ -4,7 +4,7 @@ class Views::Projects::Show < Views::Base
   def content
     row {
       column("small-3") {
-        text attachment_image_tag(project, :image, :fill, 150, 150, class: "project-image")
+        text attachment_image_tag(project, :image, class: "project-image")
       }
       column("small-9") {
         row {

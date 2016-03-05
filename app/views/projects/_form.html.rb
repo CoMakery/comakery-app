@@ -29,7 +29,7 @@ module Views
                 text "Project Image"
                 text f.attachment_field(:image)
               }
-              text attachment_image_tag(project, :image, :fill, 300, 300, class: "project-image")
+              text attachment_image_tag(project, :image, class: "project-image")
             }
             with_errors(project, :public) {
               label {

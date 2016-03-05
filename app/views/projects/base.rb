@@ -15,7 +15,7 @@ class Views::Projects::Base < Views::Base
   def project_block(project)
     row(class: "project", id: "project-#{project.to_param}") {
       column("small-4") {
-        text attachment_image_tag(project, :image, :fill, 100, 100, class: "margin-small")
+        text attachment_image_tag(project, :image, class: "margin-small")
       }
       column("small-8") {
         div(class: "margin-small") {
