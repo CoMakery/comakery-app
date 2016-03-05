@@ -44,5 +44,7 @@ module Swarmbot
 
     routes.default_url_options[:host] = ENV['APP_HOST'] || "localhost:#{ENV['PORT'] || 3000}"
     routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'] || 'http://'
+
+    config.action_controller.asset_host = ENV['CLOUDFRONT_HOST']
   end
 end
