@@ -48,12 +48,7 @@ module Swarmbot
     cloudfront_host = ENV['CLOUDFRONT_HOST']
     if cloudfront_host.present?
       config.action_controller.asset_host = cloudfront_host
-      config.action_dispatch.default_headers.merge!({
-                                                        # 'Access-Control-Allow-Origin' => "http://#{cloudfront_host}",
-                                                        # 'Access-Control-Request-Method' => 'GET'
-                                                        'Access-Control-Allow-Origin' => "*",
-                                                        'Access-Control-Request-Method' => "*"
-                                                    })
+      config.font_assets.origin = "http://#{cloudfront_host}"
     end
   end
 end
