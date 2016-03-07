@@ -48,7 +48,7 @@ module Swarmbot
     cloudfront_host = ENV['CLOUDFRONT_HOST']
     if cloudfront_host.present?
       config.action_controller.asset_host = cloudfront_host
-      config.font_assets.origin = "http://#{cloudfront_host}"
+      config.font_assets.origin = "http://#{ENV['APP_HOST']}"
     end
   end
 end
