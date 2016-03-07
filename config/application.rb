@@ -45,8 +45,13 @@ module Swarmbot
     routes.default_url_options[:host] = ENV['APP_HOST'] || "localhost:#{ENV['PORT'] || 3000}"
     routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'] || 'http://'
 
-    if ENV['CLOUDFRONT_HOST'].present?
-      config.action_controller.asset_host = ENV['CLOUDFRONT_HOST']
+    cloudfront_host = ENV['CLOUDFRONT_HOST']
+    if cloudfront_host.present?
+      config.action_controller.asset_host = cloudfront_host
+      config.action_dispatch.default_headers.merge!({
+                                                        'Access-Control-Allow-Origin' => cloudfront_host,
+                                                        'Access-Control-Request-Method' => 'GET'
+                                                    })
     end
   end
 end
