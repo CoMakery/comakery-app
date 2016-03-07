@@ -41,7 +41,7 @@ class Views::Projects::Show < Views::Base
         row {
           column("small-6") {
             if project.tracker
-              a(href: project.tracker) do
+              a(href: project.tracker, target: "_blank") do
                 i(class: "fa fa-tasks")
                 text " Project Tasks"
               end
@@ -49,7 +49,7 @@ class Views::Projects::Show < Views::Base
           }
           column("small-6") {
             if project.slack_team_domain
-              a(href: "https://#{project.slack_team_domain}.slack.com") do
+              a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank") do
                 i(class: "fa fa-slack")
                 text " Project Slack Channel"
               end
