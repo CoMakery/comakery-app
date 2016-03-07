@@ -21,11 +21,15 @@ describe SessionsController do
     context 'with valid login credentials' do
       it 'succeeds' do
         request.env['omniauth.auth'] = {
-            'name' => 'bob',
-            'provider' => 'slack',
-            'credentials' => {'token' => 'these are credentials'},
-            'info' => {'team' => "Citizen Code", 'team_id' => 'T00000000', 'user_id' => 'U00000000', 'user' => 'redman', 'first_name' => "Red", 'last_name' => "Man"},
-            'extra' => {'user_info' => {'user' => {'profile' => {'email' => "bob@example.com"}}}}}
+          'name' => 'bob',
+          'provider' => 'slack',
+          'credentials' => {'token' => 'these are credentials'},
+          'info' => {'team' => "Citizen Code", 'team_id' => 'T00000000', 'user_id' => 'U00000000', 'user' => 'redman', 'first_name' => "Red", 'last_name' => "Man"},
+          'extra' => {
+            'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com'}}},
+            'team_info' => { 'team' => { 'icon' => { 'image_34' => 'https://slack.example.com/team-image-34-px.jpg' } } }
+          }
+        }
 
         expect do
           post :create

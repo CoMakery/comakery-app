@@ -26,6 +26,7 @@ class Mom
         slack_token: "slack token",
         slack_user_id: "slack user id #{@@authentication_count}",
         slack_team_name: "Slack Team",
+        slack_team_image_34_url: "https://slack.example.com/team-image-34-px.jpg",
         slack_team_id: "citizen code id",
         slack_user_name: "johndoe"
     }

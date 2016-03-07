@@ -24,6 +24,7 @@ class AwardSlackUser
                                            provider: "slack",
                                            slack_team_name: context.issuer.slack_auth.slack_team_name,
                                            slack_team_id: context.issuer.slack_auth.slack_team_id,
+                                           slack_team_image_34_url: context.issuer.slack_auth.slack_team_image_34_url,
                                            slack_user_name: response.name,
                                            slack_user_id: context.slack_user_id)
 

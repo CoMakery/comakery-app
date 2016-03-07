@@ -4,7 +4,16 @@ describe Authentication do
   describe "validations" do
     it "requires many attributes" do
       errors = Authentication.new.tap { |a| a.valid? }.errors.full_messages
-      expect(errors).to match_array(["Account can't be blank", "Provider can't be blank", "Slack team name can't be blank", "Slack team name can't be blank", "Slack team can't be blank", "Slack user can't be blank", "Slack user name can't be blank"])
+      expect(errors).to match_array([
+        "Account can't be blank",
+        "Provider can't be blank",
+        "Slack team name can't be blank",
+        "Slack team name can't be blank",
+        "Slack team image 34 url can't be blank",
+        "Slack team can't be blank",
+        "Slack user can't be blank",
+        "Slack user name can't be blank"
+      ])
     end
 
     it "requires a valid slack team domain" do
@@ -39,7 +48,10 @@ describe Authentication do
           "credentials" => {
               "token" => "xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa"
           },
-          'extra' => {'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com'}}}},
+          'extra' => {
+            'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com'}}},
+            'team_info' => { 'team' => { 'icon' => { 'image_34' => 'https://slack.example.com/team-image-34-px.jpg' } } }
+          },
           'info' => {
             'name' => "Bob Roberts",
             'first_name' => "Bob",

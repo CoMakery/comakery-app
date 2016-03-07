@@ -67,6 +67,7 @@ describe AwardSlackUser do
                                                             award_type_id: award_type.to_param,
                                                             description: "This rocks!!11"
                                                         })
+            expect(result.message).to be_nil                                                          
             expect(result.award).to be_a_new_record
             expect(result.award.award_type).to eq(award_type)
             expect(result.award.issuer).to eq(issuer)
