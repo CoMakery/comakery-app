@@ -25,7 +25,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show?
-    project.public? || account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
+    project.public? || account.present? && account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
   end
 
   def edit?
