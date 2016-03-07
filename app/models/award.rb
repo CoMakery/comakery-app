@@ -1,9 +1,9 @@
-class Reward < ActiveRecord::Base
+class Award < ActiveRecord::Base
   belongs_to :account
   belongs_to :issuer, class_name: Account
-  belongs_to :reward_type
+  belongs_to :award_type
 
-  validates_presence_of :account, :issuer, :reward_type
+  validates_presence_of :account, :issuer, :award_type
 
   def issuer_slack_user_name
     issuer.slack_auth(slack_team_id: slack_team_id)&.display_name
@@ -16,6 +16,6 @@ class Reward < ActiveRecord::Base
   private
 
   def slack_team_id
-    reward_type.project.slack_team_id
+    award_type.project.slack_team_id
   end
 end

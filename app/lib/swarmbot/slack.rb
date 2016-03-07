@@ -16,13 +16,13 @@ class Swarmbot::Slack
     )
   end
 
-  def send_reward_notifications(reward:)
+  def send_award_notifications(award:)
     text = %{
-      #{reward.recipient_slack_user_name} received a
-      #{reward.reward_type.amount} coin #{reward.reward_type.name}
-      #{'for "' + reward.description + '"' if reward.description.present?}
+      #{award.recipient_slack_user_name} received a
+      #{award.award_type.amount} coin #{award.award_type.name}
+      #{'for "' + award.description + '"' if award.description.present?}
       on the
-      <#{project_url(reward.reward_type.project)}|#{reward.reward_type.project.title}>
+      <#{project_url(award.award_type.project)}|#{award.award_type.project.title}>
       project.
     }.strip.gsub(/\s+/, ' ')
 

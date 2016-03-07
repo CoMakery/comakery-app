@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe GetRewardableAccounts do
+describe GetAwardableAccounts do
   let(:current_account) { create(:account).tap { |a| create(:authentication, account: a) } }
   let(:account1) { create(:account).tap { |a| create(:authentication, account: a, slack_user_id: "slack user id 1", slack_first_name: nil, slack_last_name: nil) } }
   let(:account2) { create(:account).tap { |a| create(:authentication, account: a, slack_user_id: "slack user id 2", slack_first_name: "Joe", slack_last_name: "Bill") } }
@@ -33,8 +33,8 @@ describe GetRewardableAccounts do
                                                                    email: "receiver@example.com"}
                                                               }])
 
-      result = GetRewardableAccounts.call(current_account: current_account, accounts: [account1, account2])
-      expect(result.rewardable_accounts).to eq([["@johndoe", "slack user id 1"], ["Joe Bill - @johndoe", "slack user id 2"], ["@blah", "47"], ["@receiver", "U8888UVMH"], ["Bob Johnson - @bobjohnson", "U9999UVMH"]])
+      result = GetAwardableAccounts.call(current_account: current_account, accounts: [account1, account2])
+      expect(result.awardable_accounts).to eq([["@johndoe", "slack user id 1"], ["Joe Bill - @johndoe", "slack user id 2"], ["@blah", "47"], ["@receiver", "U8888UVMH"], ["Bob Johnson - @bobjohnson", "U9999UVMH"]])
     end
   end
 end

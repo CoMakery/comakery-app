@@ -57,14 +57,14 @@ describe Account do
     end
   end
 
-  describe '#send_reward_notifications' do
+  describe '#send_award_notifications' do
     before do
       create :authentication, provider: 'slack', account: subject
     end
     it 'sends a Slack notification' do
-      allow(subject.slack).to receive(:send_reward_notifications)
-      subject.send_reward_notifications
-      expect(subject.slack).to have_received(:send_reward_notifications)
+      allow(subject.slack).to receive(:send_award_notifications)
+      subject.send_award_notifications
+      expect(subject.slack).to have_received(:send_award_notifications)
     end
   end
 end

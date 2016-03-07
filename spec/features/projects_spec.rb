@@ -1,11 +1,11 @@
 require "rails_helper"
 
-def get_reward_type_rows
-  page.all(".reward-type-row", visible: true)
+def get_award_type_rows
+  page.all(".award-type-row")
 end
 
-def click_remove(reward_type_row)
-  reward_type_row.find("a[data-mark-and-hide]").click
+def click_remove(award_type_row)
+  award_type_row.find("a[data-mark-and-hide]").click
 end
 
 describe "viewing projects, creating and editing", :js, :vcr do
@@ -56,22 +56,22 @@ describe "viewing projects, creating and editing", :js, :vcr do
     end
   end
 
-  describe "removing reward types on projects where there have been rewards sent already" do
-    it "prevents destroying the reward types" do
+  describe "removing award types on projects where there have been awards sent already" do
+    it "prevents destroying the award types" do
       login(account)
 
-      reward_type = create(:reward_type, project: project, name: "Big ol' reward", amount: 40000)
+      award_type = create(:award_type, project: project, name: "Big ol' award", amount: 40000)
 
       visit edit_project_path(project)
 
       expect(page.all("a[data-mark-and-hide]").size).to eq(1)
 
-      create(:reward, reward_type: reward_type, account: same_team_account)
+      create(:award, award_type: award_type, account: same_team_account)
 
       visit edit_project_path(project)
 
       expect(page.all("a[data-mark-and-hide]").size).to eq(0)
-      expect(page).to have_content "(1 reward sent)"
+      expect(page).to have_content "(1 award sent)"
     end
   end
 
@@ -96,32 +96,33 @@ describe "viewing projects, creating and editing", :js, :vcr do
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public (display in CoMakery index)")).to be_checked
 
-    reward_type_inputs = get_reward_type_rows
-    expect(reward_type_inputs.size).to eq(3)
-    reward_type_inputs[0].all("input")[0].set "This is a small reward type"
-    reward_type_inputs[0].all("input")[1].set "1000"
-    reward_type_inputs[1].all("input")[0].set "This is a medium reward type"
-    reward_type_inputs[1].all("input")[1].set "2000"
-    reward_type_inputs[2].all("input")[0].set "This is a large reward type"
-    reward_type_inputs[2].all("input")[1].set "3000"
+    award_type_inputs = get_award_type_rows
+    expect(award_type_inputs.size).to eq(3)
+    award_type_inputs[0].all("input")[0].set "This is a small award type"
+    award_type_inputs[0].all("input")[1].set "1000"
+    award_type_inputs[1].all("input")[0].set "This is a medium award type"
+    award_type_inputs[1].all("input")[1].set "2000"
+    award_type_inputs[2].all("input")[0].set "This is a large award type"
+    award_type_inputs[2].all("input")[1].set "3000"
+    # award_type_inputs[3]["class"].include?("hide")
 
-    click_link "+ add reward type"
+    click_link "+ add award type"
 
-    reward_type_inputs = get_reward_type_rows
-    expect(reward_type_inputs.size).to eq(4)
+    award_type_inputs = get_award_type_rows
+    expect(award_type_inputs.size).to eq(4)
 
-    reward_type_inputs[3].all("input")[0].set "This is a super big reward type"
-    reward_type_inputs[3].all("input")[1].set "5000"
+    award_type_inputs[3].all("input")[0].set "This is a super big award type"
+    award_type_inputs[3].all("input")[1].set "5000"
 
-    click_link "+ add reward type"
+    click_link "+ add award type"
 
-    reward_type_inputs = get_reward_type_rows
-    expect(reward_type_inputs.size).to eq(5)
+    award_type_inputs = get_award_type_rows
+    expect(award_type_inputs.size).to eq(5)
 
-    click_remove(reward_type_inputs.last)
+    click_remove(award_type_inputs.last)
 
-    reward_type_inputs = get_reward_type_rows
-    expect(reward_type_inputs.size).to eq(4)
+    award_type_inputs = get_award_type_rows
+    expect(award_type_inputs.size).to eq(4)
 
     click_on "Save"
 
@@ -141,20 +142,20 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "Owner: Glenn Spanky"
     expect(page).to have_content "Team name: Citizen Code"
 
-    reward_type_rows = page.all(".reward-type-row")
-    expect(reward_type_rows.size).to eq(4)
+    award_type_rows = page.all(".award-type-row")
+    expect(award_type_rows.size).to eq(4)
 
-    expect(reward_type_rows[0]).to have_content "This is a small reward type"
-    expect(reward_type_rows[0]).to have_content "1000"
+    expect(award_type_rows[0]).to have_content "This is a small award type"
+    expect(award_type_rows[0]).to have_content "1000"
 
-    expect(reward_type_rows[1]).to have_content "This is a medium reward type"
-    expect(reward_type_rows[1]).to have_content "2000"
+    expect(award_type_rows[1]).to have_content "This is a medium award type"
+    expect(award_type_rows[1]).to have_content "2000"
 
-    expect(reward_type_rows[2]).to have_content "This is a large reward type"
-    expect(reward_type_rows[2]).to have_content "3000"
+    expect(award_type_rows[2]).to have_content "This is a large award type"
+    expect(award_type_rows[2]).to have_content "3000"
 
-    expect(reward_type_rows[3]).to have_content "This is a super big reward type"
-    expect(reward_type_rows[3]).to have_content "5000"
+    expect(award_type_rows[3]).to have_content "This is a super big award type"
+    expect(award_type_rows[3]).to have_content "5000"
 
     click_on "Edit"
 
@@ -166,12 +167,12 @@ describe "viewing projects, creating and editing", :js, :vcr do
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
     uncheck "Set project as public (display in CoMakery index)"
 
-    reward_type_inputs = get_reward_type_rows
-    expect(reward_type_inputs.size).to eq(4)
+    award_type_inputs = get_award_type_rows
+    expect(award_type_inputs.size).to eq(4)
 
-    reward_type_inputs[0].all("a[data-mark-and-hide]")[0].click
-    reward_type_inputs = get_reward_type_rows
-    expect(reward_type_inputs.size).to eq(3)
+    award_type_inputs[0].all("a[data-mark-and-hide]")[0].click
+    award_type_inputs = get_award_type_rows
+    expect(award_type_inputs.size).to eq(3)
 
     click_on "Save"
 
@@ -182,12 +183,12 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_link "Project Tasks"
     expect(page).to have_link "Project Slack Channel", href:"https://citizencodedomain.slack.com"
 
-    reward_type_inputs = page.all(".reward-type-row")
-    expect(reward_type_inputs.size).to eq(3)
-    expect(page).not_to have_content "This is a small reward type"
+    award_type_inputs = page.all(".award-type-row")
+    expect(award_type_inputs.size).to eq(3)
+    expect(page).not_to have_content "This is a small award type"
     expect(page).not_to have_content "1000"
 
-    expect(reward_type_inputs.size).to eq(3)
+    expect(award_type_inputs.size).to eq(3)
 
     visit("/projects")
 

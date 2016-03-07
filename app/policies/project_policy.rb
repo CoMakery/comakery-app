@@ -33,7 +33,7 @@ class ProjectPolicy < ApplicationPolicy
   end
   alias :update? :edit?
 
-  def send_reward?
+  def send_award?
     project.owner_account == account
   end
 end

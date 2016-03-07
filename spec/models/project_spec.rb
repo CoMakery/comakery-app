@@ -44,26 +44,26 @@ describe Project do
   end
 
   describe 'associations' do
-    it 'has many reward_types and accepts them as nested attributes' do
+    it 'has many award_types and accepts them as nested attributes' do
       project = Project.create!(
           title: 'This is a title',
           owner_account: create(:account),
           slack_team_id: '123',
           slack_team_name: 'This is a slack team name',
-          reward_types_attributes: [
-              {'name' => 'Small reward', 'amount' => '1000'},
+          award_types_attributes: [
+              {'name' => 'Small award', 'amount' => '1000'},
               {'name' => '', 'amount' => '1000'},
-              {'name' => 'Reward', 'amount' => ''}
+              {'name' => 'Award', 'amount' => ''}
           ])
 
-      expect(project.reward_types.count).to eq(1)
-      expect(project.reward_types.first.name).to eq('Small reward')
-      expect(project.reward_types.first.amount).to eq(1000)
+      expect(project.award_types.count).to eq(1)
+      expect(project.award_types.first.name).to eq('Small award')
+      expect(project.award_types.first.amount).to eq(1000)
       expect(project.slack_team_id).to eq('123')
       expect(project.slack_team_name).to eq('This is a slack team name')
 
-      project.update(reward_types_attributes: {id: project.reward_types.first.id, _destroy: true})
-      expect(project.reward_types.count).to eq(0)
+      project.update(award_types_attributes: {id: project.award_types.first.id, _destroy: true})
+      expect(project.award_types.count).to eq(0)
     end
   end
 

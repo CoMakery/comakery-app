@@ -21,9 +21,9 @@ Rails.application.routes.draw do
   post '/slack/command' => "slack#command"
 
   resources :projects do
+    resources :awards, only: [:index, :create]
     collection do
       get :landing
     end
-    resources :rewards, only: [:index, :create]
   end
 end

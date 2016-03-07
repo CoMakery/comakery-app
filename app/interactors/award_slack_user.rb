@@ -1,4 +1,4 @@
-class RewardSlackUser
+class AwardSlackUser
   include Interactor
 
   def call
@@ -6,9 +6,9 @@ class RewardSlackUser
 
     account = Authentication.includes(:account).find_by(slack_user_id: context.slack_user_id).try(:account)
     account ||= create_account(context)
-    context.reward = Reward.new(context.reward_params.merge(issuer: context.issuer, account_id: account.id))
-    unless context.reward.valid?
-      context.fail!(message: context.reward.errors.full_messages.join(", "))
+    context.award = Award.new(context.award_params.merge(issuer: context.issuer, account_id: account.id))
+    unless context.award.valid?
+      context.fail!(message: context.award.errors.full_messages.join(", "))
     end
   end
 

@@ -19,9 +19,9 @@ class ProjectsController < ApplicationController
   def new
     @project = Project.new(public: true)
     authorize @project
-    @project.reward_types.build(name: "Thanks", amount: 10)
-    @project.reward_types.build(name: "Small Contribution", amount: 100)
-    @project.reward_types.build(name: "Contribution", amount: 1000)
+    @project.award_types.build(name: "Thanks", amount: 10)
+    @project.award_types.build(name: "Small Contribution", amount: 100)
+    @project.award_types.build(name: "Contribution", amount: 1000)
   end
 
   def create
@@ -45,16 +45,16 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.find(params[:id])
     authorize @project
-    @reward = Reward.new
+    @award = Award.new
     if current_account
-      @rewardable_accounts = GetRewardableAccounts.call(current_account: current_account, accounts: policy_scope(Account.includes(:authentications))).rewardable_accounts
+      @awardable_accounts = GetAwardableAccounts.call(current_account: current_account, accounts: policy_scope(Account.includes(:authentications))).awardable_accounts
     else
-      @rewardable_accounts = nil
+      @awardable_accounts = nil
     end
   end
 
   def edit
-    @project = Project.includes(:reward_types).find(params[:id])
+    @project = Project.includes(:award_types).find(params[:id])
     authorize @project
   end
 
@@ -75,6 +75,6 @@ class ProjectsController < ApplicationController
 
   def project_params
     params.require(:project).permit(:title, :description, :image, :tracker, :public,
-                                    reward_types_attributes: [:id, :name, :amount, :_destroy])
+                                    award_types_attributes: [:id, :name, :amount, :_destroy])
   end
 end

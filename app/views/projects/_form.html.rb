@@ -41,7 +41,7 @@ module Views
 
           row {
             column("small-3") {
-              text "Reward Names"
+              text "Award Names"
             }
             column("small-4") {
               text "Suggested Value"
@@ -49,15 +49,15 @@ module Views
             column("small-4") {
             }
           }
-          div(class: "reward-types") {
-            project.reward_types.each do |reward_type|
-              reward_type_content(reward_type)
+          div(class: "award-types") {
+            project.award_types.each do |award_type|
+              award_type_content(award_type)
             end
-            reward_type_content(nil, "hide reward-type-template")
+            award_type_content(nil, "hide award-type-template")
           }
 
           row {
-            p { a("+ add reward type", href: "#", 'data-duplicate': '.reward-type-template') }
+            p { a("+ add award type", href: "#", 'data-duplicate': '.award-type-template') }
           }
           row {
             f.submit "Save", class: buttonish(:small, :expand)
@@ -65,21 +65,21 @@ module Views
         end
       end
 
-      def reward_type_content(reward_type, classes="")
-        row(class: "reward-type-row #{classes}") {
-          hidden_field_tag :'project[reward_types_attributes][][id]', reward_type.try(:to_param)
-          hidden_field_tag :'project[reward_types_attributes][][_destroy]', reward_type.try(:_destroy), 'data-destroy': ''
+      def award_type_content(award_type, classes="")
+        row(class: "award-type-row #{classes}") {
+          hidden_field_tag :'project[award_types_attributes][][id]', award_type.try(:to_param)
+          hidden_field_tag :'project[award_types_attributes][][_destroy]', award_type.try(:_destroy), 'data-destroy': ''
           column("small-4") {
-            text_field_tag :'project[reward_types_attributes][][name]', reward_type.try(:name)
+            text_field_tag :'project[award_types_attributes][][name]', award_type.try(:name)
           }
           column("small-4") {
-            text_field_tag :'project[reward_types_attributes][][amount]', reward_type.try(:amount), type: :number
+            text_field_tag :'project[award_types_attributes][][amount]', award_type.try(:amount), type: :number
           }
           column("small-4") {
-            if reward_type && reward_type.rewards.count > 0
-              text "(#{pluralize(reward_type.rewards.count, "reward")} sent)"
+            if award_type && award_type.awards.count > 0
+              text "(#{pluralize(award_type.awards.count, "award")} sent)"
             else
-              a("×", href: "#", 'data-mark-and-hide': '.reward-type-row')
+              a("×", href: "#", 'data-mark-and-hide': '.award-type-row')
             end
           }
         }

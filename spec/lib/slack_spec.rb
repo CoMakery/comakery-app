@@ -5,11 +5,11 @@ describe Swarmbot::Slack, :vcr do
   let!(:sender_authentication) { create :authentication, slack_token: 'xyz', slack_team_id: 'a team' }
   let!(:recipient_authentication) { create :authentication, account: recipient, slack_token: 'abc', slack_team_id: 'a team' }
   let!(:project) { create :project, slack_team_id: 'a team' }
-  let!(:reward_type) { create :reward_type, project: project }
-  let!(:reward) { create :reward, reward_type: reward_type, account: recipient }
+  let!(:award_type) { create :award_type, project: project }
+  let!(:award) { create :award, award_type: award_type, account: recipient }
   let!(:slack) { Swarmbot::Slack.new(sender_authentication.slack_token) }
 
-  describe '#send_reward_notifications' do
+  describe '#send_award_notifications' do
     it 'should send a notification to Slack with correct params' do
       expected_text = "John Doe received a 1337 coin Contribution for \"Great work\" on the <http://localhost:3000/projects/#{project.id}|Uber for Cats> project."
       stub_request(:post, "https://slack.com/api/chat.postMessage").
@@ -20,7 +20,7 @@ describe Swarmbot::Slack, :vcr do
           with(body: hash_including({channel: "channel id", timestamp: "this is a timestamp", name: 'thumbsup'})).
           to_return(status: 200, body: {ok: true}.to_json)
 
-      Swarmbot::Slack.new("token").send_reward_notifications(reward: reward)
+      Swarmbot::Slack.new("token").send_award_notifications(award: award)
     end
   end
 

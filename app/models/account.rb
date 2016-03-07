@@ -23,7 +23,7 @@ class Account < ActiveRecord::Base
     authentications.find_by(**scope.merge(provider: "slack"))
   end
 
-  def send_reward_notifications(**args)
-    slack.send_reward_notifications(**args)
+  def send_award_notifications(**args)
+    slack.send_award_notifications(**args)
   end
 end

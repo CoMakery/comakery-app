@@ -1,34 +1,34 @@
 module Views
-  module Rewards
+  module Awards
     class Index < Views::Base
-      needs :project, :rewards
+      needs :project, :awards
 
       def content
         h1 "Award History"
-        row(class: "reward-row header-row") {
+        row(class: "award-row header-row") {
           column("small-2") { div(class: "header") { text "Submitted"} }
           column("small-2") { div(class: "header") { text "Award"} }
           column("small-2") { div(class: "header") { text "Recipient"} }
           column("small-4") { div(class: "header") { text "Contribution"} }
           column("small-2") { div(class: "header") { text "Sender"} }
         }
-        rewards.sort_by(&:created_at).reverse.each do |reward|
-          row(class: "reward-row") {
+        awards.sort_by(&:created_at).reverse.each do |award|
+          row(class: "award-row") {
             column("small-2") {
-              text reward.created_at.strftime("%b %d, %Y")
+              text award.created_at.strftime("%b %d, %Y")
             }
             column("small-2") {
-              text number_with_delimiter(reward.reward_type.amount, :delimiter => ',')
+              text number_with_delimiter(award.award_type.amount, :delimiter => ',')
             }
             column("small-2") {
-              text reward.recipient_slack_user_name
+              text award.recipient_slack_user_name
             }
             column("small-4") {
-              div reward.reward_type.name
-              div(class: "text-gray") { text reward.description }
+              div award.award_type.name
+              div(class: "text-gray") { text award.description }
             }
             column("small-2") {
-              text reward.issuer_slack_user_name
+              text award.issuer_slack_user_name
             }
           }
         end

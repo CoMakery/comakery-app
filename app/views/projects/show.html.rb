@@ -1,5 +1,5 @@
 class Views::Projects::Show < Views::Base
-  needs :project, :reward, :rewardable_accounts
+  needs :project, :award, :awardable_accounts
 
   def content
     row {
@@ -63,39 +63,39 @@ class Views::Projects::Show < Views::Base
         fieldset {
           row {
             column("small-6") {
-              span(class: "underline") { text "Reward Names" }
+              span(class: "underline") { text "Award Names" }
             }
             column("small-6") {
               span(class: "underline") { text "Suggested Value" }
             }
           }
 
-          if !policy(project).send_reward?
-            project.reward_types.each do |reward_type|
+          if !policy(project).send_award?
+            project.award_types.each do |award_type|
               row {
                 column("small-6") {
-                  span(reward_type.name)
+                  span(award_type.name)
                 }
                 column("small-6") {
-                  text reward_type.amount
+                  text award_type.amount
                 }
               }
             end
           else
-            form_for [project, reward] do |f|
-              row(class: "reward-types") {
-                project.reward_types.each do |reward_type|
-                  row(class: "reward-type-row") {
+            form_for [project, award] do |f|
+              row(class: "award-types") {
+                project.award_types.each do |award_type|
+                  row(class: "award-type-row") {
                     column("small-6") {
                       with_errors(project, :account_id) {
                         label {
-                          f.radio_button(:reward_type_id, reward_type.to_param)
-                          span(reward_type.name, class: "margin-small")
+                          f.radio_button(:award_type_id, award_type.to_param)
+                          span(award_type.name, class: "margin-small")
                         }
                       }
                     }
                     column("small-6") {
-                      text reward_type.amount
+                      text award_type.amount
                     }
                   }
                 end
@@ -104,9 +104,9 @@ class Views::Projects::Show < Views::Base
                     label {
                       text "User"
                       options = capture do
-                        options_for_select([[nil, nil]].concat(rewardable_accounts))
+                        options_for_select([[nil, nil]].concat(awardable_accounts))
                       end
-                      select_tag "reward[slack_user_id]", options, html: {id: "reward_slack_user_id"}
+                      select_tag "award[slack_user_id]", options, html: {id: "award_slack_user_id"}
                     }
                   }
                 }
@@ -121,7 +121,7 @@ class Views::Projects::Show < Views::Base
                   }
                 }
                 full_row {
-                  f.submit("Send Reward", class: buttonish << "right")
+                  f.submit("Send Award", class: buttonish << "right")
                 }
               }
             end
@@ -129,7 +129,7 @@ class Views::Projects::Show < Views::Base
         }
       }
       column("small-6") {
-        a(href: project_rewards_path(project)) { text "Award History >>" }
+        a(href: project_awards_path(project)) { text "Award History >>" }
       }
     }
     full_row {

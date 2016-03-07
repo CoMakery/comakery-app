@@ -37,19 +37,19 @@ describe ProjectsController do
       expect(response.status).to eq(200)
       expect(assigns[:project]).to be_a_new_record
       expect(assigns[:project]).to be_public
-      expect(assigns[:project].reward_types.size).to eq(3)
+      expect(assigns[:project].award_types.size).to eq(3)
 
-      expect(assigns[:project].reward_types.first).to be_a_new_record
-      expect(assigns[:project].reward_types.first.name).to eq("Thanks")
-      expect(assigns[:project].reward_types.first.amount).to eq(10)
+      expect(assigns[:project].award_types.first).to be_a_new_record
+      expect(assigns[:project].award_types.first.name).to eq("Thanks")
+      expect(assigns[:project].award_types.first.amount).to eq(10)
 
-      expect(assigns[:project].reward_types.second).to be_a_new_record
-      expect(assigns[:project].reward_types.second.name).to eq("Small Contribution")
-      expect(assigns[:project].reward_types.second.amount).to eq(100)
+      expect(assigns[:project].award_types.second).to be_a_new_record
+      expect(assigns[:project].award_types.second.name).to eq("Small Contribution")
+      expect(assigns[:project].award_types.second.amount).to eq(100)
 
-      expect(assigns[:project].reward_types.third).to be_a_new_record
-      expect(assigns[:project].reward_types.third.name).to eq("Contribution")
-      expect(assigns[:project].reward_types.third.amount).to eq(1000)
+      expect(assigns[:project].award_types.third).to be_a_new_record
+      expect(assigns[:project].award_types.third.name).to eq("Contribution")
+      expect(assigns[:project].award_types.third.amount).to eq(1000)
     end
   end
 
@@ -62,22 +62,22 @@ describe ProjectsController do
                           description: "Project description here",
                           image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
                           tracker: "http://github.com/here/is/my/tracker",
-                          reward_types_attributes: [
-                              {name: "Small Reward", amount: 1000},
-                              {name: "Big Reward", amount: 2000},
+                          award_types_attributes: [
+                              {name: "Small Award", amount: 1000},
+                              {name: "Big Award", amount: 2000},
                               {name: "", amount: ""},
                           ]
                       }
           expect(response.status).to eq(302)
         end.to change { Project.count }.by(1)
-      end.to change { RewardType.count }.by(2)
+      end.to change { AwardType.count }.by(2)
 
       project = Project.last
       expect(project.title).to eq("Project title here")
       expect(project.description).to eq("Project description here")
       expect(project.image).to be_a(Refile::File)
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
-      expect(project.reward_types.first.name).to eq("Small Reward")
+      expect(project.award_types.first.name).to eq("Small Award")
       expect(project.owner_account_id).to eq(account.id)
       expect(project.slack_team_id).to eq(account.authentications.first.slack_team_id)
       expect(project.slack_team_name).to eq(account.authentications.first.slack_team_name)
@@ -91,15 +91,15 @@ describe ProjectsController do
                           description: "Project description here",
                           image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
                           tracker: "http://github.com/here/is/my/tracker",
-                          reward_types_attributes: [
-                              {name: "Small Reward", amount: 1000},
-                              {name: "Big Reward", amount: 2000},
+                          award_types_attributes: [
+                              {name: "Small Award", amount: 1000},
+                              {name: "Big Award", amount: 2000},
                               {name: "", amount: ""},
                           ]
                       }
           expect(response.status).to eq(200)
         end.not_to change { Project.count }
-      end.not_to change { RewardType.count }
+      end.not_to change { AwardType.count }
 
       expect(flash[:error]).to eq("Project saving failed, please correct the errors below")
       project = assigns[:project]
@@ -107,7 +107,7 @@ describe ProjectsController do
       expect(project.description).to eq("Project description here")
       expect(project.image).to be_a(Refile::File)
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
-      expect(project.reward_types.first.name).to eq("Small Reward")
+      expect(project.award_types.first.name).to eq("Small Award")
       expect(project.owner_account_id).to eq(account.id)
 
       account_slack_auth = account.authentications.first
@@ -115,7 +115,7 @@ describe ProjectsController do
       expect(project.slack_team_id).to eq(account_slack_auth.slack_team_id)
       expect(project.slack_team_name).to eq(account_slack_auth.slack_team_name)
       expect(project.slack_team_domain).to eq("foobar")
-      expect(project.reward_types.size).to eq(2)
+      expect(project.award_types.size).to eq(2)
     end
   end
 
@@ -142,9 +142,9 @@ describe ProjectsController do
 
     describe "#update" do
       it "updates a project" do
-        small_reward_type = project.reward_types.create!(name: "Small Reward", amount: 100)
-        medium_reward_type = project.reward_types.create!(name: "Medium Reward", amount: 300)
-        destroy_me_reward_type = project.reward_types.create!(name: "Destroy Me Reward", amount: 300)
+        small_award_type = project.award_types.create!(name: "Small Award", amount: 100)
+        medium_award_type = project.award_types.create!(name: "Medium Award", amount: 300)
+        destroy_me_award_type = project.award_types.create!(name: "Destroy Me Award", amount: 300)
 
         expect do
           expect do
@@ -153,15 +153,15 @@ describe ProjectsController do
                     title: "updated Project title here",
                     description: "updated Project description here",
                     tracker: "http://github.com/here/is/my/tracker/updated",
-                    reward_types_attributes: [
-                        {id: small_reward_type.to_param, name: "Small Reward", amount: 150},
-                        {id: destroy_me_reward_type.to_param, _destroy: true},
-                        {name: "Big Reward", amount: 500},
+                    award_types_attributes: [
+                        {id: small_award_type.to_param, name: "Small Award", amount: 150},
+                        {id: destroy_me_award_type.to_param, _destroy: true},
+                        {name: "Big Award", amount: 500},
                     ]
                 }
             expect(response.status).to eq(302)
           end.to change { Project.count }.by(0)
-        end.to change { RewardType.count }.by(0) # +1 and -1
+        end.to change { AwardType.count }.by(0) # +1 and -1
 
         expect(flash[:notice]).to eq("Project updated")
         project.reload
@@ -169,20 +169,20 @@ describe ProjectsController do
         expect(project.description).to eq("updated Project description here")
         expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
 
-        reward_types = project.reward_types.order(:amount)
-        expect(reward_types.size).to eq(3)
-        expect(reward_types.first.name).to eq("Small Reward")
-        expect(reward_types.first.amount).to eq(150)
-        expect(reward_types.second.name).to eq("Medium Reward")
-        expect(reward_types.second.amount).to eq(300)
-        expect(reward_types.third.name).to eq("Big Reward")
-        expect(reward_types.third.amount).to eq(500)
+        award_types = project.award_types.order(:amount)
+        expect(award_types.size).to eq(3)
+        expect(award_types.first.name).to eq("Small Award")
+        expect(award_types.first.amount).to eq(150)
+        expect(award_types.second.name).to eq("Medium Award")
+        expect(award_types.second.amount).to eq(300)
+        expect(award_types.third.name).to eq("Big Award")
+        expect(award_types.third.amount).to eq(500)
       end
 
       it "re-renders with errors when updating fails" do
-        small_reward_type = project.reward_types.create!(name: "Small Reward", amount: 100)
-        medium_reward_type = project.reward_types.create!(name: "Medium Reward", amount: 300)
-        destroy_me_reward_type = project.reward_types.create!(name: "Destroy Me Reward", amount: 400)
+        small_award_type = project.award_types.create!(name: "Small Award", amount: 100)
+        medium_award_type = project.award_types.create!(name: "Medium Award", amount: 300)
+        destroy_me_award_type = project.award_types.create!(name: "Destroy Me Award", amount: 400)
 
         expect do
           expect do
@@ -191,15 +191,15 @@ describe ProjectsController do
                     title: "",
                     description: "updated Project description here",
                     tracker: "http://github.com/here/is/my/tracker/updated",
-                    reward_types_attributes: [
-                        {id: small_reward_type.to_param, name: "Small Reward", amount: 150},
-                        {id: destroy_me_reward_type.to_param, _destroy: true},
-                        {name: "Big Reward", amount: 500},
+                    award_types_attributes: [
+                        {id: small_award_type.to_param, name: "Small Award", amount: 150},
+                        {id: destroy_me_award_type.to_param, _destroy: true},
+                        {name: "Big Award", amount: 500},
                     ]
                 }
             expect(response.status).to eq(200)
           end.not_to change { Project.count }
-        end.not_to change { RewardType.count }
+        end.not_to change { AwardType.count }
 
         project = assigns[:project]
         expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
@@ -207,16 +207,16 @@ describe ProjectsController do
         expect(project.description).to eq("updated Project description here")
         expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
 
-        reward_types = project.reward_types.sort_by(&:amount)
-        expect(reward_types.size).to eq(4)
-        expect(reward_types.first.name).to eq("Small Reward")
-        expect(reward_types.first.amount).to eq(150)
-        expect(reward_types.second.name).to eq("Medium Reward")
-        expect(reward_types.second.amount).to eq(300)
-        expect(reward_types.third.name).to eq("Destroy Me Reward")
-        expect(reward_types.third.amount).to eq(400)
-        expect(reward_types.fourth.name).to eq("Big Reward")
-        expect(reward_types.fourth.amount).to eq(500)
+        award_types = project.award_types.sort_by(&:amount)
+        expect(award_types.size).to eq(4)
+        expect(award_types.first.name).to eq("Small Award")
+        expect(award_types.first.amount).to eq(150)
+        expect(award_types.second.name).to eq("Medium Award")
+        expect(award_types.second.amount).to eq(300)
+        expect(award_types.third.name).to eq("Destroy Me Award")
+        expect(award_types.third.amount).to eq(400)
+        expect(award_types.fourth.name).to eq("Big Award")
+        expect(award_types.fourth.amount).to eq(500)
       end
     end
 
@@ -225,7 +225,7 @@ describe ProjectsController do
       let!(:other_account) { create(:account, email: "other@example.com").tap { |a| create(:authentication, slack_user_id: "other id", slack_team_id: "foo", account: a, slack_user_name: "other") } }
       let!(:different_team_account) { create(:account, email: "different@example.com").tap { |a| create(:authentication, slack_team_id: "bar", account: a, slack_user_name: "otherteam") } }
 
-      it "allows team members to view projects and assigns rewardable accounts from slack api and db and de-dups" do
+      it "allows team members to view projects and assigns awardable accounts from slack api and db and de-dups" do
         slack_double = double("slack")
         expect(Swarmbot::Slack).to receive(:get).and_return(slack_double)
         expect(slack_double).to receive(:get_users).and_return([{"id": "U9999UVMH",
@@ -243,8 +243,8 @@ describe ProjectsController do
 
         expect(response.code).to eq "200"
         expect(assigns(:project)).to eq project
-        expect(assigns[:reward]).to be_new_record
-        expect(assigns[:rewardable_accounts].sort).to match_array([["John Doe - @account", "account slack_user_id"],
+        expect(assigns[:award]).to be_new_record
+        expect(assigns[:awardable_accounts].sort).to match_array([["John Doe - @account", "account slack_user_id"],
                                                                    ["John Doe - @other", "other id"],
                                                                    ["@bobjohnson", "U9999UVMH"],
                                                                    ["@receiver", "U8888UVMH"]])

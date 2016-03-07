@@ -46,23 +46,23 @@ class Mom
     Project.new(defaults.merge(attrs))
   end
 
-  def reward_type(project = create(:project), **attrs)
+  def award_type(project = create(:project), **attrs)
     defaults = {
         project: project,
         amount: 1337,
         name: "Contribution"
     }
-    RewardType.new(defaults.merge(attrs))
+    AwardType.new(defaults.merge(attrs))
   end
 
-  def reward(account = create(:account), issuer = create(:account), **attrs)
+  def award(account = create(:account), issuer = create(:account), **attrs)
     defaults = {
         account: account,
         issuer: issuer,
         description: "Great work",
     }
-    defaults[:reward_type] = create(:reward_type) unless attrs[:reward_type]
-    Reward.new(defaults.merge(attrs))
+    defaults[:award_type] = create(:award_type) unless attrs[:award_type]
+    Award.new(defaults.merge(attrs))
   end
 
   def slack(authentication = create(:authentication))

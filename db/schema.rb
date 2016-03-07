@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304200102) do
+ActiveRecord::Schema.define(version: 20160305010812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,25 @@ ActiveRecord::Schema.define(version: 20160304200102) do
 
   add_index "authentications", ["slack_team_id"], name: "index_authentications_on_slack_team_id", using: :btree
 
+  create_table "award_types", force: :cascade do |t|
+    t.integer  "project_id", null: false
+    t.string   "name",       null: false
+    t.integer  "amount",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "awards", force: :cascade do |t|
+    t.integer  "account_id",    null: false
+    t.integer  "issuer_id",     null: false
+    t.text     "description"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "award_type_id", null: false
+  end
+
+  add_index "awards", ["account_id"], name: "index_awards_on_account_id", using: :btree
+
   create_table "projects", force: :cascade do |t|
     t.string   "title",                             null: false
     t.text     "description"
@@ -84,25 +103,6 @@ ActiveRecord::Schema.define(version: 20160304200102) do
   add_index "projects", ["owner_account_id"], name: "index_projects_on_owner_account_id", using: :btree
   add_index "projects", ["public"], name: "index_projects_on_public", using: :btree
   add_index "projects", ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public", using: :btree
-
-  create_table "reward_types", force: :cascade do |t|
-    t.integer  "project_id", null: false
-    t.string   "name",       null: false
-    t.integer  "amount",     null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "rewards", force: :cascade do |t|
-    t.integer  "account_id",     null: false
-    t.integer  "issuer_id",      null: false
-    t.text     "description"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.integer  "reward_type_id", null: false
-  end
-
-  add_index "rewards", ["account_id"], name: "index_rewards_on_account_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name",       null: false

@@ -1,6 +1,6 @@
-class RewardType < ActiveRecord::Base
+class AwardType < ActiveRecord::Base
   belongs_to :project
-  has_many :rewards, dependent: :restrict_with_exception
+  has_many :awards, dependent: :restrict_with_exception
 
   validates_presence_of :project, :name, :amount
 
