@@ -1,12 +1,9 @@
 class Views::Projects::Landing < Views::Projects::Base
-  needs :private_projects, :public_projects, :slack_team_name, :slack_team_image_34_url
+  needs :private_projects, :public_projects, :slack_auth
 
   def content
     if current_account
-      full_row {
-        column("small-1") { img src: slack_team_image_34_url }
-        column("small-11") { h1 "#{slack_team_name} Projects" }
-      }
+      projects_header(slack_auth)
       projects_block(private_projects)
     end
 

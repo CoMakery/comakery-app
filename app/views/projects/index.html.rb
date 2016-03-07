@@ -1,15 +1,8 @@
 class Views::Projects::Index < Views::Projects::Base
-  needs :projects
+  needs :projects, :slack_auth
 
   def content
-    row {
-      column("small-8") {
-        h1 "Projects"
-      }
-      column("small-4") {
-        a("New Project", class: buttonish(:small), href: new_project_path) if policy(Project).new?
-      }
-    }
+    projects_header(slack_auth)
 
     projects.each do |project|
       project_block(project)

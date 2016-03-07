@@ -6,18 +6,16 @@ class ProjectsController < ApplicationController
     if current_account
       @private_projects = Project.where(slack_team_id: current_account.slack_auth.slack_team_id).limit(6)
       @public_projects = Project.where(public: true).where.not(slack_team_id: current_account.slack_auth.slack_team_id).limit(6)
-      @slack_team_name = current_account.slack_auth.slack_team_name
-      @slack_team_image_34_url = current_account.slack_auth.slack_team_image_34_url
     else
       @private_projects = []
       @public_projects = policy_scope(Project).limit(6)
-      @slack_team_name = nil
-      @slack_team_image_34_url = nil
     end
+    @slack_auth = current_account&.slack_auth
   end
 
   def index
     @projects = policy_scope(Project)
+    @slack_auth = current_account&.slack_auth
   end
 
   def new

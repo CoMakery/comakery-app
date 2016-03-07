@@ -46,13 +46,18 @@ describe "viewing projects, creating and editing", :js, :vcr do
       visit root_path
 
       expect(page).to have_content "Citizen Code Projects"
-      expect(page.html).to match %r{<img[^>]+src="https://slack\.example\.com/awesome-team-image-34-px\.jpg"}
+      expect(page.html).to match %r{<img[^>]+src="[^"]+awesome-team-image-34-px\.jpg"}
+      expect(page).to have_content "New Project"
 
       expect(page.all(".project").size).to eq(12)
       expect(page).to have_content "Public Project"
       expect(page).to have_content "3D Drones"
 
       click_link "Browse All"
+
+      expect(page).to have_content "Citizen Code Projects"
+      expect(page.html).to match %r{<img[^>]+src="[^"]+awesome-team-image-34-px\.jpg"}
+      expect(page).to have_content "New Project"
 
       expect(page.all(".project").size).to eq(16)
       expect(page).to have_content "Public Project"

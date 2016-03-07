@@ -1,4 +1,15 @@
 class Views::Projects::Base < Views::Base
+
+  def projects_header(slack_auth)
+    full_row {
+      column("small-1") { img src: slack_auth.slack_team_image_34_url }
+      column("small-7") { h1 "#{slack_auth.slack_team_name} Projects" }
+      column("small-4") {
+        a("New Project", class: buttonish(:small), href: new_project_path) if policy(Project).new?
+      }
+    }
+  end
+
   def projects_block(projects)
     projects.each_slice(2) do |left_project, right_project|
       row {
