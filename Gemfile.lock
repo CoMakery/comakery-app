@@ -130,6 +130,8 @@ GEM
     ffi (1.9.10)
     font-awesome-rails (4.5.0.1)
       railties (>= 3.2, < 5.1)
+    font_assets (0.1.12)
+      rack
     formatador (0.2.5)
     foundation-icons-sass-rails (3.0.0)
       railties (>= 3.1.1)
@@ -462,6 +464,7 @@ DEPENDENCIES
   faker
   faye-websocket
   font-awesome-rails
+  font_assets
   fortitude!
   foundation-icons-sass-rails
   foundation-rails (< 6)
