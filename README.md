@@ -8,7 +8,6 @@ Swarmbot hangs out in Slack and creates Project Coins.
 It helps you to distribute profit and tracks your fair share of projects you work on.
 Swarmbot helps you run a [Dynamic Equity Organization](https://github.com/citizencode/dynamic-equity-organization).
 
-
 ## Current Implementation Status
 
 This project is alpha and not ready for production use.
