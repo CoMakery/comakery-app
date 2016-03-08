@@ -21,6 +21,6 @@ class AwardPolicy < ApplicationPolicy
 
   def create?
     project = @award&.award_type&.project
-    @account && @account == project&.owner_account && project.slack_team_id == @award&.account&.slack_auth&.slack_team_id
+    @account && @account == project&.owner_account && @award&.account&.authentications&.pluck(:slack_team_id).include?(project.slack_team_id)
   end
 end

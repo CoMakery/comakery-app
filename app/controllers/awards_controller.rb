@@ -6,8 +6,8 @@ class AwardsController < ApplicationController
 
   def create
     result = AwardSlackUser.call(slack_user_id: params[:award][:slack_user_id],
-                                  issuer: current_account,
-                                  award_params: award_params.except(:slack_user_id))
+                                 issuer: current_account,
+                                 award_params: award_params.except(:slack_user_id))
     unless result.success?
       fail_and_redirect(result.message)
       return

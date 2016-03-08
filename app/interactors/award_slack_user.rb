@@ -6,6 +6,7 @@ class AwardSlackUser
 
     account = Authentication.includes(:account).find_by(slack_user_id: context.slack_user_id).try(:account)
     account ||= create_account(context)
+
     context.award = Award.new(context.award_params.merge(issuer: context.issuer, account_id: account.id))
     unless context.award.valid?
       context.fail!(message: context.award.errors.full_messages.join(", "))

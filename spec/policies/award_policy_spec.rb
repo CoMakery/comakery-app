@@ -2,9 +2,15 @@ require 'rails_helper'
 
 describe AwardPolicy do
   let!(:account) { create(:account).tap{|a| create(:authentication, account: a, slack_team_id: "lots of sweet awards")} }
+  let!(:other_auth) { create(:authentication, account: account, slack_team_id: "other project") }
   let!(:project) { create(:project, owner_account: account, slack_team_id: "lots of sweet awards") }
+  let!(:other_project) { create(:project, owner_account: account, slack_team_id: "other project") }
   let(:award_type_with_project) { create(:award_type, project: project) }
   let(:award_with_project) { build(:award, award_type: award_type_with_project, account: receiving_account) }
+
+  let(:award_type_with_other_project) { create(:award_type, project: other_project) }
+  let(:award_with_other_project) { build(:award, award_type: award_type_with_other_project, account: account) }
+
   let(:receiving_account) { create(:account).tap{|a|create(:authentication, account: a, slack_team_id: "lots of sweet awards")} }
 
   let(:other_account) { create(:account).tap{|a| create(:authentication, account: a, slack_team_id: "other team")} }
@@ -33,6 +39,10 @@ describe AwardPolicy do
 
     it "returns true when the accounts belongs to a project, and the award belongs to a award_type that belongs to that project" do
       expect(AwardPolicy.new(account, award_with_project).create?).to be true
+    end
+
+    it "returns true when the accounts belongs to a project, and the award belongs to a award_type that belongs to that project" do
+      expect(AwardPolicy.new(account, award_with_other_project).create?).to be true
     end
 
     it "returns false when no account" do
