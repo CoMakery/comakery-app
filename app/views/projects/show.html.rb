@@ -1,7 +1,23 @@
 class Views::Projects::Show < Views::Base
-  needs :project, :award, :awardable_accounts
+  needs :project, :award, :awardable_accounts, :award_data
+
+  def make_pie_chart
+    text(<<-JAVASCRIPT.html_safe)
+      $(function() { window.pieChart("#award-percentages", {"content": [#{award_data.map { |datum| pie_chart_data_element(datum) }.join(",")}]});});
+    JAVASCRIPT
+  end
+
+  def pie_chart_data_element(award_datum)
+    {"label": award_datum[:name], "value": award_datum[:net_amount]}.to_json
+  end
 
   def content
+    if award_data.present?
+      content_for :js do
+        make_pie_chart
+      end
+    end
+
     row {
       column("small-3") {
         text attachment_image_tag(project, :image, class: "project-image")
@@ -18,6 +34,7 @@ class Views::Projects::Show < Views::Base
         full_row {
           text project.description
         }
+        br
         row {
           column("small-3") {
             p {
@@ -38,18 +55,19 @@ class Views::Projects::Show < Views::Base
             }
           }
         }
+        full_row {}
         row {
-          column("small-6") {
+          column("small-6 centered") {
             if project.tracker
-              a(href: project.tracker, target: "_blank") do
+              a(href: project.tracker, target: "_blank", class: "text-link") do
                 i(class: "fa fa-tasks")
                 text " Project Tasks"
               end
             end
           }
-          column("small-6") {
+          column("small-6 centered") {
             if project.slack_team_domain
-              a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank") do
+              a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") do
                 i(class: "fa fa-slack")
                 text " Project Slack Channel"
               end
@@ -129,7 +147,10 @@ class Views::Projects::Show < Views::Base
         }
       }
       column("small-6") {
-        a(href: project_awards_path(project)) { text "Award History >>" }
+        div(id: "award-percentages", 'data-pie-chart': '')
+        div {
+          a(href: project_awards_path(project), class: "text-link") { text "Award History >>" }
+        }
       }
     }
     full_row {

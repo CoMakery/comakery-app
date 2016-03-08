@@ -54,6 +54,7 @@ class ProjectsController < ApplicationController
     else
       @awardable_accounts = nil
     end
+    @award_data = GetAwardHistory.call(current_account: current_account, project: @project).award_data
   end
 
   def edit

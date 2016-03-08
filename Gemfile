@@ -4,6 +4,7 @@ ruby '2.3.0'
 gem 'airbrake', '< 5'
 gem 'coffee-rails'
 gem 'compass-rails', '< 3'
+gem "d3-rails"
 gem 'ethereum'
 gem 'faye-websocket'  # used by slack-ruby-client for concurrency
 gem "font-awesome-rails"
@@ -34,6 +35,7 @@ gem 'sdoc',          group: :doc
 gem 'slack-ruby-client'
 gem 'sucker_punch'
 gem 'uglifier'
+gem 'underscore-rails'
 
 group(:test) do
   gem 'webmock'

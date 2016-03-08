@@ -59,6 +59,12 @@ describe "viewing projects, creating and editing", :js, :vcr do
       visit project_awards_path(bobjohnsons_auth.projects.first)
 
       expect(page).to have_content "@bobjohnson"
+
+      click_link("Back to project")
+
+      expect(page.html).to include(<<-JAVASCRIPT)
+{"content": [      {"label": "@bobjohnson", "value": 1000}
+JAVASCRIPT
     end
   end
 

@@ -24,7 +24,6 @@ class Views::Layouts::Raw < Views::Base
       }
 
       body(class: "#{controller_name}-#{action_name}") {
-        # div(class: "top-bar-margin") {
         div(class: "contain-to-grid") {
           nav(class: "top-bar large-8 large-centered columns", "data-topbar" => "", role: "navigation") {
             ul(class: "title-area") {
@@ -60,7 +59,13 @@ class Views::Layouts::Raw < Views::Base
 
         if content_for?(:footer)
           footer(class: 'fat-footer') {
-            yield :footer
+            yield(:footer)
+          }
+        end
+
+        if content_for?(:js)
+          script {
+            yield(:js)
           }
         end
       }

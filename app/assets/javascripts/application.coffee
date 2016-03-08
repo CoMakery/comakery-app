@@ -12,6 +12,9 @@
 #
 # = require jquery
 # = require jquery_ujs
+# = require underscore
+# = require d3
+# = require d3pie
 # = require foundation
 # = require_tree .
 
@@ -24,7 +27,7 @@ $ ->
     template = $(templateSelector)
     newElement = template.clone()
     newElement.removeClass('hide')
-    newElement.removeClass(templateSelector.replace('.',''))
+    newElement.removeClass(templateSelector.replace('.', ''))
     template.parent().append(newElement)
 
   $(document).on "click", "*[data-mark-and-hide]", (e)->
@@ -33,3 +36,71 @@ $ ->
     removeElement = $(e.target).closest(removeSelector)
     removeElement.hide()
     removeElement.find("input[data-destroy]").val("1")
+
+  window.pieChart = (selector, data)->
+    pie = new d3pie(selector, _.extend({
+      "header": {
+        "title": {
+          "text": "Contributions",
+          "fontSize": 22,
+          "font": "verdana"
+        },
+        "subtitle": {
+          "color": "#999999",
+          "fontSize": 10,
+          "font": "verdana"
+        },
+        "location": "top-left",
+        "titleSubtitlePadding": 12
+      },
+      "footer": {
+        "color": "#999999",
+        "fontSize": 11,
+        "font": "open sans",
+        "location": "bottom-center"
+      },
+      "size": {
+        "canvasHeight": 300,
+        "canvasWidth": 450,
+        "pieOuterRadius": "88%"
+      },
+      "labels": {
+        "outer": {
+          "pieDistance": 32
+        },
+        "inner": {
+          "format": "value"
+        },
+        "mainLabel": {
+          "font": "verdana"
+        },
+        "percentage": {
+          "color": "#e1e1e1",
+          "font": "verdana",
+          "decimalPlaces": 0
+        },
+        "value": {
+          "color": "#e1e1e1",
+          "font": "verdana"
+        },
+        "lines": {
+          "enabled": true,
+          "color": "#cccccc"
+        },
+        "truncation": {
+          "enabled": true
+        }
+      },
+      "tooltips": {
+        "enabled": true,
+        "type": "placeholder",
+        "string": "{label}: {value}, {percentage}%"
+      },
+      "effects": {
+        "pullOutSegmentOnClick": {
+          "effect": "linear",
+          "speed": 400,
+          "size": 15
+        }
+      }
+    }, {"data": data}))
