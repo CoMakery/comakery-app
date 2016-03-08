@@ -29,9 +29,17 @@ describe ProjectPolicy do
 
   describe "#award?" do
     it "returns true if an account is the owner of a project and false otherwise" do
+      expect(ProjectPolicy.new(nil, my_public_project).send_award?).to be false
+      expect(ProjectPolicy.new(nil, my_private_project).send_award?).to be false
+
       expect(ProjectPolicy.new(account, my_public_project).send_award?).to be true
+      expect(ProjectPolicy.new(account, my_private_project).send_award?).to be true
+
       expect(ProjectPolicy.new(other_team_member, my_public_project).send_award?).to be false
+      expect(ProjectPolicy.new(other_team_member, my_private_project).send_award?).to be false
+
       expect(ProjectPolicy.new(different_team_account, my_public_project).send_award?).to be false
+      expect(ProjectPolicy.new(different_team_account, my_private_project).send_award?).to be false
     end
   end
 
@@ -52,7 +60,7 @@ describe ProjectPolicy do
     end
   end
 
-  describe "#show? #edit? #update?" do
+  describe "#edit? #update?" do
     it "only allows viewing of projects that are public or are owned by the current account" do
       [:edit?, :update?].each do |action|
         expect(ProjectPolicy.new(nil, my_public_project).send(action)).to be false
@@ -60,14 +68,14 @@ describe ProjectPolicy do
 
         expect(ProjectPolicy.new(account, my_public_project).send(action)).to be true
         expect(ProjectPolicy.new(account, my_private_project).send(action)).to be true
-        expect(ProjectPolicy.new(account, others_private_project).send(action)).to be true
 
-        expect(ProjectPolicy.new(other_team_member, others_public_project).send(action)).to be true
-        expect(ProjectPolicy.new(other_team_member, my_private_project).send(action)).to be true
+        expect(ProjectPolicy.new(account, others_public_project).send(action)).to be false
+        expect(ProjectPolicy.new(account, others_private_project).send(action)).to be false
+
+        expect(ProjectPolicy.new(other_team_member, my_public_project).send(action)).to be false
+        expect(ProjectPolicy.new(other_team_member, my_private_project).send(action)).to be false
       end
 
-      expect(ProjectPolicy.new(different_team_account, my_public_project).show?).to be true
-      expect(ProjectPolicy.new(different_team_account, my_private_project).show?).to be false
       expect(ProjectPolicy.new(different_team_account, my_public_project).edit?).to be false
       expect(ProjectPolicy.new(different_team_account, my_private_project).edit?).to be false
       expect(ProjectPolicy.new(different_team_account, my_public_project).update?).to be false
