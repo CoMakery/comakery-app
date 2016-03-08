@@ -3,7 +3,7 @@ class Views::Projects::Show < Views::Base
 
   def make_pie_chart
     text(<<-JAVASCRIPT.html_safe)
-      $(function() { window.pieChart("#award-percentages", {"content": [#{award_data.map { |datum| pie_chart_data_element(datum) }.join(",")}]});});
+      $(function() { window.pieChart("#award-percentages", {"content": [#{award_data[:pie_chart].map { |datum| pie_chart_data_element(datum) }.join(",")}]});});
     JAVASCRIPT
   end
 
@@ -12,7 +12,7 @@ class Views::Projects::Show < Views::Base
   end
 
   def content
-    if award_data.present?
+    if award_data[:pie_chart].present?
       content_for :js do
         make_pie_chart
       end
@@ -145,6 +145,17 @@ class Views::Projects::Show < Views::Base
         end
       }
       column("small-6") {
+        row { column("small-12", class: "underlined-header") { text "Awards" } }
+        row {
+          column("small-6", class: "centered") {
+            div(class: "centered font-large") { text award_data[:award_amounts][:my_project_coins] }
+            div(class: "centered") { text "My Project Coins" }
+          }
+          column("small-6") {
+            div(class: "centered font-large") { text award_data[:award_amounts][:total_coins_issued] }
+            div(class: "centered") { text "Total Coins Issued" }
+          }
+        }
         row { column("small-12", class: "underlined-header") { text "Contributions" } }
         div(id: "award-percentages", 'data-pie-chart': '')
         div {

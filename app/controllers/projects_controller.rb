@@ -49,12 +49,8 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
     @award = Award.new
-    if current_account
-      @awardable_accounts = GetAwardableAccounts.call(current_account: current_account, accounts: policy_scope(Account.includes(:authentications))).awardable_accounts
-    else
-      @awardable_accounts = nil
-    end
-    @award_data = GetAwardHistory.call(current_account: current_account, project: @project).award_data
+    @awardable_accounts = !current_account ? nil : GetAwardableAccounts.call(current_account: current_account, accounts: policy_scope(Account.includes(:authentications))).awardable_accounts
+    @award_data = GetAwardData.call(current_account: current_account, project: @project).award_data
   end
 
   def edit

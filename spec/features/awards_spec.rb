@@ -62,6 +62,9 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       click_link("Back to project")
 
+      expect(page).to have_content "0 My Project Coins"
+      expect(page).to have_content "1000 Total Coins Issued"
+
       expect(page.html).to include('{"content": [{"label":"@bobjohnson","value":1000}')
     end
   end
