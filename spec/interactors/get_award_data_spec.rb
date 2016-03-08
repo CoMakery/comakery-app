@@ -29,7 +29,9 @@ describe GetAwardData do
     it "returns a pretty hash of the awards for a project with summed amounts for each person" do
       result = GetAwardData.call(current_account: current_account, project: project)
 
-      expect(result.award_data[:pie_chart]).to match_array([{"name": "@receiver", "net_amount": 6000}, {"name": "Bob Johnson", "net_amount": 3000}, {name: "John Doe", net_amount: 1000}])
+      expect(result.award_data[:contributions]).to match_array([{"name": "@receiver", "net_amount": 6000},
+                                                            {"name": "Bob Johnson", "net_amount": 3000},
+                                                            {name: "John Doe", net_amount: 1000}])
       expect(result.award_data[:award_amounts]).to eq({my_project_coins: 1000, total_coins_issued: 10_000})
     end
   end

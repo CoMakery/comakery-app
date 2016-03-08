@@ -8,7 +8,7 @@ class GetAwardData
     awards = project.awards.includes(:account, :award_type).to_a
 
     context.award_data = {
-        pie_chart: pie_chart_data(awards),
+        contributions: contributions_data(awards),
         award_amounts: award_amount_data(current_account, awards)
     }
   end
@@ -20,7 +20,7 @@ class GetAwardData
     }
   end
 
-  def pie_chart_data(awards)
+  def contributions_data(awards)
     awards.each_with_object({}) do |award, awards|
       awards[award.account_id] ||= {net_amount: 0}
       awards[award.account_id][:name] = award.account.slack_auth.display_name

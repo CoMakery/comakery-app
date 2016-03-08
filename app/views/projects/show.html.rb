@@ -3,7 +3,7 @@ class Views::Projects::Show < Views::Base
 
   def make_pie_chart
     text(<<-JAVASCRIPT.html_safe)
-      $(function() { window.pieChart("#award-percentages", {"content": [#{award_data[:pie_chart].map { |datum| pie_chart_data_element(datum) }.join(",")}]});});
+      $(function() { window.pieChart("#award-percentages", {"content": [#{award_data[:contributions].map { |datum| pie_chart_data_element(datum) }.join(",")}]});});
     JAVASCRIPT
   end
 
@@ -12,7 +12,7 @@ class Views::Projects::Show < Views::Base
   end
 
   def content
-    if award_data[:pie_chart].present?
+    if award_data[:contributions].present?
       content_for :js do
         make_pie_chart
       end
@@ -137,8 +137,11 @@ class Views::Projects::Show < Views::Base
                   }
                 }
               }
-              full_row {
-                f.submit("Send Award", class: buttonish << "right")
+              row {
+                column("small-6") {}
+                column("small-6") {
+                  f.submit("Send Award", class: buttonish)
+                }
               }
             }
           end
@@ -146,6 +149,9 @@ class Views::Projects::Show < Views::Base
       }
       column("small-6") {
         row { column("small-12", class: "underlined-header") { text "Awards" } }
+
+        br
+
         row {
           column("small-6", class: "centered") {
             div(class: "centered font-large") { text award_data[:award_amounts][:my_project_coins] }
@@ -156,8 +162,23 @@ class Views::Projects::Show < Views::Base
             div(class: "centered") { text "Total Coins Issued" }
           }
         }
+
+        br
+
         row { column("small-12", class: "underlined-header") { text "Contributions" } }
-        div(id: "award-percentages", 'data-pie-chart': '')
+
+        row {
+          column("small-6") {
+            award_data[:contributions].each do |contributor|
+              div {
+                div(class: "right") { text contributor[:net_amount] }
+                span contributor[:name]
+              }
+            end
+          }
+          column("small-6") { div(id: "award-percentages", 'data-pie-chart': '') }
+        }
+
         div {
           a(href: project_awards_path(project), class: "text-link") { text "Award History >>" }
         }

@@ -60,8 +60,8 @@ $ ->
 #        "location": "bottom-center"
 #      },
       "size": {
-        "canvasHeight": 300,
-        "canvasWidth": 450,
+        "canvasHeight": 250,
+        "canvasWidth": 275,
         "pieOuterRadius": "88%"
       },
       "labels": {
