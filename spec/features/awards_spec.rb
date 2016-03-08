@@ -62,9 +62,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       click_link("Back to project")
 
-      expect(page.html).to include(<<-JAVASCRIPT)
-{"content": [      {"label": "@bobjohnson", "value": 1000}
-JAVASCRIPT
+      expect(page.html).to include('{"content": [{"label":"@bobjohnson","value":1000}')
     end
   end
 
