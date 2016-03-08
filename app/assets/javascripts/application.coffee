@@ -39,26 +39,26 @@ $ ->
 
   window.pieChart = (selector, data)->
     pie = new d3pie(selector, _.extend({
-      "header": {
-        "title": {
-          "text": "Contributions",
-          "fontSize": 22,
-          "font": "verdana"
-        },
-        "subtitle": {
-          "color": "#999999",
-          "fontSize": 10,
-          "font": "verdana"
-        },
-        "location": "top-left",
-        "titleSubtitlePadding": 12
-      },
-      "footer": {
-        "color": "#999999",
-        "fontSize": 11,
-        "font": "open sans",
-        "location": "bottom-center"
-      },
+#      "header": {
+#        "title": {
+#          "text": "Contributions",
+#          "fontSize": 22,
+#          "font": "verdana"
+#        },
+#        "subtitle": {
+#          "color": "#999999",
+#          "fontSize": 10,
+#          "font": "verdana"
+#        },
+#        "location": "top-left",
+#        "titleSubtitlePadding": 12
+#      },
+#      "footer": {
+#        "color": "#999999",
+#        "fontSize": 11,
+#        "font": "open sans",
+#        "location": "bottom-center"
+#      },
       "size": {
         "canvasHeight": 300,
         "canvasWidth": 450,

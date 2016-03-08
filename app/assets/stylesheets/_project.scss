@@ -143,9 +143,22 @@ form.take-action-form p.notice {
 }
 
 .award-row.header-row {
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid $iron;
   margin-bottom: 15px;
   padding: 5px;
+}
+
+.underlined-header {
+  border-bottom: 1px solid $iron;
+
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  margin-bottom: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .image-block {
@@ -162,6 +175,10 @@ form.take-action-form p.notice {
   color: white;
 }
 
+.form-box {
+  padding: 20px;
+}
+
 .underline {
   text-decoration: underline;
 }
@@ -172,4 +189,16 @@ form.take-action-form p.notice {
 
 .text-link {
   color: cornflowerblue;
+}
+
+.font-large {
+  font-size: $font-size-large;
+}
+
+.font-medium {
+  font-size: $font-size-medium;
+}
+
+.font-small {
+  font-size: $font-size-small;
 }

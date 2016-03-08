@@ -78,75 +78,74 @@ class Views::Projects::Show < Views::Base
     }
     row {
       column("small-6") {
-        fieldset {
-          row {
-            column("small-6") {
-              span(class: "underline") { text "Award Names" }
-            }
-            column("small-6") {
-              span(class: "underline") { text "Suggested Value" }
-            }
+        row {
+          column("small-6") {
+            div(class: "underlined-header") { text "Award Names" }
           }
-
-          if !policy(project).send_award?
-            project.award_types.each do |award_type|
-              row {
-                column("small-6") {
-                  span(award_type.name)
-                }
-                column("small-6") {
-                  text award_type.amount
-                }
-              }
-            end
-          else
-            form_for [project, award] do |f|
-              row(class: "award-types") {
-                project.award_types.each do |award_type|
-                  row(class: "award-type-row") {
-                    column("small-6") {
-                      with_errors(project, :account_id) {
-                        label {
-                          f.radio_button(:award_type_id, award_type.to_param)
-                          span(award_type.name, class: "margin-small")
-                        }
-                      }
-                    }
-                    column("small-6") {
-                      text award_type.amount
-                    }
-                  }
-                end
-                row {
-                  column("small-8") {
-                    label {
-                      text "User"
-                      options = capture do
-                        options_for_select([[nil, nil]].concat(awardable_accounts))
-                      end
-                      select_tag "award[slack_user_id]", options, html: {id: "award_slack_user_id"}
-                    }
-                  }
-                }
-                row {
-                  column("small-8") {
-                    with_errors(project, :description) {
-                      label {
-                        text "Description"
-                        f.text_area(:description)
-                      }
-                    }
-                  }
-                }
-                full_row {
-                  f.submit("Send Award", class: buttonish << "right")
-                }
-              }
-            end
-          end
+          column("small-6") {
+            div(class: "underlined-header") { text "Suggested Value" }
+          }
         }
+
+        if !policy(project).send_award?
+          project.award_types.each do |award_type|
+            row {
+              column("small-6") {
+                span(award_type.name)
+              }
+              column("small-6") {
+                text award_type.amount
+              }
+            }
+          end
+        else
+          form_for [project, award] do |f|
+            row(class: "award-types") {
+              project.award_types.each do |award_type|
+                row(class: "award-type-row") {
+                  column("small-6") {
+                    with_errors(project, :account_id) {
+                      label {
+                        f.radio_button(:award_type_id, award_type.to_param)
+                        span(award_type.name, class: "margin-small")
+                      }
+                    }
+                  }
+                  column("small-6") {
+                    text award_type.amount
+                  }
+                }
+              end
+              row {
+                column("small-8") {
+                  label {
+                    text "User"
+                    options = capture do
+                      options_for_select([[nil, nil]].concat(awardable_accounts))
+                    end
+                    select_tag "award[slack_user_id]", options, html: {id: "award_slack_user_id"}
+                  }
+                }
+              }
+              row {
+                column("small-8") {
+                  with_errors(project, :description) {
+                    label {
+                      text "Description"
+                      f.text_area(:description)
+                    }
+                  }
+                }
+              }
+              full_row {
+                f.submit("Send Award", class: buttonish << "right")
+              }
+            }
+          end
+        end
       }
       column("small-6") {
+        row { column("small-12", class: "underlined-header") { text "Contributions" } }
         div(id: "award-percentages", 'data-pie-chart': '')
         div {
           a(href: project_awards_path(project), class: "text-link") { text "Award History >>" }
