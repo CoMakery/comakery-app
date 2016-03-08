@@ -17,7 +17,7 @@ class AwardSlackUser
 
   def create_account(context)
     response = Swarmbot::Slack.new(context.issuer.slack_auth.slack_token).get_user_info(context.slack_user_id)
-    account = Account.create(email: response.profile.email)
+    account = Account.find_or_create_by(email: response.profile.email)
     unless account.valid?
       context.fail!(message: account.errors.full_messages.join(", "))
     end
