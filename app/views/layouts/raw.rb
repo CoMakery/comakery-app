@@ -12,7 +12,7 @@ class Views::Layouts::Raw < Views::Base
 
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
-        javascript_include_tag 'vendor/modernizr'
+        javascript_include_tag :modernizr
         javascript_include_tag 'application'
         if Airbrake.configuration.project_id && Airbrake.configuration.api_key
           javascript_include_tag "airbrake-shim",
