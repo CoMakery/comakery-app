@@ -8,7 +8,6 @@ describe Authentication do
         "Account can't be blank",
         "Provider can't be blank",
         "Slack team name can't be blank",
-        "Slack team name can't be blank",
         "Slack team image 34 url can't be blank",
         "Slack team can't be blank",
         "Slack user can't be blank",

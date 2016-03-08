@@ -42,6 +42,7 @@ class Mom
         tracker: "https://github.com/example/uber_for_cats",
         slack_team_id: "citizen code id",
         slack_team_name: "Citizen Code",
+        slack_team_image_34_url: "https://slack.example.com/team-image-34-px.jpg",
         owner_account: owner_account
     }
     Project.new(defaults.merge(attrs))

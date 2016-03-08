@@ -1,11 +1,13 @@
 class AwardsController < ApplicationController
+  before_filter :assign_project, only: [:create, :index]
+
   def index
-    @project = policy_scope(Project).find(params[:project_id])
     @awards = policy_scope(Award)
   end
 
   def create
-    result = AwardSlackUser.call(slack_user_id: params[:award][:slack_user_id],
+    result = AwardSlackUser.call(project: @project,
+                                 slack_user_id: params[:award][:slack_user_id],
                                  issuer: current_account,
                                  award_params: award_params.except(:slack_user_id))
     unless result.success?
@@ -37,5 +39,9 @@ class AwardsController < ApplicationController
 
   def award_params
     params.require(:award).permit(:slack_user_id, :award_type_id, :description)
+  end
+
+  def assign_project
+    @project = policy_scope(Project).find(params[:project_id])
   end
 end
