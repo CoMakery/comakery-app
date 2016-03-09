@@ -24,13 +24,6 @@ module Views
                 f.text_field :tracker, placeholder: "https://pivotaltracker.com"
               }
             }
-            with_errors(project, :image) {
-              label {
-                text "Project Image"
-                text f.attachment_field(:image)
-              }
-              text attachment_image_tag(project, :image, class: "project-image")
-            }
             with_errors(project, :slack_channel) {
               label {
                 text "Slack Channel"
@@ -39,6 +32,13 @@ module Views
                 end
                 select_tag "project[slack_channel]", options, html: {id: "project_slack_channel"}
               }
+            }
+            with_errors(project, :image) {
+              label {
+                text "Project Image"
+                text f.attachment_field(:image)
+              }
+              text attachment_image_tag(project, :image, class: "project-image")
             }
             with_errors(project, :public) {
               label {
