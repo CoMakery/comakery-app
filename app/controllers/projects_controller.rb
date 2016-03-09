@@ -24,6 +24,7 @@ class ProjectsController < ApplicationController
     @project.award_types.build(name: "Thanks", amount: 10)
     @project.award_types.build(name: "Small Contribution", amount: 100)
     @project.award_types.build(name: "Contribution", amount: 1000)
+    assign_slack_channels
   end
 
   def create
@@ -41,6 +42,7 @@ class ProjectsController < ApplicationController
       redirect_to project_path(@project)
     else
       flash[:error] = "Project saving failed, please correct the errors below"
+      assign_slack_channels
       render :new
     end
   end
@@ -56,6 +58,7 @@ class ProjectsController < ApplicationController
   def edit
     @project = Project.includes(:award_types).find(params[:id])
     authorize @project
+    assign_slack_channels
   end
 
   def update
@@ -67,6 +70,7 @@ class ProjectsController < ApplicationController
       respond_with @project, location: project_path(@project)
     else
       flash[:error] = "Project updating failed, please correct the errors below"
+      assign_slack_channels
       render :edit
     end
   end
@@ -74,7 +78,11 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :image, :tracker, :public,
+    params.require(:project).permit(:title, :description, :image, :tracker, :public, :slack_channel,
                                     award_types_attributes: [:id, :name, :amount, :_destroy])
+  end
+
+  def assign_slack_channels
+    @slack_channels = GetSlackChannels.call(current_account: current_account).channels
   end
 end

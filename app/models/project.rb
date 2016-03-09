@@ -12,7 +12,7 @@ class Project < ActiveRecord::Base
   has_many :awards, through: :award_types, dependent: :destroy
 
   belongs_to :owner_account, class_name: Account
-  validates_presence_of :owner_account, :slack_team_name, :slack_team_id, :slack_team_image_34_url, :title
+  validates_presence_of :owner_account, :slack_channel, :slack_team_name, :slack_team_id, :slack_team_image_34_url, :title
 
   validate :valid_tracker_url, if: ->{ tracker.present? }
 

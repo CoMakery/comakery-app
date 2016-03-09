@@ -32,6 +32,8 @@ describe ProjectsController do
 
   describe "#new" do
     it "works" do
+      expect(GetSlackChannels).to receive(:call).and_return(double(channels: ["foo", "bar"]))
+
       get :new
 
       expect(response.status).to eq(200)
@@ -50,6 +52,8 @@ describe ProjectsController do
       expect(assigns[:project].award_types.third).to be_a_new_record
       expect(assigns[:project].award_types.third.name).to eq("Contribution")
       expect(assigns[:project].award_types.third.amount).to eq(1000)
+
+      expect(assigns[:slack_channels]).to eq(["foo", "bar"])
     end
   end
 
@@ -58,16 +62,17 @@ describe ProjectsController do
       expect do
         expect do
           post :create, project: {
-                          title: "Project title here",
-                          description: "Project description here",
-                          image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
-                          tracker: "http://github.com/here/is/my/tracker",
-                          award_types_attributes: [
-                              {name: "Small Award", amount: 1000},
-                              {name: "Big Award", amount: 2000},
-                              {name: "", amount: ""},
-                          ]
-                      }
+              title: "Project title here",
+              description: "Project description here",
+              image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
+              tracker: "http://github.com/here/is/my/tracker",
+              slack_channel: "slack_channel",
+              award_types_attributes: [
+                  {name: "Small Award", amount: 1000},
+                  {name: "Big Award", amount: 2000},
+                  {name: "", amount: ""},
+              ]
+          }
           expect(response.status).to eq(302)
         end.to change { Project.count }.by(1)
       end.to change { AwardType.count }.by(2)
@@ -79,24 +84,27 @@ describe ProjectsController do
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
       expect(project.award_types.first.name).to eq("Small Award")
       expect(project.owner_account_id).to eq(account.id)
+      expect(project.slack_channel).to eq("slack_channel")
       expect(project.slack_team_id).to eq(account.authentications.first.slack_team_id)
       expect(project.slack_team_name).to eq(account.authentications.first.slack_team_name)
     end
 
     it "when valid, re-renders with errors" do
+      expect(GetSlackChannels).to receive(:call).and_return(double(channels: ["foo", "bar"]))
+
       expect do
         expect do
           post :create, project: {
-                          # title: "Project title here",
-                          description: "Project description here",
-                          image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
-                          tracker: "http://github.com/here/is/my/tracker",
-                          award_types_attributes: [
-                              {name: "Small Award", amount: 1000},
-                              {name: "Big Award", amount: 2000},
-                              {name: "", amount: ""},
-                          ]
-                      }
+              # title: "Project title here",
+              description: "Project description here",
+              image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
+              tracker: "http://github.com/here/is/my/tracker",
+              award_types_attributes: [
+                  {name: "Small Award", amount: 1000},
+                  {name: "Big Award", amount: 2000},
+                  {name: "", amount: ""},
+              ]
+          }
           expect(response.status).to eq(200)
         end.not_to change { Project.count }
       end.not_to change { AwardType.count }
@@ -132,11 +140,16 @@ describe ProjectsController do
     end
 
     describe "#edit" do
+      before do
+        expect(GetSlackChannels).to receive(:call).and_return(double(channels: ["foo", "bar"]))
+      end
+
       it "works" do
         get :edit, id: project.to_param
 
         expect(response.status).to eq(200)
         expect(assigns[:project]).to eq(project)
+        expect(assigns[:slack_channels]).to eq(["foo", "bar"])
       end
     end
 
@@ -180,6 +193,8 @@ describe ProjectsController do
       end
 
       it "re-renders with errors when updating fails" do
+        expect(GetSlackChannels).to receive(:call).and_return(double(channels: ["foo", "bar"]))
+
         small_award_type = project.award_types.create!(name: "Small Award", amount: 100)
         medium_award_type = project.award_types.create!(name: "Medium Award", amount: 300)
         destroy_me_award_type = project.award_types.create!(name: "Destroy Me Award", amount: 400)
@@ -206,6 +221,8 @@ describe ProjectsController do
         expect(project.title).to eq("")
         expect(project.description).to eq("updated Project description here")
         expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
+        expect(assigns[:slack_channels]).to eq(["foo", "bar"])
+
 
         award_types = project.award_types.sort_by(&:amount)
         expect(award_types.size).to eq(4)
@@ -223,7 +240,7 @@ describe ProjectsController do
     describe "#show" do
       it "allows team members to view projects and assigns awardable accounts from slack api and db and de-dups" do
         expect(GetAwardableAccounts).to receive(:call).and_return(double(awardable_accounts: []))
-        expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_coins: 0, total_coins_issued: 0} }))
+        expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_coins: 0, total_coins_issued: 0}}))
 
         get :show, id: project.to_param
 
@@ -231,7 +248,7 @@ describe ProjectsController do
         expect(assigns(:project)).to eq project
         expect(assigns[:award]).to be_new_record
         expect(assigns[:awardable_accounts]).to eq([])
-        expect(assigns[:award_data]).to eq({:contributions=>[], :award_amounts=>{:my_project_coins=>0, :total_coins_issued=>0}})
+        expect(assigns[:award_data]).to eq({:contributions => [], :award_amounts => {:my_project_coins => 0, :total_coins_issued => 0}})
       end
 
       it "only denies non-owners to view projects" do

@@ -66,6 +66,10 @@ describe "viewing projects, creating and editing", :js, :vcr do
   end
 
   describe "removing award types on projects where there have been awards sent already" do
+    before do
+      stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
+    end
+
     it "prevents destroying the award types" do
       login(account)
 
@@ -85,7 +89,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
   end
 
   it "does the happy path" do
-    stub_request(:post, /slack\.com/).to_return(body: '{"ok": true, "members": []}')
+    stub_request(:post, "https://slack.com/api/users.list").to_return(body: {"ok": true, "members": []}.to_json)
+    stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
 
     login(account)
 
@@ -136,8 +141,10 @@ describe "viewing projects, creating and editing", :js, :vcr do
     click_on "Save"
 
     expect(page).to have_content "Title can't be blank"
+    expect(page).to have_content "Slack Channel can't be blank"
 
     fill_in "Title", with: "This is a project"
+    select "a channel name", from: "Slack Channel"
 
     click_on "Save"
 

@@ -1,7 +1,7 @@
 module Views
   module Projects
     class Form < Views::Base
-      needs :project
+      needs :project, :slack_channels
 
       def content
         form_for project do |f|
@@ -30,6 +30,15 @@ module Views
                 text f.attachment_field(:image)
               }
               text attachment_image_tag(project, :image, class: "project-image")
+            }
+            with_errors(project, :slack_channel) {
+              label {
+                text "Slack Channel"
+                options = capture do
+                  options_for_select([[nil, nil]].concat(slack_channels), selected: project.slack_channel)
+                end
+                select_tag "project[slack_channel]", options, html: {id: "project_slack_channel"}
+              }
             }
             with_errors(project, :public) {
               label {

@@ -1,0 +1,81 @@
+{
+  "ok": true,
+  "channels": [
+    {
+      "id": "C000BE01L",
+      "name": "fun",
+      "created": 1360782804,
+      "creator": "U024BE7LH",
+      "is_archived": false,
+      "is_member": false,
+      "num_members": 6,
+      "topic": {
+        "value": "Fun times",
+        "creator": "U024BE7LV",
+        "last_set": 1369677212
+      },
+      "purpose": {
+        "value": "This channel is for fun",
+        "creator": "U024BE7LH",
+        "last_set": 1360782804
+      }
+    },
+    {
+      "id": "C000BE00L",
+      "name": "boring_channel",
+      "created": 1360782900,
+      "creator": "U024BE7LH",
+      "is_archived": false,
+      "is_member": false,
+      "num_members": 3,
+      "topic": {
+        "value": "Boring times",
+        "creator": "U024BE7LV",
+        "last_set": 1369677300
+      },
+      "purpose": {
+        "value": "This channel is for mundane topics",
+        "creator": "U024BE7LH",
+        "last_set": 1360782500
+      }
+    },
+    {
+      "id": "C000BE05L",
+      "name": "huge_channel",
+      "created": 1360782905,
+      "creator": "U024BE7LH",
+      "is_archived": false,
+      "is_member": false,
+      "num_members": 1000,
+      "topic": {
+        "value": "Huge times",
+        "creator": "U024BE7LV",
+        "last_set": 1369677305
+      },
+      "purpose": {
+        "value": "This channel is for huge topics",
+        "creator": "U024BE7LH",
+        "last_set": 1360782505
+      }
+    },
+    {
+      "id": "C000BE04L",
+      "name": "archived_channel",
+      "created": 1360782903,
+      "creator": "U024BE7LH",
+      "is_archived": true,
+      "is_member": false,
+      "num_members": 6,
+      "topic": {
+        "value": "Boring times",
+        "creator": "U024BE7LV",
+        "last_set": 1369677303
+      },
+      "purpose": {
+        "value": "This channel is hella archived",
+        "creator": "U024BE7LH",
+        "last_set": 1360782503
+      }
+    }
+  ]
+}

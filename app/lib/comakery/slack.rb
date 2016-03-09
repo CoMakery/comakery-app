@@ -27,7 +27,7 @@ class Comakery::Slack
     }.strip.gsub(/\s+/, ' ')
 
     message_response = @client.chat_postMessage(
-      channel: '#bot-testing', # '#general', #
+      channel: "##{award.award_type.project.slack_channel}",
       text: text,
       as_user: false,       # don't post as *authed user*
       username: 'CoMakery Bot', # post as swarmbot
@@ -47,5 +47,9 @@ class Comakery::Slack
 
   def get_user_info(slack_user_id)
     @client.users_info(user: slack_user_id).user
+  end
+
+  def get_channels
+    @client.channels_list.channels
   end
 end

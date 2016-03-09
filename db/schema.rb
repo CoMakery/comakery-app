@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160308010320) do
+ActiveRecord::Schema.define(version: 20160309195027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(version: 20160308010320) do
     t.string   "slack_team_name"
     t.string   "slack_team_domain"
     t.string   "slack_team_image_34_url"
+    t.string   "slack_channel"
   end
 
   add_index "projects", ["owner_account_id"], name: "index_projects_on_owner_account_id", using: :btree

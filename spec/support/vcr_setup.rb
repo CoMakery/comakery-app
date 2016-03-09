@@ -22,5 +22,6 @@ RSpec.configure do |config|
 
   config.before(:each) do
     WebMock.reset!
+    WebMock.reset_callbacks
   end
 end
