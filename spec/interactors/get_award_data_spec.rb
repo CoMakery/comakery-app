@@ -17,22 +17,61 @@ describe GetAwardData do
     let!(:award_type2) { create(:award_type, project: project, amount: 2000, name: "Medium Award") }
     let!(:award_type3) { create(:award_type, project: project, amount: 3000, name: "Big Award") }
 
-    let!(:award0) { create(:award, award_type: award_type1, account: current_account) }
+    let!(:award0) { create(:award, award_type: award_type1, account: current_account, created_at: Date.new(2016, 1, 1)) }
 
-    let!(:award1) { create(:award, award_type: award_type1, account: receiver_account) }
-    let!(:award2) { create(:award, award_type: award_type2, account: receiver_account) }
-    let!(:award3) { create(:award, award_type: award_type3, account: receiver_account) }
+    let!(:award1) { create(:award, award_type: award_type1, account: receiver_account, created_at: Date.new(2016, 3, 1)) }
+    let!(:award2) { create(:award, award_type: award_type2, account: receiver_account, created_at: Date.new(2016, 3, 2)) }
+    let!(:award3) { create(:award, award_type: award_type3, account: receiver_account, created_at: Date.new(2016, 3, 8)) }
 
-    let!(:award4) { create(:award, award_type: award_type1, account: other_account) }
-    let!(:award5) { create(:award, award_type: award_type2, account: other_account) }
+    let!(:award4) { create(:award, award_type: award_type1, account: other_account, created_at: Date.new(2016, 3, 2)) }
+    let!(:award5) { create(:award, award_type: award_type2, account: other_account, created_at: Date.new(2016, 3, 8)) }
+
+    before do
+      travel_to Date.new(2016, 3, 8)
+    end
 
     it "returns a pretty hash of the awards for a project with summed amounts for each person" do
       result = GetAwardData.call(current_account: current_account, project: project)
 
-      expect(result.award_data[:contributions]).to match_array([{"name": "@receiver", "net_amount": 6000},
-                                                            {"name": "Bob Johnson", "net_amount": 3000},
-                                                            {name: "John Doe", net_amount: 1000}])
+      expect(result.award_data[:contributions]).to match_array([{name: "@receiver", net_amount: 6000},
+                                                                {name: "Bob Johnson", net_amount: 3000},
+                                                                {name: "John Doe", net_amount: 1000}])
+
       expect(result.award_data[:award_amounts]).to eq({my_project_coins: 1000, total_coins_issued: 10_000})
+
+      expect(result.award_data[:contributions_by_day]).to eq([
+                                                                 {date: "20160207", value: 0},
+                                                                 {date: "20160208", value: 0},
+                                                                 {date: "20160209", value: 0},
+                                                                 {date: "20160210", value: 0},
+                                                                 {date: "20160211", value: 0},
+                                                                 {date: "20160212", value: 0},
+                                                                 {date: "20160213", value: 0},
+                                                                 {date: "20160214", value: 0},
+                                                                 {date: "20160215", value: 0},
+                                                                 {date: "20160216", value: 0},
+                                                                 {date: "20160217", value: 0},
+                                                                 {date: "20160218", value: 0},
+                                                                 {date: "20160219", value: 0},
+                                                                 {date: "20160220", value: 0},
+                                                                 {date: "20160221", value: 0},
+                                                                 {date: "20160222", value: 0},
+                                                                 {date: "20160223", value: 0},
+                                                                 {date: "20160224", value: 0},
+                                                                 {date: "20160225", value: 0},
+                                                                 {date: "20160226", value: 0},
+                                                                 {date: "20160227", value: 0},
+                                                                 {date: "20160228", value: 0},
+                                                                 {date: "20160229", value: 0},
+                                                                 {date: "20160301", value: 1000},
+                                                                 {date: "20160302", value: 3000},
+                                                                 {date: "20160303", value: 0},
+                                                                 {date: "20160304", value: 0},
+                                                                 {date: "20160305", value: 0},
+                                                                 {date: "20160306", value: 0},
+                                                                 {date: "20160307", value: 0},
+                                                                 {date: "20160308", value: 5000}
+                                                             ])
     end
   end
 end
