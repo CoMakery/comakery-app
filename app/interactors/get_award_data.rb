@@ -30,16 +30,15 @@ class GetAwardData
   end
 
   def award_amount_data(current_account, awards)
-    {
-        my_project_coins: awards.sum { |a| a.account_id == current_account.id ? a.award_type.amount : 0 },
-        total_coins_issued: awards.sum { |a| a.award_type.amount }
-    }
+    result = {total_coins_issued: awards.sum { |a| a.award_type.amount }}
+    result[:my_project_coins] = current_account ? awards.sum { |a| a.account_id == current_account.id ? a.award_type.amount : 0 } : 0
+    result
   end
 
   def contributions_data(awards)
     awards.each_with_object({}) do |award, awards|
       awards[award.account_id] ||= {net_amount: 0}
-      awards[award.account_id][:name] = award.account.slack_auth.display_name
+      awards[award.account_id][:name] = award.account.slack_auth&.display_name || award.account.email
       awards[award.account_id][:net_amount] += award.award_type.amount
     end.values
   end

@@ -30,6 +30,11 @@ describe GetAwardData do
       travel_to Date.new(2016, 3, 8)
     end
 
+    it "doesn't explode if you aren't logged in" do
+      result = GetAwardData.call(current_account: nil, project: project)
+      expect(result.award_data[:award_amounts]).to eq({:my_project_coins => 0, :total_coins_issued => 10000})
+    end
+
     it "returns a pretty hash of the awards for a project with summed amounts for each person" do
       result = GetAwardData.call(current_account: current_account, project: project)
 
@@ -72,6 +77,15 @@ describe GetAwardData do
                                                                  {date: "20160307", value: 0},
                                                                  {date: "20160308", value: 5000}
                                                              ])
+    end
+  end
+
+  describe "#contributions_data" do
+    it "shows the email address if there aren't any auths" do
+      account = create(:account, email: "caesar_salad@example.com")
+      expect(account.authentications.count).to eq(0)
+      award = create(:award, account: account)
+      expect(GetAwardData.new.contributions_data([award])).to eq([{:net_amount => 1337, :name => "caesar_salad@example.com"}])
     end
   end
 end
