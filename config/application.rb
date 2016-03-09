@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Swarmbot
+module Comakery
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -27,8 +27,8 @@ module Swarmbot
 
     config.allow_signup = true
     config.company_name = "CoMakery"
-    config.project_name = "Swarmbot"
-    config.project_slug = "swarmbot"
+    config.project_name = "CoMakery"
+    config.project_slug = "comakery"
     # appears in main layout meta tag
     config.project_description = "Coin distribution for dynamic equity organizations"
     config.contact_email = "hello@comakery.com"

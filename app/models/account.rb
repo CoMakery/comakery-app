@@ -16,7 +16,7 @@ class Account < ActiveRecord::Base
   end
 
   def slack
-    @slack ||= Swarmbot::Slack.get(slack_auth.slack_token)
+    @slack ||= Comakery::Slack.get(slack_auth.slack_token)
   end
 
   def slack_auth(**scope)

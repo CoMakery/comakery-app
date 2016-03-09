@@ -9,7 +9,7 @@ class SlackController < ApplicationController
       response_type: "in_channel",
       attachments: [
         {
-        text: %{ Hi!  Swarmbot helps you share equity with your team.
+        text: %{ Hi! CoMakery helps you share equity with your team.
           For more intel, drop by #{request.protocol}#{request.host_with_port}
         }.strip.gsub(/\s+/, ' ')
         }

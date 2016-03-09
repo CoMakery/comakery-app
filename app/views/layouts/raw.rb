@@ -28,7 +28,7 @@ class Views::Layouts::Raw < Views::Base
           nav(class: "top-bar large-8 large-centered columns", "data-topbar" => "", role: "navigation") {
             ul(class: "title-area") {
               li(class: "name") {
-                a(href: root_path) { h1 "Swarmbot" }
+                a(href: root_path) { h1 "CoMakery" }
               }
 
               li(class: "toggle-topbar menu-icon") {

@@ -6,7 +6,7 @@ class GetAwardableAccounts
     current_account = context.current_account
 
     db_slack_users = accounts.map { |a| [a.slack_auth.slack_user_id, db_formatted_name(a.slack_auth)] }.sort
-    api_slack_users = Swarmbot::Slack.get(current_account.slack_auth.slack_token).get_users.map { |user| [user[:id], api_formatted_name(user)] }.sort
+    api_slack_users = Comakery::Slack.get(current_account.slack_auth.slack_token).get_users.map { |user| [user[:id], api_formatted_name(user)] }.sort
 
     context.awardable_accounts = (db_slack_users + api_slack_users).to_h.invert.to_a
   end

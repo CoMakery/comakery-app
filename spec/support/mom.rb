@@ -68,7 +68,7 @@ class Mom
   end
 
   def slack(authentication = create(:authentication))
-    Swarmbot::Slack.new(authentication)
+    Comakery::Slack.new(authentication)
   end
 
   def role(name: 'A Role', key: nil)

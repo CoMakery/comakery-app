@@ -1,12 +1,12 @@
-# Swarmbot
+# CoMakery
 
 Latest build: [![Circle CI](https://circleci.com/gh/CoMakery/swarmbot/tree/master.svg?style=svg)](https://circleci.com/gh/CoMakery/swarmbot/tree/master)
 
 ## Project Vision
 
-Swarmbot hangs out in Slack and creates Project Coins.
+CoMakery hangs out in Slack and creates Project Coins.
 It helps you to distribute profit and tracks your fair share of projects you work on.
-Swarmbot helps you run a [Dynamic Equity Organization](https://github.com/citizencode/dynamic-equity-organization).
+CoMakery helps you run a [Dynamic Equity Organization](https://github.com/citizencode/dynamic-equity-organization).
 
 ## Current Implementation Status
 
@@ -15,13 +15,11 @@ It is being actively developed by CoMakery.
 We welcome [feature requests and pull requests](https://github.com/comakery/swarmbot/issues).
 
 We are planning to license it as a Dynamic Equity Organization.
-The structure is being legally reviewed for use in Swarmbot and on your projects.
-
-To learn more when we release it, sign up for updates at [www.swarmbot.io](http://www.swarmbot.io/)
+The structure is being legally reviewed for use in CoMakery and on your projects.
 
 ## Interface Example
 
-![Swarmbot UX](https://cdn.rawgit.com/CoMakery/swarmbot/56606b5000c73549e0f775cd5062927ca14443d1/doc/designs/project.png)
+![CoMakery UX](https://cdn.rawgit.com/CoMakery/swarmbot/56606b5000c73549e0f775cd5062927ca14443d1/doc/designs/project.png)
 
 ## Local development
 
@@ -35,5 +33,5 @@ rails server
 
 ## License
 
-Swarmbot is being developed under the experimental
+CoMakery is being developed under the experimental
 [Peer Production Royalty Token License](https://github.com/comakery/swarmbot/blob/master/LICENSE.md).

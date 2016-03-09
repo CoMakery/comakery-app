@@ -9,7 +9,7 @@ describe GetAwardableAccounts do
   describe "#call" do
     it "returns some accounts" do
       slack_double = double("slack")
-      expect(Swarmbot::Slack).to receive(:get).and_return(slack_double)
+      expect(Comakery::Slack).to receive(:get).and_return(slack_double)
       expect(slack_double).to receive(:get_users).and_return([{id: "U9999UVMH",
                                                                team_id: "foo",
                                                                name: "bobjohnson",

@@ -51,7 +51,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"ok":false,"error":"invalid_auth"}'
-    http_version: 
+    http_version:
   recorded_at: Thu, 03 Mar 2016 22:32:00 GMT
 - request:
     method: post
@@ -104,14 +104,14 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"ok":false,"error":"invalid_auth"}'
-    http_version: 
+    http_version:
   recorded_at: Fri, 04 Mar 2016 00:36:38 GMT
 - request:
     method: post
     uri: https://slack.com/api/chat.postMessage
     body:
       encoding: UTF-8
-      string: as_user=false&channel=%23bot-testing&icon_url=https%3A%2F%2Fs3.amazonaws.com%2Fswarmbot-production%2Fspacekitty.jpg&text=John+John+received+a+1337+coin+Contribution+for+%22Great+work%22+on+the+%3Chttp%3A%2F%2Flocalhost%3A3000%2Fprojects%2F1%7CUber+for+Cats%3E+project.&token=token&username=swarmbot
+      string: as_user=false&channel=%23bot-testing&icon_url=https%3A%2F%2Fs3.amazonaws.com%2Fswarmbot-production%2Fspacekitty.jpg&text=John+John+received+a+1337+coin+Contribution+for+%22Great+work%22+on+the+%3Chttp%3A%2F%2Flocalhost%3A3000%2Fprojects%2F1%7CUber+for+Cats%3E+project.&token=token&username=CoMakery%20Bot
     headers:
       Accept:
       - application/json; charset=utf-8
@@ -157,6 +157,6 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: '{"ok":false,"error":"invalid_auth"}'
-    http_version: 
+    http_version:
   recorded_at: Fri, 04 Mar 2016 00:37:19 GMT
 recorded_with: VCR 3.0.1

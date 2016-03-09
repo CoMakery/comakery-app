@@ -35,7 +35,7 @@ describe Account do
         subject.instance_variable_set(:@slack, nil)
       end
       specify do
-        expect(subject.slack).to be_instance_of Swarmbot::Slack
+        expect(subject.slack).to be_instance_of Comakery::Slack
       end
     end
 

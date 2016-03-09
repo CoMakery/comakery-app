@@ -1,4 +1,4 @@
-class Swarmbot::Slack
+class Comakery::Slack
 
   include ::Rails.application.routes.url_helpers
   include ActionView::Helpers::TextHelper
@@ -30,7 +30,7 @@ class Swarmbot::Slack
       channel: '#bot-testing', # '#general', #
       text: text,
       as_user: false,       # don't post as *authed user*
-      username: 'swarmbot', # post as swarmbot
+      username: 'CoMakery Bot', # post as swarmbot
       icon_url: AVATAR
     )
 

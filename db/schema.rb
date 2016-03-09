@@ -51,15 +51,15 @@ ActiveRecord::Schema.define(version: 20160308010320) do
   add_index "accounts", ["reset_password_token"], name: "index_accounts_on_reset_password_token", using: :btree
 
   create_table "authentications", force: :cascade do |t|
-    t.integer  "account_id",                           null: false
-    t.string   "provider",                             null: false
+    t.integer  "account_id",              null: false
+    t.string   "provider",                null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "slack_team_name",                      null: false
-    t.string   "slack_team_id",                        null: false
-    t.string   "slack_user_id",                        null: false
-    t.string   "slack_token",             default: ""
-    t.string   "slack_user_name",                      null: false
+    t.string   "slack_team_name",         null: false
+    t.string   "slack_team_id",           null: false
+    t.string   "slack_user_id",           null: false
+    t.string   "slack_token"
+    t.string   "slack_user_name",         null: false
     t.string   "slack_first_name"
     t.string   "slack_last_name"
     t.string   "slack_team_domain"
