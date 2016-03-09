@@ -40,20 +40,18 @@ class Views::Layouts::Raw < Views::Base
 
             render partial: 'shared/navigation'
           }
-
-          flash.each do |name, msg|
-            div("aria-labelledby" => "flash-msg-#{name}", "aria-role" => "dialog", class: ['alert-box', 'flash-msg', name], "data-alert" => "") {
-              div(msg, id: "flash-msg-#{name}")
-              a("×", class: "close", href: "#")
-            }
-          end
         }
 
         div(class: "app-container row") {
           div(class: "large-8 large-centered columns") {
+            flash.each do |name, msg|
+              div("aria-labelledby" => "flash-msg-#{name}", "aria-role" => "dialog", class: ['alert-box', 'flash-msg', name], "data-alert" => "") {
+                div(msg, id: "flash-msg-#{name}")
+                a("×", class: "close", href: "#")
+              }
+            end
 
             content_for?(:body) ? yield(:body) : yield
-
           }
         }
 

@@ -31,36 +31,28 @@ class Views::Projects::Show < Views::Base
             h1 project.title
           }
           column("small-3") {
-            a "Edit", class: buttonish, href: edit_project_path(project) if policy(project).edit?
+            a "Edit", class: buttonish(:tiny, :round), href: edit_project_path(project) if policy(project).edit?
+          }
+        }
+        row(class:"project-settings") {
+          column("small-3") {
+            text "Visibility: "
+            b "#{project.public? ? "Public" : "Private"}"
+          }
+          column("small-4") {
+            text "Team name: "
+            b "#{project.slack_team_name}"
+          }
+          column("small-5") {
+            text "Owner: "
+            b "#{project.owner_slack_user_name}"
           }
         }
         full_row {
           text project.description
         }
-        br
-        row {
-          column("small-3") {
-            p {
-              text "Visibility: "
-              b "#{project.public? ? "Public" : "Private"}"
-            }
-          }
+        row(class:"project-tasks") {
           column("small-4") {
-            p {
-              text "Team name: "
-              b "#{project.slack_team_name}"
-            }
-          }
-          column("small-5") {
-            p {
-              text "Owner: "
-              b "#{project.owner_slack_user_name}"
-            }
-          }
-        }
-        full_row {}
-        row {
-          column("small-6 centered") {
             if project.tracker
               a(href: project.tracker, target: "_blank", class: "text-link") do
                 i(class: "fa fa-tasks")
@@ -68,7 +60,7 @@ class Views::Projects::Show < Views::Base
               end
             end
           }
-          column("small-6 centered") {
+          column("small-4 end") {
             if project.slack_team_domain
               a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") do
                 i(class: "fa fa-slack")
@@ -79,43 +71,35 @@ class Views::Projects::Show < Views::Base
         }
       }
     }
-    row {
-      column("small-6") {
-        row {
-          column("small-6") {
-            div(class: "underlined-header") { text "Award Names" }
-          }
-          column("small-6") {
-            div(class: "underlined-header") { text "Suggested Value" }
-          }
-        }
-
+    row(class:"project-body") {
+      column("small-5 award-send") {
         if !policy(project).send_award?
           project.award_types.each do |award_type|
             row {
-              column("small-6") {
+              column("small-12") {
                 span(award_type.name)
-              }
-              column("small-6") {
+                text " ("
                 text award_type.amount
+                text ")"
               }
             }
           end
         else
           form_for [project, award] do |f|
             row(class: "award-types") {
+              h3 "Send awards"
               project.award_types.each do |award_type|
                 row(class: "award-type-row") {
-                  column("small-6") {
+                  column("small-12") {
                     with_errors(project, :account_id) {
                       label {
                         f.radio_button(:award_type_id, award_type.to_param)
-                        span(award_type.name, class: "margin-small")
+                        span(award_type.name)
+                        text " ("
+                        text award_type.amount
+                        text ")"
                       }
                     }
-                  }
-                  column("small-6") {
-                    text award_type.amount
                   }
                 }
               end
@@ -141,9 +125,9 @@ class Views::Projects::Show < Views::Base
                 }
               }
               row {
-                column("small-6") {}
-                column("small-6") {
-                  f.submit("Send Award", class: buttonish)
+                column("small-8") {}
+                column("small-4") {
+                  f.submit("Send Award", class: buttonish(:tiny, :round))
                 }
               }
             }

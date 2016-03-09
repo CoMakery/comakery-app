@@ -7,9 +7,8 @@
 
 // This is the default html and body font-size for the base rem value.
 // $rem-base: 16px;
-
 $font-family-sans-serif: Lato, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
-$font-family-serif: "Slabo 27px", Georgia, Cambria, "Times New Roman", Times, serif;
+$font-family-serif: Lato, "Slabo 27px", Georgia, Cambria, "Times New Roman", Times, serif;
 $font-family-monospace: Consolas, "Liberation Mono", Courier, monospace;
 
 // Allows the use of rem-calc() or lower-bound() in your settings
@@ -1318,7 +1317,7 @@ $header-font-color: $steel;
 
 // Background color for the top bar
 // $topbar-bg-color: $oil;
-$topbar-bg-color: $palate1-primary;
+$topbar-bg-color: white;
 // $topbar-bg: $topbar-bg-color;
 
 // Height and margin

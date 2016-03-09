@@ -1,6 +1,21 @@
+@import 'variables';
 .contain-to-grid {
-  background-color: black;
+  background-color: white;
+  border-bottom: 3px solid $palate1-purple;
 }
 .app-container {
   background: white;
+}
+.top-bar {
+  .name h1 {
+    color: $palate1-purple;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  .top-bar-section ul li > a {
+    color: $palate1-mediumgray;
+    text-transform: capitalize;
+    letter-spacing: 0;
+    font-size: 16px;
+  }
 }

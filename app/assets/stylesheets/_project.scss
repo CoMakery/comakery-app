@@ -1,6 +1,8 @@
 @import 'variables';
+@import 'fonts';
 @import 'functions';
 @import 'extensions';
+@import 'header';
 
 body {
   background-color: white;
@@ -134,7 +136,7 @@ form.take-action-form p.notice {
 }
 
 .margin-small {
-  margin: 10px;
+
 }
 
 .award-row .header {
@@ -161,12 +163,6 @@ form.take-action-form p.notice {
   margin-right: 2px;
 }
 
-.image-block {
-  max-height: 150px;
-  max-width: 150px;
-  margin-bottom: 10px;
-}
-
 .text-light-gray {
   color: lightgrey;
 }
@@ -187,10 +183,6 @@ form.take-action-form p.notice {
   text-align: center;
 }
 
-.text-link {
-  color: cornflowerblue;
-}
-
 .font-large {
   font-size: $font-size-large;
 }
@@ -201,4 +193,61 @@ form.take-action-form p.notice {
 
 .font-small {
   font-size: $font-size-small;
+}
+.projects-landing h2 {
+//  margin-top: 1em;
+// margin-bottom: .7em;
+ font-size: 35px;
+}
+.row.project {
+  margin-bottom: 1.5em;
+
+  .image-block {
+    overflow: hidden;
+    width: 250px;
+    height: 220px;
+    margin-bottom: 1em;
+    img {
+      min-height: 250px;
+    }
+  }
+  h5 {
+    margin-bottom: 0;
+    margin-top: 0em;
+  }
+}
+.row.project-body {
+  margin-top: 2.6em;
+  h3 {
+    margin-bottom: .5em;
+  }
+}
+.alert-box {
+  margin-bottom: 1em;
+  margin-top: -.3em;
+  background-color: #E3FFB3;
+  border: 0;
+  color: #4CA941;
+  font-size: 18px;
+  padding: 14px 20px;
+}
+.award-types input[type="radio"] {
+  margin-right: 10px;
+}
+.award-send {
+  border: 1px solid #ccc;
+  padding: 20px 50px;
+}
+.project-image {
+  margin-top: 1.2em;
+}
+.row.project-tasks {
+  margin-top: 1em;
+}
+.row.project-settings {
+  margin-bottom: .5em;
+}
+.project-icon {
+  float: left;
+  margin-right: 10px;
 }
