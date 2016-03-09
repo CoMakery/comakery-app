@@ -43,6 +43,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       visit project_path(project)
 
+      expect(page).to have_content "0 My Project Coins"
+
       choose "Small"
       expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson", "Hubert Sherbert - @hubert", "Sherman Yessir - @sherman"])
       select "bobjohnson", from: "User"

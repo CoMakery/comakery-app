@@ -31,7 +31,7 @@ class GetAwardData
 
   def award_amount_data(current_account, awards)
     result = {total_coins_issued: awards.sum { |a| a.award_type.amount }}
-    result[:my_project_coins] = current_account ? awards.sum { |a| a.account_id == current_account.id ? a.award_type.amount : 0 } : 0
+    result[:my_project_coins] = current_account ? awards.sum { |a| a.account_id == current_account.id ? a.award_type.amount : 0 } : nil
     result
   end
 

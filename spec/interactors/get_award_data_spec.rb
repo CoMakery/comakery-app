@@ -32,7 +32,7 @@ describe GetAwardData do
 
     it "doesn't explode if you aren't logged in" do
       result = GetAwardData.call(current_account: nil, project: project)
-      expect(result.award_data[:award_amounts]).to eq({:my_project_coins => 0, :total_coins_issued => 10000})
+      expect(result.award_data[:award_amounts]).to eq({:my_project_coins => nil, :total_coins_issued => 10000})
     end
 
     it "returns a pretty hash of the awards for a project with summed amounts for each person" do

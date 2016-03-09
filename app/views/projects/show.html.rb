@@ -141,10 +141,10 @@ class Views::Projects::Show < Views::Base
 
         row {
           column("small-6", class: "centered") {
-            # if award_data[:award_amounts][:my_project_coins]
+            if award_data[:award_amounts][:my_project_coins]
               div(class: "centered font-large") { text award_data[:award_amounts][:my_project_coins] }
               div(class: "centered") { text "My Project Coins" }
-            # end
+            end
           }
           column("small-6") {
             div(class: "centered font-large") { text award_data[:award_amounts][:total_coins_issued] }
