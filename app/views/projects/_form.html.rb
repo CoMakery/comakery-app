@@ -40,7 +40,7 @@ module Views
           }
 
           row {
-            column("small-3") {
+            column("small-4") {
               text "Award Names"
             }
             column("small-4") {
