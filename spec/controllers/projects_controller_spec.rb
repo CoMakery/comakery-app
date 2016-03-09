@@ -223,7 +223,7 @@ describe ProjectsController do
     describe "#show" do
       it "allows team members to view projects and assigns awardable accounts from slack api and db and de-dups" do
         expect(GetAwardableAccounts).to receive(:call).and_return(double(awardable_accounts: []))
-        expect(GetAwardData).to receive(:call).and_return(double(award_data: "some dataz"))
+        expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_coins: 0, total_coins_issued: 0} }))
 
         get :show, id: project.to_param
 
@@ -231,7 +231,7 @@ describe ProjectsController do
         expect(assigns(:project)).to eq project
         expect(assigns[:award]).to be_new_record
         expect(assigns[:awardable_accounts]).to eq([])
-        expect(assigns[:award_data]).to eq("some dataz")
+        expect(assigns[:award_data]).to eq({:contributions=>[], :award_amounts=>{:my_project_coins=>0, :total_coins_issued=>0}})
       end
 
       it "only denies non-owners to view projects" do
