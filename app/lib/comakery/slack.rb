@@ -3,7 +3,7 @@ class Comakery::Slack
   include ::Rails.application.routes.url_helpers
   include ActionView::Helpers::TextHelper
 
-  AVATAR = 'https://s3.amazonaws.com/swarmbot-production/spacekitty.jpg'
+  AVATAR = 'https://s3.amazonaws.com/comakery/spacekitty.jpg'
 
   def self.get(token)
     new(token)
