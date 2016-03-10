@@ -17,7 +17,7 @@ describe "logging in and out", :vcr do
 
     visit root_path
 
-    expect(page).to have_content "Log in"
+    expect(page).to have_content "Sign in"
 
     page.set_rack_session(account_id: account.id)
 
@@ -25,8 +25,8 @@ describe "logging in and out", :vcr do
 
     expect(page).to have_content "This is a project"
 
-    click_link "Log out"
+    click_link "Sign out"
 
-    expect(page).to have_content "Log in"
+    expect(page).to have_content "Sign in"
   end
 end

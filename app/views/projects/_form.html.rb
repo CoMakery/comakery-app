@@ -35,7 +35,7 @@ module Views
             }
             with_errors(project, :image) {
               label {
-                text "Project Image"
+                text "Project Image (A large, roughly square image works best)"
                 text f.attachment_field(:image)
               }
               text attachment_image_tag(project, :image, class: "project-image")

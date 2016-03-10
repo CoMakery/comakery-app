@@ -15,6 +15,9 @@ class ProjectsController < ApplicationController
 
   def index
     @projects = policy_scope(Project)
+    if params[:query].present?
+      @projects = @projects.where(["title ilike :query OR description ilike :query", query: "%#{params[:query]}%"])
+    end
     @slack_auth = current_account&.slack_auth
   end
 

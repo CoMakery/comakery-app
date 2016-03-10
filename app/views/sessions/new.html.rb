@@ -2,7 +2,7 @@ class Views::Sessions::New < Views::Base
   def content
     row {
       column(%i[small-12 large-6], class: "large-centered") {
-        h1("Log in")
+        h1("Sign in")
 
         form_tag session_path, method: 'post' do
           row {
@@ -18,7 +18,7 @@ class Views::Sessions::New < Views::Base
                 password_field_tag :password, nil, tabindex: 2
               }
               br
-              submit_tag "Log In", class: buttonish(:medium), tabindex: 3
+              submit_tag "Sign In", class: buttonish(:medium), tabindex: 3
             }
           }
         end

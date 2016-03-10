@@ -253,4 +253,17 @@ form.take-action-form p.notice {
 .project-icon {
   float: left;
   margin-right: 10px;
+  height: 2rem;
+  margin-top: 1.2rem;
+}
+
+.top-bar-text {
+  line-height: 4.3rem;
+  background-color: white
+}
+
+.project-search {
+  div {
+    padding: 0;
+  }
 }

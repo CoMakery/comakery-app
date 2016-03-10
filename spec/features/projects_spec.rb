@@ -9,8 +9,8 @@ def click_remove(award_type_row)
 end
 
 describe "viewing projects, creating and editing", :js, :vcr do
-  let!(:project) { create(:project, title: "Project 1", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false) }
-  let!(:project2) { create(:project, title: "Public Project", owner_account: account, slack_team_id: "citizencode", public: true) }
+  let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false) }
+  let!(:project2) { create(:project, title: "Public Project", description: "dogs with donuts", owner_account: account, slack_team_id: "citizencode", public: true) }
   let!(:award2) { create(:award, award_type: create(:award_type, project: project2))}
   let!(:account) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_team_image_34_url: "https://slack.example.com/awesome-team-image-34-px.jpg", slack_user_name: 'gleenn', slack_first_name: "Glenn", slack_last_name: "Spanky", slack_team_domain: "citizencodedomain") } }
   let!(:same_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code") } }
@@ -20,9 +20,14 @@ describe "viewing projects, creating and editing", :js, :vcr do
     it "allows viewing public projects index and show" do
       visit root_path
 
+      within(".top-bar .slack-instance") do
+        expect(page).not_to have_content "Citizen Code"
+        expect(page).not_to have_content "CoMakery"
+      end
+
       expect(page).not_to have_content "My Projects"
 
-      expect(page).not_to have_content "Project 1"
+      expect(page).not_to have_content "Cats with Lazers Project"
       expect(page).to have_content "Public Project"
 
       expect(page).not_to have_content "New Project"
@@ -37,7 +42,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     end
   end
 
-  describe "landing and searching" do
+  describe "landing" do
     it "shows some projects" do
       login(account)
 
@@ -45,6 +50,10 @@ describe "viewing projects, creating and editing", :js, :vcr do
       7.times { |i| create(:project, title: "Private Project #{i}", public: false, slack_team_id: "citizencode", slack_team_name: "Citizen Code") }
 
       visit root_path
+
+      within(".top-bar .slack-instance") do
+        expect(page).to have_content "Citizen Code"
+      end
 
       expect(page).to have_content "Citizen Code Projects"
       expect(page.html).to match %r{<img[^>]+src="[^"]+awesome-team-image-34-px\.jpg"}
@@ -88,6 +97,32 @@ describe "viewing projects, creating and editing", :js, :vcr do
     end
   end
 
+  it "searching" do
+    login(account)
+
+    visit projects_path
+
+    expect(page).not_to have_content("Search results for")
+
+    fill_in "query", with: "cats"
+
+    click_on "Search"
+
+    expect(page).to have_content "Citizen Code Projects"
+    expect(page).to have_content 'There was 1 search result for: "cats"'
+    expect(page).to have_content "Cats with Lazers Project"
+    expect(page).not_to have_content "Public Project"
+
+    fill_in "query", with: "s"
+
+    click_on "Search"
+
+    expect(page).to have_content "Citizen Code Projects"
+    expect(page).to have_content 'There were 2 search results for: "s"'
+    expect(page).to have_content "Cats with Lazers Project"
+    expect(page).to have_content "Public Project"
+  end
+
   it "does the happy path" do
     stub_request(:post, "https://slack.com/api/users.list").to_return(body: {"ok": true, "members": []}.to_json)
     stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
@@ -96,7 +131,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
     visit projects_path
 
-    expect(page).to have_content "Project 1"
+    expect(page).to have_content "Cats with Lazers Project"
 
     within "#project-#{project.to_param}" do
       click_link project.title
