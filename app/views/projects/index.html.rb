@@ -1,8 +1,8 @@
 class Views::Projects::Index < Views::Projects::Base
-  needs :projects, :slack_auth
+  needs :projects
 
   def content
-    projects_header(slack_auth)
+    projects_header(current_user.slack_auth) if current_user&.slack_auth
 
     if params[:query]
       if projects.size == 1
