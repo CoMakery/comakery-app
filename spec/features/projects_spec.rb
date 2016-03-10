@@ -109,7 +109,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
   end
 
   context "with projects with recent awards" do
-    let!(:birds_project) { create(:project, title: "Birds with Shoes Project", description: "birds with shoes", owner_account: account, slack_team_id: "citizencode", public: true) }
+    let!(:birds_project) { create(:project, title: "Birds with Shoes Project", description: "birds with shoes", owner_account: account, slack_team_id: "comakery", public: true) }
     let!(:birds_project_award) { create(:award, award_type: create(:award_type, project: birds_project), created_at: Date.new(2016, 1, 8)) }
 
     it "allows searching and shows results based on projects that are most recently awarded" do
@@ -135,14 +135,11 @@ describe "viewing projects, creating and editing", :js, :vcr do
       expect(page).to have_content "Citizen Code Projects"
       expect(page).to have_content 'There were 3 search results for: "s"'
 
-      expect(page.all("a.project-link").map { |project_link| project_link.text }).to eq([
-                                                                                            "Public Project",
-                                                                                            "Birds with Shoes Project",
-                                                                                            "Cats with Lazers Project"
-                                                                                        ])
+      expect(page.all("a.project-link").map { |project_link| project_link.text }).to eq(["Public Project", "Birds with Shoes Project", "Cats with Lazers Project"])
+      expect(page.all(".project-last-award").map { |project_link| project_link.text }).to eq(["last activity 1 day ago", "last activity 2 days ago"])
 
-      expect(page.all(".project-last-award").map { |project_link| project_link.text }).to eq(["last activity 1 day ago",
-                                                                                              "last activity 2 days ago"])
+      title_and_highlightedness = page.all(".project").map { |project| [project.find("a.project-link").text, project[:class].include?("project-highlighted")] }
+      expect(title_and_highlightedness).to eq([["Public Project", true], ["Birds with Shoes Project", false], ["Cats with Lazers Project", true]])
 
       click_link "Browse All"
 
