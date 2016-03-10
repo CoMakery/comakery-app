@@ -34,8 +34,13 @@ class Views::Projects::Base < Views::Base
         div(class: "image-block") {
           a(attachment_image_tag(project, :image), href: project_path(project))
         }
-        h5 { a(project.title, href: project_path(project)) }
+        h5 {
+          a(project.title, href: project_path(project), class: "project-link")
+        }
         i project.slack_team_name
+        if project.last_award_created_at
+          div(class: "project-last-award tiny") { text "last activity #{time_ago_in_words(project.last_award_created_at)} ago" }
+        end
         div project.description.try(:truncate, 35)
       }
     }

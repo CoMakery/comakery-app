@@ -72,6 +72,21 @@ describe Project do
     end
   end
 
+  describe 'scopes' do
+    describe ".with_last_activity_at" do
+      it "returns projects ordered by when the most recent award created_at, then by project created_at" do
+        p1_8 = create(:project, title: "p1_8", created_at: 8.days.ago).tap{|p| create(:award_type, project: p).tap{|at| create(:award, award_type: at, created_at: 1.days.ago)}}
+        p2_3 = create(:project, title: "p2_3", created_at: 3.days.ago).tap{|p| create(:award_type, project: p).tap{|at| create(:award, award_type: at, created_at: 2.days.ago)}}
+        p3_6 = create(:project, title: "p3_6", created_at: 6.days.ago).tap{|p| create(:award_type, project: p).tap{|at| create(:award, award_type: at, created_at: 3.days.ago)}}
+        p3_5 = create(:project, title: "p3_5", created_at: 5.days.ago).tap{|p| create(:award_type, project: p).tap{|at| create(:award, award_type: at, created_at: 3.days.ago)}}
+        p3_4 = create(:project, title: "p3_4", created_at: 4.days.ago).tap{|p| create(:award_type, project: p).tap{|at| create(:award, award_type: at, created_at: 3.days.ago)}}
+
+        expect(Project.count).to eq(5)
+        expect(Project.with_last_activity_at.all.map(&:title)).to eq(%w(p1_8 p2_3 p3_4 p3_5 p3_6))
+      end
+    end
+  end
+
   describe "#owner_slack_user_name" do
     let!(:owner) { create :account }
     let!(:project) { create :project, owner_account: owner, slack_team_id: 'reds' }

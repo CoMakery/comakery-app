@@ -10,11 +10,15 @@ end
 
 describe "viewing projects, creating and editing", :js, :vcr do
   let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false) }
-  let!(:project2) { create(:project, title: "Public Project", description: "dogs with donuts", owner_account: account, slack_team_id: "citizencode", public: true) }
-  let!(:award2) { create(:award, award_type: create(:award_type, project: project2))}
+  let!(:public_project) { create(:project, title: "Public Project", description: "dogs with donuts", owner_account: account, slack_team_id: "citizencode", public: true) }
+  let!(:public_project_award) { create(:award, award_type: create(:award_type, project: public_project), created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_team_image_34_url: "https://slack.example.com/awesome-team-image-34-px.jpg", slack_user_name: 'gleenn', slack_first_name: "Glenn", slack_last_name: "Spanky", slack_team_domain: "citizencodedomain") } }
   let!(:same_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code") } }
   let!(:other_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "comakery", slack_team_name: "CoMakery") } }
+
+  before do
+    travel_to Date.new(2016, 1, 10)
+  end
 
   describe "while logged out" do
     it "allows viewing public projects index and show" do
@@ -34,7 +38,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       click_link "Public Project"
 
-      expect(page).to have_current_path(project_path(project2))
+      expect(page).to have_current_path(project_path(public_project))
 
       expect(page).to have_content "Public Project"
       expect(page).to have_content "Visibility: Public"
@@ -104,30 +108,46 @@ describe "viewing projects, creating and editing", :js, :vcr do
     end
   end
 
-  it "searching" do
-    login(account)
+  context "with projects with recent awards" do
+    let!(:birds_project) { create(:project, title: "Birds with Shoes Project", description: "birds with shoes", owner_account: account, slack_team_id: "citizencode", public: true) }
+    let!(:birds_project_award) { create(:award, award_type: create(:award_type, project: birds_project), created_at: Date.new(2016, 1, 8)) }
 
-    visit projects_path
+    it "allows searching and shows results based on projects that are most recently awarded" do
+      login(account)
 
-    expect(page).not_to have_content("Search results for")
+      visit projects_path
 
-    fill_in "query", with: "cats"
+      expect(page).not_to have_content("Search results for")
 
-    click_on "Search"
+      fill_in "query", with: "cats"
 
-    expect(page).to have_content "Citizen Code Projects"
-    expect(page).to have_content 'There was 1 search result for: "cats"'
-    expect(page).to have_content "Cats with Lazers Project"
-    expect(page).not_to have_content "Public Project"
+      click_on "Search"
 
-    fill_in "query", with: "s"
+      expect(page).to have_content "Citizen Code Projects"
+      expect(page).to have_content 'There was 1 search result for: "cats"'
+      expect(page).to have_content "Cats with Lazers Project"
+      expect(page).not_to have_content "Public Project"
 
-    click_on "Search"
+      fill_in "query", with: "s"
 
-    expect(page).to have_content "Citizen Code Projects"
-    expect(page).to have_content 'There were 2 search results for: "s"'
-    expect(page).to have_content "Cats with Lazers Project"
-    expect(page).to have_content "Public Project"
+      click_on "Search"
+
+      expect(page).to have_content "Citizen Code Projects"
+      expect(page).to have_content 'There were 3 search results for: "s"'
+
+      expect(page.all("a.project-link").map { |project_link| project_link.text }).to eq([
+                                                                                            "Public Project",
+                                                                                            "Birds with Shoes Project",
+                                                                                            "Cats with Lazers Project"
+                                                                                        ])
+
+      expect(page.all(".project-last-award").map { |project_link| project_link.text }).to eq(["last activity 1 day ago",
+                                                                                              "last activity 2 days ago"])
+
+      click_link "Browse All"
+
+      expect(page).to have_content "Citizen Code Projects"
+    end
   end
 
   it "does the happy path" do
@@ -239,7 +259,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "This is an edited project description which is very informative"
     expect(page).to have_content "Visibility: Private"
     expect(page).to have_link "Project Tasks"
-    expect(page).to have_link "Project Slack Channel", href:"https://citizencodedomain.slack.com"
+    expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com"
 
     award_type_inputs = page.all(".award-type-row")
     expect(award_type_inputs.size).to eq(3)

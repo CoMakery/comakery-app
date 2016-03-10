@@ -15,5 +15,7 @@ class Views::Projects::Index < Views::Projects::Base
     projects.each do |project|
       project_block(project)
     end
+
+    a("Browse All", href: projects_path)
   end
 end

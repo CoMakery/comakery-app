@@ -15,8 +15,8 @@ describe ProjectsController do
       get :landing
 
       expect(response.status).to eq(200)
-      expect(assigns[:private_projects].map(&:title)).to eq(["my_private_project", "my_public_project"])
-      expect(assigns[:public_projects].map(&:title)).to eq(["other_public_project"])
+      expect(assigns[:private_projects].map(&:title)).to match_array(["my_private_project", "my_public_project"])
+      expect(assigns[:public_projects].map(&:title)).to match_array(["other_public_project"])
     end
 
     it "renders nicely even if you are not logged in" do
@@ -130,13 +130,22 @@ describe ProjectsController do
   context "with a project" do
     let!(:cat_project) { create(:project, title: "Cats", description: "Cats with lazers", owner_account: account, slack_team_id: 'foo') }
     let!(:dog_project) { create(:project, title: "Dogs", description: "Dogs with donuts", owner_account: account, slack_team_id: 'foo') }
+    let!(:yak_project) { create(:project, title: "Yaks", description: "Yaks with parser generaters", owner_account: account, slack_team_id: 'foo') }
+    let!(:fox_project) { create(:project, title: "Foxes", description: "Foxes with boxes", owner_account: account, slack_team_id: 'foo') }
 
     describe "#index" do
-      it "lists the projects" do
+      let!(:cat_project_award) { create(:award, award_type: create(:award_type, project: cat_project), created_at: 2.days.ago)}
+      let!(:dog_project_award) { create(:award, award_type: create(:award_type, project: dog_project), created_at: 1.days.ago)}
+      let!(:yak_project_award) { create(:award, award_type: create(:award_type, project: yak_project), created_at: 3.days.ago)}
+
+      include ActionView::Helpers::DateHelper
+      it "lists the projects ordered by most recent award date desc" do
+
         get :index
 
         expect(response.status).to eq(200)
-        expect(assigns[:projects].map(&:title)).to eq(["Cats", "Dogs"])
+        expect(assigns[:projects].map(&:title)).to eq(["Dogs", "Cats", "Yaks", "Foxes"])
+        expect(assigns[:projects].map{|p| time_ago_in_words(p.last_award_created_at) if p.last_award_created_at}).to eq(["1 day", "2 days", "3 days", nil])
       end
 
       it "allows querying based on the titleof the project, ignoring case" do
@@ -147,10 +156,10 @@ describe ProjectsController do
       end
 
       it "allows querying based on the title or description of the project, ignoring case" do
-        get :index, query: "with"
+        get :index, query: "o"
 
         expect(response.status).to eq(200)
-        expect(assigns[:projects].map(&:title)).to eq(["Cats", "Dogs"])
+        expect(assigns[:projects].map(&:title)).to eq(["Dogs", "Foxes"])
       end
     end
 

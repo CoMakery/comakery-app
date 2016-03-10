@@ -1,9 +1,9 @@
 class Views::Projects::Landing < Views::Projects::Base
-  needs :private_projects, :public_projects, :slack_auth
+  needs :private_projects, :public_projects
 
   def content
-    if current_account
-      projects_header(slack_auth)
+    if current_account&.slack_auth
+      projects_header(current_account.slack_auth)
       projects_block(private_projects)
     end
 

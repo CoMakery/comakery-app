@@ -135,10 +135,6 @@ form.take-action-form p.notice {
   color: $snow;
 }
 
-.margin-small {
-
-}
-
 .award-row .header {
   font-weight: bold;
   text-transform: uppercase;
@@ -266,4 +262,8 @@ form.take-action-form p.notice {
   div {
     padding: 0;
   }
+}
+
+.tiny {
+  font-size: $font-size-tiny;
 }

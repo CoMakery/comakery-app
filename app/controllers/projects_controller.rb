@@ -4,20 +4,21 @@ class ProjectsController < ApplicationController
   def landing
     skip_authorization
     if current_account
-      @private_projects = Project.where(slack_team_id: current_account.slack_auth.slack_team_id).limit(6)
-      @public_projects = Project.where(public: true).where.not(slack_team_id: current_account.slack_auth.slack_team_id).limit(6)
+      @private_projects = Project.with_last_activity_at.for_account(current_account).limit(6)
+      @public_projects = Project.with_last_activity_at.not_for_account(current_account).public.limit(6)
     else
       @private_projects = []
-      @public_projects = policy_scope(Project).limit(6)
+      @public_projects = policy_scope(Project).with_last_activity_at.limit(6)
     end
     @slack_auth = current_account&.slack_auth
   end
 
   def index
-    @projects = policy_scope(Project)
+    @projects = policy_scope(Project).with_last_activity_at
     if params[:query].present?
-      @projects = @projects.where(["title ilike :query OR description ilike :query", query: "%#{params[:query]}%"])
+      @projects = @projects.where(["projects.title ilike :query OR projects.description ilike :query", query: "%#{params[:query]}%"])
     end
+    @projects = @projects.to_a
   end
 
   def new
