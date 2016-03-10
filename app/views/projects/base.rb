@@ -3,10 +3,10 @@ class Views::Projects::Base < Views::Base
   def projects_header(slack_auth)
     full_row {
       column("small-1") { img src: slack_auth.slack_team_image_34_url, class: "project-icon" }
-      column("small-7") {
+      column("small-9") {
         h2 "#{slack_auth.slack_team_name} Projects"
       }
-      column("small-4") {
+      column("small-2") {
         a("New Project", class: buttonish(:button, :round, :tiny), href: new_project_path) if policy(Project).new?
       }
     }
@@ -32,7 +32,7 @@ class Views::Projects::Base < Views::Base
     row(class: "project", id: "project-#{project.to_param}") {
       column("small-12") {
         div(class: "image-block") {
-          text attachment_image_tag(project, :image)
+          a(attachment_image_tag(project, :image), href: project_path(project))
         }
         h5 { a(project.title, href: project_path(project)) }
         i project.slack_team_name
