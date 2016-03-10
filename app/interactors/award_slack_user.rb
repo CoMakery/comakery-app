@@ -17,7 +17,7 @@ class AwardSlackUser
 
   def create_account(context)
     response = Comakery::Slack.new(context.issuer.slack_auth.slack_token).get_user_info(context.slack_user_id)
-    account = Account.find_or_create_by(email: response.profile.email)
+    account = Account.find_or_create_by(email: response.user.profile.email)
     unless account.valid?
       context.fail!(message: account.errors.full_messages.join(", "))
     end
@@ -26,7 +26,7 @@ class AwardSlackUser
                                            slack_team_name: context.project.slack_team_name,
                                            slack_team_id: context.project.slack_team_id,
                                            slack_team_image_34_url: context.project.slack_team_image_34_url,
-                                           slack_user_name: response.name,
+                                           slack_user_name: response.user.name,
                                            slack_user_id: context.slack_user_id)
 
     unless authentication.valid?

@@ -42,14 +42,14 @@ class Comakery::Slack
   end
 
   def get_users
-    @client.users_list.members
+    @client.users_list
   end
 
   def get_user_info(slack_user_id)
-    @client.users_info(user: slack_user_id).user
+    @client.users_info(user: slack_user_id)
   end
 
   def get_channels
-    @client.channels_list.channels
+    @client.channels_list
   end
 end

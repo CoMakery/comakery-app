@@ -32,11 +32,11 @@ describe Comakery::Slack, :vcr do
 
       response = Comakery::Slack.new("token").get_users
 
-      expect(response[0][:name]).to eq("bobjohnson")
+      expect(response.members[0][:name]).to eq("bobjohnson")
     end
   end
 
-  describe "#get_users" do
+  describe "#get_user_info" do
     it "returns the list of users in the slack instance" do
       stub_request(:post, "https://slack.com/api/users.info").
           with(body: {"token" => "token", "user" => "foobar"}).
@@ -44,10 +44,10 @@ describe Comakery::Slack, :vcr do
 
       response = Comakery::Slack.new("token").get_user_info("foobar")
 
-      expect(response[:profile][:email]).to eq("glenn@example.com")
-      expect(response[:id]).to eq("U99M9QYFQ")
-      expect(response[:name]).to eq("glenn")
-      expect(response[:team_id]).to eq("T9999S99P")
+      expect(response[:user][:profile][:email]).to eq("glenn@example.com")
+      expect(response[:user][:id]).to eq("U99M9QYFQ")
+      expect(response[:user][:name]).to eq("glenn")
+      expect(response[:user][:team_id]).to eq("T9999S99P")
     end
   end
 
@@ -59,8 +59,8 @@ describe Comakery::Slack, :vcr do
 
       response = Comakery::Slack.new("token").get_channels
 
-      expect(response[0]["id"]).to eq("C000BE01L")
-      expect(response[0]["name"]).to eq("fun")
+      expect(response['channels'][0]["id"]).to eq("C000BE01L")
+      expect(response['channels'][0]["name"]).to eq("fun")
     end
   end
 end
