@@ -6,7 +6,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     'reactions:write',     # create "reaction" emoticons
     'users:read',          # required to log in for some teams
     'team:read',           # required to log in for some teams
-    'channels:read'        # channels.list
     # 'identify',
   ] * ','
 end
