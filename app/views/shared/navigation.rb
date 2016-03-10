@@ -14,14 +14,14 @@ class Views::Shared::Navigation < Views::Base
       ul(class: "right") {
         li(class: "has-form") {
           div(class: "row collapse project-search") {
-            form_tag("https://www.google.com", method: "GET") {
+            form_for(:projects, url: projects_path, method: "get") do |f|
               div(class: "large-8 small-9 columns collapse") {
-                input(name: "q", type: "text", placeholder: "Search Projects")
+                input(name: "query", placeholder: "Search Projects", value: params[:query])
               }
               div(class: "large-4 small-3 columns collapse") {
-                button_tag("Search", class: "button expand")
+                f.submit("Search", class: "button expand")
               }
-            }
+            end
           }
         }
         li(class: "slack-instance") {

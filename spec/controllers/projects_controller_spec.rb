@@ -128,14 +128,29 @@ describe ProjectsController do
   end
 
   context "with a project" do
-    let!(:project) { create(:project, title: "Cats", owner_account: account, slack_team_id: 'foo') }
+    let!(:cat_project) { create(:project, title: "Cats", description: "Cats with lazers", owner_account: account, slack_team_id: 'foo') }
+    let!(:dog_project) { create(:project, title: "Dogs", description: "Dogs with donuts", owner_account: account, slack_team_id: 'foo') }
 
     describe "#index" do
       it "lists the projects" do
         get :index
 
         expect(response.status).to eq(200)
+        expect(assigns[:projects].map(&:title)).to eq(["Cats", "Dogs"])
+      end
+
+      it "allows querying based on the titleof the project, ignoring case" do
+        get :index, query: "cats"
+
+        expect(response.status).to eq(200)
         expect(assigns[:projects].map(&:title)).to eq(["Cats"])
+      end
+
+      it "allows querying based on the title or description of the project, ignoring case" do
+        get :index, query: "with"
+
+        expect(response.status).to eq(200)
+        expect(assigns[:projects].map(&:title)).to eq(["Cats", "Dogs"])
       end
     end
 
@@ -145,23 +160,23 @@ describe ProjectsController do
       end
 
       it "works" do
-        get :edit, id: project.to_param
+        get :edit, id: cat_project.to_param
 
         expect(response.status).to eq(200)
-        expect(assigns[:project]).to eq(project)
+        expect(assigns[:project]).to eq(cat_project)
         expect(assigns[:slack_channels]).to eq(["foo", "bar"])
       end
     end
 
     describe "#update" do
       it "updates a project" do
-        small_award_type = project.award_types.create!(name: "Small Award", amount: 100)
-        medium_award_type = project.award_types.create!(name: "Medium Award", amount: 300)
-        destroy_me_award_type = project.award_types.create!(name: "Destroy Me Award", amount: 300)
+        small_award_type = cat_project.award_types.create!(name: "Small Award", amount: 100)
+        medium_award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300)
+        destroy_me_award_type = cat_project.award_types.create!(name: "Destroy Me Award", amount: 300)
 
         expect do
           expect do
-            put :update, id: project.to_param,
+            put :update, id: cat_project.to_param,
                 project: {
                     title: "updated Project title here",
                     description: "updated Project description here",
@@ -177,12 +192,12 @@ describe ProjectsController do
         end.to change { AwardType.count }.by(0) # +1 and -1
 
         expect(flash[:notice]).to eq("Project updated")
-        project.reload
-        expect(project.title).to eq("updated Project title here")
-        expect(project.description).to eq("updated Project description here")
-        expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
+        cat_project.reload
+        expect(cat_project.title).to eq("updated Project title here")
+        expect(cat_project.description).to eq("updated Project description here")
+        expect(cat_project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
 
-        award_types = project.award_types.order(:amount)
+        award_types = cat_project.award_types.order(:amount)
         expect(award_types.size).to eq(3)
         expect(award_types.first.name).to eq("Small Award")
         expect(award_types.first.amount).to eq(150)
@@ -195,13 +210,13 @@ describe ProjectsController do
       it "re-renders with errors when updating fails" do
         expect(GetSlackChannels).to receive(:call).and_return(double(channels: ["foo", "bar"]))
 
-        small_award_type = project.award_types.create!(name: "Small Award", amount: 100)
-        medium_award_type = project.award_types.create!(name: "Medium Award", amount: 300)
-        destroy_me_award_type = project.award_types.create!(name: "Destroy Me Award", amount: 400)
+        small_award_type = cat_project.award_types.create!(name: "Small Award", amount: 100)
+        medium_award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300)
+        destroy_me_award_type = cat_project.award_types.create!(name: "Destroy Me Award", amount: 400)
 
         expect do
           expect do
-            put :update, id: project.to_param,
+            put :update, id: cat_project.to_param,
                 project: {
                     title: "",
                     description: "updated Project description here",
@@ -242,22 +257,22 @@ describe ProjectsController do
         expect(GetAwardableAccounts).to receive(:call).and_return(double(awardable_accounts: []))
         expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_coins: 0, total_coins_issued: 0}}))
 
-        get :show, id: project.to_param
+        get :show, id: cat_project.to_param
 
         expect(response.code).to eq "200"
-        expect(assigns(:project)).to eq project
+        expect(assigns(:project)).to eq cat_project
         expect(assigns[:award]).to be_new_record
         expect(assigns[:awardable_accounts]).to eq([])
         expect(assigns[:award_data]).to eq({:contributions => [], :award_amounts => {:my_project_coins => 0, :total_coins_issued => 0}})
       end
 
       it "only denies non-owners to view projects" do
-        project.update(slack_team_id: "some other team")
+        cat_project.update(slack_team_id: "some other team")
 
-        get :show, id: project.to_param
+        get :show, id: cat_project.to_param
 
         expect(response.code).to eq "302"
-        expect(assigns(:project)).to eq project
+        expect(assigns(:project)).to eq cat_project
       end
     end
   end
