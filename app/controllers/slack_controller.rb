@@ -16,32 +16,4 @@ class SlackController < ApplicationController
       ]
     }
   end
-
-
-  # def debug
-  #
-  #   slack_auth = current_account.slack_auth
-  #
-  #   client = Slack::Web::Client.new(
-  #     token: slack_auth.slack_token
-  #     # endpoint: slack_auth.web_hook_url
-  #   )
-  #   p 1, client.auth_test
-  #
-  #   p 2, client.chat_postMessage(
-  #     channel: "#bot-testing", # slack_auth.web_hook_channel_id,
-  #     text: 'Random purrr',
-  #     as_user: false,        # don't post as *authed user*
-  #     username: 'swarmbot'  # post as swarmbot
-  #     # icon_url: asset_url (...)
-  #   )
-  #
-  #   p 3, client.chat_postMessage(
-  #     channel: "@harlan",
-  #     text: 'Meow',
-  #     as_user: false,        # don't post as *authed user*
-  #     username: 'swarmbot'  # post as swarmbot
-  #     # icon_url: asset_url (...)
-  #   )
-  # end
 end
