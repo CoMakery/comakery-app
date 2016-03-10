@@ -49,12 +49,12 @@ class Mom
     Project.new(defaults.merge(attrs))
   end
 
-  def award_type(project = create(:project), **attrs)
+  def award_type(**attrs)
     defaults = {
-        project: project,
         amount: 1337,
         name: "Contribution"
     }
+    attrs[:project] = create(:project) unless attrs[:project]
     AwardType.new(defaults.merge(attrs))
   end
 
