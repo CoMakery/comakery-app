@@ -40,6 +40,13 @@ describe "viewing projects, creating and editing", :js, :vcr do
       expect(page).to have_content "Visibility: Public"
       expect(page).to have_content "Team name: Citizen Code"
     end
+
+    it "allows searching" do
+      visit root_path
+      fill_in "query", with: "public"
+      click_on "Search"
+      expect(page).to have_content "Public Project"
+    end
   end
 
   describe "landing" do
