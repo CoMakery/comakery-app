@@ -2,8 +2,7 @@ class Views::Projects::Base < Views::Base
 
   def projects_header(slack_auth)
     full_row {
-      column("small-1") { img src: slack_auth.slack_team_image_34_url, class: "project-icon" }
-      column("small-7") {
+      column("small-8") {
         h2 "#{slack_auth.slack_team_name} Projects"
       }
       column("small-4") {

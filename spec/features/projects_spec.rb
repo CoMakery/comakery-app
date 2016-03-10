@@ -20,6 +20,11 @@ describe "viewing projects, creating and editing", :js, :vcr do
     it "allows viewing public projects index and show" do
       visit root_path
 
+      within(".top-bar .slack-instance") do
+        expect(page).not_to have_content "Citizen Code"
+        expect(page).not_to have_content "CoMakery"
+      end
+
       expect(page).not_to have_content "My Projects"
 
       expect(page).not_to have_content "Project 1"
@@ -45,6 +50,10 @@ describe "viewing projects, creating and editing", :js, :vcr do
       7.times { |i| create(:project, title: "Private Project #{i}", public: false, slack_team_id: "citizencode", slack_team_name: "Citizen Code") }
 
       visit root_path
+
+      within(".top-bar .slack-instance") do
+        expect(page).to have_content "Citizen Code"
+      end
 
       expect(page).to have_content "Citizen Code Projects"
       expect(page.html).to match %r{<img[^>]+src="[^"]+awesome-team-image-34-px\.jpg"}
