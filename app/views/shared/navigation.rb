@@ -12,11 +12,11 @@ class Views::Shared::Navigation < Views::Base
         }
         if current_account
           li {
-            link_to 'Log out', session_path, method: :delete
+            link_to 'Sign out', session_path, method: :delete
           }
         else
           li {
-            link_to 'Log in', slack_auth_path
+            link_to 'Sign in', slack_auth_path
           }
         end
       }
