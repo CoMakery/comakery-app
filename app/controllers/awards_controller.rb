@@ -1,5 +1,6 @@
 class AwardsController < ApplicationController
   before_filter :assign_project, only: [:create, :index]
+  skip_before_filter :require_login, only: :index
 
   def index
     @awards = policy_scope(Award)

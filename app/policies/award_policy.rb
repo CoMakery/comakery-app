@@ -10,13 +10,21 @@ class AwardPolicy < ApplicationPolicy
     end
 
     def resolve
-      scope.joins(award_type: :project).where("projects.slack_team_id = ?", @account.slack_auth.slack_team_id)
+      if account
+        scope.joins(award_type: :project).where("projects.slack_team_id = ?", @account.slack_auth.slack_team_id)
+      else
+        scope.joins(award_type: :project).where("projects.public = ?", true)
+      end
     end
   end
 
   def initialize(account, award)
     @account = account
     @award = award
+  end
+
+  def index?
+    true
   end
 
   def create?

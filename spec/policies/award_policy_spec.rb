@@ -1,36 +1,57 @@
 require 'rails_helper'
 
 describe AwardPolicy do
-  let!(:account) { create(:account).tap{|a| create(:authentication, account: a, slack_team_id: "lots of sweet awards")} }
+  let!(:account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "lots of sweet awards") } }
   let!(:other_auth) { create(:authentication, account: account, slack_team_id: "other project") }
+
   let!(:project) { create(:project, owner_account: account, slack_team_id: "lots of sweet awards") }
   let!(:other_project) { create(:project, owner_account: account, slack_team_id: "other project") }
+
+  let!(:public_project) { create(:project, owner_account: create(:account), slack_team_id: "public project", public: true) }
+  let(:award_type_with_public_project) { create(:award_type, project: public_project) }
+  let(:award_with_public_project) { create(:award, award_type: award_type_with_public_project) }
+
   let(:award_type_with_project) { create(:award_type, project: project) }
   let(:award_with_project) { build(:award, award_type: award_type_with_project, account: receiving_account) }
 
   let(:award_type_with_other_project) { create(:award_type, project: other_project) }
   let(:award_with_other_project) { build(:award, award_type: award_type_with_other_project, account: account) }
 
-  let(:receiving_account) { create(:account).tap{|a|create(:authentication, account: a, slack_team_id: "lots of sweet awards")} }
+  let(:receiving_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "lots of sweet awards") } }
 
-  let(:other_account) { create(:account).tap{|a| create(:authentication, account: a, slack_team_id: "other team")} }
+  let(:other_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "other team") } }
   let(:unowned_project) { create(:project, owner_account: other_account) }
 
   let(:different_team_account) { create(:account) }
 
-  let(:award_type_for_unowned_project) { create(:award_type, project: unowned_project)}
-  let(:award_for_unowned_project) { build(:award, award_type: award_type_for_unowned_project)}
+  let(:award_type_for_unowned_project) { create(:award_type, project: unowned_project) }
+  let(:award_for_unowned_project) { build(:award, award_type: award_type_for_unowned_project) }
 
   describe AwardPolicy::Scope do
-    it "returns awards that belong to projects that the specified account belongs to" do
-      award_with_project.save!
-      award_for_unowned_project.save!
-      expect(award_type_for_unowned_project.project.slack_team_id).not_to eq(project.slack_team_id)
+    context "logged out" do
+      it "returns the awards to a project that are public" do
+        expect(AwardPolicy::Scope.new(nil, Award).resolve).to eq([award_with_public_project])
+      end
+    end
 
-      create(:authentication, slack_team_id: project.slack_team_id, account: account)
+    context "logged in" do
+      it "returns awards that belong to projects that the specified account belongs to" do
+        award_with_project.save!
+        award_for_unowned_project.save!
+        expect(award_type_for_unowned_project.project.slack_team_id).not_to eq(project.slack_team_id)
 
-      awards = AwardPolicy::Scope.new(account, Award).resolve
-      expect(awards).to match_array([award_with_project])
+        create(:authentication, slack_team_id: project.slack_team_id, account: account)
+
+        awards = AwardPolicy::Scope.new(account, Award).resolve
+        expect(awards).to match_array([award_with_project])
+      end
+    end
+  end
+
+  describe "index?" do
+    it "returns true for errbody" do
+      expect(AwardPolicy.new(nil, award_with_project).index?).to be true
+      expect(AwardPolicy.new(account, award_with_project).index?).to be true
     end
   end
 

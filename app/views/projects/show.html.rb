@@ -173,7 +173,7 @@ class Views::Projects::Show < Views::Base
         }
 
         div {
-          a(href: project_awards_path(project), class: "text-link") { text "Award History >>" }
+          a(href: project_awards_path(project), class: "text-link") { text "Award History »" }
         }
       }
     }
