@@ -28,6 +28,11 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  def not_found
+    redirect_to "/404.html"
+  end
+
   # called when a policy authorization fails
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   def not_authorized
@@ -42,11 +47,6 @@ class ApplicationController < ActionController::Base
   def require_login
     not_authenticated unless session[:account_id]
   end
-
-  # def login_without_credentials(account)
-  #   auto_login(account)
-  #   after_login!(account)
-  # end
 
   def current_account
     @current_account ||= Account.find_by_id(session[:account_id])
