@@ -10,6 +10,10 @@ describe ApplicationController do
     def index
       raise ActiveRecord::RecordNotFound
     end
+
+    def new
+      raise Slack::Web::Api::Error.new("boom")
+    end
   end
 
   describe "errors" do
@@ -18,6 +22,15 @@ describe ApplicationController do
         get :index
 
         expect(response).to redirect_to "/404.html"
+      end
+    end
+
+    describe "Slack::Web::Api::Error" do
+      it "redirects to logout page" do
+        get :new
+
+        expect(response).to redirect_to logout_url
+        expect(flash[:error]).to eq("Error talking to Slack, sorry!")
       end
     end
   end

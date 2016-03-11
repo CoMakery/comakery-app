@@ -88,11 +88,6 @@ class ProjectsController < ApplicationController
 
   def assign_slack_channels
     result = GetSlackChannels.call(current_account: current_account)
-    unless result.success?
-      flash[:error] = "Slack API had an error, please log in again"
-      redirect_to logout_url
-      return
-    end
     @slack_channels = result.channels
   end
 end

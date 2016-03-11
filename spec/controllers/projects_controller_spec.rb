@@ -59,20 +59,6 @@ describe ProjectsController do
         expect(assigns[:slack_channels]).to eq(["foo", "bar"])
       end
     end
-
-    context "when slack returns a failure" do
-      before do
-        expect(GetSlackChannels).to receive(:call).and_return(double("success?": false))
-      end
-
-      it "redirects the user back with an error message" do
-        get :new
-
-        expect(response.status).to eq(302)
-        expect(response).to redirect_to logout_url
-        expect(flash[:error]).to eq("Slack API had an error, please log in again")
-      end
-    end
   end
 
   describe "#create" do
