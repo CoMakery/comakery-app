@@ -25,7 +25,7 @@ class AwardsController < ApplicationController
 
     flash[:notice] = "Successfully sent award to #{award.recipient_slack_user_name}"
     current_account.send_award_notifications(award: award)
-    redirect_to project_awards_path(award.award_type.project)
+    redirect_to project_path(award.award_type.project)
   rescue Pundit::NotAuthorizedError
     fail_and_redirect("Not authorized")
   end

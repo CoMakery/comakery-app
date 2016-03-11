@@ -123,6 +123,9 @@ describe "viewing projects, creating and editing", :js, :vcr do
       click_button "Send"
 
       expect(page).to have_content "Successfully sent award to Sherman Yessir"
+
+      click_link "Award History »"
+
       expect(page).to have_content "Award History"
       expect(page).to have_content "Feb 29"
       expect(page).to have_content "1,000"
