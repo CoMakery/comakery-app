@@ -22,12 +22,13 @@ class ProjectsController < ApplicationController
   end
 
   def new
+    assign_slack_channels
+
     @project = Project.new(public: true)
     authorize @project
     @project.award_types.build(name: "Thanks", amount: 10)
     @project.award_types.build(name: "Small Contribution", amount: 100)
     @project.award_types.build(name: "Contribution", amount: 1000)
-    assign_slack_channels
   end
 
   def create
@@ -86,6 +87,12 @@ class ProjectsController < ApplicationController
   end
 
   def assign_slack_channels
-    @slack_channels = GetSlackChannels.call(current_account: current_account).channels
+    result = GetSlackChannels.call(current_account: current_account)
+    unless result.success?
+      flash[:error] = "Slack API had an error, please log in again"
+      redirect_to logout_url
+      return
+    end
+    @slack_channels = result.channels
   end
 end

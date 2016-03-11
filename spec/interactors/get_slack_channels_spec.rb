@@ -1,16 +1,30 @@
 require 'rails_helper'
 
 describe GetSlackChannels do
-  let(:current_account) { create(:account).tap{|a| create(:authentication, account: a)} }
+  let(:current_account) { create(:account).tap { |a| create(:authentication, account: a) } }
 
-  before do
-    stub_request(:post, "https://slack.com/api/channels.list").to_return(body: File.read(Rails.root.join("spec","fixtures","channel_list_response.json")))
+  context "on successful api call" do
+    before do
+      stub_request(:post, "https://slack.com/api/channels.list").to_return(body: File.read(Rails.root.join("spec", "fixtures", "channel_list_response.json")))
+    end
+
+    describe "#call" do
+      it "returns a list of channels with their ids, excluding archived channels, sorted by number of users desc" do
+        result = GetSlackChannels.call(current_account: current_account)
+        expect(result.channels).to eq(["huge_channel", "fun", "boring_channel"])
+      end
+    end
   end
 
-  describe "#call" do
-    it "returns a list of channels with their ids, excluding archived channels, sorted by number of users desc" do
+  context "on failed api call" do
+    before do
+      stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: false}.to_json)
+    end
+
+    it "fails the interactor" do
       result = GetSlackChannels.call(current_account: current_account)
-      expect(result.channels).to eq(["huge_channel", "fun", "boring_channel"])
+      expect(result).not_to be_success
+      expect(result.message).to eq("Slack API error - Slack::Web::Api::Error")
     end
   end
 end

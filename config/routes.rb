@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   end
 
   get "/auth/slack/callback" => "sessions#create"
-  get "/auth/slack" => "sessions#create", as: :slack_auth
+  get "/auth/slack" => "sessions#create", as: :login
 
   root 'projects#landing'
 

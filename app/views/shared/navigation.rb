@@ -38,7 +38,7 @@ class Views::Shared::Navigation < Views::Base
           }
         else
           li {
-            link_to 'Sign in', slack_auth_path
+            link_to 'Sign in', login_path
           }
         end
       }

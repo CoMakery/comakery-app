@@ -31,29 +31,47 @@ describe ProjectsController do
   end
 
   describe "#new" do
-    it "works" do
-      expect(GetSlackChannels).to receive(:call).and_return(double(channels: ["foo", "bar"]))
+    context "when slack returns successful api calls" do
+      before do
+        expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
+      end
 
-      get :new
+      it "works" do
+        get :new
 
-      expect(response.status).to eq(200)
-      expect(assigns[:project]).to be_a_new_record
-      expect(assigns[:project]).to be_public
-      expect(assigns[:project].award_types.size).to eq(3)
+        expect(response.status).to eq(200)
+        expect(assigns[:project]).to be_a_new_record
+        expect(assigns[:project]).to be_public
+        expect(assigns[:project].award_types.size).to eq(3)
 
-      expect(assigns[:project].award_types.first).to be_a_new_record
-      expect(assigns[:project].award_types.first.name).to eq("Thanks")
-      expect(assigns[:project].award_types.first.amount).to eq(10)
+        expect(assigns[:project].award_types.first).to be_a_new_record
+        expect(assigns[:project].award_types.first.name).to eq("Thanks")
+        expect(assigns[:project].award_types.first.amount).to eq(10)
 
-      expect(assigns[:project].award_types.second).to be_a_new_record
-      expect(assigns[:project].award_types.second.name).to eq("Small Contribution")
-      expect(assigns[:project].award_types.second.amount).to eq(100)
+        expect(assigns[:project].award_types.second).to be_a_new_record
+        expect(assigns[:project].award_types.second.name).to eq("Small Contribution")
+        expect(assigns[:project].award_types.second.amount).to eq(100)
 
-      expect(assigns[:project].award_types.third).to be_a_new_record
-      expect(assigns[:project].award_types.third.name).to eq("Contribution")
-      expect(assigns[:project].award_types.third.amount).to eq(1000)
+        expect(assigns[:project].award_types.third).to be_a_new_record
+        expect(assigns[:project].award_types.third.name).to eq("Contribution")
+        expect(assigns[:project].award_types.third.amount).to eq(1000)
 
-      expect(assigns[:slack_channels]).to eq(["foo", "bar"])
+        expect(assigns[:slack_channels]).to eq(["foo", "bar"])
+      end
+    end
+
+    context "when slack returns a failure" do
+      before do
+        expect(GetSlackChannels).to receive(:call).and_return(double("success?": false))
+      end
+
+      it "redirects the user back with an error message" do
+        get :new
+
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to logout_url
+        expect(flash[:error]).to eq("Slack API had an error, please log in again")
+      end
     end
   end
 
@@ -90,7 +108,7 @@ describe ProjectsController do
     end
 
     it "when valid, re-renders with errors" do
-      expect(GetSlackChannels).to receive(:call).and_return(double(channels: ["foo", "bar"]))
+      expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
 
       expect do
         expect do
@@ -134,9 +152,9 @@ describe ProjectsController do
     let!(:fox_project) { create(:project, title: "Foxes", description: "Foxes with boxes", owner_account: account, slack_team_id: 'foo') }
 
     describe "#index" do
-      let!(:cat_project_award) { create(:award, award_type: create(:award_type, project: cat_project), created_at: 2.days.ago)}
-      let!(:dog_project_award) { create(:award, award_type: create(:award_type, project: dog_project), created_at: 1.days.ago)}
-      let!(:yak_project_award) { create(:award, award_type: create(:award_type, project: yak_project), created_at: 3.days.ago)}
+      let!(:cat_project_award) { create(:award, award_type: create(:award_type, project: cat_project), created_at: 2.days.ago) }
+      let!(:dog_project_award) { create(:award, award_type: create(:award_type, project: dog_project), created_at: 1.days.ago) }
+      let!(:yak_project_award) { create(:award, award_type: create(:award_type, project: yak_project), created_at: 3.days.ago) }
 
       include ActionView::Helpers::DateHelper
       it "lists the projects ordered by most recent award date desc" do
@@ -145,7 +163,7 @@ describe ProjectsController do
 
         expect(response.status).to eq(200)
         expect(assigns[:projects].map(&:title)).to eq(["Dogs", "Cats", "Yaks", "Foxes"])
-        expect(assigns[:projects].map{|p| time_ago_in_words(p.last_award_created_at) if p.last_award_created_at}).to eq(["1 day", "2 days", "3 days", nil])
+        expect(assigns[:projects].map { |p| time_ago_in_words(p.last_award_created_at) if p.last_award_created_at }).to eq(["1 day", "2 days", "3 days", nil])
       end
 
       it "allows querying based on the titleof the project, ignoring case" do
@@ -165,7 +183,7 @@ describe ProjectsController do
 
     describe "#edit" do
       before do
-        expect(GetSlackChannels).to receive(:call).and_return(double(channels: ["foo", "bar"]))
+        expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
       end
 
       it "works" do
@@ -217,7 +235,7 @@ describe ProjectsController do
       end
 
       it "re-renders with errors when updating fails" do
-        expect(GetSlackChannels).to receive(:call).and_return(double(channels: ["foo", "bar"]))
+        expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
 
         small_award_type = cat_project.award_types.create!(name: "Small Award", amount: 100)
         medium_award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300)
