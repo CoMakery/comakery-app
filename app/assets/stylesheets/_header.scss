@@ -1,16 +1,18 @@
 @import 'variables';
 .contain-to-grid {
   background-color: white;
-  border-bottom: 3px solid $palate1-purple;
-}
-.app-container {
-  background: white;
 }
 .top-bar {
+  max-width: 0;
   .name h1 {
-    color: $palate1-purple;
+    color: #5C5C5C;
     font-size: 30px;
-    font-weight: bold;
+    font-weight: 900;
+    font-family: 'Raleway', sans-serif;
+    span {
+      color: #CE00FF;
+      font-size: inherit;
+    }
   }
   .top-bar-section ul li > a {
     color: $palate1-mediumgray;

@@ -28,7 +28,12 @@ class Views::Layouts::Raw < Views::Base
           nav(class: "top-bar large-8 large-centered columns", "data-topbar" => "", role: "navigation") {
             ul(class: "title-area") {
               li(class: "name") {
-                a(href: root_path) { h1 "CoMakery" }
+                a(href: root_path) {
+                  h1 {
+                    span "Co"
+                    text "Makery"
+                  }
+                }
               }
 
               li(class: "toggle-topbar menu-icon") {
@@ -43,6 +48,8 @@ class Views::Layouts::Raw < Views::Base
         }
 
         div(class: "app-container row") {
+          content_for?(:pre_body) ? yield(:pre_body) : ''
+
           div(class: "large-8 large-centered columns") {
             flash.each do |name, msg|
               div("aria-labelledby" => "flash-msg-#{name}", "aria-role" => "dialog", class: ['alert-box', 'flash-msg', name], "data-alert" => "") {

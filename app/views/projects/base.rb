@@ -7,7 +7,7 @@ class Views::Projects::Base < Views::Base
         h2 "#{slack_auth.slack_team_name} Projects"
       }
       column("small-2") {
-        a("New Project", class: buttonish(:button, :round, :tiny), href: new_project_path) if policy(Project).new?
+        a("New Project", class: buttonish(:button, :radius, :tiny), href: new_project_path) if policy(Project).new?
       }
     }
   end

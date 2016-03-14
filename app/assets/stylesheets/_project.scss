@@ -1,5 +1,4 @@
 @import 'variables';
-@import 'fonts';
 @import 'functions';
 @import 'extensions';
 @import 'header';
@@ -23,10 +22,6 @@ body {
   max-width: initial;
 }
 
-.app-container.row {
-  padding: rem-calc(20);
-}
-
 .app-container {
   @include grid-row($behavior: collapse);
 }
@@ -37,6 +32,66 @@ body {
   background: $primary-color;
   li a:not(.button) {
     color: white;
+  }
+}
+
+.intro {
+  color: white;
+  height: 42em;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 2rem;
+
+  video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    min-width: 100%;
+    min-height: 100%;
+    transition: 10s opacity;
+    z-index: -100;
+  }
+  .overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    mix-blend-mode: multiply;
+    @include filter-gradient(#5d1ea5, #5d1ea5, vertical);
+    @include background-image(linear-gradient(top, rgba(93,30,165,0) 0%, rgba(93,30,165,0) 20%, rgba(94,30,165,1) 100%));
+    z-index: -98;
+  }
+  .overlay2 {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    @include filter-gradient(#e003fa, #750786, vertical);
+    @include background-image(linear-gradient(top, rgba(224,3,250,0.38) 0%, rgba(117,7,134,0.12) 100%));
+    z-index: -95;
+
+  }
+  .intro-content {
+    z-index: 100;
+    margin-top: 16rem;
+    h3 {
+      color: white;
+      font-size: 3.7em;
+      margin-bottom: .6em;
+      font-weight: 400;
+      font-family: Raleway;
+      line-height: 125%;
+    }
+    .button {
+      text-transform: lowercase;
+      font-size: 1rem;
+      font-weight: 500;
+    }
   }
 }
 
