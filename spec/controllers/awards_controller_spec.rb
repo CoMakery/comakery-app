@@ -25,15 +25,29 @@ describe AwardsController do
     end
 
     context "when logged out" do
-      let!(:public_project) { create(:project, owner_account: issuer, slack_team_id: "foo", public: true) }
-      let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
+      context "with a public project" do
+        let!(:public_project) { create(:project, owner_account: issuer, slack_team_id: "foo", public: true) }
+        let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
 
-      it "shows awards for current project" do
-        get :index, project_id: public_project.to_param
+        it "shows awards for public projects" do
+          get :index, project_id: public_project.to_param
 
-        expect(response.status).to eq(200)
-        expect(assigns[:project]).to eq(public_project)
-        expect(assigns[:awards]).to match_array([public_award])
+          expect(response.status).to eq(200)
+          expect(assigns[:project]).to eq(public_project)
+          expect(assigns[:awards]).to match_array([public_award])
+        end
+      end
+
+      context "with a private project" do
+        let!(:private_project) { create(:project, owner_account: issuer, slack_team_id: "foo", public: false) }
+        let!(:private_award) { create(:award, award_type: create(:award_type, project: private_project)) }
+
+        it "sends you away" do
+          get :index, project_id: private_project.to_param
+
+          expect(response.status).to eq(302)
+          expect(response).to redirect_to("/404.html")
+        end
       end
     end
   end

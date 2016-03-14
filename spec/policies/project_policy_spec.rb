@@ -43,7 +43,23 @@ describe ProjectPolicy do
     end
   end
 
-  describe "#show?" do
+  describe "#index?" do
+    it "returns true if the project is public or the account belongs to the project" do
+      expect(ProjectPolicy.new(nil, my_public_project).index?).to be true
+      expect(ProjectPolicy.new(nil, my_private_project).index?).to be false
+
+      expect(ProjectPolicy.new(account, my_public_project).index?).to be true
+      expect(ProjectPolicy.new(account, my_private_project).index?).to be true
+
+      expect(ProjectPolicy.new(other_team_member, my_public_project).index?).to be true
+      expect(ProjectPolicy.new(other_team_member, my_private_project).index?).to be true
+
+      expect(ProjectPolicy.new(different_team_account, my_public_project).index?).to be true
+      expect(ProjectPolicy.new(different_team_account, my_private_project).index?).to be false
+    end
+  end
+
+  describe "#show? and #index" do
     it "allows viewing of projects that are public or are owned by the current account" do
       expect(ProjectPolicy.new(nil, my_public_project).show?).to be true
       expect(ProjectPolicy.new(nil, others_private_project).show?).to be false
