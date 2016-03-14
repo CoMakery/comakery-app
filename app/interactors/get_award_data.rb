@@ -36,7 +36,7 @@ class GetAwardData
 
     contributor_auths = recent_awards.map { |award| award.account.slack_auth }.freeze
     empty_row_template = contributor_auths.each_with_object({}) do |contributor_auth, contributors|
-      contributors[contributor_auth.display_name] = 0
+      contributors[contributor_auth.display_name] = 0 if contributor_auth
     end.freeze
 
     awards_by_date = recent_awards.group_by{|a|a.created_at.to_date.iso8601}
@@ -56,7 +56,7 @@ class GetAwardData
     row = row.merge(empty_row_template.dup)
 
     (awards_on_day || []).each do |award|
-      row[award.account.slack_auth.display_name] = award.award_type.amount
+      row[award.account.slack_auth.display_name] = award.award_type.amount if award.account.slack_auth
     end
 
     row

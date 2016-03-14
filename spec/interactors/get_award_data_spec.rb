@@ -32,17 +32,17 @@ describe GetAwardData do
 
     it "doesn't explode if you aren't logged in" do
       result = GetAwardData.call(current_account: nil, project: project)
-      expect(result.award_data[:award_amounts]).to eq({:my_project_coins => nil, :total_coins_issued => 10000})
+      expect(result.award_data[:award_amounts]).to eq({:my_project_coins => nil, :total_coins_issued => 11000})
     end
 
     it "returns a pretty hash of the awards for a project with summed amounts for each person" do
       result = GetAwardData.call(current_account: sam, project: project)
 
-      expect(result.award_data[:contributions]).to match_array([{name: "@john", net_amount: 6000},
+      expect(result.award_data[:contributions]).to match_array([{name: "@john", net_amount: 7000},
                                                                 {name: "bob bob", net_amount: 3000},
                                                                 {name: "sam sam", net_amount: 1000}])
 
-      expect(result.award_data[:award_amounts]).to eq({my_project_coins: 1000, total_coins_issued: 10_000})
+      expect(result.award_data[:award_amounts]).to eq({my_project_coins: 1000, total_coins_issued: 11_000})
     end
 
     it "shows values for each contributor for all 30 days" do
@@ -51,37 +51,37 @@ describe GetAwardData do
       awarded_account_names = Award.select("account_id, max(id) as id").group("account_id").all.map { |a| a.account.slack_auth.display_name }
       expect(awarded_account_names).to match_array(["@john", "sam sam", "bob bob"])
 
-      expect(result.award_data[:contributions_by_day]).to eq([{"date"=>"2016-02-07", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-08", "@john"=>1000, "bob bob"=>0},
-                                                              {"date"=>"2016-02-09", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-10", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-11", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-12", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-13", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-14", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-15", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-16", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-17", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-18", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-19", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-20", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-21", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-22", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-23", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-24", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-25", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-26", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-27", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-28", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-02-29", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-03-01", "@john"=>1000, "bob bob"=>0},
-                                                              {"date"=>"2016-03-02", "@john"=>2000, "bob bob"=>1000},
-                                                              {"date"=>"2016-03-03", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-03-04", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-03-05", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-03-06", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-03-07", "@john"=>0, "bob bob"=>0},
-                                                              {"date"=>"2016-03-08", "@john"=>3000, "bob bob"=>2000}])
+      expect(result.award_data[:contributions_by_day]).to eq([{"date" => "2016-02-07", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-08", "@john" => 1000, "bob bob" => 0},
+                                                              {"date" => "2016-02-09", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-10", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-11", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-12", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-13", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-14", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-15", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-16", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-17", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-18", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-19", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-20", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-21", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-22", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-23", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-24", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-25", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-26", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-27", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-28", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-02-29", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-03-01", "@john" => 1000, "bob bob" => 0},
+                                                              {"date" => "2016-03-02", "@john" => 2000, "bob bob" => 1000},
+                                                              {"date" => "2016-03-03", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-03-04", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-03-05", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-03-06", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-03-07", "@john" => 0, "bob bob" => 0},
+                                                              {"date" => "2016-03-08", "@john" => 3000, "bob bob" => 2000}])
     end
   end
 
@@ -102,6 +102,16 @@ describe GetAwardData do
       interactor = GetAwardData.new
       template = {"bob bob" => 0, "sam sam" => 0, "@john" => 0, "some other guy" => 0}.freeze
       expect(interactor.contributor_by_day_row(template, "20160302", [johns_award, bobs_award])).to eq({"@john" => 2000,
+                                                                                                        "bob bob" => 1000,
+                                                                                                        "some other guy" => 0,
+                                                                                                        "sam sam" => 0,
+                                                                                                        "date" => "20160302"})
+    end
+
+    it "doesn't explode if award's account doesn't have a slack auth" do
+      interactor = GetAwardData.new
+      template = {"bob bob" => 0, "sam sam" => 0, "@john" => 0, "some other guy" => 0}.freeze
+      expect(interactor.contributor_by_day_row(template, "20160302", [johns_award, bobs_award, create(:award, account: create(:account))])).to eq({"@john" => 2000,
                                                                                                         "bob bob" => 1000,
                                                                                                         "some other guy" => 0,
                                                                                                         "sam sam" => 0,
