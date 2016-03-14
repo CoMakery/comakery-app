@@ -78,9 +78,7 @@ class Views::Projects::Show < Views::Base
             row {
               column("small-12") {
                 span(award_type.name)
-                text " ("
-                text award_type.amount
-                text ")"
+                text " (#{award_type.amount})"
               }
             }
           end
@@ -95,9 +93,7 @@ class Views::Projects::Show < Views::Base
                       label {
                         f.radio_button(:award_type_id, award_type.to_param)
                         span(award_type.name)
-                        text " ("
-                        text award_type.amount
-                        text ")"
+                        text " (#{award_type.amount}) "
                       }
                     }
                   }

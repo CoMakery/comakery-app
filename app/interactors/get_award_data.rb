@@ -26,7 +26,7 @@ class GetAwardData
       awards[award.account_id] ||= {net_amount: 0}
       awards[award.account_id][:name] = award.account.slack_auth&.display_name || award.account.email
       awards[award.account_id][:net_amount] += award.award_type.amount
-    end.values
+    end.values.sort_by{|award_data| -award_data[:net_amount]}
   end
 
   def contributions_by_day(awards_scope)

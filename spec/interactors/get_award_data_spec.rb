@@ -92,6 +92,18 @@ describe GetAwardData do
       award = create(:award, account: account)
       expect(GetAwardData.new.contributions_data([award])).to eq([{:net_amount => 1337, :name => "caesar_salad@example.com"}])
     end
+
+    it "sorts by amount" do
+      expect(GetAwardData.new.contributions_data([
+                                                     create(:award, award_type: create(:award_type, amount: 1000), account: create(:account, email: "a@example.com")),
+                                                     create(:award, award_type: create(:award_type, amount: 3000), account: create(:account, email: "b@example.com")),
+                                                     create(:award, award_type: create(:award_type, amount: 2000), account: create(:account, email: "c@example.com"))
+                                                 ])).to eq([
+                                                               {:net_amount => 3000, :name => "b@example.com"},
+                                                               {:net_amount => 2000, :name => "c@example.com"},
+                                                               {:net_amount => 1000, :name => "a@example.com"},
+                                                           ])
+    end
   end
 
   describe "#contributor_by_day_row" do
@@ -112,10 +124,10 @@ describe GetAwardData do
       interactor = GetAwardData.new
       template = {"bob bob" => 0, "sam sam" => 0, "@john" => 0, "some other guy" => 0}.freeze
       expect(interactor.contributor_by_day_row(template, "20160302", [johns_award, bobs_award, create(:award, account: create(:account))])).to eq({"@john" => 2000,
-                                                                                                        "bob bob" => 1000,
-                                                                                                        "some other guy" => 0,
-                                                                                                        "sam sam" => 0,
-                                                                                                        "date" => "20160302"})
+                                                                                                                                                   "bob bob" => 1000,
+                                                                                                                                                   "some other guy" => 0,
+                                                                                                                                                   "sam sam" => 0,
+                                                                                                                                                   "date" => "20160302"})
     end
   end
 end
