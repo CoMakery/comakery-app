@@ -16,6 +16,7 @@ gem 'jbuilder'
 gem 'jquery-rails'
 gem "nilify_blanks"
 gem 'modernizr-rails'
+gem 'momentjs-rails'
 gem 'nokogiri'
 gem 'omniauth-slack'
 gem 'omniauth'

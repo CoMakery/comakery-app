@@ -51,6 +51,7 @@ window.barChart = (selector, data)->
     style('text-anchor', 'end').
     text 'Value'
 
+  # bars in chart
   svg.
     selectAll('bar').
     data(data).

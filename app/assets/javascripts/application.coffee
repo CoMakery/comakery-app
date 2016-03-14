@@ -12,10 +12,11 @@
 #
 # = require jquery
 # = require jquery_ujs
-# = require underscore
 # = require d3
 # = require d3pie
 # = require foundation
+# = require moment
+# = require underscore
 # = require_tree .
 
 $ ->

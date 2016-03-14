@@ -5,7 +5,7 @@ class Views::Projects::Show < Views::Base
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
         window.pieChart("#award-percentages", {"content": [#{award_data[:contributions].map { |datum| pie_chart_data_element(datum) }.join(",")}]});
-        window.barChart("#contributions-chart", #{award_data[:contributions_by_day].to_json});
+        window.stackedBarChart("#contributions-chart", #{award_data[:contributions_by_day].to_json});
       });
     JAVASCRIPT
   end
@@ -157,7 +157,7 @@ class Views::Projects::Show < Views::Base
         row { column("small-12", class: "underlined-header") { text "Contributions" } }
 
         full_row {
-          div(id: "contributions-chart", 'data-bar-chart': '')
+          div(id: "contributions-chart")
         }
 
         row {
