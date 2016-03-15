@@ -25,7 +25,7 @@ class Views::Layouts::Raw < Views::Base
 
       body(class: "#{controller_name}-#{action_name}") {
         div(class: "contain-to-grid") {
-          nav(class: "top-bar large-8 large-centered columns", "data-topbar" => "", role: "navigation") {
+          nav(class: "top-bar large-10 large-centered columns", "data-topbar" => "", role: "navigation") {
             ul(class: "title-area") {
               li(class: "name") {
                 a(href: root_path) {
@@ -50,7 +50,7 @@ class Views::Layouts::Raw < Views::Base
         div(class: "app-container row") {
           content_for?(:pre_body) ? yield(:pre_body) : ''
 
-          div(class: "large-8 large-centered columns") {
+          div(class: "large-10 large-centered columns") {
             flash.each do |name, msg|
               div("aria-labelledby" => "flash-msg-#{name}", "aria-role" => "dialog", class: ['alert-box', 'flash-msg', name], "data-alert" => "") {
                 div(msg, id: "flash-msg-#{name}")

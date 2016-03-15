@@ -16,6 +16,27 @@ class Views::Projects::Landing < Views::Projects::Base
           a("Get Started", class: buttonish << "margin-small", href: projects_path)
         }
       }
+      div(class: "how-it-works") {
+        div(class: "large-10 large-centered columns") {
+          row {
+            column("small-4") {
+              div(class:"number") { text "1" }
+              h4 "Contribute"
+              p "Contribute code, design, content, or vision, Find a project or start one for your Slack channel."
+            }
+            column("small-4") {
+              div(class:"number") { text "2" }
+              h4 "Earn"
+              p "Earn project coins, get recognized for your contributions, see feedback, and more."
+            }
+            column("small-4") {
+              div(class:"number") { text "3" }
+              h4 "Share"
+              p "Share in the value the project creates. Project coins can be tied to revenue or company shares."
+            }
+          }
+        }
+      }
     }
 
     if current_account&.slack_auth

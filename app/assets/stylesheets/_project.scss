@@ -37,11 +37,10 @@ body {
 
 .intro {
   color: white;
-  height: 42em;
+  height: 39em;
   text-align: center;
   overflow: hidden;
   position: relative;
-  margin-bottom: 2rem;
 
   video {
     position: absolute;
@@ -78,20 +77,49 @@ body {
   }
   .intro-content {
     z-index: 100;
-    margin-top: 16rem;
+    margin-top: 15rem;
     h3 {
       color: white;
       font-size: 3.7em;
       margin-bottom: .6em;
       font-weight: 400;
-      font-family: Raleway;
+      font-family: 'Raleway';
       line-height: 125%;
     }
     .button {
       text-transform: lowercase;
-      font-size: 1rem;
+      font-size: .9rem;
       font-weight: 500;
+      padding: 1.2em 2em;
     }
+  }
+}
+
+.how-it-works {
+  background: #52008D;
+  color: white;
+  padding: 1.5em 0 1.5em;
+  margin-bottom: 2em;
+
+  h4, p {
+    margin-left: 50px;
+  }
+  h4 {
+    color: white;
+    font-size: rem-calc(30px);
+    text-transform: lowercase;
+  }
+  p {
+    font-size: rem-calc(14px);
+  }
+  .number {
+    float: left;
+    background: $palate1-primary;
+    padding: rem-calc(5px 13px 8px);
+    border-radius: rem-calc(50px);
+    font-size: rem-calc(22px);
+    display: inline-block;
+    margin-top: .35em;
   }
 }
 
