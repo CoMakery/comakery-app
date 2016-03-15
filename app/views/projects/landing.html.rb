@@ -13,7 +13,7 @@ class Views::Projects::Landing < Views::Projects::Base
             br
             text "of innovation"
           }
-          a("Get Started", class: buttonish << "margin-small", href: projects_path)
+          a("Learn More", class: buttonish << "margin-small", href: '')
         }
       }
       div(class: "how-it-works") {
