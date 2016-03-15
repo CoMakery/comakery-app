@@ -1,5 +1,6 @@
 @import 'extensions';
 @import 'header';
+@import 'homepage';
 
 body {
   background-color: white;
@@ -23,96 +24,6 @@ body {
   background: $primary-color;
   li a:not(.button) {
     color: white;
-  }
-}
-
-.intro {
-  color: white;
-  height: 39em;
-  text-align: center;
-  overflow: hidden;
-  position: relative;
-
-  video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: auto;
-    height: auto;
-    min-width: 100%;
-    min-height: 100%;
-    transition: 10s opacity;
-    z-index: -100;
-  }
-  .overlay {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    mix-blend-mode: multiply;
-    @include filter-gradient(#5d1ea5, #5d1ea5, vertical);
-    @include background-image(linear-gradient(top, rgba(93,30,165,0) 0%, rgba(93,30,165,0) 20%, rgba(94,30,165,1) 100%));
-    z-index: -98;
-  }
-  .overlay2 {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    @include filter-gradient(#e003fa, #750786, vertical);
-    @include background-image(linear-gradient(top, rgba(224,3,250,0.38) 0%, rgba(117,7,134,0.12) 100%));
-    z-index: -95;
-
-  }
-  .intro-content {
-    z-index: 100;
-    margin-top: 14.5rem;
-    h3 {
-      color: white;
-      font-size: 3.7em;
-      margin-bottom: .6em;
-      font-weight: 400;
-      line-height: 125%;
-    }
-    .button {
-      text-transform: lowercase;
-      font-size: .9rem;
-      font-weight: 500;
-      padding: 1.2em 2em;
-      @include box-shadow(0px 1px 1px 0px rgba(0, 0, 0, 0.3));
-    }
-  }
-}
-
-.how-it-works {
-  background: #52008D;
-  color: white;
-  padding: 1.5em 0 1.5em;
-  margin-bottom: 2em;
-
-  h4, p {
-    margin-left: 60px;
-    margin-right: 30px;
-  }
-  h4 {
-    color: white;
-    font-size: rem-calc(30px);
-    text-transform: lowercase;
-  }
-  p {
-    font-size: rem-calc(14px);
-  }
-  .number {
-    float: left;
-    background: $primary-color;
-    padding: .1em .52em;
-    border-radius: rem-calc(50px);
-    font-size: rem-calc(22px);
-    display: inline-block;
-    margin-top: .35em;
-    @include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.3));
   }
 }
 
