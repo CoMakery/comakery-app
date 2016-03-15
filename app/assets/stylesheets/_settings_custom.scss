@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,900,100,200,300,500,600,700,800,100italic,200italic,300italic,400italic,500italic,600italic,700italic,800italic,900italic);
+
 // Colors
 
 $primary-color: #0066FF;
@@ -19,12 +21,18 @@ $body-font-color: $steel;
 $header-font-color: $steel;
 $global-radius: .2em;
 
-// Font sizes
+// Fonts
+
+$body-font-family: "Raleway", Lato, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+$header-font-family: $body-font-family;
 
 $font-size-large: 16pt;
 $font-size-medium: 14pt;
 $font-size-small: 12pt;
 $font-size-tiny: 10pt;
+
+// Forms
+$input-font-family: inherit;
 
 // Panels
 
