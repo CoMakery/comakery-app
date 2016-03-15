@@ -25,24 +25,18 @@ class Views::Layouts::Raw < Views::Base
 
       body(class: "#{controller_name}-#{action_name}") {
         div(class: "contain-to-grid") {
-          nav(class: "top-bar large-10 large-centered columns", "data-topbar" => "", role: "navigation") {
-            ul(class: "title-area") {
-              li(class: "name") {
-                a(href: root_path) {
-                  h1 {
-                    span "Co"
-                    text "Makery"
-                  }
-                }
+          div(class: "top-bar large-10 large-centered columns", "data-topbar" => "", role: "navigation") {
+            div(class: "top-bar-title") {
+              span("data-hide-for" => "medium", "data-responsive-toggle" => "responsive-menu") {
+                span(class: "menu-icon dark", "data-toggle" => "")
               }
-
-              li(class: "toggle-topbar menu-icon") {
-                a(href: "#") {
-                  span("Menu")
+              a(class: "name", href: root_path) {
+                h1 {
+                  span "Co"
+                  text "Makery"
                 }
               }
             }
-
             render partial: 'shared/navigation'
           }
         }

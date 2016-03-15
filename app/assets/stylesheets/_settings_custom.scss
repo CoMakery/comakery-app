@@ -1,0 +1,40 @@
+// Colors
+
+$primary-color: #0066FF;
+$secondary-color: #e7e7e7;
+$alert-color: red;
+$success-color: #6CB144;
+$warning-color: #f08a24;
+$info-color: #a0d3e8;
+
+$snow        : #F9F9F9;
+$vapor       : #F6F6F6;
+$iron        : #CCCCCC;
+$mediumgray  : #999999;
+$steel       : #666666;
+$orchid      : #F7EEF7;
+
+$body-bg: $snow;
+$body-font-color: $steel;
+$header-font-color: $steel;
+
+// Font sizes
+
+$font-size-large: 16pt;
+$font-size-medium: 14pt;
+$font-size-small: 12pt;
+$font-size-tiny: 10pt;
+
+// Panels
+
+$panel-padding: rem-calc(20);
+
+// Top bar
+
+$topbar-background: white;
+$topbar-height: rem-calc(70);
+$topbar-link-dropdown-padding: ($topbar-height / 3);
+
+// Buttons
+
+$button-background: $primary-color;

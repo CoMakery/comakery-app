@@ -10,13 +10,13 @@ class Views::Shared::Navigation < Views::Base
       JAVASCRIPT
     end
 
-    section(class: "top-bar-section") {
-      ul(class: "right") {
+    div(class: "top-bar-right") {
+      ul(class: "menu") {
         li(class: "has-form") {
           div(class: "row collapse project-search") {
             form_for(:projects, url: projects_path, method: "get") do |f|
               div(class: "large-8 small-9 columns collapse") {
-                input(name: "query", placeholder: "Search Projects", value: params[:query])
+                input(type: "search", name: "query", placeholder: "Search Projects", value: params[:query])
               }
               div(class: "large-4 small-3 columns collapse") {
                 f.submit("Search", class: "button expand")
@@ -24,6 +24,7 @@ class Views::Shared::Navigation < Views::Base
             end
           }
         }
+
         li(class: "slack-instance") {
           if current_account&.slack_auth
             div(class: "top-bar-text") {
@@ -43,5 +44,6 @@ class Views::Shared::Navigation < Views::Base
         end
       }
     }
+
   end
 end

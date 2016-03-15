@@ -1,7 +1,7 @@
-@import 'variables';
 .contain-to-grid {
   background-color: white;
 }
+
 .contain-to-grid .top-bar {
   max-width: 100%;
   .name h1 {
@@ -14,8 +14,8 @@
       font-size: inherit;
     }
   }
-  .top-bar-section ul li > a {
-    color: $palate1-mediumgray;
+  .top-bar-right ul li > a {
+    color: $mediumgray;
     text-transform: lowercase;
     letter-spacing: 0;
     font-size: 16px;
