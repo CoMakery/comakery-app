@@ -17,6 +17,7 @@ $orchid      : #F7EEF7;
 $body-bg: $snow;
 $body-font-color: $steel;
 $header-font-color: $steel;
+$global-radius: .2em;
 
 // Font sizes
 
@@ -38,3 +39,4 @@ $topbar-link-dropdown-padding: ($topbar-height / 3);
 // Buttons
 
 $button-background: $primary-color;
+$button-radius: $global-radius;
