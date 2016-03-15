@@ -27,6 +27,7 @@ class ProjectPolicy < ApplicationPolicy
   def show?
     project.public? || account.present? && account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
   end
+  alias :index? :show?
 
   def edit?
     account.present? && project.owner_account == account

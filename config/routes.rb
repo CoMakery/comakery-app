@@ -9,9 +9,9 @@ Rails.application.routes.draw do
   get "/auth/slack/callback" => "sessions#create"
   get "/auth/slack" => "sessions#create", as: :login
 
-  root 'projects#landing'
-
   get '/logout', to: "sessions#destroy"
+
+  root 'projects#landing'
 
   resource :session, only: %i[create destroy] do
     get "oauth_failure"

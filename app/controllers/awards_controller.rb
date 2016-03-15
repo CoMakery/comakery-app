@@ -3,7 +3,8 @@ class AwardsController < ApplicationController
   skip_before_filter :require_login, only: :index
 
   def index
-    @awards = policy_scope(Award)
+    authorize(@project)
+    @awards = @project.awards
   end
 
   def create

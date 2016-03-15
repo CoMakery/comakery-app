@@ -48,16 +48,7 @@ describe AwardPolicy do
     end
   end
 
-  describe "index?" do
-    it "returns true for errbody" do
-      expect(AwardPolicy.new(nil, award_with_project).index?).to be true
-      expect(AwardPolicy.new(account, award_with_project).index?).to be true
-    end
-  end
-
   describe "create?" do
-    # sender account -> owner_account -> project <- award_type <- award <- receiver account
-
     it "returns true when the accounts belongs to a project, and the award belongs to a award_type that belongs to that project" do
       expect(AwardPolicy.new(account, award_with_project).create?).to be true
     end

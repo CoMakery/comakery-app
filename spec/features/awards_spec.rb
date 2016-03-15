@@ -18,12 +18,21 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
   context "awarding users" do
     let!(:project) { create(:project, title: "Project that needs awards", owner_account: owner_account, slack_team_id: "team id") }
+    let!(:same_team_project) { create(:project, title: "Same Team Project", owner_account: owner_account, slack_team_id: "team id") }
+    let!(:different_team_project) { create(:project, public: true, title: "Different Team Project", owner_account: owner_account, slack_team_id: "team id") }
 
     let!(:small_award_type) { create(:award_type, project: project, name: "Small", amount: 1000) }
     let!(:large_award_type) { create(:award_type, project: project, name: "Large", amount: 3000) }
 
+    let!(:same_team_small_award_type) { create(:award_type, project: same_team_project, name: "Small", amount: 10) }
+    let!(:same_team_small_award) { create(:award, account: owner_account, award_type: same_team_small_award_type) }
+
+    let!(:different_large_award_type) { create(:award_type, project: different_team_project, name: "Large", amount: 3000) }
+    let!(:different_large_award) { create(:award, award_type: different_large_award_type) }
+
     let!(:owner_account) { create(:account, email: "hubert@example.com").tap { |a| create(:authentication, slack_user_name: 'hubert', slack_first_name: 'Hubert', slack_last_name: 'Sherbert', slack_user_id: 'hubert id', account_id: a.id, slack_team_id: "team id") } }
     let!(:other_account) { create(:account, email: "sherman@example.com").tap { |a| create(:authentication, slack_user_name: 'sherman', slack_user_id: 'sherman id', slack_first_name: "Sherman", slack_last_name: "Yessir", account_id: a.id, slack_team_id: "team id") } }
+    let!(:different_team_account) { create(:account, email: "different@example.com").tap { |a| create(:authentication, slack_user_name: 'different', slack_user_id: 'different id', slack_first_name: "Different", slack_last_name: "Different", account_id: a.id, slack_team_id: "different team id") } }
 
     before do
       travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))
@@ -104,6 +113,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       click_link "Award History »"
 
+      expect(page.all(".award-rows .award-row").size).to eq(0)
+
       expect(page).to have_content("Award History")
 
       click_link "Back to project"
@@ -132,6 +143,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
       expect(page).to have_content "Small"
       expect(page).to have_content "Super fantastic fabulous programatic work on teh things, A++"
       expect(page).to have_content "Hubert Sherbert"
+
+      expect(page.all(".award-rows .award-row").size).to eq(1)
 
       click_link "Back to project"
 

@@ -23,10 +23,6 @@ class AwardPolicy < ApplicationPolicy
     @award = award
   end
 
-  def index?
-    true
-  end
-
   def create?
     project = @award&.award_type&.project
     @account && @account == project&.owner_account && @award&.account&.authentications&.pluck(:slack_team_id).include?(project.slack_team_id)
