@@ -36,7 +36,7 @@ describe SessionsController do
         end.to change { Authentication.count }.by(1)
 
         assert_response :redirect
-        assert_redirected_to root_path
+        assert_redirected_to projects_url
         expect(session[:account_id]).to eq(account.id)
       end
     end
