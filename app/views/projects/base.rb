@@ -30,18 +30,21 @@ class Views::Projects::Base < Views::Base
 
   def project_block(project)
     row(class: "project#{project.slack_team_id == current_account&.slack_auth&.slack_team_id ? " project-highlighted" : ""}", id: "project-#{project.to_param}") {
-      column("small-12") {
-        div(class: "image-block") {
-          a(attachment_image_tag(project, :image), href: project_path(project))
+      div(class: "image-block") {
+        a(attachment_image_tag(project, :image), href: project_path(project))
+        div(class:"overlay") {
+          h5 {
+            a(project.title, href: project_path(project), class: "project-link")
+          }
+          i project.slack_team_name
         }
-        h5 {
-          a(project.title, href: project_path(project), class: "project-link")
-        }
-        i project.slack_team_name
+      }
+      div(class: "description") {
+        img(src: project.slack_team_image_34_url, class: "icon")
         if project.last_award_created_at
           div(class: "project-last-award font-tiny") { text "last activity #{time_ago_in_words(project.last_award_created_at)} ago" }
         end
-        div project.description.try(:truncate, 35)
+        p project.description.try(:truncate, 120)
       }
     }
   end
