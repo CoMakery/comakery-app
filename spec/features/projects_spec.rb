@@ -20,38 +20,6 @@ describe "viewing projects, creating and editing", :js, :vcr do
     travel_to Date.new(2016, 1, 10)
   end
 
-  describe "landing" do
-    it "shows some projects" do
-      login(account)
-
-      7.times { |i| create(:project, title: "Public Project #{i}", public: true, slack_team_name: "3D Drones") }
-      7.times { |i| create(:project, title: "Private Project #{i}", public: false, slack_team_id: "citizencode", slack_team_name: "Citizen Code") }
-
-      visit root_path
-
-      within(".top-bar .slack-instance") do
-        expect(page).to have_content "Citizen Code"
-      end
-
-      expect(page).to have_content "Citizen Code projects"
-      expect(page.html).to match %r{<img[^>]+src="[^"]+awesome-team-image-\d+-px\.jpg"}
-      expect(page).to have_content "New Project"
-
-      expect(page.all(".project").size).to eq(12)
-      expect(page).to have_content "Public Project"
-      expect(page).to have_content "3D Drones"
-
-      click_link "Browse All"
-
-      expect(page).to have_content "Citizen Code projects"
-      expect(page.html).to match %r{<img[^>]+src="[^"]+awesome-team-image-34-px\.jpg"}
-      expect(page).to have_content "New Project"
-
-      expect(page.all(".project").size).to eq(16)
-      expect(page).to have_content "Public Project"
-    end
-  end
-
   describe "removing award types on projects where there have been awards sent already" do
     before do
       stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
