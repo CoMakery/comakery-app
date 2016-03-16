@@ -21,38 +21,37 @@ class Views::Projects::Show < Views::Base
       end
     end
 
-    row {
-      column("small-3") {
-        text attachment_image_tag(project, :image, class: "project-image")
-      }
+    row(class:"project-header") {
       column("small-9") {
-        row {
-          column("small-9") {
-            h1 project.title
-          }
-          column("small-3") {
-            a "Edit", class: buttonish(:tiny, :round), href: edit_project_path(project) if policy(project).edit?
-          }
+        h1 project.title
+        h5 "by #{project.slack_team_name}"
+      }
+      column("small-3") {
+        a "Edit", class: buttonish(:tiny, :round), href: edit_project_path(project) if policy(project).edit?
+      }
+    }
+    row {
+      column("small-6") {
+        # text attachment_image_tag(project, :image, class: "project-image")
+
+        div(class: "project-image", style: "background-image: url(#{attachment_url(project, :image)})") {}
+      }
+      column("small-6") {
+        full_row {
+          p project.description
         }
         row(class:"project-settings") {
-          column("small-3") {
-            text "Visibility: "
-            b "#{project.public? ? "Public" : "Private"}"
-          }
-          column("small-4") {
-            text "Team name: "
-            b "#{project.slack_team_name}"
-          }
-          column("small-5") {
+          column("small-6") {
             text "Owner: "
             b "#{project.owner_slack_user_name}"
           }
-        }
-        full_row {
-          text project.description
+          column("small-6") {
+            text "Visibility: "
+            b "#{project.public? ? "Public" : "Private"}"
+          }
         }
         row(class:"project-tasks") {
-          column("small-4") {
+          column("small-5") {
             if project.tracker
               a(href: project.tracker, target: "_blank", class: "text-link") do
                 i(class: "fa fa-tasks")
@@ -60,7 +59,7 @@ class Views::Projects::Show < Views::Base
               end
             end
           }
-          column("small-4 end") {
+          column("small-7") {
             if project.slack_team_domain
               a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") do
                 i(class: "fa fa-slack")

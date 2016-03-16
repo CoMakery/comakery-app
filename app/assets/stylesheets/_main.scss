@@ -5,6 +5,18 @@
 
 body {
   background-color: white;
+
+  &:not(.projects-landing) {
+    .top-bar-container {
+      border-bottom: 1px solid #ccc;
+    }
+    .app-container {
+      margin-top: 2em;
+    }
+    .large-10.large-centered.columns {
+      width: 66%;
+    }
+  }
 }
 
 .text-primary {
@@ -188,11 +200,18 @@ form.take-action-form p.notice {
   border: 1px solid #ccc;
   padding: 20px 50px;
 }
-
-.project-image {
-  margin-top: 1.2em;
+.project-header {
+  margin-bottom: 1.75em;
+  h1 {
+    margin: 0;
+  }
 }
-
+.project-image {
+  width: 100%;
+  height: 20em;
+  background-size: cover;
+  background-position: center center;
+}
 .row.project-tasks {
   margin-top: 1em;
 }

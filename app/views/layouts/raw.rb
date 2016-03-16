@@ -24,7 +24,7 @@ class Views::Layouts::Raw < Views::Base
       }
 
       body(class: "#{controller_name}-#{action_name}") {
-        div(class: "contain-to-grid") {
+        div(class: "contain-to-grid top-bar-container") {
           div(class: "top-bar large-10 large-centered columns", "data-topbar" => "", role: "navigation") {
             div(class: "top-bar-title") {
               span("data-hide-for" => "medium", "data-responsive-toggle" => "responsive-menu") {
