@@ -20,45 +20,6 @@ describe "viewing projects, creating and editing", :js, :vcr do
     travel_to Date.new(2016, 1, 10)
   end
 
-  describe "while logged out" do
-    it "allows viewing public projects index and show" do
-      visit root_path
-
-      within(".top-bar .slack-instance") do
-        expect(page).not_to have_content "Citizen Code"
-        expect(page).not_to have_content "CoMakery"
-      end
-
-      expect(page).not_to have_content "My Projects"
-
-      expect(page).not_to have_content "Cats with Lazers Project"
-      expect(page).to have_content "Public Project"
-
-      expect(page).not_to have_content "New Project"
-
-      click_link "Public Project"
-
-      expect(page).to have_current_path(project_path(public_project))
-
-      expect(page).to have_content "Public Project"
-      expect(page).to have_content "Visibility: Public"
-      expect(page).to have_content "Team name: Citizen Code"
-
-      click_link "Back"
-
-      click_link "Browse All"
-
-      expect(page).to have_content "Public Project"
-    end
-
-    it "allows searching" do
-      visit root_path
-      fill_in "query", with: "public"
-      click_on "Search"
-      expect(page).to have_content "Public Project"
-    end
-  end
-
   describe "landing" do
     it "shows some projects" do
       login(account)
