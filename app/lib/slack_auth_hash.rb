@@ -3,15 +3,19 @@ class SlackAuthHash
 
   def initialize(auth_hash)
     @auth_hash = auth_hash.to_h
-    unless provider && email_address && slack_team_id && slack_team_name && slack_team_image_34_url && slack_user_id && slack_user_name && slack_token
-      raise MissingAuthParamException.new({provider: provider,
-                                           email_address: email_address,
-                                           slack_team_id: slack_team_id,
-                                           slack_team_name: slack_team_name,
-                                           slack_team_image_34_url: slack_team_image_34_url,
-                                           slack_user_id: slack_user_id,
-                                           slack_user_name: slack_user_name,
-                                           slack_token: slack_token}.to_json)
+    unless provider && email_address && slack_team_id && slack_team_name && slack_team_image_34_url && slack_team_image_132_url && slack_user_id && slack_user_name && slack_token
+      attrs = { provider: provider,
+                email_address: email_address,
+                slack_team_id: slack_team_id,
+                slack_team_name: slack_team_name,
+                slack_team_image_34_url: slack_team_image_34_url,
+                slack_team_image_132_url: slack_team_image_132_url,
+                slack_user_id: slack_user_id,
+                slack_user_name: slack_user_name,
+                slack_token: slack_token }
+      message = "Slack auth hash is missing one or more required values:\n" \
+        "#{JSON.pretty_generate attrs, indent: '    '}"
+      raise MissingAuthParamException.new(message)
     end
   end
 
@@ -45,6 +49,10 @@ class SlackAuthHash
 
   def slack_team_image_34_url
     @slack_team_image_34_url ||= @auth_hash.dig('extra', 'team_info', 'team', 'icon', 'image_34')
+  end
+
+  def slack_team_image_132_url
+    @slack_team_image_132_url ||= @auth_hash.dig('extra', 'team_info', 'team', 'icon', 'image_132')
   end
 
   def slack_token

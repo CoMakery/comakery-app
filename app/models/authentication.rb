@@ -3,7 +3,7 @@ class Authentication < ActiveRecord::Base
 
   belongs_to :account
   has_many :projects, foreign_key: :slack_team_id, primary_key: :slack_team_id
-  validates_presence_of :account, :provider, :slack_team_id, :slack_team_image_34_url, :slack_team_name, :slack_user_id, :slack_user_name
+  validates_presence_of :account, :provider, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :slack_team_name, :slack_user_id, :slack_user_name
 
   def display_name
     return "#{slack_first_name} #{slack_last_name}" if slack_first_name.present? && slack_last_name.present?
@@ -29,7 +29,16 @@ class Authentication < ActiveRecord::Base
       slack_last_name: slack_auth_hash.slack_last_name,
       slack_team_name: slack_auth_hash.slack_team_name,
       slack_team_image_34_url: slack_auth_hash.slack_team_image_34_url,
+      slack_team_image_132_url: slack_auth_hash.slack_team_image_132_url,
       slack_token: slack_auth_hash.slack_token,
+      slack_team_domain: slack_auth_hash.slack_team_domain
+    )
+
+    # This will go away when we create a Team model <https://github.com/CoMakery/comakery-app/issues/113>
+    Project.where(slack_team_id: slack_auth_hash.slack_team_id).update_all(
+      slack_team_name: slack_auth_hash.slack_team_name,
+      slack_team_image_34_url: slack_auth_hash.slack_team_image_34_url,
+      slack_team_image_132_url: slack_auth_hash.slack_team_image_132_url,
       slack_team_domain: slack_auth_hash.slack_team_domain
     )
 

@@ -6,6 +6,7 @@ describe Project do
       expect(Project.new.tap(&:valid?).errors.full_messages.sort).to eq(["Owner account can't be blank",
                                                                          "Slack channel can't be blank",
                                                                          "Slack team can't be blank",
+                                                                         "Slack team image 132 url can't be blank",
                                                                          "Slack team image 34 url can't be blank",
                                                                          "Slack team name can't be blank",
                                                                          "Title can't be blank",
@@ -22,24 +23,24 @@ describe Project do
 
     describe "tracker" do
       it "is valid if tracker is a valid, absolute url" do
-        project = Project.create!(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy.gif", tracker: "http://foo.com")
+        project = Project.create!(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com")
         expect(project).to be_valid
         expect(project.tracker).to eq("http://foo.com")
       end
 
       it "requires the tracker url be valid if present" do
-        project = Project.new(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy.gif", tracker: "foo")
+        project = Project.new(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "foo")
         expect(project).not_to be_valid
         expect(project.errors.full_messages).to eq(["Tracker must be a valid url"])
       end
 
       it "is valid with no tracker specified" do
-        project = Project.new(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy.gif", tracker: nil)
+        project = Project.new(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: nil)
         expect(project).to be_valid
       end
 
       it "is valid if tracker is blank" do
-        project = Project.create!(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy.gif", tracker: "")
+        project = Project.create!(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "")
         expect(project.tracker).to be_nil
       end
     end
@@ -53,7 +54,8 @@ describe Project do
           slack_team_id: '123',
           slack_channel: "slack_channel",
           slack_team_name: 'This is a slack team name',
-          slack_team_image_34_url: 'http://foo.com/kittens.jpg',
+          slack_team_image_34_url: 'http://foo.com/kittens-34.jpg',
+          slack_team_image_132_url: 'http://foo.com/kittens-132.jpg',
           award_types_attributes: [
               {'name' => 'Small award', 'amount' => '1000'},
               {'name' => '', 'amount' => '1000'},
@@ -65,7 +67,8 @@ describe Project do
       expect(project.award_types.first.amount).to eq(1000)
       expect(project.slack_team_id).to eq('123')
       expect(project.slack_team_name).to eq('This is a slack team name')
-      expect(project.slack_team_image_34_url).to eq('http://foo.com/kittens.jpg')
+      expect(project.slack_team_image_34_url).to eq('http://foo.com/kittens-34.jpg')
+      expect(project.slack_team_image_132_url).to eq('http://foo.com/kittens-132.jpg')
 
       project.update(award_types_attributes: {id: project.award_types.first.id, _destroy: true})
       expect(project.award_types.count).to eq(0)

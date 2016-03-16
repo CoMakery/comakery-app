@@ -4,12 +4,13 @@ describe Authentication do
   describe "validations" do
     it "requires many attributes" do
       errors = Authentication.new.tap { |a| a.valid? }.errors.full_messages
-      expect(errors).to match_array([
+      expect(errors.sort).to eq([
         "Account can't be blank",
         "Provider can't be blank",
-        "Slack team name can't be blank",
-        "Slack team image 34 url can't be blank",
         "Slack team can't be blank",
+        "Slack team image 132 url can't be blank",
+        "Slack team image 34 url can't be blank",
+        "Slack team name can't be blank",
         "Slack user can't be blank",
         "Slack user name can't be blank"
       ])
@@ -49,14 +50,21 @@ describe Authentication do
           },
           'extra' => {
             'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com'}}},
-            'team_info' => { 'team' => { 'icon' => { 'image_34' => 'https://slack.example.com/team-image-34-px.jpg' } } }
+            'team_info' => {
+              'team' => {
+                'icon' => {
+                  'image_34' => 'https://slack.example.com/team-image-34-px.jpg',
+                  'image_132' => 'https://slack.example.com/team-image-132px.jpg'
+                }
+              }
+            }
           },
           'info' => {
             'name' => "Bob Roberts",
             'first_name' => "Bob",
             'last_name' => "Roberts",
             'user_id' => 'slack user id',
-            'team' => "CoMakery",
+            'team' => "new team name",
             'team_id' => 'slack team id',
             'user' => "bobroberts",
             'team_domain' => "bobrobertsdomain"
@@ -76,7 +84,7 @@ describe Authentication do
         expect(auth.slack_user_name).to eq("bobroberts")
         expect(auth.slack_first_name).to eq("Bob")
         expect(auth.slack_last_name).to eq("Roberts")
-        expect(auth.slack_team_name).to eq("CoMakery")
+        expect(auth.slack_team_name).to eq("new team name")
         expect(auth.slack_team_id).to eq("slack team id")
         expect(auth.slack_user_id).to eq("slack user id")
         expect(auth.slack_token).to eq("xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa")
@@ -106,6 +114,11 @@ describe Authentication do
                                      slack_token: "slack token"
       ) }
 
+      let!(:project) { create(:project,
+                               slack_team_id: "slack team id",
+                               slack_team_name: "old team name"
+      )}
+
       it "returns the existing account" do
         result = nil
         expect do
@@ -115,6 +128,12 @@ describe Authentication do
         end.not_to change { Authentication.count }
 
         expect(result.id).to eq(account.id)
+      end
+
+      it "updates team info for projects with the same slack_team_id" do
+        result = Authentication.find_or_create_from_auth_hash!(auth_hash)
+        project.reload
+        expect(project.reload.slack_team_name).to eq("new team name")
       end
     end
   end

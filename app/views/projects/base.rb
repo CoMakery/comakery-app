@@ -38,7 +38,7 @@ class Views::Projects::Base < Views::Base
           }
           i project.slack_team_name
         }
-        img(src: project.slack_team_image_34_url, class: "icon")
+        img(src: project.slack_team_image_132_url, class: "icon")
         if project.last_award_created_at
           div(class: "project-last-award font-tiny") { text "last activity #{time_ago_in_words(project.last_award_created_at)} ago" }
         end

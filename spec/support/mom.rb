@@ -27,6 +27,7 @@ class Mom
         slack_user_id: "slack user id #{@@authentication_count}",
         slack_team_name: "Slack Team",
         slack_team_image_34_url: "https://slack.example.com/team-image-34-px.jpg",
+        slack_team_image_132_url: "https://slack.example.com/team-image-132-px.jpg",
         slack_team_id: "citizen code id",
         slack_user_name: "johndoe"
     }
@@ -44,6 +45,7 @@ class Mom
         slack_channel: "slack_channel",
         slack_team_name: "Citizen Code",
         slack_team_image_34_url: "https://slack.example.com/team-image-34-px.jpg",
+        slack_team_image_132_url: "https://slack.example.com/team-image-132-px.jpg",
         owner_account: owner_account
     }
     Project.new(defaults.merge(attrs))

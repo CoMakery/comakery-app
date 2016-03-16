@@ -26,6 +26,7 @@ class AwardSlackUser
                                            slack_team_name: context.project.slack_team_name,
                                            slack_team_id: context.project.slack_team_id,
                                            slack_team_image_34_url: context.project.slack_team_image_34_url,
+                                           slack_team_image_132_url: context.project.slack_team_image_132_url,
                                            slack_user_name: response.user.name,
                                            slack_user_id: context.slack_user_id)
 

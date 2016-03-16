@@ -37,6 +37,7 @@ class ProjectsController < ApplicationController
     auth = current_account.slack_auth
     @project = Project.new(project_params.merge(owner_account: current_account,
                                                 slack_team_image_34_url: auth.slack_team_image_34_url,
+                                                slack_team_image_132_url: auth.slack_team_image_132_url,
                                                 slack_team_id: auth.slack_team_id,
                                                 slack_team_name: auth.slack_team_name,
                                                 slack_team_domain: auth.slack_team_domain))
