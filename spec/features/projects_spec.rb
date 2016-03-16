@@ -138,12 +138,12 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "Project created"
     expect(page).to have_content "This is a project"
     expect(page).to have_content "This is a project description which is very informative"
-    expect(page.find(".project-image")[:src]).to match(/\/attachments\/[A-Za-z0-9\/]+\/image/)
+    expect(page.find(".project-image")[:style]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link "Project Tasks"
     expect(page).to have_content "Visibility: Public"
 
     expect(page).to have_content "Owner: Glenn Spanky"
-    expect(page).to have_content "Team name: Citizen Code"
+    expect(page).to have_content "Citizen Code"
 
     award_type_rows = page.all(".award-type-row")
     expect(award_type_rows.size).to eq(4)
@@ -162,7 +162,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
     click_on "Edit"
 
-    expect(page.find(".project-image")[:src]).to match(/\/attachments\/[A-Za-z0-9\/]+\/image/)
+    expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
 
     expect(page).to have_checked_field("Set project as public (display in CoMakery index)")
     fill_in "Title", with: "This is an edited project"
