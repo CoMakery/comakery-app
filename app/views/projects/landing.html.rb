@@ -13,7 +13,7 @@ class Views::Projects::Landing < Views::Projects::Base
             br
             text "of innovation"
           }
-          a("Learn More", class: buttonish << "margin-small", href: '')
+          a("Sign in with Slack", class: buttonish << "margin-small", href: login_path)
         }
       }
       div(class: "how-it-works") {
