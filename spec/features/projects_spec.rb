@@ -1,13 +1,5 @@
 require "rails_helper"
 
-def get_award_type_rows
-  page.all(".award-type-row")
-end
-
-def click_remove(award_type_row)
-  award_type_row.find("a[data-mark-and-hide]").click
-end
-
 describe "viewing projects, creating and editing", :js, :vcr do
   let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false) }
   let!(:public_project) { create(:project, title: "Public Project", description: "dogs with donuts", owner_account: account, slack_team_id: "citizencode", public: true) }
@@ -18,29 +10,6 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
   before do
     travel_to Date.new(2016, 1, 10)
-  end
-
-  describe "removing award types on projects where there have been awards sent already" do
-    before do
-      stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
-    end
-
-    it "prevents destroying the award types" do
-      login(account)
-
-      award_type = create(:award_type, project: project, name: "Big ol' award", amount: 40000)
-
-      visit edit_project_path(project)
-
-      expect(page.all("a[data-mark-and-hide]").size).to eq(1)
-
-      create(:award, award_type: award_type, account: same_team_account)
-
-      visit edit_project_path(project)
-
-      expect(page.all("a[data-mark-and-hide]").size).to eq(0)
-      expect(page).to have_content "(1 award sent)"
-    end
   end
 
   it "does the happy path" do
@@ -182,5 +151,28 @@ describe "viewing projects, creating and editing", :js, :vcr do
     click_link "Public Project"
 
     expect(page).not_to have_content "Edit"
+  end
+
+  describe "removing award types on projects where there have been awards sent already" do
+    before do
+      stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
+    end
+
+    it "prevents destroying the award types" do
+      login(account)
+
+      award_type = create(:award_type, project: project, name: "Big ol' award", amount: 40000)
+
+      visit edit_project_path(project)
+
+      expect(page.all("a[data-mark-and-hide]").size).to eq(1)
+
+      create(:award, award_type: award_type, account: same_team_account)
+
+      visit edit_project_path(project)
+
+      expect(page.all("a[data-mark-and-hide]").size).to eq(0)
+      expect(page).to have_content "(1 award sent)"
+    end
   end
 end
