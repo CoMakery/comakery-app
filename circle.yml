@@ -2,6 +2,10 @@ machine:
   timezone:
     America/Los_Angeles
 
+dependencies:
+  cache_directories:
+    - /home/ubuntu/.phantomjs
+
 test:
   override:
     - ./bin/rspect --format documentation:
