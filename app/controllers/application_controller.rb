@@ -67,13 +67,13 @@ class ApplicationController < ActionController::Base
       return STDERR.puts("d expected an instance of Proc, got #{the_proc.try(:inspect)}")
     end
     source = the_proc.try(:source).try(:match, /\s*proc { (.+) }\s*/).try(:[], 1)
-    print "#{source} ===>>> " if source
+    logger.debug "#{source} ===>>> " if source
     value = the_proc.call
     begin
       value = JSON.pretty_generate value, indent: '    '
-      puts "\n#{value}"
+      logger.debug "\n#{value}"
     rescue JSON::GeneratorError
-      p value
+      logger.debug value
     end
   end
 
