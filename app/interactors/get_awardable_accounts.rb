@@ -16,16 +16,22 @@ class GetAwardableAccounts
   protected
 
   def api_formatted_name(user)
-    if user[:profile][:first_name].present? && user[:profile][:last_name].present?
-      "#{user[:profile][:first_name]} #{user[:profile][:last_name]} - @#{user[:name]}"
+    if user[:profile][:first_name].present? || user[:profile][:last_name].present?
+      name = ''
+      name << user[:profile][:first_name] + ' ' if user[:profile][:first_name].present?
+      name << user[:profile][:last_name] + ' ' if user[:profile][:last_name].present?
+      name << "- @#{user[:name]}"
     else
       "@#{user[:name]}"
     end
   end
 
   def db_formatted_name(auth)
-    if auth.slack_first_name.present? && auth.slack_last_name.present?
-      "#{auth.slack_first_name} #{auth.slack_last_name} - @#{auth.slack_user_name}"
+    if auth.slack_first_name.present? || auth.slack_last_name.present?
+      name = ''
+      name << auth.slack_first_name + ' ' if auth.slack_first_name.present?
+      name << auth.slack_last_name + ' ' if auth.slack_last_name.present?
+      name << "- @#{auth.slack_user_name}"
     else
       "@#{auth.slack_user_name}"
     end
