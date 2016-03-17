@@ -6,13 +6,15 @@
 body {
   background-color: white;
 
-  &:not(.projects-landing) {
+  &.signed-in {
     .top-bar-container {
       border-bottom: 1px solid #ccc;
     }
     .app-container {
       margin-top: 2em;
     }
+  }
+  &:not(.projects-landing) {
     .large-10.large-centered.columns {
       width: 66%;
     }
@@ -80,7 +82,6 @@ body {
 
 .main {
   padding-bottom: 4em;
-  padding-top: .5em;
 }
 
 .button.bordered {

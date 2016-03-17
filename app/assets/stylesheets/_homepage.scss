@@ -82,7 +82,8 @@
   .number {
     float: left;
     background: $primary-color;
-    padding: 0 .51em;
+    padding: .1em .57em;
+    font-weight: 400;
     font-family: arial, sans-serif;
     border-radius: rem-calc(50px);
     font-size: rem-calc(22px);

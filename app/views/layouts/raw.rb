@@ -23,7 +23,7 @@ class Views::Layouts::Raw < Views::Base
         csrf_meta_tags
       }
 
-      body(class: "#{controller_name}-#{action_name}") {
+      body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? 'signed-in' : ''}") {
         div(class: "contain-to-grid top-bar-container") {
           div(class: "top-bar large-10 large-centered columns", "data-topbar" => "", role: "navigation") {
             div(class: "top-bar-title") {

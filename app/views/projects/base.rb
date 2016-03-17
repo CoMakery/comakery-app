@@ -41,7 +41,7 @@ class Views::Projects::Base < Views::Base
         if project.last_award_created_at
           div(class: "project-last-award font-tiny") { text "last activity #{time_ago_in_words(project.last_award_created_at)} ago" }
         end
-        p project.description.try(:truncate, 120)
+        p project.description.try(:truncate, 90)
       }
     }
   end
