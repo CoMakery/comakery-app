@@ -11,6 +11,7 @@
 // Foundation components
 @include foundation-global-styles;
 @include foundation-grid;
+// @include foundation-flex-grid;  // see http://www.sitepoint.com/foundation-6-the-new-flex-grid
 @include foundation-typography;
 @include foundation-button;
 @include foundation-forms;
