@@ -106,7 +106,7 @@ class Views::Projects::Show < Views::Base
                   }
                 end
                 row {
-                  column("small-8") {
+                  column("small-12") {
                     label {
                       text "User"
                       options = capture do
@@ -117,7 +117,7 @@ class Views::Projects::Show < Views::Base
                   }
                 }
                 row {
-                  column("small-8") {
+                  column("small-12") {
                     with_errors(project, :description) {
                       label {
                         text "Description"
@@ -127,9 +127,8 @@ class Views::Projects::Show < Views::Base
                   }
                 }
                 row {
-                  column("small-8") {}
-                  column("small-4") {
-                    f.submit("Send Award", class: buttonish(:tiny, :round))
+                  column("small-12") {
+                    f.submit("Send Award", class: buttonish("float-right"))
                   }
                 }
               }
