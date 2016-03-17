@@ -56,7 +56,8 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
     @award = Award.new
-    @awardable_accounts = !current_account ? nil : GetAwardableAccounts.call(current_account: current_account, accounts: policy_scope(Account.includes(:authentications))).awardable_accounts
+    @awardable_accounts = !current_account ? nil : GetAwardableAccounts.call(current_account: current_account, project: @project, accounts: policy_scope(Account.includes(:authentications))).awardable_accounts
+    @awardable_types = @project.owner_account == current_account ? @project.award_types : @project.community_award_types
     @award_data = GetAwardData.call(current_account: current_account, project: @project).award_data
   end
 
@@ -84,7 +85,7 @@ class ProjectsController < ApplicationController
 
   def project_params
     params.require(:project).permit(:title, :description, :image, :tracker, :public, :slack_channel,
-                                    award_types_attributes: [:id, :name, :amount, :_destroy])
+                                    award_types_attributes: [:id, :name, :amount, :community_awardable, :_destroy])
   end
 
   def assign_slack_channels

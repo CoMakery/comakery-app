@@ -32,6 +32,8 @@ describe ProjectsController do
 
   describe "#new" do
     context "when slack returns successful api calls" do
+      render_views
+
       before do
         expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
       end
@@ -42,7 +44,7 @@ describe ProjectsController do
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
         expect(assigns[:project]).to be_public
-        expect(assigns[:project].award_types.size).to eq(3)
+        expect(assigns[:project].award_types.size).to eq(4)
 
         expect(assigns[:project].award_types.first).to be_a_new_record
         expect(assigns[:project].award_types.first.name).to eq("Thanks")
@@ -62,6 +64,8 @@ describe ProjectsController do
   end
 
   describe "#create" do
+    render_views
+
     it "when valid, creates a project and associates it with the current account" do
       expect do
         expect do
@@ -72,6 +76,7 @@ describe ProjectsController do
               tracker: "http://github.com/here/is/my/tracker",
               slack_channel: "slack_channel",
               award_types_attributes: [
+                  {name: "Community Award", amount: 10, community_awardable: true},
                   {name: "Small Award", amount: 1000},
                   {name: "Big Award", amount: 2000},
                   {name: "", amount: ""},
@@ -79,14 +84,17 @@ describe ProjectsController do
           }
           expect(response.status).to eq(302)
         end.to change { Project.count }.by(1)
-      end.to change { AwardType.count }.by(2)
+      end.to change { AwardType.count }.by(3)
 
       project = Project.last
       expect(project.title).to eq("Project title here")
       expect(project.description).to eq("Project description here")
       expect(project.image).to be_a(Refile::File)
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
-      expect(project.award_types.first.name).to eq("Small Award")
+      expect(project.award_types.first.name).to eq("Community Award")
+      expect(project.award_types.first.community_awardable).to eq(true)
+      expect(project.award_types.second.name).to eq("Small Award")
+      expect(project.award_types.second.community_awardable).to eq(false)
       expect(project.owner_account_id).to eq(account.id)
       expect(project.slack_channel).to eq("slack_channel")
       expect(project.slack_team_id).to eq(account.authentications.first.slack_team_id)
@@ -104,7 +112,7 @@ describe ProjectsController do
               image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
               tracker: "http://github.com/here/is/my/tracker",
               award_types_attributes: [
-                  {name: "Small Award", amount: 1000},
+                  {name: "Small Award", amount: 1000, community_awardable: true},
                   {name: "Big Award", amount: 2000},
                   {name: "", amount: ""},
               ]
@@ -120,6 +128,7 @@ describe ProjectsController do
       expect(project.image).to be_a(Refile::File)
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
       expect(project.award_types.first.name).to eq("Small Award")
+      expect(project.award_types.first.community_awardable).to eq(true)
       expect(project.owner_account_id).to eq(account.id)
 
       account_slack_auth = account.authentications.first
@@ -127,7 +136,7 @@ describe ProjectsController do
       expect(project.slack_team_id).to eq(account_slack_auth.slack_team_id)
       expect(project.slack_team_name).to eq(account_slack_auth.slack_team_name)
       expect(project.slack_team_domain).to eq("foobar")
-      expect(project.award_types.size).to eq(2)
+      expect(project.award_types.size).to eq(3) # 2 + 1 template
     end
   end
 
@@ -183,7 +192,7 @@ describe ProjectsController do
 
     describe "#update" do
       it "updates a project" do
-        small_award_type = cat_project.award_types.create!(name: "Small Award", amount: 100)
+        small_award_type = cat_project.award_types.create!(name: "Small Award", amount: 100, community_awardable: false)
         medium_award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300)
         destroy_me_award_type = cat_project.award_types.create!(name: "Destroy Me Award", amount: 300)
 
@@ -195,7 +204,7 @@ describe ProjectsController do
                     description: "updated Project description here",
                     tracker: "http://github.com/here/is/my/tracker/updated",
                     award_types_attributes: [
-                        {id: small_award_type.to_param, name: "Small Award", amount: 150},
+                        {id: small_award_type.to_param, name: "Small Award", amount: 150, community_awardable: true},
                         {id: destroy_me_award_type.to_param, _destroy: true},
                         {name: "Big Award", amount: 500},
                     ]
@@ -214,6 +223,7 @@ describe ProjectsController do
         expect(award_types.size).to eq(3)
         expect(award_types.first.name).to eq("Small Award")
         expect(award_types.first.amount).to eq(150)
+        expect(award_types.first.community_awardable).to eq(true)
         expect(award_types.second.name).to eq("Medium Award")
         expect(award_types.second.amount).to eq(300)
         expect(award_types.third.name).to eq("Big Award")
@@ -253,30 +263,59 @@ describe ProjectsController do
 
 
         award_types = project.award_types.sort_by(&:amount)
-        expect(award_types.size).to eq(4)
-        expect(award_types.first.name).to eq("Small Award")
-        expect(award_types.first.amount).to eq(150)
-        expect(award_types.second.name).to eq("Medium Award")
-        expect(award_types.second.amount).to eq(300)
-        expect(award_types.third.name).to eq("Destroy Me Award")
-        expect(award_types.third.amount).to eq(400)
-        expect(award_types.fourth.name).to eq("Big Award")
-        expect(award_types.fourth.amount).to eq(500)
+        expect(award_types.size).to eq((expected_rows = 4) + (expected_template_rows = 1))
+
+        expect(award_types.first.name).to be_nil
+        expect(award_types.first.amount).to eq(0)
+
+        expect(award_types.second.name).to eq("Small Award")
+        expect(award_types.second.amount).to eq(150)
+        expect(award_types.third.name).to eq("Medium Award")
+        expect(award_types.third.amount).to eq(300)
+        expect(award_types.fourth.name).to eq("Destroy Me Award")
+        expect(award_types.fourth.amount).to eq(400)
+        expect(award_types.fifth.name).to eq("Big Award")
+        expect(award_types.fifth.amount).to eq(500)
       end
     end
 
     describe "#show" do
-      it "allows team members to view projects and assigns awardable accounts from slack api and db and de-dups" do
-        expect(GetAwardableAccounts).to receive(:call).and_return(double(awardable_accounts: []))
-        expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_coins: 0, total_coins_issued: 0}}))
+      let!(:cat_award_type) { create(:award_type, name: "cat award type", project: cat_project, community_awardable: false) }
+      let!(:cat_award_type_community) { create(:award_type, name: "cat award type community", project: cat_project, community_awardable: true) }
+      let!(:awardable_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo", slack_user_name: "account2") } }
 
-        get :show, id: cat_project.to_param
+      context "when on team" do
+        before do
+          expect(GetAwardableAccounts).to receive(:call).and_return(double(awardable_accounts: [awardable_account]))
+          expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_coins: 0, total_coins_issued: 0}}))
+        end
 
-        expect(response.code).to eq "200"
-        expect(assigns(:project)).to eq cat_project
-        expect(assigns[:award]).to be_new_record
-        expect(assigns[:awardable_accounts]).to eq([])
-        expect(assigns[:award_data]).to eq({:contributions => [], :award_amounts => {:my_project_coins => 0, :total_coins_issued => 0}})
+        it "allows team members to view projects and assigns awardable accounts from slack api and db and de-dups" do
+          get :show, id: cat_project.to_param
+
+          expect(response.code).to eq "200"
+          expect(assigns(:project)).to eq cat_project
+          expect(assigns[:award]).to be_new_record
+          expect(assigns[:awardable_accounts]).to eq([awardable_account])
+          expect(assigns[:awardable_types].map(&:name).sort).to eq(["cat award type", "cat award type community"])
+          expect(assigns[:award_data]).to eq({:contributions => [], :award_amounts => {:my_project_coins => 0, :total_coins_issued => 0}})
+        end
+
+        context "when non-owner team member views page" do
+          let!(:team_member_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo", slack_user_name: "team_member") } }
+
+          before do
+            login(team_member_account)
+          end
+
+          it "onlys assigns community award types if current user is not owner" do
+            get :show, id: cat_project.to_param
+
+            expect(response.code).to eq "200"
+            expect(assigns[:awardable_accounts]).to eq([awardable_account])
+            expect(assigns[:awardable_types].map(&:name).sort).to eq(["cat award type community"])
+          end
+        end
       end
 
       it "only denies non-owners to view projects" do

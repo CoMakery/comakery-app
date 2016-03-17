@@ -88,3 +88,5 @@ end
 def click_remove(award_type_row)
   award_type_row.find("a[data-mark-and-hide]").click
 end
+
+include SlackStubs

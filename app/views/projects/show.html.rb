@@ -1,5 +1,5 @@
 class Views::Projects::Show < Views::Base
-  needs :project, :award, :awardable_accounts, :award_data
+  needs :project, :award, :awardable_accounts, :awardable_types, :award_data
 
   def make_pie_chart
     text(<<-JAVASCRIPT.html_safe)
@@ -21,7 +21,7 @@ class Views::Projects::Show < Views::Base
       end
     end
 
-    row(class:"project-header") {
+    row(class: "project-header") {
       column("small-12") {
         h1 project.title
         p {
@@ -38,15 +38,13 @@ class Views::Projects::Show < Views::Base
     }
     row {
       column("small-6") {
-        # text attachment_image_tag(project, :image, class: "project-image")
-
         div(class: "project-image", style: "background-image: url(#{attachment_url(project, :image)})") {}
       }
       column("small-6") {
         full_row {
           p project.description
         }
-        row(class:"project-settings") {
+        row(class: "project-settings") {
           column("small-6") {
             text "Owner: "
             b "#{project.owner_slack_user_name}"
@@ -56,7 +54,7 @@ class Views::Projects::Show < Views::Base
             b "#{project.public? ? "Public" : "Private"}"
           }
         }
-        row(class:"project-tasks") {
+        row(class: "project-tasks") {
           if project.tracker
             column("small-5") {
               a(href: project.tracker, target: "_blank", class: "text-link") do
@@ -77,40 +75,32 @@ class Views::Projects::Show < Views::Base
       }
     }
     row(class:"project-body") {
-      column("small-5") {
-        if !policy(project).send_award?
-          project.award_types.each do |award_type|
-            row {
-              column("small-12") {
-                span(award_type.name)
-                text " (#{award_type.amount})"
-              }
-            }
-          end
-        else
-          form_for [project, award] do |f|
-            row() {
-              div(class: "award-send") {
-                h3 "Send awards"
-                project.award_types.each do |award_type|
-                  row(class: "award-type-row") {
-                    column("small-12") {
-                      with_errors(project, :account_id) {
-                        label {
-                          f.radio_button(:award_type_id, award_type.to_param)
-                          span(award_type.name)
-                          text " (#{award_type.amount}) "
-                        }
+      column("small-5 award-send") {
+        form_for [project, award] do |f|
+          row() {
+            div(class: "award-send") {
+              h3 "Send awards"
+              project.award_types.each do |award_type|
+                row(class: "award-type-row") {
+                  column("small-12") {
+                    with_errors(project, :account_id) {
+                      label {
+                        f.radio_button(:award_type_id, award_type.to_param) if awardable_types.include?(award_type)
+                        span(award_type.name)
+                        text " (#{award_type.amount})"
+                        text " (Community Awardable)" if award_type.community_awardable?
                       }
                     }
                   }
-                end
+                }
+              end
+              if awardable_types.any?{|awardable_type|awardable_type.community_awardable?} || project.owner_account == current_user
                 row {
-                  column("small-12") {
+                  column("small-8") {
                     label {
                       text "User"
                       options = capture do
-                        options_for_select([[nil, nil]].concat(awardable_accounts))
+                        options_for_select([[nil, nil]].concat(awardable_accounts||[]))
                       end
                       select_tag "award[slack_user_id]", options, html: {id: "award_slack_user_id"}
                     }
@@ -128,12 +118,12 @@ class Views::Projects::Show < Views::Base
                 }
                 row {
                   column("small-12") {
-                    f.submit("Send Award", class: buttonish("float-right"))
+                    f.submit("Send Award", class: buttonish(:tiny, :round))
                   }
                 }
-              }
+              end
             }
-          end
+          }
         end
       }
       column("small-6") {

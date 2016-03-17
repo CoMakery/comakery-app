@@ -34,4 +34,8 @@ class ProjectPolicy < ApplicationPolicy
   end
   alias :update? :edit?
   alias :send_award? :edit?
+
+  def send_community_award?
+    account.present? && account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
+  end
 end

@@ -70,11 +70,12 @@ ActiveRecord::Schema.define(version: 20160316183323) do
   add_index "authentications", ["slack_team_id"], name: "index_authentications_on_slack_team_id", using: :btree
 
   create_table "award_types", force: :cascade do |t|
-    t.integer  "project_id", null: false
-    t.string   "name",       null: false
-    t.integer  "amount",     null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "project_id",                          null: false
+    t.string   "name",                                null: false
+    t.integer  "amount",                              null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.boolean  "community_awardable", default: false, null: false
   end
 
   create_table "awards", force: :cascade do |t|

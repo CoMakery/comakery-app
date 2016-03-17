@@ -49,20 +49,49 @@ module Views
           }
 
           row {
-            column("small-4") {
+            column("small-4", class: "text-center") {
               text "Award Names"
             }
-            column("small-4") {
-              text "Suggested Value"
+            column("small-2", class: "text-center") {
+              text "Coin Value"
             }
-            column("small-4") {
+            column("small-2", class: "text-center") {
+              text "Community Awardable "
+              span('data-tooltip': '',
+                   'aria-haspopup': "true",
+                   'class': "has-tip",
+                   'data-options': "show_on:large",
+                   title: "Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.") {
+                i class: "fa fa-question"
+              }
+            }
+            column("small-4", class: "text-center") {
             }
           }
           div(class: "award-types") {
-            project.award_types.each do |award_type|
-              award_type_content(award_type)
+            project.award_types.build(amount: 0) unless project.award_types.select{|award_type|award_type.amount == 0}.present?
+            f.fields_for(:award_types) do |ff|
+              row(class: "award-type-row#{ff.object.amount == 0 ? " hide award-type-template" : ""}") {
+                ff.hidden_field :id
+                ff.hidden_field :_destroy, 'data-destroy': ''
+                column("small-4") {
+                  ff.text_field :name
+                }
+                column("small-2") {
+                  ff.text_field :amount, type: :number, class: 'text-right'
+                }
+                column("small-2", class: "text-center") {
+                  ff.check_box :community_awardable
+                }
+                column("small-4") {
+                  if ff.object && ff.object.awards.count > 0
+                    text "(#{pluralize(ff.object.awards.count, "award")} sent)"
+                  else
+                    a("×", href: "#", 'data-mark-and-hide': '.award-type-row')
+                  end
+                }
+              }
             end
-            award_type_content(nil, "hide award-type-template")
           }
 
           row {
@@ -72,26 +101,6 @@ module Views
             f.submit "Save", class: buttonish(:small, :expand)
           }
         end
-      end
-
-      def award_type_content(award_type, classes="")
-        row(class: "award-type-row #{classes}") {
-          hidden_field_tag :'project[award_types_attributes][][id]', award_type.try(:to_param)
-          hidden_field_tag :'project[award_types_attributes][][_destroy]', award_type.try(:_destroy), 'data-destroy': ''
-          column("small-4") {
-            text_field_tag :'project[award_types_attributes][][name]', award_type.try(:name)
-          }
-          column("small-4") {
-            text_field_tag :'project[award_types_attributes][][amount]', award_type.try(:amount), type: :number
-          }
-          column("small-4") {
-            if award_type && award_type.awards.count > 0
-              text "(#{pluralize(award_type.awards.count, "award")} sent)"
-            else
-              a("×", href: "#", 'data-mark-and-hide': '.award-type-row')
-            end
-          }
-        }
       end
     end
   end

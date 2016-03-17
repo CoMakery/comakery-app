@@ -55,12 +55,13 @@ describe AwardsController do
   describe "#create" do
     let(:award_type) { create(:award_type, project: project) }
 
-    before { login(issuer) }
+    before do
+      login(issuer)
+      request.env["HTTP_REFERER"] = "/projects/#{project.to_param}"
+    end
 
     context "logged in" do
       it "records a award being created" do
-        request.env["HTTP_REFERER"] = "/projects/#{project.to_param}"
-
         expect_any_instance_of(Account).to receive(:send_award_notifications)
         expect do
           post :create, project_id: project.to_param, award: {
@@ -83,8 +84,6 @@ describe AwardsController do
 
       it "renders error if you specify a award type that doesn't belong to a project" do
         expect_any_instance_of(Account).not_to receive(:send_award_notifications)
-        request.env["HTTP_REFERER"] = "/projects/#{project.to_param}"
-
         expect do
           post :create, project_id: project.to_param, award: {
               slack_user_id: "receiver id",
@@ -98,8 +97,6 @@ describe AwardsController do
 
       it "renders error if you specify a slack user id that doesn't belong to a project" do
         expect_any_instance_of(Account).not_to receive(:send_award_notifications)
-        request.env["HTTP_REFERER"] = "/projects/#{project.to_param}"
-
         expect do
           post :create, project_id: project.to_param, award: {
               slack_user_id: 'different team member id',
@@ -113,8 +110,6 @@ describe AwardsController do
 
       it "redirects back to projects show if error saving" do
         expect do
-          request.env["HTTP_REFERER"] = "/projects/#{project.to_param}"
-
           post :create, project_id: project.to_param, award: {
               slack_user_id: receiver_account.slack_auth.slack_user_id,
               description: "This rocks!!11"

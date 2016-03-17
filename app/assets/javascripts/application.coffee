@@ -22,6 +22,7 @@
 $ ->
   $(document).foundation()
 
+  nextIdentifier = 1000
   $("*[data-duplicate]").click (e)->
     e.preventDefault()
     templateSelector = $(e.target).attr('data-duplicate')
@@ -29,6 +30,13 @@ $ ->
     newElement = template.clone()
     newElement.removeClass('hide')
     newElement.removeClass(templateSelector.replace('.', ''))
+    newElementIdentifier = nextIdentifier++
+    _.each $(newElement).find("input"), (input)->
+      currentName = $(input).attr("name")
+      number = +currentName.match(/[0-9]+/)[0]
+      fixedName = currentName.replace(/\[[0-9]+\]/, "[" + (number + nextIdentifier) + "]")
+      $(input).attr("name", fixedName)
+
     template.parent().append(newElement)
 
   $(document).on "click", "*[data-mark-and-hide]", (e)->

@@ -13,8 +13,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
   end
 
   it "does the happy path" do
-    stub_request(:post, "https://slack.com/api/users.list").to_return(body: {"ok": true, "members": []}.to_json)
-    stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
+    stub_slack_user_list
+    stub_slack_channel_list
 
     login(account)
 
@@ -49,8 +49,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)
 
-    award_type_inputs[3].all("input")[0].set "This is a super big award type"
-    award_type_inputs[3].all("input")[1].set "5000"
+    award_type_inputs[3].find("input[name*='[name]']").set "This is a super big award type"
+    award_type_inputs[3].find("input[name*='[amount]']").set "5000"
 
     click_link "+ add award type"
 
@@ -82,7 +82,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "Owner: Glenn Spanky"
     expect(page).to have_content "Citizen Code"
 
-    award_type_rows = page.all(".award-type-row")
+    award_type_rows = get_award_type_rows
+    expect(Project.last.award_types.count).to eq(4)
     expect(award_type_rows.size).to eq(4)
 
     expect(award_type_rows[0]).to have_content "This is a small award type"
@@ -111,6 +112,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(award_type_inputs.size).to eq(4)
 
     award_type_inputs[0].all("a[data-mark-and-hide]")[0].click
+    award_type_inputs[1].find("input[name*='[community_awardable]']").set(true)
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
 
@@ -123,8 +125,9 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_link "Project Tasks"
     expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com"
 
-    award_type_inputs = page.all(".award-type-row")
+    award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
+    expect(page).to have_content "This is a medium award type (2000) (Community Awardable)"
     expect(page).not_to have_content "This is a small award type"
     expect(page).not_to have_content "1000"
 
@@ -155,7 +158,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
   describe "removing award types on projects where there have been awards sent already" do
     before do
-      stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
+      stub_slack_channel_list
     end
 
     it "prevents destroying the award types" do
