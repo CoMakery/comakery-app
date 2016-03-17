@@ -33,7 +33,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
         expect(page).to have_content "Citizen Code"
       end
 
-      expect(page).to have_content "Citizen Code Projects"
+      expect(page).to have_content "Citizen Code projects"
       expect(page.html).to match %r{<img[^>]+src="[^"]+awesome-team-image-\d+-px\.jpg"}
       expect(page).to have_content "New Project"
 
@@ -43,7 +43,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       click_link "Browse All"
 
-      expect(page).to have_content "Citizen Code Projects"
+      expect(page).to have_content "Citizen Code projects"
       expect(page.html).to match %r{<img[^>]+src="[^"]+awesome-team-image-34-px\.jpg"}
       expect(page).to have_content "New Project"
 

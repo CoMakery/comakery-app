@@ -1,13 +1,12 @@
 class Views::Projects::Base < Views::Base
 
   def projects_header(slack_auth)
-    full_row {
-      column("small-1") { img src: slack_auth.slack_team_image_34_url, class: "project-icon" }
-      column("small-9") {
-        h2 "#{slack_auth.slack_team_name} Projects"
+    row {
+      column("small-10") {
+        h2 "#{slack_auth.slack_team_name} projects"
       }
       column("small-2") {
-        a("New Project", class: buttonish(:button, :radius, :tiny), href: new_project_path) if policy(Project).new?
+        a("New Project", class: buttonish("float-right"), href: new_project_path) if policy(Project).new?
       }
     }
   end
