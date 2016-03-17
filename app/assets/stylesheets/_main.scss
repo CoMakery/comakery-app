@@ -78,6 +78,10 @@ body {
   }
 }
 
+.main {
+  padding-bottom: 4em;
+}
+
 .button.bordered {
   border: solid 2px $snow;
 }
@@ -192,18 +196,23 @@ form.take-action-form p.notice {
   padding: 14px 20px;
 }
 
-.award-types input[type="radio"] {
-  margin-right: 10px;
-}
-
 .award-send {
   border: 1px solid #ccc;
   padding: 20px 50px;
+
+  input[type="radio"] {
+    margin-right: 10px;
+  }
 }
 .project-header {
-  margin-bottom: 1.75em;
+  margin-bottom: 2em;
+  text-align: center;
+
   h1 {
     margin: 0;
+  }
+  a.edit {
+    margin-left: 1em;
   }
 }
 .project-image {
@@ -221,15 +230,7 @@ form.take-action-form p.notice {
 }
 
 .project-icon {
-  float: left;
   margin-right: 10px;
-  height: 2rem;
-  margin-top: 1.2rem;
-}
-
-.top-bar-text {
-  line-height: 4.3rem;
-  background-color: white
 }
 
 .project-search {
@@ -238,6 +239,6 @@ form.take-action-form p.notice {
   }
 }
 
-.project-highlighted {
-  background-color: $orchid;
-}
+//.project-highlighted {
+//  background-color: $orchid;
+//}
