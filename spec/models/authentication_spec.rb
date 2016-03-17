@@ -37,7 +37,9 @@ describe Authentication do
   describe "#display_name" do
     it "returns the first and last name and falls back to the user name" do
       expect(build(:authentication, slack_first_name: "Bob", slack_last_name: "Johnson", slack_user_name: "bj").display_name).to eq("Bob Johnson")
-      expect(build(:authentication, slack_first_name: nil, slack_last_name: "Johnson", slack_user_name: "bj").display_name).to eq("@bj")
+      expect(build(:authentication, slack_first_name: nil, slack_last_name: "Johnson", slack_user_name: "bj").display_name).to eq("Johnson")
+      expect(build(:authentication, slack_first_name: "Bob", slack_last_name: "", slack_user_name: "bj").display_name).to eq("Bob")
+      expect(build(:authentication, slack_first_name: nil, slack_last_name: "", slack_user_name: "bj").display_name).to eq("@bj")
     end
   end
 

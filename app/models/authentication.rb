@@ -6,8 +6,11 @@ class Authentication < ActiveRecord::Base
   validates_presence_of :account, :provider, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :slack_team_name, :slack_user_id, :slack_user_name
 
   def display_name
-    return "#{slack_first_name} #{slack_last_name}" if slack_first_name.present? && slack_last_name.present?
-    "@#{slack_user_name}"
+    if slack_first_name.present? || slack_last_name.present?
+      [ slack_first_name.presence, slack_last_name.presence ].compact.join(' ')
+    else
+      "@#{slack_user_name}"
+    end
   end
 
   def self.find_or_create_from_auth_hash!(auth_hash)
