@@ -14,7 +14,7 @@ body {
       margin-top: 2em;
     }
   }
-  &:not(.projects-landing) {
+  &.projects-show {
     .large-10.large-centered.columns {
       width: 66%;
     }
@@ -241,11 +241,3 @@ form.take-action-form p.notice {
 //.project-highlighted {
 //  background-color: $orchid;
 //}
-
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
