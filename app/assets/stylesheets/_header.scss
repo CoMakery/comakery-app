@@ -4,6 +4,7 @@
 
 .contain-to-grid .top-bar {
   max-width: 100%;
+  padding: .7em .5em;
 
   .name h1 {
     color: #5C5C5C;
@@ -23,5 +24,25 @@
     &:hover, &:active {
       background: white!important;
     }
+  }
+  .top-bar-text {
+    margin-top: .1em;
+  }
+  input {
+    margin-right: .5rem;
+    margin-top: .3em;
+    font-size: 9pt;
+    padding: 0em .5em;
+    height: 2.5em;
+    float: left;
+    text-transform: lowercase;
+
+    &.button {
+      margin-top: .2em;
+    }
+  }
+  .project-icon {
+    margin-right: 10px;
+    margin-left: 10px;
   }
 }

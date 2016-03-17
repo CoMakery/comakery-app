@@ -15,10 +15,8 @@ class Views::Shared::Navigation < Views::Base
         li(class: "has-form") {
           div(class: "row collapse project-search") {
             form_for(:projects, url: projects_path, method: "get") do |f|
-              div(class: "large-8 small-9 columns collapse") {
-                input(type: "search", name: "query", placeholder: "Search Projects", value: params[:query])
-              }
-              div(class: "large-4 small-3 columns collapse") {
+              div(class: "large-12 small-12 columns collapse") {
+                input(type: "search", name: "query", placeholder: "search projects", value: params[:query])
                 f.submit("Search", class: "button expand")
               }
             end
