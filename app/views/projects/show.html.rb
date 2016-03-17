@@ -1,7 +1,7 @@
 class Views::Projects::Show < Views::Base
   needs :project, :award, :awardable_accounts, :awardable_types, :award_data
 
-  def make_pie_chart
+  def make_charts
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
         window.pieChart("#award-percentages", {"content": [#{award_data[:contributions].map { |datum| pie_chart_data_element(datum) }.join(",")}]});
@@ -17,7 +17,7 @@ class Views::Projects::Show < Views::Base
   def content
     if award_data[:contributions].present?
       content_for :js do
-        make_pie_chart
+        make_charts
       end
     end
 
