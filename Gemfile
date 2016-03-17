@@ -48,7 +48,6 @@ group(:development, :test) do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'dotenv-rails'
-  gem 'faker'
   gem 'fuubar'
   gem 'guard-rspec', require: false
   gem 'phantomjs', require: 'phantomjs/poltergeist'
@@ -63,6 +62,7 @@ group(:development, :test) do
 end
 
 group(:development) do
+  gem 'easy_shell'
   gem 'git-storyid'
   gem 'html2fortitude'
   gem 'letter_opener'

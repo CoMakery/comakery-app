@@ -3,7 +3,7 @@ class Mom
     @@account_count ||= 0
     @@account_count += 1
     defaults = {
-        email: Faker::Internet.safe_email.split("@").join("#{@@account_count}@"),
+        email: "me+#{@@account_count}@example.com",
         password: valid_password
     }
     Account.new(defaults.merge(attrs))
