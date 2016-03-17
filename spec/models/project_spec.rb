@@ -88,6 +88,16 @@ describe Project do
         expect(Project.with_last_activity_at.all.map(&:title)).to eq(%w(p1_8 p2_3 p3_4 p3_5 p3_6))
       end
     end
+
+    describe "#community_award_types" do
+      it "returns all award types with community_awardable? == true" do
+        project = create(:project)
+        community_award_type = create(:award_type, project: project, community_awardable: true)
+        normal_award_type = create(:award_type, project: project, community_awardable: false)
+
+        expect(project.community_award_types).to eq([community_award_type])
+      end
+    end
   end
 
   describe "#owner_slack_user_name" do

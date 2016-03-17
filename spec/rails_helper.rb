@@ -80,3 +80,13 @@ end
 def logout
   session[:account_id] = nil
 end
+
+def get_award_type_rows
+  page.all(".award-type-row")
+end
+
+def click_remove(award_type_row)
+  award_type_row.find("a[data-mark-and-hide]").click
+end
+
+include SlackStubs

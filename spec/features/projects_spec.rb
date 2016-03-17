@@ -1,13 +1,5 @@
 require "rails_helper"
 
-def get_award_type_rows
-  page.all(".award-type-row")
-end
-
-def click_remove(award_type_row)
-  award_type_row.find("a[data-mark-and-hide]").click
-end
-
 describe "viewing projects, creating and editing", :js, :vcr do
   let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false) }
   let!(:public_project) { create(:project, title: "Public Project", description: "dogs with donuts", owner_account: account, slack_team_id: "citizencode", public: true) }
@@ -20,64 +12,9 @@ describe "viewing projects, creating and editing", :js, :vcr do
     travel_to Date.new(2016, 1, 10)
   end
 
-  describe "landing" do
-    it "shows some projects" do
-      login(account)
-
-      7.times { |i| create(:project, title: "Public Project #{i}", public: true, slack_team_name: "3D Drones") }
-      7.times { |i| create(:project, title: "Private Project #{i}", public: false, slack_team_id: "citizencode", slack_team_name: "Citizen Code") }
-
-      visit root_path
-
-      within(".top-bar .slack-instance") do
-        expect(page).to have_content "Citizen Code"
-      end
-
-      expect(page).to have_content "Citizen Code projects"
-      expect(page.html).to match %r{<img[^>]+src="[^"]+awesome-team-image-\d+-px\.jpg"}
-      expect(page).to have_content "New Project"
-
-      expect(page.all(".project").size).to eq(12)
-      expect(page).to have_content "Public Project"
-      expect(page).to have_content "3D Drones"
-
-      click_link "Browse All"
-
-      expect(page).to have_content "Citizen Code projects"
-      expect(page.html).to match %r{<img[^>]+src="[^"]+awesome-team-image-34-px\.jpg"}
-      expect(page).to have_content "New Project"
-
-      expect(page.all(".project").size).to eq(16)
-      expect(page).to have_content "Public Project"
-    end
-  end
-
-  describe "removing award types on projects where there have been awards sent already" do
-    before do
-      stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
-    end
-
-    it "prevents destroying the award types" do
-      login(account)
-
-      award_type = create(:award_type, project: project, name: "Big ol' award", amount: 40000)
-
-      visit edit_project_path(project)
-
-      expect(page.all("a[data-mark-and-hide]").size).to eq(1)
-
-      create(:award, award_type: award_type, account: same_team_account)
-
-      visit edit_project_path(project)
-
-      expect(page.all("a[data-mark-and-hide]").size).to eq(0)
-      expect(page).to have_content "(1 award sent)"
-    end
-  end
-
   it "does the happy path" do
-    stub_request(:post, "https://slack.com/api/users.list").to_return(body: {"ok": true, "members": []}.to_json)
-    stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
+    stub_slack_user_list
+    stub_slack_channel_list
 
     login(account)
 
@@ -112,8 +49,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)
 
-    award_type_inputs[3].all("input")[0].set "This is a super big award type"
-    award_type_inputs[3].all("input")[1].set "5000"
+    award_type_inputs[3].find("input[name*='[name]']").set "This is a super big award type"
+    award_type_inputs[3].find("input[name*='[amount]']").set "5000"
 
     click_link "+ add award type"
 
@@ -145,7 +82,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "Owner: Glenn Spanky"
     expect(page).to have_content "Citizen Code"
 
-    award_type_rows = page.all(".award-type-row")
+    award_type_rows = get_award_type_rows
+    expect(Project.last.award_types.count).to eq(4)
     expect(award_type_rows.size).to eq(4)
 
     expect(award_type_rows[0]).to have_content "This is a small award type"
@@ -174,6 +112,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(award_type_inputs.size).to eq(4)
 
     award_type_inputs[0].all("a[data-mark-and-hide]")[0].click
+    award_type_inputs[1].find("input[name*='[community_awardable]']").set(true)
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
 
@@ -186,8 +125,9 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_link "Project Tasks"
     expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com"
 
-    award_type_inputs = page.all(".award-type-row")
+    award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
+    expect(page).to have_content "This is a medium award type (2000) (Community Awardable)"
     expect(page).not_to have_content "This is a small award type"
     expect(page).not_to have_content "1000"
 
@@ -214,5 +154,28 @@ describe "viewing projects, creating and editing", :js, :vcr do
     click_link "Public Project"
 
     expect(page).not_to have_content "Edit"
+  end
+
+  describe "removing award types on projects where there have been awards sent already" do
+    before do
+      stub_slack_channel_list
+    end
+
+    it "prevents destroying the award types" do
+      login(account)
+
+      award_type = create(:award_type, project: project, name: "Big ol' award", amount: 40000)
+
+      visit edit_project_path(project)
+
+      expect(page.all("a[data-mark-and-hide]").size).to eq(1)
+
+      create(:award, award_type: award_type, account: same_team_account)
+
+      visit edit_project_path(project)
+
+      expect(page.all("a[data-mark-and-hide]").size).to eq(0)
+      expect(page).to have_content "(1 award sent)"
+    end
   end
 end

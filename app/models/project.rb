@@ -36,6 +36,10 @@ class Project < ActiveRecord::Base
     where(public: true)
   end
 
+  def community_award_types
+    award_types.where(community_awardable: true)
+  end
+
   def invalid_params(attributes)
     AwardType.invalid_params(attributes)
   end
