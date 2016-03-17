@@ -11,12 +11,7 @@ body {
       border-bottom: 1px solid #ccc;
     }
     .app-container {
-      margin-top: 2em;
-    }
-  }
-  &.projects-show {
-    .large-10.large-centered.columns {
-      width: 66%;
+      margin-top: 1.5em;
     }
   }
 }
@@ -176,7 +171,7 @@ form.take-action-form p.notice {
 
 .projects-landing .app-container {
   h2, h1 {
-    font-size: 40px;
+    font-size: 36px;
     margin-bottom: .7em;
   }
 }
