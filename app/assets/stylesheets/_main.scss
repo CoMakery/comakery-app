@@ -6,7 +6,7 @@
 body {
   background-color: white;
 
-  &.signed-in {
+  &.signed-in, &.projects-show  {
     .top-bar-container {
       border-bottom: 1px solid #ccc;
     }
