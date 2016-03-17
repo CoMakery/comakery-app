@@ -78,7 +78,11 @@ class Views::Projects::Show < Views::Base
       column("small-5 award-send") {
         form_for [project, award] do |f|
           row(class: "award-types") {
-            h3 "Send awards"
+            if project.owner_account == current_user
+              h3 "Send awards"
+            else
+              h3 "Awards"
+            end
             project.award_types.each do |award_type|
               row(class: "award-type-row") {
                 column("small-12") {
