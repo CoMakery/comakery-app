@@ -31,7 +31,7 @@ def main
 end
 
 def make fixture:, project_model:, owner_name:, team_name:, team_image:
-  owner = user owner_name
+  owner = user owner_name, team_name
   project = project_factory owner, project_model.reverse_merge(
     public: true,
     slack_team_name: team_name,
@@ -45,7 +45,7 @@ def make fixture:, project_model:, owner_name:, team_name:, team_image:
   contributions.each do |date, data|
     data.each do |name, amount|
       amount.times do
-        award = create :award, user(name), owner,
+        award = create :award, user(name, team_name), owner,
           award_type: award_type,
           description: 'Git commit',
           created_at: date,
@@ -55,12 +55,14 @@ def make fixture:, project_model:, owner_name:, team_name:, team_image:
   end
 end
 
-def user name
+def user name, team_name
   auth = Authentication.find_by slack_first_name: name
   auth ||= create :authentication,
     slack_first_name: name,
     slack_last_name: nil,
-    slack_user_name: name.gsub(/[^[[:alpha:]]]+/, '-').downcase
+    slack_user_name: name.gsub(/[^[[:alpha:]]]+/, '-').downcase,
+    slack_team_name: team_name,
+    slack_team_id: team_name
 
   auth.account ||= create :account
   auth.save!
