@@ -6,6 +6,11 @@ class GetAwardableAccounts
     current_account = context.current_account
     project = context.project
 
+    unless current_account
+      context.awardable_accounts = []
+      return
+    end
+
     all_awardable_accounts = (db_slack_users(accounts) + api_slack_users(current_account)).to_h
 
     all_awardable_accounts.delete(current_account.slack_auth.slack_user_id) unless current_account == project.owner_account

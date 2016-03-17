@@ -50,5 +50,12 @@ describe GetAwardableAccounts do
       expect(result.awardable_accounts).not_to be_include(["@johndoe", "slack user id 1"])
       expect(result.awardable_accounts).to eq([["project_owner project_owner - @johndoe", "project_owner"], ["Joe Bill - @johndoe", "slack user id 2"], ["Bob Johnson - @bobjohnson", "U9999UVMH"]])
     end
+
+    context "without a current user" do
+      it "returns an empty array" do
+        result = GetAwardableAccounts.call(current_account: nil, project: nil, accounts: [])
+        expect(result.awardable_accounts).to eq([])
+      end
+    end
   end
 end

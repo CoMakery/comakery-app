@@ -31,6 +31,7 @@ RSpec.configure do |config|
   config.include HttpAuthHelper::RequestOverrides, type: :request
 
   config.include FeatureHelper, type: :feature
+  config.include SlackStubs, type: :feature
 
   config.include ActiveSupport::Testing::TimeHelpers
 

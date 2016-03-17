@@ -56,8 +56,8 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
     @award = Award.new
-    @awardable_accounts = !current_account ? nil : GetAwardableAccounts.call(current_account: current_account, project: @project, accounts: policy_scope(Account.includes(:authentications))).awardable_accounts
-    @awardable_types = @project.owner_account == current_account ? @project.award_types : @project.community_award_types
+    @awardable_accounts = GetAwardableAccounts.call(current_account: current_account, project: @project, accounts: policy_scope(Account.includes(:authentications))).awardable_accounts
+    @awardable_types = GetAwardableTypes.call(current_account: current_account, project: @project).awardable_types
     @award_data = GetAwardData.call(current_account: current_account, project: @project).award_data
   end
 

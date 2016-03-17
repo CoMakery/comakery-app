@@ -1,10 +1,47 @@
 require "rails_helper"
 
 describe "viewing projects, creating and editing", :js, :vcr do
-  context "viewing awards" do
+  context "when not owner" do
+    let!(:owner) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo") } }
+    let!(:other_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo") } }
+    let!(:project) { create(:project, public: true, owner_account: owner) }
+    let!(:award_type) { create(:award_type, project: project, community_awardable: false) }
+    let!(:community_award_type) { create(:award_type, project: project, community_awardable: true) }
+
+    before do
+      stub_slack_user_list
+      stub_slack_channel_list
+    end
+
+    context "when logged in as non-owner" do
+      context "viewing projects" do
+        before { login(other_account) }
+
+        it "shows radio buttons for community awardable awards" do
+          visit project_path(project)
+
+          within(".award-types") do
+            expect(page.all("input[type=radio]").size).to eq(1)
+            expect(page).to have_content "User"
+            expect(page).to have_content "Description"
+          end
+        end
+      end
+    end
+
     context "when logged out" do
-        let!(:project) { create(:project, public: true) }
-        let!(:award) { create(:award, award_type: create(:award_type, project: project)) }
+      context "viewing projects" do
+        it "doesn't show forms for awarding" do
+          visit project_path(project)
+
+          within(".award-types") do
+            expect(page.all("input[type=radio]").count).to eq(0)
+          end
+        end
+      end
+
+      context "viewing awards" do
+        let!(:award) { create(:award, award_type: community_award_type) }
 
         it "lets people view awards" do
           visit project_path(project)
@@ -14,6 +51,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
           expect(page).to have_content "Award History"
         end
       end
+    end
   end
 
   context "awarding users" do
