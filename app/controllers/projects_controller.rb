@@ -57,7 +57,9 @@ class ProjectsController < ApplicationController
     authorize @project
     @award = Award.new
     @awardable_accounts = GetAwardableAccounts.call(current_account: current_account, project: @project, accounts: policy_scope(Account.includes(:authentications))).awardable_accounts
-    @awardable_types = GetAwardableTypes.call(current_account: current_account, project: @project).awardable_types
+    awardable_types_result = GetAwardableTypes.call(current_account: current_account, project: @project)
+    @awardable_types = awardable_types_result.awardable_types
+    @can_award = awardable_types_result.can_award
     @award_data = GetAwardData.call(current_account: current_account, project: @project).award_data
   end
 

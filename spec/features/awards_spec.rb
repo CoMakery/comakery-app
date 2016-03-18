@@ -4,7 +4,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
   context "when not owner" do
     let!(:owner) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo") } }
     let!(:other_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo") } }
-    let!(:project) { create(:project, public: true, owner_account: owner) }
+    let!(:project) { create(:project, public: true, owner_account: owner, slack_team_id: "foo") }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false) }
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true) }
 
@@ -36,8 +36,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
           visit project_path(project)
 
           within(".award-types") do
-            expect(page.all("input[type=radio]").size).to eq(2)
-            expect(page.all("input[type=radio][disabled=disabled]").size).to eq(2)
+            expect(page.all("input[type=radio]").size).to eq(0)
+            expect(page.all("input[type=radio][disabled=disabled]").size).to eq(0)
             expect(page).not_to have_content "User"
             expect(page).not_to have_content "Description"
           end
@@ -168,6 +168,11 @@ describe "viewing projects, creating and editing", :js, :vcr do
       expect(page).to have_content "Failed sending award"
 
       choose "Small"
+
+      within(".award-types") do
+        expect(page.all("input[type=radio]").size).to eq(2)
+        expect(page.all("input[type=radio][disabled=disabled]").size).to eq(0)
+      end
 
       expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson", "Hubert Sherbert - @hubert", "Sherman Yessir - @sherman"])
       select "@sherman", from: "User"

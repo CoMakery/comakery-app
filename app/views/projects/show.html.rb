@@ -1,5 +1,5 @@
 class Views::Projects::Show < Views::Base
-  needs :project, :award, :awardable_accounts, :awardable_types, :award_data
+  needs :project, :award, :awardable_accounts, :awardable_types, :award_data, :can_award
 
   def make_charts
     text(<<-JAVASCRIPT.html_safe)

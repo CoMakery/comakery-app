@@ -288,6 +288,7 @@ describe ProjectsController do
         before do
           expect(GetAwardableAccounts).to receive(:call).and_return(double(awardable_accounts: [awardable_account]))
           expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_coins: 0, total_coins_issued: 0}}))
+          expect(GetAwardableTypes).to receive(:call).and_return(double(awardable_types: [cat_award_type, cat_award_type_community], can_award: true))
         end
 
         it "allows team members to view projects and assigns awardable accounts from slack api and db and de-dups" do
@@ -297,24 +298,9 @@ describe ProjectsController do
           expect(assigns(:project)).to eq cat_project
           expect(assigns[:award]).to be_new_record
           expect(assigns[:awardable_accounts]).to eq([awardable_account])
+          expect(assigns[:can_award]).to eq(true)
           expect(assigns[:awardable_types].map(&:name).sort).to eq(["cat award type", "cat award type community"])
           expect(assigns[:award_data]).to eq({:contributions => [], :award_amounts => {:my_project_coins => 0, :total_coins_issued => 0}})
-        end
-
-        context "when non-owner team member views page" do
-          let!(:team_member_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo", slack_user_name: "team_member") } }
-
-          before do
-            login(team_member_account)
-          end
-
-          it "onlys assigns community award types if current user is not owner" do
-            get :show, id: cat_project.to_param
-
-            expect(response.code).to eq "200"
-            expect(assigns[:awardable_accounts]).to eq([awardable_account])
-            expect(assigns[:awardable_types].map(&:name).sort).to eq(["cat award type community"])
-          end
         end
       end
 

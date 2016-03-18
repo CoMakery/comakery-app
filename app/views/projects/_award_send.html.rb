@@ -1,10 +1,10 @@
 class Views::Projects::AwardSend < Views::Base
-  needs :project, :award, :awardable_accounts, :awardable_types
+  needs :project, :award, :awardable_accounts, :awardable_types, :can_award
 
   def content
     form_for [project, award] do |f|
       row(class: "award-types") {
-        if project.owner_account == current_user
+        if can_award
           h3 "Send awards"
         else
           h3 "Awards"
@@ -15,10 +15,12 @@ class Views::Projects::AwardSend < Views::Base
               with_errors(project, :account_id) {
                 label {
                   row {
-                    column("small-1") {
-                      f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
-                    }
-                    column("small-11") {
+                    if can_award
+                      column("small-1") {
+                        f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
+                      }
+                    end
+                    column(can_award ? "small-11" : "small-12") {
                       span(award_type.name)
                       text " (#{award_type.amount})"
                       text " (Community Awardable)" if award_type.community_awardable?
@@ -29,7 +31,7 @@ class Views::Projects::AwardSend < Views::Base
             }
           }
         end
-        if awardable_types.any? { |awardable_type| awardable_type.community_awardable? } || project.owner_account == current_user
+        if can_award
           row {
             column("small-8") {
               label {
