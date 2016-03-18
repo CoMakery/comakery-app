@@ -161,7 +161,7 @@ describe ProjectsController do
         expect(assigns[:projects].map { |p| time_ago_in_words(p.last_award_created_at) if p.last_award_created_at }).to eq(["1 day", "2 days", "3 days", nil])
       end
 
-      it "allows querying based on the titleof the project, ignoring case" do
+      it "allows querying based on the title of the project, ignoring case" do
         get :index, query: "cats"
 
         expect(response.status).to eq(200)
