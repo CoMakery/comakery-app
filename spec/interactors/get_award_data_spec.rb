@@ -109,11 +109,12 @@ describe GetAwardData do
   describe "#contributor_by_day_row" do
     let!(:bobs_award) { create(:award, award_type: award_type1, account: bob, created_at: Date.new(2016, 3, 2)) }
     let!(:johns_award) { create(:award, award_type: award_type2, account: john, created_at: Date.new(2016, 3, 2)) }
+    let!(:johns_award2) { create(:award, award_type: award_type2, account: john, created_at: Date.new(2016, 3, 2)) }
 
     it "returns a row of data with defaults for missing data and summed amounts for multiple awards on the sam same day" do
       interactor = GetAwardData.new
       template = {"bob bob" => 0, "sam sam" => 0, "@john" => 0, "some other guy" => 0}.freeze
-      expect(interactor.contributor_by_day_row(template, "20160302", [johns_award, bobs_award])).to eq({"@john" => 2000,
+      expect(interactor.contributor_by_day_row(template, "20160302", [johns_award, johns_award2, bobs_award])).to eq({"@john" => 4000,
                                                                                                         "bob bob" => 1000,
                                                                                                         "some other guy" => 0,
                                                                                                         "sam sam" => 0,
@@ -123,11 +124,12 @@ describe GetAwardData do
     it "doesn't explode if award's account doesn't have a slack auth" do
       interactor = GetAwardData.new
       template = {"bob bob" => 0, "sam sam" => 0, "@john" => 0, "some other guy" => 0}.freeze
-      expect(interactor.contributor_by_day_row(template, "20160302", [johns_award, bobs_award, create(:award, account: create(:account))])).to eq({"@john" => 2000,
-                                                                                                                                                   "bob bob" => 1000,
-                                                                                                                                                   "some other guy" => 0,
-                                                                                                                                                   "sam sam" => 0,
-                                                                                                                                                   "date" => "20160302"})
+      expected_hash = {"@john" => 2000,
+              "bob bob" => 1000,
+              "some other guy" => 0,
+              "sam sam" => 0,
+              "date" => "20160302"}
+      expect(interactor.contributor_by_day_row(template, "20160302", [johns_award, bobs_award, create(:award, account: create(:account))])).to eq(expected_hash)
     end
   end
 end

@@ -56,7 +56,11 @@ class GetAwardData
     row = row.merge(empty_row_template.dup)
 
     (awards_on_day || []).each do |award|
-      row[award.account.slack_auth.display_name] = award.award_type.amount if award.account.slack_auth
+      if award.account.slack_auth
+        display_name = award.account.slack_auth.display_name
+        row[display_name] ||=0
+        row[display_name] += award.award_type.amount
+      end
     end
 
     row
