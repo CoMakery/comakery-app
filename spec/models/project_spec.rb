@@ -87,6 +87,24 @@ describe Project do
         expect(Project.count).to eq(5)
         expect(Project.with_last_activity_at.all.map(&:title)).to eq(%w(p1_8 p2_3 p3_4 p3_5 p3_6))
       end
+
+      describe "#for_account #not_for_account" do
+        it "returns all projects for the given account's slack auth" do
+          account = create(:account).tap do |a|
+            create(:authentication, account: a, slack_team_id: "foo", updated_at: 1.days.ago)
+            create(:authentication, account: a, slack_team_id: "bar", updated_at: 2.days.ago)
+          end
+          account2 = create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "qux") }
+
+          foo_project = create(:project, slack_team_id: "foo", title: "Foo")
+          foo2_project = create(:project, slack_team_id: "foo", title: "Foo2")
+          bar_project = create(:project, slack_team_id: "bar", title: "Bar")
+          qux_project = create(:project, slack_team_id: "qux", title: "Qux")
+
+          expect(Project.for_account(account).pluck(:title)).to match_array(%w(Foo Foo2))
+          expect(Project.not_for_account(account).pluck(:title)).to match_array(%w(Bar Qux))
+        end
+      end
     end
 
     describe "#community_award_types" do

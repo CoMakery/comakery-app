@@ -24,12 +24,12 @@ class Project < ActiveRecord::Base
         .order("max(awards.created_at) desc nulls last, projects.created_at desc nulls last")
   end
 
-  def self.for_account(current_account)
-    where(slack_team_id: current_account&.authentications.map(&:slack_team_id))
+  def self.for_account(account)
+    where(slack_team_id: account&.slack_auth.slack_team_id)
   end
 
-  def self.not_for_account(current_account)
-    where.not(slack_team_id: current_account&.authentications.map(&:slack_team_id))
+  def self.not_for_account(account)
+    where.not(slack_team_id: account&.slack_auth.slack_team_id)
   end
 
   def self.public
