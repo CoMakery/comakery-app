@@ -161,7 +161,7 @@ class Views::Projects::Show < Views::Base
         }
 
         row {
-          column("small-6") {
+          column("small-4") {
             award_data[:contributions].each do |contributor|
               div {
                 div(class: "float-right") { text contributor[:net_amount] }
@@ -169,7 +169,7 @@ class Views::Projects::Show < Views::Base
               }
             end
           }
-          column("small-6") { div(id: "award-percentages") }
+          column("small-8") { div(id: "award-percentages") }
         }
 
         div {

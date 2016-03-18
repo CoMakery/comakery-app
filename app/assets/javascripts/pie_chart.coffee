@@ -29,7 +29,7 @@ window.pieChart = (selector, data)->
     },
     "size": {
       "canvasHeight": 250,
-      "canvasWidth": 275,
+      "canvasWidth": 350,
       "pieOuterRadius": "88%"
     },
     "labels": {
