@@ -88,10 +88,16 @@ class Views::Projects::Show < Views::Base
                 column("small-12") {
                   with_errors(project, :account_id) {
                     label {
-                      f.radio_button(:award_type_id, award_type.to_param) if awardable_types.include?(award_type)
-                      span(award_type.name)
-                      text " (#{award_type.amount})"
-                      text " (Community Awardable)" if award_type.community_awardable?
+                      row {
+                        column("small-1") {
+                          f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
+                        }
+                        column("small-11") {
+                          span(award_type.name)
+                          text " (#{award_type.amount})"
+                          text " (Community Awardable)" if award_type.community_awardable?
+                        }
+                      }
                     }
                   }
                 }

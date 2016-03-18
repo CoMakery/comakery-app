@@ -21,7 +21,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
           visit project_path(project)
 
           within(".award-types") do
-            expect(page.all("input[type=radio]").size).to eq(1)
+            expect(page.all("input[type=radio]").size).to eq(2)
+            expect(page.all("input[type=radio][disabled=disabled]").size).to eq(1)
             expect(page).to have_content "User"
             expect(page).to have_content "Description"
           end
@@ -35,7 +36,10 @@ describe "viewing projects, creating and editing", :js, :vcr do
           visit project_path(project)
 
           within(".award-types") do
-            expect(page.all("input[type=radio]").count).to eq(0)
+            expect(page.all("input[type=radio]").size).to eq(2)
+            expect(page.all("input[type=radio][disabled=disabled]").size).to eq(2)
+            expect(page).not_to have_content "User"
+            expect(page).not_to have_content "Description"
           end
         end
       end
