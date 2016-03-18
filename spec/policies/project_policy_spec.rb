@@ -1,9 +1,15 @@
 require 'rails_helper'
 
 describe ProjectPolicy do
-  let!(:account) { create(:account).tap{|a| create(:authentication, account: a, slack_team_id: "citizen code id")} }
+  let!(:account) do
+    create(:account).tap do |a|
+      create(:authentication, account: a, slack_team_id: "citizen code id", updated_at: 1.day.ago)
+      create(:authentication, account: a, slack_team_id: "other slack team id", updated_at: 2.days.ago)
+    end
+  end
   let!(:my_public_project) { create(:project, title: "public mine", owner_account: account, public: true, slack_team_id: "citizen code id") }
   let!(:my_private_project) { create(:project, title: "private mine", owner_account: account, public: false, slack_team_id: "citizen code id") }
+  let!(:my_private_project_on_another_auth) { create(:project, title: "private mine other auth", owner_account: account, public: false, slack_team_id: "other slack team id") }
 
   let!(:other_team_member) { create(:account).tap{|a| create(:authentication, account: a, slack_team_id: "citizen code id")} }
   let!(:others_public_project) { create(:project, title: "public someone elses", owner_account: other_team_member, public: true, slack_team_id: "citizen code id") }
@@ -16,7 +22,7 @@ describe ProjectPolicy do
       it "returns all public projects and projects that belong to the current user's team" do
         projects = ProjectPolicy::Scope.new(account, Project).resolve
 
-        expect(projects.map(&:title).sort).to eq([my_private_project, others_private_project, my_public_project, others_public_project].map(&:title))
+        expect(projects.map(&:title).sort).to match_array([my_private_project, others_private_project, my_public_project, others_public_project].map(&:title))
       end
 
       it "returns all public projects if account is nil" do

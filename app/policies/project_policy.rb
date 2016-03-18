@@ -17,7 +17,7 @@ class ProjectPolicy < ApplicationPolicy
     def resolve
       if account
         projects = Project.arel_table
-        scope.where(projects[:public].eq(true).or(projects[:slack_team_id].in(@account.authentications.pluck(:slack_team_id))))
+        scope.where(projects[:public].eq(true).or(projects[:slack_team_id].eq(@account.slack_auth.slack_team_id)))
       else
         scope.where(public: true)
       end
