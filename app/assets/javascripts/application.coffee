@@ -17,6 +17,7 @@
 # = require foundation
 # = require moment
 # = require underscore
+# = require chart_colors
 # = require_tree .
 
 $ ->
