@@ -25,7 +25,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       click_on "Search"
 
-      expect(page).to have_content "Citizen Code projects"
+      within("h2") { expect(page.text).to eq("Projects") }
       expect(page).to have_content 'There was 1 search result for: "cats"'
       expect(page).to have_content "Cats with Lazers Project"
       expect(page).not_to have_content "Public Project"
@@ -34,7 +34,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       click_on "Search"
 
-      expect(page).to have_content "Citizen Code projects"
+      within("h2") { expect(page.text).to eq("Projects") }
       expect(page).to have_content 'There were 3 search results for: "s"'
 
       expect(page.all("a.project-link").map { |project_link| project_link.text }).to eq(["Public Project", "Birds with Shoes Project", "Cats with Lazers Project"])
@@ -45,7 +45,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       click_link "Browse All"
 
-      expect(page).to have_content "Citizen Code projects"
+      within("h2") { expect(page.text).to eq("Projects") }
     end
   end
 end

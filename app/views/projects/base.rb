@@ -1,9 +1,9 @@
 class Views::Projects::Base < Views::Base
 
-  def projects_header(slack_auth)
+  def projects_header(section_heading)
     row {
       column("small-10") {
-        h2 "#{slack_auth.slack_team_name} projects"
+        h2 section_heading
       }
       column("small-2") {
         a("New Project", class: buttonish("float-right"), href: new_project_path) if policy(Project).new?
