@@ -30,24 +30,12 @@ class GetAwardableAccounts
   end
 
   def api_formatted_name(user)
-    if user[:profile][:first_name].present? || user[:profile][:last_name].present?
-      name = ''
-      name << user[:profile][:first_name] << ' ' if user[:profile][:first_name].present?
-      name << user[:profile][:last_name] << ' ' if user[:profile][:last_name].present?
-      name << "- @#{user[:name]}"
-    else
-      "@#{user[:name]}"
-    end
+    real_name = [ user[:profile][:first_name].presence, user[:profile][:last_name].presence ].compact.join(' ')
+    [ real_name.presence, "@#{user[:name]}" ].compact.join(' - ')
   end
 
   def db_formatted_name(auth)
-    if auth.slack_first_name.present? || auth.slack_last_name.present?
-      name = ''
-      name << auth.slack_first_name << ' ' if auth.slack_first_name.present?
-      name << auth.slack_last_name << ' ' if auth.slack_last_name.present?
-      name << "- @#{auth.slack_user_name}"
-    else
-      "@#{auth.slack_user_name}"
-    end
+    real_name = [ auth.slack_first_name.presence, auth.slack_last_name.presence ].compact.join(' ')
+    [ real_name.presence, "@#{auth.slack_user_name}" ].compact.join(' - ')
   end
 end
