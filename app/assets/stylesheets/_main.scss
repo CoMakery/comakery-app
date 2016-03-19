@@ -89,10 +89,6 @@ body {
   padding-right: 15px;
 }
 
-.alert-box.flash-msg {
-  margin-bottom: 20px;
-}
-
 .logo {
   width: rem-calc(90);
   height: auto;
@@ -137,10 +133,6 @@ form.take-action-form p.notice {
   color: lightgrey;
 }
 
-.alert-box .close {
-  color: black;
-}
-
 .form-box {
   padding: 20px;
 }
@@ -183,14 +175,37 @@ form.take-action-form p.notice {
   }
 }
 
-.alert-box {
+// Callouts (aka flash, alert-box, etc)
+
+.callout {
   margin-bottom: 1em;
   margin-top: -.3em;
-  background-color: #E3FFB3;
   border: 0;
-  color: #4CA941;
   font-size: 18px;
   padding: 14px 20px;
+}
+
+.callout.notice {
+  background-color: hsl(82, 100%, 85%);
+  color:            hsl(114, 44%, 46%);
+}
+
+.callout.alert {
+  background-color: hsl(60, 100%, 85%);
+  color:            hsl(0, 44%, 46%);
+}
+
+.callout.error {
+  background-color: hsl(0, 100%, 85%);
+  color:            hsl(0, 44%, 46%);
+}
+
+.callout .close {
+  color: black;
+}
+
+.callout.flash-msg {
+  margin-bottom: 20px;
 }
 
 .award-send {
