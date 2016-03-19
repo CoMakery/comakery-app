@@ -31,6 +31,17 @@ describe ProjectsController do
   end
 
   describe "#new" do
+    context "when not logged in" do
+      it "redirects you somewhere pretty" do
+        session[:account_id] = nil
+
+        get :new
+
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
     context "when slack returns successful api calls" do
       render_views
 

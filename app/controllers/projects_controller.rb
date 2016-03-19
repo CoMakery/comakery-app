@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  skip_before_filter :require_login
+  skip_before_filter :require_login, except: :new
 
   def landing
     skip_authorization
