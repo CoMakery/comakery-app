@@ -87,16 +87,16 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(award_type_rows.size).to eq(4)
 
     expect(award_type_rows[0]).to have_content "This is a small award type"
-    expect(award_type_rows[0]).to have_content "1000"
+    expect(award_type_rows[0]).to have_content "1,000"
 
     expect(award_type_rows[1]).to have_content "This is a medium award type"
-    expect(award_type_rows[1]).to have_content "2000"
+    expect(award_type_rows[1]).to have_content "2,000"
 
     expect(award_type_rows[2]).to have_content "This is a large award type"
-    expect(award_type_rows[2]).to have_content "3000"
+    expect(award_type_rows[2]).to have_content "3,000"
 
     expect(award_type_rows[3]).to have_content "This is a super big award type"
-    expect(award_type_rows[3]).to have_content "5000"
+    expect(award_type_rows[3]).to have_content "5,000"
 
     click_on "Edit"
 
@@ -127,9 +127,9 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
-    expect(page).to have_content "This is a medium award type (2000) (Community Awardable)"
+    expect(page).to have_content "This is a medium award type (2,000) (Community Awardable)"
     expect(page).not_to have_content "This is a small award type"
-    expect(page).not_to have_content "1000"
+    expect(page).not_to have_content "1,000"
 
     expect(award_type_inputs.size).to eq(3)
 
