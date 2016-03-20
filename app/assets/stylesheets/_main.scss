@@ -6,12 +6,14 @@
 body {
   background-color: white;
 
-  &.signed-in, &.projects-show  {
+  .top-bar-container {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 2.3em;
+  }
+  &.projects-landing.signed-out {
     .top-bar-container {
-      border-bottom: 1px solid #ccc;
-    }
-    .app-container {
-      margin-top: 1.5em;
+      border-bottom: 0;
+      margin-bottom: 0;
     }
   }
 }
