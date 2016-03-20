@@ -22,7 +22,7 @@ class Views::Projects::AwardSend < Views::Base
                     end
                     column(can_award ? "small-11" : "small-12") {
                       span(award_type.name)
-                      text " (#{award_type.amount})"
+                      text " (#{number_with_precision(award_type.amount, precision: 0, delimiter: ',')})"
                       text " (Community Awardable)" if award_type.community_awardable?
                     }
                   }
@@ -55,7 +55,7 @@ class Views::Projects::AwardSend < Views::Base
           }
           row {
             column("small-12") {
-              f.submit("Send Award", class: buttonish(:tiny, :round))
+              f.submit("Send Award", class: buttonish())
             }
           }
         end
