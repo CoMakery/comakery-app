@@ -124,8 +124,5 @@ class Views::Projects::Show < Views::Base
         }
       }
     }
-    full_row {
-      a("Back", class: buttonish << "margin-small", href: projects_path)
-    }
   end
 end
