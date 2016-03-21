@@ -26,7 +26,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
       click_link project.title
     end
 
-    click_link "Back"
+    visit projects_path
 
     click_link "New Project"
 

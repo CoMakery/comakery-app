@@ -30,7 +30,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
       expect(page).to have_content "Visibility: Public"
       expect(page).to have_content "Citizen Code"
 
-      click_link "Back"
+      visit projects_path
 
       click_link "Browse All"
 
