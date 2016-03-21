@@ -44,5 +44,15 @@ module Views
       classes += Array(args.fetch(:class, []))
       args.merge(class: classes)
     end
+
+    def helpful_tooltip(text, options={})
+      span('data-tooltip': '',
+           'aria-haspopup': "true",
+           'class': "has-tip #{options[:class]}",
+           'data-options': "show_on:large",
+           title: text) {
+        i class: "fa fa-question"
+      }
+    end
   end
 end

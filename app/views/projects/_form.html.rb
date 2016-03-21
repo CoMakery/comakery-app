@@ -57,13 +57,7 @@ module Views
             }
             column("small-2", class: "text-center") {
               text "Community Awardable "
-              span('data-tooltip': '',
-                   'aria-haspopup': "true",
-                   'class': "has-tip",
-                   'data-options': "show_on:large",
-                   title: "Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.") {
-                i class: "fa fa-question"
-              }
+              helpful_tooltip("Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.")
             }
             column("small-4", class: "text-center") {
             }
@@ -78,7 +72,11 @@ module Views
                   ff.text_field :name
                 }
                 column("small-2") {
-                  ff.text_field :amount, type: :number, class: 'text-right', disabled: !ff.object&.modifiable?
+                  disabled = !ff.object&.modifiable?
+                  row {
+                    column("small-10") { ff.text_field :amount, type: :number, class: 'text-right', disabled: disabled }
+                    column("small-2") { helpful_tooltip("Award types' amounts can't be modified if there are existing awards", ) if disabled }
+                  }
                 }
                 column("small-2", class: "text-center") {
                   ff.check_box :community_awardable
