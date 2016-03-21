@@ -169,6 +169,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
       visit edit_project_path(project)
 
       expect(page.all("a[data-mark-and-hide]").size).to eq(1)
+      expect(page.find("input[name*='[amount]']")[:value]).to eq("40000")
+      expect(page.find("input[name*='[amount]']")[:disabled]).to eq(false)
 
       create(:award, award_type: award_type, account: same_team_account)
 
@@ -176,6 +178,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       expect(page.all("a[data-mark-and-hide]").size).to eq(0)
       expect(page).to have_content "(1 award sent)"
+      expect(page.find("input[name*='[amount]']")[:value]).to eq("40000")
+      expect(page.find("input[name*='[amount]']")[:disabled]).to eq(true)
     end
   end
 end

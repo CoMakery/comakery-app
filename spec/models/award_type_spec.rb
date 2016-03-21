@@ -7,6 +7,13 @@ describe AwardType do
       expect(award_type).not_to be_valid
       expect(award_type.errors.full_messages).to eq(["Project can't be blank", "Name can't be blank", "Amount can't be blank"])
     end
+
+    it "prevents modification of amount if there are existing awards" do
+      award_type = create(:award).award_type
+      award_type.amount += 1000
+      expect(award_type).not_to be_valid
+      expect(award_type.errors.full_messages).to be_include("Amount can't be modified if there are existing awards")
+    end
   end
 
   describe "associations" do
@@ -20,6 +27,18 @@ describe AwardType do
 
     it "has many awards" do
       expect(award_type.awards).to match_array([award])
+    end
+  end
+
+  describe "scopes" do
+    describe "#modifiable?" do
+      it "returns true if there are awards" do
+        award_type = create(:award_type)
+        expect(award_type).to be_modifiable
+
+        create(:award, award_type: award_type)
+        expect(award_type).not_to be_modifiable
+      end
     end
   end
 end

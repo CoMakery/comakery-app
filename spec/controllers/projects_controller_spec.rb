@@ -272,7 +272,6 @@ describe ProjectsController do
         expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
         expect(assigns[:slack_channels]).to eq(["foo", "bar"])
 
-
         award_types = project.award_types.sort_by(&:amount)
         expect(award_types.size).to eq((expected_rows = 4) + (expected_template_rows = 1))
 
@@ -287,6 +286,26 @@ describe ProjectsController do
         expect(award_types.fourth.amount).to eq(400)
         expect(award_types.fifth.name).to eq("Big Award")
         expect(award_types.fifth.amount).to eq(500)
+      end
+
+      it "doesn't allow modification of award_types when the award_type has awards already sent" do
+        expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
+
+        award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300).tap do |award_type|
+          create(:award, award_type: award_type)
+        end
+
+        expect do
+          expect do
+            put :update, id: cat_project.to_param,
+                project: {
+                    award_types_attributes: [
+                        {id: award_type.to_param, name: "Bigger Award", amount: 500},
+                    ]
+                }
+            expect(response.status).to eq(200)
+          end.not_to change { Project.count }
+        end.not_to change { AwardType.count }
       end
     end
 

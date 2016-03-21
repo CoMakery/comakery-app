@@ -78,16 +78,16 @@ module Views
                   ff.text_field :name
                 }
                 column("small-2") {
-                  ff.text_field :amount, type: :number, class: 'text-right'
+                  ff.text_field :amount, type: :number, class: 'text-right', disabled: !ff.object&.modifiable?
                 }
                 column("small-2", class: "text-center") {
                   ff.check_box :community_awardable
                 }
                 column("small-4") {
-                  if ff.object && ff.object.awards.count > 0
-                    text "(#{pluralize(ff.object.awards.count, "award")} sent)"
-                  else
+                  if ff.object&.modifiable?
                     a("×", href: "#", 'data-mark-and-hide': '.award-type-row')
+                  else
+                    text "(#{pluralize(ff.object.awards.count, "award")} sent)"
                   end
                 }
               }
