@@ -238,6 +238,9 @@ form.take-action-form p.notice {
     margin-top: 20px;
     margin-bottom: -20px;
   }
+  #award-percentages svg {
+    overflow: overlay;
+  }
 }
 .project-head {
   width: 100%;
