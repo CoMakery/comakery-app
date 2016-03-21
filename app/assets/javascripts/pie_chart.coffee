@@ -29,12 +29,12 @@ window.pieChart = (selector, data)->
     },
     "size": {
       "canvasHeight": 250,
-      "canvasWidth": 500,
+      "canvasWidth": 350,
       "pieOuterRadius": "88%"
     },
     "labels": {
       "outer": {
-        "pieDistance": 32
+        "pieDistance": 12
       },
       "inner": {
         "format": "value"

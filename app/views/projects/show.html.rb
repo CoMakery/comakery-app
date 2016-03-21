@@ -78,34 +78,27 @@ class Views::Projects::Show < Views::Base
       column("small-5 award-send") {
         render partial: "award_send"
       }
-      column("small-6") {
+      column("small-6 contributors-column") {
         row { column("small-12", class: "underlined-header") { text "Awards" } }
 
-        br
-
         row {
-          if award_data[:award_amounts][:my_project_coins]
-            column("small-6", class: "centered") {
+          column("small-4", class: "centered") {
+            if award_data[:award_amounts][:my_project_coins]
               div(class: "centered font-large") { text award_data[:award_amounts][:my_project_coins] }
               div(class: "centered") { text "My Project Coins" }
-            }
-          end
-          column("small-6") {
+            end
             div(class: "centered font-large") { text award_data[:award_amounts][:total_coins_issued] }
             div(class: "centered") { text "Total Coins Issued" }
           }
+          column("small-8", class: "centered") {
+            div(id: "award-percentages")
+          }
         }
-
-        br
 
         row { column("small-12", class: "underlined-header") { text "Contributions" } }
 
         full_row {
           div(id: "contributions-chart")
-        }
-
-        row {
-          column("small-12") { div(id: "award-percentages") }
         }
 
         row {
@@ -119,7 +112,7 @@ class Views::Projects::Show < Views::Base
           }
         }
 
-        div {
+        p {
           a(href: project_awards_path(project), class: "text-link") { text "Award History »" }
         }
       }
