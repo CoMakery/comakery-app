@@ -1,13 +1,14 @@
 window.chartColors = [
-  # these 5 are nice
-  "#722349"
-  "#e63f0b"
-  "#3c5e3a"
-  "#098aaa"
-  "#098aaa"
-
-  "#e4e400"
-  "#b0b0ff"
+  # these are nice
+  "#7B00D7"
+  "#E5004F"
+  "#0884FF"
+  "#73C30E"
+  "#D5E301"
+  "#F6A504"
+  "#C500FF"
+  "#00C3EB"
+  "#F85900"
 
   # these are filler and are meh
   "#b00000"
