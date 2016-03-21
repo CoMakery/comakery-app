@@ -97,13 +97,20 @@ class Views::Projects::Show < Views::Base
             end
             div(class: "centered font-large") { text award_data[:award_amounts][:total_coins_issued] }
             div(class: "centered") { text "Total Coins Issued" }
+
+            p(class: "centered font-small") {
+              a(href: project_awards_path(project), class: "text-link") {
+                i(class: "fa fa-history")
+                text " Award History"
+              }
+            }
           }
           column("small-8", class: "centered") {
             div(id: "award-percentages")
           }
         }
 
-        row { column("small-12", class: "underlined-header") { text "Contributions" } }
+        row { column("small-12", class: "underlined-header") { text "Recent Activity" } }
 
         full_row {
           div(id: "contributions-chart")
@@ -118,10 +125,6 @@ class Views::Projects::Show < Views::Base
               }
             end
           }
-        }
-
-        p {
-          a(href: project_awards_path(project), class: "text-link") { text "Award History »" }
         }
       }
     }

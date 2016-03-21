@@ -50,7 +50,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
         it "lets people view awards" do
           visit project_path(project)
 
-          click_link "Award History »"
+          click_link "Award History"
 
           expect(page).to have_content "Award History"
         end
@@ -153,7 +153,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       visit project_path(project)
 
-      click_link "Award History »"
+      click_link "Award History"
 
       expect(page.all(".award-rows .award-row").size).to eq(0)
 
@@ -182,7 +182,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
       expect(page).to have_content "Successfully sent award to Sherman Yessir"
 
-      click_link "Award History »"
+      click_link "Award History"
 
       expect(page).to have_content "Award History"
       expect(page).to have_content "Feb 29"
