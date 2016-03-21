@@ -31,6 +31,7 @@ body {
 
   .large-10.large-centered.columns {
     float: none;
+    max-width: 75em;
   }
 }
 
@@ -250,7 +251,7 @@ form.take-action-form p.notice {
   margin: 0 auto;
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #ccc;
-  padding: 2.3em 15% 2.5em;
+  padding: 2.3em 0 2.5em;
   background: #F5F5F5;
 }
 .project-title {

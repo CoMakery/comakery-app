@@ -23,64 +23,68 @@ class Views::Projects::Show < Views::Base
 
     content_for(:pre_body) {
       div(class: "project-head") {
-        row(class: "project-title") {
-          column("small-12") {
-            h1 project.title
-            p {
-              text "by "
-              strong project.slack_team_name
-              if policy(project).edit?
-                a(class: "edit", href: edit_project_path(project)) {
-                  i(class: "fa fa-pencil") {}
-                  text " Edit Project"
-                }
-              end
-            }
-          }
-        }
-        row {
-          column("small-6") {
-            div(class: "project-image", style: "background-image: url(#{attachment_url(project, :image)})") {}
-          }
-          column("small-6") {
-            full_row {
-              p project.description
-            }
-            row(class: "project-settings") {
-              column("small-6") {
-                text "Owner: "
-                b "#{project.owner_slack_user_name}"
-              }
-              column("small-6") {
-                text "Visibility: "
-                b "#{project.public? ? "Public" : "Private"}"
+        div(class: "large-10 large-centered columns") {
+          row(class: "project-title") {
+            column("small-12") {
+              h1 project.title
+              p {
+                text "by "
+                strong project.slack_team_name
+                if policy(project).edit?
+                  a(class: "edit", href: edit_project_path(project)) {
+                    i(class: "fa fa-pencil") {}
+                    text " Edit Project"
+                  }
+                end
               }
             }
-            row(class: "project-tasks") {
-              if project.tracker
-                column("small-5") {
-                  a(href: project.tracker, target: "_blank", class: "text-link") do
-                    i(class: "fa fa-tasks")
-                    text " Project Tasks"
-                  end
+          }
+          row {
+            column("small-6") {
+              div(class: "project-image", style: "background-image: url(#{attachment_url(project, :image)})") {}
+            }
+            column("small-6") {
+              full_row {
+                p project.description
+              }
+              row(class: "project-settings") {
+                column("small-6") {
+                  text "Owner: "
+                  b "#{project.owner_slack_user_name}"
                 }
-              end
-              if project.slack_team_domain
-                column("small-7") {
-                  a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") do
-                    i(class: "fa fa-slack")
-                    text " Project Slack Channel"
-                  end
+                column("small-6") {
+                  text "Visibility: "
+                  b "#{project.public? ? "Public" : "Private"}"
                 }
-              end
+              }
+              row(class: "project-tasks") {
+                if project.tracker
+                  column("small-5") {
+                    a(href: project.tracker, target: "_blank", class: "text-link") do
+                      i(class: "fa fa-tasks")
+                      text " Project Tasks"
+                    end
+                  }
+                end
+                if project.slack_team_domain
+                  column("small-7") {
+                    a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") do
+                      i(class: "fa fa-slack")
+                      text " Project Slack Channel"
+                    end
+                  }
+                end
+              }
             }
           }
         }
       }
     }
     row(class: "project-body") {
-      column("small-5 award-send") {
-        render partial: "award_send"
+      column("small-5") {
+        div(class:"award-send") {
+          render partial: "award_send"
+        }
       }
       column("small-6 contributors-column") {
         row { column("small-12", class: "underlined-header") { text "Awards" } }
