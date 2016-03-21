@@ -57,7 +57,7 @@ module Views
             }
             column("small-2", class: "text-center") {
               text "Community Awardable "
-              helpful_tooltip("Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.")
+              question_tooltip("Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.")
             }
             column("small-4", class: "text-center") {
             }
@@ -73,10 +73,13 @@ module Views
                 }
                 column("small-2") {
                   disabled = !ff.object&.modifiable?
-                  row {
-                    column("small-10") { ff.text_field :amount, type: :number, class: 'text-right', disabled: disabled }
-                    column("small-2") { helpful_tooltip("Award types' amounts can't be modified if there are existing awards", ) if disabled }
-                  }
+                  if disabled
+                    tooltip("Award types' amounts can't be modified if there are existing awards", if: disabled) do
+                      ff.text_field :amount, type: :number, class: 'text-right', disabled: disabled
+                    end
+                  else
+                    ff.text_field :amount, type: :number, class: 'text-right', disabled: disabled
+                  end
                 }
                 column("small-2", class: "text-center") {
                   ff.check_box :community_awardable
