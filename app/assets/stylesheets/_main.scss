@@ -190,6 +190,9 @@ form.take-action-form p.notice {
 .callout.notice {
   background-color: hsl(82, 100%, 85%);
   color:            hsl(114, 44%, 46%);
+  .close-button {
+    color: hsl(114, 44%, 46%);
+  }
 }
 
 .callout.alert {
