@@ -8,7 +8,7 @@ body {
 
   .top-bar-container {
     border-bottom: 1px solid #ccc;
-    margin-bottom: 2.3em;
+    margin-bottom: 2em;
   }
   &.projects-landing.signed-out, &.projects-show {
     .top-bar-container {
@@ -223,6 +223,9 @@ form.take-action-form p.notice {
   input[type="radio"] {
     margin-right: 10px;
     margin-left: 2px;
+  }
+  label {
+    font-weight: inherit;
   }
 }
 .contributors-column {
