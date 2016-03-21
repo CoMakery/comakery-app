@@ -30,26 +30,24 @@ window.pieChart = (selector, data)->
     "size": {
       "canvasHeight": 250,
       "canvasWidth": 350,
-      "pieOuterRadius": "88%"
+      "pieOuterRadius": "80%"
     },
     "labels": {
       "outer": {
-        "pieDistance": 12
+        "pieDistance": 14
       },
       "inner": {
         "format": "value"
       },
       "mainLabel": {
-        "font": "verdana"
+        "fontSize": 10,
       },
       "percentage": {
         "color": "#e1e1e1",
-        "font": "verdana",
         "decimalPlaces": 0
       },
       "value": {
         "color": "#e1e1e1",
-        "font": "verdana"
       },
       "lines": {
         "enabled": true,
@@ -68,7 +66,7 @@ window.pieChart = (selector, data)->
       "pullOutSegmentOnClick": {
         "effect": "linear",
         "speed": 400,
-        "size": 15
+        "size": 10
       }
     }
   }, {"data": data}))

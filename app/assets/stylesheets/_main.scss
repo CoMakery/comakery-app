@@ -10,7 +10,7 @@ body {
     border-bottom: 1px solid #ccc;
     margin-bottom: 2.3em;
   }
-  &.projects-landing.signed-out {
+  &.projects-landing.signed-out, &.projects-show {
     .top-bar-container {
       border-bottom: 0;
       margin-bottom: 0;
@@ -233,7 +233,21 @@ form.take-action-form p.notice {
     margin-bottom: -.2em;
   }
 }
-.project-header {
+.projects-show {
+  .callout.flash-msg {
+    margin-top: 20px;
+    margin-bottom: -20px;
+  }
+}
+.project-head {
+  width: 100%;
+  margin: 0 auto;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  padding: 2.3em 15% 2.5em;
+  background: #F5F5F5;
+}
+.project-title {
   margin-bottom: 2em;
   text-align: center;
 
