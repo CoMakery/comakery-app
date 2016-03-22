@@ -27,6 +27,8 @@ body {
 }
 .app-container {
   @include grid-row($behavior: collapse);
+  max-width: none;
+  width: 100%;
 
   .large-10.large-centered.columns {
     float: none;
@@ -39,9 +41,6 @@ body {
   background: darken($vapor, 15);
 }
 @media #{$medium-up} {
-  .app-container {
-    max-width: none;
-  }
   .app-nav {
     @include grid-column($columns: 2);
   }

@@ -14,13 +14,13 @@ class Views::Projects::Base < Views::Base
   def projects_block(projects)
     projects.each_slice(3) do |left_project, middle_project, right_project|
       row {
-        column("small-4") {
+        column("small-12 medium-6 large-4") {
           project_block(left_project)
         }
-        column("small-4") {
+        column("small-12 medium-6 large-4") {
           project_block(middle_project) if middle_project
         }
-        column("small-4") {
+        column("small-12 medium-6 large-4") {
           project_block(right_project) if right_project
         }
       }
