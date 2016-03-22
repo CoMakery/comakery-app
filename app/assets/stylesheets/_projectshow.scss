@@ -1,0 +1,64 @@
+.award-send {
+  border: 1px solid #ccc;
+  padding: 20px 50px;
+
+  input[type="radio"] {
+    margin-right: 10px;
+    margin-left: 2px;
+  }
+  label {
+    font-weight: inherit;
+  }
+}
+.contributors-column {
+  .font-large {
+    font-size: 2.5em;
+    font-weight: 300;
+    margin-top: .3em;
+    margin-bottom: -.2em;
+  }
+  .font-small {
+    margin-top: .2em;
+  }
+}
+.projects-show {
+  .callout.flash-msg {
+    margin-top: 20px;
+    margin-bottom: -20px;
+  }
+  #award-percentages svg {
+    overflow: overlay;
+  }
+}
+.project-head {
+  width: 100%;
+  margin: 0 auto;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  padding: 2.3em 0 2.5em;
+  background: #F5F5F5;
+}
+.project-title {
+  margin-bottom: 2em;
+  text-align: center;
+
+  h1 {
+    margin: 0;
+  }
+  a.edit {
+    margin-left: 1em;
+  }
+}
+.project-image {
+  width: 100%;
+  height: 20em;
+  background-size: cover;
+  background-position: center center;
+}
+.row.project-tasks {
+  margin-top: 1em;
+}
+
+.row.project-settings {
+  margin-bottom: .5em;
+}
