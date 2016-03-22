@@ -3,6 +3,7 @@
 @import 'homepage';
 @import 'projectbox';
 @import 'projectshow';
+@import 'callouts';
 
 body {
   background-color: white;
@@ -17,16 +18,13 @@ body {
       margin-bottom: 0;
     }
   }
+  &.projects-landing .app-container {
+    h2, h1 {
+      font-size: 36px;
+      margin-bottom: .7em;
+    }
+  }
 }
-
-.text-primary {
-  color: $primary-color;
-}
-
-.text-alert {
-  color: $alert-color;
-}
-
 .app-container {
   @include grid-row($behavior: collapse);
 
@@ -35,32 +33,11 @@ body {
     max-width: 75em;
   }
 }
-
-.app-nav {
-  @include grid-column($columns: 12);
-  @include padding-leader(.5);
-  background: $primary-color;
-  li a:not(.button) {
-    color: white;
-  }
-}
-
-.app-content {
-  @include grid-column($columns: 12);
-  @include padding-leader(.5);
-}
-
-.app-content-wide {
-  @include grid-column($columns: 12);
-  @include padding-leader(.5);
-}
-
 .app-aside {
   @include grid-column($columns: 12);
   @include padding-leader(.5);
   background: darken($vapor, 15);
 }
-
 @media #{$medium-up} {
   .app-container {
     max-width: none;
@@ -78,48 +55,36 @@ body {
     @include grid-column($columns: 4);
   }
 }
-
 .main {
   padding-bottom: 4em;
 }
-
-.button.bordered {
-  border: solid 2px $snow;
-}
-
 .top-bar-right ul li > a {
   @extend %chunko-text;
   text-align: right;
   padding-right: 15px;
 }
-
 .logo {
   width: rem-calc(90);
   height: auto;
   padding: $topbar-height/6 0 $topbar-height/5 0;
   max-height: $topbar-height;
 }
-
 a .button, a .button.take-action {
   @extend %chunko-text;
   color: $snow;
 }
-
 form.take-action-form p.notice {
   color: $snow;
 }
-
 .award-rows .header {
   font-weight: bold;
   text-transform: uppercase;
 }
-
 .award-rows .header-row {
   border-bottom: 1px solid $iron;
   margin-bottom: 15px;
   padding: 5px;
 }
-
 .underlined-header {
   border-bottom: 1px solid $iron;
 
@@ -135,91 +100,18 @@ form.take-action-form p.notice {
   text-transform: uppercase;
   font-size: .8em;
 }
-
-.text-light-gray {
-  color: lightgrey;
-}
-
-.form-box {
-  padding: 20px;
-}
-
-.underline {
-  text-decoration: underline;
-}
-
 .centered {
   text-align: center;
 }
-
 .font-large {
   font-size: $font-size-large;
 }
-
 .font-medium {
   font-size: $font-size-medium;
 }
-
 .font-small {
   font-size: $font-size-small;
 }
-
 .font-tiny {
   font-size: $font-size-tiny;
-}
-
-.projects-landing .app-container {
-  h2, h1 {
-    font-size: 36px;
-    margin-bottom: .7em;
-  }
-}
-
-.row.project-body {
-  margin-top: 2.6em;
-  h3 {
-    margin-bottom: .5em;
-  }
-}
-
-// Callouts (aka flash, alert-box, etc)
-
-.callout {
-  margin-bottom: 1em;
-  margin-top: -.3em;
-  border: 0;
-  font-size: 18px;
-  padding: 14px 20px;
-}
-
-.callout.notice {
-  background-color: hsl(82, 100%, 85%);
-  color:            hsl(114, 44%, 46%);
-  .close-button {
-    color: hsl(114, 44%, 46%);
-  }
-}
-
-.callout.alert {
-  background-color: hsl(60, 100%, 85%);
-  color:            hsl(0, 44%, 46%);
-}
-
-.callout.error {
-  background-color: hsl(0, 100%, 85%);
-  color:            hsl(0, 44%, 46%);
-}
-
-.callout .close {
-  color: black;
-}
-
-.callout.flash-msg {
-  margin-bottom: 20px;
-}
-
-.project-search {
-  div {
-    padding: 0;
-  }
 }
