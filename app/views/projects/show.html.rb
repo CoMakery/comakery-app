@@ -110,22 +110,24 @@ class Views::Projects::Show < Views::Base
           }
         }
 
-        row { column("small-12", class: "underlined-header") { text "Recent Activity" } }
+        if award_data[:contributions].present?
+          row { column("small-12", class: "underlined-header") { text "Recent Activity" } }
 
-        full_row {
-          div(id: "contributions-chart")
-        }
-
-        row {
-          column("small-12") {
-            award_data[:contributions].each do |contributor|
-              div {
-                div(class: "float-right") { text contributor[:net_amount] }
-                span contributor[:name]
-              }
-            end
+          full_row {
+            div(id: "contributions-chart")
           }
-        }
+
+          row {
+            column("small-12") {
+              award_data[:contributions].each do |contributor|
+                div {
+                  div(class: "float-right") { text contributor[:net_amount] }
+                  span contributor[:name]
+                }
+              end
+            }
+          }
+        end
       }
     }
   end
