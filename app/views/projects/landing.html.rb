@@ -47,6 +47,6 @@ class Views::Projects::Landing < Views::Projects::Base
     full_row { h1 "Public Projects" }
     projects_block(public_projects)
 
-    a("Browse All", href: projects_path)
+    a("Browse All", href: projects_path, class: "more")
   end
 end

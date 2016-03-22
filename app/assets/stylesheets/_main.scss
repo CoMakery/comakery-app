@@ -72,6 +72,10 @@ a .button, a .button.take-action {
   @extend %chunko-text;
   color: $snow;
 }
+a.more {
+  font-size: 16pt;
+  text-transform: lowercase;
+}
 form.take-action-form p.notice {
   color: $snow;
 }
