@@ -43,6 +43,13 @@ describe Authentication do
     end
   end
 
+  describe "#slack_icon" do
+    it "returns the slack_image_32 and falls back on the slack_team_image_34 if not available" do
+      expect(build(:authentication, slack_team_image_34_url: "http://team.jpg").slack_icon).to eq("http://team.jpg")
+      expect(build(:authentication, slack_team_image_34_url: "http://team.jpg", slack_image_32_url: "http://user.jpg").slack_icon).to eq("http://user.jpg")
+    end
+  end
+
   describe ".find_or_create_from_auth_hash" do
     let(:auth_hash) {
       {
@@ -51,7 +58,7 @@ describe Authentication do
               "token" => "xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa"
           },
           'extra' => {
-            'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com'}}},
+            'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com', 'image_32' => 'https://avatars.com/avatars_32.jpg'}}},
             'team_info' => {
               'team' => {
                 'icon' => {
@@ -91,6 +98,7 @@ describe Authentication do
         expect(auth.slack_user_id).to eq("slack user id")
         expect(auth.slack_token).to eq("xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa")
         expect(auth.slack_team_domain).to eq("bobrobertsdomain")
+        expect(auth.slack_image_32_url).to eq('https://avatars.com/avatars_32.jpg')
       end
     end
 

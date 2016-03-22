@@ -1,4 +1,12 @@
 class Mom
+  def cc_account(**attrs)
+    account(**attrs).tap{|a| create(:cc_authentication, account: a) }
+  end
+
+  def sb_account(**attrs)
+    account(**attrs).tap{|a| create(:sb_authentication, account: a) }
+  end
+
   def account(**attrs)
     @@account_count ||= 0
     @@account_count += 1
@@ -17,11 +25,22 @@ class Mom
     role name: 'Admin', key: Role::ADMIN_ROLE_KEY
   end
 
+  def cc_authentication(**attrs)
+    defaults = {slack_team_id: "citizencode"}
+    defaults[:account] = cc_account unless attrs.has_key?(:account)
+    authentication(defaults.merge(attrs))
+  end
+
+  def sb_authentication(**attrs)
+    defaults = {slack_team_id: "swarmbot"}
+    defaults[:account] = cc_account unless attrs.has_key?(:account)
+    authentication(defaults.merge(attrs))
+  end
+
   def authentication(**attrs)
     @@authentication_count ||= 0
     @@authentication_count += 1
     defaults = {
-        account: create(:account),
         provider: "slack",
         slack_token: "slack token",
         slack_user_id: "slack user id #{@@authentication_count}",
@@ -31,9 +50,19 @@ class Mom
         slack_team_id: "citizen code id",
         slack_user_name: "johndoe"
     }
+    defaults[:account] = create(:account) unless attrs.has_key?(:account)
     defaults[:slack_first_name] = "John" unless attrs.has_key?(:slack_first_name) && attrs[:slack_first_name] == nil
     defaults[:slack_last_name] = "Doe" unless attrs.has_key?(:slack_last_name) && attrs[:slack_last_name] == nil
     Authentication.new(defaults.merge(attrs))
+  end
+
+
+  def cc_project(owner_account = create(:cc_authentication), **attrs)
+    project(owner_account, {slack_team_id: "citizencode"}.merge(**attrs))
+  end
+
+  def sb_project(owner_account = create(:sb_authentication), **attrs)
+    project(owner_account, {slack_team_id: "swarmbot"}.merge(**attrs))
   end
 
   def project(owner_account = create(:account), **attrs)

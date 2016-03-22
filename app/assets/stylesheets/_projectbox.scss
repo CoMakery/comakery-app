@@ -64,4 +64,12 @@
       font-weight: 500;
     }
   }
+
+  .contributors {
+    display: inline-block;
+    float: right;
+    .contributor {
+      margin: 5px;
+    }
+  }
 }

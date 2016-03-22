@@ -47,6 +47,10 @@ class SlackAuthHash
     @slack_team_name ||= @auth_hash.dig('info', 'team')
   end
 
+  def slack_image_32_url
+    @slack_image_32_url ||= @auth_hash.dig('extra', 'user_info', 'user', 'profile', 'image_32')
+  end
+
   def slack_team_image_34_url
     @slack_team_image_34_url ||= @auth_hash.dig('extra', 'team_info', 'team', 'icon', 'image_34')
   end

@@ -26,7 +26,7 @@ describe SessionsController do
           'credentials' => {'token' => 'these are credentials'},
           'info' => {'team' => "Citizen Code", 'team_id' => 'T00000000', 'user_id' => 'U00000000', 'user' => 'redman', 'first_name' => "Red", 'last_name' => "Man"},
           'extra' => {
-            'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com'}}},
+            'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com', 'image_32' => 'https://avatars.com/avatars_32.jpg'}}},
             'team_info' => { 'team' => { 'icon' => { 'image_34' => 'https://slack.example.com/team-image-34-px.jpg', 'image_132' => 'https://slack.example.com/team-image-132-px.jpg' } } }
           }
         }

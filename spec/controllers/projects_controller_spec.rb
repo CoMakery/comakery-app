@@ -11,12 +11,18 @@ describe ProjectsController do
     let!(:my_private_project) { create(:project, slack_team_id: "foo", title: "my_private_project") }
     let!(:my_public_project) { create(:project, slack_team_id: "foo", public: true, title: "my_public_project") }
 
+    before do
+      expect(TopContributors).to receive(:call).twice.and_return(double(success?: true, contributors: {}))
+    end
+
     it "returns your private projects, and public projects that *do not* belong to you" do
       get :landing
 
       expect(response.status).to eq(200)
       expect(assigns[:private_projects].map(&:title)).to match_array(["my_private_project", "my_public_project"])
       expect(assigns[:public_projects].map(&:title)).to match_array(["other_public_project"])
+      expect(assigns[:private_project_contributors].keys).to eq([])
+      expect(assigns[:public_project_contributors].keys).to eq([])
     end
 
     it "renders nicely even if you are not logged in" do
@@ -158,18 +164,22 @@ describe ProjectsController do
     let!(:fox_project) { create(:project, title: "Foxes", description: "Foxes with boxes", owner_account: account, slack_team_id: 'foo') }
 
     describe "#index" do
-      let!(:cat_project_award) { create(:award, award_type: create(:award_type, project: cat_project), created_at: 2.days.ago) }
-      let!(:dog_project_award) { create(:award, award_type: create(:award_type, project: dog_project), created_at: 1.days.ago) }
-      let!(:yak_project_award) { create(:award, award_type: create(:award_type, project: yak_project), created_at: 3.days.ago) }
+      let!(:cat_project_award) { create(:award, authentication: create(:authentication, slack_team_id: "foo", slack_team_image_132_url: "http://auth_avatar_2.jpg"), award_type: create(:award_type, project: cat_project, amount: 200), created_at: 2.days.ago) }
+      let!(:dog_project_award) { create(:award, authentication: create(:authentication, slack_team_id: "foo", slack_team_image_132_url: "http://auth_avatar_1.jpg"), award_type: create(:award_type, project: dog_project, amount: 100), created_at: 1.days.ago) }
+      let!(:yak_project_award) { create(:award, authentication: create(:authentication, slack_team_id: "foo", slack_team_image_132_url: "http://auth_avatar_3.jpg"), award_type: create(:award_type, project: yak_project, amount: 300), created_at: 3.days.ago) }
+
+      before do
+        expect(TopContributors).to receive(:call).and_return(double(success?: true, contributors: {cat_project => [], dog_project => [], yak_project => []}))
+      end
 
       include ActionView::Helpers::DateHelper
       it "lists the projects ordered by most recent award date desc" do
-
         get :index
 
         expect(response.status).to eq(200)
         expect(assigns[:projects].map(&:title)).to eq(["Dogs", "Cats", "Yaks", "Foxes"])
         expect(assigns[:projects].map { |p| time_ago_in_words(p.last_award_created_at) if p.last_award_created_at }).to eq(["1 day", "2 days", "3 days", nil])
+        expect(assigns[:project_contributors].keys).to eq([cat_project, dog_project, yak_project])
       end
 
       it "allows querying based on the title of the project, ignoring case" do

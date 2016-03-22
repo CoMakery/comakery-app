@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160321181533) do
+ActiveRecord::Schema.define(version: 20160322222235) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(version: 20160321181533) do
     t.string   "slack_team_domain"
     t.string   "slack_team_image_34_url"
     t.string   "slack_team_image_132_url"
+    t.string   "slack_image_32_url"
   end
 
   add_index "authentications", ["slack_team_id"], name: "index_authentications_on_slack_team_id", using: :btree

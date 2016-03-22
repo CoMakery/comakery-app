@@ -5,10 +5,12 @@ describe "viewing projects, creating and editing", :js, :vcr do
     let!(:owner) { create(:account) }
     let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: "foo") }
     let!(:other_account) { create(:account) }
-    let!(:other_account_authentication) { create(:authentication, account: other_account, slack_team_id: "foo") }
+    let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: "foo") }
     let!(:project) { create(:project, public: true, owner_account: owner, slack_team_id: "foo") }
-    let!(:award_type) { create(:award_type, project: project, community_awardable: false) }
-    let!(:community_award_type) { create(:award_type, project: project, community_awardable: true) }
+    let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
+    let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }
+    let!(:award) { create(:award, award_type: award_type, authentication: owner_auth)}
+    let!(:community_award) { create(:award, award_type: community_award_type, authentication: other_account_auth)}
 
     before do
       stub_slack_user_list
@@ -72,15 +74,15 @@ describe "viewing projects, creating and editing", :js, :vcr do
     let!(:same_team_small_award) { create(:award, authentication: owner_authentication, award_type: same_team_small_award_type) }
 
     let!(:different_large_award_type) { create(:award_type, project: different_team_project, name: "Large", amount: 3000) }
-    let!(:different_large_award) { create(:award, award_type: different_large_award_type) }
+    let!(:different_large_award) { create(:award, award_type: different_large_award_type, authentication: different_team_authentication) }
 
     let!(:owner_account) { create(:account, email: "hubert@example.com") }
     let!(:other_account) { create(:account, email: "sherman@example.com") }
     let!(:different_team_account) { create(:account, email: "different@example.com") }
 
-    let!(:owner_authentication) { create(:authentication, slack_user_name: 'hubert', slack_first_name: 'Hubert', slack_last_name: 'Sherbert', slack_user_id: 'hubert id', account: owner_account, slack_team_id: "team id") }
-    let!(:other_authentication) { create(:authentication, slack_user_name: 'sherman', slack_user_id: 'sherman id', slack_first_name: "Sherman", slack_last_name: "Yessir", account: other_account, slack_team_id: "team id") }
-    let!(:different_team_authentication) { create(:authentication, slack_user_name: 'different', slack_user_id: 'different id', slack_first_name: "Different", slack_last_name: "Different", account: different_team_account, slack_team_id: "different team id")}
+    let!(:owner_authentication) { create(:authentication, slack_user_name: 'hubert', slack_first_name: 'Hubert', slack_last_name: 'Sherbert', slack_user_id: 'hubert id', account: owner_account, slack_team_id: "team id", slack_team_image_34_url: "http://avatar.com/owner_team_avatar.jpg") }
+    let!(:other_authentication) { create(:authentication, slack_user_name: 'sherman', slack_user_id: 'sherman id', slack_first_name: "Sherman", slack_last_name: "Yessir", account: other_account, slack_team_id: "team id", slack_image_32_url: "http://avatar.com/other_account_avatar.jpg") }
+    let!(:different_team_authentication) { create(:authentication, slack_user_name: 'different', slack_user_id: 'different id', slack_first_name: "Different", slack_last_name: "Different", account: different_team_account, slack_team_id: "different team id", slack_image_32_url: "http://avatar.com/different_team_account_avatar.jpg")}
 
     before do
       travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))
@@ -149,7 +151,13 @@ describe "viewing projects, creating and editing", :js, :vcr do
     it "has a working happy path" do
       login(other_account)
 
-      visit project_path(project)
+      visit root_path
+
+      expect(page.all("img.contributor").map{|img|img[:src]}).to match_array(["http://avatar.com/different_team_account_avatar.jpg",
+                                                                              "http://avatar.com/owner_team_avatar.jpg"])
+      within(".project", text: "Project that needs awards") do
+        click_link "Project that needs awards"
+      end
 
       expect(page).to have_content("Project that needs awards")
       expect(page).not_to have_content("Send Award")

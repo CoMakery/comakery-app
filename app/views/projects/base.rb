@@ -11,27 +11,27 @@ class Views::Projects::Base < Views::Base
     }
   end
 
-  def projects_block(projects)
+  def projects_block(projects, project_contributors)
     projects.each_slice(3) do |left_project, middle_project, right_project|
       row {
         column("small-12 medium-6 large-4") {
-          project_block(left_project)
+          project_block(left_project, project_contributors[left_project])
         }
         column("small-12 medium-6 large-4") {
-          project_block(middle_project) if middle_project
+          project_block(middle_project, project_contributors[middle_project]) if middle_project
         }
         column("small-12 medium-6 large-4") {
-          project_block(right_project) if right_project
+          project_block(right_project, project_contributors[right_project]) if right_project
         }
       }
     end
   end
 
-  def project_block(project)
+  def project_block(project, contributors)
     row(class: "project#{project.slack_team_id == current_account&.slack_auth&.slack_team_id ? " project-highlighted" : ""}", id: "project-#{project.to_param}") {
       a(href: project_path(project), class: "image-block", style: "background-image: url(#{attachment_url(project, :image)})") {}
       div(class: "description") {
-        div(class:"text-overlay") {
+        div(class: "text-overlay") {
           h5 {
             a(project.title, href: project_path(project), class: "project-link")
           }
@@ -42,6 +42,11 @@ class Views::Projects::Base < Views::Base
           p(class: "project-last-award font-tiny") { text "active #{time_ago_in_words(project.last_award_created_at)} ago" }
         end
         p project.description.try(:truncate, 90)
+      }
+      div(class: "contributors") {
+        Array.wrap(contributors).each do |contributor|
+          img(src: contributor.slack_icon, class: "contributor")
+        end
       }
     }
   end

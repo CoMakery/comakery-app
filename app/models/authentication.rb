@@ -13,6 +13,10 @@ class Authentication < ActiveRecord::Base
     end
   end
 
+  def slack_icon
+    slack_image_32_url || slack_team_image_34_url
+  end
+
   def self.find_or_create_from_auth_hash!(auth_hash)
     slack_auth_hash = SlackAuthHash.new(auth_hash)
 
@@ -31,6 +35,7 @@ class Authentication < ActiveRecord::Base
       slack_first_name: slack_auth_hash.slack_first_name,
       slack_last_name: slack_auth_hash.slack_last_name,
       slack_team_name: slack_auth_hash.slack_team_name,
+      slack_image_32_url: slack_auth_hash.slack_image_32_url,
       slack_team_image_34_url: slack_auth_hash.slack_team_image_34_url,
       slack_team_image_132_url: slack_auth_hash.slack_team_image_132_url,
       slack_token: slack_auth_hash.slack_token,
