@@ -3,29 +3,29 @@ class GetAwardData
 
   def call
     project = context.project
-    current_account = context.current_account
+    authentication = context.authentication
 
-    awards = project.awards.includes(:account, :award_type)
+    awards = project.awards.includes(:authentication, :award_type)
     awards_array = awards.dup.to_a
 
     context.award_data = {
         contributions: contributions_data(awards_array),
-        award_amounts: award_amount_data(current_account, awards_array),
+        award_amounts: award_amount_data(authentication, awards_array),
         contributions_by_day: contributions_by_day(awards)
     }
   end
 
-  def award_amount_data(current_account, awards)
+  def award_amount_data(authentication, awards)
     result = {total_coins_issued: awards.sum { |a| a.award_type.amount }}
-    result[:my_project_coins] = current_account ? awards.sum { |a| a.account_id == current_account.id ? a.award_type.amount : 0 } : nil
+    result[:my_project_coins] = authentication ? awards.sum { |a| a.authentication_id == authentication.id ? a.award_type.amount : 0 } : nil
     result
   end
 
   def contributions_data(awards)
     awards.each_with_object({}) do |award, awards|
-      awards[award.account_id] ||= {net_amount: 0}
-      awards[award.account_id][:name] = award.account.slack_auth&.display_name || award.account.email
-      awards[award.account_id][:net_amount] += award.award_type.amount
+      awards[award.authentication_id] ||= {net_amount: 0}
+      awards[award.authentication_id][:name] = award.authentication.display_name || award.authentication.email
+      awards[award.authentication_id][:net_amount] += award.award_type.amount
     end.values.sort_by{|award_data| -award_data[:net_amount]}
   end
 
@@ -34,7 +34,7 @@ class GetAwardData
                         .where("awards.created_at > ?", 30.days.ago)
                         .order("awards.created_at asc")
 
-    contributor_auths = recent_awards.map { |award| award.account.slack_auth }.freeze
+    contributor_auths = recent_awards.map { |award| award.authentication }.freeze
     empty_row_template = contributor_auths.each_with_object({}) do |contributor_auth, contributors|
       contributors[contributor_auth.display_name] = 0 if contributor_auth
     end.freeze
@@ -56,8 +56,8 @@ class GetAwardData
     row = row.merge(empty_row_template.dup)
 
     (awards_on_day || []).each do |award|
-      if award.account.slack_auth
-        display_name = award.account.slack_auth.display_name
+      if award.authentication
+        display_name = award.authentication.display_name
         row[display_name] ||=0
         row[display_name] += award.award_type.amount
       end

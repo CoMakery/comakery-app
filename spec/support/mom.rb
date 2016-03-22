@@ -60,9 +60,9 @@ class Mom
     AwardType.new(defaults.merge(attrs))
   end
 
-  def award(account = create(:account), issuer = create(:account), **attrs)
+  def award(authentication = create(:authentication), issuer = create(:account), **attrs)
     defaults = {
-        account: account,
+        authentication: authentication,
         issuer: issuer,
         description: "Great work",
     }

@@ -4,10 +4,10 @@ class AwardSlackUser
   def call
     context.fail!(message: "missing slack_user_id") unless context.slack_user_id.present?
 
-    account = Authentication.includes(:account).find_by(slack_user_id: context.slack_user_id).try(:account)
-    account ||= create_account(context)
+    authentication = Authentication.includes(:account).find_by(slack_user_id: context.slack_user_id)
+    authentication ||= create_authentication(context)
 
-    context.award = Award.new(context.award_params.merge(issuer: context.issuer, account_id: account.id))
+    context.award = Award.new(context.award_params.merge(issuer: context.issuer, authentication_id: authentication.id))
     unless context.award.valid?
       context.fail!(message: context.award.errors.full_messages.join(", "))
     end
@@ -15,7 +15,7 @@ class AwardSlackUser
 
   private
 
-  def create_account(context)
+  def create_authentication(context)
     response = Comakery::Slack.new(context.issuer.slack_auth.slack_token).get_user_info(context.slack_user_id)
     account = Account.find_or_create_by(email: response.user.profile.email)
     unless account.valid?
@@ -34,6 +34,6 @@ class AwardSlackUser
       context.fail!(message: authentication.errors.full_messages.join(", "))
     end
 
-    account
+    authentication
   end
 end

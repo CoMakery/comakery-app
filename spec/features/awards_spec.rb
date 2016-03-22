@@ -2,8 +2,10 @@ require "rails_helper"
 
 describe "viewing projects, creating and editing", :js, :vcr do
   context "when not owner" do
-    let!(:owner) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo") } }
-    let!(:other_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo") } }
+    let!(:owner) { create(:account) }
+    let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: "foo") }
+    let!(:other_account) { create(:account) }
+    let!(:other_account_authentication) { create(:authentication, account: other_account, slack_team_id: "foo") }
     let!(:project) { create(:project, public: true, owner_account: owner, slack_team_id: "foo") }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false) }
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true) }
@@ -67,14 +69,18 @@ describe "viewing projects, creating and editing", :js, :vcr do
     let!(:large_award_type) { create(:award_type, project: project, name: "Large", amount: 3000) }
 
     let!(:same_team_small_award_type) { create(:award_type, project: same_team_project, name: "Small", amount: 10) }
-    let!(:same_team_small_award) { create(:award, account: owner_account, award_type: same_team_small_award_type) }
+    let!(:same_team_small_award) { create(:award, authentication: owner_authentication, award_type: same_team_small_award_type) }
 
     let!(:different_large_award_type) { create(:award_type, project: different_team_project, name: "Large", amount: 3000) }
     let!(:different_large_award) { create(:award, award_type: different_large_award_type) }
 
-    let!(:owner_account) { create(:account, email: "hubert@example.com").tap { |a| create(:authentication, slack_user_name: 'hubert', slack_first_name: 'Hubert', slack_last_name: 'Sherbert', slack_user_id: 'hubert id', account_id: a.id, slack_team_id: "team id") } }
-    let!(:other_account) { create(:account, email: "sherman@example.com").tap { |a| create(:authentication, slack_user_name: 'sherman', slack_user_id: 'sherman id', slack_first_name: "Sherman", slack_last_name: "Yessir", account_id: a.id, slack_team_id: "team id") } }
-    let!(:different_team_account) { create(:account, email: "different@example.com").tap { |a| create(:authentication, slack_user_name: 'different', slack_user_id: 'different id', slack_first_name: "Different", slack_last_name: "Different", account_id: a.id, slack_team_id: "different team id") } }
+    let!(:owner_account) { create(:account, email: "hubert@example.com") }
+    let!(:other_account) { create(:account, email: "sherman@example.com") }
+    let!(:different_team_account) { create(:account, email: "different@example.com") }
+
+    let!(:owner_authentication) { create(:authentication, slack_user_name: 'hubert', slack_first_name: 'Hubert', slack_last_name: 'Sherbert', slack_user_id: 'hubert id', account: owner_account, slack_team_id: "team id") }
+    let!(:other_authentication) { create(:authentication, slack_user_name: 'sherman', slack_user_id: 'sherman id', slack_first_name: "Sherman", slack_last_name: "Yessir", account: other_account, slack_team_id: "team id") }
+    let!(:different_team_authentication) { create(:authentication, slack_user_name: 'different', slack_user_id: 'different id', slack_first_name: "Different", slack_last_name: "Different", account: different_team_account, slack_team_id: "different team id")}
 
     before do
       travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))

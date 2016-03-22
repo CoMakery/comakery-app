@@ -7,44 +7,48 @@ describe AwardSlackUser do
   let!(:other_project) { create(:project, owner_account: issuer, slack_team_id: "other team id") }
   let!(:award_type) { create(:award_type, project: project) }
 
-  let(:recipient) { create(:account, email: "glenn@example.com").tap { |a| create(:authentication, account: a, slack_team_id: "team id", slack_user_id: "recipient user id") } }
+  let(:recipient) { create(:account, email: "glenn@example.com") }
+  let(:recipient_authentication) { create(:authentication, account: recipient, slack_team_id: "team id", slack_user_id: "recipient user id") }
 
   context "when the account/auth exists already in the db" do
     it "builds a award for the given slack user id with the matching account from the db" do
       recipient
+      recipient_authentication
       result = nil
       expect do
         expect do
           expect do
-            result = AwardSlackUser.call(project: project, issuer: issuer, slack_user_id: recipient.slack_auth.slack_user_id, award_params: {
+            result = AwardSlackUser.call(project: project, issuer: issuer, slack_user_id: recipient_authentication.slack_user_id, award_params: {
                 award_type_id: award_type.to_param,
                 description: "This rocks!!11"
             })
             expect(result.award).to be_a_new_record
             expect(result.award.award_type).to eq(award_type)
             expect(result.award.issuer).to eq(issuer)
-            expect(result.award.account).to eq(recipient)
+            expect(result.award.authentication).to eq(recipient_authentication)
           end.not_to change { Award.count }
         end.not_to change { Authentication.count }
       end.not_to change { Account.count }
       expect(result.award.save).to eq(true)
     end
 
-    context "when the award is not valid"
-    it "fails with a nice message" do
-      recipient
-      expect do
+    context "when the award is not valid" do
+      it "fails with a nice message" do
+        recipient
+        recipient_authentication
         expect do
           expect do
-            result = AwardSlackUser.call(project: project, issuer: issuer, slack_user_id: recipient.slack_auth.slack_user_id, award_params: {
-                award_type_id: nil,
-                description: "This rocks!!11"
-            })
-            expect(result).not_to be_success
-            expect(result.message).to eq("Award type can't be blank")
-          end.not_to change { Award.count }
-        end.not_to change { Authentication.count }
-      end.not_to change { Account.count }
+            expect do
+              result = AwardSlackUser.call(project: project, issuer: issuer, slack_user_id: recipient.slack_auth.slack_user_id, award_params: {
+                  award_type_id: nil,
+                  description: "This rocks!!11"
+              })
+              expect(result).not_to be_success
+              expect(result.message).to eq("Award type can't be blank")
+            end.not_to change { Award.count }
+          end.not_to change { Authentication.count }
+        end.not_to change { Account.count }
+      end
     end
   end
 
@@ -75,12 +79,11 @@ describe AwardSlackUser do
               expect(result.award).to be_a_new_record
               expect(result.award.award_type).to eq(award_type)
               expect(result.award.issuer).to eq(issuer)
-              expect(result.award.account).to eq(recipient)
             end.not_to change { Award.count }
           end.to change { Authentication.count }.by(1)
         end.not_to change { Account.count }
         expect(result.award.save).to eq(true)
-        expect(result.award.reload.account).to eq(recipient)
+        expect(result.award.reload.authentication).to eq(recipient.authentications.last)
       end
     end
   end
@@ -117,11 +120,11 @@ describe AwardSlackUser do
           expect(result.award).to be_a_new_record
           expect(result.award.award_type).to eq(award_type)
           expect(result.award.issuer).to eq(issuer)
-          expect(result.award.account).to eq(Account.last)
+          expect(result.award.authentication).to eq(Account.last.authentications.last)
         end.not_to change { Award.count }
       end.to change { Account.count }.by(1)
       expect(result.award.save).to eq(true)
-      expect(result.award.reload.account).to eq(Account.last)
+      expect(result.award.reload.authentication).to eq(Account.last.authentications.last)
     end
   end
 end

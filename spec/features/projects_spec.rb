@@ -5,7 +5,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
   let!(:public_project) { create(:project, title: "Public Project", description: "dogs with donuts", owner_account: account, slack_team_id: "citizencode", public: true) }
   let!(:public_project_award) { create(:award, award_type: create(:award_type, project: public_project), created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_team_image_34_url: "https://slack.example.com/awesome-team-image-34-px.jpg", slack_team_image_132_url: "https://slack.example.com/awesome-team-image-132-px.jpg", slack_user_name: 'gleenn', slack_first_name: "Glenn", slack_last_name: "Spanky", slack_team_domain: "citizencodedomain") } }
-  let!(:same_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code") } }
+  let!(:same_team_account) { create(:account) }
+  let!(:same_team_account_authentication) { create(:authentication, account: same_team_account, slack_team_id: "citizencode", slack_team_name: "Citizen Code") }
   let!(:other_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "comakery", slack_team_name: "CoMakery") } }
 
   before do
@@ -172,7 +173,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
       expect(page.find("input[name*='[amount]']")[:value]).to eq("40000")
       expect(page.find("input[name*='[amount]']")[:disabled]).to eq(false)
 
-      create(:award, award_type: award_type, account: same_team_account)
+      create(:award, award_type: award_type, authentication: same_team_account_authentication)
 
       visit edit_project_path(project)
 

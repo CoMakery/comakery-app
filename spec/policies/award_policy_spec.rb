@@ -1,12 +1,8 @@
 require 'rails_helper'
 
 describe AwardPolicy do
-  let!(:account) do
-    create(:account).tap do |a|
-      create(:authentication, account: a, slack_team_id: "lots of sweet awards")
-      create(:authentication, account: a, slack_team_id: "other project")
-    end
-  end
+  let!(:account) { create(:account) }
+  let!(:account_authentication) { create(:authentication, account: account, slack_team_id: "lots of sweet awards") }
 
   let!(:project) { create(:project, owner_account: account, slack_team_id: "lots of sweet awards") }
   let!(:other_project) { create(:project, owner_account: account, slack_team_id: "other project") }
@@ -17,17 +13,17 @@ describe AwardPolicy do
 
   let(:award_type_with_project) { create(:award_type, project: project) }
   let(:community_award_type_with_project) { create(:award_type, project: project, community_awardable: true) }
-  let(:award_with_project) { build(:award, award_type: award_type_with_project, account: receiving_account, issuer: account) }
+  let(:award_with_project) { build(:award, award_type: award_type_with_project, authentication: receiving_authentication, issuer: account) }
 
   let(:award_type_with_other_project) { create(:award_type, project: other_project) }
-  let(:award_with_other_project) { build(:award, award_type: award_type_with_other_project, account: account, issuer: account) }
+  let(:award_with_other_project) { build(:award, award_type: award_type_with_other_project, authentication: account_authentication, issuer: account) }
 
-  let(:receiving_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "lots of sweet awards") } }
+  let(:receiving_authentication) { create(:authentication, slack_team_id: "lots of sweet awards") }
 
-  let(:other_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "other team") } }
-  let(:unowned_project) { create(:project, owner_account: other_account) }
+  let(:other_authentication) { create(:authentication, slack_team_id: "other team") }
+  let(:unowned_project) { create(:project, owner_account: other_authentication.account) }
 
-  let(:different_team_account) { create(:account) }
+  let(:different_team_authentication) { create(:authentication) }
 
   let(:award_type_for_unowned_project) { create(:award_type, project: unowned_project) }
   let(:award_for_unowned_project) { build(:award, award_type: award_type_for_unowned_project) }
@@ -54,9 +50,8 @@ describe AwardPolicy do
   end
 
   describe "create?" do
-    it "returns true when the accounts belongs to a project (even if multiple auths), and the award belongs to a award_type that belongs to that project" do
+    it "returns true when the accounts belongs to a project, and the award belongs to a award_type that belongs to that project" do
       expect(AwardPolicy.new(account, award_with_project).create?).to be true
-      expect(AwardPolicy.new(account, award_with_other_project).create?).to be true
     end
 
     it "returns false when no account" do
@@ -64,16 +59,16 @@ describe AwardPolicy do
     end
 
     it "returns false when the sending account doesn't own the project and award type is NOT community awardable" do
-      expect(AwardPolicy.new(different_team_account, build(:award, award_type: award_type_with_project, account: receiving_account)).create?).to be_falsey
+      expect(AwardPolicy.new(different_team_authentication, build(:award, award_type: award_type_with_project, authentication: receiving_authentication)).create?).to be_falsey
     end
 
     it "returns true when the sending account is the owner or award type is community awardable and the issuer is NOT the receiver" do
-      expect(AwardPolicy.new(receiving_account, build(:award, award_type: community_award_type_with_project, account: receiving_account)).create?).to be_falsey
-      expect(AwardPolicy.new(receiving_account, build(:award, award_type: community_award_type_with_project, account: account, issuer: receiving_account)).create?).to eq(true)
+      expect(AwardPolicy.new(receiving_authentication.account, build(:award, award_type: community_award_type_with_project, authentication: receiving_authentication)).create?).to be_falsey
+      expect(AwardPolicy.new(receiving_authentication.account, build(:award, award_type: community_award_type_with_project, authentication: account_authentication, issuer: receiving_authentication.account)).create?).to eq(true)
     end
 
     it "returns false when the receiving account doesn't belong to the project" do
-      expect(AwardPolicy.new(account, build(:award, award_type: award_type_with_project, account: other_account)).create?).to be_falsey
+      expect(AwardPolicy.new(account, build(:award, award_type: award_type_with_project, authentication: other_authentication)).create?).to be_falsey
     end
 
     it "returns false when award doesn't have a award_type" do

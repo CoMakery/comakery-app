@@ -1,13 +1,12 @@
 require 'rails_helper'
 
 describe GetAwardData do
-  let!(:sam) do
-    create(:account, email: 'account@example.com').tap do |a|
-      create(:authentication, account: a, slack_first_name: "sam", slack_last_name: "sam", slack_team_id: "foo", slack_user_name: "account", slack_user_id: "account slack_user_id", slack_team_domain: "foobar")
-    end
-  end
-  let!(:john) { create(:account, email: "receiver@example.com").tap { |a| create(:authentication, slack_user_id: "U8888UVMH", slack_team_id: "foo", account: a, slack_user_name: "john", slack_first_name: nil, slack_last_name: nil) } }
-  let!(:bob) { create(:account, email: "other@example.com").tap { |a| create(:authentication, slack_first_name: "bob", slack_last_name: "bob", slack_user_id: "other id", slack_team_id: "foo", account: a, slack_user_name: "other") } }
+  let!(:sam) { create(:account, email: 'account@example.com') }
+  let!(:sam_auth) { create(:authentication, account: sam, slack_first_name: "sam", slack_last_name: "sam", slack_team_id: "foo", slack_user_name: "account", slack_user_id: "account slack_user_id", slack_team_domain: "foobar") }
+  let!(:john) { create(:account, email: "receiver@example.com") }
+  let!(:john_auth) { create(:authentication, slack_user_id: "U8888UVMH", slack_team_id: "foo", account: john, slack_user_name: "john", slack_first_name: nil, slack_last_name: nil) }
+  let!(:bob) { create(:account, email: "other@example.com") }
+  let!(:bob_auth) { create(:authentication, slack_first_name: "bob", slack_last_name: "bob", slack_user_id: "other id", slack_team_id: "foo", account: bob, slack_user_name: "other") }
 
   let!(:project) { create(:project, title: "Cats", owner_account: sam, slack_team_id: 'foo') }
 
@@ -16,27 +15,27 @@ describe GetAwardData do
   let!(:award_type3) { create(:award_type, project: project, amount: 3000, name: "Big Award") }
 
   describe "#call" do
-    let!(:sam_award_1) { create(:award, award_type: award_type1, account: sam, created_at: Date.new(2016, 1, 1)) }
+    let!(:sam_award_1) { create(:award, award_type: award_type1, authentication: sam_auth, created_at: Date.new(2016, 1, 1)) }
 
-    let!(:john_award_1) { create(:award, award_type: award_type1, account: john, created_at: Date.new(2016, 2, 8)) }
-    let!(:john_award_2) { create(:award, award_type: award_type1, account: john, created_at: Date.new(2016, 3, 1)) }
-    let!(:john_award_3) { create(:award, award_type: award_type2, account: john, created_at: Date.new(2016, 3, 2)) }
-    let!(:john_award_4) { create(:award, award_type: award_type3, account: john, created_at: Date.new(2016, 3, 8)) }
+    let!(:john_award_1) { create(:award, award_type: award_type1, authentication: john_auth, created_at: Date.new(2016, 2, 8)) }
+    let!(:john_award_2) { create(:award, award_type: award_type1, authentication: john_auth, created_at: Date.new(2016, 3, 1)) }
+    let!(:john_award_3) { create(:award, award_type: award_type2, authentication: john_auth, created_at: Date.new(2016, 3, 2)) }
+    let!(:john_award_4) { create(:award, award_type: award_type3, authentication: john_auth, created_at: Date.new(2016, 3, 8)) }
 
-    let!(:bob_award_1) { create(:award, award_type: award_type1, account: bob, created_at: Date.new(2016, 3, 2)) }
-    let!(:bob_award_2) { create(:award, award_type: award_type2, account: bob, created_at: Date.new(2016, 3, 8)) }
+    let!(:bob_award_1) { create(:award, award_type: award_type1, authentication: bob_auth, created_at: Date.new(2016, 3, 2)) }
+    let!(:bob_award_2) { create(:award, award_type: award_type2, authentication: bob_auth, created_at: Date.new(2016, 3, 8)) }
 
     before do
       travel_to Date.new(2016, 3, 8)
     end
 
     it "doesn't explode if you aren't logged in" do
-      result = GetAwardData.call(current_account: nil, project: project)
+      result = GetAwardData.call(authentication: nil, project: project)
       expect(result.award_data[:award_amounts]).to eq({:my_project_coins => nil, :total_coins_issued => 11000})
     end
 
     it "returns a pretty hash of the awards for a project with summed amounts for each person" do
-      result = GetAwardData.call(current_account: sam, project: project)
+      result = GetAwardData.call(authentication: sam_auth, project: project)
 
       expect(result.award_data[:contributions]).to match_array([{name: "@john", net_amount: 7000},
                                                                 {name: "bob bob", net_amount: 3000},
@@ -48,7 +47,7 @@ describe GetAwardData do
     it "shows values for each contributor for all 30 days" do
       result = GetAwardData.call(current_account: sam, project: project)
 
-      awarded_account_names = Award.select("account_id, max(id) as id").group("account_id").all.map { |a| a.account.slack_auth.display_name }
+      awarded_account_names = Award.select("authentication_id, max(id) as id").group("authentication_id").all.map { |a| a.authentication.display_name }
       expect(awarded_account_names).to match_array(["@john", "sam sam", "bob bob"])
 
       expect(result.award_data[:contributions_by_day]).to eq([{"date" => "2016-02-07", "@john" => 0, "bob bob" => 0},
@@ -86,30 +85,23 @@ describe GetAwardData do
   end
 
   describe "#contributions_data" do
-    it "shows the email address if there aren't any auths" do
-      account = create(:account, email: "caesar_salad@example.com")
-      expect(account.authentications.count).to eq(0)
-      award = create(:award, account: account)
-      expect(GetAwardData.new.contributions_data([award])).to eq([{:net_amount => 1337, :name => "caesar_salad@example.com"}])
-    end
-
     it "sorts by amount" do
       expect(GetAwardData.new.contributions_data([
-                                                     create(:award, award_type: create(:award_type, amount: 1000), account: create(:account, email: "a@example.com")),
-                                                     create(:award, award_type: create(:award_type, amount: 3000), account: create(:account, email: "b@example.com")),
-                                                     create(:award, award_type: create(:award_type, amount: 2000), account: create(:account, email: "c@example.com"))
+                                                     create(:award, award_type: create(:award_type, amount: 1000), authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
+                                                     create(:award, award_type: create(:award_type, amount: 3000), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
+                                                     create(:award, award_type: create(:award_type, amount: 2000), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
                                                  ])).to eq([
-                                                               {:net_amount => 3000, :name => "b@example.com"},
-                                                               {:net_amount => 2000, :name => "c@example.com"},
-                                                               {:net_amount => 1000, :name => "a@example.com"},
+                                                               {:net_amount => 3000, :name => "b b"},
+                                                               {:net_amount => 2000, :name => "c c"},
+                                                               {:net_amount => 1000, :name => "a a"},
                                                            ])
     end
   end
 
   describe "#contributor_by_day_row" do
-    let!(:bobs_award) { create(:award, award_type: award_type1, account: bob, created_at: Date.new(2016, 3, 2)) }
-    let!(:johns_award) { create(:award, award_type: award_type2, account: john, created_at: Date.new(2016, 3, 2)) }
-    let!(:johns_award2) { create(:award, award_type: award_type2, account: john, created_at: Date.new(2016, 3, 2)) }
+    let!(:bobs_award) { create(:award, award_type: award_type1, authentication: bob_auth, created_at: Date.new(2016, 3, 2)) }
+    let!(:johns_award) { create(:award, award_type: award_type2, authentication: john_auth, created_at: Date.new(2016, 3, 2)) }
+    let!(:johns_award2) { create(:award, award_type: award_type2, authentication: john_auth, created_at: Date.new(2016, 3, 2)) }
 
     it "returns a row of data with defaults for missing data and summed amounts for multiple awards on the sam same day" do
       interactor = GetAwardData.new
@@ -119,17 +111,6 @@ describe GetAwardData do
                                                                                                         "some other guy" => 0,
                                                                                                         "sam sam" => 0,
                                                                                                         "date" => "20160302"})
-    end
-
-    it "doesn't explode if award's account doesn't have a slack auth" do
-      interactor = GetAwardData.new
-      template = {"bob bob" => 0, "sam sam" => 0, "@john" => 0, "some other guy" => 0}.freeze
-      expected_hash = {"@john" => 2000,
-              "bob bob" => 1000,
-              "some other guy" => 0,
-              "sam sam" => 0,
-              "date" => "20160302"}
-      expect(interactor.contributor_by_day_row(template, "20160302", [johns_award, bobs_award, create(:award, account: create(:account))])).to eq(expected_hash)
     end
   end
 end
