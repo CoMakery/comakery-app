@@ -40,19 +40,19 @@ class Views::Projects::Show < Views::Base
             }
           }
           row {
-            column("small-6") {
+            column("small-5") {
               div(class: "project-image", style: "background-image: url(#{attachment_url(project, :image)})") {}
             }
-            column("small-6") {
+            column("small-7") {
               full_row {
                 p project.description
               }
               row(class: "project-settings") {
-                column("small-6") {
+                column("small-5") {
                   text "Owner: "
                   b "#{project.owner_slack_user_name}"
                 }
-                column("small-6") {
+                column("small-7") {
                   text "Visibility: "
                   b "#{project.public? ? "Public" : "Private"}"
                 }
@@ -86,7 +86,7 @@ class Views::Projects::Show < Views::Base
           render partial: "award_send"
         }
       }
-      column("small-6 contributors-column") {
+      column("small-7 contributors-column") {
         row { column("small-12", class: "underlined-header") { text "Awards" } }
 
         row {
