@@ -45,7 +45,9 @@ class Views::Projects::Base < Views::Base
       }
       div(class: "contributors") {
         Array.wrap(contributors).each do |contributor|
-          img(src: contributor.slack_icon, class: "contributor")
+          tooltip("#{contributor.display_name} - #{contributor.total_awarded}") {
+            img(src: contributor.slack_icon, class: "contributor")
+          }
         end
       }
     }
