@@ -5,12 +5,16 @@ class Award < ActiveRecord::Base
 
   validates_presence_of :authentication, :issuer, :award_type
 
-  def issuer_slack_user_name
+  def issuer_display_name
     issuer.slack_auth(slack_team_id: slack_team_id)&.display_name
   end
 
-  def recipient_slack_user_name
+  def recipient_display_name
     authentication&.display_name
+  end
+
+  def recipient_slack_user_name
+    authentication&.slack_user_name
   end
 
   private

@@ -22,14 +22,14 @@ module Views
                 text number_with_delimiter(award.award_type.amount, :delimiter => ',')
               }
               column("small-2") {
-                text award.recipient_slack_user_name
+                text award.recipient_display_name
               }
               column("small-4") {
                 div award.award_type.name
                 div(class: "text-gray") { text award.description }
               }
               column("small-2") {
-                text award.issuer_slack_user_name
+                text award.issuer_display_name
               }
             }
           end
