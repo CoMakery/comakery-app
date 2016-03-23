@@ -24,6 +24,12 @@ body {
       margin-bottom: .7em;
     }
   }
+  &.projects-edit {
+    .project-image {
+      max-width: 13em;
+      max-height: 13em;
+    }
+  }
 }
 .app-container {
   @include grid-row($behavior: collapse);
@@ -78,6 +84,14 @@ a.more {
 }
 form.take-action-form p.notice {
   color: $snow;
+}
+.award-type-row .close {
+  font-size: 2em;
+}
+input#project_image {
+  border: 1px solid #ccc;
+  padding: .65em;
+  cursor: pointer;
 }
 .award-rows .header {
   font-weight: bold;
