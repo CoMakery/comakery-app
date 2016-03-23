@@ -17,6 +17,10 @@ class Mom
     Account.new(defaults.merge(attrs))
   end
 
+  def account_with_auth(**attrs)
+    account(**attrs).tap{|a| create(:authentication, account: a)}
+  end
+
   def account_role(account, role)
     AccountRole.new account: account, role: role
   end
@@ -65,7 +69,7 @@ class Mom
     project(owner_account, {slack_team_id: "swarmbot"}.merge(**attrs))
   end
 
-  def project(owner_account = create(:account), **attrs)
+  def project(owner_account = create(:account_with_auth), **attrs)
     defaults = {
         title: "Uber for Cats",
         description: "We are going to build amazing",

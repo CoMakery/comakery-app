@@ -251,51 +251,54 @@ describe ProjectsController do
         expect(award_types.third.amount).to eq(500)
       end
 
-      it "re-renders with errors when updating fails" do
-        expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
+      context "with rendered views" do
+        render_views
+        it "re-renders with errors when updating fails" do
+          expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
 
-        small_award_type = cat_project.award_types.create!(name: "Small Award", amount: 100)
-        medium_award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300)
-        destroy_me_award_type = cat_project.award_types.create!(name: "Destroy Me Award", amount: 400)
+          small_award_type = cat_project.award_types.create!(name: "Small Award", amount: 100)
+          medium_award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300)
+          destroy_me_award_type = cat_project.award_types.create!(name: "Destroy Me Award", amount: 400)
 
-        expect do
           expect do
-            put :update, id: cat_project.to_param,
-                project: {
-                    title: "",
-                    description: "updated Project description here",
-                    tracker: "http://github.com/here/is/my/tracker/updated",
-                    award_types_attributes: [
-                        {id: small_award_type.to_param, name: "Small Award", amount: 150},
-                        {id: destroy_me_award_type.to_param, _destroy: true},
-                        {name: "Big Award", amount: 500},
-                    ]
-                }
-            expect(response.status).to eq(200)
-          end.not_to change { Project.count }
-        end.not_to change { AwardType.count }
+            expect do
+              put :update, id: cat_project.to_param,
+                  project: {
+                      title: "",
+                      description: "updated Project description here",
+                      tracker: "http://github.com/here/is/my/tracker/updated",
+                      award_types_attributes: [
+                          {id: small_award_type.to_param, name: "Small Award", amount: 150},
+                          {id: destroy_me_award_type.to_param, _destroy: true},
+                          {name: "Big Award", amount: 500},
+                      ]
+                  }
+              expect(response.status).to eq(200)
+            end.not_to change { Project.count }
+          end.not_to change { AwardType.count }
 
-        project = assigns[:project]
-        expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
-        expect(project.title).to eq("")
-        expect(project.description).to eq("updated Project description here")
-        expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
-        expect(assigns[:slack_channels]).to eq(["foo", "bar"])
+          project = assigns[:project]
+          expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
+          expect(project.title).to eq("")
+          expect(project.description).to eq("updated Project description here")
+          expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
+          expect(assigns[:slack_channels]).to eq(["foo", "bar"])
 
-        award_types = project.award_types.sort_by(&:amount)
-        expect(award_types.size).to eq((expected_rows = 4) + (expected_template_rows = 1))
+          award_types = project.award_types.sort_by(&:amount)
+          expect(award_types.size).to eq((expected_rows = 4) + (expected_template_rows = 1))
 
-        expect(award_types.first.name).to be_nil
-        expect(award_types.first.amount).to eq(0)
+          expect(award_types.first.name).to be_nil
+          expect(award_types.first.amount).to eq(0)
 
-        expect(award_types.second.name).to eq("Small Award")
-        expect(award_types.second.amount).to eq(150)
-        expect(award_types.third.name).to eq("Medium Award")
-        expect(award_types.third.amount).to eq(300)
-        expect(award_types.fourth.name).to eq("Destroy Me Award")
-        expect(award_types.fourth.amount).to eq(400)
-        expect(award_types.fifth.name).to eq("Big Award")
-        expect(award_types.fifth.amount).to eq(500)
+          expect(award_types.second.name).to eq("Small Award")
+          expect(award_types.second.amount).to eq(150)
+          expect(award_types.third.name).to eq("Medium Award")
+          expect(award_types.third.amount).to eq(300)
+          expect(award_types.fourth.name).to eq("Destroy Me Award")
+          expect(award_types.fourth.amount).to eq(400)
+          expect(award_types.fifth.name).to eq("Big Award")
+          expect(award_types.fifth.amount).to eq(500)
+        end
       end
 
       it "doesn't allow modification of award_types when the award_type has awards already sent" do

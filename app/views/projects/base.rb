@@ -47,7 +47,7 @@ class Views::Projects::Base < Views::Base
         # this can go away when project owners become auths instead of accounts
         owner_auth = project.owner_account.authentications.find_by(slack_team_id: project.slack_team_id)
 
-        (Array.wrap(contributors).reverse << owner_auth).uniq{|auth|auth.id}.reverse.each do |contributor|
+        ([owner_auth].compact + Array.wrap(contributors)).uniq{|auth|auth.id}.each do |contributor|
           tooltip =  contributor == owner_auth ?
             "#{contributor.display_name} - Project Owner#{contributor.respond_to?(:total_awarded) ? " - #{contributor.total_awarded} coins" : ""}" :
             "#{contributor.display_name} - #{contributor.total_awarded} coins"
