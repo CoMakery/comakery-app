@@ -59,8 +59,8 @@ def make fixture:, project_model:, owner_name:, team_name:, team_image:
 end
 
 def auth name, team_name, team_image
-  auth = Authentication.find_by slack_first_name: name
-  auth ||= create :authentication,
+  auth = Authentication.find_by slack_first_name: name, slack_team_id: team_name
+  attrs = {
     slack_first_name: name,
     slack_last_name: nil,
     slack_user_name: name.gsub(/[^[[:alpha:]]]+/, '-').downcase,
@@ -68,6 +68,13 @@ def auth name, team_name, team_image
     slack_team_id: team_name,
     slack_team_image_34_url: team_image,
     slack_team_image_132_url: team_image
+  }
+
+  if auth
+    auth.update_attributes! attrs
+  else
+    auth = create :authentication, attrs
+  end
 
   auth.account ||= create :account
   auth.save!
