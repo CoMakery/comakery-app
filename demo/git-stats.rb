@@ -8,7 +8,6 @@
 require 'active_support/all'
 require 'json'
 require 'easy_shell'
-require 'awesome_print'
 
 repo_path = ARGV[-1] || '.'
 

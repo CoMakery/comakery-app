@@ -12,7 +12,7 @@ DEMOS = [
     },
     owner_name: "David Heinemeier Hansson",
     team_name: 'Ruby on Rails',
-    team_image: 'http://rubyonrails.org/images/rails-logo.svg'
+    team_image: 'http://www.bytebob.com/images/ruby.png'
   },
   {
     fixture: 'go-ipfs',
