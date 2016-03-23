@@ -39,7 +39,8 @@ class Authentication < ActiveRecord::Base
       slack_team_image_34_url: slack_auth_hash.slack_team_image_34_url,
       slack_team_image_132_url: slack_auth_hash.slack_team_image_132_url,
       slack_token: slack_auth_hash.slack_token,
-      slack_team_domain: slack_auth_hash.slack_team_domain
+      slack_team_domain: slack_auth_hash.slack_team_domain,
+      oauth_response: auth_hash
     )
 
     # This will go away when we create a Team model <https://github.com/CoMakery/comakery-app/issues/113>
