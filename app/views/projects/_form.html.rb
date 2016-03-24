@@ -54,21 +54,22 @@ module Views
             }
           }
 
-          row {
-            column("small-4", class: "") {
-              text "Award Names"
-            }
-            column("small-2", class: "") {
-              text "Coin Value"
-            }
-            column("small-2", class: "") {
-              text "Community Awardable "
-              question_tooltip("Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.")
-            }
-            column("small-4", class: "") {
-            }
-          }
           div(class: "award-types") {
+            row {
+              column("small-4", class: "") {
+                label "Award Names"
+              }
+              column("small-2", class: "") {
+                label "Coin Value"
+              }
+              column("small-6", class: "") {
+                label {
+                  text "Community Awardable "
+                  question_tooltip("Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.")
+                }
+              }
+            }
+
             project.award_types.build(amount: 0) unless project.award_types.select{|award_type|award_type.amount == 0}.present?
             f.fields_for(:award_types) do |ff|
               row(class: "award-type-row#{ff.object.amount == 0 ? " hide award-type-template" : ""}") {
@@ -99,13 +100,13 @@ module Views
                 }
               }
             end
-          }
 
-          row {
-            p { a("+ add award type", href: "#", 'data-duplicate': '.award-type-template') }
+            full_row {
+              p { a("+ add award type", href: "#", 'data-duplicate': '.award-type-template') }
+            }
           }
-          row {
-            f.submit "Save", class: buttonish(:small, :expand)
+          full_row {
+            f.submit "Save", class: buttonish(:expand)
           }
         end
       end

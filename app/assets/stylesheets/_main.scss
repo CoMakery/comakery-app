@@ -85,9 +85,6 @@ a.more {
 form.take-action-form p.notice {
   color: $snow;
 }
-.award-type-row .close {
-  font-size: 2em;
-}
 form.edit_project, form.new_project {
   input#project_image {
     border: 1px solid #ccc;
@@ -96,6 +93,20 @@ form.edit_project, form.new_project {
   }
   textarea {
     height: 7em;
+  }
+  .award-types {
+    margin-top: 2em;
+    border-top: 1px solid #ccc;
+    padding-top: 2em;
+    padding-bottom: 2em;
+  }
+  input[type="checkbox"] {
+    margin-top: .7em;
+  }
+  .close {
+    font-size: 2em;
+    margin-top: -.2em;
+    display: inline-block;
   }
 }
 .award-rows .header {
