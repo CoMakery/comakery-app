@@ -30,7 +30,7 @@ class Views::Projects::Base < Views::Base
   def project_block(project, contributors)
     row(class: "project#{project.slack_team_id == current_account&.slack_auth&.slack_team_id ? " project-highlighted" : ""}", id: "project-#{project.to_param}") {
       a(href: project_path(project), class: "image-block", style: "background-image: url(#{attachment_url(project, :image)})") {}
-      div(class: "description") {
+      div(class: "info") {
         div(class: "text-overlay") {
           h5 {
             a(project.title, href: project_path(project), class: "project-link")
@@ -40,21 +40,24 @@ class Views::Projects::Base < Views::Base
         img(src: project.slack_team_image_132_url, class: "icon")
         if project.last_award_created_at
           p(class: "project-last-award font-tiny") { text "active #{time_ago_in_words(project.last_award_created_at)} ago" }
+          p(class:"description") { text project.description.try(:truncate, 90) }
+        else
+          p(class: "description no-last-award") { text project.description.try(:truncate, 90) }
         end
-        p project.description.try(:truncate, 90)
-      }
-      div(class: "contributors") {
-        # this can go away when project owners become auths instead of accounts
-        owner_auth = project.owner_account.authentications.find_by(slack_team_id: project.slack_team_id)
 
-        ([owner_auth].compact + Array.wrap(contributors)).uniq{|auth|auth.id}.each do |contributor|
-          tooltip = contributor == owner_auth ?
-            "#{contributor.display_name} - Project Owner#{contributor.respond_to?(:total_awarded) ? " - #{contributor.total_awarded.to_i} coins" : ""}" :
-            "#{contributor.display_name} - #{contributor.total_awarded.to_i} coins"
-          tooltip(tooltip) {
-            img(src: contributor.slack_icon, class: "contributor")
-          }
-        end
+        div(class: "contributors") {
+          # this can go away when project owners become auths instead of accounts
+          owner_auth = project.owner_account.authentications.find_by(slack_team_id: project.slack_team_id)
+
+          ([owner_auth].compact + Array.wrap(contributors)).uniq{|auth|auth.id}.each do |contributor|
+            tooltip = contributor == owner_auth ?
+              "#{contributor.display_name} - Project Owner#{contributor.respond_to?(:total_awarded) ? " - #{contributor.total_awarded.to_i} coins" : ""}" :
+              "#{contributor.display_name} - #{contributor.total_awarded.to_i} coins"
+            tooltip(tooltip) {
+              img(src: contributor.slack_icon, class: "contributor")
+            }
+          end
+        }
       }
     }
   end
