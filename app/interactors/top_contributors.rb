@@ -11,7 +11,7 @@ class TopContributors
   end
 
   def top_contributors(project, n)
-    all_columns = Authentication.column_names.map { |column| "max(authentications.#{column}) as #{column}" }.join(", ")
+    all_columns = (Authentication.column_names-["oauth_response"]).map { |column| "max(authentications.#{column}) as #{column}" }.join(", ")
     Authentication.
         select("#{all_columns}, sum(award_type_amount) as total_awarded, max(last_awarded_at) as last_awarded_at").
         from(project.contributors.

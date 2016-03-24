@@ -99,6 +99,7 @@ describe Authentication do
         expect(auth.slack_token).to eq("xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa")
         expect(auth.slack_team_domain).to eq("bobrobertsdomain")
         expect(auth.slack_image_32_url).to eq('https://avatars.com/avatars_32.jpg')
+        expect(auth.oauth_response).to eq(auth_hash)
       end
     end
 
