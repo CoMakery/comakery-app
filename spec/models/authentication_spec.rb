@@ -81,6 +81,17 @@ describe Authentication do
       }
     }
 
+    context "when nothing changed from last login" do
+      it "updates the timestamp on the authentications" do
+        travel_to Date.new 2015
+        account = Authentication.find_or_create_from_auth_hash!(auth_hash)
+        travel_to Date.new 2016
+        expect do
+          Authentication.find_or_create_from_auth_hash!(auth_hash)
+        end.to change { account.slack_auth.reload.updated_at }
+      end
+    end
+
     context "when no account exists yet" do
       it "creates an account and authentications for that account" do
         account = Authentication.find_or_create_from_auth_hash!(auth_hash)
