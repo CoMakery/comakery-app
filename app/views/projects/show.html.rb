@@ -92,10 +92,10 @@ class Views::Projects::Show < Views::Base
         row {
           column("small-4", class: "centered") {
             if award_data[:award_amounts][:my_project_coins]
-              div(class: "centered font-large") { text award_data[:award_amounts][:my_project_coins] }
+              div(class: "centered font-large") { text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',') }
               div(class: "centered") { text "My Project Coins" }
             end
-            div(class: "centered font-large") { text award_data[:award_amounts][:total_coins_issued] }
+            div(class: "centered font-large") { text number_with_precision(award_data[:award_amounts][:total_coins_issued], precision: 0, delimiter: ',') }
             div(class: "centered") { text "Total Coins Issued" }
 
             p(class: "centered font-small") {
@@ -121,7 +121,7 @@ class Views::Projects::Show < Views::Base
             column("small-12") {
               award_data[:contributions].each do |contributor|
                 div {
-                  div(class: "float-right") { text contributor[:net_amount] }
+                  div(class: "float-right") { text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',') }
                   span contributor[:name]
                 }
               end
