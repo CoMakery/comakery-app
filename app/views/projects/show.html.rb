@@ -45,7 +45,8 @@ class Views::Projects::Show < Views::Base
             }
             column("small-7") {
               full_row {
-                p project.description
+                paras = project.description.split(/\r?\n/)
+                paras.each { |para| p para }
               }
               row(class: "project-settings") {
                 column("small-5") {

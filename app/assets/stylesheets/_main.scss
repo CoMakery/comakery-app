@@ -24,12 +24,6 @@ body {
       margin-bottom: .7em;
     }
   }
-  &.projects-edit {
-    .project-image {
-      max-width: 13em;
-      max-height: 13em;
-    }
-  }
 }
 .app-container {
   @include grid-row($behavior: collapse);
@@ -90,6 +84,12 @@ form.edit_project, form.new_project {
     border: 1px solid #ccc;
     padding: .65em;
     cursor: pointer;
+  }
+  .project-image {
+    max-width: 30em;
+    max-height: 20.5em;
+    height: auto;
+    width: auto;
   }
   textarea {
     height: 7em;
