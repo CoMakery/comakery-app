@@ -20,6 +20,7 @@ class Authentication < ActiveRecord::Base
   def self.find_or_create_from_auth_hash!(auth_hash)
     slack_auth_hash = SlackAuthHash.new(auth_hash)
 
+
     account = Account.find_or_create_by(email: slack_auth_hash.email_address)
 
     # find the "slack" authentication *for the given slack user* if exists
@@ -42,6 +43,7 @@ class Authentication < ActiveRecord::Base
       slack_team_domain: slack_auth_hash.slack_team_domain,
       oauth_response: auth_hash
     )
+    authentication.touch # we must change updated_at manually: update! does not change updated_at if attrs have not changed
 
     # This will go away when we create a Team model <https://github.com/CoMakery/comakery-app/issues/113>
     Project.where(slack_team_id: slack_auth_hash.slack_team_id).update_all(
