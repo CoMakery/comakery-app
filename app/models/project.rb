@@ -49,6 +49,10 @@ class Project < ActiveRecord::Base
     owner_account.slack_auth(slack_team_id: slack_team_id)&.display_name
   end
 
+  def description_paragraphs
+    description&.gsub(/\r/, '')&.split(/\n{2,}/) || []
+  end
+
   private
 
   def valid_tracker_url

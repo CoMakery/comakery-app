@@ -139,4 +139,31 @@ describe Project do
       expect(project.owner_slack_user_name).to be_nil
     end
   end
+
+  describe "#description_paragraphs" do
+    it "should split description on multiple newlines" do
+      project = create :project, description: "Line 1\nLine 2\n\nPara 2\r\n\r\nPara 3\n\n\n\n\nPara 4"
+      expect(project.description_paragraphs).to eq [
+        "Line 1\nLine 2",
+        "Para 2",
+        "Para 3",
+        "Para 4",
+      ]
+    end
+
+    it "should return an array containg description if no newlines" do
+      project = create :project, description: "foo bar baz"
+      expect(project.description_paragraphs).to eq [ "foo bar baz" ]
+    end
+
+    it "should return an empty array if no description" do
+      project = create :project, description: nil
+      expect(project.description_paragraphs).to eq []
+    end
+
+    it "should return an empty array if description is blank" do
+      project = create :project, description: " \t "
+      expect(project.description_paragraphs).to eq []
+    end
+  end
 end
