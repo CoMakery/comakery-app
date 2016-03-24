@@ -127,6 +127,14 @@ describe Project do
       expect(project.owner_slack_user_name).to eq('John Doe')
     end
 
+    it "returns the user name for the correct auth, even if older" do
+      travel_to Date.new(2015)
+      create(:authentication, account: owner, slack_team_id: 'reds', slack_first_name: "John", slack_last_name: "Red", slack_user_name: 'johnny')
+      travel_to Date.new(2016)
+      create(:authentication, account: owner, slack_team_id: 'blues', slack_first_name: "John", slack_last_name: "Blue", slack_user_name: 'johnny')
+      expect(project.owner_slack_user_name).to eq('John Red')
+    end
+
     it "doesn't blow up if the isn't an auth" do
       expect(project.owner_slack_user_name).to be_nil
     end

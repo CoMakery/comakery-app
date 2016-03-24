@@ -27,6 +27,14 @@ describe Award do
       expect(award.issuer_display_name).to eq('@johnny')
     end
 
+    it "returns the auth for the correct team, even if older" do
+      travel_to Date.new(2015)
+      create(:authentication, account: issuer, slack_team_id: 'reds', slack_user_name: 'johnny-red', slack_first_name: nil, slack_last_name: nil)
+      travel_to Date.new(2016)
+      create(:authentication, account: issuer, slack_team_id: 'blues', slack_user_name: 'johnny-blue', slack_first_name: nil, slack_last_name: nil)
+      expect(award.issuer_display_name).to eq('@johnny-red')
+    end
+
     it "doesn't explode if auth is missing" do
       expect(award.issuer_display_name).to be_nil
     end
