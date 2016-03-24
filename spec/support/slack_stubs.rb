@@ -1,6 +1,6 @@
 module SlackStubs
-  def stub_slack_user_list
-    stub_request(:post, "https://slack.com/api/users.list").to_return(body: {"ok": true, "members": []}.to_json)
+  def stub_slack_user_list(members = [])
+    stub_request(:post, "https://slack.com/api/users.list").to_return(body: {"ok": true, "members": members}.to_json)
   end
 
   def stub_slack_channel_list

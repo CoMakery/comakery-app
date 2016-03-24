@@ -26,12 +26,7 @@ describe "awarding users" do
     travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))
 
     expect_any_instance_of(Account).to receive(:send_award_notifications)
-    stub_request(:post, "https://slack.com/api/users.list").to_return(body: {ok: true,
-                                                                             members: [{"id": "U99M9QYFQ",
-                                                                                        "team_id": "team id",
-                                                                                        "name": "bobjohnson",
-                                                                                        "profile": {"email": "bobjohnson@example.com"}
-                                                                                       }]}.to_json)
+    stub_slack_user_list([{"id": "U99M9QYFQ", "team_id": "team id", "name": "bobjohnson", "profile": {"email": "bobjohnson@example.com"}}])
     stub_request(:post, "https://slack.com/api/users.info").to_return(body: {
         ok: true,
         "user": {
