@@ -88,10 +88,15 @@ form.take-action-form p.notice {
 .award-type-row .close {
   font-size: 2em;
 }
-input#project_image {
-  border: 1px solid #ccc;
-  padding: .65em;
-  cursor: pointer;
+form.edit_project, form.new_project {
+  input#project_image {
+    border: 1px solid #ccc;
+    padding: .65em;
+    cursor: pointer;
+  }
+  textarea {
+    height: 7em;
+  }
 }
 .award-rows .header {
   font-weight: bold;

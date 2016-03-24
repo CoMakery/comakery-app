@@ -16,7 +16,7 @@ module Views
               with_errors(project, :description) {
                 label {
                   text "Description"
-                  f.text_field :description
+                  f.text_area :description
                 }
               }
               with_errors(project, :tracker) {
