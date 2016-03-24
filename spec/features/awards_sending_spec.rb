@@ -75,7 +75,7 @@ describe "awarding users" do
       expect(page).to have_content "0My Project Coins"
       expect(page).to have_content "1,000Total Coins Issued"
 
-      expect(page).to have_content "1000@bobjohnson"
+      expect(page).to have_content "1,000@bobjohnson"
 
       expect(page.html).to include('{"content": [{"label":"@bobjohnson","value":1000}')
     end
