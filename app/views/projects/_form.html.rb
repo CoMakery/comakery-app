@@ -100,8 +100,9 @@ module Views
                 }
               }
             end
-
-            full_row {
+          }
+          row(class: "add-award-type") {
+            column {
               p { a("+ add award type", href: "#", 'data-duplicate': '.award-type-template') }
             }
           }
