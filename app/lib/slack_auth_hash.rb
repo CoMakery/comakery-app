@@ -39,6 +39,10 @@ class SlackAuthHash
     @slack_last_name ||= @auth_hash.dig('info', 'last_name').presence
   end
 
+  def slack_real_name
+    @slack_real_name ||= @auth_hash.dig('extra', 'user_info', 'user', 'real_name')
+  end
+
   def slack_team_id
     @slack_team_id ||= @auth_hash.dig('info', 'team_id')
   end

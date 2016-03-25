@@ -20,7 +20,6 @@ class Authentication < ActiveRecord::Base
   def self.find_or_create_from_auth_hash!(auth_hash)
     slack_auth_hash = SlackAuthHash.new(auth_hash)
 
-
     account = Account.find_or_create_by(email: slack_auth_hash.email_address)
 
     # find the "slack" authentication *for the given slack user* if exists
