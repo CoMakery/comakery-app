@@ -1,15 +1,5 @@
 class Views::Shared::Navigation < Views::Base
   def content
-    content_for :js do
-      text(<<-JAVASCRIPT.html_safe)
-        $(function() {
-          $(".project-search a").on("click", function() {
-            window.location = "http://www.google.com"
-          })
-        });
-      JAVASCRIPT
-    end
-
     div(class: "top-bar-right") {
       ul(class: "menu") {
         li(class: "has-form") {
