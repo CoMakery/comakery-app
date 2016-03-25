@@ -64,12 +64,12 @@ class Mom
     BetaSignup.new(**attrs)
   end
 
-  def cc_project(owner_account = create(:cc_authentication), **attrs)
-    project(owner_account, {slack_team_id: "citizencode"}.merge(**attrs))
+  def cc_project(owner_account = create(:cc_account), **attrs)
+    project(owner_account, {slack_team_id: "citizencode", title: "Citizen Code"}.merge(**attrs))
   end
 
-  def sb_project(owner_account = create(:sb_authentication), **attrs)
-    project(owner_account, {slack_team_id: "swarmbot"}.merge(**attrs))
+  def sb_project(owner_account = create(:sb_account), **attrs)
+    project(owner_account, {slack_team_id: "swarmbot", title: "Swarmbot"}.merge(**attrs))
   end
 
   def project(owner_account = create(:account_with_auth), **attrs)
