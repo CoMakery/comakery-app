@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   root 'projects#landing'
 
+  resources :beta_signups, only: [:new, :create]
+
   resource :session, only: %i[create destroy] do
     get "oauth_failure"
   end

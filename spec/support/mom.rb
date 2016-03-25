@@ -60,6 +60,9 @@ class Mom
     Authentication.new(defaults.merge(attrs))
   end
 
+  def beta_signup(**attrs)
+    BetaSignup.new(**attrs)
+  end
 
   def cc_project(owner_account = create(:cc_authentication), **attrs)
     project(owner_account, {slack_team_id: "citizencode"}.merge(**attrs))
