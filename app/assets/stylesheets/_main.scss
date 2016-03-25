@@ -81,6 +81,9 @@ a.more {
   font-size: 16pt;
   text-transform: lowercase;
 }
+.project-image {
+  border-radius: $global-radius;
+}
 form.take-action-form p.notice {
   color: $snow;
 }

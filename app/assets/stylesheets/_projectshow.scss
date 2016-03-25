@@ -14,6 +14,7 @@
   border-top: 1px solid #ccc;
   padding: 2.3em 0 2.5em;
   background: $palegray;
+  @include box-shadow(inset 0px 8px 35px -20px rgba(0,0,0,0.25))
 }
 .project-title {
   margin-bottom: 2em;
@@ -21,6 +22,7 @@
 
   h1 {
     margin: 0;
+    font-size: 2.7em;
   }
   a.edit {
     margin-left: 1em;
@@ -41,6 +43,7 @@
 .award-send {
   border: 1px solid #ccc;
   padding: 20px 50px;
+  border-radius: $global-radius;
 
   input[type="radio"] {
     margin-right: 10px;
