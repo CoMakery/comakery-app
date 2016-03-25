@@ -1,7 +1,6 @@
 .contain-to-grid {
   background-color: white;
 }
-
 .contain-to-grid .top-bar {
   max-width: 75em;
   padding: .7em 1em;
@@ -44,5 +43,10 @@
   .project-icon {
     margin-right: 10px;
     margin-left: 10px;
+  }
+}
+.project-search {
+  div {
+    padding: 0;
   }
 }
