@@ -42,19 +42,21 @@ class Views::Layouts::Raw < Views::Base
         }
 
         div(class: "app-container row") {
+          div(class: "large-10 large-centered columns") {
+            flash.each do |name, msg|
+              div("aria-labelledby" => "flash-msg-#{name}", "aria-role" => "dialog", class: ['callout', 'flash-msg', name], "data-alert" => "", "data-closable" => "") {
+                button("class" => "close-button float-right", "aria-label" => "Close alert", "data-close" => "") {
+                  span("aria-hidden" => true) { text raw '&times;' }
+                }
+                p(msg, id: "flash-msg-#{name}")
+              }
+            end
+          }
+
           content_for?(:pre_body) ? yield(:pre_body) : ''
 
           div(class: "main") {
             div(class: "large-10 large-centered columns") {
-              flash.each do |name, msg|
-                div("aria-labelledby" => "flash-msg-#{name}", "aria-role" => "dialog", class: ['callout', 'flash-msg', name], "data-alert" => "", "data-closable" => "") {
-                  button("class" => "close-button float-right", "aria-label" => "Close alert", "data-close" => "") {
-                    span("aria-hidden" => true) { text raw '&times;' }
-                  }
-                  p(msg, id: "flash-msg-#{name}")
-                }
-              end
-
               content_for?(:body) ? yield(:body) : yield
             }
           }
