@@ -1,7 +1,6 @@
 contract Project {
     string public name;
-    string public symbol;
-    uint8 public decimals;
+    string public owner;
 
     mapping (address => uint256) public balanceOf;
 
@@ -10,8 +9,9 @@ contract Project {
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
     function Project(uint256 initialSupply, string tokenName) {
-        balanceOf[msg.sender] = initialSupply;              // Give the creator all initial tokens
-        name = tokenName;                                   // Set the name for display purposes
+        owner = msg.sender;
+        balanceOf[owner] = initialSupply;
+        name = tokenName;
     }
 
     function transfer(address _to, uint256 _value) {
