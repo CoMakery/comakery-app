@@ -51,6 +51,9 @@
   }
   label {
     font-weight: inherit;
+    .grayed-out {
+      color: #999;
+    }
   }
 }
 .contributors-column {
