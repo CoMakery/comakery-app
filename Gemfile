@@ -62,6 +62,7 @@ group(:development, :test) do
 end
 
 group(:development) do
+  gem 'brakeman', require: false
   gem 'easy_shell'
   gem 'git-storyid'
   gem 'html2fortitude'
