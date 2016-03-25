@@ -25,7 +25,7 @@ class Views::Layouts::Raw < Views::Base
 
       body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") {
         div(class: "contain-to-grid top-bar-container") {
-          div(class: "top-bar large-10 large-centered columns", "data-topbar" => "", role: "navigation") {
+          div(class: "top-bar large-10 medium-11 small-12 small-centered columns", "data-topbar" => "", role: "navigation") {
             div(class: "top-bar-title") {
               span("data-hide-for" => "medium", "data-responsive-toggle" => "responsive-menu") {
                 span(class: "menu-icon dark", "data-toggle" => "")
@@ -42,7 +42,7 @@ class Views::Layouts::Raw < Views::Base
         }
 
         div(class: "app-container row") {
-          div(class: "large-10 large-centered columns") {
+          div(class: "large-10 medium-11 small-12 small-centered columns") {
             flash.each do |name, msg|
               div("aria-labelledby" => "flash-msg-#{name}", "aria-role" => "dialog", class: ['callout', 'flash-msg', name], "data-alert" => "", "data-closable" => "") {
                 button("class" => "close-button float-right", "aria-label" => "Close alert", "data-close" => "") {
@@ -56,7 +56,7 @@ class Views::Layouts::Raw < Views::Base
           content_for?(:pre_body) ? yield(:pre_body) : ''
 
           div(class: "main") {
-            div(class: "large-10 large-centered columns") {
+            div(class: "large-10 medium-11 small-12 small-centered columns") {
               content_for?(:body) ? yield(:body) : yield
             }
           }

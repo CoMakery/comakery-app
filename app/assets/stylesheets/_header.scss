@@ -2,8 +2,14 @@
   background-color: white;
 }
 .contain-to-grid .top-bar {
-  max-width: 75em;
   padding: .7em 1em;
+
+  @media #{$large-up} {
+    width: 75em;
+  }
+  @media only screen and (min-width: 64.063em) and (max-width: 75em) {
+    width: 64em;
+  }
 
   .name h1 {
     color: #5C5C5C;

@@ -31,9 +31,34 @@ body {
   max-width: none;
   width: 100%;
 
-  .large-10.large-centered.columns {
+  .main > .columns {
     float: none;
-    max-width: 75em;
+
+    @media #{$large-up} {
+      width: 75em;
+      .row.project {
+        width: 23.5em;
+        .image-block {
+          height: 17em;
+        }
+      }
+    }
+    @media only screen and (min-width: 64em) and (max-width: 75em) {
+      width: 64em;
+    }
+    @media only screen and (min-width: 45em) and (max-width: 75em) {
+      .row.project {
+        width: 20em;
+        .image-block {
+          height: 14.47em;
+        }
+      }
+    }
+    @media only screen and (min-width: 40em) and (max-width: 45em) {
+      .image-block {
+        height: 12.5em;
+      }
+    }
   }
 }
 .app-aside {
