@@ -45,8 +45,6 @@ body {
     }
     @media only screen and (min-width: 64em) and (max-width: 75em) {
       width: 64em;
-    }
-    @media only screen and (min-width: 45em) and (max-width: 75em) {
       .row.project {
         width: 20em;
         .image-block {
@@ -54,7 +52,7 @@ body {
         }
       }
     }
-    @media only screen and (min-width: 40em) and (max-width: 45em) {
+    @media only screen and (min-width: 40em) and (max-width: 64em) {
       .image-block {
         height: 12.5em;
       }
