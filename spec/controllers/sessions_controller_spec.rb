@@ -58,7 +58,7 @@ describe SessionsController do
     end
 
     context "when slack instances have been white-listed" do
-      before { expect(ENV).to receive(:[]).with("BETA_SLACK_INSTANCE_WHITELIST").and_return("comakery") }
+      before { expect(ENV).to receive(:[]).with("BETA_SLACK_INSTANCE_WHITELIST").and_return("foo,comakery") }
 
       it "prevents users from non-whitelisted slack instances from logging in, saves the info in a beta-signup" do
         expect(auth_hash["info"]["team_id"]).to eq("this_is_a_team_id")
@@ -78,6 +78,20 @@ describe SessionsController do
         expect(beta_signup.slack_instance).to eq("Citizen Code")
         expect(beta_signup.oauth_response).to eq(auth_hash)
         expect(beta_signup.opt_in).to eq(false)
+      end
+    end
+
+    context "when slack instances whitelisting is blank" do
+      before { expect(ENV).to receive(:[]).with("BETA_SLACK_INSTANCE_WHITELIST").and_return("") }
+
+      it 'succeeds' do
+        request.env['omniauth.auth'] = auth_hash
+
+        post :create
+
+        assert_response :redirect
+        assert_redirected_to projects_url
+        expect(session[:account_id]).to eq(account.id)
       end
     end
   end
