@@ -1,0 +1,48 @@
+body.projects-edit, body.projects-new, body.projects-create  {
+  .top-bar, .main .large-10.large-centered.columns {
+    max-width: 57em;
+  }
+}
+form.edit_project, form.new_project {
+  input#project_image {
+    border: 1px solid #ccc;
+    padding: .65em;
+    cursor: pointer;
+  }
+  .project-image {
+    max-width: 30em;
+    max-height: 20.5em;
+    height: auto;
+    width: auto;
+  }
+  textarea {
+    height: 9em;
+  }
+  .award-types {
+    margin-top: 2em;
+    border-top: 1px solid #ccc;
+    padding-top: 2em;
+  }
+  .add-award-type {
+    margin-bottom: 2em;
+  }
+  input[type="checkbox"] {
+    margin-top: .7em;
+  }
+  .close {
+    font-size: 2em;
+    margin-top: -.2em;
+    display: inline-block;
+  }
+  .error {
+    select {
+      border: 2px solid $error-color;
+    }
+    small.error {
+      color: $error-color;
+      display: block;
+      margin-top: -1em;
+      margin-bottom: 1em;
+    }
+  }
+}
