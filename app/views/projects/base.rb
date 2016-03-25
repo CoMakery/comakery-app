@@ -2,10 +2,10 @@ class Views::Projects::Base < Views::Base
 
   def projects_header(section_heading)
     row {
-      column("small-10") {
+      column("small-12 medium-10") {
         h2 section_heading
       }
-      column("small-2") {
+      column("small-12 medium-2") {
         a("New Project", class: buttonish("float-right"), href: new_project_path) if policy(Project).new?
       }
     }
