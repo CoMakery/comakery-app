@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   end
 
   get "/account" => "authentications#show", as: "account"
+  resource :account, only: [:update]
   resource :authentication, only: [:show]
 
   get "/auth/slack/callback" => "sessions#create"

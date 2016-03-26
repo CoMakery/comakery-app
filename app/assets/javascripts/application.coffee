@@ -40,6 +40,10 @@ $ ->
 
     template.parent().append(newElement)
 
+  $(document).on "click", "*[data-toggles]", (e)->
+    selector = $(e.target).attr('data-toggles')
+    $(selector).toggleClass("hide")
+
   $(document).on "click", "*[data-mark-and-hide]", (e)->
     e.preventDefault()
     removeSelector = $(e.target).attr('data-mark-and-hide')

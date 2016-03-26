@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160324160006) do
+ActiveRecord::Schema.define(version: 20160325234050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20160324160006) do
     t.datetime "last_logout_at"
     t.datetime "last_activity_at"
     t.string   "last_login_from_ip_address"
+    t.string   "ethereum_address"
   end
 
   add_index "accounts", ["email"], name: "index_accounts_on_email", unique: true, using: :btree
