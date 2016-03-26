@@ -8,9 +8,9 @@ describe AccountsController do
   describe "#update" do
     it "works" do
       expect do
-        put :update, account: {ethereum_address: "foobar"}
+        put :update, account: {ethereum_address: "0x#{'a'*40}"}
         expect(response.status).to eq(302)
-      end.to change { account.reload.ethereum_address }.from(nil).to("foobar")
+      end.to change { account.reload.ethereum_address }.from(nil).to("0x#{'a'*40}")
 
       expect(response).to redirect_to account_url
       expect(flash[:notice]).to eq("Ethereum address updated")

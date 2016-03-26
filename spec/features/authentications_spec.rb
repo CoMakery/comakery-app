@@ -31,12 +31,12 @@ describe "viewing user auth" do
       click_link "Cancel"
       click_link "Edit"
 
-      fill_in "Ethereum Address", with: "foobar"
+      fill_in "Ethereum Address", with: "0x#{'a'*40}"
 
       click_on "Save"
     end
 
     expect(page).to have_content "Ethereum address updated"
-    expect(page.find("a[href='https://www.etherchain.org/account/foobar']")).to be
+    expect(page.find("a[href='https://www.etherchain.org/account/0x#{'a'*40}']")).to be
   end
 end

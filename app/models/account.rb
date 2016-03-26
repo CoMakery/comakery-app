@@ -11,6 +11,8 @@ class Account < ActiveRecord::Base
 
   validates_presence_of :email
 
+  validates_format_of :ethereum_address, with: /\A0x[a-zA-Z0-9]{40}\z/, message: "should start with '0x' and be 42 alpha-numeric characters long total", if: ->(account) { account.ethereum_address.present? }
+
   before_save :downcase_email
 
   def downcase_email
