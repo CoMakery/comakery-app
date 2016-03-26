@@ -37,5 +37,6 @@ describe "viewing user auth" do
     end
 
     expect(page).to have_content "Ethereum address updated"
+    expect(page.find("a[href='https://www.etherchain.org/account/foobar']")).to be
   end
 end

@@ -7,17 +7,18 @@ class Views::Authentications::Show < Views::Base
         row {
           form_for authentication.account do |f|
             with_errors(authentication.account, :ethereum_address) {
-              column("small-2") {
+              column("small-3") {
                 label(for: :"account_ethereum_address") {
-                  text "Ethereum Address "
+                  text "Ethereum Address ("
+                  a(href: "#", "data-toggles": ".edit-ethereum-address,.view-ethereum-address") { text "Cancel" }
+                  text ")"
                 }
               }
               column("small-6") {
                 f.text_field :ethereum_address
               }
-              column("small-4") {
+              column("small-3") {
                 f.submit "Save"
-                a(href: "#", "data-toggles": ".edit-ethereum-address,.view-ethereum-address") { text "Cancel" }
               }
             }
           end
@@ -25,12 +26,13 @@ class Views::Authentications::Show < Views::Base
       }
       div(class: "view-ethereum-address") {
         row {
-          column("small-2") {
-            text "Ethereum Address"
-          }
-          column("small-10") {
-            text authentication.account.ethereum_address
+          column("small-3") {
+            text "Ethereum Address ("
             a(href: "#", "data-toggles": ".edit-ethereum-address,.view-ethereum-address") { text "Edit" }
+            text ")"
+          }
+          column("small-9") {
+            link_to authentication.account.ethereum_address, "https://www.etherchain.org/account/#{authentication.account.ethereum_address}"
           }
         }
       }
