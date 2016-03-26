@@ -2,6 +2,15 @@ class Views::Authentications::Show < Views::Base
   needs :authentication, :awards
 
   def content
+    p {
+      text "CoMakery distributes project coins to your private wallet using the Ethereum blockchain. You can download your Ethereum wallet from "
+      link_to("Ethereum.org", "http://www.ethereum.org")
+      text ". Open your wallet enter your Ethereum address to receive your CoMakery project coins! "
+      text "Once you have entered your Ethereum address you will be able to see your project coins in blockchain explorers like Etherchain.com and in your Ethereum wallet."
+    }
+    p {
+      button_to("Get a wallet now", "http://www.ethereum.org")
+    }
     div(class: "ethereum_address") {
       div(class: "hide edit-ethereum-address") {
         row {
