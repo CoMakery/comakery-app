@@ -2,8 +2,9 @@ require 'rails_helper'
 
 describe Project do
   describe 'validations' do
-    it 'requires an owner' do
-      expect(Project.new.tap(&:valid?).errors.full_messages.sort).to eq(["Owner account can't be blank",
+    it 'requires many attributes' do
+      expect(Project.new.tap(&:valid?).errors.full_messages.sort).to eq(["Description can't be blank",
+                                                                         "Owner account can't be blank",
                                                                          "Slack channel can't be blank",
                                                                          "Slack team can't be blank",
                                                                          "Slack team image 132 url can't be blank",
@@ -23,24 +24,24 @@ describe Project do
 
     describe "tracker" do
       it "is valid if tracker is a valid, absolute url" do
-        project = Project.create!(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com")
+        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com")
         expect(project).to be_valid
         expect(project.tracker).to eq("http://foo.com")
       end
 
       it "requires the tracker url be valid if present" do
-        project = Project.new(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "foo")
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "foo")
         expect(project).not_to be_valid
         expect(project.errors.full_messages).to eq(["Tracker must be a valid url"])
       end
 
       it "is valid with no tracker specified" do
-        project = Project.new(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: nil)
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: nil)
         expect(project).to be_valid
       end
 
       it "is valid if tracker is blank" do
-        project = Project.create!(owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "")
+        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "")
         expect(project.tracker).to be_nil
       end
     end
@@ -48,7 +49,7 @@ describe Project do
 
   describe 'associations' do
     it 'has many award_types and accepts them as nested attributes' do
-      project = Project.create!(
+      project = Project.create!(description: "foo",
           title: 'This is a title',
           owner_account: create(:account),
           slack_team_id: '123',
@@ -156,14 +157,9 @@ describe Project do
       expect(project.description_paragraphs).to eq [ "foo bar baz" ]
     end
 
-    it "should return an empty array if no description" do
-      project = create :project, description: nil
-      expect(project.description_paragraphs).to eq []
-    end
-
-    it "should return an empty array if description is blank" do
-      project = create :project, description: " \t "
-      expect(project.description_paragraphs).to eq []
+    it "should return an array containg description if no newlines" do
+      project = create :project, description: "foo "
+      expect(project.description_paragraphs).to eq [ "foo " ]
     end
   end
 end
