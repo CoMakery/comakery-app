@@ -8,7 +8,7 @@ DEMOS = [
     fixture: 'rails',
     project_model: {
       title: 'Ruby on Rails',
-      description: %{Rails is a web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Controller (MVC) pattern.},
+      description: %{Rails is a web-application framework that includes everything needed to create database-backed web applications according to the Model-View-Controller (MVC) pattern.\n\nIn addition to MVC, Rails emphasizes the use of other well-known software engineering patterns and paradigms, including convention over configuration, don't repeat yourself, and the active record pattern.},
       tracker: 'https://github.com/rails/rails/issues'
     },
     owner_name: "David Heinemeier Hansson",
