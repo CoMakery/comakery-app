@@ -30,7 +30,7 @@ class SessionsController < ApplicationController
   def handle_beta_signup
     beta_instances = ENV["BETA_SLACK_INSTANCE_WHITELIST"]&.split(",")
     return if beta_instances.blank?
-    slack_team_name = request.env.dig('omniauth.auth', "info", "team")
+    slack_team_name = request.env.dig('omniauth.auth', "info", "team_domain")
     return oauth_failure unless slack_team_name
     return if beta_instances.include?(slack_team_name)
     slack_auth_hash = SlackAuthHash.new(request.env['omniauth.auth'])

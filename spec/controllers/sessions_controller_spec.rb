@@ -22,7 +22,7 @@ describe SessionsController do
           'name' => 'bob johnson',
           'provider' => 'slack',
           'credentials' => {'token' => 'these are credentials'},
-          'info' => {'team' => "Citizen Code", 'team_id' => 'this_is_a_team_id', 'user_id' => 'U00000000', 'user' => 'redman', 'first_name' => "Red", 'last_name' => "Man"},
+          'info' => {'team' => "Citizen Code", 'team_id' => 'this_is_a_team_id', 'user_id' => 'U00000000', 'user' => 'redman', 'first_name' => "Red", 'last_name' => "Man", "team_domain" => "citizencode"},
           'extra' => {
               'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com', 'image_32' => 'https://avatars.com/avatars_32.jpg'}, 'real_name' => "Real Name"}},
               'team_info' => {'team' => {'icon' => {'image_34' => 'https://slack.example.com/team-image-34-px.jpg', 'image_132' => 'https://slack.example.com/team-image-132-px.jpg'}}}
@@ -61,7 +61,7 @@ describe SessionsController do
       before { expect(ENV).to receive(:[]).with("BETA_SLACK_INSTANCE_WHITELIST").and_return("foo,comakery") }
 
       it "prevents users from non-whitelisted slack instances from logging in, saves the info in a beta-signup" do
-        expect(auth_hash["info"]["team_id"]).to eq("this_is_a_team_id")
+        expect(auth_hash["info"]["team_domain"]).to eq("citizencode")
         request.env['omniauth.auth'] = auth_hash
 
         expect do
@@ -75,7 +75,7 @@ describe SessionsController do
         beta_signup = BetaSignup.last
         expect(beta_signup.email_address).to eq("bob@example.com")
         expect(beta_signup.name).to eq("Real Name")
-        expect(beta_signup.slack_instance).to eq("Citizen Code")
+        expect(beta_signup.slack_instance).to eq("citizencode")
         expect(beta_signup.oauth_response).to eq(auth_hash)
         expect(beta_signup.opt_in).to eq(false)
       end
@@ -86,6 +86,21 @@ describe SessionsController do
 
       it 'succeeds' do
         request.env['omniauth.auth'] = auth_hash
+
+        post :create
+
+        assert_response :redirect
+        assert_redirected_to projects_url
+        expect(session[:account_id]).to eq(account.id)
+      end
+    end
+
+    context "when slack instances whitelisting matches the user logging in" do
+      before { expect(ENV).to receive(:[]).with("BETA_SLACK_INSTANCE_WHITELIST").and_return("citizencode") }
+
+      it 'succeeds' do
+        request.env['omniauth.auth'] = auth_hash
+        expect(auth_hash["info"]["team_domain"]).to eq("citizencode")
 
         post :create
 
