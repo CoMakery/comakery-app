@@ -11,15 +11,15 @@ describe Account do
     end
 
     it "requires ehtereum address to look like an address" do
-      expect(account.ethereum_address).to be_blank
+      expect(account.ethereum_wallet).to be_blank
       expect(account).to be_valid
 
-      expect(account.tap{|a|a.update(ethereum_address: "foo")}.errors.full_messages).to eq(["Ethereum address should start with '0x' and be 42 alpha-numeric characters long total"])
-      expect(account.tap{|a|a.update(ethereum_address: "0x")}.errors.full_messages).to eq(["Ethereum address should start with '0x' and be 42 alpha-numeric characters long total"])
-      expect(account.tap{|a|a.update(ethereum_address: "0x#{'a'*39}")}.errors.full_messages).to eq(["Ethereum address should start with '0x' and be 42 alpha-numeric characters long total"])
-      expect(account.tap{|a|a.update(ethereum_address: "0x#{'a'*41}")}.errors.full_messages).to eq(["Ethereum address should start with '0x' and be 42 alpha-numeric characters long total"])
+      expect(account.tap{|a|a.update(ethereum_wallet: "foo")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
+      expect(account.tap{|a|a.update(ethereum_wallet: "0x")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
+      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*39}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
+      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*41}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
 
-      expect(account.tap{|a|a.update(ethereum_address: "0x#{'a'*40}")}).to be_valid
+      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*40}")}).to be_valid
     end
   end
 

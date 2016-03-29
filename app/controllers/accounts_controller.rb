@@ -12,12 +12,12 @@ class AccountsController < ApplicationController
       return
     end
 
-    redirect_to account_url, notice: "Ethereum address updated"
+    redirect_to account_url, notice: "Ethereum wallet updated"
   end
 
   protected
 
   def account_params
-    params.require(:account).permit(:ethereum_address)
+    params.require(:account).permit(:ethereum_wallet)
   end
 end

@@ -26,7 +26,7 @@ describe "viewing user auth" do
     expect(page).to have_content "Great work"
     expect(page).to have_content "John Doe"
 
-    within(".ethereum_address") do
+    within(".ethereum_wallet") do
       click_link "Edit"
       click_link "Cancel"
       click_link "Edit"
@@ -36,16 +36,16 @@ describe "viewing user auth" do
       click_on "Save"
     end
 
-    expect(page).to have_content "Ethereum address should start with '0x' and be 42 alpha-numeric characters long total"
+    expect(page).to have_content "Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"
 
-    within(".ethereum_address") do
+    within(".ethereum_wallet") do
 
       fill_in "Ethereum Address", with: "0x#{'a'*40}"
 
       click_on "Save"
     end
 
-    expect(page).to have_content "Ethereum address updated"
+    expect(page).to have_content "Ethereum wallet updated"
     expect(page.find("a[href='https://www.etherchain.org/account/0x#{'a'*40}']")).to be
   end
 end
