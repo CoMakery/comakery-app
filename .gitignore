@@ -20,6 +20,9 @@
 /tmp
 /coverage
 
+# Ethereum
+/ethereum/environments/*/contracts/*.sol.js
+
 # Others
 .idea
 .vagrant
@@ -27,3 +30,4 @@
 .DS_Store
 junk.txt
 junk.rb
+scratch.txt
