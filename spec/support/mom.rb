@@ -9,6 +9,10 @@ class Mom
     Account.new(defaults.merge(attrs))
   end
 
+  def account_with_auth(**attrs)
+    account(**attrs).tap{|a| create(:authentication, account: a)}
+  end
+
   def account_role(account, role)
     AccountRole.new account: account, role: role
   end
@@ -17,11 +21,22 @@ class Mom
     role name: 'Admin', key: Role::ADMIN_ROLE_KEY
   end
 
+  def cc_authentication(**attrs)
+    defaults = {slack_team_id: "citizencode"}
+    defaults[:account] = account unless attrs.has_key?(:account)
+    authentication(defaults.merge(attrs))
+  end
+
+  def sb_authentication(**attrs)
+    defaults = {slack_team_id: "swarmbot"}
+    defaults[:account] = account unless attrs.has_key?(:account)
+    authentication(defaults.merge(attrs))
+  end
+
   def authentication(**attrs)
     @@authentication_count ||= 0
     @@authentication_count += 1
     defaults = {
-        account: create(:account),
         provider: "slack",
         slack_token: "slack token",
         slack_user_id: "slack user id #{@@authentication_count}",
@@ -31,12 +46,25 @@ class Mom
         slack_team_id: "citizen code id",
         slack_user_name: "johndoe"
     }
+    defaults[:account] = create(:account) unless attrs.has_key?(:account)
     defaults[:slack_first_name] = "John" unless attrs.has_key?(:slack_first_name) && attrs[:slack_first_name] == nil
     defaults[:slack_last_name] = "Doe" unless attrs.has_key?(:slack_last_name) && attrs[:slack_last_name] == nil
     Authentication.new(defaults.merge(attrs))
   end
 
-  def project(owner_account = create(:account), **attrs)
+  def beta_signup(**attrs)
+    BetaSignup.new(**attrs)
+  end
+
+  def cc_project(owner_account = create(:cc_authentication).account, **attrs)
+    project(owner_account, {slack_team_id: "citizencode", title: "Citizen Code"}.merge(**attrs))
+  end
+
+  def sb_project(owner_account = create(:sb_authentication).account, **attrs)
+    project(owner_account, {slack_team_id: "swarmbot", title: "Swarmbot"}.merge(**attrs))
+  end
+
+  def project(owner_account = create(:account_with_auth), **attrs)
     defaults = {
         title: "Uber for Cats",
         description: "We are going to build amazing",

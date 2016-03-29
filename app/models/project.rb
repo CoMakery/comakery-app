@@ -10,9 +10,10 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
 
   has_many :awards, through: :award_types, dependent: :destroy
+  has_many :contributors, through: :awards, source: :authentication
 
   belongs_to :owner_account, class_name: Account
-  validates_presence_of :owner_account, :slack_channel, :slack_team_name, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :title
+  validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :title
 
   validate :valid_tracker_url, if: -> { tracker.present? }
 
@@ -45,7 +46,11 @@ class Project < ActiveRecord::Base
   end
 
   def owner_slack_user_name
-    owner_account.slack_auth(slack_team_id: slack_team_id)&.display_name
+    owner_account.authentications.find_by(slack_team_id: slack_team_id)&.display_name
+  end
+
+  def description_paragraphs
+    description.presence&.gsub(/\r/, '')&.split(/\n{2,}/) || []
   end
 
   private

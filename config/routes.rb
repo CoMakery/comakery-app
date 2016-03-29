@@ -6,12 +6,18 @@ Rails.application.routes.draw do
     resources :roles
   end
 
+  get "/account" => "authentications#show", as: "account"
+  resource :account, only: [:update]
+  resource :authentication, only: [:show]
+
   get "/auth/slack/callback" => "sessions#create"
   get "/auth/slack" => "sessions#create", as: :login
 
   get '/logout', to: "sessions#destroy"
 
   root 'projects#landing'
+
+  resources :beta_signups, only: [:new, :create]
 
   resource :session, only: %i[create destroy] do
     get "oauth_failure"

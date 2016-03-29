@@ -13,7 +13,8 @@
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #ccc;
   padding: 2.3em 0 2.5em;
-  background: #F5F5F5;
+  background: $palegray;
+  @include box-shadow(inset 0px 8px 35px -20px rgba(0,0,0,0.25))
 }
 .project-title {
   margin-bottom: 2em;
@@ -21,6 +22,7 @@
 
   h1 {
     margin: 0;
+    font-size: 2.7em;
   }
   a.edit {
     margin-left: 1em;
@@ -41,6 +43,7 @@
 .award-send {
   border: 1px solid #ccc;
   padding: 20px 50px;
+  border-radius: $global-radius;
 
   input[type="radio"] {
     margin-right: 10px;
@@ -48,6 +51,9 @@
   }
   label {
     font-weight: inherit;
+    .grayed-out {
+      color: #999;
+    }
   }
 }
 .contributors-column {
@@ -57,10 +63,10 @@
     font-size: 2.5em;
     font-weight: 300;
     margin-top: .3em;
-    margin-bottom: -.2em;
+    margin-bottom: -.1em;
   }
   .font-small {
-    margin-top: .2em;
+    margin-top: .3em;
   }
 }
 .row.project-tasks {

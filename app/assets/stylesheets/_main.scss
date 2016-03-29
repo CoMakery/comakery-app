@@ -4,6 +4,7 @@
 @import 'projectbox';
 @import 'projectshow';
 @import 'callouts';
+@import 'edit';
 
 body {
   background-color: white;
@@ -30,9 +31,32 @@ body {
   max-width: none;
   width: 100%;
 
-  .large-10.large-centered.columns {
+  .main > .columns {
     float: none;
-    max-width: 75em;
+
+    @media #{$large-up} {
+      width: 75em;
+      .row.project {
+        width: 23.5em;
+        .image-block {
+          height: 17em;
+        }
+      }
+    }
+    @media only screen and (min-width: 64em) and (max-width: 75em) {
+      width: 64em;
+      .row.project {
+        width: 20em;
+        .image-block {
+          height: 14.47em;
+        }
+      }
+    }
+    @media only screen and (min-width: 40em) and (max-width: 64em) {
+      .image-block {
+        height: 12.5em;
+      }
+    }
   }
 }
 .app-aside {
@@ -56,6 +80,11 @@ body {
 }
 .main {
   padding-bottom: 4em;
+
+  h1 {
+    font-size: 2.7em;
+    margin-bottom: .4em;
+  }
 }
 .top-bar-right ul li > a {
   @extend %chunko-text;
@@ -71,6 +100,13 @@ body {
 a .button, a .button.take-action {
   @extend %chunko-text;
   color: $snow;
+}
+a.more {
+  font-size: 16pt;
+  text-transform: lowercase;
+}
+.project-image {
+  border-radius: $global-radius;
 }
 form.take-action-form p.notice {
   color: $snow;

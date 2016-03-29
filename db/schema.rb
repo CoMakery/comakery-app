@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160321181533) do
+ActiveRecord::Schema.define(version: 20160329004420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20160321181533) do
     t.datetime "last_logout_at"
     t.datetime "last_activity_at"
     t.string   "last_login_from_ip_address"
+    t.string   "ethereum_wallet"
   end
 
   add_index "accounts", ["email"], name: "index_accounts_on_email", unique: true, using: :btree
@@ -65,6 +66,8 @@ ActiveRecord::Schema.define(version: 20160321181533) do
     t.string   "slack_team_domain"
     t.string   "slack_team_image_34_url"
     t.string   "slack_team_image_132_url"
+    t.string   "slack_image_32_url"
+    t.jsonb    "oauth_response"
   end
 
   add_index "authentications", ["slack_team_id"], name: "index_authentications_on_slack_team_id", using: :btree
@@ -85,6 +88,14 @@ ActiveRecord::Schema.define(version: 20160321181533) do
     t.datetime "updated_at",        null: false
     t.integer  "award_type_id",     null: false
     t.integer  "authentication_id", null: false
+  end
+
+  create_table "beta_signups", force: :cascade do |t|
+    t.string  "email_address",                  null: false
+    t.string  "name"
+    t.string  "slack_instance"
+    t.boolean "opt_in",         default: false, null: false
+    t.jsonb   "oauth_response"
   end
 
   create_table "projects", force: :cascade do |t|

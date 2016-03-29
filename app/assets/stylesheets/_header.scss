@@ -1,9 +1,15 @@
 .contain-to-grid {
   background-color: white;
 }
-
+.contain-to-grid .top-bar, .project-head > .columns {
+  @media #{$large-up} {
+    width: 75em;
+  }
+  @media only screen and (min-width: 64.063em) and (max-width: 75em) {
+    width: 64em;
+  }
+}
 .contain-to-grid .top-bar {
-  max-width: 75em;
   padding: .7em 1em;
 
   .name h1 {
@@ -44,5 +50,10 @@
   .project-icon {
     margin-right: 10px;
     margin-left: 10px;
+  }
+}
+.project-search {
+  div {
+    padding: 0;
   }
 }

@@ -18,7 +18,7 @@ class Comakery::Slack
 
   def send_award_notifications(award:)
     text = %{
-      #{award.recipient_slack_user_name} received a
+      @#{award.recipient_slack_user_name} received a
       #{award.award_type.amount} coin #{award.award_type.name}
       #{'for "' + award.description + '"' if award.description.present?}
       on the
@@ -27,10 +27,11 @@ class Comakery::Slack
     }.strip.gsub(/\s+/, ' ')
 
     message_response = @client.chat_postMessage(
-      channel: "##{award.award_type.project.slack_channel}",
+      channel: '#'+award.award_type.project.slack_channel,
       text: text,
-      as_user: false,       # don't post as *authed user*
-      username: 'CoMakery Bot', # post as swarmbot
+      link_names: 1,            # make @bob a live link and notify @bob
+      username: 'CoMakery Bot',
+      as_user: false,           # don't post as *authed user*
       icon_url: AVATAR
     )
 

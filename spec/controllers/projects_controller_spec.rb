@@ -11,12 +11,18 @@ describe ProjectsController do
     let!(:my_private_project) { create(:project, slack_team_id: "foo", title: "my_private_project") }
     let!(:my_public_project) { create(:project, slack_team_id: "foo", public: true, title: "my_public_project") }
 
+    before do
+      expect(TopContributors).to receive(:call).twice.and_return(double(success?: true, contributors: {}))
+    end
+
     it "returns your private projects, and public projects that *do not* belong to you" do
       get :landing
 
       expect(response.status).to eq(200)
       expect(assigns[:private_projects].map(&:title)).to match_array(["my_private_project", "my_public_project"])
       expect(assigns[:public_projects].map(&:title)).to match_array(["other_public_project"])
+      expect(assigns[:private_project_contributors].keys).to eq([])
+      expect(assigns[:public_project_contributors].keys).to eq([])
     end
 
     it "renders nicely even if you are not logged in" do
@@ -158,18 +164,22 @@ describe ProjectsController do
     let!(:fox_project) { create(:project, title: "Foxes", description: "Foxes with boxes", owner_account: account, slack_team_id: 'foo') }
 
     describe "#index" do
-      let!(:cat_project_award) { create(:award, award_type: create(:award_type, project: cat_project), created_at: 2.days.ago) }
-      let!(:dog_project_award) { create(:award, award_type: create(:award_type, project: dog_project), created_at: 1.days.ago) }
-      let!(:yak_project_award) { create(:award, award_type: create(:award_type, project: yak_project), created_at: 3.days.ago) }
+      let!(:cat_project_award) { create(:award, authentication: create(:authentication, slack_team_id: "foo", slack_team_image_132_url: "http://auth_avatar_2.jpg"), award_type: create(:award_type, project: cat_project, amount: 200), created_at: 2.days.ago) }
+      let!(:dog_project_award) { create(:award, authentication: create(:authentication, slack_team_id: "foo", slack_team_image_132_url: "http://auth_avatar_1.jpg"), award_type: create(:award_type, project: dog_project, amount: 100), created_at: 1.days.ago) }
+      let!(:yak_project_award) { create(:award, authentication: create(:authentication, slack_team_id: "foo", slack_team_image_132_url: "http://auth_avatar_3.jpg"), award_type: create(:award_type, project: yak_project, amount: 300), created_at: 3.days.ago) }
+
+      before do
+        expect(TopContributors).to receive(:call).and_return(double(success?: true, contributors: {cat_project => [], dog_project => [], yak_project => []}))
+      end
 
       include ActionView::Helpers::DateHelper
       it "lists the projects ordered by most recent award date desc" do
-
         get :index
 
         expect(response.status).to eq(200)
         expect(assigns[:projects].map(&:title)).to eq(["Dogs", "Cats", "Yaks", "Foxes"])
         expect(assigns[:projects].map { |p| time_ago_in_words(p.last_award_created_at) if p.last_award_created_at }).to eq(["1 day", "2 days", "3 days", nil])
+        expect(assigns[:project_contributors].keys).to eq([cat_project, dog_project, yak_project])
       end
 
       it "allows querying based on the title of the project, ignoring case" do
@@ -241,51 +251,54 @@ describe ProjectsController do
         expect(award_types.third.amount).to eq(500)
       end
 
-      it "re-renders with errors when updating fails" do
-        expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
+      context "with rendered views" do
+        render_views
+        it "re-renders with errors when updating fails" do
+          expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
 
-        small_award_type = cat_project.award_types.create!(name: "Small Award", amount: 100)
-        medium_award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300)
-        destroy_me_award_type = cat_project.award_types.create!(name: "Destroy Me Award", amount: 400)
+          small_award_type = cat_project.award_types.create!(name: "Small Award", amount: 100)
+          medium_award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300)
+          destroy_me_award_type = cat_project.award_types.create!(name: "Destroy Me Award", amount: 400)
 
-        expect do
           expect do
-            put :update, id: cat_project.to_param,
-                project: {
-                    title: "",
-                    description: "updated Project description here",
-                    tracker: "http://github.com/here/is/my/tracker/updated",
-                    award_types_attributes: [
-                        {id: small_award_type.to_param, name: "Small Award", amount: 150},
-                        {id: destroy_me_award_type.to_param, _destroy: true},
-                        {name: "Big Award", amount: 500},
-                    ]
-                }
-            expect(response.status).to eq(200)
-          end.not_to change { Project.count }
-        end.not_to change { AwardType.count }
+            expect do
+              put :update, id: cat_project.to_param,
+                  project: {
+                      title: "",
+                      description: "updated Project description here",
+                      tracker: "http://github.com/here/is/my/tracker/updated",
+                      award_types_attributes: [
+                          {id: small_award_type.to_param, name: "Small Award", amount: 150},
+                          {id: destroy_me_award_type.to_param, _destroy: true},
+                          {name: "Big Award", amount: 500},
+                      ]
+                  }
+              expect(response.status).to eq(200)
+            end.not_to change { Project.count }
+          end.not_to change { AwardType.count }
 
-        project = assigns[:project]
-        expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
-        expect(project.title).to eq("")
-        expect(project.description).to eq("updated Project description here")
-        expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
-        expect(assigns[:slack_channels]).to eq(["foo", "bar"])
+          project = assigns[:project]
+          expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
+          expect(project.title).to eq("")
+          expect(project.description).to eq("updated Project description here")
+          expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
+          expect(assigns[:slack_channels]).to eq(["foo", "bar"])
 
-        award_types = project.award_types.sort_by(&:amount)
-        expect(award_types.size).to eq((expected_rows = 4) + (expected_template_rows = 1))
+          award_types = project.award_types.sort_by(&:amount)
+          expect(award_types.size).to eq((expected_rows = 4) + (expected_template_rows = 1))
 
-        expect(award_types.first.name).to be_nil
-        expect(award_types.first.amount).to eq(0)
+          expect(award_types.first.name).to be_nil
+          expect(award_types.first.amount).to eq(0)
 
-        expect(award_types.second.name).to eq("Small Award")
-        expect(award_types.second.amount).to eq(150)
-        expect(award_types.third.name).to eq("Medium Award")
-        expect(award_types.third.amount).to eq(300)
-        expect(award_types.fourth.name).to eq("Destroy Me Award")
-        expect(award_types.fourth.amount).to eq(400)
-        expect(award_types.fifth.name).to eq("Big Award")
-        expect(award_types.fifth.amount).to eq(500)
+          expect(award_types.second.name).to eq("Small Award")
+          expect(award_types.second.amount).to eq(150)
+          expect(award_types.third.name).to eq("Medium Award")
+          expect(award_types.third.amount).to eq(300)
+          expect(award_types.fourth.name).to eq("Destroy Me Award")
+          expect(award_types.fourth.amount).to eq(400)
+          expect(award_types.fifth.name).to eq("Big Award")
+          expect(award_types.fifth.amount).to eq(500)
+        end
       end
 
       it "doesn't allow modification of award_types when the award_type has awards already sent" do
@@ -312,11 +325,11 @@ describe ProjectsController do
     describe "#show" do
       let!(:cat_award_type) { create(:award_type, name: "cat award type", project: cat_project, community_awardable: false) }
       let!(:cat_award_type_community) { create(:award_type, name: "cat award type community", project: cat_project, community_awardable: true) }
-      let!(:awardable_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo", slack_user_name: "account2") } }
+      let!(:awardable_auth) { create(:authentication, slack_team_id: "foo", slack_user_name: "account2") }
 
       context "when on team" do
         before do
-          expect(GetAwardableAccounts).to receive(:call).and_return(double(awardable_accounts: [awardable_account]))
+          expect(GetAwardableAuthentications).to receive(:call).and_return(double(awardable_authentications: [awardable_auth]))
           expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_coins: 0, total_coins_issued: 0}}))
           expect(GetAwardableTypes).to receive(:call).and_return(double(awardable_types: [cat_award_type, cat_award_type_community], can_award: true))
         end
@@ -327,7 +340,7 @@ describe ProjectsController do
           expect(response.code).to eq "200"
           expect(assigns(:project)).to eq cat_project
           expect(assigns[:award]).to be_new_record
-          expect(assigns[:awardable_accounts]).to eq([awardable_account])
+          expect(assigns[:awardable_authentications]).to eq([awardable_auth])
           expect(assigns[:can_award]).to eq(true)
           expect(assigns[:awardable_types].map(&:name).sort).to eq(["cat award type", "cat award type community"])
           expect(assigns[:award_data]).to eq({:contributions => [], :award_amounts => {:my_project_coins => 0, :total_coins_issued => 0}})

@@ -10,6 +10,8 @@ class ProjectsController < ApplicationController
       @private_projects = []
       @public_projects = policy_scope(Project).with_last_activity_at.limit(6)
     end
+    @private_project_contributors = TopContributors.call(projects: @private_projects).contributors
+    @public_project_contributors = TopContributors.call(projects: @public_projects).contributors
     @slack_auth = current_account&.slack_auth
   end
 
@@ -19,6 +21,7 @@ class ProjectsController < ApplicationController
       @projects = @projects.where(["projects.title ilike :query OR projects.description ilike :query", query: "%#{params[:query]}%"])
     end
     @projects = @projects.to_a
+    @project_contributors = TopContributors.call(projects: @projects).contributors
   end
 
   def new
@@ -56,7 +59,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
     authorize @project
     @award = Award.new
-    @awardable_accounts = GetAwardableAccounts.call(current_account: current_account, project: @project, accounts: policy_scope(Account.includes(:authentications))).awardable_accounts
+    @awardable_authentications = GetAwardableAuthentications.call(current_account: current_account, project: @project, authentications: policy_scope(Authentication)).awardable_authentications
     awardable_types_result = GetAwardableTypes.call(current_account: current_account, project: @project)
     @awardable_types = awardable_types_result.awardable_types
     @can_award = awardable_types_result.can_award

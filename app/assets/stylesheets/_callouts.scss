@@ -5,7 +5,12 @@
   margin-top: -.3em;
   border: 0;
   font-size: 18px;
-  padding: 14px 20px;
+  padding: 16px 20px 13px;
+  margin-bottom: 20px;
+
+  .close {
+    color: black;
+  }
 }
 
 .callout.notice {
@@ -22,20 +27,9 @@
 }
 
 .callout.error {
-  background-color: hsl(0, 100%, 85%);
-  color:            hsl(0, 44%, 46%);
-}
-
-.callout .close {
-  color: black;
-}
-
-.callout.flash-msg {
-  margin-bottom: 20px;
-}
-
-.project-search {
-  div {
-    padding: 0;
+  background-color: #FFF3F7;
+  color: $error-color;
+  .close-button {
+    color: $error-color;
   }
 }

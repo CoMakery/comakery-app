@@ -21,3 +21,11 @@
 
 en:
   hello: "Hello world"
+  datetime:
+    distance_in_words:
+      less_than_x_minutes:
+        one:   "1 minute"
+        other: "%{count} minutes"
+      about_x_hours:
+        one: "1 hour"
+        other: "%{count} hours"

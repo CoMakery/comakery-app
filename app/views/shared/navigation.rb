@@ -1,15 +1,5 @@
 class Views::Shared::Navigation < Views::Base
   def content
-    content_for :js do
-      text(<<-JAVASCRIPT.html_safe)
-        $(function() {
-          $(".project-search a").on("click", function() {
-            window.location = "http://www.google.com"
-          })
-        });
-      JAVASCRIPT
-    end
-
     div(class: "top-bar-right") {
       ul(class: "menu") {
         li(class: "has-form") {
@@ -32,6 +22,9 @@ class Views::Shared::Navigation < Views::Base
           end
         }
         if current_account
+          li {
+            link_to 'Account', account_path
+          }
           li {
             link_to 'Sign out', session_path, method: :delete
           }

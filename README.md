@@ -17,10 +17,6 @@ We welcome [feature requests and pull requests](https://github.com/comakery/coma
 We are planning to license it as a Dynamic Equity Organization.
 The structure is being legally reviewed for use in CoMakery and on your projects.
 
-## Interface Example
-
-![CoMakery UX](https://cdn.rawgit.com/CoMakery/comakery-app/56606b5000c73549e0f775cd5062927ca14443d1/doc/designs/project.png)
-
 ## Local development
 
 Prerequisites: PostgreSQL

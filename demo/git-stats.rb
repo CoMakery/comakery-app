@@ -8,9 +8,10 @@
 require 'active_support/all'
 require 'json'
 require 'easy_shell'
-require 'awesome_print'
 
 repo_path = ARGV[-1] || '.'
+
+TOO_SMALL_CONTRIBUTION = 0  # used to trim dataset to managable size
 
 stats = {}
 (0...30).each do |days_ago|
@@ -24,6 +25,10 @@ stats = {}
     day[name] ||= 0
     day[name] += 1
   end
+end
+
+stats.each do |day, data|
+  data.delete_if { |key, value| value <= TOO_SMALL_CONTRIBUTION }
 end
 
 puts "\n" * 3 if $DEBUG

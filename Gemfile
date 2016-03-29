@@ -63,6 +63,7 @@ group(:development, :test) do
 end
 
 group(:development) do
+  gem 'brakeman', require: false
   gem 'git-storyid'
   gem 'html2fortitude'
   gem 'letter_opener'

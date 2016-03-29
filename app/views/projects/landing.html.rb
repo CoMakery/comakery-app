@@ -1,10 +1,10 @@
 class Views::Projects::Landing < Views::Projects::Base
-  needs :private_projects, :public_projects
+  needs :private_projects, :public_projects, :private_project_contributors, :public_project_contributors
 
   def content
     if current_account&.slack_auth
       projects_header("#{current_account.slack_auth.slack_team_name} projects")
-      projects_block(private_projects)
+      projects_block(private_projects, private_project_contributors)
     else
       content_for(:pre_body) {
         div(class: "intro") {
@@ -45,8 +45,8 @@ class Views::Projects::Landing < Views::Projects::Base
     end
 
     full_row { h1 "Public Projects" }
-    projects_block(public_projects)
+    projects_block(public_projects, public_project_contributors)
 
-    a("Browse All", href: projects_path)
+    a("Browse All", href: projects_path, class: "more")
   end
 end

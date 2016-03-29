@@ -1,5 +1,5 @@
 class Views::Projects::AwardSend < Views::Base
-  needs :project, :award, :awardable_accounts, :awardable_types, :can_award
+  needs :project, :award, :awardable_authentications, :awardable_types, :can_award
 
   def content
     form_for [project, award] do |f|
@@ -20,7 +20,7 @@ class Views::Projects::AwardSend < Views::Base
                         f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
                       }
                     end
-                    column(can_award ? "small-11" : "small-12") {
+                    column(can_award ? "small-11 #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : "small-12") {
                       span(award_type.name)
                       text " (#{number_with_precision(award_type.amount, precision: 0, delimiter: ',')})"
                       text " (Community Awardable)" if award_type.community_awardable?
@@ -37,7 +37,7 @@ class Views::Projects::AwardSend < Views::Base
               label {
                 text "User"
                 options = capture do
-                  options_for_select([[nil, nil]].concat(awardable_accounts))
+                  options_for_select([[nil, nil]].concat(awardable_authentications))
                 end
                 select_tag "award[slack_user_id]", options, html: {id: "award_slack_user_id"}
               }
