@@ -22,6 +22,7 @@
 
 # Ethereum
 /ethereum/environments/*/contracts/*.sol.js
+/ethereum/node_modules/
 
 # Others
 .idea

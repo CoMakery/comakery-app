@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "lightsaber": "^0.5.1"
+  },
+  "devDependencies": {
+  }
+}
