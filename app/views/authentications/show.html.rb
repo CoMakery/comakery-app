@@ -3,10 +3,10 @@ class Views::Authentications::Show < Views::Base
 
   def content
     p {
-      text "CoMakery distributes project coins to your private wallet using the Ethereum blockchain. You can download your Ethereum wallet from "
+      text "You can download an Ethereum wallet from "
       link_to("Ethereum.org", "http://www.ethereum.org", target: "_blank")
-      text ". Open your wallet enter your Ethereum wallet to receive your CoMakery project coins! "
-      text "Once you have entered your Ethereum wallet you will be able to see your project coins in blockchain explorers like Etherchain.com and in your Ethereum wallet."
+      text " to create an account. Enter your Ethereum wallet below. "
+      text "Then you will receive your CoMakery project coin awards in your Ethereum wallet!"
     }
     p {
       link_to("Get a wallet now", "http://www.ethereum.org", target: "_blank", class: buttonish)
