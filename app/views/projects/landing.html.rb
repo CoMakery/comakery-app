@@ -8,7 +8,7 @@ class Views::Projects::Landing < Views::Projects::Base
     else
       content_for(:pre_body) {
         div(class: "intro") {
-          video_tag("collaboration.mp4", autobuffer: true, autoplay: true, loop: true)
+          video_tag("https://s3.amazonaws.com/comakery/collaboration.mp4", autobuffer: true, autoplay: true, loop: true)
           div(class:"overlay") {}
           div(class:"overlay2") {}
           div(class:"intro-content") {
