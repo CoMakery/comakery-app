@@ -73,7 +73,7 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    @project = Project.find(params[:id])
+    @project = Project.includes(:award_types).find(params[:id])
     @project.attributes = project_params
     authorize @project
     if @project.save

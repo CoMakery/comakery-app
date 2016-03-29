@@ -11,12 +11,11 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
   before do
     travel_to Date.new(2016, 1, 10)
+    stub_slack_user_list
+    stub_slack_channel_list
   end
 
   it "does the happy path" do
-    stub_slack_user_list
-    stub_slack_channel_list
-
     login(account)
 
     visit projects_path
@@ -158,29 +157,62 @@ describe "viewing projects, creating and editing", :js, :vcr do
   end
 
   describe "removing award types on projects where there have been awards sent already" do
-    before do
-      stub_slack_channel_list
+    let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false, slack_channel: "a channel name") }
+    before { login(account) }
+
+    let!(:award_type) { create(:award_type, project: project, name: "Big ol' award", amount: 40000, community_awardable: false) }
+
+    context "without awards" do
+      it "can update any attribute" do
+        visit edit_project_path(project)
+        award_type_amount_input = page.find("input[name*='[amount]']")
+
+        expect(page.all("a[data-mark-and-hide]").size).to eq(1)
+        expect(award_type_amount_input[:value]).to eq("40000")
+        expect(award_type_amount_input[:readonly]).to be_falsey
+
+        award_type_amount_input.set("50000")
+        page.find("input[name*='[title]']").set("fancy title")
+        page.find("input[name*='[community_awardable]']").set(true)
+
+        click_on "Save"
+
+        visit edit_project_path(project)
+        award_type_amount_input = page.find("input[name*='[amount]']")
+
+        expect(award_type_amount_input[:value]).to eq("50000")
+        expect(award_type_amount_input[:readonly]).to be_falsey
+        expect(page.find("input[name*='[title]']")[:value]).to eq("fancy title")
+        expect(page.find("input[name*='[community_awardable]']")).to be_truthy
+      end
     end
 
-    it "prevents destroying the award types" do
-      login(account)
+    context "with awards" do
+      let!(:award) { create(:award, award_type: award_type, authentication: same_team_account_authentication) }
 
-      award_type = create(:award_type, project: project, name: "Big ol' award", amount: 40000)
+      it "prevents destroying the award types" do
+        visit edit_project_path(project)
+        award_type_amount_input = page.find("input[name*='[amount]']")
 
-      visit edit_project_path(project)
+        expect(page.all("a[data-mark-and-hide]").size).to eq(0)
+        expect(page).to have_content "(1 award sent)"
+        expect(award_type_amount_input[:value]).to eq("40000")
+        expect(award_type_amount_input[:readonly]).to eq("readonly")
+      end
 
-      expect(page.all("a[data-mark-and-hide]").size).to eq(1)
-      expect(page.find("input[name*='[amount]']")[:value]).to eq("40000")
-      expect(page.find("input[name*='[amount]']")[:disabled]).to eq(false)
+      it "allows modifying the award type's name and community awardable but NOT amount" do
+        visit edit_project_path(project)
 
-      create(:award, award_type: award_type, authentication: same_team_account_authentication)
+        page.find("input[name*='[title]']").set("fancy title")
+        page.find("input[name*='[community_awardable]']").set(true)
 
-      visit edit_project_path(project)
+        click_on "Save"
 
-      expect(page.all("a[data-mark-and-hide]").size).to eq(0)
-      expect(page).to have_content "(1 award sent)"
-      expect(page.find("input[name*='[amount]']")[:value]).to eq("40000")
-      expect(page.find("input[name*='[amount]']")[:disabled]).to eq(true)
+        visit edit_project_path(project)
+
+        expect(page.find("input[name*='[title]']")[:value]).to eq("fancy title")
+        expect(page.find("input[name*='[community_awardable]']")[:value]).to be_truthy
+      end
     end
   end
 end

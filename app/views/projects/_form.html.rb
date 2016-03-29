@@ -79,13 +79,13 @@ module Views
                   ff.text_field :name
                 }
                 column("small-2") {
-                  disabled = !ff.object&.modifiable?
-                  if disabled
-                    tooltip("Award types' amounts can't be modified if there are existing awards", if: disabled) do
-                      ff.text_field :amount, type: :number, class: 'text-right', disabled: disabled
+                  readonly = !ff.object&.modifiable?
+                  if readonly
+                    tooltip("Award types' amounts can't be modified if there are existing awards", if: readonly) do
+                      ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
                     end
                   else
-                    ff.text_field :amount, type: :number, class: 'text-right', disabled: disabled
+                    ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
                   end
                 }
                 column("small-2", class: "text-center") {
