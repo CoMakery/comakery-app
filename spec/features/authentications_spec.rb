@@ -45,7 +45,7 @@ describe "viewing user auth" do
       click_on "Save"
     end
 
-    expect(page).to have_content "Ethereum wallet updated"
+    expect(page).to have_content "Ethereum account updated"
     expect(page.find("a[href='https://www.etherchain.org/account/0x#{'a'*40}']")).to be
   end
 end
