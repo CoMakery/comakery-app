@@ -50,7 +50,7 @@ class Project < ActiveRecord::Base
   end
 
   def description_paragraphs
-    description&.gsub(/\r/, '')&.split(/\n{2,}/) || []
+    description.presence&.gsub(/\r/, '')&.split(/\n{2,}/) || []
   end
 
   private

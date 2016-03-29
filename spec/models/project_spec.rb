@@ -152,12 +152,22 @@ describe Project do
       ]
     end
 
-    it "should return an array containg description if no newlines" do
+    it "should return an array containing description if no newlines" do
       project = create :project, description: "foo bar baz"
       expect(project.description_paragraphs).to eq [ "foo bar baz" ]
     end
 
-    it "should return an array containg description if no newlines" do
+    it "should return an empty array if no description" do
+      project = build :project, description: nil
+      expect(project.description_paragraphs).to eq []
+    end
+
+    it "should return an empty array if description is blank" do
+      project = build :project, description: " \t "
+      expect(project.description_paragraphs).to eq []
+    end
+
+    it "should return an array containing description if no newlines" do
       project = create :project, description: "foo "
       expect(project.description_paragraphs).to eq [ "foo " ]
     end
