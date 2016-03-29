@@ -14,6 +14,7 @@ describe AuthenticationsController do
       get :show
 
       expect(response.status).to eq(200)
+      expect(assigns[:current_account]).to eq(auth.account)
       expect(assigns[:authentication]).to eq(auth)
       expect(assigns[:awards]).to match_array([award1, award2])
     end

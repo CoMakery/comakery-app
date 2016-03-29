@@ -23,7 +23,7 @@ class Views::Shared::Navigation < Views::Base
         }
         if current_account
           li {
-            link_to 'Settings', account_path
+            link_to 'Account', account_path
           }
           li {
             link_to 'Sign out', session_path, method: :delete

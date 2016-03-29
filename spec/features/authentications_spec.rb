@@ -11,13 +11,13 @@ describe "viewing user auth" do
   specify do
     visit root_path
 
-    expect(page).not_to have_content "Settings"
+    expect(page).not_to have_content "Account"
 
     login(auth.account)
 
     visit root_path
 
-    click_link "Settings"
+    click_link "Account"
 
     expect(page).to have_content "Swarmbot"
     expect(page).to have_content "1,337"
@@ -30,6 +30,15 @@ describe "viewing user auth" do
       click_link "Edit"
       click_link "Cancel"
       click_link "Edit"
+
+      fill_in "Ethereum Address", with: "too short and with spaces"
+
+      click_on "Save"
+    end
+
+    expect(page).to have_content "Ethereum address should start with '0x' and be 42 alpha-numeric characters long total"
+
+    within(".ethereum_address") do
 
       fill_in "Ethereum Address", with: "0x#{'a'*40}"
 

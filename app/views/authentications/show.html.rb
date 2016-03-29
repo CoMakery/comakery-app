@@ -1,5 +1,5 @@
 class Views::Authentications::Show < Views::Base
-  needs :authentication, :awards
+  needs :current_account, :authentication, :awards
 
   def content
     p {
@@ -15,7 +15,7 @@ class Views::Authentications::Show < Views::Base
       div(class: "hide edit-ethereum-address") {
         row {
           form_for authentication.account do |f|
-            with_errors(authentication.account, :ethereum_address) {
+            with_errors(current_account, :ethereum_address) {
               column("small-3") {
                 label(for: :"account_ethereum_address") {
                   text "Ethereum Address ("
