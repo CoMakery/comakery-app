@@ -5,13 +5,19 @@ machine:
 dependencies:
   cache_directories:
     - /home/ubuntu/.phantomjs
+  pre:
+    - npm i -g truffle@0.3.1
+    - npm i -g ethereumjs-testrpc@1.2.1
 
 test:
+  pre:
+    - testrpc -p 7777
   override:
     - ./bin/rspect --format documentation:
         parallel: true
         files:
           - spec/**/*_spec.rb
+    - cd ethereum && truffle test
 
 deployment:
   autodeploy:

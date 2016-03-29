@@ -31,6 +31,22 @@ rake db:create:all db:schema:load
 rails server
 ```
 
+## Ethereum development
+
+Prerequisites:
+
+```sh
+npm i -g truffle@0.3.1
+npm i -g ethereumjs-testrpc
+```
+
+Run tests:
+
+```
+testrpc -p 7777
+cd ethereum && truffle test
+```
+
 ## License
 
 CoMakery is being developed under the experimental
