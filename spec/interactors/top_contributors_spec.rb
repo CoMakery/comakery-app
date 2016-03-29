@@ -7,7 +7,7 @@ describe TopContributors do
     end
 
     it "returns the map of project => accounts of the top N most awarded members, ordered by total contribution/recency, excluding accounts without awards and defaults n to 5" do
-      sb_account_owner = create(:sb_account, email: "sb_account_owner")
+      sb_account_owner = create(:sb_authentication).account
       sb_auth1 = create(:sb_authentication, slack_user_name: "sb1")
       sb_auth2 = create(:sb_authentication, slack_user_name: "sb2")
       sb_auth3 = create(:sb_authentication, slack_user_name: "sb3")

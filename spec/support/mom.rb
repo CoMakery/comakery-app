@@ -1,12 +1,4 @@
 class Mom
-  def cc_account(**attrs)
-    account(**attrs).tap{|a| create(:cc_authentication, account: a) }
-  end
-
-  def sb_account(**attrs)
-    account(**attrs).tap{|a| create(:sb_authentication, account: a) }
-  end
-
   def account(**attrs)
     @@account_count ||= 0
     @@account_count += 1
@@ -31,13 +23,13 @@ class Mom
 
   def cc_authentication(**attrs)
     defaults = {slack_team_id: "citizencode"}
-    defaults[:account] = cc_account unless attrs.has_key?(:account)
+    defaults[:account] = account unless attrs.has_key?(:account)
     authentication(defaults.merge(attrs))
   end
 
   def sb_authentication(**attrs)
     defaults = {slack_team_id: "swarmbot"}
-    defaults[:account] = cc_account unless attrs.has_key?(:account)
+    defaults[:account] = account unless attrs.has_key?(:account)
     authentication(defaults.merge(attrs))
   end
 
@@ -64,11 +56,11 @@ class Mom
     BetaSignup.new(**attrs)
   end
 
-  def cc_project(owner_account = create(:cc_account), **attrs)
+  def cc_project(owner_account = create(:cc_authentication).account, **attrs)
     project(owner_account, {slack_team_id: "citizencode", title: "Citizen Code"}.merge(**attrs))
   end
 
-  def sb_project(owner_account = create(:sb_account), **attrs)
+  def sb_project(owner_account = create(:sb_authentication).account, **attrs)
     project(owner_account, {slack_team_id: "swarmbot", title: "Swarmbot"}.merge(**attrs))
   end
 

@@ -325,11 +325,11 @@ describe ProjectsController do
     describe "#show" do
       let!(:cat_award_type) { create(:award_type, name: "cat award type", project: cat_project, community_awardable: false) }
       let!(:cat_award_type_community) { create(:award_type, name: "cat award type community", project: cat_project, community_awardable: true) }
-      let!(:awardable_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "foo", slack_user_name: "account2") } }
+      let!(:awardable_auth) { create(:authentication, slack_team_id: "foo", slack_user_name: "account2") }
 
       context "when on team" do
         before do
-          expect(GetAwardableAccounts).to receive(:call).and_return(double(awardable_accounts: [awardable_account]))
+          expect(GetAwardableAuthentications).to receive(:call).and_return(double(awardable_authentications: [awardable_auth]))
           expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_coins: 0, total_coins_issued: 0}}))
           expect(GetAwardableTypes).to receive(:call).and_return(double(awardable_types: [cat_award_type, cat_award_type_community], can_award: true))
         end
@@ -340,7 +340,7 @@ describe ProjectsController do
           expect(response.code).to eq "200"
           expect(assigns(:project)).to eq cat_project
           expect(assigns[:award]).to be_new_record
-          expect(assigns[:awardable_accounts]).to eq([awardable_account])
+          expect(assigns[:awardable_authentications]).to eq([awardable_auth])
           expect(assigns[:can_award]).to eq(true)
           expect(assigns[:awardable_types].map(&:name).sort).to eq(["cat award type", "cat award type community"])
           expect(assigns[:award_data]).to eq({:contributions => [], :award_amounts => {:my_project_coins => 0, :total_coins_issued => 0}})

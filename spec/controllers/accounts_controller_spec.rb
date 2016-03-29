@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe AccountsController do
-  let(:account) { create(:sb_account) }
+  let(:account) { create(:sb_authentication).account }
 
   before { login(account) }
 

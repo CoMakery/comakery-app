@@ -1,5 +1,5 @@
 class Views::Projects::AwardSend < Views::Base
-  needs :project, :award, :awardable_accounts, :awardable_types, :can_award
+  needs :project, :award, :awardable_authentications, :awardable_types, :can_award
 
   def content
     form_for [project, award] do |f|
@@ -37,7 +37,7 @@ class Views::Projects::AwardSend < Views::Base
               label {
                 text "User"
                 options = capture do
-                  options_for_select([[nil, nil]].concat(awardable_accounts))
+                  options_for_select([[nil, nil]].concat(awardable_authentications))
                 end
                 select_tag "award[slack_user_id]", options, html: {id: "award_slack_user_id"}
               }
