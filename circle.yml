@@ -6,6 +6,8 @@ dependencies:
   cache_directories:
     - /home/ubuntu/.phantomjs
   pre:
+    - nvm install 5
+    - nvm use 5
     - npm i -g truffle@0.3.1
     - npm i -g ethereumjs-testrpc@1.2.1
 
