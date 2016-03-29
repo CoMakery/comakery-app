@@ -12,9 +12,7 @@ class Views::BetaSignups::New < Views::Base
     form_for beta_signup do |f|
       row {
         column("small-6") {
-          # f.label(:email_address, "Email")
-          # f.text_field(:email_address, type: "email")
-          f.hidden_field(:email_address, type: "email")
+          f.hidden_field(:email_address)
 
           p(class: "beta_signup_email_address") {
             text "Email: "
