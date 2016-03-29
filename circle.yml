@@ -14,7 +14,7 @@ dependencies:
 
 test:
   pre:
-    - testrpc -p 7777
+    - testrpc -p 7777 &
   override:
     - ./bin/rspect --format documentation:
         parallel: true
