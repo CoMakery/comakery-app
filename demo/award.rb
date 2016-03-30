@@ -20,7 +20,8 @@ DEMOS = [
     project_model: {
       title: 'IPFS Core',
       description: %{The InterPlanetary File System (IPFS) is a new hypermedia distribution protocol, addressed by content and identities. IPFS enables the creation of completely distributed applications. It aims to make the web faster, safer, and more open.  IPFS is an open source project developed by the IPFS Community and many contributors from the open source community.},
-      tracker: 'https://waffle.io/ipfs/ipfs'
+      tracker: 'https://waffle.io/ipfs/ipfs',
+      image: File.new(Rails.root.join("spec/fixtures/helmet_cat.png"))
     },
     owner_name: "Juan Benet",
     team_name: 'Protocol Labs',
