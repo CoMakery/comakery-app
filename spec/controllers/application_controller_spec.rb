@@ -14,6 +14,10 @@ describe ApplicationController do
     def new
       raise Slack::Web::Api::Error.new("boom")
     end
+
+    def show
+      raise Pundit::NotAuthorizedError.new("boooom")
+    end
   end
 
   describe "errors" do
@@ -27,10 +31,24 @@ describe ApplicationController do
 
     describe "Slack::Web::Api::Error" do
       it "redirects to logout page" do
+        expect(Rails.logger).to receive(:error)
+        session[:account_id] = 432
+
         get :new
 
-        expect(response).to redirect_to logout_url
+        expect(session).not_to have_key(:account_id)
+        expect(response).to redirect_to root_url
         expect(flash[:error]).to eq("Error talking to Slack, sorry!")
+      end
+    end
+
+    describe "Pundit::NotAuthorizedError" do
+      it "redirects to root path and logs the error" do
+        expect(Rails.logger).to receive(:error)
+
+        get :show, id: 1
+
+        expect(response).to redirect_to root_url
       end
     end
   end

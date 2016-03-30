@@ -376,8 +376,8 @@ describe ProjectsController do
 
         get :show, id: cat_project.to_param
 
-        expect(response.code).to eq "302"
-        expect(assigns(:project)).to eq cat_project
+        expect(response.status).to eq(302)
+        expect(assigns(:project)).to eq(cat_project)
       end
     end
   end

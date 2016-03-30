@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
       session[:account_id] = @account.id
       redirect_to projects_url
     rescue SlackAuthHash::MissingAuthParamException => e
-      flash['alert'] = "Failed authentication - #{e}"
+      flash[:error] = "Failed authentication - #{e}"
       redirect_to root_url
     end
   end
