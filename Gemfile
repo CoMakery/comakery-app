@@ -62,7 +62,7 @@ group(:development) do
   gem 'brakeman', require: false
   gem 'easy_shell'
   gem 'git-storyid'
-  gem 'html2fortitude'
+  # gem 'html2fortitude'  # requires old ruby_parser, try global "gem install html2fortitude" instead
   gem 'letter_opener'
   gem 'meta_request'
   gem 'pivotal_git_scripts'
