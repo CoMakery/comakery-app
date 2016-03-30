@@ -12,6 +12,7 @@ test:
         parallel: true
         files:
           - spec/**/*_spec.rb
+    - brakeman --exit-on-warn
 
 deployment:
   autodeploy:
