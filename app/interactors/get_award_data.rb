@@ -36,6 +36,8 @@ class GetAwardData
 
     contributor_auths = recent_awards.map { |award| award.authentication }.freeze
     empty_row_template = contributor_auths.each_with_object({}) do |contributor_auth, contributors|
+      # using display names is potentially problematic because these aren't unique, and also they could be a stale copy in our DB
+      # from when the user last logged in
       contributors[contributor_auth.display_name] = 0 if contributor_auth
     end.freeze
 
