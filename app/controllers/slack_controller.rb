@@ -10,7 +10,7 @@ class SlackController < ApplicationController
       attachments: [
         {
         text: %{ Hi! CoMakery helps you share equity with your team.
-          For more intel, drop by #{request.protocol}#{request.host_with_port}
+          For more intel, drop by #{ENV['APP_PROTOCOL']}#{ENV['APP_HOST']}
         }.strip.gsub(/\s+/, ' ')
         }
       ]
