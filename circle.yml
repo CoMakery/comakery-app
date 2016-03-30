@@ -3,6 +3,9 @@ machine:
     America/Los_Angeles
 
 dependencies:
+  pre:
+    - gem install brakeman
+
   cache_directories:
     - /home/ubuntu/.phantomjs
 
