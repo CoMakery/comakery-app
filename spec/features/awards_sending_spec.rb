@@ -54,7 +54,7 @@ describe "awarding users" do
       expect(page).to have_content "0My Project Coins"
 
       choose "Small"
-      expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson", "Hubert Sherbert - @hubert", "Sherman Yessir - @sherman"])
+      expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson"])
       select "bobjohnson", from: "User"
 
       click_button "Send"
@@ -119,13 +119,13 @@ describe "awarding users" do
       expect(page.all("input[type=radio][disabled=disabled]").size).to eq(0)
     end
 
-    expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson", "Hubert Sherbert - @hubert", "Sherman Yessir - @sherman"])
-    select "@sherman", from: "User"
+    expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson"])
+    select "@bobjohnson", from: "User"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
 
     click_button "Send"
 
-    expect(page).to have_content "Successfully sent award to Sherman Yessir"
+    expect(page).to have_content "Successfully sent award to @bobjohnson"
 
     click_link "Award History"
 
@@ -134,7 +134,7 @@ describe "awarding users" do
     expect(page).to have_content "1,000"
     expect(page).to have_content "Small"
     expect(page).to have_content "Super fantastic fabulous programatic work on teh things, A++"
-    expect(page).to have_content "Hubert Sherbert"
+    expect(page).to have_content "@bobjohnson"
 
     expect(page.all(".award-rows .award-row").size).to eq(1)
 
@@ -145,7 +145,7 @@ describe "awarding users" do
     visit landing_projects_path
 
     within(".project", text: "Project that needs awards") do
-      expect(page.all("img.contributor").map { |img| img[:src] }).to match_array(["http://avatar.com/owner_team_avatar.jpg", "http://avatar.com/other_account_avatar.jpg"])
+      expect(page.all("img.contributor").map { |img| img[:src] }).to match_array(["http://avatar.com/owner_team_avatar.jpg", "https://slack.example.com/team-image-34-px.jpg"])
     end
   end
 end

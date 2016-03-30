@@ -9,7 +9,7 @@ class Views::Projects::AwardSend < Views::Base
         else
           h3 "Awards"
         end
-        project.award_types.each do |award_type|
+        project.award_types.order("amount asc").each do |award_type|
           row(class: "award-type-row") {
             column("small-12") {
               with_errors(project, :account_id) {

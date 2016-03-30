@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 describe "Collaborator projects", :vcr do
-  let!(:owner) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account: a, slack_team_id: "citizencode", slack_user_name: "owner", slack_first_name: "owner", slack_last_name: "owner") } }
-  let!(:collab1) { create(:account, email: "collab1@example.com").tap { |a| create(:authentication, account: a, slack_team_id: "citizencode", slack_user_name: "collab1", slack_first_name: "collab1", slack_last_name: "collab1") } }
-  let!(:collab2) { create(:account, email: "collab2@example.com").tap { |a| create(:authentication, account: a, slack_team_id: "citizencode", slack_user_name: "collab2", slack_first_name: "collab2", slack_last_name: "collab2") } }
+  let!(:owner) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account: a, slack_team_id: "citizencode", slack_user_name: "owner", slack_first_name: "owner", slack_last_name: "owner", slack_user_id: "owner_id") } }
+  let!(:collab1) { create(:account, email: "collab1@example.com").tap { |a| create(:authentication, account: a, slack_team_id: "citizencode", slack_user_name: "collab1", slack_first_name: "collab1", slack_last_name: "collab1", slack_user_id: "collab1") } }
+  let!(:collab2) { create(:account, email: "collab2@example.com").tap { |a| create(:authentication, account: a, slack_team_id: "citizencode", slack_user_name: "collab2", slack_first_name: "collab2", slack_last_name: "collab2", slack_user_id: "collab2") } }
 
   it "allow creating of award types that are community-awardable" do
     stub_slack_channel_list
-    stub_slack_user_list
+    stub_slack_user_list([create_stub_slack_user(first_name: "collab1", last_name: "collab1", user_id: "collab1"),
+                          create_stub_slack_user(first_name: "collab2", last_name: "collab2", user_id: "collab2"),
+                          create_stub_slack_user(first_name: "owner", last_name: "owner", user_id: "owner_id")])
 
     login(owner)
 
@@ -31,7 +33,7 @@ describe "Collaborator projects", :vcr do
 
     expect(page).to have_content "Project created"
 
-    expect(page.all("select#award_slack_user_id option").map(&:text)).to match_array(["", "collab1 collab1 - @collab1", "collab2 collab2 - @collab2", "owner owner - @owner"])
+    expect(page.all("select#award_slack_user_id option").map(&:text)).to match_array(["", "collab1 collab1 - @collab1collab1", "collab2 collab2 - @collab2collab2", "owner owner - @ownerowner"])
 
     bookmark_project_path = page.current_path
 
@@ -39,6 +41,6 @@ describe "Collaborator projects", :vcr do
 
     visit bookmark_project_path
 
-    expect(page.all("select#award_slack_user_id option").map(&:text)).to match_array(["", "collab2 collab2 - @collab2", "owner owner - @owner"])
+    expect(page.all("select#award_slack_user_id option").map(&:text)).to match_array(["", "collab2 collab2 - @collab2collab2", "owner owner - @ownerowner"])
   end
 end
