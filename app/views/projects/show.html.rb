@@ -1,12 +1,10 @@
 class Views::Projects::Show < Views::Base
   needs :project, :award, :awardable_authentications, :awardable_types, :award_data, :can_award
 
-  PIE_CHART_CONTRIBUTORS = 12
-
   def make_charts
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
-        window.pieChart("#award-percentages", {"content": [#{award_data[:contributions][0...PIE_CHART_CONTRIBUTORS].map { |datum| pie_chart_data_element(datum) }.join(",")}]});
+        window.pieChart("#award-percentages", {"content": [#{award_data[:contributions].map { |datum| pie_chart_data_element(datum) }.join(",")}]});
         window.stackedBarChart("#contributions-chart", #{award_data[:contributions_by_day].to_json});
       });
     JAVASCRIPT
