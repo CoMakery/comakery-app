@@ -1,9 +1,7 @@
 class Mom
   def account(**attrs)
-    @@account_count ||= 0
-    @@account_count += 1
     defaults = {
-        email: "me+#{@@account_count}@example.com",
+        email: "me+#{Random.new.urlsafe_base64}@example.com",
         password: valid_password
     }
     Account.new(defaults.merge(attrs))

@@ -13,7 +13,8 @@ DEMOS = [
     },
     owner_name: "David Heinemeier Hansson",
     team_name: 'Ruby on Rails',
-    team_image: 'http://www.bytebob.com/images/ruby.png'
+    team_image: 'http://www.bytebob.com/images/ruby.png',
+    project_image: "rails.jpg"
   },
   {
     fixture: 'go-ipfs',
@@ -21,11 +22,23 @@ DEMOS = [
       title: 'IPFS Core',
       description: %{The InterPlanetary File System (IPFS) is a new hypermedia distribution protocol, addressed by content and identities. IPFS enables the creation of completely distributed applications. It aims to make the web faster, safer, and more open.  IPFS is an open source project developed by the IPFS Community and many contributors from the open source community.},
       tracker: 'https://waffle.io/ipfs/ipfs',
-      image: File.new(Rails.root.join("spec/fixtures/helmet_cat.png"))
     },
     owner_name: "Juan Benet",
     team_name: 'Protocol Labs',
-    team_image: 'https://upload.wikimedia.org/wikipedia/en/1/18/Ipfs-logo-1024-ice-text.png'
+    team_image: 'https://upload.wikimedia.org/wikipedia/en/1/18/Ipfs-logo-1024-ice-text.png',
+    project_image: "go-ipfs.png"
+  },
+  {
+    fixture: 'swarmbot',
+    project_model: {
+      title: 'Swarmbot',
+      description: %{An open source solution to infect Slack messaging networks with community crypto coins and space kitty kuteness. Swarmbot helps you make contributions and receive project coins. This helps you track your contributions to projects and receive profit distributions!},
+      tracker: 'https://github.com/CoMakery/swarmbot/issues'
+    },
+    owner_name: "CoMakery",
+    team_name: 'CoMakery',
+    team_image: 'https://s3.amazonaws.com/comakery/spacekitty.jpg',
+    project_image: "swarmbot.jpg"
   }
 ]
 
@@ -33,17 +46,18 @@ def main
   DEMOS.each { |demo| make demo }
 end
 
-def make fixture:, project_model:, owner_name:, team_name:, team_image:
+def make fixture:, project_model:, owner_name:, team_name:, team_image:, project_image:
   owner = auth owner_name, team_name, team_image
   project = project_factory owner.account, project_model.reverse_merge(
     public: true,
     slack_team_name: team_name,
     slack_team_id: team_name,
     slack_team_image_34_url: team_image,
-    slack_team_image_132_url: team_image
+    slack_team_image_132_url: team_image,
+    image: File.new(get_fixture(project_image))
   )
   award_type = create :award_type, amount: 100, name: 'Commit', project: project
-  fixture_path = File.expand_path "../fixtures/#{fixture}.json", __FILE__
+  fixture_path = get_fixture "#{fixture}.json"
   contributions = JSON.load IO.read fixture_path
   contributions.each do |date, data|
     data.each do |name, amount|
@@ -91,6 +105,10 @@ def project_factory owner, params
     project = create :project, owner, **params
   end
   project
+end
+
+def get_fixture file
+  File.expand_path "../fixtures/#{file}", __FILE__
 end
 
 main
