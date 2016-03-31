@@ -35,8 +35,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public")).to be_checked
 
-    expect(find_field("Maximum number of awardable coins")['value']).to eq("10000000")
-    fill_in "Maximum number of awardable coins", with: "20000000"
+    expect(find_field("Maximum Number of Awardable Coins")['value']).to eq("10000000")
+    fill_in "Maximum Number of Awardable Coins", with: "20000000"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
@@ -112,6 +112,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     fill_in "Title", with: "This is an edited project"
     fill_in "Description", with: "This is an edited project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
+    fill_in "Contributor Agreement", with: "https://docusign.com/project_contributor_agreement.pdf"
     uncheck "Set project as public"
 
     award_type_inputs = get_award_type_rows
@@ -130,6 +131,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "Visibility: Private"
     expect(page).to have_link "Project Tasks"
     expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com"
+    expect(page).to have_link "Contributor Agreement", href: "https://docusign.com/project_contributor_agreement.pdf"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)

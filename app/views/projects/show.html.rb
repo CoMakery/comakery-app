@@ -61,7 +61,7 @@ class Views::Projects::Show < Views::Base
               }
               row(class: "project-tasks") {
                 if project.tracker
-                  column("medium-5 small-12") {
+                  column("medium-4 small-12") {
                     a(href: project.tracker, target: "_blank", class: "text-link") do
                       i(class: "fa fa-tasks")
                       text " Project Tasks"
@@ -69,10 +69,18 @@ class Views::Projects::Show < Views::Base
                   }
                 end
                 if project.slack_team_domain
-                  column("medium-7 small-12") {
+                  column("medium-4 small-12") {
                     a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") do
                       i(class: "fa fa-slack")
                       text " Project Slack Channel"
+                    end
+                  }
+                end
+                if project.contributor_agreement_url
+                  column("medium-4 small-12") {
+                    a(href: project.contributor_agreement_url, target: "_blank", class: "text-link") do
+                      i(class: "fa fa-file-text")
+                      text " Contributor Agreement"
                     end
                   }
                 end

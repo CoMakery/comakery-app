@@ -39,6 +39,12 @@ describe Project do
         expect(project.tracker).to eq("http://foo.com")
       end
 
+      it "doesn't allow completely wrong urls that cause parsing errors" do
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "ゆアルエル", maximum_coins: 10_000_000)
+        expect(project).not_to be_valid
+        expect(project.errors.full_messages).to eq(["Tracker must be a valid url"])
+      end
+
       it "requires the tracker url be valid if present" do
         project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "foo", maximum_coins: 10_000_000)
         expect(project).not_to be_valid
@@ -53,6 +59,36 @@ describe Project do
       it "is valid if tracker is blank" do
         project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "", maximum_coins: 10_000_000)
         expect(project.tracker).to be_nil
+      end
+    end
+
+    describe "contributor_agreement_url" do
+      it "is valid if contributor_agreement_url is a valid, absolute url" do
+        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: "http://foo.com", maximum_coins: 10_000_000)
+        expect(project).to be_valid
+        expect(project.contributor_agreement_url).to eq("http://foo.com")
+      end
+
+      it "doesn't allow completely wrong urls that cause parsing errors" do
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: "ゆアルエル", maximum_coins: 10_000_000)
+        expect(project).not_to be_valid
+        expect(project.errors.full_messages).to eq(["Contributor agreement url must be a valid url"])
+      end
+
+      it "requires the contributor_agreement_url be valid if present" do
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: "foo", maximum_coins: 10_000_000)
+        expect(project).not_to be_valid
+        expect(project.errors.full_messages).to eq(["Contributor agreement url must be a valid url"])
+      end
+
+      it "is valid with no contributor_agreement_url specified" do
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: nil, maximum_coins: 10_000_000)
+        expect(project).to be_valid
+      end
+
+      it "is valid if contributor_agreement_url is blank" do
+        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: "", maximum_coins: 10_000_000)
+        expect(project.contributor_agreement_url).to be_nil
       end
     end
   end

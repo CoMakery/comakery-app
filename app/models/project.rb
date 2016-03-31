@@ -17,6 +17,7 @@ class Project < ActiveRecord::Base
   validates_numericality_of :maximum_coins, greater_than: 0
 
   validate :valid_tracker_url, if: -> { tracker.present? }
+  validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
 
   validate :maximum_coins_unchanged, if: -> { !new_record? }
 
@@ -59,8 +60,19 @@ class Project < ActiveRecord::Base
   private
 
   def valid_tracker_url
-    uri = URI.parse(tracker || "")
-    errors[:tracker] << "must be a valid url" unless uri.absolute?
+    validate_url(:tracker)
+  end
+
+  def valid_contributor_agreement_url
+    validate_url(:contributor_agreement_url)
+  end
+
+  def validate_url(attribute_name)
+    uri = URI.parse(self.send(attribute_name) || "")
+  rescue URI::InvalidURIError
+    uri = nil
+  ensure
+    errors[attribute_name] << "must be a valid url" unless uri&.absolute?
   end
 
   def maximum_coins_unchanged

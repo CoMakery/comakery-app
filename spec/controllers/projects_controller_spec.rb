@@ -92,6 +92,7 @@ describe ProjectsController do
               description: "Project description here",
               image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
               tracker: "http://github.com/here/is/my/tracker",
+              contributor_agreement_url: "http://docusign.com/here/is/my/signature",
               slack_channel: "slack_channel",
               maximum_coins: "150",
               award_types_attributes: [
@@ -110,6 +111,7 @@ describe ProjectsController do
       expect(project.description).to eq("Project description here")
       expect(project.image).to be_a(Refile::File)
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
+      expect(project.contributor_agreement_url).to eq("http://docusign.com/here/is/my/signature")
       expect(project.maximum_coins).to eq(150)
       expect(project.award_types.first.name).to eq("Community Award")
       expect(project.award_types.first.community_awardable).to eq(true)
