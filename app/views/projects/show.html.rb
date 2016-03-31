@@ -4,14 +4,16 @@ class Views::Projects::Show < Views::Base
   def make_charts
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
-        window.pieChart("#award-percentages", {"content": [#{award_data[:contributions_summary].map { |datum| pie_chart_data_element(datum) }.join(",")}]});
+        window.pieChart("#award-percentages", {"content": #{pie_chart_data}});
         window.stackedBarChart("#contributions-chart", #{award_data[:contributions_by_day].to_json});
       });
     JAVASCRIPT
   end
 
-  def pie_chart_data_element(award_datum)
-    {"label": award_datum[:name], "value": award_datum[:net_amount]}.to_json
+  def pie_chart_data
+    award_data[:contributions_summary].map do |award|
+      {label: award[:name], value: award[:net_amount]}
+    end.to_json
   end
 
   def content
