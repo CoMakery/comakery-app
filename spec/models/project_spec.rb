@@ -23,6 +23,15 @@ describe Project do
       expect(Project.new(slack_team_domain: "a").tap{|p|p.valid?}.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
     end
 
+    describe "maximum_coins" do
+      it "prevents modification if the record has been saved" do
+        project = create(:project)
+        project.maximum_coins += 10
+        expect(project).not_to be_valid
+        expect(project.errors.full_messages).to be_include("Maximum coins can't be changed")
+      end
+    end
+
     describe "tracker" do
       it "is valid if tracker is a valid, absolute url" do
         project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com", maximum_coins: 10_000_000)

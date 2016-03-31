@@ -32,7 +32,7 @@ module Views
               with_errors(project, :maximum_coins) {
                 label {
                   text "Maximum number of awardable coins"
-                  f.text_field :maximum_coins, type: "number"
+                  f.text_field :maximum_coins, type: "number", disabled: !project.new_record?
                 }
               }
               with_errors(project, :public) {

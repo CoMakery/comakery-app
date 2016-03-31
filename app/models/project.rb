@@ -18,6 +18,8 @@ class Project < ActiveRecord::Base
 
   validate :valid_tracker_url, if: -> { tracker.present? }
 
+  validate :maximum_coins_unchanged, if: -> { !new_record? }
+
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<("max(awards.created_at) as last_award_created_at").join(","))
         .joins("left join award_types on projects.id = award_types.project_id")
@@ -59,5 +61,9 @@ class Project < ActiveRecord::Base
   def valid_tracker_url
     uri = URI.parse(tracker || "")
     errors[:tracker] << "must be a valid url" unless uri.absolute?
+  end
+
+  def maximum_coins_unchanged
+    errors[:maximum_coins] << "can't be changed" unless maximum_coins_was == maximum_coins
   end
 end
