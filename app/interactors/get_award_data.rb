@@ -10,6 +10,7 @@ class GetAwardData
 
     context.award_data = {
         contributions: contributions_data(awards_array),
+        contributions_summary: contributions_summary_data(awards_array),
         award_amounts: award_amount_data(authentication, awards_array),
         contributions_by_day: contributions_by_day(awards)
     }
@@ -27,6 +28,17 @@ class GetAwardData
       awards[award.authentication_id][:name] = award.authentication.display_name || award.authentication.email
       awards[award.authentication_id][:net_amount] += award.award_type.amount
     end.values.sort_by{|award_data| -award_data[:net_amount]}
+  end
+
+  def contributions_summary_data(awards, fully_shown = 12)
+    contributions = contributions_data(awards)
+    summary = contributions[0...fully_shown]
+    if contributions.size > fully_shown
+      other = {name: 'Other'}
+      other[:net_amount] = contributions[fully_shown..-1].sum { |award| award[:net_amount] }
+      summary << other
+    end
+    summary
   end
 
   def contributions_by_day(awards_scope)

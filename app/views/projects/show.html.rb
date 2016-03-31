@@ -4,7 +4,7 @@ class Views::Projects::Show < Views::Base
   def make_charts
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
-        window.pieChart("#award-percentages", {"content": [#{award_data[:contributions].map { |datum| pie_chart_data_element(datum) }.join(",")}]});
+        window.pieChart("#award-percentages", {"content": [#{award_data[:contributions_summary].map { |datum| pie_chart_data_element(datum) }.join(",")}]});
         window.stackedBarChart("#contributions-chart", #{award_data[:contributions_by_day].to_json});
       });
     JAVASCRIPT
