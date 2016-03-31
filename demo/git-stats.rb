@@ -11,8 +11,7 @@ require 'easy_shell'
 
 repo_path = ARGV[-1] || '.'
 
-TOO_SMALL_CONTRIBUTION = 0  # used to trim dataset to managable size
-DAYS_OF_HISTORY = 30
+DAYS_OF_HISTORY = 365 * 2
 BOTS = %w[ greenkeeperio-bot ]
 
 def d args
@@ -22,11 +21,10 @@ end
 stats = {}
 (0...DAYS_OF_HISTORY).each do |days_ago|
   date = Date.parse(days_ago.days.ago.utc.iso8601)
-
-  day = stats[date] = {}
   results = run %{cd #{repo_path} && git log --pretty="%an" --since="#{days_ago + 1} days ago" --until "#{days_ago} days ago"}, quiet: !$DEBUG
   next if results.blank?
   d date
+  day = stats[date] = {}
   results.split("\n").each do |names|
     d "names: "+names
     # handle pair programmers: split name on ' and ' or ' & ' or ', '
@@ -38,14 +36,6 @@ stats = {}
       end
     end
   end
-end
-
-# delete if no data for that day
-stats.delete_if { |day, data| data.blank? }
-
-# delete if contribution too small
-stats.each do |day, data|
-  data.delete_if { |key, value| value <= TOO_SMALL_CONTRIBUTION }
 end
 
 puts "\n" * 3 if $DEBUG
