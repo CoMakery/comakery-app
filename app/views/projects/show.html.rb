@@ -92,10 +92,10 @@ class Views::Projects::Show < Views::Base
         row {
           column("small-12 medium-4", class: "centered coins-issued") {
             if award_data[:award_amounts][:my_project_coins]
-              div(class: "centered font-large") { text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',') }
+              div(class: "centered coin-numbers") { text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',') }
               div(class: "centered") { text "My Project Coins" }
             end
-            div(class: "centered font-large") {
+            div(class: "centered coin-numbers") {
               total_coins_issued = award_data[:award_amounts][:total_coins_issued]
 
               text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')

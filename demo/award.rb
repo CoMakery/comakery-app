@@ -54,7 +54,8 @@ def make fixture:, project_model:, owner_name:, team_name:, team_image:, project
     slack_team_id: team_name,
     slack_team_image_34_url: team_image,
     slack_team_image_132_url: team_image,
-    image: File.new(get_fixture(project_image))
+    image: File.new(get_fixture(project_image)),
+    maximum_coins: 10_000_000
   )
   award_type = create :award_type, amount: 100, name: 'Commit', project: project
   fixture_path = get_fixture "#{fixture}.json"
@@ -98,9 +99,15 @@ end
 
 # find or create project with the given title
 def project_factory owner, params
-  project = Project.find_by title: params[:title]
+  project = Project.find_by(
+    title: params[:title],
+    owner_account_id: owner.id,
+    slack_team_name: params[:slack_team_name]
+  )
   if project
     project.update_attributes! **params
+    project.award_types.each{|award_type| award_type.awards.destroy_all}
+    project.award_types.destroy_all
   else
     project = create :project, owner, **params
   end

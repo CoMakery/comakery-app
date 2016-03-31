@@ -27,6 +27,16 @@ rake db:create:all db:schema:load
 rails server
 ```
 
+## Deleting a project
+
+If you want to completely remove all trace of project `p` (be careful):
+
+```ruby
+p.award_types.each{|t| t.awards.destroy_all}
+p.award_types.destroy_all
+p.delete
+```
+
 ## License
 
 CoMakery is being developed under the experimental

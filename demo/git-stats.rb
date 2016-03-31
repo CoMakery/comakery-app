@@ -12,7 +12,7 @@ require 'easy_shell'
 repo_path = ARGV[-1] || '.'
 
 TOO_SMALL_CONTRIBUTION = 0  # used to trim dataset to managable size
-DAYS_OF_HISTORY = 300
+DAYS_OF_HISTORY = 30
 BOTS = %w[ greenkeeperio-bot ]
 
 stats = {}
@@ -24,8 +24,8 @@ stats = {}
   results = run %{cd #{repo_path} && git log --pretty="%an" --since="#{days_ago + 1} days ago" --until "#{days_ago} days ago"}, quiet: !$DEBUG
   next if results.blank?
   results.split("\n").each do |names|
-    # handle pair programmers: split name on ' and ' or ' & '
-    names.split(/(?:,\s*|\s+and\s+|\s+&\s+)/).each do |name|
+    # handle pair programmers: split name on ' and ' or ' & ' or ', '
+    names.split(/,\s*|\s+and\s+|\s+&\s+/).each do |name|
       unless BOTS.include? name
         day[name] ||= 0
         day[name] += 1
