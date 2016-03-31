@@ -1,32 +1,32 @@
 machine:
-  timezone:
-    America/Los_Angeles
+    timezone:
+        America/Los_Angeles
 
 dependencies:
-  cache_directories:
-    - /home/ubuntu/.phantomjs
-  pre:
-    - gem install brakeman
-    - nvm install 5
-    - nvm alias default 5
-    - nvm use default
-    - npm i -g 'github:ConsenSys/truffle#master'
-    - cd ethereum && npm i
+    cache_directories:
+        - /home/ubuntu/.phantomjs
+    pre:
+        - gem install brakeman
+        - nvm install 5
+        - nvm alias default 5
+        - nvm use default
+        - npm i -g 'github:ConsenSys/truffle#master'
+        - cd ethereum && npm i
 
 test:
-  pre:
-    - cd ethereum && npm run testrpc -p 7777:
-      background: true
-  override:
-    - ./bin/rspect --format documentation:
-      parallel: true
-      files:
-        - spec/**/*_spec.rb
-    - brakeman --exit-on-warn
-    - cd ethereum && truffle test
+    pre:
+        - cd ethereum && npm run testrpc -p 7777:
+            background: true
+    override:
+        - ./bin/rspect --format documentation:
+            parallel: true
+            files:
+                - spec/**/*_spec.rb
+        - brakeman --exit-on-warn
+        - cd ethereum && truffle test
 
 deployment:
-  autodeploy:
-    branch: master
-    commands:
-      - bin/deploy comakery-staging $CIRCLE_SHA1
+    autodeploy:
+        branch: master
+        commands:
+            - bin/deploy comakery-staging $CIRCLE_SHA1
