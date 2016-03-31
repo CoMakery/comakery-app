@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "testrpc": "testrpc"
+    "testrpc": "testrpc -p 7777"
   },
   "dependencies": {
     "ethereumjs-testrpc": "^1.2.1",
