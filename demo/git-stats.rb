@@ -15,18 +15,24 @@ TOO_SMALL_CONTRIBUTION = 0  # used to trim dataset to managable size
 DAYS_OF_HISTORY = 30
 BOTS = %w[ greenkeeperio-bot ]
 
+def d args
+  p args if $DEBUG
+end
+
 stats = {}
 (0...DAYS_OF_HISTORY).each do |days_ago|
   date = Date.parse(days_ago.days.ago.utc.iso8601)
 
   day = stats[date] = {}
-
   results = run %{cd #{repo_path} && git log --pretty="%an" --since="#{days_ago + 1} days ago" --until "#{days_ago} days ago"}, quiet: !$DEBUG
   next if results.blank?
+  d date
   results.split("\n").each do |names|
+    d "names: "+names
     # handle pair programmers: split name on ' and ' or ' & ' or ', '
     names.split(/,\s*|\s+and\s+|\s+&\s+/).each do |name|
-      unless BOTS.include? name
+      d 'name:  ' + name
+      unless BOTS.include?(name)
         day[name] ||= 0
         day[name] += 1
       end
