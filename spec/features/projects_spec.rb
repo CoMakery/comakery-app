@@ -3,7 +3,8 @@ require "rails_helper"
 describe "viewing projects, creating and editing", :js, :vcr do
   let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false) }
   let!(:public_project) { create(:project, title: "Public Project", description: "dogs with donuts", owner_account: account, slack_team_id: "citizencode", public: true) }
-  let!(:public_project_award) { create(:award, award_type: create(:award_type, project: public_project), created_at: Date.new(2016, 1, 9)) }
+  let!(:public_project_award_type) { create(:award_type, project: public_project) }
+  let!(:public_project_award) { create(:award, award_type: public_project_award_type, created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_team_image_34_url: "https://slack.example.com/awesome-team-image-34-px.jpg", slack_team_image_132_url: "https://slack.example.com/awesome-team-image-132-px.jpg", slack_user_name: 'gleenn', slack_first_name: "Glenn", slack_last_name: "Spanky", slack_team_domain: "citizencodedomain") } }
   let!(:same_team_account) { create(:account) }
   let!(:same_team_account_authentication) { create(:authentication, account: same_team_account, slack_team_id: "citizencode", slack_team_name: "Citizen Code") }
@@ -11,12 +12,11 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
   before do
     travel_to Date.new(2016, 1, 10)
+    stub_slack_user_list
+    stub_slack_channel_list
   end
 
   it "does the happy path" do
-    stub_slack_user_list
-    stub_slack_channel_list
-
     login(account)
 
     visit projects_path
@@ -34,6 +34,9 @@ describe "viewing projects, creating and editing", :js, :vcr do
     fill_in "Description", with: "This is a project description which is very informative"
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public (display in CoMakery index)")).to be_checked
+
+    expect(find_field("Maximum number of awardable coins")['value']).to eq("10000000")
+    fill_in "Maximum number of awardable coins", with: "20000000"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
@@ -78,6 +81,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "This is a project description which is very informative"
     expect(page.find(".project-image")[:style]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link "Project Tasks"
+    expect(page).to have_content "0/20,000,000"
     expect(page).to have_content "Visibility: Public"
 
     expect(page).to have_content "Owner: Glenn Spanky"
@@ -101,6 +105,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
     click_on "Edit"
 
+    expect(page.find("input[name*='[maximum_coins]']")[:disabled]).to eq(true)
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
 
     expect(page).to have_checked_field("Set project as public (display in CoMakery index)")
@@ -158,29 +163,80 @@ describe "viewing projects, creating and editing", :js, :vcr do
   end
 
   describe "removing award types on projects where there have been awards sent already" do
-    before do
-      stub_slack_channel_list
+    let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false, slack_channel: "a channel name") }
+    before { login(account) }
+
+    let!(:award_type) { create(:award_type, project: project, name: "Big ol' award", amount: 40000, community_awardable: false) }
+
+    context "without awards" do
+      it "can update any attribute" do
+        visit edit_project_path(project)
+        award_type_amount_input = page.find("input[name*='[amount]']")
+
+        expect(page.all("a[data-mark-and-hide]").size).to eq(1)
+        expect(award_type_amount_input[:value]).to eq("40000")
+        expect(award_type_amount_input[:readonly]).to be_falsey
+
+        award_type_amount_input.set("50000")
+        page.find("input[name*='[title]']").set("fancy title")
+        page.find("input[name*='[community_awardable]']").set(true)
+
+        click_on "Save"
+
+        visit edit_project_path(project)
+        award_type_amount_input = page.find("input[name*='[amount]']")
+
+        expect(award_type_amount_input[:value]).to eq("50000")
+        expect(award_type_amount_input[:readonly]).to be_falsey
+        expect(page.find("input[name*='[title]']")[:value]).to eq("fancy title")
+        expect(page.find("input[name*='[community_awardable]']")).to be_truthy
+      end
     end
 
-    it "prevents destroying the award types" do
-      login(account)
+    context "with awards" do
+      let!(:award) { create(:award, award_type: award_type, authentication: same_team_account_authentication) }
 
-      award_type = create(:award_type, project: project, name: "Big ol' award", amount: 40000)
+      it "prevents destroying the award types" do
+        visit edit_project_path(project)
+        award_type_amount_input = page.find("input[name*='[amount]']")
 
-      visit edit_project_path(project)
+        expect(page.all("a[data-mark-and-hide]").size).to eq(0)
+        expect(page).to have_content "(1 award sent)"
+        expect(award_type_amount_input[:value]).to eq("40000")
+        expect(award_type_amount_input[:readonly]).to eq("readonly")
+      end
 
-      expect(page.all("a[data-mark-and-hide]").size).to eq(1)
-      expect(page.find("input[name*='[amount]']")[:value]).to eq("40000")
-      expect(page.find("input[name*='[amount]']")[:disabled]).to eq(false)
+      it "allows modifying the award type's name and community awardable but NOT amount" do
+        visit edit_project_path(project)
 
-      create(:award, award_type: award_type, authentication: same_team_account_authentication)
+        page.find("input[name*='[title]']").set("fancy title")
+        page.find("input[name*='[community_awardable]']").set(true)
 
-      visit edit_project_path(project)
+        click_on "Save"
 
-      expect(page.all("a[data-mark-and-hide]").size).to eq(0)
-      expect(page).to have_content "(1 award sent)"
-      expect(page.find("input[name*='[amount]']")[:value]).to eq("40000")
-      expect(page.find("input[name*='[amount]']")[:disabled]).to eq(true)
+        visit edit_project_path(project)
+
+        expect(page.find("input[name*='[title]']")[:value]).to eq("fancy title")
+        expect(page.find("input[name*='[community_awardable]']")[:value]).to be_truthy
+      end
+    end
+  end
+
+  it "shows the percentage of coin awards if greater than 0.01% have been awarded" do
+    login(account)
+
+    visit project_path(project)
+
+    within(".coins-issued") do
+      expect(page).to have_content "0/10,000,000"
+    end
+
+    create(:award, award_type: create(:award_type, project: project, amount: 100_000))
+
+    visit project_path(project)
+
+    within(".coins-issued") do
+      expect(page).to have_content "100,000/10,000,000 (1.00%) Total Coins Issued"
     end
   end
 end

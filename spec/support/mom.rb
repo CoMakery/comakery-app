@@ -1,9 +1,7 @@
 class Mom
   def account(**attrs)
-    @@account_count ||= 0
-    @@account_count += 1
     defaults = {
-        email: "me+#{@@account_count}@example.com",
+        email: "me+#{Random.new.urlsafe_base64}@example.com",
         password: valid_password
     }
     Account.new(defaults.merge(attrs))
@@ -74,7 +72,8 @@ class Mom
         slack_team_name: "Citizen Code",
         slack_team_image_34_url: "https://slack.example.com/team-image-34-px.jpg",
         slack_team_image_132_url: "https://slack.example.com/team-image-132-px.jpg",
-        owner_account: owner_account
+        owner_account: owner_account,
+        maximum_coins: 10_000_000
     }
     Project.new(defaults.merge(attrs))
   end

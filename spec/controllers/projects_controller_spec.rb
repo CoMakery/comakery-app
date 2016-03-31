@@ -61,6 +61,7 @@ describe ProjectsController do
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
         expect(assigns[:project]).to be_public
+        expect(assigns[:project].maximum_coins).to eq(10000000)
         expect(assigns[:project].award_types.size).to eq(4)
 
         expect(assigns[:project].award_types.first).to be_a_new_record
@@ -92,6 +93,7 @@ describe ProjectsController do
               image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
               tracker: "http://github.com/here/is/my/tracker",
               slack_channel: "slack_channel",
+              maximum_coins: "150",
               award_types_attributes: [
                   {name: "Community Award", amount: 10, community_awardable: true},
                   {name: "Small Award", amount: 1000},
@@ -108,6 +110,7 @@ describe ProjectsController do
       expect(project.description).to eq("Project description here")
       expect(project.image).to be_a(Refile::File)
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
+      expect(project.maximum_coins).to eq(150)
       expect(project.award_types.first.name).to eq("Community Award")
       expect(project.award_types.first.community_awardable).to eq(true)
       expect(project.award_types.second.name).to eq("Small Award")
@@ -301,7 +304,7 @@ describe ProjectsController do
         end
       end
 
-      it "doesn't allow modification of award_types when the award_type has awards already sent" do
+      it "doesn't allow modification of award_types' amounts when the award_type has awards already sent" do
         expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: ["foo", "bar"]))
 
         award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300).tap do |award_type|
@@ -317,8 +320,32 @@ describe ProjectsController do
                     ]
                 }
             expect(response.status).to eq(200)
+            expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
+      end
+
+      it "does allow modification of award_types' non-amount attributes when the award_type has awards already sent" do
+        award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300, community_awardable: false).tap do |award_type|
+          create(:award, award_type: award_type)
+        end
+
+        expect do
+          expect do
+            put :update, id: cat_project.to_param,
+                project: {
+                    award_types_attributes: [
+                        {id: award_type.to_param, name: "Bigger Award", community_awardable: true, amount: award_type.amount},
+                    ]
+                }
+            expect(response.status).to eq(302)
+          end.not_to change { Project.count }
+        end.not_to change { AwardType.count }
+
+        expect(flash[:notice]).to eq("Project updated")
+        award_type.reload
+        expect(award_type.name).to eq("Bigger Award")
+        expect(award_type).to be_community_awardable
       end
     end
 
@@ -352,8 +379,8 @@ describe ProjectsController do
 
         get :show, id: cat_project.to_param
 
-        expect(response.code).to eq "302"
-        expect(assigns(:project)).to eq cat_project
+        expect(response.status).to eq(302)
+        expect(assigns(:project)).to eq(cat_project)
       end
     end
   end

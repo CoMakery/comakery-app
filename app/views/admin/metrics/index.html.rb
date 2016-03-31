@@ -20,7 +20,7 @@ class Views::Admin::Metrics::Index < Views::Base
             }
           }
 
-          render partial: "daily_count_rows", locals: { metrics: Metrics.signups_per_day }
+          render partial: "daily_count_rows", locals: { metrics: ::Metrics.signups_per_day }
         }
       }
 
@@ -35,7 +35,7 @@ class Views::Admin::Metrics::Index < Views::Base
             }
           }
 
-          render partial: "daily_count_rows", locals: { metrics: Metrics.signups_per_week }
+          render partial: "daily_count_rows", locals: { metrics: ::Metrics.signups_per_week }
         }
       }
 
@@ -54,7 +54,7 @@ class Views::Admin::Metrics::Index < Views::Base
             }
           }
 
-          render partial: "daily_count_rows", locals: { metrics: Metrics.churn_per_day }
+          render partial: "daily_count_rows", locals: { metrics: ::Metrics.churn_per_day }
         }
       }
 
@@ -68,11 +68,11 @@ class Views::Admin::Metrics::Index < Views::Base
             }
           }
 
-          render partial: "daily_count_rows", locals: { metrics: Metrics.churn_per_week }
+          render partial: "daily_count_rows", locals: { metrics: ::Metrics.churn_per_week }
 
           tr {
             td("Lapsed", colspan: "2")
-            td(Metrics.lapsed[:count], class: "text-right")
+            td(::Metrics.lapsed[:count], class: "text-right")
             td
           }
         }

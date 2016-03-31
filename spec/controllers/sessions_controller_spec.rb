@@ -46,13 +46,24 @@ describe SessionsController do
 
     context 'with missing credentials' do
       it 'fails' do
-        request.env['omniauth.auth'] = nil
+        request.env['omniauth.auth'] = {"provider" => "slack", "credentials" => {"token" => "this is a token"}}
 
         post :create
 
         assert_response :redirect
         assert_redirected_to root_path
-        expect(flash['alert']).not_to be_blank
+        expect(flash[:error]).to eq('Failed authentication - Slack auth hash is missing one or more required values:
+{
+    "provider": "slack",
+    "email_address": null,
+    "slack_team_id": null,
+    "slack_team_name": null,
+    "slack_team_image_34_url": null,
+    "slack_team_image_132_url": null,
+    "slack_user_id": null,
+    "slack_user_name": null,
+    "slack_token": "this is a token"
+}')
         expect(session[:account_id]).to be_nil
       end
     end

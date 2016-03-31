@@ -33,15 +33,16 @@ class ApplicationController < ActionController::Base
     redirect_to "/404.html"
   end
 
-  rescue_from Slack::Web::Api::Error, with: :go_to_login
-  def go_to_login
+  rescue_from Slack::Web::Api::Error do |exception|
+    Rails.logger.error(exception.to_s)
     flash[:error] = "Error talking to Slack, sorry!"
-    redirect_to logout_url
+    session.delete(:account_id)
+    redirect_to root_url
   end
 
   # called when a policy authorization fails
-  rescue_from Pundit::NotAuthorizedError, with: :not_authorized
-  def not_authorized
+  rescue_from Pundit::NotAuthorizedError do |exception|
+    Rails.logger.error(exception.to_s)
     redirect_to root_path
   end
 

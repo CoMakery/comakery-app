@@ -23,6 +23,7 @@
 $ ->
   $(document).foundation()
 
+  # lets hope we never have more than 1000 initial records (award types only have 3 by default)
   nextIdentifier = 1000
   $("*[data-duplicate]").click (e)->
     e.preventDefault()

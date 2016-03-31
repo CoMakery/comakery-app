@@ -6,10 +6,11 @@ dependencies:
   cache_directories:
     - /home/ubuntu/.phantomjs
   pre:
+    - gem install brakeman
     - nvm install 5
     - nvm alias default 5
     - nvm use default
-    - npm i -g truffle@0.3.1
+    - npm i -g 'github:ConsenSys/truffle#master'
     - npm i -g ethereumjs-testrpc@1.2.1
 
 test:
@@ -21,6 +22,7 @@ test:
         parallel: true
         files:
           - spec/**/*_spec.rb
+    - brakeman --exit-on-warn
     - cd ethereum && truffle test
 
 deployment:

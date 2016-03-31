@@ -3,7 +3,7 @@ class AwardType < ActiveRecord::Base
   has_many :awards, dependent: :restrict_with_exception
 
   validates_presence_of :project, :name, :amount
-  validate :amount, :amount_didnt_change?, unless: :modifiable?
+  validate :amount_didnt_change?, unless: :modifiable?
 
   def self.invalid_params(attributes)
     attributes['name'].blank? || attributes['amount'].blank?

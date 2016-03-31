@@ -27,11 +27,11 @@ class ProjectsController < ApplicationController
   def new
     assign_slack_channels
 
-    @project = Project.new(public: true)
-    authorize @project
+    @project = Project.new(public: true, maximum_coins: 10_000_000)
     @project.award_types.build(name: "Thanks", amount: 10)
     @project.award_types.build(name: "Small Contribution", amount: 100)
     @project.award_types.build(name: "Contribution", amount: 1000)
+    authorize @project
   end
 
   def create
@@ -56,10 +56,10 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.find(params[:id])
+    @project = Project.includes(:award_types).find(params[:id])
     authorize @project
     @award = Award.new
-    @awardable_authentications = GetAwardableAuthentications.call(current_account: current_account, project: @project, authentications: policy_scope(Authentication)).awardable_authentications
+    @awardable_authentications = GetAwardableAuthentications.call(current_account: current_account, project: @project).awardable_authentications
     awardable_types_result = GetAwardableTypes.call(current_account: current_account, project: @project)
     @awardable_types = awardable_types_result.awardable_types
     @can_award = awardable_types_result.can_award
@@ -73,7 +73,7 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    @project = Project.find(params[:id])
+    @project = Project.includes(:award_types).find(params[:id])
     @project.attributes = project_params
     authorize @project
     if @project.save
@@ -89,7 +89,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :image, :tracker, :public, :slack_channel,
+    params.require(:project).permit(:title, :description, :image, :tracker, :public, :slack_channel, :maximum_coins,
                                     award_types_attributes: [:id, :name, :amount, :community_awardable, :_destroy])
   end
 

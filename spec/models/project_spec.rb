@@ -4,6 +4,7 @@ describe Project do
   describe 'validations' do
     it 'requires many attributes' do
       expect(Project.new.tap(&:valid?).errors.full_messages.sort).to eq(["Description can't be blank",
+                                                                         "Maximum coins must be greater than 0",
                                                                          "Owner account can't be blank",
                                                                          "Slack channel can't be blank",
                                                                          "Slack team can't be blank",
@@ -22,26 +23,35 @@ describe Project do
       expect(Project.new(slack_team_domain: "a").tap{|p|p.valid?}.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
     end
 
+    describe "maximum_coins" do
+      it "prevents modification if the record has been saved" do
+        project = create(:project)
+        project.maximum_coins += 10
+        expect(project).not_to be_valid
+        expect(project.errors.full_messages).to be_include("Maximum coins can't be changed")
+      end
+    end
+
     describe "tracker" do
       it "is valid if tracker is a valid, absolute url" do
-        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com")
+        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com", maximum_coins: 10_000_000)
         expect(project).to be_valid
         expect(project.tracker).to eq("http://foo.com")
       end
 
       it "requires the tracker url be valid if present" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "foo")
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "foo", maximum_coins: 10_000_000)
         expect(project).not_to be_valid
         expect(project.errors.full_messages).to eq(["Tracker must be a valid url"])
       end
 
       it "is valid with no tracker specified" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: nil)
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: nil, maximum_coins: 10_000_000)
         expect(project).to be_valid
       end
 
       it "is valid if tracker is blank" do
-        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "")
+        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "", maximum_coins: 10_000_000)
         expect(project.tracker).to be_nil
       end
     end
@@ -57,6 +67,7 @@ describe Project do
           slack_team_name: 'This is a slack team name',
           slack_team_image_34_url: 'http://foo.com/kittens-34.jpg',
           slack_team_image_132_url: 'http://foo.com/kittens-132.jpg',
+          maximum_coins: 10_000_000,
           award_types_attributes: [
               {'name' => 'Small award', 'amount' => '1000'},
               {'name' => '', 'amount' => '1000'},

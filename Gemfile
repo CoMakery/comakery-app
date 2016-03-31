@@ -12,12 +12,10 @@ gem 'foundation-icons-sass-rails'
 gem 'foundation-rails'
 gem 'font_assets'
 gem 'interactor'
-gem 'jbuilder'
 gem 'jquery-rails'
 gem "nilify_blanks"
 gem 'modernizr-rails'
 gem 'momentjs-rails'
-gem 'nokogiri'
 gem 'omniauth-slack'
 gem 'omniauth'
 gem 'pg'
@@ -34,7 +32,6 @@ gem 'responders'
 gem 'sass-rails'
 gem 'sdoc',          group: :doc
 gem 'slack-ruby-client'
-gem 'sucker_punch'
 gem 'uglifier'
 gem 'underscore-rails'
 
@@ -65,7 +62,7 @@ end
 group(:development) do
   gem 'brakeman', require: false
   gem 'git-storyid'
-  gem 'html2fortitude'
+  # gem 'html2fortitude'  # requires old ruby_parser, try global "gem install html2fortitude" instead
   gem 'letter_opener'
   gem 'meta_request'
   gem 'pivotal_git_scripts'

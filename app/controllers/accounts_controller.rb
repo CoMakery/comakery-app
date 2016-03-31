@@ -12,7 +12,7 @@ class AccountsController < ApplicationController
       return
     end
 
-    redirect_to account_url, notice: "Ethereum wallet updated. If this is an unused wallet the address will not be visible on the Ethereum blockchain until it is part of a transaction."
+    redirect_to account_url, notice: "Ethereum account updated. If this is an unused account the address will not be visible on the Ethereum blockchain until it is part of a transaction."
   end
 
   protected

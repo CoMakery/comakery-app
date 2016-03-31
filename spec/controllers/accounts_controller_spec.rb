@@ -13,7 +13,7 @@ describe AccountsController do
       end.to change { account.reload.ethereum_wallet }.from(nil).to("0x#{'a'*40}")
 
       expect(response).to redirect_to account_url
-      expect(flash[:notice]).to eq("Ethereum wallet updated. If this is an unused wallet the address will not be visible on the Ethereum blockchain until it is part of a transaction.")
+      expect(flash[:notice]).to eq("Ethereum account updated. If this is an unused account the address will not be visible on the Ethereum blockchain until it is part of a transaction.")
     end
 
     it "renders errors" do

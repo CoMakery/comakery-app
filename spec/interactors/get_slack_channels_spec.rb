@@ -9,9 +9,9 @@ describe GetSlackChannels do
     end
 
     describe "#call" do
-      it "returns a list of channels with their ids, excluding archived channels, sorted by number of users desc" do
+      it "returns a list of channels with their ids, excluding archived channels, sorted alphabetically" do
         result = GetSlackChannels.call(current_account: current_account)
-        expect(result.channels).to eq(["huge_channel", "fun", "boring_channel"])
+        expect(result.channels).to eq(["boring_channel", "fun", "huge_channel"])
       end
     end
   end

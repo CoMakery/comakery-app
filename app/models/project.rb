@@ -14,8 +14,11 @@ class Project < ActiveRecord::Base
 
   belongs_to :owner_account, class_name: Account
   validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :title
+  validates_numericality_of :maximum_coins, greater_than: 0
 
   validate :valid_tracker_url, if: -> { tracker.present? }
+
+  validate :maximum_coins_unchanged, if: -> { !new_record? }
 
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<("max(awards.created_at) as last_award_created_at").join(","))
@@ -58,5 +61,9 @@ class Project < ActiveRecord::Base
   def valid_tracker_url
     uri = URI.parse(tracker || "")
     errors[:tracker] << "must be a valid url" unless uri.absolute?
+  end
+
+  def maximum_coins_unchanged
+    errors[:maximum_coins] << "can't be changed" unless maximum_coins_was == maximum_coins
   end
 end

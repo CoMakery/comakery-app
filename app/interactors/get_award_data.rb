@@ -10,6 +10,7 @@ class GetAwardData
 
     context.award_data = {
         contributions: contributions_data(awards_array),
+        contributions_summary: contributions_summary_data(awards_array),
         award_amounts: award_amount_data(authentication, awards_array),
         contributions_by_day: contributions_by_day(awards)
     }
@@ -29,6 +30,17 @@ class GetAwardData
     end.values.sort_by{|award_data| -award_data[:net_amount]}
   end
 
+  def contributions_summary_data(awards, fully_shown = 12)
+    contributions = contributions_data(awards)
+    summary = contributions[0...fully_shown]
+    if contributions.size > fully_shown
+      other = {name: 'Other'}
+      other[:net_amount] = contributions[fully_shown..-1].sum { |award| award[:net_amount] }
+      summary << other
+    end
+    summary
+  end
+
   def contributions_by_day(awards_scope)
     recent_awards = awards_scope
                         .where("awards.created_at > ?", 30.days.ago)
@@ -36,6 +48,8 @@ class GetAwardData
 
     contributor_auths = recent_awards.map { |award| award.authentication }.freeze
     empty_row_template = contributor_auths.each_with_object({}) do |contributor_auth, contributors|
+      # using display names is potentially problematic because these aren't unique, and also they could be a stale copy in our DB
+      # from when the user last logged in
       contributors[contributor_auth.display_name] = 0 if contributor_auth
     end.freeze
 

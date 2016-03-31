@@ -12,9 +12,7 @@ class Views::BetaSignups::New < Views::Base
     form_for beta_signup do |f|
       row {
         column("small-6") {
-          # f.label(:email_address, "Email")
-          # f.text_field(:email_address, type: "email")
-          f.hidden_field(:email_address, type: "email")
+          f.hidden_field(:email_address)
 
           p(class: "beta_signup_email_address") {
             text "Email: "
@@ -23,8 +21,8 @@ class Views::BetaSignups::New < Views::Base
         }
         column("small-6") {}
       }
-      f.submit(value: OPT_IN_SUBMIT_BUTTON_TEXT, class: "opt-in")
-      f.submit(value: OPT_OUT_SUBMIT_BUTTON_TEXT, class: "opt-out")
+      f.submit(value: OPT_IN_SUBMIT_BUTTON_TEXT, class: buttonish << "opt-in" << "primary" << "margin-small-right")
+      f.submit(value: OPT_OUT_SUBMIT_BUTTON_TEXT, class: buttonish << "opt-out" << "secondary")
     end
   end
 end

@@ -98,6 +98,30 @@ describe GetAwardData do
     end
   end
 
+  describe "#contributions_summary_data" do
+    it "gathers extra entries into 'other'" do
+      expect(GetAwardData.new.contributions_summary_data([
+                                                     create(:award, award_type: create(:award_type, amount: 10), authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
+                                                     create(:award, award_type: create(:award_type, amount: 33), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
+                                                     create(:award, award_type: create(:award_type, amount: 20), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
+                                                 ], 1)).to eq([
+                                                               {:net_amount => 33, :name => "b b"},
+                                                               {:net_amount => 30, :name => "Other"}
+                                                           ])
+    end
+    it "gathers shows all entries if less than threshold" do
+      expect(GetAwardData.new.contributions_summary_data([
+                                                     create(:award, award_type: create(:award_type, amount: 10), authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
+                                                     create(:award, award_type: create(:award_type, amount: 33), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
+                                                     create(:award, award_type: create(:award_type, amount: 20), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
+                                                 ], 3)).to eq([
+                                                               {:net_amount => 33, :name => "b b"},
+                                                               {:net_amount => 20, :name => "c c"},
+                                                               {:net_amount => 10, :name => "a a"},
+                                                           ])
+    end
+  end
+
   describe "#contributor_by_day_row" do
     let!(:bobs_award) { create(:award, award_type: award_type1, authentication: bob_auth, created_at: Date.new(2016, 3, 2)) }
     let!(:johns_award) { create(:award, award_type: award_type2, authentication: john_auth, created_at: Date.new(2016, 3, 2)) }

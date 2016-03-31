@@ -11,24 +11,31 @@ require 'easy_shell'
 
 repo_path = ARGV[-1] || '.'
 
-TOO_SMALL_CONTRIBUTION = 0  # used to trim dataset to managable size
+DAYS_OF_HISTORY = 365 * 2
+BOTS = %w[ greenkeeperio-bot ]
 
-stats = {}
-(0...30).each do |days_ago|
-  date = Date.parse(days_ago.days.ago.utc.iso8601)
-
-  day = stats[date] = {}
-
-  results = run %{cd #{repo_path} && git log --pretty="%an" --since="#{days_ago + 1} days ago" --until "#{days_ago} days ago"}, quiet: !$DEBUG
-
-  results.split("\n").each do |name|
-    day[name] ||= 0
-    day[name] += 1
-  end
+def d args
+  p args if $DEBUG
 end
 
-stats.each do |day, data|
-  data.delete_if { |key, value| value <= TOO_SMALL_CONTRIBUTION }
+stats = {}
+(0...DAYS_OF_HISTORY).each do |days_ago|
+  date = Date.parse(days_ago.days.ago.utc.iso8601)
+  results = run %{cd #{repo_path} && git log --pretty="%an" --since="#{days_ago + 1} days ago" --until "#{days_ago} days ago"}, quiet: !$DEBUG
+  next if results.blank?
+  d date
+  day = stats[date] = {}
+  results.split("\n").each do |names|
+    d "names: "+names
+    # handle pair programmers: split name on ' and ' or ' & ' or ', '
+    names.split(/,\s*|\s+and\s+|\s+&\s+/).each do |name|
+      d 'name:  ' + name
+      unless BOTS.include?(name)
+        day[name] ||= 0
+        day[name] += 1
+      end
+    end
+  end
 end
 
 puts "\n" * 3 if $DEBUG

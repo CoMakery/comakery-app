@@ -14,8 +14,8 @@ class SessionsController < ApplicationController
       @account = Authentication.find_or_create_from_auth_hash!(request.env['omniauth.auth'])
       session[:account_id] = @account.id
       redirect_to projects_url
-    rescue SlackAuthHash::MissingAuthParamException
-      flash['alert'] = "Failed authentication"
+    rescue SlackAuthHash::MissingAuthParamException => e
+      flash[:error] = "Failed authentication - #{e}"
       redirect_to root_url
     end
   end
