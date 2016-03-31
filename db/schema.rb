@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20160330185622) do
   create_table "authentications", force: :cascade do |t|
     t.integer  "account_id",               null: false
     t.string   "provider",                 null: false
-    t.datetime "created_at"
+    t.datetime "creat\ed_at"
     t.datetime "updated_at"
     t.string   "slack_team_name",          null: false
     t.string   "slack_team_id",            null: false

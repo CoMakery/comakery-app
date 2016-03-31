@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe AwardSlackUser do
+describe BuildAwardRecords do
   let!(:issuer) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: "team id", slack_token: "token") } }
   let!(:other_auth) { create(:authentication, account: issuer, slack_team_id: "other team id", slack_token: "token") }
   let!(:project) { create(:project, owner_account: issuer, slack_team_id: "team id") }
@@ -18,10 +18,11 @@ describe AwardSlackUser do
       expect do
         expect do
           expect do
-            result = AwardSlackUser.call(project: project, issuer: issuer, slack_user_id: recipient_authentication.slack_user_id, award_params: {
+            result = BuildAwardRecords.call(project: project, issuer: issuer, slack_user_id: recipient_authentication.slack_user_id, award_params: {
                 award_type_id: award_type.to_param,
                 description: "This rocks!!11"
-            })
+            }, total_coins_issued: 0)
+            expect(result).to be_success
             expect(result.award).to be_a_new_record
             expect(result.award.award_type).to eq(award_type)
             expect(result.award.issuer).to eq(issuer)
@@ -39,12 +40,31 @@ describe AwardSlackUser do
         expect do
           expect do
             expect do
-              result = AwardSlackUser.call(project: project, issuer: issuer, slack_user_id: recipient.slack_auth.slack_user_id, award_params: {
+              result = BuildAwardRecords.call(project: project, issuer: nil, slack_user_id: recipient.slack_auth.slack_user_id, award_params: {
+                  award_type_id: award_type.to_param,
+                  description: "This rocks!!11"
+              }, total_coins_issued: 0)
+              expect(result).not_to be_success
+              expect(result.message).to eq("Issuer can't be blank")
+            end.not_to change { Award.count }
+          end.not_to change { Authentication.count }
+        end.not_to change { Account.count }
+      end
+    end
+
+    context "when the award is not valid because of bad award type" do
+      it "fails with a nice message" do
+        recipient
+        recipient_authentication
+        expect do
+          expect do
+            expect do
+              result = BuildAwardRecords.call(project: project, issuer: issuer, slack_user_id: recipient.slack_auth.slack_user_id, award_params: {
                   award_type_id: nil,
                   description: "This rocks!!11"
-              })
+              }, total_coins_issued: 0)
               expect(result).not_to be_success
-              expect(result.message).to eq("Award type can't be blank")
+              expect(result.message).to eq("missing award type")
             end.not_to change { Award.count }
           end.not_to change { Authentication.count }
         end.not_to change { Account.count }
@@ -52,9 +72,21 @@ describe AwardSlackUser do
     end
   end
 
+  context "when the project has already awarded the maximum amount of awards" do
+    it "returns an error message without creating the award" do
+      recipient
+      recipient_authentication
+      expect do
+        result = BuildAwardRecords.call(project: project, issuer: issuer, slack_user_id: recipient_authentication.slack_user_id, award_params: {award_type_id: award_type.to_param}, total_coins_issued: project.maximum_coins)
+        expect(result).not_to be_success
+        expect(result.message).to eq("Sorry, you can't send more awards than the project's maximum number of allowable coins")
+      end.not_to change { Award.count }
+    end
+  end
+
   context "when the slack user id is missing" do
     it "fails" do
-      result = AwardSlackUser.call(project: project, slack_user_id: "", issuer: issuer)
+      result = BuildAwardRecords.call(project: project, slack_user_id: "", issuer: issuer, total_coins_issued: 0)
       expect(result).not_to be_success
     end
   end
@@ -71,10 +103,10 @@ describe AwardSlackUser do
         expect do
           expect do
             expect do
-              result = AwardSlackUser.call(project: project, issuer: issuer, slack_user_id: "U99M9QYFQ", award_params: {
+              result = BuildAwardRecords.call(project: project, issuer: issuer, slack_user_id: "U99M9QYFQ", award_params: {
                   award_type_id: award_type.to_param,
                   description: "This rocks!!11"
-              })
+              }, total_coins_issued: 0)
               expect(result.message).to be_nil
               expect(result.award).to be_a_new_record
               expect(result.award.award_type).to eq(award_type)
@@ -97,10 +129,10 @@ describe AwardSlackUser do
 
     it "creates the auth with the slack details from the project" do
       expect do
-        result = AwardSlackUser.call(project: project, issuer: issuer, slack_user_id: "U99M9QYFQ", award_params: {
+        result = BuildAwardRecords.call(project: project, issuer: issuer, slack_user_id: "U99M9QYFQ", award_params: {
             award_type_id: award_type.to_param,
             description: "This rocks!!11"
-        })
+        }, total_coins_issued: 0)
         expect(result.message).to be_nil
       end.to change { Authentication.count }.by(1)
       created_auth = Authentication.last
@@ -112,10 +144,10 @@ describe AwardSlackUser do
       result = nil
       expect do
         expect do
-          result = AwardSlackUser.call(project: project, issuer: issuer, slack_user_id: "U99M9QYFQ", award_params: {
+          result = BuildAwardRecords.call(project: project, issuer: issuer, slack_user_id: "U99M9QYFQ", award_params: {
               award_type_id: award_type.to_param,
               description: "This rocks!!11"
-          })
+          }, total_coins_issued: 0)
           expect(result.message).to be_nil
           expect(result.award).to be_a_new_record
           expect(result.award.award_type).to eq(award_type)

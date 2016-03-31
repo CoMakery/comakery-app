@@ -7,9 +7,9 @@ describe "Collaborator projects", :vcr do
 
   it "allow creating of award types that are community-awardable" do
     stub_slack_channel_list
-    stub_slack_user_list([create_stub_slack_user(first_name: "collab1", last_name: "collab1", user_id: "collab1"),
-                          create_stub_slack_user(first_name: "collab2", last_name: "collab2", user_id: "collab2"),
-                          create_stub_slack_user(first_name: "owner", last_name: "owner", user_id: "owner_id")])
+    stub_slack_user_list([slack_user(first_name: "collab1", last_name: "collab1", user_id: "collab1"),
+                          slack_user(first_name: "collab2", last_name: "collab2", user_id: "collab2"),
+                          slack_user(first_name: "owner", last_name: "owner", user_id: "owner_id")])
 
     login(owner)
 
