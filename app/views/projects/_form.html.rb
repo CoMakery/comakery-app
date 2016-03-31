@@ -31,7 +31,8 @@ module Views
               }
               with_errors(project, :maximum_coins) {
                 label {
-                  text "Maximum number of awardable coins"
+                  text "Maximum number of awardable coins "
+                  question_tooltip("This is the maximum sum of coins you can award in the life of this project. Select it carefully, it cannot be changed after it has been set. Also select a high enough number so you have room for the future.")
                   f.text_field :maximum_coins, type: "number", disabled: !project.new_record?
                 }
               }
