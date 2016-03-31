@@ -33,7 +33,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
 
     fill_in "Description", with: "This is a project description which is very informative"
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
-    expect(find_field("Set project as public (display in CoMakery index)")).to be_checked
+    expect(find_field("Set project as public")).to be_checked
 
     expect(find_field("Maximum number of awardable coins")['value']).to eq("10000000")
     fill_in "Maximum number of awardable coins", with: "20000000"
@@ -108,11 +108,11 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page.find("input[name*='[maximum_coins]']")[:disabled]).to eq(true)
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
 
-    expect(page).to have_checked_field("Set project as public (display in CoMakery index)")
+    expect(page).to have_checked_field("Set project as public")
     fill_in "Title", with: "This is an edited project"
     fill_in "Description", with: "This is an edited project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
-    uncheck "Set project as public (display in CoMakery index)"
+    uncheck "Set project as public"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)
