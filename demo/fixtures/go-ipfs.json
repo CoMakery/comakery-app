@@ -1,16 +1,45 @@
 {
-    "2016-03-17": {
+    "2016-03-31": {
+        "Jeromy Johnson": 1
+    },
+    "2016-03-30": {
+        "Jeromy": 1,
+        "Jeromy Johnson": 1
+    },
+    "2016-03-29": {
+        "Steven Allen": 1
+    },
+    "2016-03-28": {
+        "Jeromy Johnson": 1
+    },
+    "2016-03-26": {
+        "Jeromy Johnson": 2,
+        "Michael Muré": 2
+    },
+    "2016-03-24": {
+        "Jeromy": 1
+    },
+    "2016-03-23": {
+        "Jeromy Johnson": 1
+    },
+    "2016-03-22": {
+        "Jeromy Johnson": 2,
+        "Lars Gierth": 1
+    },
+    "2016-03-19": {
+        "Richard Littauer": 1
+    },
+    "2016-03-18": {
+        "Jeromy Johnson": 1,
+        "Tarnay Kálmán": 1
     },
     "2016-03-16": {
-        "Jeromy Johnson": 2
+        "Jeromy Johnson": 2,
+        "Richard Littauer": 1
     },
     "2016-03-15": {
         "Jeromy Johnson": 3,
         "dignifiedquire": 1
-    },
-    "2016-03-14": {
-    },
-    "2016-03-13": {
     },
     "2016-03-12": {
         "Jeromy Johnson": 1
@@ -23,14 +52,8 @@
         "Jeromy Johnson": 1,
         "Jeromy": 2
     },
-    "2016-03-09": {
-    },
     "2016-03-08": {
         "Christian Couder": 1
-    },
-    "2016-03-07": {
-    },
-    "2016-03-06": {
     },
     "2016-03-05": {
         "David Dias": 1,
@@ -41,12 +64,12 @@
     "2016-03-04": {
         "Giuseppe Bertone": 1,
         "Jeromy Johnson": 2,
-        "Lars Gierth": 1,
-        "Stephen Whitmore": 3
+        "Lars Gierth": 1
     },
     "2016-03-03": {
+        "Stephen Whitmore": 3,
         "Adrian Ulrich": 1,
-        "Jeromy Johnson": 7,
+        "Jeromy Johnson": 5,
         "Richard Littauer": 1,
         "Jeromy": 3,
         "Thomas Gardner": 3
@@ -55,15 +78,12 @@
         "Jeromy Johnson": 4,
         "Richard Littauer": 4,
         "Jeromy": 1,
-        "Mildred Ki'Lya": 8,
-        "Stephen Whitmore": 4
+        "Mildred Ki'Lya": 8
     },
     "2016-03-01": {
-        "Jeromy Johnson": 7,
-        "Stephen Whitmore": 1,
+        "Jeromy Johnson": 9,
+        "Stephen Whitmore": 5,
         "Jakub Sztandera": 1
-    },
-    "2016-02-29": {
     },
     "2016-02-28": {
         "Jakub Sztandera": 1
@@ -71,39 +91,34 @@
     "2016-02-27": {
         "Richard Littauer": 3
     },
-    "2016-02-26": {
-    },
     "2016-02-25": {
         "Stephen Whitmore": 1,
-        "Jeromy": 5,
-        "Jeromy Johnson": 2
+        "Jeromy": 3
     },
     "2016-02-24": {
-        "Jeromy Johnson": 4,
+        "Jeromy Johnson": 6,
+        "Jeromy": 5,
         "Christian Couder": 2,
-        "Stephen Whitmore": 4,
-        "Jeromy": 4
+        "Stephen Whitmore": 4
     },
     "2016-02-23": {
+        "Jeromy": 1,
         "Christian Couder": 2
     },
-    "2016-02-22": {
-        "Jeromy": 1
-    },
     "2016-02-21": {
-        "Jeromy": 4,
+        "Jeromy": 5,
         "Jeromy Johnson": 3
     },
     "2016-02-20": {
-        "Jeromy Johnson": 10,
-        "Richard Littauer": 5,
+        "Jeromy Johnson": 4,
+        "Richard Littauer": 3,
         "Christian Couder": 3
     },
     "2016-02-19": {
-        "Richard Littauer": 6,
+        "Richard Littauer": 8,
+        "Jeromy Johnson": 7,
         "Stephen Whitmore": 1,
-        "palkeo": 1,
-        "Jeromy Johnson": 1
+        "palkeo": 1
     },
     "2016-02-18": {
         "Jeromy": 1,
@@ -115,5 +130,2127 @@
         "Jeromy Johnson": 4,
         "Jakub Sztandera": 1,
         "Jeromy": 1
+    },
+    "2016-02-16": {
+        "Jakub Sztandera": 1,
+        "Jeromy Johnson": 2
+    },
+    "2016-02-15": {
+        "Jakub Sztandera": 3,
+        "Christian Couder": 2,
+        "Richard Littauer": 1
+    },
+    "2016-02-14": {
+        "Jeromy Johnson": 2
+    },
+    "2016-02-13": {
+        "Jeromy": 6,
+        "Christian Couder": 6,
+        "Jeromy Johnson": 3
+    },
+    "2016-02-12": {
+        "Jeromy Johnson": 2,
+        "Jeromy": 2,
+        "Richard Littauer": 1
+    },
+    "2016-02-11": {
+        "Richard Littauer": 1,
+        "Jeromy": 2,
+        "Jeromy Johnson": 2
+    },
+    "2016-02-10": {
+        "Jeromy Johnson": 2,
+        "Robert Carlsen": 1
+    },
+    "2016-02-09": {
+        "Jeromy Johnson": 5,
+        "Jeromy": 10,
+        "Robert Carlsen": 1,
+        "Stephen Whitmore": 2,
+        "Richard Littauer": 1
+    },
+    "2016-02-08": {
+        "Jeromy Johnson": 1
+    },
+    "2016-02-07": {
+        "Richard Littauer": 2,
+        "Jeromy": 1,
+        "Lars Gierth": 1
+    },
+    "2016-02-06": {
+        "Jeromy Johnson": 3,
+        "Jeromy": 3,
+        "Richard Littauer": 3,
+        "Lars Gierth": 1
+    },
+    "2016-02-05": {
+        "Lars Gierth": 2,
+        "Jeromy Johnson": 6,
+        "Richard Littauer": 2,
+        "Christian Couder": 2,
+        "Jeromy": 1,
+        "Jakub Sztandera": 1
+    },
+    "2016-02-04": {
+        "Jeromy": 1,
+        "Richard Littauer": 1,
+        "Jeromy Johnson": 3,
+        "Thomas Gardner": 1
+    },
+    "2016-02-03": {
+        "Jakub Sztandera": 1,
+        "Richard Littauer": 2,
+        "Jeromy Johnson": 3,
+        "Jeromy": 1
+    },
+    "2016-02-02": {
+        "Jeromy": 4,
+        "Christian Couder": 5,
+        "Jonathan Dahan": 1
+    },
+    "2016-02-01": {
+        "Jeromy": 2
+    },
+    "2016-01-31": {
+        "Jeromy": 20,
+        "Jeromy Johnson": 1,
+        "Richard Littauer": 1,
+        "rht": 4
+    },
+    "2016-01-30": {
+        "Jeromy Johnson": 2,
+        "Richard Littauer": 1,
+        "Kubuxu": 1
+    },
+    "2016-01-29": {
+        "Jeromy Johnson": 2
+    },
+    "2016-01-28": {
+        "Jeromy": 1,
+        "Richard Littauer": 1,
+        "rht": 1,
+        "Jeromy Johnson": 3
+    },
+    "2016-01-27": {
+        "Thomas Gardner": 1,
+        "Jeromy": 1,
+        "Jeromy Johnson": 1
+    },
+    "2016-01-26": {
+        "Stephen Whitmore": 3,
+        "Thomas Gardner": 1
+    },
+    "2016-01-25": {
+        "Richard Littauer": 2,
+        "Juan Benet": 1
+    },
+    "2016-01-24": {
+        "Juan Benet": 2,
+        "Richard Littauer": 1,
+        "Thomas Gardner": 1,
+        "rht": 4
+    },
+    "2016-01-23": {
+        "Marcin Rataj": 1,
+        "Juan Benet": 2,
+        "rht": 1
+    },
+    "2016-01-22": {
+        "Marcin Rataj": 1,
+        "Juan Benet": 1,
+        "rht": 3,
+        "Richard Littauer": 4,
+        "Stephen Whitmore": 1
+    },
+    "2016-01-21": {
+        "Christian Couder": 1,
+        "Jakub Sztandera": 1
+    },
+    "2016-01-19": {
+        "Christian Couder": 7
+    },
+    "2016-01-18": {
+        "Juan Benet": 1,
+        "Knut Ahlers": 1,
+        "Jeromy Johnson": 1
+    },
+    "2016-01-17": {
+        "Jeromy": 4,
+        "Juan Benet": 1
+    },
+    "2016-01-16": {
+        "Stephen Whitmore": 3,
+        "Jeromy Johnson": 2,
+        "Juan Benet": 5,
+        "dignifiedquire": 1,
+        "rht": 1,
+        "Christian Couder": 4
+    },
+    "2016-01-15": {
+        "Juan Benet": 1,
+        "Stephen Whitmore": 1,
+        "Jeromy": 2
+    },
+    "2016-01-14": {
+        "Juan Benet": 1,
+        "Richard Littauer": 1
+    },
+    "2016-01-13": {
+        "Richard Littauer": 1,
+        "Jeromy": 68,
+        "Jeromy Johnson": 2,
+        "Etienne Laurin": 1,
+        "rht": 7,
+        "Andrew Chin": 1,
+        "Tommi Virtanen": 33,
+        "Juan Batiz-Benet": 2,
+        "David Dias": 1,
+        "dignifiedquire": 1
+    },
+    "2016-01-11": {
+        "Jeromy Johnson": 3,
+        "Jeromy": 1,
+        "Christian Couder": 5,
+        "Christian Kniep": 1
+    },
+    "2016-01-09": {
+        "Jeromy Johnson": 1,
+        "Yuval Langer": 1
+    },
+    "2016-01-08": {
+        "Richard Littauer": 1
+    },
+    "2016-01-06": {
+        "Jeromy Johnson": 2,
+        "Jakub (Kubuxu) Sztandera": 2,
+        "ReadmeCritic": 1
+    },
+    "2016-01-05": {
+        "Richard Littauer": 1
+    },
+    "2016-01-03": {
+        "Jeromy Johnson": 2,
+        "Jeromy": 1
+    },
+    "2016-01-02": {
+        "Jeromy": 1,
+        "Lars Gierth": 1
+    },
+    "2015-12-31": {
+        "Jeromy Johnson": 1,
+        "Jeromy": 2
+    },
+    "2015-12-30": {
+        "Jeromy Johnson": 1
+    },
+    "2015-12-29": {
+        "Jeromy Johnson": 3,
+        "Adam Gashlin": 1,
+        "Jeromy": 5,
+        "rht": 2
+    },
+    "2015-12-28": {
+        "Jeromy": 1
+    },
+    "2015-12-23": {
+        "Jeromy Johnson": 1,
+        "Dominic Della Valle": 1
+    },
+    "2015-12-18": {
+        "Juan Benet": 1,
+        "Jonathan Dahan": 1
+    },
+    "2015-12-17": {
+        "Jonathan Dahan": 1
+    },
+    "2015-12-16": {
+        "Juan Benet": 1
+    },
+    "2015-12-15": {
+        "Christian Couder": 4,
+        "Juan Benet": 2,
+        "Lars Gierth": 1
+    },
+    "2015-12-14": {
+        "Jeromy": 2
+    },
+    "2015-12-13": {
+        "Juan Benet": 1
+    },
+    "2015-12-10": {
+        "Juan Benet": 1
+    },
+    "2015-12-09": {
+        "Juan Benet": 4,
+        "Jeromy": 3
+    },
+    "2015-12-08": {
+        "Juan Benet": 1
+    },
+    "2015-12-07": {
+        "Jeromy": 2,
+        "Juan Benet": 1
+    },
+    "2015-12-06": {
+        "Christian Couder": 3
+    },
+    "2015-12-04": {
+        "Juan Benet": 1
+    },
+    "2015-12-03": {
+        "Lars Gierth": 1,
+        "Juan Benet": 2,
+        "Chris P": 1
+    },
+    "2015-12-02": {
+        "Juan Benet": 3
+    },
+    "2015-12-01": {
+        "Jeromy": 2,
+        "Juan Benet": 1
+    },
+    "2015-11-30": {
+        "Nick Hamann": 1
+    },
+    "2015-11-28": {
+        "rht": 2
+    },
+    "2015-11-26": {
+        "Lars Gierth": 2,
+        "dignifiedquire": 3
+    },
+    "2015-11-25": {
+        "Lars Gierth": 2
+    },
+    "2015-11-24": {
+        "Jeromy Johnson": 4,
+        "Lars Gierth": 1
+    },
+    "2015-11-21": {
+        "Lars Gierth": 1,
+        "Juan Benet": 1
+    },
+    "2015-11-18": {
+        "Juan Benet": 1,
+        "Jeromy": 1
+    },
+    "2015-11-17": {
+        "Jeromy": 2,
+        "Juan Benet": 2,
+        "Lars Gierth": 1
+    },
+    "2015-11-16": {
+        "rht": 1
+    },
+    "2015-11-12": {
+        "Lars Gierth": 1
+    },
+    "2015-11-11": {
+        "Juan Benet": 4,
+        "Jeromy": 5,
+        "rht": 1
+    },
+    "2015-11-09": {
+        "Jeromy Johnson": 1,
+        "Jeromy": 4,
+        "Juan Benet": 2
+    },
+    "2015-11-07": {
+        "Juan Benet": 1
+    },
+    "2015-11-06": {
+        "Jeromy": 2
+    },
+    "2015-11-04": {
+        "Jeromy": 2,
+        "Juan Benet": 1
+    },
+    "2015-11-03": {
+        "Juan Benet": 3,
+        "Jeromy": 1,
+        "Richard Littauer": 5
+    },
+    "2015-11-01": {
+        "rht": 1,
+        "Jeromy": 2,
+        "Juan Benet": 3,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-10-31": {
+        "Henry": 1,
+        "Juan Benet": 3
+    },
+    "2015-10-30": {
+        "Christian Couder": 3,
+        "Juan Benet": 2,
+        "Jeromy": 1
+    },
+    "2015-10-29": {
+        "Jeromy": 4,
+        "Juan Benet": 2,
+        "Henry": 1
+    },
+    "2015-10-28": {
+        "Juan Benet": 6,
+        "Jeromy": 2
+    },
+    "2015-10-27": {
+        "Jeromy": 1
+    },
+    "2015-10-26": {
+        "Jeromy": 1
+    },
+    "2015-10-25": {
+        "Christian Couder": 14
+    },
+    "2015-10-24": {
+        "Henry": 1
+    },
+    "2015-10-22": {
+        "Jeromy": 4
+    },
+    "2015-10-21": {
+        "Juan Benet": 5,
+        "Christian Couder": 3,
+        "Jeromy": 1
+    },
+    "2015-10-20": {
+        "Jeromy": 5,
+        "Juan Benet": 4,
+        "Lars Gierth": 2,
+        "Richard Littauer": 2,
+        "rht": 2
+    },
+    "2015-10-19": {
+        "Juan Benet": 7,
+        "Jeromy": 3
+    },
+    "2015-10-18": {
+        "Caio Alonso": 1,
+        "rht": 1,
+        "Christian Couder": 1
+    },
+    "2015-10-17": {
+        "Jeromy": 1,
+        "rht": 1,
+        "Christian Couder": 2,
+        "Juan Benet": 2
+    },
+    "2015-10-15": {
+        "Jeromy": 1,
+        "ForrestWeston": 1,
+        "Juan Benet": 3
+    },
+    "2015-10-14": {
+        "ForrestWeston": 3,
+        "rht": 3,
+        "Matt Bell": 5,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-10-13": {
+        "Artem Andreenko": 1,
+        "Jeromy": 7,
+        "Juan Benet": 2
+    },
+    "2015-10-12": {
+        "Jeromy": 1,
+        "Juan Benet": 2
+    },
+    "2015-10-11": {
+        "Caio Alonso": 1
+    },
+    "2015-10-10": {
+        "Juan Benet": 3,
+        "Forrest Weston": 1,
+        "Jeromy": 1
+    },
+    "2015-10-09": {
+        "Jeromy Johnson": 1,
+        "Juan Benet": 1,
+        "Jeromy": 1
+    },
+    "2015-10-06": {
+        "Juan Benet": 1
+    },
+    "2015-10-05": {
+        "Lars Gierth": 1,
+        "rht": 3,
+        "Juan Benet": 3,
+        "Juan Batiz-Benet": 2,
+        "Christian Couder": 4
+    },
+    "2015-10-04": {
+        "Juan Benet": 9,
+        "Christian Couder": 11,
+        "Jeromy": 2
+    },
+    "2015-10-03": {
+        "rht": 2,
+        "Juan Benet": 1,
+        "Jeromy": 1
+    },
+    "2015-10-02": {
+        "Juan Benet": 1,
+        "Jeromy": 1
+    },
+    "2015-10-01": {
+        "Jeromy": 2
+    },
+    "2015-09-30": {
+        "Jeromy": 3
+    },
+    "2015-09-28": {
+        "Juan Benet": 4,
+        "Michael Muré": 1,
+        "rht": 1,
+        "Roerick Sweeney": 1,
+        "Christian Couder": 1
+    },
+    "2015-09-27": {
+        "Juan Benet": 1
+    },
+    "2015-09-26": {
+        "sroerick": 1,
+        "Juan Benet": 5,
+        "Jeromy": 2,
+        "Marcin Janczyk": 1
+    },
+    "2015-09-25": {
+        "Cayman Nava": 1,
+        "Juan Benet": 1,
+        "Jeromy": 2
+    },
+    "2015-09-24": {
+        "rht": 1,
+        "Juan Benet": 1
+    },
+    "2015-09-22": {
+        "Richard Littauer": 2
+    },
+    "2015-09-17": {
+        "Juan Benet": 1
+    },
+    "2015-09-16": {
+        "Jeromy": 4,
+        "Juan Benet": 4,
+        "klauspost": 1,
+        "Knut Ahlers": 1
+    },
+    "2015-09-15": {
+        "Jeromy": 2,
+        "Juan Benet": 3,
+        "Knut Ahlers": 2
+    },
+    "2015-09-14": {
+        "Lars Gierth": 2,
+        "Juan Benet": 3,
+        "Jeromy": 1,
+        "rht": 1
+    },
+    "2015-09-13": {
+        "Christian Couder": 6
+    },
+    "2015-09-12": {
+        "Juan Benet": 1
+    },
+    "2015-09-11": {
+        "Juan Benet": 3,
+        "Jeromy": 6,
+        "Philip Nelson": 1
+    },
+    "2015-09-10": {
+        "Jeromy": 2,
+        "Juan Benet": 1
+    },
+    "2015-09-06": {
+        "Jeromy Johnson": 1,
+        "Jeromy": 4,
+        "Juan Benet": 2,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-09-05": {
+        "Juan Benet": 3,
+        "Jeromy": 2,
+        "rht": 4
+    },
+    "2015-09-04": {
+        "Juan Benet": 6,
+        "Jeromy": 4,
+        "Jeromy Johnson": 1,
+        "Michael Muré": 1,
+        "rht": 2
+    },
+    "2015-09-03": {
+        "Jeromy Johnson": 1,
+        "Andres Buritica": 1,
+        "Juan Benet": 5,
+        "Jeromy": 6
+    },
+    "2015-09-01": {
+        "Jeromy": 1,
+        "rht": 1
+    },
+    "2015-08-31": {
+        "Jeromy": 1,
+        "Christian Couder": 1
+    },
+    "2015-08-30": {
+        "Christian Couder": 3,
+        "rht": 2,
+        "Juan Benet": 1,
+        "Juan Batiz-Benet": 2
+    },
+    "2015-08-29": {
+        "Juan Benet": 3,
+        "rht": 3,
+        "Christian Couder": 1
+    },
+    "2015-08-28": {
+        "Juan Benet": 2,
+        "Jeromy": 1,
+        "rht": 1,
+        "Juan Batiz-Benet": 2
+    },
+    "2015-08-27": {
+        "Juan Benet": 1,
+        "Jeromy": 1
+    },
+    "2015-08-26": {
+        "Christian Couder": 1,
+        "Juan Benet": 2,
+        "drathir": 1
+    },
+    "2015-08-25": {
+        "Christian Couder": 2,
+        "Juan Benet": 1
+    },
+    "2015-08-24": {
+        "rht": 9,
+        "Juan Benet": 2
+    },
+    "2015-08-22": {
+        "Juan Benet": 1,
+        "Christian Couder": 1
+    },
+    "2015-08-21": {
+        "Juan Benet": 1,
+        "Juan Batiz-Benet": 1,
+        "rht": 2
+    },
+    "2015-08-20": {
+        "Pavol Rusnak": 1,
+        "Juan Benet": 2
+    },
+    "2015-08-19": {
+        "Juan Benet": 1,
+        "Jeromy": 1
+    },
+    "2015-08-18": {
+        "Lars Gierth": 2,
+        "rht": 1,
+        "Juan Benet": 4
+    },
+    "2015-08-17": {
+        "Karthik Bala": 1
+    },
+    "2015-08-16": {
+        "rht": 3,
+        "Juan Benet": 3
+    },
+    "2015-08-15": {
+        "Jeromy": 1
+    },
+    "2015-08-14": {
+        "Juan Benet": 2,
+        "Jeromy": 1,
+        "rht": 2,
+        "Stephan Seidt": 1
+    },
+    "2015-08-13": {
+        "Jeromy": 1,
+        "Juan Benet": 1,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-08-12": {
+        "Jeromy Johnson": 1
+    },
+    "2015-08-11": {
+        "Jeromy": 2
+    },
+    "2015-08-09": {
+        "Jeromy": 1
+    },
+    "2015-08-06": {
+        "Juan Benet": 3,
+        "Juan Batiz-Benet": 4
+    },
+    "2015-08-05": {
+        "Juan Batiz-Benet": 1,
+        "Juan Benet": 1
+    },
+    "2015-08-04": {
+        "Pavol Rusnak": 1
+    },
+    "2015-08-03": {
+        "Francesco Canessa": 1,
+        "Juan Batiz-Benet": 4,
+        "Juan Benet": 1
+    },
+    "2015-07-31": {
+        "Jeromy": 2,
+        "Juan Batiz-Benet": 1,
+        "Juan Benet": 1,
+        "Muneeb Ali": 1
+    },
+    "2015-07-30": {
+        "Juan Benet": 7,
+        "Jeromy": 6,
+        "Juan Batiz-Benet": 15
+    },
+    "2015-07-29": {
+        "Jeromy": 8,
+        "Juan Benet": 6,
+        "Jeromy Johnson": 1,
+        "Shaun Bruce": 1,
+        "Juan Batiz-Benet": 3,
+        "gatesvp": 1,
+        "rht": 1
+    },
+    "2015-07-28": {
+        "Juan Benet": 3,
+        "Jeromy": 4
+    },
+    "2015-07-27": {
+        "Jeromy": 2
+    },
+    "2015-07-26": {
+        "Jeromy": 2
+    },
+    "2015-07-25": {
+        "Juan Batiz-Benet": 3,
+        "rht": 1
+    },
+    "2015-07-24": {
+        "Juan Benet": 2,
+        "Jeromy": 1
+    },
+    "2015-07-23": {
+        "Jeromy": 3,
+        "Juan Benet": 1
+    },
+    "2015-07-22": {
+        "Juan Benet": 3,
+        "Jeromy": 3
+    },
+    "2015-07-21": {
+        "Jeromy": 2,
+        "Juan Benet": 2
+    },
+    "2015-07-20": {
+        "Jeromy Johnson": 1,
+        "Jeromy": 2,
+        "Juan Benet": 2
+    },
+    "2015-07-19": {
+        "Michael Muré": 2
+    },
+    "2015-07-18": {
+        "Jeromy": 1
+    },
+    "2015-07-17": {
+        "Karthik Bala": 1
+    },
+    "2015-07-16": {
+        "Juan Batiz-Benet": 3,
+        "Knut Ahlers": 1,
+        "rht": 1
+    },
+    "2015-07-15": {
+        "Juan Batiz-Benet": 4,
+        "Jeromy": 7
+    },
+    "2015-07-14": {
+        "Jeromy": 4,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-07-11": {
+        "Juan Batiz-Benet": 6,
+        "Jeromy": 2
+    },
+    "2015-07-10": {
+        "Juan Batiz-Benet": 5,
+        "Jeromy": 1,
+        "gatesvp": 1
+    },
+    "2015-07-08": {
+        "Juan Batiz-Benet": 3,
+        "Jeromy": 1
+    },
+    "2015-07-07": {
+        "W. Trevor King": 1,
+        "Juan Batiz-Benet": 1,
+        "Sean Lang": 1
+    },
+    "2015-07-06": {
+        "Juan Batiz-Benet": 1,
+        "rht": 1
+    },
+    "2015-07-05": {
+        "rht": 6
+    },
+    "2015-07-04": {
+        "Juan Batiz-Benet": 4,
+        "Henry": 8,
+        "rht": 2
+    },
+    "2015-07-03": {
+        "Jason Carver": 1,
+        "Juan Batiz-Benet": 3,
+        "Jeromy": 1
+    },
+    "2015-07-02": {
+        "Juan Batiz-Benet": 2,
+        "Lars Gierth": 1,
+        "rht": 1
+    },
+    "2015-07-01": {
+        "Jeromy": 3,
+        "Juan Batiz-Benet": 1,
+        "Lars Gierth": 2
+    },
+    "2015-06-30": {
+        "Lars Gierth": 1
+    },
+    "2015-06-28": {
+        "Juan Batiz-Benet": 10
+    },
+    "2015-06-27": {
+        "Juan Batiz-Benet": 3,
+        "Christian Couder": 1
+    },
+    "2015-06-26": {
+        "Juan Batiz-Benet": 1,
+        "Jeromy Johnson": 1,
+        "Jeromy": 1
+    },
+    "2015-06-25": {
+        "Juan Batiz-Benet": 2
+    },
+    "2015-06-24": {
+        "Jeromy": 4,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-06-23": {
+        "Jeromy": 1,
+        "Christian Couder": 1
+    },
+    "2015-06-21": {
+        "W. Trevor King": 6,
+        "Juan Batiz-Benet": 5,
+        "Jeromy": 2,
+        "Jeromy Johnson": 1
+    },
+    "2015-06-20": {
+        "Dylan Powers": 3,
+        "Juan Batiz-Benet": 2,
+        "W. Trevor King": 2
+    },
+    "2015-06-19": {
+        "Juan Batiz-Benet": 9,
+        "Jeromy": 5,
+        "rht": 7
+    },
+    "2015-06-18": {
+        "Jeromy Johnson": 1
+    },
+    "2015-06-17": {
+        "Juan Batiz-Benet": 1,
+        "Dylan Powers": 1
+    },
+    "2015-06-16": {
+        "Jeromy": 1,
+        "Juan Batiz-Benet": 1,
+        "Lars Gierth": 1
+    },
+    "2015-06-15": {
+        "Juan Batiz-Benet": 2,
+        "Knut Ahlers": 1,
+        "Christian Couder": 1
+    },
+    "2015-06-14": {
+        "Juan Batiz-Benet": 1,
+        "Christian Couder": 3,
+        "W. Trevor King": 3
+    },
+    "2015-06-13": {
+        "Juan Batiz-Benet": 2,
+        "Jeromy": 2
+    },
+    "2015-06-12": {
+        "Jeromy": 2
+    },
+    "2015-06-10": {
+        "W. Trevor King": 1
+    },
+    "2015-06-09": {
+        "Juan Batiz-Benet": 2,
+        "Jeromy": 2,
+        "Henry": 2
+    },
+    "2015-06-08": {
+        "Juan Batiz-Benet": 5,
+        "Christian Couder": 2
+    },
+    "2015-06-07": {
+        "Juan Batiz-Benet": 1,
+        "Christian Couder": 1,
+        "Harlan T Wood": 1
+    },
+    "2015-06-06": {
+        "Christian Couder": 1
+    },
+    "2015-06-04": {
+        "Juan Batiz-Benet": 7,
+        "Jeromy": 4,
+        "Christian Couder": 2,
+        "rht": 4
+    },
+    "2015-06-03": {
+        "Jeromy": 1,
+        "Juan Batiz-Benet": 1,
+        "Travis Person": 1
+    },
+    "2015-06-02": {
+        "Juan Batiz-Benet": 5,
+        "Jeromy": 2
+    },
+    "2015-06-01": {
+        "Juan Batiz-Benet": 8,
+        "Jeromy": 1,
+        "David": 2,
+        "Henry": 1
+    },
+    "2015-05-31": {
+        "Juan Batiz-Benet": 2,
+        "rht": 2
+    },
+    "2015-05-30": {
+        "Jeromy": 6,
+        "Juan Batiz-Benet": 6,
+        "Henry": 3
+    },
+    "2015-05-29": {
+        "Henry": 2,
+        "Jeromy": 3
+    },
+    "2015-05-27": {
+        "Jeromy": 1,
+        "rht": 2,
+        "Jeromy Johnson": 1,
+        "David Dias": 1
+    },
+    "2015-05-25": {
+        "Juan Batiz-Benet": 2
+    },
+    "2015-05-24": {
+        "Christian Couder": 1
+    },
+    "2015-05-23": {
+        "Juan Batiz-Benet": 4,
+        "Jeromy": 3,
+        "Travis Person": 4
+    },
+    "2015-05-22": {
+        "Jeromy": 18,
+        "Jeromy Johnson": 1,
+        "Juan Batiz-Benet": 9,
+        "Knut Ahlers": 2
+    },
+    "2015-05-21": {
+        "Juan Batiz-Benet": 2,
+        "Christian Couder": 3,
+        "Jeromy": 3,
+        "Knut Ahlers": 1,
+        "W. Trevor King": 11
+    },
+    "2015-05-20": {
+        "Lars Gierth": 2,
+        "Juan Batiz-Benet": 6,
+        "Christian Couder": 2
+    },
+    "2015-05-19": {
+        "rht": 2,
+        "Juan Batiz-Benet": 2,
+        "Jeromy": 1,
+        "Jeromy Johnson": 1,
+        "Vijayee Kulkaa": 1
+    },
+    "2015-05-18": {
+        "Christian Couder": 7
+    },
+    "2015-05-15": {
+        "Juan Batiz-Benet": 2
+    },
+    "2015-05-14": {
+        "Juan Batiz-Benet": 2
+    },
+    "2015-05-13": {
+        "Tim Groeneveld": 1,
+        "Juan Batiz-Benet": 5
+    },
+    "2015-05-12": {
+        "Juan Batiz-Benet": 1
+    },
+    "2015-05-11": {
+        "Kristoffer Ström": 1,
+        "David Braun": 1,
+        "Henry": 2,
+        "Juan Batiz-Benet": 6
+    },
+    "2015-05-10": {
+        "Henry": 4,
+        "Juan Batiz-Benet": 1,
+        "W. Trevor King": 1
+    },
+    "2015-05-09": {
+        "David Braun": 1,
+        "W. Trevor King": 1,
+        "Juan Batiz-Benet": 4
+    },
+    "2015-05-08": {
+        "Henry": 2,
+        "Chris Grimmett": 1,
+        "Juan Batiz-Benet": 1,
+        "W. Trevor King": 1
+    },
+    "2015-05-07": {
+        "Henry": 1,
+        "Juan Batiz-Benet": 3,
+        "Jeromy": 1,
+        "Jeromy Johnson": 2,
+        "Dominic Tarr": 1
+    },
+    "2015-05-06": {
+        "Juan Batiz-Benet": 4,
+        "Jeromy": 1
+    },
+    "2015-05-05": {
+        "Juan Batiz-Benet": 1,
+        "Jeromy": 1,
+        "Jeromy Johnson": 1
+    },
+    "2015-05-04": {
+        "Juan Batiz-Benet": 1,
+        "Christian Couder": 3
+    },
+    "2015-05-03": {
+        "Henry": 1,
+        "Christian Couder": 4,
+        "Juan Batiz-Benet": 4,
+        "W. Trevor King": 6,
+        "Jeromy": 2
+    },
+    "2015-05-02": {
+        "Tommi Virtanen": 5,
+        "Juan Batiz-Benet": 5,
+        "Stephen Sugden": 2,
+        "Jeromy": 1,
+        "W. Trevor King": 3
+    },
+    "2015-05-01": {
+        "Dylan Powers": 1,
+        "Jeromy Johnson": 2,
+        "Jeromy": 2,
+        "Henry": 2
+    },
+    "2015-04-30": {
+        "Juan Batiz-Benet": 3,
+        "Henry": 1,
+        "Stephan Seidt": 1,
+        "Jeromy": 3
+    },
+    "2015-04-29": {
+        "Juan Batiz-Benet": 7,
+        "Tommi Virtanen": 3,
+        "Jeromy": 4,
+        "Vitor Baptista": 1,
+        "Stephan Seidt": 1,
+        "Henry": 7
+    },
+    "2015-04-28": {
+        "Juan Batiz-Benet": 5,
+        "Jeromy": 6,
+        "Etienne Laurin": 1
+    },
+    "2015-04-27": {
+        "Jeromy Johnson": 1,
+        "Christian Couder": 2
+    },
+    "2015-04-26": {
+        "Tommi Virtanen": 2,
+        "Juan Batiz-Benet": 2,
+        "Etienne Laurin": 1
+    },
+    "2015-04-25": {
+        "Jeromy": 1
+    },
+    "2015-04-24": {
+        "Knut Ahlers": 1,
+        "Juan Batiz-Benet": 2,
+        "W. Trevor King": 2,
+        "Jeromy Johnson": 1,
+        "Jeromy": 1
+    },
+    "2015-04-23": {
+        "Jeromy": 5,
+        "Jeromy Johnson": 2,
+        "Dylan Powers": 5,
+        "Juan Batiz-Benet": 5
+    },
+    "2015-04-22": {
+        "Christian Couder": 3,
+        "Juan Batiz-Benet": 8,
+        "Travis Person": 2
+    },
+    "2015-04-21": {
+        "Juan Batiz-Benet": 15,
+        "Travis Person": 2,
+        "Jeromy": 9,
+        "Tor Arne Vestbø": 10,
+        "Christian Couder": 1,
+        "Tommi Virtanen": 5,
+        "gatesvp": 1
+    },
+    "2015-04-20": {
+        "Juan Batiz-Benet": 5,
+        "Jeromy Johnson": 1,
+        "Jeromy": 1
+    },
+    "2015-04-18": {
+        "Jeromy": 3,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-04-16": {
+        "Kristoffer Ström": 2
+    },
+    "2015-04-15": {
+        "Juan Batiz-Benet": 4,
+        "Christian Couder": 1,
+        "Baptiste Jonglez": 1,
+        "Jeromy": 1
+    },
+    "2015-04-14": {
+        "Juan Batiz-Benet": 4,
+        "Michael Lovci": 6
+    },
+    "2015-04-13": {
+        "Juan Batiz-Benet": 8,
+        "Etienne Laurin": 1,
+        "Jeromy": 1
+    },
+    "2015-04-12": {
+        "Jeromy": 1
+    },
+    "2015-04-11": {
+        "Ho-Sheng Hsiao": 2
+    },
+    "2015-04-09": {
+        "Juan Batiz-Benet": 2
+    },
+    "2015-04-08": {
+        "Juan Batiz-Benet": 7,
+        "Tor Arne Vestbø": 5,
+        "Kristoffer Ström": 1,
+        "Michael Muré": 1,
+        "Jeromy Johnson": 1,
+        "Jeromy": 5
+    },
+    "2015-04-07": {
+        "Jeromy": 2,
+        "Juan Batiz-Benet": 3,
+        "Marcin Rataj": 2,
+        "Christian Couder": 5,
+        "theswitch": 1
+    },
+    "2015-04-05": {
+        "Juan Batiz-Benet": 1,
+        "Christian Couder": 2
+    },
+    "2015-04-03": {
+        "Juan Batiz-Benet": 7,
+        "Ho-Sheng Hsiao": 1,
+        "Christian Couder": 1
+    },
+    "2015-04-02": {
+        "Juan Batiz-Benet": 3,
+        "Christian Couder": 1,
+        "Konstantin Koroviev": 1,
+        "Jeromy": 1
+    },
+    "2015-04-01": {
+        "Jeromy Johnson": 2,
+        "Jeromy": 2,
+        "Juan Batiz-Benet": 2,
+        "Christian Couder": 1,
+        "Ho-Sheng Hsiao": 2
+    },
+    "2015-03-31": {
+        "Juan Batiz-Benet": 1,
+        "Jeromy": 2
+    },
+    "2015-03-30": {
+        "Juan Batiz-Benet": 2,
+        "Christian Couder": 2
+    },
+    "2015-03-26": {
+        "Juan Batiz-Benet": 1,
+        "Michael Muré": 2
+    },
+    "2015-03-25": {
+        "Juan Batiz-Benet": 2,
+        "Jeromy": 5
+    },
+    "2015-03-24": {
+        "Henry": 1,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-03-23": {
+        "Juan Batiz-Benet": 3,
+        "Konstantin Koroviev": 1,
+        "Henry": 1
+    },
+    "2015-03-22": {
+        "Juan Batiz-Benet": 2,
+        "Christian Couder": 2
+    },
+    "2015-03-21": {
+        "Juan Batiz-Benet": 2,
+        "Henry": 1
+    },
+    "2015-03-20": {
+        "Konstantin Koroviev": 1,
+        "Juan Batiz-Benet": 3,
+        "Jeromy": 1
+    },
+    "2015-03-19": {
+        "Jeromy": 10,
+        "Juan Batiz-Benet": 8
+    },
+    "2015-03-18": {
+        "Juan Batiz-Benet": 6,
+        "Jeromy": 2
+    },
+    "2015-03-17": {
+        "Andy Leap": 2,
+        "Christian Couder": 1,
+        "Juan Batiz-Benet": 2
+    },
+    "2015-03-16": {
+        "Christian Couder": 1
+    },
+    "2015-03-15": {
+        "Tommi Virtanen": 10
+    },
+    "2015-03-13": {
+        "Juan Batiz-Benet": 5,
+        "Henry": 1,
+        "vitzli": 1,
+        "Konstantin Koroviev": 2,
+        "Tommi Virtanen": 3,
+        "Jeromy": 9
+    },
+    "2015-03-12": {
+        "Tommi Virtanen": 6
+    },
+    "2015-03-11": {
+        "Juan Batiz-Benet": 7,
+        "Henry": 2,
+        "vitzli": 2,
+        "Christian Couder": 3
+    },
+    "2015-03-10": {
+        "Tommi Virtanen": 1,
+        "Konstantin Koroviev": 2,
+        "Juan Batiz-Benet": 7,
+        "Henry": 3,
+        "Jeromy": 1
+    },
+    "2015-03-09": {
+        "anarcat": 1,
+        "Jeromy": 1,
+        "Henry": 1,
+        "Christian Couder": 1,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-03-08": {
+        "Jeromy": 3,
+        "Christian Couder": 1,
+        "Juan Batiz-Benet": 11,
+        "Henry": 4,
+        "anarcat": 3,
+        "David Wagner": 1
+    },
+    "2015-03-07": {
+        "Juan Batiz-Benet": 3,
+        "Jeromy": 1
+    },
+    "2015-03-06": {
+        "Jeromy": 3,
+        "Tonis Tiigi": 2
+    },
+    "2015-03-05": {
+        "Juan Batiz-Benet": 14,
+        "Henry": 9,
+        "Christian Couder": 1
+    },
+    "2015-03-04": {
+        "Alex": 3,
+        "Juan Batiz-Benet": 2
+    },
+    "2015-03-03": {
+        "Juan Batiz-Benet": 2,
+        "bbenshoof": 2
+    },
+    "2015-03-02": {
+        "Juan Batiz-Benet": 3,
+        "Henry": 8
+    },
+    "2015-03-01": {
+        "Henry": 2,
+        "Christian Couder": 4
+    },
+    "2015-02-28": {
+        "Christian Couder": 1,
+        "Henry": 9,
+        "Juan Batiz-Benet": 1,
+        "Jeromy": 15,
+        "Jeromy Johnson": 3
+    },
+    "2015-02-27": {
+        "Jeromy Johnson": 1,
+        "Jeromy": 1
+    },
+    "2015-02-26": {
+        "Juan Batiz-Benet": 4,
+        "Henry": 2
+    },
+    "2015-02-25": {
+        "Jeromy": 7,
+        "Juan Batiz-Benet": 2,
+        "Jeromy Johnson": 1
+    },
+    "2015-02-24": {
+        "Jeromy": 2,
+        "Jeromy Johnson": 1
+    },
+    "2015-02-23": {
+        "Knut Ahlers": 5
+    },
+    "2015-02-22": {
+        "Jeromy": 1,
+        "Jeromy Johnson": 1
+    },
+    "2015-02-21": {
+        "Jeromy": 7
+    },
+    "2015-02-20": {
+        "Jeromy Johnson": 2,
+        "Jeromy": 5
+    },
+    "2015-02-19": {
+        "Jeromy": 12,
+        "Juan Batiz-Benet": 1,
+        "Jeromy Johnson": 1
+    },
+    "2015-02-17": {
+        "Juan Batiz-Benet": 4
+    },
+    "2015-02-16": {
+        "Brian Tiger Chow": 37,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-02-15": {
+        "Brian Tiger Chow": 36
+    },
+    "2015-02-14": {
+        "Juan Batiz-Benet": 4,
+        "Jeromy": 3,
+        "Jeromy Johnson": 1
+    },
+    "2015-02-13": {
+        "Jeromy": 2,
+        "Jeromy Johnson": 1
+    },
+    "2015-02-12": {
+        "Jeromy Johnson": 1,
+        "Matt Bell": 1,
+        "Juan Batiz-Benet": 3,
+        "Jeromy": 1
+    },
+    "2015-02-11": {
+        "Juan Batiz-Benet": 3,
+        "Jeromy": 1
+    },
+    "2015-02-09": {
+        "Juan Batiz-Benet": 1,
+        "Kevin Wallace": 4,
+        "Christian Couder": 2
+    },
+    "2015-02-08": {
+        "Juan Batiz-Benet": 4
+    },
+    "2015-02-07": {
+        "Juan Batiz-Benet": 4,
+        "Brian Tiger Chow": 5
+    },
+    "2015-02-06": {
+        "Juan Batiz-Benet": 7,
+        "Matt Bell": 5,
+        "Brian Tiger Chow": 1
+    },
+    "2015-02-05": {
+        "Matt Bell": 3,
+        "Brian Tiger Chow": 5,
+        "Jeromy Johnson": 2,
+        "Jeromy": 7,
+        "Christian Couder": 3,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-02-04": {
+        "Brian Tiger Chow": 6,
+        "Juan Batiz-Benet": 24,
+        "Christian Couder": 1
+    },
+    "2015-02-03": {
+        "Brian Tiger Chow": 40,
+        "Juan Batiz-Benet": 22,
+        "Matt Bell": 5,
+        "Jeromy": 1,
+        "Christian Couder": 2
+    },
+    "2015-02-02": {
+        "Christian Couder": 1,
+        "Juan Batiz-Benet": 24
+    },
+    "2015-02-01": {
+        "Juan Batiz-Benet": 13,
+        "Jeromy Johnson": 1,
+        "Jeromy": 1,
+        "Mildred Ki'Lya": 5
+    },
+    "2015-01-31": {
+        "Brian Tiger Chow": 15,
+        "Jeromy": 1,
+        "Juan Batiz-Benet": 3
+    },
+    "2015-01-30": {
+        "Juan Batiz-Benet": 12,
+        "Jeromy": 2,
+        "Jeromy Johnson": 1,
+        "Brian Tiger Chow": 2
+    },
+    "2015-01-29": {
+        "Juan Batiz-Benet": 16,
+        "Matt Bell": 14,
+        "Jeromy": 2
+    },
+    "2015-01-28": {
+        "Brian Tiger Chow": 7,
+        "Christian Couder": 1,
+        "Jeromy": 5,
+        "Juan Batiz-Benet": 11,
+        "Jeromy Johnson": 2
+    },
+    "2015-01-27": {
+        "Jeromy": 3,
+        "Juan Batiz-Benet": 11,
+        "Matt Bell": 6,
+        "Brian Tiger Chow": 1
+    },
+    "2015-01-26": {
+        "Matt Bell": 5
+    },
+    "2015-01-25": {
+        "Jeromy": 9,
+        "Juan Batiz-Benet": 22,
+        "Brian Tiger Chow": 24,
+        "Matt Bell": 17
+    },
+    "2015-01-24": {
+        "Matt Bell": 17,
+        "Juan Batiz-Benet": 29,
+        "Brian Tiger Chow": 1,
+        "Christian Couder": 1,
+        "Jeromy": 2,
+        "Jeromy Johnson": 1
+    },
+    "2015-01-23": {
+        "Matt Bell": 3,
+        "Brian Tiger Chow": 3
+    },
+    "2015-01-22": {
+        "Brian Tiger Chow": 18,
+        "Juan Batiz-Benet": 4,
+        "Jeromy": 9,
+        "Matt Bell": 1
+    },
+    "2015-01-21": {
+        "Brian Tiger Chow": 6,
+        "Juan Batiz-Benet": 14
+    },
+    "2015-01-20": {
+        "Brian Tiger Chow": 2,
+        "Juan Batiz-Benet": 2,
+        "Jeromy": 3
+    },
+    "2015-01-19": {
+        "Brian Tiger Chow": 29,
+        "Juan Batiz-Benet": 2
+    },
+    "2015-01-18": {
+        "Juan Batiz-Benet": 2,
+        "Jeromy": 1
+    },
+    "2015-01-17": {
+        "Juan Batiz-Benet": 6,
+        "Jeromy": 1
+    },
+    "2015-01-16": {
+        "Brian Tiger Chow": 1,
+        "Jeromy": 4,
+        "Juan Batiz-Benet": 1
+    },
+    "2015-01-15": {
+        "Brian Tiger Chow": 39,
+        "Juan Batiz-Benet": 19,
+        "Matt Bell": 9,
+        "Jeromy": 2
+    },
+    "2015-01-14": {
+        "Juan Batiz-Benet": 26,
+        "Brian Tiger Chow": 34
+    },
+    "2015-01-13": {
+        "Juan Batiz-Benet": 19,
+        "Jeromy": 5,
+        "Matt Bell": 6,
+        "Simon Kirkby": 2
+    },
+    "2015-01-12": {
+        "Juan Batiz-Benet": 11,
+        "Brian Tiger Chow": 25,
+        "Jeromy": 1
+    },
+    "2015-01-11": {
+        "Juan Batiz-Benet": 11,
+        "Jeromy": 7,
+        "Brian Tiger Chow": 1
+    },
+    "2015-01-10": {
+        "Brian Tiger Chow": 1,
+        "Juan Batiz-Benet": 4,
+        "Christian Couder": 1
+    },
+    "2015-01-09": {
+        "Juan Batiz-Benet": 6
+    },
+    "2015-01-08": {
+        "Juan Batiz-Benet": 23,
+        "Christian Couder": 1
+    },
+    "2015-01-07": {
+        "Matt Bell": 17,
+        "Juan Batiz-Benet": 14,
+        "Christian Couder": 2,
+        "Jeromy": 1
+    },
+    "2015-01-06": {
+        "Juan Batiz-Benet": 48,
+        "Brian Tiger Chow": 4,
+        "Jeromy": 1
+    },
+    "2015-01-05": {
+        "Juan Batiz-Benet": 6
+    },
+    "2015-01-03": {
+        "Juan Batiz-Benet": 29,
+        "Jeromy": 7
+    },
+    "2015-01-02": {
+        "Juan Batiz-Benet": 3
+    },
+    "2015-01-01": {
+        "Juan Batiz-Benet": 3
+    },
+    "2014-12-31": {
+        "Brian Tiger Chow": 1,
+        "Jeromy": 1
+    },
+    "2014-12-29": {
+        "Juan Batiz-Benet": 5,
+        "Brian Tiger Chow": 2
+    },
+    "2014-12-27": {
+        "Brian Tiger Chow": 1
+    },
+    "2014-12-26": {
+        "Juan Batiz-Benet": 2,
+        "Brian Tiger Chow": 7
+    },
+    "2014-12-25": {
+        "Brian Tiger Chow": 23,
+        "Juan Batiz-Benet": 23
+    },
+    "2014-12-24": {
+        "Juan Batiz-Benet": 24,
+        "Brian Tiger Chow": 17
+    },
+    "2014-12-22": {
+        "Brian Tiger Chow": 1
+    },
+    "2014-12-21": {
+        "Christian Couder": 1
+    },
+    "2014-12-20": {
+        "Jeromy": 1
+    },
+    "2014-12-19": {
+        "Juan Batiz-Benet": 31,
+        "Brian Tiger Chow": 50,
+        "Jeromy": 14
+    },
+    "2014-12-17": {
+        "Juan Batiz-Benet": 29,
+        "Brian Tiger Chow": 6
+    },
+    "2014-12-16": {
+        "Brian Tiger Chow": 9,
+        "Jeromy Johnson": 1,
+        "Jeromy": 5
+    },
+    "2014-12-15": {
+        "Brian Tiger Chow": 5,
+        "Jeromy": 1,
+        "Juan Batiz-Benet": 1,
+        "Markus Amalthea Magnuson": 1
+    },
+    "2014-12-14": {
+        "Brian Tiger Chow": 13
+    },
+    "2014-12-13": {
+        "Juan Batiz-Benet": 11,
+        "Brian Tiger Chow": 2
+    },
+    "2014-12-12": {
+        "Jeromy Johnson": 2,
+        "Jeromy": 3,
+        "Juan Batiz-Benet": 2
+    },
+    "2014-12-10": {
+        "Juan Batiz-Benet": 19,
+        "Brian Tiger Chow": 4
+    },
+    "2014-12-09": {
+        "Brian Tiger Chow": 20,
+        "Juan Batiz-Benet": 1
+    },
+    "2014-12-08": {
+        "Juan Batiz-Benet": 2,
+        "Brian Tiger Chow": 2,
+        "Jeromy": 3
+    },
+    "2014-12-07": {
+        "Juan Batiz-Benet": 7,
+        "Brian Tiger Chow": 22,
+        "Matt Bell": 4
+    },
+    "2014-12-06": {
+        "Jeromy Johnson": 2,
+        "Jeromy": 30,
+        "Brian Tiger Chow": 59,
+        "Juan Batiz-Benet": 2
+    },
+    "2014-12-05": {
+        "Simon Kirkby": 1
+    },
+    "2014-12-02": {
+        "Jeromy Johnson": 1,
+        "Jeromy": 2
+    },
+    "2014-12-01": {
+        "Christian Couder": 2
+    },
+    "2014-11-29": {
+        "Ethan Buchman": 1,
+        "Brian Tiger Chow": 1
+    },
+    "2014-11-28": {
+        "Brian Tiger Chow": 2
+    },
+    "2014-11-26": {
+        "Brian Tiger Chow": 15,
+        "Juan Batiz-Benet": 1,
+        "Matt Bell": 2,
+        "Christian Couder": 1
+    },
+    "2014-11-25": {
+        "Brian Tiger Chow": 4,
+        "Juan Batiz-Benet": 1
+    },
+    "2014-11-24": {
+        "Christian Couder": 1,
+        "Juan Batiz-Benet": 2,
+        "Peter Borzov": 1,
+        "Brian Tiger Chow": 1
+    },
+    "2014-11-23": {
+        "Christian Couder": 2
+    },
+    "2014-11-22": {
+        "Jeromy": 1,
+        "Juan Batiz-Benet": 1
+    },
+    "2014-11-21": {
+        "Brian Tiger Chow": 2,
+        "Juan Batiz-Benet": 12,
+        "Christian Couder": 4
+    },
+    "2014-11-20": {
+        "Matt Bell": 24,
+        "Juan Batiz-Benet": 1,
+        "Christian Couder": 1,
+        "ᴍᴀᴛᴛ ʙᴇʟʟ": 1
+    },
+    "2014-11-19": {
+        "Christian Couder": 1,
+        "Juan Batiz-Benet": 26,
+        "Brian Tiger Chow": 20,
+        "Matt Bell": 44
+    },
+    "2014-11-18": {
+        "Juan Batiz-Benet": 2,
+        "Christian Couder": 1,
+        "Jeromy": 2,
+        "Brian Tiger Chow": 7,
+        "Matt Bell": 1
+    },
+    "2014-11-17": {
+        "Matt Bell": 3,
+        "Jeromy": 11,
+        "Christian Couder": 6,
+        "Brian Tiger Chow": 50,
+        "Juan Batiz-Benet": 15
+    },
+    "2014-11-16": {
+        "Jeromy": 2,
+        "Juan Batiz-Benet": 7,
+        "Brian Tiger Chow": 14,
+        "Christian Couder": 1
+    },
+    "2014-11-15": {
+        "Brian Tiger Chow": 148,
+        "Simon Kirkby": 1,
+        "Juan Batiz-Benet": 37,
+        "Matt Bell": 201
+    },
+    "2014-11-13": {
+        "Jeromy": 1
+    },
+    "2014-11-11": {
+        "Juan Batiz-Benet": 1
+    },
+    "2014-11-10": {
+        "Juan Batiz-Benet": 10,
+        "Christian Couder": 2,
+        "Jeromy": 8,
+        "Brian Tiger Chow": 1
+    },
+    "2014-11-09": {
+        "Jeromy": 1
+    },
+    "2014-11-08": {
+        "Juan Batiz-Benet": 20,
+        "Christian Couder": 3,
+        "Jeromy": 2
+    },
+    "2014-11-07": {
+        "Juan Batiz-Benet": 2,
+        "Christian Couder": 1
+    },
+    "2014-11-06": {
+        "Brian Tiger Chow": 35,
+        "Juan Batiz-Benet": 13
+    },
+    "2014-11-05": {
+        "Brian Tiger Chow": 3,
+        "Juan Batiz-Benet": 1,
+        "Matt Bell": 64
+    },
+    "2014-11-04": {
+        "Juan Batiz-Benet": 3,
+        "Jeromy": 4,
+        "Brian Tiger Chow": 3
+    },
+    "2014-11-03": {
+        "Jeromy": 4,
+        "Juan Batiz-Benet": 3,
+        "Christian Couder": 1,
+        "Brian Tiger Chow": 1
+    },
+    "2014-11-02": {
+        "Juan Batiz-Benet": 4,
+        "Brian Tiger Chow": 1,
+        "Jeromy": 18,
+        "Christian Couder": 2
+    },
+    "2014-11-01": {
+        "Christian Couder": 3,
+        "Jeromy": 4,
+        "Juan Batiz-Benet": 1
+    },
+    "2014-10-31": {
+        "Juan Batiz-Benet": 14,
+        "Jeromy": 3,
+        "Brian Tiger Chow": 2
+    },
+    "2014-10-30": {
+        "Juan Batiz-Benet": 1,
+        "Brian Tiger Chow": 3
+    },
+    "2014-10-29": {
+        "Juan Batiz-Benet": 4,
+        "Brian Tiger Chow": 21
+    },
+    "2014-10-28": {
+        "Juan Batiz-Benet": 1
+    },
+    "2014-10-27": {
+        "Juan Batiz-Benet": 13,
+        "Christian Couder": 2
+    },
+    "2014-10-26": {
+        "Emery Hemingway": 1,
+        "Juan Batiz-Benet": 6,
+        "Jeromy": 4,
+        "Christian Couder": 6,
+        "Brian Tiger Chow": 3
+    },
+    "2014-10-25": {
+        "Jeromy": 1,
+        "Brian Tiger Chow": 3
+    },
+    "2014-10-24": {
+        "Juan Batiz-Benet": 1,
+        "Brian Tiger Chow": 5
+    },
+    "2014-10-23": {
+        "Brian Tiger Chow": 20,
+        "Juan Batiz-Benet": 20,
+        "Jeromy": 11,
+        "Henry": 17
+    },
+    "2014-10-22": {
+        "Juan Batiz-Benet": 5,
+        "Matt Bell": 10
+    },
+    "2014-10-21": {
+        "Matt Bell": 55,
+        "Juan Batiz-Benet": 10
+    },
+    "2014-10-20": {
+        "Juan Batiz-Benet": 24,
+        "Henry": 3
+    },
+    "2014-10-19": {
+        "Jeromy": 13,
+        "Juan Batiz-Benet": 30,
+        "Henry": 2
+    },
+    "2014-10-17": {
+        "Juan Batiz-Benet": 1,
+        "Henry": 9
+    },
+    "2014-10-16": {
+        "Juan Batiz-Benet": 2,
+        "Henry": 16
+    },
+    "2014-10-15": {
+        "Juan Batiz-Benet": 7,
+        "Henry": 3
+    },
+    "2014-10-14": {
+        "Henry": 6,
+        "Patrick Connolly": 2,
+        "Juan Batiz-Benet": 2
+    },
+    "2014-10-12": {
+        "Juan Batiz-Benet": 7
+    },
+    "2014-10-11": {
+        "Jeromy": 12,
+        "Juan Batiz-Benet": 3,
+        "Peter Borzov": 11
+    },
+    "2014-10-10": {
+        "Juan Batiz-Benet": 8
+    },
+    "2014-10-09": {
+        "Jeromy": 8,
+        "Juan Batiz-Benet": 13
+    },
+    "2014-10-08": {
+        "Jeromy": 3
+    },
+    "2014-10-07": {
+        "Jeromy": 3,
+        "Juan Batiz-Benet": 6
+    },
+    "2014-10-06": {
+        "Juan Batiz-Benet": 5,
+        "Siraj Ravel": 1
+    },
+    "2014-10-05": {
+        "Jeromy": 10,
+        "Juan Batiz-Benet": 3
+    },
+    "2014-10-04": {
+        "Juan Batiz-Benet": 5,
+        "Jeromy": 5
+    },
+    "2014-10-03": {
+        "Jeromy": 3,
+        "Juan Batiz-Benet": 13
+    },
+    "2014-10-02": {
+        "Juan Batiz-Benet": 12,
+        "Jeromy": 21
+    },
+    "2014-10-01": {
+        "Juan Batiz-Benet": 11,
+        "verokarhu": 24,
+        "Brian Tiger Chow": 1,
+        "Jeromy": 2
+    },
+    "2014-09-30": {
+        "Juan Batiz-Benet": 3,
+        "Shanti Bouchez-Mongardé": 6
+    },
+    "2014-09-28": {
+        "Jeromy": 2,
+        "Juan Batiz-Benet": 5
+    },
+    "2014-09-27": {
+        "Juan Batiz-Benet": 8
+    },
+    "2014-09-26": {
+        "Brian Tiger Chow": 4
+    },
+    "2014-09-25": {
+        "Juan Batiz-Benet": 2
+    },
+    "2014-09-24": {
+        "Brian Tiger Chow": 3,
+        "Jeromy": 4,
+        "Jeromy Johnson": 1,
+        "epitron": 1,
+        "Juan Batiz-Benet": 2
+    },
+    "2014-09-23": {
+        "Jeromy": 1,
+        "Juan Batiz-Benet": 102,
+        "Brian Tiger Chow": 121
+    },
+    "2014-09-20": {
+        "Jeromy": 1
+    },
+    "2014-09-19": {
+        "llSourcell": 3,
+        "Jeromy": 1
+    },
+    "2014-09-18": {
+        "Jeromy": 3,
+        "Brian Tiger Chow": 1
+    },
+    "2014-09-17": {
+        "Brian Tiger Chow": 5,
+        "Juan Batiz-Benet": 1
+    },
+    "2014-09-16": {
+        "Jeromy": 8,
+        "Juan Batiz-Benet": 1,
+        "Siraj Ravel": 2
+    },
+    "2014-09-15": {
+        "Jeromy": 3,
+        "Juan Batiz-Benet": 1,
+        "Brian Tiger Chow": 2
+    },
+    "2014-09-14": {
+        "Brian Tiger Chow": 8,
+        "Jeromy": 1
+    },
+    "2014-09-13": {
+        "Jeromy": 2,
+        "Juan Batiz-Benet": 1,
+        "Siraj Ravel": 2,
+        "Brian Tiger Chow": 2
+    },
+    "2014-09-12": {
+        "Matt Bell": 7,
+        "Juan Batiz-Benet": 2,
+        "Siraj Ravel": 3,
+        "Brian Tiger Chow": 10
+    },
+    "2014-09-11": {
+        "Siraj Ravel": 3,
+        "Jeromy": 2,
+        "Brian Tiger Chow": 2
+    },
+    "2014-09-10": {
+        "Jeromy": 1
+    },
+    "2014-09-09": {
+        "Jeromy": 2
+    },
+    "2014-09-07": {
+        "Jeromy": 2
+    },
+    "2014-09-06": {
+        "Jeromy": 2
+    },
+    "2014-09-05": {
+        "Jeromy": 4,
+        "Brendan Mc": 1
+    },
+    "2014-09-04": {
+        "Brendan Mc": 4,
+        "Jeromy": 1
+    },
+    "2014-09-03": {
+        "Jeromy": 3
+    },
+    "2014-09-02": {
+        "Jeromy": 2
+    },
+    "2014-09-01": {
+        "Jeromy": 1
+    },
+    "2014-08-31": {
+        "Jeromy": 3
+    },
+    "2014-08-30": {
+        "Jeromy": 2
+    },
+    "2014-08-29": {
+        "Jeromy": 2
+    },
+    "2014-08-28": {
+        "Jeromy Johnson": 1
+    },
+    "2014-08-27": {
+        "Jeromy": 1
+    },
+    "2014-08-26": {
+        "Jeromy": 1
+    },
+    "2014-08-25": {
+        "Jeromy": 2
+    },
+    "2014-08-21": {
+        "Jeromy": 8,
+        "Chas Leichner": 5,
+        "Juan Batiz-Benet": 7
+    },
+    "2014-08-17": {
+        "Chas": 1,
+        "Jeromy": 3,
+        "Juan Batiz-Benet": 1
+    },
+    "2014-08-16": {
+        "Jeromy": 1
+    },
+    "2014-08-15": {
+        "Jeromy": 1
+    },
+    "2014-08-14": {
+        "Jeromy": 1
+    },
+    "2014-08-13": {
+        "Jeromy": 2
+    },
+    "2014-08-12": {
+        "Jeromy": 3
+    },
+    "2014-08-11": {
+        "Jeromy": 1
+    },
+    "2014-08-10": {
+        "Jeromy": 2
+    },
+    "2014-08-09": {
+        "Jeromy": 2
+    },
+    "2014-08-08": {
+        "Jeromy": 18,
+        "Jeromy Johnson": 4,
+        "Juan Batiz-Benet": 7
+    },
+    "2014-08-02": {
+        "Juan Batiz-Benet": 1
+    },
+    "2014-08-01": {
+        "verokarhu": 2,
+        "Juan Batiz-Benet": 3,
+        "Peter Borzov": 1
+    },
+    "2014-07-31": {
+        "Juan Batiz-Benet": 6
+    },
+    "2014-07-29": {
+        "Jeromy": 1,
+        "Juan Batiz-Benet": 1
+    },
+    "2014-07-28": {
+        "Carlos Cobo": 1
+    },
+    "2014-07-25": {
+        "Jeromy Johnson": 2,
+        "Juan Batiz-Benet": 1,
+        "Carlos Cobo": 2
+    },
+    "2014-07-23": {
+        "Juan Batiz-Benet": 8,
+        "Aaron Hill": 1
+    },
+    "2014-07-22": {
+        "Juan Batiz-Benet": 2,
+        "Quinn Slack": 1
+    },
+    "2014-07-20": {
+        "Juan Batiz-Benet": 1
+    },
+    "2014-07-19": {
+        "Quinn Slack": 1
+    },
+    "2014-07-13": {
+        "Juan Batiz-Benet": 3
+    },
+    "2014-07-11": {
+        "Juan Batiz-Benet": 1
+    },
+    "2014-07-09": {
+        "Juan Batiz-Benet": 1
+    },
+    "2014-07-07": {
+        "Juan Batiz-Benet": 9
+    },
+    "2014-07-06": {
+        "Juan Batiz-Benet": 28
+    },
+    "2014-07-05": {
+        "Juan Batiz-Benet": 8
+    },
+    "2014-06-27": {
+        "Juan Batiz-Benet": 2
     }
 }
