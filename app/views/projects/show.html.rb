@@ -90,12 +90,23 @@ class Views::Projects::Show < Views::Base
         row { column("small-12", class: "underlined-header") { text "Awards" } }
 
         row {
-          column("small-12 medium-4", class: "centered") {
+          column("small-12 medium-4", class: "centered coins-issued") {
             if award_data[:award_amounts][:my_project_coins]
               div(class: "centered font-large") { text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',') }
               div(class: "centered") { text "My Project Coins" }
             end
-            div(class: "centered font-large") { text number_with_precision(award_data[:award_amounts][:total_coins_issued], precision: 0, delimiter: ',') }
+            div(class: "centered font-large") {
+              total_coins_issued = award_data[:award_amounts][:total_coins_issued]
+
+              text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
+              text "/"
+              text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
+
+              percentage_issued = total_coins_issued.to_f / project.maximum_coins
+              if percentage_issued >= 0.01
+                text " (#{number_with_precision(percentage_issued, precision: 2)}%)"
+              end
+            }
             div(class: "centered") { text "Total Coins Issued" }
 
             p(class: "centered font-small") {

@@ -19,13 +19,6 @@ module Views
                   f.text_area :description
                 }
               }
-              with_errors(project, :tracker) {
-                label {
-                  i(class: "fa fa-tasks")
-                  text " Project Tracker"
-                  f.text_field :tracker, placeholder: "https://pivotaltracker.com"
-                }
-              }
               with_errors(project, :slack_channel) {
                 label {
                   i(class: "fa fa-slack")
@@ -36,6 +29,12 @@ module Views
                   select_tag "project[slack_channel]", options, html: {id: "project_slack_channel"}
                 }
               }
+              with_errors(project, :maximum_coins) {
+                label {
+                  text "Maximum number of awardable coins"
+                  f.text_field :maximum_coins, type: "number"
+                }
+              }
               with_errors(project, :public) {
                 label {
                   f.check_box :public
@@ -44,6 +43,13 @@ module Views
               }
             }
             column("large-6 small-12") {
+              with_errors(project, :tracker) {
+                label {
+                  i(class: "fa fa-tasks")
+                  text " Project Tracker"
+                  f.text_field :tracker, placeholder: "https://pivotaltracker.com"
+                }
+              }
               with_errors(project, :image) {
                 label {
                   text "Project Image (At least 450x400 px)"
@@ -88,10 +94,10 @@ module Views
                     ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
                   end
                 }
-                column("small-2", class: "text-center") {
+                column("small-3", class: "text-center") {
                   ff.check_box :community_awardable
                 }
-                column("small-4") {
+                column("small-3") {
                   if ff.object&.modifiable?
                     a("×", href: "#", 'data-mark-and-hide': '.award-type-row', class: "close")
                   else

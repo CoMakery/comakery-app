@@ -61,6 +61,7 @@ describe ProjectsController do
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
         expect(assigns[:project]).to be_public
+        expect(assigns[:project].maximum_coins).to eq(10000000)
         expect(assigns[:project].award_types.size).to eq(4)
 
         expect(assigns[:project].award_types.first).to be_a_new_record
@@ -92,6 +93,7 @@ describe ProjectsController do
               image: fixture_file_upload("helmet_cat.png", 'image/png', :binary),
               tracker: "http://github.com/here/is/my/tracker",
               slack_channel: "slack_channel",
+              maximum_coins: "150",
               award_types_attributes: [
                   {name: "Community Award", amount: 10, community_awardable: true},
                   {name: "Small Award", amount: 1000},
@@ -108,6 +110,7 @@ describe ProjectsController do
       expect(project.description).to eq("Project description here")
       expect(project.image).to be_a(Refile::File)
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
+      expect(project.maximum_coins).to eq(150)
       expect(project.award_types.first.name).to eq("Community Award")
       expect(project.award_types.first.community_awardable).to eq(true)
       expect(project.award_types.second.name).to eq("Small Award")

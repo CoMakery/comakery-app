@@ -3,7 +3,8 @@ require "rails_helper"
 describe "viewing projects, creating and editing", :js, :vcr do
   let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false) }
   let!(:public_project) { create(:project, title: "Public Project", description: "dogs with donuts", owner_account: account, slack_team_id: "citizencode", public: true) }
-  let!(:public_project_award) { create(:award, award_type: create(:award_type, project: public_project), created_at: Date.new(2016, 1, 9)) }
+  let!(:public_project_award_type) { create(:award_type, project: public_project) }
+  let!(:public_project_award) { create(:award, award_type: public_project_award_type, created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_team_image_34_url: "https://slack.example.com/awesome-team-image-34-px.jpg", slack_team_image_132_url: "https://slack.example.com/awesome-team-image-132-px.jpg", slack_user_name: 'gleenn', slack_first_name: "Glenn", slack_last_name: "Spanky", slack_team_domain: "citizencodedomain") } }
   let!(:same_team_account) { create(:account) }
   let!(:same_team_account_authentication) { create(:authentication, account: same_team_account, slack_team_id: "citizencode", slack_team_name: "Citizen Code") }
@@ -33,6 +34,9 @@ describe "viewing projects, creating and editing", :js, :vcr do
     fill_in "Description", with: "This is a project description which is very informative"
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public (display in CoMakery index)")).to be_checked
+
+    expect(find_field("Maximum number of awardable coins")['value']).to eq("10000000")
+    fill_in "Maximum number of awardable coins", with: "20000000"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
@@ -77,6 +81,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "This is a project description which is very informative"
     expect(page.find(".project-image")[:style]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link "Project Tasks"
+    expect(page).to have_content "0/20,000,000"
     expect(page).to have_content "Visibility: Public"
 
     expect(page).to have_content "Owner: Glenn Spanky"
@@ -213,6 +218,24 @@ describe "viewing projects, creating and editing", :js, :vcr do
         expect(page.find("input[name*='[title]']")[:value]).to eq("fancy title")
         expect(page.find("input[name*='[community_awardable]']")[:value]).to be_truthy
       end
+    end
+  end
+
+  it "shows the percentage of coin awards if greater than 0.01% have been awarded" do
+    login(account)
+
+    visit project_path(project)
+
+    within(".coins-issued") do
+      expect(page).to have_content "0/10,000,000"
+    end
+
+    create(:award, award_type: create(:award_type, project: project, amount: 100_000))
+
+    visit project_path(project)
+
+    within(".coins-issued") do
+      expect(page).to have_content "100,000/10,000,000 (0.01%)"
     end
   end
 end

@@ -27,11 +27,11 @@ class ProjectsController < ApplicationController
   def new
     assign_slack_channels
 
-    @project = Project.new(public: true)
-    authorize @project
+    @project = Project.new(public: true, maximum_coins: 10_000_000)
     @project.award_types.build(name: "Thanks", amount: 10)
     @project.award_types.build(name: "Small Contribution", amount: 100)
     @project.award_types.build(name: "Contribution", amount: 1000)
+    authorize @project
   end
 
   def create
@@ -89,7 +89,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :image, :tracker, :public, :slack_channel,
+    params.require(:project).permit(:title, :description, :image, :tracker, :public, :slack_channel, :maximum_coins,
                                     award_types_attributes: [:id, :name, :amount, :community_awardable, :_destroy])
   end
 

@@ -72,8 +72,10 @@ describe "awarding users" do
 
       click_link("Back to project")
 
-      expect(page).to have_content "0My Project Coins"
-      expect(page).to have_content "1,000Total Coins Issued"
+      within(".coins-issued") do
+        expect(page).to have_content "0My Project Coins"
+        expect(page).to have_content "1,000/10,000,000Total Coins Issued"
+      end
 
       expect(page).to have_content "1,000@bobjohnson"
 

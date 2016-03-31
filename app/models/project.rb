@@ -14,6 +14,7 @@ class Project < ActiveRecord::Base
 
   belongs_to :owner_account, class_name: Account
   validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :title
+  validates_numericality_of :maximum_coins, greater_than: 0
 
   validate :valid_tracker_url, if: -> { tracker.present? }
 
