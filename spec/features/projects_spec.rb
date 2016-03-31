@@ -235,7 +235,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     visit project_path(project)
 
     within(".coins-issued") do
-      expect(page).to have_content "100,000/10,000,000 (0.01%)"
+      expect(page).to have_content "100,000/10,000,000 (1.00%) Total Coins Issued"
     end
   end
 end

@@ -104,7 +104,7 @@ class Views::Projects::Show < Views::Base
               text "/"
               text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
 
-              percentage_issued = total_coins_issued.to_f / project.maximum_coins
+              percentage_issued = total_coins_issued * 100 / project.maximum_coins.to_f
               if percentage_issued >= 0.01
                 text " (#{number_with_precision(percentage_issued, precision: 2)}%)"
               end
