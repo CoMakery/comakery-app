@@ -10,7 +10,7 @@ Rake::Task["default"].clear
 task default: :specs_thorough
 
 task :specs_thorough do
-  run "testrpc -p 7777 >/dev/null", continue_on_failure: true
+  run "testrpc -p 7777 >/dev/null &", continue_on_failure: true
   run "bin/rspect"
   run "cd ethereum && truffle test"
 end

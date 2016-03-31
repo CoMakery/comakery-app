@@ -1,7 +1,10 @@
 {
+  "scripts": {
+    "testrpc": "testrpc"
+  },
   "dependencies": {
+    "ethereumjs-testrpc": "^1.2.1",
     "lightsaber": "^0.5.1"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

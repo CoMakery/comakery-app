@@ -11,17 +11,17 @@ dependencies:
     - nvm alias default 5
     - nvm use default
     - npm i -g 'github:ConsenSys/truffle#master'
-    - npm i -g ethereumjs-testrpc@1.2.1
+    - cd ethereum && npm i
 
 test:
   pre:
-    - testrpc -p 7777:
-        background: true
+    - cd ethereum && npm run testrpc -p 7777:
+      background: true
   override:
     - ./bin/rspect --format documentation:
-        parallel: true
-        files:
-          - spec/**/*_spec.rb
+      parallel: true
+      files:
+        - spec/**/*_spec.rb
     - brakeman --exit-on-warn
     - cd ethereum && truffle test
 
