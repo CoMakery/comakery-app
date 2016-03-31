@@ -10,7 +10,11 @@ Rake::Task["default"].clear
 task default: :specs_thorough
 
 task :specs_thorough do
-  run "ethereum/node_modules/.bin/testrpc -p 7777 2>/dev/null &", continue_on_failure: true
-  run "bin/rspect"
-  run "cd ethereum && truffle test"
+  testrpc = spawn "ethereum/node_modules/.bin/testrpc -p 7777"
+  begin
+    system "bin/rspect"
+    run "cd ethereum && truffle test"
+  ensure
+    Process.kill :HUP, testrpc
+  end
 end

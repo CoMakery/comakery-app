@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "test": "truffle test",
     "testrpc": "testrpc -p 7777"
   },
   "dependencies": {
