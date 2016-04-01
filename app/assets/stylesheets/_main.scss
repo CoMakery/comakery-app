@@ -101,6 +101,9 @@ a .button, a .button.take-action {
   @extend %chunko-text;
   color: $snow;
 }
+.button {
+  margin: 5px 4px;
+}
 .button.primary {
   background-color: limegreen;
 }
@@ -160,4 +163,9 @@ form.take-action-form p.notice {
 
 .margin-small-right {
   margin-right: 10px;
+}
+
+.clear-both {
+  clear: both;
+  width: 100%;
 }
