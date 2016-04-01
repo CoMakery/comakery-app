@@ -141,9 +141,17 @@ class Views::Projects::Show < Views::Base
           row {
             column("small-12") {
               award_data[:contributions].each do |contributor|
-                div {
-                  div(class: "float-right") { text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',') }
-                  span contributor[:name]
+                row {
+                  column("small-1") {
+                    img(src: contributor[:avatar], class: "icon")
+                  }
+                  column("small-4") {
+                    span contributor[:name]
+                  }
+                  column("small-4") {
+                    span(class: "float-right") { text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',') }
+                  }
+                  column("small-3") { }
                 }
               end
             }
