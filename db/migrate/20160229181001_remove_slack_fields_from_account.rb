@@ -1,7 +1,7 @@
 class RemoveSlackFieldsFromAccount < ActiveRecord::Migration
   def change
-    remove_column :accounts, :name
-    remove_column :accounts, :uid
-    remove_column :accounts, :provider
+    remove_column :accounts, :name, :string
+    remove_column :accounts, :uid, :integer
+    remove_column :accounts, :provider, :string
   end
 end
