@@ -77,7 +77,8 @@ describe "awarding users" do
         expect(page).to have_content "1,000/10,000,000 (0.01%)Total Coins Issued"
       end
 
-      expect(page).to have_content "1,000@bobjohnson"
+      expect(page.all("img[src='https://slack.example.com/team-image-34-px.jpg']").size).to eq(2)
+      expect(page).to have_content "@bobjohnson1,000"
 
       expect(page.html).to include('{"content": [{"label":"@bobjohnson","value":1000}')
     end

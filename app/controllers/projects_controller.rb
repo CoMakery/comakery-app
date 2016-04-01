@@ -89,7 +89,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :image, :tracker, :public, :slack_channel, :maximum_coins,
+    params.require(:project).permit(:title, :description, :image, :tracker, :contributor_agreement_url, :public, :slack_channel, :maximum_coins,
                                     award_types_attributes: [:id, :name, :amount, :community_awardable, :_destroy])
   end
 

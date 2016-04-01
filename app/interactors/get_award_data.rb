@@ -25,8 +25,9 @@ class GetAwardData
   def contributions_data(awards)
     awards.each_with_object({}) do |award, awards|
       awards[award.authentication_id] ||= {net_amount: 0}
-      awards[award.authentication_id][:name] = award.authentication.display_name || award.authentication.email
+      awards[award.authentication_id][:name] ||= award.authentication.display_name || award.authentication.email
       awards[award.authentication_id][:net_amount] += award.award_type.amount
+      awards[award.authentication_id][:avatar] ||= award.authentication.slack_icon
     end.values.sort_by{|award_data| -award_data[:net_amount]}
   end
 

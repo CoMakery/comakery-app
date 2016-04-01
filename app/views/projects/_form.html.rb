@@ -13,32 +13,35 @@ module Views
                   f.text_field :title
                 }
               }
-              with_errors(project, :description) {
+              with_errors(project, :maximum_coins) {
                 label {
-                  text "Description"
-                  f.text_area :description
+                  text "Maximum Number of Awardable Coins "
+                  question_tooltip("This is the maximum sum of coins you can award in the life of this project. Select it carefully, it cannot be changed after it has been set. Also select a high enough number so you have room for the future.")
+                  f.text_field :maximum_coins, type: "number", disabled: !project.new_record?
                 }
               }
               with_errors(project, :slack_channel) {
                 label {
                   i(class: "fa fa-slack")
-                  text " Slack Channel"
+                  text " Slack Channel "
+                  question_tooltip("Select where project notifications will be sent.")
                   options = capture do
                     options_for_select([[nil, nil]].concat(slack_channels), selected: project.slack_channel)
                   end
                   select_tag "project[slack_channel]", options, html: {id: "project_slack_channel"}
                 }
               }
-              with_errors(project, :maximum_coins) {
+              with_errors(project, :description) {
                 label {
-                  text "Maximum number of awardable coins"
-                  f.text_field :maximum_coins, type: "number", disabled: !project.new_record?
+                  text "Description"
+                  f.text_area :description
                 }
               }
               with_errors(project, :public) {
                 label {
                   f.check_box :public
-                  text " Set project as public (display in CoMakery index)"
+                  text " Set project as public "
+                  question_tooltip("Decide whether or not to display this project in the CoMakery project index")
                 }
               }
             }
@@ -50,9 +53,17 @@ module Views
                   f.text_field :tracker, placeholder: "https://pivotaltracker.com"
                 }
               }
+              with_errors(project, :contributor_agreement_url) {
+                label {
+                  i(class: "fa fa-gavel")
+                  text " Contributor Agreement"
+                  f.text_field :contributor_agreement_url, placeholder: "https://docusign.com"
+                }
+              }
               with_errors(project, :image) {
                 label {
-                  text "Project Image (At least 450x400 px)"
+                  text "Project Image "
+                  question_tooltip("An image that is at least 450 x 400 pixels is recommended.")
                   text f.attachment_field(:image)
                 }
                 text attachment_image_tag(project, :image, class: "project-image")
@@ -62,21 +73,25 @@ module Views
 
           div(class: "award-types") {
             row {
-              column("small-4", class: "") {
-                label "Award Names"
+              column("small-4") {
+                text "Award Names"
               }
-              column("small-2", class: "") {
-                label "Coin Value"
+              column("small-2") {
+                text "Coin Value "
+                question_tooltip("The number of coins a contributor will receive from this award. It cannot be changed after awards of this type have been issued.")
               }
-              column("small-6", class: "") {
-                label {
-                  text "Community Awardable "
-                  question_tooltip("Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.")
-                }
+              column("small-3") {
+                text "Community Awardable "
+                question_tooltip("Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.")
               }
+              column("small-2") {
+                text "Remove "
+                question_tooltip("Award type cannot be changed after awards have been issued.")
+              }
+              column("small-1") {}
             }
 
-            project.award_types.build(amount: 0) unless project.award_types.select{|award_type|award_type.amount == 0}.present?
+            project.award_types.build(amount: 0) unless project.award_types.select { |award_type| award_type.amount == 0 }.present?
             f.fields_for(:award_types) do |ff|
               row(class: "award-type-row#{ff.object.amount == 0 ? " hide award-type-template" : ""}") {
                 ff.hidden_field :id
@@ -97,13 +112,14 @@ module Views
                 column("small-3", class: "text-center") {
                   ff.check_box :community_awardable
                 }
-                column("small-3") {
+                column("small-2", class: "text-center") {
                   if ff.object&.modifiable?
                     a("×", href: "#", 'data-mark-and-hide': '.award-type-row', class: "close")
                   else
                     text "(#{pluralize(ff.object.awards.count, "award")} sent)"
                   end
                 }
+                column("small-1") {}
               }
             end
           }

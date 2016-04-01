@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe GetAwardData do
   let!(:sam) { create(:account, email: 'account@example.com') }
-  let!(:sam_auth) { create(:authentication, account: sam, slack_first_name: "sam", slack_last_name: "sam", slack_team_id: "foo", slack_user_name: "account", slack_user_id: "account slack_user_id", slack_team_domain: "foobar") }
+  let!(:sam_auth) { create(:authentication, account: sam, slack_first_name: "sam", slack_last_name: "sam", slack_team_id: "foo", slack_user_name: "account", slack_user_id: "account slack_user_id", slack_team_domain: "foobar", slack_image_32_url: "http://avatar.com/im_pretty.jpg") }
   let!(:john) { create(:account, email: "receiver@example.com") }
   let!(:john_auth) { create(:authentication, slack_user_id: "U8888UVMH", slack_team_id: "foo", account: john, slack_user_name: "john", slack_first_name: nil, slack_last_name: nil) }
   let!(:bob) { create(:account, email: "other@example.com") }
@@ -37,9 +37,9 @@ describe GetAwardData do
     it "returns a pretty hash of the awards for a project with summed amounts for each person" do
       result = GetAwardData.call(authentication: sam_auth, project: project)
 
-      expect(result.award_data[:contributions]).to match_array([{name: "@john", net_amount: 7000},
-                                                                {name: "bob bob", net_amount: 3000},
-                                                                {name: "sam sam", net_amount: 1000}])
+      expect(result.award_data[:contributions]).to match_array([{:net_amount=>7000, :name=>"@john", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
+                                                                {:net_amount=>3000, :name=>"bob bob", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
+                                                                {:net_amount=>1000, :name=>"sam sam", :avatar=>"http://avatar.com/im_pretty.jpg"}])
 
       expect(result.award_data[:award_amounts]).to eq({my_project_coins: 1000, total_coins_issued: 11_000})
     end
@@ -90,11 +90,9 @@ describe GetAwardData do
                                                      create(:award, award_type: create(:award_type, amount: 1000), authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
                                                      create(:award, award_type: create(:award_type, amount: 3000), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
                                                      create(:award, award_type: create(:award_type, amount: 2000), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
-                                                 ])).to eq([
-                                                               {:net_amount => 3000, :name => "b b"},
-                                                               {:net_amount => 2000, :name => "c c"},
-                                                               {:net_amount => 1000, :name => "a a"},
-                                                           ])
+                                                 ])).to eq([{:net_amount=>3000, :name=>"b b", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
+                                                            {:net_amount=>2000, :name=>"c c", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
+                                                            {:net_amount=>1000, :name=>"a a", :avatar=>"https://slack.example.com/team-image-34-px.jpg"}])
     end
   end
 
@@ -105,7 +103,7 @@ describe GetAwardData do
                                                      create(:award, award_type: create(:award_type, amount: 33), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
                                                      create(:award, award_type: create(:award_type, amount: 20), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
                                                  ], 1)).to eq([
-                                                               {:net_amount => 33, :name => "b b"},
+                                                               {:net_amount => 33, :name => "b b", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
                                                                {:net_amount => 30, :name => "Other"}
                                                            ])
     end
@@ -115,9 +113,9 @@ describe GetAwardData do
                                                      create(:award, award_type: create(:award_type, amount: 33), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
                                                      create(:award, award_type: create(:award_type, amount: 20), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
                                                  ], 3)).to eq([
-                                                               {:net_amount => 33, :name => "b b"},
-                                                               {:net_amount => 20, :name => "c c"},
-                                                               {:net_amount => 10, :name => "a a"},
+                                                               {:net_amount => 33, :name => "b b", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
+                                                               {:net_amount => 20, :name => "c c", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
+                                                               {:net_amount => 10, :name => "a a", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
                                                            ])
     end
   end

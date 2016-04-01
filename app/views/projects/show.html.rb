@@ -60,22 +60,34 @@ class Views::Projects::Show < Views::Base
                 }
               }
               row(class: "project-tasks") {
-                if project.tracker
-                  column("medium-5 small-12") {
-                    a(href: project.tracker, target: "_blank", class: "text-link") do
-                      i(class: "fa fa-tasks")
-                      text " Project Tasks"
-                    end
-                  }
-                end
-                if project.slack_team_domain
-                  column("medium-7 small-12") {
-                    a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") do
+                column("medium-5 small-12") {
+                  if project.tracker
+                    div {
+                      a(href: project.tracker, target: "_blank", class: "text-link") {
+                        i(class: "fa fa-tasks")
+                        text " Project Tasks"
+                      }
+                    }
+                  end
+
+                  if project.contributor_agreement_url
+                    div {
+                      a(href: project.contributor_agreement_url, target: "_blank", class: "text-link") {
+                        i(class: "fa fa-gavel")
+                        text " Contributor Agreement"
+                      }
+                    }
+                  end
+                }
+
+                column("medium-7 small-12") {
+                  if project.slack_team_domain
+                    a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") {
                       i(class: "fa fa-slack")
                       text " Project Slack Channel"
-                    end
-                  }
-                end
+                    }
+                  end
+                }
               }
             }
           }
@@ -133,9 +145,15 @@ class Views::Projects::Show < Views::Base
           row {
             column("small-12") {
               award_data[:contributions].each do |contributor|
-                div {
-                  div(class: "float-right") { text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',') }
-                  span contributor[:name]
+                row {
+                  column("small-5") {
+                    img(src: contributor[:avatar], class: "icon")
+                    div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
+                  }
+                  column("small-4") {
+                    span(class: "float-right margin-small") { text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',') }
+                  }
+                  column("small-3") { }
                 }
               end
             }

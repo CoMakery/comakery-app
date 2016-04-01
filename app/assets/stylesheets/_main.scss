@@ -101,6 +101,9 @@ a .button, a .button.take-action {
   @extend %chunko-text;
   color: $snow;
 }
+.button {
+  margin: 5px 4px;
+}
 .button.primary {
   background-color: limegreen;
 }
@@ -158,6 +161,23 @@ form.take-action-form p.notice {
   font-size: $font-size-tiny;
 }
 
-.margin-small-right {
+.margin-right-small {
   margin-right: 10px;
+}
+
+.margin-small {
+  margin: 10px;
+}
+
+.margin-tiny {
+  margin: 5px;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.clear-both {
+  clear: both;
+  width: 100%;
 }

@@ -21,7 +21,7 @@ class Views::BetaSignups::New < Views::Base
         }
         column("small-6") {}
       }
-      f.submit(value: OPT_IN_SUBMIT_BUTTON_TEXT, class: buttonish << "opt-in" << "primary" << "margin-small-right")
+      f.submit(value: OPT_IN_SUBMIT_BUTTON_TEXT, class: buttonish << "opt-in" << "primary" << "margin-right-small")
       f.submit(value: OPT_OUT_SUBMIT_BUTTON_TEXT, class: buttonish << "opt-out" << "secondary")
     end
   end
