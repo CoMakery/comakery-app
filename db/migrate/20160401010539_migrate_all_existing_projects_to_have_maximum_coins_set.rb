@@ -1,4 +1,5 @@
 class MigrateAllExistingProjectsToHaveMaximumCoinsSet < ActiveRecord::Migration
+  def up
     Project.where(maximum_coins: 0).update_all(maximum_coins: 10_000_000)
   end
 
