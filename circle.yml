@@ -14,7 +14,7 @@ database:
     - bundle exec rake db:create db:migrate               # check that migration run successfully
     - bundle exec rake db:migrate VERSION=20160224202923  # migrate down until irreversible migration
     - git checkout db/schema.rb                           # revert to schema in repo
-    - bundle exec rake db:drop db:create db:setup         # load from schema + seeds
+    - bundle exec rake db:reset                           # load from schema + seeds
 
 test:
   override:
