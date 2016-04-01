@@ -34,7 +34,7 @@ describe Project do
 
     describe "tracker" do
       it "is valid if tracker is a valid, absolute url" do
-        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com", maximum_coins: 10_000_000)
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com", maximum_coins: 10_000_000)
         expect(project).to be_valid
         expect(project.tracker).to eq("http://foo.com")
       end
@@ -62,9 +62,43 @@ describe Project do
       end
     end
 
+    describe "video_url" do
+      it "is valid if video_url is a valid, absolute url, the domain is youtube.com, and there is the identifier inside" do
+        expect(build(:sb_project, video_url: "https://youtube.com/watch?v=Dn3ZMhmmzK0")).to be_valid
+        expect(build(:sb_project, video_url: "https://youtube.com/embed/Dn3ZMhmmzK0")).to be_valid
+        expect(build(:sb_project, video_url: "https://youtu.be/jJrzIdDUfT4")).to be_valid
+
+        expect(build(:sb_project, video_url: "https://youtube.com/embed/")).not_to be_valid
+        expect(build(:sb_project, video_url: "https://youtu.be/")).not_to be_valid
+        expect(build(:sb_project, video_url: "https://youtu.be/").tap(&:valid?).errors.full_messages).to eq(["Video url must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'"])
+      end
+
+      it "doesn't allow completely wrong urls that cause parsing errors" do
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", video_url: "ゆアルエル", maximum_coins: 10_000_000)
+        expect(project).not_to be_valid
+        expect(project.errors.full_messages).to eq(["Video url must be a valid url"])
+      end
+
+      it "requires the video_url url be valid if present" do
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", video_url: "foo", maximum_coins: 10_000_000)
+        expect(project).not_to be_valid
+        expect(project.errors.full_messages).to match_array(["Video url must be a valid url"])
+      end
+
+      it "is valid with no video_url specified" do
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", video_url: nil, maximum_coins: 10_000_000)
+        expect(project).to be_valid
+      end
+
+      it "is valid if video_url is blank" do
+        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", video_url: "", maximum_coins: 10_000_000)
+        expect(project.video_url).to be_nil
+      end
+    end
+
     describe "contributor_agreement_url" do
       it "is valid if contributor_agreement_url is a valid, absolute url" do
-        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: "http://foo.com", maximum_coins: 10_000_000)
+        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: "http://foo.com", maximum_coins: 10_000_000)
         expect(project).to be_valid
         expect(project.contributor_agreement_url).to eq("http://foo.com")
       end

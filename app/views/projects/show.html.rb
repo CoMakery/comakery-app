@@ -43,7 +43,11 @@ class Views::Projects::Show < Views::Base
           }
           row {
             column("medium-5 small-12") {
-              div(class: "project-image", style: "background-image: url(#{attachment_url(project, :image)})") {}
+              div(class: "project-image", style: "background-image: url(#{attachment_url(project, :image)})") {
+                if project.video_url
+                  iframe(width: "454", height: "304", src: "http://www.youtube.com/embed/#{project.youtube_id}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0", frameborder: "0")
+                end
+              }
             }
             column("medium-7 small-12") {
               full_row {
@@ -82,9 +86,19 @@ class Views::Projects::Show < Views::Base
 
                 column("medium-7 small-12") {
                   if project.slack_team_domain
-                    a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") {
-                      i(class: "fa fa-slack")
-                      text " Project Slack Channel"
+                    div {
+                      a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") {
+                        i(class: "fa fa-slack")
+                        text " Project Slack Channel"
+                      }
+                    }
+                  end
+                  if project.video_url
+                    div {
+                      a(href: project.video_url, target: "_blank", class: "text-link") {
+                        i(class: "fa fa-youtube")
+                        text " Video"
+                      }
                     }
                   end
                 }

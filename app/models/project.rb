@@ -18,6 +18,7 @@ class Project < ActiveRecord::Base
 
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
+  validate :valid_video_url, if: -> { video_url.present? }
 
   validate :maximum_coins_unchanged, if: -> { !new_record? }
 
@@ -57,6 +58,18 @@ class Project < ActiveRecord::Base
     description.presence&.gsub(/\r/, '')&.split(/\n{2,}/) || []
   end
 
+  def youtube_id
+    # taken from http://stackoverflow.com/questions/5909121/converting-a-regular-youtube-link-into-an-embedded-video
+    # Regex from # http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
+    if video_url[/youtu\.be\/([^\?]*)/]
+      youtube_id = $1
+    else
+      video_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
+      youtube_id = $5
+    end
+    youtube_id
+  end
+
   private
 
   def valid_tracker_url
@@ -67,12 +80,20 @@ class Project < ActiveRecord::Base
     validate_url(:contributor_agreement_url)
   end
 
+  def valid_video_url
+    validate_url(:video_url)
+    return if errors[:video_url].present?
+
+    errors[:video_url] << "must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'" unless youtube_id.present?
+  end
+
   def validate_url(attribute_name)
     uri = URI.parse(self.send(attribute_name) || "")
   rescue URI::InvalidURIError
     uri = nil
   ensure
     errors[attribute_name] << "must be a valid url" unless uri&.absolute?
+    uri
   end
 
   def maximum_coins_unchanged

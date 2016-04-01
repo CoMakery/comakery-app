@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160401010539) do
+ActiveRecord::Schema.define(version: 20160401182851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 20160401010539) do
     t.string   "slack_team_image_132_url"
     t.integer  "maximum_coins",             default: 0,     null: false
     t.text     "contributor_agreement_url"
+    t.text     "video_url"
   end
 
   add_index "projects", ["owner_account_id"], name: "index_projects_on_owner_account_id", using: :btree

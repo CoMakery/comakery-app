@@ -112,6 +112,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     fill_in "Title", with: "This is an edited project"
     fill_in "Description", with: "This is an edited project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
+    fill_in "Video", with: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
     fill_in "Contributor Agreement", with: "https://docusign.com/project_contributor_agreement.pdf"
     uncheck "Set project as public"
 
@@ -131,6 +132,8 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "Visibility: Private"
     expect(page).to have_link "Project Tasks"
     expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com"
+    expect(page.all(".project-image iframe").size).to eq(1)
+    expect(page).to have_link "Video", href: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
     expect(page).to have_link "Contributor Agreement", href: "https://docusign.com/project_contributor_agreement.pdf"
 
     award_type_inputs = get_award_type_rows

@@ -60,6 +60,14 @@ module Views
                   f.text_field :contributor_agreement_url, placeholder: "https://docusign.com"
                 }
               }
+              with_errors(project, :video_url) {
+                label {
+                  i(class: "fa fa-youtube")
+                  text " Video "
+                  question_tooltip("A video url representing your project. Must be a Youtube url.")
+                  f.text_field :video_url, placeholder: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
+                }
+              }
               with_errors(project, :image) {
                 label {
                   text "Project Image "
