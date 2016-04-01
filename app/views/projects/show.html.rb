@@ -79,7 +79,7 @@ class Views::Projects::Show < Views::Base
                 if project.contributor_agreement_url
                   column("medium-4 small-12") {
                     a(href: project.contributor_agreement_url, target: "_blank", class: "text-link") do
-                      i(class: "fa fa-file-text")
+                      i(class: "fa fa-gavel")
                       text " Contributor Agreement"
                     end
                   }
