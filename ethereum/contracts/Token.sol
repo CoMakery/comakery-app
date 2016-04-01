@@ -32,6 +32,7 @@ contract Token {
     if (balances[_to] + _value < balances[_to]) throw;  // Check for overflows
     balances[msg.sender] -= _value;                     // Subtract from the sender
     balances[_to] += _value;                            // Add the same to the recipient
+    /*return balances[_to];*/
     /*Transfer(msg.sender, _to, _value);                   // Notify anyone listening that this transfer took place*/
   }
 

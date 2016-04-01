@@ -21,6 +21,7 @@
 /coverage
 
 # Ethereum
+/ethereum/environments/*/build/*
 /ethereum/environments/*/contracts/*.sol.js
 /ethereum/node_modules/
 
@@ -31,4 +32,4 @@
 .DS_Store
 junk.txt
 junk.rb
-scratch.txt
+scratch.md
