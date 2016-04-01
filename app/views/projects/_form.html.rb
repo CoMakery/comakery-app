@@ -55,7 +55,8 @@ module Views
               }
               with_errors(project, :contributor_agreement_url) {
                 label {
-                  text "Contributor Agreement"
+                  i(class: "fa fa-gavel")
+                  text " Contributor Agreement"
                   f.text_field :contributor_agreement_url, placeholder: "https://docusign.com"
                 }
               }
