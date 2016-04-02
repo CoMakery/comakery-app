@@ -28,4 +28,4 @@ deployment:
   autodeploy:
     branch: master
     commands:
-      - bin/deploy comakery-staging $CIRCLE_SHA1
+      - bin/deploy staging $CIRCLE_SHA1
