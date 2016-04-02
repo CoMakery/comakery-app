@@ -161,7 +161,7 @@ class Views::Projects::Show < Views::Base
               award_data[:contributions].each do |contributor|
                 row {
                   column("small-5") {
-                    img(src: contributor[:avatar], class: "icon")
+                    img(src: contributor[:avatar], class: "icon avatar-img")
                     div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
                   }
                   column("small-4") {

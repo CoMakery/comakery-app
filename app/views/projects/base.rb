@@ -54,7 +54,7 @@ class Views::Projects::Base < Views::Base
               "#{contributor.display_name} - Project Owner#{contributor.respond_to?(:total_awarded) ? " - #{contributor.total_awarded.to_i} coins" : ""}" :
               "#{contributor.display_name} - #{contributor.total_awarded.to_i} coins"
             tooltip(tooltip) {
-              img(src: contributor.slack_icon, class: "contributor")
+              img(src: contributor.slack_icon, class: "contributor avatar-img")
             }
           end
         }
