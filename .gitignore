@@ -23,6 +23,7 @@
 # Ethereum
 /ethereum/environments/*/build/*
 /ethereum/environments/*/contracts/*.sol.js
+!/ethereum/environments/production/contracts/*.sol.js
 /ethereum/node_modules/
 
 # Others
