@@ -72,7 +72,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "Slack Channel can't be blank"
 
     fill_in "Title", with: "This is a project"
-    select "a channel name", from: "Slack Channel"
+    select "a-channel-name", from: "Slack Channel"
 
     click_on "Save"
 
@@ -131,7 +131,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
     expect(page).to have_content "This is an edited project description which is very informative"
     expect(page).to have_content "Visibility: Private"
     expect(page).to have_link "Project Tasks"
-    expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com"
+    expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com/messages/a-channel-name"
     expect(page.all(".project-image iframe").size).to eq(1)
     expect(page).to have_link "Video", href: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
     expect(page).to have_link "Contributor Agreement", href: "https://docusign.com/project_contributor_agreement.pdf"
@@ -168,7 +168,7 @@ describe "viewing projects, creating and editing", :js, :vcr do
   end
 
   describe "removing award types on projects where there have been awards sent already" do
-    let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false, slack_channel: "a channel name") }
+    let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false, slack_channel: "a-channel-name") }
     before { login(account) }
 
     let!(:award_type) { create(:award_type, project: project, name: "Big ol' award", amount: 40000, community_awardable: false) }
