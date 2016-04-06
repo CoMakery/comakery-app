@@ -7,7 +7,8 @@ class Views::Shared::Awards < Views::Base
         column("small-2") { div(class: "header") { text "Submitted" } }
         column("small-2") { div(class: "header") { text "Award" } }
         column("small-2") { div(class: "header") { text "Recipient" } } if show_recipient
-        column("small-4") { div(class: "header") { text "Contribution" } }
+        column("small-2") { div(class: "header") { text "Award Type" } }
+        column("small-2") { div(class: "header") { text "Description" } }
         column("small-2") { div(class: "header") { text "Sender" } }
         column("small-2") { div(class: "header") {} } unless show_recipient
       }
@@ -24,8 +25,10 @@ class Views::Shared::Awards < Views::Base
               text award.recipient_display_name
             }
           end
-          column("small-4") {
+          column("small-2") {
             div award.award_type.name
+          }
+          column("small-2") {
             div(class: "text-gray") { text award.description }
           }
           column("small-2") {
