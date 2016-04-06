@@ -50,7 +50,7 @@ module Views
                 label {
                   i(class: "fa fa-tasks")
                   text " Project Tracker"
-                  f.text_field :tracker, placeholder: "https://pivotaltracker.com"
+                  f.text_field :tracker, placeholder: "https://trello.com/my-project"
                 }
               }
               with_errors(project, :contributor_agreement_url) {

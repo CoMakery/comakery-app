@@ -20,7 +20,7 @@ describe "Collaborator projects", :vcr do
     fill_in "Title", with: "Super title"
     fill_in "Description", with: "This is a project description which is very informative"
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
-    select "a channel name", from: "Slack Channel"
+    select "a-channel-name", from: "Slack Channel"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)

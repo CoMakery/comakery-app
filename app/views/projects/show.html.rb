@@ -87,7 +87,7 @@ class Views::Projects::Show < Views::Base
                 column("medium-7 small-12") {
                   if project.slack_team_domain
                     div {
-                      a(href: "https://#{project.slack_team_domain}.slack.com", target: "_blank", class: "text-link") {
+                      a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: "_blank", class: "text-link") {
                         i(class: "fa fa-slack")
                         text " Project Slack Channel"
                       }

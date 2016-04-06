@@ -42,6 +42,6 @@ module SlackStubs
   end
 
   def stub_slack_channel_list
-    stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a channel name", num_members: 3}]}.to_json)
+    stub_request(:post, "https://slack.com/api/channels.list").to_return(body: {ok: true, channels: [{id: "channel id", name: "a-channel-name", num_members: 3}]}.to_json)
   end
 end
