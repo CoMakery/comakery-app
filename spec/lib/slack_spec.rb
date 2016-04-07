@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Comakery::Slack, :vcr do
+describe Comakery::Slack do
   let!(:recipient) { create(:account) }
   let!(:recipient_authentication) { create(:authentication, account: recipient) }
   let!(:sender_authentication) { create :authentication, slack_token: 'xyz', slack_team_id: 'a team' }

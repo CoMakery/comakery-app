@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "Collaborator projects", :vcr do
+describe "Collaborator projects" do
   let!(:owner) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account: a, slack_team_id: "citizencode", slack_user_name: "owner", slack_first_name: "owner", slack_last_name: "owner", slack_user_id: "owner_id") } }
   let!(:collab1) { create(:account, email: "collab1@example.com").tap { |a| create(:authentication, account: a, slack_team_id: "citizencode", slack_user_name: "collab1", slack_first_name: "collab1", slack_last_name: "collab1", slack_user_id: "collab1") } }
   let!(:collab2) { create(:account, email: "collab2@example.com").tap { |a| create(:authentication, account: a, slack_team_id: "citizencode", slack_user_name: "collab2", slack_first_name: "collab2", slack_last_name: "collab2", slack_user_id: "collab2") } }

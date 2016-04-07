@@ -444,7 +444,6 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
-    vcr (3.0.1)
     web-console (3.1.1)
       activemodel (>= 4.2)
       debug_inspector
@@ -524,7 +523,6 @@ DEPENDENCIES
   typhoeus
   uglifier
   underscore-rails
-  vcr
   web-console
   webmock
   xray-rails

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "viewing projects, creating and editing", :js, :vcr do
+describe "viewing projects, creating and editing", :js do
   let!(:account) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_team_image_34_url: "https://slack.example.com/awesome-team-image-34-px.jpg", slack_user_name: 'gleenn', slack_first_name: "Glenn", slack_last_name: "Spanky", slack_team_domain: "citizencodedomain") } }
   let!(:swarmbot_owner_account) { create(:account, email: "swarm@example.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "swarmbot", slack_team_name: "Citizen Code", slack_team_image_34_url: "https://slack.example.com/swarmbot-team-image-34-px.jpg", slack_user_name: 'swarmy', slack_first_name: "Swarm", slack_last_name: "Bot", slack_team_domain: "swarmbot") } }
 

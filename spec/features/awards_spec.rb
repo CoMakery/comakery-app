@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "viewing projects, creating and editing", :js, :vcr do
+describe "viewing projects, creating and editing", :js do
   context "when not owner" do
     let!(:owner) { create(:account) }
     let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: "foo", slack_image_32_url: "http://avatar.com/owner.jpg") }

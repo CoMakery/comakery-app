@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "viewing projects, creating and editing", :js, :vcr do
+describe "viewing projects, creating and editing", :js do
   let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false) }
   let!(:public_project) { create(:project, title: "Public Project", description: "dogs with donuts", owner_account: account, slack_team_id: "citizencode", public: true) }
   let!(:public_project_award_type) { create(:award_type, project: public_project) }

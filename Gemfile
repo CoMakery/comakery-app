@@ -37,7 +37,6 @@ gem 'underscore-rails'
 
 group(:test) do
   gem 'webmock'
-  gem 'vcr'
 end
 
 group(:development, :test) do
