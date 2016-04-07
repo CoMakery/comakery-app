@@ -45,7 +45,7 @@ class Views::Projects::Show < Views::Base
             column("medium-5 small-12") {
               div(class: "project-image", style: "background-image: url(#{attachment_url(project, :image)})") {
                 if project.video_url
-                  iframe(width: "454", height: "304", src: "http://www.youtube.com/embed/#{project.youtube_id}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0", frameborder: "0")
+                  iframe(width: "454", height: "304", src: "//www.youtube.com/embed/#{project.youtube_id}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0", frameborder: "0")
                 end
               }
             }
