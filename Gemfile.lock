@@ -49,6 +49,9 @@ GEM
     airbrake (4.3.6)
       builder
       multi_json
+    annotate (2.6.5)
+      activerecord (>= 2.3.0)
+      rake (>= 0.8.7)
     arel (6.0.3)
     awesome_print (1.6.1)
     aws-sdk (2.2.26)
@@ -467,6 +470,7 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake (< 5)
+  annotate
   awesome_print
   brakeman
   capybara
