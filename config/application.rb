@@ -50,5 +50,7 @@ module Comakery
       config.action_controller.asset_host = cloudfront_host
       config.font_assets.origin = "http://#{ENV['APP_HOST']}"
     end
+
+    config.allow_missing_ethereum_bridge = false
   end
 end

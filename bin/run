@@ -1,0 +1,2 @@
+bundle check || bundle install
+rerun --dir config --dir app/jobs -- foreman start

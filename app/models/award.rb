@@ -19,6 +19,21 @@ class Award < ActiveRecord::Base
 
   validates_presence_of :authentication, :issuer, :award_type
 
+  after_create :ethereum_token_transfer
+
+  def ethereum_token_transfer
+    contract_address = award_type.project.ethereum_contract_address
+    recipient_address = authentication.account.ethereum_wallet
+
+    if contract_address.present? && recipient_address.present?
+      EthereumTokenTransferJob.perform_async(self.id, {
+        contractAddress: contract_address,
+        recipient: recipient_address,
+        amount: award_type.amount
+      })
+    end
+  end
+
   def issuer_display_name
     issuer.authentications.find_by(slack_team_id: slack_team_id)&.display_name
   end

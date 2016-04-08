@@ -53,6 +53,8 @@ class Project < ActiveRecord::Base
 
   validate :maximum_coins_unchanged, if: -> { !new_record? }
 
+  after_create :create_ethereum_contract
+
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<("max(awards.created_at) as last_award_created_at").join(","))
         .joins("left join award_types on projects.id = award_types.project_id")
@@ -71,6 +73,10 @@ class Project < ActiveRecord::Base
 
   def self.public
     where(public: true)
+  end
+
+  def create_ethereum_contract
+    EthereumTokenContractJob.perform_async self.id
   end
 
   def community_award_types
@@ -128,6 +134,8 @@ class Project < ActiveRecord::Base
   end
 
   def maximum_coins_unchanged
-    errors[:maximum_coins] << "can't be changed" unless maximum_coins_was == maximum_coins
+    if maximum_coins_was > 0 and maximum_coins_was != maximum_coins
+      errors[:maximum_coins] << "can't be changed"
+    end
   end
 end

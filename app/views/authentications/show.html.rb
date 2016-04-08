@@ -41,7 +41,8 @@ class Views::Authentications::Show < Views::Base
             text ")"
           }
           column("small-9") {
-            link_to authentication.account.ethereum_wallet, "https://www.etherchain.org/account/#{authentication.account.ethereum_wallet}", target: "_blank"
+            # link_to authentication.account.ethereum_wallet, "https://www.etherchain.org/account/#{authentication.account.ethereum_wallet}", target: "_blank"
+            text authentication.account.ethereum_wallet
           }
         }
       }

@@ -82,6 +82,14 @@ class Views::Projects::Show < Views::Base
                       }
                     }
                   end
+
+                  if project.ethereum_contract_address
+                    div {
+                      a(href: "https://morden.ether.camp/account/#{project.ethereum_contract_address}", target: "_blank", class: "text-link") {
+                        text "Ξthereum Smart Contract"
+                      }
+                    }
+                  end
                 }
 
                 column("medium-7 small-12") {

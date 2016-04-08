@@ -45,7 +45,7 @@ describe "awarding users" do
     travel_back
   end
 
-  describe "awarding a user which swarmbot doesn't have an account for yet" do
+  describe "awarding a user which we don't have an account for yet" do
     it "populates the dropdown to select the awardee and creates the account/auth for the user" do
       login(owner_account)
 
@@ -135,6 +135,7 @@ describe "awarding users" do
     expect(page).to have_content "Award History"
     expect(page).to have_content "Feb 29"
     expect(page).to have_content "1,000"
+    expect(page).to have_content "(pending)"
     expect(page).to have_content "Small"
     expect(page).to have_content "Super fantastic fabulous programatic work on teh things, A++"
     expect(page).to have_content "@bobjohnson"

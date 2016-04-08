@@ -4,8 +4,9 @@ class Views::Shared::Awards < Views::Base
   def content
     div(class: "award-rows") {
       row(class: "header-row") {
-        column("small-2") { div(class: "header") { text "Submitted" } }
-        column("small-2") { div(class: "header") { text "Award" } }
+        column("small-1") { div(class: "header") { text "Submitted" } }
+        column("small-1") { div(class: "header") { text "Award" } }
+        column("small-2") { div(class: "header") { text "Blockchain Transaction" } }
         column("small-2") { div(class: "header") { text "Recipient" } } if show_recipient
         column("small-2") { div(class: "header") { text "Award Type" } }
         column("small-2") { div(class: "header") { text "Description" } }
@@ -14,11 +15,21 @@ class Views::Shared::Awards < Views::Base
       }
       awards.sort_by(&:created_at).reverse.each do |award|
         row(class: "award-row") {
-          column("small-2") {
-            text award.created_at.strftime("%b %d, %Y")
+          column("small-1") {
+            text raw award.created_at.strftime("%b %d, %Y").gsub(' ', '&nbsp;')
+          }
+          column("small-1") {
+            text number_with_delimiter(award.award_type.amount, :delimiter => ',')
           }
           column("small-2") {
-            text number_with_delimiter(award.award_type.amount, :delimiter => ',')
+            if award.ethereum_transaction_address
+              link_to "#{award.ethereum_transaction_address[0...10]}...",
+                # "https://live.ether.camp/transaction/#{award.ethereum_transaction_address}",
+                "https://morden.ether.camp/transaction/#{award.ethereum_transaction_address}",
+                target: '_blank'
+            else
+              text '(pending)'
+            end
           }
           if show_recipient
             column("small-2") {

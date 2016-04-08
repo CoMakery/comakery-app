@@ -6,12 +6,12 @@ gem 'annotate'
 gem 'coffee-rails'
 gem 'compass-rails'
 gem "d3-rails"
-gem 'faye-websocket'  # used by slack-ruby-client for concurrency
 gem "font-awesome-rails"
 gem 'fortitude', git: "https://github.com/ageweke/fortitude.git", ref: '3de1286652874506802a75befde0f11d79a0ec67'  # change when gem released
 gem 'foundation-icons-sass-rails'
 gem 'foundation-rails'
 gem 'font_assets'
+gem 'httparty'
 gem 'interactor'
 gem 'jquery-rails'
 gem "nilify_blanks"
@@ -31,14 +31,12 @@ gem "refile-mini_magick"
 gem "refile-s3"
 gem 'responders'
 gem 'sass-rails'
+gem 'sinatra', :require => nil  # for sidekiq admin interface
 gem 'sdoc',          group: :doc
+gem 'sidekiq'
 gem 'slack-ruby-client'
 gem 'uglifier'
 gem 'underscore-rails'
-
-group(:test) do
-  gem 'webmock'
-end
 
 group(:development, :test) do
   gem 'awesome_print'
@@ -52,6 +50,7 @@ group(:development, :test) do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rack_session_access'
+  gem 'rerun'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'simplecov'
@@ -63,6 +62,7 @@ group(:development) do
   gem 'easy_shell'
   gem 'git-storyid'
   # gem 'html2fortitude'  # requires old ruby_parser, try global "gem install html2fortitude" instead
+  gem 'foreman'
   gem 'letter_opener'
   gem 'meta_request'
   gem 'pivotal_git_scripts'
@@ -71,4 +71,8 @@ group(:development) do
   gem 'spring'
   gem 'web-console'
   gem 'xray-rails'
+end
+
+group(:test) do
+  gem 'webmock'
 end

@@ -1,0 +1,6 @@
+---
+  :verbose: true
+  :concurrency: 1
+  :queues:
+    - [create_contract, 3]
+    - [transaction, 1]

@@ -1,5 +1,9 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+
   namespace :admin do
+    mount Sidekiq::Web => '/sidekiq'#, constraints: AdminRequiredConstraint.new
     get '/' => 'admin#index'
     resources :accounts
     get '/metrics' => 'metrics#index'

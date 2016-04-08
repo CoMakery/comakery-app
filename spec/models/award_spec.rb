@@ -15,6 +15,10 @@
 require 'rails_helper'
 
 describe Award do
+  before do
+    allow(Comakery::Ethereum).to receive(:token_transfer) { }
+  end
+
   describe "associations" do
     it "has stuff" do
       Award.create!(authentication: create(:authentication), issuer: create(:account), award_type: create(:award_type))
