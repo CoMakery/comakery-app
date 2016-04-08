@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160401182851) do
+ActiveRecord::Schema.define(version: 20160407031909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,12 +82,13 @@ ActiveRecord::Schema.define(version: 20160401182851) do
   end
 
   create_table "awards", force: :cascade do |t|
-    t.integer  "issuer_id",         null: false
+    t.integer  "issuer_id",                    null: false
     t.text     "description"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.integer  "award_type_id",     null: false
-    t.integer  "authentication_id", null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "award_type_id",                null: false
+    t.integer  "authentication_id",            null: false
+    t.string   "ethereum_transaction_address"
   end
 
   create_table "beta_signups", force: :cascade do |t|
@@ -116,6 +117,7 @@ ActiveRecord::Schema.define(version: 20160401182851) do
     t.integer  "maximum_coins",             default: 0,     null: false
     t.text     "contributor_agreement_url"
     t.text     "video_url"
+    t.string   "ethereum_contract_address"
   end
 
   add_index "projects", ["owner_account_id"], name: "index_projects_on_owner_account_id", using: :btree

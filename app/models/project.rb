@@ -1,3 +1,34 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  contributor_agreement_url :text
+#  created_at                :datetime         not null
+#  description               :text
+#  ethereum_contract_address :string
+#  id                        :integer          not null, primary key
+#  image_id                  :string
+#  maximum_coins             :integer          default("0"), not null
+#  owner_account_id          :integer          not null
+#  public                    :boolean          default("false"), not null
+#  slack_channel             :string
+#  slack_team_domain         :string
+#  slack_team_id             :string           not null
+#  slack_team_image_132_url  :string
+#  slack_team_image_34_url   :string
+#  slack_team_name           :string
+#  title                     :string           not null
+#  tracker                   :string
+#  updated_at                :datetime         not null
+#  video_url                 :text
+#
+# Indexes
+#
+#  index_projects_on_owner_account_id          (owner_account_id)
+#  index_projects_on_public                    (public)
+#  index_projects_on_slack_team_id_and_public  (slack_team_id,public)
+#
+
 class Project < ActiveRecord::Base
   include SlackDomainable
   nilify_blanks

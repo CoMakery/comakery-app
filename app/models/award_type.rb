@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: award_types
+#
+#  amount              :integer          not null
+#  community_awardable :boolean          default("false"), not null
+#  created_at          :datetime         not null
+#  id                  :integer          not null, primary key
+#  name                :string           not null
+#  project_id          :integer          not null
+#  updated_at          :datetime         not null
+#
+
 class AwardType < ActiveRecord::Base
   belongs_to :project
   has_many :awards, dependent: :restrict_with_exception

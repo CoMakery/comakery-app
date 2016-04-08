@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: beta_signups
+#
+#  email_address  :string           not null
+#  id             :integer          not null, primary key
+#  name           :string
+#  oauth_response :jsonb
+#  opt_in         :boolean          default("false"), not null
+#  slack_instance :string
+#
+
 require 'rails_helper'
 
 describe BetaSignup do

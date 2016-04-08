@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: roles
+#
+#  created_at :datetime
+#  id         :integer          not null, primary key
+#  key        :string           not null
+#  name       :string           not null
+#  updated_at :datetime
+#
+
 class Role < ActiveRecord::Base
   has_many :account_roles, dependent: :destroy
   has_many :accounts, through: :account_roles

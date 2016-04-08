@@ -1,3 +1,30 @@
+# == Schema Information
+#
+# Table name: authentications
+#
+#  account_id               :integer          not null
+#  created_at               :datetime
+#  id                       :integer          not null, primary key
+#  oauth_response           :jsonb
+#  provider                 :string           not null
+#  slack_first_name         :string
+#  slack_image_32_url       :string
+#  slack_last_name          :string
+#  slack_team_domain        :string
+#  slack_team_id            :string           not null
+#  slack_team_image_132_url :string
+#  slack_team_image_34_url  :string
+#  slack_team_name          :string           not null
+#  slack_token              :string
+#  slack_user_id            :string           not null
+#  slack_user_name          :string           not null
+#  updated_at               :datetime
+#
+# Indexes
+#
+#  index_authentications_on_slack_team_id  (slack_team_id)
+#
+
 require 'rails_helper'
 
 describe Authentication do
