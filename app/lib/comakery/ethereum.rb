@@ -2,6 +2,8 @@ class Comakery::Ethereum
 
   class << self
 
+    TIMEOUT = 10.minutes
+
     def token_contract
       ethereum_bridge = ENV['ETHEREUM_BRIDGE'].presence
       return if ethereum_bridge.nil? && Comakery::Application.config.allow_missing_ethereum_bridge
@@ -10,7 +12,7 @@ class Comakery::Ethereum
       url = URI.join ethereum_bridge, "project"
       headers = { 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
 
-      response = HTTParty.post url, body: {}.to_json, headers: headers
+      response = HTTParty.post url, body: {}.to_json, headers: headers, timeout: TIMEOUT
 
       begin
         return response.parsed_response.fetch('contractAddress')
@@ -31,7 +33,7 @@ class Comakery::Ethereum
 
       url = URI.join ethereum_bridge, "token_transfer"
       headers = { 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
-      response = HTTParty.post url, body: args.to_json, headers: headers
+      response = HTTParty.post url, body: args.to_json, headers: headers, timeout: TIMEOUT
 
       begin
         return response.parsed_response.fetch('transactionId')
