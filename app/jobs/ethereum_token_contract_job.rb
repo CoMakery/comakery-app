@@ -4,6 +4,7 @@ class EthereumTokenContractJob
 
   def perform project_id
     project = Project.find project_id
-    project.update! ethereum_contract_address: Comakery::Ethereum.token_contract
+    ethereum_contract_address = Comakery::Ethereum.token_contract(maxSupply: project.maximum_coins)
+    project.update! ethereum_contract_address: ethereum_contract_address
   end
 end
