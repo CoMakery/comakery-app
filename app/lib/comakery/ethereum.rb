@@ -4,7 +4,7 @@ class Comakery::Ethereum
 
     TIMEOUT = 10.minutes
 
-    def token_contract
+    def token_contract args
       ethereum_bridge = ENV['ETHEREUM_BRIDGE'].presence
       return if ethereum_bridge.nil? && Comakery::Application.config.allow_missing_ethereum_bridge
       raise("please set env var ETHEREUM_BRIDGE") unless ethereum_bridge
@@ -12,7 +12,7 @@ class Comakery::Ethereum
       url = URI.join ethereum_bridge, "project"
       headers = { 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
 
-      response = HTTParty.post url, body: {}.to_json, headers: headers, timeout: TIMEOUT
+      response = HTTParty.post url, body: args.to_json, headers: headers, timeout: TIMEOUT
 
       begin
         return response.parsed_response.fetch('contractAddress')
