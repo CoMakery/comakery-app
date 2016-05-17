@@ -13,9 +13,9 @@ class Views::Projects::Landing < Views::Projects::Base
           div(class:"overlay2") {}
           div(class:"intro-content") {
             h3 {
-              text "equity at the speed"
+              text "Collaborate freely and"
               br
-              text "of innovation"
+              text "be rewarded"
             }
             a("Sign in with Slack", class: buttonish << "margin-small", href: login_path)
           }
