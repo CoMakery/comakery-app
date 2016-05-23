@@ -16,7 +16,7 @@ require 'rails_helper'
 
 describe Award do
   before do
-    allow(Comakery::Ethereum).to receive(:token_transfer) { }
+    allow(Comakery::Ethereum).to receive(:token_issue) { }
   end
 
   describe "associations" do

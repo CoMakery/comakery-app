@@ -26,12 +26,12 @@ class Comakery::Ethereum
       end
     end
 
-    def token_transfer args
+    def token_issue args
       ethereum_bridge = ENV['ETHEREUM_BRIDGE'].presence
       return if ethereum_bridge.nil? && Comakery::Application.config.allow_missing_ethereum_bridge
       raise("please set env var ETHEREUM_BRIDGE") unless ethereum_bridge
 
-      url = URI.join ethereum_bridge, "token_transfer"
+      url = URI.join ethereum_bridge, "token_issue"
       headers = { 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
       response = HTTParty.post url, body: args.to_json, headers: headers, timeout: TIMEOUT
 

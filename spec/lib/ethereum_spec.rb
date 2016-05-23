@@ -26,10 +26,10 @@ describe Comakery::Ethereum do
     end
   end
 
-  describe "#token_transfer" do
+  describe "#token_issue" do
 
     it "should call out to the expected server" do
-      stub_request(:post, "https://eth.example.com/token_transfer")
+      stub_request(:post, "https://eth.example.com/token_issue")
         .with(body: hash_including({
           contractAddress: '0xcccccccccccccccccccccccccccccccccccccccc',
           recipient:       '0x2222222222222222222222222222222222222222',
@@ -39,7 +39,7 @@ describe Comakery::Ethereum do
           headers: {'Content-Type': 'application/json'},
           body: {transactionId: '0x9999999999999999999999999999999999999999'}.to_json
         )
-      transactionId = Comakery::Ethereum.token_transfer(
+      transactionId = Comakery::Ethereum.token_issue(
         contractAddress: '0xcccccccccccccccccccccccccccccccccccccccc',
         recipient: '0x2222222222222222222222222222222222222222',
         amount: 100
