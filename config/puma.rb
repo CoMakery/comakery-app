@@ -2,8 +2,8 @@
 # Heroku gives 20 DB connections. Each thread requires a connection.
 # Each process has its own connection pool, so if you have 2 workers, don't have DB_POOL > 10.
 # If you are using Sucker Punch for background jobs, keep some extra connections in the pool for worker threads to use.
-workers Integer(ENV['PUMA_WORKERS'] || 2)
-threads Integer(ENV['MIN_THREADS']  || 5), Integer(ENV['MAX_THREADS'] || 5)
+workers Integer(ENV['PUMA_WORKERS'] || 1)
+threads Integer(ENV['MIN_THREADS']  || 1), Integer(ENV['MAX_THREADS'] || 2)
 
 preload_app!
 
@@ -18,7 +18,7 @@ on_worker_boot do
   ActiveSupport.on_load(:active_record) do
     config = ActiveRecord::Base.configurations[Rails.env] ||
                 Rails.application.config.database_configuration[Rails.env]
-    config['pool'] = Integer(ENV['MAX_THREADS'] || 5)
+    config['pool'] = Integer(ENV['MAX_THREADS'] || 2)
     ActiveRecord::Base.establish_connection(config)
   end
 end
