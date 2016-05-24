@@ -52,5 +52,7 @@ module Comakery
     end
 
     config.allow_missing_ethereum_bridge = false
+
+    config.active_record.raise_in_transactional_callbacks = true
   end
 end
