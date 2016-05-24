@@ -19,7 +19,7 @@ class Comakery::Ethereum
       rescue => error
         message = "Error received: #{response.parsed_response.inspect}
           From request to: #{url}
-          with params: #{JSON.pretty_generate body}
+          with params: #{JSON.pretty_generate args}
         "
         Airbrake.notify(Exception.new(message))
         nil
@@ -40,7 +40,7 @@ class Comakery::Ethereum
       rescue => error
         message = "Error received: #{response.parsed_response.inspect}
           From request to: #{url}
-          with params: #{JSON.pretty_generate body}
+          with params: #{JSON.pretty_generate args}
         "
         Airbrake.notify(Exception.new(message))
         nil
