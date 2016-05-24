@@ -22,12 +22,9 @@ class Award < ActiveRecord::Base
   after_commit :ethereum_token_issue, on: :create
 
   def ethereum_token_issue
-    contract_address = award_type.project.ethereum_contract_address
     recipient_address = authentication.account.ethereum_wallet
-
-    if contract_address.present? && recipient_address.present?
-      EthereumTokenIssueJob.perform_async(self.id, {
-        contractAddress: contract_address,
+    if recipient_address.present?
+      EthereumTokenIssueJob.perform_async(self.id, project.id, {
         recipient: recipient_address,
         amount: award_type.amount
       })
