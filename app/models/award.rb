@@ -24,7 +24,7 @@ class Award < ActiveRecord::Base
   def ethereum_token_issue
     recipient_address = authentication.account.ethereum_wallet
     if recipient_address.present?
-      EthereumTokenIssueJob.perform_async(self.id, project.id, {
+      EthereumTokenIssueJob.perform_async(self.id, award_type.project.id, {
         recipient: recipient_address,
         amount: award_type.amount
       })

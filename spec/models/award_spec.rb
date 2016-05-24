@@ -15,12 +15,9 @@
 require 'rails_helper'
 
 describe Award do
-  before do
-    allow(Comakery::Ethereum).to receive(:token_issue) { }
-  end
 
   describe "associations" do
-    it "has stuff" do
+    it do
       Award.create!(authentication: create(:authentication), issuer: create(:account), award_type: create(:award_type))
     end
   end
@@ -76,4 +73,24 @@ describe Award do
       end
     end
   end
+
+  describe "#ethereum_token_issue" do
+    let!(:award) { create :award, authentication: authentication, award_type: award_type }
+    let!(:award_type) { create :award_type, project: project, amount: award_amount }
+    let!(:award_amount) { 111 }
+    let!(:project) { create :project }
+    let!(:authentication) { create :authentication, account: account }
+    let!(:account) { create :account, ethereum_wallet: ethereum_address }
+    let!(:ethereum_address) { '0x'+'1'*40 }
+
+    it "should create a job" do
+      expect(EthereumTokenIssueJob).to receive(:perform_async).with(
+        award.id,
+        project.id,
+        { recipient: ethereum_address, amount: award_amount }
+      )
+      award.ethereum_token_issue
+    end
+  end
+
 end
