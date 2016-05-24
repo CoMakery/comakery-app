@@ -67,6 +67,7 @@ group(:development) do
   gem 'meta_request'
   gem 'pivotal_git_scripts'
   gem 'quiet_assets'
+  # gem 'rubocop', require: false
   gem 'spring-commands-rspec'
   gem 'spring'
   gem 'web-console'
