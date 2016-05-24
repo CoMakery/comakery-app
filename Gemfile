@@ -34,6 +34,7 @@ gem 'sass-rails'
 gem 'sinatra', :require => nil  # for sidekiq admin interface
 gem 'sdoc',          group: :doc
 gem 'sidekiq'
+gem 'sidekiq-failures'
 gem 'slack-ruby-client'
 gem 'uglifier'
 gem 'underscore-rails'

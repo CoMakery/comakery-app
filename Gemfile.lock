@@ -405,6 +405,8 @@ GEM
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       redis (~> 3.2, >= 3.2.1)
+    sidekiq-failures (0.4.5)
+      sidekiq (>= 2.16.0)
     simplecov (0.11.2)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -532,6 +534,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   sidekiq
+  sidekiq-failures
   simplecov
   sinatra
   slack-ruby-client
