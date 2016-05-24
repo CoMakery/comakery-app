@@ -284,4 +284,12 @@ describe Project do
       expect(project.description_paragraphs).to eq [ "foo " ]
     end
   end
+
+  describe '#create_ethereum_contract' do
+    let (:project) { create :project }
+    it "should create a job" do
+      expect(EthereumTokenContractJob).to receive(:perform_async).with(project.id)
+      project.create_ethereum_contract
+    end
+  end
 end
