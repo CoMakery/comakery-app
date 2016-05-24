@@ -13,7 +13,7 @@ fi
 HEROKU_APP="comakery-${HEROKU_ENV}"
 echo "Pushing $GIT_REF to heroku app $HEROKU_APP..."
 set -e
-git push --force git@heroku.com:$HEROKU_APP.git $GIT_REF:master
+git push --force https://git.heroku.com/$HEROKU_APP.git $GIT_REF:master
 heroku config:set GIT_REF=`git rev-parse $GIT_REF` --app $HEROKU_APP
 heroku run --exit-code rake db:migrate --app $HEROKU_APP
 heroku restart --app $HEROKU_APP || heroku restart --app $HEROKU_APP || heroku restart --app $HEROKU_APP
