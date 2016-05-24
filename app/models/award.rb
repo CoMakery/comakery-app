@@ -19,7 +19,7 @@ class Award < ActiveRecord::Base
 
   validates_presence_of :authentication, :issuer, :award_type
 
-  after_create :ethereum_token_issue
+  after_commit :ethereum_token_issue, on: :create
 
   def ethereum_token_issue
     contract_address = award_type.project.ethereum_contract_address

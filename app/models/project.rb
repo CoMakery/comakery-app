@@ -53,7 +53,7 @@ class Project < ActiveRecord::Base
 
   validate :maximum_coins_unchanged, if: -> { !new_record? }
 
-  after_create :create_ethereum_contract
+  after_commit :create_ethereum_contract, on: :create
 
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<("max(awards.created_at) as last_award_created_at").join(","))
