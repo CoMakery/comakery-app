@@ -4,18 +4,19 @@ class Comakery::Ethereum
 
     TIMEOUT = 10.minutes
 
-    def token_contract args
-      call_ethereum_bridge('project', args,'contractAddress')
+    def token_contract url_args
+      call_ethereum_bridge('project', url_args, 'contractAddress')
     end
 
-    def token_issue args
-      call_ethereum_bridge('token_issue', args,'transactionId')
+    def token_issue url_args
+      call_ethereum_bridge('token_issue', url_args, 'transactionId')
     end
 
     def call_ethereum_bridge(path, url_args, response_key)
       ethereum_bridge = ENV['ETHEREUM_BRIDGE'].presence
       return if ethereum_bridge.nil? && Comakery::Application.config.allow_missing_ethereum_bridge
       raise("please set env var ETHEREUM_BRIDGE") unless ethereum_bridge
+      raise("please set env var ETHEREUM_BRIDGE_API_KEY") unless ENV['ETHEREUM_BRIDGE_API_KEY'].present?
 
       url = URI.join ethereum_bridge, path
       headers = { 'Content-Type' => 'application/json', 'Accept' => 'application/json'}

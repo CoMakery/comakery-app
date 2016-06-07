@@ -1,17 +1,18 @@
 require 'rails_helper'
 
 describe Comakery::Ethereum do
-  # before { expect(ENV).to receive(:[]).with("ETHEREUM_BRIDGE").at_least(:once).and_return("https://eth.example.com") }
-  # before { allow(ENV).to receive(:[]).with("ETHEREUM_BRIDGE").and_return("https://eth.example.com") }
   before do
     allow(ENV).to receive(:[]) do |key|
-     if key == 'ETHEREUM_BRIDGE'
-       "https://eth.example.com"
-     elsif key == 'ETHEREUM_BRIDGE_API_KEY'
-       "abc123apikey"
-     end
+      if key == 'ETHEREUM_BRIDGE'
+        ethereum_bridge
+      elsif key == 'ETHEREUM_BRIDGE_API_KEY'
+        ethereum_bridge_api_key
+      end
     end
   end
+
+  let(:ethereum_bridge) { "https://eth.example.com" }
+  let(:ethereum_bridge_api_key) { "abc123apikey" }
 
   describe "#token_contract" do
     it "should call out to the expected server" do
@@ -27,10 +28,18 @@ describe Comakery::Ethereum do
       contractAddress = Comakery::Ethereum.token_contract(maxSupply: 101)
       expect(contractAddress).to eq '0x9999999999999999999999999999999999999999'
     end
+
+    describe "with ETHEREUM_BRIDGE_API_KEY env var unset" do
+      let(:ethereum_bridge_api_key) { nil }
+      it "should require that ETHEREUM_BRIDGE_API_KEY is set in ENV" do
+        expect {
+          Comakery::Ethereum.token_contract(maxSupply: 101)
+        }.to raise_error(/please set env var ETHEREUM_BRIDGE_API_KEY/)
+      end
+    end
   end
 
   describe "#token_issue" do
-
     it "should call out to the expected server" do
       stub_request(:post, "https://eth.example.com/token_issue")
         .with(body: hash_including({
