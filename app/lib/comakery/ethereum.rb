@@ -19,7 +19,13 @@ class Comakery::Ethereum
 
       url = URI.join ethereum_bridge, path
       headers = { 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
-      response = HTTParty.post url, body: url_args.to_json, headers: headers, timeout: TIMEOUT
+
+      url_args.merge! apiKey: ENV['ETHEREUM_BRIDGE_API_KEY']
+
+      response = HTTParty.post url,
+        body: url_args.to_json,
+        headers: headers,
+        timeout: TIMEOUT
 
       begin
         response.parsed_response.fetch(response_key)

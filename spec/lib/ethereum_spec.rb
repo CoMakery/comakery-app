@@ -7,6 +7,8 @@ describe Comakery::Ethereum do
     allow(ENV).to receive(:[]) do |key|
      if key == 'ETHEREUM_BRIDGE'
        "https://eth.example.com"
+     elsif key == 'ETHEREUM_BRIDGE_API_KEY'
+       "abc123apikey"
      end
     end
   end
@@ -15,7 +17,8 @@ describe Comakery::Ethereum do
     it "should call out to the expected server" do
       stub_request(:post, "https://eth.example.com/project")
         .with(body: hash_including({
-          maxSupply: 101
+          maxSupply: 101,
+          apiKey: 'abc123apikey'
         }))
         .to_return(
           headers: {'Content-Type': 'application/json'},
@@ -34,6 +37,7 @@ describe Comakery::Ethereum do
           contractAddress: '0xcccccccccccccccccccccccccccccccccccccccc',
           recipient:       '0x2222222222222222222222222222222222222222',
           amount: 100,
+          apiKey: 'abc123apikey'
         }))
         .to_return(
           headers: {'Content-Type': 'application/json'},
