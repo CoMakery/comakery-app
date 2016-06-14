@@ -3,7 +3,6 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
 
   namespace :admin do
-    mount Sidekiq::Web => '/sidekiq'#, constraints: AdminRequiredConstraint.new
     get '/' => 'admin#index'
     resources :accounts
     get '/metrics' => 'metrics#index'
@@ -36,4 +35,12 @@ Rails.application.routes.draw do
       get :landing
     end
   end
+
+  unless Rails.env.development? || Rails.env.test?
+    Sidekiq::Web.use Rack::Auth::Basic do |username, password|
+      username.present? && password.present? &&
+        username == ENV["SIDEKIQ_USERNAME"] && password == ENV["SIDEKIQ_PASSWORD"]
+    end
+  end
+  mount Sidekiq::Web, at: "/admin/sidekiq"
 end
