@@ -1,5 +1,8 @@
 class Comakery::Ethereum
 
+  include HTTParty
+  # debug_output $stdout # good for debugging HTTP, but logs API key :(
+
   class << self
 
     TIMEOUT = 10.minutes
@@ -23,7 +26,7 @@ class Comakery::Ethereum
 
       url_args.merge! apiKey: ENV['ETHEREUM_BRIDGE_API_KEY']
 
-      response = HTTParty.post url,
+      response = post url,
         body: url_args.to_json,
         headers: headers,
         timeout: TIMEOUT
