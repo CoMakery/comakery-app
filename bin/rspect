@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -e
 
+bin/spring stop
 QUIET_TESTS=true THOROUGH=true bin/rspec $*
