@@ -18,6 +18,7 @@ class Views::Projects::Landing < Views::Projects::Base
               text "Sweat Equity for Products"
             }
             a("Sign in with Slack", class: buttonish << "margin-small", href: login_path)
+            a("get updates", class: "beta-signup", href: 'http://eepurl.com/b9ISjX')
           }
         }
         div(class: "how-it-works") {

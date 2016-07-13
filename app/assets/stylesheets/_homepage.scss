@@ -56,6 +56,10 @@
       margin-top: .3em;
       @include box-shadow(0px 1px 1px 0px rgba(0, 0, 0, 0.3));
     }
+    .beta-signup {
+      display: block;
+      color: #aaa;
+    }
   }
 }
 
