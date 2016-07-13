@@ -1,5 +1,11 @@
 require "rails_helper"
 
+def ignore_js_errors
+  yield
+rescue Capybara::Poltergeist::JavascriptError
+  # ignore JS errors
+end
+
 describe "viewing projects, creating and editing", :js do
   let!(:project) { create(:project, title: "Cats with Lazers Project", description: "cats with lazers", owner_account: account, slack_team_id: "citizencode", public: false) }
   let!(:public_project) { create(:project, title: "Public Project", description: "dogs with donuts", owner_account: account, slack_team_id: "citizencode", public: true) }
@@ -123,11 +129,11 @@ describe "viewing projects, creating and editing", :js do
     award_type_inputs[1].find("input[name*='[community_awardable]']").set(true)
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
-    
-    click_on "Save" rescue Capybara::Poltergeist::JavascriptError
 
+    # youtube player throws js errors, ignore them:
+    ignore_js_errors { click_on "Save" }
+    ignore_js_errors { expect(page).to have_content "Project updated" }
 
-    expect(page).to have_content "Project updated"
     expect(page).to have_content "This is an edited project"
     expect(page).to have_content "This is an edited project description which is very informative"
     expect(page).to have_content "Visibility: Private"
