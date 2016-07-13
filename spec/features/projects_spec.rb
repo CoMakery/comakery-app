@@ -123,8 +123,9 @@ describe "viewing projects, creating and editing", :js do
     award_type_inputs[1].find("input[name*='[community_awardable]']").set(true)
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
+    
+    click_on "Save" rescue Capybara::Poltergeist::JavascriptError
 
-    click_on "Save"
 
     expect(page).to have_content "Project updated"
     expect(page).to have_content "This is an edited project"
