@@ -33,6 +33,12 @@ class Views::Shared::Navigation < Views::Base
             link_to 'Sign in', login_path
           }
         end
+        li {
+          a(href: '//github.com/CoMakery') { i(class: "fa fa-github") }
+        }
+        li {
+          a(href: '//twitter.com/comakery') { i(class: "fa fa-twitter") }
+        }
       }
     }
 
