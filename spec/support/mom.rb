@@ -92,6 +92,7 @@ class Mom
         authentication: authentication,
         issuer: issuer,
         description: "Great work",
+        proof_id: 'abc123'
     }
     defaults[:award_type] = create(:award_type) unless attrs[:award_type]
     Award.new(defaults.merge(attrs))

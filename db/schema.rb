@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160407031909) do
+ActiveRecord::Schema.define(version: 20160713192855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20160407031909) do
     t.integer  "award_type_id",                null: false
     t.integer  "authentication_id",            null: false
     t.string   "ethereum_transaction_address"
+    t.text     "proof_id",                     null: false
   end
 
   create_table "beta_signups", force: :cascade do |t|

@@ -9,6 +9,7 @@
 #  ethereum_transaction_address :string
 #  id                           :integer          not null, primary key
 #  issuer_id                    :integer          not null
+#  proof_id                     :text
 #  updated_at                   :datetime         not null
 #
 
@@ -17,9 +18,14 @@ class Award < ActiveRecord::Base
   belongs_to :issuer, class_name: Account
   belongs_to :award_type
 
-  validates_presence_of :authentication, :issuer, :award_type
+  validates_presence_of :proof_id, :authentication, :award_type, :issuer
 
+  before_validation :ensure_proof_id_exists
   after_commit :ethereum_token_issue, on: :create
+
+  def ensure_proof_id_exists
+    self.proof_id ||= SecureRandom.base58(44)
+  end
 
   def ethereum_token_issue
     recipient_address = authentication.account.ethereum_wallet

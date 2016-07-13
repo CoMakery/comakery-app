@@ -9,6 +9,7 @@
 #  ethereum_transaction_address :string
 #  id                           :integer          not null, primary key
 #  issuer_id                    :integer          not null
+#  proof_id                     :text
 #  updated_at                   :datetime         not null
 #
 
@@ -17,17 +18,23 @@ require 'rails_helper'
 describe Award do
 
   describe "associations" do
-    it do
-      Award.create!(authentication: create(:authentication), issuer: create(:account), award_type: create(:award_type))
+    it "has the expected associations" do
+      Award.create!(
+        authentication: create(:authentication),
+        issuer: create(:account),
+        award_type: create(:award_type),
+        proof_id: 'xyz123'
+      )
     end
   end
 
   describe "validations" do
     it "requires things be present" do
-      expect(Award.new.tap{|r|r.valid?}.errors.full_messages.sort).to eq(["Authentication can't be blank",
-                                                                           "Award type can't be blank",
-                                                                           "Issuer can't be blank",
-                                                                          ])
+      expect(Award.new.tap{|award| award.valid? }.errors.full_messages).to match_array([
+        "Authentication can't be blank",
+        "Award type can't be blank",
+        "Issuer can't be blank",
+      ])
     end
   end
 
