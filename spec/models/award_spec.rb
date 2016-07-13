@@ -82,8 +82,9 @@ describe Award do
   end
 
   describe "#ethereum_token_issue" do
-    let!(:award) { create :award, authentication: authentication, award_type: award_type }
+    let!(:award) { create :award, proof_id: proof_id, authentication: authentication, award_type: award_type }
     let!(:award_type) { create :award_type, project: project, amount: award_amount }
+    let!(:proof_id) { 'xyz12345' }
     let!(:award_amount) { 111 }
     let!(:project) { create :project }
     let!(:authentication) { create :authentication, account: account }
@@ -92,9 +93,11 @@ describe Award do
 
     it "should create a job" do
       expect(EthereumTokenIssueJob).to receive(:perform_async).with(
-        award.id,
-        project.id,
-        { recipient: ethereum_address, amount: award_amount }
+        award.id, project.id, {
+          recipient: ethereum_address,
+          amount: award_amount,
+          proofId: proof_id
+        }
       )
       award.ethereum_token_issue
     end

@@ -32,7 +32,8 @@ class Award < ActiveRecord::Base
     if recipient_address.present?
       EthereumTokenIssueJob.perform_async(self.id, award_type.project.id, {
         recipient: recipient_address,
-        amount: award_type.amount
+        amount: award_type.amount,
+        proofId: proof_id
       })
     end
   end
