@@ -24,8 +24,7 @@ class Views::Shared::Awards < Views::Base
           column("small-2") {
             if award.ethereum_transaction_address
               link_to "#{award.ethereum_transaction_address[0...10]}...",
-                # "https://live.ether.camp/transaction/#{award.ethereum_transaction_address}",
-                "https://morden.ether.camp/transaction/#{award.ethereum_transaction_address}",
+                "https://#{ENV['ETHERCAMP_SUBDOMAIN']}.ether.camp/transaction/#{award.ethereum_transaction_address}",
                 target: '_blank'
             else
               text '(pending)'

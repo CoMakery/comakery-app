@@ -85,9 +85,9 @@ class Views::Projects::Show < Views::Base
 
                   if project.ethereum_contract_address
                     div {
-                      a(href: "https://morden.ether.camp/account/#{project.ethereum_contract_address}", target: "_blank", class: "text-link") {
-                        text "Ξthereum Smart Contract"
-                      }
+                      link_to "Ξthereum Smart Contract",
+                        "https://#{ENV['ETHERCAMP_SUBDOMAIN']}.ether.camp/account/#{project.ethereum_contract_address}",
+                        target: "_blank", class: "text-link"
                     }
                   end
                 }
