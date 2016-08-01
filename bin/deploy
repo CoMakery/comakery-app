@@ -1,19 +1,19 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
+#
+# Usage: bin/deploy staging [git_ref]
 
-# Usage: bin/deploy staging [GIT_REF]
+require 'easy_shell'  # gives us `run`, which exits with error if commands fails
 
-HEROKU_ENV=$1
-GIT_REF=${2:-HEAD}
-
-if [ -z "${HEROKU_ENV}" ]; then
-  echo "Usage: bin/deploy HEROKU_ENV [GIT_REF]"
+if ARGV.empty?
+  STDERR.puts "Usage: bin/deploy staging|production|other [git_ref]"
   exit 1
-fi
+end
 
-HEROKU_APP="comakery-${HEROKU_ENV}"
-echo "Pushing $GIT_REF to heroku app $HEROKU_APP..."
-set -e
-git push --force https://git.heroku.com/$HEROKU_APP.git $GIT_REF:master
-heroku config:set GIT_REF=`git rev-parse $GIT_REF` --app $HEROKU_APP
-heroku run --exit-code rake db:migrate --app $HEROKU_APP
-heroku restart --app $HEROKU_APP || heroku restart --app $HEROKU_APP || heroku restart --app $HEROKU_APP
+heroku_env, git_ref = ARGV
+git_ref ||= 'HEAD'
+
+heroku_app="comakery-#{heroku_env}"
+run "git push --force https://git.heroku.com/#{heroku_app}.git #{git_ref}:master"
+run "heroku config:set git_ref=`git rev-parse #{git_ref}` --app #{heroku_app}"
+run "heroku run --exit-code rake db:migrate --app #{heroku_app}"
+run 5.times.map { "heroku restart --app #{heroku_app}" }.join(' || ')
