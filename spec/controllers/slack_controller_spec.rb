@@ -3,13 +3,12 @@ require 'rails_helper'
 describe SlackController do
   describe 'GET command' do
     before {
-      expect(ENV).to receive(:[]).with("APP_PROTOCOL").and_return("http://")
       expect(ENV).to receive(:[]).with("APP_HOST").and_return("comakery.museum")
     }
     it "should respond with welcome text" do
       post :command
       expect(response.body).to match %r{helps you share equity}
-      expect(response.body).to match %r{http://comakery.museum}
+      expect(response.body).to match %r{comakery.museum}
     end
   end
 end

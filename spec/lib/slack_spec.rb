@@ -12,7 +12,7 @@ describe Comakery::Slack do
 
   describe '#send_award_notifications' do
     it 'should send a notification to Slack with correct params' do
-      expected_text = "@newt received a 1337 coin Contribution for \"Great work\" on the <http://localhost:3000/projects/#{project.id}|Uber for Cats> project."
+      expected_text = "@newt received a 1337 coin Contribution for \"Great work\" on the <https://localhost:3000/projects/#{project.id}|Uber for Cats> project."
       stub_request(:post, "https://slack.com/api/chat.postMessage").
           with(body: hash_including({text: expected_text, token: "token", channel: "#super sweet slack channel", username: "CoMakery Bot", icon_url: Comakery::Slack::AVATAR, as_user: "false", link_names: "1"})).
           to_return(body: {ok: true, channel: "channel id", message: {ts: 'this is a timestamp'}}.to_json)

@@ -43,7 +43,7 @@ module Comakery
     config.action_mailer.postmark_settings = { :api_key => ENV['POSTMARK_API_KEY'] }
 
     routes.default_url_options[:host] = ENV['APP_HOST'] || "localhost:#{ENV['PORT'] || 3000}"
-    routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'] || 'http://'
+    routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'] || 'https://'
 
     cloudfront_host = ENV['CLOUDFRONT_HOST']
     if cloudfront_host.present?
