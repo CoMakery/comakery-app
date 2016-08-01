@@ -5,6 +5,7 @@ machine:
 dependencies:
   pre:
     - gem install brakeman
+    - gem install easy_shell
 
   cache_directories:
     - /home/ubuntu/.phantomjs
