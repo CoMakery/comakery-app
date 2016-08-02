@@ -1,18 +1,3 @@
-# == Schema Information
-#
-# Table name: awards
-#
-#  authentication_id            :integer          not null
-#  award_type_id                :integer          not null
-#  created_at                   :datetime         not null
-#  description                  :text
-#  ethereum_transaction_address :string
-#  id                           :integer          not null, primary key
-#  issuer_id                    :integer          not null
-#  proof_id                     :text
-#  updated_at                   :datetime         not null
-#
-
 require 'rails_helper'
 
 describe Award do

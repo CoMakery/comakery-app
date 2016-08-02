@@ -1,35 +1,3 @@
-# == Schema Information
-#
-# Table name: accounts
-#
-#  created_at                      :datetime
-#  crypted_password                :string
-#  email                           :string
-#  ethereum_wallet                 :string
-#  failed_logins_count             :integer          default("0")
-#  id                              :integer          not null, primary key
-#  last_activity_at                :datetime
-#  last_login_at                   :datetime
-#  last_login_from_ip_address      :string
-#  last_logout_at                  :datetime
-#  lock_expires_at                 :datetime
-#  remember_me_token               :string
-#  remember_me_token_expires_at    :datetime
-#  reset_password_email_sent_at    :datetime
-#  reset_password_token            :string
-#  reset_password_token_expires_at :datetime
-#  salt                            :string
-#  unlock_token                    :string
-#  updated_at                      :datetime
-#
-# Indexes
-#
-#  index_accounts_on_email                                (email) UNIQUE
-#  index_accounts_on_last_logout_at_and_last_activity_at  (last_logout_at,last_activity_at)
-#  index_accounts_on_remember_me_token                    (remember_me_token)
-#  index_accounts_on_reset_password_token                 (reset_password_token)
-#
-
 require 'rails_helper'
 
 describe Account do
