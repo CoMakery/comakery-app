@@ -76,5 +76,6 @@ group(:development) do
 end
 
 group(:test) do
+  gem 'test_after_commit'  # not needed in rails 5+
   gem 'webmock'
 end

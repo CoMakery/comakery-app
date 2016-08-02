@@ -185,6 +185,28 @@ describe Project do
     end
   end
 
+  describe "callbacks" do
+    describe "after commit: create_ethereum_contract" do
+      it "should trigger if new project is saved with ethereum_enabled = true" do
+        project = build(:project, ethereum_enabled: true)
+        expect(project).to receive(:create_ethereum_contract)
+        project.save!
+      end
+
+      it "should trigger if existing project is saved with ethereum_enabled = true" do
+        project = create(:project, ethereum_enabled: false)
+        expect(project).to receive(:create_ethereum_contract)
+        project.update!(ethereum_enabled: true)
+      end
+
+      it "should not trigger if new project is saved with ethereum_enabled = false" do
+        project = build(:project, ethereum_enabled: false)
+        expect(project).not_to receive(:create_ethereum_contract)
+        project.save!
+      end
+    end
+  end
+
   describe 'scopes' do
     describe ".with_last_activity_at" do
       it "returns projects ordered by when the most recent award created_at, then by project created_at" do
