@@ -3,5 +3,5 @@ set -e
 
 if [[ $(git status --porcelain) ]]; then echo '*** Please stash or commit changes first ***' && exit 1; fi
 bin/rspect
-brakeman --exit-on-warn
+brakeman --exit-on-warn --quiet
 git push origin HEAD
