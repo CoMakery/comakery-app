@@ -40,8 +40,16 @@ module Views
               with_errors(project, :public) {
                 label {
                   f.check_box :public
-                  text " Set project as public "
+                  text " Set project as publicly visible on CoMakery "
                   question_tooltip("Decide whether or not to display this project in the CoMakery project index")
+                }
+              }
+
+              with_errors(project, :ethereum_enabled) {
+                label {
+                  f.check_box :ethereum_enabled, disabled: project.ethereum_enabled
+                  text " Publish to Ethereum Blockchain "
+                  question_tooltip("WARING: This is irreversible. This will issue blockchain tokens for all existing and future awards for users with ethereum accounts. This information is public with anonymized account names and cannot be revoked.")
                 }
               }
             }

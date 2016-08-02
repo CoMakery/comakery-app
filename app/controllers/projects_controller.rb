@@ -90,7 +90,7 @@ class ProjectsController < ApplicationController
 
   def project_params
     params.require(:project).permit(:title, :description, :image, :tracker, :video_url, :contributor_agreement_url, :public, :slack_channel, :maximum_coins,
-                                    award_types_attributes: [:id, :name, :amount, :community_awardable, :_destroy])
+                                    :ethereum_enabled, award_types_attributes: [:id, :name, :amount, :community_awardable, :_destroy])
   end
 
   def assign_slack_channels

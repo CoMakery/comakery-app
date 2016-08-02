@@ -22,6 +22,8 @@ class Project < ActiveRecord::Base
 
   validate :maximum_coins_unchanged, if: -> { !new_record? }
 
+  validate :valid_ethereum_enabled
+
   after_commit :create_ethereum_contract, on: :create
 
   def self.with_last_activity_at
@@ -91,6 +93,12 @@ class Project < ActiveRecord::Base
     return if errors[:video_url].present?
 
     errors[:video_url] << "must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'" unless youtube_id.present?
+  end
+
+  def valid_ethereum_enabled
+    if ethereum_enabled_changed? && ethereum_enabled == false
+      errors[:ethereum_enabled] << "cannot be set to false after it has been set to true"
+    end
   end
 
   def validate_url(attribute_name)

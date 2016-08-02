@@ -32,6 +32,34 @@ describe Project do
       end
     end
 
+    describe "ethereum_enabled" do
+      let(:project) { create(:project) }
+
+      it { expect(project.ethereum_enabled).to eq(false) }
+
+      it 'can be set to true' do
+        project.ethereum_enabled = true
+        project.save!
+        project.reload
+        expect(project.ethereum_enabled).to eq(true)
+      end
+
+      it 'if set to false can be set to false' do
+        project.ethereum_enabled = false
+        project.save!
+        project.ethereum_enabled = false
+        expect(project).to be_valid
+      end
+
+      it 'once set to true it cannot be set to false' do
+        project.ethereum_enabled = true
+        project.save!
+        project.ethereum_enabled = false
+        expect(project.tap(&:valid?).errors.full_messages.first).
+          to eq("Ethereum enabled cannot be set to false after it has been set to true")
+      end
+    end
+
     describe "tracker" do
       it "is valid if tracker is a valid, absolute url" do
         project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com", maximum_coins: 10_000_000)
