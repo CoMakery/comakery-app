@@ -85,6 +85,8 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     chunky_png (1.3.5)
     cliver (0.3.2)
+    code_analyzer (0.4.5)
+      sexp_processor
     coderay (1.1.1)
     coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
@@ -320,6 +322,14 @@ GEM
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
+    rails_best_practices (1.17.0)
+      activesupport
+      code_analyzer (>= 0.4.3)
+      erubis
+      i18n
+      json
+      require_all
+      ruby-progressbar
     rails_serve_static_assets (0.0.5)
     rails_stdout_logging (0.0.4)
     railties (4.2.5.2)
@@ -345,6 +355,7 @@ GEM
     refile-s3 (0.2.0)
       aws-sdk (~> 2.0)
       refile (~> 0.6.0)
+    require_all (1.3.3)
     rerun (0.11.0)
       listen (~> 3.0)
     responders (2.1.1)
@@ -520,6 +531,7 @@ DEPENDENCIES
   rack_session_access
   rails (= 4.2.5.2)
   rails_12factor
+  rails_best_practices
   refile
   refile-mini_magick
   refile-s3

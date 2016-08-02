@@ -24,6 +24,7 @@ test:
         files:
           - spec/**/*_spec.rb
     - brakeman --exit-on-warn
+    # - rails_best_practices .
 
 deployment:
   autodeploy:
