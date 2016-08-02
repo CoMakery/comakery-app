@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 ruby '2.3.0'
 
 gem 'airbrake', '< 5'
-gem 'annotate'
 gem 'coffee-rails'
 gem 'compass-rails'
 gem "d3-rails"
