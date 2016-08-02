@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
     skip_authorization
     if current_account
       @private_projects = Project.with_last_activity_at.for_account(current_account).limit(6)
-      @public_projects = Project.with_last_activity_at.not_for_account(current_account).public.limit(6)
+      @public_projects = Project.with_last_activity_at.not_for_account(current_account).public_projects.limit(6)
     else
       @private_projects = []
       @public_projects = policy_scope(Project).with_last_activity_at.limit(6)

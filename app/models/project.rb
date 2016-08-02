@@ -41,7 +41,7 @@ class Project < ActiveRecord::Base
     where.not(slack_team_id: account&.slack_auth.slack_team_id)
   end
 
-  def self.public
+  def self.public_projects
     where(public: true)
   end
 
