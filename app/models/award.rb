@@ -9,7 +9,7 @@ class Award < ActiveRecord::Base
   after_commit :ethereum_token_issue, on: :create
 
   def ensure_proof_id_exists
-    self.proof_id ||= SecureRandom.base58(44)
+    self.proof_id ||= SecureRandom.base58(44)  # 58^44 > 2^256
   end
 
   def ethereum_token_issue
