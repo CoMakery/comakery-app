@@ -6,21 +6,24 @@ class Award < ActiveRecord::Base
   validates_presence_of :proof_id, :authentication, :award_type, :issuer
 
   before_validation :ensure_proof_id_exists
-  after_commit :ethereum_token_issue, on: :create
+  after_commit :ethereum_token_issue
 
   def ensure_proof_id_exists
     self.proof_id ||= SecureRandom.base58(44)  # 58^44 > 2^256
   end
 
   def ethereum_token_issue
-    recipient_address = authentication.account.ethereum_wallet
-    if recipient_address.present?
+    if ethereum_contract_and_account?
       EthereumTokenIssueJob.perform_async(self.id, award_type.project.id, {
         recipient: recipient_address,
         amount: award_type.amount,
         proofId: proof_id
       })
     end
+  end
+
+  def ethereum_contract_and_account?
+    award_type&.project&.ethereum_enabled && recipient_address.present?
   end
 
   def issuer_display_name
@@ -36,6 +39,10 @@ class Award < ActiveRecord::Base
   end
 
   private
+
+  def recipient_address
+    authentication&.account&.ethereum_wallet
+  end
 
   def slack_team_id
     award_type.project.slack_team_id

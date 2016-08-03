@@ -23,6 +23,17 @@ describe Award do
     end
   end
 
+  describe "callbacks" do
+    describe "after commit: ethereum_token_issue" do
+      it "should trigger for new award" do
+        award_type = create(:award_type, project: create(:project))
+        award = build(:award, award_type: award_type)
+        expect(award).to receive(:ethereum_token_issue)
+        award.save!
+      end
+    end
+  end
+
   describe "#issuer_display_name" do
     let!(:issuer) { create :account }
     let!(:project) { create :project, slack_team_id: 'reds' }
@@ -77,6 +88,7 @@ describe Award do
     let!(:ethereum_address) { '0x'+'1'*40 }
 
     it "should create a job" do
+      expect(award).to receive(:ethereum_contract_and_account?) { true }
       expect(EthereumTokenIssueJob).to receive(:perform_async).with(
         award.id, project.id, {
           recipient: ethereum_address,
@@ -86,6 +98,10 @@ describe Award do
       )
       award.ethereum_token_issue
     end
+  end
+
+  describe "#ethereum_contract_and_account?" do
+    xit "test it"
   end
 
 end
