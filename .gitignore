@@ -28,3 +28,5 @@
 .DS_Store
 junk.txt
 junk.rb
+/.tags
+/.tags[0-9]*
