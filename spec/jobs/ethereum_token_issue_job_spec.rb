@@ -6,25 +6,31 @@ describe EthereumTokenIssueJob do
   let(:recipient_address) { '0x123' }
   let(:transaction_adddress) { '0x99999' }
   let(:project) { create :project, ethereum_contract_address: contract_address }
-  let(:project_no_contract) { create :project, ethereum_contract_address: nil }
-  let(:award) { create :award }
+  let(:award_type) { create :award_type, project: project }
+  let(:award) { create :award, award_type: award_type, proof_id: '873!' }
+  # let(:award_type_with_project_no_contract) { create :award_type, project: project_no_contract }
+  # let(:award_with_project_no_contract) { create :award, award_type: award_type_with_project_no_contract }
   let(:job) { EthereumTokenIssueJob.new }
 
   it 'should return an ethereum transaction address on completion' do
+    allow_any_instance_of(Award).to receive(:ethereum_contract_and_account?) { true }
     expect(Comakery::Ethereum).to receive(:token_issue).with({
-        recipient: recipient_address,
-        amount: 101,
-        contractAddress: contract_address
+        recipient: award.recipient_address,
+        amount: award.award_type.amount,
+        contractAddress: award.award_type.project.ethereum_contract_address,
+        proofId: "873!"
       }) { transaction_adddress }
 
-    job.perform(award.id, project.id, {recipient: recipient_address, amount: 101})
+    job.perform(award.id)
 
     expect(award.reload.ethereum_transaction_address).to eq(transaction_adddress)
   end
 
   it 'should raise if there is no ethereum contract yet' do
+    project = award.award_type.project
+    project.update!(ethereum_contract_address: nil)
     expect do
-      job.perform(award.id, project_no_contract.id, {recipient: recipient_address, amount: 101})
-    end.to raise_error(ArgumentError, /no ethereum contract.*project.*#{project_no_contract.id}/i)
+      job.perform(award.id)
+    end.to raise_error(ArgumentError, /cannot issue ethereum tokens from award ##{award.id}/i)
   end
 end

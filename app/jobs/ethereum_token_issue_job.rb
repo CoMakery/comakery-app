@@ -2,13 +2,19 @@ class EthereumTokenIssueJob
   include Sidekiq::Worker
   sidekiq_options queue: 'transaction'
 
-  def perform(award_id, project_id, args)
+  def perform(award_id)
     award = Award.find award_id
-    args[:contractAddress] = Project.find(project_id)&.ethereum_contract_address
-    if args[:contractAddress]
+    project = award.award_type.project
+    args = {
+      recipient: award.recipient_address,
+      amount: award.award_type.amount,
+      proofId: award.proof_id,
+      contractAddress: project.ethereum_contract_address
+    }
+    if award.ethereum_contract_and_account?
       award.update! ethereum_transaction_address: Comakery::Ethereum.token_issue(args)
     else
-      raise ArgumentError.new("No ethereum contract address found for project #{project_id}")
+      raise ArgumentError.new("cannot issue ethereum tokens from award ##{award_id}")
     end
   end
 end

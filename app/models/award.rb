@@ -38,11 +38,11 @@ class Award < ActiveRecord::Base
     authentication&.slack_user_name
   end
 
-  private
-
   def recipient_address
     authentication&.account&.ethereum_wallet
   end
+
+  private
 
   def slack_team_id
     award_type.project.slack_team_id
