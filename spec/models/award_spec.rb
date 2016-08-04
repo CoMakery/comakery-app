@@ -99,9 +99,4 @@ describe Award do
       award.ethereum_token_issue
     end
   end
-
-  describe "#ethereum_contract_and_account?" do
-    xit "test it"
-  end
-
 end

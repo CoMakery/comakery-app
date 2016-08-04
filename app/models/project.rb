@@ -23,7 +23,7 @@ class Project < ActiveRecord::Base
   validate :maximum_coins_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
 
-  after_commit :create_ethereum_contract, if: -> { ethereum_enabled }
+  before_save :set_transitioned_to_ethereum_enabled
 
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<("max(awards.created_at) as last_award_created_at").join(","))
@@ -43,10 +43,6 @@ class Project < ActiveRecord::Base
 
   def self.public_projects
     where(public: true)
-  end
-
-  def create_ethereum_contract
-    EthereumTokenContractJob.perform_async self.id
   end
 
   def community_award_types
@@ -77,6 +73,10 @@ class Project < ActiveRecord::Base
     youtube_id
   end
 
+  def transitioned_to_ethereum_enabled?
+    !!@transitioned_to_ethereum_enabled
+  end
+
   private
 
   def valid_tracker_url
@@ -98,6 +98,11 @@ class Project < ActiveRecord::Base
     if ethereum_enabled_changed? && ethereum_enabled == false
       errors[:ethereum_enabled] << "cannot be set to false after it has been set to true"
     end
+  end
+
+  def set_transitioned_to_ethereum_enabled
+    @transitioned_to_ethereum_enabled = ethereum_enabled_changed? && ethereum_enabled == true
+    true
   end
 
   def validate_url(attribute_name)

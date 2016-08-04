@@ -85,6 +85,8 @@ describe ProjectsController do
     render_views
 
     it "when valid, creates a project and associates it with the current account" do
+      expect(CreateEthereumContract).to receive(:call).with(project: an_instance_of(Project))
+
       expect do
         expect do
           post :create, project: {
@@ -223,6 +225,8 @@ describe ProjectsController do
         small_award_type = cat_project.award_types.create!(name: "Small Award", amount: 100, community_awardable: false)
         medium_award_type = cat_project.award_types.create!(name: "Medium Award", amount: 300)
         destroy_me_award_type = cat_project.award_types.create!(name: "Destroy Me Award", amount: 300)
+
+        expect(CreateEthereumContract).to receive(:call).with(project: cat_project)
 
         expect do
           expect do

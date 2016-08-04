@@ -46,6 +46,8 @@ class ProjectsController < ApplicationController
                                                 slack_team_domain: auth.slack_team_domain))
     authorize @project
     if @project.save
+      CreateEthereumContract.call(project: @project)
+
       flash[:notice] = "Project created"
       redirect_to project_path(@project)
     else
@@ -76,7 +78,10 @@ class ProjectsController < ApplicationController
     @project = Project.includes(:award_types).find(params[:id])
     @project.attributes = project_params
     authorize @project
+
     if @project.save
+      CreateEthereumContract.call(project: @project)
+
       flash[:notice] = "Project updated"
       respond_with @project, location: project_path(@project)
     else
