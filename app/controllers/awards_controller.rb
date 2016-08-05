@@ -12,21 +12,20 @@ class AwardsController < ApplicationController
                                  slack_user_id: params[:award][:slack_user_id],
                                  issuer: current_account,
                                  award_params: award_params.except(:slack_user_id))
-    unless result.success?
+    if result.success?
+      award = result.award
+      authorize award
+      award.save!
+      CreateEthereumAwards.call(award: award)
+      
+      current_account.send_award_notifications(award: award)
+
+      flash[:notice] = "Successfully sent award to #{award.recipient_display_name}"
+      redirect_to project_path(award.award_type.project)
+    else
       fail_and_redirect(result.message)
-      return
     end
 
-    award = result.award
-    authorize award
-    unless award.save
-      fail_and_redirect(award.errors.full_messages.join(", "))
-      return
-    end
-
-    flash[:notice] = "Successfully sent award to #{award.recipient_display_name}"
-    current_account.send_award_notifications(award: award)
-    redirect_to project_path(award.award_type.project)
   rescue Pundit::NotAuthorizedError
     fail_and_redirect("Not authorized")
   end

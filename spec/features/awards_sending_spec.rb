@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "awarding users" do
-  let!(:project) { create(:project, title: "Project that needs awards", owner_account: owner_account, slack_team_id: "team id") }
+  let!(:project) { create(:project, title: "Project that needs awards", owner_account: owner_account, slack_team_id: "team id", ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40) }
   let!(:same_team_project) { create(:project, title: "Same Team Project", owner_account: owner_account, slack_team_id: "team id") }
   let!(:different_team_project) { create(:project, public: true, title: "Different Team Project", owner_account: owner_account, slack_team_id: "team id") }
 
@@ -84,7 +84,7 @@ describe "awarding users" do
     end
   end
 
-  it "has a working happy path" do
+  it "for a user with an account but no ethereum address has a working happy path" do
     login(other_account)
 
     visit root_path
@@ -132,6 +132,8 @@ describe "awarding users" do
 
     click_link "Award History"
 
+    expect(EthereumTokenIssueJob.jobs.length).to eq(0)
+
     expect(page).to have_content "Award History"
     expect(page).to have_content "Feb 29"
     expect(page).to have_content "1,000"
@@ -151,5 +153,21 @@ describe "awarding users" do
     within(".project", text: "Project that needs awards") do
       expect(page.all("img.contributor").map { |img| img[:src] }).to match_array(["http://avatar.com/owner_team_avatar.jpg", "https://slack.example.com/team-image-34-px.jpg"])
     end
+  end
+
+  it 'awarding a user with an ethereum account' do
+    bob_account = create(:account, email: "bobjohnson@example.com")
+    bob_account.update!(ethereum_wallet: '0x' + ('1'*40) )
+
+    login(owner_account)
+    visit project_path(project)
+    choose "Small"
+    select "bobjohnson", from: "User"
+    click_button "Send"
+
+
+    expect(page).to have_content "Successfully sent award to @bobjohnson"
+    expect(EthereumTokenIssueJob.jobs.length).to eq(1)
+    expect(EthereumTokenIssueJob.jobs.first['args']).to eq([Award.last.id])
   end
 end

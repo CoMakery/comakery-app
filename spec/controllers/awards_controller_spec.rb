@@ -63,6 +63,8 @@ describe AwardsController do
     context "logged in" do
       it "records a award being created" do
         expect_any_instance_of(Account).to receive(:send_award_notifications)
+        allow_any_instance_of(Award).to receive(:ethereum_contract_and_account?) {true}
+
         expect do
           post :create, project_id: project.to_param, award: {
               slack_user_id: receiver_authentication.slack_user_id,
@@ -80,6 +82,7 @@ describe AwardsController do
         expect(award.authentication).to eq(receiver_authentication)
         expect(award.issuer).to eq(issuer)
         expect(award.description).to eq("This rocks!!11")
+        expect(EthereumTokenIssueJob.jobs.first['args']).to eq([award.id])
       end
 
       it "renders error if you specify a award type that doesn't belong to a project" do
