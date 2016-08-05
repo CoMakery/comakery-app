@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rubocop -c config/rubocop/default.yml
