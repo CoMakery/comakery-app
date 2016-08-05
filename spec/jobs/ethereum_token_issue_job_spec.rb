@@ -8,8 +8,6 @@ describe EthereumTokenIssueJob do
   let(:project) { create :project, ethereum_contract_address: contract_address }
   let(:award_type) { create :award_type, project: project }
   let(:award) { create :award, award_type: award_type, proof_id: '873!' }
-  # let(:award_type_with_project_no_contract) { create :award_type, project: project_no_contract }
-  # let(:award_with_project_no_contract) { create :award, award_type: award_type_with_project_no_contract }
   let(:job) { EthereumTokenIssueJob.new }
 
   it 'should return an ethereum transaction address on completion' do

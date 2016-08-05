@@ -12,7 +12,7 @@ describe "viewing projects, creating and editing", :js do
   let!(:public_project_award_type) { create(:award_type, project: public_project) }
   let!(:public_project_award) { create(:award, award_type: public_project_award_type, created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, email: "gleenn@example.com").tap { |a| create(:authentication, account_id: a.id, slack_team_id: "citizencode", slack_team_name: "Citizen Code", slack_team_image_34_url: "https://slack.example.com/awesome-team-image-34-px.jpg", slack_team_image_132_url: "https://slack.example.com/awesome-team-image-132-px.jpg", slack_user_name: 'gleenn', slack_first_name: "Glenn", slack_last_name: "Spanky", slack_team_domain: "citizencodedomain") } }
-  let!(:same_team_account) { create(:account) }
+  let!(:same_team_account) { create(:account, ethereum_wallet: "0x#{'1'*40}") }
   let!(:same_team_account_authentication) { create(:authentication, account: same_team_account, slack_team_id: "citizencode", slack_team_name: "Citizen Code") }
   let!(:other_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: "comakery", slack_team_name: "CoMakery") } }
 
@@ -121,6 +121,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Video", with: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
     fill_in "Contributor Agreement", with: "https://docusign.com/project_contributor_agreement.pdf"
     uncheck "Set project as public"
+    uncheck "Publish to Ethereum Blockchain"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)
@@ -133,6 +134,9 @@ describe "viewing projects, creating and editing", :js do
     # youtube player throws js errors, ignore them:
     ignore_js_errors { click_on "Save" }
     ignore_js_errors { expect(page).to have_content "Project updated" }
+
+    expect(EthereumTokenContractJob.jobs.length).to eq(0)
+    expect(EthereumTokenIssueJob.jobs.length).to eq(0)
 
     expect(page).to have_content "This is an edited project"
     expect(page).to have_content "This is an edited project description which is very informative"
@@ -230,6 +234,21 @@ describe "viewing projects, creating and editing", :js do
 
         expect(page.find("input[name*='[title]']")[:value]).to eq("fancy title")
         expect(page.find("input[name*='[community_awardable]']")[:value]).to be_truthy
+      end
+
+      it "allows creating ethereum contract for project AND ethereum tokens for each award" do
+        award2 = create(:award, award_type: award_type, authentication: same_team_account_authentication)
+        visit edit_project_path(project)
+        check "Publish to Ethereum Blockchain"
+        click_on "Save"
+
+        expect(EthereumTokenContractJob.jobs.length).to eq(1)
+        expect(EthereumTokenContractJob.jobs.first['args'].first).to eq(project.id)
+
+        expect(EthereumTokenIssueJob.jobs.length).to eq(2)
+        expect(EthereumTokenIssueJob.jobs.map{ |job| job['args'] }.flatten).to match_array([
+          award.id, award2.id ])
+
       end
     end
   end
