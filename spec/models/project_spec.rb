@@ -300,5 +300,11 @@ describe Project do
       project.save!
       expect(project.transitioned_to_ethereum_enabled?).to eq(false)
     end
+
+    it "should be false if an existing project with an account is transitioned from ethereum_enabled = false to true" do
+      project = create(:project, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' *40 )
+      project.update!(ethereum_enabled: true)
+      expect(project.transitioned_to_ethereum_enabled?).to eq(false)
+    end
   end
 end
