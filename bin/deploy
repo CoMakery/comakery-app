@@ -13,8 +13,10 @@ heroku_env, git_ref = ARGV
 git_ref ||= 'HEAD'
 
 heroku_app="comakery-#{heroku_env}"
-# run "git push --force https://git.heroku.com/#{heroku_app}.git #{git_ref}:master"
-run "git push --force git@heroku.com:#{heroku_app}.git #{git_ref}:master"
-run "heroku config:set git_ref=`git rev-parse #{git_ref}` --app #{heroku_app}"
+git_remotes = [
+  "git@heroku.com:#{heroku_app}.git",
+  "https://git.heroku.com/#{heroku_app}.git"
+]
+run git_remotes.map { |remote| "git push --force #{remote} #{git_ref}:master" }.join(' || ')
 run "heroku run --exit-code rake db:migrate --app #{heroku_app}"
-run 5.times.map { "heroku restart --app #{heroku_app}" }.join(' || ')
+run 7.times.map { "heroku restart --app #{heroku_app}" }.join(' || ')
