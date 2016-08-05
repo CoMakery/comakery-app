@@ -123,7 +123,13 @@ class Views::Projects::Show < Views::Base
         }
       }
       column("medium-7 small-12 contributors-column") {
-        row { column("small-12", class: "underlined-header") { text "Awards" } }
+
+        row {
+          column("small-12", class: "underlined-header") {
+            text "Awards "
+            question_tooltip("This shows project coins issued on CoMakery. It does not currently show secondary trading on the Ethereum blockchain.")
+          }
+        }
 
         row {
           column("small-12 medium-4", class: "centered coins-issued") {
@@ -153,7 +159,7 @@ class Views::Projects::Show < Views::Base
             }
           }
           column("medium-8 small-12", class: "centered") {
-            div(id: "award-percentages")
+            div(id: "award-percentages") {}
           }
         }
 
