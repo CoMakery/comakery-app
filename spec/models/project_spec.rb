@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Project do
   describe 'validations' do
-    it 'requires many attributes' do
+    it 'requires attributes' do
       expect(Project.new.tap(&:valid?).errors.full_messages.sort).to eq(["Description can't be blank",
                                                                          "Maximum coins must be greater than 0",
                                                                          "Owner account can't be blank",
