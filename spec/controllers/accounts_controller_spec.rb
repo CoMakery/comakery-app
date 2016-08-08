@@ -22,7 +22,7 @@ describe AccountsController do
         expect(response.status).to eq(200)
       end.not_to change { account.reload.ethereum_wallet }
 
-      expect(flash[:error]).to eq("Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total")
+      expect(flash[:error]).to eq("Ethereum wallet should start with '0x', followed by a 40 character ethereum address")
       expect(assigns[:current_account]).to be
     end
   end

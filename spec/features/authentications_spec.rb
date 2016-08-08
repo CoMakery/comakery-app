@@ -36,7 +36,7 @@ describe "viewing user auth" do
       click_on "Save"
     end
 
-    expect(page).to have_content "Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"
+    expect(page).to have_content "Ethereum wallet should start with '0x', followed by a 40 character ethereum address"
 
     within(".ethereum_wallet") do
 

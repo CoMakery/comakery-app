@@ -1,5 +1,7 @@
 class Project < ActiveRecord::Base
   include SlackDomainable
+  include EthereumAddressable
+
   nilify_blanks
   attachment :image
 
@@ -23,7 +25,7 @@ class Project < ActiveRecord::Base
   validate :maximum_coins_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
   validate :valid_ethereum_contract_address
-  validates_format_of :ethereum_contract_address, with: Rails.configuration.ethereum_address_pattern, message: "should start with '0x', followed by a 40 character ethereum address", if: ->(project) { project.ethereum_contract_address.present? }
+  validates :ethereum_contract_address, ethereum_address: true  # see EthereumAddressable
 
   before_save :set_transitioned_to_ethereum_enabled
 

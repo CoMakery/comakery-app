@@ -14,11 +14,11 @@ describe Account do
       expect(account.ethereum_wallet).to be_blank
       expect(account).to be_valid
 
-      expect(account.tap{|a|a.update(ethereum_wallet: "foo")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
-      expect(account.tap{|a|a.update(ethereum_wallet: "0x")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
-      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*39}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
-      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*41}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
-      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'g'*40}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
+      expect(account.tap{|a|a.update(ethereum_wallet: "foo")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
+      expect(account.tap{|a|a.update(ethereum_wallet: "0x")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
+      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*39}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
+      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*41}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
+      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'g'*40}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
 
       expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*40}")}).to be_valid
       expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'A'*40}")}).to be_valid
