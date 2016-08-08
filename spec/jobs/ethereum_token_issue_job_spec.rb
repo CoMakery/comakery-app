@@ -25,8 +25,7 @@ describe EthereumTokenIssueJob do
   end
 
   it 'should raise if there is no ethereum contract yet' do
-    project = award.award_type.project
-    project.update!(ethereum_contract_address: nil)
+    award.award_type.create_project(ethereum_contract_address: nil)
     expect do
       job.perform(award.id)
     end.to raise_error(ArgumentError, /cannot issue ethereum tokens from award ##{award.id}/i)

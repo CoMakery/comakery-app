@@ -60,6 +60,34 @@ describe Project do
       end
     end
 
+    describe "ethereum_contract_address" do
+      let(:project) { create(:project) }
+      let(:address) { '0x'+'a'*40 }
+
+      it { expect(project.ethereum_contract_address).to eq(nil) }
+
+      it 'can be set' do
+        project.ethereum_contract_address = address
+        project.save!
+        project.reload
+        expect(project.ethereum_contract_address).to eq(address)
+      end
+
+      it 'once set cannot be set unset' do
+        project.ethereum_contract_address = address
+        project.save!
+        project.ethereum_contract_address = nil
+        expect(project).not_to be_valid
+      end
+
+      it 'once set it cannot be set to another value' do
+        project.ethereum_contract_address = address
+        project.save!
+        project.ethereum_contract_address = '0x'+'b'*40
+        expect(project).not_to be_valid
+      end
+    end
+
     describe "tracker" do
       it "is valid if tracker is a valid, absolute url" do
         project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com", maximum_coins: 10_000_000)
