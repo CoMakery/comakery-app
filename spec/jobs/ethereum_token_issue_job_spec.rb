@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe EthereumTokenIssueJob do
 
-  let(:contract_address) { '0x555' }
-  let(:recipient_address) { '0x123' }
+  let(:contract_address) { '0x'+'a'*40 }
+  let(:recipient_address) { '0x'+'b'*40 }
   let(:transaction_adddress) { '0x99999' }
   let(:project) { create :project, ethereum_contract_address: contract_address }
   let(:award_type) { create :award_type, project: project }

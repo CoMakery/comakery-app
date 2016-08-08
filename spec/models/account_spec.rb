@@ -10,7 +10,7 @@ describe Account do
       expect(Account.new.tap(&:valid?).errors.full_messages.sort).to eq(["Email can't be blank"])
     end
 
-    it "requires ehtereum address to look like an address" do
+    it "requires #ethereum_wallet to be a valid ethereum address" do
       expect(account.ethereum_wallet).to be_blank
       expect(account).to be_valid
 
@@ -18,8 +18,10 @@ describe Account do
       expect(account.tap{|a|a.update(ethereum_wallet: "0x")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
       expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*39}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
       expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*41}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
+      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'g'*40}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x' and be 42 alpha-numeric characters long total"])
 
       expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*40}")}).to be_valid
+      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'A'*40}")}).to be_valid
     end
   end
 

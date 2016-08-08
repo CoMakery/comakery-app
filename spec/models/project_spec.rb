@@ -60,6 +60,23 @@ describe Project do
       end
     end
 
+    describe "#ethereum_contract_address" do
+      it "should validate with a valid ethereum address" do
+        expect(build(:project, ethereum_contract_address: nil)).to be_valid
+        expect(build(:project, ethereum_contract_address: "0x#{'a'*40}")).to be_valid
+        expect(build(:project, ethereum_contract_address: "0x#{'A'*40}")).to be_valid
+      end
+
+      it "should not validate with an invalid ethereum address" do
+        expected_error_message = "Ethereum contract address should start with '0x', followed by a 40 character ethereum address"
+        expect(build(:project, ethereum_contract_address: "foo").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(build(:project, ethereum_contract_address: "0x").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(build(:project, ethereum_contract_address: "0x#{'a'*39}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(build(:project, ethereum_contract_address: "0x#{'a'*41}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(build(:project, ethereum_contract_address: "0x#{'g'*40}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+      end
+    end
+
     describe "ethereum_contract_address" do
       let(:project) { create(:project) }
       let(:address) { '0x'+'a'*40 }
