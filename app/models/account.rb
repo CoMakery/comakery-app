@@ -11,7 +11,7 @@ class Account < ActiveRecord::Base
 
   validates_presence_of :email
 
-  validates_format_of :ethereum_wallet, with: /\A0x[a-zA-Z0-9]{40}\z/, message: "should start with '0x' and be 42 alpha-numeric characters long total", if: ->(account) { account.ethereum_wallet.present? }
+  validates_format_of :ethereum_wallet, with: Rails.configuration.ethereum_address_pattern, message: "should start with '0x' and be 42 alpha-numeric characters long total", if: ->(account) { account.ethereum_wallet.present? }
 
   before_save :downcase_email
 
