@@ -2,12 +2,10 @@ class CreateEthereumAwards
   include Interactor
 
   def call
-    if context.awards
-      context.awards.each do |award|
-        create_ethereum_award(award)
-      end
-    elsif context.award
+    if context.award
       create_ethereum_award(context.award)
+    elsif context.awards
+      awards.each { |award| create_ethereum_award(award) }
     end
   end
 
