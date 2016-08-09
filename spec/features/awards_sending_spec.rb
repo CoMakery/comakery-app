@@ -156,15 +156,13 @@ describe "awarding users" do
   end
 
   it 'awarding a user with an ethereum account' do
-    bob_account = create(:account, email: "bobjohnson@example.com")
-    bob_account.update!(ethereum_wallet: '0x' + ('1'*40) )
+    bob_account = create(:account, email: "bobjohnson@example.com", ethereum_wallet: '0x'+'a'*40 )
 
     login(owner_account)
     visit project_path(project)
     choose "Small"
     select "bobjohnson", from: "User"
     click_button "Send"
-
 
     expect(page).to have_content "Successfully sent award to @bobjohnson"
     expect(EthereumTokenIssueJob.jobs.length).to eq(1)
