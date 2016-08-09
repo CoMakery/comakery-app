@@ -1,5 +1,14 @@
 class Comakery::Ethereum
 
+  ADDRESS = {
+    account: {
+      length: 40
+    },
+    transaction: {
+      length: 64
+    }
+  }
+
   include HTTParty
   # debug_output $stdout # good for debugging HTTP, but logs API key :(
 

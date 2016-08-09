@@ -13,7 +13,7 @@ class Account < ActiveRecord::Base
 
   validates_presence_of :email
 
-  validates :ethereum_wallet, ethereum_address: {length: 40}  # see EthereumAddressable
+  validates :ethereum_wallet, ethereum_address: {type: :account}  # see EthereumAddressable
 
   before_save :downcase_email
 
