@@ -25,7 +25,7 @@ class Project < ActiveRecord::Base
   validate :maximum_coins_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
   validate :valid_ethereum_contract_address
-  validates :ethereum_contract_address, ethereum_address: true  # see EthereumAddressable
+  validates :ethereum_contract_address, ethereum_address: {length: 40}  # see EthereumAddressable
 
   before_save :set_transitioned_to_ethereum_enabled
 

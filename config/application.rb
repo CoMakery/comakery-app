@@ -33,8 +33,6 @@ module Comakery
     config.project_description = "Coin distribution for dynamic equity organizations"
     config.contact_email = "hello@comakery.com"
 
-    config.ethereum_address_pattern = /\A0x[0-9a-fA-F]{40}\z/
-
     # lib/ is for code that is entirely independent of your Rails app
     # app/lib/ is for code that expects Rails (esp. models) but which is not itself a model
     config.autoload_paths << Rails.root.join("app", "lib")

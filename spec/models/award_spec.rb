@@ -21,6 +21,24 @@ describe Award do
         "Issuer can't be blank",
       ])
     end
+
+    describe "#ethereum_transaction_address" do
+      it "should validate with a valid ethereum transaction address" do
+        expect(build(:award, ethereum_transaction_address: nil)).to be_valid
+        expect(build(:award, ethereum_transaction_address: "0x#{'a'*64}")).to be_valid
+        expect(build(:award, ethereum_transaction_address: "0x#{'A'*64}")).to be_valid
+      end
+
+      it "should not validate with an invalid ethereum transaction address" do
+        expected_error_message = "Ethereum transaction address should start with '0x', followed by a 64 character ethereum address"
+        expect(build(:award, ethereum_transaction_address: "foo").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(build(:award, ethereum_transaction_address: "0x").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(build(:award, ethereum_transaction_address: "0x#{'a'*63}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(build(:award, ethereum_transaction_address: "0x#{'a'*65}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(build(:award, ethereum_transaction_address: "0x#{'g'*64}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+      end
+    end
+
   end
 
   describe "#issuer_display_name" do

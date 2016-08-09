@@ -1,10 +1,13 @@
 class Award < ActiveRecord::Base
+  include EthereumAddressable
+
   belongs_to :authentication
   belongs_to :issuer, class_name: Account
   belongs_to :award_type
 
   validates_presence_of :proof_id, :authentication, :award_type, :issuer
 
+  validates :ethereum_transaction_address, ethereum_address: {length: 64}  # see EthereumAddressable
   before_validation :ensure_proof_id_exists
 
   def ensure_proof_id_exists
