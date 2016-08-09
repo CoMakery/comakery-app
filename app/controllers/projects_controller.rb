@@ -81,7 +81,6 @@ class ProjectsController < ApplicationController
 
     if @project.save
       CreateEthereumContract.call(project: @project)
-
       flash[:notice] = "Project updated"
       respond_with @project, location: project_path(@project)
     else
@@ -94,8 +93,25 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :image, :tracker, :video_url, :contributor_agreement_url, :public, :slack_channel, :maximum_coins,
-                                    :ethereum_enabled, award_types_attributes: [:id, :name, :amount, :community_awardable, :_destroy])
+    params.require(:project).permit(
+      :contributor_agreement_url,
+      :description,
+      :ethereum_enabled,
+      :image,
+      :maximum_coins,
+      :public,
+      :slack_channel,
+      :title,
+      :tracker,
+      :video_url,
+      award_types_attributes: [
+        :_destroy,
+        :amount,
+        :community_awardable,
+        :id,
+        :name
+      ]
+    )
   end
 
   def assign_slack_channels
