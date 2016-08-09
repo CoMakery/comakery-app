@@ -4,6 +4,7 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+# Environment (dotenv)
 /.env
 /.env.*
 !/.env.example
@@ -22,11 +23,12 @@
 /coverage
 
 # Others
-.idea
-.vagrant
-.ruby-gemset
+.byebug_history
 .DS_Store
-junk.txt
-junk.rb
+.idea
+.ruby-gemset
+.vagrant
 /.tags
 /.tags[0-9]*
+junk.rb
+junk.txt
