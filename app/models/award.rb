@@ -15,7 +15,9 @@ class Award < ActiveRecord::Base
   end
 
   def ethereum_ready?
-    award_type.project.ethereum_enabled && recipient_address.present?
+    award_type.project.ethereum_enabled &&
+      recipient_address.present? &&
+      ethereum_transaction_address.blank?
   end
 
   def issuer_display_name
