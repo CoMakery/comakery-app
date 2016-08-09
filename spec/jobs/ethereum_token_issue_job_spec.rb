@@ -11,7 +11,7 @@ describe EthereumTokenIssueJob do
   let(:job) { EthereumTokenIssueJob.new }
 
   it 'should return an ethereum transaction address on completion' do
-    allow_any_instance_of(Award).to receive(:ethereum_contract_and_account?) { true }
+    allow_any_instance_of(Award).to receive(:ethereum_ready?) { true }
     expect(Comakery::Ethereum).to receive(:token_issue).with({
         recipient: award.recipient_address,
         amount: award.award_type.amount,

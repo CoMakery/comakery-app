@@ -14,7 +14,7 @@ class CreateEthereumAwards
   private
 
   def create_ethereum_award(award)
-    if award.ethereum_contract_and_account?
+    if award.ethereum_ready?
       EthereumTokenIssueJob.perform_async(award.id)
     end
   end

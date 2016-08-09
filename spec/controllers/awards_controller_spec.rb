@@ -63,7 +63,7 @@ describe AwardsController do
     context "logged in" do
       it "records a award being created" do
         expect_any_instance_of(Account).to receive(:send_award_notifications)
-        allow_any_instance_of(Award).to receive(:ethereum_contract_and_account?) {true}
+        allow_any_instance_of(Award).to receive(:ethereum_ready?) {true}
 
         expect do
           post :create, project_id: project.to_param, award: {
