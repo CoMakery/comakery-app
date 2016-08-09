@@ -112,7 +112,7 @@ class Project < ActiveRecord::Base
 
   def set_transitioned_to_ethereum_enabled
     @transitioned_to_ethereum_enabled = ethereum_enabled_changed? &&
-      ethereum_enabled == true && ethereum_contract_address.blank?
+      ethereum_enabled && ethereum_contract_address.blank?
     true  # don't halt filter
   end
 

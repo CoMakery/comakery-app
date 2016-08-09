@@ -36,7 +36,6 @@ describe "awarding users" do
             "profile": {
                 email: "bobjohnson@example.com"
             }
-
         }
     }.to_json)
   end
@@ -45,7 +44,7 @@ describe "awarding users" do
     travel_back
   end
 
-  describe "awarding a user which we don't have an account for yet" do
+  describe "when a user doesn't have an account for yet" do
     it "populates the dropdown to select the awardee and creates the account/auth for the user" do
       login(owner_account)
 
@@ -84,7 +83,7 @@ describe "awarding users" do
     end
   end
 
-  it "for a user with an account but no ethereum address has a working happy path" do
+  it "for a user with an account but no ethereum address" do
     login(other_account)
 
     visit root_path
