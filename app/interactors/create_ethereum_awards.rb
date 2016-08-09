@@ -5,7 +5,7 @@ class CreateEthereumAwards
     if context.award
       create_ethereum_award(context.award)
     elsif context.awards
-      awards.each { |award| create_ethereum_award(award) }
+      context.awards.each { |award| create_ethereum_award(award) }
     end
   end
 
