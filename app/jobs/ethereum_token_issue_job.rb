@@ -11,7 +11,7 @@ class EthereumTokenIssueJob
       proofId: award.proof_id,
       contractAddress: project.ethereum_contract_address
     }
-    if award.ethereum_ready?
+    if award.ethereum_issue_ready?
       award.update! ethereum_transaction_address: Comakery::Ethereum.token_issue(args)
     else
       raise ArgumentError.new("cannot issue ethereum tokens from award ##{award_id}")

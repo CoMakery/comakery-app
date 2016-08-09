@@ -14,7 +14,7 @@ class Award < ActiveRecord::Base
     self.proof_id ||= SecureRandom.base58(44)  # 58^44 > 2^256
   end
 
-  def ethereum_ready?
+  def ethereum_issue_ready?
     award_type.project.ethereum_enabled &&
       recipient_address.present? &&
       ethereum_transaction_address.blank?

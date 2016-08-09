@@ -7,13 +7,13 @@ describe CreateEthereumAwards do
 
   describe 'with context.award' do
     it 'should trigger job, if ethereum contract and account present' do
-      expect(award).to receive(:ethereum_ready?) { true }
+      expect(award).to receive(:ethereum_issue_ready?) { true }
       expect(EthereumTokenIssueJob).to receive(:perform_async).with(award.id)
       CreateEthereumAwards.call(award: award)
     end
 
     it 'should NOT trigger job, if ethereum contract or account NOT present' do
-      expect(award).to receive(:ethereum_ready?) { false }
+      expect(award).to receive(:ethereum_issue_ready?) { false }
       expect(EthereumTokenIssueJob).not_to receive(:perform_async)
       CreateEthereumAwards.call(award: award)
     end
@@ -21,16 +21,16 @@ describe CreateEthereumAwards do
 
   describe 'with context.awards' do
     it 'should trigger job, if ethereum contract and account present' do
-      expect(award2).to receive(:ethereum_ready?) { true }
-      expect(award3).to receive(:ethereum_ready?) { true }
+      expect(award2).to receive(:ethereum_issue_ready?) { true }
+      expect(award3).to receive(:ethereum_issue_ready?) { true }
       expect(EthereumTokenIssueJob).to receive(:perform_async).with(award2.id)
       expect(EthereumTokenIssueJob).to receive(:perform_async).with(award3.id)
       CreateEthereumAwards.call(awards: [award2, award3])
     end
 
     it 'should NOT trigger job, if ethereum contract or account NOT present' do
-      expect(award2).to receive(:ethereum_ready?) { true }
-      expect(award3).to receive(:ethereum_ready?) { false }
+      expect(award2).to receive(:ethereum_issue_ready?) { true }
+      expect(award3).to receive(:ethereum_issue_ready?) { false }
       expect(EthereumTokenIssueJob).to receive(:perform_async).with(award2.id)
       CreateEthereumAwards.call(awards: [award2, award3])
     end
