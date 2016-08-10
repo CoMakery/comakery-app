@@ -16,9 +16,9 @@ class Views::Layouts::Raw < Views::Base
         javascript_include_tag 'application'
         if ENV['AIRBRAKE_API_KEY'].present? && ENV['AIRBRAKE_PROJECT_ID'].present?
           javascript_include_tag "airbrake-shim",
-                                 "data-airbrake-project-id" => Airbrake.configuration.project_id,
-                                 "data-airbrake-project-key" => Airbrake.configuration.api_key,
-                                 "data-airbrake-environment-name" => Airbrake.configuration.environment_name
+                                 "data-airbrake-project-id" => ENV['AIRBRAKE_PROJECT_ID'],
+                                 "data-airbrake-project-key" => ENV['AIRBRAKE_API_KEY'],
+                                 "data-airbrake-environment-name" => ENV['APP_NAME']
         end
         csrf_meta_tags
       }
