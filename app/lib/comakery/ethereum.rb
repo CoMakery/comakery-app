@@ -16,15 +16,15 @@ class Comakery::Ethereum
 
     TIMEOUT = 10.minutes
 
-    def token_contract url_args
-      call_ethereum_bridge('project', url_args, 'contractAddress')
+    def token_contract params
+      call_ethereum_bridge('project', params, 'contractAddress')
     end
 
-    def token_issue url_args
-      call_ethereum_bridge('token_issue', url_args, 'transactionId')
+    def token_issue params
+      call_ethereum_bridge('token_issue', params, 'transactionId')
     end
 
-    def call_ethereum_bridge(path, url_args, response_key)
+    def call_ethereum_bridge(path, params, response_key)
       ethereum_bridge = ENV['ETHEREUM_BRIDGE'].presence
       return if ethereum_bridge.nil? && Comakery::Application.config.allow_missing_ethereum_bridge
       raise("please set env var ETHEREUM_BRIDGE") unless ethereum_bridge
@@ -33,10 +33,10 @@ class Comakery::Ethereum
       url = URI.join ethereum_bridge, path
       headers = { 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
 
-      url_args.merge! apiKey: ENV['ETHEREUM_BRIDGE_API_KEY']
+      private_params = params.merge apiKey: ENV['ETHEREUM_BRIDGE_API_KEY']
 
       response = post url,
-        body: url_args.to_json,
+        body: private_params.to_json,
         headers: headers,
         timeout: TIMEOUT
 
@@ -45,7 +45,7 @@ class Comakery::Ethereum
       rescue => error
         message = "Error received: #{response.parsed_response.inspect}
           From request to: #{url}
-          with params: #{JSON.pretty_generate url_args}
+          with params: #{JSON.pretty_generate params}
         "
         Airbrake.notify(Exception.new(message))
         nil
