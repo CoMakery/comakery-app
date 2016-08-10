@@ -550,7 +550,7 @@ DEPENDENCIES
   rerun
   responders
   rspec-rails
-  rubocop (~> 0.42.0)
+  rubocop
   sass-rails
   sdoc
   selenium-webdriver
