@@ -46,9 +46,9 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
-    airbrake (4.3.6)
-      builder
-      multi_json
+    airbrake (5.4.4)
+      airbrake-ruby (~> 1.4)
+    airbrake-ruby (1.4.4)
     arel (6.0.3)
     ast (2.3.0)
     awesome_print (1.6.1)
@@ -221,7 +221,7 @@ GEM
     modernizr-rails (2.7.1)
     momentjs-rails (2.11.0)
       railties (>= 3.1)
-    multi_json (1.11.2)
+    multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     nenv (0.3.0)
@@ -500,7 +500,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake (< 5)
+  airbrake
   awesome_print
   brakeman
   capybara

@@ -14,7 +14,7 @@ class Views::Layouts::Raw < Views::Base
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
-        if Airbrake.configuration.project_id && Airbrake.configuration.api_key
+        if ENV['AIRBRAKE_API_KEY'].present? && ENV['AIRBRAKE_PROJECT_ID'].present?
           javascript_include_tag "airbrake-shim",
                                  "data-airbrake-project-id" => Airbrake.configuration.project_id,
                                  "data-airbrake-project-key" => Airbrake.configuration.api_key,
