@@ -24,10 +24,18 @@ describe EthereumTokenIssueJob do
     expect(award.reload.ethereum_transaction_address).to eq(transaction_adddress)
   end
 
+  it 'should do nothing if the project is not ethereum enabled' do
+    allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { false }
+    expect(Comakery::Ethereum).not_to receive(:token_issue)
+    job.perform(award.id)
+  end
+
   it 'should raise if there is no ethereum contract yet' do
-    award.award_type.create_project(ethereum_contract_address: nil)
+    allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
+    project.update_attribute(:ethereum_contract_address, nil)
     expect do
       job.perform(award.id)
-    end.to raise_error(ArgumentError, /cannot issue ethereum tokens from award ##{award.id}/i)
+    end.to raise_error(ArgumentError, /project ##{project.id} which has no ethereum contract address/i)
   end
+
 end

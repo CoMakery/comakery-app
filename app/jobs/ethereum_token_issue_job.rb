@@ -4,6 +4,7 @@ class EthereumTokenIssueJob
 
   def perform(award_id)
     award = Award.find award_id
+    return unless award.ethereum_issue_ready?
     project = award.award_type.project
     args = {
       recipient: award.recipient_address,
@@ -11,10 +12,13 @@ class EthereumTokenIssueJob
       proofId: award.proof_id,
       contractAddress: project.ethereum_contract_address
     }
-    if award.ethereum_issue_ready?
-      award.update! ethereum_transaction_address: Comakery::Ethereum.token_issue(args)
+
+    if project.ethereum_contract_address.blank?
+      # on raise, sidekiq will retry the job later:
+      raise ArgumentError.new("award ##{award.id} belongs to
+        project ##{project.id} which has no ethereum contract address (yet)")
     else
-      raise ArgumentError.new("cannot issue ethereum tokens from award ##{award_id}")
+      award.update! ethereum_transaction_address: Comakery::Ethereum.token_issue(args)
     end
   end
 end
