@@ -4,7 +4,7 @@ ruby '2.3.0'
 gem 'airbrake'
 gem 'coffee-rails'
 gem 'compass-rails'
-gem "d3-rails"
+gem "d3-rails", '~>3.5'
 gem "font-awesome-rails"
 gem 'fortitude', git: "https://github.com/ageweke/fortitude.git", ref: '3de1286652874506802a75befde0f11d79a0ec67'  # change when gem released
 gem 'foundation-icons-sass-rails'
