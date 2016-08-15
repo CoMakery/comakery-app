@@ -24,7 +24,7 @@ gem 'premailer-rails'
 gem 'puma'
 gem 'pundit'
 gem 'rails_12factor', group: :production
-gem 'rails', '4.2.5.2'
+gem 'rails', '~> 4.2'
 gem "refile", require: "refile/rails"
 gem "refile-mini_magick"
 gem "refile-s3"
