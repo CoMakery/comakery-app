@@ -19,10 +19,7 @@ database:
 
 test:
   override:
-    - ./bin/rspect --format documentation:
-        parallel: true
-        files:
-          - spec/**/*_spec.rb
+    - ./bin/rspect --format documentation
     - brakeman --exit-on-warn
     # - rails_best_practices .
 
