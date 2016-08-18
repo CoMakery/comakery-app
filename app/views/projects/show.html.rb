@@ -44,7 +44,9 @@ class Views::Projects::Show < Views::Base
           row {
             column("medium-5 small-12") {
               if project.video_url
-                iframe(width: "454", height: "304", src: "//www.youtube.com/embed/#{project.youtube_id}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0", frameborder: "0")
+                div(class: "project-video") {
+                  iframe(width: "454", height: "304", src: "//www.youtube.com/embed/#{project.youtube_id}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0", frameborder: "0")
+                }
               else
                 div(class: "sixteen-nine") {
                   div(class: "content") {
