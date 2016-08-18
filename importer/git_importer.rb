@@ -134,11 +134,12 @@ class GitImporter
     award_type = project.award_types.order(:amount).first  # lowest award
     commits.each do |commit|
       commit[:author_names].each do |author_name|
-        proof_id = commit_url = "https://github.com/#{@opts[:github_repo]}/commit/#{commit[:git_hash]}"
+        proof_id = commit[:git_hash]
+        next if project.awards.find_by(proof_id: proof_id)
+
+        commit_url = "https://github.com/#{@opts[:github_repo]}/commit/#{commit[:git_hash]}"
         commit_link = "[#{commit[:subject]}](#{commit_url})"
         description = "Git commit to #{@opts[:github_repo]}: #{commit_link}"
-
-        next if project.awards.find_by(proof_id: proof_id)
 
         result = AwardSlackUser.call(
           project: project,
