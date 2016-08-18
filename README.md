@@ -45,6 +45,16 @@ rake db:create:all db:schema:load
 rails server
 ```
 
+## Running Tests
+
+A bit faster: `bin/rspec`
+
+More thorough (integrates views): `bin/rspect`
+
+## Pushing Code
+
+To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
+
 ## Deleting a project
 
 If you want to completely remove all trace of project `p` (be careful):
