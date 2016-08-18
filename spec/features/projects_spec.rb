@@ -143,7 +143,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Visibility: Private"
     expect(page).to have_link "Project Tasks"
     expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com/messages/a-channel-name"
-    expect(page.all(".project-image iframe").size).to eq(1)
+    expect(page.all(".project-video iframe").size).to eq(1)
     expect(page).to have_link "Video", href: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
     expect(page).to have_link "Contributor Agreement", href: "https://docusign.com/project_contributor_agreement.pdf"
 
