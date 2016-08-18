@@ -28,7 +28,7 @@ class Views::Projects::Landing < Views::Projects::Base
                 text "Products"
               }
             }
-            div(class:"show-for-large-only") {
+            div(class:"show-for-large") {
               h3 {
                 text "Track and Trade"
                 br
