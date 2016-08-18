@@ -12,15 +12,8 @@
 .contain-to-grid .top-bar {
   padding: .7em 1em;
 
-  .name h1 {
-    color: #5C5C5C;
-    font-size: 30px;
-    font-weight: 900;
-    margin-bottom: 0;
-    span {
-      color: #CE00FF;
-      font-size: inherit;
-    }
+  .logo {
+    max-height: 40px;
   }
   .top-bar-right ul li > a {
     color: $mediumgray;

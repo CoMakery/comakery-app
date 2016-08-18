@@ -29,7 +29,13 @@ class Views::Projects::Base < Views::Base
 
   def project_block(project, contributors)
     row(class: "project#{project.slack_team_id == current_account&.slack_auth&.slack_team_id ? " project-highlighted" : ""}", id: "project-#{project.to_param}") {
-      a(href: project_path(project), class: "image-block", style: "background-image: url(#{attachment_url(project, :image)})") {}
+      div(class: "sixteen-nine") {
+        div(class: "content") {
+          a(href: project_path(project)) {
+            img(src: attachment_url(project, :image), class: "image-block")
+          }
+        }
+      }
       div(class: "info") {
         div(class: "text-overlay") {
           h5 {
