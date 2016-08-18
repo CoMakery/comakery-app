@@ -10,22 +10,50 @@ CoMakery helps you run a [Dynamic Equity Organization](https://github.com/citize
 
 ## Current Implementation Status
 
-This project is alpha and not ready for production use.
+This project is in private alpha.
 It is being actively developed by CoMakery.
-We welcome [feature requests and pull requests](https://github.com/comakery/comakery-app/issues).
 
 We are planning to license it as a Dynamic Equity Organization.
 The structure is being legally reviewed for use in CoMakery and on your projects.
 
+## Project management
+
+Install the [zenbhub chrome git extension](https://chrome.google.com/webstore/detail/zenhub-for-github/ogcgkffhplmphkaahpmffcafajaocjbd?hl=en-US)
+
+Then you can see the board at: https://github.com/CoMakery/comakery-app#boards?repos=51389241
+
 ## Local development
 
 Prerequisites: PostgreSQL
+
+add to `.env`:
+
+```
+RACK_ENV=development
+PORT=3000
+SLACK_API_KEY=[ask a teammate]
+SLACK_API_SECRET=[ask a teammate]
+APP_NAME=development
+
+ETHEREUM_BRIDGE=http://localhost:3906
+ETHERCAMP_SUBDOMAIN=morden
+```
 
 ```sh
 bundle
 rake db:create:all db:schema:load
 rails server
 ```
+
+## Running Tests
+
+A bit faster: `bin/rspec`
+
+More thorough (integrates views): `bin/rspect`
+
+## Pushing Code
+
+To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
 
 ## Deleting a project
 

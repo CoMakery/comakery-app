@@ -39,7 +39,7 @@ class Views::Shared::Awards < Views::Base
             div award.award_type.name
           }
           column("small-2") {
-            div(class: "text-gray") { text award.description }
+            div(class: "text-gray") { text raw markdown_to_html award.description }
           }
           column("small-2") {
             text award.issuer_display_name

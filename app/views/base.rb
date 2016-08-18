@@ -60,5 +60,26 @@ module Views
         block.yield
       }
     end
+
+    def markdown_to_html(markdown)
+      redcarpet.render(markdown)
+    end
+
+    def redcarpet
+      @@redcarpet_renderer ||= RenderHtmlWithoutWrap.new(
+        filter_html: true,
+        no_images: true,
+        no_styles: true,
+        safe_links_only: true
+        # link_attributes: {target: '_blank'}
+      )
+      @@redcarpet ||= Redcarpet::Markdown.new(@@redcarpet_renderer)
+    end
+  end
+end
+
+class RenderHtmlWithoutWrap < Redcarpet::Render::HTML
+  def postprocess(full_document)
+    Regexp.new(/\A<p>(.*)<\/p>\Z/m).match(full_document)[1] rescue full_document
   end
 end

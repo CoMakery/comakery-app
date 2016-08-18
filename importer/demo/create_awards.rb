@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require_relative '../config/environment'
-require_relative '../spec/support/mom'
+require_relative '../../config/environment'
+require_relative '../../spec/support/mom'
 
 DEMOS = [
   {
