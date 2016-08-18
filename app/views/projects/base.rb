@@ -12,8 +12,8 @@ class Views::Projects::Base < Views::Base
   end
 
   def projects_block(projects, project_contributors)
-    projects.each_slice(3) do |left_project, middle_project, right_project|
-      row {
+    row {
+      projects.each_slice(3) do |left_project, middle_project, right_project|
         column("small-12 medium-6 large-4") {
           project_block(left_project, project_contributors[left_project])
         }
@@ -23,8 +23,8 @@ class Views::Projects::Base < Views::Base
         column("small-12 medium-6 large-4") {
           project_block(right_project, project_contributors[right_project]) if right_project
         }
-      }
-    end
+      end
+    }
   end
 
   def project_block(project, contributors)

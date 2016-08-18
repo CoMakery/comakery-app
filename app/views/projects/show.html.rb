@@ -174,6 +174,8 @@ class Views::Projects::Show < Views::Base
             div(id: "contributions-chart")
           }
 
+          row { column("small-12", class: "underlined-header") { text "Top Contributors" } }
+
           row {
             column("small-12") {
               award_data[:contributions].each do |contributor|
