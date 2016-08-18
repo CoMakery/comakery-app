@@ -335,6 +335,7 @@ GEM
       ffi (>= 0.5.0)
     rdoc (4.2.2)
       json (~> 1.4)
+    redcarpet (3.3.4)
     redis (3.3.1)
     ref (2.0.0)
     refile (0.6.2)
@@ -518,6 +519,7 @@ DEPENDENCIES
   rails (~> 4.2)
   rails_12factor
   rails_best_practices
+  redcarpet
   refile
   refile-mini_magick
   refile-s3

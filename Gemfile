@@ -26,6 +26,7 @@ gem 'puma'
 gem 'pundit'
 gem 'rails_12factor', group: :production
 gem 'rails', '~> 4.2'
+gem "redcarpet"
 gem "refile", require: "refile/rails"
 gem "refile-mini_magick"
 gem "refile-s3"
