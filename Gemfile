@@ -72,7 +72,6 @@ group(:development) do
   gem 'spring-commands-rspec'
   gem 'spring'
   gem 'web-console'
-  gem 'xray-rails'
 end
 
 group(:test) do
