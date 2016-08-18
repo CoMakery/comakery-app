@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '2.3.1'
 
 gem 'airbrake'
+gem 'awesome_print'
 gem 'coffee-rails'
 gem 'compass-rails'
 gem "d3-rails", '~>3.5'
@@ -38,28 +39,20 @@ gem 'slack-ruby-client'
 gem 'uglifier'
 gem 'underscore-rails'
 
+group(:scripts) do
+  gem 'easy_shell'
+  gem 'trollop'
+end
+
 group(:development, :test) do
-  gem 'awesome_print'
-  gem 'capybara'
-  gem 'database_cleaner'
   gem 'dotenv-rails'
-  gem 'fuubar'
-  gem 'guard-rspec', require: false
-  gem 'phantomjs', require: 'phantomjs/poltergeist'
-  gem 'poltergeist'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rack_session_access'
   gem 'rerun'
-  gem 'rspec-rails'
-  gem 'selenium-webdriver'
-  gem 'simplecov'
-  gem 'typhoeus'
 end
 
 group(:development) do
   gem 'brakeman', require: false
-  gem 'easy_shell'
   gem 'git-storyid'
   # gem 'html2fortitude'  # requires old ruby_parser, try global "gem install html2fortitude" instead
   gem 'foreman'
@@ -75,5 +68,15 @@ group(:development) do
 end
 
 group(:test) do
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'fuubar'
+  gem 'guard-rspec', require: false
+  gem 'phantomjs', require: 'phantomjs/poltergeist'
+  gem 'poltergeist'
+  gem 'rack_session_access'
+  gem 'rspec-rails'
+  gem 'selenium-webdriver'
+  gem 'simplecov'
   gem 'webmock'
 end
