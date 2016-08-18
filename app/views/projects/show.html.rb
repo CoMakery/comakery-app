@@ -117,12 +117,12 @@ class Views::Projects::Show < Views::Base
       }
     }
     row(class: "project-body") {
-      column("medium-5 small-12") {
+      column("large-5 small-12") {
         div(class:"award-send") {
           render partial: "award_send"
         }
       }
-      column("medium-7 small-12 contributors-column") {
+      column("large-7 small-12 contributors-column") {
 
         row {
           column("small-12", class: "underlined-header") {
