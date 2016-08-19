@@ -100,6 +100,9 @@ form.take-action-form p.notice {
   margin-bottom: 15px;
   padding: 5px;
 }
+.award-rows .award-row {
+  margin-bottom: 50px;
+}
 .underlined-header {
   border-bottom: 1px solid $iron;
 
@@ -177,4 +180,8 @@ form.take-action-form p.notice {
 }
 .sixteen-nine {
   @include aspect-ratio(16, 9);
+}
+
+.skyblue {
+  color: $skyblue;
 }

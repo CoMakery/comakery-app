@@ -18,6 +18,10 @@ class Account < ActiveRecord::Base
 
   before_save :downcase_email
 
+  def team_auth(slack_team_id)
+    authentications.where(slack_team_id: slack_team_id).first
+  end
+
   def downcase_email
     self.email = email.try(:downcase)
   end
