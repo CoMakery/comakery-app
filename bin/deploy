@@ -2,6 +2,8 @@
 #
 # Usage: bin/deploy staging [git_ref]
 
+require 'bundler'
+Bundler.setup()
 require 'easy_shell'  # gives us `run`, which exits with error if commands fails
 
 if ARGV.empty?
