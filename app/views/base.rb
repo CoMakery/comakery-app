@@ -70,6 +70,7 @@ module Views
         filter_html: true,
         no_images: true,
         no_styles: true,
+        autolink: true,
         safe_links_only: true
         # link_attributes: {target: '_blank'}
       )
