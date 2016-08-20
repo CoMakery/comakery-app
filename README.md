@@ -45,13 +45,13 @@ rake db:create:all db:schema:load
 rails server
 ```
 
-## Running Tests
+## Running tests
 
 A bit faster: `bin/rspec`
 
 More thorough (integrates views): `bin/rspect`
 
-## Pushing Code
+## Pushing code to Github
 
 To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
 
