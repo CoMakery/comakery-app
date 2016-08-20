@@ -103,6 +103,7 @@ class GitImporter
     name_to_user_name = {
       'Harlan T Wood' => 'harlan',
       'Adam Apollo' => 'adamapollo',
+      'AdamApollo' => 'adamapollo',
       'Duke Dorje' => 'duke',
       'Jack Senechal' => 'jack',
     }
