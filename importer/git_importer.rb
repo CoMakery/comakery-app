@@ -137,9 +137,8 @@ class GitImporter
         proof_id = commit[:git_hash]
         next if project.awards.find_by(proof_id: proof_id)
 
-        commit_url = "https://github.com/#{@opts[:github_repo]}/commit/#{commit[:git_hash]}"
-        commit_link = "[#{commit[:subject]}](#{commit_url})"
-        description = "Git commit to #{@opts[:github_repo]}: #{commit_link}"
+        proof_link = "https://github.com/#{@opts[:github_repo]}/commit/#{commit[:git_hash]}"
+        description = "Git commit to #{@opts[:github_repo]}: #{commit[:subject]}"
 
         result = AwardSlackUser.call(
           project: project,
@@ -149,6 +148,7 @@ class GitImporter
             award_type_id: award_type.id,
             description: description,
             proof_id: proof_id,
+            proof_link: proof_link,
             created_at: commit[:author_date],
             updated_at: commit[:author_date]
           }
