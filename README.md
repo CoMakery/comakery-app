@@ -55,6 +55,16 @@ More thorough (integrates views): `bin/rspect`
 
 To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
 
+## Deploying to heroku
+
+Once your heroku user has access to the applications, you can run any of:
+
+```
+bin/deploy demo
+bin/deploy staging
+bin/deploy production
+```
+
 ## Deleting a project
 
 If you want to completely remove all trace of project `p` (be careful):
