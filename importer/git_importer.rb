@@ -130,6 +130,7 @@ class GitImporter
   end
 
   def send_awards commits
+    awards = 0
     project = Project.find @opts[:project_id]
     award_type = project.award_types.order(:amount).first  # lowest award
     commits.each do |commit|
@@ -157,11 +158,13 @@ class GitImporter
           award = result.award
           award.save!
           CreateEthereumAwards.call(award: award) if @opts[:ethereum]
+          awards += 1
         else
           STDERR.puts result.message
         end
       end
     end
+    puts "Created #{awards} awards."
   end
 end
 
