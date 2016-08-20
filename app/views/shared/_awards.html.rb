@@ -34,7 +34,7 @@ class Views::Shared::Awards < Views::Base
             end
             br
             strong "#{award.award_type.name}"
-            text ": #{raw markdown_to_html award.description}" if award.description.present?
+            text raw ": #{markdown_to_html award.description}" if award.description.present?
           }
           column("small-2") {
             img(src: award.issuer.team_auth(award.award_type.project.slack_team_id).slack_icon, class: "icon avatar-img")
