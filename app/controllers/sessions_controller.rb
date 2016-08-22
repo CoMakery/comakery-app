@@ -13,11 +13,10 @@ class SessionsController < ApplicationController
       d proc { request.env['omniauth.auth'] }
       @account = Authentication.find_or_create_from_auth_hash!(request.env['omniauth.auth'])
       session[:account_id] = @account.id
-      redirect_to projects_url
     rescue SlackAuthHash::MissingAuthParamException => e
       flash[:error] = "Failed authentication - #{e}"
-      redirect_to root_url
     end
+    redirect_to root_path
   end
 
   def destroy
