@@ -24,25 +24,35 @@ Then you can see the board at: https://github.com/CoMakery/comakery-app#boards?r
 
 ## Local development
 
-Prerequisites: PostgreSQL
+Prerequisites:
 
-add to `.env`:
+- PostgreSQL
+- Redis is you want to run delayed jobs
 
+Set up .env:
+
+```sh
+cp .env.dev .env
+heroku config -a comakery-demo -s | egrep '^(SLACK_|ETHEREUM_|ETHERCAMP_)' | sort >> .env
 ```
-RACK_ENV=development
-PORT=3000
-SLACK_API_KEY=[ask a teammate]
-SLACK_API_SECRET=[ask a teammate]
-APP_NAME=development
 
-ETHEREUM_BRIDGE=http://localhost:3906
-ETHERCAMP_SUBDOMAIN=morden
-```
+Basics :
 
 ```sh
 bundle
 rake db:create:all db:schema:load
+```
+
+Run server:
+
+```sh
 rails server
+```
+
+or if you want to run with delayed jobs:
+
+```sh
+bin/server
 ```
 
 ## Running tests
