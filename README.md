@@ -45,15 +45,25 @@ rake db:create:all db:schema:load
 rails server
 ```
 
-## Running Tests
+## Running tests
 
 A bit faster: `bin/rspec`
 
 More thorough (integrates views): `bin/rspect`
 
-## Pushing Code
+## Pushing code to Github
 
 To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
+
+## Deploying to heroku
+
+Once your heroku user has access to the applications, you can run any of:
+
+```
+bin/deploy demo
+bin/deploy staging
+bin/deploy production
+```
 
 ## Deleting a project
 

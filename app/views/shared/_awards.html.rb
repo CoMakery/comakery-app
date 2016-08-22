@@ -26,12 +26,14 @@ class Views::Shared::Awards < Views::Base
             }
           end
           column("small-3") {
-            if award.proof_id
-              span("#{award.proof_id[0...20]}...", class: "skyblue")
-                br
+            if award.proof_link
+              link_to "#{award.proof_id[0...20]}...", award.proof_link, target: '_blank'
+            else
+              span "#{award.proof_id[0...20]}..."
             end
-            strong "#{award.award_type.name}: "
-            text raw markdown_to_html award.description
+            br
+            strong "#{award.award_type.name}"
+            text raw ": #{markdown_to_html award.description}" if award.description.present?
           }
           column("small-2") {
             img(src: award.issuer.team_auth(award.award_type.project.slack_team_id).slack_icon, class: "icon avatar-img")

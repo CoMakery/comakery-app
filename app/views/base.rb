@@ -70,10 +70,10 @@ module Views
         filter_html: true,
         no_images: true,
         no_styles: true,
-        safe_links_only: true
-        # link_attributes: {target: '_blank'}
+        safe_links_only: true,
+        link_attributes: {rel: 'nofollow', target: '_blank'}
       )
-      @@redcarpet ||= Redcarpet::Markdown.new(@@redcarpet_renderer)
+      @@redcarpet ||= Redcarpet::Markdown.new(@@redcarpet_renderer, autolink: true)
     end
   end
 end

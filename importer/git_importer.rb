@@ -103,6 +103,7 @@ class GitImporter
     name_to_user_name = {
       'Harlan T Wood' => 'harlan',
       'Adam Apollo' => 'adamapollo',
+      'AdamApollo' => 'adamapollo',
       'Duke Dorje' => 'duke',
       'Jack Senechal' => 'jack',
     }
@@ -130,6 +131,7 @@ class GitImporter
   end
 
   def send_awards commits
+    awards = 0
     project = Project.find @opts[:project_id]
     award_type = project.award_types.order(:amount).first  # lowest award
     commits.each do |commit|
@@ -137,9 +139,8 @@ class GitImporter
         proof_id = commit[:git_hash]
         next if project.awards.find_by(proof_id: proof_id)
 
-        commit_url = "https://github.com/#{@opts[:github_repo]}/commit/#{commit[:git_hash]}"
-        commit_link = "[#{commit[:subject]}](#{commit_url})"
-        description = "Git commit to #{@opts[:github_repo]}: #{commit_link}"
+        proof_link = "https://github.com/#{@opts[:github_repo]}/commit/#{commit[:git_hash]}"
+        description = "Git commit to #{@opts[:github_repo]}: #{commit[:subject]}"
 
         result = AwardSlackUser.call(
           project: project,
@@ -149,6 +150,7 @@ class GitImporter
             award_type_id: award_type.id,
             description: description,
             proof_id: proof_id,
+            proof_link: proof_link,
             created_at: commit[:author_date],
             updated_at: commit[:author_date]
           }
@@ -157,11 +159,13 @@ class GitImporter
           award = result.award
           award.save!
           CreateEthereumAwards.call(award: award) if @opts[:ethereum]
+          awards += 1
         else
           STDERR.puts result.message
         end
       end
     end
+    puts "Created #{awards} awards."
   end
 end
 
