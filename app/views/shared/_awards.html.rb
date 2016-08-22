@@ -40,10 +40,8 @@ class Views::Shared::Awards < Views::Base
             text " " + award.issuer_display_name
           }
           column("small-2") {
-            if award.ethereum_transaction_address
-              link_to award.ethereum_transaction_address_short,
-                "https://#{ENV['ETHERCAMP_SUBDOMAIN']}.ether.camp/transaction/#{award.ethereum_transaction_address}",
-                target: '_blank'
+            if award.ethereum_transaction_explorer_url
+              link_to award.ethereum_transaction_address_short, ethereum_transaction_explorer_url, target: '_blank'
             else
               text '(pending)'
             end
