@@ -22,8 +22,7 @@ class Views::Shared::Awards < Views::Base
           if show_recipient
             column("small-2") {
               img(src: award.authentication.slack_icon, class: "icon avatar-img")
-              br
-              text award.recipient_display_name
+              text " " + award.recipient_display_name
             }
           end
           column("small-3") {
@@ -36,8 +35,7 @@ class Views::Shared::Awards < Views::Base
           }
           column("small-2") {
             img(src: award.issuer.team_auth(award.award_type.project.slack_team_id).slack_icon, class: "icon avatar-img")
-            br
-            text award.issuer_display_name
+            text " " + award.issuer_display_name
           }
           column("small-2") {
             if award.ethereum_transaction_address
