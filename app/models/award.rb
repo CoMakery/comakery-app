@@ -36,6 +36,10 @@ class Award < ActiveRecord::Base
     authentication&.account&.ethereum_wallet
   end
 
+  def issuer_slack_icon
+    issuer.team_auth(slack_team_id).slack_icon
+  end
+
   private
 
   def slack_team_id

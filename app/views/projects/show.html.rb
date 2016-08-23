@@ -89,10 +89,9 @@ class Views::Projects::Show < Views::Base
                     }
                   end
 
-                  if project.ethereum_contract_address
+                  if project.ethereum_contract_explorer_url
                     div {
-                      link_to "Ξthereum Smart Contract",
-                        "https://#{ENV['ETHERCAMP_SUBDOMAIN']}.ether.camp/account/#{project.ethereum_contract_address}",
+                      link_to "Ξthereum Smart Contract", project.ethereum_contract_explorer_url,
                         target: "_blank", class: "text-link"
                     }
                   end

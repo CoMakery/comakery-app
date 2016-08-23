@@ -62,24 +62,7 @@ module Views
     end
 
     def markdown_to_html(markdown)
-      redcarpet.render(markdown)
+      Comakery::Markdown.to_html(markdown)
     end
-
-    def redcarpet
-      @@redcarpet_renderer ||= RenderHtmlWithoutWrap.new(
-        filter_html: true,
-        no_images: true,
-        no_styles: true,
-        safe_links_only: true,
-        link_attributes: {rel: 'nofollow', target: '_blank'}
-      )
-      @@redcarpet ||= Redcarpet::Markdown.new(@@redcarpet_renderer, autolink: true)
-    end
-  end
-end
-
-class RenderHtmlWithoutWrap < Redcarpet::Render::HTML
-  def postprocess(full_document)
-    Regexp.new(/\A<p>(.*)<\/p>\Z/m).match(full_document)[1] rescue full_document
   end
 end
