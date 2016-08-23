@@ -13,7 +13,29 @@
   padding: .7em 1em;
 
   .logo {
-    max-height: 40px;
+    width: auto;
+    height: 60px;
+  }
+  @media screen and (max-width: 39.9375em) {
+    .top-bar-title {
+      float: none;
+      text-align: center;
+      margin-right: 0;
+    }
+    .menu {
+      text-align: center;
+    }
+  }
+  @media screen and (min-width: 40em) and (max-width: 63.9375em) {
+    .logo {
+      width: auto;
+      height: 40px;
+    }
+  }
+  @media #{$large-up} {
+    .top-bar-right {
+      margin-top: 10px;
+    }
   }
   .top-bar-right ul li > a {
     color: $mediumgray;
@@ -27,6 +49,11 @@
   .top-bar-text {
     margin-top: .1em;
   }
+
+  .menu > li {
+    display: inline-block;
+  }
+
   input {
     margin-right: .5rem;
     margin-top: .3em;
