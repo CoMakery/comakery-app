@@ -27,7 +27,7 @@ describe AwardsController do
     context "when logged out" do
       context "with a public project" do
         let!(:public_project) { create(:project, owner_account: issuer, slack_team_id: "foo", public: true) }
-        let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
+        let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project), issuer: issuer) }
 
         it "shows awards for public projects" do
           get :index, project_id: public_project.to_param
