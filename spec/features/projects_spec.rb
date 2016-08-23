@@ -39,7 +39,7 @@ describe "viewing projects, creating and editing", :js do
 
     fill_in "Description", with: "This is a project description which is very informative"
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
-    expect(find_field("Set project as public")).to be_checked
+    expect(find_field("Set project as public")).not_to be_checked
 
     expect(find_field("Maximum Number of Awardable Coins")['value']).to eq("10000000")
     fill_in "Maximum Number of Awardable Coins", with: "20000000"
@@ -88,7 +88,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page.find(".project-image")[:style]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link "Project Tasks"
     expect(page).to have_content "0/20,000,000"
-    expect(page).to have_content "Visibility: Public"
+    expect(page).to have_content "Visibility: Private"
 
     expect(page).to have_content "Owner: Glenn Spanky"
     expect(page).to have_content "Citizen Code"
@@ -114,7 +114,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page.find("input[name*='[maximum_coins]']")[:disabled]).to eq(true)
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
 
-    expect(page).to have_checked_field("Set project as public")
+    expect(page).to have_unchecked_field("Set project as public")
     fill_in "Title", with: "This is an edited project"
     fill_in "Description", with: "This is an edited project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
