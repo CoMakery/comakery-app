@@ -60,7 +60,7 @@ describe ProjectsController do
 
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
-        expect(assigns[:project]).to be_public
+        expect(assigns[:project]).not_to be_public
         expect(assigns[:project].maximum_coins).to eq(10000000)
         expect(assigns[:project].award_types.size).to eq(4)
 
