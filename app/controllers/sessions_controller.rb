@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
 
   def create
     begin
-      d proc { request.env['omniauth.auth'] }
+      # d proc { request.env['omniauth.auth'] }
       @account = Authentication.find_or_create_from_auth_hash!(request.env['omniauth.auth'])
       session[:account_id] = @account.id
     rescue SlackAuthHash::MissingAuthParamException => e
