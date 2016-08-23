@@ -27,9 +27,9 @@ class Views::Shared::Awards < Views::Base
           end
           column("small-3") {
             if award.proof_link
-              link_to "#{award.proof_id[0...20]}...", award.proof_link, target: '_blank'
+              link_to award.proof_id_short, award.proof_link, target: '_blank'
             else
-              span "#{award.proof_id[0...20]}..."
+              span award.proof_id_short
             end
             br
             strong "#{award.award_type.name}"
@@ -41,7 +41,7 @@ class Views::Shared::Awards < Views::Base
           }
           column("small-2") {
             if award.ethereum_transaction_address
-              link_to "#{award.ethereum_transaction_address[0...10]}...",
+              link_to award.ethereum_transaction_address_short,
                 "https://#{ENV['ETHERCAMP_SUBDOMAIN']}.ether.camp/transaction/#{award.ethereum_transaction_address}",
                 target: '_blank'
             else
