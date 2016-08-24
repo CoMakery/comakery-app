@@ -1,5 +1,5 @@
 class Views::Shared::Awards < Views::Base
-  needs :awards, :show_recipient
+  needs :awards, :show_recipient, :current_account
 
   def content
     div(class: "award-rows") {
@@ -39,9 +39,13 @@ class Views::Shared::Awards < Views::Base
             img(src: award.issuer_slack_icon, class: "icon avatar-img")
             text " " + award.issuer_display_name
           }
-          column("small-2") {
+          column("small-2", class: 'blockchain-address') {
             if award.ethereum_transaction_explorer_url
-              link_to award.ethereum_transaction_address_short, ethereum_transaction_explorer_url, target: '_blank'
+              link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
+            elsif award.recipient_address.blank? && current_account == award.recipient_account && show_recipient
+              link_to '(no account)', account_path
+            elsif award.recipient_address.blank?
+              text '(no account)'
             else
               text '(pending)'
             end
