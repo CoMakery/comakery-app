@@ -12,38 +12,41 @@
 .contain-to-grid .top-bar {
   padding: .7em 1em;
 
+  a {
+   color: $mediumgray;
+   text-transform: lowercase;
+   letter-spacing: 0;
+   font-size: 16px;
+   &:hover, &:active {
+     background: white!important;
+   }
+  }
+
   .logo {
     width: auto;
     height: 60px;
   }
   @media screen and (max-width: 39.9375em) {
-    .top-bar-title {
-      float: none;
-      text-align: center;
-      margin-right: 0;
+    input {
+      margin-top: .5rem !important;
+      margin-bottom: .5rem !important;
     }
-    .menu {
-      text-align: center;
+    .account-links {
+      margin-top: .5rem;
     }
   }
   @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-    .logo {
-      width: auto;
-      height: 40px;
+    input {
+      margin-top: .5rem !important;
+      margin-bottom: .5rem !important;
+    }
+    .account-links {
+      margin-top: .5rem;
     }
   }
   @media #{$large-up} {
     .top-bar-right {
       margin-top: 10px;
-    }
-  }
-  .top-bar-right ul li > a {
-    color: $mediumgray;
-    text-transform: lowercase;
-    letter-spacing: 0;
-    font-size: 16px;
-    &:hover, &:active {
-      background: white!important;
     }
   }
   .top-bar-text {
@@ -52,6 +55,9 @@
 
   .menu > li {
     display: inline-block;
+  }
+  .menu > li .first {
+    padding-left: 0;
   }
 
   input {
@@ -70,6 +76,16 @@
   .project-icon {
     margin-right: 10px;
     margin-left: 10px;
+  }
+  @media screen and (max-width: 39.9375em) {
+    .project-icon {
+      margin-left: 0;
+    }
+  }
+  @media screen and (min-width: 40em) and (max-width: 63.9375em) {
+    .project-icon {
+      margin-left: 0;
+    }
   }
 }
 .project-search {
