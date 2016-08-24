@@ -10,6 +10,7 @@ class Views::Shared::Awards < Views::Base
         column("small-3") { div(class: "header") { text "Contribution" } }
         column("small-2") { div(class: "header") { text "Authorized By" } }
         column("small-2") { div(class: "header") { text "Blockchain Transaction" } }
+        column("small-2") {} unless show_recipient
       }
       awards.sort_by(&:created_at).reverse.each do |award|
         row(class: "award-row") {
