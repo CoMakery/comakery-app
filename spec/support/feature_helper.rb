@@ -6,4 +6,10 @@ module FeatureHelper
   def login(account)
     page.set_rack_session(:account_id => account.id)
   end
+
+  def ignore_js_errors
+    yield
+  rescue Capybara::Poltergeist::JavascriptError
+    # ignore JS errors
+  end
 end

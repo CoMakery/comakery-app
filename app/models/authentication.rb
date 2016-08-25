@@ -18,6 +18,13 @@ class Authentication < ActiveRecord::Base
     slack_image_32_url || slack_team_image_34_url
   end
 
+  def slack_team_ethereum_enabled?
+    allow_ethereum = Rails.application.config.allow_ethereum
+    allowed_domains = allow_ethereum.to_s.split(',').compact
+    allowed_domains.include?(slack_team_domain)
+  end
+
+
   def self.find_or_create_from_auth_hash!(auth_hash)
     slack_auth_hash = SlackAuthHash.new(auth_hash)
 

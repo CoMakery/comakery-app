@@ -16,7 +16,12 @@ module Views
               with_errors(project, :maximum_coins) {
                 label {
                   text "Maximum Number of Awardable Coins "
-                  question_tooltip("This is the maximum sum of coins you can award in the life of this project. Select it carefully, it cannot be changed after it has been set. Also select a high enough number so you have room for the future.")
+                  question_tooltip("This is the maximum sum of coins
+                    you can award in the life of this project.
+                    Select it carefully,
+                    it cannot be changed after it has been set.
+                    Also select a high enough number
+                    so you have room for the future.")
                   f.text_field :maximum_coins, type: "number", disabled: !project.new_record?
                 }
               }
@@ -44,14 +49,24 @@ module Views
                   question_tooltip("Decide whether or not to display this project in the CoMakery project index")
                 }
               }
-
-              with_errors(project, :ethereum_enabled) {
-                label {
-                  f.check_box :ethereum_enabled, disabled: project.ethereum_enabled
-                  text " Publish to Ethereum Blockchain "
-                  question_tooltip("WARING: This is irreversible. This will issue blockchain tokens for all existing and future awards for users with ethereum accounts. This information is public with anonymized account names and cannot be revoked.")
+              if current_account.slack_auth.slack_team_ethereum_enabled?
+                with_errors(project, :ethereum_enabled) {
+                  label {
+                    f.check_box :ethereum_enabled, disabled: project.ethereum_enabled
+                    text " Publish to Ethereum Blockchain "
+                    question_tooltip("WARING: This is irreversible.
+                      This will issue blockchain tokens for all existing and
+                      future awards for users with ethereum accounts.
+                      This information is public with anonymized account names
+                      and cannot be revoked.")
+                  }
                 }
-              }
+              else
+                label {
+                  link_to 'contact us', 'mailto:hello@comakery.com'
+                  text " if you'd like to join the Ξthereum blockchain beta"
+                }
+              end
             }
             column("large-6 small-12") {
               with_errors(project, :tracker) {

@@ -50,6 +50,54 @@ describe Authentication do
     end
   end
 
+  describe "slack_team_ethereum_enabled?" do
+    describe "when ENV whitelist is set" do
+      before do
+        Rails.application.config.allow_ethereum = 'foo,comakery'
+      end
+      it "is true if the slack team domain is in the ENV whitelist" do
+        auth = create(:authentication, slack_team_domain: 'comakery')
+        expect(auth.slack_team_ethereum_enabled?).to eq true
+      end
+      it "is false if the slack team domain is not in the ENV whitelist" do
+        auth = create(:authentication, slack_team_domain: 'com0kery')
+        expect(auth.slack_team_ethereum_enabled?).to eq false
+      end
+      it "is false if the slack team domain is nil" do
+        auth = create(:authentication, slack_team_domain: nil)
+        expect(auth.slack_team_ethereum_enabled?).to eq false
+      end
+    end
+
+    describe "when ENV whitelist is nil" do
+      before do
+        Rails.application.config.allow_ethereum = nil
+      end
+      it "is false for a valid slack team domain" do
+        auth = create(:authentication, slack_team_domain: 'comakery')
+        expect(auth.slack_team_ethereum_enabled?).to eq false
+      end
+      it "is false if the slack team domain is nil" do
+        auth = create(:authentication, slack_team_domain: nil)
+        expect(auth.slack_team_ethereum_enabled?).to eq false
+      end
+    end
+
+    describe "when ENV whitelist is empty" do
+      before do
+        Rails.application.config.allow_ethereum = ''
+      end
+      it "is false for a valid domain" do
+        auth = create(:authentication, slack_team_domain: 'comakery')
+        expect(auth.slack_team_ethereum_enabled?).to eq false
+      end
+      it "is false if the slack team domain is nil" do
+        auth = create(:authentication, slack_team_domain: nil)
+        expect(auth.slack_team_ethereum_enabled?).to eq false
+      end
+    end
+  end
+
   describe ".find_or_create_from_auth_hash" do
     let(:auth_hash) {
       {
