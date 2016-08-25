@@ -34,6 +34,10 @@
     padding-bottom: 2.3em;
     position: relative;
 
+    @media #{$large-up} {
+      min-height: 130px;
+    }
+    
     .text-overlay {
       position: absolute;
       left: 85px;
