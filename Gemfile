@@ -1,10 +1,12 @@
 source 'https://rubygems.org'
-ruby '2.3.0'
+ruby '2.3.1'
 
 gem 'airbrake'
+gem 'awesome_print'
 gem 'coffee-rails'
 gem 'compass-rails'
-gem "d3-rails"
+gem 'draper'
+gem "d3-rails", '~>3.5'
 gem "font-awesome-rails"
 gem 'fortitude', git: "https://github.com/ageweke/fortitude.git", ref: '3de1286652874506802a75befde0f11d79a0ec67'  # change when gem released
 gem 'foundation-icons-sass-rails'
@@ -24,7 +26,8 @@ gem 'premailer-rails'
 gem 'puma'
 gem 'pundit'
 gem 'rails_12factor', group: :production
-gem 'rails', '4.2.5.2'
+gem 'rails', '~> 4.2'
+gem "redcarpet"
 gem "refile", require: "refile/rails"
 gem "refile-mini_magick"
 gem "refile-s3"
@@ -38,28 +41,20 @@ gem 'slack-ruby-client'
 gem 'uglifier'
 gem 'underscore-rails'
 
+group(:scripts) do
+  gem 'easy_shell'
+  gem 'trollop'
+end
+
 group(:development, :test) do
-  gem 'awesome_print'
-  gem 'capybara'
-  gem 'database_cleaner'
   gem 'dotenv-rails'
-  gem 'fuubar'
-  gem 'guard-rspec', require: false
-  gem 'phantomjs', require: 'phantomjs/poltergeist'
-  gem 'poltergeist'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rack_session_access'
   gem 'rerun'
-  gem 'rspec-rails'
-  gem 'selenium-webdriver'
-  gem 'simplecov'
-  gem 'typhoeus'
 end
 
 group(:development) do
   gem 'brakeman', require: false
-  gem 'easy_shell'
   gem 'git-storyid'
   # gem 'html2fortitude'  # requires old ruby_parser, try global "gem install html2fortitude" instead
   gem 'foreman'
@@ -72,9 +67,18 @@ group(:development) do
   gem 'spring-commands-rspec'
   gem 'spring'
   gem 'web-console'
-  gem 'xray-rails'
 end
 
 group(:test) do
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'fuubar'
+  gem 'guard-rspec', require: false
+  gem 'phantomjs', require: 'phantomjs/poltergeist'
+  gem 'poltergeist'
+  gem 'rack_session_access'
+  gem 'rspec-rails'
+  gem 'selenium-webdriver'
+  gem 'simplecov'
   gem 'webmock'
 end

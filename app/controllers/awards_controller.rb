@@ -4,7 +4,7 @@ class AwardsController < ApplicationController
 
   def index
     authorize(@project)
-    @awards = @project.awards
+    @awards = @project.awards.decorate
   end
 
   def create
@@ -17,7 +17,7 @@ class AwardsController < ApplicationController
       authorize award
       award.save!
       CreateEthereumAwards.call(award: award)
-      
+
       current_account.send_award_notifications(award: award)
 
       flash[:notice] = "Successfully sent award to #{award.recipient_display_name}"

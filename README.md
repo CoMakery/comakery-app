@@ -10,21 +10,69 @@ CoMakery helps you run a [Dynamic Equity Organization](https://github.com/citize
 
 ## Current Implementation Status
 
-This project is alpha and not ready for production use.
+This project is in private alpha.
 It is being actively developed by CoMakery.
-We welcome [feature requests and pull requests](https://github.com/comakery/comakery-app/issues).
 
 We are planning to license it as a Dynamic Equity Organization.
 The structure is being legally reviewed for use in CoMakery and on your projects.
 
+## Project management
+
+Install the [zenbhub chrome git extension](https://chrome.google.com/webstore/detail/zenhub-for-github/ogcgkffhplmphkaahpmffcafajaocjbd?hl=en-US)
+
+Then you can see the board at: https://github.com/CoMakery/comakery-app#boards?repos=51389241
+
 ## Local development
 
-Prerequisites: PostgreSQL
+Prerequisites:
+
+- PostgreSQL
+- Redis is you want to run delayed jobs
+
+Set up .env:
+
+```sh
+cp .env.dev .env
+heroku config -a comakery-demo -s | egrep '^(SLACK_|ETHEREUM_|ETHERCAMP_)' | sort >> .env
+```
+
+Basics :
 
 ```sh
 bundle
 rake db:create:all db:schema:load
+```
+
+Run server:
+
+```sh
 rails server
+```
+
+or if you want to run with delayed jobs:
+
+```sh
+bin/server
+```
+
+## Running tests
+
+A bit faster: `bin/rspec`
+
+More thorough (integrates views): `bin/rspect`
+
+## Pushing code to Github
+
+To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
+
+## Deploying to heroku
+
+Once your heroku user has access to the applications, you can run any of:
+
+```
+bin/deploy demo
+bin/deploy staging
+bin/deploy production
 ```
 
 ## Deleting a project

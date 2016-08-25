@@ -9,8 +9,8 @@ describe "viewing projects, creating and editing", :js do
     let!(:project) { create(:project, public: true, owner_account: owner, slack_team_id: "foo") }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }
-    let!(:award) { create(:award, award_type: award_type, authentication: owner_auth) }
-    let!(:community_award) { create(:award, award_type: community_award_type, authentication: other_account_auth) }
+    let!(:award) { create(:award, award_type: award_type, issuer: owner, authentication: other_account_auth) }
+    let!(:community_award) { create(:award, award_type: community_award_type, issuer: other_account, authentication: owner_auth) }
 
     before do
       stub_slack_user_list
@@ -49,8 +49,6 @@ describe "viewing projects, creating and editing", :js do
       end
 
       context "viewing awards" do
-        let!(:award) { create(:award, award_type: community_award_type) }
-
         it "lets people view awards" do
           visit project_path(project)
 

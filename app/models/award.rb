@@ -33,7 +33,15 @@ class Award < ActiveRecord::Base
   end
 
   def recipient_address
-    authentication&.account&.ethereum_wallet
+    recipient_account&.ethereum_wallet
+  end
+
+  def recipient_account
+    authentication&.account
+  end
+
+  def issuer_slack_icon
+    issuer.team_auth(slack_team_id)&.slack_icon
   end
 
   private

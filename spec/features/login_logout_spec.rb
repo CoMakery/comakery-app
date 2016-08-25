@@ -20,7 +20,7 @@ describe "logging in and out" do
 
     expect(page).to have_content "This is a project"
 
-    click_link "Sign out"
+    first('.menu').click_link "Sign out"
 
     expect(page).to have_content "Sign in"
 

@@ -27,7 +27,7 @@ class ProjectsController < ApplicationController
   def new
     assign_slack_channels
 
-    @project = Project.new(public: true, maximum_coins: 10_000_000)
+    @project = Project.new(public: false, maximum_coins: 10_000_000)
     @project.award_types.build(name: "Thanks", amount: 10)
     @project.award_types.build(name: "Small Contribution", amount: 100)
     @project.award_types.build(name: "Contribution", amount: 1000)
@@ -58,7 +58,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.includes(:award_types).find(params[:id])
+    @project = Project.includes(:award_types).find(params[:id]).decorate
     authorize @project
     @award = Award.new
     @awardable_authentications = GetAwardableAuthentications.call(current_account: current_account, project: @project).awardable_authentications

@@ -60,5 +60,9 @@ module Views
         block.yield
       }
     end
+
+    def markdown_to_html(markdown)
+      Comakery::Markdown.to_html(markdown)
+    end
   end
 end

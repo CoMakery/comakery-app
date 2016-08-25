@@ -3,10 +3,6 @@ machine:
     America/Los_Angeles
 
 dependencies:
-  pre:
-    - gem install brakeman
-    - gem install easy_shell
-
   cache_directories:
     - /home/ubuntu/.phantomjs
 
@@ -19,11 +15,8 @@ database:
 
 test:
   override:
-    - ./bin/rspect --format documentation:
-        parallel: true
-        files:
-          - spec/**/*_spec.rb
-    - brakeman --exit-on-warn
+    - ./bin/rspect --format documentation
+    - bundle exec brakeman --exit-on-warn
     # - rails_best_practices .
 
 deployment:

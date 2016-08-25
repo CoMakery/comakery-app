@@ -5,7 +5,7 @@ class Project < ActiveRecord::Base
   nilify_blanks
   attachment :image
 
-  has_many :authentications, foreign_key: :slack_team_id
+  has_many :authentications, foreign_key: :slack_team_id, primary_key: :slack_team_id
   has_many :accounts, through: :authentications
 
   has_many :award_types, inverse_of: :project, dependent: :destroy
