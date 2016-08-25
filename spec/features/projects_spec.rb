@@ -85,7 +85,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Project created"
     expect(page).to have_content "This is a project"
     expect(page).to have_content "This is a project description which is very informative"
-    expect(page.find(".project-image")[:style]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
+    expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link "Project Tasks"
     expect(page).to have_content "0/20,000,000"
     expect(page).to have_content "Visibility: Private"
@@ -143,7 +143,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Visibility: Private"
     expect(page).to have_link "Project Tasks"
     expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com/messages/a-channel-name"
-    expect(page.all(".project-image iframe").size).to eq(1)
+    expect(page.all(".project-video iframe").size).to eq(1)
     expect(page).to have_link "Video", href: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
     expect(page).to have_link "Contributor Agreement", href: "https://docusign.com/project_contributor_agreement.pdf"
 

@@ -33,30 +33,6 @@ body {
 
   .main > .columns {
     float: none;
-
-    @media #{$large-up} {
-      width: 75em;
-      .row.project {
-        width: 23.5em;
-        .image-block {
-          height: 17em;
-        }
-      }
-    }
-    @media only screen and (min-width: 64em) and (max-width: 75em) {
-      width: 64em;
-      .row.project {
-        width: 20em;
-        .image-block {
-          height: 14.47em;
-        }
-      }
-    }
-    @media only screen and (min-width: 40em) and (max-width: 64em) {
-      .image-block {
-        height: 12.5em;
-      }
-    }
   }
 }
 .app-aside {
@@ -91,12 +67,6 @@ body {
   text-align: right;
   padding-right: 15px;
 }
-.logo {
-  width: rem-calc(90);
-  height: auto;
-  padding: $topbar-height/6 0 $topbar-height/5 0;
-  max-height: $topbar-height;
-}
 a .button, a .button.take-action {
   @extend %chunko-text;
   color: $snow;
@@ -121,14 +91,25 @@ a.more {
 form.take-action-form p.notice {
   color: $snow;
 }
+.awards-title {
+  text-align: left;
+}
+.award-rows {
+  margin-bottom: 100px;
+}
 .award-rows .header {
   font-weight: bold;
   text-transform: uppercase;
 }
 .award-rows .header-row {
+  text-align: left;
   border-bottom: 1px solid $iron;
   margin-bottom: 15px;
   padding: 5px;
+}
+.award-rows .award-row {
+  text-align: left;
+  margin-bottom: 50px;
 }
 .underlined-header {
   border-bottom: 1px solid $iron;
@@ -184,4 +165,31 @@ form.take-action-form p.notice {
 
 .avatar-img {
   max-width: 27px;
+}
+
+@mixin aspect-ratio($width, $height) {
+  position: relative;
+  &:before {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: ($height / $width) * 100%;
+  }
+  > .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    @include filter-gradient(#000000, #000000, vertical);
+    @include background-image(linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.55) 100%));
+  }
+}
+.sixteen-nine {
+  @include aspect-ratio(16, 9);
+}
+
+.skyblue {
+  color: $skyblue;
 }
