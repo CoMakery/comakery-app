@@ -25,10 +25,13 @@
     padding-bottom: 2.3em;
     position: relative;
 
+    @media screen and (min-width: 40em) and (max-width: 63.9375em) {
+      min-height: 130px;
+    }
     @media #{$large-up} {
       min-height: 130px;
     }
-    
+
     .text-overlay {
       position: absolute;
       left: 85px;
