@@ -33,9 +33,7 @@
     height: 20em;
   }
   width: 100%;
-  height: 20em;
-  background-size: cover;
-  background-position: center center;
+  height: auto;
 }
 .row.project-body {
   margin-top: 2.6em;
@@ -82,4 +80,12 @@
 
 .coin-numbers {
   font-size: 1.7em;
+}
+
+#award_description {
+  margin-bottom: 0;
+}
+.award-description-help-text {
+  color: $mediumgray;
+  font-size: 9pt;
 }

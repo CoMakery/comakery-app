@@ -56,5 +56,7 @@ module Comakery
     config.active_record.raise_in_transactional_callbacks = true
 
     config.airbrake = false
+
+    config.ethercamp_subdomain = ENV['ETHERCAMP_SUBDOMAIN'] || raise("Please set ETHERCAMP_SUBDOMAIN environment variable")
   end
 end

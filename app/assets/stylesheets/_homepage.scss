@@ -63,6 +63,18 @@
   }
 }
 
+@media screen and (max-width: 39.9375em) {
+  .intro .intro-content {
+      margin-top: 6.5rem;
+  }
+}
+
+@media screen and (min-width: 40em) and (max-width: 63.9375em) {
+  .intro .intro-content {
+      margin-top: 9.5rem;
+  }
+}  
+
 .how-it-works {
   background: #52008D;
   color: white;

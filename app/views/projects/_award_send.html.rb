@@ -20,7 +20,7 @@ class Views::Projects::AwardSend < Views::Base
                         f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
                       }
                     end
-                    column(can_award ? "small-11 #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : "small-12") {
+                    column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : "small-12") {
                       span(award_type.name)
                       text " (#{number_with_precision(award_type.amount, precision: 0, delimiter: ',')})"
                       text " (Community Awardable)" if award_type.community_awardable?
@@ -49,6 +49,7 @@ class Views::Projects::AwardSend < Views::Base
                 label {
                   text "Description"
                   f.text_area(:description)
+                  link_to("Styling with Markdown is Supported", "https://guides.github.com/features/mastering-markdown/", class: "award-description-help-text")
                 }
               }
             }

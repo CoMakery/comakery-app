@@ -58,7 +58,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.includes(:award_types).find(params[:id])
+    @project = Project.includes(:award_types).find(params[:id]).decorate
     authorize @project
     @award = Award.new
     @awardable_authentications = GetAwardableAuthentications.call(current_account: current_account, project: @project).awardable_authentications

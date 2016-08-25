@@ -23,7 +23,7 @@ describe "awarding users" do
   let!(:different_team_authentication) { create(:authentication, slack_user_name: 'different', slack_user_id: 'different id', slack_first_name: "Different", slack_last_name: "Different", account: different_team_account, slack_team_id: "different team id", slack_image_32_url: "http://avatar.com/different_team_account_avatar.jpg") }
 
   before do
-    travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))
+    travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))  # so we can check for fixed date of award
 
     expect_any_instance_of(Account).to receive(:send_award_notifications)
     stub_slack_user_list([{"id": "U99M9QYFQ", "team_id": "team id", "name": "bobjohnson", "profile": {"email": "bobjohnson@example.com"}}])
@@ -76,7 +76,9 @@ describe "awarding users" do
         expect(page).to have_content "1,000/10,000,000 (0.01%)Total Coins Issued"
       end
 
-      expect(page.all("img[src='https://slack.example.com/team-image-34-px.jpg']").size).to eq(2)
+      within('.project-body') do
+        expect(page.all("img[src='https://slack.example.com/team-image-34-px.jpg']").size).to eq(1)
+      end
       expect(page).to have_content "@bobjohnson1,000"
 
       expect(page.html).to include('{"content": [{"label":"@bobjohnson","value":1000}')
@@ -136,7 +138,7 @@ describe "awarding users" do
     expect(page).to have_content "Award History"
     expect(page).to have_content "Feb 29"
     expect(page).to have_content "1,000"
-    expect(page).to have_content "(pending)"
+    expect(page).to have_content "(no account)"
     expect(page).to have_content "Small"
     expect(page).to have_content "Super fantastic fabulous programatic work on teh things, A++"
     expect(page).to have_content "@bobjohnson"

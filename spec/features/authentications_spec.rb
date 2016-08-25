@@ -16,7 +16,7 @@ feature "my account" do
     login(auth.account)
 
     visit root_path
-    click_link "Account"
+    first('.menu').click_link "Account"
 
     expect(page).to have_content "Swarmbot"
     expect(page).to have_content "1,337"
@@ -29,7 +29,7 @@ feature "my account" do
   scenario "editing, and adding an ethereum address" do
     login(auth.account)
     visit root_path
-    click_link "Account"
+    first('.menu').click_link "Account"
 
     within(".ethereum_wallet") do
       click_link "Edit"
@@ -55,7 +55,7 @@ feature "my account" do
   scenario 'adding an ethereum address sends ethereum tokens, for awards' do
     login(auth.account)
     visit root_path
-    click_link "Account"
+    first('.menu').click_link "Account"
 
     within(".ethereum_wallet") do
       click_link "Edit"

@@ -43,11 +43,17 @@ class Views::Projects::Show < Views::Base
           }
           row {
             column("medium-5 small-12") {
-              div(class: "project-image", style: "background-image: url(#{attachment_url(project, :image)})") {
-                if project.video_url
+              if project.video_url
+                div(class: "project-video") {
                   iframe(width: "454", height: "304", src: "//www.youtube.com/embed/#{project.youtube_id}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0", frameborder: "0")
-                end
-              }
+                }
+              else
+                div(class: "sixteen-nine") {
+                  div(class: "content") {
+                    img(src: attachment_url(project, :image), class: "project-image")
+                  }
+                }
+              end
             }
             column("medium-7 small-12") {
               full_row {
@@ -83,10 +89,9 @@ class Views::Projects::Show < Views::Base
                     }
                   end
 
-                  if project.ethereum_contract_address
+                  if project.ethereum_contract_explorer_url
                     div {
-                      link_to "Ξthereum Smart Contract",
-                        "https://#{ENV['ETHERCAMP_SUBDOMAIN']}.ether.camp/account/#{project.ethereum_contract_address}",
+                      link_to "Ξthereum Smart Contract", project.ethereum_contract_explorer_url,
                         target: "_blank", class: "text-link"
                     }
                   end
@@ -117,12 +122,12 @@ class Views::Projects::Show < Views::Base
       }
     }
     row(class: "project-body") {
-      column("medium-5 small-12") {
+      column("large-5 small-12") {
         div(class:"award-send") {
           render partial: "award_send"
         }
       }
-      column("medium-7 small-12 contributors-column") {
+      column("large-7 small-12 contributors-column") {
 
         row {
           column("small-12", class: "underlined-header") {
@@ -169,6 +174,8 @@ class Views::Projects::Show < Views::Base
           full_row {
             div(id: "contributions-chart")
           }
+
+          row { column("small-12", class: "underlined-header") { text "Top Contributors" } }
 
           row {
             column("small-12") {
