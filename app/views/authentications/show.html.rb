@@ -51,7 +51,7 @@ class Views::Authentications::Show < Views::Base
     hr
 
     awards.group_by { |award| award.award_type.project_id }.each do |(_, awards_for_project)|
-      h3 "#{awards_for_project.first.award_type.project.title} awards"
+      h3 "#{awards_for_project.first.award_type.project.title} awards", class: "awards-title"
       render partial: "shared/awards", locals: {awards: AwardDecorator.decorate_collection(awards_for_project), show_recipient: false}
     end
   end

@@ -91,16 +91,24 @@ a.more {
 form.take-action-form p.notice {
   color: $snow;
 }
+.awards-title {
+  text-align: left;
+}
+.award-rows {
+  margin-bottom: 100px;
+}
 .award-rows .header {
   font-weight: bold;
   text-transform: uppercase;
 }
 .award-rows .header-row {
+  text-align: left;
   border-bottom: 1px solid $iron;
   margin-bottom: 15px;
   padding: 5px;
 }
 .award-rows .award-row {
+  text-align: left;
   margin-bottom: 50px;
 }
 .underlined-header {
