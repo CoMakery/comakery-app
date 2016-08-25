@@ -41,7 +41,7 @@ class Award < ActiveRecord::Base
   end
 
   def issuer_slack_icon
-    issuer.team_auth(slack_team_id).slack_icon
+    issuer.team_auth(slack_team_id)&.slack_icon
   end
 
   private

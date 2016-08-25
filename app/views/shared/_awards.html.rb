@@ -36,8 +36,11 @@ class Views::Shared::Awards < Views::Base
             text raw ": #{markdown_to_html award.description}" if award.description.present?
           }
           column("small-2") {
-            img(src: award.issuer_slack_icon, class: "icon avatar-img")
-            text " " + award.issuer_display_name
+            if award.issuer_slack_icon
+              img(src: award.issuer_slack_icon, class: "icon avatar-img")
+              text " "
+            end
+            text award.issuer_display_name
           }
           column("small-2", class: 'blockchain-address') {
             if award.ethereum_transaction_explorer_url
