@@ -20,10 +20,13 @@ module Comakery
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # one HTTP auth password for the entire site
-    config.require_site_login = false # disabled by default
-    config.site_username = 'foo'
-    config.site_password = 'bar'
+    if ENV['APP_NAME'] == 'staging' || ENV['APP_NAME'] == 'demo'
+      config.require_site_login = true
+      config.site_username = 'comakery'
+      config.site_password = 'now'
+    else
+      config.require_site_login = false
+    end
 
     config.allow_signup = true
     config.company_name = "CoMakery"
