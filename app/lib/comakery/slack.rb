@@ -45,7 +45,7 @@ class Comakery::Slack
       project.
     }
     if award.project.ethereum_enabled && award.recipient_address.blank?
-      text += " <#{account_url}|Set up your account> "
+      text += " <#{account_url}|Set up your account> to receive Ethereum tokens."
     end
     text.strip!.gsub!(/\s+/, ' ')
     text
