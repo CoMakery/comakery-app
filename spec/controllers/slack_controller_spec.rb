@@ -7,7 +7,7 @@ describe SlackController do
     }
     it "should respond with welcome text" do
       post :command
-      expect(response.body).to match %r{helps you share equity}
+      expect(response.body).to match %r{helps you share revenue}
       expect(response.body).to match %r{comakery.museum}
     end
   end

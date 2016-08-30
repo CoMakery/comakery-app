@@ -33,7 +33,7 @@ module Comakery
     config.project_name = "CoMakery"
     config.project_slug = "comakery"
     # appears in main layout meta tag
-    config.project_description = "Coin distribution for dynamic equity organizations"
+    config.project_description = "Collaborate on products and share the revenue"
     config.contact_email = "hello@comakery.com"
 
     # lib/ is for code that is entirely independent of your Rails app

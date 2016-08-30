@@ -9,7 +9,7 @@ class SlackController < ApplicationController
       response_type: "in_channel",
       attachments: [
         {
-        text: %{ Hi! CoMakery helps you share equity with your team.
+        text: %{ Hi! CoMakery helps you share revenue with product teams.
           For more intel, drop by #{ENV['APP_HOST']}
         }.strip.gsub(/\s+/, ' ')
         }

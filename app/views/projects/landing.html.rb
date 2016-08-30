@@ -16,23 +16,21 @@ class Views::Projects::Landing < Views::Projects::Base
           div(class:"intro-content") {
             div(class:"show-for-small-only") {
               h3 {
-                text "Track and Trade Sweat Equity for Products"
+                text "Collaborate on Products and Share the Revenue"
               }
             }
             div(class:"show-for-medium-only") {
               h3 {
-                text "Track and Trade"
+                text "Collaborate on Products"
                 br
-                text "Sweat Equity for"
-                br
-                text "Products"
+                text "Share the Revenue"
               }
             }
             div(class:"show-for-large") {
               h3 {
-                text "Track and Trade"
+                text "Collaborate on Products"
                 br
-                text "Sweat Equity for Products"
+                text "Share the Revenue"
               }
             }
             a("Sign in with Slack", class: buttonish << "margin-small", href: login_path)
@@ -45,17 +43,17 @@ class Views::Projects::Landing < Views::Projects::Base
               column("small-12 large-4") {
                 div(class:"number") { text "1" }
                 h4 "Contribute"
-                p "Contribute code, design, content, or vision, Find a project or start one for your Slack channel."
+                p "Join a project or start one for your Slack team. Contribute code, design, marketing, or ideas."
               }
               column("small-12 large-4") {
                 div(class:"number") { text "2" }
-                h4 "Earn"
-                p "Earn project coins, get recognized for your contributions, see feedback, and more."
+                h4 "Receive"
+                p "Receive project coin awards and recognition for your contributions."
               }
               column("small-12 large-4") {
                 div(class:"number") { text "3" }
-                h4 "Share"
-                p "Share in the value the project creates. Project coins can be tied to revenue or company shares."
+                h4 "Share Revenue"
+                p "Project coins become cash when your project earns revenue."
               }
             }
           }
