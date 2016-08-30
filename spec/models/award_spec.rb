@@ -23,6 +23,9 @@ describe Award do
     end
 
     describe "#ethereum_transaction_address" do
+      let(:award) { create(:award) }
+      let(:address) { '0x'+'a'*64 }
+
       it "should validate with a valid ethereum transaction address" do
         expect(build(:award, ethereum_transaction_address: nil)).to be_valid
         expect(build(:award, ethereum_transaction_address: "0x#{'a'*64}")).to be_valid
@@ -37,8 +40,34 @@ describe Award do
         expect(build(:award, ethereum_transaction_address: "0x#{'a'*65}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
         expect(build(:award, ethereum_transaction_address: "0x#{'g'*64}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
       end
-    end
 
+      it { expect(award.ethereum_transaction_address).to eq(nil) }
+
+      it 'can be set' do
+        award.ethereum_transaction_address = address
+        award.save!
+        award.reload
+        expect(award.ethereum_transaction_address).to eq(address)
+      end
+
+      it 'once set cannot be set unset' do
+        award.ethereum_transaction_address = address
+        award.save!
+        award.ethereum_transaction_address = nil
+        expect(award).not_to be_valid
+        expect(award.errors.full_messages.to_sentence).to match \
+          /Ethereum transaction address cannot be changed after it has been set/
+      end
+
+      it 'once set it cannot be set to another value' do
+        award.ethereum_transaction_address = address
+        award.save!
+        award.ethereum_transaction_address = '0x'+'b'*64
+        expect(award).not_to be_valid
+        expect(award.errors.full_messages.to_sentence).to match \
+          /Ethereum transaction address cannot be changed after it has been set/
+      end
+    end
   end
 
   describe "#issuer_display_name" do

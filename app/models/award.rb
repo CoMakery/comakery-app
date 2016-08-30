@@ -7,7 +7,8 @@ class Award < ActiveRecord::Base
 
   validates_presence_of :proof_id, :authentication, :award_type, :issuer
 
-  validates :ethereum_transaction_address, ethereum_address: {type: :transaction}  # see EthereumAddressable
+  validates :ethereum_transaction_address, ethereum_address: {type: :transaction, immutable: true}  # see EthereumAddressable
+
   before_validation :ensure_proof_id_exists
 
   def ensure_proof_id_exists

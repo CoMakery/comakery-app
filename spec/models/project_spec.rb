@@ -61,6 +61,9 @@ describe Project do
     end
 
     describe "#ethereum_contract_address" do
+      let(:project) { create(:project) }
+      let(:address) { '0x'+'a'*40 }
+
       it "should validate with a valid ethereum address" do
         expect(build(:project, ethereum_contract_address: nil)).to be_valid
         expect(build(:project, ethereum_contract_address: "0x#{'a'*40}")).to be_valid
@@ -75,11 +78,6 @@ describe Project do
         expect(build(:project, ethereum_contract_address: "0x#{'a'*41}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
         expect(build(:project, ethereum_contract_address: "0x#{'g'*40}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
       end
-    end
-
-    describe "ethereum_contract_address" do
-      let(:project) { create(:project) }
-      let(:address) { '0x'+'a'*40 }
 
       it { expect(project.ethereum_contract_address).to eq(nil) }
 
@@ -95,6 +93,8 @@ describe Project do
         project.save!
         project.ethereum_contract_address = nil
         expect(project).not_to be_valid
+        expect(project.errors.full_messages.to_sentence).to match \
+          /Ethereum contract address cannot be changed after it has been set/
       end
 
       it 'once set it cannot be set to another value' do
@@ -102,6 +102,8 @@ describe Project do
         project.save!
         project.ethereum_contract_address = '0x'+'b'*40
         expect(project).not_to be_valid
+        expect(project.errors.full_messages.to_sentence).to match \
+          /Ethereum contract address cannot be changed after it has been set/
       end
     end
 

@@ -24,8 +24,7 @@ class Project < ActiveRecord::Base
 
   validate :maximum_coins_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
-  validate :valid_ethereum_contract_address
-  validates :ethereum_contract_address, ethereum_address: {type: :account}  # see EthereumAddressable
+  validates :ethereum_contract_address, ethereum_address: {type: :account, immutable: true}  # see EthereumAddressable
 
   before_save :set_transitioned_to_ethereum_enabled
 
@@ -101,12 +100,6 @@ class Project < ActiveRecord::Base
   def valid_ethereum_enabled
     if ethereum_enabled_changed? && ethereum_enabled == false
       errors[:ethereum_enabled] << "cannot be set to false after it has been set to true"
-    end
-  end
-
-  def valid_ethereum_contract_address
-    if ethereum_contract_address_was.present? && ethereum_contract_address_changed?
-      errors[:ethereum_contract_address] << "cannot be changed after it has been set"
     end
   end
 
