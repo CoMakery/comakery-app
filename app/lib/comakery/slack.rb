@@ -36,9 +36,18 @@ class Comakery::Slack
   end
 
   def award_notifications_message(award)
-    text = %{
-      @#{award.recipient_slack_user_name} received a
-      #{award.award_type.amount} coin #{award.award_type.name}
+    text = ''
+    if award.self_issued?
+      text += %{
+        @#{award.issuer_slack_user_name} self-issued
+      }
+    else
+      text += %{
+        @#{award.issuer_slack_user_name} sent @#{award.recipient_slack_user_name}
+      }
+    end
+    text += %{
+      a #{award.award_type.amount} coin #{award.award_type.name}
       #{'for "' + award.description + '"' if award.description.present?}
       on the
       <#{project_url(award.award_type.project)}|#{award.award_type.project.title}>

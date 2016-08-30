@@ -3,13 +3,14 @@ require 'rails_helper'
 describe Comakery::Slack do
   let!(:recipient) { create(:account) }
   let!(:recipient_authentication) { create(:authentication, account: recipient) }
-  let!(:sender_authentication) { create :authentication, slack_token: 'xyz', slack_team_id: 'a team' }
+  let!(:issuer) { create :account }
+  let!(:issuer_authentication) { create :authentication, account: issuer, slack_token: 'xyz', slack_user_name: 'jim', slack_team_id: 'a team' }
   let!(:recipient_authentication) { create :authentication, account: recipient, slack_user_name: 'newt', slack_token: 'abc', slack_team_id: 'a team' }
   let!(:project) { create :project, slack_team_id: 'a team', slack_channel: 'super sweet slack channel' }
   let!(:award_type) { create :award_type, project: project }
-  let!(:award) { create :award, award_type: award_type, authentication: recipient_authentication }
+  let!(:award) { create :award, award_type: award_type, issuer: issuer, authentication: recipient_authentication }
   let!(:slack) { Comakery::Slack.new(slack_token) }
-  let!(:slack_token) { sender_authentication.slack_token }
+  let!(:slack_token) { issuer_authentication.slack_token }
 
   describe '#send_award_notifications' do
     it 'should send a notification to Slack with correct params' do
@@ -40,10 +41,28 @@ describe Comakery::Slack do
   end
 
   describe '#award_notifications_message' do
-    it 'should have the expected message' do
+    describe "when the issuer sends to someone else" do
+      it 'should be from issuer to recipient' do
+        message = slack.award_notifications_message(award)
+        expect(message).to match %r{@jim sent @newt a 1337 coin Contribution}
+      end
+    end
+
+    describe "when the issuer sends to themselves" do
+      before { award.update! authentication: issuer_authentication }
+      it 'should be self-issued' do
+        message = slack.award_notifications_message(award)
+        expect(message).to match %r{@jim self-issued}
+      end
+    end
+
+    it 'should include award description' do
       message = slack.award_notifications_message(award)
-      expect(message).to match %r{@newt received a 1337 coin Contribution}
-      expect(message).to match %r{for "Great work" on the}
+      expect(message).to match %r{for "Great work" on}
+    end
+
+    it 'should link to the project' do
+      message = slack.award_notifications_message(award)
       expect(message).to match %r{<https://localhost:3000/projects/#{project.id}\|Uber for Cats> project}
     end
 

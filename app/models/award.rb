@@ -22,8 +22,8 @@ class Award < ActiveRecord::Base
       ethereum_transaction_address.blank?
   end
 
-  def issuer_display_name
-    issuer.authentications.find_by(slack_team_id: slack_team_id)&.display_name
+  def self_issued?
+    issuer_slack_auth&.slack_user_id == authentication&.slack_user_id
   end
 
   def recipient_display_name
@@ -42,8 +42,20 @@ class Award < ActiveRecord::Base
     authentication&.account
   end
 
+  def issuer_display_name
+    issuer_slack_auth&.display_name
+  end
+
+  def issuer_slack_user_name
+    issuer_slack_auth&.slack_user_name
+  end
+
   def issuer_slack_icon
-    issuer.team_auth(slack_team_id)&.slack_icon
+    issuer_slack_auth&.slack_icon
+  end
+
+  def issuer_slack_auth
+    issuer.team_auth(slack_team_id)
   end
 
   private
