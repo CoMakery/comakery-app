@@ -4,6 +4,7 @@ class Award < ActiveRecord::Base
   belongs_to :authentication
   belongs_to :issuer, class_name: Account
   belongs_to :award_type
+  delegate :project, to: :award_type
 
   validates_presence_of :proof_id, :authentication, :award_type, :issuer
 
@@ -16,7 +17,7 @@ class Award < ActiveRecord::Base
   end
 
   def ethereum_issue_ready?
-    award_type.project.ethereum_enabled &&
+    project.ethereum_enabled &&
       recipient_address.present? &&
       ethereum_transaction_address.blank?
   end
@@ -48,6 +49,6 @@ class Award < ActiveRecord::Base
   private
 
   def slack_team_id
-    award_type.project.slack_team_id
+    project.slack_team_id
   end
 end
