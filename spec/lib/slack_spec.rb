@@ -8,20 +8,43 @@ describe Comakery::Slack do
   let!(:project) { create :project, slack_team_id: 'a team', slack_channel: 'super sweet slack channel' }
   let!(:award_type) { create :award_type, project: project }
   let!(:award) { create :award, award_type: award_type, authentication: recipient_authentication }
-  let!(:slack) { Comakery::Slack.new(sender_authentication.slack_token) }
+  let!(:slack) { Comakery::Slack.new(slack_token) }
+  let!(:slack_token) { sender_authentication.slack_token }
 
   describe '#send_award_notifications' do
     it 'should send a notification to Slack with correct params' do
-      expected_text = "@newt received a 1337 coin Contribution for \"Great work\" on the <https://localhost:3000/projects/#{project.id}|Uber for Cats> project."
-      stub_request(:post, "https://slack.com/api/chat.postMessage").
-          with(body: hash_including({text: expected_text, token: "token", channel: "#super sweet slack channel", username: "CoMakery Bot", icon_url: Comakery::Slack::AVATAR, as_user: "false", link_names: "1"})).
-          to_return(body: {ok: true, channel: "channel id", message: {ts: 'this is a timestamp'}}.to_json)
+      stub_request(:post, "https://slack.com/api/chat.postMessage"
+        ).with(body: hash_including({
+          text: slack.award_notifications_message(award),
+          token: slack_token,
+          channel: "#super sweet slack channel",
+          username: "CoMakery Bot",
+          icon_url: Comakery::Slack::AVATAR,
+          as_user: "false",
+          link_names: "1"}
+        )).to_return(body: {
+          ok: true,
+          channel: "channel id",
+          message: {ts: 'this is a timestamp'}
+        }.to_json)
 
-      stub_request(:post, "https://slack.com/api/reactions.add").
-          with(body: hash_including({channel: "channel id", timestamp: "this is a timestamp", name: 'thumbsup'})).
-          to_return(body: {ok: true}.to_json)
+      stub_request(:post, "https://slack.com/api/reactions.add"
+        ).with(body: hash_including({
+          channel: "channel id",
+          timestamp: "this is a timestamp",
+          name: 'thumbsup'
+        })).to_return(body: {ok: true}.to_json)
 
-      Comakery::Slack.new("token").send_award_notifications(award: award)
+      slack.send_award_notifications(award: award)
+    end
+  end
+
+  describe '#award_notifications_message' do
+    it 'should have the expected message' do
+      message = slack.award_notifications_message(award)
+      expect(message).to match(%r{@newt received a 1337 coin Contribution } +
+        %r{for "Great work" on the } +
+        %r{<https://localhost:3000/projects/#{project.id}|Uber for Cats> project})
     end
   end
 

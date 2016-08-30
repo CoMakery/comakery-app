@@ -17,19 +17,12 @@ class Comakery::Slack
   end
 
   def send_award_notifications(award:)
-    text = %{
-      @#{award.recipient_slack_user_name} received a
-      #{award.award_type.amount} coin #{award.award_type.name}
-      #{'for "' + award.description + '"' if award.description.present?}
-      on the
-      <#{project_url(award.award_type.project)}|#{award.award_type.project.title}>
-      project.
-    }.strip.gsub(/\s+/, ' ')
+    text = award_notifications_message(award)
 
     message_response = @client.chat_postMessage(
       channel: '#'+award.award_type.project.slack_channel,
       text: text,
-      link_names: 1,            # make @bob a live link and notify @bob
+      link_names: 1,            # make @user a live link and notify @user
       username: 'CoMakery Bot',
       as_user: false,           # don't post as *authed user*
       icon_url: AVATAR
@@ -40,6 +33,19 @@ class Comakery::Slack
       timestamp: message_response[:message][:ts],
       name: 'thumbsup'
     )
+  end
+
+  def award_notifications_message(award)
+    text = %{
+      @#{award.recipient_slack_user_name} received a
+      #{award.award_type.amount} coin #{award.award_type.name}
+      #{'for "' + award.description + '"' if award.description.present?}
+      on the
+      <#{project_url(award.award_type.project)}|#{award.award_type.project.title}>
+      project.
+    }
+    text.strip!.gsub!(/\s+/, ' ')
+    text
   end
 
   def get_users

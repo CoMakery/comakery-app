@@ -19,6 +19,19 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+class Regexp
+  def +(other_regexp)
+    unless other_regexp.is_a? Regexp
+      raise ArgumentError.new \
+        "can only add Regexp to Regexp, got #{other_regexp.inspect}"
+    end
+    Regexp.new(
+      Regexp.escape(self.source).gsub('\ ', ' ') +
+      Regexp.escape(other_regexp.source).gsub('\ ', ' ')
+    )
+  end
+end
+
 RSpec.configure do |config|
   config.include ModelValidations, type: :model
 
