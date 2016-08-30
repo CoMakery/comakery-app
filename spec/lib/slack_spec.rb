@@ -46,6 +46,32 @@ describe Comakery::Slack do
         %r{for "Great work" on the } +
         %r{<https://localhost:3000/projects/#{project.id}|Uber for Cats> project})
     end
+
+    describe "when project is ethereum enabled and recipient has no ethereum address" do
+      it 'should link to recipient account' do
+        project.update! ethereum_enabled: true
+        recipient.update! ethereum_wallet: nil
+        message = slack.award_notifications_message(award)
+        expect(message).to match \
+          %r{<https://localhost:3000/account|Set up your account>}
+      end
+    end
+    describe "when project is not ethereum enabled" do
+      it 'should not link to recipient account' do
+        project.update! ethereum_enabled: false
+        recipient.update! ethereum_wallet: nil
+        message = slack.award_notifications_message(award)
+        expect(message).not_to match %r{/account}
+      end
+    end
+    describe "when recipient has ethereum address" do
+      it 'should not link to recipient account' do
+        project.update! ethereum_enabled: true
+        recipient.update! ethereum_wallet: '0x'+'a'*40
+        message = slack.award_notifications_message(award)
+        expect(message).not_to match %r{/account}
+      end
+    end
   end
 
   describe "#get_users" do

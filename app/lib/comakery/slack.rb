@@ -44,6 +44,9 @@ class Comakery::Slack
       <#{project_url(award.award_type.project)}|#{award.award_type.project.title}>
       project.
     }
+    if award.project.ethereum_enabled && award.recipient_address.blank?
+      text += " <#{account_url}|Set up your account> "
+    end
     text.strip!.gsub!(/\s+/, ' ')
     text
   end
