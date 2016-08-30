@@ -37,25 +37,28 @@ class Comakery::Slack
 
   def award_notifications_message(award)
     text = ''
+
     if award.self_issued?
-      text += %{
-        @#{award.issuer_slack_user_name} self-issued
-      }
+      text += %{ @#{award.issuer_slack_user_name} self-issued }
     else
-      text += %{
-        @#{award.issuer_slack_user_name} sent @#{award.recipient_slack_user_name}
-      }
+      text += %{ @#{award.issuer_slack_user_name} sent
+        @#{award.recipient_slack_user_name} }
     end
+
+    text += %{ a #{award.award_type.amount} coin #{award.award_type.name} }
+
+    text += %{ for "#{award.description}" } if award.description.present?
+
     text += %{
-      a #{award.award_type.amount} coin #{award.award_type.name}
-      #{'for "' + award.description + '"' if award.description.present?}
       on the
       <#{project_url(award.award_type.project)}|#{award.award_type.project.title}>
       project.
     }
+
     if award.project.ethereum_enabled && award.recipient_address.blank?
       text += " <#{account_url}|Set up your account> to receive Ethereum tokens."
     end
+
     text.strip!.gsub!(/\s+/, ' ')
     text
   end

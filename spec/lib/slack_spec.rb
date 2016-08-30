@@ -56,9 +56,19 @@ describe Comakery::Slack do
       end
     end
 
-    it 'should include award description' do
-      message = slack.award_notifications_message(award)
-      expect(message).to match %r{for "Great work" on}
+    describe "when the award has a description" do
+      it 'should include award description' do
+        message = slack.award_notifications_message(award)
+        expect(message).to match %r{for "Great work"}
+      end
+    end
+
+    describe "when the award has no description" do
+      before { award.update! description: '' }
+      it 'should include award description' do
+        message = slack.award_notifications_message(award)
+        expect(message).not_to match %r{for ".*"}m
+      end
     end
 
     it 'should link to the project' do
