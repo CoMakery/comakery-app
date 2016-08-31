@@ -32,7 +32,7 @@ class Views::Projects::Base < Views::Base
       a(href: project_path(project)) {
         div(class: "sixteen-nine") {
           div(class: "content") {
-            project_image = attachment_url(project, :image) || image_tag('default_project_image.png')
+            project_image = attachment_url(project, :image) # || image_tag('default_project_image.png')
             img(src: project_image, class: "image-block")
           }
         }
