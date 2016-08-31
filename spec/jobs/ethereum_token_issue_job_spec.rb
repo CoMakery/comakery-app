@@ -15,7 +15,7 @@ describe EthereumTokenIssueJob do
     expect(Comakery::Ethereum).to receive(:token_issue).with({
         recipient: award.recipient_address,
         amount: award.award_type.amount,
-        contractAddress: award.award_type.project.ethereum_contract_address,
+        contractAddress: award.project.ethereum_contract_address,
         proofId: "873!"
       }) { transaction_adddress }
 

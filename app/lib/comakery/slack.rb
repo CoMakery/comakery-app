@@ -20,7 +20,7 @@ class Comakery::Slack
     text = award_notifications_message(award)
 
     message_response = @client.chat_postMessage(
-      channel: '#'+award.award_type.project.slack_channel,
+      channel: '#'+award.project.slack_channel,
       text: text,
       link_names: 1,            # make @user a live link and notify @user
       username: 'CoMakery Bot',
@@ -51,7 +51,7 @@ class Comakery::Slack
 
     text += %{
       on the
-      <#{project_url(award.award_type.project)}|#{award.award_type.project.title}>
+      <#{project_url(award.project)}|#{award.project.title}>
       project.
     }
 

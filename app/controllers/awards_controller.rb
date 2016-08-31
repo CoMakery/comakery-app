@@ -21,7 +21,7 @@ class AwardsController < ApplicationController
       current_account.send_award_notifications(award: award)
 
       flash[:notice] = "Successfully sent award to #{award.recipient_display_name}"
-      redirect_to project_path(award.award_type.project)
+      redirect_to project_path(award.project)
     else
       fail_and_redirect(result.message)
     end

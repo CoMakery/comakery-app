@@ -5,7 +5,7 @@ class EthereumTokenIssueJob
   def perform(award_id)
     award = Award.find award_id
     return unless award.ethereum_issue_ready?
-    project = award.award_type.project
+    project = award.project
     args = {
       recipient: award.recipient_address,
       amount: award.award_type.amount,
