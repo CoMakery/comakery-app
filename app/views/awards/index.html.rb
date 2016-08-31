@@ -3,8 +3,8 @@ class Views::Awards::Index < Views::Base
 
   def content
     h1 "Award History"
-    render partial: "shared/awards", locals: {awards: awards, show_recipient: true}
-
+    render partial: "shared/awards",
+      locals: {project: project, awards: awards, show_recipient: true}
     br
 
     link_to "Back to project", project_path(project), class: buttonish

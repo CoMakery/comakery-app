@@ -1,15 +1,21 @@
 class Views::Shared::Awards < Views::Base
-  needs :awards, :show_recipient, :current_account
+  needs :project, :awards, :show_recipient, :current_account
 
   def content
     div(class: "award-rows") {
       row(class: "header-row") {
         column("small-1") { div(class: "header") { text "Tokens Issued" } }
         column("small-2") { div(class: "header") { text "Date" } }
-        column("small-2") { div(class: "header") { text "Recipient" } } if show_recipient
+        if show_recipient
+          column("small-2") { div(class: "header") { text "Recipient" } }
+        end
         column("small-3") { div(class: "header") { text "Contribution" } }
         column("small-2") { div(class: "header") { text "Authorized By" } }
-        column("small-2") { div(class: "header") { text "Blockchain Transaction" } }
+        if project.ethereum_enabled
+          column("small-2") { div(class: "header blockchain-address") {
+            text "Blockchain Transaction" }
+          }
+        end
       }
       awards.sort_by(&:created_at).reverse.each do |award|
         row(class: "award-row") {
@@ -42,18 +48,19 @@ class Views::Shared::Awards < Views::Base
             end
             text award.issuer_display_name
           }
-          column("small-2", class: 'blockchain-address') {
-            if award.ethereum_transaction_explorer_url
-              link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
-            elsif award.recipient_address.blank? && current_account == award.recipient_account && show_recipient
-              link_to '(no account)', account_path
-            elsif award.recipient_address.blank?
-              text '(no account)'
-            else
-              text '(pending)'
-            end
-          }
-          column("small-2") {} unless show_recipient
+          if project.ethereum_enabled
+            column("small-2", class: 'blockchain-address') {
+              if award.ethereum_transaction_explorer_url
+                link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
+              elsif award.recipient_address.blank? && current_account == award.recipient_account && show_recipient
+                link_to '(no account)', account_path
+              elsif award.recipient_address.blank?
+                text '(no account)'
+              else
+                text '(pending)'
+              end
+            }
+          end
         }
       end
     }

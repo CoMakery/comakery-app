@@ -50,9 +50,17 @@ class Views::Authentications::Show < Views::Base
 
     hr
 
-    awards.group_by { |award| award.award_type.project_id }.each do |(_, awards_for_project)|
-      h3 "#{awards_for_project.first.award_type.project.title} awards"
-      render partial: "shared/awards", locals: {awards: AwardDecorator.decorate_collection(awards_for_project), show_recipient: false}
+    awards.group_by { |award| award.project.id }.each do |(_, awards_for_project)|
+      project = awards_for_project.first.project
+      h3 {
+        link_to project.title, project_path(project)
+        text " awards"
+      }
+      render partial: "shared/awards", locals: {
+        awards: AwardDecorator.decorate_collection(awards_for_project),
+        show_recipient: false,
+        project: project
+      }
     end
   end
 end
