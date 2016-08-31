@@ -1,4 +1,4 @@
-class Views::Projects::Show < Views::Base
+class Views::Projects::Show < Views::Projects::Base
   needs :project, :award, :awardable_authentications, :awardable_types, :award_data, :can_award
 
   def make_charts
@@ -52,7 +52,7 @@ class Views::Projects::Show < Views::Base
               else
                 div(class: "sixteen-nine") {
                   div(class: "content") {
-                    img(src: attachment_url(project, :image), class: "project-image")
+                    img(src: project_image(project), class: "project-image")
                   }
                 }
               end
