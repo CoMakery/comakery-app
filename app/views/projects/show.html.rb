@@ -59,7 +59,9 @@ class Views::Projects::Show < Views::Projects::Base
             }
             column("medium-7 small-12") {
               full_row {
-                project.description_paragraphs.each { |paragraph| p paragraph }
+                p(class: "description") {
+                  text raw project.description
+                }
               }
               row(class: "project-settings") {
                 column("medium-5 small-12") {
@@ -123,14 +125,15 @@ class Views::Projects::Show < Views::Projects::Base
         }
       }
     }
+
     row(class: "project-body") {
       column("large-5 small-12") {
         div(class:"award-send") {
           render partial: "award_send"
         }
       }
-      column("large-7 small-12 contributors-column") {
 
+      column("large-7 small-12 contributors-column") {
         row {
           column("small-12", class: "underlined-header") {
             text "Awards "

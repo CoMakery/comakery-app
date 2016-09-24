@@ -297,38 +297,6 @@ describe Project do
     end
   end
 
-  describe "#description_paragraphs" do
-    it "should split description on multiple newlines" do
-      project = create :project, description: "Line 1\nLine 2\n\nPara 2\r\n\r\nPara 3\n\n\n\n\nPara 4"
-      expect(project.description_paragraphs).to eq [
-        "Line 1\nLine 2",
-        "Para 2",
-        "Para 3",
-        "Para 4",
-      ]
-    end
-
-    it "should return an array containing description if no newlines" do
-      project = create :project, description: "foo bar baz"
-      expect(project.description_paragraphs).to eq [ "foo bar baz" ]
-    end
-
-    it "should return an empty array if no description" do
-      project = build :project, description: nil
-      expect(project.description_paragraphs).to eq []
-    end
-
-    it "should return an empty array if description is blank" do
-      project = build :project, description: " \t "
-      expect(project.description_paragraphs).to eq []
-    end
-
-    it "should return an array containing description if no newlines" do
-      project = create :project, description: "foo "
-      expect(project.description_paragraphs).to eq [ "foo " ]
-    end
-  end
-
   describe "#transitioned_to_ethereum_enabled?" do
     it "should trigger if new project is saved with ethereum_enabled = true" do
       project = build(:project, ethereum_enabled: true)
