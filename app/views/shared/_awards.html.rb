@@ -50,7 +50,7 @@ class Views::Shared::Awards < Views::Base
                 text award.issuer_display_name
               }
               if project.ethereum_enabled
-                td(class: "small-2", class: 'blockchain-address') {
+                td(class: "small-2 blockchain-address") {
                   if award.ethereum_transaction_explorer_url
                     link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
                   elsif award.recipient_address.blank? && current_account == award.recipient_account && show_recipient
