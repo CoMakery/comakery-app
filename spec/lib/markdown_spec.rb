@@ -6,5 +6,15 @@ describe Comakery::Markdown do
       html = Comakery::Markdown.to_html('_Thanks_ for thinking to add www.comakery.com to our list.')
       expect(html).to eq '<em>Thanks</em> for thinking to add <a href="http://www.comakery.com" rel="nofollow" target="_blank">www.comakery.com</a> to our list.'
     end
+
+    it "should ignore HTML tags" do
+      html = Comakery::Markdown.to_html('<h1>hi!</h1>')
+      expect(html).to eq 'hi!'
+    end
+
+    it "should de-fang JS" do
+      html = Comakery::Markdown.to_html('<script>alert("danger")</script>')
+      expect(html).to eq 'alert(&quot;danger&quot;)'
+    end
   end
 end

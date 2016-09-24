@@ -9,13 +9,21 @@ describe "shared/_awards.html.rb" do
   let!(:recipient2_auth) { create(:authentication, slack_team_id: 'cats', account: recipient2) }
   let!(:project) { create(:project, ethereum_enabled: true, slack_team_id: 'cats') }
   let!(:award_type) { create(:award_type, project: project) }
-  let!(:award1) { create(:award, award_type: award_type, issuer: issuer, authentication: recipient1_auth).decorate }
-  let!(:award2) { create(:award, award_type: award_type, issuer: issuer, authentication: recipient2_auth).decorate }
+  let!(:award1) { create(:award, award_type: award_type, description: 'markdown _rocks_: www.auto.link', issuer: issuer, authentication: recipient1_auth).decorate }
+  let!(:award2) { create(:award, award_type: award_type, description: 'awesome', issuer: issuer, authentication: recipient2_auth).decorate }
 
   before { assign :project, project }
   before { assign :awards, [award1] }
   before { assign :show_recipient, true }
   before { assign :current_account, issuer }
+
+  describe "Description column" do
+    it "the column header is hidden" do
+      render
+      assert_select '.description', html: %r{markdown <em>rocks</em>:}
+      assert_select '.description', html: %r{<a href="http://www.auto.link"[^>]*>www.auto.link</a>}
+    end
+  end
 
   describe "Blockchain Transaction column" do
     describe 'when project is not ethereum enabled' do

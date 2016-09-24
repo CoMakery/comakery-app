@@ -32,7 +32,7 @@ class Views::Shared::Awards < Views::Base
                   text " " + award.recipient_display_name
                 }
               end
-              td(class: "small-3") {
+              td(class: "small-3 description") {
                 if award.proof_link
                   link_to award.proof_id_short, award.proof_link, target: '_blank'
                 else
