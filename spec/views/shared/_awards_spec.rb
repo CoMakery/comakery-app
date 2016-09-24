@@ -18,7 +18,7 @@ describe "shared/_awards.html.rb" do
   before { assign :current_account, issuer }
 
   describe "Description column" do
-    it "the column header is hidden" do
+    it "renders mardown as HTML" do
       render
       assert_select '.description', html: %r{markdown <em>rocks</em>:}
       assert_select '.description', html: %r{<a href="http://www.auto.link"[^>]*>www.auto.link</a>}
