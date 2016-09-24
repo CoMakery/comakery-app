@@ -66,7 +66,7 @@ class Project < ActiveRecord::Base
 
   def youtube_id
     # taken from http://stackoverflow.com/questions/5909121/converting-a-regular-youtube-link-into-an-embedded-video
-    # Regex from # http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
+    # Regex from http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
     if video_url[/youtu\.be\/([^\?]*)/]
       youtube_id = $1
     else
