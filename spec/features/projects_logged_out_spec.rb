@@ -29,12 +29,6 @@ describe "viewing projects, creating and editing", :js do
       expect(page).to have_content "Public Project"
       expect(page).to have_content "Visibility: Public"
       expect(page).to have_content "Citizen Code"
-
-      visit projects_path
-
-      click_link "Browse All"
-
-      expect(page).to have_content "Public Project"
     end
 
     it "allows searching" do
