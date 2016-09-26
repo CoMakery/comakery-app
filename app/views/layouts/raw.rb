@@ -3,10 +3,13 @@ class Views::Layouts::Raw < Views::Base
     doctype!
     html(lang: "en") {
       head {
-        meta(:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type")
-        meta(charset: "utf-8")
-        meta(content: "width=device-width, initial-scale=1.0", name: "viewport")
-        meta(content: Rails.application.config.project_description, name: "description")
+        meta :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"
+        meta charset: "utf-8"
+        meta name: "viewport", content: "width=device-width, initial-scale=1.0"
+        meta name: "description", content: Rails.application.config.project_description
+        meta name: "theme-color", content: "#ffffff"
+        meta name: "msapplication-TileColor", content: "#ffffff"
+        meta name: "msapplication-TileImage", content: "/assets/favicon/ms-icon-144x144.png"
 
         title(content_for?(:title) ? yield(:title) : Rails.application.config.project_name)
 
@@ -34,9 +37,6 @@ class Views::Layouts::Raw < Views::Base
         favicon_link_tag "favicon/favicon-96x96.png", rel:"icon", sizes:"96x96", type: "image/png"
         favicon_link_tag "favicon/favicon-16x16.png", rel:"icon", sizes:"16x16", type: "image/png"
         favicon_link_tag "favicon/manifest.json", rel:"manifest", type: "application/json"
-        meta(name: "msapplication-TileColor", content: "#ffffff")
-        meta(name: "msapplication-TileImage", content: "/assets/favicon/ms-icon-144x144.png")
-        meta(name: "theme-color", content: "#ffffff")
         csrf_meta_tags
       }
 
