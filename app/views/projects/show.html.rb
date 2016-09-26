@@ -60,7 +60,7 @@ class Views::Projects::Show < Views::Projects::Base
             column("medium-7 small-12") {
               full_row {
                 p(class: "description") {
-                  text raw project.description
+                  text raw project.description_html
                 }
               }
               row(class: "project-settings") {

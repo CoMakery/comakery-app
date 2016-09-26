@@ -40,6 +40,7 @@ module Views
                 label {
                   text "Description"
                   f.text_area :description
+                  link_to("Styling with Markdown is Supported", "https://guides.github.com/features/mastering-markdown/", class: "help-text")
                 }
               }
               with_errors(project, :public) {

@@ -4,11 +4,11 @@ class ProjectsController < ApplicationController
   def landing
     skip_authorization
     if current_account
-      @private_projects = Project.with_last_activity_at.for_account(current_account).limit(6)
-      @public_projects = Project.with_last_activity_at.not_for_account(current_account).public_projects.limit(6)
+      @private_projects = Project.with_last_activity_at.for_account(current_account).limit(6).decorate
+      @public_projects = Project.with_last_activity_at.not_for_account(current_account).public_projects.limit(6).decorate
     else
       @private_projects = []
-      @public_projects = policy_scope(Project).with_last_activity_at.limit(6)
+      @public_projects = policy_scope(Project).with_last_activity_at.limit(6).decorate
     end
     @private_project_contributors = TopContributors.call(projects: @private_projects).contributors
     @public_project_contributors = TopContributors.call(projects: @public_projects).contributors
@@ -20,7 +20,7 @@ class ProjectsController < ApplicationController
     if params[:query].present?
       @projects = @projects.where(["projects.title ilike :query OR projects.description ilike :query", query: "%#{params[:query]}%"])
     end
-    @projects = @projects.to_a
+    @projects = @projects.decorate
     @project_contributors = TopContributors.call(projects: @projects).contributors
   end
 

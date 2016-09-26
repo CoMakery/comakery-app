@@ -50,9 +50,9 @@ class Views::Projects::Base < Views::Base
         }
         if project.last_award_created_at
           p(class: "project-last-award font-tiny") { text "active #{time_ago_in_words(project.last_award_created_at)} ago" }
-          p(class:"description") { text project.description.try(:truncate, 90) }
+          p(class: "description") { text project.description_text }
         else
-          p(class: "description no-last-award") { text project.description.try(:truncate, 90) }
+          p(class: "description no-last-award") { text project.description_text }
         end
 
         div(class: "contributors") {

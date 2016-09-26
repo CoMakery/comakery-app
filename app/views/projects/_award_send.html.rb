@@ -49,7 +49,7 @@ class Views::Projects::AwardSend < Views::Base
                 label {
                   text "Description"
                   f.text_area(:description)
-                  link_to("Styling with Markdown is Supported", "https://guides.github.com/features/mastering-markdown/", class: "award-description-help-text")
+                  link_to("Styling with Markdown is Supported", "https://guides.github.com/features/mastering-markdown/", class: "help-text")
                 }
               }
             }

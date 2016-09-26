@@ -1,22 +1,35 @@
+require 'redcarpet/render_strip'
+
 module Comakery
   class  Markdown
     include Singleton
 
     def self.to_html(markdown)
-      instance.redcarpet.render(markdown)
+      return '' unless markdown
+      instance.html.render(markdown)
     end
 
-    def redcarpet
-      return @redcarpet if @redcarpet
+    def self.to_text(markdown)
+      return '' unless markdown
+      text = instance.text.render(markdown)
+      text.gsub(/<.+?>/, '')  # remove HTML tags
+    end
 
-      renderer ||= RenderHtmlWithoutWrap.new(
+    def html
+      return @html if @html
+
+      html_renderer = RenderHtmlWithoutWrap.new(
         filter_html: true,
         no_images: true,
         no_styles: true,
         safe_links_only: true,
         link_attributes: {rel: 'nofollow', target: '_blank'}
       )
-      @redcarpet = Redcarpet::Markdown.new(renderer, autolink: true)
+      @html = Redcarpet::Markdown.new(html_renderer, autolink: true)
+    end
+
+    def text
+      @text ||= Redcarpet::Markdown.new(Redcarpet::Render::StripDown.new())
     end
   end
 

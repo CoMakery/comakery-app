@@ -16,5 +16,42 @@ describe Comakery::Markdown do
       html = Comakery::Markdown.to_html('<script>alert("danger")</script>')
       expect(html).to eq 'alert(&quot;danger&quot;)'
     end
+
+    it "should be cool with empty input" do
+      html = Comakery::Markdown.to_html('')
+      expect(html).to eq ''
+    end
+
+    it "should be cool with nil input" do
+      html = Comakery::Markdown.to_html(nil)
+      expect(html).to eq ''
+    end
+  end
+
+  describe '.to_text' do
+    it "should transform markdown to text" do
+      html = Comakery::Markdown.to_text('_Thanks_ for thinking to add www.comakery.com to our list.')
+      expect(html).to eq "Thanks for thinking to add www.comakery.com to our list.\n"
+    end
+
+    it "should ignore HTML tags" do
+      html = Comakery::Markdown.to_text('<h1>hi!</h1>')
+      expect(html).to eq "hi!\n"
+    end
+
+    it "should de-fang JS" do
+      html = Comakery::Markdown.to_text('<script>alert("danger")</script>')
+      expect(html).to eq %{alert("danger")\n}
+    end
+
+    it "should be cool with empty input" do
+      html = Comakery::Markdown.to_text('')
+      expect(html).to eq ''
+    end
+
+    it "should be cool with nil input" do
+      html = Comakery::Markdown.to_text(nil)
+      expect(html).to eq ''
+    end
   end
 end

@@ -18,6 +18,9 @@ form.edit_project, form.new_project {
   textarea {
     height: 9em;
   }
+  #project_description {
+    margin-bottom: 0;
+  }
   .award-types {
     margin-top: 2em;
     border-top: 1px solid #ccc;
