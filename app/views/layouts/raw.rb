@@ -6,12 +6,14 @@ class Views::Layouts::Raw < Views::Base
         meta :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"
         meta charset: "utf-8"
         meta name: "viewport", content: "width=device-width, initial-scale=1.0"
-        meta name: "description", content: Rails.application.config.project_description
+        description = content_for?(:description) ? capture { yield(:description) } : Rails.application.config.project_description
+        meta name: "description", content: description
+        meta name: "robots", content: "NOODP"  # don't use Open Director Project in search listing
         meta name: "theme-color", content: "#ffffff"
         meta name: "msapplication-TileColor", content: "#ffffff"
         meta name: "msapplication-TileImage", content: "/assets/favicon/ms-icon-144x144.png"
 
-        title(content_for?(:title) ? yield(:title) : Rails.application.config.project_name)
+        title content_for?(:title) ? capture { yield(:title) } : Rails.application.config.project_name
 
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'

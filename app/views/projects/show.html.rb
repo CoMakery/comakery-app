@@ -17,6 +17,9 @@ class Views::Projects::Show < Views::Projects::Base
   end
 
   def content
+    content_for(:title) { project.title.strip }
+    content_for(:description) { project.description_text(150) }
+
     if award_data[:contributions].present?
       content_for :js do
         make_charts

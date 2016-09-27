@@ -5,8 +5,8 @@ class ProjectDecorator < Draper::Decorator
     Comakery::Markdown.to_html(object.description)
   end
 
-  def description_text
-    Comakery::Markdown.to_text(object.description).truncate(90)
+  def description_text(max_length = 90)
+    Comakery::Markdown.to_text(object.description).truncate(max_length)
   end
 
   def ethereum_contract_explorer_url
