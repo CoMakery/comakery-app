@@ -134,6 +134,26 @@ class Views::Projects::Show < Views::Projects::Base
         div(class:"award-send") {
           render partial: "award_send"
         }
+
+        br
+        form(method: "GET") {
+          script(
+            "src" => "https://checkout.stripe.com/checkout.js",
+            "class" => 'stripe-button',
+            "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
+            "data-label" => "Pay Royalties",
+            "data-panel-label" => "Pay Royalties",
+            "data-amount" => "100000",
+            "data-name" => project.title,
+            "data-description" => "Pay Royalties",
+            "data-image" => project_image(project),
+            "data-locale" => "auto",
+            "data-zip-code" => true,
+            "data-bitcoin" => true
+          )
+        }
+        br
+
       }
 
       column("large-7 small-12 contributors-column") {

@@ -56,7 +56,7 @@ class Views::Projects::AwardSend < Views::Base
           }
           row {
             column("small-12") {
-              f.submit("Send Award", class: buttonish())
+              f.submit("Send Award", class: buttonish)
             }
           }
         end
