@@ -21,6 +21,7 @@ class Views::Shared::Awards < Views::Base
           awards.sort_by(&:created_at).reverse.each do |award|
             tr(class: "award-row") {
               td(class: "small-1") {
+                text currency_unit
                 text number_with_delimiter(award.award_type.amount, :delimiter => ',')
               }
               td(class: "small-2") {
