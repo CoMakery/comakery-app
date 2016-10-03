@@ -135,6 +135,7 @@ class Views::Projects::Show < Views::Projects::Base
           render partial: "award_send"
         }
 
+        # STRIPE CHECKOUT DEMO:
         br
         form(method: "GET") {
           script(
