@@ -147,14 +147,19 @@ class Views::Projects::Show < Views::Projects::Base
         row {
           column("small-12 medium-4", class: "centered coins-issued") {
             if award_data[:award_amounts][:my_project_coins]
-              div(class: "centered coin-numbers") { text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',') }
-              div(class: "centered") { text "My Project Coins" }
+              div(class: "centered coin-numbers") {
+                text currency_unit
+                text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
+              }
+              div(class: "centered") { text "My #{coin_name}" }
             end
             div(class: "centered coin-numbers") {
               total_coins_issued = award_data[:award_amounts][:total_coins_issued]
 
+              text currency_unit
               text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
               text "/"
+              text currency_unit
               text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
 
               percentage_issued = total_coins_issued * 100 / project.maximum_coins.to_f
@@ -162,7 +167,7 @@ class Views::Projects::Show < Views::Projects::Base
                 text " (#{number_with_precision(percentage_issued, precision: 2)}%)"
               end
             }
-            div(class: "centered") { text "Total Coins Issued" }
+            div(class: "centered") { text "Total #{coin_name_short} Issued" }
 
             p(class: "centered font-small") {
               a(href: project_awards_path(project), class: "text-link") {
@@ -194,7 +199,10 @@ class Views::Projects::Show < Views::Projects::Base
                     div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
                   }
                   column("small-4") {
-                    span(class: "float-right margin-small") { text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',') }
+                    span(class: "float-right margin-small") {
+                      text currency_unit
+                      text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',')
+                    }
                   }
                   column("small-3") { }
                 }

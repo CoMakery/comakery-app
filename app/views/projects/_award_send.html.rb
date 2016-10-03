@@ -22,7 +22,7 @@ class Views::Projects::AwardSend < Views::Base
                     end
                     column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : "small-12") {
                       span(award_type.name)
-                      text " (#{number_with_precision(award_type.amount, precision: 0, delimiter: ',')})"
+                      text " (#{currency_unit}#{number_with_precision(award_type.amount, precision: 0, delimiter: ',')})"
                       text " (Community Awardable)" if award_type.community_awardable?
                     }
                   }
