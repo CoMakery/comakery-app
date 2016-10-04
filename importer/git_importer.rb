@@ -56,7 +56,7 @@ class GitImporter
       --format='%H %x00 %an %x00 %ae %x00 %aI %x00 %s'
     }
     if @opts[:history].present?
-      git_log += %{ --since="#{DAYS_OF_HISTORY + 1} days ago"}
+      git_log += %{ --since="#{@opts[:history] + 1} days ago"}
     end
 
     results = run "cd #{repo[:local_repo]} && #{git_log}", quiet: !$DEBUG
