@@ -15,7 +15,7 @@ module Views
               }
               with_errors(project, :maximum_coins) {
                 label {
-                  text "Maximum Number of Awardable Coins "
+                  text "Maximum Royalties"
                   question_tooltip("This is the maximum sum of coins
                     you can award in the life of this project.
                     Select it carefully,
@@ -109,7 +109,7 @@ module Views
                 text "Award Names"
               }
               column("small-2") {
-                text "Coin Value "
+                text "Amount "
                 question_tooltip("The number of coins a contributor will receive from this award. It cannot be changed after awards of this type have been issued.")
               }
               column("small-3") {
