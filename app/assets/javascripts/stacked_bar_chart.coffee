@@ -6,7 +6,7 @@ window.stackedBarChart = (selector, data)->
     top: 20
     right: 20
     bottom: 70
-    left: 70
+    left: 120
   width = 500 - (margin.left) - (margin.right)
   height = 250 - (margin.top) - (margin.bottom)
 
@@ -16,7 +16,7 @@ window.stackedBarChart = (selector, data)->
 
   xAxis = d3.svg.axis().scale(x).orient('bottom').tickValues(_.filter(_.map(data, (d, i)-> d["date"]), (d, i) -> i % 5 == 0))
 
-  yAxis = d3.svg.axis().scale(y).orient('left').ticks(5).tickFormat(d3.format('.2s'))
+  yAxis = d3.svg.axis().scale(y).orient('left').ticks(5).tickFormat(d3.format(',.2r'))
 
   svg = d3.select(selector)
     .append('svg')
@@ -57,13 +57,13 @@ window.stackedBarChart = (selector, data)->
   svg.append('g')
       .attr('class', 'y axis')
       .call(yAxis)
-    .append('text')
-      .attr('transform', 'rotate(-90)')
-      .attr('x', -60)
-      .attr('y', -60)
-      .attr('dy', '.71em')
-      .style('text-anchor', 'end')
-      .text 'Coins'
+    # .append('text')
+    #   .attr('transform', 'rotate(-90)')
+    #   .attr('x', -60)
+    #   .attr('y', -60)
+    #   .attr('dy', '.71em')
+    #   .style('text-anchor', 'end')
+    #   .text 'Coins'
 
   # graph bars
   state = svg.selectAll('.state')
