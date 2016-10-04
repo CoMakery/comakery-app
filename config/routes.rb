@@ -36,6 +36,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # TEMPORARY, WHILE STRIPE IS IN DEMO MODE ONLY
+  post "/projects/:id" => redirect {|params| "/projects/#{params[:id]}" }
+
   unless Rails.env.development? || Rails.env.test?
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|
       username.present? && password.present? &&
