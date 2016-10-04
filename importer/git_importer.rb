@@ -128,7 +128,7 @@ class GitImporter
 
     user_id = @slack_user_name_to_slack_id[user_name]
     unless user_id
-      raise RecipientError.new "Slack user name '#{user_name}' not found in Slack team '#{project.slack_team_name}')"
+      raise RecipientError.new "Slack user name '#{user_name}' not found in Slack team '#{project.slack_team_name}'"
     end
     user_id
   end
