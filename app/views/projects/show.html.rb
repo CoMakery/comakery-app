@@ -209,23 +209,38 @@ class Views::Projects::Show < Views::Projects::Base
             div(id: "contributions-chart")
           }
 
-          row { column("small-12", class: "underlined-header") { text "Top Contributors" } }
-
-          row {
-            column("small-12") {
+          div(class: "table-scroll") {
+            table(class: "award-rows") {
+              tr(class: "header-row") {
+                th "Top Contributors"
+                th "Earned"
+                th "Paid"
+                th "Remaining"
+              }
               award_data[:contributions].each do |contributor|
-                row {
-                  column("small-5") {
+                tr(class: "award-row") {
+                  td {
                     img(src: contributor[:avatar], class: "icon avatar-img")
                     div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
                   }
-                  column("small-4") {
+                  td {
                     span(class: "float-right margin-small") {
                       text currency_unit
                       text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',')
                     }
                   }
-                  column("small-3") { }
+                  td {
+                    span(class: "float-right margin-small") {
+                      text currency_unit
+                      text number_with_precision(contributor[:net_amount] * 0.6, precision: 0, delimiter: ',')
+                    }
+                  }
+                  td {
+                    span(class: "float-right margin-small") {
+                      text currency_unit
+                      text number_with_precision(contributor[:net_amount] * 0.4, precision: 0, delimiter: ',')
+                    }
+                  }
                 }
               end
             }
