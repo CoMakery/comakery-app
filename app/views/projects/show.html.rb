@@ -134,68 +134,79 @@ class Views::Projects::Show < Views::Projects::Base
         div(class:"award-send") {
           render partial: "award_send"
         }
-
-        # STRIPE CHECKOUT DEMO:
-        br
-        form(method: "GET") {
-          script(
-            "src" => "https://checkout.stripe.com/checkout.js",
-            "class" => 'stripe-button',
-            "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
-            "data-label" => "Pay Royalties",
-            "data-panel-label" => "Pay Royalties",
-            "data-amount" => "100000",
-            "data-name" => project.title,
-            "data-description" => "Pay Royalties",
-            "data-image" => project_image(project),
-            "data-locale" => "auto",
-            "data-zip-code" => true,
-            "data-bitcoin" => true
-          )
-        }
-        br
-
       }
 
       column("large-7 small-12 contributors-column") {
         row {
           column("small-12", class: "underlined-header") {
-            text "Awards "
+            text "Royalties "
             question_tooltip("This shows project coins issued on CoMakery. It does not currently show secondary trading on the Ethereum blockchain.")
           }
         }
 
         row {
-          column("small-12 medium-4", class: "centered coins-issued") {
-            if award_data[:award_amounts][:my_project_coins]
-              div(class: "centered coin-numbers") {
-                text currency_unit
-                text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
-              }
-              div(class: "centered") { text "My #{coin_name}" }
-            end
-            div(class: "centered coin-numbers") {
-              total_coins_issued = award_data[:award_amounts][:total_coins_issued]
+          column("small-12 medium-4", class: "coins-issued") {
+            total_coins_issued = award_data[:award_amounts][:total_coins_issued]
+            div(class: "") {
+              div {
 
-              text currency_unit
-              text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
-              text "/"
-              text currency_unit
-              text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
+                span(class: " coin-numbers") {
+                  text currency_unit
+                  text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
+                }
+                text raw "&nbsp;max"
+              }
+
+              div {
+                span(class: " coin-numbers") {
+                  text currency_unit
+                  text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
+                }
+
+                text raw "&nbsp;total"
+              }
 
               percentage_issued = total_coins_issued * 100 / project.maximum_coins.to_f
               if percentage_issued >= 0.01
                 text " (#{number_with_precision(percentage_issued, precision: 2)}%)"
               end
-            }
-            div(class: "centered") { text "Total #{coin_name_short} Issued" }
 
-            p(class: "centered font-small") {
+              if award_data[:award_amounts][:my_project_coins]
+                div {
+                  span(class: "coin-numbers") {
+                    text currency_unit
+                    text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
+                  }
+                  text raw "&nbsp;mine"
+                }
+              end
+            }
+
+            p(class: " font-small") {
               a(href: project_awards_path(project), class: "text-link") {
                 i(class: "fa fa-history")
-                text " Award History"
+                text " History"
               }
             }
+
+            # STRIPE CHECKOUT DEMO:
+            form(method: "GET") {
+              script(
+                "src" => "https://checkout.stripe.com/checkout.js",
+                "class" => 'stripe-button',
+                "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
+                "data-label" => "Pay Royalties",
+                "data-panel-label" => "Pay Royalties",
+                "data-amount" => total_coins_issued * 60,
+                "data-name" => project.title,
+                "data-description" => "Pay Royalties",
+                "data-image" => project_image(project),
+                "data-locale" => "auto",
+                "data-zip-code" => true,
+                "data-bitcoin" => true
+              )
+            }
+
           }
           column("medium-8 small-12", class: "centered") {
             div(id: "award-percentages") {}
@@ -208,30 +219,50 @@ class Views::Projects::Show < Views::Projects::Base
           full_row {
             div(id: "contributions-chart")
           }
-
-          row { column("small-12", class: "underlined-header") { text "Top Contributors" } }
-
-          row {
-            column("small-12") {
-              award_data[:contributions].each do |contributor|
-                row {
-                  column("small-5") {
-                    img(src: contributor[:avatar], class: "icon avatar-img")
-                    div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
-                  }
-                  column("small-4") {
-                    span(class: "float-right margin-small") {
-                      text currency_unit
-                      text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',')
-                    }
-                  }
-                  column("small-3") { }
-                }
-              end
-            }
-          }
         end
       }
+    }
+
+    br
+    row {
+      div(class: "table-scroll") {
+        table(class: "award-rows", style: "width: 100%") {
+          tr(class: "header-row") {
+            th "Top Contributors"
+            th(class: "text-align-right") { text "Earned" }
+            th(class: "text-align-right") { text "Paid" }
+            th(class: "text-align-right") { text "Remaining" }
+          }
+          award_data[:contributions].each do |contributor|
+            tr(class: "award-row") {
+              td {
+                img(src: contributor[:avatar], class: "icon avatar-img")
+                div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
+              }
+              td {
+                span(class: "float-right margin-small") {
+                  text currency_unit
+                  text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',')
+                }
+              }
+              td {
+                span(class: "float-right margin-small") {
+                  text currency_unit
+                  text number_with_precision(contributor[:net_amount] * 0.6, precision: 0, delimiter: ',')
+                }
+              }
+              td {
+                span(class: "float-right margin-small") {
+                  text currency_unit
+                  text number_with_precision(contributor[:net_amount] * 0.4, precision: 0, delimiter: ',')
+                }
+              }
+            }
+          end
+        }
+      }
+
+
     }
   end
 end
