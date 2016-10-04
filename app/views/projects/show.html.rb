@@ -134,66 +134,67 @@ class Views::Projects::Show < Views::Projects::Base
         div(class:"award-send") {
           render partial: "award_send"
         }
-
-        # STRIPE CHECKOUT DEMO:
-        br
-        form(method: "GET") {
-          script(
-            "src" => "https://checkout.stripe.com/checkout.js",
-            "class" => 'stripe-button',
-            "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
-            "data-label" => "Pay Royalties",
-            "data-panel-label" => "Pay Royalties",
-            "data-amount" => "100000",
-            "data-name" => project.title,
-            "data-description" => "Pay Royalties",
-            "data-image" => project_image(project),
-            "data-locale" => "auto",
-            "data-zip-code" => true,
-            "data-bitcoin" => true
-          )
-        }
-        br
-
       }
 
       column("large-7 small-12 contributors-column") {
         row {
           column("small-12", class: "underlined-header") {
-            text "Awards "
+            text "Royalties "
             question_tooltip("This shows project coins issued on CoMakery. It does not currently show secondary trading on the Ethereum blockchain.")
           }
         }
 
         row {
           column("small-12 medium-4", class: "centered coins-issued") {
-            if award_data[:award_amounts][:my_project_coins]
-              div(class: "centered coin-numbers") {
-                text currency_unit
-                text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
-              }
-              div(class: "centered") { text "My #{coin_name}" }
-            end
-            div(class: "centered coin-numbers") {
+            div(class: "centered") {
               total_coins_issued = award_data[:award_amounts][:total_coins_issued]
 
-              text currency_unit
-              text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
-              text "/"
-              text currency_unit
-              text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
-
+              span(class: "centered coin-numbers") {
+                text currency_unit
+                text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
+              }
+              text raw "&nbsp;of&nbsp;"
+              span(class: "centered coin-numbers") {
+                text currency_unit
+                text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
+              }
               percentage_issued = total_coins_issued * 100 / project.maximum_coins.to_f
               if percentage_issued >= 0.01
                 text " (#{number_with_precision(percentage_issued, precision: 2)}%)"
               end
+              div { text "Earned" }
+              if award_data[:award_amounts][:my_project_coins]
+                div(class: "coin-numbers") {
+                  text currency_unit
+                  text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
+                }
+                text "Earned by me"
+              end
             }
-            div(class: "centered") { text "Total #{coin_name_short} Issued" }
+
+            # STRIPE CHECKOUT DEMO:
+            br
+            form(method: "GET") {
+              script(
+                "src" => "https://checkout.stripe.com/checkout.js",
+                "class" => 'stripe-button',
+                "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
+                "data-label" => "Pay Royalties",
+                "data-panel-label" => "Pay Royalties",
+                "data-amount" => "100000",
+                "data-name" => project.title,
+                "data-description" => "Pay Royalties",
+                "data-image" => project_image(project),
+                "data-locale" => "auto",
+                "data-zip-code" => true,
+                "data-bitcoin" => true
+              )
+            }
 
             p(class: "centered font-small") {
               a(href: project_awards_path(project), class: "text-link") {
                 i(class: "fa fa-history")
-                text " Award History"
+                text " History"
               }
             }
           }
