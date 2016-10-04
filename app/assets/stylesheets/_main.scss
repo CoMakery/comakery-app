@@ -75,9 +75,11 @@ a .button, a .button.take-action {
 .button {
   margin: 5px 4px;
 }
+
 .button.primary {
   background-color: limegreen;
 }
+
 .button.secondary {
   background-color: lightgray;
 }
@@ -86,9 +88,11 @@ a.more {
   font-size: 16pt;
   text-transform: lowercase;
 }
+
 .project-image {
   border-radius: $global-radius;
 }
+
 form.take-action-form p.notice {
   color: $snow;
 }
@@ -108,18 +112,23 @@ form.take-action-form p.notice {
   text-transform: uppercase;
   font-size: .8em;
 }
+
 .centered {
   text-align: center;
 }
+
 .font-large {
   font-size: $font-size-large;
 }
+
 .font-medium {
   font-size: $font-size-medium;
 }
+
 .font-small {
   font-size: $font-size-small;
 }
+
 .font-tiny {
   font-size: $font-size-tiny;
 }
@@ -168,6 +177,7 @@ form.take-action-form p.notice {
     @include background-image(linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.55) 100%));
   }
 }
+
 .sixteen-nine {
   @include aspect-ratio(16, 9);
 }
