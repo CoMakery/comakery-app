@@ -1,3 +1,12 @@
-table.award-rows th .header {
+.award-rows .header-row {
   text-align: left;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid $iron;
+  margin-bottom: 15px;
+  padding: 5px;
+}
+
+.award-rows .award-row {
+  margin-bottom: 50px;
 }

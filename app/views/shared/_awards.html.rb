@@ -5,17 +5,15 @@ class Views::Shared::Awards < Views::Base
     div(class: "table-scroll") {
       table(class: "award-rows") {
         tr(class: "header-row") {
-          th(class: "small-1") { div(class: "header") { text "Tokens Issued" } }
-          th(class: "small-2") { div(class: "header") { text "Date" } }
+          th(class: "small-1") { text "Tokens Issued" }
+          th(class: "small-2") { text "Date" }
           if show_recipient
-            th(class: "small-2") { div(class: "header") { text "Recipient" } }
+            th(class: "small-2") { text "Recipient" }
           end
-          th(class: "small-3") { div(class: "header") { text "Contribution" } }
-          th(class: "small-2") { div(class: "header") { text "Authorized By" } }
+          th(class: "small-3") { text "Contribution" }
+          th(class: "small-2") { text "Authorized By" }
           if project.ethereum_enabled
-            th(class: "small-2") { div(class: "header blockchain-address") {
-              text "Blockchain Transaction" }
-            }
+            th(class: "small-2 blockchain-address") { text "Blockchain Transaction" }
           end
 
           awards.sort_by(&:created_at).reverse.each do |award|
