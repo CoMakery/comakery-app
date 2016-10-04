@@ -190,7 +190,7 @@ class Views::Projects::Show < Views::Projects::Base
             }
 
             # STRIPE CHECKOUT DEMO:
-            form(method: "GET") {
+            form(method: "POST") {
               script(
                 "src" => "https://checkout.stripe.com/checkout.js",
                 "class" => 'stripe-button',
