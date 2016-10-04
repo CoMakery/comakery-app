@@ -28,12 +28,24 @@ class Views::Projects::Show < Views::Projects::Base
 
     div(class: "project-head") {
       div {
+        row(class: "project-title") {
+          column("small-12") {
+            h2 project.title
+          }
+        }
         row {
           column("large-6 small-12") {
-            row(class: "project-title") {
-              column("small-12") {
-                h1 project.title
-              }
+
+
+            div {
+
+            }
+
+            p {
+              text "Lead by "
+              b "#{project.owner_slack_user_name}"
+              text " with "
+              strong project.slack_team_name
             }
 
             if project.video_url
@@ -43,7 +55,7 @@ class Views::Projects::Show < Views::Projects::Base
                 }
               }
             else
-              div(class: "sixteen-nine") {
+              div() {
                 div(class: "content") {
                   img(src: project_image(project), class: "project-image")
                 }
@@ -52,61 +64,44 @@ class Views::Projects::Show < Views::Projects::Base
           }
           column("large-6 small-12 header-graphic") {
             row(class: "project-tasks") {
-              column("large-6 small-6") {
+              if policy(project).edit?
                 div {
-                  text "by "
-                  strong project.slack_team_name
+                  a(class: "edit", href: edit_project_path(project)) {
+                    i(class: "fa fa-pencil") {}
+                    text " Edit Project"
+                  }
                 }
+              end
+              if project.slack_team_domain
                 div {
-                  text "Owner: "
-                  b "#{project.owner_slack_user_name}"
+                  a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: "_blank", class: "text-link") {
+                    i(class: "fa fa-slack")
+                    text " Slack Channel"
+                  }
                 }
+              end
+              if project.tracker
                 div {
-                  text "Visibility: "
-                  b "#{project.public? ? "Public" : "Private"}"
+                  a(href: project.tracker, target: "_blank", class: "text-link") {
+                    i(class: "fa fa-tasks")
+                    text " Project Tasks"
+                  }
                 }
-              }
-
-              column("large-6 small-6") {
+              end
+              if project.contributor_agreement_url
                 div {
-                  if policy(project).edit?
-                    a(class: "edit", href: edit_project_path(project)) {
-                      i(class: "fa fa-pencil") {}
-                      text " Edit Project"
-                    }
-                  end
+                  a(href: project.contributor_agreement_url, target: "_blank", class: "text-link") {
+                    i(class: "fa fa-gavel")
+                    text " Contributor Agreement"
+                  }
                 }
-                if project.slack_team_domain
-                  div {
-                    a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: "_blank", class: "text-link") {
-                      i(class: "fa fa-slack")
-                      text " Project Slack Channel"
-                    }
-                  }
-                end
-                if project.tracker
-                  div {
-                    a(href: project.tracker, target: "_blank", class: "text-link") {
-                      i(class: "fa fa-tasks")
-                      text " Project Tasks"
-                    }
-                  }
-                end
-                if project.contributor_agreement_url
-                  div {
-                    a(href: project.contributor_agreement_url, target: "_blank", class: "text-link") {
-                      i(class: "fa fa-gavel")
-                      text " Contributor Agreement"
-                    }
-                  }
-                end
-                if project.ethereum_contract_explorer_url
-                  div {
-                    link_to "Ξthereum Smart Contract", project.ethereum_contract_explorer_url,
-                      target: "_blank", class: "text-link"
-                  }
-                end
-              }
+              end
+              if project.ethereum_contract_explorer_url
+                div {
+                  link_to "Ξthereum Smart Contract", project.ethereum_contract_explorer_url,
+                    target: "_blank", class: "text-link"
+                }
+              end
             }
             full_row {
               p(class: "description") {

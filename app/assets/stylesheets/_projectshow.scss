@@ -8,17 +8,13 @@
 }
 .project-head {
   width: 100%;
-  margin: 0 auto;
+  margin: 2em 0 0 0;
   border: 1px solid #ccc;
   padding: 1em;
   background: $palegray;
   @include box-shadow(inset 0px 8px 35px -20px rgba(0,0,0,0.25))
 }
 .project-title {
-  h1 {
-    margin: 0;
-    font-size: 2.7em;
-  }
   a.edit {
     margin-left: 1em;
   }
@@ -70,6 +66,11 @@
 }
 .row.project-tasks {
   margin-bottom: 1em;
+}
+.project-tasks div {
+  display: inline-block;
+  min-width: 210px;
+  padding-left: 15px;
 }
 
 .row.project-settings {
