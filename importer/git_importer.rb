@@ -101,11 +101,14 @@ class GitImporter
   def slack_user_id author_name
     project = Project.find @opts[:project_id]
     name_to_user_name = {
-      'Harlan T Wood' => 'harlan',
       'Adam Apollo' => 'adamapollo',
       'AdamApollo' => 'adamapollo',
+      'aquabu' => 'noahthorp',
       'Duke Dorje' => 'duke',
+      'Harlan T Wood' => 'harlan',
+      'harlantwood' => 'harlan',
       'Jack Senechal' => 'jack',
+      'Noah Thorp' => 'noahthorp',
     }
     unless @slack
       slack_team_id = project.slack_team_id
