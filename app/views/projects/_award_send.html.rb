@@ -5,7 +5,7 @@ class Views::Projects::AwardSend < Views::Base
     form_for [project, award] do |f|
       row(class: "award-types") {
         if can_award
-          h3 "Send awards"
+          h3 "Award Royalties"
         else
           h3 "Awards"
         end

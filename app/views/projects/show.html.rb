@@ -26,102 +26,91 @@ class Views::Projects::Show < Views::Projects::Base
       end
     end
 
-    content_for(:pre_body) {
-      div(class: "project-head") {
-        div(class: "small-12 medium-11 large-10 small-centered columns") {
-          row(class: "project-title") {
-            column("small-12") {
-              h1 project.title
-              p {
-                text "by "
-                strong project.slack_team_name
-                if policy(project).edit?
-                  a(class: "edit", href: edit_project_path(project)) {
-                    i(class: "fa fa-pencil") {}
-                    text " Edit Project"
-                  }
-                end
+    div(class: "project-head") {
+      div {
+        row {
+          column("large-6 small-12") {
+            row(class: "project-title") {
+              column("small-12") {
+                h1 project.title
               }
             }
+
+            if project.video_url
+              div(class: "project-video") {
+                div(class: "flex-video widescreen") {
+                  iframe(width: "454", height: "304", src: "//www.youtube.com/embed/#{project.youtube_id}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0", frameborder: "0")
+                }
+              }
+            else
+              div(class: "sixteen-nine") {
+                div(class: "content") {
+                  img(src: project_image(project), class: "project-image")
+                }
+              }
+            end
           }
-          row {
-            column("medium-5 small-12") {
-              if project.video_url
-                div(class: "project-video") {
-                  div(class: "flex-video widescreen") {
-                    iframe(width: "454", height: "304", src: "//www.youtube.com/embed/#{project.youtube_id}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0", frameborder: "0")
-                  }
+          column("large-6 small-12 header-graphic") {
+            row(class: "project-tasks") {
+              column("large-6 small-6") {
+                div {
+                  text "by "
+                  strong project.slack_team_name
                 }
-              else
-                div(class: "sixteen-nine") {
-                  div(class: "content") {
-                    img(src: project_image(project), class: "project-image")
-                  }
-                }
-              end
-            }
-            column("medium-7 small-12") {
-              full_row {
-                p(class: "description") {
-                  text raw project.description_html
-                }
-              }
-              row(class: "project-settings") {
-                column("medium-5 small-12") {
+                div {
                   text "Owner: "
                   b "#{project.owner_slack_user_name}"
                 }
-                column("medium-7 small-12") {
+                div {
                   text "Visibility: "
                   b "#{project.public? ? "Public" : "Private"}"
                 }
               }
-              row(class: "project-tasks") {
-                column("medium-5 small-12") {
-                  if project.tracker
-                    div {
-                      a(href: project.tracker, target: "_blank", class: "text-link") {
-                        i(class: "fa fa-tasks")
-                        text " Project Tasks"
-                      }
-                    }
-                  end
 
-                  if project.contributor_agreement_url
-                    div {
-                      a(href: project.contributor_agreement_url, target: "_blank", class: "text-link") {
-                        i(class: "fa fa-gavel")
-                        text " Contributor Agreement"
-                      }
-                    }
-                  end
-
-                  if project.ethereum_contract_explorer_url
-                    div {
-                      link_to "Ξthereum Smart Contract", project.ethereum_contract_explorer_url,
-                        target: "_blank", class: "text-link"
+              column("large-6 small-6") {
+                div {
+                  if policy(project).edit?
+                    a(class: "edit", href: edit_project_path(project)) {
+                      i(class: "fa fa-pencil") {}
+                      text " Edit Project"
                     }
                   end
                 }
-
-                column("medium-7 small-12") {
-                  if project.slack_team_domain
-                    div {
-                      a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: "_blank", class: "text-link") {
-                        i(class: "fa fa-slack")
-                        text " Project Slack Channel"
-                      }
+                if project.slack_team_domain
+                  div {
+                    a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: "_blank", class: "text-link") {
+                      i(class: "fa fa-slack")
+                      text " Project Slack Channel"
                     }
-                  end
-                  if project.video_url
-                    div {
-                      a(href: project.video_url, target: "_blank", class: "text-link") {
-                        i(class: "fa fa-youtube")
-                        text " Video"
-                      }
+                  }
+                end
+                if project.tracker
+                  div {
+                    a(href: project.tracker, target: "_blank", class: "text-link") {
+                      i(class: "fa fa-tasks")
+                      text " Project Tasks"
                     }
-                  end
-                }
+                  }
+                end
+                if project.contributor_agreement_url
+                  div {
+                    a(href: project.contributor_agreement_url, target: "_blank", class: "text-link") {
+                      i(class: "fa fa-gavel")
+                      text " Contributor Agreement"
+                    }
+                  }
+                end
+                if project.ethereum_contract_explorer_url
+                  div {
+                    link_to "Ξthereum Smart Contract", project.ethereum_contract_explorer_url,
+                      target: "_blank", class: "text-link"
+                  }
+                end
+              }
+            }
+            full_row {
+              p(class: "description") {
+                text raw project.description_html
               }
             }
           }
@@ -130,22 +119,16 @@ class Views::Projects::Show < Views::Projects::Base
     }
 
     row(class: "project-body") {
-      column("large-5 small-12") {
-        div(class:"award-send") {
-          render partial: "award_send"
-        }
-      }
-
-      column("large-7 small-12 contributors-column") {
+      column("large-6 small-12") {
         row {
-          column("small-12", class: "underlined-header") {
+          column("small-12", class: "underlined-header contributors-column") {
             text "Royalties "
             question_tooltip("This shows project coins issued on CoMakery. It does not currently show secondary trading on the Ethereum blockchain.")
           }
         }
 
         row {
-          column("small-12 medium-4", class: "coins-issued") {
+          column("large-3 small-12", class: "coins-issued contributors-column") {
             total_coins_issued = award_data[:award_amounts][:total_coins_issued]
             div(class: "") {
               div {
@@ -200,7 +183,7 @@ class Views::Projects::Show < Views::Projects::Base
                 "data-amount" => total_coins_issued * 60,
                 "data-name" => project.title,
                 "data-description" => "Pay Royalties",
-                "data-image" => project_image(project),
+                # "data-image" => project_image(project),
                 "data-locale" => "auto",
                 "data-zip-code" => true,
                 "data-bitcoin" => true
@@ -208,23 +191,30 @@ class Views::Projects::Show < Views::Projects::Base
             }
 
           }
-          column("medium-8 small-12", class: "centered") {
+          column("large-9 small-12", class: "royalty-pie") {
             div(id: "award-percentages") {}
           }
         }
-
-        if award_data[:contributions].present?
+      }
+      if award_data[:contributions].present?
+        column("large-6 small-12") {
           row { column("small-12", class: "underlined-header") { text "Recent Activity" } }
 
           full_row {
             div(id: "contributions-chart")
           }
-        end
-      }
+        }
+      end
     }
 
     br
     row {
+      column("large-6 small-12") {
+        div(class:"award-send") {
+          render partial: "award_send"
+        }
+      }
+
       div(class: "table-scroll") {
         table(class: "award-rows", style: "width: 100%") {
           tr(class: "header-row") {
