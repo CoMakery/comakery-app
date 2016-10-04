@@ -219,45 +219,50 @@ class Views::Projects::Show < Views::Projects::Base
           full_row {
             div(id: "contributions-chart")
           }
-
-          div(class: "table-scroll") {
-            table(class: "award-rows") {
-              tr(class: "header-row") {
-                th "Top Contributors"
-                th "Earned"
-                th "Paid"
-                th "Remaining"
-              }
-              award_data[:contributions].each do |contributor|
-                tr(class: "award-row") {
-                  td {
-                    img(src: contributor[:avatar], class: "icon avatar-img")
-                    div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
-                  }
-                  td {
-                    span(class: "float-right margin-small") {
-                      text currency_unit
-                      text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',')
-                    }
-                  }
-                  td {
-                    span(class: "float-right margin-small") {
-                      text currency_unit
-                      text number_with_precision(contributor[:net_amount] * 0.6, precision: 0, delimiter: ',')
-                    }
-                  }
-                  td {
-                    span(class: "float-right margin-small") {
-                      text currency_unit
-                      text number_with_precision(contributor[:net_amount] * 0.4, precision: 0, delimiter: ',')
-                    }
-                  }
-                }
-              end
-            }
-          }
         end
       }
+    }
+
+    br
+    row {
+      div(class: "table-scroll") {
+        table(class: "award-rows", style: "width: 100%") {
+          tr(class: "header-row") {
+            th "Top Contributors"
+            th(class: "text-align-right") { text "Earned" }
+            th(class: "text-align-right") { text "Paid" }
+            th(class: "text-align-right") { text "Remaining" }
+          }
+          award_data[:contributions].each do |contributor|
+            tr(class: "award-row") {
+              td {
+                img(src: contributor[:avatar], class: "icon avatar-img")
+                div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
+              }
+              td {
+                span(class: "float-right margin-small") {
+                  text currency_unit
+                  text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',')
+                }
+              }
+              td {
+                span(class: "float-right margin-small") {
+                  text currency_unit
+                  text number_with_precision(contributor[:net_amount] * 0.6, precision: 0, delimiter: ',')
+                }
+              }
+              td {
+                span(class: "float-right margin-small") {
+                  text currency_unit
+                  text number_with_precision(contributor[:net_amount] * 0.4, precision: 0, delimiter: ',')
+                }
+              }
+            }
+          end
+        }
+      }
+
+
     }
   end
 end
