@@ -145,35 +145,51 @@ class Views::Projects::Show < Views::Projects::Base
         }
 
         row {
-          column("small-12 medium-4", class: "centered coins-issued") {
-            div(class: "centered") {
-              total_coins_issued = award_data[:award_amounts][:total_coins_issued]
+          column("small-12 medium-4", class: "coins-issued") {
+            total_coins_issued = award_data[:award_amounts][:total_coins_issued]
+            div(class: "") {
+              div {
 
-              span(class: "centered coin-numbers") {
-                text currency_unit
-                text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
+                span(class: " coin-numbers") {
+                  text currency_unit
+                  text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
+                }
+                text raw "&nbsp;max"
               }
-              text raw "&nbsp;of&nbsp;"
-              span(class: "centered coin-numbers") {
-                text currency_unit
-                text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
+
+              div {
+                span(class: " coin-numbers") {
+                  text currency_unit
+                  text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
+                }
+
+                text raw "&nbsp;total"
               }
+
               percentage_issued = total_coins_issued * 100 / project.maximum_coins.to_f
               if percentage_issued >= 0.01
                 text " (#{number_with_precision(percentage_issued, precision: 2)}%)"
               end
-              div { text "Earned" }
+
               if award_data[:award_amounts][:my_project_coins]
-                div(class: "coin-numbers") {
-                  text currency_unit
-                  text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
+                div {
+                  span(class: "coin-numbers") {
+                    text currency_unit
+                    text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
+                  }
+                  text raw "&nbsp;mine"
                 }
-                text "Earned by me"
               end
             }
 
+            p(class: " font-small") {
+              a(href: project_awards_path(project), class: "text-link") {
+                i(class: "fa fa-history")
+                text " History"
+              }
+            }
+
             # STRIPE CHECKOUT DEMO:
-            br
             form(method: "GET") {
               script(
                 "src" => "https://checkout.stripe.com/checkout.js",
@@ -181,7 +197,7 @@ class Views::Projects::Show < Views::Projects::Base
                 "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
                 "data-label" => "Pay Royalties",
                 "data-panel-label" => "Pay Royalties",
-                "data-amount" => "100000",
+                "data-amount" => total_coins_issued * 60,
                 "data-name" => project.title,
                 "data-description" => "Pay Royalties",
                 "data-image" => project_image(project),
@@ -191,12 +207,6 @@ class Views::Projects::Show < Views::Projects::Base
               )
             }
 
-            p(class: "centered font-small") {
-              a(href: project_awards_path(project), class: "text-link") {
-                i(class: "fa fa-history")
-                text " History"
-              }
-            }
           }
           column("medium-8 small-12", class: "centered") {
             div(id: "award-percentages") {}
