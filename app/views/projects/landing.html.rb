@@ -61,7 +61,7 @@ class Views::Projects::Landing < Views::Projects::Base
       }
     end
 
-    full_row { h1 "Public Projects" }
+    full_row { h1 "Featured Projects" }
     projects_block(public_projects, public_project_contributors)
 
     a("Browse All", href: projects_path, class: "more")
