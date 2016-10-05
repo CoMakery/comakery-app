@@ -168,22 +168,24 @@ class Views::Projects::Show < Views::Projects::Base
             }
 
             # STRIPE CHECKOUT DEMO:
-            form(method: "POST") {
-              script(
-                "src" => "https://checkout.stripe.com/checkout.js",
-                "class" => 'stripe-button',
-                "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
-                "data-label" => "Pay Royalties",
-                "data-panel-label" => "Pay Royalties",
-                "data-amount" => total_coins_issued * 60,
-                "data-name" => project.title,
-                "data-description" => "Pay Royalties",
-                # "data-image" => project_image(project),
-                "data-locale" => "auto",
-                "data-zip-code" => true,
-                "data-bitcoin" => true
-              )
-            }
+            if can_award
+              form(method: "POST") {
+                script(
+                  "src" => "https://checkout.stripe.com/checkout.js",
+                  "class" => 'stripe-button',
+                  "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
+                  "data-label" => "Pay Royalties",
+                  "data-panel-label" => "Pay Royalties",
+                  "data-amount" => total_coins_issued * 60,
+                  "data-name" => project.title,
+                  "data-description" => "Pay Royalties",
+                  # "data-image" => project_image(project),
+                  "data-locale" => "auto",
+                  "data-zip-code" => true,
+                  "data-bitcoin" => true
+                )
+              }
+            end
 
           }
           column("large-9 small-12", class: "royalty-pie") {
