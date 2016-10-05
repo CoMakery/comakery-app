@@ -43,8 +43,9 @@ class GetAwardData
   end
 
   def contributions_by_day(awards_scope)
+    history = 150
     recent_awards = awards_scope
-                        .where("awards.created_at > ?", 30.days.ago)
+                        .where("awards.created_at > ?", history.days.ago)
                         .order("awards.created_at asc")
 
     contributor_auths = recent_awards.map { |award| award.authentication }.freeze
@@ -56,7 +57,11 @@ class GetAwardData
 
     awards_by_date = recent_awards.group_by{|a|a.created_at.to_date.iso8601}
 
-    data = (0..30).each_with_object({}) do |days_ago, contribution_object_by_day|
+    award_age_days = (Time.now - recent_awards.first.created_at) / (60 * 60 * 24)
+    start_days_ago = [history, award_age_days].min
+    start_days_ago = [start_days_ago, 7].max  # at least 7 days
+
+    data = (0..start_days_ago).each_with_object({}) do |days_ago, contribution_object_by_day|
       date = days_ago.days.ago.to_date
       date_string = date.iso8601
       contribution_object_by_day[date_string] = contributor_by_day_row(empty_row_template, date_string, awards_by_date[date_string])
