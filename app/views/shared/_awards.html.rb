@@ -5,7 +5,7 @@ class Views::Shared::Awards < Views::Base
     div(class: "table-scroll") {
       table(class: "award-rows") {
         tr(class: "header-row") {
-          th(class: "small-1") { text "Tokens Issued" }
+          th(class: "small-1") { text "Royalties Earned" }
           th(class: "small-2") { text "Date" }
           if show_recipient
             th(class: "small-2") { text "Recipient" }
