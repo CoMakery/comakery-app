@@ -14,7 +14,11 @@ window.stackedBarChart = (selector, data)->
   y = d3.scale.linear().rangeRound([height, 0])
   color = d3.scale.ordinal().range(window.chartColors)
 
-  xAxis = d3.svg.axis().scale(x).orient('bottom').tickValues(_.filter(_.map(data, (d, i)-> d["date"]), (d, i) -> i % 5 == 0))
+  dates = for percentage in [0, 0.2, 0.4, 0.6, 0.8, 1]
+    i = Math.round(percentage * (data.length-1))
+    date = data[i].date
+
+  xAxis = d3.svg.axis().scale(x).orient('bottom').tickValues(dates)
 
   yAxis = d3.svg.axis().scale(y).orient('left').ticks(5).tickFormat(d3.format('$,.2r'))
 
