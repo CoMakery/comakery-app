@@ -106,7 +106,7 @@ module Views
           div(class: "award-types") {
             row {
               column("small-4") {
-                text "Award Names"
+                text "Royalty Award Names"
               }
               column("small-2") {
                 text "Amount "
