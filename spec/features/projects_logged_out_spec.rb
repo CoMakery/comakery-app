@@ -27,7 +27,6 @@ describe "viewing projects, creating and editing", :js do
       expect(page).to have_current_path(project_path(public_project))
 
       expect(page).to have_content "Public Project"
-      expect(page).to have_content "Visibility: Public"
       expect(page).to have_content "Citizen Code"
     end
 
