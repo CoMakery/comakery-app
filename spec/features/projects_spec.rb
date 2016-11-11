@@ -36,8 +36,8 @@ describe "viewing projects, creating and editing", :js do
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public")).not_to be_checked
 
-    expect(find_field("Maximum Number of Awardable Coins")['value']).to eq("10000000")
-    fill_in "Maximum Number of Awardable Coins", with: "20000000"
+    expect(find_field("Maximum Royalties")['value']).to eq("10000000")
+    fill_in "Maximum Royalties", with: "20000000"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
@@ -82,10 +82,12 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "This is a project description which is very informative"
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link "Project Tasks"
-    expect(page).to have_content "0/20,000,000"
-    expect(page).to have_content "Visibility: Private"
 
-    expect(page).to have_content "Owner: Glenn Spanky"
+    expect(page).to have_content "$20,000,000 max"
+    expect(page).to have_content "$0 total"
+    expect(page).to have_content "$0 mine"
+
+    expect(page).to have_content "Lead by Glenn Spanky"
     expect(page).to have_content "Citizen Code"
 
     award_type_rows = get_award_type_rows
@@ -135,16 +137,14 @@ describe "viewing projects, creating and editing", :js do
 
     expect(page).to have_content "This is an edited project"
     expect(page).to have_content "This is an edited project description which is very informative"
-    expect(page).to have_content "Visibility: Private"
     expect(page).to have_link "Project Tasks"
-    expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com/messages/a-channel-name"
+    expect(page).to have_link "Slack Channel", href: "https://citizencodedomain.slack.com/messages/a-channel-name"
     expect(page.all(".project-video iframe").size).to eq(1)
-    expect(page).to have_link "Video", href: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
     expect(page).to have_link "Contributor Agreement", href: "https://docusign.com/project_contributor_agreement.pdf"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
-    expect(page).to have_content "This is a medium award type (2,000) (Community Awardable)"
+    expect(page).to have_content "This is a medium award type ($2,000) (Community Awardable)"
     expect(page).not_to have_content "This is a small award type"
     expect(page).not_to have_content "1,000"
 
@@ -254,7 +254,9 @@ describe "viewing projects, creating and editing", :js do
     visit project_path(project)
 
     within(".coins-issued") do
-      expect(page).to have_content "0/10,000,000"
+      expect(page).to have_content "$10,000,000 max"
+      expect(page).to have_content "$0 total"
+      expect(page).to have_content "$0 mine"
     end
 
     create(:award, award_type: create(:award_type, project: project, amount: 100_000))
@@ -262,7 +264,9 @@ describe "viewing projects, creating and editing", :js do
     visit project_path(project)
 
     within(".coins-issued") do
-      expect(page).to have_content "100,000/10,000,000 (1.00%) Total Coins Issued"
+      expect(page).to have_content "$10,000,000 max"
+      expect(page).to have_content "$100,000 total"
+      expect(page).to have_content "$0 mine"
     end
   end
 end

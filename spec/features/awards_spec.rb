@@ -52,9 +52,9 @@ describe "viewing projects, creating and editing", :js do
         it "lets people view awards" do
           visit project_path(project)
 
-          click_link "Award History"
+          click_link "History"
 
-          expect(page).to have_content "Award History"
+          expect(page).to have_content "History"
         end
       end
     end
