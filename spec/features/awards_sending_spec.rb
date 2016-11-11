@@ -50,7 +50,7 @@ describe "awarding users" do
 
       visit project_path(project)
 
-      expect(page).to have_content "0My Project Coins"
+      expect(page).to have_content "$0 mine"
 
       choose "Small"
       expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson"])
@@ -72,14 +72,18 @@ describe "awarding users" do
       click_link("Back to project")
 
       within(".coins-issued") do
-        expect(page).to have_content "1,000My Project Coins"
-        expect(page).to have_content "1,000/10,000,000 (0.01%)Total Coins Issued"
+        expect(page).to have_content "$10,000,000 max"
+        expect(page).to have_content "$1,000 total"
+        expect(page).to have_content "$1,000 mine"
       end
 
-      within('.project-body') do
+      within('.award-rows') do
         expect(page.all("img[src='https://slack.example.com/team-image-34-px.jpg']").size).to eq(1)
+        expect(page).to have_content "@bobjohnson"
+        expect(page).to have_content "1,000"
+        #TODO: add paid and remaining columns
       end
-      expect(page).to have_content "@bobjohnson1,000"
+
 
       expect(page.html).to include('{"content": [{"label":"@bobjohnson","value":1000}')
     end
@@ -102,11 +106,11 @@ describe "awarding users" do
 
     visit project_path(project)
 
-    click_link "Award History"
+    click_link "History"
 
     expect(page.all(".award-rows .award-row").size).to eq(0)
 
-    expect(page).to have_content("Award History")
+    expect(page).to have_content("History")
 
     click_link "Back to project"
 
@@ -131,11 +135,11 @@ describe "awarding users" do
 
     expect(page).to have_content "Successfully sent award to @bobjohnson"
 
-    click_link "Award History"
+    click_link "History"
 
     expect(EthereumTokenIssueJob.jobs.length).to eq(0)
 
-    expect(page).to have_content "Award History"
+    expect(page).to have_content "History"
     expect(page).to have_content "Feb 29"
     expect(page).to have_content "1,000"
     expect(page).to have_content "(no account)"
