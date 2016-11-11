@@ -211,8 +211,8 @@ class Views::Projects::Show < Views::Projects::Base
           render partial: "award_send"
         }
       }
-
-      div(class: "table-scroll") {
+      if award_data[:contributions].present?
+        div(class: "table-scroll") {
         table(class: "award-rows", style: "width: 100%") {
           tr(class: "header-row") {
             th "Top Contributors"
@@ -248,8 +248,7 @@ class Views::Projects::Show < Views::Projects::Base
           end
         }
       }
-
-
+      end
     }
   end
 end
