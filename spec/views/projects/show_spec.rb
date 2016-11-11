@@ -18,12 +18,8 @@ describe "projects/show.html.rb" do
   describe "Project description" do
     it "renders mardown as HTML" do
       render
-      pre_body = Nokogiri::HTML(view.content_for(:pre_body))
-      descriptions = pre_body.css('.description')
-      expect(descriptions.count).to eq 1
-      description = descriptions.first.inner_html
-      expect(description).to match %r{markdown <em>rocks</em>:}
-      expect(description).to match %r{<a href="http://www.auto.link"[^>]*>www.auto.link</a>}
+      assert_select '.description', html: %r{<a href="http://www.auto.link"[^>]*>www.auto.link</a>}
+      assert_select '.description', html: %r{markdown <em>rocks</em>:}
     end
   end
 end
