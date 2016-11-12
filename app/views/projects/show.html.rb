@@ -11,7 +11,7 @@ class Views::Projects::Show < Views::Projects::Base
   end
 
   def pie_chart_data
-    award_data[:contributions_summary].map do |award|
+    award_data[:contributions_summary_pie_chart].map do |award|
       {label: award[:name], value: award[:net_amount]}
     end.to_json
   end
@@ -211,7 +211,7 @@ class Views::Projects::Show < Views::Projects::Base
           render partial: "award_send"
         }
       }
-      if award_data[:contributions].present?
+      if award_data[:contributions_summary].present?
         div(class: "table-scroll") {
         table(class: "award-rows", style: "width: 100%") {
           tr(class: "header-row") {
@@ -220,28 +220,28 @@ class Views::Projects::Show < Views::Projects::Base
             th(class: "text-align-right") { text "Paid" }
             th(class: "text-align-right") { text "Remaining" }
           }
-          award_data[:contributions].each do |contributor|
+          award_data[:contributions_summary].each do |contributor|
             tr(class: "award-row") {
-              td {
+              td(class: "contributor") {
                 img(src: contributor[:avatar], class: "icon avatar-img")
                 div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
               }
-              td {
+              td(class: "earned") {
                 span(class: "float-right margin-small") {
                   text currency_unit
-                  text number_with_precision(contributor[:net_amount], precision: 0, delimiter: ',')
+                  text number_with_precision(contributor[:earned], precision: 0, delimiter: ',')
                 }
               }
-              td {
+              td(class: "paid") {
                 span(class: "float-right margin-small") {
                   text currency_unit
-                  text number_with_precision(contributor[:net_amount] * 0.6, precision: 0, delimiter: ',')
+                  text number_with_precision(contributor[:paid], precision: 0, delimiter: ',')
                 }
               }
-              td {
+              td(class: "remaining") {
                 span(class: "float-right margin-small") {
                   text currency_unit
-                  text number_with_precision(contributor[:net_amount] * 0.4, precision: 0, delimiter: ',')
+                  text number_with_precision(contributor[:remaining], precision: 0, delimiter: ',')
                 }
               }
             }

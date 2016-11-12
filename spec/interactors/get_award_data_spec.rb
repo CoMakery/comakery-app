@@ -74,9 +74,42 @@ describe GetAwardData do
     end
   end
 
-  describe "#contributions_summary_data" do
+  describe "#contributions_summary" do
+    context "with no awards" do
+      specify do
+        contributions = GetAwardData.new.contributions_summary(project)
+        expect(contributions).to eq []
+      end
+    end
+
+    context "with awards" do
+      let!(:sam_award_1) { create(:award, award_type: award_type1, authentication: sam_auth, created_at: Date.new(2016, 1, 1)) }
+      let!(:john_award_1) { create(:award, award_type: award_type1, authentication: john_auth, created_at: Date.new(2016, 2, 8)) }
+      let!(:john_award_2) { create(:award, award_type: award_type1, authentication: john_auth, created_at: Date.new(2016, 3, 1)) }
+      let!(:john_payment) { create(:payment, recipient: john_auth, issuer: sam, project: project, amount: 10) }
+      let!(:sam_payment) { create(:payment, recipient: sam_auth, issuer: sam, project: project, amount: 5) }
+
+      specify do
+        contributions = GetAwardData.new.contributions_summary(project)
+        expect(contributions).to eq([
+                                        {:name => "@john",
+                                         :avatar => "https://slack.example.com/team-image-34-px.jpg",
+                                         :earned => 2000,
+                                         :paid => 10,
+                                         :remaining => 1990},
+                                        {:name => "sam sam",
+                                         :avatar => "http://avatar.com/im_pretty.jpg",
+                                         :earned => 1000,
+                                         :paid => 5,
+                                         :remaining => 995},
+                                    ])
+      end
+    end
+  end
+
+  describe "#contributions_summary_pie_chart" do
     it "gathers extra entries into 'other'" do
-      expect(GetAwardData.new.contributions_summary_data([
+      expect(GetAwardData.new.contributions_summary_pie_chart([
                                                      create(:award, award_type: create(:award_type, amount: 10), authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
                                                      create(:award, award_type: create(:award_type, amount: 33), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
                                                      create(:award, award_type: create(:award_type, amount: 20), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
@@ -86,7 +119,7 @@ describe GetAwardData do
                                                            ])
     end
     it "gathers shows all entries if less than threshold" do
-      expect(GetAwardData.new.contributions_summary_data([
+      expect(GetAwardData.new.contributions_summary_pie_chart([
                                                      create(:award, award_type: create(:award_type, amount: 10), authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
                                                      create(:award, award_type: create(:award_type, amount: 33), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
                                                      create(:award, award_type: create(:award_type, amount: 20), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
