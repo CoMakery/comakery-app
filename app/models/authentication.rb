@@ -24,6 +24,17 @@ class Authentication < ActiveRecord::Base
     allowed_domains.include?(slack_team_domain)
   end
 
+  def total_awards_earned(project)
+    project.awards.where(authentication: self).sum(:amount)
+  end
+
+  def total_awards_paid(project)
+    project.payments.where(recipient: self).sum(:amount)
+  end
+
+  def total_awards_remaining(project)
+    total_awards_earned(project) - total_awards_paid(project)
+  end
 
   def self.find_or_create_from_auth_hash!(auth_hash)
     slack_auth_hash = SlackAuthHash.new(auth_hash)

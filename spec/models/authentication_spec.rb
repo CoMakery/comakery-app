@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe Authentication do
+
   describe "validations" do
     it "requires many attributes" do
       errors = Authentication.new.tap { |a| a.valid? }.errors.full_messages
@@ -40,6 +41,61 @@ describe Authentication do
       expect(build(:authentication, slack_first_name: nil, slack_last_name: "Johnson", slack_user_name: "bj").display_name).to eq("Johnson")
       expect(build(:authentication, slack_first_name: "Bob", slack_last_name: "", slack_user_name: "bj").display_name).to eq("Bob")
       expect(build(:authentication, slack_first_name: nil, slack_last_name: "", slack_user_name: "bj").display_name).to eq("@bj")
+    end
+  end
+
+  describe "#total_awards_earned" do
+    let!(:contributor) { create(:authentication) }
+    let!(:bystander) { create(:authentication) }
+    let!(:project) { create :project }
+    let!(:award_type) { create(:award_type, amount: 10, project: project) }
+    let!(:award1) {create :award, authentication: contributor, award_type: award_type }
+    let!(:award2) {create :award, authentication: contributor, award_type: award_type }
+
+    specify do
+      expect(bystander.total_awards_earned(project)).to eq 0
+    end
+
+    specify do
+      expect(contributor.total_awards_earned(project)).to eq 20
+    end
+  end
+
+  describe "#total_awards_paid" do
+    let!(:issuer) { create(:account) }
+    let!(:contributor) { create(:authentication) }
+    let!(:bystander) { create(:authentication) }
+    let!(:project) { create :project }
+    let!(:award_type) { create(:award_type, amount: 10, project: project) }
+    let!(:payment1) {create :payment, project: project, recipient: contributor, issuer: issuer, amount: 10}
+    let!(:payment2) {create :payment, project: project, recipient: contributor, issuer: issuer, amount: 1 }
+
+    specify do
+      expect(bystander.total_awards_paid(project)).to eq 0
+    end
+
+    specify do
+      expect(contributor.total_awards_paid(project)).to eq 11
+    end
+  end
+
+  describe "#total_awards_remaining" do
+    let!(:issuer) { create(:account) }
+    let!(:contributor) { create(:authentication) }
+    let!(:bystander) { create(:authentication) }
+    let!(:project) { create :project }
+    let!(:award_type) { create(:award_type, amount: 10, project: project) }
+    let!(:award1) {create :award, authentication: contributor, award_type: award_type }
+    let!(:award2) {create :award, authentication: contributor, award_type: award_type }
+    let!(:payment1) {create :payment, project: project, recipient: contributor, issuer: issuer, amount: 10}
+    let!(:payment2) {create :payment, project: project, recipient: contributor, issuer: issuer, amount: 1 }
+
+    specify do
+      expect(bystander.total_awards_remaining(project)).to eq 0
+    end
+
+    specify do
+      expect(contributor.total_awards_remaining(project)).to eq 9
     end
   end
 
