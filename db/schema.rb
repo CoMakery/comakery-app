@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160820044646) do
+ActiveRecord::Schema.define(version: 20161111201131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,15 @@ ActiveRecord::Schema.define(version: 20160820044646) do
     t.string  "slack_instance"
     t.boolean "opt_in",         default: false, null: false
     t.jsonb   "oauth_response"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.integer  "project_id"
+    t.integer  "issuer_id"
+    t.integer  "recipient_id"
+    t.integer  "amount"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "projects", force: :cascade do |t|

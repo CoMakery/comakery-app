@@ -5,7 +5,9 @@ class TopContributors
     projects = context.projects
     n = context.n || 5
 
-    contributors = projects.each_with_object({}) { |project, projects_to_contributors| projects_to_contributors[project] = top_contributors(project, n) }
+    contributors = projects.each_with_object({}) do |project, projects_to_contributors|
+      projects_to_contributors[project] = top_contributors(project, n)
+    end
 
     context.contributors = contributors
   end

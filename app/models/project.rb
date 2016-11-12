@@ -12,7 +12,10 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
 
   has_many :awards, through: :award_types, dependent: :destroy
-  has_many :contributors, through: :awards, source: :authentication
+  has_many :payments, dependent: :destroy
+
+  has_many :contributors, through: :awards, source: :authentication  # TODO deprecate in favor of contributors_distinct
+  has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
 
   belongs_to :owner_account, class_name: Account
   validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :title

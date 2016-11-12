@@ -98,6 +98,10 @@ class Mom
     Award.new(defaults.merge(attrs))
   end
 
+  def payment(**attrs )
+    Payment.new(**attrs)
+  end
+
   def slack(authentication = create(:authentication))
     Comakery::Slack.new(authentication)
   end
