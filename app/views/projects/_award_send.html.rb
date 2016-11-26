@@ -5,7 +5,7 @@ class Views::Projects::AwardSend < Views::Base
     form_for [project, award] do |f|
       row(class: "award-types") {
         if can_award
-          h3 "Award Royalties"
+          h3 "Award #{project.payment_description}"
         else
           h3 "Awards"
         end
@@ -22,7 +22,7 @@ class Views::Projects::AwardSend < Views::Base
                     end
                     column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : "small-12") {
                       span(award_type.name)
-                      text " (#{currency_unit}#{number_with_precision(award_type.amount, precision: 0, delimiter: ',')})"
+                      text " (#{project.currency_denomination}#{number_with_precision(award_type.amount, precision: 0, delimiter: ',')})"
                       text " (Community Awardable)" if award_type.community_awardable?
                     }
                   }

@@ -116,8 +116,8 @@ class Views::Projects::Show < Views::Projects::Base
     row(class: "project-body") {
       column("large-6 small-12") {
         row {
-          column("small-12", class: "underlined-header contributors-column") {
-            text "Royalties "
+          column("small-12", class: "underlined-header contributors-column award-header") {
+            text "#{project.payment_description} "
             question_tooltip("This shows project coins issued on CoMakery. It does not currently show secondary trading on the Ethereum blockchain.")
           }
         }
@@ -129,7 +129,7 @@ class Views::Projects::Show < Views::Projects::Base
               div {
 
                 span(class: " coin-numbers") {
-                  text currency_unit
+                  text project.currency_denomination
                   text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
                 }
                 text raw "&nbsp;max"
@@ -137,7 +137,7 @@ class Views::Projects::Show < Views::Projects::Base
 
               div {
                 span(class: " coin-numbers") {
-                  text currency_unit
+                  text project.currency_denomination
                   text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
                 }
 
@@ -152,7 +152,7 @@ class Views::Projects::Show < Views::Projects::Base
               if award_data[:award_amounts][:my_project_coins]
                 div {
                   span(class: "coin-numbers") {
-                    text currency_unit
+                    text project.currency_denomination
                     text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
                   }
                   text raw "&nbsp;mine"
@@ -174,11 +174,11 @@ class Views::Projects::Show < Views::Projects::Base
                   "src" => "https://checkout.stripe.com/checkout.js",
                   "class" => 'stripe-button',
                   "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
-                  "data-label" => "Pay Royalties",
-                  "data-panel-label" => "Pay Royalties",
+                  "data-label" => "Pay #{project.payment_description}",
+                  "data-panel-label" => "Pay #{project.payment_description}",
                   "data-amount" => total_coins_issued * 60,
                   "data-name" => project.title,
-                  "data-description" => "Pay Royalties",
+                  "data-description" => "Pay #{project.payment_description}",
                   # "data-image" => project_image(project),
                   "data-locale" => "auto",
                   "data-zip-code" => true,
@@ -228,19 +228,19 @@ class Views::Projects::Show < Views::Projects::Base
               }
               td(class: "earned") {
                 span(class: "float-right margin-small") {
-                  text currency_unit
+                  text project.currency_denomination
                   text number_with_precision(contributor[:earned], precision: 0, delimiter: ',')
                 }
               }
               td(class: "paid") {
                 span(class: "float-right margin-small") {
-                  text currency_unit
+                  text project.currency_denomination
                   text number_with_precision(contributor[:paid], precision: 0, delimiter: ',')
                 }
               }
               td(class: "remaining") {
                 span(class: "float-right margin-small") {
-                  text currency_unit
+                  text project.currency_denomination
                   text number_with_precision(contributor[:remaining], precision: 0, delimiter: ',')
                 }
               }

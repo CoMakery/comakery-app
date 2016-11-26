@@ -20,7 +20,7 @@ window.stackedBarChart = (selector, data)->
 
   xAxis = d3.svg.axis().scale(x).orient('bottom').tickValues(dates)
 
-  yAxis = d3.svg.axis().scale(y).orient('left').ticks(5).tickFormat(d3.format('$,.2r'))
+  yAxis = d3.svg.axis().scale(y).orient('left').ticks(5).tickFormat(d3.format(',.2r'))
 
   svg = d3.select(selector)
     .append('svg')
