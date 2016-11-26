@@ -23,6 +23,22 @@ describe Project do
       expect(Project.new(slack_team_domain: "a").tap{|p|p.valid?}.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
     end
 
+    describe "payment_type" do
+      let(:project) { create(:project) }
+      let(:order) { [:royalty_usd, :project_coin, :royalty_btc, :royalty_eth] }
+
+      it 'defaults to project_coin' do
+        expect(project.payment_type).to eq('royalty_usd')
+      end
+
+
+      it 'has the correct enum index values' do
+        order.each_with_index do |item, index|
+          expect(Project.payment_types[item]).to eq index
+        end
+      end
+    end
+
     describe "maximum_coins" do
       it "prevents modification if the record has been saved" do
         project = create(:project)

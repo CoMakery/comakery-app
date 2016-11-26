@@ -36,8 +36,8 @@ describe "viewing projects, creating and editing", :js do
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public")).not_to be_checked
 
-    expect(find_field("Maximum Royalties")['value']).to eq("10000000")
-    fill_in "Maximum Royalties", with: "20000000"
+    expect(find_field("Maximum Awards")['value']).to eq("10000000")
+    fill_in "Maximum Awards", with: "20000000"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
@@ -74,6 +74,8 @@ describe "viewing projects, creating and editing", :js do
 
     fill_in "Title", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
+
+    select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
 
     click_on "Save"
 

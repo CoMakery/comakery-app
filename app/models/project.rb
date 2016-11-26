@@ -18,6 +18,14 @@ class Project < ActiveRecord::Base
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
 
   belongs_to :owner_account, class_name: Account
+
+  enum payment_type: {
+      royalty_usd: 0,
+      project_coin: 1,
+      royalty_btc: 2,
+      royalty_eth: 3,
+  }
+
   validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :title
   validates_numericality_of :maximum_coins, greater_than: 0
 

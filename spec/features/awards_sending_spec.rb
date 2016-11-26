@@ -80,8 +80,7 @@ describe "awarding users" do
       within('.award-rows') do
         expect(page.all("img[src='https://slack.example.com/team-image-34-px.jpg']").size).to eq(1)
         expect(page).to have_content "@bobjohnson"
-        expect(page).to have_content "1,000"
-        #TODO: add paid and remaining columns
+        expect(page).to have_content "$1,000$0$1,000"
       end
 
 
