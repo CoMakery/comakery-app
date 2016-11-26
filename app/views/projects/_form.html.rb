@@ -13,14 +13,28 @@ module Views
                   f.text_field :title
                 }
               }
+              with_errors(project, :payment_type) {
+                label {
+                  text "Award Payment Type"
+                  question_tooltip("Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project coins for their work contributions.")
+                  f.select(:payment_type,
+                           [["Royalties paid in US Dollars ($)", "royalty_usd"],
+                            ["Royalties paid in Bitcoin (฿)", "royalty_btc"],
+                            ["Royalties paid in Ether (Ξ)", "royalty_eth"],
+                            ["Project Coin direct payment", "project_coin"]],
+                            {selected: project.payment_type,include_blank: false}
+                  )
+                }
+              }
               with_errors(project, :maximum_coins) {
                 label {
-                  text "Maximum Royalties"
-                  question_tooltip("This is the maximum sum of coins
-                    you can award in the life of this project.
-                    Select it carefully,
+                  text "Maximum Awards Outstanding"
+                  question_tooltip("Select it carefully,
                     it cannot be changed after it has been set.
-                    Also select a high enough number
+                    For royalties this is the maximum amount of unpaid royalties.
+                    For project coins this is the maximum number of project coins that can be issued.
+                    When royalties are paid or project coins are burned they are not included in this total.
+                    Select a high enough number
                     so you have room for the future.")
                   f.text_field :maximum_coins, type: "number", disabled: !project.new_record?
                 }

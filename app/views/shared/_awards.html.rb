@@ -5,7 +5,7 @@ class Views::Shared::Awards < Views::Base
     div(class: "table-scroll") {
       table(class: "award-rows") {
         tr(class: "header-row") {
-          th(class: "small-1") { text "Royalties Earned" }
+          th(class: "small-1") { text "#{project.payment_description} Earned" }
           th(class: "small-2") { text "Date" }
           if show_recipient
             th(class: "small-2") { text "Recipient" }
@@ -19,7 +19,7 @@ class Views::Shared::Awards < Views::Base
           awards.sort_by(&:created_at).reverse.each do |award|
             tr(class: "award-row") {
               td(class: "small-1") {
-                text currency_unit
+                text project.currency_denomination
                 text number_with_delimiter(award.award_type.amount, :delimiter => ',')
               }
               td(class: "small-2") {

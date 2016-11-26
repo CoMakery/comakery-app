@@ -64,20 +64,5 @@ module Views
     def markdown_to_html(markdown)
       Comakery::Markdown.to_html(markdown)
     end
-
-    def coin_name
-      'Project Coins'
-      'Royalties'
-    end
-
-    def coin_name_short
-      'Coins'
-      'Royalties'
-    end
-
-    def currency_unit
-      ''
-      '$'
-    end
   end
 end

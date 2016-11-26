@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161111201131) do
+ActiveRecord::Schema.define(version: 20161126004536) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 20161111201131) do
     t.text     "video_url"
     t.string   "ethereum_contract_address"
     t.boolean  "ethereum_enabled",          default: false
+    t.integer  "payment_type",              default: 0
   end
 
   add_index "projects", ["owner_account_id"], name: "index_projects_on_owner_account_id", using: :btree

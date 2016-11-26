@@ -104,6 +104,7 @@ class ProjectsController < ApplicationController
       :title,
       :tracker,
       :video_url,
+      :payment_type,
       award_types_attributes: [
         :_destroy,
         :amount,

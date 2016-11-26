@@ -1,6 +1,19 @@
 class ProjectDecorator < Draper::Decorator
   delegate_all
 
+  PAYMENT_DESCRIPTIONS = { "royalty_usd" => "Royalties",
+                     "royalty_btc" => "Royalties",
+                     "royalty_eth" => "Royalties",
+                     "project_coin" => "Project Coins",
+  }
+
+  CURRENCY_DENOMINATIONS = {
+      "royalty_usd" => "$",
+      "royalty_btc" => "฿",
+      "royalty_eth" => "Ξ",
+      "project_coin" => ""
+  }
+
   def description_html
     Comakery::Markdown.to_html(object.description)
   end
@@ -15,5 +28,13 @@ class ProjectDecorator < Draper::Decorator
     else
       nil
     end
+  end
+
+  def currency_denomination
+    CURRENCY_DENOMINATIONS[project.payment_type]
+  end
+
+  def payment_description
+    PAYMENT_DESCRIPTIONS[project.payment_type]
   end
 end
