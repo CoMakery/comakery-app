@@ -20,7 +20,7 @@ module Views
                   f.select(:payment_type,
                            [["Royalties paid in US Dollars ($)", "royalty_usd"],
                             ["Royalties paid in Bitcoin (฿)", "royalty_btc"],
-                            ["Royalties paid in Ether (Ξ)", "royalty_eth"],
+                            # ["Royalties paid in Ether (Ξ)", "royalty_eth"],
                             ["Project Coin direct payment", "project_coin"]],
                             {selected: project.payment_type,include_blank: false}
                   )

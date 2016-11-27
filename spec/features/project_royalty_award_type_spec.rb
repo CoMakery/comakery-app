@@ -110,7 +110,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "฿100"
   end
 
-  it "setup royalties project with ETH" do
+  xit "setup royalties project with ETH" do
     login(account)
 
     visit projects_path
