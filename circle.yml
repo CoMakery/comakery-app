@@ -9,7 +9,7 @@ dependencies:
 database:
   override:
     - bundle exec rake db:create db:migrate               # check that migrations run successfully
-#    - bundle exec rake db:migrate VERSION=20160224202923  # migrate down until irreversible migration
+    - bundle exec rake db:migrate VERSION=20160224202923  # migrate down until irreversible migration
     - git checkout db/schema.rb                           # revert to schema in repo
     - bundle exec rake db:reset                           # load from schema + seeds
 
