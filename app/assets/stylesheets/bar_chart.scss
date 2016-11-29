@@ -1,12 +1,14 @@
-.contribution-chart {
+#contributions-chart {
+  margin-left: 0px;
   .axis {
-    font: 10px sans-serif;
+    font: 14px raleway;
   }
 
   .axis path,
   .axis line {
     fill: none;
-    stroke: #000;
+    stroke: #666;
     shape-rendering: crispEdges;
+    stroke-width: 1px;
   }
 }
