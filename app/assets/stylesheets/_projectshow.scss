@@ -4,11 +4,12 @@
   }
   #award-percentages svg {
     overflow: overlay;
+    margin-top: -40px;
   }
 }
 .project-head {
   width: 100%;
-  margin: 2em 0 0 0;
+  margin: 1em 0 0 0;
   border: 1px solid #ccc;
   padding: 1em;
   background: $palegray;
@@ -35,7 +36,7 @@
     margin-bottom: .5em;
   }
 }
-.award-send {
+.award-box {
   border: 1px solid #ccc;
   padding: 20px 50px;
   border-radius: $global-radius;
@@ -100,4 +101,27 @@
 
 .content {
   margin-bottom: 1em;
+}
+
+.awarded-info {
+
+}
+
+.awarded-info-header {
+  h1, h2, h3 {display: inline;}
+
+  padding: 5px 10px 0px 0px;
+
+  margin-bottom: 1em;
+  margin-left: 0px;
+  margin-right: 0px;
+
+  font-size: .8em;
+}
+
+.awarded-info {
+  li {
+    margin-bottom: 2em;
+    vertical-align: top;
+  }
 }

@@ -255,7 +255,7 @@ describe "viewing projects, creating and editing", :js do
 
     visit project_path(project)
 
-    within(".coins-issued") do
+    within(".awarded-info") do
       expect(page).to have_content "$10,000,000 max"
       expect(page).to have_content "$0 total"
       expect(page).to have_content "$0 mine"
@@ -265,9 +265,9 @@ describe "viewing projects, creating and editing", :js do
 
     visit project_path(project)
 
-    within(".coins-issued") do
+    within(".awarded-info") do
       expect(page).to have_content "$10,000,000 max"
-      expect(page).to have_content "$100,000 total"
+      expect(page).to have_content "$100,000 (1.00%) total"
       expect(page).to have_content "$0 mine"
     end
   end

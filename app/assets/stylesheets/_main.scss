@@ -6,6 +6,7 @@
 @import 'awards_table';
 @import 'callouts';
 @import 'edit';
+@import 'bar_chart';
 
 body {
   background-color: white;
@@ -94,22 +95,6 @@ a.more {
 
 form.take-action-form p.notice {
   color: $snow;
-}
-
-.underlined-header {
-  border-bottom: 1px solid $iron;
-
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-
-  margin-bottom: 5px;
-  margin-left: 2px;
-  margin-right: 2px;
-
-  text-transform: uppercase;
-  font-size: .8em;
 }
 
 .centered {
