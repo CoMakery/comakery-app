@@ -1,21 +1,6 @@
 class Views::Projects::Show < Views::Projects::Base
   needs :project, :award, :awardable_authentications, :awardable_types, :award_data, :can_award
 
-  def make_charts
-    text(<<-JAVASCRIPT.html_safe)
-      $(function() {
-        window.pieChart("#award-percentages", {"content": #{pie_chart_data}});
-        window.stackedBarChart("#contributions-chart", #{award_data[:contributions_by_day].to_json});
-      });
-    JAVASCRIPT
-  end
-
-  def pie_chart_data
-    award_data[:contributions_summary_pie_chart].map do |award|
-      {label: award[:name], value: award[:net_amount]}
-    end.to_json
-  end
-
   def content
     content_for(:title) { project.title.strip }
     content_for(:description) { project.description_text(150) }
@@ -35,12 +20,6 @@ class Views::Projects::Show < Views::Projects::Base
         }
         row {
           column("large-6 small-12") {
-
-
-            div {
-
-            }
-
             p {
               text "Lead by "
               b "#{project.owner_slack_user_name}"
@@ -99,7 +78,7 @@ class Views::Projects::Show < Views::Projects::Base
               if project.ethereum_contract_explorer_url
                 div {
                   link_to "Ξthereum Smart Contract", project.ethereum_contract_explorer_url,
-                    target: "_blank", class: "text-link"
+                          target: "_blank", class: "text-link"
                 }
               end
             }
@@ -113,106 +92,121 @@ class Views::Projects::Show < Views::Projects::Base
       }
     }
 
-    row(class: "project-body") {
-      column("large-6 small-12") {
-        row {
-          column("small-12", class: "underlined-header contributors-column award-header") {
-            text "#{project.payment_description} "
-            question_tooltip("This shows project coins issued on CoMakery. It does not currently show secondary trading on the Ethereum blockchain.")
+    div(class: "project-body") {
+      row {
+        column("large-6 medium-12") {
+
+          div(id: "award-send", class: "award-box") {
+            render partial: "award_send"
           }
         }
+        column("large-6 medium-12 award-box") {
 
-        row {
-          column("large-3 small-12", class: "coins-issued contributors-column") {
-            total_coins_issued = award_data[:award_amounts][:total_coins_issued]
-            div(class: "") {
-              div {
-
-                span(class: " coin-numbers") {
-                  text project.currency_denomination
-                  text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
-                }
-                text raw "&nbsp;max"
-              }
-
-              div {
-                span(class: " coin-numbers") {
-                  text project.currency_denomination
-                  text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
-                }
-
-                text raw "&nbsp;total"
-              }
-
-              percentage_issued = total_coins_issued * 100 / project.maximum_coins.to_f
-              if percentage_issued >= 0.01
-                text " (#{number_with_precision(percentage_issued, precision: 2)}%)"
-              end
-
-              if award_data[:award_amounts][:my_project_coins]
-                div {
-                  span(class: "coin-numbers") {
-                    text project.currency_denomination
-                    text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
-                  }
-                  text raw "&nbsp;mine"
-                }
-              end
-            }
-
-            p(class: " font-small") {
-              a(href: project_awards_path(project), class: "text-link") {
+          row(class: "awarded-info-header") {
+            h3 "#{project.payment_description} "
+            question_tooltip("This shows project coins issued on CoMakery. It does not currently" +
+                                 "show secondary trading on the Ethereum blockchain.", class: "coin-numbers")
+            div(class: "float-right") {
+              a(href: project_awards_path(project), class: "text-link coin-numbers") {
                 i(class: "fa fa-history")
                 text " History"
               }
             }
-
-            # STRIPE CHECKOUT DEMO:
-            if can_award
-              form(method: "POST") {
-                script(
-                  "src" => "https://checkout.stripe.com/checkout.js",
-                  "class" => 'stripe-button',
-                  "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
-                  "data-label" => "Pay #{project.payment_description}",
-                  "data-panel-label" => "Pay #{project.payment_description}",
-                  "data-amount" => total_coins_issued * 60,
-                  "data-name" => project.title,
-                  "data-description" => "Pay #{project.payment_description}",
-                  # "data-image" => project_image(project),
-                  "data-locale" => "auto",
-                  "data-zip-code" => true,
-                  "data-bitcoin" => true
-                )
-              }
-            end
-
           }
-          column("large-9 small-12", class: "royalty-pie") {
-            div(id: "award-percentages") {}
-          }
+          row { awarded_info }
+
+          row { top_contributors }
         }
       }
-      if award_data[:contributions].present?
-        column("large-6 small-12") {
-          row { column("small-12", class: "underlined-header") { text "Recent Activity" } }
+    }
+  end
 
-          full_row {
-            div(id: "contributions-chart")
+  def make_charts
+    text(<<-JAVASCRIPT.html_safe)
+      $(function() {
+        window.pieChart("#award-percentages", {"content": #{pie_chart_data}});
+        window.stackedBarChart("#contributions-chart", #{award_data[:contributions_by_day].to_json});
+      });
+    JAVASCRIPT
+  end
+
+  def pie_chart_data
+    award_data[:contributions_summary_pie_chart].map do |award|
+      {label: award[:name], value: award[:net_amount]}
+    end.to_json
+  end
+
+  def total_coins_issued
+    award_data[:award_amounts][:total_coins_issued]
+  end
+
+  def percentage_issued
+    total_coins_issued * 100 / project.maximum_coins.to_f
+  end
+
+  def awarded_info
+    ul(class: 'menu simple awarded-info') {
+      li {
+        span(class: " coin-numbers") {
+          text project.currency_denomination
+          text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
+        }
+        text raw "&nbsp;max"
+      }
+
+      li {
+        span(class: " coin-numbers") {
+          text project.currency_denomination
+          text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
+        }
+        if percentage_issued >= 0.01
+          text " (#{number_with_precision(percentage_issued, precision: 2)}%)"
+        end
+
+        text raw "&nbsp;total"
+      }
+
+
+      if award_data[:award_amounts][:my_project_coins]
+        li {
+          span(class: "coin-numbers") {
+            text project.currency_denomination
+            text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
           }
+          text raw "&nbsp;mine"
+        }
+      end
+      li(id: "contributions-chart")
+      li(id: "award-percentages", class: "royalty-pie") {}
+    }
+  end
+
+  def royalty_payment
+    p {
+      if can_award
+        form(method: "POST") {
+          script(
+              "src" => "https://checkout.stripe.com/checkout.js",
+              "class" => 'stripe-button',
+              "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
+              "data-label" => "Pay #{project.payment_description}",
+              "data-panel-label" => "Pay #{project.payment_description}",
+              "data-amount" => total_coins_issued * 60,
+              "data-name" => project.title,
+              "data-description" => "Pay #{project.payment_description}",
+              # "data-image" => project_image(project),
+              "data-locale" => "auto",
+              "data-zip-code" => true,
+              "data-bitcoin" => true
+          )
         }
       end
     }
+  end
 
-    br
-    row {
-      column("large-6 small-12") {
-        div(class:"award-send") {
-          render partial: "award_send"
-        }
-      }
-      if award_data[:contributions_summary].present?
-        div(class: "table-scroll") {
+  def top_contributors
+    if award_data[:contributions_summary].present?
+      div(class: "table-scroll") {
         table(class: "award-rows", style: "width: 100%") {
           tr(class: "header-row") {
             th "Top Contributors"
@@ -248,7 +242,6 @@ class Views::Projects::Show < Views::Projects::Base
           end
         }
       }
-      end
-    }
+    end
   end
 end

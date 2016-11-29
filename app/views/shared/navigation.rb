@@ -2,16 +2,16 @@ class Views::Shared::Navigation < Views::Base
   def content
     div(class: "show-for-small-only") {
       div(class: "clear-both") {}
-      div(class: "row collapse project-search") {
+      div(class: "row project-search") {
         form_for(:projects, url: projects_path, method: "get") do |f|
-          div(class: "small-12 columns collapse") {
+          div(class: "small-12 columns") {
             input(type: "search", name: "query", placeholder: "search projects", value: params[:query])
             f.submit("Search", class: "button expand")
           }
         end
       }
-      div(class: "row collapse slack-instance") {
-        div(class: "small-12 columns collapse") {
+      div(class: "row slack-instance collapse") {
+        div(class: "small-12 columns") {
           if current_account&.slack_auth
             div(class: "top-bar-text") {
               img(src: current_account.slack_auth.slack_team_image_34_url, class: "project-icon")
@@ -37,16 +37,16 @@ class Views::Shared::Navigation < Views::Base
     }
     div(class: "show-for-medium-only") {
       div(class: "clear-both") {}
-      div(class: "row collapse project-search") {
+      div(class: "row project-search") {
         form_for(:projects, url: projects_path, method: "get") do |f|
-          div(class: "small-12 columns collapse") {
+          div(class: "small-12 columns") {
             input(type: "search", name: "query", placeholder: "search projects", value: params[:query])
             f.submit("Search", class: "button expand")
           }
         end
       }
       div(class: "row collapse slack-instance") {
-        div(class: "small-12 columns collapse") {
+        div(class: "small-12 columns") {
           if current_account&.slack_auth
             div(class: "top-bar-text") {
               img(src: current_account.slack_auth.slack_team_image_34_url, class: "project-icon")
@@ -77,15 +77,15 @@ class Views::Shared::Navigation < Views::Base
       }
     }
     div(class: "show-for-large") {
-      div(class: "top-bar-right") {
+      div(class: "top-bar-left") {
         ul(class: "menu") {
           li(class: "has-form") {
-            div(class: "row collapse project-search") {
+            div(class: "row project-search") {
               form_for(:projects, url: projects_path, method: "get") do |f|
-                div(class: "small-8 columns collapse") {
+                div(class: "small-8 columns") {
                   input(type: "search", name: "query", placeholder: "search projects", value: params[:query])
                 }
-                div(class: "small-4 columns collapse") {
+                div(class: "small-4 columns") {
                   f.submit("Search", class: "button expand")
                 }
               end

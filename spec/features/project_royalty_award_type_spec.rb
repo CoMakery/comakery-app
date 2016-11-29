@@ -55,8 +55,8 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "$100,000 max"
     expect(page).to have_content "$0 total"
     expect(page).to have_content "$0 mine"
-    within(".award-header") { expect(page).to have_content /royalties/i }
-    within(".award-send") { expect(page).to have_content /award royalties/i }
+    within(".awarded-info-header") { expect(page).to have_content /royalties/i }
+    within("#award-send") { expect(page).to have_content /award royalties/i }
     select "@bobjohnson", from: "User"
     choose "Small"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
@@ -91,8 +91,8 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "฿100,000 max"
     expect(page).to have_content "฿0 total"
     expect(page).to have_content "฿0 mine"
-    within(".award-header") { expect(page).to have_content /royalties/i }
-    within(".award-send") { expect(page).to have_content /award royalties/i }
+    within(".awarded-info-header") { expect(page).to have_content /royalties/i }
+    within("#award-send") { expect(page).to have_content /award royalties/i }
     select "@bobjohnson", from: "User"
     choose "Small"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
@@ -128,7 +128,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Ξ0 total"
     expect(page).to have_content "Ξ0 mine"
     within(".award-header") { expect(page).to have_content /royalties/i }
-    within(".award-send") { expect(page).to have_content /award royalties/i }
+    within("#award-send") { expect(page).to have_content /award royalties/i }
     select "@bobjohnson", from: "User"
     choose "Small"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
@@ -163,8 +163,8 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "100,000 max"
     expect(page).to have_content "0 total"
     expect(page).to have_content "0 mine"
-    within(".award-header") { expect(page).to have_content /project coins/i }
-    within(".award-send") { expect(page).to have_content /award project coins/i }
+    within(".awarded-info-header") { expect(page).to have_content /project coins/i }
+    within("#award-send") { expect(page).to have_content /award project coins/i }
     select "@bobjohnson", from: "User"
     choose "Small"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
