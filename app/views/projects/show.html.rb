@@ -20,13 +20,6 @@ class Views::Projects::Show < Views::Projects::Base
         }
         row {
           column("large-6 small-12") {
-            p {
-              text "Lead by "
-              b "#{project.owner_slack_user_name}"
-              text " with "
-              strong project.slack_team_name
-            }
-
             if project.video_url
               div(class: "project-video") {
                 div(class: "flex-video widescreen") {
@@ -34,88 +27,98 @@ class Views::Projects::Show < Views::Projects::Base
                 }
               }
             else
-              div() {
+              div {
                 div(class: "content") {
                   img(src: project_image(project), class: "project-image")
                 }
               }
             end
+            p(class: 'centered') {
+              text "Lead by "
+              b "#{project.owner_slack_user_name}"
+              text " with "
+              strong project.slack_team_name
+            }
           }
           column("large-6 small-12 header-graphic") {
-            row(class: "project-tasks") {
-              if policy(project).edit?
-                div {
-                  a(class: "edit", href: edit_project_path(project)) {
-                    i(class: "fa fa-pencil") {}
-                    text " Edit Project"
+            div(class: 'content-box') {
+
+              row(class: "project-tasks") {
+                if policy(project).edit?
+                  div {
+                    a(class: "edit", href: edit_project_path(project)) {
+                      i(class: "fa fa-pencil") {}
+                      text " Edit Project"
+                    }
                   }
-                }
-              end
-              if project.slack_team_domain
-                div {
-                  a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: "_blank", class: "text-link") {
-                    i(class: "fa fa-slack")
-                    text " Slack Channel"
+                end
+                if project.slack_team_domain
+                  div {
+                    a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: "_blank", class: "text-link") {
+                      i(class: "fa fa-slack")
+                      text " Slack Channel"
+                    }
                   }
-                }
-              end
-              if project.tracker
-                div {
-                  a(href: project.tracker, target: "_blank", class: "text-link") {
-                    i(class: "fa fa-tasks")
-                    text " Project Tasks"
+                end
+                if project.tracker
+                  div {
+                    a(href: project.tracker, target: "_blank", class: "text-link") {
+                      i(class: "fa fa-tasks")
+                      text " Project Tasks"
+                    }
                   }
-                }
-              end
-              if project.contributor_agreement_url
-                div {
-                  a(href: project.contributor_agreement_url, target: "_blank", class: "text-link") {
-                    i(class: "fa fa-gavel")
-                    text " Contributor Agreement"
+                end
+                if project.contributor_agreement_url
+                  div {
+                    a(href: project.contributor_agreement_url, target: "_blank", class: "text-link") {
+                      i(class: "fa fa-gavel")
+                      text " Contributor Agreement"
+                    }
                   }
+                end
+                if project.ethereum_contract_explorer_url
+                  div {
+                    link_to "Ξthereum Smart Contract", project.ethereum_contract_explorer_url,
+                            target: "_blank", class: "text-link"
+                  }
+                end
+              }
+              full_row {
+                p(class: "description") {
+                  text raw project.description_html
                 }
-              end
-              if project.ethereum_contract_explorer_url
-                div {
-                  link_to "Ξthereum Smart Contract", project.ethereum_contract_explorer_url,
-                          target: "_blank", class: "text-link"
-                }
-              end
-            }
-            full_row {
-              p(class: "description") {
-                text raw project.description_html
               }
             }
           }
+
         }
       }
     }
 
     div(class: "project-body") {
+
       row {
         column("large-6 medium-12") {
 
-          div(id: "award-send", class: "award-box") {
+          div(id: "award-send", class: "content-box") {
             render partial: "award_send"
           }
         }
-        column("large-6 medium-12 award-box") {
-
-          row(class: "awarded-info-header") {
-            h3 "#{project.payment_description} "
-            question_tooltip("This shows project coins issued on CoMakery. It does not currently" +
-                                 "show secondary trading on the Ethereum blockchain.", class: "coin-numbers")
-            div(class: "float-right") {
-              a(href: project_awards_path(project), class: "text-link coin-numbers") {
-                i(class: "fa fa-history")
-                text " History"
+        column("large-6 medium-12") {
+          div(class: 'content-box') {
+            row(class: "awarded-info-header") {
+              h3 "Project Activity"
+              div(class: "float-right") {
+                a(href: project_awards_path(project), class: "text-link coin-numbers") {
+                  i(class: "fa fa-history")
+                  text " History"
+                }
               }
             }
-          }
-          row { awarded_info }
+            row { awarded_info }
 
-          row { top_contributors }
+            row { top_contributors }
+          }
         }
       }
     }
@@ -149,21 +152,13 @@ class Views::Projects::Show < Views::Projects::Base
       li {
         span(class: " coin-numbers") {
           text project.currency_denomination
-          text number_with_precision(project.maximum_coins, precision: 0, delimiter: ',')
-        }
-        text raw "&nbsp;max"
-      }
-
-      li {
-        span(class: " coin-numbers") {
-          text project.currency_denomination
           text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
         }
         if percentage_issued >= 0.01
           text " (#{number_with_precision(percentage_issued, precision: 2)}%)"
         end
 
-        text raw "&nbsp;total"
+        text raw "&nbsp;awarded"
       }
 
 
@@ -176,9 +171,17 @@ class Views::Projects::Show < Views::Projects::Base
           text raw "&nbsp;mine"
         }
       end
-      li(id: "contributions-chart")
-      li(id: "award-percentages", class: "royalty-pie") {}
     }
+
+    if award_data[:contributions].present?
+      p {
+        div(id: "contributions-chart")
+      }
+      p {
+        h4 "#{project.payment_description} Earned "
+        div(id: "award-percentages", class: "royalty-pie") {}
+      }
+    end
   end
 
   def royalty_payment

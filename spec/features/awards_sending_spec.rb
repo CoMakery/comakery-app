@@ -72,8 +72,7 @@ describe "awarding users" do
       click_link("Back to project")
 
       within(".awarded-info") do
-        expect(page).to have_content "$10,000,000 max"
-        expect(page).to have_content "$1,000 (0.01%) total"
+        expect(page).to have_content "$1,000 (0.01%) awarded"
         expect(page).to have_content "$1,000 mine"
       end
 
