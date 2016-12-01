@@ -1,5 +1,6 @@
 class ProjectDecorator < Draper::Decorator
   delegate_all
+  include ActionView::Helpers::NumberHelper
 
   PAYMENT_DESCRIPTIONS = { "royalty_usd" => "Royalties",
                      "royalty_btc" => "Royalties",
@@ -37,4 +38,20 @@ class ProjectDecorator < Draper::Decorator
   def payment_description
     PAYMENT_DESCRIPTIONS[project.payment_type]
   end
+
+  def royalty_percentage_pretty
+    "#{project.royalty_percentage}%"
+  end
+
+  private
+
+  def self.pretty_currencies(*currency_methods)
+    currency_methods.each  do |method_name|
+      define_method "#{method_name}_pretty" do
+        "#{currency_denomination}#{number_with_precision(self.send(method_name), precision: 0, delimiter: ',')}"
+      end
+    end
+  end
+
+  pretty_currencies :maximum_royalties_per_quarter, :maximum_coins, :minimum_revenue, :minimum_payment
 end
