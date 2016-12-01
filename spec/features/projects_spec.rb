@@ -86,7 +86,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).not_to have_link "Project Tasks"
 
     expect(page).to have_content "$20,000,000 max"
-    expect(page).to have_content "$0 total"
+    expect(page).to have_content "$0 awarded"
     expect(page).to have_content "$0 mine"
 
     expect(page).to have_content "Lead by Glenn Spanky"
@@ -118,7 +118,6 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Description", with: "This is an edited project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
     fill_in "Video", with: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
-    fill_in "Contributor Agreement", with: "https://docusign.com/project_contributor_agreement.pdf"
     uncheck "Set project as public"
     uncheck "Publish to Ethereum Blockchain"
 
@@ -142,7 +141,6 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_link "Project Tasks"
     expect(page).to have_link "Slack Channel", href: "https://citizencodedomain.slack.com/messages/a-channel-name"
     expect(page.all(".project-video iframe").size).to eq(1)
-    expect(page).to have_link "Contributor Agreement", href: "https://docusign.com/project_contributor_agreement.pdf"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
@@ -256,8 +254,7 @@ describe "viewing projects, creating and editing", :js do
     visit project_path(project)
 
     within(".awarded-info") do
-      expect(page).to have_content "$10,000,000 max"
-      expect(page).to have_content "$0 total"
+      expect(page).to have_content "$0 awarded"
       expect(page).to have_content "$0 mine"
     end
 
@@ -266,8 +263,7 @@ describe "viewing projects, creating and editing", :js do
     visit project_path(project)
 
     within(".awarded-info") do
-      expect(page).to have_content "$10,000,000 max"
-      expect(page).to have_content "$100,000 (1.00%) total"
+      expect(page).to have_content "$100,000 (1.00%) awarded"
       expect(page).to have_content "$0 mine"
     end
   end

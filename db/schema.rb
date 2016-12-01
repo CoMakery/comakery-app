@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161126004536) do
+ActiveRecord::Schema.define(version: 20161130022809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,26 +111,34 @@ ActiveRecord::Schema.define(version: 20161126004536) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string   "title",                                     null: false
+    t.string   "title",                                         null: false
     t.text     "description"
     t.string   "tracker"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.boolean  "public",                    default: false, null: false
-    t.integer  "owner_account_id",                          null: false
-    t.string   "slack_team_id",                             null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.boolean  "public",                        default: false, null: false
+    t.integer  "owner_account_id",                              null: false
+    t.string   "slack_team_id",                                 null: false
     t.string   "image_id"
     t.string   "slack_team_name"
     t.string   "slack_team_domain"
     t.string   "slack_team_image_34_url"
     t.string   "slack_channel"
     t.string   "slack_team_image_132_url"
-    t.integer  "maximum_coins",             default: 0,     null: false
+    t.integer  "maximum_coins",                 default: 0,     null: false
     t.text     "contributor_agreement_url"
     t.text     "video_url"
     t.string   "ethereum_contract_address"
-    t.boolean  "ethereum_enabled",          default: false
-    t.integer  "payment_type",              default: 0
+    t.boolean  "ethereum_enabled",              default: false
+    t.integer  "payment_type",                  default: 0
+    t.boolean  "exclusive_contributions"
+    t.string   "legal_project_owner"
+    t.integer  "minimum_payment"
+    t.integer  "minimum_revenue"
+    t.boolean  "business_confidentiality"
+    t.boolean  "project_confidentiality"
+    t.integer  "royalty_percentage"
+    t.integer  "maximum_royalties_per_quarter"
   end
 
   add_index "projects", ["owner_account_id"], name: "index_projects_on_owner_account_id", using: :btree

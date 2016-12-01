@@ -4,16 +4,16 @@
   }
   #award-percentages svg {
     overflow: overlay;
-    margin-top: -40px;
   }
 }
+.award-types {
+  margin-bottom: 15px;
+}
+
 .project-head {
   width: 100%;
   margin: 1em 0 0 0;
-  border: 1px solid #ccc;
   padding: 1em;
-  background: $palegray;
-  @include box-shadow(inset 0px 8px 35px -20px rgba(0,0,0,0.25))
 }
 .project-title {
   a.edit {
@@ -29,29 +29,15 @@
   height: auto;
 }
 .project-body {
-  margin: 0 auto;
-  padding: 2.3em 0 2.5em;
-  margin-top: 2.6em;
+  width: 100%;
+  margin: 1em 0 0 0;
+  padding: 1em;
+
   h3 {
     margin-bottom: .5em;
   }
 }
-.award-box {
-  border: 1px solid #ccc;
-  padding: 20px 50px;
-  border-radius: $global-radius;
 
-  input[type="radio"] {
-    margin-right: 10px;
-    margin-left: 2px;
-  }
-  label {
-    font-weight: inherit;
-    .grayed-out {
-      color: #999;
-    }
-  }
-}
 .contributors-column {
   padding-left: 1.85em;
 
@@ -124,4 +110,17 @@
     margin-bottom: 2em;
     vertical-align: top;
   }
+}
+
+.project-terms {
+  .column {
+    width: 150px;
+    height: 75px;
+    border: solid 1px $iron;
+  }
+}
+
+h4 {
+  border-bottom: 1px solid $iron;
+  margin-bottom: 10px;
 }

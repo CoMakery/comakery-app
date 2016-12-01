@@ -61,6 +61,39 @@ class Views::Projects::AwardSend < Views::Base
           }
         end
       }
+
+      row(class: 'project-terms') {
+        h4 "Terms"
+
+        ul {
+          li_if(project.legal_project_owner) { text "#{project.legal_project_owner} is the project owner" }
+          li_if(project.exclusive_contributions) { text "Contributions are exclusive" }
+          li_if(project.business_confidentiality) { text "Business confidentiality is required" }
+          li_if(project.project_confidentiality) { text "Project confidentiality is required" }
+        }
+        unless project.project_coin?
+          div(class: 'royalty-terms'){
+            h6 "Contributor Royalties"
+            ul {
+              li { text "#{project.royalty_percentage_pretty} of revenue is reserved to pay contributor royalties" }
+              li { text "#{project.maximum_coins_pretty} maximum royalty awards" }
+              li { text "#{project.maximum_royalties_per_quarter_pretty} maximum royalties can be awarded each quarter" }
+              li { text "#{project.minimum_revenue_pretty} minimum revenue accumulated before paying the first royalty payment" }
+              li { text "#{project.minimum_payment_pretty} minimum payment per contributor" }
+
+            }
+            div(class: 'help-text') {
+              text "This is the 'Award Form' that the contribution license references for calculating 'Contributor Royalties'."
+            }
+          }
+        end
+      }
+    end
+  end
+
+  def li_if(variable)
+    if variable.present?
+      li { yield }
     end
   end
 end

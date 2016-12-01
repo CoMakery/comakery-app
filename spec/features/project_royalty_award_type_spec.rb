@@ -49,14 +49,33 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Maximum Awards", with: "100000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
+    fill_in "Project Owner's Legal Name", with: "Mindful Inc"
+    fill_in "Percentage of Revenue Paid", with: "7"
+    fill_in "Maximum Royalty Amount Awarded Per Quarter", with: "25000"
+    fill_in "Minimum Revenue Collected ", with: "150"
+    fill_in "Contributor Minimum Payment", with: "26"
+    check "Contributions are exclusive"
+    check "Require business confidentiality"
+    check "Require project confidentiality"
 
     click_on "Save"
     expect(page).to have_content "Project created"
-    expect(page).to have_content "$100,000 max"
-    expect(page).to have_content "$0 total"
     expect(page).to have_content "$0 mine"
-    within(".awarded-info-header") { expect(page).to have_content /royalties/i }
+    expect(page).to have_content "$0 awarded"
+    within ".project-terms" do
+      expect(page).to have_css('.royalty-terms')
+      expect(page).to have_content "Mindful Inc"
+      expect(page).to have_content "7%"
+      expect(page).to have_content "$100,000 maximum royalty"
+      expect(page).to have_content "$25,000"
+      expect(page).to have_content "$150 minimum revenue"
+      expect(page).to have_content "$26 minimum payment"
+      expect(page).to have_content "Contributions are exclusive"
+      expect(page).to have_content "Business confidentiality"
+      expect(page).to have_content "Project confidentiality"
+    end
     within("#award-send") { expect(page).to have_content /award royalties/i }
+
     select "@bobjohnson", from: "User"
     choose "Small"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
@@ -82,17 +101,36 @@ describe "viewing projects, creating and editing", :js do
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
     select "Royalties paid in Bitcoin (฿)", from: "Award Payment Type"
-    fill_in "Maximum Awards", with: "100000"
+    fill_in "Maximum Awards", with: "200000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
+    fill_in "Project Owner's Legal Name", with: "Mindful Inc"
+    fill_in "Percentage of Revenue Paid", with: "8"
+    fill_in "Maximum Royalty Amount Awarded Per Quarter", with: "27000"
+    fill_in "Minimum Revenue Collected ", with: "170"
+    fill_in "Contributor Minimum Payment", with: "27"
+    check "Contributions are exclusive"
+    check "Require business confidentiality"
+    check "Require project confidentiality"
 
     click_on "Save"
     expect(page).to have_content "Project created"
-    expect(page).to have_content "฿100,000 max"
-    expect(page).to have_content "฿0 total"
     expect(page).to have_content "฿0 mine"
-    within(".awarded-info-header") { expect(page).to have_content /royalties/i }
+    expect(page).to have_content "฿0 awarded"
+    within ".project-terms" do
+      expect(page).to have_css('.royalty-terms')
+      expect(page).to have_content "Mindful Inc"
+      expect(page).to have_content "8%"
+      expect(page).to have_content "฿200,000 maximum royalty"
+      expect(page).to have_content "฿27,000"
+      expect(page).to have_content "฿170 minimum revenue"
+      expect(page).to have_content "฿27 minimum payment"
+      expect(page).to have_content "Contributions are exclusive"
+      expect(page).to have_content "Business confidentiality"
+      expect(page).to have_content "Project confidentiality"
+    end
     within("#award-send") { expect(page).to have_content /award royalties/i }
+
     select "@bobjohnson", from: "User"
     choose "Small"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
@@ -110,42 +148,6 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "฿100"
   end
 
-  xit "setup royalties project with ETH" do
-    login(account)
-
-    visit projects_path
-
-    click_link "New Project"
-    fill_in "Title", with: "Mindfulness App"
-    select "Royalties paid in Ether (Ξ)", from: "Award Payment Type"
-    fill_in "Maximum Awards", with: "100000"
-    fill_in "Description", with: "This is a project"
-    select "a-channel-name", from: "Slack Channel"
-
-    click_on "Save"
-    expect(page).to have_content "Project created"
-    expect(page).to have_content "Ξ100,000 max"
-    expect(page).to have_content "Ξ0 total"
-    expect(page).to have_content "Ξ0 mine"
-    within(".award-header") { expect(page).to have_content /royalties/i }
-    within("#award-send") { expect(page).to have_content /award royalties/i }
-    select "@bobjohnson", from: "User"
-    choose "Small"
-    fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
-
-    click_button "Send"
-    within('.award-rows') { expect(page).to have_content "@bobjohnson Ξ100 Ξ0 Ξ100" }
-
-    click_link "History"
-    within(".header-row") { expect(page).to have_content /Royalties Earned/i }
-    expect(page).to have_content "Ξ100"
-
-    login(bobjohnsons_auth.account)
-    visit account_path
-    within(".header-row") { expect(page).to have_content /Royalties Earned/i }
-    expect(page).to have_content "Ξ100"
-  end
-
   it "setup project with Project Coins" do
     login(account)
 
@@ -154,16 +156,35 @@ describe "viewing projects, creating and editing", :js do
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
     select "Project Coin direct payment", from: "Award Payment Type"
-    fill_in "Maximum Awards", with: "100000"
+    fill_in "Maximum Awards Outstanding", with: "210000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
+    fill_in "Project Owner's Legal Name", with: "Mindful Inc"
+    check "Contributions are exclusive"
+    check "Require business confidentiality"
+    check "Require project confidentiality"
 
     click_on "Save"
     expect(page).to have_content "Project created"
-    expect(page).to have_content "100,000 max"
-    expect(page).to have_content "0 total"
+    expect(page).to have_content "0 awarded"
     expect(page).to have_content "0 mine"
-    within(".awarded-info-header") { expect(page).to have_content /project coins/i }
+    within ".project-terms" do
+      expect(page).to have_content "Mindful Inc"
+
+      expect(page).to have_content "Contributions are exclusive"
+      expect(page).to have_content "Business confidentiality"
+      expect(page).to have_content "Project confidentiality"
+    end
+
+    within ".project-terms" do
+      expect(page).to_not have_css('.royalty-terms')
+      expect(page).to_not have_content "7%"
+      expect(page).to_not have_content "maximum royalty awards"
+      expect(page).to_not have_content "maximum royalties can be awarded each quarter"
+      expect(page).to_not have_content "minimum revenue"
+      expect(page).to_not have_content "minimum payment"
+    end
+
     within("#award-send") { expect(page).to have_content /award project coins/i }
     select "@bobjohnson", from: "User"
     choose "Small"
