@@ -50,7 +50,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
-    fill_in "Percentage of Revenue Paid", with: "7"
+    fill_in "Percentage of Revenue Paid", with: "7.99999"
     fill_in "Maximum Royalty Amount Awarded Per Quarter", with: "25000"
     fill_in "Minimum Revenue Collected ", with: "150"
     fill_in "Contributor Minimum Payment", with: "26"
@@ -64,7 +64,7 @@ describe "viewing projects, creating and editing", :js do
     within ".project-terms" do
       expect(page).to have_css('.royalty-terms')
       expect(page).to have_content "Mindful Inc"
-      expect(page).to have_content "7%"
+      expect(page).to have_content "7.99999%"
       expect(page).to have_content "$100,000 maximum royalty"
       expect(page).to have_content "$25,000"
       expect(page).to have_content "$150 minimum revenue"
@@ -117,7 +117,7 @@ describe "viewing projects, creating and editing", :js do
     within ".project-terms" do
       expect(page).to have_css('.royalty-terms')
       expect(page).to have_content "Mindful Inc"
-      expect(page).to have_content "8%"
+      expect(page).to have_content "8.0%"
       expect(page).to have_content "฿200,000 maximum royalty"
       expect(page).to have_content "฿27,000"
       expect(page).to have_content "฿170 minimum revenue"

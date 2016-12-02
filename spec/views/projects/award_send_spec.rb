@@ -31,7 +31,7 @@ describe "projects/_award_send.html.rb" do
     render
     expect(rendered).to include('The Legal Owner')
     expect(rendered).to include('royalty-terms')
-    expect(rendered).to include "8% of revenue is reserved to pay contributor"
+    expect(rendered).to include "8.0% of revenue is reserved to pay contributor"
     expect(rendered).to include "$200,000 maximum royalty awards"
     expect(rendered).to include "$27,000 maximum royalties can be awarded each quarter"
     expect(rendered).to include "$170 minimum revenue"
