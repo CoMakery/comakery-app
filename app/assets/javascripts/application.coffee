@@ -53,7 +53,13 @@ $ ->
     removeElement.find("input[data-destroy]").val("1")
 
   $('#project_payment_type').change (e)->
-    if $('#project_payment_type option:selected').val() is 'project_coin'
-      $('#royalty-legal-terms').addClass('hide')
-    else
-      $('#royalty-legal-terms').removeClass('hide')
+    switch $('#project_payment_type option:selected').val()
+      when 'project_coin'
+        $('#royalty-legal-terms').addClass('hide')
+        $('.input-group-label.denomination').html('Project Coins')
+      when 'royalty_usd'
+        $('#royalty-legal-terms').removeClass('hide')
+        $('.input-group-label.denomination').html('$')
+      when 'royalty_btc'
+        $('#royalty-legal-terms').removeClass('hide')
+        $('.input-group-label.denomination').html('฿')

@@ -5,6 +5,6 @@ class Views::Projects::Edit < Views::Base
     content_for(:title) { "Editing: #{project.title.strip}" }
     content_for(:description) { project.decorate.description_text(150) }
 
-    render partial: "form", locals: {project: project}
+    render partial: "form", locals: {project: project.decorate}
   end
 end

@@ -16,33 +16,6 @@ module Views
                     f.text_field :title
                   }
                 }
-                with_errors(project, :payment_type) {
-                  label {
-                    text "Award Payment Type"
-                    question_tooltip "Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project coins for their work contributions."
-                    f.select(:payment_type,
-                             [["Royalties paid in US Dollars ($)", "royalty_usd"],
-                              ["Royalties paid in Bitcoin (฿)", "royalty_btc"],
-                              # ["Royalties paid in Ether (Ξ)", "royalty_eth"],
-                              ["Project Coin direct payment", "project_coin"]],
-                             {selected: project.payment_type, include_blank: false}
-                    )
-                    ethereum_beta(f)
-                  }
-                }
-                with_errors(project, :maximum_coins) {
-                  label {
-                    text "Maximum Awards Outstanding"
-                    question_tooltip "Select it carefully,
-                      it cannot be changed after it has been set.
-                      For royalties this is the maximum amount of unpaid royalties.
-                      For project coins this is the maximum number of project coins that can be issued.
-                      When royalties are paid or project coins are burned they are not included in this total.
-                      Select a high enough number
-                      so you have room for the future."
-                    f.text_field :maximum_coins, type: "number", disabled: !project.new_record?
-                  }
-                }
                 with_errors(project, :slack_channel) {
                   label {
                     i(class: "fa fa-slack")
@@ -92,6 +65,33 @@ module Views
                 row {
                   h3 "General Legal Terms"
 
+                  with_errors(project, :payment_type) {
+                    label {
+                      text "Award Payment Type"
+                      question_tooltip "Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project coins for their work contributions."
+                      f.select(:payment_type,
+                               [["Royalties paid in US Dollars ($)", "royalty_usd"],
+                                ["Royalties paid in Bitcoin (฿)", "royalty_btc"],
+                                # ["Royalties paid in Ether (Ξ)", "royalty_eth"],
+                                ["Project Coin direct payment", "project_coin"]],
+                               {selected: project.payment_type, include_blank: false}
+                      )
+                    }
+                  }
+                  with_errors(project, :maximum_coins) {
+                    label {
+                      text "Maximum Awards"
+                      question_tooltip "Select it carefully,
+                      it cannot be changed after it has been set.
+                      For royalties this is the maximum amount of unpaid royalties.
+                      For project coins this is the maximum number of project coins that can be issued.
+                      When royalties are paid or project coins are burned they are not included in this total.
+                      Select a high enough number
+                      so you have room for the future."
+                      denomination_div f, :maximum_coins, type: "number", disabled: !project.new_record?
+                    }
+                  }
+
                   with_errors(project, :legal_project_owner) {
                     label {
                       text "Project Owner's Legal Name "
@@ -116,6 +116,7 @@ module Views
                       question_tooltip "If project requires project confidentiality contributors agree to keep information about this agreement, other contributions to the Project, royalties awarded for other contributions, revenue received, royalties paid to the contributors and others, and all other unpublished information about the business, plans, and customers of the Project secret. Contributors also agree to keep copies of their contributions, copies of other materials contributed to the Project, and information about their content and purpose secret."
                     }
                   }
+                  ethereum_beta(f)
                 }
               }
               div(class: "content-box #{'hide' if project.project_coin?}", id: 'royalty-legal-terms') {
@@ -124,16 +125,17 @@ module Views
 
                   with_errors(project, :royalty_percentage) {
                     label {
-                      text "Percentage of Revenue Paid to Contributor Royalties "
+                      text "Percentage of Revenue reserved for Contributor Royalties "
                       question_tooltip "The Project Owner agrees to count money customers pay either to license, or to use a hosted instance of, the Project as 'Revenue', starting from the date of this agreement. Money customers pay for consulting, training, custom development, support, and other services related to the Project does not count as Revenue."
-                      f.text_field :royalty_percentage, placeholder: "5%"
+                      # percentage_div { f.text_field :royalty_percentage, placeholder: "5%", class: 'input-group-field' }
+                      percentage_div f, :royalty_percentage, placeholder: "5%"
                     }
                   }
 
                   with_errors(project, :maximum_royalties_per_quarter) {
                     label {
-                      text "Maximum Royalty Amount Awarded Per Quarter"
-                      f.text_field :maximum_royalties_per_quarter, placeholder: "50000"
+                      text "Maximum Royalties Awarded Per Quarter"
+                      denomination_div f,  :maximum_royalties_per_quarter, type: :number, placeholder: "50000"
                     }
                   }
 
@@ -141,7 +143,7 @@ module Views
                     label {
                       text "Minimum Revenue Collected Before Paying Contributor Royalties "
                       question_tooltip "The Project Owner agrees to begin paying Royalties once Revenue reaches the minimum revenue amount on the Award Form."
-                      f.text_field :minimum_revenue, placeholder: "100"
+                      denomination_div f, :minimum_revenue, type: :number, placeholder: "100"
                     }
                   }
 
@@ -149,7 +151,7 @@ module Views
                     label {
                       text "Contributor Minimum Payment Amount "
                       question_tooltip "Once Revenue reaches the minimum revenue amount the Project Owner agrees to pay the Contributor Royalties on demand, as long as the Project Owner owes the Contributor at least the minimum payment amount."
-                      f.text_field :minimum_payment, placeholder: "25"
+                      denomination_div f, :minimum_payment, type: :number, placeholder: "25"
                     }
                   }
                 }
@@ -226,6 +228,23 @@ module Views
             f.submit "Save", class: buttonish(:expand)
           }
         end
+      end
+
+      def denomination_div(form, field_name, **opts)
+        opts[:class] = "#{opts[:class]} input-group-field"
+        div(class: 'input-group') {
+          span(class: "input-group-label denomination") { text project.currency_denomination_explicit }
+          form.text_field field_name, **opts
+        }
+      end
+
+      def percentage_div(form, field_name, **opts)
+        opts[:class] = "#{opts[:class]} input-group-field"
+
+        div(class: 'input-group') {
+          span(class: "input-group-label percentage") { text "%" }
+          form.text_field field_name, **opts
+        }
       end
 
       def ethereum_beta(form)

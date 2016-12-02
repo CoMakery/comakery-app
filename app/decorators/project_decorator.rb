@@ -35,6 +35,11 @@ class ProjectDecorator < Draper::Decorator
     CURRENCY_DENOMINATIONS[project.payment_type]
   end
 
+  def currency_denomination_explicit
+    return "Project Coins" if project.payment_type == "project_coin"
+    CURRENCY_DENOMINATIONS[project.payment_type]
+  end
+
   def payment_description
     PAYMENT_DESCRIPTIONS[project.payment_type]
   end
