@@ -133,7 +133,7 @@ module Views
                   with_errors(project, :maximum_royalties_per_quarter) {
                     label {
                       text "Maximum Royalty Amount Awarded Per Quarter"
-                      f.text_field :maximum_royalties_per_quarter, placeholder: "100000"
+                      f.text_field :maximum_royalties_per_quarter, placeholder: "50000"
                     }
                   }
 
