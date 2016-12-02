@@ -50,8 +50,8 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
-    fill_in "Percentage of Revenue Paid", with: "7.99999"
-    fill_in "Maximum Royalty Amount Awarded Per Quarter", with: "25000"
+    fill_in "Percentage of Revenue reserved", with: "7.99999"
+    fill_in "Maximum Royalties Awarded Per Quarter", with: "25000"
     fill_in "Minimum Revenue Collected ", with: "150"
     fill_in "Contributor Minimum Payment", with: "26"
     check "Contributions are exclusive"
@@ -103,8 +103,8 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
-    fill_in "Percentage of Revenue Paid", with: "8"
-    fill_in "Maximum Royalty Amount Awarded Per Quarter", with: "27000"
+    fill_in "Percentage of Revenue reserved", with: "8"
+    fill_in "Maximum Royalties Awarded Per Quarter", with: "27000"
     fill_in "Minimum Revenue Collected ", with: "170"
     fill_in "Contributor Minimum Payment", with: "27"
     check "Contributions are exclusive"
@@ -152,7 +152,7 @@ describe "viewing projects, creating and editing", :js do
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
     select "Project Coin direct payment", from: "Award Payment Type"
-    fill_in "Maximum Awards Outstanding", with: "210000"
+    fill_in "Maximum Awards", with: "210000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
@@ -234,6 +234,62 @@ describe "viewing projects, creating and editing", :js do
     end
   end
 
+  describe 'denominations should match the project type' do
+    before do
+      login(account)
+    end
+
+    it 'are visible for existing usd royalty projects' do
+      project.update(payment_type: :royalty_usd)
+      visit edit_project_path(project)
+      expect_denomination_usd
+    end
+
+    it 'are visible for existing bitcoin royalty projects' do
+      project.update(payment_type: :royalty_btc)
+      visit edit_project_path(project)
+      expect_denomination_btc
+    end
+
+    it 'are hidden for existing project coin' do
+      project.update(payment_type: :project_coin)
+      visit edit_project_path(project)
+      expect_denomination_project_coin
+    end
+
+    it 'are shown and hidden by selecting the project type', js: true  do
+      visit edit_project_path(project)
+      expect_denomination_usd
+
+      select "Project Coin direct payment", from: "Award Payment Type"
+      expect_denomination_project_coin
+
+      select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
+      expect_denomination_usd
+
+      select "Royalties paid in Bitcoin (฿)", from: "Award Payment Type"
+      expect_denomination_btc
+    end
+  end
+
+  def expect_denomination_usd
+    page.assert_selector('.denomination', text: "$", minimum: 4)
+    page.assert_selector('.denomination', text: "฿", count: 0)
+    page.assert_selector('.denomination', text: "Project Coins", count: 0)
+  end
+
+  def expect_denomination_btc
+    page.assert_selector('.denomination', text: "$", count: 0)
+    page.assert_selector('.denomination', text: "฿", minimum: 4)
+    page.assert_selector('.denomination', text: "Project Coins", count: 0)
+  end
+
+  def expect_denomination_project_coin
+    page.assert_selector('.denomination', text: "$", count: 0)
+    page.assert_selector('.denomination', text: "฿", count: 0)
+    page.assert_selector('.denomination', text: "Project Coins", minimum: 1)
+  end
+
   def expect_royalty_terms
     assert_royalty_terms(true)
   end
@@ -246,7 +302,7 @@ describe "viewing projects, creating and editing", :js do
     to_or_not = bool ? 'to' : 'to_not'
     expect(page).send(to_or_not, have_content("Royalty Legal Terms"))
     expect(page).send(to_or_not, have_content("Percentage of Revenue "))
-    expect(page).send(to_or_not, have_content("Maximum Royalty Amount"))
+    expect(page).send(to_or_not, have_content("Maximum Royalties Awarded Per Quarter"))
     expect(page).send(to_or_not, have_content("Minimum Revenue Collected"))
     expect(page).send(to_or_not, have_content("Contributor Minimum Payment"))
   end
