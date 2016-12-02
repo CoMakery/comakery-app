@@ -12,8 +12,7 @@ describe "projects/_award_send.html.rb" do
         maximum_royalties_per_quarter: 27_000,
         minimum_revenue: 170,
         minimum_payment: 27,
-        business_confidentiality: true,
-        project_confidentiality: true,
+        require_confidentiality: true,
         exclusive_contributions: true,
         description: 'markdown _rocks_: www.auto.link').decorate
   end
@@ -38,8 +37,7 @@ describe "projects/_award_send.html.rb" do
     expect(rendered).to include "$170 minimum revenue"
     expect(rendered).to include "$27 minimum payment"
     expect(rendered).to include "Contributions are exclusive"
-    expect(rendered).to include "Business confidentiality"
-    expect(rendered).to include "Project confidentiality"
+    expect(rendered).to include "Confidentiality is required"
   end
 
   specify do
@@ -49,15 +47,9 @@ describe "projects/_award_send.html.rb" do
   end
 
   specify do
-    project.update!(business_confidentiality: false)
+    project.update!(require_confidentiality: false)
     render
-    expect(rendered).to_not include "Business confidentiality"
-  end
-
-  specify do
-    project.update!(project_confidentiality: false)
-    render
-    expect(rendered).to_not include "Project confidentiality"
+    expect(rendered).to_not include "Confidentiality is required"
   end
 
   specify do

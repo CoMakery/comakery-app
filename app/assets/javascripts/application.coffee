@@ -51,3 +51,9 @@ $ ->
     removeElement = $(e.target).closest(removeSelector)
     removeElement.hide()
     removeElement.find("input[data-destroy]").val("1")
+
+  $('#project_payment_type').change (e)->
+    if $('#project_payment_type option:selected').val() is 'project_coin'
+      $('#royalty-legal-terms').addClass('hide')
+    else
+      $('#royalty-legal-terms').removeClass('hide')

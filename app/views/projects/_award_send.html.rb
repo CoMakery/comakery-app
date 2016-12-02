@@ -68,8 +68,7 @@ class Views::Projects::AwardSend < Views::Base
         ul {
           li_if(project.legal_project_owner) { text "#{project.legal_project_owner} is the project owner" }
           li_if(project.exclusive_contributions) { text "Contributions are exclusive" }
-          li_if(project.business_confidentiality) { text "Business confidentiality is required" }
-          li_if(project.project_confidentiality) { text "Project confidentiality is required" }
+          li_if(project.require_confidentiality) { text "Confidentiality is required about the project and business" }
         }
         unless project.project_coin?
           div(class: 'royalty-terms'){

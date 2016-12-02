@@ -25,7 +25,7 @@ module Views
                               ["Royalties paid in Bitcoin (฿)", "royalty_btc"],
                               # ["Royalties paid in Ether (Ξ)", "royalty_eth"],
                               ["Project Coin direct payment", "project_coin"]],
-                              {selected: project.payment_type,include_blank: false}
+                             {selected: project.payment_type, include_blank: false}
                     )
                     ethereum_beta(f)
                   }
@@ -87,69 +87,71 @@ module Views
               }
             }
 
-            column("large-6 small-12 content-box") {
-              h3 "Royalty Contract Terms"
+            column("large-6 small-12") {
+              div(class: 'content-box') {
+                row {
+                  h3 "General Legal Terms"
 
-              with_errors(project, :legal_project_owner) {
-                label {
-                  text "Project Owner's Legal Name "
-                  question_tooltip "The name of the company, association, legal entity, or individual that owns the project and administers awards."
-                  f.text_field :legal_project_owner
+                  with_errors(project, :legal_project_owner) {
+                    label {
+                      text "Project Owner's Legal Name "
+                      question_tooltip "The name of the company, association, legal entity, or individual that owns the project and administers awards."
+                      f.text_field :legal_project_owner
+                    }
+                  }
+
+
+                  with_errors(project, :exclusive_contributions) {
+                    label {
+                      f.check_box :exclusive_contributions
+                      text "Contributions are exclusive to this project "
+                      question_tooltip "When contributions are exclusive contributors may not gives others license for their contributions."
+                    }
+                  }
+
+                  with_errors(project, :require_confidentiality) {
+                    label {
+                      f.check_box :require_confidentiality
+                      text "Require project and business confidentiality "
+                      question_tooltip "If project requires project confidentiality contributors agree to keep information about this agreement, other contributions to the Project, royalties awarded for other contributions, revenue received, royalties paid to the contributors and others, and all other unpublished information about the business, plans, and customers of the Project secret. Contributors also agree to keep copies of their contributions, copies of other materials contributed to the Project, and information about their content and purpose secret."
+                    }
+                  }
                 }
               }
+              div(class: "content-box #{'hide' if project.project_coin?}", id: 'royalty-legal-terms') {
+                row {
+                  h3 "Royalty Legal Terms"
 
-              with_errors(project, :royalty_percentage) {
-                label {
-                  text "Percentage of Revenue Paid to Contributor Royalties "
-                  question_tooltip "The Project Owner agrees to count money customers pay either to license, or to use a hosted instance of, the Project as 'Revenue', starting from the date of this agreement. Money customers pay for consulting, training, custom development, support, and other services related to the Project does not count as Revenue."
-                  f.text_field :royalty_percentage, placeholder: "5%"
-                }
-              }
+                  with_errors(project, :royalty_percentage) {
+                    label {
+                      text "Percentage of Revenue Paid to Contributor Royalties "
+                      question_tooltip "The Project Owner agrees to count money customers pay either to license, or to use a hosted instance of, the Project as 'Revenue', starting from the date of this agreement. Money customers pay for consulting, training, custom development, support, and other services related to the Project does not count as Revenue."
+                      f.text_field :royalty_percentage, placeholder: "5%"
+                    }
+                  }
 
-              with_errors(project, :maximum_royalties_per_quarter) {
-                label {
-                  text "Maximum Royalty Amount Awarded Per Quarter"
-                  f.text_field :maximum_royalties_per_quarter, placeholder: "100000"
-                }
-              }
+                  with_errors(project, :maximum_royalties_per_quarter) {
+                    label {
+                      text "Maximum Royalty Amount Awarded Per Quarter"
+                      f.text_field :maximum_royalties_per_quarter, placeholder: "100000"
+                    }
+                  }
 
-              with_errors(project, :minimum_revenue) {
-                label {
-                  text "Minimum Revenue Collected Before Paying Contributor Royalties "
-                  question_tooltip "The Project Owner agrees to begin paying Royalties once Revenue reaches the minimum revenue amount on the Award Form."
-                  f.text_field :minimum_revenue, placeholder: "100"
-                }
-              }
+                  with_errors(project, :minimum_revenue) {
+                    label {
+                      text "Minimum Revenue Collected Before Paying Contributor Royalties "
+                      question_tooltip "The Project Owner agrees to begin paying Royalties once Revenue reaches the minimum revenue amount on the Award Form."
+                      f.text_field :minimum_revenue, placeholder: "100"
+                    }
+                  }
 
-              with_errors(project, :minimum_payment) {
-                label {
-                  text "Contributor Minimum Payment Amount "
-                  question_tooltip "Once Revenue reaches the minimum revenue amount the Project Owner agrees to pay the Contributor Royalties on demand, as long as the Project Owner owes the Contributor at least the minimum payment amount."
-                  f.text_field :minimum_payment, placeholder: "25"
-                }
-              }
-
-              with_errors(project, :exclusive_contributions) {
-                label {
-                  f.check_box :exclusive_contributions
-                  text "Contributions are exclusive to this project "
-                  question_tooltip "When contributions are exclusive contributors may not gives others license for their contributions."
-                }
-              }
-
-              with_errors(project, :business_confidentiality) {
-                label {
-                  f.check_box :business_confidentiality
-                  text "Require business confidentiality "
-                  question_tooltip "If the project requires business confidentiality, contributors agree to keep information about this agreement, other contributions to the project, royalties awarded for other contributions, revenue received, royalties paid, and all other unpublished information about the business, plans, and customers of the Project secret."
-                }
-              }
-
-              with_errors(project, :project_confidentiality) {
-                label {
-                  f.check_box :project_confidentiality
-                  text "Require project confidentiality "
-                  question_tooltip "If project requires project confidentiality, contributors agree to keep copies of their contributions, copies of other materials contributed to the Project, and information about their content and purpose secret."
+                  with_errors(project, :minimum_payment) {
+                    label {
+                      text "Contributor Minimum Payment Amount "
+                      question_tooltip "Once Revenue reaches the minimum revenue amount the Project Owner agrees to pay the Contributor Royalties on demand, as long as the Project Owner owes the Contributor at least the minimum payment amount."
+                      f.text_field :minimum_payment, placeholder: "25"
+                    }
+                  }
                 }
               }
             }

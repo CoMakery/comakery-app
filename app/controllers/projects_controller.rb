@@ -109,8 +109,7 @@ class ProjectsController < ApplicationController
       :legal_project_owner,
       :minimum_payment,
       :minimum_revenue,
-      :business_confidentiality,
-      :project_confidentiality,
+      :require_confidentiality,
       :royalty_percentage,
       :maximum_royalties_per_quarter,
       award_types_attributes: [

@@ -19,7 +19,7 @@ describe "viewing projects, creating and editing", :js do
 
     travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))  # so we can check for fixed date of award
 
-    expect_any_instance_of(Account).to receive(:send_award_notifications)
+    allow_any_instance_of(Account).to receive(:send_award_notifications)
     stub_slack_user_list([{"id": "U99M9QYFQ", "team_id": "team id", "name": "bobjohnson", "profile": {"email": "bobjohnson@example.com"}}])
     stub_request(:post, "https://slack.com/api/users.info").to_return(body: {
         ok: true,
@@ -55,8 +55,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Minimum Revenue Collected ", with: "150"
     fill_in "Contributor Minimum Payment", with: "26"
     check "Contributions are exclusive"
-    check "Require business confidentiality"
-    check "Require project confidentiality"
+    check "Require project and business confidentiality"
 
     click_on "Save"
     expect(page).to have_content "Project created"
@@ -71,8 +70,7 @@ describe "viewing projects, creating and editing", :js do
       expect(page).to have_content "$150 minimum revenue"
       expect(page).to have_content "$26 minimum payment"
       expect(page).to have_content "Contributions are exclusive"
-      expect(page).to have_content "Business confidentiality"
-      expect(page).to have_content "Project confidentiality"
+      expect(page).to have_content "Confidentiality is required"
     end
     within("#award-send") { expect(page).to have_content /award royalties/i }
 
@@ -110,8 +108,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Minimum Revenue Collected ", with: "170"
     fill_in "Contributor Minimum Payment", with: "27"
     check "Contributions are exclusive"
-    check "Require business confidentiality"
-    check "Require project confidentiality"
+    check "Require project and business confidentiality"
 
     click_on "Save"
     expect(page).to have_content "Project created"
@@ -126,8 +123,7 @@ describe "viewing projects, creating and editing", :js do
       expect(page).to have_content "฿170 minimum revenue"
       expect(page).to have_content "฿27 minimum payment"
       expect(page).to have_content "Contributions are exclusive"
-      expect(page).to have_content "Business confidentiality"
-      expect(page).to have_content "Project confidentiality"
+      expect(page).to have_content "Confidentiality is required"
     end
     within("#award-send") { expect(page).to have_content /award royalties/i }
 
@@ -161,8 +157,7 @@ describe "viewing projects, creating and editing", :js do
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
     check "Contributions are exclusive"
-    check "Require business confidentiality"
-    check "Require project confidentiality"
+    check "Require project and business confidentiality"
 
     click_on "Save"
     expect(page).to have_content "Project created"
@@ -170,10 +165,8 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "0 mine"
     within ".project-terms" do
       expect(page).to have_content "Mindful Inc"
-
       expect(page).to have_content "Contributions are exclusive"
-      expect(page).to have_content "Business confidentiality"
-      expect(page).to have_content "Project confidentiality"
+      expect(page).to have_content "Confidentiality is required"
     end
 
     within ".project-terms" do
@@ -201,5 +194,60 @@ describe "viewing projects, creating and editing", :js do
     visit account_path
     within(".header-row") { expect(page).to have_content /Project Coins Earned/i }
     expect(page).to have_content "100"
+  end
+
+  describe "royalty legal terms", js: true do
+    before do
+      login(account)
+    end
+
+    it 'are visible for existing usd royalty projects' do
+      project.update(payment_type: :royalty_usd)
+      visit edit_project_path(project)
+      expect_royalty_terms
+    end
+
+    it 'are visible for existing bitcoin royalty projects' do
+      project.update(payment_type: :royalty_btc)
+      visit edit_project_path(project)
+      expect_royalty_terms
+    end
+
+    it 'are hidden for existing project coin' do
+      project.update(payment_type: :project_coin)
+      visit edit_project_path(project)
+      expect_no_royalty_terms
+    end
+
+    it 'are shown and hidden by selecting the project type', js: true  do
+      visit edit_project_path(project)
+      expect_royalty_terms
+
+      select "Project Coin direct payment", from: "Award Payment Type"
+      expect_no_royalty_terms
+
+      select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
+      expect_royalty_terms
+
+      select "Royalties paid in Bitcoin (฿)", from: "Award Payment Type"
+      expect_royalty_terms
+    end
+  end
+
+  def expect_royalty_terms
+    assert_royalty_terms(true)
+  end
+
+  def expect_no_royalty_terms
+    assert_royalty_terms(false)
+  end
+
+  def assert_royalty_terms(bool)
+    to_or_not = bool ? 'to' : 'to_not'
+    expect(page).send(to_or_not, have_content("Royalty Legal Terms"))
+    expect(page).send(to_or_not, have_content("Percentage of Revenue "))
+    expect(page).send(to_or_not, have_content("Maximum Royalty Amount"))
+    expect(page).send(to_or_not, have_content("Minimum Revenue Collected"))
+    expect(page).send(to_or_not, have_content("Contributor Minimum Payment"))
   end
 end
