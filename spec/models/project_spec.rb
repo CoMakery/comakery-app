@@ -14,13 +14,27 @@ describe Project do
                                                                          "Title can't be blank",
                                                                         ])
 
-      expect(Project.new(slack_team_domain: "").tap{|p|p.valid?}.errors.full_messages).to be_include("Slack team domain can't be blank")
-      expect(Project.new(slack_team_domain: "XX").tap{|p|p.valid?}.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
-      expect(Project.new(slack_team_domain: "-xx").tap{|p|p.valid?}.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
-      expect(Project.new(slack_team_domain: "good\n-bad").tap{|p|p.valid?}.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+      expect(Project.new(slack_team_domain: "").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain can't be blank")
+      expect(Project.new(slack_team_domain: "XX").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+      expect(Project.new(slack_team_domain: "-xx").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+      expect(Project.new(slack_team_domain: "good\n-bad").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
 
-      expect(Project.new(slack_team_domain: "3-xx").tap{|p|p.valid?}.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
-      expect(Project.new(slack_team_domain: "a").tap{|p|p.valid?}.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+      expect(Project.new(slack_team_domain: "3-xx").tap { |p| p.valid? }.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+      expect(Project.new(slack_team_domain: "a").tap { |p| p.valid? }.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+    end
+
+    describe :royalty_percentage do
+      it 'has high precision' do
+        project = create :project, royalty_percentage: '99.999_999_999_999_9'
+        project.reload
+        expect(project.royalty_percentage).to eq(BigDecimal('99.999_999_999_999_9'))
+      end
+
+      it 'can represent 100%' do
+        project = create :project, royalty_percentage: '100'
+        project.reload
+        expect(project.royalty_percentage).to eq(100.0)
+      end
     end
 
     describe "payment_type" do
@@ -72,7 +86,7 @@ describe Project do
         project.save!
         project.ethereum_enabled = false
         expect(project.tap(&:valid?).errors.full_messages.first).
-          to eq("Ethereum enabled cannot be set to false after it has been set to true")
+            to eq("Ethereum enabled cannot be set to false after it has been set to true")
       end
     end
 
@@ -221,19 +235,19 @@ describe Project do
   describe 'associations' do
     it 'has many award_types and accepts them as nested attributes' do
       project = Project.create!(description: "foo",
-          title: 'This is a title',
-          owner_account: create(:account),
-          slack_team_id: '123',
-          slack_channel: "slack_channel",
-          slack_team_name: 'This is a slack team name',
-          slack_team_image_34_url: 'http://foo.com/kittens-34.jpg',
-          slack_team_image_132_url: 'http://foo.com/kittens-132.jpg',
-          maximum_coins: 10_000_000,
-          award_types_attributes: [
-              {'name' => 'Small award', 'amount' => '1000'},
-              {'name' => '', 'amount' => '1000'},
-              {'name' => 'Award', 'amount' => ''}
-          ])
+                                title: 'This is a title',
+                                owner_account: create(:account),
+                                slack_team_id: '123',
+                                slack_channel: "slack_channel",
+                                slack_team_name: 'This is a slack team name',
+                                slack_team_image_34_url: 'http://foo.com/kittens-34.jpg',
+                                slack_team_image_132_url: 'http://foo.com/kittens-132.jpg',
+                                maximum_coins: 10_000_000,
+                                award_types_attributes: [
+                                    {'name' => 'Small award', 'amount' => '1000'},
+                                    {'name' => '', 'amount' => '1000'},
+                                    {'name' => 'Award', 'amount' => ''}
+                                ])
 
       expect(project.award_types.count).to eq(1)
       expect(project.award_types.first.name).to eq('Small award')
@@ -251,11 +265,11 @@ describe Project do
   describe 'scopes' do
     describe ".with_last_activity_at" do
       it "returns projects ordered by when the most recent award created_at, then by project created_at" do
-        p1_8 = create(:project, title: "p1_8", created_at: 8.days.ago).tap{|p| create(:award_type, project: p).tap{|at| create(:award, award_type: at, created_at: 1.days.ago)}}
-        p2_3 = create(:project, title: "p2_3", created_at: 3.days.ago).tap{|p| create(:award_type, project: p).tap{|at| create(:award, award_type: at, created_at: 2.days.ago)}}
-        p3_6 = create(:project, title: "p3_6", created_at: 6.days.ago).tap{|p| create(:award_type, project: p).tap{|at| create(:award, award_type: at, created_at: 3.days.ago)}}
-        p3_5 = create(:project, title: "p3_5", created_at: 5.days.ago).tap{|p| create(:award_type, project: p).tap{|at| create(:award, award_type: at, created_at: 3.days.ago)}}
-        p3_4 = create(:project, title: "p3_4", created_at: 4.days.ago).tap{|p| create(:award_type, project: p).tap{|at| create(:award, award_type: at, created_at: 3.days.ago)}}
+        p1_8 = create(:project, title: "p1_8", created_at: 8.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 1.days.ago) } }
+        p2_3 = create(:project, title: "p2_3", created_at: 3.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 2.days.ago) } }
+        p3_6 = create(:project, title: "p3_6", created_at: 6.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
+        p3_5 = create(:project, title: "p3_5", created_at: 5.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
+        p3_4 = create(:project, title: "p3_4", created_at: 4.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
 
         expect(Project.count).to eq(5)
         expect(Project.with_last_activity_at.all.map(&:title)).to eq(%w(p1_8 p2_3 p3_4 p3_5 p3_6))
@@ -333,7 +347,7 @@ describe Project do
     end
 
     it "should be false if an existing project with an account is transitioned from ethereum_enabled = false to true" do
-      project = create(:project, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' *40 )
+      project = create(:project, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' *40)
       project.update!(ethereum_enabled: true)
       expect(project.transitioned_to_ethereum_enabled?).to eq(false)
     end
