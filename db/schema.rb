@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161130022809) do
+ActiveRecord::Schema.define(version: 20161202043625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,8 +135,7 @@ ActiveRecord::Schema.define(version: 20161130022809) do
     t.string   "legal_project_owner"
     t.integer  "minimum_payment"
     t.integer  "minimum_revenue"
-    t.boolean  "business_confidentiality"
-    t.boolean  "project_confidentiality"
+    t.boolean  "require_confidentiality"
     t.integer  "royalty_percentage"
     t.integer  "maximum_royalties_per_quarter"
   end
