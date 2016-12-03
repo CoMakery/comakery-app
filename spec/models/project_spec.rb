@@ -352,4 +352,22 @@ describe Project do
       expect(project.transitioned_to_ethereum_enabled?).to eq(false)
     end
   end
+
+  describe '#legal_terms_finalized?' do
+    let(:project) { create :project }
+
+    it 'is not finalized after first save' do
+      expect(project.legal_terms_finalized?).to eq false
+    end
+
+    it "is finalized after first award is issued" do
+      create(:award_type, project: project).tap { |at| create(:award, award_type: at, created_at: 1.second.ago) }
+      expect(project.legal_terms_finalized?).to eq(true)
+    end
+
+    it "is finalized after ethereum contract created" do
+      expect(project).to receive(:transitioned_to_ethereum_enabled?) { true }
+      expect(project.legal_terms_finalized?).to eq(true)
+    end
+  end
 end

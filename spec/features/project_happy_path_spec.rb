@@ -110,7 +110,6 @@ describe "viewing projects, creating and editing", :js do
 
     click_on "Edit"
 
-    expect(page.find("input[name*='[maximum_coins]']")[:disabled]).to eq(true)
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
 
     expect(page).to have_unchecked_field("Set project as public")
