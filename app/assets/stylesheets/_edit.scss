@@ -48,6 +48,17 @@ form.edit_project, form.new_project {
       margin-bottom: 1em;
     }
   }
+  .legal-box-header {
+    h3 {
+      display: inline;
+    }
+    margin-bottom: 10px;
+    i.fa-lock {
+      padding-top: 10px;
+      font-size: 30px;
+      float: right;
+    }
+  }
 }
 .input-group {
   padding: 0;
@@ -56,5 +67,4 @@ form.edit_project, form.new_project {
   padding-top: 0;
   padding-bottom: 0;
   height: 10px;
-  background-color: white;
 }

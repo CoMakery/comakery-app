@@ -63,8 +63,10 @@ module Views
             column("large-6 small-12") {
               div(class: 'content-box') {
                 row {
-                  h3 "General Legal Terms"
-
+                  div(class: 'legal-box-header') {
+                    h3 "General Legal Terms"
+                    i(class:"fa fa-lock") if project.legal_terms_finalized?
+                  }
                   with_errors(project, :payment_type) {
                     label {
                       text "Award Payment Type"
@@ -74,7 +76,8 @@ module Views
                                 ["Royalties paid in Bitcoin (฿)", "royalty_btc"],
                                 # ["Royalties paid in Ether (Ξ)", "royalty_eth"],
                                 ["Project Coin direct payment", "project_coin"]],
-                               {selected: project.payment_type, include_blank: false}
+                               {selected: project.payment_type, include_blank: false},
+                               disabled: project.legal_terms_finalized?
                       )
                     }
                   }
@@ -88,7 +91,7 @@ module Views
                       When royalties are paid or project coins are burned they are not included in this total.
                       Select a high enough number
                       so you have room for the future."
-                      denomination_div f, :maximum_coins, type: "number", disabled: !project.new_record?
+                      denomination_div f, :maximum_coins, type: "number", disabled: project.legal_terms_finalized?
                     }
                   }
 
@@ -96,14 +99,14 @@ module Views
                     label {
                       text "Project Owner's Legal Name "
                       question_tooltip "The name of the company, association, legal entity, or individual that owns the project and administers awards."
-                      f.text_field :legal_project_owner
+                      f.text_field :legal_project_owner, disabled: project.legal_terms_finalized?
                     }
                   }
 
 
                   with_errors(project, :exclusive_contributions) {
                     label {
-                      f.check_box :exclusive_contributions
+                      f.check_box :exclusive_contributions, disabled: project.legal_terms_finalized?
                       text "Contributions are exclusive to this project "
                       question_tooltip "When contributions are exclusive contributors may not gives others license for their contributions."
                     }
@@ -111,7 +114,7 @@ module Views
 
                   with_errors(project, :require_confidentiality) {
                     label {
-                      f.check_box :require_confidentiality
+                      f.check_box :require_confidentiality, disabled: project.legal_terms_finalized?
                       text "Require project and business confidentiality "
                       question_tooltip "If project requires project confidentiality contributors agree to keep information about this agreement, other contributions to the Project, royalties awarded for other contributions, revenue received, royalties paid to the contributors and others, and all other unpublished information about the business, plans, and customers of the Project secret. Contributors also agree to keep copies of their contributions, copies of other materials contributed to the Project, and information about their content and purpose secret."
                     }
@@ -121,21 +124,27 @@ module Views
               }
               div(class: "content-box #{'hide' if project.project_coin?}", id: 'royalty-legal-terms') {
                 row {
-                  h3 "Royalty Legal Terms"
+                  div(class: 'legal-box-header') {
+                    h3 "Royalty Legal Terms"
+                    i(class:"fa fa-lock") if project.legal_terms_finalized?
+                  }
+
 
                   with_errors(project, :royalty_percentage) {
                     label {
                       text "Percentage of Revenue reserved for Contributor Royalties "
                       question_tooltip "The Project Owner agrees to count money customers pay either to license, or to use a hosted instance of, the Project as 'Revenue', starting from the date of this agreement. Money customers pay for consulting, training, custom development, support, and other services related to the Project does not count as Revenue."
                       # percentage_div { f.text_field :royalty_percentage, placeholder: "5%", class: 'input-group-field' }
-                      percentage_div f, :royalty_percentage, placeholder: "5%"
+                      percentage_div f, :royalty_percentage, placeholder: "5%",
+                                     disabled: project.legal_terms_finalized?
                     }
                   }
 
                   with_errors(project, :maximum_royalties_per_quarter) {
                     label {
                       text "Maximum Royalties Awarded Per Quarter"
-                      denomination_div f,  :maximum_royalties_per_quarter, type: :number, placeholder: "50000"
+                      denomination_div f,  :maximum_royalties_per_quarter,
+                                       type: :number, placeholder: "50000", disabled: project.legal_terms_finalized?
                     }
                   }
 
@@ -143,7 +152,8 @@ module Views
                     label {
                       text "Minimum Revenue Collected Before Paying Contributor Royalties "
                       question_tooltip "The Project Owner agrees to begin paying Royalties once Revenue reaches the minimum revenue amount on the Award Form."
-                      denomination_div f, :minimum_revenue, type: :number, placeholder: "100"
+                      denomination_div f, :minimum_revenue, type: :number, placeholder: "100",
+                                       disabled: project.legal_terms_finalized?
                     }
                   }
 
@@ -151,7 +161,8 @@ module Views
                     label {
                       text "Contributor Minimum Payment Amount "
                       question_tooltip "Once Revenue reaches the minimum revenue amount the Project Owner agrees to pay the Contributor Royalties on demand, as long as the Project Owner owes the Contributor at least the minimum payment amount."
-                      denomination_div f, :minimum_payment, type: :number, placeholder: "25"
+                      denomination_div f, :minimum_payment, type: :number, placeholder: "25",
+                                       disabled: project.legal_terms_finalized?
                     }
                   }
                 }

@@ -71,6 +71,10 @@ class Project < ActiveRecord::Base
     owner_account.authentications.find_by(slack_team_id: slack_team_id)&.display_name
   end
 
+  def legal_terms_finalized?
+    awards.present? || transitioned_to_ethereum_enabled?
+  end
+
   def youtube_id
     # taken from http://stackoverflow.com/questions/5909121/converting-a-regular-youtube-link-into-an-embedded-video
     # Regex from http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
