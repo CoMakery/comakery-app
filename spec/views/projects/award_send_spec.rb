@@ -51,10 +51,4 @@ describe "projects/_award_send.html.rb" do
     render
     expect(rendered).to_not include "Confidentiality is required"
   end
-
-  specify do
-    project.update!(legal_project_owner: nil)
-    render
-    expect(rendered).to_not match /project owner/i
-  end
 end
