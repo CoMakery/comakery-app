@@ -272,6 +272,57 @@ describe "viewing projects, creating and editing", :js do
     end
   end
 
+  it 'should freeze royalty terms after the first award is issued' do
+    login(account)
+
+    visit projects_path
+
+    click_link "New Project"
+    page.assert_selector('.fa-lock', count: 0)
+
+    fill_in "Title", with: "Mindfulness App"
+    select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
+    fill_in "Maximum Awards", with: "100000"
+    fill_in "Description", with: "This is a project"
+    select "a-channel-name", from: "Slack Channel"
+    fill_in "Project Owner's Legal Name", with: "Mindful Inc"
+    fill_in "Percentage of Revenue reserved", with: "7.99999"
+    fill_in "Maximum Royalties Awarded Per Quarter", with: "25000"
+    fill_in "Minimum Revenue Collected ", with: "150"
+    fill_in "Contributor Minimum Payment", with: "26"
+    check "Contributions are exclusive"
+    check "Require project and business confidentiality"
+
+    click_on "Save"
+    expect(page).to have_content "Project created"
+    choose "Small"
+    expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson"])
+    select "bobjohnson", from: "User"
+    click_button "Send"
+    expect(page).to have_content "Successfully sent award to @bobjohnson"
+
+
+
+    click_on "Edit Project"
+    contract_term_fields.each do |disabled_field_name|
+      expect(page).to have_css("##{disabled_field_name}[disabled]")
+    end
+    page.assert_selector('.fa-lock', count: 2)
+  end
+
+  def contract_term_fields
+    [:project_maximum_coins,
+     :project_payment_type,
+     :project_exclusive_contributions,
+     :project_legal_project_owner,
+     :project_minimum_payment,
+     :project_minimum_revenue,
+     :project_require_confidentiality,
+     :project_royalty_percentage,
+     :project_maximum_royalties_per_quarter,
+     :project_payment_type]
+  end
+
   def expect_denomination_usd
     page.assert_selector('.denomination', text: "$", minimum: 4)
     page.assert_selector('.denomination', text: "฿", count: 0)
