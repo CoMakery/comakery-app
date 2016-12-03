@@ -172,7 +172,6 @@ describe "viewing projects, creating and editing", :js do
     within ".project-terms" do
       expect(page).to_not have_css('.royalty-terms')
       expect(page).to_not have_content "7%"
-      expect(page).to_not have_content "maximum royalty awards"
       expect(page).to_not have_content "maximum royalties can be awarded each quarter"
       expect(page).to_not have_content "minimum revenue"
       expect(page).to_not have_content "minimum payment"
