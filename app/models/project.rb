@@ -26,7 +26,12 @@ class Project < ActiveRecord::Base
       royalty_eth: 3,
   }
 
-  validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :title
+  validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id,
+                        :slack_team_image_34_url, :slack_team_image_132_url, :title, :legal_project_owner
+
+  validates_presence_of :royalty_percentage, :maximum_royalties_per_quarter, :minimum_revenue, :minimum_payment,
+                        unless: :project_coin?
+
   validates_numericality_of :maximum_coins, greater_than: 0
 
   validate :valid_tracker_url, if: -> { tracker.present? }

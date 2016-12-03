@@ -84,7 +84,7 @@ class ProjectsController < ApplicationController
       flash[:notice] = "Project updated"
       respond_with @project, location: project_path(@project)
     else
-      flash[:error] = "Project updating failed, please correct the errors below"
+      flash[:error] = "Project update failed, please correct the errors below"
       assign_slack_channels
       render :edit
     end
