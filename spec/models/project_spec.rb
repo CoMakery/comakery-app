@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Project do
   describe 'validations' do
     it 'requires attributes' do
-      expect(Project.new.tap(&:valid?).errors.full_messages.sort).to eq(["Description can't be blank",
+      expect(Project.new(payment_type: 'project_coin').tap(&:valid?).errors.full_messages.sort).to eq(["Description can't be blank",
                                                                          "Maximum coins must be greater than 0",
                                                                          "Owner account can't be blank",
                                                                          "Slack channel can't be blank",
@@ -12,7 +12,8 @@ describe Project do
                                                                          "Slack team image 34 url can't be blank",
                                                                          "Slack team name can't be blank",
                                                                          "Title can't be blank",
-                                                                        ])
+                                                                         "Legal project owner can't be blank"
+                                                                        ].sort)
 
       expect(Project.new(slack_team_domain: "").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain can't be blank")
       expect(Project.new(slack_team_domain: "XX").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
@@ -21,6 +22,38 @@ describe Project do
 
       expect(Project.new(slack_team_domain: "3-xx").tap { |p| p.valid? }.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
       expect(Project.new(slack_team_domain: "a").tap { |p| p.valid? }.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+    end
+
+    describe 'royalty validations' do
+      let(:project) { build :project, royalty_percentage: nil,  maximum_royalties_per_quarter: nil, minimum_revenue: nil, minimum_payment: nil }
+
+      it 'for USD projects' do
+        project.payment_type = 'royalty_usd'
+        expect_royalty_fields_present
+      end
+
+      it 'for BTC projects' do
+        project.payment_type = 'royalty_btc'
+        expect_royalty_fields_present
+      end
+
+      it 'for ETH projects' do
+        project.payment_type = 'royalty_eth'
+        expect_royalty_fields_present
+      end
+
+      it 'for project coin projects' do
+        project.payment_type = 'project_coin'
+        expect(project).to be_valid
+      end
+
+      def expect_royalty_fields_present
+        expect(project.tap(&:valid?).errors.full_messages.sort).to eq(["Royalty percentage can't be blank",
+                                                                       "Maximum royalties per quarter can't be blank",
+                                                                       "Minimum revenue can't be blank",
+                                                                       "Minimum payment can't be blank",
+                                                                      ].sort)
+      end
     end
 
     describe :royalty_percentage do
@@ -137,97 +170,47 @@ describe Project do
       end
     end
 
-    describe "tracker" do
-      it "is valid if tracker is a valid, absolute url" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "http://foo.com", maximum_coins: 10_000_000)
-        expect(project).to be_valid
-        expect(project.tracker).to eq("http://foo.com")
-      end
+    it "video_url is valid if video_url is a valid, absolute url, the domain is youtube.com, and there is the identifier inside" do
+      expect(build(:sb_project, video_url: "https://youtube.com/watch?v=Dn3ZMhmmzK0")).to be_valid
+      expect(build(:sb_project, video_url: "https://youtube.com/embed/Dn3ZMhmmzK0")).to be_valid
+      expect(build(:sb_project, video_url: "https://youtu.be/jJrzIdDUfT4")).to be_valid
 
-      it "doesn't allow completely wrong urls that cause parsing errors" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "ゆアルエル", maximum_coins: 10_000_000)
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages).to eq(["Tracker must be a valid url"])
-      end
-
-      it "requires the tracker url be valid if present" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "foo", maximum_coins: 10_000_000)
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages).to eq(["Tracker must be a valid url"])
-      end
-
-      it "is valid with no tracker specified" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: nil, maximum_coins: 10_000_000)
-        expect(project).to be_valid
-      end
-
-      it "is valid if tracker is blank" do
-        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", tracker: "", maximum_coins: 10_000_000)
-        expect(project.tracker).to be_nil
-      end
+      expect(build(:sb_project, video_url: "https://youtube.com/embed/")).not_to be_valid
+      expect(build(:sb_project, video_url: "https://youtu.be/")).not_to be_valid
+      expect(build(:sb_project, video_url: "https://youtu.be/").tap(&:valid?).errors.full_messages).to eq(["Video url must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'"])
     end
 
-    describe "video_url" do
-      it "is valid if video_url is a valid, absolute url, the domain is youtube.com, and there is the identifier inside" do
-        expect(build(:sb_project, video_url: "https://youtube.com/watch?v=Dn3ZMhmmzK0")).to be_valid
-        expect(build(:sb_project, video_url: "https://youtube.com/embed/Dn3ZMhmmzK0")).to be_valid
-        expect(build(:sb_project, video_url: "https://youtu.be/jJrzIdDUfT4")).to be_valid
+    %w{video_url tracker contributor_agreement_url}.each do |method|
+      describe method do
+        let(:project) { build :project}
 
-        expect(build(:sb_project, video_url: "https://youtube.com/embed/")).not_to be_valid
-        expect(build(:sb_project, video_url: "https://youtu.be/")).not_to be_valid
-        expect(build(:sb_project, video_url: "https://youtu.be/").tap(&:valid?).errors.full_messages).to eq(["Video url must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'"])
-      end
+        it "is valid if tracker is a valid, absolute url" do
+          project.tracker = "https://youtu.be/jJrzIdDUfT4"
+          expect(project).to be_valid
+          expect(project.tracker).to eq("https://youtu.be/jJrzIdDUfT4")
+        end
 
-      it "doesn't allow completely wrong urls that cause parsing errors" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", video_url: "ゆアルエル", maximum_coins: 10_000_000)
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages).to eq(["Video url must be a valid url"])
-      end
+        it "doesn't allow completely wrong urls that cause parsing errors" do
+          project.send("#{method}=", "ゆアルエル")
+          expect(project).not_to be_valid
+          expect(project.errors.full_messages.first).to include "must be a valid url"
+        end
 
-      it "requires the video_url url be valid if present" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", video_url: "foo", maximum_coins: 10_000_000)
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages).to match_array(["Video url must be a valid url"])
-      end
+        it "requires the url be valid if present" do
+          project.send("#{method}=", "foo")
+          expect(project).not_to be_valid
+          expect(project.errors.full_messages.first).to include("must be a valid url")
+        end
 
-      it "is valid with no video_url specified" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", video_url: nil, maximum_coins: 10_000_000)
-        expect(project).to be_valid
-      end
+        it "is valid with no url specified" do
+          project.send("#{method}=", nil)
+          expect(project).to be_valid
+        end
 
-      it "is valid if video_url is blank" do
-        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", video_url: "", maximum_coins: 10_000_000)
-        expect(project.video_url).to be_nil
-      end
-    end
-
-    describe "contributor_agreement_url" do
-      it "is valid if contributor_agreement_url is a valid, absolute url" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: "http://foo.com", maximum_coins: 10_000_000)
-        expect(project).to be_valid
-        expect(project.contributor_agreement_url).to eq("http://foo.com")
-      end
-
-      it "doesn't allow completely wrong urls that cause parsing errors" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: "ゆアルエル", maximum_coins: 10_000_000)
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages).to eq(["Contributor agreement url must be a valid url"])
-      end
-
-      it "requires the contributor_agreement_url be valid if present" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: "foo", maximum_coins: 10_000_000)
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages).to eq(["Contributor agreement url must be a valid url"])
-      end
-
-      it "is valid with no contributor_agreement_url specified" do
-        project = Project.new(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: nil, maximum_coins: 10_000_000)
-        expect(project).to be_valid
-      end
-
-      it "is valid if contributor_agreement_url is blank" do
-        project = Project.create!(description: "foo", owner_account: create(:account), title: "title", slack_team_id: "bar", slack_channel: "slack_channel", slack_team_name: "baz", slack_team_image_34_url: "happy-34.gif", slack_team_image_132_url: "happy-132.gif", contributor_agreement_url: "", maximum_coins: 10_000_000)
-        expect(project.contributor_agreement_url).to be_nil
+        it "is valid if url is blank" do
+          project.send("#{method}=", "")
+          expect(project).to be_valid
+        end
       end
     end
   end
@@ -243,6 +226,8 @@ describe Project do
                                 slack_team_image_34_url: 'http://foo.com/kittens-34.jpg',
                                 slack_team_image_132_url: 'http://foo.com/kittens-132.jpg',
                                 maximum_coins: 10_000_000,
+                                legal_project_owner: 'legal project owner',
+                                payment_type: 'project_coin',
                                 award_types_attributes: [
                                     {'name' => 'Small award', 'amount' => '1000'},
                                     {'name' => '', 'amount' => '1000'},

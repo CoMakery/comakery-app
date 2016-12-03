@@ -98,6 +98,8 @@ describe ProjectsController do
               video_url: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0",
               slack_channel: "slack_channel",
               maximum_coins: "150",
+              legal_project_owner: 'legal project owner',
+              payment_type: 'project_coin',
               award_types_attributes: [
                   {name: "Community Award", amount: 10, community_awardable: true},
                   {name: "Small Award", amount: 1000},
@@ -278,6 +280,8 @@ describe ProjectsController do
                       title: "",
                       description: "updated Project description here",
                       tracker: "http://github.com/here/is/my/tracker/updated",
+                      legal_project_owner: 'legal project owner',
+                      payment_type: 'project_coin',
                       award_types_attributes: [
                           {id: small_award_type.to_param, name: "Small Award", amount: 150},
                           {id: destroy_me_award_type.to_param, _destroy: true},
@@ -289,7 +293,7 @@ describe ProjectsController do
           end.not_to change { AwardType.count }
 
           project = assigns[:project]
-          expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
+          expect(flash[:error]).to eq("Project update failed, please correct the errors below")
           expect(project.title).to eq("")
           expect(project.description).to eq("updated Project description here")
           expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
@@ -323,12 +327,14 @@ describe ProjectsController do
           expect do
             put :update, id: cat_project.to_param,
                 project: {
+                    legal_project_owner: 'legal project owner',
+                    payment_type: 'project_coin',
                     award_types_attributes: [
                         {id: award_type.to_param, name: "Bigger Award", amount: 500},
                     ]
                 }
             expect(response.status).to eq(200)
-            expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
+            expect(flash[:error]).to eq("Project update failed, please correct the errors below")
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
       end

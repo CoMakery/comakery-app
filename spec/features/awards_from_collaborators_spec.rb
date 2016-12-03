@@ -21,6 +21,11 @@ describe "Collaborator projects" do
     fill_in "Description", with: "This is a project description which is very informative"
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     select "a-channel-name", from: "Slack Channel"
+    select "Project Coin direct payment", from: "Award Payment Type"
+    fill_in "Maximum Awards", with: "210000"
+    fill_in "Project Owner's Legal Name", with: "Mindful Inc"
+    check "Contributions are exclusive"
+    check "Require project and business confidentiality"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)
