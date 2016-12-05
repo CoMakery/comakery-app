@@ -204,9 +204,9 @@ module Views
                     }
                     tbody {
                       tr {
-                        td {}
-                        td {}
-                        td {}
+                        td(class: 'monthly-revenue') {}
+                        td(class: 'monthly-payment') {}
+                        td(class: 'months-to-pay') {}
                       }
                     }
                   }
