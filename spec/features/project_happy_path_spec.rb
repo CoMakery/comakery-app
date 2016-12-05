@@ -38,7 +38,7 @@ describe "viewing projects, creating and editing", :js do
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public")).not_to be_checked
 
-    expect(find_field("Maximum Awards")['value']).to eq("50000")
+    expect(find_field("Maximum Awards")['value']).to eq("12000")
     fill_in "Maximum Awards", with: "20000000"
 
     award_type_inputs = get_award_type_rows
@@ -80,7 +80,7 @@ describe "viewing projects, creating and editing", :js do
     select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
 
     fill_in "Percentage of Revenue reserved", with: "7.99999"
-    fill_in "Maximum Royalties Awarded Per Quarter", with: "25000"
+    fill_in "Maximum Awarded Per Quarter", with: "25000"
     fill_in "Minimum Revenue Collected ", with: "150"
     fill_in "Contributor Minimum Payment", with: "26"
 

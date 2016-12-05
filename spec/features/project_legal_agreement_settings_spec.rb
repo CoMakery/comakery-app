@@ -17,7 +17,7 @@ describe "viewing projects, creating and editing", :js do
     stub_slack_user_list
     stub_slack_channel_list
 
-    travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))  # so we can check for fixed date of award
+    travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000")) # so we can check for fixed date of award
 
     allow_any_instance_of(Account).to receive(:send_award_notifications)
     stub_slack_user_list([{"id": "U99M9QYFQ", "team_id": "team id", "name": "bobjohnson", "profile": {"email": "bobjohnson@example.com"}}])
@@ -51,7 +51,7 @@ describe "viewing projects, creating and editing", :js do
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
     fill_in "Percentage of Revenue reserved", with: "7.99999"
-    fill_in "Maximum Royalties Awarded Per Quarter", with: "25000"
+    fill_in "Maximum Awarded Per Quarter", with: "25000"
     fill_in "Minimum Revenue Collected ", with: "150"
     fill_in "Contributor Minimum Payment", with: "26"
     check "Contributions are exclusive"
@@ -104,7 +104,7 @@ describe "viewing projects, creating and editing", :js do
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
     fill_in "Percentage of Revenue reserved", with: "8"
-    fill_in "Maximum Royalties Awarded Per Quarter", with: "27000"
+    fill_in "Maximum Awarded Per Quarter", with: "27000"
     fill_in "Minimum Revenue Collected ", with: "170"
     fill_in "Contributor Minimum Payment", with: "27"
     check "Contributions are exclusive"
@@ -218,7 +218,7 @@ describe "viewing projects, creating and editing", :js do
       expect_no_royalty_terms
     end
 
-    it 'are shown and hidden by selecting the project type', js: true  do
+    it 'are shown and hidden by selecting the project type', js: true do
       visit edit_project_path(project)
       expect_royalty_terms
 
@@ -256,18 +256,26 @@ describe "viewing projects, creating and editing", :js do
       expect_denomination_project_coin
     end
 
-    it 'are shown and hidden by selecting the project type', js: true  do
-      visit edit_project_path(project)
-      expect_denomination_usd
+    describe 'denominations are shown and hidden by selecting the project type', js: true do
+      before { visit edit_project_path(project) }
 
-      select "Project Coin direct payment", from: "Award Payment Type"
-      expect_denomination_project_coin
+      specify { expect_denomination_usd }
 
-      select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
-      expect_denomination_usd
+      specify do
+        select "Project Coin direct payment", from: "Award Payment Type"
+        expect(page.find('#project_payment_type').value).to eq('project_coin')
+        expect_denomination_project_coin
+      end
 
-      select "Royalties paid in Bitcoin (฿)", from: "Award Payment Type"
-      expect_denomination_btc
+      specify do
+        select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
+        expect_denomination_usd
+      end
+
+      specify do
+        select "Royalties paid in Bitcoin (฿)", from: "Award Payment Type"
+        expect_denomination_btc
+      end
     end
   end
 
@@ -286,7 +294,7 @@ describe "viewing projects, creating and editing", :js do
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
     fill_in "Percentage of Revenue reserved", with: "7.99999"
-    fill_in "Maximum Royalties Awarded Per Quarter", with: "25000"
+    fill_in "Maximum Awarded Per Quarter", with: "25000"
     fill_in "Minimum Revenue Collected ", with: "150"
     fill_in "Contributor Minimum Payment", with: "26"
     check "Contributions are exclusive"
@@ -301,12 +309,11 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Successfully sent award to @bobjohnson"
 
 
-
     click_on "Edit Project"
     contract_term_fields.each do |disabled_field_name|
       expect(page).to have_css("##{disabled_field_name}[disabled]")
     end
-    page.assert_selector('.fa-lock', count: 2)
+    page.assert_selector('.fa-lock', count: 3)
   end
 
   def contract_term_fields
@@ -323,21 +330,21 @@ describe "viewing projects, creating and editing", :js do
   end
 
   def expect_denomination_usd
-    page.assert_selector('.denomination', text: "$", minimum: 4)
-    page.assert_selector('.denomination', text: "฿", count: 0)
-    page.assert_selector('.denomination', text: "Project Coins", count: 0)
+    page.assert_selector('span.denomination', text: "$", minimum: 4)
+    page.assert_selector('span.denomination', text: "฿", count: 0)
+    page.assert_selector('span.denomination', text: "Project Coins", count: 0)
   end
 
   def expect_denomination_btc
-    page.assert_selector('.denomination', text: "$", count: 0)
-    page.assert_selector('.denomination', text: "฿", minimum: 4)
-    page.assert_selector('.denomination', text: "Project Coins", count: 0)
+    page.assert_selector('span.denomination', text: "$", count: 0)
+    page.assert_selector('span.denomination', text: "฿", minimum: 4)
+    page.assert_selector('span.denomination', text: "Project Coins", count: 0)
   end
 
   def expect_denomination_project_coin
-    page.assert_selector('.denomination', text: "$", count: 0)
-    page.assert_selector('.denomination', text: "฿", count: 0)
-    page.assert_selector('.denomination', text: "Project Coins", minimum: 1)
+    page.assert_selector('span.denomination', text: "$", count: 0)
+    page.assert_selector('span.denomination', text: "฿", count: 0)
+    page.assert_selector('span.denomination', text: "Project Coins", minimum: 1)
   end
 
   def expect_royalty_terms
@@ -350,9 +357,8 @@ describe "viewing projects, creating and editing", :js do
 
   def assert_royalty_terms(bool)
     to_or_not = bool ? 'to' : 'to_not'
-    expect(page).send(to_or_not, have_content("Royalty Legal Terms"))
+    expect(page).send(to_or_not, have_content("Royalty Terms"))
     expect(page).send(to_or_not, have_content("Percentage of Revenue "))
-    expect(page).send(to_or_not, have_content("Maximum Royalties Awarded Per Quarter"))
     expect(page).send(to_or_not, have_content("Minimum Revenue Collected"))
     expect(page).send(to_or_not, have_content("Contributor Minimum Payment"))
   end
