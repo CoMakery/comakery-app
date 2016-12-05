@@ -5,11 +5,13 @@ module Views
 
       def content
         form_for project do |f|
-          row {
-            column("large-6 small-12") {
-              div(class: 'content-box') {
-                h3 "Project Settings"
+          div(class: 'content-box') {
+            div(class: 'legal-box-header') {
+              h3 "Project Settings"
+            }
+            row {
 
+              column("large-6 small-12") {
                 with_errors(project, :title) {
                   label {
                     text "Title"
@@ -31,9 +33,20 @@ module Views
                   label {
                     text "Description"
                     f.text_area :description
-                    link_to("Styling with Markdown is Supported", "https://guides.github.com/features/mastering-markdown/", class: "help-text")
+                  }
+                  link_to("Styling with Markdown is Supported", "https://guides.github.com/features/mastering-markdown/", class: "help-text float-right")
+                }
+                br
+                with_errors(project, :public) {
+                  label {
+                    f.check_box :public
+                    text " Set project as publicly visible on CoMakery "
+                    question_tooltip "Decide whether or not to display this project in the CoMakery project index"
                   }
                 }
+              }
+
+              column("large-6 small-12") {
                 with_errors(project, :tracker) {
                   label {
                     i(class: "fa fa-tasks")
@@ -60,73 +73,96 @@ module Views
               }
             }
 
-            column("large-6 small-12") {
-              div(class: 'content-box') {
-                row {
-                  div(class: 'legal-box-header') {
-                    h3 "General Legal Terms"
-                    i(class:"fa fa-lock") if project.legal_terms_finalized?
+          }
+
+          div(class: 'content-box') {
+            row {
+
+              column("large-6 small-12") {
+                div(class: 'legal-box-header') {
+                  h3 "General Legal Terms"
+                  i(class: "fa fa-lock") if project.legal_terms_finalized?
+                }
+                with_errors(project, :legal_project_owner) {
+                  label {
+                    text "Project Owner's Legal Name "
+                    question_tooltip "The name of the company, association, legal entity, or individual that owns the project and administers awards."
+                    f.text_field :legal_project_owner, disabled: project.legal_terms_finalized?
                   }
-                  with_errors(project, :payment_type) {
-                    label {
-                      text "Award Payment Type"
-                      question_tooltip "Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project coins for their work contributions."
-                      f.select(:payment_type,
-                               [["Royalties paid in US Dollars ($)", "royalty_usd"],
-                                ["Royalties paid in Bitcoin (฿)", "royalty_btc"],
-                                # ["Royalties paid in Ether (Ξ)", "royalty_eth"],
-                                ["Project Coin direct payment", "project_coin"]],
-                               {selected: project.payment_type, include_blank: false},
-                               disabled: project.legal_terms_finalized?
-                      )
-                    }
+                }
+
+
+                with_errors(project, :exclusive_contributions) {
+                  label {
+                    f.check_box :exclusive_contributions, disabled: project.legal_terms_finalized?
+                    text "Contributions are exclusive to this project "
+                    question_tooltip "When contributions are exclusive contributors may not gives others license for their contributions."
                   }
-                  with_errors(project, :maximum_coins) {
-                    label {
-                      text "Maximum Awards"
-                      question_tooltip "Select it carefully,
+                }
+
+                with_errors(project, :require_confidentiality) {
+                  label {
+                    f.check_box :require_confidentiality, disabled: project.legal_terms_finalized?
+                    text "Require project and business confidentiality "
+                    question_tooltip "If project requires project confidentiality contributors agree to keep information about this agreement, other contributions to the Project, royalties awarded for other contributions, revenue received, royalties paid to the contributors and others, and all other unpublished information about the business, plans, and customers of the Project secret. Contributors also agree to keep copies of their contributions, copies of other materials contributed to the Project, and information about their content and purpose secret."
+                  }
+                }
+
+              }
+            }
+          }
+          div(class: 'content-box') {
+            row {
+
+              column("large-6 small-12") {
+                div(class: 'legal-box-header') {
+                  h3 "Award Terms"
+                  i(class: "fa fa-lock") if project.legal_terms_finalized?
+                }
+                with_errors(project, :payment_type) {
+                  label {
+                    text "Award Payment Type"
+                    question_tooltip "Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project coins for their work contributions."
+                    f.select(:payment_type,
+                             [["Royalties paid in US Dollars ($)", "royalty_usd"],
+                              ["Royalties paid in Bitcoin (฿)", "royalty_btc"],
+                              # ["Royalties paid in Ether (Ξ)", "royalty_eth"],
+                              ["Project Coin direct payment", "project_coin"]],
+                             {selected: project.payment_type, include_blank: false},
+                             disabled: project.legal_terms_finalized?
+                    )
+                  }
+                }
+                with_errors(project, :maximum_coins) {
+                  label {
+                    text "Maximum Awards"
+                    question_tooltip "Select it carefully,
                       it cannot be changed after it has been set.
                       For royalties this is the maximum amount of unpaid royalties.
                       For project coins this is the maximum number of project coins that can be issued.
                       When royalties are paid or project coins are burned they are not included in this total.
                       Select a high enough number
                       so you have room for the future."
-                      denomination_div f, :maximum_coins, type: "number", disabled: project.legal_terms_finalized?
-                    }
+                    denomination_div f, :maximum_coins, type: "number", disabled: project.legal_terms_finalized?
                   }
-
-                  with_errors(project, :legal_project_owner) {
-                    label {
-                      text "Project Owner's Legal Name "
-                      question_tooltip "The name of the company, association, legal entity, or individual that owns the project and administers awards."
-                      f.text_field :legal_project_owner, disabled: project.legal_terms_finalized?
-                    }
-                  }
-
-
-                  with_errors(project, :exclusive_contributions) {
-                    label {
-                      f.check_box :exclusive_contributions, disabled: project.legal_terms_finalized?
-                      text "Contributions are exclusive to this project "
-                      question_tooltip "When contributions are exclusive contributors may not gives others license for their contributions."
-                    }
-                  }
-
-                  with_errors(project, :require_confidentiality) {
-                    label {
-                      f.check_box :require_confidentiality, disabled: project.legal_terms_finalized?
-                      text "Require project and business confidentiality "
-                      question_tooltip "If project requires project confidentiality contributors agree to keep information about this agreement, other contributions to the Project, royalties awarded for other contributions, revenue received, royalties paid to the contributors and others, and all other unpublished information about the business, plans, and customers of the Project secret. Contributors also agree to keep copies of their contributions, copies of other materials contributed to the Project, and information about their content and purpose secret."
-                    }
-                  }
-                  ethereum_beta(f)
                 }
+
+                with_errors(project, :maximum_royalties_per_quarter) {
+                  label {
+                    text "Maximum Awarded Per Quarter"
+                    denomination_div f, :maximum_royalties_per_quarter,
+                                     type: :number, placeholder: "12000", disabled: project.legal_terms_finalized?
+                  }
+                }
+
+                ethereum_beta(f)
               }
-              div(class: "content-box #{'hide' if project.project_coin?}", id: 'royalty-legal-terms') {
-                row {
+
+              column("large-6 small-12") {
+                div(id: 'royalty-legal-terms', class: "#{'hide' if project.project_coin?}" ) {
                   div(class: 'legal-box-header') {
-                    h3 "Royalty Legal Terms"
-                    i(class:"fa fa-lock") if project.legal_terms_finalized?
+                    h3 "Royalty Terms"
+                    i(class: "fa fa-lock") if project.legal_terms_finalized?
                   }
 
 
@@ -135,16 +171,8 @@ module Views
                       text "Percentage of Revenue reserved for Contributor Royalties "
                       question_tooltip "The Project Owner agrees to count money customers pay either to license, or to use a hosted instance of, the Project as 'Revenue', starting from the date of this agreement. Money customers pay for consulting, training, custom development, support, and other services related to the Project does not count as Revenue."
                       # percentage_div { f.text_field :royalty_percentage, placeholder: "5%", class: 'input-group-field' }
-                      percentage_div f, :royalty_percentage, placeholder: "5%",
+                      percentage_div f, :royalty_percentage, placeholder: "5%", type: :number,
                                      disabled: project.legal_terms_finalized?
-                    }
-                  }
-
-                  with_errors(project, :maximum_royalties_per_quarter) {
-                    label {
-                      text "Maximum Royalties Awarded Per Quarter"
-                      denomination_div f,  :maximum_royalties_per_quarter,
-                                       type: :number, placeholder: "50000", disabled: project.legal_terms_finalized?
                     }
                   }
 
@@ -165,77 +193,91 @@ module Views
                                        disabled: project.legal_terms_finalized?
                     }
                   }
+                  h5 "Royalty Payment Schedule"
+                  table(class: 'royalty-calc') {
+                    thead {
+                      tr {
+                        th { text "Monthly Revenue" }
+                        th { text "Monthly Payment" }
+                        th { text "Months to Pay" }
+                      }
+                    }
+                    tbody {
+                      tr {
+                        td {}
+                        td {}
+                        td {}
+                      }
+                    }
+                  }
                 }
               }
             }
           }
-
-          div(class: "award-types") {
-            row {
-              column("small-4") {
-                text "Award Names"
+          div(class: 'content-box') {
+            div(class: "award-types") {
+              div(class: 'legal-box-header') {
+                h3 "Awards Offered"
               }
-              column("small-2") {
-                text "Amount "
-                question_tooltip "The number of coins a contributor will receive from this award. It cannot be changed after awards of this type have been issued."
-              }
-              column("small-3") {
-                text "Community Awardable "
-                question_tooltip "Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards."
-              }
-              column("small-2") {
-                text "Remove "
-                question_tooltip "Award type cannot be changed after awards have been issued."
-              }
-              column("small-1") {}
-            }
-
-            project.award_types.build(amount: 0) unless project.award_types.select { |award_type| award_type.amount == 0 }.present?
-            f.fields_for(:award_types) do |ff|
-              row(class: "award-type-row#{ff.object.amount == 0 ? " hide award-type-template" : ""}") {
-                ff.hidden_field :id
-                ff.hidden_field :_destroy, 'data-destroy': ''
+              row {
                 column("small-4") {
-                  ff.text_field :name
+                  text "Contribution Type"
                 }
                 column("small-2") {
-                  readonly = !ff.object&.modifiable?
-                  if readonly
-                    tooltip("Award types' amounts can't be modified if there are existing awards", if: readonly) do
-                      ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
-                    end
-                  else
-                    ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
-                  end
+                  text "Amount "
+                  question_tooltip "The number of coins a contributor will receive from this award. It cannot be changed after awards of this type have been issued."
                 }
-                column("small-3", class: "text-center") {
-                  ff.check_box :community_awardable
+                column("small-3") {
+                  text "Community Awardable "
+                  question_tooltip "Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards."
                 }
-                column("small-2", class: "text-center") {
-                  if ff.object&.modifiable?
-                    a("×", href: "#", 'data-mark-and-hide': '.award-type-row', class: "close")
-                  else
-                    text "(#{pluralize(ff.object.awards.count, "award")} sent)"
-                  end
+                column("small-2") {
+                  text "Remove "
+                  question_tooltip "Award type cannot be changed after awards have been issued."
                 }
                 column("small-1") {}
               }
-            end
-          }
-          row(class: "add-award-type") {
-            column {
-              p { a("+ add award type", href: "#", 'data-duplicate': '.award-type-template') }
+
+              project.award_types.build(amount: 0) unless project.award_types.select { |award_type| award_type.amount == 0 }.present?
+              f.fields_for(:award_types) do |ff|
+                row(class: "award-type-row#{ff.object.amount == 0 ? " hide award-type-template" : ""}") {
+                  ff.hidden_field :id
+                  ff.hidden_field :_destroy, 'data-destroy': ''
+                  column("small-4") {
+                    ff.text_field :name
+                  }
+                  column("small-2") {
+                    readonly = !ff.object&.modifiable?
+                    if readonly
+                      tooltip("Award types' amounts can't be modified if there are existing awards", if: readonly) do
+                        ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
+                      end
+                    else
+                      ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
+                    end
+                  }
+                  column("small-3", class: "text-center") {
+                    ff.check_box :community_awardable
+                  }
+                  column("small-2", class: "text-center") {
+                    if ff.object&.modifiable?
+                      a("×", href: "#", 'data-mark-and-hide': '.award-type-row', class: "close")
+                    else
+                      text "(#{pluralize(ff.object.awards.count, "award")} sent)"
+                    end
+                  }
+                  column("small-1") {}
+                }
+              end
+            }
+            row(class: "add-award-type") {
+              column {
+                p { a("+ add award type", href: "#", 'data-duplicate': '.award-type-template') }
+              }
             }
           }
 
           full_row {
-            with_errors(project, :public) {
-              label {
-                f.check_box :public
-                text " Set project as publicly visible on CoMakery "
-                question_tooltip "Decide whether or not to display this project in the CoMakery project index"
-              }
-            }
             f.submit "Save", class: buttonish(:expand)
           }
         end
