@@ -56,10 +56,28 @@ $ ->
     switch $('#project_payment_type option:selected').val()
       when 'project_coin'
         $('#royalty-legal-terms').addClass('hide')
-        $('.input-group-label.denomination').html('Project Coins')
+        $('span.denomination').html('Project Coins')
       when 'royalty_usd'
         $('#royalty-legal-terms').removeClass('hide')
-        $('.input-group-label.denomination').html('$')
+        $('span.denomination').html('$')
       when 'royalty_btc'
         $('#royalty-legal-terms').removeClass('hide')
-        $('.input-group-label.denomination').html('฿')
+        $('span.denomination').html('฿')
+
+  royaltyCalc()
+  $('#project_royalty_percentage, #project_maximum_coins').on 'ready change', (e) ->
+    royaltyCalc()
+
+royaltyCalc = () ->
+  percentage = $('#project_royalty_percentage').val()
+  maxAwarded = $('#project_maximum_coins').val()
+
+  schedule = $("<tbody>")
+
+  for monthlyRevenue in [100, 1000, 10000, 100000]
+    monthlyPayment = monthlyRevenue * percentage / 100
+    yearsToPay = maxAwarded / monthlyPayment
+    denomination = "<span class='denomination'>#{$('span.denomination').html()}</span>"
+    $(schedule).append("<tr><td>#{denomination}#{monthlyRevenue.toFixed()}</td><td>#{denomination}#{monthlyPayment.toFixed()}</td><td>#{yearsToPay.toFixed()}</td></tr>")
+
+  $('.royalty-calc tbody').replaceWith(schedule)
