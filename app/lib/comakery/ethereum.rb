@@ -43,16 +43,13 @@ class Comakery::Ethereum
       begin
         response.parsed_response.fetch(response_key)
       rescue => error
-        message = "Error received: #{response.parsed_response.inspect}
+        raise "Error received: #{response.parsed_response.inspect}
           From request to: #{url}
           With params: #{JSON.pretty_generate params}
           Original error:
           #{error.message}
           #{error.backtrace}
         "
-        rich_error = RuntimeError.new(message)
-        Airbrake.notify(rich_error)
-        raise rich_error
       end
     end
   end
