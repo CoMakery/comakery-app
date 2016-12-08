@@ -48,7 +48,7 @@ class Comakery::Ethereum
           with params: #{JSON.pretty_generate params}
         "
         Airbrake.notify(Exception.new(message))
-        nil
+        raise error
       end
     end
   end
