@@ -101,6 +101,19 @@ class Views::Projects::Show < Views::Projects::Base
         column("large-6 medium-12") {
 
           div(id: "award-send", class: "content-box") {
+            row(class: "awarded-info-header") {
+              if can_award
+                h3 "Award #{project.payment_description}"
+              else
+                h3 "Awards"
+              end
+              div(class: "float-right") {
+                a(href: project_licenses_path(project), class: "text-link coin-numbers") {
+                  # i(class: "fa fa-history")
+                  text " Contribution License"
+                }
+              }
+            }
             render partial: "award_send"
           }
         }

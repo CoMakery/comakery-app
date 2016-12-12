@@ -65,12 +65,12 @@ describe "viewing projects, creating and editing", :js do
       expect(page).to have_css('.royalty-terms')
       expect(page).to have_content "Mindful Inc"
       expect(page).to have_content "7.99999%"
-      expect(page).to have_content "$100,000 maximum royalty"
+      expect(page).to have_content "Maximum Royalties: $100,000"
       expect(page).to have_content "$25,000"
-      expect(page).to have_content "$150 minimum revenue"
-      expect(page).to have_content "$26 minimum payment"
-      expect(page).to have_content "Contributions are exclusive"
-      expect(page).to have_content "Confidentiality is required"
+      expect(page).to have_content "Minimum Revenue: $150"
+      expect(page).to have_content "Contributor Minimum Payment: $26"
+      expect(page).to have_content "Contributions: are exclusive"
+      expect(page).to have_content "Business Confidentiality: is required"
     end
     within("#award-send") { expect(page).to have_content /award royalties/i }
 
@@ -118,12 +118,12 @@ describe "viewing projects, creating and editing", :js do
       expect(page).to have_css('.royalty-terms')
       expect(page).to have_content "Mindful Inc"
       expect(page).to have_content "8.0%"
-      expect(page).to have_content "฿200,000 maximum royalty"
+      expect(page).to have_content "Maximum Royalties: ฿200,000"
       expect(page).to have_content "฿27,000"
-      expect(page).to have_content "฿170 minimum revenue"
-      expect(page).to have_content "฿27 minimum payment"
-      expect(page).to have_content "Contributions are exclusive"
-      expect(page).to have_content "Confidentiality is required"
+      expect(page).to have_content "Minimum Revenue: ฿170 "
+      expect(page).to have_content "Contributor Minimum Payment: ฿27"
+      expect(page).to have_content "Contributions: are exclusive"
+      expect(page).to have_content "Business Confidentiality: is required"
     end
     within("#award-send") { expect(page).to have_content /award royalties/i }
 
@@ -165,8 +165,9 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "0 mine"
     within ".project-terms" do
       expect(page).to have_content "Mindful Inc"
-      expect(page).to have_content "Contributions are exclusive"
-      expect(page).to have_content "Confidentiality is required"
+      expect(page).to have_content "Contributions: are exclusive"
+      expect(page).to have_content "Business Confidentiality: is required"
+      expect(page).to have_content "Project Confidentiality: is required"
     end
 
     within ".project-terms" do
