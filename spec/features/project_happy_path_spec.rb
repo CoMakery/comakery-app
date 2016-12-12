@@ -92,7 +92,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link "Project Tasks"
 
-    expect(page).to have_content "$20,000,000 max"
+    expect(page).to have_content "Maximum Royalties: $20,000,000"
     expect(page).to have_content "$0 awarded"
     expect(page).to have_content "$0 mine"
 

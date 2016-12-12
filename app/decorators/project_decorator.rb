@@ -48,6 +48,13 @@ class ProjectDecorator < Draper::Decorator
     "#{project.royalty_percentage}%"
   end
 
+  def require_confidentiality_text
+    project.require_confidentiality ? "is required" : "is not required"
+  end
+
+  def exclusive_contributions_text
+    project.exclusive_contributions ? "are exclusive" : "are not exclusive"
+  end
   private
 
   def self.pretty_currencies(*currency_methods)

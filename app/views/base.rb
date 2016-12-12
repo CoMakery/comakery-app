@@ -65,4 +65,11 @@ module Views
       Comakery::Markdown.to_html(markdown)
     end
   end
+
+
+  def li_if(variable)
+    if variable.present?
+      li { yield }
+    end
+  end
 end
