@@ -29,26 +29,29 @@ describe "projects/_award_send.html.rb" do
 
   it 'renders all fields for royalty projects when present' do
     render
-    expect(rendered).to include('The Legal Owner')
-    expect(rendered).to include('royalty-terms')
-    expect(rendered).to include "8.0% of revenue is reserved to pay contributor"
-    expect(rendered).to include "$200,000 maximum royalty awards"
-    expect(rendered).to include "$27,000 maximum royalties can be awarded each quarter"
-    expect(rendered).to include "$170 minimum revenue"
-    expect(rendered).to include "$27 minimum payment"
-    expect(rendered).to include "Contributions are exclusive"
-    expect(rendered).to include "Confidentiality is required"
+    expect(rendered).to have_content 'The Legal Owner'
+    expect(rendered).to have_css '.royalty-terms'
+    expect(rendered).to have_content "Revenue Reserved To Pay Contributor Royalties: 8.0%"
+    expect(rendered).to have_content "Maximum Royalties: $200,000"
+    expect(rendered).to have_content "Maximum Royalties Per Quarter: $27,000"
+    expect(rendered).to have_content "Minimum Revenue: $170"
+    expect(rendered).to have_content "Contributor Minimum Payment: $27"
+    expect(rendered).to have_content "Contributions: are exclusive"
+    expect(rendered).to have_content "Business Confidentiality: is required"
+    expect(rendered).to have_content "Project Confidentiality: is required"
   end
 
   specify do
     project.update!(exclusive_contributions: false)
     render
-    expect(rendered).to_not include "exclusive"
+
+    expect(rendered).to have_content "Contributions: are not exclusive"
   end
 
   specify do
     project.update!(require_confidentiality: false)
     render
-    expect(rendered).to_not include "Confidentiality is required"
+    expect(rendered).to have_content "Business Confidentiality: is not required"
+    expect(rendered).to have_content "Project Confidentiality: is not required"
   end
 end
