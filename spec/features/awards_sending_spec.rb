@@ -69,13 +69,14 @@ describe "awarding users" do
 
       expect(page).to have_content "@bobjohnson"
 
-      click_link("Back to project")
+      click_link("Overview")
 
       within(".awarded-info") do
         expect(page).to have_content "$1,000 (0.01%) awarded"
         expect(page).to have_content "$1,000 mine"
       end
 
+      click_link "Contributors"
       within('.award-rows') do
         expect(page.all("img[src='https://slack.example.com/team-image-34-px.jpg']").size).to eq(1)
         expect(page).to have_content "@bobjohnson"
@@ -110,7 +111,7 @@ describe "awarding users" do
 
     expect(page).to have_content("History")
 
-    click_link "Back to project"
+    click_link "Overview"
 
     expect(page).to have_content("Project that needs awards")
 
@@ -147,7 +148,7 @@ describe "awarding users" do
 
     expect(page.all(".award-rows .award-row").size).to eq(1)
 
-    click_link "Back to project"
+    click_link "Overview"
 
     expect(page).to have_content("Project that needs awards")
 

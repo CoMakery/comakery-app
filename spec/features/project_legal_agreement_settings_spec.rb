@@ -79,6 +79,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
 
     click_button "Send"
+    click_link "Contributors"
     within('.award-rows') { expect(page).to have_content "@bobjohnson $100 $0 $100" }
 
     click_link "History"
@@ -132,6 +133,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
 
     click_button "Send"
+    click_link "Contributors"
     within('.award-rows') { expect(page).to have_content "@bobjohnson ฿100 ฿0 ฿100" }
 
     click_link "History"
@@ -184,6 +186,8 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
 
     click_button "Send"
+    click_link "Contributors"
+
     within('.award-rows') { expect(page).to have_content "@bobjohnson 100 0 100" }
 
     click_link "History"

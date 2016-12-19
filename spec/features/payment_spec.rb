@@ -19,7 +19,7 @@ describe "payments" do
     it "populates shows the earned, paid, remaining" do
       login(owner_account)
 
-      visit project_path(project)
+      visit project_contributors_path(project)
       within(".award-row") do
         within('.contributor') do
           expect(page).to have_content "Sherman Yessir"
