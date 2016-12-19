@@ -11,9 +11,6 @@
 body {
   background-color: white;
 
-  .top-bar-container {
-    margin-bottom: 2em;
-  }
   &.projects-landing.signed-out, &.projects-show {
     .top-bar-container {
       border-bottom: 0;
@@ -199,5 +196,16 @@ ul {
   li {
     list-style: none;
     margin-bottom: 5px;
+  }
+}
+.project-nav {
+  margin-bottom: 1em;
+  ul {
+    li {
+      font-size: 18px;
+      display: inline;
+      float: left;
+      margin-bottom: 0px;
+    }
   }
 }
