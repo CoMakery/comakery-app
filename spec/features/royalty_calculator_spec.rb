@@ -46,7 +46,7 @@ describe "viewing projects, creating and editing", :js do
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
     select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
-    fill_in "Maximum Awards", with: "100000"
+    fill_in "Maximum Unpaid Balance", with: "100000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
@@ -64,7 +64,7 @@ describe "viewing projects, creating and editing", :js do
 
     # valid #1
     fill_in "Percentage of Revenue reserved", with: "10"
-    fill_in "Maximum Awards", with: "12000"
+    fill_in "Maximum Unpaid Balance", with: "12000"
     within('.royalty-calc tbody') do
       expect(page).to have_content('$10')
       expect(page).to have_content('$100')
@@ -79,7 +79,7 @@ describe "viewing projects, creating and editing", :js do
 
     # valid #2
     fill_in "Percentage of Revenue reserved", with: "5"
-    fill_in "Maximum Awards", with: "24000"
+    fill_in "Maximum Unpaid Balance", with: "24000"
 
     within('.royalty-calc tbody') do
       #revenue

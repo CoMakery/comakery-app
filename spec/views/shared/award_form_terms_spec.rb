@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "projects/_award_send.html.rb" do
+describe "shared/award_form_terms.html.rb" do
 
   let(:project) do
     create(
@@ -19,20 +19,14 @@ describe "projects/_award_send.html.rb" do
 
   before do
     assign :project, project
-    assign :award, build(:award)
-    assign :award_data, {award_amounts: {total_coins_issued: 0}}
-    assign :awardable_authentications, []
-    assign :awardable_types, []
-    assign :can_award, false
-    allow(view).to receive(:policy).and_return(double("project policy", edit?: false))
   end
 
   it 'renders all fields for royalty projects when present' do
     render
-    expect(rendered).to have_content 'The Legal Owner'
+    expect(rendered).to have_content "Project Name"
     expect(rendered).to have_css '.royalty-terms'
     expect(rendered).to have_content "Revenue Reserved To Pay Contributor Royalties: 8.0%"
-    expect(rendered).to have_content "Maximum Royalties: $200,000"
+    expect(rendered).to have_content "Maximum Unpaid Royalties Balance: $200,000"
     expect(rendered).to have_content "Maximum Royalties Per Quarter: $27,000"
     expect(rendered).to have_content "Minimum Revenue: $170"
     expect(rendered).to have_content "Contributor Minimum Payment: $27"

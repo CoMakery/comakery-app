@@ -2,7 +2,7 @@ class Views::Projects::AwardSend < Views::Base
   needs :project, :award, :awardable_authentications, :awardable_types, :can_award
 
   def content
-    div(id: "award-send", class: "content-box") {
+    div(id: "award-send") {
       row(class: "awarded-info-header") {
         if can_award
           h3 "Award #{project.payment_description}"
@@ -63,16 +63,6 @@ class Views::Projects::AwardSend < Views::Base
               }
             }
           end
-        }
-
-        row(class: 'project-terms') {
-          h4 "Project Terms"
-          render 'shared/award_form_terms'
-          div(class: 'help-text') {
-            text "This is the 'Award Form' that the "
-            a(href: project_licenses_path(project)) { text "contribution license" }
-            text " references for calculating 'Contributor Royalties'."
-          }
         }
       end
     }

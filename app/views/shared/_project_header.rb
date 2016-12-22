@@ -20,6 +20,13 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           }
 
           li {
+            a(href: project_awards_path(project)) {
+              # i(class: "fa fa-history")
+              text "Awards"
+            }
+          }
+
+          li {
             a(href: project_contributors_path(project)) {
               text " Contributors"
             }
@@ -27,23 +34,8 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
 
           li {
             a(href: project_licenses_path(project)) {
-              i(class: "fa fa-gavel")
+              # i(class: "fa fa-gavel")
               text "Contribution License"
-            }
-          }
-
-          li {
-            a(href: project_awards_path(project)) {
-              i(class: "fa fa-history")
-              text "History"
-            }
-          }
-
-
-          li_if(policy(project).edit?) {
-            a(class: "edit", href: edit_project_path(project)) {
-              i(class: "fa fa-pencil") {}
-              text "Edit Project"
             }
           }
 
@@ -64,6 +56,14 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           li_if(project.ethereum_contract_explorer_url) {
             link_to "Ξthereum Smart Contract", project.ethereum_contract_explorer_url,
                     target: "_blank", class: "text-link"
+          }
+
+
+          li_if(policy(project).edit?) {
+            a(class: "edit", href: edit_project_path(project)) {
+              i(class: "fa fa-pencil") {}
+              text "Settings"
+            }
           }
         }
       }
