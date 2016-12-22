@@ -8,7 +8,7 @@ class Views::Shared::AwardFormTerms < Views::Base
       term "Contributions", project.exclusive_contributions_text
       term "Business Confidentiality", project.require_confidentiality_text
       term "Project confidentiality", project.require_confidentiality_text
-      term "Maximum #{project.payment_description}", project.maximum_coins_pretty
+      term "Maximum Unpaid #{project.payment_description} Balance", project.maximum_coins_pretty
       unless project.project_coin?
         div(class: 'royalty-terms') {
           term "Revenue reserved to pay Contributor Royalties", project.royalty_percentage_pretty

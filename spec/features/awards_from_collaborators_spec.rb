@@ -22,7 +22,7 @@ describe "Collaborator projects" do
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     select "a-channel-name", from: "Slack Channel"
     select "Project Coin direct payment", from: "Award Payment Type"
-    fill_in "Maximum Awards", with: "210000"
+    fill_in "Maximum Unpaid Balance", with: "210000"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
     check "Contributions are exclusive"
     check "Require project and business confidentiality"
