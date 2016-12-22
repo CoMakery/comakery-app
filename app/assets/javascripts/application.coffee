@@ -78,6 +78,6 @@ royaltyCalc = () ->
     monthlyPayment = monthlyRevenue * percentage / 100
     yearsToPay = maxAwarded / monthlyPayment
     denomination = "<span class='denomination'>#{$('span.denomination').html()}</span>"
-    $(schedule).append("<tr><td>#{denomination}#{monthlyRevenue.toFixed()}</td><td>#{denomination}#{monthlyPayment.toFixed()}</td><td>#{yearsToPay.toFixed()}</td></tr>")
+    $(schedule).append("<tr><td>#{denomination}#{monthlyRevenue.toFixed()}</td><td>#{denomination}#{monthlyPayment.toFixed(2)}</td><td>#{yearsToPay.toFixed(2)}</td></tr>")
 
   $('.royalty-calc tbody').replaceWith(schedule)

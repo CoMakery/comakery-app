@@ -89,10 +89,6 @@
   margin-bottom: 1em;
 }
 
-.awarded-info {
-
-}
-
 .awarded-info-header {
   h1, h2, h3 {display: inline;}
 
@@ -105,10 +101,18 @@
   font-size: .8em;
 }
 
-.awarded-info {
+.description-stats {
   li {
     margin-bottom: 2em;
     vertical-align: top;
+    text-indent: 0em;
+  }
+  span {
+    display: inline;
+    margin-right: 5px;
+  }
+  span.balance-type {
+    font-size: 13px;
   }
 }
 
@@ -124,3 +128,8 @@ h4 {
   border-bottom: 1px solid $iron;
   margin-bottom: 10px;
 }
+
+form {
+  margin-right: 25px;
+}
+

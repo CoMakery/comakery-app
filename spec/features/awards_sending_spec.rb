@@ -23,7 +23,7 @@ describe "awarding users" do
   let!(:different_team_authentication) { create(:authentication, slack_user_name: 'different', slack_user_id: 'different id', slack_first_name: "Different", slack_last_name: "Different", account: different_team_account, slack_team_id: "different team id", slack_image_32_url: "http://avatar.com/different_team_account_avatar.jpg") }
 
   before do
-    travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))  # so we can check for fixed date of award
+    travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000")) # so we can check for fixed date of award
 
     expect_any_instance_of(Account).to receive(:send_award_notifications)
     stub_slack_user_list([{"id": "U99M9QYFQ", "team_id": "team id", "name": "bobjohnson", "profile": {"email": "bobjohnson@example.com"}}])
@@ -50,7 +50,7 @@ describe "awarding users" do
 
       visit project_path(project)
 
-      expect(page).to have_content "$0 mine"
+      expect(page).to have_content "$0Royalties"
 
       choose "Small"
       expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson"])
@@ -72,8 +72,8 @@ describe "awarding users" do
       click_link("Overview")
 
       within(".awarded-info") do
-        expect(page).to have_content "$1,000 (0.01%) awarded"
-        expect(page).to have_content "$1,000 mine"
+        expect(page).to have_content "My Balance$1,000Royalties"
+        expect(page).to have_content "Project Balance$1,000Royalties"
       end
 
       click_link "Contributors"
@@ -105,7 +105,7 @@ describe "awarding users" do
 
     visit project_path(project)
 
-    click_link "History"
+    click_link "Awards"
 
     expect(page.all(".award-rows .award-row").size).to eq(0)
 
@@ -134,7 +134,7 @@ describe "awarding users" do
 
     expect(page).to have_content "Successfully sent award to @bobjohnson"
 
-    click_link "History"
+    click_link "Awards"
 
     expect(EthereumTokenIssueJob.jobs.length).to eq(0)
 
@@ -160,7 +160,7 @@ describe "awarding users" do
   end
 
   it 'awarding a user with an ethereum account' do
-    bob_account = create(:account, email: "bobjohnson@example.com", ethereum_wallet: '0x'+'a'*40 )
+    bob_account = create(:account, email: "bobjohnson@example.com", ethereum_wallet: '0x'+'a'*40)
 
     login(owner_account)
     visit project_path(project)

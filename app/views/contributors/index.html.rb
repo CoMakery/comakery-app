@@ -17,7 +17,6 @@ class Views::Contributors::Index < Views::Projects::Base
       }
 
       full_row {
-
           if award_data[:contributions_summary].present?
             div(class: "table-scroll") {
               table(class: "award-rows", style: "width: 100%") {

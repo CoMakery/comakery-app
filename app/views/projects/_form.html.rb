@@ -135,7 +135,7 @@ module Views
                 }
                 with_errors(project, :maximum_coins) {
                   label {
-                    text "Maximum Awards"
+                    text "Maximum Unpaid Balance"
                     question_tooltip "Select it carefully,
                       it cannot be changed after it has been set.
                       For royalties this is the maximum amount of unpaid royalties.

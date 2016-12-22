@@ -43,17 +43,17 @@ class Views::Projects::Landing < Views::Projects::Base
               column("small-12 large-4") {
                 div(class:"number") { text "1" }
                 h4 "Contribute"
-                p "Join a project or start one for your Slack team. Contribute code, design, marketing, or ideas."
+                p "Join a project or start one. Contribute code, design, content, marketing, or ideas."
               }
               column("small-12 large-4") {
                 div(class:"number") { text "2" }
-                h4 "Receive"
-                p "Receive project coin awards and recognition for your contributions."
+                h4 "Earn"
+                p "Earn awards of future revenue. Receive recognition for your skills and unlock new opportunities."
               }
               column("small-12 large-4") {
                 div(class:"number") { text "3" }
-                h4 "Share Revenue"
-                p "Project coins become cash when your project earns revenue."
+                h4 "Share The Upside"
+                p "Get paid your fair share of revenue."
               }
             }
           }

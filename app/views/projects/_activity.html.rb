@@ -6,7 +6,6 @@ class Views::Projects::Activity < Views::Base
       row(class: "awarded-info-header") {
         h3 "Project Activity"
       }
-
       row {
         ul(class: 'menu simple awarded-info') {
           li {

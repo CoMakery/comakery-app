@@ -46,7 +46,7 @@ describe "viewing projects, creating and editing", :js do
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
     select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
-    fill_in "Maximum Awards", with: "100000"
+    fill_in "Maximum Unpaid Balance", with: "100000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
@@ -59,13 +59,13 @@ describe "viewing projects, creating and editing", :js do
 
     click_on "Save"
     expect(page).to have_content "Project created"
-    expect(page).to have_content "$0 mine"
-    expect(page).to have_content "$0 awarded"
+    expect(page).to have_content "My Balance $0"
+    expect(page).to have_content "Royalties Project Balance $0"
     within ".project-terms" do
       expect(page).to have_css('.royalty-terms')
       expect(page).to have_content "Mindful Inc"
       expect(page).to have_content "7.99999%"
-      expect(page).to have_content "Maximum Royalties: $100,000"
+      expect(page).to have_content "Maximum Unpaid Royalties Balance: $100,000"
       expect(page).to have_content "$25,000"
       expect(page).to have_content "Minimum Revenue: $150"
       expect(page).to have_content "Contributor Minimum Payment: $26"
@@ -82,7 +82,7 @@ describe "viewing projects, creating and editing", :js do
     click_link "Contributors"
     within('.award-rows') { expect(page).to have_content "@bobjohnson $100 $0 $100" }
 
-    click_link "History"
+    click_link "Awards"
     within(".header-row") { expect(page).to have_content /Royalties Earned/i }
     expect(page).to have_content "$100"
 
@@ -100,7 +100,7 @@ describe "viewing projects, creating and editing", :js do
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
     select "Royalties paid in Bitcoin (฿)", from: "Award Payment Type"
-    fill_in "Maximum Awards", with: "200000"
+    fill_in "Maximum Unpaid Balance", with: "200000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
@@ -113,13 +113,13 @@ describe "viewing projects, creating and editing", :js do
 
     click_on "Save"
     expect(page).to have_content "Project created"
-    expect(page).to have_content "฿0 mine"
-    expect(page).to have_content "฿0 awarded"
+    expect(page).to have_content "My Balance ฿0"
+    expect(page).to have_content "Project Balance ฿0"
     within ".project-terms" do
       expect(page).to have_css('.royalty-terms')
       expect(page).to have_content "Mindful Inc"
       expect(page).to have_content "8.0%"
-      expect(page).to have_content "Maximum Royalties: ฿200,000"
+      expect(page).to have_content "฿200,000"
       expect(page).to have_content "฿27,000"
       expect(page).to have_content "Minimum Revenue: ฿170 "
       expect(page).to have_content "Contributor Minimum Payment: ฿27"
@@ -136,7 +136,7 @@ describe "viewing projects, creating and editing", :js do
     click_link "Contributors"
     within('.award-rows') { expect(page).to have_content "@bobjohnson ฿100 ฿0 ฿100" }
 
-    click_link "History"
+    click_link "Awards"
     within(".header-row") { expect(page).to have_content /Royalties Earned/i }
     expect(page).to have_content "฿100"
 
@@ -154,7 +154,7 @@ describe "viewing projects, creating and editing", :js do
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
     select "Project Coin direct payment", from: "Award Payment Type"
-    fill_in "Maximum Awards", with: "210000"
+    fill_in "Maximum Unpaid Balance", with: "210000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
@@ -163,8 +163,8 @@ describe "viewing projects, creating and editing", :js do
 
     click_on "Save"
     expect(page).to have_content "Project created"
-    expect(page).to have_content "0 awarded"
-    expect(page).to have_content "0 mine"
+    expect(page).to have_content "My Balance 0"
+    expect(page).to have_content "Project Balance 0"
     within ".project-terms" do
       expect(page).to have_content "Mindful Inc"
       expect(page).to have_content "Contributions: are exclusive"
@@ -190,7 +190,7 @@ describe "viewing projects, creating and editing", :js do
 
     within('.award-rows') { expect(page).to have_content "@bobjohnson 100 0 100" }
 
-    click_link "History"
+    click_link "Awards"
     within(".header-row") { expect(page).to have_content /Project Coins Earned/i }
     expect(page).to have_content "100"
 
@@ -294,7 +294,7 @@ describe "viewing projects, creating and editing", :js do
 
     fill_in "Title", with: "Mindfulness App"
     select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
-    fill_in "Maximum Awards", with: "100000"
+    fill_in "Maximum Unpaid Balance", with: "100000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
@@ -314,7 +314,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Successfully sent award to @bobjohnson"
 
 
-    click_on "Edit Project"
+    click_on "Settings"
     contract_term_fields.each do |disabled_field_name|
       expect(page).to have_css("##{disabled_field_name}[disabled]")
     end

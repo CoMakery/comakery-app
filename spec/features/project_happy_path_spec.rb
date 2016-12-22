@@ -38,8 +38,8 @@ describe "viewing projects, creating and editing", :js do
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public")).not_to be_checked
 
-    expect(find_field("Maximum Awards")['value']).to eq("12000")
-    fill_in "Maximum Awards", with: "20000000"
+    expect(find_field("Maximum Unpaid Balance")['value']).to eq("12000")
+    fill_in "Maximum Unpaid Balance", with: "20000000"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
@@ -92,9 +92,9 @@ describe "viewing projects, creating and editing", :js do
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link "Project Tasks"
 
-    expect(page).to have_content "Maximum Royalties: $20,000,000"
-    expect(page).to have_content "$0 awarded"
-    expect(page).to have_content "$0 mine"
+    expect(page).to have_content "Maximum Unpaid Royalties Balance: $20,000,000"
+    expect(page).to have_content "Royalties Project Balance $0"
+    expect(page).to have_content "My Balance $0"
 
     expect(page).to have_content "Lead by Glenn Spanky"
     expect(page).to have_content "Citizen Code"
@@ -115,7 +115,7 @@ describe "viewing projects, creating and editing", :js do
     expect(award_type_rows[3]).to have_content "This is a super big award type"
     expect(award_type_rows[3]).to have_content "5,000"
 
-    click_on "Edit"
+    click_on "Settings"
 
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
 
@@ -260,8 +260,8 @@ describe "viewing projects, creating and editing", :js do
     visit project_path(project)
 
     within(".awarded-info") do
-      expect(page).to have_content "$0 awarded"
-      expect(page).to have_content "$0 mine"
+      expect(page).to have_content "My Balance $0"
+      expect(page).to have_content "Royalties Project Balance $0"
     end
 
     create(:award, award_type: create(:award_type, project: project, amount: 100_000))
@@ -269,8 +269,8 @@ describe "viewing projects, creating and editing", :js do
     visit project_path(project)
 
     within(".awarded-info") do
-      expect(page).to have_content "$100,000 (1.00%) awarded"
-      expect(page).to have_content "$0 mine"
+      expect(page).to have_content "Royalties Project Balance $100,000"
+      expect(page).to have_content "My Balance $0"
     end
   end
 end
