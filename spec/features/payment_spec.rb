@@ -21,14 +21,12 @@ describe "payments" do
 
       visit project_contributors_path(project)
       within(".award-row") do
-        within('.contributor') do
-          expect(page).to have_content "Sherman Yessir"
-        end
-        within('.earned') { expect(page).to have_content '$10' }
-        within('.paid') { expect(page).to have_content '$3' }
-        within('.remaining') { expect(page).to have_content '$7' }
+        expect(page.find('.contributor')).to have_content "Sherman Yessir"
+        expect(page.find('.award-holdings')).to have_content '10'
+        expect(page.find('.holdings-value')).to have_content '$0'
+        expect(page.find('.awards-earned')).to have_content '10'
+        expect(page.find('.paid')).to have_content '$0'
       end
-
     end
   end
 

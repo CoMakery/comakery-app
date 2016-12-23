@@ -7,9 +7,17 @@ class Views::Projects::AwardSend < Views::Base
         if can_award
           h3 "Award #{project.payment_description}"
         else
-          h3 "Awards"
+          h3 "Earn #{project.payment_description}"
         end
       }
+      row(class: 'help-text') {
+        text "The "
+        a(href: project_licenses_path(project)) { text "Contribution License" }
+        text " refers to this "
+        strong "'Award Form' "
+        text "for calculating Contributor Royalties."
+      }
+      br
       form_for [project, award] do |f|
         row(class: "award-types") {
           project.award_types.order("amount asc").each do |award_type|
@@ -25,7 +33,7 @@ class Views::Projects::AwardSend < Views::Base
                       end
                       column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : "small-12") {
                         span(award_type.name)
-                        text " (#{project.currency_denomination}#{number_with_precision(award_type.amount, precision: 0, delimiter: ',')})"
+                        text " (#{number_with_precision(award_type.amount, precision: 0, delimiter: ',')})"
                         text " (Community Awardable)" if award_type.community_awardable?
                       }
                     }

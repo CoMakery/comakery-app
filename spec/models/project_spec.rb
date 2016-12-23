@@ -3,17 +3,18 @@ require 'rails_helper'
 describe Project do
   describe 'validations' do
     it 'requires attributes' do
-      expect(Project.new(payment_type: 'project_coin').tap(&:valid?).errors.full_messages.sort).to eq(["Description can't be blank",
-                                                                         "Maximum coins must be greater than 0",
-                                                                         "Owner account can't be blank",
-                                                                         "Slack channel can't be blank",
-                                                                         "Slack team can't be blank",
-                                                                         "Slack team image 132 url can't be blank",
-                                                                         "Slack team image 34 url can't be blank",
-                                                                         "Slack team name can't be blank",
-                                                                         "Title can't be blank",
-                                                                         "Legal project owner can't be blank"
-                                                                        ].sort)
+      expect(Project.new(payment_type: 'project_coin').tap(&:valid?).errors.full_messages.sort).
+          to eq(["Description can't be blank",
+                 "Maximum coins must be greater than 0",
+                 "Owner account can't be blank",
+                 "Slack channel can't be blank",
+                 "Slack team can't be blank",
+                 "Slack team image 132 url can't be blank",
+                 "Slack team image 34 url can't be blank",
+                 "Slack team name can't be blank",
+                 "Title can't be blank",
+                 "Legal project owner can't be blank"
+                ].sort)
 
       expect(Project.new(slack_team_domain: "").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain can't be blank")
       expect(Project.new(slack_team_domain: "XX").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
@@ -24,21 +25,11 @@ describe Project do
       expect(Project.new(slack_team_domain: "a").tap { |p| p.valid? }.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
     end
 
-    describe 'royalty validations' do
-      let(:project) { build :project, royalty_percentage: nil,  maximum_royalties_per_quarter: nil, minimum_revenue: nil, minimum_payment: nil }
+    describe 'payment types' do
+      let(:project) { build :project, royalty_percentage: nil, maximum_royalties_per_month: nil }
 
       it 'for USD projects' do
-        project.payment_type = 'royalty_usd'
-        expect_royalty_fields_present
-      end
-
-      it 'for BTC projects' do
-        project.payment_type = 'royalty_btc'
-        expect_royalty_fields_present
-      end
-
-      it 'for ETH projects' do
-        project.payment_type = 'royalty_eth'
+        project.payment_type = 'revenue_share'
         expect_royalty_fields_present
       end
 
@@ -49,10 +40,31 @@ describe Project do
 
       def expect_royalty_fields_present
         expect(project.tap(&:valid?).errors.full_messages.sort).to eq(["Royalty percentage can't be blank",
-                                                                       "Maximum royalties per quarter can't be blank",
-                                                                       "Minimum revenue can't be blank",
-                                                                       "Minimum payment can't be blank",
+                                                                       "Maximum royalties per month can't be blank",
                                                                       ].sort)
+      end
+    end
+
+    describe 'denomination enumeration' do
+      let(:project) { build :project }
+
+      it 'default' do
+        expect(Project.new.denomination).to eq('USD')
+      end
+
+      specify do
+        project.USD!
+        expect(project.denomination).to eq('USD')
+      end
+
+      specify do
+        project.BTC!
+        expect(project.denomination).to eq('BTC')
+      end
+
+      specify do
+        project.ETH!
+        expect(project.denomination).to eq('ETH')
       end
     end
 
@@ -72,10 +84,10 @@ describe Project do
 
     describe "payment_type" do
       let(:project) { create(:project) }
-      let(:order) { [:royalty_usd, :project_coin, :royalty_btc, :royalty_eth] }
+      let(:order) { [:revenue_share, :project_coin] }
 
-      it 'defaults to project_coin' do
-        expect(project.payment_type).to eq('royalty_usd')
+      it 'defaults to revenue_share' do
+        expect(project.payment_type).to eq('revenue_share')
       end
 
 
@@ -182,7 +194,7 @@ describe Project do
 
     %w{video_url tracker contributor_agreement_url}.each do |method|
       describe method do
-        let(:project) { build :project}
+        let(:project) { build :project }
 
         it "is valid if tracker is a valid, absolute url" do
           project.tracker = "https://youtu.be/jJrzIdDUfT4"
@@ -335,24 +347,6 @@ describe Project do
       project = create(:project, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' *40)
       project.update!(ethereum_enabled: true)
       expect(project.transitioned_to_ethereum_enabled?).to eq(false)
-    end
-  end
-
-  describe '#legal_terms_finalized?' do
-    let(:project) { create :project }
-
-    it 'is not finalized after first save' do
-      expect(project.legal_terms_finalized?).to eq false
-    end
-
-    it "is finalized after first award is issued" do
-      create(:award_type, project: project).tap { |at| create(:award, award_type: at, created_at: 1.second.ago) }
-      expect(project.legal_terms_finalized?).to eq(true)
-    end
-
-    it "is finalized after ethereum contract created" do
-      expect(project).to receive(:transitioned_to_ethereum_enabled?) { true }
-      expect(project.legal_terms_finalized?).to eq(true)
     end
   end
 end

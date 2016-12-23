@@ -3,28 +3,36 @@ class Views::Shared::AwardFormTerms < Views::Base
 
   def content
     ul {
+      term "Status", project.status_description
       term "Project Name", project.title
-      term "Project Owner", project.legal_project_owner, condition: project.legal_project_owner.present?
+      term "Project Owner", project.legal_project_owner
+      br
       term "Contributions", project.exclusive_contributions_text
       term "Business Confidentiality", project.require_confidentiality_text
       term "Project confidentiality", project.require_confidentiality_text
-      term "Maximum Unpaid #{project.payment_description} Balance", project.maximum_coins_pretty
-      unless project.project_coin?
-        div(class: 'royalty-terms') {
-          term "Revenue reserved to pay Contributor Royalties", project.royalty_percentage_pretty
-          term "Maximum royalties per quarter", project.maximum_royalties_per_quarter_pretty
-          term "Minimum Revenue", project.minimum_revenue_pretty
-          term "Contributor Minimum Payment", project.minimum_payment_pretty
+      br
+      term "Maximum #{project.payment_description}", project.maximum_coins_pretty
+      term "Maximum #{project.payment_description} Awarded Per Month", project.maximum_royalties_per_month_pretty
+      if project.revenue_share?
+        span(class: 'revenue-sharing-only') {
+          term "Revenue reserved to pay Contributors", project.royalty_percentage_pretty
+          term "Minimum Revenue Before Revenue Sharing", project.minimum_revenue
+          term "Minimum Payment to Contributors", project.minimum_payment
         }
       end
     }
+    if project.project_coin?
+      p {
+        text "Contributors are awarded Project Coins for contributions. Contributors do not receive Contributor Royalties or Revenue Sharing awards. The value of Project Coins is not defined by the CoMakery Contributor License, CoMakery Inc, or the CoMakery platform."
+      }
+    end
   end
 
-  def term(term_name, trailing_text = "", condition: true)
-    return unless condition
+  def term(term_name, trailing_text = "")
     li {
       strong "#{term_name.titleize}: "
       text trailing_text
     }
   end
+
 end
