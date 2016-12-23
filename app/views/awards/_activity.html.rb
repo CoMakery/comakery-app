@@ -1,16 +1,12 @@
-class Views::Projects::Activity < Views::Base
+class Views::Awards::Activity < Views::Base
   needs :project, :award_data
 
   def content
     div(class: 'content-box') {
-      row(class: "awarded-info-header") {
-        h3 "Project Activity"
-      }
       row {
         ul(class: 'menu simple awarded-info') {
           li {
             span(class: " coin-numbers") {
-              text project.currency_denomination
               text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
             }
             if percentage_issued >= 0.01
@@ -24,7 +20,6 @@ class Views::Projects::Activity < Views::Base
           if award_data[:award_amounts][:my_project_coins]
             li {
               span(class: "coin-numbers") {
-                text project.currency_denomination
                 text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
               }
               text raw "&nbsp;mine"

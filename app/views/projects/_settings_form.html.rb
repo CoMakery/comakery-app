@@ -1,6 +1,6 @@
 module Views
   module Projects
-    class Form < Views::Base
+    class SettingsForm < Views::Base
       needs :project, :slack_channels
 
       def content
@@ -36,12 +36,18 @@ module Views
                   }
                   link_to("Styling with Markdown is Supported", "https://guides.github.com/features/mastering-markdown/", class: "help-text float-right")
                 }
-                br
-                with_errors(project, :public) {
+
+                with_errors(project, :denomination) {
                   label {
-                    f.check_box :public
-                    text " Set project as publicly visible on CoMakery "
-                    question_tooltip "Decide whether or not to display this project in the CoMakery project index"
+                    text "Display Currency"
+                    question_tooltip "This is the currency that will be used for display by default. Revenues for revenue sharing will be counted in the currency it was received in."
+                    f.select(:denomination,
+                             [["US Dollars ($)", "USD"],
+                              ["Bitcoin (฿)", "BTC"],
+                              ["Ether (Ξ)", "ETH"],
+                             ],
+                             {selected: project.denomination, include_blank: false}
+                    )
                   }
                 }
               }
@@ -76,25 +82,26 @@ module Views
           }
 
           div(class: 'content-box') {
+            full_row {
+              div(class: 'legal-box-header') {
+                h3 "Contribution License Terms"
+                i(class: "fa fa-lock") if project.license_finalized?
+              }
+            }
             row {
-
               column("large-6 small-12") {
-                div(class: 'legal-box-header') {
-                  h3 "General Legal Terms"
-                  i(class: "fa fa-lock") if project.legal_terms_finalized?
-                }
                 with_errors(project, :legal_project_owner) {
                   label {
                     text "Project Owner's Legal Name "
                     question_tooltip "The name of the company, association, legal entity, or individual that owns the project and administers awards."
-                    f.text_field :legal_project_owner, disabled: project.legal_terms_finalized?
+                    f.text_field :legal_project_owner, disabled: project.license_finalized?
                   }
                 }
 
 
                 with_errors(project, :exclusive_contributions) {
                   label {
-                    f.check_box :exclusive_contributions, disabled: project.legal_terms_finalized?
+                    f.check_box :exclusive_contributions, disabled: project.license_finalized?
                     text "Contributions are exclusive to this project "
                     question_tooltip "When contributions are exclusive contributors may not gives others license for their contributions."
                   }
@@ -102,7 +109,7 @@ module Views
 
                 with_errors(project, :require_confidentiality) {
                   label {
-                    f.check_box :require_confidentiality, disabled: project.legal_terms_finalized?
+                    f.check_box :require_confidentiality, disabled: project.license_finalized?
                     text "Require project and business confidentiality "
                     question_tooltip "If project requires project confidentiality contributors agree to keep information about this agreement, other contributions to the Project, royalties awarded for other contributions, revenue received, royalties paid to the contributors and others, and all other unpublished information about the business, plans, and customers of the Project secret. Contributors also agree to keep copies of their contributions, copies of other materials contributed to the Project, and information about their content and purpose secret."
                   }
@@ -110,105 +117,98 @@ module Views
 
               }
             }
-          }
-          div(class: 'content-box') {
+            br
+            full_row {
+              div(class: 'legal-box-header') {
+                h4 "Contributor Awards"
+              }
+            }
             row {
 
               column("large-6 small-12") {
-                div(class: 'legal-box-header') {
-                  h3 "Award Terms"
-                  i(class: "fa fa-lock") if project.legal_terms_finalized?
-                }
                 with_errors(project, :payment_type) {
                   label {
                     text "Award Payment Type"
                     question_tooltip "Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project coins for their work contributions."
                     f.select(:payment_type,
-                             [["Royalties paid in US Dollars ($)", "royalty_usd"],
-                              ["Royalties paid in Bitcoin (฿)", "royalty_btc"],
-                              # ["Royalties paid in Ether (Ξ)", "royalty_eth"],
-                              ["Project Coin direct payment", "project_coin"]],
+                             [["Revenue Shares", "revenue_share"],
+                              ["Project Coins", "project_coin"]],
                              {selected: project.payment_type, include_blank: false},
-                             disabled: project.legal_terms_finalized?
+                             disabled: project.license_finalized?
                     )
                   }
                 }
                 with_errors(project, :maximum_coins) {
                   label {
-                    text "Maximum Unpaid Balance"
-                    question_tooltip "Select it carefully,
-                      it cannot be changed after it has been set.
-                      For royalties this is the maximum amount of unpaid royalties.
-                      For project coins this is the maximum number of project coins that can be issued.
-                      When royalties are paid or project coins are burned they are not included in this total.
-                      Select a high enough number
-                      so you have room for the future."
-                    denomination_div f, :maximum_coins, type: "number", disabled: project.legal_terms_finalized?
+                    text "Total Authorized"
+                    award_type_div f, :maximum_coins, type: "number", disabled: project.license_finalized? || project.ethereum_enabled?
                   }
                 }
 
-                with_errors(project, :maximum_royalties_per_quarter) {
+                with_errors(project, :maximum_royalties_per_month) {
                   label {
-                    text "Maximum Awarded Per Quarter"
-                    denomination_div f, :maximum_royalties_per_quarter,
-                                     type: :number, placeholder: "12000", disabled: project.legal_terms_finalized?
+                    text "Maximum Awarded Per Month"
+                    award_type_div f, :maximum_royalties_per_month,
+                                   type: :number, placeholder: "25000",
+                                   disabled: project.license_finalized?
+                  }
+                }
+                div(class: "revenue-sharing-terms #{'hide' if project.project_coin?}") {
+                  with_errors(project, :royalty_percentage) {
+                    label {
+                      text "Revenue Shared With Contributors"
+                      question_tooltip "The Project Owner agrees to count money customers pay either to license, or to use a hosted instance of, the Project as 'Revenue'. Money customers pay for consulting, training, custom development, support, and other services related to the Project does not count as Revenue."
+                      # percentage_div { f.text_field :royalty_percentage, placeholder: "5%", class: 'input-group-field' }
+                      percentage_div f, :royalty_percentage, placeholder: "10", type: :number,
+                                     disabled: project.license_finalized?
+                    }
                   }
                 }
 
                 ethereum_beta(f)
+
+                with_errors(project, :license_finalized) {
+                  label {
+                    f.check_box :license_finalized, disabled: project.license_finalized?
+                    text "The Contribution License Revenue Sharing Terms Are Finalized"
+                    div(class: 'help-text') { text "Leave this unchecked if you want to use CoMakery for tracking contributions with no legal agreement for sharing revenue." }
+                  }
+                }
               }
 
               column("large-6 small-12") {
-                div(id: 'royalty-legal-terms', class: "#{'hide' if project.project_coin?}" ) {
-                  div(class: 'legal-box-header') {
-                    h3 "Royalty Terms"
-                    i(class: "fa fa-lock") if project.legal_terms_finalized?
-                  }
+                br
+                div(class: "revenue-sharing-terms #{'hide' if project.project_coin?}") {
 
-
-                  with_errors(project, :royalty_percentage) {
-                    label {
-                      text "Percentage of Revenue reserved for Contributor Royalties "
-                      question_tooltip "The Project Owner agrees to count money customers pay either to license, or to use a hosted instance of, the Project as 'Revenue', starting from the date of this agreement. Money customers pay for consulting, training, custom development, support, and other services related to the Project does not count as Revenue."
-                      # percentage_div { f.text_field :royalty_percentage, placeholder: "5%", class: 'input-group-field' }
-                      percentage_div f, :royalty_percentage, placeholder: "5%", type: :number,
-                                     disabled: project.legal_terms_finalized?
-                    }
-                  }
-
-                  with_errors(project, :minimum_revenue) {
-                    label {
-                      text "Minimum Revenue Collected Before Paying Contributor Royalties "
-                      question_tooltip "The Project Owner agrees to begin paying Royalties once Revenue reaches the minimum revenue amount on the Award Form."
-                      denomination_div f, :minimum_revenue, type: :number, placeholder: "100",
-                                       disabled: project.legal_terms_finalized?
-                    }
-                  }
-
-                  with_errors(project, :minimum_payment) {
-                    label {
-                      text "Contributor Minimum Payment Amount "
-                      question_tooltip "Once Revenue reaches the minimum revenue amount the Project Owner agrees to pay the Contributor Royalties on demand, as long as the Project Owner owes the Contributor at least the minimum payment amount."
-                      denomination_div f, :minimum_payment, type: :number, placeholder: "25",
-                                       disabled: project.legal_terms_finalized?
-                    }
-                  }
-                  h5 "Royalty Payment Schedule"
+                  h5 "Example"
                   table(class: 'royalty-calc') {
                     thead {
                       tr {
-                        th { text "Monthly Revenue" }
-                        th { text "Monthly Payment" }
-                        th { text "Months to Pay" }
+                        th { text "Revenue" }
+                        th { text "Shared" }
                       }
                     }
                     tbody {
                       tr {
-                        td(class: 'monthly-revenue') {}
-                        td(class: 'monthly-payment') {}
-                        td(class: 'months-to-pay') {}
+                        td(class: 'revenue') {}
+                        td(class: 'revenue-shared') {}
                       }
                     }
+                  }
+                }
+
+                div(class: "project-coin-terms #{'hide' if project.revenue_share?}") {
+                  h5 "About Project Coins"
+                  p {
+                    text %{
+                        Project Coins provide open ended and flexible award tracking.
+                        They can be used for effort tracking, point systems, blockchain projects, and meta-currencies.
+                        Project Coin projects don't currently show the CoMakery Contribution License or pricing information.}
+
+                  }
+                  p {
+                    link_to 'Send us an email', 'mailto:hello@comakery.com'
+                    text " to let us know how you are using them and how we can support you in using them."
                   }
                 }
               }
@@ -278,15 +278,24 @@ module Views
           }
 
           full_row {
-            f.submit "Save", class: buttonish(:expand)
+            column {
+              with_errors(project, :public) {
+                label {
+                  f.check_box :public
+                  text " Set project as publicly visible on CoMakery "
+                  question_tooltip "Decide whether or not to display this project in the CoMakery project index"
+                }
+              }
+              f.submit "Save", class: buttonish(:expand)
+            }
           }
         end
       end
 
-      def denomination_div(form, field_name, **opts)
+      def award_type_div(form, field_name, **opts)
         opts[:class] = "#{opts[:class]} input-group-field"
         div(class: 'input-group') {
-          span(class: "input-group-label denomination") { text project.currency_denomination_explicit }
+          span(class: "input-group-label award-type") { text project.currency_denomination }
           form.text_field field_name, **opts
         }
       end
@@ -316,7 +325,7 @@ module Views
         else
           label {
             link_to 'Contact us', 'mailto:hello@comakery.com'
-            text " if you'd like to join the Ξthereum blockchain beta for project coins"
+            text " if you'd like to join the Ξthereum blockchain beta"
           }
           br
         end

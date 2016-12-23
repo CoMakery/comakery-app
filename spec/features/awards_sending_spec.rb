@@ -50,7 +50,8 @@ describe "awarding users" do
 
       visit project_path(project)
 
-      expect(page).to have_content "$0Royalties"
+      expect(page.find('.my-share')).to have_content "0"
+      expect(page.find('.my-balance')).to have_content "$0"
 
       choose "Small"
       expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson"])
@@ -72,15 +73,16 @@ describe "awarding users" do
       click_link("Overview")
 
       within(".awarded-info") do
-        expect(page).to have_content "My Balance$1,000Royalties"
-        expect(page).to have_content "Project Balance$1,000Royalties"
+        expect(page.find('.my-share')).to have_content "1,000"
+        expect(page.find('.my-balance')).to have_content "$0"
       end
 
       click_link "Contributors"
-      within('.award-rows') do
+
+      within('table') do
         expect(page.all("img[src='https://slack.example.com/team-image-34-px.jpg']").size).to eq(1)
-        expect(page).to have_content "@bobjohnson"
-        expect(page).to have_content "$1,000$0$1,000"
+        expect(page.find('.contributor')).to have_content "@bobjohnson"
+        expect(page.find('.award-holdings')).to have_content "1,000"
       end
 
 

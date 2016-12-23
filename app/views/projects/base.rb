@@ -60,10 +60,7 @@ class Views::Projects::Base < Views::Base
           owner_auth = project.owner_account.authentications.find_by(slack_team_id: project.slack_team_id)
 
           ([owner_auth].compact + Array.wrap(contributors)).uniq{|auth|auth.id}.each do |contributor|
-            tooltip = contributor == owner_auth ?
-              "#{contributor.display_name} - Project Owner#{contributor.respond_to?(:total_awarded) ? " - #{contributor.total_awarded.to_i} coins" : ""}" :
-              "#{contributor.display_name} - #{contributor.total_awarded.to_i} coins"
-            tooltip(tooltip) {
+            tooltip(contributor.display_name) {
               img(src: contributor.slack_icon, class: "contributor avatar-img")
             }
           end

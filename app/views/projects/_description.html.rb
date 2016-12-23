@@ -31,12 +31,52 @@ class Views::Projects::Description < Views::Projects::Base
             p(class: "description") {
               text raw project.description_html
             }
+            if project.project_coin?
+              p {
+                i 'This project does not offer royalties or a share of revenue. It does award project coins. Read the Project Terms for more details.'
+              }
+            end
           }
           full_row {
 
-            awarded_info
-          }
+            ul(class: 'menu simple awarded-info description-stats') {
+              li_if(project.revenue_share?) {
+                h5 "Revenue Shared"
+                span(class: "coin-numbers revenue-percentage") {
+                  text project.royalty_percentage_pretty
+                }
+              }
 
+              if award_data[:award_amounts][:my_project_coins].present?
+                li(class: 'my-share') {
+                  h5 "My #{project.payment_description}"
+                  span(class: " coin-numbers") {
+                    text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
+                  }
+                  span(class: "balance-type") { text " of #{total_coins_issued}" }
+                }
+
+                li_if(project.revenue_share?, class: 'my-balance') {
+                  h5 "My Balance"
+                  span(class: "coin-numbers") {
+                    text project.my_balance_pretty
+                    span(class: "balance-type") { text " of #{project.balance_pretty}" }
+                  }
+                }
+              end
+
+              if award_data[:contributions_summary].present?
+                li(class: 'top-contributors') {
+                  h5 "Top Contributors"
+                  award_data[:contributions_summary].first(5).each do |contributor|
+                    tooltip(contributor[:name]) {
+                      img(src: contributor[:avatar], class: "avatar-img")
+                    }
+                  end
+                }
+              end
+            }
+          }
         }
 
       }
@@ -44,47 +84,15 @@ class Views::Projects::Description < Views::Projects::Base
   end
 
 
-  def awarded_info
-    ul(class: 'menu simple awarded-info description-stats') {
-      if award_data[:award_amounts][:my_project_coins]
-        li {
-          h5 "My Balance"
-          span(class: "coin-numbers") {
-            text project.currency_denomination
-            text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
-          }
-          span(class: "balance-type") { text project.payment_description }
-        }
-      end
+  def total_coins_issued_pretty
+    number_with_precision(award_data[:award_amounts][:total_coins_issued], precision: 0, delimiter: ',')
+  end
 
-      li {
-        h5 "Project Balance"
-        span(class: " coin-numbers") {
-          text project.currency_denomination
-          text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
-
-        }
-        span(class: "balance-type") { text project.payment_description }
-      }
-
-      if award_data[:contributions_summary].present?
-        li(class: 'top-contributors') {
-            h5 "Top Contributors"
-            award_data[:contributions_summary].first(5).each do |contributor|
-              tooltip(contributor[:name]) {
-                img(src: contributor[:avatar], class: "avatar-img")
-              }
-            end
-          }
-      end
-    }
+  def my_project_coins
+    award_data[:award_amounts][:my_project_coins]
   end
 
   def total_coins_issued
     award_data[:award_amounts][:total_coins_issued]
-  end
-
-  def percentage_issued
-    total_coins_issued * 100 / project.maximum_coins.to_f
   end
 end

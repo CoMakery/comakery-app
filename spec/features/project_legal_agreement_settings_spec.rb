@@ -38,112 +38,45 @@ describe "viewing projects, creating and editing", :js do
     travel_back
   end
 
-  it "setup royalties project with USD" do
+  it "setup revenue sharing project with USD" do
     login(account)
 
     visit projects_path
 
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
-    select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
-    fill_in "Maximum Unpaid Balance", with: "100000"
+    select "Revenue Shares", from: "project_payment_type"
+    fill_in "project_maximum_coins", with: "100000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
-    fill_in "Percentage of Revenue reserved", with: "7.99999"
-    fill_in "Maximum Awarded Per Quarter", with: "25000"
-    fill_in "Minimum Revenue Collected ", with: "150"
-    fill_in "Contributor Minimum Payment", with: "26"
+    fill_in "project_royalty_percentage", with: "7.99999"
+    fill_in "project_maximum_royalties_per_month", with: "25000"
     check "Contributions are exclusive"
     check "Require project and business confidentiality"
 
     click_on "Save"
     expect(page).to have_content "Project created"
     expect(page).to have_content "My Balance $0"
-    expect(page).to have_content "Royalties Project Balance $0"
+    expect(page).to have_content "My Balance $0 of $0"
     within ".project-terms" do
-      expect(page).to have_css('.royalty-terms')
       expect(page).to have_content "Mindful Inc"
       expect(page).to have_content "7.99999%"
-      expect(page).to have_content "Maximum Unpaid Royalties Balance: $100,000"
-      expect(page).to have_content "$25,000"
-      expect(page).to have_content "Minimum Revenue: $150"
-      expect(page).to have_content "Contributor Minimum Payment: $26"
+      expect(page).to have_content "Maximum Revenue Shares Awarded Per Month: 25,000"
+      expect(page).to have_content "Maximum Revenue Shares: 100,000"
       expect(page).to have_content "Contributions: are exclusive"
       expect(page).to have_content "Business Confidentiality: is required"
     end
-    within("#award-send") { expect(page).to have_content /award royalties/i }
+    within("#award-send") { expect(page).to have_content /award revenue shares/i }
 
-    select "@bobjohnson", from: "User"
-    choose "Small"
-    fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
+    within(".project-nav") { click_on "Contribution License" }
 
-    click_button "Send"
-    click_link "Contributors"
-    within('.award-rows') { expect(page).to have_content "@bobjohnson $100 $0 $100" }
-
-    click_link "Awards"
-    within(".header-row") { expect(page).to have_content /Royalties Earned/i }
-    expect(page).to have_content "$100"
-
-    login(bobjohnsons_auth.account)
-    visit account_path
-    within(".header-row") { expect(page).to have_content /Royalties Earned/i }
-    expect(page).to have_content "$100"
-  end
-
-  it "setup royalties project with BTC" do
-    login(account)
-
-    visit projects_path
-
-    click_link "New Project"
-    fill_in "Title", with: "Mindfulness App"
-    select "Royalties paid in Bitcoin (฿)", from: "Award Payment Type"
-    fill_in "Maximum Unpaid Balance", with: "200000"
-    fill_in "Description", with: "This is a project"
-    select "a-channel-name", from: "Slack Channel"
-    fill_in "Project Owner's Legal Name", with: "Mindful Inc"
-    fill_in "Percentage of Revenue reserved", with: "8"
-    fill_in "Maximum Awarded Per Quarter", with: "27000"
-    fill_in "Minimum Revenue Collected ", with: "170"
-    fill_in "Contributor Minimum Payment", with: "27"
-    check "Contributions are exclusive"
-    check "Require project and business confidentiality"
-
-    click_on "Save"
-    expect(page).to have_content "Project created"
-    expect(page).to have_content "My Balance ฿0"
-    expect(page).to have_content "Project Balance ฿0"
-    within ".project-terms" do
-      expect(page).to have_css('.royalty-terms')
-      expect(page).to have_content "Mindful Inc"
-      expect(page).to have_content "8.0%"
-      expect(page).to have_content "฿200,000"
-      expect(page).to have_content "฿27,000"
-      expect(page).to have_content "Minimum Revenue: ฿170 "
-      expect(page).to have_content "Contributor Minimum Payment: ฿27"
-      expect(page).to have_content "Contributions: are exclusive"
-      expect(page).to have_content "Business Confidentiality: is required"
-    end
-    within("#award-send") { expect(page).to have_content /award royalties/i }
-
-    select "@bobjohnson", from: "User"
-    choose "Small"
-    fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
-
-    click_button "Send"
-    click_link "Contributors"
-    within('.award-rows') { expect(page).to have_content "@bobjohnson ฿100 ฿0 ฿100" }
-
-    click_link "Awards"
-    within(".header-row") { expect(page).to have_content /Royalties Earned/i }
-    expect(page).to have_content "฿100"
-
-    login(bobjohnsons_auth.account)
-    visit account_path
-    within(".header-row") { expect(page).to have_content /Royalties Earned/i }
-    expect(page).to have_content "฿100"
+    expect(page).to have_content "Mindful Inc"
+    expect(page).to have_content "7.99999%"
+    expect(page).to have_content "Maximum Revenue Shares Awarded Per Month: 25,000"
+    expect(page).to have_content "Maximum Revenue Shares: 100,000"
+    expect(page).to have_content "Contributions: are exclusive"
+    expect(page).to have_content "Business Confidentiality: is required"
   end
 
   it "setup project with Project Coins" do
@@ -153,18 +86,17 @@ describe "viewing projects, creating and editing", :js do
 
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
-    select "Project Coin direct payment", from: "Award Payment Type"
-    fill_in "Maximum Unpaid Balance", with: "210000"
+    fill_in "project_maximum_coins", with: "210000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
+    select "Project Coins", from: "project_payment_type"
     check "Contributions are exclusive"
     check "Require project and business confidentiality"
 
     click_on "Save"
     expect(page).to have_content "Project created"
-    expect(page).to have_content "My Balance 0"
-    expect(page).to have_content "Project Balance 0"
+    expect(page).to have_content "My Project Coins 0 of 0"
     within ".project-terms" do
       expect(page).to have_content "Mindful Inc"
       expect(page).to have_content "Contributions: are exclusive"
@@ -172,94 +104,55 @@ describe "viewing projects, creating and editing", :js do
       expect(page).to have_content "Project Confidentiality: is required"
     end
 
-    within ".project-terms" do
-      expect(page).to_not have_css('.royalty-terms')
-      expect(page).to_not have_content "7%"
-      expect(page).to_not have_content "maximum royalties can be awarded each quarter"
-      expect(page).to_not have_content "minimum revenue"
-      expect(page).to_not have_content "minimum payment"
-    end
-
     within("#award-send") { expect(page).to have_content /award project coins/i }
     select "@bobjohnson", from: "User"
-    choose "Small"
+    choose "Thanks"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
 
     click_button "Send"
     click_link "Contributors"
 
-    within('.award-rows') { expect(page).to have_content "@bobjohnson 100 0 100" }
+    expect(page.find('.award-row')).to have_content "@bobjohnson 10 10"
 
     click_link "Awards"
     within(".header-row") { expect(page).to have_content /Project Coins Earned/i }
-    expect(page).to have_content "100"
+    expect(page).to have_content "10"
 
     login(bobjohnsons_auth.account)
     visit account_path
     within(".header-row") { expect(page).to have_content /Project Coins Earned/i }
-    expect(page).to have_content "100"
+    expect(page).to have_content "10"
   end
 
-  describe "royalty legal terms", js: true do
+  describe 'denominations shown' do
     before do
       login(account)
     end
 
-    it 'are visible for existing usd royalty projects' do
-      project.update(payment_type: :royalty_usd)
-      visit edit_project_path(project)
-      expect_royalty_terms
-    end
-
-    it 'are visible for existing bitcoin royalty projects' do
-      project.update(payment_type: :royalty_btc)
-      visit edit_project_path(project)
-      expect_royalty_terms
-    end
-
-    it 'are hidden for existing project coin' do
-      project.update(payment_type: :project_coin)
-      visit edit_project_path(project)
-      expect_no_royalty_terms
-    end
-
-    it 'are shown and hidden by selecting the project type', js: true do
-      visit edit_project_path(project)
-      expect_royalty_terms
-
-      select "Project Coin direct payment", from: "Award Payment Type"
-      expect_no_royalty_terms
-
-      select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
-      expect_royalty_terms
-
-      select "Royalties paid in Bitcoin (฿)", from: "Award Payment Type"
-      expect_royalty_terms
-    end
-  end
-
-  describe 'denominations should match the project type' do
-    before do
-      login(account)
-    end
-
-    it 'are visible for existing usd royalty projects' do
-      project.update(payment_type: :royalty_usd)
+    specify do
+      project.update(denomination: :USD)
       visit edit_project_path(project)
       expect_denomination_usd
     end
 
-    it 'are visible for existing bitcoin royalty projects' do
-      project.update(payment_type: :royalty_btc)
+    specify do
+      project.update(denomination: :BTC)
       visit edit_project_path(project)
       expect_denomination_btc
     end
 
-    it 'are hidden for existing project coin' do
+    specify do
+      project.update(denomination: :ETH)
+      visit edit_project_path(project)
+      expect_denomination_eth
+    end
+
+    it 'are hidden for project coins' do
       project.update(payment_type: :project_coin)
       visit edit_project_path(project)
-      expect_denomination_project_coin
+      expect_denomination_hidden
     end
+
 
     describe 'denominations are shown and hidden by selecting the project type', js: true do
       before { visit edit_project_path(project) }
@@ -267,24 +160,28 @@ describe "viewing projects, creating and editing", :js do
       specify { expect_denomination_usd }
 
       specify do
-        select "Project Coin direct payment", from: "Award Payment Type"
-        expect(page.find('#project_payment_type').value).to eq('project_coin')
-        expect_denomination_project_coin
-      end
-
-      specify do
-        select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
+        select "US Dollars ($)", from: 'project_denomination'
         expect_denomination_usd
       end
 
       specify do
-        select "Royalties paid in Bitcoin (฿)", from: "Award Payment Type"
+        select "Bitcoin (฿)", from: "project_denomination"
         expect_denomination_btc
+      end
+
+      specify do
+        select "Ether (Ξ)", from: "project_denomination"
+        expect_denomination_eth
+      end
+
+      it 'hides the awards section when project coin is selected' do
+        select "Project Coins", from: 'project_payment_type'
+        expect_denomination_hidden
       end
     end
   end
 
-  it 'should freeze royalty terms after the first award is issued' do
+  it 'should lock contribution license terms when the contract is finalized' do
     login(account)
 
     visit projects_path
@@ -293,45 +190,54 @@ describe "viewing projects, creating and editing", :js do
     page.assert_selector('.fa-lock', count: 0)
 
     fill_in "Title", with: "Mindfulness App"
-    select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
-    fill_in "Maximum Unpaid Balance", with: "100000"
+    fill_in "project_maximum_coins", with: "100000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
-    fill_in "Percentage of Revenue reserved", with: "7.99999"
-    fill_in "Maximum Awarded Per Quarter", with: "25000"
-    fill_in "Minimum Revenue Collected ", with: "150"
-    fill_in "Contributor Minimum Payment", with: "26"
+    fill_in "project_royalty_percentage", with: "7.99999"
+    fill_in "project_maximum_royalties_per_month", with: "25000"
     check "Contributions are exclusive"
     check "Require project and business confidentiality"
 
     click_on "Save"
     expect(page).to have_content "Project created"
-    choose "Small"
-    expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson"])
-    select "bobjohnson", from: "User"
-    click_button "Send"
-    expect(page).to have_content "Successfully sent award to @bobjohnson"
+
+    click_on "Settings"
+    contract_term_fields.each do |disabled_field_name|
+      expect(page).to_not have_css("##{disabled_field_name}[disabled]")
+    end
+    page.assert_selector('.fa-lock', count: 0)
+    check 'project_license_finalized'
 
 
+    click_on "Save"
     click_on "Settings"
     contract_term_fields.each do |disabled_field_name|
       expect(page).to have_css("##{disabled_field_name}[disabled]")
     end
-    page.assert_selector('.fa-lock', count: 3)
+    page.assert_selector('.fa-lock', count: 1)
+  end
+
+  it "should lock maximum authorized if ethereum is enabled" do
+    login(account)
+
+    visit edit_project_path(project)
+    expect(page).to have_css("#project_maximum_coins")
+    expect(page).to_not have_css("#project_maximum_coins[disabled]")
+
+    project.update(ethereum_enabled: true)
+    visit edit_project_path(project)
+    expect(page).to have_css("#project_maximum_coins[disabled]")
   end
 
   def contract_term_fields
     [:project_maximum_coins,
-     :project_payment_type,
      :project_exclusive_contributions,
      :project_legal_project_owner,
-     :project_minimum_payment,
-     :project_minimum_revenue,
      :project_require_confidentiality,
      :project_royalty_percentage,
-     :project_maximum_royalties_per_quarter,
-     :project_payment_type]
+     :project_maximum_royalties_per_month,
+     :project_license_finalized]
   end
 
   def expect_denomination_usd
@@ -343,13 +249,19 @@ describe "viewing projects, creating and editing", :js do
   def expect_denomination_btc
     page.assert_selector('span.denomination', text: "$", count: 0)
     page.assert_selector('span.denomination', text: "฿", minimum: 4)
-    page.assert_selector('span.denomination', text: "Project Coins", count: 0)
+    page.assert_selector('span.denomination', text: "Ξ", count: 0)
   end
 
-  def expect_denomination_project_coin
+  def expect_denomination_eth
     page.assert_selector('span.denomination', text: "$", count: 0)
     page.assert_selector('span.denomination', text: "฿", count: 0)
-    page.assert_selector('span.denomination', text: "Project Coins", minimum: 1)
+    page.assert_selector('span.denomination', text: "Ξ", minimum: 1)
+  end
+
+  def expect_denomination_hidden
+    page.assert_selector('span.denomination', text: "$", count: 0)
+    page.assert_selector('span.denomination', text: "฿", count: 0)
+    page.assert_selector('span.denomination', text: "Ξ", count: 0)
   end
 
   def expect_royalty_terms
@@ -364,7 +276,5 @@ describe "viewing projects, creating and editing", :js do
     to_or_not = bool ? 'to' : 'to_not'
     expect(page).send(to_or_not, have_content("Royalty Terms"))
     expect(page).send(to_or_not, have_content("Percentage of Revenue "))
-    expect(page).send(to_or_not, have_content("Minimum Revenue Collected"))
-    expect(page).send(to_or_not, have_content("Contributor Minimum Payment"))
   end
 end

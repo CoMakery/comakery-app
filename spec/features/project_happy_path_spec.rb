@@ -38,18 +38,20 @@ describe "viewing projects, creating and editing", :js do
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public")).not_to be_checked
 
-    expect(find_field("Maximum Unpaid Balance")['value']).to eq("12000")
-    fill_in "Maximum Unpaid Balance", with: "20000000"
+    expect(find_field("project_maximum_coins")['value']).to eq("1000000")
+    fill_in "project_maximum_coins", with: "20000000"
 
     award_type_inputs = get_award_type_rows
-    expect(award_type_inputs.size).to eq(3)
     award_type_inputs[0].all("input")[0].set "This is a small award type"
     award_type_inputs[0].all("input")[1].set "1000"
     award_type_inputs[1].all("input")[0].set "This is a medium award type"
     award_type_inputs[1].all("input")[1].set "2000"
     award_type_inputs[2].all("input")[0].set "This is a large award type"
     award_type_inputs[2].all("input")[1].set "3000"
-    # award_type_inputs[3]["class"].include?("hide")
+    award_type_inputs.last(award_type_inputs.size - 3). each do |input|
+      input.all("a[data-mark-and-hide]")[0].click
+    end
+
 
     click_link "+ add award type"
 
@@ -77,12 +79,8 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Title", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
 
-    select "Royalties paid in US Dollars ($)", from: "Award Payment Type"
-
-    fill_in "Percentage of Revenue reserved", with: "7.99999"
-    fill_in "Maximum Awarded Per Quarter", with: "25000"
-    fill_in "Minimum Revenue Collected ", with: "150"
-    fill_in "Contributor Minimum Payment", with: "26"
+    fill_in "project_royalty_percentage", with: "7.99999"
+    fill_in "project_maximum_royalties_per_month", with: "25000"
 
     click_on "Save"
 
@@ -92,9 +90,8 @@ describe "viewing projects, creating and editing", :js do
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link "Project Tasks"
 
-    expect(page).to have_content "Maximum Unpaid Royalties Balance: $20,000,000"
-    expect(page).to have_content "Royalties Project Balance $0"
-    expect(page).to have_content "My Balance $0"
+    expect(page).to have_content "Maximum Revenue Shares: 20,000,000"
+    expect(page.find('.revenue-percentage')).to have_content "7.99999%"
 
     expect(page).to have_content "Lead by Glenn Spanky"
     expect(page).to have_content "Citizen Code"
@@ -150,7 +147,7 @@ describe "viewing projects, creating and editing", :js do
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
-    expect(page).to have_content "This is a medium award type ($2,000) (Community Awardable)"
+    expect(page).to have_content "This is a medium award type (2,000) (Community Awardable)"
     expect(page).not_to have_content "This is a small award type"
     expect(page).not_to have_content "1,000"
 
@@ -251,26 +248,6 @@ describe "viewing projects, creating and editing", :js do
           award.id, award2.id ])
 
       end
-    end
-  end
-
-  it "shows the percentage of coin awards if greater than 0.01% have been awarded" do
-    login(account)
-
-    visit project_path(project)
-
-    within(".awarded-info") do
-      expect(page).to have_content "My Balance $0"
-      expect(page).to have_content "Royalties Project Balance $0"
-    end
-
-    create(:award, award_type: create(:award_type, project: project, amount: 100_000))
-
-    visit project_path(project)
-
-    within(".awarded-info") do
-      expect(page).to have_content "Royalties Project Balance $100,000"
-      expect(page).to have_content "My Balance $0"
     end
   end
 end

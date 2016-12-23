@@ -52,32 +52,37 @@ $ ->
     removeElement.hide()
     removeElement.find("input[data-destroy]").val("1")
 
-  $('#project_payment_type').change (e)->
-    switch $('#project_payment_type option:selected').val()
-      when 'project_coin'
-        $('#royalty-legal-terms').addClass('hide')
-        $('span.denomination').html('Project Coins')
-      when 'royalty_usd'
-        $('#royalty-legal-terms').removeClass('hide')
-        $('span.denomination').html('$')
-      when 'royalty_btc'
-        $('#royalty-legal-terms').removeClass('hide')
-        $('span.denomination').html('฿')
+  awardPaymentType()
+  $('#project_payment_type').on 'ready change', (e)->
+    awardPaymentType()
 
   royaltyCalc()
-  $('#project_royalty_percentage, #project_maximum_coins').on 'ready change', (e) ->
+  $('#project_royalty_percentage, #project_maximum_coins, #project_denomination').on 'ready change', (e) ->
     royaltyCalc()
 
+awardPaymentType = () ->
+  switch $('#project_payment_type option:selected').val()
+    when 'project_coin'
+      $('.revenue-sharing-terms').addClass('hide')
+      $('.project-coin-terms').removeClass('hide')
+      $('span.award-type').html('Project Coins')
+    when 'revenue_share'
+      $('.revenue-sharing-terms').removeClass('hide')
+      $('.project-coin-terms').addClass('hide')
+      $('span.award-type').html('Revenue Shares')
+
 royaltyCalc = () ->
+  return unless $('#project_denomination option:selected').html()
   percentage = $('#project_royalty_percentage').val()
   maxAwarded = $('#project_maximum_coins').val()
 
   schedule = $("<tbody>")
 
-  for monthlyRevenue in [100, 1000, 10000, 100000]
-    monthlyPayment = monthlyRevenue * percentage / 100
-    yearsToPay = maxAwarded / monthlyPayment
-    denomination = "<span class='denomination'>#{$('span.denomination').html()}</span>"
-    $(schedule).append("<tr><td>#{denomination}#{monthlyRevenue.toFixed()}</td><td>#{denomination}#{monthlyPayment.toFixed(2)}</td><td>#{yearsToPay.toFixed(2)}</td></tr>")
+  for revenue in [1e3, 1e4, 1e5, 1e6]
+    contributorPayment = revenue * percentage / 100
+    currencyFromSelectedOption = $('#project_denomination option:selected').html().match(/\(([^)]+)\)/)[1]
+    denomination = "<span class='denomination'>#{currencyFromSelectedOption}</span>"
+    $(schedule).append "<tr><td>#{denomination}#{revenue.toLocaleString()}</td>" +
+      "<td>#{denomination}#{contributorPayment.toLocaleString()}</td>"
 
   $('.royalty-calc tbody').replaceWith(schedule)

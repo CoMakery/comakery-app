@@ -16,19 +16,19 @@ class Views::Projects::Landing < Views::Projects::Base
           div(class:"intro-content") {
             div(class:"show-for-small-only") {
               h3 {
-                text "Collaborate on Products and Share the Revenue"
+                text "Help Make Apps & Products and Share the Revenue"
               }
             }
             div(class:"show-for-medium-only") {
               h3 {
-                text "Collaborate on Products"
+                text "Help Make Apps & Products"
                 br
                 text "Share the Revenue"
               }
             }
             div(class:"show-for-large") {
               h3 {
-                text "Collaborate on Products"
+                text "Help Make Apps & Products"
                 br
                 text "Share the Revenue"
               }
@@ -48,7 +48,7 @@ class Views::Projects::Landing < Views::Projects::Base
               column("small-12 large-4") {
                 div(class:"number") { text "2" }
                 h4 "Earn"
-                p "Earn awards of future revenue. Receive recognition for your skills and unlock new opportunities."
+                p "Earn shares of future revenue. Get recognized for your skills and unlock new opportunities."
               }
               column("small-12 large-4") {
                 div(class:"number") { text "3" }

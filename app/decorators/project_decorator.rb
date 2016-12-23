@@ -2,17 +2,15 @@ class ProjectDecorator < Draper::Decorator
   delegate_all
   include ActionView::Helpers::NumberHelper
 
-  PAYMENT_DESCRIPTIONS = { "royalty_usd" => "Royalties",
-                     "royalty_btc" => "Royalties",
-                     "royalty_eth" => "Royalties",
-                     "project_coin" => "Project Coins",
+  PAYMENT_DESCRIPTIONS = {
+      "revenue_share" => "Revenue Shares",
+      "project_coin" => "Project Coins",
   }
 
   CURRENCY_DENOMINATIONS = {
-      "royalty_usd" => "$",
-      "royalty_btc" => "฿",
-      "royalty_eth" => "Ξ",
-      "project_coin" => ""
+      "USD" => "$",
+      "BTC" => "฿",
+      "ETH" => "Ξ"
   }
 
   def description_html
@@ -31,13 +29,16 @@ class ProjectDecorator < Draper::Decorator
     end
   end
 
-  def currency_denomination
-    CURRENCY_DENOMINATIONS[project.payment_type]
+  def status_description
+    if project.license_finalized?
+      "These terms are finalized and legally binding."
+    else
+      "This is a draft of possible project terms that is not legally binding."
+    end
   end
 
-  def currency_denomination_explicit
-    return "Project Coins" if project.payment_type == "project_coin"
-    CURRENCY_DENOMINATIONS[project.payment_type]
+  def currency_denomination
+    CURRENCY_DENOMINATIONS[project.denomination]
   end
 
   def payment_description
@@ -45,6 +46,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def royalty_percentage_pretty
+    return "0%" if project.royalty_percentage.blank?
     "#{project.royalty_percentage}%"
   end
 
@@ -55,15 +57,34 @@ class ProjectDecorator < Draper::Decorator
   def exclusive_contributions_text
     project.exclusive_contributions ? "are exclusive" : "are not exclusive"
   end
+
+  def balance_pretty
+    "#{currency_denomination}0"
+  end
+
+  def my_balance_pretty
+    "#{currency_denomination}0"
+  end
+
+
+  def minimum_revenue
+    "#{currency_denomination}0"
+  end
+
+  def minimum_payment
+    "#{currency_denomination}10"
+  end
+
   private
 
-  def self.pretty_currencies(*currency_methods)
-    currency_methods.each  do |method_name|
+
+  def self.pretty_number(*currency_methods)
+    currency_methods.each do |method_name|
       define_method "#{method_name}_pretty" do
-        "#{currency_denomination}#{number_with_precision(self.send(method_name), precision: 0, delimiter: ',')}"
+        "#{number_with_precision(self.send(method_name), precision: 0, delimiter: ',')}"
       end
     end
   end
 
-  pretty_currencies :maximum_royalties_per_quarter, :maximum_coins, :minimum_revenue, :minimum_payment
+  pretty_number :maximum_royalties_per_month, :maximum_coins
 end

@@ -20,17 +20,21 @@ class Project < ActiveRecord::Base
   belongs_to :owner_account, class_name: Account
 
   enum payment_type: {
-      royalty_usd: 0,
-      project_coin: 1,
-      royalty_btc: 2,
-      royalty_eth: 3,
+      revenue_share: 0,
+      project_coin: 1
+  }
+
+  enum denomination: {
+    USD: 0,
+    BTC: 1,
+    ETH: 2
   }
 
   validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id,
-                        :slack_team_image_34_url, :slack_team_image_132_url, :title, :legal_project_owner
+                        :slack_team_image_34_url, :slack_team_image_132_url, :title, :legal_project_owner,
+                        :denomination
 
-  validates_presence_of :royalty_percentage, :maximum_royalties_per_quarter, :minimum_revenue, :minimum_payment,
-                        unless: :project_coin?
+  validates_presence_of :royalty_percentage, :maximum_royalties_per_month, unless: :project_coin?
 
   validates_numericality_of :maximum_coins, greater_than: 0
 
@@ -74,10 +78,6 @@ class Project < ActiveRecord::Base
 
   def owner_slack_user_name
     owner_account.authentications.find_by(slack_team_id: slack_team_id)&.display_name
-  end
-
-  def legal_terms_finalized?
-    awards.present? || transitioned_to_ethereum_enabled?
   end
 
   def youtube_id
