@@ -61,20 +61,12 @@ describe ProjectsController do
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
         expect(assigns[:project]).not_to be_public
-        expect(assigns[:project].maximum_coins).to eq(12_000)
-        expect(assigns[:project].award_types.size).to eq(4)
+        expect(assigns[:project].maximum_coins).to eq(1_000_000)
+        expect(assigns[:project].award_types.size).to be > 4
 
         expect(assigns[:project].award_types.first).to be_a_new_record
         expect(assigns[:project].award_types.first.name).to eq("Thanks")
         expect(assigns[:project].award_types.first.amount).to eq(10)
-
-        expect(assigns[:project].award_types.second).to be_a_new_record
-        expect(assigns[:project].award_types.second.name).to eq("Small Contribution")
-        expect(assigns[:project].award_types.second.amount).to eq(100)
-
-        expect(assigns[:project].award_types.third).to be_a_new_record
-        expect(assigns[:project].award_types.third.name).to eq("Contribution")
-        expect(assigns[:project].award_types.third.amount).to eq(1000)
 
         expect(assigns[:slack_channels]).to eq(["foo", "bar"])
       end

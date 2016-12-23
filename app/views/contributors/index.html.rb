@@ -7,7 +7,7 @@ class Views::Contributors::Index < Views::Projects::Base
       full_row {
         if award_data[:contributions].present?
           p {
-            h4 "#{project.payment_description} Earned "
+            h4 "#{project.payment_description}"
             div(id: "award-percentages", class: "royalty-pie") {}
           }
           content_for :js do
@@ -17,46 +17,56 @@ class Views::Contributors::Index < Views::Projects::Base
       }
 
       full_row {
-          if award_data[:contributions_summary].present?
-            div(class: "table-scroll") {
-              table(class: "award-rows", style: "width: 100%") {
-                tr(class: "header-row") {
-                  th "Top Contributors"
-                  th(class: "text-align-right") { text "Earned" }
-                  th(class: "text-align-right") { text "Paid" }
-                  th(class: "text-align-right") { text "Remaining" }
-                }
-                award_data[:contributions_summary].each do |contributor|
-                  tr(class: "award-row") {
-                    td(class: "contributor") {
-                      img(src: contributor[:avatar], class: "icon avatar-img")
-                      div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
-                    }
-                    td(class: "earned") {
-                      span(class: "float-right margin-small") {
-                        text project.currency_denomination
-                        text number_with_precision(contributor[:earned], precision: 0, delimiter: ',')
-                      }
-                    }
-                    td(class: "paid") {
-                      span(class: "float-right margin-small") {
-                        text project.currency_denomination
-                        text number_with_precision(contributor[:paid], precision: 0, delimiter: ',')
-                      }
-                    }
-                    td(class: "remaining") {
-                      span(class: "float-right margin-small") {
-                        text project.currency_denomination
-                        text number_with_precision(contributor[:remaining], precision: 0, delimiter: ',')
-                      }
+        if award_data[:contributions_summary].present?
+          div(class: "table-scroll table-box .contributors") {
+            table(class: "table-scroll", style: "width: 100%") {
+              tr(class: "header-row") {
+                th "Contributors"
+                th { text "Current #{project.payment_description.singularize} Holdings" }
+                th { text "Current Value" } if project.revenue_share?
+                th { text "Lifetime #{project.payment_description} Earned" }
+                th { text "Lifetime Paid" } if project.revenue_share?
+              }
+              award_data[:contributions_summary].each do |contributor|
+                tr(class: "award-row") {
+                  td(class: "contributor") {
+                    img(src: contributor[:avatar], class: "icon avatar-img")
+                    div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
+                  }
+                  td(class: "award-holdings") {
+                    span(class: "margin-small") {
+                      text text number_with_precision(contributor[:earned], precision: 0, delimiter: ',')
                     }
                   }
-                end
-              }
+
+                  if project.revenue_share?
+                    td(class: "holdings-value") {
+                      span(class: "margin-small") {
+                        text project.currency_denomination
+                        text 0
+                      }
+                    }
+                  end
+                  td(class: "awards-earned") {
+                    span(class: "margin-small") {
+                      text number_with_precision(contributor[:earned], precision: 0, delimiter: ',')
+                    }
+                  }
+                  if project.revenue_share?
+                    td(class: "paid hidden") {
+                      span(class: "margin-small") {
+                        text project.currency_denomination
+                        text 0
+                      }
+                    }
+                  end
+                }
+              end
             }
-          end
-        }
+          }
+        end
       }
+    }
   end
 
 

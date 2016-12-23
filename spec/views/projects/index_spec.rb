@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe "projects/index.html.rb" do
-
   before do
     project = create(:project, description: 'markdown _rocks_ **hard**: www.auto.link')
     assign :projects, Project.with_last_activity_at.decorate

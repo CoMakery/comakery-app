@@ -2,7 +2,7 @@ class Views::Shared::Awards < Views::Base
   needs :project, :awards, :show_recipient, :current_account
 
   def content
-    div(class: "table-scroll") {
+    div(class: "table-scroll table-box") {
       table(class: "award-rows") {
         tr(class: "header-row") {
           th(class: "small-1") { text "#{project.payment_description} Earned" }
@@ -19,7 +19,6 @@ class Views::Shared::Awards < Views::Base
           awards.sort_by(&:created_at).reverse.each do |award|
             tr(class: "award-row") {
               td(class: "small-1") {
-                text project.currency_denomination
                 text number_with_delimiter(award.award_type.amount, :delimiter => ',')
               }
               td(class: "small-2") {

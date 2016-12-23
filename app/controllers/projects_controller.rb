@@ -27,10 +27,21 @@ class ProjectsController < ApplicationController
   def new
     assign_slack_channels
 
-    @project = Project.new(public: false, maximum_coins: 12_000)
+    @project = Project.new(public: false,
+                           maximum_coins: 1_000_000,
+                           maximum_royalties_per_month: 50_000)
     @project.award_types.build(name: "Thanks", amount: 10)
-    @project.award_types.build(name: "Small Contribution", amount: 100)
-    @project.award_types.build(name: "Contribution", amount: 1000)
+    @project.award_types.build(name: "Software development hour", amount: 100)
+    @project.award_types.build(name: "Graphic design hour", amount: 100)
+    @project.award_types.build(name: "Product management hour", amount: 100)
+    @project.award_types.build(name: "Marketing hour", amount: 100)
+
+    @project.award_types.build(name: "Expert software development hour", amount: 150)
+    @project.award_types.build(name: "Expert graphic design hour", amount: 150)
+    @project.award_types.build(name: "Expert product management hour", amount: 150)
+    @project.award_types.build(name: "Expert marketing hour", amount: 150)
+    @project.award_types.build(name: "Blog post (600+ words)", amount: 150)
+    @project.award_types.build(name: "Long form article (2,000+ words)", amount: 2000)
     authorize @project
   end
 
@@ -94,31 +105,33 @@ class ProjectsController < ApplicationController
 
   def project_params
     params.require(:project).permit(
-      :contributor_agreement_url,
-      :description,
-      :ethereum_enabled,
-      :image,
-      :maximum_coins,
-      :public,
-      :slack_channel,
-      :title,
-      :tracker,
-      :video_url,
-      :payment_type,
-      :exclusive_contributions,
-      :legal_project_owner,
-      :minimum_payment,
-      :minimum_revenue,
-      :require_confidentiality,
-      :royalty_percentage,
-      :maximum_royalties_per_quarter,
-      award_types_attributes: [
-        :_destroy,
-        :amount,
-        :community_awardable,
-        :id,
-        :name
-      ]
+        :contributor_agreement_url,
+        :description,
+        :ethereum_enabled,
+        :image,
+        :maximum_coins,
+        :public,
+        :slack_channel,
+        :title,
+        :tracker,
+        :video_url,
+        :payment_type,
+        :exclusive_contributions,
+        :legal_project_owner,
+        :minimum_payment,
+        :minimum_revenue,
+        :require_confidentiality,
+        :royalty_percentage,
+        :maximum_royalties_per_month,
+        :license_finalized,
+        :denomination,
+        award_types_attributes: [
+            :_destroy,
+            :amount,
+            :community_awardable,
+            :id,
+            :name
+        ]
     )
   end
 

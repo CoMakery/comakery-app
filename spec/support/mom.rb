@@ -73,11 +73,9 @@ class Mom
         slack_team_image_34_url: "https://slack.example.com/team-image-34-px.jpg",
         slack_team_image_132_url: "https://slack.example.com/team-image-132-px.jpg",
         owner_account: owner_account,
-        payment_type: 'royalty_usd',
+        payment_type: 'revenue_share',
         royalty_percentage: 5.9,
-        maximum_royalties_per_quarter: 10_000,
-        minimum_revenue: 100,
-        minimum_payment: 10,
+        maximum_royalties_per_month: 10_000,
         legal_project_owner: "UberCatz Inc",
 
         maximum_coins: 10_000_000

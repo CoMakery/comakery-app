@@ -5,11 +5,17 @@ class Views::Licenses::Index < Views::Projects::Base
     render partial: 'shared/project_header'
     column('license-markdown') {
       full_row {
-        license = File.read(Rails.root + 'lib/assets/license.md')
-        text raw markdown_to_html(license)
+        div(class: 'content-box') {
+          h1 "Project Terms"
+          render 'shared/award_form_terms'
+        }
 
-        h2 "Project Terms"
-        render 'shared/award_form_terms'
+        div(class: 'content-box') {
+          license = File.read(Rails.root + 'lib/assets/license.md')
+          text raw markdown_to_html(license)
+
+
+        }
       }
     }
   end
