@@ -52,12 +52,13 @@ $ ->
     removeElement.hide()
     removeElement.find("input[data-destroy]").val("1")
 
+  # Run on page ready then bind events
   awardPaymentType()
-  $('#project_payment_type').on 'ready change', (e)->
+  $('#project_payment_type').change (e)->
     awardPaymentType()
 
   royaltyCalc()
-  $('#project_royalty_percentage, #project_maximum_coins, #project_denomination').on 'ready change', (e) ->
+  $('#project_royalty_percentage, #project_maximum_coins, #project_denomination').change (e) ->
     royaltyCalc()
 
 awardPaymentType = () ->
