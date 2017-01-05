@@ -33,21 +33,25 @@ describe "viewing projects, creating and editing", :js do
     click_link "New Project"
 
     fill_in "Description", with: "This is a project description which is very informative"
+    fill_in "Project Owner's Legal Name", with: "Mindful Inc"
+
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public")).not_to be_checked
 
-    expect(find_field("Maximum Number of Awardable Coins")['value']).to eq("10000000")
-    fill_in "Maximum Number of Awardable Coins", with: "20000000"
+    expect(find_field("project_maximum_coins")['value']).to eq("1000000")
+    fill_in "project_maximum_coins", with: "20000000"
 
     award_type_inputs = get_award_type_rows
-    expect(award_type_inputs.size).to eq(3)
     award_type_inputs[0].all("input")[0].set "This is a small award type"
     award_type_inputs[0].all("input")[1].set "1000"
     award_type_inputs[1].all("input")[0].set "This is a medium award type"
     award_type_inputs[1].all("input")[1].set "2000"
     award_type_inputs[2].all("input")[0].set "This is a large award type"
     award_type_inputs[2].all("input")[1].set "3000"
-    # award_type_inputs[3]["class"].include?("hide")
+    award_type_inputs.last(award_type_inputs.size - 3). each do |input|
+      input.all("a[data-mark-and-hide]")[0].click
+    end
+
 
     click_link "+ add award type"
 
@@ -75,17 +79,21 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Title", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
 
+    fill_in "project_royalty_percentage", with: "7.99999"
+    fill_in "project_maximum_royalties_per_month", with: "25000"
+
     click_on "Save"
 
     expect(page).to have_content "Project created"
     expect(page).to have_content "This is a project"
-    expect(page).to have_content "This is a project description which is very informative"
+    expect(page).to have_content "This is a project description"
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link "Project Tasks"
-    expect(page).to have_content "0/20,000,000"
-    expect(page).to have_content "Visibility: Private"
 
-    expect(page).to have_content "Owner: Glenn Spanky"
+    expect(page).to have_content "Maximum Revenue Shares: 20,000,000"
+    expect(page.find('.revenue-percentage')).to have_content "7.99999%"
+
+    expect(page).to have_content "Lead by Glenn Spanky"
     expect(page).to have_content "Citizen Code"
 
     award_type_rows = get_award_type_rows
@@ -104,9 +112,8 @@ describe "viewing projects, creating and editing", :js do
     expect(award_type_rows[3]).to have_content "This is a super big award type"
     expect(award_type_rows[3]).to have_content "5,000"
 
-    click_on "Edit"
+    click_on "Settings"
 
-    expect(page.find("input[name*='[maximum_coins]']")[:disabled]).to eq(true)
     expect(page.find(".project-image")[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
 
     expect(page).to have_unchecked_field("Set project as public")
@@ -114,7 +121,6 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Description", with: "This is an edited project description which is very informative"
     fill_in "Project Tracker", with: "http://github.com/here/is/my/tracker"
     fill_in "Video", with: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
-    fill_in "Contributor Agreement", with: "https://docusign.com/project_contributor_agreement.pdf"
     uncheck "Set project as public"
     uncheck "Publish to Ethereum Blockchain"
 
@@ -135,12 +141,9 @@ describe "viewing projects, creating and editing", :js do
 
     expect(page).to have_content "This is an edited project"
     expect(page).to have_content "This is an edited project description which is very informative"
-    expect(page).to have_content "Visibility: Private"
     expect(page).to have_link "Project Tasks"
-    expect(page).to have_link "Project Slack Channel", href: "https://citizencodedomain.slack.com/messages/a-channel-name"
+    expect(page).to have_link "Slack Channel", href: "https://citizencodedomain.slack.com/messages/a-channel-name"
     expect(page.all(".project-video iframe").size).to eq(1)
-    expect(page).to have_link "Video", href: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0"
-    expect(page).to have_link "Contributor Agreement", href: "https://docusign.com/project_contributor_agreement.pdf"
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
@@ -245,24 +248,6 @@ describe "viewing projects, creating and editing", :js do
           award.id, award2.id ])
 
       end
-    end
-  end
-
-  it "shows the percentage of coin awards if greater than 0.01% have been awarded" do
-    login(account)
-
-    visit project_path(project)
-
-    within(".coins-issued") do
-      expect(page).to have_content "0/10,000,000"
-    end
-
-    create(:award, award_type: create(:award_type, project: project, amount: 100_000))
-
-    visit project_path(project)
-
-    within(".coins-issued") do
-      expect(page).to have_content "100,000/10,000,000 (1.00%) Total Coins Issued"
     end
   end
 end

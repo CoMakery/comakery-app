@@ -23,7 +23,7 @@ describe "awarding users" do
   let!(:different_team_authentication) { create(:authentication, slack_user_name: 'different', slack_user_id: 'different id', slack_first_name: "Different", slack_last_name: "Different", account: different_team_account, slack_team_id: "different team id", slack_image_32_url: "http://avatar.com/different_team_account_avatar.jpg") }
 
   before do
-    travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000"))  # so we can check for fixed date of award
+    travel_to(DateTime.parse("Mon, 29 Feb 2016 00:00:00 +0000")) # so we can check for fixed date of award
 
     expect_any_instance_of(Account).to receive(:send_award_notifications)
     stub_slack_user_list([{"id": "U99M9QYFQ", "team_id": "team id", "name": "bobjohnson", "profile": {"email": "bobjohnson@example.com"}}])
@@ -50,7 +50,8 @@ describe "awarding users" do
 
       visit project_path(project)
 
-      expect(page).to have_content "0My Project Coins"
+      expect(page.find('.my-share')).to have_content "0"
+      expect(page.find('.my-balance')).to have_content "$0"
 
       choose "Small"
       expect(page.all("select#award_slack_user_id option").map(&:text).sort).to eq(["", "@bobjohnson"])
@@ -69,17 +70,21 @@ describe "awarding users" do
 
       expect(page).to have_content "@bobjohnson"
 
-      click_link("Back to project")
+      click_link("Overview")
 
-      within(".coins-issued") do
-        expect(page).to have_content "1,000My Project Coins"
-        expect(page).to have_content "1,000/10,000,000 (0.01%)Total Coins Issued"
+      within(".awarded-info") do
+        expect(page.find('.my-share')).to have_content "1,000"
+        expect(page.find('.my-balance')).to have_content "$0"
       end
 
-      within('.project-body') do
+      click_link "Contributors"
+
+      within('table') do
         expect(page.all("img[src='https://slack.example.com/team-image-34-px.jpg']").size).to eq(1)
+        expect(page.find('.contributor')).to have_content "@bobjohnson"
+        expect(page.find('.award-holdings')).to have_content "1,000"
       end
-      expect(page).to have_content "@bobjohnson1,000"
+
 
       expect(page.html).to include('{"content": [{"label":"@bobjohnson","value":1000}')
     end
@@ -102,13 +107,13 @@ describe "awarding users" do
 
     visit project_path(project)
 
-    click_link "Award History"
+    click_link "Awards"
 
     expect(page.all(".award-rows .award-row").size).to eq(0)
 
-    expect(page).to have_content("Award History")
+    expect(page).to have_content("History")
 
-    click_link "Back to project"
+    click_link "Overview"
 
     expect(page).to have_content("Project that needs awards")
 
@@ -131,11 +136,11 @@ describe "awarding users" do
 
     expect(page).to have_content "Successfully sent award to @bobjohnson"
 
-    click_link "Award History"
+    click_link "Awards"
 
     expect(EthereumTokenIssueJob.jobs.length).to eq(0)
 
-    expect(page).to have_content "Award History"
+    expect(page).to have_content "History"
     expect(page).to have_content "Feb 29"
     expect(page).to have_content "1,000"
     expect(page).to have_content "(no account)"
@@ -145,7 +150,7 @@ describe "awarding users" do
 
     expect(page.all(".award-rows .award-row").size).to eq(1)
 
-    click_link "Back to project"
+    click_link "Overview"
 
     expect(page).to have_content("Project that needs awards")
 
@@ -157,7 +162,7 @@ describe "awarding users" do
   end
 
   it 'awarding a user with an ethereum account' do
-    bob_account = create(:account, email: "bobjohnson@example.com", ethereum_wallet: '0x'+'a'*40 )
+    bob_account = create(:account, email: "bobjohnson@example.com", ethereum_wallet: '0x'+'a'*40)
 
     login(owner_account)
     visit project_path(project)

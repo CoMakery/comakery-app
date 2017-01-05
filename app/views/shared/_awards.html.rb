@@ -2,10 +2,10 @@ class Views::Shared::Awards < Views::Base
   needs :project, :awards, :show_recipient, :current_account
 
   def content
-    div(class: "table-scroll") {
+    div(class: "table-scroll table-box") {
       table(class: "award-rows") {
         tr(class: "header-row") {
-          th(class: "small-1") { text "Tokens Issued" }
+          th(class: "small-1") { text "#{project.payment_description} Earned" }
           th(class: "small-2") { text "Date" }
           if show_recipient
             th(class: "small-2") { text "Recipient" }
@@ -31,14 +31,15 @@ class Views::Shared::Awards < Views::Base
                 }
               end
               td(class: "small-3 description") {
-                if award.proof_link
-                  link_to award.proof_id_short, award.proof_link, target: '_blank'
-                else
-                  span award.proof_id_short
-                end
-                br
+
                 strong "#{award.award_type.name}"
                 text raw ": #{markdown_to_html award.description}" if award.description.present?
+                br
+                if award.proof_link
+                  link_to award.proof_id, award.proof_link, target: '_blank'
+                else
+                  span award.proof_id
+                end
               }
               td(class: "small-2") {
                 if award.issuer_slack_icon

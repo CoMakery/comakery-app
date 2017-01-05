@@ -5,18 +5,22 @@ window.stackedBarChart = (selector, data)->
   margin =
     top: 20
     right: 20
-    bottom: 70
-    left: 120
+    bottom: 50
+    left: 80
   width = 500 - (margin.left) - (margin.right)
-  height = 250 - (margin.top) - (margin.bottom)
+  height = 125 - (margin.top) - (margin.bottom)
 
   x = d3.scale.ordinal().rangeRoundBands([0, width], .1)
   y = d3.scale.linear().rangeRound([height, 0])
   color = d3.scale.ordinal().range(window.chartColors)
 
-  xAxis = d3.svg.axis().scale(x).orient('bottom').tickValues(_.filter(_.map(data, (d, i)-> d["date"]), (d, i) -> i % 5 == 0))
+  dates = for percentage in [0, 0.2, 0.4, 0.6, 0.8, 1]
+    i = Math.round(percentage * (data.length-1))
+    date = data[i].date
 
-  yAxis = d3.svg.axis().scale(y).orient('left').ticks(5).tickFormat(d3.format(',.2r'))
+  xAxis = d3.svg.axis().scale(x).orient('bottom').tickValues(dates)
+
+  yAxis = d3.svg.axis().scale(y).orient('left').ticks(1).tickFormat(d3.format(',.2r'))
 
   svg = d3.select(selector)
     .append('svg')
@@ -57,13 +61,13 @@ window.stackedBarChart = (selector, data)->
   svg.append('g')
       .attr('class', 'y axis')
       .call(yAxis)
-    # .append('text')
-    #   .attr('transform', 'rotate(-90)')
-    #   .attr('x', -60)
-    #   .attr('y', -60)
-    #   .attr('dy', '.71em')
-    #   .style('text-anchor', 'end')
-    #   .text 'Coins'
+     .append('text')
+       .attr('transform', 'rotate(-90)')
+       .attr('x', -15)
+       .attr('y', -60)
+       .attr('dy', '.71em')
+       .style('text-anchor', 'end')
+       .text 'Awards'
 
   # graph bars
   state = svg.selectAll('.state')

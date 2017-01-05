@@ -6,23 +6,16 @@
     overflow: overlay;
   }
 }
+.award-types {
+  margin-bottom: 15px;
+}
+
 .project-head {
   width: 100%;
-  margin: 0 auto;
-  border-bottom: 1px solid #ccc;
-  border-top: 1px solid #ccc;
-  padding: 2.3em 0 2.5em;
-  background: $palegray;
-  @include box-shadow(inset 0px 8px 35px -20px rgba(0,0,0,0.25))
+  margin: 1em 0 0 0;
+  padding: 1em;
 }
 .project-title {
-  margin-bottom: 2em;
-  text-align: center;
-
-  h1 {
-    margin: 0;
-    font-size: 2.7em;
-  }
   a.edit {
     margin-left: 1em;
   }
@@ -35,28 +28,16 @@
   width: 100%;
   height: auto;
 }
-.row.project-body {
-  margin-top: 2.6em;
+.project-body {
+  width: 100%;
+  margin: 1em 0 0 0;
+  padding: 1em;
+
   h3 {
     margin-bottom: .5em;
   }
 }
-.award-send {
-  border: 1px solid #ccc;
-  padding: 20px 50px;
-  border-radius: $global-radius;
 
-  input[type="radio"] {
-    margin-right: 10px;
-    margin-left: 2px;
-  }
-  label {
-    font-weight: inherit;
-    .grayed-out {
-      color: #999;
-    }
-  }
-}
 .contributors-column {
   padding-left: 1.85em;
 
@@ -71,7 +52,12 @@
   }
 }
 .row.project-tasks {
-  margin-top: 1em;
+  margin-bottom: 1em;
+}
+.project-tasks div {
+  display: inline-block;
+  min-width: 210px;
+  padding-left: 15px;
 }
 
 .row.project-settings {
@@ -85,3 +71,52 @@
 #award_description {
   margin-bottom: 0;
 }
+
+.content {
+  margin-bottom: 1em;
+}
+
+.awarded-info-header {
+  h1, h2, h3 {display: inline;}
+
+  padding: 5px 10px 0px 0px;
+
+  margin-bottom: 1em;
+  margin-left: 0px;
+  margin-right: 0px;
+
+  font-size: .8em;
+}
+
+.description-stats {
+  li {
+    margin-bottom: 2em;
+    vertical-align: top;
+    text-indent: 0em;
+  }
+  span {
+    display: inline;
+    margin-right: 5px;
+  }
+  span.balance-type {
+    font-size: 13px;
+  }
+}
+
+.project-terms {
+  .column {
+    width: 150px;
+    height: 75px;
+    border: solid 1px $iron;
+  }
+}
+
+h4 {
+  border-bottom: 1px solid $iron;
+  margin-bottom: 10px;
+}
+
+form {
+  margin-right: 25px;
+}
+

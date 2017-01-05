@@ -51,3 +51,39 @@ $ ->
     removeElement = $(e.target).closest(removeSelector)
     removeElement.hide()
     removeElement.find("input[data-destroy]").val("1")
+
+  # Run on page ready then bind events
+  awardPaymentType()
+  $('#project_payment_type').change (e)->
+    awardPaymentType()
+
+  royaltyCalc()
+  $('#project_royalty_percentage, #project_maximum_coins, #project_denomination').change (e) ->
+    royaltyCalc()
+
+awardPaymentType = () ->
+  switch $('#project_payment_type option:selected').val()
+    when 'project_coin'
+      $('.revenue-sharing-terms').addClass('hide')
+      $('.project-coin-terms').removeClass('hide')
+      $('span.award-type').html('Project Coins')
+    when 'revenue_share'
+      $('.revenue-sharing-terms').removeClass('hide')
+      $('.project-coin-terms').addClass('hide')
+      $('span.award-type').html('Revenue Shares')
+
+royaltyCalc = () ->
+  return unless $('#project_denomination option:selected').html()
+  percentage = $('#project_royalty_percentage').val()
+  maxAwarded = $('#project_maximum_coins').val()
+
+  schedule = $("<tbody>")
+  currencyFromSelectedOption = $('#project_denomination option:selected').html().match(/\(([^)]+)\)/)[1]
+  denomination = "<span class='denomination'>#{currencyFromSelectedOption}</span>"
+
+  for revenue in [1e3, 1e4, 1e5, 1e6]
+    contributorPayment = revenue * percentage / 100
+    $(schedule).append "<tr><td>#{denomination}#{revenue.toLocaleString()}</td>" +
+      "<td>#{denomination}#{contributorPayment.toLocaleString()}</td>"
+
+  $('.royalty-calc tbody').replaceWith(schedule)

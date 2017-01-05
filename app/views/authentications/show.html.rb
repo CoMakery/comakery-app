@@ -6,7 +6,7 @@ class Views::Authentications::Show < Views::Base
       text "You can download an Ethereum wallet from "
       link_to("Ethereum.org", "http://www.ethereum.org", target: "_blank")
       text " to create an account. Enter your Ethereum account address below. "
-      text "Then you will receive your CoMakery project coin awards in your Ethereum account!"
+      text "Then you will receive your CoMakery awards in your Ethereum account!"
     }
     p {
       link_to("Get a wallet now", "http://www.ethereum.org", target: "_blank", class: buttonish)
@@ -51,10 +51,9 @@ class Views::Authentications::Show < Views::Base
     hr
 
     awards.group_by { |award| award.project.id }.each do |(_, awards_for_project)|
-      project = awards_for_project.first.project
+      project = awards_for_project.first.project.decorate
       h3 {
-        link_to project.title, project_path(project)
-        text " awards"
+        link_to project.title, project_awards_path(project)
       }
       render partial: "shared/awards", locals: {
         awards: AwardDecorator.decorate_collection(awards_for_project),

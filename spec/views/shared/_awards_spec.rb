@@ -12,7 +12,7 @@ describe "shared/_awards.html.rb" do
   let!(:award1) { create(:award, award_type: award_type, description: 'markdown _rocks_: www.auto.link', issuer: issuer, authentication: recipient1_auth).decorate }
   let!(:award2) { create(:award, award_type: award_type, description: 'awesome', issuer: issuer, authentication: recipient2_auth).decorate }
 
-  before { assign :project, project }
+  before { assign :project, project.decorate }
   before { assign :awards, [award1] }
   before { assign :show_recipient, true }
   before { assign :current_account, issuer }

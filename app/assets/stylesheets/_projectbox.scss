@@ -21,21 +21,22 @@
     color: #aaa;
   }
   .info {
-    padding: 1em;
     padding-bottom: 2.3em;
     position: relative;
-
     @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-      min-height: 130px;
+      min-height: 100px;
     }
     @media #{$large-up} {
-      min-height: 130px;
+      min-height: 100px;
     }
 
     .text-overlay {
       position: absolute;
-      left: 85px;
-      top: -55px;
+      background-color: #444;
+      width: 100%;
+      padding: 6px 5px 6px 85px;
+      top: -75px;
+      opacity: 0.9;
       color: white;
 
       a {
@@ -50,12 +51,14 @@
         margin-bottom: -.2em;
       }
     }
-
+    p {
+      padding-left: 1em;
+    }
     .icon {
       border: 2px solid white;
       position: absolute;
       left: 1em;
-      top: -49px;
+      top: -95px;
       height: 55px;
       @include box-shadow(0px 1px 1px 1px rgba(0,0,0,0.12));
     }
@@ -78,6 +81,7 @@
     float: right;
     .contributor {
       margin-left: 6px;
+      margin-right: 8px;
     }
   }
 }

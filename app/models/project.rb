@@ -12,10 +12,30 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
 
   has_many :awards, through: :award_types, dependent: :destroy
-  has_many :contributors, through: :awards, source: :authentication
+  has_many :payments, dependent: :destroy
+
+  has_many :contributors, through: :awards, source: :authentication  # TODO deprecate in favor of contributors_distinct
+  has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
 
   belongs_to :owner_account, class_name: Account
-  validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :title
+
+  enum payment_type: {
+      revenue_share: 0,
+      project_coin: 1
+  }
+
+  enum denomination: {
+    USD: 0,
+    BTC: 1,
+    ETH: 2
+  }
+
+  validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id,
+                        :slack_team_image_34_url, :slack_team_image_132_url, :title, :legal_project_owner,
+                        :denomination
+
+  validates_presence_of :royalty_percentage, :maximum_royalties_per_month, unless: :project_coin?
+
   validates_numericality_of :maximum_coins, greater_than: 0
 
   validate :valid_tracker_url, if: -> { tracker.present? }

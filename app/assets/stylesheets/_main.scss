@@ -6,14 +6,11 @@
 @import 'awards_table';
 @import 'callouts';
 @import 'edit';
+@import 'bar_chart';
 
 body {
   background-color: white;
 
-  .top-bar-container {
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 2em;
-  }
   &.projects-landing.signed-out, &.projects-show {
     .top-bar-container {
       border-bottom: 0;
@@ -97,22 +94,6 @@ form.take-action-form p.notice {
   color: $snow;
 }
 
-.underlined-header {
-  border-bottom: 1px solid $iron;
-
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-
-  margin-bottom: 5px;
-  margin-left: 2px;
-  margin-right: 2px;
-
-  text-transform: uppercase;
-  font-size: .8em;
-}
-
 .centered {
   text-align: center;
 }
@@ -173,8 +154,6 @@ form.take-action-form p.notice {
     right: 0;
     bottom: 0;
     overflow: hidden;
-    @include filter-gradient(#000000, #000000, vertical);
-    @include background-image(linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.55) 100%));
   }
 }
 
@@ -189,4 +168,66 @@ form.take-action-form p.notice {
 .help-text {
   color: $mediumgray;
   font-size: 9pt;
+}
+
+.content-box {
+  border: 1px solid #ccc;
+  padding: 20px 50px;
+  margin-bottom: 20px;
+  border-radius: $global-radius;
+  background-color: white;
+
+
+  input[type="radio"] {
+    margin-right: 10px;
+    margin-left: 2px;
+  }
+  label {
+    font-weight: inherit;
+    .grayed-out {
+      color: #999;
+    }
+  }
+
+  @include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.12));
+}
+ul {
+  margin-left: 0px;
+  li {
+    list-style: none;
+    margin-bottom: 5px;
+  }
+}
+.project-nav {
+  margin-bottom: 1em;
+  ul {
+    li {
+      font-size: 18px;
+      display: inline;
+      float: left;
+      margin-bottom: 0px;
+    }
+  }
+}
+
+.license-markdown {
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.1rem; }
+}
+
+.table-box {
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  border-radius: $global-radius;
+  background-color: white;
+
+  th, td {
+    text-align: left;
+  }
+  table {
+    margin-bottom: 0px;
+  }
+
+  @include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.12));
 }

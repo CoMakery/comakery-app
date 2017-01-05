@@ -1,7 +1,7 @@
 body.projects-edit, body.projects-new, body.projects-create  {
-  .top-bar, .main > .columns {
-    max-width: 57em;
-  }
+  // .top-bar, .main > .columns {
+  //   max-width: 57em;
+  // }
 }
 form.edit_project, form.new_project {
   input#project_image {
@@ -17,14 +17,6 @@ form.edit_project, form.new_project {
   }
   textarea {
     height: 9em;
-  }
-  #project_description {
-    margin-bottom: 0;
-  }
-  .award-types {
-    margin-top: 2em;
-    border-top: 1px solid #ccc;
-    padding-top: 2em;
   }
   .add-award-type {
     margin-bottom: 2em;
@@ -48,4 +40,23 @@ form.edit_project, form.new_project {
       margin-bottom: 1em;
     }
   }
+  .legal-box-header {
+    h3 {
+      display: inline;
+    }
+    margin-bottom: 10px;
+    i.fa-lock {
+      padding-top: 10px;
+      font-size: 30px;
+      float: right;
+    }
+  }
+}
+.input-group {
+  padding: 0;
+}
+.input-group-label {
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 10px;
 }

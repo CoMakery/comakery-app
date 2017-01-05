@@ -12,6 +12,8 @@ class Award < ActiveRecord::Base
 
   before_validation :ensure_proof_id_exists
 
+  delegate :amount, to: :award_type
+
   def ensure_proof_id_exists
     self.proof_id ||= SecureRandom.base58(44)  # 58^44 > 2^256
   end

@@ -5,6 +5,7 @@ class AwardsController < ApplicationController
   def index
     authorize(@project)
     @awards = @project.awards.decorate
+    @award_data = GetAwardData.call(authentication: current_account&.slack_auth, project: @project).award_data
   end
 
   def create
@@ -43,6 +44,6 @@ class AwardsController < ApplicationController
   end
 
   def assign_project
-    @project = policy_scope(Project).find(params[:project_id])
+    @project = policy_scope(Project).find(params[:project_id]).decorate
   end
 end

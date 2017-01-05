@@ -50,37 +50,15 @@ describe GetAwardData do
       awarded_account_names = Award.select("authentication_id, max(id) as id").group("authentication_id").all.map { |a| a.authentication.display_name }
       expect(awarded_account_names).to match_array(["@john", "sam sam", "bob bob"])
 
-      expect(result.award_data[:contributions_by_day]).to eq([{"date" => "2016-02-07", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-08", "@john" => 1000, "bob bob" => 0},
-                                                              {"date" => "2016-02-09", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-10", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-11", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-12", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-13", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-14", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-15", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-16", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-17", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-18", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-19", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-20", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-21", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-22", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-23", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-24", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-25", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-26", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-27", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-28", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-02-29", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-03-01", "@john" => 1000, "bob bob" => 0},
-                                                              {"date" => "2016-03-02", "@john" => 2000, "bob bob" => 1000},
-                                                              {"date" => "2016-03-03", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-03-04", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-03-05", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-03-06", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-03-07", "@john" => 0, "bob bob" => 0},
-                                                              {"date" => "2016-03-08", "@john" => 3000, "bob bob" => 2000}])
+      contributions = result.award_data[:contributions_by_day].select do |cbd|
+        cbd["@john"] > 0
+      end
+
+      expect(contributions).to eq([
+                                      {"date" => "2016-02-08", "sam sam" => 0, "@john" => 1000, "bob bob" => 0},
+                                      {"date" => "2016-03-01", "sam sam" => 0, "@john" => 1000, "bob bob" => 0},
+                                      {"date" => "2016-03-02", "sam sam" => 0, "@john" => 2000, "bob bob" => 1000},
+                                      {"date" => "2016-03-08", "sam sam"=>0, "@john" => 3000, "bob bob" => 2000}])
     end
   end
 
@@ -96,9 +74,42 @@ describe GetAwardData do
     end
   end
 
-  describe "#contributions_summary_data" do
+  describe "#contributions_summary" do
+    context "with no awards" do
+      specify do
+        contributions = GetAwardData.new.contributions_summary(project)
+        expect(contributions).to eq []
+      end
+    end
+
+    context "with awards" do
+      let!(:sam_award_1) { create(:award, award_type: award_type1, authentication: sam_auth, created_at: Date.new(2016, 1, 1)) }
+      let!(:john_award_1) { create(:award, award_type: award_type1, authentication: john_auth, created_at: Date.new(2016, 2, 8)) }
+      let!(:john_award_2) { create(:award, award_type: award_type1, authentication: john_auth, created_at: Date.new(2016, 3, 1)) }
+      let!(:john_payment) { create(:payment, recipient: john_auth, issuer: sam, project: project, amount: 10) }
+      let!(:sam_payment) { create(:payment, recipient: sam_auth, issuer: sam, project: project, amount: 5) }
+
+      specify do
+        contributions = GetAwardData.new.contributions_summary(project)
+        expect(contributions).to eq([
+                                        {:name => "@john",
+                                         :avatar => "https://slack.example.com/team-image-34-px.jpg",
+                                         :earned => 2000,
+                                         :paid => 10,
+                                         :remaining => 1990},
+                                        {:name => "sam sam",
+                                         :avatar => "http://avatar.com/im_pretty.jpg",
+                                         :earned => 1000,
+                                         :paid => 5,
+                                         :remaining => 995},
+                                    ])
+      end
+    end
+  end
+
+  describe "#contributions_summary_pie_chart" do
     it "gathers extra entries into 'other'" do
-      expect(GetAwardData.new.contributions_summary_data([
+      expect(GetAwardData.new.contributions_summary_pie_chart([
                                                      create(:award, award_type: create(:award_type, amount: 10), authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
                                                      create(:award, award_type: create(:award_type, amount: 33), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
                                                      create(:award, award_type: create(:award_type, amount: 20), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
@@ -108,7 +119,7 @@ describe GetAwardData do
                                                            ])
     end
     it "gathers shows all entries if less than threshold" do
-      expect(GetAwardData.new.contributions_summary_data([
+      expect(GetAwardData.new.contributions_summary_pie_chart([
                                                      create(:award, award_type: create(:award_type, amount: 10), authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
                                                      create(:award, award_type: create(:award_type, amount: 33), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
                                                      create(:award, award_type: create(:award_type, amount: 20), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))

@@ -28,8 +28,8 @@ window.pieChart = (selector, data)->
       }
     },
     "size": {
-      "canvasHeight": 250,
-      "canvasWidth": 380,
+      "canvasHeight": 300,
+      "canvasWidth": 450,
       "pieOuterRadius": "80%"
     },
     "labels": {
@@ -40,7 +40,7 @@ window.pieChart = (selector, data)->
         "format": "value"
       },
       "mainLabel": {
-        "fontSize": 10,
+        "fontSize": 12,
       },
       "percentage": {
         "color": "#e1e1e1",

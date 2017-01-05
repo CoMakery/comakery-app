@@ -61,20 +61,12 @@ describe ProjectsController do
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
         expect(assigns[:project]).not_to be_public
-        expect(assigns[:project].maximum_coins).to eq(10000000)
-        expect(assigns[:project].award_types.size).to eq(4)
+        expect(assigns[:project].maximum_coins).to eq(1_000_000)
+        expect(assigns[:project].award_types.size).to be > 4
 
         expect(assigns[:project].award_types.first).to be_a_new_record
         expect(assigns[:project].award_types.first.name).to eq("Thanks")
         expect(assigns[:project].award_types.first.amount).to eq(10)
-
-        expect(assigns[:project].award_types.second).to be_a_new_record
-        expect(assigns[:project].award_types.second.name).to eq("Small Contribution")
-        expect(assigns[:project].award_types.second.amount).to eq(100)
-
-        expect(assigns[:project].award_types.third).to be_a_new_record
-        expect(assigns[:project].award_types.third.name).to eq("Contribution")
-        expect(assigns[:project].award_types.third.amount).to eq(1000)
 
         expect(assigns[:slack_channels]).to eq(["foo", "bar"])
       end
@@ -98,6 +90,8 @@ describe ProjectsController do
               video_url: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0",
               slack_channel: "slack_channel",
               maximum_coins: "150",
+              legal_project_owner: 'legal project owner',
+              payment_type: 'project_coin',
               award_types_attributes: [
                   {name: "Community Award", amount: 10, community_awardable: true},
                   {name: "Small Award", amount: 1000},
@@ -278,6 +272,8 @@ describe ProjectsController do
                       title: "",
                       description: "updated Project description here",
                       tracker: "http://github.com/here/is/my/tracker/updated",
+                      legal_project_owner: 'legal project owner',
+                      payment_type: 'project_coin',
                       award_types_attributes: [
                           {id: small_award_type.to_param, name: "Small Award", amount: 150},
                           {id: destroy_me_award_type.to_param, _destroy: true},
@@ -289,7 +285,7 @@ describe ProjectsController do
           end.not_to change { AwardType.count }
 
           project = assigns[:project]
-          expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
+          expect(flash[:error]).to eq("Project update failed, please correct the errors below")
           expect(project.title).to eq("")
           expect(project.description).to eq("updated Project description here")
           expect(project.tracker).to eq("http://github.com/here/is/my/tracker/updated")
@@ -323,12 +319,14 @@ describe ProjectsController do
           expect do
             put :update, id: cat_project.to_param,
                 project: {
+                    legal_project_owner: 'legal project owner',
+                    payment_type: 'project_coin',
                     award_types_attributes: [
                         {id: award_type.to_param, name: "Bigger Award", amount: 500},
                     ]
                 }
             expect(response.status).to eq(200)
-            expect(flash[:error]).to eq("Project updating failed, please correct the errors below")
+            expect(flash[:error]).to eq("Project update failed, please correct the errors below")
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
       end
