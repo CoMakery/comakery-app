@@ -55,27 +55,4 @@ class Views::Awards::Activity < Views::Base
   def percentage_issued
     total_coins_issued * 100 / project.maximum_coins.to_f
   end
-
-  def royalty_payment
-    p {
-      if can_award
-        form(method: "POST") {
-          script(
-              "src" => "https://checkout.stripe.com/checkout.js",
-              "class" => 'stripe-button',
-              "data-key" => "pk_test_DuBJXYk5G6VvuuLT5fYsSbBj",
-              "data-label" => "Pay #{project.payment_description}",
-              "data-panel-label" => "Pay #{project.payment_description}",
-              "data-amount" => total_coins_issued * 60,
-              "data-name" => project.title,
-              "data-description" => "Pay #{project.payment_description}",
-              # "data-image" => project_image(project),
-              "data-locale" => "auto",
-              "data-zip-code" => true,
-              "data-bitcoin" => true
-          )
-        }
-      end
-    }
-  end
 end
