@@ -16,19 +16,21 @@ class Views::Projects::Landing < Views::Projects::Base
           div(class:"intro-content") {
             div(class:"show-for-small-only") {
               h3 {
-                text "Help Make Apps & Products and Share the Revenue"
+                text "Collaborate on Products"
+                br
+                text "Share the Revenue"
               }
             }
             div(class:"show-for-medium-only") {
               h3 {
-                text "Help Make Apps & Products"
+                text "Collaborate on Products"
                 br
                 text "Share the Revenue"
               }
             }
             div(class:"show-for-large") {
               h3 {
-                text "Help Make Apps & Products"
+                text "Collaborate on Products"
                 br
                 text "Share the Revenue"
               }
