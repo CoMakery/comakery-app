@@ -79,10 +79,10 @@ royaltyCalc = () ->
 
   schedule = $("<tbody>")
   currencyFromSelectedOption = $('#project_denomination option:selected').html().match(/\(([^)]+)\)/)[1]
+  denomination = "<span class='denomination'>#{currencyFromSelectedOption}</span>"
 
   for revenue in [1e3, 1e4, 1e5, 1e6]
     contributorPayment = revenue * percentage / 100
-    denomination = "<span class='denomination'>#{currencyFromSelectedOption}</span>"
     $(schedule).append "<tr><td>#{denomination}#{revenue.toLocaleString()}</td>" +
       "<td>#{denomination}#{contributorPayment.toLocaleString()}</td>"
 
