@@ -12,7 +12,7 @@ class Views::Licenses::Index < Views::Projects::Base
 
         div(class: 'content-box') {
           license = File.read(Rails.root + 'lib/assets/license.md')
-          text raw markdown_to_html(license)
+          text raw markdown_to_legal_doc_html(license)
 
 
         }
