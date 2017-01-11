@@ -15,15 +15,15 @@ describe GetAwardData do
   let!(:award_type3) { create(:award_type, project: project, amount: 3000, name: "Big Award") }
 
   describe "#call" do
-    let!(:sam_award_1) { create(:award, award_type: award_type1, authentication: sam_auth, created_at: Date.new(2016, 1, 1)) }
+    let!(:sam_award_1) { create(:award, award_type: award_type1, quantity: 0.15, authentication: sam_auth, created_at: Date.new(2016, 1, 1)) }
 
-    let!(:john_award_1) { create(:award, award_type: award_type1, authentication: john_auth, created_at: Date.new(2016, 2, 8)) }
-    let!(:john_award_2) { create(:award, award_type: award_type1, authentication: john_auth, created_at: Date.new(2016, 3, 1)) }
-    let!(:john_award_3) { create(:award, award_type: award_type2, authentication: john_auth, created_at: Date.new(2016, 3, 2)) }
-    let!(:john_award_4) { create(:award, award_type: award_type3, authentication: john_auth, created_at: Date.new(2016, 3, 8)) }
+    let!(:john_award_1) { create(:award, award_type: award_type1, quantity: 2, authentication: john_auth, created_at: Date.new(2016, 2, 8)) }
+    let!(:john_award_2) { create(:award, award_type: award_type1, quantity: 2, authentication: john_auth, created_at: Date.new(2016, 3, 1)) }
+    let!(:john_award_3) { create(:award, award_type: award_type2, quantity: 2, authentication: john_auth, created_at: Date.new(2016, 3, 2)) }
+    let!(:john_award_4) { create(:award, award_type: award_type3, quantity: 2, authentication: john_auth, created_at: Date.new(2016, 3, 8)) }
 
-    let!(:bob_award_1) { create(:award, award_type: award_type1, authentication: bob_auth, created_at: Date.new(2016, 3, 2)) }
-    let!(:bob_award_2) { create(:award, award_type: award_type2, authentication: bob_auth, created_at: Date.new(2016, 3, 8)) }
+    let!(:bob_award_1) { create(:award, award_type: award_type1, quantity: 2, authentication: bob_auth, created_at: Date.new(2016, 3, 2)) }
+    let!(:bob_award_2) { create(:award, award_type: award_type2, quantity: 2, authentication: bob_auth, created_at: Date.new(2016, 3, 8)) }
 
     before do
       travel_to Date.new(2016, 3, 8)
@@ -31,17 +31,17 @@ describe GetAwardData do
 
     it "doesn't explode if you aren't logged in" do
       result = GetAwardData.call(authentication: nil, project: project)
-      expect(result.award_data[:award_amounts]).to eq({:my_project_coins => nil, :total_coins_issued => 11000})
+      expect(result.award_data[:award_amounts]).to eq({:my_project_coins => nil, :total_coins_issued => 20_150.0})
     end
 
     it "returns a pretty hash of the awards for a project with summed amounts for each person" do
       result = GetAwardData.call(authentication: sam_auth, project: project)
 
-      expect(result.award_data[:contributions]).to match_array([{:net_amount=>7000, :name=>"@john", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
-                                                                {:net_amount=>3000, :name=>"bob bob", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
-                                                                {:net_amount=>1000, :name=>"sam sam", :avatar=>"http://avatar.com/im_pretty.jpg"}])
+      expect(result.award_data[:contributions]).to match_array([{:net_amount=>14000.0, :name=>"@john", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
+                                                                {:net_amount=>6000, :name=>"bob bob", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
+                                                                {:net_amount=>150.0, :name=>"sam sam", :avatar=>"http://avatar.com/im_pretty.jpg"}])
 
-      expect(result.award_data[:award_amounts]).to eq({my_project_coins: 1000, total_coins_issued: 11_000})
+      expect(result.award_data[:award_amounts]).to eq({my_project_coins: 150.0, total_coins_issued: 20_150.0})
     end
 
     it "shows values for each contributor for all 30 days" do
@@ -55,10 +55,10 @@ describe GetAwardData do
       end
 
       expect(contributions).to eq([
-                                      {"date" => "2016-02-08", "sam sam" => 0, "@john" => 1000, "bob bob" => 0},
-                                      {"date" => "2016-03-01", "sam sam" => 0, "@john" => 1000, "bob bob" => 0},
-                                      {"date" => "2016-03-02", "sam sam" => 0, "@john" => 2000, "bob bob" => 1000},
-                                      {"date" => "2016-03-08", "sam sam"=>0, "@john" => 3000, "bob bob" => 2000}])
+                                      {"date" => "2016-02-08", "sam sam" => 0, "@john" => 2000.0, "bob bob" => 0},
+                                      {"date" => "2016-03-01", "sam sam" => 0, "@john" => 2000.0, "bob bob" => 0},
+                                      {"date" => "2016-03-02", "sam sam" => 0, "@john" => 4000.0, "bob bob" => 2000.0},
+                                      {"date" => "2016-03-08", "sam sam"=>0, "@john" => 6000.0, "bob bob" => 4000.0}])
     end
   end
 
@@ -110,9 +110,9 @@ describe GetAwardData do
   describe "#contributions_summary_pie_chart" do
     it "gathers extra entries into 'other'" do
       expect(GetAwardData.new.contributions_summary_pie_chart([
-                                                     create(:award, award_type: create(:award_type, amount: 10), authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
-                                                     create(:award, award_type: create(:award_type, amount: 33), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
-                                                     create(:award, award_type: create(:award_type, amount: 20), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
+                                                     create(:award, unit_amount: 10, total_amount: 10, authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
+                                                     create(:award, unit_amount: 33, total_amount: 33, authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
+                                                     create(:award, unit_amount: 20, total_amount: 20, authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
                                                  ], 1)).to eq([
                                                                {:net_amount => 33, :name => "b b", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
                                                                {:net_amount => 30, :name => "Other"}
@@ -120,9 +120,9 @@ describe GetAwardData do
     end
     it "gathers shows all entries if less than threshold" do
       expect(GetAwardData.new.contributions_summary_pie_chart([
-                                                     create(:award, award_type: create(:award_type, amount: 10), authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
-                                                     create(:award, award_type: create(:award_type, amount: 33), authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
-                                                     create(:award, award_type: create(:award_type, amount: 20), authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
+                                                     create(:award, unit_amount: 10, total_amount: 10, authentication: create(:authentication, slack_first_name: "a", slack_last_name: "a")),
+                                                     create(:award, unit_amount: 33, total_amount: 33, authentication: create(:authentication, slack_first_name: "b", slack_last_name: "b")),
+                                                     create(:award, unit_amount: 20, total_amount: 20, authentication: create(:authentication, slack_first_name: "c", slack_last_name: "c"))
                                                  ], 3)).to eq([
                                                                {:net_amount => 33, :name => "b b", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
                                                                {:net_amount => 20, :name => "c c", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},

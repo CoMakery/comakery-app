@@ -8,17 +8,23 @@ describe Award do
         authentication: create(:authentication),
         issuer: create(:account),
         award_type: create(:award_type),
-        proof_id: 'xyz123'
+        proof_id: 'xyz123',
+        total_amount: 100,
+        unit_amount: 50,
+        quantity: 2
       )
     end
   end
 
   describe "validations" do
     it "requires things be present" do
-      expect(Award.new.tap{|award| award.valid? }.errors.full_messages).to match_array([
+      expect(Award.new(quantity: nil).tap{|award| award.valid? }.errors.full_messages).to match_array([
         "Authentication can't be blank",
         "Award type can't be blank",
         "Issuer can't be blank",
+        "Quantity can't be blank",
+        "Unit amount can't be blank",
+        "Total amount can't be blank"
       ])
     end
 

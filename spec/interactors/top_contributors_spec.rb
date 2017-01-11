@@ -26,7 +26,7 @@ describe TopContributors do
       create(:award, authentication: sb_auth1, award_type: medium_award_type, created_at: 5.days.ago)
       create(:award, authentication: sb_auth1, award_type: large_award_type, created_at: 5.days.ago)
 
-      create(:award, authentication: sb_auth2, award_type: large_award_type, created_at: 1.days.ago)
+      create(:award, authentication: sb_auth2, award_type: large_award_type, quantity: 2, created_at: 1.days.ago)
 
       create(:award, authentication: sb_auth3, award_type: extra_large_award_type, created_at: 4.days.ago)
 
@@ -34,7 +34,7 @@ describe TopContributors do
 
       create(:award, authentication: sb_auth5, award_type: small_award_type, created_at: 2.days.ago)
 
-      expected_result = [["sb3", 2000, 4.days.ago], ["sb1", 2000, 5.days.ago], ["sb2", 1000, 1.days.ago]]
+      expected_result = [["sb3", 2000, 4.days.ago], ["sb1", 2000, 5.days.ago], ["sb2", 2000, 1.days.ago]]
       expect(TopContributors.call(projects: [sb_project], n: 3).contributors[sb_project].map{|auth|[auth.slack_user_name, auth.total_awarded.to_i, auth.last_awarded_at]}).to eq(expected_result)
 
       expect(TopContributors.call(projects: [sb_project]).contributors[sb_project].map{|auth|auth.slack_user_name}).to eq(%w(sb3 sb1 sb2 sb5 sb4))

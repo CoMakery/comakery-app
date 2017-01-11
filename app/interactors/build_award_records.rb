@@ -19,8 +19,14 @@ class BuildAwardRecords
 
     authentication = Authentication.includes(:account).find_by(slack_user_id: slack_user_id)
     authentication ||= create_authentication(context)
-
-    award = Award.new(award_params.merge(issuer: issuer, authentication_id: authentication.id))
+    award_params["quantity"] ||= 1
+    award = Award.new(award_params.merge(
+        issuer: issuer,
+        authentication_id: authentication.id,
+        unit_amount: award_type.amount,
+        quantity: award_params["quantity"],
+        total_amount: award_type.amount * BigDecimal(award_params["quantity"])
+    ))
 
     unless award.valid?
       context.award = award
