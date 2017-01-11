@@ -6,7 +6,7 @@ class Award < ActiveRecord::Base
   belongs_to :award_type
   delegate :project, to: :award_type
 
-  validates_presence_of :proof_id, :authentication, :award_type, :issuer
+  validates_presence_of :proof_id, :authentication, :award_type, :issuer, :unit_amount, :total_amount, :quantity
 
   validates :ethereum_transaction_address, ethereum_address: {type: :transaction, immutable: true}  # see EthereumAddressable
 

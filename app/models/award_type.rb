@@ -16,4 +16,16 @@ class AwardType < ActiveRecord::Base
   def amount_didnt_change?
     errors[:amount] = "can't be modified if there are existing awards" if amount_was != amount
   end
+
+  # TODO: remove temporary migration method after migrating all environments
+  def self.write_all_award_amounts
+    AwardType.all.each {|award_type| award_type.write_award_amount }
+  end
+
+  # TODO: remove temporary migration method after migrating all environments
+  def write_award_amount
+    awards.each do |award|
+      award.update(unit_amount: amount, total_amount: award.quantity * amount)
+    end
+  end
 end

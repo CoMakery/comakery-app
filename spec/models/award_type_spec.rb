@@ -41,4 +41,53 @@ describe AwardType do
       end
     end
   end
+
+  describe '#write_award_amount' do
+    let!(:award_type_a) { create :award_type, amount: 16 }
+    let!(:award1_type_a) { create :award, award_type: award_type_a, quantity: 1 }
+    let!(:award2_type_a) { create :award, award_type: award_type_a, quantity: 2 }
+    let!(:award3_type_b) { create :award, quantity: 5, unit_amount: 10, total_amount: 50 }
+
+    before do
+      award1_type_a.update(unit_amount: 7, total_amount: 7)
+      award2_type_a.update(unit_amount: 7, total_amount: 14)
+      award_type_a.write_award_amount
+
+      award1_type_a.reload
+      award2_type_a.reload
+      award3_type_b.reload
+    end
+
+    specify { expect(award1_type_a.unit_amount).to eq 16 }
+    specify { expect(award1_type_a.total_amount).to eq 16 }
+
+    specify { expect(award2_type_a.unit_amount).to eq 16 }
+    specify { expect(award2_type_a.total_amount).to eq 32 }
+
+    specify { expect(award3_type_b.unit_amount).to eq 10 }
+    specify { expect(award3_type_b.total_amount).to eq 50 }
+  end
+
+  describe '.write_all_award_amounts' do
+    let!(:award_type_a) { create :award_type, amount: 16 }
+    let!(:award_type_b) { create :award_type, amount: 17 }
+    let!(:award1_type_a) { create :award, award_type: award_type_a, quantity: 1 }
+    let!(:award2_type_b) { create :award, award_type: award_type_b, quantity: 1 }
+
+    before do
+      award1_type_a.update(unit_amount: 7, total_amount: 7)
+      award2_type_b.update(unit_amount: 7, total_amount: 14)
+
+      AwardType.write_all_award_amounts
+
+      award1_type_a.reload
+      award2_type_b.reload
+    end
+
+    specify { expect(award1_type_a.unit_amount).to eq(16) }
+    specify { expect(award1_type_a.total_amount).to eq(16) }
+
+    specify { expect(award2_type_b.unit_amount).to eq(17) }
+    specify { expect(award2_type_b.total_amount).to eq(17) }
+  end
 end

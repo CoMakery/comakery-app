@@ -18,8 +18,8 @@ class GetAwardData
   end
 
   def award_amount_data(authentication, awards)
-    result = {total_coins_issued: awards.sum { |a| a.award_type.amount }}
-    result[:my_project_coins] = authentication ? awards.sum { |a| a.authentication_id == authentication.id ? a.award_type.amount : 0 } : nil
+    result = {total_coins_issued: awards.sum { |a| a.total_amount }}
+    result[:my_project_coins] = authentication ? awards.sum { |a| a.authentication_id == authentication.id ? a.total_amount : 0 } : nil
     result
   end
 
@@ -45,7 +45,7 @@ class GetAwardData
     awards.each_with_object({}) do |award, awards|
       awards[award.authentication_id] ||= {net_amount: 0}
       awards[award.authentication_id][:name] ||= award.authentication.display_name || award.authentication.email
-      awards[award.authentication_id][:net_amount] += award.award_type.amount
+      awards[award.authentication_id][:net_amount] += award.total_amount
       awards[award.authentication_id][:avatar] ||= award.authentication.slack_icon
     end.values.sort_by{|award_data| -award_data[:net_amount]}
   end
@@ -103,7 +103,7 @@ class GetAwardData
       if award.authentication
         display_name = award.authentication.display_name
         row[display_name] ||=0
-        row[display_name] += award.award_type.amount
+        row[display_name] += award.total_amount
       end
     end
 
