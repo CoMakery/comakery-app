@@ -8,7 +8,7 @@ describe Comakery::Slack do
   let!(:recipient_authentication) { create :authentication, account: recipient, slack_user_name: 'newt', slack_token: 'abc', slack_team_id: 'a team' }
   let!(:project) { create :project, slack_team_id: 'a team', slack_channel: 'super sweet slack channel' }
   let!(:award_type) { create :award_type, project: project }
-  let!(:award) { create :award, award_type: award_type, issuer: issuer, authentication: recipient_authentication }
+  let!(:award) { create :award, award_type: award_type, issuer: issuer, authentication: recipient_authentication, quantity: 2 }
   let!(:slack) { Comakery::Slack.new(slack_token) }
   let!(:slack_token) { issuer_authentication.slack_token }
 
@@ -44,7 +44,7 @@ describe Comakery::Slack do
     describe "when the issuer sends to someone else" do
       it 'should be from issuer to recipient' do
         message = slack.award_notifications_message(award)
-        expect(message).to match %r{@jim sent @newt a 1337 coin Contribution}
+        expect(message).to match %r{@jim sent @newt a 2674 coin Contribution}
       end
     end
 

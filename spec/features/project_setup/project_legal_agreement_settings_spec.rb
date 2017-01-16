@@ -115,13 +115,13 @@ describe "viewing projects, creating and editing", :js do
     expect(page.find('.award-row')).to have_content "@bobjohnson 10 10"
 
     click_link "Awards"
-    within(".header-row") { expect(page).to have_content /Project Coins Earned/i }
-    expect(page).to have_content "10"
+    expect(page.find('.award-type')).to have_content "Project Coin"
+    expect(page.find('.award-total-amount')).to have_content "10"
 
     login(bobjohnsons_auth.account)
     visit account_path
-    within(".header-row") { expect(page).to have_content /Project Coins Earned/i }
-    expect(page).to have_content "10"
+    expect(page.find('.award-type')).to have_content "Project Coin"
+    expect(page.find('.award-total-amount')).to have_content "10"
   end
 
   describe 'denominations shown' do

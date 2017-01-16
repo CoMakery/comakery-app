@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170110004020) do
+ActiveRecord::Schema.define(version: 20170116023520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,8 +92,8 @@ ActiveRecord::Schema.define(version: 20170110004020) do
     t.text     "proof_id",                                                             null: false
     t.string   "proof_link"
     t.decimal  "quantity",                     precision: 36, scale: 18, default: 1.0
-    t.decimal  "total_amount",                 precision: 36, scale: 18
-    t.decimal  "unit_amount",                  precision: 36, scale: 18
+    t.decimal  "total_amount",                 precision: 18
+    t.decimal  "unit_amount",                  precision: 18
   end
 
   create_table "beta_signups", force: :cascade do |t|

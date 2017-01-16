@@ -80,7 +80,6 @@ describe "awarding users" do
 
       click_link "Contributors"
 
-      wut
       within('table') do
         expect(page.all("img[src='https://slack.example.com/team-image-34-px.jpg']").size).to eq(1)
         expect(page.find('.contributor')).to have_content "@bobjohnson"

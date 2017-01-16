@@ -13,20 +13,25 @@ class BuildAwardRecords
     award_type = AwardType.find_by(id: award_params[:award_type_id])
     project = award_type&.project
     context.fail!(message: "missing award type") unless project
-    unless total_coins_issued + award_type.amount <= project.maximum_coins
-      context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable coins")
-    end
+
+    quantity = award_params[:quantity].present? ? award_params[:quantity] : 1
 
     authentication = Authentication.includes(:account).find_by(slack_user_id: slack_user_id)
     authentication ||= create_authentication(context)
-    award_params["quantity"] ||= 1
+
+    #TODO: could be done with a award_type.build_award_with_quantity variation of award_type.create_award_with_quantity
     award = Award.new(award_params.merge(
         issuer: issuer,
         authentication_id: authentication.id,
         unit_amount: award_type.amount,
-        quantity: award_params["quantity"],
-        total_amount: award_type.amount * BigDecimal(award_params["quantity"])
+        quantity: quantity,
+        total_amount: award_type.amount * BigDecimal(quantity)
     ))
+
+    #TODO: this shuold be an award validation
+    unless award.total_amount + total_coins_issued <= project.maximum_coins
+      context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable coins")
+    end
 
     unless award.valid?
       context.award = award
