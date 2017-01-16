@@ -1,0 +1,12 @@
+STDOUT.print "Checking all awards"
+
+Project.find_each(batch_size: 1) do |project|
+  if project.ethereum_enabled?
+    project.awards.find_each(batch_size: 1) do |award|
+      CreateEthereumAwards.call(award: award)
+      STDOUT.print '.'
+    end
+  end
+end
+
+STDOUT.print "\nDone.\n"
