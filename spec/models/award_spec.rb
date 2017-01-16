@@ -118,4 +118,19 @@ describe Award do
       end
     end
   end
+
+  describe "#total_amount should round" do
+
+    specify do
+      award = create :award, quantity: 1.4, unit_amount: 1, total_amount: 1.4
+      award.reload
+      expect(award.total_amount).to eq(1)
+    end
+
+    specify do
+      award = create :award, quantity: 1.5, unit_amount: 1, total_amount: 1.5
+      award.reload
+      expect(award.total_amount).to eq(2)
+    end
+  end
 end

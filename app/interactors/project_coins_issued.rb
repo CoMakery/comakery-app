@@ -1,15 +1,10 @@
+#TODO: this class can be refactored away
 class ProjectCoinsIssued
   include Interactor
 
   def call
     project = context.project
 
-    total_coins_issued = Project.where(id: project.id).
-        joins(:awards).
-        select("sum(award_types.amount) as total_coins_issued").
-        group("projects.id").
-        first&.total_coins_issued || 0
-
-    context.total_coins_issued = total_coins_issued
+    context.total_coins_issued = project.awards.sum(:total_amount)
   end
 end

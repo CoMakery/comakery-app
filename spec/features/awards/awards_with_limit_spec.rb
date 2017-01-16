@@ -1,11 +1,5 @@
 require 'rails_helper'
 
-def send_award
-  select "John Doe - @johndoe", from: "User"
-  page.find("input[name='award[award_type_id]'][value='1']").set(true)
-  click_on "Send Award"
-end
-
 describe "awarding up to limit of maximum awardable coins for a project" do
   let!(:current_auth) { create(:sb_authentication) }
   let!(:awardee_auth) { create(:sb_authentication) }
@@ -32,5 +26,11 @@ describe "awarding up to limit of maximum awardable coins for a project" do
     send_award
 
     expect(page).to have_content "Sorry, you can't send more awards than the project's maximum number of allowable coins"
+  end
+
+  def send_award
+    select "John Doe - @johndoe", from: "User"
+    page.find("input[name='award[award_type_id]']").set(true)
+    click_on "Send Award"
   end
 end

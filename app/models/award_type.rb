@@ -1,6 +1,16 @@
 class AwardType < ActiveRecord::Base
   belongs_to :project
-  has_many :awards, dependent: :restrict_with_exception
+  has_many :awards, dependent: :restrict_with_exception do
+    def create_with_quantity(quantity, issuer:, authentication:)
+      award_type = @association.owner
+
+      create quantity: quantity,
+             unit_amount: award_type.amount,
+             total_amount: (quantity * award_type.amount),
+             issuer: issuer,
+             authentication: authentication
+    end
+  end
 
   validates_presence_of :project, :name, :amount
   validate :amount_didnt_change?, unless: :modifiable?
@@ -19,7 +29,7 @@ class AwardType < ActiveRecord::Base
 
   # TODO: remove temporary migration method after migrating all environments
   def self.write_all_award_amounts
-    AwardType.all.each {|award_type| award_type.write_award_amount }
+    AwardType.all.each { |award_type| award_type.write_award_amount }
   end
 
   # TODO: remove temporary migration method after migrating all environments

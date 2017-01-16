@@ -90,4 +90,28 @@ describe AwardType do
     specify { expect(award2_type_b.unit_amount).to eq(17) }
     specify { expect(award2_type_b.total_amount).to eq(17) }
   end
+
+  describe "#awards#create_with_quantity" do
+    let(:award_type) { create :award_type, amount: 1 }
+    let(:issuer) { create :account }
+    let(:authentication) { create :authentication}
+    let(:award) { award_type.awards.create_with_quantity 1.4,
+                                                         issuer: issuer,
+                                                         authentication: authentication }
+
+    specify { expect(award.quantity).to eq(1.4) }
+
+    specify { expect(award.unit_amount).to eq(1) }
+
+    specify { expect(award.total_amount).to eq(1) }
+
+    specify { expect(award).to be_persisted }
+
+    it 'rounds up when >= x.5' do
+      roundup_award = award_type.awards.create_with_quantity(1.5,
+                                                             issuer: issuer,
+                                                             authentication: authentication)
+      expect(roundup_award.total_amount).to eq(2)
+    end
+  end
 end
