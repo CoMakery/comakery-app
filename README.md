@@ -6,21 +6,15 @@ Latest build: [![Circle CI](https://circleci.com/gh/CoMakery/comakery-app/tree/m
 
 CoMakery hangs out in Slack and creates Project Coins.
 It helps you to distribute profit and tracks your fair share of projects you work on.
-CoMakery helps you run a [Dynamic Equity Organization](https://github.com/citizencode/dynamic-equity-organization).
 
 ## Current Implementation Status
 
-This project is in private alpha.
+This project is in open beta.
 It is being actively developed by CoMakery.
-
-We are planning to license it as a Dynamic Equity Organization.
-The structure is being legally reviewed for use in CoMakery and on your projects.
 
 ## Project management
 
-Install the [zenbhub chrome git extension](https://chrome.google.com/webstore/detail/zenhub-for-github/ogcgkffhplmphkaahpmffcafajaocjbd?hl=en-US)
-
-Then you can see the board at: https://github.com/CoMakery/comakery-app#boards?repos=51389241
+See https://github.com/CoMakery/comakery-app/projects/1
 
 ## Local development
 
