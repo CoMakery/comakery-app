@@ -80,6 +80,21 @@ Username admin, password is in 1Password
 On staging and production, we use Heroku Scheduler to run `rails runner bin/patch_ethereum_awards`
 on a daily basis.  This task backfills "pending" ethereum awards, if they are no longer retired by Sidekiq.
 
+## Github Importer
+
+To create an an award for each git commit in a github project, start by running this command:  
+```
+heroku run -r staging "importer/git_importer.rb --help"
+```
+
+Study the options in help, then construct a command.  
+**Be careful!**  If you mistype the project ID, you will import awards into the wrong project.
+
+A full sample command:
+```
+heroku run -r staging "importer/git_importer.rb --github-repo core-network/client --project-id 1 --ethereum"
+```
+
 ## Deleting a project
 
 If you want to completely remove all trace of project `p` (be careful):
