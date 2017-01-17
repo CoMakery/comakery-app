@@ -78,7 +78,7 @@ royaltyCalc = () ->
   maxAwarded = $('#project_maximum_coins').val()
 
   schedule = $("<tbody>")
-  currencyFromSelectedOption = $('#project_denomination option:selected').html().match(/\(([^)]+)\)/)[1]
+  currencyFromSelectedOption = $('#project_denomination option:selected').html().match(/\((.+?)\)/)[1]
   denomination = "<span class='denomination'>#{currencyFromSelectedOption}</span>"
 
   for revenue in [1e3, 1e4, 1e5, 1e6]
