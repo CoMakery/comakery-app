@@ -69,6 +69,17 @@ bin/deploy staging
 bin/deploy production
 ```
 
+## Sidekiq
+
+Visit https://(demo|staging|www).comakery.com/admin/sidekiq
+
+Username admin, password is in 1Password
+
+## Scheduled Jobs
+
+On staging and production, we use Heroku Scheduler to run `rails runner bin/patch_ethereum_awards`
+on a daily basis.  This task backfills "pending" ethereum awards, if they are no longer retired by Sidekiq.
+
 ## Deleting a project
 
 If you want to completely remove all trace of project `p` (be careful):
