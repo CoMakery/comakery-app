@@ -5,7 +5,7 @@ describe AwardType do
     it "requires many attributes" do
       award_type = AwardType.new
       expect(award_type).not_to be_valid
-      expect(award_type.errors.full_messages).to eq(["Project can't be blank", "Name can't be blank", "Amount can't be blank"])
+      expect(award_type.errors.full_messages).to eq(["Project can't be blank", "Name can't be blank", "Amount can't be blank", "Amount is not a number"])
     end
 
     it "prevents modification of amount if there are existing awards" do
@@ -13,6 +13,13 @@ describe AwardType do
       award_type.amount += 1000
       expect(award_type).not_to be_valid
       expect(award_type.errors.full_messages).to be_include("Amount can't be modified if there are existing awards")
+    end
+
+
+    it "amount must be a positive number" do
+      award_type = build(:award_type, amount: -1)
+      expect(award_type.valid?).to eq(false)
+      expect(award_type.errors[:amount]).to eq(["must be greater than 0"])
     end
   end
 

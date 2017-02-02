@@ -82,18 +82,18 @@ ActiveRecord::Schema.define(version: 20170116023520) do
   end
 
   create_table "awards", force: :cascade do |t|
-    t.integer  "issuer_id",                                                            null: false
+    t.integer  "issuer_id",                                  null: false
     t.text     "description"
-    t.datetime "created_at",                                                           null: false
-    t.datetime "updated_at",                                                           null: false
-    t.integer  "award_type_id",                                                        null: false
-    t.integer  "authentication_id",                                                    null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.integer  "award_type_id",                              null: false
+    t.integer  "authentication_id",                          null: false
     t.string   "ethereum_transaction_address"
-    t.text     "proof_id",                                                             null: false
+    t.text     "proof_id",                                   null: false
     t.string   "proof_link"
-    t.decimal  "quantity",                     precision: 36, scale: 18, default: 1.0
-    t.decimal  "total_amount",                 precision: 18
-    t.decimal  "unit_amount",                  precision: 18
+    t.decimal  "quantity",                     default: 1.0
+    t.integer  "total_amount"
+    t.integer  "unit_amount"
   end
 
   create_table "beta_signups", force: :cascade do |t|

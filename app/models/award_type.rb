@@ -14,6 +14,7 @@ class AwardType < ActiveRecord::Base
 
   validates_presence_of :project, :name, :amount
   validate :amount_didnt_change?, unless: :modifiable?
+  validates_numericality_of :amount, greater_than: 0
 
   def self.invalid_params(attributes)
     attributes['name'].blank? || attributes['amount'].blank?
@@ -34,7 +35,9 @@ class AwardType < ActiveRecord::Base
 
   # TODO: remove temporary migration method after migrating all environments
   def write_award_amount
-    awards.each do |award|
+    # The find_each method uses find_in_batches with a batch size of 1000 (or as specified by the :batch_size option).
+    # http://api.rubyonrails.org/classes/ActiveRecord/Batches.html
+    awards.find_each do |award|
       award.update(unit_amount: amount, total_amount: award.quantity * amount)
     end
   end
