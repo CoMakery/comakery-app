@@ -14,7 +14,7 @@ class BuildAwardRecords
     project = award_type&.project
     context.fail!(message: "missing award type") unless project
 
-    quantity = award_params[:quantity].present? ? award_params[:quantity] : 1
+    quantity = award_params[:quantity].presence || 1
 
     authentication = Authentication.includes(:account).find_by(slack_user_id: slack_user_id)
     authentication ||= create_authentication(context)
@@ -28,7 +28,7 @@ class BuildAwardRecords
         total_amount: award_type.amount * BigDecimal(quantity)
     ))
 
-    #TODO: this shuold be an award validation
+    #TODO: this should be an award validation
     unless award.total_amount + total_coins_issued <= project.maximum_coins
       context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable coins")
     end
