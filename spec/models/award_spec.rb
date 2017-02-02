@@ -5,21 +5,52 @@ describe Award do
   describe "associations" do
     it "has the expected associations" do
       Award.create!(
-        authentication: create(:authentication),
-        issuer: create(:account),
-        award_type: create(:award_type),
-        proof_id: 'xyz123'
+          authentication: create(:authentication),
+          issuer: create(:account),
+          award_type: create(:award_type),
+          proof_id: 'xyz123',
+          total_amount: 100,
+          unit_amount: 50,
+          quantity: 2
       )
     end
   end
 
   describe "validations" do
     it "requires things be present" do
-      expect(Award.new.tap{|award| award.valid? }.errors.full_messages).to match_array([
-        "Authentication can't be blank",
-        "Award type can't be blank",
-        "Issuer can't be blank",
-      ])
+      expect(Award.new(quantity: nil).tap { |award| award.valid? }.errors.full_messages).
+          to match_array([
+                             "Authentication can't be blank",
+                             "Award type can't be blank",
+                             "Issuer can't be blank",
+                             "Quantity can't be blank",
+                             "Unit amount can't be blank",
+                             "Total amount can't be blank",
+                             "Unit amount is not a number",
+                             "Quantity is not a number",
+                             "Total amount is not a number"
+                         ])
+    end
+    describe 'awards amounts must be > 0' do
+      let(:award) { build :award }
+
+      specify do
+        award.quantity = -1
+        expect(award.valid?).to eq(false)
+        expect(award.errors[:quantity]).to eq(["must be greater than 0"])
+      end
+
+      specify do
+        award.total_amount = -1
+        expect(award.valid?).to eq(false)
+        expect(award.errors[:total_amount]).to eq(["must be greater than 0"])
+      end
+
+      specify do
+        award.unit_amount = -1
+        expect(award.valid?).to eq(false)
+        expect(award.errors[:unit_amount]).to eq(["must be greater than 0"])
+      end
     end
 
     describe "#ethereum_transaction_address" do
@@ -110,6 +141,21 @@ describe Award do
       it "returns the user name" do
         expect(award.recipient_slack_user_name).to eq('betty')
       end
+    end
+  end
+
+  describe "#total_amount should round" do
+
+    specify do
+      award = create :award, quantity: 1.4, unit_amount: 1, total_amount: 1.4
+      award.reload
+      expect(award.total_amount).to eq(1)
+    end
+
+    specify do
+      award = create :award, quantity: 1.5, unit_amount: 1, total_amount: 1.5
+      award.reload
+      expect(award.total_amount).to eq(2)
     end
   end
 end

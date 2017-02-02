@@ -50,14 +50,14 @@ describe Authentication do
     let!(:project) { create :project }
     let!(:award_type) { create(:award_type, amount: 10, project: project) }
     let!(:award1) {create :award, authentication: contributor, award_type: award_type }
-    let!(:award2) {create :award, authentication: contributor, award_type: award_type }
+    let!(:award2) {create :award, authentication: contributor, award_type: award_type, quantity: 3.5 }
 
     specify do
       expect(bystander.total_awards_earned(project)).to eq 0
     end
 
     specify do
-      expect(contributor.total_awards_earned(project)).to eq 20
+      expect(contributor.total_awards_earned(project)).to eq 45
     end
   end
 

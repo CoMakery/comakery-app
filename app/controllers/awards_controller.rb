@@ -40,7 +40,7 @@ class AwardsController < ApplicationController
   private
 
   def award_params
-    params.require(:award).permit(:slack_user_id, :award_type_id, :description)
+    params.require(:award).permit(:slack_user_id, :award_type_id, :quantity, :description)
   end
 
   def assign_project

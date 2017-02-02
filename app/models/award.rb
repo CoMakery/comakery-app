@@ -6,13 +6,12 @@ class Award < ActiveRecord::Base
   belongs_to :award_type
   delegate :project, to: :award_type
 
-  validates_presence_of :proof_id, :authentication, :award_type, :issuer
+  validates_presence_of :proof_id, :authentication, :award_type, :issuer, :unit_amount, :total_amount, :quantity
+  validates_numericality_of :quantity, :total_amount, :unit_amount, greater_than: 0
 
   validates :ethereum_transaction_address, ethereum_address: {type: :transaction, immutable: true}  # see EthereumAddressable
 
   before_validation :ensure_proof_id_exists
-
-  delegate :amount, to: :award_type
 
   def ensure_proof_id_exists
     self.proof_id ||= SecureRandom.base58(44)  # 58^44 > 2^256
@@ -58,6 +57,10 @@ class Award < ActiveRecord::Base
 
   def issuer_slack_auth
     issuer.team_auth(slack_team_id)
+  end
+
+  def total_amount=(x)
+    write_attribute(:total_amount, x.round)
   end
 
   private

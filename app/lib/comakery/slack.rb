@@ -45,7 +45,7 @@ class Comakery::Slack
         @#{award.recipient_slack_user_name} }
     end
 
-    text += %{ a #{award.award_type.amount} coin #{award.award_type.name} }
+    text += %{ a #{award.total_amount} coin #{award.award_type.name} }
 
     text += %{ for "#{award.description}" } if award.description.present?
 

@@ -44,6 +44,14 @@ class Views::Projects::AwardSend < Views::Base
           end
           if can_award
             row {
+              column("small-2") {
+                label {
+                  text "Quantity"
+                  f.text_field(:quantity, type: :text, default: 1)
+                }
+              }
+            }
+            row {
               column("small-8") {
                 label {
                   text "User"
