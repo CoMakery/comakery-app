@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     resources :awards, only: [:index, :create]
     resources :licenses, only: [:index]
     resources :contributors, only: [:index]
+    resources :revenues, only: [:index, :create]
     collection do
       get :landing
     end
