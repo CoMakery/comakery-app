@@ -33,6 +33,12 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           }
 
           li {
+            a(href: project_revenues_path(project)) {
+              text "Revenues"
+            }
+          }
+
+          li {
             a(href: project_licenses_path(project)) {
               # i(class: "fa fa-gavel")
               text "Contribution License"

@@ -10,5 +10,4 @@ describe Payment do
                                         "Recipient can't be blank",
                                     ])
   end
-
 end

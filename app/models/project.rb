@@ -16,6 +16,7 @@ class Project < ActiveRecord::Base
 
   has_many :contributors, through: :awards, source: :authentication  # TODO deprecate in favor of contributors_distinct
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
+  has_many :revenues
 
   belongs_to :owner_account, class_name: Account
 
