@@ -80,6 +80,20 @@ describe Project do
         project.reload
         expect(project.royalty_percentage).to eq(100.0)
       end
+
+      it "can't be greater than 100%" do
+        project = build :project
+        project.royalty_percentage = 100.1
+        expect(project).to_not be_valid
+        expect(project.errors[:royalty_percentage]).to eq(["must be less than or equal to 100"])
+      end
+
+      it "can't be < 0" do
+        project = build :project
+        project.royalty_percentage = -1
+        expect(project).to_not be_valid
+        expect(project.errors[:royalty_percentage]).to eq(["must be greater than or equal to 0"])
+      end
     end
 
     describe "payment_type" do

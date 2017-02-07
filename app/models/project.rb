@@ -38,6 +38,7 @@ class Project < ActiveRecord::Base
   validates_presence_of :royalty_percentage, :maximum_royalties_per_month, unless: :project_coin?
 
   validates_numericality_of :maximum_coins, greater_than: 0
+  validates_numericality_of :royalty_percentage, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_nil: true
 
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
