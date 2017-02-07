@@ -41,4 +41,27 @@ describe "", :js do
 
     expect(page).to_not have_css('.new_revenue')
   end
+
+  it 'project members can see a summary of the project state' do
+    project.update(royalty_percentage: 10)
+    project.revenues.create(amount: 1000, currency: 'USD')
+    project.revenues.create(amount: 270, currency: 'USD')
+
+    login owner
+    visit project_revenues_path(project)
+
+    within('.summary') do
+      expect(page.find('.revenue-shared')).to have_content("$127.00 Revenue Shared (10.0%)")
+      expect(page.find('.total-awards')).to have_content("1010")
+      expect(page.find('.total-revenue')).to have_content("$1,270")
+      expect(page.find('.per-revenue-share')).to have_content("$0.1257")
+    end
+  end
+
+  xdescribe "with different project currency denomination"
+  xit "non-members can see revenues if it's a public project"
+  xit "non-members can't see revenues if it's a private project"
+  xit "no revenues page displayed for project_coins"
+  xit "no revenues page displayed when 0% royalty percentage"
+  xit "no revenues page displayed when nil royalty percentage"
 end

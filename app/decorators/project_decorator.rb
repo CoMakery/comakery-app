@@ -66,6 +66,18 @@ class ProjectDecorator < Draper::Decorator
     "#{currency_denomination}0"
   end
 
+  def total_revenue_pretty
+    "#{currency_denomination}#{number_with_precision(total_revenue, precision: 2, delimiter: ',')}"
+  end
+
+  def total_revenue_shared_pretty
+    "#{currency_denomination}#{number_with_precision(total_revenue_shared, precision: 2, delimiter: ',')}"
+  end
+
+  def revenue_per_share_pretty
+    "#{currency_denomination}#{number_with_precision(revenue_per_share, precision: 4, delimiter: ',')}"
+  end
+
 
   def minimum_revenue
     "#{currency_denomination}0"

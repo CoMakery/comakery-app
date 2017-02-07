@@ -158,4 +158,36 @@ describe Award do
       expect(award.total_amount).to eq(2)
     end
   end
+
+  describe '.total_awarded' do
+    describe 'without project awards' do
+      specify { expect(Award.total_awarded).to eq(0) }
+    end
+
+    describe 'with project awards' do
+      let!(:project1) { create :project }
+      let!(:project1_award_type) { (create :award_type, project: project1, amount: 3) }
+      let(:project2) { create :project }
+      let!(:project2_award_type) { (create :award_type, project: project2, amount: 5) }
+      let(:issuer) { create :account }
+      let(:authentication) { create :authentication}
+
+      before do
+        project1_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
+        project1_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
+
+        project2_award_type.awards.create_with_quantity(3, issuer: issuer, authentication: authentication)
+        project2_award_type.awards.create_with_quantity(7, issuer: issuer, authentication: authentication)
+      end
+
+      it 'should be able to scope to a project' do
+        expect(project1.awards.total_awarded).to eq(30)
+        expect(project2.awards.total_awarded).to eq(50)
+      end
+
+      it 'should return the total amount of awards issued' do
+        expect(Award.total_awarded).to eq(80)
+      end
+    end
+  end
 end
