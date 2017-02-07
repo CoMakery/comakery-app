@@ -70,6 +70,27 @@ class Project < ActiveRecord::Base
     where(public: true)
   end
 
+  def total_revenue
+    revenues.total_amount
+  end
+
+  def total_awarded
+    awards.total_awarded
+  end
+
+  def total_revenue_shared
+    return 0 if royalty_percentage.blank? || project_coin?
+    total_revenue * (royalty_percentage * 0.01)
+  end
+
+  #TODO: WARNING this number needs to be updated to subtract out payments_made and shares_redeemend
+  # this functionality isn't written at the time this method is being written
+  # ALSO WARNING may need to think about fractional share amounts and when to round further
+  def revenue_per_share
+    return 0 if royalty_percentage.blank?|| total_awarded == 0
+    (total_revenue_shared / total_awarded).truncate(4)
+  end
+
   def community_award_types
     award_types.where(community_awardable: true)
   end

@@ -6,10 +6,35 @@ class Views::Revenues::Index < Views::Projects::Base
     column {
       full_row {
         if project.owner_account == current_account
-          column("large-6 medium-12") {
-            text "left"
+          column("large-6 medium-12 summary") {
+            row {
+              h3 "Summary"
+            }
+
+            row(class: 'total-revenue')  {
+              span(class: "coin-numbers") { text project.total_revenue_pretty }
+              text " Revenue"
+            }
+
+            row(class: 'revenue-shared') {
+              span(class: "coin-numbers revenue-percentage") { text project.total_revenue_shared_pretty }
+              text " Revenue Shared (#{project.royalty_percentage_pretty})"
+            }
+            row(class: 'total-awards')  {
+              span(class: "coin-numbers") { text project.total_awarded }
+              text ' Revenue Shares'
+            }
+
+
+            row(class: 'per-revenue-share')  {
+              span(class: "coin-numbers") { text project.revenue_per_share_pretty }
+              text ' Revenue Per Share'
+            }
           }
           column("large-6 medium-12") {
+            row {
+              h3 "Record Revenue"
+            }
             form_for [project, revenue] do |f|
               row {
                 with_errors(project, :amount) {
