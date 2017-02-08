@@ -33,6 +33,24 @@ describe "", :js do
     end
   end
 
+  it 'revenues appear in reverse chronological order' do
+    login owner
+    visit project_path(project)
+    click_link "Revenues"
+
+    [30,20,10].each do |amount|
+      fill_in :revenue_amount, with: amount
+      click_on "Record Revenue"
+    end
+
+    within ".revenues" do
+      expect(page.all('.amount')[0]).to have_content('10')
+      expect(page.all('.amount')[1]).to have_content('20')
+      expect(page.all('.amount')[2]).to have_content('30')
+    end
+
+  end
+
   it "non-project owner cannot record revenues" do
     login other_account
 
