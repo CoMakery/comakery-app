@@ -42,8 +42,7 @@ class Views::Contributors::Index < Views::Projects::Base
                   if project.revenue_share?
                     td(class: "holdings-value") {
                       span(class: "margin-small") {
-                        text project.currency_denomination
-                        text 0
+                        text project.shares_to_balance_pretty(contributor[:earned])
                       }
                     }
                   end
