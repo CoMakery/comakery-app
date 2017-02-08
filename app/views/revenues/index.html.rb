@@ -83,7 +83,7 @@ class Views::Revenues::Index < Views::Projects::Base
               th { text "Comment" }
               th { text "Transaction Reference" }
             }
-            project.revenues.each do |revenue|
+            project.revenues.order(created_at: :desc).each do |revenue|
               tr(class: "award-row") {
                 td(class: "date") {
                   div(class: "margin-small margin-collapse inline-block") { text revenue.created_at }
