@@ -1,20 +1,39 @@
 require 'rails_helper'
 
 describe Revenue do
-  specify do
-    validation_errors = Revenue.new.tap(&:valid?).errors.full_messages.sort
-    expect(validation_errors.sort).to match ["Amount can't be blank",
-                                             "Amount is not a number",
-                                             "Currency can't be blank",
-                                             "Project can't be blank",
-                                            ].sort
-  end
+  describe 'validations' do
+    specify do
+      validation_errors = Revenue.new.tap(&:valid?).errors.full_messages.sort
+      expect(validation_errors.sort).to match ["Amount can't be blank",
+                                               "Amount is not a number",
+                                               "Currency can't be blank",
+                                               "Project can't be blank",
+                                               "Currency is not included in the list"
+                                              ].sort
+    end
 
-  specify do
-    revenue = Revenue.new
-    revenue.amount = -1
-    expect(revenue.valid?).to eq(false)
-    expect(revenue.errors[:amount]).to eq(["must be greater than 0"])
+    it 'has an amount greater than 0' do
+      revenue = Revenue.new
+      revenue.amount = -1
+      expect(revenue.valid?).to eq(false)
+      expect(revenue.errors[:amount]).to eq(["must be greater than 0"])
+    end
+
+    describe '#currency' do
+      let(:revenue) { build :revenue }
+
+      Comakery::Currency::DENOMINATIONS.each do |string, symbol|
+        it "should allow #{string}" do
+          revenue.currency = string
+          expect(revenue).to be_valid
+        end
+      end
+
+      it 'should not allow non-currency strings' do
+        revenue.currency = "magenta"
+        expect(revenue).to_not be_valid
+      end
+    end
   end
 
   describe ".total_revenue" do

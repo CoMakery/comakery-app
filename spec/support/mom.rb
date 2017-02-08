@@ -127,6 +127,10 @@ class Mom
   def valid_password
     'a password'
   end
+
+  def revenue(project: create(:project))
+    Revenue.new(amount: 10, currency: 'USD', project: project)
+  end
 end
 
 def mom

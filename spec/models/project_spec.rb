@@ -279,6 +279,12 @@ describe Project do
     end
   end
 
+  it 'enum of denominations should contain the platform wide currencies' do
+    project_denominations = Project.denominations.map {|x,_| x}.sort
+    platform_denominations = Comakery::Currency::DENOMINATIONS.keys.sort
+    expect(project_denominations).to eq(platform_denominations)
+  end
+
   describe 'scopes' do
     describe ".with_last_activity_at" do
       it "returns projects ordered by when the most recent award created_at, then by project created_at" do
