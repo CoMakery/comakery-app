@@ -53,14 +53,14 @@ class Views::Projects::Description < Views::Projects::Base
                   span(class: " coin-numbers") {
                     text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
                   }
-                  span(class: "balance-type") { text " of #{total_coins_issued}" }
+                  span(class: "balance-type") { text " of #{project.total_awarded_pretty}" }
                 }
 
                 li_if(project.revenue_share?, class: 'my-balance') {
                   h5 "My Balance"
                   span(class: "coin-numbers") {
-                    text project.my_balance_pretty
-                    span(class: "balance-type") { text " of #{project.balance_pretty}" }
+                    text project.shares_to_balance_pretty(award_data[:award_amounts][:my_project_coins])
+                    span(class: "balance-type") { text " of #{project.total_revenue_shared_pretty}" }
                   }
                 }
               end

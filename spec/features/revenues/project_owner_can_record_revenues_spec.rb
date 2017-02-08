@@ -6,10 +6,7 @@ describe "", :js do
   let!(:other_account) { create(:account) }
   let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: "foo", slack_image_32_url: "http://avatar.com/other.jpg") }
   let!(:project) { create(:project, public: true, owner_account: owner, slack_team_id: "foo") }
-  let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
-  let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }
-  let!(:award) { create(:award, award_type: award_type, issuer: owner, authentication: other_account_auth) }
-  let!(:community_award) { create(:award, award_type: community_award_type, issuer: other_account, authentication: owner_auth) }
+  let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000, name: 'Code Contribution') }
 
   before do
     stub_slack_user_list
@@ -38,7 +35,7 @@ describe "", :js do
     visit project_path(project)
     click_link "Revenues"
 
-    [3,2,1].each do |amount|
+    [3, 2, 1].each do |amount|
       fill_in :revenue_amount, with: amount
       click_on "Record Revenue"
     end
@@ -64,17 +61,56 @@ describe "", :js do
     project.update(royalty_percentage: 10)
     project.revenues.create(amount: 1000, currency: 'USD')
     project.revenues.create(amount: 270, currency: 'USD')
+    award_type.awards.create_with_quantity(1.01, issuer: owner, authentication: owner_auth)
 
     login owner
     visit project_revenues_path(project)
 
     within('.summary') do
       expect(page.find('.revenue-shared')).to have_content("$127.00 Revenue Shared (10.0%)")
-      expect(page.find('.total-awards')).to have_content("1010")
+      expect(page.find('.total-awards')).to have_content("0")
       expect(page.find('.total-revenue')).to have_content("$1,270")
       expect(page.find('.per-revenue-share')).to have_content("$0.1257")
     end
   end
+
+  describe 'when share value can be calculated' do
+    before do
+      project.update(royalty_percentage: 10)
+      login owner
+      visit project_path(project)
+      click_link "Revenues"
+
+      [3, 2, 1].each do |amount|
+        fill_in :revenue_amount, with: amount
+        click_on "Record Revenue"
+      end
+    end
+
+    it 'share value appears on project page' do
+      visit project_path(project)
+      expect(page.find('.my-balance')).to have_content('$0.00 of $0.60')
+    end
+
+    it 'share value appears on project page' do
+      visit project_path(project)
+      expect(page.find('.my-balance')).to have_content('$0.00 of $0.60')
+    end
+
+    it 'holdings value appears on contributors page' do
+      award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
+      visit project_path(project)
+      expect(page.find('.my-share')).to have_content('7,000 of 7,000')
+      expect(page.find('.my-balance')).to have_content('$0.60 of $0.60')
+
+      award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
+      visit project_path(project)
+      expect(page.find('.my-share')).to have_content('7,000 of 12,000')
+      expect(page.find('.my-balance')).to have_content('$0.35 of $0.60')
+    end
+  end
+
+  xit 'updates the contributors page'
 
   xdescribe "with different project currency denomination"
   xit "non-members can see revenues if it's a public project"
