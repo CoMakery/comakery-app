@@ -78,6 +78,11 @@ class Project < ActiveRecord::Base
     awards.total_awarded
   end
 
+  def share_of_revenue(awards)
+    return 0 if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0
+    (BigDecimal(awards) / BigDecimal(total_awarded)) * total_revenue_shared
+  end
+
   def total_revenue_shared
     return 0 if royalty_percentage.blank? || project_coin?
     total_revenue * (royalty_percentage * 0.01)

@@ -52,14 +52,6 @@ class ProjectDecorator < Draper::Decorator
     project.exclusive_contributions ? "are exclusive" : "are not exclusive"
   end
 
-  def balance_pretty
-    "#{currency_denomination}0"
-  end
-
-  def my_balance_pretty
-    "#{currency_denomination}0"
-  end
-
   def total_revenue_pretty
     "#{currency_denomination}#{number_with_precision(total_revenue, precision: 2, delimiter: ',')}"
   end
@@ -68,8 +60,20 @@ class ProjectDecorator < Draper::Decorator
     "#{currency_denomination}#{number_with_precision(total_revenue_shared, precision: 2, delimiter: ',')}"
   end
 
+  def total_awarded_pretty
+    number_with_precision(total_awarded, precision: 0, delimiter: ',')
+  end
+
   def revenue_per_share_pretty
     "#{currency_denomination}#{number_with_precision(revenue_per_share, precision: 4, delimiter: ',')}"
+  end
+
+  def total_revenue_shared_rounded
+    "#{currency_denomination}#{number_with_precision(total_revenue_shared, precision: 0, delimiter: ',')}"
+  end
+
+  def revenue_per_share_rounded
+    "#{currency_denomination}#{number_with_precision(revenue_per_share, precision: 0, delimiter: ',')}"
   end
 
 
@@ -83,6 +87,11 @@ class ProjectDecorator < Draper::Decorator
 
   def revenue_history
     project.revenues.order(created_at: :desc, id: :desc).decorate
+  end
+
+  # TODO: This will neeed to accomodate redeemed revenue shares and payments made
+  def shares_to_balance_pretty(users_project_coins)
+    "#{currency_denomination}#{number_with_precision(share_of_revenue(users_project_coins), precision: 2, delimiter: ',')}"
   end
 
   private

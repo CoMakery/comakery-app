@@ -511,4 +511,63 @@ describe Project do
       end
     end
   end
+
+  describe '#share_of_revenue' do
+    describe 'with revenue sharing awards' do
+      let!(:project) { create :project, payment_type: :revenue_share }
+
+      it 'with no revenue sharing percentage entered' do
+        project.update(royalty_percentage: nil)
+        expect(project.share_of_revenue(17)).to eq(0)
+      end
+
+
+      it 'with percentage and no revenue' do
+        project.update(royalty_percentage: 10)
+
+        expect(project.share_of_revenue(17)).to eq(0)
+      end
+
+      it 'with percentage and revenue and no shares' do
+        project.update(royalty_percentage: 10)
+        project.revenues.create(amount: 1000, currency: 'USD')
+        project.revenues.create(amount: 270, currency: 'USD')
+        expect(project.total_revenue).to eq(1270)
+        expect(project.share_of_revenue(17)).to eq(0)
+      end
+
+      describe 'with percentage and revenue and shares' do
+        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let(:issuer) { create :account }
+        let(:authentication) { create :authentication }
+
+        before do
+          project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
+          project.update(royalty_percentage: 10)
+          project.revenues.create(amount: 1000, currency: 'USD')
+          project.revenues.create(amount: 270, currency: 'USD')
+        end
+
+        it "should return an unrounded big decimal" do
+          expect(project.total_revenue).to eq(1270)
+          expect(project.total_awarded).to eq(35)
+          expect(project.royalty_percentage).to eq(10)
+          expect(project.total_revenue_shared).to eq(127)
+          expect(project.share_of_revenue(17)).to eq(BigDecimal('61.685714285714285678'))
+        end
+      end
+    end
+
+    describe 'with project coin awards' do
+      let(:project) { create :project, payment_type: :project_coin }
+
+      it 'with percentage and revenue' do
+        project.update(royalty_percentage: 10)
+        project.revenues.create(amount: 1000, currency: 'USD')
+        project.revenues.create(amount: 270, currency: 'USD')
+        expect(project.total_revenue).to eq(1270)
+        expect(project.share_of_revenue(17)).to eq(0)
+      end
+    end
+  end
 end

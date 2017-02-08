@@ -57,8 +57,7 @@ describe "viewing projects, creating and editing", :js do
 
     click_on "Save"
     expect(page).to have_content "Project created"
-    expect(page).to have_content "My Balance $0"
-    expect(page).to have_content "My Balance $0 of $0"
+    expect(page).to have_content "My Balance $0.00 of $0.00"
     within ".project-terms" do
       expect(page).to have_content "Mindful Inc"
       expect(page).to have_content "7.99999%"
