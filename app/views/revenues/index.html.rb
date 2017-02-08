@@ -83,14 +83,14 @@ class Views::Revenues::Index < Views::Projects::Base
               th { text "Comment" }
               th { text "Transaction Reference" }
             }
-            project.revenues.order(created_at: :desc).each do |revenue|
+            project.revenue_history.each do |revenue|
               tr(class: "award-row") {
                 td(class: "date") {
                   div(class: "margin-small margin-collapse inline-block") { text revenue.created_at }
                 }
                 td(class: "amount") {
                   div(class: "margin-small margin-collapse inline-block") {
-                    text "#{number_with_precision(revenue.amount, precision: 2, delimiter: ',')} #{revenue.currency}"
+                    text revenue.amount_pretty
                   }
                 }
                 td(class: "comment") {

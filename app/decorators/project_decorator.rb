@@ -7,12 +7,6 @@ class ProjectDecorator < Draper::Decorator
       "project_coin" => "Project Coins",
   }
 
-  CURRENCY_DENOMINATIONS = {
-      "USD" => "$",
-      "BTC" => "฿",
-      "ETH" => "Ξ"
-  }
-
   def description_html
     Comakery::Markdown.to_html(object.description)
   end
@@ -38,7 +32,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def currency_denomination
-    CURRENCY_DENOMINATIONS[project.denomination]
+    Comakery::Currency::DENOMINATIONS[project.denomination]
   end
 
   def payment_description
@@ -85,6 +79,10 @@ class ProjectDecorator < Draper::Decorator
 
   def minimum_payment
     "#{currency_denomination}10"
+  end
+
+  def revenue_history
+    project.revenues.order(created_at: :desc, id: :desc).decorate
   end
 
   private

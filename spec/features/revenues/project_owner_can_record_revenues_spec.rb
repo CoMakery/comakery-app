@@ -29,7 +29,7 @@ describe "", :js do
     within ".revenues" do
       expect(page.all('.transaction-reference')[0]).to have_content('0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098')
       expect(page.all('.comment')[0]).to have_content('A comment')
-      expect(page).to have_content('10.00 USD')
+      expect(page).to have_content('$10.00')
     end
   end
 
@@ -38,15 +38,15 @@ describe "", :js do
     visit project_path(project)
     click_link "Revenues"
 
-    [30,20,10].each do |amount|
+    [3,2,1].each do |amount|
       fill_in :revenue_amount, with: amount
       click_on "Record Revenue"
     end
 
     within ".revenues" do
-      expect(page.all('.amount')[0]).to have_content('10')
-      expect(page.all('.amount')[1]).to have_content('20')
-      expect(page.all('.amount')[2]).to have_content('30')
+      expect(page.all('.amount')[0]).to have_content('$1.00')
+      expect(page.all('.amount')[1]).to have_content('$2.00')
+      expect(page.all('.amount')[2]).to have_content('$3.00')
     end
 
   end
