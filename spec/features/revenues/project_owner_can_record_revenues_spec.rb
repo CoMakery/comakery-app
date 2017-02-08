@@ -97,7 +97,7 @@ describe "", :js do
       expect(page.find('.my-balance')).to have_content('$0.00 of $0.60')
     end
 
-    it 'holdings value appears on contributors page' do
+    it 'holdings value appears on the project show page' do
       award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
       visit project_path(project)
       expect(page.find('.my-share')).to have_content('7,000 of 7,000')
@@ -110,7 +110,27 @@ describe "", :js do
     end
   end
 
-  xit 'updates the contributors page'
+  it 'updates the contributors page' do
+    project.update(royalty_percentage: 10)
+    award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
+    award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
+
+    login owner
+    visit project_path(project)
+    click_link "Revenues"
+
+    [3, 2, 1].each do |amount|
+      fill_in :revenue_amount, with: amount
+      click_on "Record Revenue"
+    end
+
+    visit project_contributors_path(project)
+    contributor_holdings = page.all('.holdings-value')
+    expect(contributor_holdings.size).to eq(2)
+    expect(contributor_holdings[0]).to have_content("$0.35")
+    expect(contributor_holdings[1]).to have_content("$0.25")
+  end
+
 
   xdescribe "with different project currency denomination"
   xit "non-members can see revenues if it's a public project"
