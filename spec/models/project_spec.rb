@@ -486,9 +486,9 @@ describe Project do
           project.revenues.create(amount: 270, currency: 'USD')
         end
 
-        it 'should round down revenue per share to 4 decimal places' do
+        it "shouldn't round at this level" do
           expect(project.total_revenue).to eq(1270)
-          expect(project.revenue_per_share).to eq(3.6285)
+          expect(project.revenue_per_share).to eq(BigDecimal('3.628571428571428571'))
         end
       end
     end

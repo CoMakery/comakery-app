@@ -85,10 +85,9 @@ class Project < ActiveRecord::Base
 
   #TODO: WARNING this number needs to be updated to subtract out payments_made and shares_redeemend
   # this functionality isn't written at the time this method is being written
-  # ALSO WARNING may need to think about fractional share amounts and when to round further
   def revenue_per_share
     return 0 if royalty_percentage.blank?|| total_awarded == 0
-    (total_revenue_shared / total_awarded).truncate(4)
+    total_revenue_shared / total_awarded
   end
 
   def community_award_types
