@@ -131,6 +131,17 @@ describe "", :js do
     expect(contributor_holdings[1]).to have_content("$0.25")
   end
 
+  it 'shows errors if there were missing fields' do
+    login owner
+    visit project_revenues_path(project)
+
+    click_on "Record Revenue"
+    expect(page.all('.amount').size).to eq(0)
+    within('form.new_revenue') do
+      expect(page.find('small.error')).to have_text("can't be blank and is not a number")
+    end
+  end
+
 
   xdescribe "with different project currency denomination"
   xit "non-members can see revenues if it's a public project"

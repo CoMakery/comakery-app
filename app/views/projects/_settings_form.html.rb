@@ -14,14 +14,14 @@ module Views
               column("large-6 small-12") {
                 with_errors(project, :title) {
                   label {
-                    text "Title"
+                    required_label_text "Title"
                     f.text_field :title
                   }
                 }
                 with_errors(project, :slack_channel) {
                   label {
                     i(class: "fa fa-slack")
-                    text " Slack Channel "
+                    required_label_text " Slack Channel "
                     question_tooltip "Select where project notifications will be sent."
                     options = capture do
                       options_for_select([[nil, nil]].concat(slack_channels), selected: project.slack_channel)
@@ -31,7 +31,7 @@ module Views
                 }
                 with_errors(project, :description) {
                   label {
-                    text "Description"
+                    required_label_text "Description"
                     f.text_area :description
                   }
                   link_to("Styling with Markdown is Supported", "https://guides.github.com/features/mastering-markdown/", class: "help-text float-right")
@@ -92,7 +92,7 @@ module Views
               column("large-6 small-12") {
                 with_errors(project, :legal_project_owner) {
                   label {
-                    text "Project Owner's Legal Name "
+                    required_label_text "Project Owner's Legal Name "
                     question_tooltip "The name of the company, association, legal entity, or individual that owns the project and administers awards."
                     f.text_field :legal_project_owner, disabled: project.license_finalized?
                   }
@@ -128,7 +128,7 @@ module Views
               column("large-6 small-12") {
                 with_errors(project, :payment_type) {
                   label {
-                    text "Award Payment Type"
+                    required_label_text "Award Payment Type"
                     question_tooltip "Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project coins for their work contributions."
                     f.select(:payment_type,
                              [["Revenue Shares", "revenue_share"],
@@ -140,14 +140,14 @@ module Views
                 }
                 with_errors(project, :maximum_coins) {
                   label {
-                    text "Total Authorized"
+                    required_label_text "Total Authorized"
                     award_type_div f, :maximum_coins, type: "number", disabled: project.license_finalized? || project.ethereum_enabled?
                   }
                 }
 
                 with_errors(project, :maximum_royalties_per_month) {
                   label {
-                    text "Maximum Awarded Per Month"
+                    required_label_text "Maximum Awarded Per Month"
                     award_type_div f, :maximum_royalties_per_month,
                                    type: :number, placeholder: "25000",
                                    disabled: project.license_finalized?
@@ -156,7 +156,7 @@ module Views
                 div(class: "revenue-sharing-terms #{'hide' if project.project_coin?}") {
                   with_errors(project, :royalty_percentage) {
                     label {
-                      text "Revenue Shared With Contributors"
+                      required_label_text "Revenue Shared With Contributors"
                       question_tooltip "The Project Owner agrees to count money customers pay either to license, or to use a hosted instance of, the Project as 'Revenue'. Money customers pay for consulting, training, custom development, support, and other services related to the Project does not count as Revenue."
                       # percentage_div { f.text_field :royalty_percentage, placeholder: "5%", class: 'input-group-field' }
                       percentage_div f, :royalty_percentage, placeholder: "10", type: :number,

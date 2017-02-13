@@ -25,7 +25,6 @@ class Views::Revenues::Index < Views::Projects::Base
               text ' Revenue Shares'
             }
 
-
             row(class: 'per-revenue-share')  {
               span(class: "coin-numbers") { text project.revenue_per_share_pretty }
               text ' Revenue Per Share'
@@ -37,9 +36,11 @@ class Views::Revenues::Index < Views::Projects::Base
             }
             form_for [project, revenue] do |f|
               row {
-                with_errors(project, :amount) {
+                with_errors(revenue, :amount) {
                   label {
-                    text "Amount"
+                    span(class: 'required') {
+                      text "Amount"
+                    }
                     div(class: 'input-group') {
                       span(class: "input-group-label denomination") { text project.currency_denomination }
                       f.text_field(:amount, class: 'input-group-field')
@@ -49,7 +50,7 @@ class Views::Revenues::Index < Views::Projects::Base
               }
 
               row {
-                with_errors(project, :comment) {
+                with_errors(revenue, :comment) {
                   label {
                     text "Comment"
                     f.text_field(:comment)
@@ -58,7 +59,7 @@ class Views::Revenues::Index < Views::Projects::Base
               }
 
               row {
-                with_errors(project, :transaction_reference) {
+                with_errors(revenue, :transaction_reference) {
                   label {
                     text "Transaction Reference"
                     f.text_field(:transaction_reference)

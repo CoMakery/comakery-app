@@ -74,5 +74,11 @@ module Views
         li(**opts) { yield }
       end
     end
+
+    def required_label_text(label_text)
+      span(class: 'required') {
+        text label_text
+      }
+    end
   end
 end

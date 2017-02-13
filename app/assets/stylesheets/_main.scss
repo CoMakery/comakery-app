@@ -251,3 +251,20 @@ ul {
 .denomination {
   height: 10px;
 }
+
+.required::after {
+  content: " (Required)";
+  color: $mediumgray;
+}
+
+.error {
+  select {
+    border: 2px solid $error-color;
+  }
+  small.error {
+    color: $error-color;
+    display: block;
+    margin-top: -1em;
+    margin-bottom: 1em;
+  }
+}
