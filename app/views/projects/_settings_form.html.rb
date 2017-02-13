@@ -159,7 +159,7 @@ module Views
                       required_label_text "Revenue Shared With Contributors"
                       question_tooltip "The Project Owner agrees to count money customers pay either to license, or to use a hosted instance of, the Project as 'Revenue'. Money customers pay for consulting, training, custom development, support, and other services related to the Project does not count as Revenue."
                       # percentage_div { f.text_field :royalty_percentage, placeholder: "5%", class: 'input-group-field' }
-                      percentage_div f, :royalty_percentage, placeholder: "10", type: :number,
+                      percentage_div f, :royalty_percentage, placeholder: "10",
                                      disabled: project.license_finalized?
                     }
                   }
