@@ -204,9 +204,21 @@ describe "", :js do
     end
   end
 
+  it "no revenues page displayed for project_coins" do
+    project.project_coin!
+
+    login owner
+    visit project_path(project)
+
+    expect(page).to_not have_link "Revenues"
+
+    visit project_revenues_path(project)
+    expect(page).to have_current_path(root_path)
+  end
+
+
   xit "non-members can see revenues if it's a public project"
   xit "non-members can't see revenues if it's a private project"
-  xit "no revenues page displayed for project_coins"
   xit "no revenues page displayed when 0% royalty percentage"
   xit "no revenues page displayed when nil royalty percentage"
 end

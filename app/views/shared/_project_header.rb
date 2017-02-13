@@ -32,11 +32,13 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
             }
           }
 
-          li {
-            a(href: project_revenues_path(project)) {
-              text "Revenues"
+          unless project.project_coin?
+            li {
+              a(href: project_revenues_path(project)) {
+                text "Revenues"
+              }
             }
-          }
+          end
 
           li {
             a(href: project_licenses_path(project)) {

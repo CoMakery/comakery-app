@@ -1,5 +1,5 @@
 class RevenuesController < ApplicationController
-  before_filter :assign_project #, only: :index
+  before_filter :assign_project, :check_redirects
   # skip_before_filter :require_login #, only: :index
 
   def index
@@ -30,5 +30,9 @@ class RevenuesController < ApplicationController
                                     :comment,
                                     :transaction_reference,
                                     :project_id
+  end
+
+  def check_redirects
+    redirect_to root_path if @project.project_coin?
   end
 end
