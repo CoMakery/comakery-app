@@ -53,11 +53,15 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def total_revenue_pretty
-    "#{currency_denomination}#{number_with_precision(total_revenue, precision: 2, delimiter: ',')}"
+    "#{currency_denomination}#{number_with_precision(total_revenue,
+                                                     precision: Comakery::Currency::PRECISION[denomination],
+                                                     delimiter: ',')}"
   end
 
   def total_revenue_shared_pretty
-    "#{currency_denomination}#{number_with_precision(total_revenue_shared, precision: 2, delimiter: ',')}"
+    "#{currency_denomination}#{number_with_precision(total_revenue_shared,
+                                                     precision: Comakery::Currency::PRECISION[denomination],
+                                                     delimiter: ',')}"
   end
 
   def total_awarded_pretty
@@ -65,7 +69,9 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def revenue_per_share_pretty
-    "#{currency_denomination}#{number_with_precision(revenue_per_share, precision: 4, delimiter: ',')}"
+    "#{currency_denomination}#{number_with_precision(revenue_per_share,
+                                                     precision: Comakery::Currency::PER_SHARE_PRECISION[denomination],
+                                                     delimiter: ',')}"
   end
 
   def total_revenue_shared_rounded

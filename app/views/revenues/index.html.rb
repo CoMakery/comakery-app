@@ -21,11 +21,11 @@ class Views::Revenues::Index < Views::Projects::Base
               text " Revenue Shared (#{project.royalty_percentage_pretty})"
             }
             row(class: 'total-awards')  {
-              span(class: "coin-numbers") { text project.total_awarded }
+              span(class: "coin-numbers") { text project.total_awarded_pretty }
               text ' Revenue Shares'
             }
 
-            row(class: 'per-revenue-share')  {
+            row(class: 'revenue-per-share')  {
               span(class: "coin-numbers") { text project.revenue_per_share_pretty }
               text ' Revenue Per Share'
             }

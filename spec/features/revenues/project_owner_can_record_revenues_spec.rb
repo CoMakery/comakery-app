@@ -82,7 +82,7 @@ describe "", :js do
       expect(page.find('.revenue-shared')).to have_content("$127.00 Revenue Shared (10.0%)")
       expect(page.find('.total-awards')).to have_content("0")
       expect(page.find('.total-revenue')).to have_content("$1,270")
-      expect(page.find('.per-revenue-share')).to have_content("$0.1257")
+      expect(page.find('.revenue-per-share')).to have_content("$0.1257")
     end
   end
 
@@ -154,7 +154,10 @@ describe "", :js do
   end
 
   describe 'it displays correct currency precision for' do
-    before { login owner }
+    before {
+      login owner
+      award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
+    }
 
     it 'usd' do
       project.USD!
@@ -163,6 +166,11 @@ describe "", :js do
       fill_in :revenue_amount, with: "4,321.12345678"
       click_on "Record Revenue"
       expect(page.find('.revenues .amount')).to have_content('$4,321.12')
+
+      expect(page.find('.total-revenue .coin-numbers')).to have_content('$4,321.12')
+      expect(page.find('.revenue-shared .coin-numbers')).to have_content('$254.95')
+      expect(page.find('.total-awards .coin-numbers')).to have_content('7,000')
+      expect(page.find('.revenue-per-share .coin-numbers')).to have_content('$0.0364')
     end
 
     it 'btc' do
@@ -172,6 +180,11 @@ describe "", :js do
       fill_in :revenue_amount, with: "4,321.12345678"
       click_on "Record Revenue"
       expect(page.find('.revenues .amount')).to have_content('฿4,321.12345678')
+
+      expect(page.find('.total-revenue .coin-numbers')).to have_content(/฿4,321.[0-9]{8}/)
+      expect(page.find('.revenue-shared .coin-numbers')).to have_content(/฿254.[0-9]{8}/)
+      expect(page.find('.total-awards .coin-numbers')).to have_content('7,000')
+      expect(page.find('.revenue-per-share .coin-numbers')).to have_content(/฿0.03642090/)
     end
 
     it 'eth' do
@@ -180,7 +193,12 @@ describe "", :js do
 
       fill_in :revenue_amount, with: "4,321.123456789012345678"
       click_on "Record Revenue"
-      expect(page.find('.revenues .amount')).to have_content('4,321.123456789012345678')
+      expect(page.find('.revenues .amount')).to have_content('Ξ4,321.123456789012345678')
+
+      expect(page.find('.total-revenue .coin-numbers')).to have_content(/Ξ4,321.[0-9]{18}/)
+      expect(page.find('.revenue-shared .coin-numbers')).to have_content(/Ξ254.[0-9]{18}/)
+      expect(page.find('.total-awards .coin-numbers')).to have_content('7,000')
+      expect(page.find('.revenue-per-share .coin-numbers')).to have_content(/Ξ0.[0-9]{18}/)
     end
   end
 
