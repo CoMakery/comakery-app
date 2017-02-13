@@ -30,6 +30,18 @@ describe "", :js do
     end
   end
 
+  it 'parses amounts with both commas and decimal point' do
+    login owner
+    visit project_revenues_path(project)
+
+    fill_in :revenue_amount, with: "1,234.56"
+    click_on "Record Revenue"
+
+    within ".revenues" do
+      expect(page).to have_content('$1,234.56')
+    end
+  end
+
 
   it 'revenues appear in reverse chronological order' do
     login owner

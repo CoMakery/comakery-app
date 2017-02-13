@@ -8,4 +8,9 @@ class Revenue < ActiveRecord::Base
   def self.total_amount
     sum(:amount)
   end
+
+  def amount=(x)
+    x.sub!(',','') if x.respond_to?(:sub)
+    write_attribute(:amount, x)
+  end
 end
