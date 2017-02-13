@@ -30,10 +30,10 @@ describe "", :js do
     end
   end
 
+
   it 'revenues appear in reverse chronological order' do
     login owner
-    visit project_path(project)
-    click_link "Revenues"
+    visit project_revenues_path(project)
 
     [3, 2, 1].each do |amount|
       fill_in :revenue_amount, with: amount
@@ -79,7 +79,7 @@ describe "", :js do
       project.update(royalty_percentage: 10)
       login owner
       visit project_path(project)
-      click_link "Revenues"
+      visit project_revenues_path(project)
 
       [3, 2, 1].each do |amount|
         fill_in :revenue_amount, with: amount
@@ -116,8 +116,7 @@ describe "", :js do
     award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
 
     login owner
-    visit project_path(project)
-    click_link "Revenues"
+    visit project_revenues_path(project)
 
     [3, 2, 1].each do |amount|
       fill_in :revenue_amount, with: amount
