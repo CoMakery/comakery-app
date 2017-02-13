@@ -153,8 +153,37 @@ describe "", :js do
     end
   end
 
+  describe 'it displays correct currency precision for' do
+    before { login owner }
 
-  xdescribe "with different project currency denomination"
+    it 'usd' do
+      project.USD!
+      visit project_revenues_path(project)
+
+      fill_in :revenue_amount, with: "4,321.12345678"
+      click_on "Record Revenue"
+      expect(page.find('.revenues .amount')).to have_content('$4,321.12')
+    end
+
+    it 'btc' do
+      project.BTC!
+      visit project_revenues_path(project)
+
+      fill_in :revenue_amount, with: "4,321.12345678"
+      click_on "Record Revenue"
+      expect(page.find('.revenues .amount')).to have_content('฿4,321.12345678')
+    end
+
+    it 'eth' do
+      project.ETH!
+      visit project_revenues_path(project)
+
+      fill_in :revenue_amount, with: "4,321.123456789012345678"
+      click_on "Record Revenue"
+      expect(page.find('.revenues .amount')).to have_content('4,321.123456789012345678')
+    end
+  end
+
   xit "non-members can see revenues if it's a public project"
   xit "non-members can't see revenues if it's a private project"
   xit "no revenues page displayed for project_coins"
