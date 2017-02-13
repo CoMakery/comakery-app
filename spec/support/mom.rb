@@ -128,8 +128,8 @@ class Mom
     'a password'
   end
 
-  def revenue(project: create(:project))
-    Revenue.new(amount: 10, currency: 'USD', project: project, recorded_by: project.owner_account )
+  def revenue(project: create(:project), amount: 10, currency: 'USD')
+    Revenue.new(amount: amount, currency: 'USD', project: project, recorded_by: project.owner_account )
   end
 end
 

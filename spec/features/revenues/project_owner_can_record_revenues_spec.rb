@@ -170,7 +170,7 @@ describe "", :js do
       expect(page.find('.revenues .amount')).to have_content('$4,321.12')
 
       expect(page.find('.total-revenue .coin-numbers')).to have_content('$4,321.12')
-      expect(page.find('.revenue-shared .coin-numbers')).to have_content('$254.95')
+      expect(page.find('.revenue-shared .coin-numbers')).to have_content('$254.94')
       expect(page.find('.total-awards .coin-numbers')).to have_content('7,000')
       expect(page.find('.revenue-per-share .coin-numbers')).to have_content('$0.0364')
     end
@@ -186,7 +186,7 @@ describe "", :js do
       expect(page.find('.total-revenue .coin-numbers')).to have_content(/฿4,321.[0-9]{8}/)
       expect(page.find('.revenue-shared .coin-numbers')).to have_content(/฿254.[0-9]{8}/)
       expect(page.find('.total-awards .coin-numbers')).to have_content('7,000')
-      expect(page.find('.revenue-per-share .coin-numbers')).to have_content(/฿0.03642090/)
+      expect(page.find('.revenue-per-share .coin-numbers')).to have_content(/฿0.03642089/)
     end
 
     it 'eth' do

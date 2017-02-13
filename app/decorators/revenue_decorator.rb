@@ -3,7 +3,9 @@ class RevenueDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
 
   def amount_pretty
-    "#{currency_denomination}#{number_with_precision(amount, precision: Comakery::Currency::PRECISION[currency], delimiter: ',')}"
+    "#{currency_denomination}#{number_with_precision(amount.truncate(Comakery::Currency::PRECISION[currency]),
+                                                     precision: Comakery::Currency::PRECISION[currency],
+                                                     delimiter: ',')}"
   end
 
   def currency_denomination

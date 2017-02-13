@@ -426,6 +426,7 @@ describe Project do
       it 'with no revenue sharing percentage entered' do
         project.update(royalty_percentage: nil)
         expect(project.total_revenue_shared).to eq(0)
+        expect(project.total_revenue_shared).to be_a(BigDecimal)
       end
 
 
@@ -433,6 +434,7 @@ describe Project do
         project.update(royalty_percentage: 10)
 
         expect(project.total_revenue_shared).to eq(0)
+        expect(project.total_revenue_shared).to be_a(BigDecimal)
       end
 
       it 'with percentage and revenue' do
@@ -441,6 +443,7 @@ describe Project do
         project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
         expect(project.total_revenue).to eq(1270)
         expect(project.total_revenue_shared).to eq(127)
+        expect(project.total_revenue_shared).to be_a(BigDecimal)
       end
     end
 
@@ -452,6 +455,7 @@ describe Project do
         project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
         expect(project.total_revenue).to eq(1270)
         expect(project.total_revenue_shared).to eq(0)
+        expect(project.total_revenue_shared).to be_a(BigDecimal)
       end
     end
   end
@@ -470,6 +474,7 @@ describe Project do
         project.update(royalty_percentage: 10)
 
         expect(project.revenue_per_share).to eq(0)
+        expect(project.revenue_per_share).to be_a(BigDecimal)
       end
 
       it 'with percentage and revenue and now shares' do
@@ -478,6 +483,7 @@ describe Project do
         project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
         expect(project.total_revenue).to eq(1270)
         expect(project.revenue_per_share).to eq(0)
+        expect(project.revenue_per_share).to be_a(BigDecimal)
       end
 
       describe 'with percentage and revenue and shares' do
@@ -495,6 +501,7 @@ describe Project do
         it "shouldn't round at this level" do
           expect(project.total_revenue).to eq(1270)
           expect(project.revenue_per_share).to eq(BigDecimal('3.628571428571428571'))
+          expect(project.revenue_per_share).to be_a(BigDecimal)
         end
       end
     end
@@ -508,6 +515,7 @@ describe Project do
         project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
         expect(project.total_revenue).to eq(1270)
         expect(project.revenue_per_share).to eq(0)
+        expect(project.revenue_per_share).to be_a(BigDecimal)
       end
     end
   end
@@ -519,6 +527,7 @@ describe Project do
       it 'with no revenue sharing percentage entered' do
         project.update(royalty_percentage: nil)
         expect(project.share_of_revenue(17)).to eq(0)
+        expect(project.share_of_revenue(17)).to be_a(BigDecimal)
       end
 
 
@@ -534,6 +543,7 @@ describe Project do
         project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
         expect(project.total_revenue).to eq(1270)
         expect(project.share_of_revenue(17)).to eq(0)
+        expect(project.share_of_revenue(17)).to be_a(BigDecimal)
       end
 
       describe 'with percentage and revenue and shares' do
@@ -554,6 +564,7 @@ describe Project do
           expect(project.royalty_percentage).to eq(10)
           expect(project.total_revenue_shared).to eq(127)
           expect(project.share_of_revenue(17)).to eq(BigDecimal('61.685714285714285678'))
+          expect(project.share_of_revenue(17)).to be_a(BigDecimal)
         end
       end
     end
@@ -567,6 +578,7 @@ describe Project do
         project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
         expect(project.total_revenue).to eq(1270)
         expect(project.share_of_revenue(17)).to eq(0)
+        expect(project.share_of_revenue(17)).to be_a(BigDecimal)
       end
     end
   end

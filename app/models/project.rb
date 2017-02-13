@@ -79,19 +79,19 @@ class Project < ActiveRecord::Base
   end
 
   def share_of_revenue(awards)
-    return 0 if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0
+    return BigDecimal(0)  if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0
     (BigDecimal(awards) / BigDecimal(total_awarded)) * total_revenue_shared
   end
 
   def total_revenue_shared
-    return 0 if royalty_percentage.blank? || project_coin?
+    return BigDecimal(0)  if royalty_percentage.blank? || project_coin?
     total_revenue * (royalty_percentage * 0.01)
   end
 
   #TODO: WARNING this number needs to be updated to subtract out payments_made and shares_redeemend
   # this functionality isn't written at the time this method is being written
   def revenue_per_share
-    return 0 if royalty_percentage.blank?|| total_awarded == 0
+    return BigDecimal(0) if royalty_percentage.blank?|| total_awarded == 0
     total_revenue_shared / total_awarded
   end
 

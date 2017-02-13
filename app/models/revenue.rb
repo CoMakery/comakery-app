@@ -11,7 +11,7 @@ class Revenue < ActiveRecord::Base
   end
 
   def amount=(x)
-    x.sub!(',','') if x.respond_to?(:sub)
+    x.sub!(',','') if x.respond_to?(:sub!)
     write_attribute(:amount, x)
   end
 
