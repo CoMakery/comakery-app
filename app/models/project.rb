@@ -123,6 +123,11 @@ class Project < ActiveRecord::Base
     !!@transitioned_to_ethereum_enabled
   end
 
+
+  def share_revenue?
+    revenue_share? & royalty_percentage.present? & (royalty_percentage > 0)
+  end
+
   private
 
   def valid_tracker_url

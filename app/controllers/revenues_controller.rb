@@ -1,6 +1,6 @@
 class RevenuesController < ApplicationController
   before_filter :assign_project, :check_redirects
-  # skip_before_filter :require_login #, only: :index
+  skip_before_filter :require_login, only: :index
 
   def index
     @revenue = @project.revenues.new
@@ -33,6 +33,6 @@ class RevenuesController < ApplicationController
   end
 
   def check_redirects
-    redirect_to root_path if @project.project_coin?
+    redirect_to root_path unless @project.show_revenues?
   end
 end

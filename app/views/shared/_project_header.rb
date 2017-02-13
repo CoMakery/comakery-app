@@ -32,7 +32,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
             }
           }
 
-          unless project.project_coin?
+          if project.show_revenues?
             li {
               a(href: project_revenues_path(project)) {
                 text "Revenues"
