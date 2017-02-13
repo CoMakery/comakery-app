@@ -8,7 +8,8 @@ describe Revenue do
                                                "Amount is not a number",
                                                "Currency can't be blank",
                                                "Project can't be blank",
-                                               "Currency is not included in the list"
+                                               "Currency is not included in the list",
+                                               "Recorded by can't be blank"
                                               ].sort
     end
 
@@ -46,11 +47,11 @@ describe Revenue do
       let!(:project2) { create :project }
 
       before do
-        project1.revenues.create(amount: 3, currency: 'USD')
-        project1.revenues.create(amount: 5, currency: 'USD')
+        project1.revenues.create(amount: 3, currency: 'USD', recorded_by: project1.owner_account)
+        project1.revenues.create(amount: 5, currency: 'USD', recorded_by: project1.owner_account)
 
-        project2.revenues.create(amount: 7, currency: 'USD')
-        project2.revenues.create(amount: 11, currency: 'USD')
+        project2.revenues.create(amount: 7, currency: 'USD', recorded_by: project1.owner_account)
+        project2.revenues.create(amount: 11, currency: 'USD', recorded_by: project1.owner_account)
       end
 
       specify do

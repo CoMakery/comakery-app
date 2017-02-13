@@ -11,8 +11,8 @@ class RevenuesController < ApplicationController
 
     @revenue = @project.revenues.new(revenue_params)
     @revenue.currency = @project.denomination
+    @revenue.recorded_by = current_account
 
-    #TODO: test the invalid path, verify the denomination is properly set
     if @revenue.save
       redirect_to project_revenues_path(@project)
     else

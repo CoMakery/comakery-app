@@ -268,3 +268,14 @@ ul {
     margin-bottom: 1em;
   }
 }
+
+.summary {
+  .table-box {
+    margin-right: 65px;
+  }
+}
+table.summary-table {
+  tr td:first-of-type {
+    width: 250px;
+  }
+}

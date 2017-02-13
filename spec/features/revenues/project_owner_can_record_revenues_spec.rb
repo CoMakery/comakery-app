@@ -27,6 +27,8 @@ describe "", :js do
       expect(page.all('.transaction-reference')[0]).to have_content('0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098')
       expect(page.all('.comment')[0]).to have_content('A comment')
       expect(page).to have_content('$10.00')
+      expect(page.all('.recorded-by')[0]).to have_content("John Doe")
+      expect(page.all('.recorded-by')[0]).to have_css("img[src*='http://avatar.com/owner.jpg']")
     end
   end
 
@@ -71,15 +73,15 @@ describe "", :js do
 
   it 'project members can see a summary of the project state' do
     project.update(royalty_percentage: 10)
-    project.revenues.create(amount: 1000, currency: 'USD')
-    project.revenues.create(amount: 270, currency: 'USD')
+    project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
+    project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
     award_type.awards.create_with_quantity(1.01, issuer: owner, authentication: owner_auth)
 
     login owner
     visit project_revenues_path(project)
 
     within('.summary') do
-      expect(page.find('.revenue-shared')).to have_content("$127.00 Revenue Shared (10.0%)")
+      expect(page.find('.revenue-shared')).to have_content("Revenue Shared (10.0%) $127.00")
       expect(page.find('.total-awards')).to have_content("0")
       expect(page.find('.total-revenue')).to have_content("$1,270")
       expect(page.find('.revenue-per-share')).to have_content("$0.1257")

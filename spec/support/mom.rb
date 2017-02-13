@@ -129,7 +129,7 @@ class Mom
   end
 
   def revenue(project: create(:project))
-    Revenue.new(amount: 10, currency: 'USD', project: project)
+    Revenue.new(amount: 10, currency: 'USD', project: project, recorded_by: project.owner_account )
   end
 end
 

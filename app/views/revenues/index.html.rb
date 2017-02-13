@@ -6,28 +6,32 @@ class Views::Revenues::Index < Views::Projects::Base
     column {
       full_row {
         if project.owner_account == current_account
+
           column("large-6 medium-12 summary") {
             row {
               h3 "Summary"
-            }
+              div(class: 'table-box') {
+                table(class: "table-scroll summary-table") {
+                  tr(class: 'total-revenue') {
+                    td { text " Revenue" }
+                    td(class: "coin-numbers") { text project.total_revenue_pretty }
+                  }
 
-            row(class: 'total-revenue')  {
-              span(class: "coin-numbers") { text project.total_revenue_pretty }
-              text " Revenue"
-            }
+                  tr(class: 'revenue-shared') {
+                    td { text " Revenue Shared (#{project.royalty_percentage_pretty})" }
+                    td(class: "coin-numbers revenue-percentage") { text project.total_revenue_shared_pretty }
+                  }
+                  tr(class: 'total-awards') {
+                    td { text ' Revenue Shares' }
+                    td(class: "coin-numbers") { text project.total_awarded_pretty }
+                  }
 
-            row(class: 'revenue-shared') {
-              span(class: "coin-numbers revenue-percentage") { text project.total_revenue_shared_pretty }
-              text " Revenue Shared (#{project.royalty_percentage_pretty})"
-            }
-            row(class: 'total-awards')  {
-              span(class: "coin-numbers") { text project.total_awarded_pretty }
-              text ' Revenue Shares'
-            }
-
-            row(class: 'revenue-per-share')  {
-              span(class: "coin-numbers") { text project.revenue_per_share_pretty }
-              text ' Revenue Per Share'
+                  tr(class: 'revenue-per-share') {
+                    td { text ' Revenue Per Share' }
+                    td(class: "coin-numbers") { text project.revenue_per_share_pretty }
+                  }
+                }
+              }
             }
           }
           column("large-6 medium-12") {
@@ -83,6 +87,7 @@ class Views::Revenues::Index < Views::Projects::Base
               th { text "Amount" }
               th { text "Comment" }
               th { text "Transaction Reference" }
+              th { text "Recorded By" }
             }
             project.revenue_history.each do |revenue|
               tr(class: "award-row") {
@@ -99,6 +104,14 @@ class Views::Revenues::Index < Views::Projects::Base
                 }
                 td(class: "transaction-reference") {
                   div(class: "margin-small margin-collapse inline-block") { text revenue.transaction_reference }
+                }
+                td(class: "recorded-by small-2") {
+                  if revenue.issuer_slack_icon
+                    img(src: revenue.issuer_slack_icon, class: "icon avatar-img")
+                    text " "
+                  end
+
+                  div(class: "margin-small margin-collapse inline-block") { text revenue.issuer_display_name }
                 }
               }
             end
