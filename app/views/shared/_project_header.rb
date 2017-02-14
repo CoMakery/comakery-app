@@ -26,13 +26,15 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
             }
           }
 
-          li {
-            a(href: project_contributors_path(project)) {
-              text " Contributors"
+          if policy(project).show_contributions?
+            li {
+              a(href: project_contributors_path(project)) {
+                text " Contributors"
+              }
             }
-          }
+          end
 
-          if project.show_revenues?
+          if policy(project).show_revenue_info?
             li {
               a(href: project_revenues_path(project)) {
                 text "Revenues"

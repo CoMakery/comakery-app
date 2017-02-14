@@ -14,7 +14,10 @@ describe "contributors/index.html.rb" do
                          ]
     }
 
-    allow(view).to receive(:policy).and_return(double("project policy", edit?: false))
+    allow(view).to receive(:policy).and_return(double("project policy",
+                                                      edit?: false,
+                                                      show_contributions?: true,
+                                                      show_revenue_info?: true))
   end
 
   describe "with contributors and revenue shares" do

@@ -1,8 +1,10 @@
 class RevenuesController < ApplicationController
-  before_filter :assign_project, :check_redirects
+  before_filter :assign_project
   skip_before_filter :require_login, only: :index
 
   def index
+    authorize @project, :show_revenue_info?
+
     @revenue = @project.revenues.new
   end
 
@@ -30,9 +32,5 @@ class RevenuesController < ApplicationController
                                     :comment,
                                     :transaction_reference,
                                     :project_id
-  end
-
-  def check_redirects
-    redirect_to root_path unless @project.show_revenues?
   end
 end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "", :js do
+describe "" do
   let!(:owner) { create(:account) }
   let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: "foo", slack_image_32_url: "http://avatar.com/owner.jpg") }
   let!(:other_account) { create(:account) }
@@ -34,7 +34,8 @@ describe "", :js do
 
   it 'parses amounts with both commas and decimal point' do
     login owner
-    visit project_revenues_path(project)
+    visit project_path(project)
+    click_link "Revenues"
 
     fill_in :revenue_amount, with: "1,234.56"
     click_on "Record Revenue"
@@ -47,7 +48,8 @@ describe "", :js do
 
   it 'revenues appear in reverse chronological order' do
     login owner
-    visit project_revenues_path(project)
+    visit project_path(project)
+    click_link "Revenues"
 
     [3, 2, 1].each do |amount|
       fill_in :revenue_amount, with: amount
@@ -78,7 +80,8 @@ describe "", :js do
     award_type.awards.create_with_quantity(1.01, issuer: owner, authentication: owner_auth)
 
     login owner
-    visit project_revenues_path(project)
+    visit project_path(project)
+    click_link "Revenues"
 
     within('.summary') do
       expect(page.find('.revenue-shared')).to have_content("Revenue Shared (10.0%) $127.00")
@@ -93,7 +96,8 @@ describe "", :js do
       project.update(royalty_percentage: 10)
       login owner
       visit project_path(project)
-      visit project_revenues_path(project)
+      visit project_path(project)
+      click_link "Revenues"
 
       [3, 2, 1].each do |amount|
         fill_in :revenue_amount, with: amount
@@ -130,7 +134,8 @@ describe "", :js do
     award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
 
     login owner
-    visit project_revenues_path(project)
+    visit project_path(project)
+    click_link "Revenues"
 
     [3, 2, 1].each do |amount|
       fill_in :revenue_amount, with: amount
@@ -146,7 +151,8 @@ describe "", :js do
 
   it 'shows errors if there were missing fields' do
     login owner
-    visit project_revenues_path(project)
+    visit project_path(project)
+    click_link "Revenues"
 
     click_on "Record Revenue"
     expect(page.all('.amount').size).to eq(0)
@@ -163,7 +169,8 @@ describe "", :js do
 
     it 'usd' do
       project.USD!
-      visit project_revenues_path(project)
+      visit project_path(project)
+      click_link "Revenues"
 
       fill_in :revenue_amount, with: "4,321.12345678"
       click_on "Record Revenue"
@@ -177,7 +184,8 @@ describe "", :js do
 
     it 'btc' do
       project.BTC!
-      visit project_revenues_path(project)
+      visit project_path(project)
+      click_link "Revenues"
 
       fill_in :revenue_amount, with: "4,321.12345678"
       click_on "Record Revenue"
@@ -191,7 +199,8 @@ describe "", :js do
 
     it 'eth' do
       project.ETH!
-      visit project_revenues_path(project)
+      visit project_path(project)
+      click_link "Revenues"
 
       fill_in :revenue_amount, with: "4,321.123456789012345678"
       click_on "Record Revenue"

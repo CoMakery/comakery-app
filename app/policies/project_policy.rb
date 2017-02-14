@@ -27,13 +27,24 @@ class ProjectPolicy < ApplicationPolicy
   def show?
     project.public? || account.present? && account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
   end
+
   alias :index? :show?
 
   def edit?
     account.present? && project.owner_account == account
   end
+
   alias :update? :edit?
   alias :send_award? :edit?
+
+  def show_contributions?
+    (project.public? && !project.require_confidentiality?) ||
+        (account.present? && account.authentications.pluck(:slack_team_id).include?(project.slack_team_id))
+  end
+
+  def show_revenue_info?
+    project.share_revenue? && show_contributions?
+  end
 
   def send_community_award?
     account.present? && account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)

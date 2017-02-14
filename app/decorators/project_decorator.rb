@@ -100,10 +100,6 @@ class ProjectDecorator < Draper::Decorator
     "#{currency_denomination}#{number_with_precision(share_of_revenue(users_project_coins), precision: 2, delimiter: ',')}"
   end
 
-  def show_revenues?
-    share_revenue? & !require_confidentiality?
-  end
-
   private
 
 
