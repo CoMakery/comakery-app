@@ -3,7 +3,7 @@ class AwardsController < ApplicationController
   skip_before_filter :require_login, only: :index
 
   def index
-    authorize(@project)
+    authorize @project, :show_contributions?
     @awards = @project.awards.decorate
     @award_data = GetAwardData.call(authentication: current_account&.slack_auth, project: @project).award_data
   end

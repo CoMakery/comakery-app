@@ -50,6 +50,27 @@ describe AwardsController do
         end
       end
     end
+
+    describe 'checks policy' do
+      before do
+        allow(controller).to receive(:policy_scope).and_call_original
+        allow(controller).to receive(:authorize).and_call_original
+      end
+
+      specify do
+        login issuer
+
+        get :index, project_id: project.id
+        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
+      end
+
+      specify do
+        project.update_attributes(public:true)
+
+        get :index, project_id: project.id
+        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
+      end
+    end
   end
 
   describe "#create" do

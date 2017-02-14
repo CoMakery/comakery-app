@@ -19,28 +19,25 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
             }
           }
 
-          li {
+          li_if(policy(project).show_contributions?) {
             a(href: project_awards_path(project)) {
               # i(class: "fa fa-history")
               text "Awards"
             }
           }
 
-          if policy(project).show_contributions?
-            li {
-              a(href: project_contributors_path(project)) {
-                text " Contributors"
-              }
-            }
-          end
 
-          if policy(project).show_revenue_info?
-            li {
-              a(href: project_revenues_path(project)) {
-                text "Revenues"
-              }
+          li_if(policy(project).show_contributions?) {
+            a(href: project_contributors_path(project)) {
+              text " Contributors"
             }
-          end
+          }
+
+          li_if(policy(project).show_revenue_info?) {
+            a(href: project_revenues_path(project)) {
+              text "Revenues"
+            }
+          }
 
           li {
             a(href: project_licenses_path(project)) {
