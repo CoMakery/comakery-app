@@ -13,6 +13,17 @@ describe "" do
     stub_slack_channel_list
   end
 
+  it 'revenue page looks sensible when there are no entries recorded yet' do
+    login owner
+    visit project_path(project)
+    click_link "Revenues"
+
+    within ".revenues" do
+      expect(page).to_not have_css('table')
+      expect(page).to have_content('No revenue yet.')
+    end
+  end
+
   it "project owner can record revenues" do
     login owner
     visit project_path(project)
@@ -61,7 +72,6 @@ describe "" do
       expect(page.all('.amount')[1]).to have_content('$2.00')
       expect(page.all('.amount')[2]).to have_content('$3.00')
     end
-
   end
 
   it "non-project owner cannot record revenues" do

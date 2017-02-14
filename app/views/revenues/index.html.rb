@@ -80,43 +80,49 @@ class Views::Revenues::Index < Views::Projects::Base
       }
       br
       full_row {
-        div(class: "table-scroll table-box revenues") {
-          table(class: "table-scroll", style: "width: 100%") {
-            tr(class: "header-row") {
-              th { text "Date" }
-              th { text "Amount" }
-              th { text "Comment" }
-              th { text "Transaction Reference" }
-              th { text "Recorded By" }
-            }
-            project.revenue_history.each do |revenue|
-              tr(class: "award-row") {
-                td(class: "date financial") {
-                  div(class: "margin-small margin-collapse inline-block") { text revenue.created_at }
-                }
-                td(class: "amount financial") {
-                  div(class: "margin-small margin-collapse inline-block") {
-                    text revenue.amount_pretty
+        if project.revenue_history.any?
+          div(class: "table-scroll table-box revenues") {
+
+
+            table(class: "table-scroll", style: "width: 100%") {
+              tr(class: "header-row") {
+                th { text "Date" }
+                th { text "Amount" }
+                th { text "Comment" }
+                th { text "Transaction Reference" }
+                th { text "Recorded By" }
+              }
+              project.revenue_history.each do |revenue|
+                tr(class: "award-row") {
+                  td(class: "date financial") {
+                    div(class: "margin-small margin-collapse inline-block") { text revenue.created_at }
+                  }
+                  td(class: "amount financial") {
+                    div(class: "margin-small margin-collapse inline-block") {
+                      text revenue.amount_pretty
+                    }
+                  }
+                  td(class: "comment") {
+                    div(class: "margin-small margin-collapse inline-block") { text revenue.comment }
+                  }
+                  td(class: "transaction-reference financial") {
+                    div(class: "margin-small margin-collapse inline-block") { text revenue.transaction_reference }
+                  }
+                  td(class: "recorded-by small-2") {
+                    if revenue.issuer_slack_icon
+                      img(src: revenue.issuer_slack_icon, class: "icon avatar-img")
+                      text " "
+                    end
+
+                    div(class: "margin-small margin-collapse inline-block") { text revenue.issuer_display_name }
                   }
                 }
-                td(class: "comment") {
-                  div(class: "margin-small margin-collapse inline-block") { text revenue.comment }
-                }
-                td(class: "transaction-reference financial") {
-                  div(class: "margin-small margin-collapse inline-block") { text revenue.transaction_reference }
-                }
-                td(class: "recorded-by small-2") {
-                  if revenue.issuer_slack_icon
-                    img(src: revenue.issuer_slack_icon, class: "icon avatar-img")
-                    text " "
-                  end
-
-                  div(class: "margin-small margin-collapse inline-block") { text revenue.issuer_display_name }
-                }
-              }
-            end
+              end
+            }
           }
-        }
+        else
+          div(class: 'revenues') { text "No revenue yet." }
+        end
       }
     }
   end
