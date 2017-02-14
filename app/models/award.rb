@@ -1,4 +1,6 @@
 class Award < ActiveRecord::Base
+  paginates_per 50
+
   include EthereumAddressable
 
   belongs_to :authentication

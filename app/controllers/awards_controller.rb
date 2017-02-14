@@ -4,7 +4,7 @@ class AwardsController < ApplicationController
 
   def index
     authorize @project, :show_contributions?
-    @awards = @project.awards.decorate
+    @awards = @project.awards.page(params[:page]).decorate
     @award_data = GetAwardData.call(authentication: current_account&.slack_auth, project: @project).award_data
   end
 
@@ -40,7 +40,7 @@ class AwardsController < ApplicationController
   private
 
   def award_params
-    params.require(:award).permit(:slack_user_id, :award_type_id, :quantity, :description)
+    params.require(:award).permit(:slack_user_id, :award_type_id, :quantity, :description, :page)
   end
 
   def assign_project

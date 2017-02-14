@@ -40,6 +40,7 @@ gem 'sidekiq-failures'
 gem 'slack-ruby-client'
 gem 'uglifier'
 gem 'underscore-rails'
+gem 'kaminari'
 
 group(:scripts) do
   gem 'easy_shell'
