@@ -18,7 +18,7 @@ class Views::Revenues::Index < Views::Projects::Base
                   }
 
                   tr(class: 'revenue-shared') {
-                    td { text " Revenue Shared (#{project.royalty_percentage_pretty})" }
+                    td { text " Revenue Shared (#{project.royalty_percentage_pretty}) " }
                     td(class: "coin-numbers revenue-percentage") { text project.total_revenue_shared_pretty }
                   }
                   tr(class: 'total-awards') {
@@ -45,7 +45,7 @@ class Views::Revenues::Index < Views::Projects::Base
                     span(class: 'required') {
                       text "Amount"
                     }
-                    div(class: 'input-group') {
+                    div(class: 'input-group financial') {
                       span(class: "input-group-label denomination") { text project.currency_denomination }
                       f.text_field(:amount, class: 'input-group-field')
                     }
@@ -66,7 +66,7 @@ class Views::Revenues::Index < Views::Projects::Base
                 with_errors(revenue, :transaction_reference) {
                   label {
                     text "Transaction Reference"
-                    f.text_field(:transaction_reference)
+                    f.text_field(:transaction_reference, class: 'financial')
                   }
                 }
               }
@@ -91,10 +91,10 @@ class Views::Revenues::Index < Views::Projects::Base
             }
             project.revenue_history.each do |revenue|
               tr(class: "award-row") {
-                td(class: "date") {
+                td(class: "date financial") {
                   div(class: "margin-small margin-collapse inline-block") { text revenue.created_at }
                 }
-                td(class: "amount") {
+                td(class: "amount financial") {
                   div(class: "margin-small margin-collapse inline-block") {
                     text revenue.amount_pretty
                   }
@@ -102,7 +102,7 @@ class Views::Revenues::Index < Views::Projects::Base
                 td(class: "comment") {
                   div(class: "margin-small margin-collapse inline-block") { text revenue.comment }
                 }
-                td(class: "transaction-reference") {
+                td(class: "transaction-reference financial") {
                   div(class: "margin-small margin-collapse inline-block") { text revenue.transaction_reference }
                 }
                 td(class: "recorded-by small-2") {

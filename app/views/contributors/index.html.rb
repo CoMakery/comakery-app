@@ -33,26 +33,26 @@ class Views::Contributors::Index < Views::Projects::Base
                     img(src: contributor[:avatar], class: "icon avatar-img")
                     div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
                   }
-                  td(class: "award-holdings") {
+                  td(class: "award-holdings financial") {
                     span(class: "margin-small") {
                       text text number_with_precision(contributor[:earned], precision: 0, delimiter: ',')
                     }
                   }
 
                   if project.revenue_share?
-                    td(class: "holdings-value") {
+                    td(class: "holdings-value financial") {
                       span(class: "margin-small") {
                         text project.shares_to_balance_pretty(contributor[:earned])
                       }
                     }
                   end
-                  td(class: "awards-earned") {
+                  td(class: "awards-earned financial") {
                     span(class: "margin-small") {
                       text number_with_precision(contributor[:earned], precision: 0, delimiter: ',')
                     }
                   }
                   if project.revenue_share?
-                    td(class: "paid hidden") {
+                    td(class: "paid hidden financial") {
                       span(class: "margin-small") {
                         text project.currency_denomination
                         text 0

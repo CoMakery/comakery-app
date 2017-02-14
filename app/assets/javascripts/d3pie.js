@@ -42,13 +42,13 @@ var defaultSettings = {
 			text:     "",
 			color:    "#333333",
 			fontSize: 18,
-			font:     "arial"
+			font:     "roboto"
 		},
 		subtitle: {
 			text:     "",
 			color:    "#666666",
 			fontSize: 14,
-			font:     "arial"
+			font:     "roboto"
 		},
 		location: "top-center",
 		titleSubtitlePadding: 8
@@ -57,7 +57,7 @@ var defaultSettings = {
 		text: 	  "",
 		color:    "#666666",
 		fontSize: 14,
-		font:     "arial",
+		font:     "roboto",
 		location: "left"
 	},
 	size: {
@@ -94,18 +94,18 @@ var defaultSettings = {
 		},
 		mainLabel: {
 			color: "#333333",
-			font: "arial",
+			font: "roboto",
 			fontSize: 10
 		},
 		percentage: {
 			color: "#dddddd",
-			font: "arial",
+			font: "roboto",
 			fontSize: 10,
 			decimalPlaces: 0
 		},
 		value: {
 			color: "#cccc44",
-			font: "arial",
+			font: "roboto",
 			fontSize: 10
 		},
 		lines: {
@@ -143,7 +143,7 @@ var defaultSettings = {
       backgroundOpacity: 0.5,
 			color: "#efefef",
       borderRadius: 2,
-      font: "arial",
+      font: "roboto",
       fontSize: 10,
       padding: 4
 		}

@@ -6,9 +6,9 @@ class Views::Shared::Awards < Views::Base
       table(class: "award-rows") {
         tr(class: "header-row") {
           th(class: "small-1") { text "Type" }
-          th(class: "small-1 financial") { text "Amount" }
-          th(class: "small-1 financial") { text "Quantity" }
-          th(class: "small-1 financial") { text "Total Amount" }
+          th(class: "small-1") { text "Amount" }
+          th(class: "small-1") { text "Quantity" }
+          th(class: "small-1") { text "Total Amount" }
           th(class: "small-1") { text "Date" }
           if show_recipient
             th(class: "small-2") { text "Recipient" }
