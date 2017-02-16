@@ -38,6 +38,7 @@ gem 'sdoc', group: :doc
 gem 'sidekiq'
 gem 'sidekiq-failures'
 gem 'slack-ruby-client'
+gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 gem 'uglifier'
 gem 'underscore-rails'
 gem 'kaminari'
