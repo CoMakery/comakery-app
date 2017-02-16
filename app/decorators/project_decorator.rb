@@ -53,14 +53,16 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def total_revenue_pretty
-    "#{currency_denomination}#{number_with_precision(total_revenue.truncate(Comakery::Currency::PRECISION[denomination]),
-                                                     precision: Comakery::Currency::PRECISION[denomination],
+    precision = Comakery::Currency::PRECISION[denomination]
+    "#{currency_denomination}#{number_with_precision(total_revenue.truncate(precision),
+                                                     precision: precision,
                                                      delimiter: ',')}"
   end
 
   def total_revenue_shared_pretty
-    "#{currency_denomination}#{number_with_precision(total_revenue_shared.truncate(Comakery::Currency::PRECISION[denomination]),
-                                                     precision: Comakery::Currency::PRECISION[denomination],
+    precision = Comakery::Currency::PRECISION[denomination]
+    "#{currency_denomination}#{number_with_precision(total_revenue_shared.truncate(precision),
+                                                     precision: precision,
                                                      delimiter: ',')}"
   end
 
@@ -69,8 +71,9 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def revenue_per_share_pretty
-    "#{currency_denomination}#{number_with_precision(revenue_per_share.truncate(Comakery::Currency::PER_SHARE_PRECISION[denomination]),
-                                                     precision: Comakery::Currency::PER_SHARE_PRECISION[denomination],
+    precision = Comakery::Currency::PER_SHARE_PRECISION[denomination]
+    "#{currency_denomination}#{number_with_precision(revenue_per_share.truncate(precision),
+                                                     precision: precision,
                                                      delimiter: ',')}"
   end
 

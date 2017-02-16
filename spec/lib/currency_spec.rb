@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Comakery::Slack do
+describe Comakery::Currency do
   it 'should have matching denomination and precision' do
     expect(Comakery::Currency::DENOMINATIONS.keys.sort).to eq(Comakery::Currency::PRECISION.keys.sort)
   end
