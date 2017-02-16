@@ -563,7 +563,7 @@ describe Project do
           expect(project.total_awarded).to eq(35)
           expect(project.royalty_percentage).to eq(10)
           expect(project.total_revenue_shared).to eq(127)
-          expect(project.share_of_revenue(17)).to eq(BigDecimal('61.685714285714285678'))
+          expect(project.share_of_revenue(17)).to eq(BigDecimal('61.685714285714285714'))
           expect(project.share_of_revenue(17)).to be_a(BigDecimal)
         end
       end
@@ -580,6 +580,44 @@ describe Project do
         expect(project.share_of_revenue(17)).to eq(0)
         expect(project.share_of_revenue(17)).to be_a(BigDecimal)
       end
+    end
+  end
+
+  describe 'with large numbers' do
+    let(:billion_minus_one) { BigDecimal("999,999,999") }
+
+    let(:project) { create :project, payment_type: :revenue_share, royalty_percentage: 100, denomination: :ETH }
+    let(:big_award) { create :award_type, project: project, amount: billion_minus_one }
+
+    before do
+      big_award.awards.create_with_quantity(1,
+                                            issuer: project.owner_account,
+                                            authentication: project.owner_account.authentications.first)
+
+      project.revenues.create(amount: billion_minus_one, currency: 'USD', recorded_by: project.owner_account)
+    end
+
+    it 'should avoid multiplying rounding errors' do
+      expect(project.total_revenue_shared).to eq(billion_minus_one)
+      expect(project.share_of_revenue(billion_minus_one)).to eq(billion_minus_one)
+      expect(project.share_of_revenue(1)).to eq(1)
+
+    end
+
+    it 'should be resilient to multiplication rounding errors in subsequent method calls' do
+      lots_of_shares = 10_000
+      tiny_rev_share = project.share_of_revenue(1)
+
+      total = 0
+      lots_of_shares.times do
+        total += tiny_rev_share
+      end
+
+      expect(project.share_of_revenue(lots_of_shares)).to eq(total)
+    end
+
+    it 'should have equivilent #share_of_revenue(1) share and #revenue_per_share' do
+      expect(project.share_of_revenue(1)).to eq(project.revenue_per_share)
     end
   end
 end

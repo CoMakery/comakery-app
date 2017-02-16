@@ -80,7 +80,7 @@ class Project < ActiveRecord::Base
 
   def share_of_revenue(awards)
     return BigDecimal(0)  if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0
-    (BigDecimal(awards) / BigDecimal(total_awarded)) * total_revenue_shared
+    (BigDecimal(awards) * total_revenue_shared) / BigDecimal(total_awarded)
   end
 
   def total_revenue_shared
