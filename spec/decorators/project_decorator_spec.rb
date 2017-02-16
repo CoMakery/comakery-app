@@ -20,12 +20,12 @@ describe ProjectDecorator do
 
     specify do
       project.BTC!
-      expect(pretty_method_call).to eq("฿9.99999999")
+      expect(pretty_method_call).to match(/^฿9.9{8}$/)
     end
 
     specify do
       project.ETH!
-      expect(pretty_method_call).to eq("Ξ9.999999999999999999")
+      expect(pretty_method_call).to match(/^Ξ9.9{18}$/)
     end
   end
 
@@ -45,12 +45,12 @@ describe ProjectDecorator do
 
     specify do
       project.BTC!
-      expect(pretty_method_call).to eq("฿9.99999999")
+      expect(pretty_method_call).to match(/^฿9.9{8}$/)
     end
 
     specify do
       project.ETH!
-      expect(pretty_method_call).to eq("Ξ9.999999999999999999")
+      expect(pretty_method_call).to match(/^Ξ9.9{18}$/)
     end
   end
 
@@ -70,12 +70,12 @@ describe ProjectDecorator do
 
     specify do
       project.BTC!
-      expect(pretty_method_call).to eq("฿9.99999999")
+      expect(pretty_method_call).to match(/^฿9.9{8}$/)
     end
 
     specify do
       project.ETH!
-      expect(pretty_method_call).to eq("Ξ9.999999999999999999")
+      expect(pretty_method_call).to match(/^Ξ9.9{18}$/)
     end
   end
 end
