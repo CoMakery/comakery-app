@@ -69,9 +69,9 @@ describe Revenue do
     let(:revenue) { build :revenue }
 
     it 'should strip commas but retain decimals' do
-      revenue.amount = '1,234.56'
+      revenue.amount = '90,123,456,789.56'
       revenue.save!
-      expect(revenue.amount).to eq(1_234.56)
+      expect(revenue.amount).to eq(90_123_456_789.56)
     end
   end
 end

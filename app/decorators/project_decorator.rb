@@ -67,6 +67,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def total_awarded_pretty
+    # awards (e.g. project coins or revenue shares) are validated as whole numbers; they are rounded
     number_with_precision(total_awarded, precision: 0, delimiter: ',')
   end
 

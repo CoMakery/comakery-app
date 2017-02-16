@@ -4,7 +4,7 @@ describe ProjectDecorator do
   let(:amount_with_24_decimal_precision) { BigDecimal('9.999_999_999_999_999_999_999') }
   let(:project) { (create :project, royalty_percentage: 100).decorate }
 
-  describe "revenue_per_share_pretty method truncates" do
+  describe "total_revenue_pretty method truncates" do
     let(:project_method) { 'total_revenue' }
 
     before { allow(project).to receive(project_method).and_return(amount_with_24_decimal_precision) }

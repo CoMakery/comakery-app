@@ -3,7 +3,7 @@ class Revenue < ActiveRecord::Base
   belongs_to :recorded_by, class_name: Account
 
   validates_presence_of :amount, :currency, :project, :recorded_by
-  validates :currency, inclusion: { in: Comakery::Currency::DENOMINATIONS }
+  validates :currency, inclusion: { in: Comakery::Currency::DENOMINATIONS.keys }
   validates_numericality_of :amount, greater_than: 0
 
   def self.total_amount
@@ -11,7 +11,7 @@ class Revenue < ActiveRecord::Base
   end
 
   def amount=(x)
-    x.sub!(',','') if x.respond_to?(:sub!)
+    x.gsub!(',','') if x.respond_to?(:sub!)
     write_attribute(:amount, x)
   end
 
