@@ -16,6 +16,7 @@ class Project < ActiveRecord::Base
 
   has_many :contributors, through: :awards, source: :authentication  # TODO deprecate in favor of contributors_distinct
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
+  has_many :revenues
 
   belongs_to :owner_account, class_name: Account
 
@@ -37,6 +38,7 @@ class Project < ActiveRecord::Base
   validates_presence_of :royalty_percentage, :maximum_royalties_per_month, unless: :project_coin?
 
   validates_numericality_of :maximum_coins, greater_than: 0
+  validates_numericality_of :royalty_percentage, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_nil: true
 
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
@@ -45,6 +47,7 @@ class Project < ActiveRecord::Base
   validate :maximum_coins_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
   validates :ethereum_contract_address, ethereum_address: {type: :account, immutable: true}  # see EthereumAddressable
+  validate :denomination_changeable
 
   before_save :set_transitioned_to_ethereum_enabled
 
@@ -66,6 +69,31 @@ class Project < ActiveRecord::Base
 
   def self.public_projects
     where(public: true)
+  end
+
+  def total_revenue
+    revenues.total_amount
+  end
+
+  def total_awarded
+    awards.total_awarded
+  end
+
+  def share_of_revenue(awards)
+    return BigDecimal(0)  if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0
+    (BigDecimal(awards) * total_revenue_shared) / BigDecimal(total_awarded)
+  end
+
+  def total_revenue_shared
+    return BigDecimal(0)  if royalty_percentage.blank? || project_coin?
+    total_revenue * (royalty_percentage * 0.01)
+  end
+
+  #TODO: WARNING this number needs to be updated to subtract out payments_made and shares_redeemend
+  # this functionality isn't written at the time this method is being written
+  def revenue_per_share
+    return BigDecimal(0) if royalty_percentage.blank?|| total_awarded == 0
+    total_revenue_shared / total_awarded
   end
 
   def community_award_types
@@ -94,6 +122,11 @@ class Project < ActiveRecord::Base
 
   def transitioned_to_ethereum_enabled?
     !!@transitioned_to_ethereum_enabled
+  end
+
+
+  def share_revenue?
+    revenue_share? && (royalty_percentage&.> 0)
   end
 
   private
@@ -138,5 +171,10 @@ class Project < ActiveRecord::Base
     if maximum_coins_was > 0 and maximum_coins_was != maximum_coins
       errors[:maximum_coins] << "can't be changed"
     end
+  end
+
+  def denomination_changeable
+    errors.add(:denomination, "cannot be changed because the license terms are finalized") if license_finalized_was
+    errors.add(:denomination, "cannot be changed because revenue has been recorded") if revenues.any?
   end
 end

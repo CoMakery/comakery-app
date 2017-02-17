@@ -50,18 +50,22 @@ class Views::Projects::Description < Views::Projects::Base
               if award_data[:award_amounts][:my_project_coins].present?
                 li(class: 'my-share') {
                   h5 "My #{project.payment_description}"
-                  span(class: " coin-numbers") {
+                  div(class: " coin-numbers") {
                     text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
                   }
-                  span(class: "balance-type") { text " of #{total_coins_issued}" }
+                  span(class: "balance-type") { text "of #{project.total_awarded_pretty} awarded" }
+                  br
+                  span(class: "help-text") { text "(estimated)" }
                 }
 
                 li_if(project.revenue_share?, class: 'my-balance') {
                   h5 "My Balance"
-                  span(class: "coin-numbers") {
-                    text project.my_balance_pretty
-                    span(class: "balance-type") { text " of #{project.balance_pretty}" }
+                  div(class: "coin-numbers") {
+                    text project.shares_to_balance_pretty(award_data[:award_amounts][:my_project_coins])
                   }
+                  span(class: "balance-type") { text "of #{project.total_revenue_shared_rounded} total" }
+                  br
+                  span(class: "help-text") { text "(estimated)" }
                 }
               end
 

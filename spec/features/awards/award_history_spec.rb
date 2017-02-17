@@ -56,6 +56,22 @@ describe "viewing projects, creating and editing", :js do
 
           expect(page).to have_content "History"
         end
+
+        it 'paginates when there are lots of awards' do
+          (60 - project.awards.count).times do
+            create(:award, award_type: community_award_type, issuer: other_account, authentication: owner_auth)
+          end
+
+          visit project_path(project)
+
+          click_link "Awards"
+          expect(page.all("table.award-rows tr.award-row").size).to eq(50)
+
+          within(page.all('.pagination').first) do
+            click_link "2"
+          end
+          expect(page.all("table.award-rows tr.award-row").size).to eq(10)
+        end
       end
     end
   end

@@ -11,13 +11,13 @@ class Views::Shared::AwardFormTerms < Views::Base
       term "Business Confidentiality", project.require_confidentiality_text
       term "Project confidentiality", project.require_confidentiality_text
       br
-      term "Maximum #{project.payment_description}", project.maximum_coins_pretty
-      term "Maximum #{project.payment_description} Awarded Per Month", project.maximum_royalties_per_month_pretty
+      numeric_term "Maximum #{project.payment_description}", project.maximum_coins_pretty
+      numeric_term "Maximum #{project.payment_description} Awarded Per Month", project.maximum_royalties_per_month_pretty
       if project.revenue_share?
         span(class: 'revenue-sharing-only') {
-          term "Revenue reserved to pay Contributors", project.royalty_percentage_pretty
-          term "Minimum Revenue Before Revenue Sharing", project.minimum_revenue
-          term "Minimum Payment to Contributors", project.minimum_payment
+          numeric_term "Revenue reserved to pay Contributors", project.royalty_percentage_pretty
+          numeric_term "Minimum Revenue Before Revenue Sharing", project.minimum_revenue
+          numeric_term "Minimum Payment to Contributors", project.minimum_payment
         }
       end
     }
@@ -32,6 +32,13 @@ class Views::Shared::AwardFormTerms < Views::Base
     li {
       strong "#{term_name.titleize}: "
       text trailing_text
+    }
+  end
+
+  def numeric_term(term_name, trailing_text = "")
+    li {
+      strong { text "#{term_name.titleize}: " }
+      span(class: 'financial') { text trailing_text }
     }
   end
 

@@ -8,8 +8,9 @@ describe "projects/_description.html.rb" do
     assign :project, project
     assign :can_award, false
 
-    assign :award_data, {award_amounts: {total_coins_issued: 20, my_project_coins: 10}
-    }
+    assign :award_data, {award_amounts: {my_project_coins: 10}}
+
+    allow(project).to receive(:total_awarded_pretty).and_return(20)
 
     allow(view).to receive(:policy).and_return(double("project policy", edit?: false))
   end
@@ -26,8 +27,8 @@ describe "projects/_description.html.rb" do
     it 'renders revenue fields' do
       render
 
-      expect(rendered).to have_selector('.my-share', text: "My Revenue Shares10 of 20")
-      expect(rendered).to have_selector('.my-balance', text: "My Balance$0 of $0")
+      expect(rendered).to have_selector('.my-share', text: "My Revenue Shares10of 20")
+      expect(rendered).to have_selector('.my-balance', text: "My Balance$0.00of $0.00")
       expect(rendered).to have_selector('.revenue-percentage')
     end
 
@@ -39,13 +40,13 @@ describe "projects/_description.html.rb" do
     it 'balance shows BTC denomination' do
       project.BTC!
       render
-      expect(rendered).to have_selector('.my-balance', text: "My Balance฿0 of ฿0")
+      expect(rendered).to have_selector('.my-balance', text: "My Balance฿0.00000000of ฿0.00000000")
     end
 
     it 'balance shows ETH denomination' do
       project.ETH!
       render
-      expect(rendered).to have_selector('.my-balance', text: "My BalanceΞ0 of Ξ0")
+      expect(rendered).to have_selector('.my-balance', text: "My BalanceΞ0.00000000of Ξ0.00000000")
     end
   end
 
@@ -54,7 +55,7 @@ describe "projects/_description.html.rb" do
 
     it 'hides revenue fields' do
       render
-      expect(rendered).to have_selector('.my-share', text: "My Project Coins10 of 20")
+      expect(rendered).to have_selector('.my-share', text: "My Project Coins10of 20")
 
       expect(rendered).to_not have_selector('.my-balance')
       expect(rendered).to_not have_selector('.revenue-percentage')

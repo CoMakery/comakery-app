@@ -93,14 +93,23 @@ class Mom
   end
 
   def award(authentication = create(:authentication), issuer = create(:account), **attrs)
-    defaults = {
+    params = {
         authentication: authentication,
         issuer: issuer,
         description: "Great work",
-        proof_id: 'abc123'
-    }
-    defaults[:award_type] = create(:award_type) unless attrs[:award_type]
-    Award.new(defaults.merge(attrs))
+        proof_id: 'abc123',
+        quantity: 1,
+        unit_amount: 50,
+        total_amount: 50
+    }.merge(attrs)
+
+    params[:award_type] ||= create(:award_type, amount: params[:unit_amount])
+
+    params[:unit_amount] = params[:award_type].amount
+    params[:total_amount] = params[:award_type].amount * params[:quantity]
+
+
+    Award.new(params)
   end
 
   def payment(**attrs )
@@ -117,6 +126,13 @@ class Mom
 
   def valid_password
     'a password'
+  end
+
+  def revenue(project: create(:project), amount: 10, currency: 'USD')
+    Revenue.new amount: amount,
+                currency: currency,
+                project: project,
+                recorded_by: project.owner_account
   end
 end
 

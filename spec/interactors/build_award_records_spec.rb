@@ -76,8 +76,32 @@ describe BuildAwardRecords do
     it "returns an error message without creating the award" do
       recipient
       recipient_authentication
+      award_type.update!(amount: project.maximum_coins + 1)
+
       expect do
-        result = BuildAwardRecords.call(project: project, issuer: issuer, slack_user_id: recipient_authentication.slack_user_id, award_params: {award_type_id: award_type.to_param}, total_coins_issued: project.maximum_coins)
+        result = BuildAwardRecords.call(project: project,
+                                        issuer: issuer,
+                                        slack_user_id: recipient_authentication.slack_user_id,
+                                        award_params: {award_type_id: award_type.to_param},
+                                        total_coins_issued: 0)
+        expect(result).not_to be_success
+        expect(result.message).to eq("Sorry, you can't send more awards than the project's maximum number of allowable coins")
+      end.not_to change { Award.count }
+    end
+
+    it "raises based on award.total_amount with multiple award unit quantity" do
+      recipient
+      recipient_authentication
+      award_type.update(amount: 1)
+      expect do
+        result = BuildAwardRecords.call(project: project,
+                                        issuer: issuer,
+                                        slack_user_id: recipient_authentication.slack_user_id,
+                                        award_params: {award_type_id: award_type.to_param,
+                                        quantity: 2,
+                                        },
+                                        total_coins_issued: project.maximum_coins - 1)
+
         expect(result).not_to be_success
         expect(result.message).to eq("Sorry, you can't send more awards than the project's maximum number of allowable coins")
       end.not_to change { Award.count }

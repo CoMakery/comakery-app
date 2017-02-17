@@ -1,5 +1,6 @@
 class AwardDecorator < Draper::Decorator
   delegate_all
+  include ActionView::Helpers::NumberHelper
 
   def proof_id_short
     "#{object.proof_id[0...20]}..."
@@ -19,5 +20,13 @@ class AwardDecorator < Draper::Decorator
     else
       nil
     end
+  end
+
+  def unit_amount_pretty
+    number_with_delimiter(award.unit_amount, :delimiter => ',')
+  end
+
+  def total_amount_pretty
+    number_with_delimiter(award.total_amount, :seperator => ',')
   end
 end

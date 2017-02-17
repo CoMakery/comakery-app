@@ -25,7 +25,7 @@ class Authentication < ActiveRecord::Base
   end
 
   def total_awards_earned(project)
-    project.awards.where(authentication: self).sum(:amount)
+    project.awards.where(authentication: self).sum(:total_amount)
   end
 
   def total_awards_paid(project)

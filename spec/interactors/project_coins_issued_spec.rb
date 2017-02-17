@@ -21,18 +21,31 @@ describe ProjectCoinsIssued do
     expect(ProjectCoinsIssued.call(project: project).total_coins_issued).to eq(0)
   end
 
-  it "returns the total amount of coins awarded for a project" do
-    create(:award, authentication: auth1, award_type: award_type_1)
-    create(:award, authentication: auth1, award_type: award_type_2)
-    create(:award, authentication: auth1, award_type: award_type_4)
+  describe do
+    before do
+      create(:award, authentication: auth1, award_type: award_type_1)
+      create(:award, authentication: auth1, award_type: award_type_2)
+      create(:award, authentication: auth1, award_type: award_type_4)
 
-    create(:award, authentication: auth2, award_type: award_type_1)
-    create(:award, authentication: auth2, award_type: award_type_2)
-    create(:award, authentication: auth2, award_type: award_type_4)
+      create(:award, authentication: auth2, award_type: award_type_1)
+      create(:award, authentication: auth2, award_type: award_type_2)
+      create(:award, authentication: auth2, award_type: award_type_4)
+    end
 
-    result = ProjectCoinsIssued.call(project: project)
-    expect(result).to be_success
-    expect(result.total_coins_issued).to eq(1 + 2 + 4 +
-                                            1 + 2 + 4)
+    it "returns the total amount of coins awarded for a project" do
+      result = ProjectCoinsIssued.call(project: project)
+      expect(result).to be_success
+      expect(result.total_coins_issued).to eq(1 + 2 + 4 +
+                                                  1 + 2 + 4)
+    end
+
+    it "returns the total amount of coins awarded for a project with multiple award.quantity" do
+      create(:award, authentication: auth2, award_type: award_type_4, quantity: 2)
+
+      result = ProjectCoinsIssued.call(project: project)
+      expect(result).to be_success
+      expect(result.total_coins_issued).to eq(1 + 2 + 4 + 1 + 2 + 4 +
+                                                  8)
+    end
   end
 end

@@ -50,6 +50,27 @@ describe AwardsController do
         end
       end
     end
+
+    describe 'checks policy' do
+      before do
+        allow(controller).to receive(:policy_scope).and_call_original
+        allow(controller).to receive(:authorize).and_call_original
+      end
+
+      specify do
+        login issuer
+
+        get :index, project_id: project.id
+        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
+      end
+
+      specify do
+        project.update_attributes(public:true)
+
+        get :index, project_id: project.id
+        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
+      end
+    end
   end
 
   describe "#create" do
@@ -69,6 +90,7 @@ describe AwardsController do
           post :create, project_id: project.to_param, award: {
               slack_user_id: receiver_authentication.slack_user_id,
               award_type_id: award_type.to_param,
+              quantity: 1.5,
               description: "This rocks!!11"
           }
           expect(response.status).to eq(302)
@@ -82,6 +104,7 @@ describe AwardsController do
         expect(award.authentication).to eq(receiver_authentication)
         expect(award.issuer).to eq(issuer)
         expect(award.description).to eq("This rocks!!11")
+        expect(award.quantity).to eq(1.5)
         expect(EthereumTokenIssueJob.jobs.first['args']).to eq([award.id])
       end
 

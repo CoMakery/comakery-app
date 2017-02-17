@@ -8,7 +8,7 @@ class EthereumTokenIssueJob
     project = award.project
     args = {
       recipient: award.recipient_address,
-      amount: award.award_type.amount,
+      amount: award.total_amount,
       proofId: award.proof_id,
       contractAddress: project.ethereum_contract_address
     }

@@ -25,6 +25,28 @@ describe "shared/_awards.html.rb" do
     end
   end
 
+  describe "awards history" do
+    before do
+      award1.update(quantity: 2, unit_amount: 5, total_amount: 10)
+      render
+    end
+    specify do
+      expect(rendered).to have_css ".award-type", text: "Revenue Share"
+    end
+
+    specify do
+      expect(rendered).to have_css ".award-unit-amount", text: "5"
+    end
+
+    specify do
+      expect(rendered).to have_css ".award-quantity", text: "2"
+    end
+
+    specify do
+      expect(rendered).to have_css ".award-total-amount", text: "10"
+    end
+  end
+
   describe "Blockchain Transaction column" do
     describe 'when project is not ethereum enabled' do
       before { project.ethereum_enabled = false }
