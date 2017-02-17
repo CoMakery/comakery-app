@@ -2,7 +2,8 @@ require 'rails_helper'
 
 describe RevenueDecorator do
   let(:amount_with_24_decimal_precision) { BigDecimal('9.999_999_999_999_999_999_999') }
-  let(:revenue) { (create :revenue, amount: amount_with_24_decimal_precision).reload.decorate }
+  let(:revenue) { create(:revenue).decorate.tap {|r| r.amount = amount_with_24_decimal_precision } }
+
 
   describe 'initialization conditions' do
     specify { expect(revenue.amount).to eq(amount_with_24_decimal_precision) }

@@ -17,9 +17,15 @@ module Comakery
     }
 
     PER_SHARE_PRECISION = {
-        USD => 4,
+        USD => 8,
         BTC => 8,
-        ETH => 18
+        ETH => 8
+    }
+
+    ROUNDED_BALANCE_PRECISION = {
+        USD => 2,
+        BTC => 8,
+        ETH => 8
     }
   end
 end

@@ -65,7 +65,7 @@ describe ProjectDecorator do
 
     specify do
       project.USD!
-      expect(pretty_method_call).to eq("$9.9999")
+      expect(pretty_method_call).to match(/^\$9.9{8}$/)
     end
 
     specify do
@@ -75,7 +75,7 @@ describe ProjectDecorator do
 
     specify do
       project.ETH!
-      expect(pretty_method_call).to match(/^Ξ9.9{18}$/)
+      expect(pretty_method_call).to match(/^Ξ9.9{8}$/)
     end
   end
 end

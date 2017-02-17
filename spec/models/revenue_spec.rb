@@ -35,6 +35,31 @@ describe Revenue do
         expect(revenue).to_not be_valid
       end
     end
+
+    describe 'amount cannot be overly precise for the currencies smallest unit' do
+      specify do
+        valid_revenue = build :revenue, amount: 0.01, currency: Comakery::Currency::USD
+        expect(valid_revenue).to be_valid
+      end
+
+      specify do
+        revenue = build :revenue, amount: 1e-3, currency: Comakery::Currency::USD
+        expect(revenue).to_not be_valid
+        expect(revenue.errors[:amount]).to eq(['must use only 2 decimal places for USD'])
+      end
+
+      specify do
+        revenue = build :revenue, amount: 1e-9, currency: Comakery::Currency::BTC
+        expect(revenue).to_not be_valid
+        expect(revenue.errors[:amount]).to eq(['must use only 8 decimal places for BTC'])
+      end
+
+      specify do
+        revenue = build :revenue, amount: 1e-19, currency: Comakery::Currency::ETH
+        expect(revenue).to_not be_valid
+        expect(revenue.errors[:amount]).to eq(['must use only 18 decimal places for ETH'])
+      end
+    end
   end
 
   describe ".total_revenue" do

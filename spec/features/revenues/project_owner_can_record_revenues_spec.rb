@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe "" do
+describe "when recording revenue" do
   let!(:owner) { create(:account) }
   let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: "foo", slack_image_32_url: "http://avatar.com/owner.jpg") }
   let!(:other_account) { create(:account) }
@@ -117,24 +117,24 @@ describe "" do
 
     it 'share value appears on project page' do
       visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$0.00 of $0.60')
+      expect(page.find('.my-balance')).to have_content('$0.00of $0.60')
     end
 
     it 'share value appears on project page' do
       visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$0.00 of $0.60')
+      expect(page.find('.my-balance')).to have_content('$0.00of $0.60')
     end
 
     it 'holdings value appears on the project show page' do
       award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('7,000 of 7,000')
-      expect(page.find('.my-balance')).to have_content('$0.60 of $0.60')
+      expect(page.find('.my-share')).to have_content('7,000of 7,000')
+      expect(page.find('.my-balance')).to have_content('$0.60of $0.60')
 
       award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('7,000 of 12,000')
-      expect(page.find('.my-balance')).to have_content('$0.35 of $0.60')
+      expect(page.find('.my-share')).to have_content('7,000of 12,000')
+      expect(page.find('.my-balance')).to have_content('$0.35of $0.60')
     end
   end
 
@@ -182,7 +182,7 @@ describe "" do
       visit project_path(project)
       click_link "Revenues"
 
-      fill_in :revenue_amount, with: "4,321.12345678"
+      fill_in :revenue_amount, with: "4,321.12"
       click_on "Record Revenue"
       expect(page.find('.revenues .amount')).to have_content('$4,321.12')
 
@@ -216,10 +216,10 @@ describe "" do
       click_on "Record Revenue"
       expect(page.find('.revenues .amount')).to have_content('Ξ4,321.123456789012345678')
 
-      expect(page.find('.total-revenue .coin-numbers')).to have_content(/Ξ4,321.[0-9]{18}/)
-      expect(page.find('.revenue-shared .coin-numbers')).to have_content(/Ξ254.[0-9]{18}/)
+      expect(page.find('.total-revenue .coin-numbers')).to have_content(/^Ξ4,321.[0-9]{18}$/)
+      expect(page.find('.revenue-shared .coin-numbers')).to have_content(/^Ξ254.[0-9]{18}$/)
       expect(page.find('.total-awards .coin-numbers')).to have_content('7,000')
-      expect(page.find('.revenue-per-share .coin-numbers')).to have_content(/Ξ0.[0-9]{18}/)
+      expect(page.find('.revenue-per-share .coin-numbers')).to have_content(/^Ξ0.[0-9]{8}$/)
     end
   end
 

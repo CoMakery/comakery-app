@@ -79,7 +79,10 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def total_revenue_shared_rounded
-    "#{currency_denomination}#{number_with_precision(total_revenue_shared, precision: 0, delimiter: ',')}"
+    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
+    "#{currency_denomination}#{number_with_precision(total_revenue_shared,
+                                                     precision: precision,
+                                                     delimiter: ',')}"
   end
 
   def revenue_per_share_rounded
@@ -101,8 +104,13 @@ class ProjectDecorator < Draper::Decorator
 
   # TODO: This will neeed to accomodate redeemed revenue shares and payments made
   def shares_to_balance_pretty(users_project_coins)
-    "#{currency_denomination}#{number_with_precision(share_of_revenue(users_project_coins), precision: 2, delimiter: ',')}"
+    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
+    "#{currency_denomination}#{number_with_precision(share_of_revenue(users_project_coins),
+                                                     precision: precision,
+                                                     delimiter: ',')}"
   end
+
+
 
   private
 
