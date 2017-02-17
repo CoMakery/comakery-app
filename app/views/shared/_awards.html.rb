@@ -2,8 +2,6 @@ class Views::Shared::Awards < Views::Base
   needs :project, :awards, :show_recipient, :current_account
 
   def content
-    pages
-
     div(class: "table-scroll table-box") {
       table(class: "award-rows") {
         tr(class: "header-row") {
@@ -83,18 +81,6 @@ class Views::Shared::Awards < Views::Base
             end
           }
         end
-      }
-    }
-
-    pages
-  end
-
-  def pages
-    full_row {
-      div(class: 'callout clearfix') {
-        div(class: 'pagination float-right') {
-          text paginate project.awards.page(params[:page])
-        }
       }
     }
   end
