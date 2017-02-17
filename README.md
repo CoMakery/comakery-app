@@ -84,11 +84,14 @@ on a daily basis.  This task backfills "pending" ethereum awards, if they are no
 
 To create an an award for each git commit in a github project, start by running this command:  
 ```
-heroku run -r staging "importer/git_importer.rb --help"
+importer/git_importer.rb --help                             # local
+heroku run -r staging "importer/git_importer.rb --help"     # staging
 ```
 
-Study the options in help, then construct a command.  
-**Be careful!**  If you mistype the project ID, you will import awards into the wrong project.
+Study the options in help, then construct a command.
+
+**Use only with great care on production!**
+If you mistype the project ID, you will import awards into the wrong project.
 
 A full sample command:
 ```
