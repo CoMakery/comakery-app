@@ -56,6 +56,17 @@ describe "when recording revenue" do
     end
   end
 
+  it 'project denomination cannot be changed after first revenue is recorded' do
+    login owner
+
+    visit project_path(project)
+    click_link "Revenues"
+    fill_in :revenue_amount, with: 1
+    click_on "Record Revenue"
+
+    click_on "Settings"
+    expect(page).to have_css("#project_denomination[disabled]")
+  end
 
   it 'revenues appear in reverse chronological order' do
     login owner

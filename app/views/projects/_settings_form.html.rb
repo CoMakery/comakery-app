@@ -46,7 +46,8 @@ module Views
                               ["Bitcoin (฿)", "BTC"],
                               ["Ether (Ξ)", "ETH"],
                              ],
-                             {selected: project.denomination, include_blank: false}
+                             {selected: project.denomination, include_blank: false},
+                             disabled: project.license_finalized? || project.revenues.any?
                     )
                   }
                 }

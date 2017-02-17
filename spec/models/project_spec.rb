@@ -68,6 +68,33 @@ describe Project do
       end
     end
 
+    describe 'denomination' do
+      let(:project) { create :project, denomination: 'USD'}
+
+      it 'can be changed' do
+        project.denomination = 'BTC'
+
+        expect(project).to be_valid
+      end
+
+      it 'cannot be changed after revenue is recorded' do
+        create :revenue, project: project
+        project.reload
+        project.denomination = 'BTC'
+
+        expect(project).to be_invalid
+        expect(project.errors[:denomination]).to eq(["cannot be changed because revenue has been recorded"])
+      end
+
+      it 'cannot be changed after the contract terms are finalized' do
+        project.update(license_finalized: true)
+        project.denomination = 'BTC'
+
+        expect(project).to be_invalid
+        expect(project.errors[:denomination]).to eq(["cannot be changed because the license terms are finalized"])
+      end
+    end
+
     describe :royalty_percentage do
       it 'has high precision' do
         project = create :project, royalty_percentage: '99.999_999_999_999_9'

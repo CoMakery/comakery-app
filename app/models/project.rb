@@ -47,6 +47,7 @@ class Project < ActiveRecord::Base
   validate :maximum_coins_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
   validates :ethereum_contract_address, ethereum_address: {type: :account, immutable: true}  # see EthereumAddressable
+  validate :denomination_changeable
 
   before_save :set_transitioned_to_ethereum_enabled
 
@@ -170,5 +171,10 @@ class Project < ActiveRecord::Base
     if maximum_coins_was > 0 and maximum_coins_was != maximum_coins
       errors[:maximum_coins] << "can't be changed"
     end
+  end
+
+  def denomination_changeable
+    errors.add(:denomination, "cannot be changed because the license terms are finalized") if license_finalized
+    errors.add(:denomination, "cannot be changed because revenue has been recorded") if revenues.any?
   end
 end

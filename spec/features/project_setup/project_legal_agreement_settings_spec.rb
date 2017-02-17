@@ -231,6 +231,7 @@ describe "viewing projects, creating and editing", :js do
 
   def contract_term_fields
     [:project_maximum_coins,
+     :project_denomination,
      :project_exclusive_contributions,
      :project_legal_project_owner,
      :project_require_confidentiality,
