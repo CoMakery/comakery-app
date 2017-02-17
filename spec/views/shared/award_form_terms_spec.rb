@@ -14,7 +14,7 @@ describe "shared/award_form_terms.html.rb" do
         exclusive_contributions: true,
         denomination: :USD,
         payment_type: :revenue_share,
-        license_finalized: true,
+        license_finalized: false,
         description: 'markdown _rocks_: www.auto.link').decorate
   end
 
@@ -25,12 +25,12 @@ describe "shared/award_form_terms.html.rb" do
   describe 'with revenue shares' do
     it 'renders all fields for royalty projects when present' do
       render
-      expect(rendered).to have_content "Status: These terms are finalized and legally binding."
       expect(rendered).to have_content "Project Name"
       expect(rendered).to have_content "Revenue Reserved To Pay Contributors: 8.0%"
       expect(rendered).to have_content "Maximum Revenue Shares: 200,000"
       expect(rendered).to have_content "Maximum Revenue Shares Awarded Per Month: 27,000"
       expect(rendered).to have_content "Contributions: are exclusive"
+      expect(rendered).to have_content "Status: This is a draft of possible project terms that is not legally binding."
       expect(rendered).to have_content "Business Confidentiality: is required"
       expect(rendered).to have_content "Project Confidentiality: is required"
       expect(rendered).to have_selector('.revenue-sharing-only')
@@ -44,10 +44,10 @@ describe "shared/award_form_terms.html.rb" do
     end
 
     specify do
-      project.update!(license_finalized: false)
+      project.update!(license_finalized: true)
 
       render
-      expect(rendered).to have_content "Status: This is a draft of possible project terms that is not legally binding."
+      expect(rendered).to have_content "Status: These terms are finalized and legally binding."
     end
 
     specify do

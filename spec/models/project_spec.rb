@@ -93,6 +93,13 @@ describe Project do
         expect(project).to be_invalid
         expect(project.errors[:denomination]).to eq(["cannot be changed because the license terms are finalized"])
       end
+
+      it 'can be changed at the same time the license terms are finalized' do
+        project.denomination = 'BTC'
+        project.license_finalized = true
+
+        expect(project).to be_valid
+      end
     end
 
     describe :royalty_percentage do
