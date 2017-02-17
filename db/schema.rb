@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170213061844) do
+ActiveRecord::Schema.define(version: 20170217071425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20170213061844) do
   end
 
   add_index "account_roles", ["account_id", "role_id"], name: "index_account_roles_on_account_id_and_role_id", unique: true, using: :btree
+  add_index "account_roles", ["account_id"], name: "index_account_roles_on_account_id", using: :btree
 
   create_table "accounts", force: :cascade do |t|
     t.string   "email"
@@ -70,7 +71,9 @@ ActiveRecord::Schema.define(version: 20170213061844) do
     t.jsonb    "oauth_response"
   end
 
+  add_index "authentications", ["account_id"], name: "index_authentications_on_account_id", using: :btree
   add_index "authentications", ["slack_team_id"], name: "index_authentications_on_slack_team_id", using: :btree
+  add_index "authentications", ["slack_user_id"], name: "index_authentications_on_slack_user_id", using: :btree
 
   create_table "award_types", force: :cascade do |t|
     t.integer  "project_id",                          null: false
@@ -80,6 +83,8 @@ ActiveRecord::Schema.define(version: 20170213061844) do
     t.datetime "updated_at",                          null: false
     t.boolean  "community_awardable", default: false, null: false
   end
+
+  add_index "award_types", ["project_id"], name: "index_award_types_on_project_id", using: :btree
 
   create_table "awards", force: :cascade do |t|
     t.integer  "issuer_id",                                  null: false
@@ -95,6 +100,10 @@ ActiveRecord::Schema.define(version: 20170213061844) do
     t.integer  "total_amount"
     t.integer  "unit_amount"
   end
+
+  add_index "awards", ["authentication_id"], name: "index_awards_on_authentication_id", using: :btree
+  add_index "awards", ["award_type_id"], name: "index_awards_on_award_type_id", using: :btree
+  add_index "awards", ["issuer_id"], name: "index_awards_on_issuer_id", using: :btree
 
   create_table "beta_signups", force: :cascade do |t|
     t.string  "email_address",                  null: false
@@ -112,6 +121,10 @@ ActiveRecord::Schema.define(version: 20170213061844) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
   end
+
+  add_index "payments", ["issuer_id"], name: "index_payments_on_issuer_id", using: :btree
+  add_index "payments", ["project_id"], name: "index_payments_on_project_id", using: :btree
+  add_index "payments", ["recipient_id"], name: "index_payments_on_recipient_id", using: :btree
 
   create_table "projects", force: :cascade do |t|
     t.string   "title",                                                                 null: false
@@ -157,6 +170,9 @@ ActiveRecord::Schema.define(version: 20170213061844) do
     t.datetime "updated_at",            null: false
     t.integer  "recorded_by_id"
   end
+
+  add_index "revenues", ["project_id"], name: "index_revenues_on_project_id", using: :btree
+  add_index "revenues", ["recorded_by_id"], name: "index_revenues_on_recorded_by_id", using: :btree
 
   create_table "roles", force: :cascade do |t|
     t.string   "name",       null: false
