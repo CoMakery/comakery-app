@@ -56,7 +56,7 @@ describe "when recording revenue" do
     end
   end
 
-  it 'project denomination cannot be changed after first revenue is recorded' do
+  it 'project denomination cannot be changed after first revenue is recorded but other settings can be edited' do
     login owner
 
     visit project_path(project)
@@ -66,6 +66,18 @@ describe "when recording revenue" do
 
     click_on "Settings"
     expect(page).to have_css("#project_denomination[disabled]")
+
+    fill_in "Title", with: "Mindfulness App"
+    fill_in "Description", with: "This is a project"
+    select "a-channel-name", from: "Slack Channel"
+    fill_in "Project Owner's Legal Name", with: "Mindful Inc"
+    check "Contributions are exclusive"
+    check "Require project and business confidentiality"
+
+    click_on "Save"
+    expect(page).to have_current_path(project_path(project))
+    expect(page).to_not have_content("cannot be changed because revenue has been recorded")
+    expect(page).to_not have_css('.error')
   end
 
   it 'revenues appear in reverse chronological order' do

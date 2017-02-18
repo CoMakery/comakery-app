@@ -175,6 +175,6 @@ class Project < ActiveRecord::Base
 
   def denomination_changeable
     errors.add(:denomination, "cannot be changed because the license terms are finalized") if license_finalized_was
-    errors.add(:denomination, "cannot be changed because revenue has been recorded") if revenues.any?
+    errors.add(:denomination, "cannot be changed because revenue has been recorded") if revenues.any? && denomination_changed?
   end
 end

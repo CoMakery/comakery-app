@@ -86,6 +86,16 @@ describe Project do
         expect(project.errors[:denomination]).to eq(["cannot be changed because revenue has been recorded"])
       end
 
+      it 'does not block the project from being changed after revenue is recorded' do
+        create :revenue, project: project
+        project.reload
+        project.title = "new title"
+        expect(project).to be_valid
+
+        project.denomination = 'BTC'
+        expect(project).to_not be_valid
+      end
+
       it 'cannot be changed after the contract terms are finalized' do
         project.update(license_finalized: true)
         project.denomination = 'BTC'
