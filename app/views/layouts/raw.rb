@@ -19,6 +19,7 @@ class Views::Layouts::Raw < Views::Base
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
+        javascript_include_tag 'https://js.stripe.com/v2/'  # For Stripe’s fraud protection functionality, include Stripe.js on every page on your site, not just the checkout page
         if ENV['AIRBRAKE_API_KEY'].present? && ENV['AIRBRAKE_PROJECT_ID'].present?
           javascript_include_tag "airbrake-shim",
                                  "data-airbrake-project-id" => ENV['AIRBRAKE_PROJECT_ID'],

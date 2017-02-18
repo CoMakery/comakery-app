@@ -36,6 +36,7 @@ class ProjectPolicy < ApplicationPolicy
 
   alias :update? :edit?
   alias :send_award? :edit?
+  alias :pay_revenues? :edit?
 
   def show_contributions?
     (project.public? && !project.require_confidentiality?) ||

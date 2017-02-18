@@ -18,9 +18,7 @@ class Views::Projects::Show < Views::Projects::Base
           row(class: 'project-terms') {
             h4 "Project Terms"
             render 'shared/award_form_terms'
-
           }
-
         }
       }
     }

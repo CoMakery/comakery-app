@@ -2,6 +2,7 @@ class Views::Projects::Description < Views::Projects::Base
   needs :project, :can_award, :award_data, :current_auth
 
   def content
+    my_balance = award_data[:award_amounts][:my_project_coins]
     div {
       row {
         column("large-6 small-12") {
@@ -83,8 +84,71 @@ class Views::Projects::Description < Views::Projects::Base
 
       }
     }
-  end
 
+    if project.share_of_revenue(my_balance) > 0
+      div {
+        row {
+          column("large-6 small-12") {
+            label {
+              text "Routing Number"
+              text_field_tag 'routing_number'
+            }
+          }
+          column("large-6 small-12") {
+            label {
+              text "Bank Account Number"
+              text_field_tag 'account_number'
+            }
+          }
+        }
+        row {
+          column("large-6 small-12") {
+            label {
+              text "Account Holder Name"
+              text_field_tag 'account_holder_name'
+            }
+          }
+          column("large-6 small-12") {
+            label {
+              text "Account Holder Type"
+              options = capture do
+                options_for_select([
+                    ["Individual", "individual"],
+                    ["Company", "company"]
+                ])
+              end
+              select_tag 'account_holder_type', options
+            }
+          }
+        }
+        row {
+          column("large-6 small-12") {
+            label {
+              text "Country"
+              options = capture do
+                options_for_select(['US'])
+              end
+              select_tag 'country', options
+            }
+          }
+          column("large-6 small-12") {
+            label {
+              text "Currency"
+              options = capture do
+                options_for_select(['USD'])
+              end
+              select_tag 'currency', options
+            }
+          }
+        }
+        row {
+          column("large-6 small-12") {
+            button_tag "Redeem My Shares", class: buttonish(:medium)
+          }
+        }
+      }
+    end
+  end
 
   def total_coins_issued_pretty
     number_with_precision(award_data[:award_amounts][:total_coins_issued], precision: 0, delimiter: ',')

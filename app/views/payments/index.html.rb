@@ -4,6 +4,33 @@ class Views::Payments::Index < Views::Projects::Base
   def content
     render partial: 'shared/project_header'
     column {
+      full_row {
+        if project.owner_account == current_account
+
+          column("large-6 medium-12 summary") {
+            row {
+              owed = 1.01
+              h3 "Amount Owed $1.01"
+              div {
+                script(
+                    "src" => "https://checkout.stripe.com/checkout.js",
+                    "class" => 'stripe-button',
+                    "data-key" => "pk_live_cJA0jySarq2bmh289qmlgsH9",
+                    "data-label" => "Pay Now",
+                    "data-panel-label" => "Pay Now",
+                    "data-amount" => BigDecimal(owed, 2) * 100,
+                    "data-name" => project.title,
+                    "data-description" => "Pay Now",
+                    # "data-image" => project_image(project),
+                    "data-locale" => "auto",
+                    "data-zip-code" => true,
+                    "data-bitcoin" => true
+                )
+              }
+            }
+          }
+        end
+      }
       if current_auth.present?
         full_row {
           column("small-12 content-box") {

@@ -1,5 +1,5 @@
-# stolen from https://bl.ocks.org/mbostock/3886208
-# http://bl.ocks.org/d3noob/8952219
+# originally from https://bl.ocks.org/mbostock/3886208
+# see also http://bl.ocks.org/d3noob/8952219
 
 window.stackedBarChart = (selector, data)->
   margin =
