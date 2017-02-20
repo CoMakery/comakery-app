@@ -15,6 +15,7 @@ describe "shared/award_form_terms.html.rb" do
         denomination: :USD,
         payment_type: :revenue_share,
         license_finalized: false,
+        revenue_stream: 'subscription revenue from example.com',
         description: 'markdown _rocks_: www.auto.link').decorate
   end
 
@@ -33,6 +34,7 @@ describe "shared/award_form_terms.html.rb" do
       expect(rendered).to have_content "Status: This is a draft of possible project terms that is not legally binding."
       expect(rendered).to have_content "Business Confidentiality: is required"
       expect(rendered).to have_content "Project Confidentiality: is required"
+      expect(rendered).to have_content "Revenue Stream: subscription revenue from example.com"
       expect(rendered).to have_selector('.revenue-sharing-only')
     end
 

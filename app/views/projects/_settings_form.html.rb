@@ -99,6 +99,14 @@ module Views
                   }
                 }
 
+                with_errors(project, :revenue_stream) {
+                  label {
+                    text "Revenue Stream "
+                    question_tooltip "The revenue stream describes what revenue will be counted and shared with contributors."
+                    f.text_field :revenue_stream#, disabled: project.license_finalized?
+                  }
+                }
+
 
                 with_errors(project, :exclusive_contributions) {
                   label {

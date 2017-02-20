@@ -125,6 +125,7 @@ class ProjectsController < ApplicationController
         :maximum_royalties_per_month,
         :license_finalized,
         :denomination,
+        :revenue_stream,
         award_types_attributes: [
             :_destroy,
             :amount,

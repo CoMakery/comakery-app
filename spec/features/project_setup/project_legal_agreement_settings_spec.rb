@@ -52,6 +52,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
     fill_in "project_royalty_percentage", with: "7.99999"
     fill_in "project_maximum_royalties_per_month", with: "25000"
+    fill_in "project_revenue_stream", with: "All revenues from xyz."
     check "Contributions are exclusive"
     check "Require project and business confidentiality"
 
@@ -65,6 +66,7 @@ describe "viewing projects, creating and editing", :js do
       expect(page).to have_content "Maximum Revenue Shares: 100,000"
       expect(page).to have_content "Contributions: are exclusive"
       expect(page).to have_content "Business Confidentiality: is required"
+      expect(page).to have_content "All revenues from xyz."
     end
     within("#award-send") { expect(page).to have_content /award revenue shares/i }
 
@@ -76,6 +78,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Maximum Revenue Shares: 100,000"
     expect(page).to have_content "Contributions: are exclusive"
     expect(page).to have_content "Business Confidentiality: is required"
+    expect(page).to have_content "All revenues from xyz."
   end
 
   it "setup project with Project Coins" do

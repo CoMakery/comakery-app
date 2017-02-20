@@ -20,6 +20,7 @@ class Views::Shared::AwardFormTerms < Views::Base
           numeric_term "Minimum Payment to Contributors", project.minimum_payment
         }
       end
+      term "Revenue Stream", project.revenue_stream
     }
     if project.project_coin?
       p {
@@ -29,10 +30,12 @@ class Views::Shared::AwardFormTerms < Views::Base
   end
 
   def term(term_name, trailing_text = "")
-    li {
-      strong "#{term_name.titleize}: "
-      text trailing_text
-    }
+    if trailing_text.present?
+      li {
+        strong "#{term_name.titleize}: "
+        text trailing_text
+      }
+    end
   end
 
   def numeric_term(term_name, trailing_text = "")
