@@ -131,7 +131,8 @@ class ProjectsController < ApplicationController
             :amount,
             :community_awardable,
             :id,
-            :name
+            :name,
+            :description
         ]
     )
   end

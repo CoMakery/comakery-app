@@ -18,6 +18,12 @@ form.edit_project, form.new_project {
   textarea {
     height: 9em;
   }
+
+  textarea.award-type-description {
+    height: 7em;
+    font-size: 11px;
+  }
+
   .add-award-type {
     margin-bottom: 2em;
   }
