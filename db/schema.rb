@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170217071425) do
+ActiveRecord::Schema.define(version: 20170221013222) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(version: 20170217071425) do
     t.integer  "maximum_royalties_per_month"
     t.boolean  "license_finalized",                                     default: false, null: false
     t.integer  "denomination",                                          default: 0,     null: false
+    t.datetime "revenue_sharing_end_date"
   end
 
   add_index "projects", ["owner_account_id"], name: "index_projects_on_owner_account_id", using: :btree

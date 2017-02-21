@@ -54,6 +54,7 @@ describe "viewing projects, creating and editing", :js do
     fill_in "project_maximum_royalties_per_month", with: "25000"
     check "Contributions are exclusive"
     check "Require project and business confidentiality"
+    fill_in 'Revenue Sharing End Date', with: '2050/01/02'
 
     click_on "Save"
     expect(page).to have_content "Project created"
@@ -65,6 +66,7 @@ describe "viewing projects, creating and editing", :js do
       expect(page).to have_content "Maximum Revenue Shares: 100,000"
       expect(page).to have_content "Contributions: are exclusive"
       expect(page).to have_content "Business Confidentiality: is required"
+      expect(page).to have_content "January 2, 2050"
     end
     within("#award-send") { expect(page).to have_content /award revenue shares/i }
 
@@ -76,6 +78,7 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "Maximum Revenue Shares: 100,000"
     expect(page).to have_content "Contributions: are exclusive"
     expect(page).to have_content "Business Confidentiality: is required"
+    expect(page).to have_content "January 2, 2050"
   end
 
   it "setup project with Project Coins" do

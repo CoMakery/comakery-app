@@ -166,6 +166,19 @@ module Views
                   }
                 }
 
+                div {
+                  with_errors(project, :revenue_sharing_end_date) {
+                    label {
+                      text "Revenue Sharing End Date"
+                      f.date_field :revenue_sharing_end_date,
+                                   disabled: project.license_finalized?
+                      div(class: 'help-text') { text '"mm/dd/yyy" means revenue sharing does not end.' }
+
+                    }
+                  }
+                }
+
+                br
                 ethereum_beta(f)
 
                 with_errors(project, :license_finalized) {
