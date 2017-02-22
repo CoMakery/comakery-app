@@ -105,6 +105,7 @@ class ProjectsController < ApplicationController
 
   def project_params
     params.require(:project).permit(
+        :revenue_sharing_end_date,
         :contributor_agreement_url,
         :description,
         :ethereum_enabled,
@@ -130,7 +131,8 @@ class ProjectsController < ApplicationController
             :amount,
             :community_awardable,
             :id,
-            :name
+            :name,
+            :description
         ]
     )
   end

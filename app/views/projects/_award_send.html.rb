@@ -20,7 +20,7 @@ class Views::Projects::AwardSend < Views::Base
       br
       form_for [project, award] do |f|
         row(class: "award-types") {
-          project.award_types.order("amount asc").each do |award_type|
+          project.award_types.order("amount asc").decorate.each do |award_type|
             row(class: "award-type-row") {
               column("small-12") {
                 with_errors(project, :account_id) {
@@ -32,11 +32,15 @@ class Views::Projects::AwardSend < Views::Base
                         }
                       end
                       column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : "small-12") {
-                        span(award_type.name)
-                        span(class: ' financial') {
-                          text " (#{number_with_precision(award_type.amount, precision: 0, delimiter: ',')})"
+                        row {
+                          span(award_type.name)
+                          span(class: ' financial') {
+                            text " (#{award_type.amount_pretty})"
+                          }
+                          text " (Community Awardable)" if award_type.community_awardable?
+                          br
+                          span(class: 'help-text') { text raw(award_type.description_markdown) }
                         }
-                        text " (Community Awardable)" if award_type.community_awardable?
                       }
                     }
                   }

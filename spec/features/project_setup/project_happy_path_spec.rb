@@ -44,6 +44,7 @@ describe "viewing projects, creating and editing", :js do
     award_type_inputs = get_award_type_rows
     award_type_inputs[0].all("input")[0].set "This is a small award type"
     award_type_inputs[0].all("input")[1].set "1000"
+    award_type_inputs[0].all("textarea")[0].set "Say hi to earn this"
     award_type_inputs[1].all("input")[0].set "This is a medium award type"
     award_type_inputs[1].all("input")[1].set "2000"
     award_type_inputs[2].all("input")[0].set "This is a large award type"
@@ -101,6 +102,7 @@ describe "viewing projects, creating and editing", :js do
     expect(award_type_rows.size).to eq(4)
 
     expect(award_type_rows[0]).to have_content "This is a small award type"
+    expect(award_type_rows[0]).to have_content "Say hi to earn this"
     expect(award_type_rows[0]).to have_content "1,000"
 
     expect(award_type_rows[1]).to have_content "This is a medium award type"

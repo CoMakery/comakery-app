@@ -166,6 +166,19 @@ module Views
                   }
                 }
 
+                div {
+                  with_errors(project, :revenue_sharing_end_date) {
+                    label {
+                      text "Revenue Sharing End Date"
+                      f.date_field :revenue_sharing_end_date,
+                                   disabled: project.license_finalized?
+                      div(class: 'help-text') { text '"mm/dd/yyy" means revenue sharing does not end.' }
+
+                    }
+                  }
+                }
+
+                br
                 ethereum_beta(f)
 
                 with_errors(project, :license_finalized) {
@@ -221,22 +234,25 @@ module Views
                 h3 "Awards Offered"
               }
               row {
-                column("small-4") {
+                column("small-3") {
                   text "Contribution Type"
                 }
-                column("small-2") {
+                column("small-1") {
                   text "Amount "
-                  question_tooltip "The number of coins a contributor will receive from this award. It cannot be changed after awards of this type have been issued."
                 }
-                column("small-3") {
+                column("small-2") {
                   text "Community Awardable "
                   question_tooltip "Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards."
+                }
+                column("small-4") {
+                  text "Description"
+                  br
+                  link_to("Styling with Markdown is Supported", "https://guides.github.com/features/mastering-markdown/", class: "help-text")
                 }
                 column("small-2") {
                   text "Remove "
                   question_tooltip "Award type cannot be changed after awards have been issued."
                 }
-                column("small-1") {}
               }
 
               project.award_types.build(amount: 0) unless project.award_types.select { |award_type| award_type.amount == 0 }.present?
@@ -244,10 +260,10 @@ module Views
                 row(class: "award-type-row#{ff.object.amount == 0 ? " hide award-type-template" : ""}") {
                   ff.hidden_field :id
                   ff.hidden_field :_destroy, 'data-destroy': ''
-                  column("small-4") {
+                  column("small-3") {
                     ff.text_field :name
                   }
-                  column("small-2") {
+                  column("small-1") {
                     readonly = !ff.object&.modifiable?
                     if readonly
                       tooltip("Award types' amounts can't be modified if there are existing awards", if: readonly) do
@@ -257,8 +273,11 @@ module Views
                       ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
                     end
                   }
-                  column("small-3", class: "text-center") {
+                  column("small-2", class: "text-center") {
                     ff.check_box :community_awardable
+                  }
+                  column("small-4", class: "text-center") {
+                    ff.text_area :description, class: 'award-type-description'
                   }
                   column("small-2", class: "text-center") {
                     if ff.object&.modifiable?
@@ -267,7 +286,6 @@ module Views
                       text "(#{pluralize(ff.object.awards.count, "award")} sent)"
                     end
                   }
-                  column("small-1") {}
                 }
               end
             }

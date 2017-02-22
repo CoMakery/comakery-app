@@ -110,7 +110,10 @@ class ProjectDecorator < Draper::Decorator
                                                      delimiter: ',')}"
   end
 
-
+  def revenue_sharing_end_date_pretty
+    return "revenue sharing does not have an end date." unless project.revenue_sharing_end_date.present?
+    project.revenue_sharing_end_date.strftime('%B %-d, %Y')
+  end
 
   private
 
