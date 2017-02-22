@@ -24,13 +24,13 @@ class GetAwardData
   end
 
   def contributions_summary(project)
-    contributions = project.contributors_distinct.map do |contributor|
+    contributions = project.contributors_distinct.includes(:payments, awards: :award_type).map do |contributor|
       {
           name: contributor.display_name,
           avatar: contributor.slack_icon,
-          earned: contributor.total_awards_earned(project),
-          paid: contributor.total_awards_paid(project),
-          remaining: contributor.total_awards_remaining(project),
+          earned: contributor.awards.total_awards_earned,
+          paid: contributor.payments.total_awards_paid,
+          remaining: contributor.total_awards_remaining,
       }
     end
 

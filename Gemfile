@@ -68,6 +68,7 @@ group(:development) do
   gem 'spring-commands-rspec'
   gem 'spring'
   gem 'web-console'
+  gem 'rack-mini-profiler'
 end
 
 group(:test) do

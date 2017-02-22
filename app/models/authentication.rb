@@ -3,8 +3,23 @@ class Authentication < ActiveRecord::Base
 
   belongs_to :account
   has_many :projects, foreign_key: :slack_team_id, primary_key: :slack_team_id
-  has_many :awards
+  has_many :awards do
+    def total_awards_earned
+      sum(:total_amount)
+    end
+  end
+
+  has_many :payments, foreign_key: :recipient_id do
+    def total_awards_paid
+      sum(:amount)
+    end
+  end
+
   validates_presence_of :account, :provider, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :slack_team_name, :slack_user_id, :slack_user_name
+
+  def total_awards_remaining
+    awards.total_awards_earned - payments.total_awards_paid
+  end
 
   def display_name
     if slack_first_name.present? || slack_last_name.present?
@@ -22,18 +37,6 @@ class Authentication < ActiveRecord::Base
     allow_ethereum = Rails.application.config.allow_ethereum
     allowed_domains = allow_ethereum.to_s.split(',').compact
     allowed_domains.include?(slack_team_domain)
-  end
-
-  def total_awards_earned(project)
-    project.awards.where(authentication: self).sum(:total_amount)
-  end
-
-  def total_awards_paid(project)
-    project.payments.where(recipient: self).sum(:amount)
-  end
-
-  def total_awards_remaining(project)
-    total_awards_earned(project) - total_awards_paid(project)
   end
 
   def self.find_or_create_from_auth_hash!(auth_hash)
