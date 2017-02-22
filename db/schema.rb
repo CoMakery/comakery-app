@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170221044259) do
+ActiveRecord::Schema.define(version: 20170222214214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(version: 20170221044259) do
     t.integer  "maximum_royalties_per_month"
     t.boolean  "license_finalized",                                     default: false, null: false
     t.integer  "denomination",                                          default: 0,     null: false
+    t.text     "revenue_stream"
     t.datetime "revenue_sharing_end_date"
   end
 
