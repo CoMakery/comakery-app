@@ -6,25 +6,25 @@ describe Authentication do
     it "requires many attributes" do
       errors = Authentication.new.tap { |a| a.valid? }.errors.full_messages
       expect(errors.sort).to eq([
-        "Account can't be blank",
-        "Provider can't be blank",
-        "Slack team can't be blank",
-        "Slack team image 132 url can't be blank",
-        "Slack team image 34 url can't be blank",
-        "Slack team name can't be blank",
-        "Slack user can't be blank",
-        "Slack user name can't be blank"
-      ])
+                                    "Account can't be blank",
+                                    "Provider can't be blank",
+                                    "Slack team can't be blank",
+                                    "Slack team image 132 url can't be blank",
+                                    "Slack team image 34 url can't be blank",
+                                    "Slack team name can't be blank",
+                                    "Slack user can't be blank",
+                                    "Slack user name can't be blank"
+                                ])
     end
 
     it "requires a valid slack team domain" do
-      expect(Authentication.new(slack_team_domain: "").tap{|p|p.valid?}.errors.full_messages).to be_include("Slack team domain can't be blank")
-      expect(Authentication.new(slack_team_domain: "XX").tap{|p|p.valid?}.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
-      expect(Authentication.new(slack_team_domain: "-xx").tap{|p|p.valid?}.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
-      expect(Authentication.new(slack_team_domain: "good\n-bad").tap{|p|p.valid?}.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+      expect(Authentication.new(slack_team_domain: "").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain can't be blank")
+      expect(Authentication.new(slack_team_domain: "XX").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+      expect(Authentication.new(slack_team_domain: "-xx").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+      expect(Authentication.new(slack_team_domain: "good\n-bad").tap { |p| p.valid? }.errors.full_messages).to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
 
-      expect(Authentication.new(slack_team_domain: "3-xx").tap{|p|p.valid?}.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
-      expect(Authentication.new(slack_team_domain: "a").tap{|p|p.valid?}.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+      expect(Authentication.new(slack_team_domain: "3-xx").tap { |p| p.valid? }.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
+      expect(Authentication.new(slack_team_domain: "a").tap { |p| p.valid? }.errors.full_messages).not_to be_include("Slack team domain must only contain lower-case letters, numbers, and hyphens and start with a letter or number")
     end
   end
 
@@ -49,8 +49,8 @@ describe Authentication do
     let!(:bystander) { create(:authentication) }
     let!(:project) { create :project }
     let!(:award_type) { create(:award_type, amount: 10, project: project) }
-    let!(:award1) {create :award, authentication: contributor, award_type: award_type }
-    let!(:award2) {create :award, authentication: contributor, award_type: award_type, quantity: 3.5 }
+    let!(:award1) { create :award, authentication: contributor, award_type: award_type }
+    let!(:award2) { create :award, authentication: contributor, award_type: award_type, quantity: 3.5 }
 
     specify do
       expect(bystander.total_awards_earned(project)).to eq 0
@@ -62,13 +62,13 @@ describe Authentication do
   end
 
   describe "#total_awards_paid" do
-    let!(:issuer) { create(:account) }
+    let!(:issuer) { create(:authentication) }
     let!(:contributor) { create(:authentication) }
     let!(:bystander) { create(:authentication) }
     let!(:project) { create :project }
     let!(:award_type) { create(:award_type, amount: 10, project: project) }
-    let!(:payment1) {create :payment, project: project, recipient: contributor, issuer: issuer, amount: 10}
-    let!(:payment2) {create :payment, project: project, recipient: contributor, issuer: issuer, amount: 1 }
+    let!(:payment1) { project.payments.create_with_quantity(quantity_redeemed: 10, payee_auth: contributor) }
+    let!(:payment2) { project.payments.create_with_quantity(quantity_redeemed: 1, payee_auth: contributor) }
 
     specify do
       expect(bystander.total_awards_paid(project)).to eq 0
@@ -80,15 +80,15 @@ describe Authentication do
   end
 
   describe "#total_awards_remaining" do
-    let!(:issuer) { create(:account) }
+    let!(:issuer) { create(:authentication) }
     let!(:contributor) { create(:authentication) }
     let!(:bystander) { create(:authentication) }
     let!(:project) { create :project }
     let!(:award_type) { create(:award_type, amount: 10, project: project) }
-    let!(:award1) {create :award, authentication: contributor, award_type: award_type }
-    let!(:award2) {create :award, authentication: contributor, award_type: award_type }
-    let!(:payment1) {create :payment, project: project, recipient: contributor, issuer: issuer, amount: 10}
-    let!(:payment2) {create :payment, project: project, recipient: contributor, issuer: issuer, amount: 1 }
+    let!(:award1) { create :award, authentication: contributor, award_type: award_type }
+    let!(:award2) { create :award, authentication: contributor, award_type: award_type }
+    let!(:payment1) { project.payments.create_with_quantity(quantity_redeemed: 10, payee_auth: contributor) }
+    let!(:payment2) { project.payments.create_with_quantity(quantity_redeemed: 1, payee_auth: contributor) }
 
     specify do
       expect(bystander.total_awards_remaining(project)).to eq 0
@@ -96,6 +96,93 @@ describe Authentication do
 
     specify do
       expect(contributor.total_awards_remaining(project)).to eq 9
+    end
+  end
+
+  describe 'revenue' do
+    let!(:contributor) { create(:authentication) }
+    let!(:bystander) { create(:authentication) }
+    let!(:project) { create :project, royalty_percentage: 100 }
+    let!(:award_type) { create(:award_type, amount: 1, project: project) }
+    let!(:award1) { create :award, authentication: contributor, award_type: award_type, quantity: 50 }
+    let!(:award2) { create :award, authentication: contributor, award_type: award_type, quantity: 50 }
+
+    describe "#total_revenue_earned" do
+      describe 'no revenue' do
+        specify { expect(bystander.total_revenue_earned(project)).to eq 0 }
+
+        specify { expect(contributor.total_revenue_earned(project)).to eq 0 }
+      end
+
+      describe 'with revenue' do
+        let!(:reveue) { create :revenue, amount: 100, project: project }
+
+        specify { expect(bystander.total_revenue_earned(project)).to eq 0 }
+
+        specify { expect(contributor.total_revenue_earned(project)).to eq 100 }
+      end
+
+      describe 'with revenue and payments' do
+        let!(:reveue) { create :revenue, amount: 100, project: project }
+        let!(:payment) { project.payments.create_with_quantity quantity_redeemed: 25, payee_auth: contributor }
+
+        specify { expect(bystander.total_revenue_earned(project)).to eq 0 }
+
+        specify { expect(contributor.total_revenue_earned(project)).to eq 100 }
+      end
+    end
+
+    describe "#total_revenue_paid" do
+      describe 'no revenue' do
+        specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
+
+        specify { expect(contributor.total_revenue_paid(project)).to eq 0 }
+      end
+
+      describe 'with revenue' do
+        let!(:revenue) { create :revenue, amount: 100, project: project }
+
+        specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
+
+        specify { expect(contributor.total_revenue_paid(project)).to eq 0 }
+      end
+
+      describe 'with revenue and payments' do
+        let!(:revenue) { create :revenue, amount: 100, project: project }
+        let!(:payment1) { project.payments.create_with_quantity quantity_redeemed: 25, payee_auth: contributor }
+        let!(:payment2) { project.payments.create_with_quantity quantity_redeemed: 14, payee_auth: contributor }
+
+        specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
+
+        specify { expect(contributor.total_revenue_paid(project)).to eq 39 }
+      end
+    end
+
+    describe "#total_revenue_unpaid" do
+
+      describe 'no revenue' do
+        specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
+
+        specify { expect(contributor.total_revenue_unpaid(project)).to eq 0 }
+      end
+
+      describe 'with revenue' do
+        let!(:revenue) { create :revenue, amount: 100, project: project }
+
+        specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
+
+        specify { expect(contributor.total_revenue_unpaid(project)).to eq 100 }
+      end
+
+      describe 'with revenue and payments' do
+        let!(:revenue) { create :revenue, amount: 100, project: project }
+        let!(:payment1) { project.payments.create_with_quantity quantity_redeemed: 25, payee_auth: contributor }
+        let!(:payment2) { project.payments.create_with_quantity quantity_redeemed: 14, payee_auth: contributor }
+
+        specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
+
+        specify { expect(contributor.total_revenue_unpaid(project)).to eq 61 }
+      end
     end
   end
 
@@ -162,25 +249,25 @@ describe Authentication do
               "token" => "xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa"
           },
           'extra' => {
-            'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com', 'image_32' => 'https://avatars.com/avatars_32.jpg'}}},
-            'team_info' => {
-              'team' => {
-                'icon' => {
-                  'image_34' => 'https://slack.example.com/team-image-34-px.jpg',
-                  'image_132' => 'https://slack.example.com/team-image-132px.jpg'
-                }
+              'user_info' => {'user' => {'profile' => {'email' => 'bob@example.com', 'image_32' => 'https://avatars.com/avatars_32.jpg'}}},
+              'team_info' => {
+                  'team' => {
+                      'icon' => {
+                          'image_34' => 'https://slack.example.com/team-image-34-px.jpg',
+                          'image_132' => 'https://slack.example.com/team-image-132px.jpg'
+                      }
+                  }
               }
-            }
           },
           'info' => {
-            'name' => "Bob Roberts",
-            'first_name' => "Bob",
-            'last_name' => "Roberts",
-            'user_id' => 'slack user id',
-            'team' => "new team name",
-            'team_id' => 'slack team id',
-            'user' => "bobroberts",
-            'team_domain' => "bobrobertsdomain"
+              'name' => "Bob Roberts",
+              'first_name' => "Bob",
+              'last_name' => "Roberts",
+              'user_id' => 'slack user id',
+              'team' => "new team name",
+              'team_id' => 'slack team id',
+              'user' => "bobroberts",
+              'team_domain' => "bobrobertsdomain"
           }
       }
     }
@@ -241,9 +328,9 @@ describe Authentication do
       ) }
 
       let!(:project) { create(:project,
-                               slack_team_id: "slack team id",
-                               slack_team_name: "old team name"
-      )}
+                              slack_team_id: "slack team id",
+                              slack_team_name: "old team name"
+      ) }
 
       it "returns the existing account" do
         result = nil

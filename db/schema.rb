@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170222214214) do
+ActiveRecord::Schema.define(version: 20170222223825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,15 +117,22 @@ ActiveRecord::Schema.define(version: 20170222214214) do
   create_table "payments", force: :cascade do |t|
     t.integer  "project_id"
     t.integer  "issuer_id"
-    t.integer  "recipient_id"
-    t.integer  "amount"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "payee_id"
+    t.decimal  "total_value"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.decimal  "share_value"
+    t.integer  "quantity_redeemed"
+    t.decimal  "transaction_fee"
+    t.decimal  "total_payment"
+    t.text     "transaction_reference"
+    t.string   "currency"
+    t.integer  "status",                default: 0
   end
 
   add_index "payments", ["issuer_id"], name: "index_payments_on_issuer_id", using: :btree
+  add_index "payments", ["payee_id"], name: "index_payments_on_payee_id", using: :btree
   add_index "payments", ["project_id"], name: "index_payments_on_project_id", using: :btree
-  add_index "payments", ["recipient_id"], name: "index_payments_on_recipient_id", using: :btree
 
   create_table "projects", force: :cascade do |t|
     t.string   "title",                                                                 null: false

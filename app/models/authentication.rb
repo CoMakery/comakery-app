@@ -29,11 +29,23 @@ class Authentication < ActiveRecord::Base
   end
 
   def total_awards_paid(project)
-    project.payments.where(recipient: self).sum(:amount)
+    project.payments.where(payee: self).sum(:quantity_redeemed)
   end
 
   def total_awards_remaining(project)
     total_awards_earned(project) - total_awards_paid(project)
+  end
+
+  def total_revenue_earned(project)
+    project.share_of_revenue(total_awards_earned(project))
+  end
+
+  def total_revenue_paid(project)
+    project.payments.where(payee: self).sum(:total_value)
+  end
+
+  def total_revenue_unpaid(project)
+    total_revenue_earned(project) - total_revenue_paid(project)
   end
 
   def self.find_or_create_from_auth_hash!(auth_hash)

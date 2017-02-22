@@ -1,5 +1,5 @@
 class Views::Projects::Description < Views::Projects::Base
-  needs :project, :can_award, :award_data
+  needs :project, :can_award, :award_data, :current_auth
 
   def content
     div {
@@ -51,9 +51,9 @@ class Views::Projects::Description < Views::Projects::Base
                 li(class: 'my-share') {
                   h5 "My #{project.payment_description}"
                   div(class: " coin-numbers") {
-                    text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
+                    text current_auth.total_awards_remaining_pretty(project)
                   }
-                  span(class: "balance-type") { text "of #{project.total_awarded_pretty} awarded" }
+                  span(class: "balance-type") { text "of #{project.total_awards_outstanding_pretty} awarded" }
                   br
                   span(class: "help-text") { text "(estimated)" }
                 }
@@ -61,9 +61,9 @@ class Views::Projects::Description < Views::Projects::Base
                 li_if(project.revenue_share?, class: 'my-balance') {
                   h5 "My Balance"
                   div(class: "coin-numbers") {
-                    text project.shares_to_balance_pretty(award_data[:award_amounts][:my_project_coins])
+                    text current_auth.total_revenue_unpaid_remaining_rounded(project)
                   }
-                  span(class: "balance-type") { text "of #{project.total_revenue_shared_rounded} total" }
+                  span(class: "balance-type") { text "of #{project.total_revenue_shared_unpaid_rounded} total" }
                   br
                   span(class: "help-text") { text "(estimated)" }
                 }

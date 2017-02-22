@@ -69,7 +69,7 @@ describe Project do
     end
 
     describe 'denomination' do
-      let(:project) { create :project, denomination: 'USD'}
+      let(:project) { create :project, denomination: 'USD' }
 
       it 'can be changed' do
         project.denomination = 'BTC'
@@ -114,9 +114,15 @@ describe Project do
 
     describe :royalty_percentage do
       it 'has high precision' do
-        project = create :project, royalty_percentage: '99.999_999_999_999_9'
+        project = create :project, royalty_percentage: '99.' + '9' * 13
         project.reload
         expect(project.royalty_percentage).to eq(BigDecimal('99.999_999_999_999_9'))
+      end
+
+      xit 'is invalid if precision is exceeded' do
+        project = create :project, royalty_percentage: '99.' + '9' * 14
+        expect(project).to be_invalid
+        expect(project.errors[:royalty_percentage]).to eq(["must have less than 13 decimal precision"])
       end
 
       it 'can represent 100%' do
@@ -324,7 +330,7 @@ describe Project do
   end
 
   it 'enum of denominations should contain the platform wide currencies' do
-    project_denominations = Project.denominations.map {|x,_| x}.sort
+    project_denominations = Project.denominations.map { |x, _| x }.sort
     platform_denominations = Comakery::Currency::DENOMINATIONS.keys.sort
     expect(project_denominations).to eq(platform_denominations)
   end
@@ -504,6 +510,60 @@ describe Project do
     end
   end
 
+  describe '#total_revenue_shared_unpaid' do
+    describe 'with revenue sharing awards' do
+      let!(:project) { create :project, payment_type: :revenue_share }
+      let(:authentication) { create :authentication }
+      let(:project_award_type) { create :award_type, project: project, amount: 1 }
+
+      it 'with no revenue sharing percentage entered' do
+        project.update(royalty_percentage: nil)
+        expect(project.total_revenue_shared_unpaid).to eq(0)
+        expect(project.total_revenue_shared_unpaid).to be_a(BigDecimal)
+      end
+
+
+      it 'with percentage and no revenue' do
+        project.update(royalty_percentage: 10)
+
+        expect(project.total_revenue_shared_unpaid).to eq(0)
+        expect(project.total_revenue_shared_unpaid).to be_a(BigDecimal)
+      end
+
+      it 'with percentage and revenue' do
+        project.update(royalty_percentage: 10)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
+        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        expect(project.total_revenue).to eq(1270)
+        expect(project.total_revenue_shared_unpaid).to eq(127)
+        expect(project.total_revenue_shared_unpaid).to be_a(BigDecimal)
+      end
+
+      xit 'with percentage, revenue, and payments' do
+        project.update(royalty_percentage: 10)
+        project_award_type.awards.create_with_quantity(9, issuer: project.owner_account, authentication: authentication)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
+        project.payments.new_with_quantity(quantity_redeemed: 2, payee_auth: authentication).save!
+
+        expect(project.total_revenue_shared_unpaid).to eq(80.0)
+        fail
+      end
+    end
+
+    describe 'with project coin awards' do
+      let(:project) { create :project, payment_type: :project_coin }
+      it 'with percentage and revenue' do
+        project.update(royalty_percentage: 10)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
+        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        expect(project.total_revenue).to eq(1270)
+        expect(project.total_revenue_shared_unpaid).to eq(0)
+        expect(project.total_revenue_shared_unpaid).to be_a(BigDecimal)
+      end
+    end
+  end
+
+
   describe '#revenue_per_share' do
     describe 'with revenue sharing awards' do
       let!(:project) { create :project, payment_type: :revenue_share }
@@ -548,6 +608,30 @@ describe Project do
           expect(project.revenue_per_share).to be_a(BigDecimal)
         end
       end
+
+      describe "with payments made" do
+        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let(:issuer) { create :account }
+        let(:authentication) { create :authentication }
+
+        before do
+          project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
+          project.update(royalty_percentage: 10)
+          project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
+          project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        end
+
+        it 'has right starting conditions' do
+          expect(project.revenue_per_share).to eq(BigDecimal('3.628571428571428571'))
+          expect(project.total_awards_outstanding).to eq(35)
+        end
+
+        it "should deduct payments before calculating" do
+          project.payments.new_with_quantity(quantity_redeemed: 10, payee_auth: authentication).save!
+          expect(project.total_awards_outstanding).to eq(25)
+          expect(project.revenue_per_share).to eq(BigDecimal('3.62857142857142857144'))
+        end
+      end
     end
 
     describe 'with project coin awards' do
@@ -564,21 +648,21 @@ describe Project do
     end
   end
 
-  describe '#share_of_revenue' do
+  describe '#share_of_revenue_unpaid' do
     describe 'with revenue sharing awards' do
       let!(:project) { create :project, payment_type: :revenue_share }
 
       it 'with no revenue sharing percentage entered' do
         project.update(royalty_percentage: nil)
-        expect(project.share_of_revenue(17)).to eq(0)
-        expect(project.share_of_revenue(17)).to be_a(BigDecimal)
+        expect(project.share_of_revenue_unpaid(17)).to eq(0)
+        expect(project.share_of_revenue_unpaid(17)).to be_a(BigDecimal)
       end
 
 
       it 'with percentage and no revenue' do
         project.update(royalty_percentage: 10)
 
-        expect(project.share_of_revenue(17)).to eq(0)
+        expect(project.share_of_revenue_unpaid(17)).to eq(0)
       end
 
       it 'with percentage and revenue and no shares' do
@@ -586,8 +670,8 @@ describe Project do
         project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
         project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
         expect(project.total_revenue).to eq(1270)
-        expect(project.share_of_revenue(17)).to eq(0)
-        expect(project.share_of_revenue(17)).to be_a(BigDecimal)
+        expect(project.share_of_revenue_unpaid(17)).to eq(0)
+        expect(project.share_of_revenue_unpaid(17)).to be_a(BigDecimal)
       end
 
       describe 'with percentage and revenue and shares' do
@@ -607,8 +691,8 @@ describe Project do
           expect(project.total_awarded).to eq(35)
           expect(project.royalty_percentage).to eq(10)
           expect(project.total_revenue_shared).to eq(127)
-          expect(project.share_of_revenue(17)).to eq(BigDecimal('61.685714285714285714'))
-          expect(project.share_of_revenue(17)).to be_a(BigDecimal)
+          expect(project.share_of_revenue_unpaid(17)).to eq(BigDecimal('61.685714285714285714'))
+          expect(project.share_of_revenue_unpaid(17)).to be_a(BigDecimal)
         end
       end
     end
@@ -621,8 +705,8 @@ describe Project do
         project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
         project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
         expect(project.total_revenue).to eq(1270)
-        expect(project.share_of_revenue(17)).to eq(0)
-        expect(project.share_of_revenue(17)).to be_a(BigDecimal)
+        expect(project.share_of_revenue_unpaid(17)).to eq(0)
+        expect(project.share_of_revenue_unpaid(17)).to be_a(BigDecimal)
       end
     end
   end
@@ -643,25 +727,68 @@ describe Project do
 
     it 'should avoid multiplying rounding errors' do
       expect(project.total_revenue_shared).to eq(billion_minus_one)
-      expect(project.share_of_revenue(billion_minus_one)).to eq(billion_minus_one)
-      expect(project.share_of_revenue(1)).to eq(1)
+      expect(project.share_of_revenue_unpaid(billion_minus_one)).to eq(billion_minus_one)
+      expect(project.share_of_revenue_unpaid(1)).to eq(1)
 
     end
 
     it 'should be resilient to multiplication rounding errors in subsequent method calls' do
       lots_of_shares = 10_000
-      tiny_rev_share = project.share_of_revenue(1)
+      tiny_rev_share = project.share_of_revenue_unpaid(1)
 
       total = 0
       lots_of_shares.times do
         total += tiny_rev_share
       end
 
-      expect(project.share_of_revenue(lots_of_shares)).to eq(total)
+      expect(project.share_of_revenue_unpaid(lots_of_shares)).to eq(total)
     end
 
-    it 'should have equivilent #share_of_revenue(1) share and #revenue_per_share' do
-      expect(project.share_of_revenue(1)).to eq(project.revenue_per_share)
+    it 'should have equivilent #share_of_revenue_unpaid(1) share and #revenue_per_share' do
+      expect(project.share_of_revenue_unpaid(1)).to eq(project.revenue_per_share)
+    end
+  end
+
+  describe 'payments association methods' do
+    let!(:project) { create :project, payment_type: :revenue_share }
+    let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+    let(:issuer) { create :account }
+    let!(:authentication) { create :authentication }
+
+    before do
+      project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
+      project.update(royalty_percentage: 10)
+      project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
+      project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+    end
+
+    it 'has right preconditions' do
+      expect(project.total_revenue).to eq(1270)
+      expect(project.revenue_per_share).to eq(BigDecimal('3.628571428571428571'))
+      expect(project.revenue_per_share).to be_a(BigDecimal)
+    end
+
+
+    describe "payments.new_with_quantity" do
+      let(:new_payment) { project.payments.new_with_quantity(quantity_redeemed: 10, payee_auth: authentication) }
+
+      specify { expect(new_payment).to be_valid }
+      specify { expect { new_payment.save! }.to_not raise_error }
+      specify { expect(new_payment.share_value).to eq(project.share_of_revenue_unpaid(1)) }
+      specify { expect(new_payment.total_value).to eq(project.share_of_revenue_unpaid(new_payment.quantity_redeemed)) }
+      specify { expect(new_payment.currency).to eq('USD') }
+      specify { expect(new_payment.payee).to eq(authentication) }
+    end
+
+    describe "payments.create_with_quantity" do
+      let(:new_payment) { project.payments.create_with_quantity(quantity_redeemed: 10, payee_auth: authentication) }
+
+      specify { expect(new_payment).to be_valid }
+      specify { expect { new_payment.save! }.to_not raise_error }
+      specify { expect(new_payment.share_value).to eq(BigDecimal('3.628571428571428571')) }
+      specify { expect(new_payment.total_value).to eq(BigDecimal('36.285714285714285714')) }
+      specify { expect(new_payment.currency).to eq('USD') }
+      specify { expect(new_payment.payee).to eq(authentication) }
     end
   end
 end

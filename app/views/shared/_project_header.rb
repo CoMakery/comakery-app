@@ -21,7 +21,6 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
 
           li_if(policy(project).show_contributions?) {
             a(href: project_awards_path(project)) {
-              # i(class: "fa fa-history")
               text "Awards"
             }
           }
@@ -36,6 +35,12 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           li_if(policy(project).show_revenue_info?) {
             a(href: project_revenues_path(project)) {
               text "Revenues"
+            }
+          }
+
+          li_if(policy(project).show_revenue_info?) {
+            a(href: project_payments_path(project)) {
+              text "Payments"
             }
           }
 
