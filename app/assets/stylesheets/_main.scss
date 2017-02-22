@@ -24,6 +24,7 @@ body {
     }
   }
 }
+
 .app-container {
   @include grid-row($behavior: collapse);
   max-width: none;
@@ -33,11 +34,13 @@ body {
     float: none;
   }
 }
+
 .app-aside {
   @include grid-column($columns: 12);
   @include padding-leader(.5);
   background: darken($vapor, 15);
 }
+
 @media #{$medium-up} {
   .app-nav {
     @include grid-column($columns: 2);
@@ -52,6 +55,7 @@ body {
     @include grid-column($columns: 4);
   }
 }
+
 .main {
   padding-bottom: 4em;
 
@@ -60,15 +64,18 @@ body {
     margin-bottom: .4em;
   }
 }
+
 .top-bar-right ul li > a {
   @extend %chunko-text;
   text-align: right;
   padding-right: 15px;
 }
+
 a .button, a .button.take-action {
   @extend %chunko-text;
   color: $snow;
 }
+
 .button {
   margin: 5px 4px;
 }
@@ -177,7 +184,6 @@ form.take-action-form p.notice {
   border-radius: $global-radius;
   background-color: white;
 
-
   input[type="radio"] {
     margin-right: 10px;
     margin-left: 2px;
@@ -191,6 +197,7 @@ form.take-action-form p.notice {
 
   @include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.12));
 }
+
 ul {
   margin-left: 0px;
   li {
@@ -198,6 +205,7 @@ ul {
     margin-bottom: 5px;
   }
 }
+
 .project-nav {
   margin-bottom: 1em;
   ul {
@@ -211,9 +219,15 @@ ul {
 }
 
 .license-markdown {
-  h1 { font-size: 1.5rem; }
-  h2 { font-size: 1.25rem; }
-  h3 { font-size: 1.1rem; }
+  h1 {
+    font-size: 1.5rem;
+  }
+  h2 {
+    font-size: 1.25rem;
+  }
+  h3 {
+    font-size: 1.1rem;
+  }
 }
 
 .table-box {
@@ -274,6 +288,7 @@ ul {
     margin-right: 65px;
   }
 }
+
 table.summary-table {
   tr td:first-of-type {
     width: 250px;
@@ -282,4 +297,19 @@ table.summary-table {
 
 .coin-numbers {
   font-size: 1.4em;
+}
+
+.conversational-form {
+  font-size: 1.9375rem;
+  font-color: $steel;
+
+  input[type=number] {
+    display: inline;
+    width: 150px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .row {
+    margin-bottom: 15px;
+  }
 }

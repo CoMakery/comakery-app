@@ -66,9 +66,9 @@ class ProjectDecorator < Draper::Decorator
                                                      delimiter: ',')}"
   end
 
-  def total_awarded_pretty
+  def total_awards_outstanding_pretty
     # awards (e.g. project coins or revenue shares) are validated as whole numbers; they are rounded
-    number_with_precision(total_awarded, precision: 0, delimiter: ',')
+    number_with_precision(total_awards_outstanding, precision: 0, delimiter: ',')
   end
 
   def revenue_per_share_pretty
@@ -78,9 +78,9 @@ class ProjectDecorator < Draper::Decorator
                                                      delimiter: ',')}"
   end
 
-  def total_revenue_shared_rounded
+  def total_revenue_shared_unpaid_rounded
     precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
-    "#{currency_denomination}#{number_with_precision(total_revenue_shared,
+    "#{currency_denomination}#{number_with_precision(total_revenue_shared_unpaid.truncate(precision),
                                                      precision: precision,
                                                      delimiter: ',')}"
   end
@@ -102,15 +102,21 @@ class ProjectDecorator < Draper::Decorator
     project.revenues.order(created_at: :desc, id: :desc).decorate
   end
 
-  # TODO: This will neeed to accomodate redeemed revenue shares and payments made
-  def shares_to_balance_pretty(users_project_coins)
+  def payment_history
+    project.payments.order(created_at: :desc, id: :desc)
+  end
+
+
+  def share_of_revenue_unpaid_pretty(users_project_coins)
     precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
-    "#{currency_denomination}#{number_with_precision(share_of_revenue(users_project_coins),
+    "#{currency_denomination}#{number_with_precision(share_of_revenue_unpaid(users_project_coins).truncate(precision),
                                                      precision: precision,
                                                      delimiter: ',')}"
   end
 
-
+  def contributors_by_award_amount
+    contributors_distinct.decorate.to_a.sort_by {|c| c.total_awards_earned(project) }.reverse!
+  end
 
   private
 

@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   skip_before_filter :require_login, except: :new
+  before_filter :assign_current_auth
 
   def landing
     skip_authorization
@@ -138,5 +139,9 @@ class ProjectsController < ApplicationController
   def assign_slack_channels
     result = GetSlackChannels.call(current_account: current_account)
     @slack_channels = result.channels
+  end
+
+  def assign_current_auth
+    @current_auth = current_account&.slack_auth&.decorate
   end
 end

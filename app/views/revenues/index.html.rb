@@ -9,7 +9,7 @@ class Views::Revenues::Index < Views::Projects::Base
 
           column("large-6 medium-12 summary") {
             row {
-              h3 "Summary"
+              h3 "Revenue Summary"
               div(class: 'table-box') {
                 table(class: "table-scroll summary-table") {
                   tr(class: 'total-revenue') {
@@ -23,7 +23,7 @@ class Views::Revenues::Index < Views::Projects::Base
                   }
                   tr(class: 'total-awards') {
                     td { text ' Revenue Shares' }
-                    td(class: "coin-numbers") { text project.total_awarded_pretty }
+                    td(class: "coin-numbers") { text project.total_awards_outstanding_pretty }
                   }
 
                   tr(class: 'revenue-per-share') {
@@ -34,7 +34,7 @@ class Views::Revenues::Index < Views::Projects::Base
               }
             }
           }
-          column("large-6 medium-12") {
+          column("large-6 medium-12 content-box") {
             row {
               h3 "Record Revenue"
             }
