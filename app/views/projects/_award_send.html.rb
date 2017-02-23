@@ -19,7 +19,7 @@ class Views::Projects::AwardSend < Views::Base
       }
       br
       form_for [project, award] do |f|
-        row(class: "award-types") {
+        div(class: "award-types") {
           project.award_types.order("amount asc").decorate.each do |award_type|
             row(class: "award-type-row") {
               column("small-12") {
