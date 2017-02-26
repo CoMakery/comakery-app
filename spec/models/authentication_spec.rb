@@ -67,8 +67,12 @@ describe Authentication do
     let!(:bystander) { create(:authentication) }
     let!(:project) { create :project }
     let!(:award_type) { create(:award_type, amount: 10, project: project) }
-    let!(:payment1) { project.payments.create_with_quantity(quantity_redeemed: 10, payee_auth: contributor) }
-    let!(:payment2) { project.payments.create_with_quantity(quantity_redeemed: 1, payee_auth: contributor) }
+
+    before do
+      award_type.awards.create_with_quantity(2, issuer: project.owner_account, authentication: contributor )
+      project.payments.create_with_quantity(quantity_redeemed: 10, payee_auth: contributor)
+      project.payments.create_with_quantity(quantity_redeemed: 1, payee_auth: contributor)
+    end
 
     specify do
       expect(bystander.total_awards_paid(project)).to eq 0

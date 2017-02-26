@@ -10,7 +10,7 @@ describe AccountsController do
 
   describe "#update" do
     it "updates a valid ethereum address successfully" do
-      expect(CreateEthereumAwards).to receive(:call).with(awards: [award1, award2])
+      expect(CreateEthereumAwards).to receive(:call).with(awards: array_including(award1, award2))
       expect do
         put :update, account: {ethereum_wallet: "0x#{'a'*40}"}
         expect(response.status).to eq(302)
