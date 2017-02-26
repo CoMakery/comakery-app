@@ -38,6 +38,12 @@ describe PaymentsController do
   end
 
   describe '#create' do
+    let!(:award_type) { create(:award_type, amount: 1, project: my_project) }
+
+    before do
+      award_type.awards.create_with_quantity(50, issuer: my_project.owner_account, authentication: account.slack_auth )
+    end
+
     describe 'owner success' do
       before do
         login account
