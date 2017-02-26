@@ -46,6 +46,7 @@ describe "viewing projects, creating and editing", :js do
     award_type_inputs[0].all("input")[1].set "1000"
     award_type_inputs[1].all("input")[0].set "This is a medium award type"
     award_type_inputs[1].all("input")[1].set "2000"
+    award_type_inputs[1].all("input[name*='[community_awardable]']")[0].set(true)
     award_type_inputs[2].all("input")[0].set "This is a large award type"
     award_type_inputs[2].all("input")[1].set "3000"
     award_type_inputs.last(award_type_inputs.size - 3). each do |input|
@@ -128,7 +129,6 @@ describe "viewing projects, creating and editing", :js do
     expect(award_type_inputs.size).to eq(4)
 
     award_type_inputs[0].all("a[data-mark-and-hide]")[0].click
-    award_type_inputs[1].find("input[name*='[community_awardable]']").set(true)
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
 
@@ -148,8 +148,6 @@ describe "viewing projects, creating and editing", :js do
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(3)
     expect(page).to have_content "This is a medium award type (2,000) (Community Awardable)"
-    expect(page).not_to have_content "This is a small award type"
-    expect(page).not_to have_content "1,000"
 
     expect(award_type_inputs.size).to eq(3)
 
