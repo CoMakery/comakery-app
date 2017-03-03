@@ -7,7 +7,7 @@ class Views::Contributors::Index < Views::Projects::Base
       full_row {
         if award_data[:contributions].present?
           p {
-            h4 "#{project.payment_description}"
+            h4 "Contributor #{project.payment_description}"
             div(id: "award-percentages", class: "royalty-pie") {}
           }
           content_for :js do

@@ -2,15 +2,15 @@ require "rails_helper"
 
 describe "when redeeming revenue shares for payments" do
   let!(:owner) { create(:account) }
-  let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: "foo", slack_image_32_url: "http://avatar.com/owner.jpg") }
+  let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: "lazercats", slack_image_32_url: "http://avatar.com/owner.jpg") }
   let!(:other_account) { create(:account) }
-  let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: "foo", slack_image_32_url: "http://avatar.com/other.jpg") }
+  let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: "lazercats", slack_image_32_url: "http://avatar.com/other.jpg") }
 
   let!(:project) { create(:project,
                           royalty_percentage: 100,
                           public: true,
                           owner_account: owner,
-                          slack_team_id: "foo",
+                          slack_team_id: "lazercats",
                           require_confidentiality: false) }
   let!(:revenue) { create(:revenue, project: project, amount: 123.45, currency: 'USD') }
 
@@ -44,7 +44,6 @@ describe "when redeeming revenue shares for payments" do
     visit project_path(project)
 
     click_link "Payments"
-
 
     within('.summary-table') do
       expect(page.find('.my-revenue-shares')).to have_content('50 of 100')
@@ -236,7 +235,7 @@ describe "when redeeming revenue shares for payments" do
                               royalty_percentage: 100,
                               public: true,
                               owner_account: owner,
-                              slack_team_id: "foo",
+                              slack_team_id: "lazercats",
                               require_confidentiality: false) }
       specify do
         login owner
@@ -260,7 +259,7 @@ describe "when redeeming revenue shares for payments" do
                               royalty_percentage: 100,
                               public: true,
                               owner_account: owner,
-                              slack_team_id: "foo",
+                              slack_team_id: "lazercats",
                               require_confidentiality: false,
                               denomination: 'BTC') }
       specify do
@@ -283,7 +282,7 @@ describe "when redeeming revenue shares for payments" do
                               royalty_percentage: 100,
                               public: true,
                               owner_account: owner,
-                              slack_team_id: "foo",
+                              slack_team_id: "lazercats",
                               require_confidentiality: false,
                               denomination: 'ETH') }
       specify do
