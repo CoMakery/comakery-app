@@ -6,7 +6,6 @@ class Views::Revenues::Index < Views::Projects::Base
     column {
       full_row {
         if project.owner_account == current_account
-
           column("large-6 medium-12 summary") {
             row {
               h3 "Revenue Summary"
@@ -81,6 +80,7 @@ class Views::Revenues::Index < Views::Projects::Base
       br
       full_row {
         if project.revenue_history.any?
+          h3 "Revenues"
           div(class: "table-scroll table-box revenues") {
 
 

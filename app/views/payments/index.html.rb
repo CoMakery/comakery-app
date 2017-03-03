@@ -5,8 +5,7 @@ class Views::Payments::Index < Views::Projects::Base
     render partial: 'shared/project_header'
     column {
       if current_auth.present?
-      full_row {
-
+        full_row {
           column("large-6 medium-12 summary") {
             row {
               h3 "My Summary"
@@ -36,26 +35,28 @@ class Views::Payments::Index < Views::Projects::Base
             }
           }
           column("large-6 medium-12 content-box") {
-            form_for [project, payment], html: {class: 'conversational-form'} do |f|
-              row {
-                with_errors(payment, :quantity_redeemed) {
-                  text "Redeem "
-                  f.number_field(:quantity_redeemed, class: 'input-group-field')
-                  text " revenue shares"
+            if policy(project).team_member?
+              form_for [project, payment], html: {class: 'conversational-form'} do |f|
+                row {
+                  with_errors(payment, :quantity_redeemed) {
+                    text "Redeem "
+                    f.number_field(:quantity_redeemed, class: 'input-group-field')
+                    text " revenue shares"
+                  }
                 }
-              }
 
-              row {
-                p {
-                  text "At "
-                  span(class: 'revenue-per-share') { text project.revenue_per_share_pretty }
-                  text " each"
+                row {
+                  p {
+                    text "At "
+                    span(class: 'revenue-per-share') { text project.revenue_per_share_pretty }
+                    text " each"
+                  }
                 }
-              }
 
-              row {
-                f.submit("Redeem My Revenue Shares", class: buttonish(:expand))
-              }
+                row {
+                  f.submit("Redeem My Revenue Shares", class: buttonish(:expand))
+                }
+              end
             end
           }
         }
@@ -63,8 +64,9 @@ class Views::Payments::Index < Views::Projects::Base
       br
       full_row {
         if project.payment_history.any?
-          div(class: "table-scroll table-box payments") {
+          h3 "Payments"
 
+          div(class: "table-scroll table-box payments") {
 
             table(class: "table-scroll", style: "width: 100%") {
               tr(class: "header-row") {
