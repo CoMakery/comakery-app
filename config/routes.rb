@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     resources :licenses, only: [:index]
     resources :contributors, only: [:index]
     resources :revenues, only: [:index, :create]
-    resources :payments, only: [:index, :create]
+    resources :payments, only: [:index, :create, :update]
     collection do
       get :landing
     end
