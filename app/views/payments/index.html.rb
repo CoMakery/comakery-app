@@ -7,58 +7,58 @@ class Views::Payments::Index < Views::Projects::Base
       if current_auth.present?
       full_row {
 
-        column("large-6 medium-12 summary") {
-          row {
-            h3 "My Summary"
-            div(class: 'table-box') {
-              table(class: "table-scroll summary-table") {
-                tr(class: '') {
-                  td { text "My Revenue Shares" }
-                  td(class: "coin-numbers my-revenue-shares") {
-                    span  {
-                      text current_auth.total_awards_remaining_pretty(project)
+          column("large-6 medium-12 summary") {
+            row {
+              h3 "My Summary"
+              div(class: 'table-box') {
+                table(class: "table-scroll summary-table") {
+                  tr(class: '') {
+                    td { text "My Revenue Shares" }
+                    td(class: "coin-numbers my-revenue-shares") {
+                      span {
+                        text current_auth.total_awards_remaining_pretty(project)
+                      }
+                      span { text " of #{project.total_awards_outstanding_pretty} total" }
                     }
-                    span { text " of #{project.total_awards_outstanding_pretty} total" }
                   }
-                }
 
-                tr(class: '') {
-                  td { text "My Balance" }
-                  td(class: "coin-numbers my-balance") {
-                    span {
-                      text current_auth.total_revenue_unpaid_remaining_pretty(project)
+                  tr(class: '') {
+                    td { text "My Balance" }
+                    td(class: "coin-numbers my-balance") {
+                      span {
+                        text current_auth.total_revenue_unpaid_remaining_pretty(project)
+                      }
+                      span { text " of #{project.total_revenue_shared_unpaid_rounded} total" }
                     }
-                    span { text " of #{project.total_revenue_shared_unpaid_rounded} total" }
                   }
                 }
               }
             }
           }
-        }
-        column("large-6 medium-12 content-box") {
-          form_for [project, payment], html: {class: 'conversational-form'} do |f|
-            row {
-              with_errors(payment, :quantity_redeemed) {
-                text "Redeem "
-                f.number_field(:quantity_redeemed, class: 'input-group-field')
-                text " revenue shares"
+          column("large-6 medium-12 content-box") {
+            form_for [project, payment], html: {class: 'conversational-form'} do |f|
+              row {
+                with_errors(payment, :quantity_redeemed) {
+                  text "Redeem "
+                  f.number_field(:quantity_redeemed, class: 'input-group-field')
+                  text " revenue shares"
+                }
               }
-            }
 
-            row {
-              p {
-                text "At "
-                span(class: 'revenue-per-share') { text project.revenue_per_share_pretty }
-                text " each"
+              row {
+                p {
+                  text "At "
+                  span(class: 'revenue-per-share') { text project.revenue_per_share_pretty }
+                  text " each"
+                }
               }
-            }
 
-            row {
-              f.submit("Redeem My Revenue Shares", class: buttonish(:expand))
-            }
-          end
+              row {
+                f.submit("Redeem My Revenue Shares", class: buttonish(:expand))
+              }
+            end
+          }
         }
-      }
       end
       br
       full_row {
@@ -75,8 +75,8 @@ class Views::Payments::Index < Views::Projects::Base
                 th { text "Total Value" }
                 th { text "Transaction Fee" }
 
-                th { text "Total Payment" }
                 th { text "Transaction Reference" }
+                th { text "Total Payment" }
                 th { text "Issuer" }
                 th { text "Status" }
               }
@@ -98,10 +98,22 @@ class Views::Payments::Index < Views::Projects::Base
 
                   payment_td('total-value') { text payment.total_value_pretty }
 
+                  if !payment.reconciled? && policy(project).edit?
+                    form_for([project, payment]) do |f|
+                      payment_td('transaction-fee') { f.text_field :transaction_fee, value: payment.transaction_fee }
 
-                  payment_td('transaction-fee') { text payment.transaction_fee }
-                  payment_td('total-payment') { text payment.total_payment }
-                  payment_td('transaction-reference') { text payment.transaction_reference }
+                      payment_td('transaction-reference') do
+                        f.text_field :transaction_reference, value: payment.transaction_reference
+                      end
+
+                      payment_td('total-payment') { f.submit "Reconcile", class: 'button' }
+                    end
+                  else
+                    payment_td('transaction-fee') { text payment.transaction_fee_pretty }
+                    payment_td('transaction-reference') { text payment.transaction_reference }
+                    payment_td('total-payment') { text payment.total_payment_pretty }
+                  end
+
                   payment_td('issuer') {
                     if payment.issuer_avatar
                       img(src: payment.issuer_avatar, class: "icon avatar-img")

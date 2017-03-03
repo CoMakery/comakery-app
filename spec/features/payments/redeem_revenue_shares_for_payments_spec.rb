@@ -61,7 +61,7 @@ describe "when redeeming revenue shares for payments" do
       expect(page.find('.quantity-redeemed')).to have_content('2')
       expect(page.find('.share-value')).to have_content(/^\$1.23450000$/)
       expect(page.find('.total-value')).to have_content('$2.46')
-      expect(page.find('.status')).to have_content('unpaid')
+      expect(page.find('.status')).to have_content('Unpaid')
       expect(page.find('.transaction-fee').value).to be_blank
     end
 
@@ -74,12 +74,13 @@ describe "when redeeming revenue shares for payments" do
     expect(page.find('.revenue-per-share')).to have_content(/^\$1.23450000$/)
   end
 
-  xit "owner can reconcile revenue shares" do
+  it "owner can reconcile revenue shares" do
     login owner
     visit project_path(project)
     click_link "Payments"
     fill_in :payment_quantity_redeemed, with: 2
     click_on "Redeem My Revenue Shares"
+
 
     within ".payments" do
       expect(page.find('.payee')).to have_content(same_team_account_authentication.display_name)
@@ -87,10 +88,10 @@ describe "when redeeming revenue shares for payments" do
       expect(page.find('.share-value')).to have_content('$1.23')
       expect(page.find('.total-value')).to have_content('$2.46')
       expect(page.find('.transaction-fee').value).to be_blank
-      expect(page.find('.status')).to have_content('unpaid')
+      expect(page.find('.status')).to have_content('Unpaid')
 
       fill_in :payment_transaction_fee, with: '0.50'
-      fill_in :transaction_reference, with: 'xyz123abc'
+      fill_in :payment_transaction_reference, with: 'xyz123abc'
       click_on "Reconcile"
     end
 
@@ -101,34 +102,19 @@ describe "when redeeming revenue shares for payments" do
       expect(page.find('.total-value')).to have_content('$2.46')
 
       expect(page.find('.transaction-fee')).to have_content("$0.50")
-      expect(page.find('.status')).to have_content('paid')
+      expect(page.find('.status')).to have_content(/^Paid$/)
 
-
-      fill_in :payment_transaction_fee, with: '0.50'
-      fill_in :transaction_reference, with: 'xyz123abc'
-      click_on "Reconcile"
+      expect(page.all('.issuer')[0]).to have_content("John Doe")
+      expect(page.all('.issuer')[0]).to have_css("img[src*='http://avatar.com/owner.jpg']")
     end
   end
 
-  xit "non team member of public project can't redeem shares"
-
-  xit "project owner can record payments" do
-    login owner
+  xit "non team member of public project can't redeem shares" do
+    login other_account
     visit project_path(project)
     click_link "Payments"
 
-    fill_in :payment_quantity_redeemed, with: 10
-    # fill_in :revenue_comment, with: "A comment"
-    # fill_in :revenue_transaction_reference, with: "0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098"
-    click_on "Redeem My Revenue Shares"
-
-    within ".payments" do
-      expect(page.all('.transaction-reference')[0]).to have_content('0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098')
-      expect(page.all('.comment')[0]).to have_content('A comment')
-      expect(page).to have_content('$10.00')
-      expect(page.all('.recorded-by')[0]).to have_content("John Doe")
-      expect(page.all('.recorded-by')[0]).to have_css("img[src*='http://avatar.com/owner.jpg']")
-    end
+    page.assert_selector('#new_payment', count: 0)
   end
 
   it 'payments appear in reverse chronological order' do
@@ -148,13 +134,23 @@ describe "when redeeming revenue shares for payments" do
     end
   end
 
-  xit "non-project owner cannot reconcile payments" do
-    login other_account
-
+  it "non-project owner cannot reconcile payments" do
+    login same_team_account
     visit project_path(project)
     click_link "Payments"
+    fill_in :payment_quantity_redeemed, with: 2
+    click_on "Redeem My Revenue Shares"
 
-    expect(page).to_not have_css('.new_revenue')
+    within ".payments" do
+      expect(page.find('.payee')).to have_content(same_team_account_authentication.display_name)
+      expect(page.find('.quantity-redeemed')).to have_content('2')
+      expect(page.find('.share-value')).to have_content('$1.23')
+      expect(page.find('.total-value')).to have_content('$2.46')
+      expect(page.find('.transaction-fee').value).to be_blank
+      expect(page.find('.status')).to have_content('Unpaid')
+
+      page.assert_selector('input', count: 0)
+    end
   end
 
   describe 'when share value can be calculated' do

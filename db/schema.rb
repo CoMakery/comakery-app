@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170222223825) do
+ActiveRecord::Schema.define(version: 20170302173357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,8 +119,8 @@ ActiveRecord::Schema.define(version: 20170222223825) do
     t.integer  "issuer_id"
     t.integer  "payee_id"
     t.decimal  "total_value"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.decimal  "share_value"
     t.integer  "quantity_redeemed"
     t.decimal  "transaction_fee"
@@ -128,6 +128,7 @@ ActiveRecord::Schema.define(version: 20170222223825) do
     t.text     "transaction_reference"
     t.string   "currency"
     t.integer  "status",                default: 0
+    t.boolean  "reconciled",            default: false
   end
 
   add_index "payments", ["issuer_id"], name: "index_payments_on_issuer_id", using: :btree

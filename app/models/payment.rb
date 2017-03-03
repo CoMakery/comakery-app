@@ -9,15 +9,13 @@ class Payment < ActiveRecord::Base
   validates_numericality_of :quantity_redeemed, :total_value, greater_than_or_equal_to: 0
   validate :payee_has_the_awards_they_are_redeeming
 
-  def status
-    "unpaid"
-  end
-
   private
 
   def payee_has_the_awards_they_are_redeeming
     return unless payee.present? && project.present? && quantity_redeemed.present?
-    if quantity_redeemed > payee.total_awards_remaining(project)
+    new_amount_redeemed = quantity_redeemed_was.present? ? (quantity_redeemed - quantity_redeemed_was) : quantity_redeemed
+
+    if (payee.total_awards_paid(project) + new_amount_redeemed) > payee.total_awards_earned(project)
       errors.add(:quantity_redeemed, "cannot be greater than the payee's total awards remaining balance")
     end
   end
