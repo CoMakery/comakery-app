@@ -36,16 +36,12 @@ class Authentication < ActiveRecord::Base
     total_awards_earned(project) - total_awards_paid(project)
   end
 
-  def total_revenue_earned(project)
-    project.share_of_revenue(total_awards_earned(project))
-  end
-
   def total_revenue_paid(project)
     project.payments.where(payee: self).sum(:total_value)
   end
 
   def total_revenue_unpaid(project)
-    total_revenue_earned(project) - total_revenue_paid(project)
+    project.share_of_revenue_unpaid(total_awards_remaining(project))
   end
 
   def self.find_or_create_from_auth_hash!(auth_hash)

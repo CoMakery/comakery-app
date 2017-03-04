@@ -19,6 +19,107 @@ describe "precise financial calculations across the integrated revenue sharing c
     stub_slack_channel_list
   end
 
+  shared_examples_for "check sums" do
+    specify { expect(project.total_awards_outstanding + project.payments.total_awards_redeemed).to eq(project.total_awarded) }
+    specify { expect(project.total_revenue * (project.royalty_percentage * 0.01)).to eq(project.total_revenue_shared) }
+    specify { expect(project.total_revenue_shared_unpaid + project.payments.total_value_redeemed).to eq(project.total_revenue_shared) }
+    specify { expect(project.share_of_revenue_unpaid(project.total_awards_outstanding)).to eq(project.total_revenue_shared_unpaid) }
+    specify { expect(project.share_of_revenue_unpaid(1)).to eq(project.revenue_per_share) }
+
+    specify do
+      expect(owner_auth.total_awards_earned(project) +
+                 same_team_account_auth.total_awards_earned(project)).to eq(project.total_awarded)
+    end
+
+    specify do
+      expect(owner_auth.total_awards_paid(project) +
+                 same_team_account_auth.total_awards_paid(project)).to eq(project.payments.total_awards_redeemed)
+    end
+
+    specify do
+      expect(owner_auth.total_awards_remaining(project) +
+                 same_team_account_auth.total_awards_remaining(project)).to eq(project.total_awards_outstanding)
+    end
+
+    specify do
+      expect(owner_auth.total_revenue_paid(project) +
+                 same_team_account_auth.total_revenue_paid(project)).to eq(project.payments.total_value_redeemed)
+    end
+
+    specify do
+      expect(owner_auth.total_revenue_unpaid(project) +
+                 same_team_account_auth.total_revenue_unpaid(project)).to eq(project.total_revenue_shared_unpaid)
+    end
+  end
+
+
+  describe "empty" do
+    let!(:project) { create(:project,
+                            royalty_percentage: BigDecimal('99.999999'),
+                            public: true,
+                            owner_account: owner,
+                            slack_team_id: "foo",
+                            require_confidentiality: false) }
+
+    it_behaves_like "check sums"
+  end
+
+  describe 'with revenues, awards, and payments and simple numbers' do
+    let!(:project) { create(:project,
+                            royalty_percentage: BigDecimal('100'),
+                            public: true,
+                            owner_account: owner,
+                            slack_team_id: "foo",
+                            require_confidentiality: false) }
+
+    let!(:code_award_type) { project.award_types.create(community_awardable: false,
+                                                        amount: 1,
+                                                        name: 'Code Contribution') }
+    let!(:same_team_award) { code_award_type.awards.create_with_quantity(50,
+                                                                         issuer: owner,
+                                                                         authentication: same_team_account_auth) }
+
+    let!(:owner_award) { code_award_type.awards.create_with_quantity(50,
+                                                                     issuer: owner,
+                                                                     authentication: owner_auth) }
+
+    let!(:revenues) { project.revenues.create(amount: 100,
+                                              currency: 'USD',
+                                              recorded_by: owner) }
+
+    let!(:payments) { project.payments.create_with_quantity(quantity_redeemed: 25,
+                                                            payee_auth: owner_auth) }
+    it_behaves_like "check sums"
+  end
+
+  describe 'with revenues, awards, and payments and decimal royalties' do
+    let!(:project) { create(:project,
+                            royalty_percentage: BigDecimal('99.99'),
+                            public: true,
+                            owner_account: owner,
+                            slack_team_id: "foo",
+                            require_confidentiality: false) }
+
+    let!(:code_award_type) { project.award_types.create(community_awardable: false,
+                                                        amount: 1,
+                                                        name: 'Code Contribution') }
+    let!(:same_team_award) { code_award_type.awards.create_with_quantity(50,
+                                                                         issuer: owner,
+                                                                         authentication: same_team_account_auth) }
+
+    let!(:owner_award) { code_award_type.awards.create_with_quantity(50,
+                                                                     issuer: owner,
+                                                                     authentication: owner_auth) }
+
+    let!(:revenues) { project.revenues.create(amount: 100,
+                                              currency: 'USD',
+                                              recorded_by: owner) }
+
+    let!(:payments) { project.payments.create_with_quantity(quantity_redeemed: 25,
+                                                            payee_auth: owner_auth) }
+    it_behaves_like "check sums"
+  end
+
   it 'simple awards, revenue, and payments in USD' do
     # 1) create project
     project = create(:project,
@@ -42,7 +143,6 @@ describe "precise financial calculations across the integrated revenue sharing c
     expect(owner_auth.total_awards_paid(project)).to eq(0)
     expect(owner_auth.total_awards_remaining(project)).to eq(0)
 
-    expect(owner_auth.total_revenue_earned(project)).to eq(0)
     expect(owner_auth.total_revenue_paid(project)).to eq(0)
     expect(owner_auth.total_revenue_unpaid(project)).to eq(0)
 
@@ -68,7 +168,6 @@ describe "precise financial calculations across the integrated revenue sharing c
     expect(owner_auth.total_awards_paid(project)).to eq(0)
     expect(owner_auth.total_awards_remaining(project)).to eq(50)
 
-    expect(owner_auth.total_revenue_earned(project)).to eq(0)
     expect(owner_auth.total_revenue_paid(project)).to eq(0)
     expect(owner_auth.total_revenue_unpaid(project)).to eq(0)
 
@@ -92,7 +191,6 @@ describe "precise financial calculations across the integrated revenue sharing c
     expect(owner_auth.total_awards_paid(project)).to eq(0)
     expect(owner_auth.total_awards_remaining(project)).to eq(50)
 
-    expect(owner_auth.total_revenue_earned(project)).to eq(50)
     expect(owner_auth.total_revenue_paid(project)).to eq(0)
     expect(owner_auth.total_revenue_unpaid(project)).to eq(50)
 
@@ -116,7 +214,6 @@ describe "precise financial calculations across the integrated revenue sharing c
     expect(owner_auth.total_awards_paid(project)).to eq(25)
     expect(owner_auth.total_awards_remaining(project)).to eq(25)
 
-    expect(owner_auth.total_revenue_earned(project)).to eq(50)
     expect(owner_auth.total_revenue_paid(project)).to eq(25)
     expect(owner_auth.total_revenue_unpaid(project)).to eq(25)
 
@@ -124,13 +221,12 @@ describe "precise financial calculations across the integrated revenue sharing c
     expect(same_team_account_auth.total_awards_paid(project)).to eq(0)
     expect(same_team_account_auth.total_awards_remaining(project)).to eq(50)
 
-    expect(same_team_account_auth.total_revenue_earned(project)).to eq(50)
     expect(same_team_account_auth.total_revenue_paid(project)).to eq(0)
     expect(same_team_account_auth.total_revenue_unpaid(project)).to eq(50)
   end
 
   it 'high precision awards, revenue, and payments in USD' do
-    almost_100 = BigDecimal('99.' + ('9'*19))
+    almost_100 = BigDecimal('99.' + ('9'*19)) # this highlights precision and potential rounding errors
     ninety_nine_point_13_nines = almost_100.truncate(13)
     zero_point_15_nines = BigDecimal('0.' + ('9' * 15))
     seventy_four_point_13_nines_and_25 = BigDecimal('74.' + ('9' * 13) + '25')
@@ -160,7 +256,6 @@ describe "precise financial calculations across the integrated revenue sharing c
     expect(owner_auth.total_awards_paid(project)).to eq(0)
     expect(owner_auth.total_awards_remaining(project)).to eq(0)
 
-    expect(owner_auth.total_revenue_earned(project)).to eq(0)
     expect(owner_auth.total_revenue_paid(project)).to eq(0)
     expect(owner_auth.total_revenue_unpaid(project)).to eq(0)
 
@@ -186,7 +281,6 @@ describe "precise financial calculations across the integrated revenue sharing c
     expect(owner_auth.total_awards_paid(project)).to eq(0)
     expect(owner_auth.total_awards_remaining(project)).to eq(50)
 
-    expect(owner_auth.total_revenue_earned(project)).to eq(0)
     expect(owner_auth.total_revenue_paid(project)).to eq(0)
     expect(owner_auth.total_revenue_unpaid(project)).to eq(0)
 
@@ -211,7 +305,6 @@ describe "precise financial calculations across the integrated revenue sharing c
     expect(owner_auth.total_awards_remaining(project)).to eq(50)
 
 
-    expect(owner_auth.total_revenue_earned(project)).to eq(forty_nine_point_13_nines_and_a_five)
     expect(owner_auth.total_revenue_paid(project)).to eq(0)
     expect(owner_auth.total_revenue_unpaid(project)).to eq(forty_nine_point_13_nines_and_a_five)
 
@@ -219,7 +312,8 @@ describe "precise financial calculations across the integrated revenue sharing c
     # 4) pay contributors
     # ---
 
-    project.payments.create_with_quantity(quantity_redeemed: 25, payee_auth: owner_auth)
+    payment = project.payments.create_with_quantity(quantity_redeemed: 25, payee_auth: owner_auth)
+    expect(payment.total_value).to eq(24.99) # rounded to USD precision
 
     #project
 
@@ -227,25 +321,30 @@ describe "precise financial calculations across the integrated revenue sharing c
     expect(project.total_awarded).to eq(100)
     expect(project.total_revenue_shared).to eq(ninety_nine_point_13_nines)
     expect(project.total_awards_outstanding).to eq(75)
-    expect(project.total_revenue_shared_unpaid).to eq(seventy_four_point_13_nines_and_25)
-    expect(project.revenue_per_share).to eq(zero_point_15_nines)
-    expect(project.share_of_revenue_unpaid(1)).to eq(zero_point_15_nines)
+
+    revenue_shared_minus_truncated_payment = ninety_nine_point_13_nines - 24.99
+    expect(project.total_revenue_shared_unpaid).to eq(revenue_shared_minus_truncated_payment)
+
+    new_price_per_share_after_reclaiming_truncated_values_like_richard_prior_in_superman3 =
+        revenue_shared_minus_truncated_payment / BigDecimal('75')
+    expect(project.revenue_per_share).to eq(new_price_per_share_after_reclaiming_truncated_values_like_richard_prior_in_superman3)
+    expect(project.share_of_revenue_unpaid(1)).to eq(new_price_per_share_after_reclaiming_truncated_values_like_richard_prior_in_superman3)
+
 
     # auth
     expect(owner_auth.total_awards_earned(project)).to eq(50)
     expect(owner_auth.total_awards_paid(project)).to eq(25)
     expect(owner_auth.total_awards_remaining(project)).to eq(25)
 
-    expect(owner_auth.total_revenue_earned(project)).to eq(forty_nine_point_13_nines_and_a_five)
-    expect(owner_auth.total_revenue_paid(project)).to eq(BigDecimal(25) * zero_point_15_nines)
-    expect(owner_auth.total_revenue_unpaid(project)).to eq(BigDecimal(25) * zero_point_15_nines)
+    expect(owner_auth.total_revenue_paid(project)).to eq(24.99)
+    expect(owner_auth.total_revenue_unpaid(project)).to eq((revenue_shared_minus_truncated_payment * BigDecimal('25')) / BigDecimal('75'))
 
     expect(same_team_account_auth.total_awards_earned(project)).to eq(50)
     expect(same_team_account_auth.total_awards_paid(project)).to eq(0)
     expect(same_team_account_auth.total_awards_remaining(project)).to eq(50)
 
-    expect(same_team_account_auth.total_revenue_earned(project)).to eq(forty_nine_point_13_nines_and_a_five)
     expect(same_team_account_auth.total_revenue_paid(project)).to eq(0)
-    expect(same_team_account_auth.total_revenue_unpaid(project)).to eq(forty_nine_point_13_nines_and_a_five)
+    expect(same_team_account_auth.total_revenue_unpaid(project)).
+        to eq((revenue_shared_minus_truncated_payment * BigDecimal('50')) / BigDecimal('75'))
   end
 end
