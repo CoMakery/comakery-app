@@ -602,9 +602,9 @@ describe Project do
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
         end
 
-        it "shouldn't round at this level" do
+        it "to eight decimal places" do
           expect(project.total_revenue).to eq(1270)
-          expect(project.revenue_per_share).to eq(BigDecimal('3.628571428571428571'))
+          expect(project.revenue_per_share).to eq(BigDecimal('3.62857142'))
           expect(project.revenue_per_share).to be_a(BigDecimal)
         end
       end
@@ -623,7 +623,7 @@ describe Project do
         end
 
         it 'has right starting conditions' do
-          expect(project.revenue_per_share).to eq(BigDecimal('3.628571428571428571'))
+          expect(project.revenue_per_share).to eq(BigDecimal('3.62857142'))
           expect(project.total_awards_outstanding).to eq(35)
         end
 
@@ -685,7 +685,7 @@ describe Project do
         expect(project.share_of_revenue_unpaid(17)).to be_a(BigDecimal)
       end
 
-      describe 'with percentage and revenue and shares' do
+      describe 'with percentage and revenue and shares for USD' do
         let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
         let(:issuer) { create :account }
         let(:authentication) { create :authentication }
@@ -697,12 +697,12 @@ describe Project do
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
         end
 
-        it "should return an unrounded big decimal" do
+        it "should return a big decimal truncated to currency precision" do
           expect(project.total_revenue).to eq(1270)
           expect(project.total_awarded).to eq(35)
           expect(project.royalty_percentage).to eq(10)
           expect(project.total_revenue_shared).to eq(127)
-          expect(project.share_of_revenue_unpaid(17)).to eq(BigDecimal('61.685714285714285714'))
+          expect(project.share_of_revenue_unpaid(17)).to eq(BigDecimal('61.68'))
           expect(project.share_of_revenue_unpaid(17)).to be_a(BigDecimal)
         end
 
@@ -712,6 +712,30 @@ describe Project do
           expect(project.royalty_percentage).to eq(10)
           expect(project.total_revenue_shared).to eq(127)
           expect(project.share_of_revenue_unpaid(nil)).to eq(BigDecimal('0'))
+        end
+      end
+
+      describe 'with percentage and revenue and shares for high precision currency (ETH)' do
+        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let(:issuer) { create :account }
+        let(:authentication) { create :authentication }
+
+        before do
+          project.update(denomination: 'ETH')
+          project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
+          project.update(royalty_percentage: 10)
+          project.revenues.create(amount: 1000, currency: 'ETH', recorded_by: project.owner_account)
+          project.revenues.create(amount: 270, currency: 'ETH', recorded_by: project.owner_account)
+        end
+
+        it "should return an big decimal truncated to currency precision" do
+          expect(project.total_revenue).to eq(1270)
+          expect(project.total_awarded).to eq(35)
+          expect(project.royalty_percentage).to eq(10)
+          expect(project.total_revenue_shared).to eq(127)
+
+          share_price_with_18_decimal_precision = BigDecimal('61.685714285714285714')
+          expect(project.share_of_revenue_unpaid(17)).to eq(share_price_with_18_decimal_precision)
         end
       end
     end
@@ -783,7 +807,7 @@ describe Project do
 
     it 'has right preconditions' do
       expect(project.total_revenue).to eq(1270)
-      expect(project.revenue_per_share).to eq(BigDecimal('3.628571428571428571'))
+      expect(project.revenue_per_share).to eq(BigDecimal('3.62857142'))
       expect(project.revenue_per_share).to be_a(BigDecimal)
     end
 
@@ -793,7 +817,7 @@ describe Project do
 
       specify { expect(new_payment).to be_valid }
       specify { expect { new_payment.save! }.to_not raise_error }
-      specify { expect(new_payment.share_value).to eq(project.share_of_revenue_unpaid(1)) }
+      specify { expect(project.share_of_revenue_unpaid(1)).to eq(new_payment.share_value.truncate(2)) }
       specify { expect(new_payment.total_value).to eq(BigDecimal('36.28')) }
       specify { expect(new_payment.currency).to eq('USD') }
       specify { expect(new_payment.payee).to eq(authentication) }
@@ -808,7 +832,7 @@ describe Project do
 
       specify { expect(new_payment).to be_valid }
       specify { expect { new_payment.save! }.to_not raise_error }
-      specify { expect(new_payment.share_value).to eq(BigDecimal('3.628571428571428571')) }
+      specify { expect(new_payment.share_value).to eq(BigDecimal('3.62857142')) }
       specify { expect(new_payment.total_value).to eq(BigDecimal('36.28')) }
       specify { expect(new_payment.currency).to eq('USD') }
       specify { expect(new_payment.payee).to eq(authentication) }
