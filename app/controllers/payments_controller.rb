@@ -15,6 +15,7 @@ class PaymentsController < ApplicationController
 
     @payment = @project.payments.new_with_quantity quantity_redeemed: payment_params[:quantity_redeemed],
                                                    payee_auth: @current_auth
+    @payment.truncate_total_value_to_currency_precision
 
     if @payment.save
       redirect_to project_payments_path(@project)
