@@ -112,8 +112,8 @@ class Mom
     Award.new(params)
   end
 
-  def payment(**attrs )
-    Payment.new(**attrs)
+  def payment(currency: 'USD', **attrs )
+    Payment.new(currency: currency, **attrs)
   end
 
   def slack(authentication = create(:authentication))
