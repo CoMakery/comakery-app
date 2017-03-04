@@ -99,9 +99,11 @@ class Project < ActiveRecord::Base
     total_awarded - payments.sum(:quantity_redeemed)
   end
 
+  # truncated to project currency precision
+  # don't multiply this number
   def share_of_revenue_unpaid(awards)
     return BigDecimal(0) if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0 || awards.blank?
-    (BigDecimal(awards) * total_revenue_shared_unpaid) / BigDecimal(total_awards_outstanding)
+    ((BigDecimal(awards) * total_revenue_shared_unpaid) / BigDecimal(total_awards_outstanding)).truncate(currency_precision)
   end
 
   def total_revenue_shared
@@ -113,9 +115,11 @@ class Project < ActiveRecord::Base
     total_revenue_shared - payments.sum(:total_value)
   end
 
+  # truncated to 8 decimal places
+  # don't multiply this number
   def revenue_per_share
     return BigDecimal(0) if royalty_percentage.blank?|| total_awarded == 0
-    total_revenue_shared_unpaid / BigDecimal(total_awards_outstanding)
+    (total_revenue_shared_unpaid / BigDecimal(total_awards_outstanding)).truncate(8)
   end
 
   def community_award_types
@@ -203,5 +207,9 @@ class Project < ActiveRecord::Base
   def denomination_changeable
     errors.add(:denomination, "cannot be changed because the license terms are finalized") if license_finalized_was
     errors.add(:denomination, "cannot be changed because revenue has been recorded") if revenues.any? && denomination_changed?
+  end
+
+  def currency_precision
+    Comakery::Currency::PRECISION[denomination]
   end
 end
