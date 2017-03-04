@@ -168,21 +168,21 @@ describe "when redeeming revenue shares for payments" do
 
     it 'share value appears on project page' do
       visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$5.44of $11.61')
+      expect(page.find('.my-balance')).to have_content('$5.43of $11.61')
     end
 
     it 'holdings value appears on the project show page' do
       award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
       visit project_path(project)
       expect(page.find('.my-share')).to have_content('51of 101 awarded')
-      expect(page.find('.my-balance')).to have_content('$5.84of $11.61')
+      expect(page.find('.my-balance')).to have_content('$5.86of $11.61')
 
       award_type.awards.create_with_quantity(1, issuer: owner, authentication: owner_auth)
       award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
       visit project_path(project)
 
       expect(page.find('.my-share')).to have_content('52of 107')
-      expect(page.find('.my-balance')).to have_content('$5.60of $11.61')
+      expect(page.find('.my-balance')).to have_content('$5.64of $11.61')
     end
   end
 

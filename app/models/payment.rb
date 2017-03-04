@@ -11,6 +11,9 @@ class Payment < ActiveRecord::Base
   validate :must_use_the_precision_of_the_currency_for_total_payment
   validate :must_use_the_precision_of_the_currency_for_total_value
 
+  scope :total_awards_redeemed, -> { sum(:quantity_redeemed) }
+  scope :total_value_redeemed, -> { sum(:total_value) }
+
   def truncate_total_value_to_currency_precision
     return if total_value.blank?
     self.total_value = total_value.truncate(currency_precision)

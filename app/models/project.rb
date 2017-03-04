@@ -17,21 +17,16 @@ class Project < ActiveRecord::Base
     def new_with_quantity(quantity_redeemed:, payee_auth:)
       project = @association.owner
 
-      new total_value: project.share_of_revenue_unpaid(quantity_redeemed),
+      new(total_value: project.share_of_revenue_unpaid(quantity_redeemed),
           quantity_redeemed: quantity_redeemed,
           share_value: project.revenue_per_share,
           currency: project.denomination,
-          payee: payee_auth
+          payee: payee_auth).
+          tap { |n| n.truncate_total_value_to_currency_precision }
     end
 
-    def create_with_quantity(quantity_redeemed:, payee_auth:)
-      project = @association.owner
-
-      create total_value: project.share_of_revenue_unpaid(quantity_redeemed),
-             quantity_redeemed: quantity_redeemed,
-             share_value: project.revenue_per_share,
-             currency: project.denomination,
-             payee: payee_auth
+    def create_with_quantity(**attrs)
+      new_with_quantity(**attrs).tap {|n| n.save }
     end
   end
 
@@ -104,19 +99,14 @@ class Project < ActiveRecord::Base
     total_awarded - payments.sum(:quantity_redeemed)
   end
 
-  def share_of_revenue(awards)
-    return BigDecimal(0)  if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0
-    (BigDecimal(awards) * total_revenue_shared) / BigDecimal(total_awarded)
-  end
-
   def share_of_revenue_unpaid(awards)
-    return BigDecimal(0) if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0
+    return BigDecimal(0) if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0 || awards.blank?
     (BigDecimal(awards) * total_revenue_shared_unpaid) / BigDecimal(total_awards_outstanding)
   end
 
   def total_revenue_shared
     return BigDecimal(0) if royalty_percentage.blank? || project_coin?
-    total_revenue * (royalty_percentage * 0.01)
+    total_revenue * (royalty_percentage * BigDecimal('0.01'))
   end
 
   def total_revenue_shared_unpaid
@@ -125,7 +115,7 @@ class Project < ActiveRecord::Base
 
   def revenue_per_share
     return BigDecimal(0) if royalty_percentage.blank?|| total_awarded == 0
-    total_revenue_shared_unpaid / total_awards_outstanding
+    total_revenue_shared_unpaid / BigDecimal(total_awards_outstanding)
   end
 
   def community_award_types
@@ -162,7 +152,7 @@ class Project < ActiveRecord::Base
   end
 
   def royalty_percentage=(x)
-    x_truncated = BigDecimal(x,14).truncate(13) unless x.blank?
+    x_truncated = BigDecimal(x, 14).truncate(13) unless x.blank?
     write_attribute(:royalty_percentage, x_truncated)
   end
 

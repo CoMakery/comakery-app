@@ -155,4 +155,25 @@ describe Payment do
       end
     end
   end
+
+  describe 'scopes' do
+    let!(:project) { create :project, royalty_percentage: 100 }
+    let!(:award_type) { create :award_type, amount: 1, project: project }
+    let!(:payee_auth) { create :authentication }
+    let!(:award1) { award_type.awards.create_with_quantity(100,
+                                                   issuer: project.owner_account,
+                                                   authentication: payee_auth)}
+    let!(:revenues) { project.revenues.create!(amount: 50, currency: 'USD', recorded_by: project.owner_account)}
+
+    let!(:payment1) { project.payments.create_with_quantity(payee_auth: payee_auth, quantity_redeemed: 1) }
+    let!(:payment2) { project.payments.create_with_quantity(payee_auth: payee_auth, quantity_redeemed: 6) }
+
+    specify do
+      expect(Payment.total_awards_redeemed).to eq(7)
+    end
+
+    specify do
+      expect(Payment.total_value_redeemed).to eq(3.5)
+    end
+  end
 end

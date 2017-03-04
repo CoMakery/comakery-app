@@ -111,31 +111,6 @@ describe Authentication do
     let!(:award1) { create :award, authentication: contributor, award_type: award_type, quantity: 50 }
     let!(:award2) { create :award, authentication: contributor, award_type: award_type, quantity: 50 }
 
-    describe "#total_revenue_earned" do
-      describe 'no revenue' do
-        specify { expect(bystander.total_revenue_earned(project)).to eq 0 }
-
-        specify { expect(contributor.total_revenue_earned(project)).to eq 0 }
-      end
-
-      describe 'with revenue' do
-        let!(:reveue) { create :revenue, amount: 100, project: project }
-
-        specify { expect(bystander.total_revenue_earned(project)).to eq 0 }
-
-        specify { expect(contributor.total_revenue_earned(project)).to eq 100 }
-      end
-
-      describe 'with revenue and payments' do
-        let!(:reveue) { create :revenue, amount: 100, project: project }
-        let!(:payment) { project.payments.create_with_quantity quantity_redeemed: 25, payee_auth: contributor }
-
-        specify { expect(bystander.total_revenue_earned(project)).to eq 0 }
-
-        specify { expect(contributor.total_revenue_earned(project)).to eq 100 }
-      end
-    end
-
     describe "#total_revenue_paid" do
       describe 'no revenue' do
         specify { expect(bystander.total_revenue_paid(project)).to eq 0 }

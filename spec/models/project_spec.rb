@@ -613,6 +613,7 @@ describe Project do
         let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
         let(:issuer) { create :account }
         let(:authentication) { create :authentication }
+        let(:expected_revenue_per_share) {BigDecimal('3.628571428571428571')}
 
         before do
           project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
@@ -627,9 +628,19 @@ describe Project do
         end
 
         it "should deduct payments before calculating" do
-          project.payments.new_with_quantity(quantity_redeemed: 10, payee_auth: authentication).save!
+          payment = project.payments.create_with_quantity(quantity_redeemed: 10, payee_auth: authentication)
+
+          expect(payment.total_value).to eq( (10 * expected_revenue_per_share).truncate(2) )
+          expect(payment.total_value).to eq(36.28)
           expect(project.total_awards_outstanding).to eq(25)
-          expect(project.revenue_per_share).to eq(BigDecimal('3.62857142857142857144'))
+
+          shared_revenue = 1_27
+          payment_amount = 36.28
+          share_portion = Rational('1/25')
+
+          expected_revenue_per_share = (shared_revenue - payment_amount) * share_portion
+          expect(project.revenue_per_share).to eq(expected_revenue_per_share)
+          expect(project.revenue_per_share).to eq(3.6288)
         end
       end
     end
@@ -693,6 +704,14 @@ describe Project do
           expect(project.total_revenue_shared).to eq(127)
           expect(project.share_of_revenue_unpaid(17)).to eq(BigDecimal('61.685714285714285714'))
           expect(project.share_of_revenue_unpaid(17)).to be_a(BigDecimal)
+        end
+
+        it "should return 0 if passed nil input" do
+          expect(project.total_revenue).to eq(1270)
+          expect(project.total_awarded).to eq(35)
+          expect(project.royalty_percentage).to eq(10)
+          expect(project.total_revenue_shared).to eq(127)
+          expect(project.share_of_revenue_unpaid(nil)).to eq(BigDecimal('0'))
         end
       end
     end
@@ -775,18 +794,22 @@ describe Project do
       specify { expect(new_payment).to be_valid }
       specify { expect { new_payment.save! }.to_not raise_error }
       specify { expect(new_payment.share_value).to eq(project.share_of_revenue_unpaid(1)) }
-      specify { expect(new_payment.total_value).to eq(project.share_of_revenue_unpaid(new_payment.quantity_redeemed)) }
+      specify { expect(new_payment.total_value).to eq(BigDecimal('36.28')) }
       specify { expect(new_payment.currency).to eq('USD') }
       specify { expect(new_payment.payee).to eq(authentication) }
     end
 
     describe "payments.create_with_quantity" do
-      let(:new_payment) { project.payments.create_with_quantity(quantity_redeemed: 10, payee_auth: authentication) }
+      let!(:new_payment) { project.payments.create_with_quantity(quantity_redeemed: 10, payee_auth: authentication) }
+      # let!(:new_share_value) { (project.total_revenue_shared - new_payment.total_value)  }
+      let(:payment_total_value) { 36.28 }
+      let(:total_revenue_shared) { 127 }
+      let(:total_awards_outstanding) { 25 }
 
       specify { expect(new_payment).to be_valid }
       specify { expect { new_payment.save! }.to_not raise_error }
       specify { expect(new_payment.share_value).to eq(BigDecimal('3.628571428571428571')) }
-      specify { expect(new_payment.total_value).to eq(BigDecimal('36.285714285714285714')) }
+      specify { expect(new_payment.total_value).to eq(BigDecimal('36.28')) }
       specify { expect(new_payment.currency).to eq('USD') }
       specify { expect(new_payment.payee).to eq(authentication) }
     end
