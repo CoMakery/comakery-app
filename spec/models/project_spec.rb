@@ -628,7 +628,8 @@ describe Project do
         end
 
         it "should deduct payments before calculating" do
-          payment = project.payments.create_with_quantity(quantity_redeemed: 10, payee_auth: authentication)
+          payment = project.payments.create_with_quantity(quantity_redeemed: 10,
+                                                          payee_auth: authentication)
 
           expect(payment.total_value).to eq( (10 * expected_revenue_per_share).truncate(2) )
           expect(payment.total_value).to eq(36.28)
@@ -734,8 +735,9 @@ describe Project do
           expect(project.royalty_percentage).to eq(10)
           expect(project.total_revenue_shared).to eq(127)
 
-          share_price_with_18_decimal_precision = BigDecimal('61.685714285714285714')
-          expect(project.share_of_revenue_unpaid(17)).to eq(share_price_with_18_decimal_precision)
+          revenue_per_share = BigDecimal('3.62857142')
+          expect(project.revenue_per_share).to eq(revenue_per_share)
+          expect(project.share_of_revenue_unpaid(17)).to eq(revenue_per_share * 17)
         end
       end
     end

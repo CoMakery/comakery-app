@@ -10,6 +10,8 @@ class Payment < ActiveRecord::Base
   validate :payee_has_the_awards_they_are_redeeming
   validate :must_use_the_precision_of_the_currency_for_total_payment
   validate :must_use_the_precision_of_the_currency_for_total_value
+  validate :check_total_value_calculation
+  validate :check_total_payment_calculation
 
   scope :total_awards_redeemed, -> { sum(:quantity_redeemed) }
   scope :total_value_redeemed, -> { sum(:total_value) }
@@ -42,6 +44,19 @@ class Payment < ActiveRecord::Base
     if total_value.truncate(currency_precision) != total_value
       errors.add(:total_value, "must use only #{currency_precision} decimal places for #{currency}")
     end
+  end
+
+  def check_total_value_calculation
+    return if total_value.nil? || quantity_redeemed.nil?
+    return if (share_value * quantity_redeemed).truncate(currency_precision) == total_value
+    errors.add(:total_value, "#{total_value} does not match the quantity #{quantity_redeemed}" +
+        " and share value #{share_value}")
+  end
+
+  def check_total_payment_calculation
+    return if total_payment.nil? || transaction_fee.nil?
+    return if total_payment + transaction_fee == total_value
+    errors.add(:total_payment, "is not equal to the total value minus the transaction fee")
   end
 
   def currency_precision

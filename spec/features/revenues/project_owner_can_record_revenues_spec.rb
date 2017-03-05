@@ -152,7 +152,7 @@ describe "when recording revenue" do
       award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
       visit project_path(project)
       expect(page.find('.my-share')).to have_content('7,000of 7,000')
-      expect(page.find('.my-balance')).to have_content('$0.60of $0.60')
+      expect(page.find('.my-balance')).to have_content('$0.59of $0.60')
 
       award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
       visit project_path(project)

@@ -127,32 +127,71 @@ describe Payment do
       end
     end
 
+    describe "with quantity_redeemed, share_value, total_value, fee, and payment amount" do
+      let!(:project) { create :project }
+      let!(:award_type) { create :award_type, amount: 1, project: project }
+      let!(:payee_auth) { create :authentication }
+      let!(:payment) { Payment.new(payee: payee_auth,
+                                   project: project,
+                                   total_value: 1,
+                                   share_value: 1,
+                                   quantity_redeemed: 1,
+                                   transaction_fee: 0.1,
+                                   total_payment: 0.9,
+                                   currency: 'USD') }
+      let!(:award) { award_type.awards.create_with_quantity(100,
+                                                            issuer: project.owner_account,
+                                                            authentication: payee_auth) }
 
-    describe "#truncate_total_value_to_currency" do
-      let(:project) { create :project }
-      let(:award_type) { create :award_type, amount: 1, project: project }
-      let(:payee_auth) { create :authentication }
-      let(:payment) { Payment.new(payee: payee_auth, project: project, total_value: 0, share_value: 0, currency: 'USD') }
-
-      specify do
-        payment.currency = 'USD'
-        payment.total_value = 0.999
-        payment.truncate_total_value_to_currency_precision
-        expect(payment.total_value).to eq(0.99)
+      it 'is valid when they add up' do
+        expect(payment).to be_valid
       end
 
       specify do
-        payment.currency = 'BTC'
-        payment.total_value = 0.123456789
-        payment.truncate_total_value_to_currency_precision
-        expect(payment.total_value).to eq(0.12345678)
+        payment.total_value = 2
+        expect(payment).to_not be_valid
+        expect(payment.errors[:total_value]).to eq(["2.0 does not match the quantity 1 and share value 1.0"])
       end
 
       specify do
-        payment.total_value = nil
-        payment.truncate_total_value_to_currency_precision
-        expect(payment.total_value).to eq(nil)
+        payment.quantity_redeemed = 17
+        expect(payment).to_not be_valid
+        expect(payment.errors[:total_value]).to eq(["1.0 does not match the quantity 17 and share value 1.0"])
       end
+
+      specify do
+        payment.transaction_fee = 0.13
+        payment.total_payment = 1337
+        expect(payment).to_not be_valid
+        expect(payment.errors[:total_payment]).to eq(["is not equal to the total value minus the transaction fee"])
+      end
+    end
+  end
+
+  describe "#truncate_total_value_to_currency" do
+    let(:project) { create :project }
+    let(:award_type) { create :award_type, amount: 1, project: project }
+    let(:payee_auth) { create :authentication }
+    let(:payment) { Payment.new(payee: payee_auth, project: project, total_value: 0, share_value: 0, currency: 'USD') }
+
+    specify do
+      payment.currency = 'USD'
+      payment.total_value = 0.999
+      payment.truncate_total_value_to_currency_precision
+      expect(payment.total_value).to eq(0.99)
+    end
+
+    specify do
+      payment.currency = 'BTC'
+      payment.total_value = 0.123456789
+      payment.truncate_total_value_to_currency_precision
+      expect(payment.total_value).to eq(0.12345678)
+    end
+
+    specify do
+      payment.total_value = nil
+      payment.truncate_total_value_to_currency_precision
+      expect(payment.total_value).to eq(nil)
     end
   end
 
@@ -161,9 +200,9 @@ describe Payment do
     let!(:award_type) { create :award_type, amount: 1, project: project }
     let!(:payee_auth) { create :authentication }
     let!(:award1) { award_type.awards.create_with_quantity(100,
-                                                   issuer: project.owner_account,
-                                                   authentication: payee_auth)}
-    let!(:revenues) { project.revenues.create!(amount: 50, currency: 'USD', recorded_by: project.owner_account)}
+                                                           issuer: project.owner_account,
+                                                           authentication: payee_auth) }
+    let!(:revenues) { project.revenues.create!(amount: 50, currency: 'USD', recorded_by: project.owner_account) }
 
     let!(:payment1) { project.payments.create_with_quantity(payee_auth: payee_auth, quantity_redeemed: 1) }
     let!(:payment2) { project.payments.create_with_quantity(payee_auth: payee_auth, quantity_redeemed: 6) }
