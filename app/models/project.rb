@@ -17,7 +17,7 @@ class Project < ActiveRecord::Base
     def new_with_quantity(quantity_redeemed:, payee_auth:)
       project = @association.owner
 
-      new(total_value: project.share_of_revenue_unpaid(quantity_redeemed),
+      new(total_value: BigDecimal(quantity_redeemed) * project.revenue_per_share,
           quantity_redeemed: quantity_redeemed,
           share_value: project.revenue_per_share,
           currency: project.denomination,
@@ -99,11 +99,10 @@ class Project < ActiveRecord::Base
     total_awarded - payments.sum(:quantity_redeemed)
   end
 
-  # truncated to project currency precision
-  # don't multiply this number
+
   def share_of_revenue_unpaid(awards)
     return BigDecimal(0) if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0 || awards.blank?
-    ((BigDecimal(awards) * total_revenue_shared_unpaid) / BigDecimal(total_awards_outstanding)).truncate(currency_precision)
+    (BigDecimal(awards) * revenue_per_share).truncate(currency_precision)
   end
 
   def total_revenue_shared
@@ -116,7 +115,6 @@ class Project < ActiveRecord::Base
   end
 
   # truncated to 8 decimal places
-  # don't multiply this number
   def revenue_per_share
     return BigDecimal(0) if royalty_percentage.blank?|| total_awarded == 0
     (total_revenue_shared_unpaid / BigDecimal(total_awards_outstanding)).truncate(8)
