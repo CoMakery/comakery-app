@@ -12,6 +12,7 @@ class Payment < ActiveRecord::Base
   validate :must_use_the_precision_of_the_currency_for_total_value
   validate :check_total_value_calculation
   validate :check_total_payment_calculation
+  validate :check_minimum_payment
 
   scope :total_awards_redeemed, -> { sum(:quantity_redeemed) }
   scope :total_value_redeemed, -> { sum(:total_value) }
@@ -57,6 +58,18 @@ class Payment < ActiveRecord::Base
     return if total_payment.nil? || transaction_fee.nil?
     return if total_payment + transaction_fee == total_value
     errors.add(:total_payment, "is not equal to the total value minus the transaction fee")
+  end
+
+  def check_minimum_payment
+    errors.add(:total_value, "must be greater than or equal to #{currency_symbol}#{min_payment}")
+  end
+
+  def min_payment
+    Comakery::Currency::DEFAULT_MIN_PAYMENT[currency]
+  end
+
+  def currency_symbol
+    Comakery::Currency::DENOMINATIONS[currency]
   end
 
   def currency_precision

@@ -27,5 +27,10 @@ module Comakery
         BTC => 8,
         ETH => 8
     }
+    DEFAULT_MIN_PAYMENT = {
+        USD => 10,
+        BTC => 0.001,
+        ETH => 0.1
+    }
   end
 end
