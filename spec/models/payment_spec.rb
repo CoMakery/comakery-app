@@ -166,6 +166,52 @@ describe Payment do
         expect(payment.errors[:total_payment]).to eq(["is not equal to the total value minus the transaction fee"])
       end
     end
+
+    describe "has min total_value specific to the currency" do
+      let!(:project) { create :project }
+      let!(:award_type) { create :award_type, amount: 1, project: project }
+      let!(:payee_auth) { create :authentication }
+      let!(:payment) { Payment.new(payee: payee_auth,
+                                   project: project,
+                                   total_value: 1,
+                                   share_value: 1,
+                                   quantity_redeemed: 1,
+                                   transaction_fee: 0.1,
+                                   total_payment: 0.9,
+                                   currency: 'USD') }
+      let!(:award) { award_type.awards.create_with_quantity(100,
+                                                            issuer: project.owner_account,
+                                                            authentication: payee_auth) }
+
+      before do
+        payment.quantity_redeemed = 1
+        payment.total_payment = nil
+      end
+
+      specify do
+        payment.total_value = 9
+        payment.share_value = 9
+        payment.currency= 'USD'
+        expect(payment).to_not be_valid
+        expect(payment.errors[:total_value]).to eq(["must be greater than or equal to $10"])
+      end
+
+      specify do
+        payment.total_value = 0.0009
+        payment.share_value = 0.0009
+        payment.currency= 'BTC'
+        expect(payment).to_not be_valid
+        expect(payment.errors[:total_value]).to eq(["must be greater than or equal to ฿0.001"])
+      end
+
+      specify do
+        payment.total_value = 0.0009
+        payment.share_value = 0.0009
+        payment.currency= 'ETH'
+        expect(payment).to_not be_valid
+        expect(payment.errors[:total_value]).to eq(["must be greater than or equal to Ξ0.1"])
+      end
+    end
   end
 
   describe "#truncate_total_value_to_currency" do
