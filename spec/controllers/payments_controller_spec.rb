@@ -39,6 +39,7 @@ describe PaymentsController do
 
   describe '#create' do
     let!(:award_type) { create(:award_type, amount: 1, project: my_project) }
+    let!(:revenue) { create :revenue, amount: 100, project: my_project }
 
     before do
       award_type.awards.create_with_quantity(50, issuer: my_project.owner_account, authentication: account.slack_auth)

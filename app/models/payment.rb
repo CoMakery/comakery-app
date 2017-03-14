@@ -7,6 +7,8 @@ class Payment < ActiveRecord::Base
 
   validates_presence_of :project, :payee, :total_value, :share_value, :quantity_redeemed, :currency
   validates_numericality_of :quantity_redeemed, :total_value, greater_than_or_equal_to: 0
+  validates_numericality_of :total_payment, greater_than_or_equal_to: 0, allow_nil: true
+
   validate :payee_has_the_awards_they_are_redeeming
   validate :must_use_the_precision_of_the_currency_for_total_payment
   validate :must_use_the_precision_of_the_currency_for_total_value
@@ -61,6 +63,7 @@ class Payment < ActiveRecord::Base
   end
 
   def check_minimum_payment
+    return if total_value.blank? || currency.blank? || total_value >= min_payment
     errors.add(:total_value, "must be greater than or equal to #{currency_symbol}#{min_payment}")
   end
 
