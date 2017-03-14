@@ -23,7 +23,7 @@ describe Payment do
     let(:project) { create :project }
     let(:award_type) { create :award_type, amount: 1, project: project }
     let(:payee_auth) { create :authentication }
-    let(:payment) { Payment.new(payee: payee_auth, project: project, total_value: 0, share_value: 0, currency: 'USD') }
+    let(:payment) { Payment.new(payee: payee_auth, project: project, total_value: 1, share_value: 1, currency: 'USD') }
 
     it 'Cannot redeem less than 0 shares' do
       payment.quantity_redeemed = -1
@@ -34,7 +34,7 @@ describe Payment do
     it 'Total value cannot be less than 0' do
       payment.total_value = -1
       expect(payment).to_not be_valid
-      expect(payment.errors[:total_value]).to eq(["must be greater than or equal to 0"])
+      expect(payment.errors[:total_value]).to include("must be greater than or equal to 0")
     end
 
     it 'Cannot redeem more shares than they have' do
@@ -55,6 +55,8 @@ describe Payment do
       award_type.awards.create_with_quantity(1, issuer: project.owner_account, authentication: payee_auth)
       expect(payee_auth.total_awards_remaining(project)).to eq(1)
       payment.quantity_redeemed = 1
+      payment.share_value = 1
+      payment.total_value = 1
       payment.save!
       payment.quantity_redeemed = 2
       expect(payment).to_not be_valid
@@ -67,6 +69,7 @@ describe Payment do
       payment.quantity_redeemed = 1
       payment.save!
       payment.quantity_redeemed = 2
+      payment.total_value = 2
       expect(payment).to be_valid
     end
 
@@ -74,8 +77,10 @@ describe Payment do
       award_type.awards.create_with_quantity(2, issuer: project.owner_account, authentication: payee_auth)
       expect(payee_auth.total_awards_remaining(project)).to eq(2)
       payment.quantity_redeemed = 2
+      payment.total_value = 2
       payment.save!
       payment.quantity_redeemed = 1
+      payment.total_value = 1
       expect(payment).to be_valid
     end
 
@@ -189,11 +194,11 @@ describe Payment do
       end
 
       specify do
-        payment.total_value = 9
-        payment.share_value = 9
+        payment.total_value = 0.9
+        payment.share_value = 0.9
         payment.currency= 'USD'
         expect(payment).to_not be_valid
-        expect(payment.errors[:total_value]).to eq(["must be greater than or equal to $10"])
+        expect(payment.errors[:total_value]).to eq(["must be greater than or equal to $1"])
       end
 
       specify do
@@ -211,6 +216,16 @@ describe Payment do
         expect(payment).to_not be_valid
         expect(payment.errors[:total_value]).to eq(["must be greater than or equal to Ξ0.1"])
       end
+    end
+
+    it 'total_payment cannot be less than 0' do
+      payment.total_value = 1
+      payment.share_value = 1
+      payment.transaction_fee = 1.5
+      payment.total_payment = -0.5
+      payment.currency= 'USD'
+      expect(payment).to_not be_valid
+      expect(payment.errors[:total_payment]).to eq(["must be greater than or equal to 0"])
     end
   end
 
@@ -248,7 +263,7 @@ describe Payment do
     let!(:award1) { award_type.awards.create_with_quantity(100,
                                                            issuer: project.owner_account,
                                                            authentication: payee_auth) }
-    let!(:revenues) { project.revenues.create!(amount: 50, currency: 'USD', recorded_by: project.owner_account) }
+    let!(:revenues) { project.revenues.create!(amount: 300, currency: 'USD', recorded_by: project.owner_account) }
 
     let!(:payment1) { project.payments.create_with_quantity(payee_auth: payee_auth, quantity_redeemed: 1) }
     let!(:payment2) { project.payments.create_with_quantity(payee_auth: payee_auth, quantity_redeemed: 6) }
@@ -258,7 +273,7 @@ describe Payment do
     end
 
     specify do
-      expect(Payment.total_value_redeemed).to eq(3.5)
+      expect(Payment.total_value_redeemed).to eq(21.00)
     end
   end
 end

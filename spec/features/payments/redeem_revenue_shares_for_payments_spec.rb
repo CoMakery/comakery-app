@@ -12,7 +12,7 @@ describe "when redeeming revenue shares for payments" do
                           owner_account: owner,
                           slack_team_id: "lazercats",
                           require_confidentiality: false) }
-  let!(:revenue) { create(:revenue, project: project, amount: 123.45, currency: 'USD') }
+  let!(:revenue) { create(:revenue, project: project, amount: 1234.5, currency: 'USD') }
 
   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1, name: 'Code Contribution') }
 
@@ -47,9 +47,9 @@ describe "when redeeming revenue shares for payments" do
 
     within('.summary-table') do
       expect(page.find('.my-revenue-shares')).to have_content('50 of 100')
-      expect(page.find('.my-balance')).to have_content('$61.72 of $123.45 total')
+      expect(page.find('.my-balance')).to have_content('$617.25 of $1,234.50 total')
     end
-    expect(page.find('.revenue-per-share')).to have_content(/^\$1.23450000$/)
+    expect(page.find('.revenue-per-share')).to have_content(/^\$12.34500000$/)
 
     fill_in :payment_quantity_redeemed, with: 2
     click_on "Redeem My Revenue Shares"
@@ -58,8 +58,8 @@ describe "when redeeming revenue shares for payments" do
     within ".payments" do
       expect(page.find('.payee')).to have_content(same_team_account_authentication.display_name)
       expect(page.find('.quantity-redeemed')).to have_content('2')
-      expect(page.find('.share-value')).to have_content(/^\$1.23450000$/)
-      expect(page.find('.total-value')).to have_content('$2.46')
+      expect(page.find('.share-value')).to have_content(/^\$12.34500000$/)
+      expect(page.find('.total-value')).to have_content('$24.69')
       expect(page.find('.status')).to have_content('Unpaid')
       expect(page.find('.transaction-fee').value).to be_blank
     end
@@ -67,10 +67,10 @@ describe "when redeeming revenue shares for payments" do
 
     within('.summary-table') do
       expect(page.find('.my-revenue-shares')).to have_content('48 of 98')
-      expect(page.find('.my-balance')).to have_content('$59.26 of $120.99 total')
+      expect(page.find('.my-balance')).to have_content('$592.56 of $1,209.81 total')
     end
 
-    expect(page.find('.revenue-per-share')).to have_content(/^\$1.23459183$/)
+    expect(page.find('.revenue-per-share')).to have_content(/^\$12.34500000$/)
   end
 
   it "owner can reconcile revenue shares" do
@@ -84,8 +84,8 @@ describe "when redeeming revenue shares for payments" do
     within ".payments" do
       expect(page.find('.payee')).to have_content(same_team_account_authentication.display_name)
       expect(page.find('.quantity-redeemed')).to have_content('2')
-      expect(page.find('.share-value')).to have_content('$1.23')
-      expect(page.find('.total-value')).to have_content('$2.46')
+      expect(page.find('.share-value')).to have_content('$12.34500000')
+      expect(page.find('.total-value')).to have_content('$24.69')
       expect(page.find('.transaction-fee').value).to be_blank
       expect(page.find('.status')).to have_content('Unpaid')
 
@@ -97,8 +97,8 @@ describe "when redeeming revenue shares for payments" do
     within ".payments" do
       expect(page.find('.payee')).to have_content(same_team_account_authentication.display_name)
       expect(page.find('.quantity-redeemed')).to have_content('2')
-      expect(page.find('.share-value')).to have_content('$1.23')
-      expect(page.find('.total-value')).to have_content('$2.46')
+      expect(page.find('.share-value')).to have_content('$12.34500000')
+      expect(page.find('.total-value')).to have_content('$24.69')
 
       expect(page.find('.transaction-fee')).to have_content("$0.50")
       expect(page.find('.status')).to have_content(/^Paid$/)
@@ -127,9 +127,9 @@ describe "when redeeming revenue shares for payments" do
     end
 
     within ".payments" do
-      expect(page.all('.total-value')[0]).to have_content('$1.23')
-      expect(page.all('.total-value')[1]).to have_content('$2.46')
-      expect(page.all('.total-value')[2]).to have_content('$3.70')
+      expect(page.all('.total-value')[0]).to have_content('$12.34')
+      expect(page.all('.total-value')[1]).to have_content('$24.69')
+      expect(page.all('.total-value')[2]).to have_content('$37.03')
     end
   end
 
@@ -143,8 +143,8 @@ describe "when redeeming revenue shares for payments" do
     within ".payments" do
       expect(page.find('.payee')).to have_content(same_team_account_authentication.display_name)
       expect(page.find('.quantity-redeemed')).to have_content('2')
-      expect(page.find('.share-value')).to have_content('$1.23')
-      expect(page.find('.total-value')).to have_content('$2.46')
+      expect(page.find('.share-value')).to have_content('$12.34500000')
+      expect(page.find('.total-value')).to have_content('$24.69')
       expect(page.find('.transaction-fee').value).to be_blank
       expect(page.find('.status')).to have_content('Unpaid')
 
@@ -168,21 +168,21 @@ describe "when redeeming revenue shares for payments" do
 
     it 'share value appears on project page' do
       visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$5.43of $11.61')
+      expect(page.find('.my-balance')).to have_content('$54.32of $116.06')
     end
 
     it 'holdings value appears on the project show page' do
       award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
       visit project_path(project)
       expect(page.find('.my-share')).to have_content('51of 101 awarded')
-      expect(page.find('.my-balance')).to have_content('$5.86of $11.61')
+      expect(page.find('.my-balance')).to have_content('$58.60of $116.06')
 
       award_type.awards.create_with_quantity(1, issuer: owner, authentication: owner_auth)
       award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
       visit project_path(project)
 
       expect(page.find('.my-share')).to have_content('52of 107')
-      expect(page.find('.my-balance')).to have_content('$5.64of $11.61')
+      expect(page.find('.my-balance')).to have_content('$56.40of $116.06')
     end
   end
 
@@ -249,8 +249,8 @@ describe "when redeeming revenue shares for payments" do
 
         expect(page.find('.payee')).to have_content('John Doe')
         expect(page.find('.quantity-redeemed')).to have_content('50')
-        expect(page.find('.share-value')).to have_content('$44.44450000')
-        expect(page.find('.total-value')).to have_content('$2,222.22')
+        expect(page.find('.share-value')).to have_content('$55.55500000')
+        expect(page.find('.total-value')).to have_content('$2,777.75')
       end
     end
 
@@ -272,8 +272,8 @@ describe "when redeeming revenue shares for payments" do
 
         expect(page.find('.payee')).to have_content('John Doe')
         expect(page.find('.quantity-redeemed')).to have_content('50')
-        expect(page.find('.share-value')).to have_content("฿1.23450000")
-        expect(page.find('.total-value')).to have_content("฿61.72500000")
+        expect(page.find('.share-value')).to have_content("฿12.34500000")
+        expect(page.find('.total-value')).to have_content("฿617.25000000")
       end
     end
 
@@ -295,8 +295,8 @@ describe "when redeeming revenue shares for payments" do
 
         expect(page.find('.payee')).to have_content('John Doe')
         expect(page.find('.quantity-redeemed')).to have_content('50')
-        expect(page.find('.share-value')).to have_content("Ξ1.23450000")
-        expect(page.find('.total-value')).to have_content("Ξ61.72500000")
+        expect(page.find('.share-value')).to have_content("Ξ12.34500000")
+        expect(page.find('.total-value')).to have_content("Ξ617.25000000")
       end
     end
   end

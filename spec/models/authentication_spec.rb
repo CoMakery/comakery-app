@@ -67,6 +67,7 @@ describe Authentication do
     let!(:bystander) { create(:authentication) }
     let!(:project) { create :project }
     let!(:award_type) { create(:award_type, amount: 10, project: project) }
+    let!(:revenue) { create :revenue, amount: 1000, project: project }
 
     before do
       award_type.awards.create_with_quantity(2, issuer: project.owner_account, authentication: contributor )
@@ -88,6 +89,7 @@ describe Authentication do
     let!(:contributor) { create(:authentication) }
     let!(:bystander) { create(:authentication) }
     let!(:project) { create :project }
+    let!(:revenue) { create :revenue, amount: 1000, project: project }
     let!(:award_type) { create(:award_type, amount: 10, project: project) }
     let!(:award1) { create :award, authentication: contributor, award_type: award_type }
     let!(:award2) { create :award, authentication: contributor, award_type: award_type }
