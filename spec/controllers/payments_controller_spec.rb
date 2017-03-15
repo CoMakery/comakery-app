@@ -53,6 +53,10 @@ describe PaymentsController do
 
       specify { expect(controller).to have_received(:policy_scope).with(Project) }
 
+      specify { expect(controller).to have_received(:authorize).with(kind_of(Payment), :create?) }
+
+      specify { expect(controller).to have_received(:authorize).with(kind_of(Project)) }
+
       specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
       specify { expect(response).to redirect_to(project_payments_path(my_project)) }
@@ -112,7 +116,9 @@ describe PaymentsController do
 
     specify { expect(controller).to have_received(:policy_scope).with(Project) }
 
-    specify { expect(controller).to have_received(:policy_scope).with(Project) }
+    specify { expect(controller).to have_received(:authorize).with(kind_of(Payment), :update?) }
+
+    specify { expect(controller).to have_received(:authorize).with(kind_of(Project)) }
 
     specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 

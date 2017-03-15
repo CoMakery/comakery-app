@@ -20,6 +20,9 @@ describe "when redeeming revenue shares for payments" do
   let!(:same_team_account) { create(:account, ethereum_wallet: "0x#{'1'*40}") }
   let!(:same_team_account_authentication) { create(:authentication, account: same_team_account, slack_team_id: "lazercats", slack_team_name: "Lazer Cats") }
 
+  let!(:ray_dog_account) { create(:account, ethereum_wallet: "0x#{'1'*40}") }
+  let!(:ray_dog_auth) { create(:authentication, account: ray_dog_account, slack_team_id: "raydogs", slack_team_name: "Ray Dogs") }
+
   before do
     stub_slack_user_list
     stub_slack_channel_list
@@ -108,8 +111,8 @@ describe "when redeeming revenue shares for payments" do
     end
   end
 
-  xit "non team member of public project can't redeem shares" do
-    login other_account
+  it "non team member of public project can't redeem shares" do
+    login ray_dog_account
     visit project_path(project)
     click_link "Payments"
 
