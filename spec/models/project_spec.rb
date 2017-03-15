@@ -539,14 +539,18 @@ describe Project do
         expect(project.total_revenue_shared_unpaid).to be_a(BigDecimal)
       end
 
-      xit 'with percentage, revenue, and payments' do
+      it 'with percentage, revenue, and payments' do
         project.update(royalty_percentage: 10)
         project_award_type.awards.create_with_quantity(9, issuer: project.owner_account, authentication: authentication)
         project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
         project.payments.new_with_quantity(quantity_redeemed: 2, payee_auth: authentication).save!
 
-        expect(project.total_revenue_shared_unpaid).to eq(80.0)
-        fail
+        expect(project.total_awarded).to eq(9)
+        expect(project.total_awards_outstanding).to eq(7)
+        expect(project.total_revenue_shared).to eq(100)
+        expect(project.payments.sum(:total_value)).to eq(22.22)
+
+        expect(project.total_revenue_shared_unpaid).to eq(77.78)
       end
     end
 
