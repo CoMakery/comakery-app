@@ -17,6 +17,8 @@ class PaymentsController < ApplicationController
                                                    payee_auth: @current_auth
     @payment.truncate_total_value_to_currency_precision
 
+    authorize @payment, :create?
+
     if @payment.save
       redirect_to project_payments_path(@project)
     else
@@ -29,6 +31,8 @@ class PaymentsController < ApplicationController
 
     update_params = params.require(:payment).permit :transaction_fee, :transaction_reference, :id
     @payment = Payment.find(params['id'])
+
+    authorize @payment, :update?
 
     @payment.transaction_fee = update_params[:transaction_fee]
     @payment.transaction_reference = update_params[:transaction_reference]
