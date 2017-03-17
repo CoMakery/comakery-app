@@ -1,5 +1,6 @@
 class AwardsController < ApplicationController
   before_filter :assign_project, only: [:create, :index]
+  before_filter :assign_current_auth, only: [:index]
   skip_before_filter :require_login, only: :index
 
   def index
@@ -45,5 +46,9 @@ class AwardsController < ApplicationController
 
   def assign_project
     @project = policy_scope(Project).find(params[:project_id]).decorate
+  end
+
+  def assign_current_auth
+    @current_auth = current_account&.slack_auth&.decorate
   end
 end

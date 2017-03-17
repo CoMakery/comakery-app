@@ -44,6 +44,49 @@ describe Authentication do
     end
   end
 
+  describe "#percent_unpaid" do
+    let!(:auth1) { create :authentication }
+    let!(:auth2) { create :authentication }
+    let!(:project) { create :project }
+    let!(:award_type) { create(:award_type, amount: 1, project: project) }
+    let!(:revenue) { create :revenue, amount: 1000, project: project }
+
+    specify { expect(auth1.percent_unpaid(project)).to eq(0) }
+
+    it "handles divide by 0 risk" do
+      award_type.awards.create_with_quantity(1, issuer: project.owner_account, authentication: auth1 )
+      expect(auth1.percent_unpaid(project)).to eq(100)
+    end
+
+    it "handles two awardees" do
+      award_type.awards.create_with_quantity(1, issuer: project.owner_account, authentication: auth1 )
+      award_type.awards.create_with_quantity(1, issuer: project.owner_account, authentication: auth2 )
+      expect(auth1.percent_unpaid(project)).to eq(50)
+    end
+
+    it "calculates only unpaid awards" do
+      award_type.awards.create_with_quantity(6, issuer: project.owner_account, authentication: auth1 )
+      award_type.awards.create_with_quantity(6, issuer: project.owner_account, authentication: auth2 )
+      expect(auth1.percent_unpaid(project)).to eq(50)
+
+      project.payments.create_with_quantity(quantity_redeemed: 2, payee_auth: auth1)
+      expect(auth1.percent_unpaid(project)).to eq(40)
+      expect(auth2.percent_unpaid(project)).to eq(60)
+
+      project.payments.create_with_quantity(quantity_redeemed: 5, payee_auth: auth2)
+      expect(auth1.percent_unpaid(project)).to eq(80)
+      expect(auth2.percent_unpaid(project)).to eq(20)
+    end
+
+    it 'returns 8 decimal point precision BigDecimal' do
+      award_type.awards.create_with_quantity(1, issuer: project.owner_account, authentication: auth1 )
+      award_type.awards.create_with_quantity(2, issuer: project.owner_account, authentication: auth2 )
+
+      expect(auth1.percent_unpaid(project)).to eq(BigDecimal('33.' + ('3' * 8)))
+      expect(auth2.percent_unpaid(project)).to eq(BigDecimal('66.' + ('6' * 8)))
+    end
+  end
+
   describe "#total_awards_earned" do
     let!(:contributor) { create(:authentication) }
     let!(:bystander) { create(:authentication) }

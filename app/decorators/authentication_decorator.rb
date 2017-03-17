@@ -34,6 +34,10 @@ class AuthenticationDecorator < Draper::Decorator
     pretty_currency(project, total_revenue_paid(project))
   end
 
+  def percentage_of_unpaid_pretty(project)
+    "#{number_with_precision(percent_unpaid(project).truncate(1), precision: 1)}%"
+  end
+
   private
 
   def pretty_currency(project, amount_to_make_pretty)
