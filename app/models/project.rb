@@ -26,7 +26,7 @@ class Project < ActiveRecord::Base
     end
 
     def create_with_quantity(**attrs)
-      new_with_quantity(**attrs).tap {|n| n.save }
+      new_with_quantity(**attrs).tap { |n| n.save }
     end
   end
 
@@ -96,7 +96,11 @@ class Project < ActiveRecord::Base
   end
 
   def total_awards_outstanding
-    total_awarded - payments.sum(:quantity_redeemed)
+    total_awarded - total_awards_redeemed
+  end
+
+  def total_awards_redeemed
+    payments.sum(:quantity_redeemed)
   end
 
 
@@ -110,8 +114,12 @@ class Project < ActiveRecord::Base
     total_revenue * (royalty_percentage * BigDecimal('0.01'))
   end
 
+  def total_paid_to_contributors
+    payments.sum(:total_value)
+  end
+
   def total_revenue_shared_unpaid
-    total_revenue_shared - payments.sum(:total_value)
+    total_revenue_shared - total_paid_to_contributors
   end
 
   # truncated to 8 decimal places

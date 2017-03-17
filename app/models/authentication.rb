@@ -44,6 +44,12 @@ class Authentication < ActiveRecord::Base
     project.share_of_revenue_unpaid(total_awards_remaining(project))
   end
 
+  def percent_unpaid(project)
+    return BigDecimal('0') if project.total_awards_outstanding == 0
+    precise_percentage = (BigDecimal(total_awards_remaining(project)) * 100) / BigDecimal(project.total_awards_outstanding)
+    precise_percentage.truncate(8)
+  end
+
   def self.find_or_create_from_auth_hash!(auth_hash)
     slack_auth_hash = SlackAuthHash.new(auth_hash)
 

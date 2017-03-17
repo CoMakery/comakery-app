@@ -20,15 +20,14 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           }
 
           li_if(policy(project).show_contributions?) {
-            a(href: project_awards_path(project)) {
-              text "Awards"
+            a(href: project_contributors_path(project)) {
+              text " Contributors"
             }
           }
 
-
           li_if(policy(project).show_contributions?) {
-            a(href: project_contributors_path(project)) {
-              text " Contributors"
+            a(href: project_awards_path(project)) {
+              text "Awards"
             }
           }
 

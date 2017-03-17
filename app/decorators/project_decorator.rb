@@ -7,6 +7,11 @@ class ProjectDecorator < Draper::Decorator
       "project_coin" => "Project Coins",
   }
 
+  OUTSTANDING_AWARD_DESCRIPTIONS = {
+      "revenue_share" => "Unpaid Revenue Shares",
+      "project_coin" => "Project Coins",
+  }
+
   def description_html
     Comakery::Markdown.to_html(object.description)
   end
@@ -37,6 +42,10 @@ class ProjectDecorator < Draper::Decorator
 
   def payment_description
     PAYMENT_DESCRIPTIONS[project.payment_type]
+  end
+
+  def outstanding_award_description
+    OUTSTANDING_AWARD_DESCRIPTIONS[project.payment_type]
   end
 
   def royalty_percentage_pretty
@@ -71,6 +80,14 @@ class ProjectDecorator < Draper::Decorator
     number_with_precision(total_awards_outstanding, precision: 0, delimiter: ',')
   end
 
+  def total_awarded_pretty
+    number_with_precision(total_awarded, precision: 0, delimiter: ',')
+  end
+
+  def total_awards_redeemed_pretty
+    number_with_precision(total_awards_redeemed, precision: 0, delimiter: ',')
+  end
+
   def revenue_per_share_pretty
     precision = Comakery::Currency::PER_SHARE_PRECISION[denomination]
     "#{currency_denomination}#{number_with_precision(revenue_per_share.truncate(precision),
@@ -78,9 +95,16 @@ class ProjectDecorator < Draper::Decorator
                                                      delimiter: ',')}"
   end
 
-  def total_revenue_shared_unpaid_rounded
+  def total_revenue_shared_unpaid_pretty
     precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
     "#{currency_denomination}#{number_with_precision(total_revenue_shared_unpaid.truncate(precision),
+                                                     precision: precision,
+                                                     delimiter: ',')}"
+  end
+
+  def total_paid_to_contributors_pretty
+    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
+    "#{currency_denomination}#{number_with_precision(total_paid_to_contributors.truncate(precision),
                                                      precision: precision,
                                                      delimiter: ',')}"
   end

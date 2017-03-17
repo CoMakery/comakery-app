@@ -6,51 +6,21 @@ class Views::Payments::Index < Views::Projects::Base
     column {
       if current_auth.present?
         full_row {
-          column("large-6 medium-12 summary") {
-            row {
-              h3 "My Summary"
-              div(class: 'table-box') {
-                table(class: "table-scroll summary-table") {
-                  tr(class: '') {
-                    td { text "My Revenue Shares" }
-                    td(class: "coin-numbers my-revenue-shares") {
-                      span {
-                        text current_auth.total_awards_remaining_pretty(project)
-                      }
-                      span { text " of #{project.total_awards_outstanding_pretty} total" }
-                    }
-                  }
-
-                  tr(class: '') {
-                    td { text "My Balance" }
-                    td(class: "coin-numbers my-balance") {
-                      span {
-                        text current_auth.total_revenue_unpaid_remaining_pretty(project)
-                      }
-                      span { text " of #{project.total_revenue_shared_unpaid_rounded} total" }
-                    }
-                  }
-                }
-              }
-            }
-          }
-          column("large-6 medium-12 content-box") {
+          column("small-12 content-box") {
             if policy(project).team_member?
               form_for [project, payment], html: {class: 'conversational-form'} do |f|
                 row {
                   with_errors(payment, :quantity_redeemed) {
                     text "Redeem "
                     f.number_field(:quantity_redeemed, class: 'input-group-field')
-                    text " revenue shares"
+                    text "of my #{current_auth.total_awards_remaining_pretty(project)} revenue shares"
+                    text " valued at #{current_auth.total_revenue_unpaid_remaining_pretty(project)}"
                   }
                 }
-
                 row {
-                  p {
-                    text "At "
-                    span(class: 'revenue-per-share') { text project.revenue_per_share_pretty }
-                    text " each"
-                  }
+                  text "For "
+                  span(class: 'revenue-per-share') { text project.revenue_per_share_pretty }
+                  text " each"
                 }
 
                 row {
@@ -59,6 +29,12 @@ class Views::Payments::Index < Views::Projects::Base
               end
             end
           }
+        }
+
+        full_row {
+          render partial: 'shared/table/my_balance'
+          render partial: 'shared/table/unpaid_pool'
+          render partial: 'shared/table/current_share_value'
         }
       end
       br
