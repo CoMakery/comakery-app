@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302173357) do
+ActiveRecord::Schema.define(version: 20170318000641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,15 +53,15 @@ ActiveRecord::Schema.define(version: 20170302173357) do
   add_index "accounts", ["reset_password_token"], name: "index_accounts_on_reset_password_token", using: :btree
 
   create_table "authentications", force: :cascade do |t|
-    t.integer  "account_id",               null: false
-    t.string   "provider",                 null: false
+    t.integer  "account_id",                       null: false
+    t.string   "provider",                         null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "slack_team_name",          null: false
-    t.string   "slack_team_id",            null: false
-    t.string   "slack_user_id",            null: false
+    t.string   "slack_team_name",                  null: false
+    t.string   "slack_team_id",                    null: false
+    t.string   "slack_user_id",                    null: false
     t.string   "slack_token"
-    t.string   "slack_user_name",          null: false
+    t.string   "slack_user_name",                  null: false
     t.string   "slack_first_name"
     t.string   "slack_last_name"
     t.string   "slack_team_domain"
@@ -69,6 +69,21 @@ ActiveRecord::Schema.define(version: 20170302173357) do
     t.string   "slack_team_image_132_url"
     t.string   "slack_image_32_url"
     t.jsonb    "oauth_response"
+    t.text     "bank_account_account_holder_type"
+    t.text     "bank_account_bank_name"
+    t.text     "bank_account_country"
+    t.text     "bank_account_currency"
+    t.text     "bank_account_id"
+    t.text     "bank_account_last4"
+    t.text     "bank_account_name"
+    t.text     "bank_account_object"
+    t.text     "bank_account_routing_number"
+    t.text     "bank_account_status"
+    t.text     "stripe_token_client_ip"
+    t.datetime "stripe_token_created"
+    t.text     "stripe_token_id"
+    t.text     "stripe_token_type"
+    t.boolean  "stripe_token_livemode"
   end
 
   add_index "authentications", ["account_id"], name: "index_authentications_on_account_id", using: :btree
@@ -163,6 +178,7 @@ ActiveRecord::Schema.define(version: 20170302173357) do
     t.integer  "maximum_royalties_per_month"
     t.boolean  "license_finalized",                                     default: false, null: false
     t.integer  "denomination",                                          default: 0,     null: false
+    t.text     "revenue_stream"
     t.datetime "revenue_sharing_end_date"
   end
 

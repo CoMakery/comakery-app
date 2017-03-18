@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   get "/account" => "authentications#show", as: "account"
   resource :account, only: [:update]
-  resource :authentication, only: [:show]
+  resource :authentication, only: [:show, :update]
 
   get "/auth/slack/callback" => "sessions#create"
   get "/auth/slack" => "sessions#create", as: :login

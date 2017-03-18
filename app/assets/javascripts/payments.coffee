@@ -18,3 +18,20 @@ class Payment
 
   @stripeResponseHandler: (status, response) ->
     console.log({status, response})
+    params = {}
+
+    for key, value of response.bank_account
+      params['bank_account_'+key] = value
+    delete response.bank_account
+
+    for key, value of response
+      params['stripe_token_'+key] = value
+
+    params.stripe_token_created = (new Date(params.stripe_token_created * 1000)).toString()
+
+    $.ajax({
+      type: "PUT",
+      url: '/authentication',
+      data: params,
+      success: (e) -> console.log(e),
+    });
