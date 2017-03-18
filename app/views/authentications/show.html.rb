@@ -2,14 +2,78 @@ class Views::Authentications::Show < Views::Base
   needs :current_account, :authentication, :awards
 
   def content
+    h4 'Bank Account to Receive Payments'
+    div {
+      row {
+        column("large-6 small-12") {
+          label {
+            text "Routing Number"
+            text_field_tag 'routing_number'
+          }
+        }
+        column("large-6 small-12") {
+          label {
+            text "Bank Account Number"
+            text_field_tag 'account_number'
+          }
+        }
+      }
+      row {
+        column("large-6 small-12") {
+          label {
+            text "Account Holder Name"
+            text_field_tag 'account_holder_name'
+          }
+        }
+        column("large-6 small-12") {
+          label {
+            text "Account Holder Type"
+            options = capture do
+              options_for_select([
+                  ["Individual", "individual"],
+                  ["Company", "company"]
+              ])
+            end
+            select_tag 'account_holder_type', options
+          }
+        }
+      }
+      row {
+        column("large-6 small-12") {
+          label {
+            text "Country"
+            options = capture do
+              options_for_select(['US'])
+            end
+            select_tag 'country', options
+          }
+        }
+        column("large-6 small-12") {
+          label {
+            text "Currency"
+            options = capture do
+              options_for_select(['USD'])
+            end
+            select_tag 'currency', options
+          }
+        }
+      }
+      row {
+        column("large-6 small-12") {
+          button_tag "Submit", class: buttonish(:expand), id: 'stripe_bank_account_submit'
+        }
+      }
+    }
+    br
+    br
+
+    h4 'Ethereum'
+
     p {
       text "You can download an Ethereum wallet from "
       link_to("Ethereum.org", "http://www.ethereum.org", target: "_blank")
       text " to create an account. Enter your Ethereum account address below. "
       text "Then you will receive your CoMakery awards in your Ethereum account!"
-    }
-    p {
-      link_to("Get a wallet now", "http://www.ethereum.org", target: "_blank", class: buttonish)
     }
     div(class: "ethereum_wallet") {
       div(class: "hide edit-ethereum-wallet") {

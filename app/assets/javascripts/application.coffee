@@ -23,6 +23,8 @@
 $ ->
   $(document).foundation()
 
+  Stripe.setPublishableKey('pk_test_DuBJXYk5G6VvuuLT5fYsSbBj')
+
   # lets hope we never have more than 1000 initial records (award types only have 3 by default)
   nextIdentifier = 1000
   $("*[data-duplicate]").click (e)->
