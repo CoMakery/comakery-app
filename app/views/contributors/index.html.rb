@@ -7,7 +7,7 @@ class Views::Contributors::Index < Views::Projects::Base
       full_row {
         if award_data[:contributions].present?
           column("large-4 medium-12 summary float-left") {
-              h3 "Lifetime #{project.payment_description} Awarded"
+              h3 "Lifetime #{project.payment_description} Awarded To Contributors"
 
               p {
                 div(id: "award-percentages", class: "royalty-pie") {}
@@ -24,7 +24,7 @@ class Views::Contributors::Index < Views::Projects::Base
 
       full_row {
         if award_data[:contributions_summary].present?
-          div(class: "table-scroll table-box .contributors") {
+          div(class: "table-scroll table-box contributors") {
             table(class: "table-scroll", style: "width: 100%") {
               tr(class: "header-row") {
                 th "Contributors"

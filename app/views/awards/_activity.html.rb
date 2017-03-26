@@ -2,11 +2,10 @@ class Views::Awards::Activity < Views::Base
   needs :project, :award_data, :current_auth
 
   def content
-    column("small-12 grow") {
-      h3 "Award History"
-      div(class: 'content-box') {
-
-        render partial: 'shared/award_progress_bar'
+    column {
+      div {
+        h3 "#{project.payment_description} Awarded"
+        br
 
         if award_data[:contributions].present?
           p {

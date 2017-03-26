@@ -3,7 +3,7 @@ class Views::Shared::Table::CurrentShareValue < Views::Projects::Base
 
   def content
     if project.revenue_share?
-      column("large-4 medium-12 summary float-left") {
+      column("large-4 medium-12 summary float-left current-share-value") {
         row(class: 'money') {
           h3 "Current Share Value"
         }
@@ -12,21 +12,21 @@ class Views::Shared::Table::CurrentShareValue < Views::Projects::Base
             tr {
               td(class: "coin-numbers") { text "" }
               td {
-                span(class: "coin-numbers revenue-percentage") { text "#{project.total_revenue_shared_unpaid_pretty} " }
-                span { text "Unpaid Pool" }
+                span(class: "coin-numbers total-revenue-unpaid") { text "#{project.total_revenue_shared_unpaid_pretty} " }
+                span { text "Contributor Pool Balance" }
               }
             }
             tr {
               td(class: "coin-numbers") { text "÷" }
               td {
-                span(class: "coin-numbers") { text "#{project.total_awards_outstanding_pretty} " }
+                span(class: "coin-numbers unpaid-revenue-shares") { text "#{project.total_awards_outstanding_pretty} " }
                 span { text 'Unpaid Revenue Shares' }
               }
             }
             tr(class: 'money') {
               td(class: "coin-numbers") { text "=" }
               td {
-                span(class: "coin-numbers revenue-percentage") { text project.revenue_per_share_pretty }
+                span(class: "coin-numbers revenue-per-share") { text project.revenue_per_share_pretty }
                 span { text ' Current Share Value' }
               }
             }

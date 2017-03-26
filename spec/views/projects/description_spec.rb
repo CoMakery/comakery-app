@@ -24,47 +24,31 @@ describe "projects/_description.html.rb" do
   end
 
   describe 'revenue sharing project' do
-    before { project.revenue_share! }
-
-    it 'renders revenue fields' do
+    before do
+      project.revenue_share!
       render
+    end
 
-      expect(rendered).to have_selector('.my-share', text: "My Revenue Shares0of 20")
-      expect(rendered).to have_selector('.my-balance', text: "My Balance$0.00of $0.00")
+    specify do
       expect(rendered).to have_selector('.revenue-percentage')
     end
 
-    it 'does not show the project coin warning' do
-      render
+    specify do
       expect(rendered).to_not have_content "This project does not offer royalties"
-    end
-
-    it 'balance shows BTC denomination' do
-      project.BTC!
-      render
-      expect(rendered).to have_selector('.my-balance', text: "My Balance฿0.00000000of ฿0.00000000")
-    end
-
-    it 'balance shows ETH denomination' do
-      project.ETH!
-      render
-      expect(rendered).to have_selector('.my-balance', text: "My BalanceΞ0.00000000of Ξ0.00000000")
     end
   end
 
   describe 'project coin' do
-    before { project.project_coin! }
-
-    it 'hides revenue fields' do
+    before do
+      project.project_coin!
       render
-      expect(rendered).to have_selector('.my-share', text: "My Project Coins0of 20")
-
-      expect(rendered).to_not have_selector('.my-balance')
-      expect(rendered).to_not have_selector('.revenue-percentage')
     end
 
-    it 'shows the project coin warning' do
-      render
+    specify { expect(rendered).to_not have_selector('.revenue-percentage') }
+
+    specify { expect(rendered).to have_content "This project does not offer royalties" }
+
+    specify do
       expect(rendered).to have_content "This project does not offer royalties"
     end
   end

@@ -349,57 +349,88 @@ progress {
 }
 
 .meter-box {
+  min-width: 250px;
+  width: 100%;
+  table {
+    overflow: auto;
+    border-style: none;
+    tbody {
+      border: none;
+    }
+    tr {
+      background-color: white;
+      td {
+        padding: 2px;
+        text-align: right;
+      }
+    }
+  }
   .meter {
-    height: 20px; /* Can be anything */
-    //position: relative;
+    height: 25px;
     background: $steel;
     -moz-border-radius: 25px;
     -webkit-border-radius: 25px;
     border-radius: 25px;
     overflow: visible;
-    //padding: 10px;
-    //box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0px;
+
+    .complete {
+      display: inline-block;
+      vertical-align: middle;
+
+      float: left;
+      height: 100%;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+      background-color: green;
+      box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3),
+      inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: visible;
+      text-align: right;
+      padding-right: 5px;
+      padding-left: 6px;
+    }
+
+    .incomplete {
+      float: left;
+      vertical-align: middle;
+      padding-left: 5px;
+
+      height: 100%;
+      position: relative;
+      overflow: visible;
+      text-align: left;
+    }
   }
+
   .meter-text {
-    height: 50px;
+    overflow: auto;
     .incomplete-text, .complete-text {
       display: inline-block;
       float: left;
       position: relative;
       overflow: visible;
-      color: black;
       height: 100%;
     }
+
+    .complete-text {
+      vertical-align: bottom;
+      text-align: right;
+      padding-left: 6px;
+      padding-right: 5px;
+    }
+
     .end-text {
       display: inline-block;
       float: right;
       text-align: right;
       position: relative;
       overflow: visible;
-      color: black;
       height: 100%;
     }
-  }
-
-  .meter > .complete {
-    display: inline-block;
-    float: left;
-    height: 100%;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    background-color: green;
-    box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3),
-    inset 0 -2px 6px rgba(0, 0, 0, 0.4);
-    position: relative;
-    overflow: visible;
-  }
-
-  .meter > .incomplete {
-    float: left;
-    height: 100%;
-    position: relative;
-    overflow: visible;
   }
 }

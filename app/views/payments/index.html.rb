@@ -14,7 +14,6 @@ class Views::Payments::Index < Views::Projects::Base
                     text "Redeem "
                     f.number_field(:quantity_redeemed, class: 'input-group-field')
                     text "of my #{current_auth.total_awards_remaining_pretty(project)} revenue shares"
-                    text " valued at #{current_auth.total_revenue_unpaid_remaining_pretty(project)}"
                   }
                 }
                 row {
@@ -33,7 +32,6 @@ class Views::Payments::Index < Views::Projects::Base
 
         full_row {
           render partial: 'shared/table/my_balance'
-          render partial: 'shared/table/unpaid_pool'
           render partial: 'shared/table/current_share_value'
         }
       end

@@ -67,7 +67,7 @@ describe "contributors/index.html.rb" do
       expect(rendered).to_not have_selector('td.holdings-value', text: "$0")
       expect(rendered).to_not have_content("$")
 
-      expect(rendered).to_not have_selector('th', text: /paid/i)
+      expect(rendered).to_not have_selector('th', text: /^paid/i)
       expect(rendered).to_not have_selector('th', text: /value/i)
     end
   end
