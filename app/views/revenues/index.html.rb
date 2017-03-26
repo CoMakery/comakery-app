@@ -8,7 +8,7 @@ class Views::Revenues::Index < Views::Projects::Base
 
     column {
       if project.owner_account == current_account
-        full_row { h3 "Record Revenue" }
+        full_row { h3 "Record Project Revenue" }
         form_for [project, revenue] { |f|
           div(class: 'content-box summary menu simple') {
             row {
@@ -52,12 +52,11 @@ class Views::Revenues::Index < Views::Projects::Base
       full_row {
         render partial: 'shared/table/reserved_for_contributors'
         render partial: 'shared/table/unpaid_pool'
-        render partial: 'shared/table/current_share_value'
       }
 
       full_row {
         if project.revenue_history.any?
-          h3 "Revenue History"
+          h3 "Project Revenue"
           div(class: "table-scroll table-box revenues") {
 
 

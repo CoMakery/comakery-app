@@ -40,31 +40,12 @@ class Views::Projects::Description < Views::Projects::Base
           full_row {
 
             ul(class: 'menu simple awarded-info description-stats') {
-              if award_data[:award_amounts][:my_project_coins].present?
-
-                li_if(project.revenue_share?, class: 'my-balance') {
-                  h5 "My Balance"
-                  div(class: "coin-numbers") {
-                    text current_auth.total_revenue_unpaid_remaining_rounded(project)
-                  }
-                  span(class: "balance-type") { text "#{current_auth.percentage_of_unpaid_pretty(project)}  of unpaid pool" }
-
-                }
-                li(class: 'my-share') {
-                  h5 "My #{project.payment_description}"
-                  div(class: " coin-numbers") {
-                    text current_auth.total_awards_remaining_pretty(project)
-                  }
-                  span(class: "balance-type") { text "#{current_auth.percentage_of_unpaid_pretty(project)} of unpaid revenue shares" }
-                }
-              end
-
               li_if(project.revenue_share?) {
                 h5 "Reserved For Contributors"
                 div(class: "coin-numbers revenue-percentage") {
                   text "#{project.royalty_percentage_pretty}"
+                  span(class: "balance-type") { text " of project revenue" }
                 }
-                span(class: "balance-type") { text "of total project revenue" }
               }
 
               if award_data[:contributions_summary].present?

@@ -26,7 +26,6 @@ shared_examples "can see revenue data" do
 
   it "does show revenue data on the overview page" do
     visit project_path(project)
-
     expect(page).to have_css('.my-share')
     expect(page).to have_css('.my-balance')
   end

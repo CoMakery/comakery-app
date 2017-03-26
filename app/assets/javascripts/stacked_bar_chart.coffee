@@ -7,8 +7,8 @@ window.stackedBarChart = (selector, data)->
     right: 20
     bottom: 50
     left: 80
-  width = 500 - (margin.left) - (margin.right)
-  height = 125 - (margin.top) - (margin.bottom)
+  width = 900 - (margin.left) - (margin.right)
+  height = 250 - (margin.top) - (margin.bottom)
 
   x = d3.scale.ordinal().rangeRoundBands([0, width], .1)
   y = d3.scale.linear().rangeRound([height, 0])

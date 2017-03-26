@@ -48,11 +48,14 @@ describe "when redeeming revenue shares for payments" do
 
     click_link "Payments"
 
-    within('.summary-table') do
-      expect(page.find('.my-revenue-shares')).to have_content('50 of 100')
-      expect(page.find('.my-balance')).to have_content('$617.25 of $1,234.50 total')
+    within('.my-balance') do
+      expect(page.find('.total-awards-remaining')).to have_content('50')
+      expect(page.find('.total-revenue-unpaid')).to have_content('$617.25')
     end
-    expect(page.find('.revenue-per-share')).to have_content(/^\$12.34500000$/)
+
+    within('.current-share-value') do
+      expect(page.find('.revenue-per-share')).to have_content(/^\$12.34500000$/)
+    end
 
     fill_in :payment_quantity_redeemed, with: 2
     click_on "Redeem My Revenue Shares"
@@ -68,12 +71,14 @@ describe "when redeeming revenue shares for payments" do
     end
 
 
-    within('.summary-table') do
-      expect(page.find('.my-revenue-shares')).to have_content('48 of 98')
-      expect(page.find('.my-balance')).to have_content('$592.56 of $1,209.81 total')
+    within('.my-balance') do
+      expect(page.find('.total-awards-remaining')).to have_content('48')
+      expect(page.find('.total-revenue-unpaid')).to have_content('$592.56')
     end
 
-    expect(page.find('.revenue-per-share')).to have_content(/^\$12.34500000$/)
+    within('.current-share-value') do
+      expect(page.find('.revenue-per-share')).to have_content(/^\$12.34500000$/)
+    end
   end
 
   it "owner can reconcile revenue shares" do
@@ -171,21 +176,21 @@ describe "when redeeming revenue shares for payments" do
 
     it 'share value appears on project page' do
       visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$54.32of $116.06')
+      expect(page.find('.my-balance')).to have_content('$54.32')
     end
 
     it 'holdings value appears on the project show page' do
       award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('51of 101 awarded')
-      expect(page.find('.my-balance')).to have_content('$58.60of $116.06')
+      expect(page.find('.my-share')).to have_content('51')
+      expect(page.find('.my-balance')).to have_content('$58.60')
 
       award_type.awards.create_with_quantity(1, issuer: owner, authentication: owner_auth)
       award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
       visit project_path(project)
 
-      expect(page.find('.my-share')).to have_content('52of 107')
-      expect(page.find('.my-balance')).to have_content('$56.40of $116.06')
+      expect(page.find('.my-share')).to have_content('52')
+      expect(page.find('.my-balance')).to have_content('$56.40')
     end
   end
 
