@@ -409,6 +409,9 @@ progress {
 
   .meter-text {
     overflow: auto;
+    .title {
+      text-align: right;
+    }
     .incomplete-text, .complete-text {
       display: inline-block;
       float: left;

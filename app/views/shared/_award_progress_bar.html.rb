@@ -5,9 +5,15 @@ class Views::Shared::AwardProgressBar < Views::Base
     return unless current_auth.present?
     div(class: 'meter-box') {
       div(class: 'meter-text') {
+        complete { h4 project.payment_description }
+      }
+
+      div(class: 'meter-text') {
         if current_auth.percent_unpaid(project) <= 20
-          complete {}
-          incomplete { meter_text_balances }
+          complete { br }
+          incomplete {
+            meter_text_balances
+          }
         else
           complete { meter_text_balances }
           incomplete {}
@@ -24,7 +30,7 @@ class Views::Shared::AwardProgressBar < Views::Base
         div(class: 'end-text') {
           text "Contributor Pool Balance"
           br
-          text "#{project.total_awarded_pretty}"
+          text "#{project.payment_description} #{project.total_awarded_pretty}"
           if project.revenue_share?
             br
             text "#{project.total_revenue_shared_unpaid_pretty}"
@@ -35,34 +41,33 @@ class Views::Shared::AwardProgressBar < Views::Base
   end
 
   def meter_text_balances
-    h4 project.payment_description
     text "My Balance"
+    br
+    my_share
     if project.revenue_share?
       br
       my_balance
     end
-    br
-    my_share
   end
 
   def my_share
-    span(class: 'my-share') {
-      text "#{current_auth.total_awards_remaining_pretty(project)} #{project.payment_description}"
+    span(class: ' my-share ') {
+      text "#{project.payment_description} #{current_auth.total_awards_remaining_pretty(project)}"
     }
   end
 
   def my_balance
-    span(class: 'my-balance') {
+    span(class: ' my-balance ') {
       text "#{current_auth.total_revenue_unpaid_remaining_pretty(project)}"
     }
   end
 
   def meter(left: " ", right: " ")
-    div(class: 'meter') {
-      span(class: 'complete', style: "width: #{current_auth.percentage_of_unpaid_pretty(project)}") {
+    div(class: ' meter ') {
+      span(class: ' complete ', style: "width: #{current_auth.percentage_of_unpaid_pretty(project)}") {
         text left
       }
-      span(class: 'incomplete') { text right }
+      span(class: ' incomplete ') { text right }
     }
   end
 
@@ -71,11 +76,11 @@ class Views::Shared::AwardProgressBar < Views::Base
   end
 
   def complete
-    div(class: 'complete-text', style: "width: #{current_auth.percentage_of_unpaid_pretty(project)}") { yield }
+    div(class: ' complete-text ', style: "width: #{current_auth.percentage_of_unpaid_pretty(project)}") { yield }
   end
 
   def incomplete
-    div(class: 'incomplete-text') { yield }
+    div(class: ' incomplete-text ') { yield }
   end
 
 end
