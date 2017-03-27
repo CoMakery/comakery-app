@@ -10,8 +10,7 @@ describe Payment do
                                              "Total value can't be blank",
                                              "Project can't be blank",
                                              "Payee can't be blank",
-                                             "Quantity redeemed is not a number",
-                                             "Total value is not a number"
+                                             "Quantity redeemed is not a number"
                                          ].sort)
   end
 
@@ -34,7 +33,7 @@ describe Payment do
     it 'Total value cannot be less than 0' do
       payment.total_value = -1
       expect(payment).to_not be_valid
-      expect(payment.errors[:total_value]).to include("must be greater than or equal to 0")
+      expect(payment.errors[:total_value]).to eq(["must be greater than or equal to $1"])
     end
 
     it 'Cannot redeem more shares than they have' do

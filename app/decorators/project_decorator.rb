@@ -50,7 +50,7 @@ class ProjectDecorator < Draper::Decorator
 
   def royalty_percentage_pretty
     return "0%" if project.royalty_percentage.blank?
-    "#{project.royalty_percentage}%"
+    "#{number_with_precision(project.royalty_percentage, precision: 2)}%"
   end
 
   def require_confidentiality_text
@@ -108,11 +108,6 @@ class ProjectDecorator < Draper::Decorator
                                                      precision: precision,
                                                      delimiter: ',')}"
   end
-
-  def revenue_per_share_rounded
-    "#{currency_denomination}#{number_with_precision(revenue_per_share, precision: 0, delimiter: ',')}"
-  end
-
 
   def minimum_revenue
     "#{currency_denomination}0"

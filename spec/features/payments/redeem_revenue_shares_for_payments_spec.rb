@@ -208,7 +208,9 @@ describe "when redeeming revenue shares for payments" do
 
   it 'has a grayed out form if the user has 0 revenue shares' do
     login other_account
-    visit project_payments_path(project)
+    visit project_path(project)
+    click_link "Payments"
+
     expect(page).to_not have_css('.my-shares')
     expect(page).to have_content("Earn awards by contributing")
     within('.no-awards-message') { click_on "awards" }
@@ -217,7 +219,9 @@ describe "when redeeming revenue shares for payments" do
 
   it 'does not have a grayed out form if the user has > 0 revenue shares' do
     login owner_auth
-    visit project_payments_path(project)
+    visit project_path(project)
+    click_link "Payments"
+
     expect(page.find('.my-shares')).to have_content 'of my 50 revenue shares'
     expect(page.find('form#new_payment #payment_quantity_redeemed').disabled?).to eq(false)
     expect(page.find('form#new_payment input[type=submit]').disabled?).to eq(false)
