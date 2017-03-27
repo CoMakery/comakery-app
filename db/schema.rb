@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(version: 20170302173357) do
     t.integer  "maximum_royalties_per_month"
     t.boolean  "license_finalized",                                     default: false, null: false
     t.integer  "denomination",                                          default: 0,     null: false
+    t.text     "revenue_stream"
     t.datetime "revenue_sharing_end_date"
   end
 

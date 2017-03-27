@@ -5,18 +5,18 @@ class Views::Shared::AwardProgressBar < Views::Base
     return unless current_auth.present?
     div(class: 'meter-box') {
       div(class: 'meter-text') {
-        complete { h4 project.payment_description }
-      }
-
-      div(class: 'meter-text') {
         if current_auth.percent_unpaid(project) <= 20
           complete { br }
           incomplete {
+            h4 project.payment_description
             meter_text_balances
           }
         else
-          complete { meter_text_balances }
-          incomplete {}
+          complete {
+            h4 project.payment_description
+            meter_text_balances
+          }
+          incomplete {  }
         end
       }
 
