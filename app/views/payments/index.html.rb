@@ -7,12 +7,14 @@ class Views::Payments::Index < Views::Projects::Base
       if current_auth.present?
         full_row {
           column("small-12 content-box") {
-            if policy(project).team_member?
+            if policy(project).team_member? && current_user_has_awards?
               form_for [project, payment], html: {class: 'conversational-form'} do |f|
                 row {
                   text "Redeem "
                   f.number_field(:quantity_redeemed, class: 'input-group-field')
-                  text "of my #{current_auth.total_awards_remaining_pretty(project)} revenue shares"
+                  span(class: 'my-shares') do
+                    text "of my #{current_auth.total_awards_remaining_pretty(project)} revenue shares"
+                  end
                 }
 
                 row {
@@ -30,8 +32,17 @@ class Views::Payments::Index < Views::Projects::Base
                   f.submit("Redeem My Revenue Shares", class: buttonish(:expand))
                 }
               end
-              row {
+              row(class: 'conversational-form') {
                 span(class: 'help-text min-transaction-amount') { text "The minimum transaction amount is #{project.minimum_payment}"}
+              }
+            else
+              row(class: 'conversational-form no-awards-message') {
+                p {
+                  text "Earn "
+                  link_to "awards", project_path(project, anchor: "awards")
+                  text " by contributing to the project - then cash them out here for your share of the revenue."
+                }
+
               }
             end
           }
@@ -126,5 +137,9 @@ class Views::Payments::Index < Views::Projects::Base
 
   def conversational
     span(class: 'conversational-form') { yield }
+  end
+
+  def current_user_has_awards?
+    current_auth.total_awards_remaining(project) > 0
   end
 end

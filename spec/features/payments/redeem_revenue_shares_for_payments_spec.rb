@@ -194,27 +194,6 @@ describe "when redeeming revenue shares for payments" do
     end
   end
 
-  xit 'updates the contributors page' do
-    project.update(royalty_percentage: 10)
-    award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
-    award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
-
-    login owner
-    visit project_path(project)
-    click_link "Payments"
-
-    [3, 2, 1].each do |amount|
-      fill_in :payment_quantity_redeemed, with: amount
-      click_on "Redeem My Revenue Shares"
-    end
-
-    visit project_contributors_path(project)
-    contributor_holdings = page.all('.holdings-value')
-    expect(contributor_holdings.size).to eq(2)
-    expect(contributor_holdings[0]).to have_content("$0.35")
-    expect(contributor_holdings[1]).to have_content("$0.25")
-  end
-
   it 'shows errors if there were missing fields' do
     login owner
     visit project_path(project)
@@ -225,6 +204,23 @@ describe "when redeeming revenue shares for payments" do
     within('form#new_payment') do
       expect(page).to have_text("can't be blank")
     end
+  end
+
+  it 'has a grayed out form if the user has 0 revenue shares' do
+    login other_account
+    visit project_payments_path(project)
+    expect(page).to_not have_css('.my-shares')
+    expect(page).to have_content("Earn awards by contributing")
+    within('.no-awards-message') { click_on "awards" }
+    expect(current_path).to eq(project_path(project))
+  end
+
+  it 'does not have a grayed out form if the user has > 0 revenue shares' do
+    login owner_auth
+    visit project_payments_path(project)
+    expect(page.find('.my-shares')).to have_content 'of my 50 revenue shares'
+    expect(page.find('form#new_payment #payment_quantity_redeemed').disabled?).to eq(false)
+    expect(page.find('form#new_payment input[type=submit]').disabled?).to eq(false)
   end
 
   describe 'it displays correct currency precision for' do

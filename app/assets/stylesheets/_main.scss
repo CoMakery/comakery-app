@@ -80,6 +80,11 @@ a .button, a .button.take-action {
   margin: 5px 4px;
 }
 
+.button:disabled {
+  background-color: $skyblue;
+  opacity: 0.5;
+}
+
 .button.primary {
   background-color: limegreen;
 }

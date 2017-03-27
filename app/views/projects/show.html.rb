@@ -15,7 +15,7 @@ class Views::Projects::Show < Views::Projects::Base
 
 
       row {
-        column("large-6 medium-12") {
+        column("large-6 medium-12", id: "awards") {
           render partial: "award_send"
         }
         column("large-6 medium-12") {
