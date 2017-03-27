@@ -36,7 +36,24 @@ describe "projects/_description.html.rb" do
     specify do
       expect(rendered).to_not have_content "This project does not offer royalties"
     end
+
+    specify do
+      expect(rendered).to_not have_content("until")
+    end
   end
+
+  describe "revenue sharing with an end date" do
+    before do
+      project.revenue_share!
+      project.update revenue_sharing_end_date: '2123-01-02'
+      render
+    end
+
+    specify do
+      expect(rendered).to have_content("Until #{project.revenue_sharing_end_date_pretty}")
+    end
+  end
+
 
   describe 'project coin' do
     before do

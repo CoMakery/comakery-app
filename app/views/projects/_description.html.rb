@@ -45,6 +45,12 @@ class Views::Projects::Description < Views::Projects::Base
                 div(class: "coin-numbers revenue-percentage") {
                   text "#{project.royalty_percentage_pretty}"
                   span(class: "balance-type") { text " of project revenue" }
+                  if project.revenue_sharing_end_date.present?
+                    br
+                    span(class: 'help-text') {
+                      text "Until #{project.revenue_sharing_end_date_pretty}"
+                    }
+                  end
                 }
               }
 
