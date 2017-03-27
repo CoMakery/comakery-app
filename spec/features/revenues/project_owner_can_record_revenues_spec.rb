@@ -150,7 +150,7 @@ describe "when recording revenue" do
     it 'holdings value appears on the project show page' do
       award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('7,000 Revenue Shares')
+      expect(page.find('.my-share')).to have_content('Revenue Shares 7,000')
       expect(page.find('.my-balance')).to have_content('$0.59')
 
       award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
