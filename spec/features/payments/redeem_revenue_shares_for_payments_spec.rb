@@ -218,11 +218,12 @@ describe "when redeeming revenue shares for payments" do
   end
 
   it 'does not have a grayed out form if the user has > 0 revenue shares' do
-    login owner_auth
+    login owner
     visit project_path(project)
+    project.revenues.create(amount: 4321, recorded_by: owner, currency: 'USD')
     click_link "Payments"
 
-    expect(page.find('.my-shares')).to have_content 'of my 50 revenue shares'
+    expect(page).to have_content 'of my 50 revenue shares'
     expect(page.find('form#new_payment #payment_quantity_redeemed').disabled?).to eq(false)
     expect(page.find('form#new_payment input[type=submit]').disabled?).to eq(false)
   end
@@ -235,8 +236,6 @@ describe "when redeeming revenue shares for payments" do
                             slack_team_id: "foo",
                             require_confidentiality: false) }
 
-    before do
-    end
 
     describe 'usd' do
       let!(:project) { create(:project,

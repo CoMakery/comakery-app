@@ -117,7 +117,7 @@ describe "when recording revenue" do
     click_link "Revenues"
 
     within('.reserved-for-contributors') do
-      expect(page.find('.royalty-percentage')).to have_content("10.0%")
+      expect(page.find('.royalty-percentage')).to have_content("10%")
       expect(page.find('.total-revenue')).to have_content("$1,270")
       expect(page.find('.total-revenue-shared')).to have_content("$127.00")
     end

@@ -161,7 +161,17 @@ describe ProjectDecorator do
 
     specify do
       project.royalty_percentage = 10
-      expect(project.royalty_percentage_pretty).to eq("10.00%")
+      expect(project.royalty_percentage_pretty).to eq("10%")
+    end
+
+    specify do
+      project.royalty_percentage = 10.9
+      expect(project.royalty_percentage_pretty).to eq("10.9%")
+    end
+
+    specify do
+      project.royalty_percentage = 10.999_999_999_999_9
+      expect(project.royalty_percentage_pretty).to eq("10." + ("9" * 13) + "%")
     end
   end
 
