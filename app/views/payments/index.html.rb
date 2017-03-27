@@ -10,12 +10,11 @@ class Views::Payments::Index < Views::Projects::Base
             if policy(project).team_member?
               form_for [project, payment], html: {class: 'conversational-form'} do |f|
                 row {
-                  with_errors(payment, :quantity_redeemed) {
-                    text "Redeem "
-                    f.number_field(:quantity_redeemed, class: 'input-group-field')
-                    text "of my #{current_auth.total_awards_remaining_pretty(project)} revenue shares"
-                  }
+                  text "Redeem "
+                  f.number_field(:quantity_redeemed, class: 'input-group-field')
+                  text "of my #{current_auth.total_awards_remaining_pretty(project)} revenue shares"
                 }
+
                 row {
                   text "For "
                   span(class: 'revenue-per-share') { text project.revenue_per_share_pretty }
@@ -23,9 +22,17 @@ class Views::Payments::Index < Views::Projects::Base
                 }
 
                 row {
+                  inline_errors(payment, :total_value)
+                  inline_errors(payment, :quantity_redeemed)
+                }
+
+                row {
                   f.submit("Redeem My Revenue Shares", class: buttonish(:expand))
                 }
               end
+              row {
+                span(class: 'help-text min-transaction-amount') { text "The minimum transaction amount is #{project.minimum_payment}"}
+              }
             end
           }
         }

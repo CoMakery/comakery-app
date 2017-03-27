@@ -307,6 +307,14 @@ table.summary-table {
   font-size: 1.9375rem;
   font-color: $steel;
 
+  .field_with_errors {
+    display: inline-block;
+  }
+
+  .error {
+    color: $error-color;
+  }
+
   input[type=number] {
     display: inline;
     width: 150px;

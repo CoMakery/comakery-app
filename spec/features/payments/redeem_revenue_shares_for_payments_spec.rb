@@ -223,7 +223,7 @@ describe "when redeeming revenue shares for payments" do
     click_on "Redeem My Revenue Shares"
     expect(page.all('.amount').size).to eq(0)
     within('form#new_payment') do
-      expect(page.find('small.error')).to have_text("can't be blank")
+      expect(page).to have_text("can't be blank")
     end
   end
 
@@ -260,6 +260,25 @@ describe "when redeeming revenue shares for payments" do
         expect(page.find('.share-value')).to have_content('$55.55500000')
         expect(page.find('.total-value')).to have_content('$2,777.75')
       end
+
+      it "shows errors" do
+        login owner
+        project.revenues.create(amount: 4321, recorded_by: owner, currency: 'USD')
+
+        visit project_path(project)
+        click_link "Payments"
+
+        click_on "Redeem My Revenue Shares"
+        expect(page.first('.error')).to have_content "Total value must be greater than or equal to $1"
+        expect(page.all('.error')[1]).to have_content "Quantity redeemed can't be blank and is not a number"
+      end
+
+      it 'displays the minimum payment amount' do
+        login owner
+        visit project_path(project)
+        click_link "Payments"
+        expect(page.first('.min-transaction-amount')).to have_content "The minimum transaction amount is $1"
+      end
     end
 
     describe 'btc' do
@@ -283,6 +302,24 @@ describe "when redeeming revenue shares for payments" do
         expect(page.find('.share-value')).to have_content("฿12.34500000")
         expect(page.find('.total-value')).to have_content("฿617.25000000")
       end
+
+      it "must have correct minimum value" do
+        login owner
+        project.revenues.create(amount: 4321, recorded_by: owner, currency: 'BTC')
+
+        visit project_path(project)
+        click_link "Payments"
+
+        click_on "Redeem My Revenue Shares"
+        expect(page.first('.error')).to have_content "Total value must be greater than or equal to ฿0.001"
+      end
+
+      it 'displays the minimum payment amount' do
+        login owner
+        visit project_path(project)
+        click_link "Payments"
+        expect(page.first('.min-transaction-amount')).to have_content "The minimum transaction amount is ฿0.001"
+      end
     end
 
     describe 'eth' do
@@ -305,6 +342,24 @@ describe "when redeeming revenue shares for payments" do
         expect(page.find('.quantity-redeemed')).to have_content('50')
         expect(page.find('.share-value')).to have_content("Ξ12.34500000")
         expect(page.find('.total-value')).to have_content("Ξ617.25000000")
+      end
+
+      it "must have correct minimum value" do
+        login owner
+        project.revenues.create(amount: 4321, recorded_by: owner, currency: 'ETH')
+
+        visit project_path(project)
+        click_link "Payments"
+
+        click_on "Redeem My Revenue Shares"
+        expect(page.first('.error')).to have_content "Total value must be greater than or equal to Ξ0.1"
+      end
+
+      it 'displays the minimum payment amount' do
+        login owner
+        visit project_path(project)
+        click_link "Payments"
+        expect(page.first('.min-transaction-amount')).to have_content "The minimum transaction amount is Ξ0.1"
       end
     end
   end

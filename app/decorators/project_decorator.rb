@@ -119,7 +119,8 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def minimum_payment
-    "#{currency_denomination}10"
+    project_min_payment = Comakery::Currency::DEFAULT_MIN_PAYMENT[denomination]
+    "#{currency_denomination}#{project_min_payment}"
   end
 
   def revenue_history
