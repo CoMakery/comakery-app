@@ -1,8 +1,9 @@
 class Views::Shared::AwardProgressBar < Views::Base
-  needs :project, :award_data, :current_auth
+  include Pundit
+  needs :project, :current_auth
 
   def content
-    return unless current_auth.present?
+    return unless current_auth.present? && policy(project).team_member?
     div(class: 'meter-box') {
       div(class: 'meter-text') {
         if current_auth.percent_unpaid(project) <= 20
