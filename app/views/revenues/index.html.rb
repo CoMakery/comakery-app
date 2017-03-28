@@ -4,8 +4,6 @@ class Views::Revenues::Index < Views::Projects::Base
   def content
     render partial: 'shared/project_header'
 
-
-
     column {
       if project.owner_account == current_account
         full_row { h3 "Record Project Revenue" }
