@@ -49,15 +49,6 @@
 // If you'd like to include motion-ui the foundation-rails gem comes prepackaged with it, uncomment the 3 @imports, if you are not using the gem you need to install the motion-ui sass package.
 // @include motion-ui-transitions;
 // @include motion-ui-animations;
-.progress {
-  @include progress-container;
-  height: 20px;
-}
-.progress-meter {
-  @include progress-meter;
-  @include progress-meter-text;
-  height: 20px;
-}
 // CoMakery custom styles
 @import 'main';
 
