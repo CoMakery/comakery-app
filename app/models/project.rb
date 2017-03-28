@@ -1,4 +1,6 @@
 class Project < ActiveRecord::Base
+  ROYALTY_PERCENTAGE_PRECISION = 13
+
   include SlackDomainable
   include EthereumAddressable
 
@@ -162,8 +164,7 @@ class Project < ActiveRecord::Base
   end
 
   def royalty_percentage=(x)
-    max_database_column_precision = 13
-    x_truncated = BigDecimal(x, max_database_column_precision).truncate(max_database_column_precision) unless x.blank?
+    x_truncated = BigDecimal(x, ROYALTY_PERCENTAGE_PRECISION).truncate(ROYALTY_PERCENTAGE_PRECISION) unless x.blank?
     write_attribute(:royalty_percentage, x_truncated)
   end
 

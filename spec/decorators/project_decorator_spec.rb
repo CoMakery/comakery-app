@@ -170,7 +170,7 @@ describe ProjectDecorator do
     end
 
     specify do
-      project.royalty_percentage = 10.999_999_999_999_9
+      project.royalty_percentage = BigDecimal('10.999_999_999_999_9')
       expect(project.royalty_percentage_pretty).to eq("10." + ("9" * 13) + "%")
     end
   end

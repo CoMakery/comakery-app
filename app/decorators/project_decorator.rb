@@ -50,7 +50,9 @@ class ProjectDecorator < Draper::Decorator
 
   def royalty_percentage_pretty
     return "0%" if project.royalty_percentage.blank?
-    "#{number_with_precision(project.royalty_percentage, precision: 13, strip_insignificant_zeros: true)}%"
+    "#{number_with_precision(project.royalty_percentage,
+                             precision: Project::ROYALTY_PERCENTAGE_PRECISION,
+                             strip_insignificant_zeros: true)}%"
   end
 
   def require_confidentiality_text
