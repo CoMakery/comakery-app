@@ -81,40 +81,7 @@ describe "when redeeming revenue shares for payments" do
     end
   end
 
-  it "owner can reconcile revenue shares" do
-    login owner
-    visit project_path(project)
-    click_link "Payments"
-    fill_in :payment_quantity_redeemed, with: 2
-    click_on "Redeem My Revenue Shares"
 
-
-    within ".payments" do
-      expect(page.find('.payee')).to have_content(same_team_account_authentication.display_name)
-      expect(page.find('.quantity-redeemed')).to have_content('2')
-      expect(page.find('.share-value')).to have_content('$12.34500000')
-      expect(page.find('.total-value')).to have_content('$24.69')
-      expect(page.find('.transaction-fee').value).to be_blank
-      expect(page.find('.status')).to have_content('Unpaid')
-
-      fill_in :payment_transaction_fee, with: '0.50'
-      fill_in :payment_transaction_reference, with: 'xyz123abc'
-      click_on "Reconcile"
-    end
-
-    within ".payments" do
-      expect(page.find('.payee')).to have_content(same_team_account_authentication.display_name)
-      expect(page.find('.quantity-redeemed')).to have_content('2')
-      expect(page.find('.share-value')).to have_content('$12.34500000')
-      expect(page.find('.total-value')).to have_content('$24.69')
-
-      expect(page.find('.transaction-fee')).to have_content("$0.50")
-      expect(page.find('.status')).to have_content(/^Paid$/)
-
-      expect(page.all('.issuer')[0]).to have_content("John Doe")
-      expect(page.all('.issuer')[0]).to have_css("img[src*='http://avatar.com/owner.jpg']")
-    end
-  end
 
   it "non team member of public project can't redeem shares" do
     login ray_dog_account
@@ -141,26 +108,7 @@ describe "when redeeming revenue shares for payments" do
     end
   end
 
-  it "non-project owner cannot reconcile payments" do
-    login same_team_account
-    visit project_path(project)
-    click_link "Payments"
-    fill_in :payment_quantity_redeemed, with: 2
-    click_on "Redeem My Revenue Shares"
-
-    within ".payments" do
-      expect(page.find('.payee')).to have_content(same_team_account_authentication.display_name)
-      expect(page.find('.quantity-redeemed')).to have_content('2')
-      expect(page.find('.share-value')).to have_content('$12.34500000')
-      expect(page.find('.total-value')).to have_content('$24.69')
-      expect(page.find('.transaction-fee').value).to be_blank
-      expect(page.find('.status')).to have_content('Unpaid')
-
-      page.assert_selector('input', count: 0)
-    end
-  end
-
-  describe 'when share value can be calculated' do
+  describe 'when shares have been redeemed' do
     before do
       project.update(royalty_percentage: 10)
       login owner
@@ -172,6 +120,10 @@ describe "when redeeming revenue shares for payments" do
         fill_in :payment_quantity_redeemed, with: amount
         click_on "Redeem My Revenue Shares"
       end
+    end
+
+    specify do
+      expect(page.find("#flash-msg-notice")).to have_content("$1.23 pending payment by the project owner")
     end
 
     it 'share value appears on project page' do

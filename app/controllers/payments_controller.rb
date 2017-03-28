@@ -20,6 +20,7 @@ class PaymentsController < ApplicationController
     authorize @payment, :create?
 
     if @payment.save
+      flash[:notice] = "#{@payment.decorate.total_value_pretty} pending payment by the project owner."
       redirect_to project_payments_path(@project)
     else
       render template: 'payments/index'
@@ -40,7 +41,10 @@ class PaymentsController < ApplicationController
     @payment.total_payment = @payment.total_value - @payment.transaction_fee
     @payment.reconciled = true
     @payment.issuer = @current_auth
-    @payment.save!
+
+    unless @payment.save
+      flash[:error] = @payment.errors.full_messages.join(" ")
+    end
 
     redirect_to project_payments_path(@project)
   end
