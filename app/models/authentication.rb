@@ -29,11 +29,25 @@ class Authentication < ActiveRecord::Base
   end
 
   def total_awards_paid(project)
-    project.payments.where(recipient: self).sum(:amount)
+    project.payments.where(payee: self).sum(:quantity_redeemed)
   end
 
   def total_awards_remaining(project)
     total_awards_earned(project) - total_awards_paid(project)
+  end
+
+  def total_revenue_paid(project)
+    project.payments.where(payee: self).sum(:total_value)
+  end
+
+  def total_revenue_unpaid(project)
+    project.share_of_revenue_unpaid(total_awards_remaining(project))
+  end
+
+  def percent_unpaid(project)
+    return BigDecimal('0') if project.total_awards_outstanding == 0
+    precise_percentage = (BigDecimal(total_awards_remaining(project)) * 100) / BigDecimal(project.total_awards_outstanding)
+    precise_percentage.truncate(8)
   end
 
   def self.find_or_create_from_auth_hash!(auth_hash)

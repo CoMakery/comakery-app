@@ -1,17 +1,20 @@
 require 'rails_helper'
 
 describe "contributors/index.html.rb" do
-
+  let!(:owner) { create(:account) }
+  let(:authentication) { create :authentication }
   let(:project) { create(:project, description: 'markdown _rocks_: www.auto.link').decorate }
+  let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1, name: 'Code Contribution') }
 
   before do
+    award_type.awards.create_with_quantity(50, issuer: owner, authentication: authentication)
     assign :project, project
-    assign :award_data, {award_amounts: {total_coins_issued: 0},
-                         contributions_summary: [
-                             {avatar: 'http://google.com',
-                              earned: 10,
-                              name: "Tony! Toni! Toné!"}
-                         ]
+    assign :award_data, {
+        contributions_summary: [
+            {avatar: 'http://google.com',
+             earned: 10,
+             name: "Tony! Toni! Toné!"}
+        ]
     }
 
     allow(view).to receive(:policy).and_return(double("project policy",
@@ -25,10 +28,10 @@ describe "contributors/index.html.rb" do
       render
       expect(rendered).to have_text("Contributors")
       expect(rendered).to have_selector('td.contributor')
-      expect(rendered).to have_selector('td.contributor', text: "Tony! Toni! Toné!")
-      expect(rendered).to have_selector('td.awards-earned', text: "10")
+      expect(rendered).to have_selector('td.contributor', text: "John Doe")
+      expect(rendered).to have_selector('td.awards-earned', text: "50")
       expect(rendered).to have_selector('td.paid', text: "$0")
-      expect(rendered).to have_selector('td.award-holdings', text: "10")
+      expect(rendered).to have_selector('td.award-holdings', text: "50")
       expect(rendered).to have_selector('td.holdings-value', text: "$0")
     end
 
@@ -56,15 +59,15 @@ describe "contributors/index.html.rb" do
 
       expect(rendered).to have_text("Contributors")
       expect(rendered).to have_selector('td.contributor')
-      expect(rendered).to have_selector('td.contributor', text: "Tony! Toni! Toné!")
-      expect(rendered).to have_selector('td.awards-earned', text: "10")
-      expect(rendered).to have_selector('td.award-holdings', text: "10")
+      expect(rendered).to have_selector('td.contributor', text: "John Doe")
+      expect(rendered).to have_selector('td.awards-earned', text: "50")
+      expect(rendered).to have_selector('td.award-holdings', text: "50")
 
       expect(rendered).to_not have_selector('td.paid', text: "$0")
       expect(rendered).to_not have_selector('td.holdings-value', text: "$0")
       expect(rendered).to_not have_content("$")
 
-      expect(rendered).to_not have_selector('th', text: /paid/i)
+      expect(rendered).to_not have_selector('th', text: /^paid/i)
       expect(rendered).to_not have_selector('th', text: /value/i)
     end
   end

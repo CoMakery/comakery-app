@@ -116,11 +116,10 @@ describe "when recording revenue" do
     visit project_path(project)
     click_link "Revenues"
 
-    within('.summary') do
-      expect(page.find('.revenue-shared')).to have_content("Revenue Shared (10.0%) $127.00")
-      expect(page.find('.total-awards')).to have_content("0")
+    within('.reserved-for-contributors') do
+      expect(page.find('.royalty-percentage')).to have_content("10%")
       expect(page.find('.total-revenue')).to have_content("$1,270")
-      expect(page.find('.revenue-per-share')).to have_content("$0.1257")
+      expect(page.find('.total-revenue-shared')).to have_content("$127.00")
     end
   end
 
@@ -140,24 +139,24 @@ describe "when recording revenue" do
 
     it 'share value appears on project page' do
       visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$0.00of $0.60')
+      expect(page.find('.my-balance')).to have_content('$0.00')
     end
 
     it 'share value appears on project page' do
       visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$0.00of $0.60')
+      expect(page.find('.my-balance')).to have_content('$0.00')
     end
 
     it 'holdings value appears on the project show page' do
       award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('7,000of 7,000')
-      expect(page.find('.my-balance')).to have_content('$0.60of $0.60')
+      expect(page.find('.my-share')).to have_content('Revenue Shares 7,000')
+      expect(page.find('.my-balance')).to have_content('$0.59')
 
       award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('7,000of 12,000')
-      expect(page.find('.my-balance')).to have_content('$0.35of $0.60')
+      expect(page.find('.my-share')).to have_content('7,000')
+      expect(page.find('.my-balance')).to have_content('$0.35')
     end
   end
 
@@ -209,10 +208,10 @@ describe "when recording revenue" do
       click_on "Record Revenue"
       expect(page.find('.revenues .amount')).to have_content('$4,321.12')
 
-      expect(page.find('.total-revenue .coin-numbers')).to have_content('$4,321.12')
-      expect(page.find('.revenue-shared .coin-numbers')).to have_content('$254.94')
-      expect(page.find('.total-awards .coin-numbers')).to have_content('7,000')
-      expect(page.find('.revenue-per-share .coin-numbers')).to have_content('$0.0364')
+      within('.reserved-for-contributors') do
+        expect(page.find('.total-revenue')).to have_content('$4,321.12')
+        expect(page.find('.total-revenue-shared')).to have_content('$254.94')
+      end
     end
 
     it 'btc' do
@@ -222,12 +221,11 @@ describe "when recording revenue" do
 
       fill_in :revenue_amount, with: "4,321.12345678"
       click_on "Record Revenue"
-      expect(page.find('.revenues .amount')).to have_content('฿4,321.12345678')
 
-      expect(page.find('.total-revenue .coin-numbers')).to have_content(/฿4,321.[0-9]{8}/)
-      expect(page.find('.revenue-shared .coin-numbers')).to have_content(/฿254.[0-9]{8}/)
-      expect(page.find('.total-awards .coin-numbers')).to have_content('7,000')
-      expect(page.find('.revenue-per-share .coin-numbers')).to have_content(/฿0.03642089/)
+      within('.reserved-for-contributors') do
+        expect(page.find('.total-revenue')).to have_content(/฿4,321.[0-9]{8}/)
+        expect(page.find('.total-revenue-shared')).to have_content(/฿254.[0-9]{8}/)
+      end
     end
 
     it 'eth' do
@@ -237,12 +235,10 @@ describe "when recording revenue" do
 
       fill_in :revenue_amount, with: "4,321.123456789012345678"
       click_on "Record Revenue"
-      expect(page.find('.revenues .amount')).to have_content('Ξ4,321.123456789012345678')
-
-      expect(page.find('.total-revenue .coin-numbers')).to have_content(/^Ξ4,321.[0-9]{18}$/)
-      expect(page.find('.revenue-shared .coin-numbers')).to have_content(/^Ξ254.[0-9]{18}$/)
-      expect(page.find('.total-awards .coin-numbers')).to have_content('7,000')
-      expect(page.find('.revenue-per-share .coin-numbers')).to have_content(/^Ξ0.[0-9]{8}$/)
+      within('.reserved-for-contributors') do
+        expect(page.find('.total-revenue')).to have_content(/^Ξ4,321.[0-9]{18}$/)
+        expect(page.find('.total-revenue-shared')).to have_content(/^Ξ254.[0-9]{18}$/)
+      end
     end
   end
 

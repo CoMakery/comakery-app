@@ -3,57 +3,26 @@ class Views::Revenues::Index < Views::Projects::Base
 
   def content
     render partial: 'shared/project_header'
+
     column {
-      full_row {
-        if project.owner_account == current_account
-
-          column("large-6 medium-12 summary") {
+      if project.owner_account == current_account
+        full_row { h3 "Record Project Revenue" }
+        form_for [project, revenue] { |f|
+          div(class: 'content-box summary menu simple') {
             row {
-              h3 "Summary"
-              div(class: 'table-box') {
-                table(class: "table-scroll summary-table") {
-                  tr(class: 'total-revenue') {
-                    td { text " Revenue" }
-                    td(class: "coin-numbers") { text project.total_revenue_pretty }
-                  }
-
-                  tr(class: 'revenue-shared') {
-                    td { text " Revenue Shared (#{project.royalty_percentage_pretty}) " }
-                    td(class: "coin-numbers revenue-percentage") { text project.total_revenue_shared_pretty }
-                  }
-                  tr(class: 'total-awards') {
-                    td { text ' Revenue Shares' }
-                    td(class: "coin-numbers") { text project.total_awarded_pretty }
-                  }
-
-                  tr(class: 'revenue-per-share') {
-                    td { text ' Revenue Per Share' }
-                    td(class: "coin-numbers") { text project.revenue_per_share_pretty }
-                  }
-                }
-              }
-            }
-          }
-          column("large-6 medium-12") {
-            row {
-              h3 "Record Revenue"
-            }
-            form_for [project, revenue] do |f|
-              row {
+              column('large-4 float-left') {
                 with_errors(revenue, :amount) {
                   label {
-                    span(class: 'required') {
-                      text "Amount"
-                    }
-                    div(class: 'input-group financial') {
+                    text "Amount"
+                    span(class: 'input-group financial') {
                       span(class: "input-group-label denomination") { text project.currency_denomination }
-                      f.text_field(:amount, class: 'input-group-field')
+                      f.text_field(:amount)
                     }
                   }
                 }
               }
 
-              row {
+              column('large-4 float-left') {
                 with_errors(revenue, :comment) {
                   label {
                     text "Comment"
@@ -62,7 +31,7 @@ class Views::Revenues::Index < Views::Projects::Base
                 }
               }
 
-              row {
+              column('large-4 float-left') {
                 with_errors(revenue, :transaction_reference) {
                   label {
                     text "Transaction Reference"
@@ -70,17 +39,22 @@ class Views::Revenues::Index < Views::Projects::Base
                   }
                 }
               }
-
-              row {
-                f.submit("Record Revenue", class: buttonish(:expand))
-              }
-            end
+            }
+            full_row {
+              f.submit("Record Revenue", class: buttonish(:expand))
+            }
           }
-        end
+        }
+      end
+
+      full_row {
+        render partial: 'shared/table/reserved_for_contributors'
+        render partial: 'shared/table/unpaid_pool'
       }
-      br
+
       full_row {
         if project.revenue_history.any?
+          h3 "Project Revenue"
           div(class: "table-scroll table-box revenues") {
 
 

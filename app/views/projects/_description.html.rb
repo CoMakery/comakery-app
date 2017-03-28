@@ -1,5 +1,5 @@
 class Views::Projects::Description < Views::Projects::Base
-  needs :project, :can_award, :award_data
+  needs :project, :can_award, :award_data, :current_auth
 
   def content
     div {
@@ -41,33 +41,18 @@ class Views::Projects::Description < Views::Projects::Base
 
             ul(class: 'menu simple awarded-info description-stats') {
               li_if(project.revenue_share?) {
-                h5 "Revenue Shared"
-                span(class: "coin-numbers revenue-percentage") {
-                  text project.royalty_percentage_pretty
+                h5 "Reserved For Contributors"
+                div(class: "coin-numbers revenue-percentage") {
+                  text "#{project.royalty_percentage_pretty}"
+                  span(class: "balance-type") { text " of project revenue" }
+                  if project.revenue_sharing_end_date.present?
+                    br
+                    span(class: 'help-text') {
+                      text "Until #{project.revenue_sharing_end_date_pretty}"
+                    }
+                  end
                 }
               }
-
-              if award_data[:award_amounts][:my_project_coins].present?
-                li(class: 'my-share') {
-                  h5 "My #{project.payment_description}"
-                  div(class: " coin-numbers") {
-                    text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
-                  }
-                  span(class: "balance-type") { text "of #{project.total_awarded_pretty} awarded" }
-                  br
-                  span(class: "help-text") { text "(estimated)" }
-                }
-
-                li_if(project.revenue_share?, class: 'my-balance') {
-                  h5 "My Balance"
-                  div(class: "coin-numbers") {
-                    text project.shares_to_balance_pretty(award_data[:award_amounts][:my_project_coins])
-                  }
-                  span(class: "balance-type") { text "of #{project.total_revenue_shared_rounded} total" }
-                  br
-                  span(class: "help-text") { text "(estimated)" }
-                }
-              end
 
               if award_data[:contributions_summary].present?
                 li(class: 'top-contributors') {

@@ -112,8 +112,15 @@ class Mom
     Award.new(params)
   end
 
-  def payment(**attrs )
-    Payment.new(**attrs)
+  def payment(currency: 'USD', **attrs )
+    Payment.new(currency: currency, **attrs)
+  end
+
+  def project_payment(quantity_redeemed: 1, payee_auth: create(:authentication), project: create(:project))
+    project.
+        payments.
+        new_with_quantity(quantity_redeemed: quantity_redeemed,
+                                       payee_auth: payee_auth)
   end
 
   def slack(authentication = create(:authentication))

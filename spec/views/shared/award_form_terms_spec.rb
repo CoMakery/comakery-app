@@ -27,7 +27,7 @@ describe "shared/award_form_terms.html.rb" do
     it 'renders all fields for royalty projects when present' do
       render
       expect(rendered).to have_content "Project Name"
-      expect(rendered).to have_content "Revenue Reserved To Pay Contributors: 8.0%"
+      expect(rendered).to have_content "Revenue Reserved To Pay Contributors: 8%"
       expect(rendered).to have_content "Maximum Revenue Shares: 200,000"
       expect(rendered).to have_content "Maximum Revenue Shares Awarded Per Month: 27,000"
       expect(rendered).to have_content "Contributions: are exclusive"

@@ -1,19 +1,15 @@
 class Views::Awards::Index < Views::Base
-  needs :project, :awards
+  needs :project, :awards, :current_auth
 
   def content
     render partial: 'shared/project_header'
-    column {
-      h3 "Award History"
-
+    full_row {
       render partial: 'awards/activity'
-
-      pages
-      render partial: "shared/awards",
-             locals: {project: project, awards: awards, show_recipient: true}
-      pages
-
     }
+    pages
+    render partial: "shared/awards",
+           locals: {project: project, awards: awards, show_recipient: true}
+    pages
   end
 
   def pages

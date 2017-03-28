@@ -22,11 +22,11 @@ class Views::Shared::Awards < Views::Base
         awards.sort_by(&:created_at).reverse.each do |award|
           tr(class: "award-row") {
             td(class: "small-1 award-type") {
-              text number_with_delimiter(project.payment_description, :delimiter => ',')
+              text project.payment_description
             }
 
             td(class: "small-1 award-unit-amount financial") {
-              text award.unit_amount
+              text award.unit_amount_pretty
             }
 
             td(class: "small-1 award-quantity financial") {

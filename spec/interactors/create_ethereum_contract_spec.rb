@@ -9,7 +9,7 @@ describe CreateEthereumContract do
   it 'should trigger if transitioned_to_ethereum_enabled = true' do
     expect(project).to receive(:transitioned_to_ethereum_enabled?) { true }
     expect(EthereumTokenContractJob).to receive(:perform_async).with(project.id)
-    expect(CreateEthereumAwards).to receive(:call).with(awards: [award1, award2])
+    expect(CreateEthereumAwards).to receive(:call).with(awards: array_including(award1, award2))
     CreateEthereumContract.call(project: project)
   end
 

@@ -24,6 +24,7 @@ body {
     }
   }
 }
+
 .app-container {
   @include grid-row($behavior: collapse);
   max-width: none;
@@ -33,11 +34,13 @@ body {
     float: none;
   }
 }
+
 .app-aside {
   @include grid-column($columns: 12);
   @include padding-leader(.5);
   background: darken($vapor, 15);
 }
+
 @media #{$medium-up} {
   .app-nav {
     @include grid-column($columns: 2);
@@ -52,6 +55,7 @@ body {
     @include grid-column($columns: 4);
   }
 }
+
 .main {
   padding-bottom: 4em;
 
@@ -60,17 +64,25 @@ body {
     margin-bottom: .4em;
   }
 }
+
 .top-bar-right ul li > a {
   @extend %chunko-text;
   text-align: right;
   padding-right: 15px;
 }
+
 a .button, a .button.take-action {
   @extend %chunko-text;
   color: $snow;
 }
+
 .button {
   margin: 5px 4px;
+}
+
+.button:disabled {
+  background-color: $skyblue;
+  opacity: 0.5;
 }
 
 .button.primary {
@@ -177,7 +189,6 @@ form.take-action-form p.notice {
   border-radius: $global-radius;
   background-color: white;
 
-
   input[type="radio"] {
     margin-right: 10px;
     margin-left: 2px;
@@ -191,6 +202,7 @@ form.take-action-form p.notice {
 
   @include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.12));
 }
+
 ul {
   margin-left: 0px;
   li {
@@ -198,6 +210,7 @@ ul {
     margin-bottom: 5px;
   }
 }
+
 .project-nav {
   margin-bottom: 1em;
   ul {
@@ -211,14 +224,21 @@ ul {
 }
 
 .license-markdown {
-  h1 { font-size: 1.5rem; }
-  h2 { font-size: 1.25rem; }
-  h3 { font-size: 1.1rem; }
+  h1 {
+    font-size: 1.5rem;
+  }
+  h2 {
+    font-size: 1.25rem;
+  }
+  h3 {
+    font-size: 1.1rem;
+  }
 }
 
 .table-box {
   border: 1px solid #ccc;
   margin-bottom: 20px;
+  margin-right: 10px;
   border-radius: $global-radius;
   background-color: white;
 
@@ -270,10 +290,14 @@ ul {
 }
 
 .summary {
-  .table-box {
-    margin-right: 65px;
+  min-width: 500px;
+
+  .table-box, .content-box {
+    margin-right: 0px;
   }
+
 }
+
 table.summary-table {
   tr td:first-of-type {
     width: 250px;
@@ -282,4 +306,147 @@ table.summary-table {
 
 .coin-numbers {
   font-size: 1.4em;
+}
+
+.conversational-form {
+  font-size: 1.9375rem;
+  font-color: $steel;
+
+  .field_with_errors {
+    display: inline-block;
+  }
+
+  .error {
+    color: $error-color;
+  }
+
+  input[type=number] {
+    display: inline;
+    width: 150px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  .row {
+    margin-bottom: 15px;
+  }
+}
+
+.flush-left-column {
+  padding-left: 0px;
+  h3 {
+    padding-left: 10px;
+  }
+}
+
+.money {
+  color: green;
+  td {
+    font-size: 1.1em;
+  }
+}
+
+progress.first-segment {
+  background-color: #f3f3f3;
+  border: 0;
+  height: 18px;
+  border-radius: 9px;
+  width: 300px;
+}
+
+progress {
+  background-color: #f3f3f3;
+  border: 0;
+  height: 18px;
+  border-radius: 9px;
+  width: 300px;
+}
+
+.meter-box {
+  min-width: 250px;
+  width: 100%;
+  table {
+    overflow: auto;
+    border-style: none;
+    tbody {
+      border: none;
+    }
+    tr {
+      background-color: white;
+      td {
+        padding: 2px;
+        text-align: right;
+      }
+    }
+  }
+  .meter {
+    height: 25px;
+    background: $steel;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    overflow: visible;
+    color: white;
+    padding: 0px;
+
+    .complete {
+      display: inline-block;
+      vertical-align: middle;
+
+      float: left;
+      height: 100%;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+      background-color: green;
+      box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3),
+      inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: visible;
+      text-align: right;
+      padding-right: 5px;
+      padding-left: 6px;
+    }
+
+    .incomplete {
+      float: left;
+      vertical-align: middle;
+      padding-left: 5px;
+
+      height: 100%;
+      position: relative;
+      overflow: visible;
+      text-align: left;
+    }
+  }
+
+  .meter-text {
+    overflow: auto;
+    .title {
+      text-align: right;
+    }
+    .incomplete-text, .complete-text {
+      display: inline-block;
+      float: left;
+      position: relative;
+      overflow: visible;
+      height: 100%;
+    }
+
+    .complete-text {
+      vertical-align: bottom;
+      text-align: right;
+      padding-left: 6px;
+      padding-right: 5px;
+    }
+
+    .end-text {
+      display: inline-block;
+      float: right;
+      text-align: right;
+      position: relative;
+      overflow: visible;
+      height: 100%;
+    }
+  }
 }

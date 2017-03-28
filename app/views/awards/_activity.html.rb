@@ -1,40 +1,20 @@
 class Views::Awards::Activity < Views::Base
-  needs :project, :award_data
+  needs :project, :award_data, :current_auth
 
   def content
-    div(class: 'content-box') {
-      row {
-        ul(class: 'menu simple awarded-info') {
-          li {
-            span(class: " coin-numbers") {
-              text number_with_precision(total_coins_issued, precision: 0, delimiter: ',')
-            }
-            if percentage_issued >= 0.01
-              text " (#{number_with_precision(percentage_issued, precision: 2)}%)"
-            end
+    column {
+      div {
+        h3 "#{project.payment_description} Awarded"
+        br
 
-            text raw "&nbsp;awarded"
+        if award_data[:contributions].present?
+          p {
+            div(id: "contributions-chart")
           }
-
-
-          if award_data[:award_amounts][:my_project_coins]
-            li {
-              span(class: "coin-numbers") {
-                text number_with_precision(award_data[:award_amounts][:my_project_coins], precision: 0, delimiter: ',')
-              }
-              text raw "&nbsp;mine"
-            }
+          content_for :js do
+            make_charts
           end
-
-          if award_data[:contributions].present?
-            p {
-              div(id: "contributions-chart")
-            }
-            content_for :js do
-              make_charts
-            end
-          end
-        }
+        end
       }
     }
   end

@@ -1,4 +1,6 @@
 class Project < ActiveRecord::Base
+  ROYALTY_PERCENTAGE_PRECISION = 13
+
   include SlackDomainable
   include EthereumAddressable
 
@@ -12,9 +14,25 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
 
   has_many :awards, through: :award_types, dependent: :destroy
-  has_many :payments, dependent: :destroy
 
-  has_many :contributors, through: :awards, source: :authentication  # TODO deprecate in favor of contributors_distinct
+  has_many :payments, dependent: :destroy do
+    def new_with_quantity(quantity_redeemed:, payee_auth:)
+      project = @association.owner
+
+      new(total_value: BigDecimal(quantity_redeemed) * project.revenue_per_share,
+          quantity_redeemed: quantity_redeemed,
+          share_value: project.revenue_per_share,
+          currency: project.denomination,
+          payee: payee_auth).
+          tap { |n| n.truncate_total_value_to_currency_precision }
+    end
+
+    def create_with_quantity(**attrs)
+      new_with_quantity(**attrs).tap { |n| n.save }
+    end
+  end
+
+  has_many :contributors, through: :awards, source: :authentication # TODO deprecate in favor of contributors_distinct
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
   has_many :revenues
 
@@ -26,9 +44,9 @@ class Project < ActiveRecord::Base
   }
 
   enum denomination: {
-    USD: 0,
-    BTC: 1,
-    ETH: 2
+      USD: 0,
+      BTC: 1,
+      ETH: 2
   }
 
   validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id,
@@ -46,17 +64,17 @@ class Project < ActiveRecord::Base
 
   validate :maximum_coins_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
-  validates :ethereum_contract_address, ethereum_address: {type: :account, immutable: true}  # see EthereumAddressable
+  validates :ethereum_contract_address, ethereum_address: {type: :account, immutable: true} # see EthereumAddressable
   validate :denomination_changeable
 
   before_save :set_transitioned_to_ethereum_enabled
 
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<("max(awards.created_at) as last_award_created_at").join(","))
-      .joins("left join award_types on projects.id = award_types.project_id")
-      .joins("left join awards on award_types.id = awards.award_type_id")
-      .group("projects.id")
-      .order("max(awards.created_at) desc nulls last, projects.created_at desc nulls last")
+        .joins("left join award_types on projects.id = award_types.project_id")
+        .joins("left join awards on award_types.id = awards.award_type_id")
+        .group("projects.id")
+        .order("max(awards.created_at) desc nulls last, projects.created_at desc nulls last")
   end
 
   def self.for_account(account)
@@ -79,21 +97,37 @@ class Project < ActiveRecord::Base
     awards.total_awarded
   end
 
-  def share_of_revenue(awards)
-    return BigDecimal(0)  if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0
-    (BigDecimal(awards) * total_revenue_shared) / BigDecimal(total_awarded)
+  def total_awards_outstanding
+    total_awarded - total_awards_redeemed
+  end
+
+  def total_awards_redeemed
+    payments.sum(:quantity_redeemed)
+  end
+
+
+  def share_of_revenue_unpaid(awards)
+    return BigDecimal(0) if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0 || awards.blank?
+    (BigDecimal(awards) * revenue_per_share).truncate(currency_precision)
   end
 
   def total_revenue_shared
-    return BigDecimal(0)  if royalty_percentage.blank? || project_coin?
-    total_revenue * (royalty_percentage * 0.01)
+    return BigDecimal(0) if royalty_percentage.blank? || project_coin?
+    total_revenue * (royalty_percentage * BigDecimal('0.01'))
   end
 
-  #TODO: WARNING this number needs to be updated to subtract out payments_made and shares_redeemend
-  # this functionality isn't written at the time this method is being written
+  def total_paid_to_contributors
+    payments.sum(:total_value)
+  end
+
+  def total_revenue_shared_unpaid
+    total_revenue_shared - total_paid_to_contributors
+  end
+
+  # truncated to 8 decimal places
   def revenue_per_share
     return BigDecimal(0) if royalty_percentage.blank?|| total_awarded == 0
-    total_revenue_shared / total_awarded
+    (total_revenue_shared_unpaid / BigDecimal(total_awards_outstanding)).truncate(8)
   end
 
   def community_award_types
@@ -129,6 +163,11 @@ class Project < ActiveRecord::Base
     revenue_share? && (royalty_percentage&.> 0)
   end
 
+  def royalty_percentage=(x)
+    x_truncated = BigDecimal(x, ROYALTY_PERCENTAGE_PRECISION).truncate(ROYALTY_PERCENTAGE_PRECISION) unless x.blank?
+    write_attribute(:royalty_percentage, x_truncated)
+  end
+
   private
 
   def valid_tracker_url
@@ -154,8 +193,8 @@ class Project < ActiveRecord::Base
 
   def set_transitioned_to_ethereum_enabled
     @transitioned_to_ethereum_enabled = ethereum_enabled_changed? &&
-      ethereum_enabled && ethereum_contract_address.blank?
-    true  # don't halt filter
+        ethereum_enabled && ethereum_contract_address.blank?
+    true # don't halt filter
   end
 
   def validate_url(attribute_name)
@@ -176,5 +215,9 @@ class Project < ActiveRecord::Base
   def denomination_changeable
     errors.add(:denomination, "cannot be changed because the license terms are finalized") if license_finalized_was
     errors.add(:denomination, "cannot be changed because revenue has been recorded") if revenues.any? && denomination_changed?
+  end
+
+  def currency_precision
+    Comakery::Currency::PRECISION[denomination]
   end
 end

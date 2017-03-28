@@ -86,8 +86,10 @@ describe GetAwardData do
       let!(:sam_award_1) { create(:award, award_type: award_type1, authentication: sam_auth, created_at: Date.new(2016, 1, 1)) }
       let!(:john_award_1) { create(:award, award_type: award_type1, authentication: john_auth, created_at: Date.new(2016, 2, 8)) }
       let!(:john_award_2) { create(:award, award_type: award_type1, authentication: john_auth, created_at: Date.new(2016, 3, 1)) }
-      let!(:john_payment) { create(:payment, recipient: john_auth, issuer: sam, project: project, amount: 10) }
-      let!(:sam_payment) { create(:payment, recipient: sam_auth, issuer: sam, project: project, amount: 5) }
+      let!(:john_payment) { create(:payment, payee: john_auth, issuer: sam_auth, project: project, total_value: 10,
+                                   share_value: 1, quantity_redeemed: 10) }
+      let!(:sam_payment) { create(:payment, payee: sam_auth, issuer: sam_auth, project: project,
+                                  share_value: 1, total_value: 5, quantity_redeemed: 5) }
 
       specify do
         contributions = GetAwardData.new.contributions_summary(project)

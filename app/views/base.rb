@@ -36,6 +36,15 @@ module Views
       end
     end
 
+    def inline_errors(object, field)
+      errors = object.errors[field]
+      if errors.any?
+        div(class: :error) {
+          text("#{field.to_s.humanize} #{errors.to_sentence}")
+        }
+      end
+    end
+
     def to_json(*args)
       as_json(*args).to_json
     end

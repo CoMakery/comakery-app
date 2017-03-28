@@ -6,56 +6,62 @@ class Views::Contributors::Index < Views::Projects::Base
     column {
       full_row {
         if award_data[:contributions].present?
-          p {
-            h4 "#{project.payment_description}"
-            div(id: "award-percentages", class: "royalty-pie") {}
+          column("large-4 medium-12 summary float-left") {
+              h3 "Lifetime #{project.payment_description} Awarded To Contributors"
+
+              p {
+                div(id: "award-percentages", class: "royalty-pie") {}
+              }
+              content_for :js do
+                make_charts
+              end
           }
-          content_for :js do
-            make_charts
-          end
         end
+
+        render partial: 'shared/table/unpaid_revenue_shares'
+        render partial: 'shared/table/unpaid_pool'
       }
 
       full_row {
         if award_data[:contributions_summary].present?
-          div(class: "table-scroll table-box .contributors") {
+          div(class: "table-scroll table-box contributors") {
             table(class: "table-scroll", style: "width: 100%") {
               tr(class: "header-row") {
                 th "Contributors"
-                th { text "Current #{project.payment_description.singularize} Holdings" }
-                th { text "Current Value" } if project.revenue_share?
-                th { text "Lifetime #{project.payment_description} Earned" }
+                th { text "Lifetime #{project.payment_description} Awarded" }
+                th { text "Unpaid #{project.payment_description}" }
+                th { text "Unpaid Revenue Share Balance" } if project.revenue_share?
                 th { text "Lifetime Paid" } if project.revenue_share?
               }
-              award_data[:contributions_summary].each do |contributor|
+              project.contributors_by_award_amount.each do |contributor_auth|
+
                 tr(class: "award-row") {
                   td(class: "contributor") {
-                    img(src: contributor[:avatar], class: "icon avatar-img")
-                    div(class: "margin-small margin-collapse inline-block") { text contributor[:name] }
+                    img(src: contributor_auth.slack_icon, class: "icon avatar-img")
+                    div(class: "margin-small margin-collapse inline-block") { text contributor_auth.display_name }
+                  }
+                  td(class: "awards-earned financial") {
+                    span(class: "margin-small") {
+                      text contributor_auth.total_awards_earned_pretty(project)
+                    }
                   }
                   td(class: "award-holdings financial") {
                     span(class: "margin-small") {
-                      text text number_with_precision(contributor[:earned], precision: 0, delimiter: ',')
+                      text text contributor_auth.total_awards_remaining_pretty(project)
                     }
                   }
 
                   if project.revenue_share?
                     td(class: "holdings-value financial") {
                       span(class: "margin-small") {
-                        text project.shares_to_balance_pretty(contributor[:earned])
+                        text contributor_auth.total_revenue_unpaid_remaining_pretty(project)
                       }
                     }
                   end
-                  td(class: "awards-earned financial") {
-                    span(class: "margin-small") {
-                      text number_with_precision(contributor[:earned], precision: 0, delimiter: ',')
-                    }
-                  }
                   if project.revenue_share?
                     td(class: "paid hidden financial") {
                       span(class: "margin-small") {
-                        text project.currency_denomination
-                        text 0
+                        text contributor_auth.total_revenue_paid_pretty(project)
                       }
                     }
                   end
