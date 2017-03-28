@@ -162,7 +162,8 @@ class Project < ActiveRecord::Base
   end
 
   def royalty_percentage=(x)
-    x_truncated = BigDecimal(x, 15).truncate(13) unless x.blank?
+    max_database_column_precision = 13
+    x_truncated = BigDecimal(x, max_database_column_precision).truncate(max_database_column_precision) unless x.blank?
     write_attribute(:royalty_percentage, x_truncated)
   end
 
