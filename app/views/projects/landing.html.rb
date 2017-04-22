@@ -36,7 +36,7 @@ class Views::Projects::Landing < Views::Projects::Base
               }
             }
             a("Sign in with Slack", class: buttonish << "margin-small", href: login_path)
-            a("get updates", class: "beta-signup", href: 'http://eepurl.com/b9ISjX')
+            a("or join CoMakery's Slack", class: "beta-signup", href: 'https://join-comakery-slack.herokuapp.com')
           }
         }
         div(class: "how-it-works") {
