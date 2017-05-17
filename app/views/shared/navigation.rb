@@ -21,18 +21,8 @@ class Views::Shared::Navigation < Views::Base
         }
       }
       ul(class: "menu") {
-        if current_account
-          li {
-            link_to 'Account', account_path, class: "first"
-          }
-          li {
-            link_to 'Sign out', session_path, method: :delete
-          }
-        else
-          li {
-            link_to 'Sign in', login_path, class: "first"
-          }
-        end
+        blog_link
+        account_links
       }
     }
     div(class: "show-for-medium-only") {
@@ -56,24 +46,9 @@ class Views::Shared::Navigation < Views::Base
         }
       }
       ul(class: "menu") {
-        if current_account
-          li {
-            link_to 'Account', account_path, class: "first"
-          }
-          li {
-            link_to 'Sign out', session_path, method: :delete
-          }
-        else
-          li {
-            link_to 'Sign in', login_path, class: "first"
-          }
-        end
-        li {
-          a(href: '//github.com/CoMakery') { i(class: "fa fa-github") }
-        }
-        li {
-          a(href: '//twitter.com/comakery') { i(class: "fa fa-twitter") }
-        }
+        blog_link
+        social_media_links
+        account_links
       }
     }
     div(class: "show-for-large") {
@@ -91,6 +66,9 @@ class Views::Shared::Navigation < Views::Base
               end
             }
           }
+
+          blog_link
+          social_media_links
 
           li(class: "slack-instance") {
             if current_account&.slack_auth
@@ -112,14 +90,40 @@ class Views::Shared::Navigation < Views::Base
               link_to 'Sign in', login_path
             }
           end
-          li {
-            a(href: '//github.com/CoMakery') { i(class: "fa fa-github") }
-          }
-          li {
-            a(href: '//twitter.com/comakery') { i(class: "fa fa-twitter") }
-          }
+
+
         }
       }
     }
+  end
+
+  def blog_link
+    li {
+      link_to 'Media', 'https://media.comakery.com'
+    }
+  end
+
+  def social_media_links
+    li {
+      a(href: '//github.com/CoMakery') { i(class: "fa fa-github") }
+    }
+    li {
+      a(href: '//twitter.com/comakery') { i(class: "fa fa-twitter") }
+    }
+  end
+
+  def account_links
+    if current_account
+      li {
+        link_to 'Account', account_path, class: "first"
+      }
+      li {
+        link_to 'Sign out', session_path, method: :delete
+      }
+    else
+      li {
+        link_to 'Sign in', login_path, class: "first"
+      }
+    end
   end
 end
