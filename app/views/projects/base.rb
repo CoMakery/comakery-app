@@ -48,18 +48,14 @@ class Views::Projects::Base < Views::Base
         a(href: project_path(project)) {
           img(src: project.slack_team_image_132_url, class: "icon")
         }
-        if project.last_award_created_at
-          p(class: "project-last-award font-tiny") { text "active #{time_ago_in_words(project.last_award_created_at)} ago" }
-          p(class: "description") { text project.description_text }
-        else
-          p(class: "description no-last-award") { text project.description_text }
-        end
+
+        p(class: "description no-last-award") { text project.description_text }
 
         div(class: "contributors") {
           # this can go away when project owners become auths instead of accounts
           owner_auth = project.owner_account.authentications.find_by(slack_team_id: project.slack_team_id)
 
-          ([owner_auth].compact + Array.wrap(contributors)).uniq{|auth|auth.id}.each do |contributor|
+          ([owner_auth].compact + Array.wrap(contributors)).uniq { |auth| auth.id }.each do |contributor|
             tooltip(contributor.display_name) {
               img(src: contributor.slack_icon, class: "contributor avatar-img")
             }
