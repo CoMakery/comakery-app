@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302173357) do
+ActiveRecord::Schema.define(version: 20170519051542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,6 +165,7 @@ ActiveRecord::Schema.define(version: 20170302173357) do
     t.integer  "denomination",                                          default: 0,     null: false
     t.text     "revenue_stream"
     t.datetime "revenue_sharing_end_date"
+    t.integer  "featured"
   end
 
   add_index "projects", ["owner_account_id"], name: "index_projects_on_owner_account_id", using: :btree

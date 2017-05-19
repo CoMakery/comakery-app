@@ -348,6 +348,17 @@ describe Project do
         expect(Project.with_last_activity_at.all.map(&:title)).to eq(%w(p1_8 p2_3 p3_4 p3_5 p3_6))
       end
 
+      it '.featured overrides last activity' do
+        p1_8 = create(:project, title: "p1_8", created_at: 8.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 1.days.ago) } }
+        p2_3 = create(:project, title: "p2_3", created_at: 3.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 2.days.ago) } }
+        p3_6 = create(:project, title: "p3_6", created_at: 6.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
+        p3_5 = create(:project, title: "p3_5", created_at: 5.days.ago, featured: 1).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
+        p3_4 = create(:project, title: "p3_4", created_at: 4.days.ago, featured: 0).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
+
+        expect(Project.count).to eq(5)
+        expect(Project.featured.with_last_activity_at.all.map(&:title)).to eq(%w(p3_4 p3_5 p1_8 p2_3 p3_6))
+      end
+
       describe "#for_account #not_for_account" do
         it "returns all projects for the given account's slack auth" do
           account = create(:account).tap do |a|
@@ -617,7 +628,7 @@ describe Project do
         let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
         let(:issuer) { create :account }
         let(:authentication) { create :authentication }
-        let(:expected_revenue_per_share) {BigDecimal('3.628571428571428571')}
+        let(:expected_revenue_per_share) { BigDecimal('3.628571428571428571') }
 
         before do
           project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
@@ -635,7 +646,7 @@ describe Project do
           payment = project.payments.create_with_quantity(quantity_redeemed: 10,
                                                           payee_auth: authentication)
 
-          expect(payment.total_value).to eq( (10 * expected_revenue_per_share).truncate(2) )
+          expect(payment.total_value).to eq((10 * expected_revenue_per_share).truncate(2))
           expect(payment.total_value).to eq(36.28)
           expect(project.total_awards_outstanding).to eq(25)
 

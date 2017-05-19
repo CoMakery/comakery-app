@@ -89,6 +89,10 @@ class Project < ActiveRecord::Base
     where(public: true)
   end
 
+  def self.featured
+    order("featured asc")
+  end
+
   def total_revenue
     revenues.total_amount
   end
