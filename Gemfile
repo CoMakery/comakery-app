@@ -10,7 +10,7 @@ gem "d3-rails", '~>3.5'
 gem "font-awesome-rails"
 gem 'fortitude'
 gem 'foundation-icons-sass-rails'
-gem 'foundation-rails'
+gem 'foundation-rails', '~>6.2.4.0'
 gem 'font_assets'
 gem 'httparty'
 gem 'interactor'
@@ -26,7 +26,7 @@ gem 'premailer-rails'
 gem 'puma'
 gem 'pundit'
 gem 'rails_12factor', group: :production
-gem 'rails', '~> 4.2'
+gem 'rails', '4.2.7.1'
 gem "redcarpet"
 gem "refile", require: "refile/rails"
 gem "refile-mini_magick"
