@@ -46,8 +46,6 @@ module Comakery
 
     config.allow_missing_ethereum_bridge = false
 
-    config.active_record.raise_in_transactional_callbacks = true
-
     config.airbrake = false
 
     config.ethereum_explorer_site = ENV['ETHEREUM_EXPLORER_SITE'] || raise("Please set ETHEREUM_EXPLORER_SITE environment variable")
