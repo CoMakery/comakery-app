@@ -107,8 +107,3 @@ p.award_types.each{|t| t.awards.destroy_all}
 p.award_types.destroy_all
 p.delete
 ```
-
-## License
-
-CoMakery is being developed under the experimental
-[Peer Production Royalty Token License](https://github.com/comakery/comakery-app/blob/master/LICENSE.md).
