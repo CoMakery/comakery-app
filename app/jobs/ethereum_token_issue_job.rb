@@ -2,6 +2,10 @@ class EthereumTokenIssueJob
   include Sidekiq::Worker
   sidekiq_options queue: 'transaction'
 
+  sidekiq_retry_in do |count|
+    30.minutes.to_i * (count + 1) # The current retry count is yielded. The return value of the block must be an integer. It is used as the delay, in seconds.
+  end
+
   def perform(award_id)
     award = Award.find award_id
     return unless award.ethereum_issue_ready?
