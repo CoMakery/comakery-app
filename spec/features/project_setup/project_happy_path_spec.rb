@@ -233,21 +233,6 @@ describe "viewing projects, creating and editing", :js do
         expect(page.find("input[name*='[title]']")[:value]).to eq("fancy title")
         expect(page.find("input[name*='[community_awardable]']")[:value]).to be_truthy
       end
-
-      it "allows creating ethereum contract for project AND ethereum tokens for each award" do
-        award2 = create(:award, award_type: award_type, authentication: same_team_account_authentication)
-        visit edit_project_path(project)
-        check "Publish to Ethereum Blockchain"
-        click_on "Save"
-
-        expect(EthereumTokenContractJob.jobs.length).to eq(1)
-        expect(EthereumTokenContractJob.jobs.first['args'].first).to eq(project.id)
-
-        expect(EthereumTokenIssueJob.jobs.length).to eq(2)
-        expect(EthereumTokenIssueJob.jobs.map{ |job| job['args'] }.flatten).to match_array([
-          award.id, award2.id ])
-
-      end
     end
   end
 end
