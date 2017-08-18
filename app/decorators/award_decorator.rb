@@ -16,7 +16,7 @@ class AwardDecorator < Draper::Decorator
 
   def ethereum_transaction_explorer_url
     if object.ethereum_transaction_address
-      "https://#{Rails.application.config.ethercamp_subdomain}.ether.camp/transaction/#{object.ethereum_transaction_address}"
+      "https://#{Rails.application.config.ethereum_explorer_site}/tx/#{object.ethereum_transaction_address}"
     else
       nil
     end

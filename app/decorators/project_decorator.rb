@@ -22,7 +22,7 @@ class ProjectDecorator < Draper::Decorator
 
   def ethereum_contract_explorer_url
     if ethereum_contract_address
-      "https://#{Rails.application.config.ethercamp_subdomain}.ether.camp/account/#{project.ethereum_contract_address}"
+      "https://#{Rails.application.config.ethereum_explorer_site}/address/#{project.ethereum_contract_address}"
     else
       nil
     end

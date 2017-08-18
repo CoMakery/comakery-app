@@ -96,7 +96,8 @@ describe ProjectDecorator do
     let(:project) { create(:project,
                            ethereum_contract_address: '0xa234567890b234567890a234567890b234567890').decorate }
     specify {
-      expect(project.ethereum_contract_explorer_url).to include("ether.camp/account/#{project.ethereum_contract_address}")
+      expect(project.ethereum_contract_explorer_url).
+          to include("fake-subdomain-for-tests.example.com/address/#{project.ethereum_contract_address}")
     }
   end
 

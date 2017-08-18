@@ -60,7 +60,7 @@ module Comakery
 
     config.airbrake = false
 
-    config.ethercamp_subdomain = ENV['ETHERCAMP_SUBDOMAIN'] || raise("Please set ETHERCAMP_SUBDOMAIN environment variable")
+    config.ethereum_explorer_site = ENV['ETHEREUM_EXPLORER_SITE'] || raise("Please set ETHEREUM_EXPLORER_SITE environment variable")
 
     config.allow_ethereum = ENV['ALLOW_ETHEREUM']
   end
