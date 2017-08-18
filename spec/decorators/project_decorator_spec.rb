@@ -97,7 +97,7 @@ describe ProjectDecorator do
                            ethereum_contract_address: '0xa234567890b234567890a234567890b234567890').decorate }
     specify {
       expect(project.ethereum_contract_explorer_url).
-          to include("fake-subdomain-for-tests.example.com/address/#{project.ethereum_contract_address}")
+          to include("#{Rails.application.config.ethereum_explorer_site}/address/#{project.ethereum_contract_address}")
     }
   end
 
