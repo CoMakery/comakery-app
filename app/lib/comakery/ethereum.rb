@@ -21,7 +21,7 @@ class Comakery::Ethereum
     end
 
     def token_issue params
-      call_ethereum_bridge('token_issue', params, 'transactionId')
+      call_ethereum_bridge('token_issue', params, 'tx')
     end
 
     def call_ethereum_bridge(path, params, response_key)

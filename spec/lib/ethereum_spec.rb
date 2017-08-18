@@ -50,7 +50,7 @@ describe Comakery::Ethereum do
         }))
         .to_return(
           headers: {'Content-Type': 'application/json'},
-          body: {transactionId: '0x9999999999999999999999999999999999999999'}.to_json
+          body: {tx: '0x9999999999999999999999999999999999999999'}.to_json
         )
       transactionId = Comakery::Ethereum.token_issue(
         contractAddress: '0xcccccccccccccccccccccccccccccccccccccccc',
