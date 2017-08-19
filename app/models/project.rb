@@ -77,6 +77,14 @@ class Project < ActiveRecord::Base
         .order("max(awards.created_at) desc nulls last, projects.created_at desc nulls last")
   end
 
+  def create_ethereum_awards!
+    CreateEthereumAwards.call(awards: self.awards)
+  end
+
+  def create_ethereum_contract!
+    EthereumTokenContractJob.perform_async(self.id)
+  end
+
   def self.for_account(account)
     where(slack_team_id: account&.slack_auth.slack_team_id)
   end

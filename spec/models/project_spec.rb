@@ -855,4 +855,28 @@ describe Project do
       specify { expect(new_payment.payee).to eq(authentication) }
     end
   end
+
+
+  describe "create_ethereum_awards!" do
+    let(:project) { create :project }
+    let(:issuer) { create :account }
+    let!(:authentication) { create :authentication }
+
+    let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+    let!(:awards) { project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication) }
+
+    specify { expect(project.awards.size).to eq(1)}
+
+    it 'kicks of jobs to issue ethereum awards for the project' do
+      expect(CreateEthereumAwards).to receive(:call).with(awards: project.awards)
+      project.create_ethereum_awards!
+    end
+  end
+
+  describe '#create_ethereum_contract!' do
+    it 'kicks off an ethereum token contract job' do
+      expect(EthereumTokenContractJob).to receive(:perform_async).with(project.id)
+      project.create_ethereum_contract!
+    end
+  end
 end
