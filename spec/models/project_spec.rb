@@ -874,6 +874,7 @@ describe Project do
   end
 
   describe '#create_ethereum_contract!' do
+    let(:project) { create :project }
     it 'kicks off an ethereum token contract job' do
       expect(EthereumTokenContractJob).to receive(:perform_async).with(project.id)
       project.create_ethereum_contract!
