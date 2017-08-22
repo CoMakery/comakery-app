@@ -82,7 +82,8 @@ class Project < ActiveRecord::Base
   end
 
   def create_ethereum_contract!
-    EthereumTokenContractJob.perform_async(self.id)
+    address = Comakery::Ethereum.token_contract(maxSupply: self.maximum_coins)
+    self.update! ethereum_contract_address: address
   end
 
   def self.for_account(account)

@@ -875,9 +875,12 @@ describe Project do
 
   describe '#create_ethereum_contract!' do
     let(:project) { create :project }
+    let(:contract_address) { "0x03b3536e825a484F796B094e63011027620bc2a9" }
+
     it 'kicks off an ethereum token contract job' do
-      expect(EthereumTokenContractJob).to receive(:perform_async).with(project.id)
+      expect(Comakery::Ethereum).to receive(:token_contract).with(maxSupply: project.maximum_coins) {contract_address}
       project.create_ethereum_contract!
+      expect(project.ethereum_contract_address).to eq(contract_address)
     end
   end
 end
