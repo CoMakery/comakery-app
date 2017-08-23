@@ -40,7 +40,7 @@ class Project < ActiveRecord::Base
 
   enum payment_type: {
       revenue_share: 0,
-      project_coin: 1
+      project_token: 1
   }
 
   enum denomination: {
@@ -53,16 +53,16 @@ class Project < ActiveRecord::Base
                         :slack_team_image_34_url, :slack_team_image_132_url, :title, :legal_project_owner,
                         :denomination
 
-  validates_presence_of :royalty_percentage, :maximum_royalties_per_month, unless: :project_coin?
+  validates_presence_of :royalty_percentage, :maximum_royalties_per_month, unless: :project_token?
 
-  validates_numericality_of :maximum_coins, greater_than: 0
+  validates_numericality_of :maximum_tokens, greater_than: 0
   validates_numericality_of :royalty_percentage, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_nil: true
 
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
   validate :valid_video_url, if: -> { video_url.present? }
 
-  validate :maximum_coins_unchanged, if: -> { !new_record? }
+  validate :maximum_tokens_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
   validates :ethereum_contract_address, ethereum_address: {type: :account, immutable: true} # see EthereumAddressable
   validate :denomination_changeable
@@ -82,7 +82,7 @@ class Project < ActiveRecord::Base
   end
 
   def create_ethereum_contract!
-    address = Comakery::Ethereum.token_contract(maxSupply: self.maximum_coins)
+    address = Comakery::Ethereum.token_contract(maxSupply: self.maximum_tokens)
     self.update! ethereum_contract_address: address
   end
 
@@ -125,7 +125,7 @@ class Project < ActiveRecord::Base
   end
 
   def total_revenue_shared
-    return BigDecimal(0) if royalty_percentage.blank? || project_coin?
+    return BigDecimal(0) if royalty_percentage.blank? || project_token?
     total_revenue * (royalty_percentage * BigDecimal('0.01'))
   end
 
@@ -219,9 +219,9 @@ class Project < ActiveRecord::Base
     uri
   end
 
-  def maximum_coins_unchanged
-    if maximum_coins_was > 0 and maximum_coins_was != maximum_coins
-      errors[:maximum_coins] << "can't be changed"
+  def maximum_tokens_unchanged
+    if maximum_tokens_was > 0 and maximum_tokens_was != maximum_tokens
+      errors[:maximum_tokens] << "can't be changed"
     end
   end
 

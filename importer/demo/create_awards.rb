@@ -32,7 +32,7 @@ DEMOS = [
     fixture: 'swarmbot',
     project_model: {
       title: 'Swarmbot',
-      description: %{An open source solution to infect Slack messaging networks with community crypto coins and space kitty kuteness. Swarmbot helps you make contributions and receive project coins. This helps you track your contributions to projects and receive profit distributions!},
+      description: %{An open source solution to infect Slack messaging networks with community crypto tokens and space kitty kuteness. Swarmbot helps you make contributions and receive project tokens. This helps you track your contributions to projects and receive profit distributions!},
       tracker: 'https://github.com/CoMakery/swarmbot/issues'
     },
     owner_name: "CoMakery",
@@ -55,7 +55,7 @@ def make fixture:, project_model:, owner_name:, team_name:, team_image:, project
     slack_team_image_34_url: team_image,
     slack_team_image_132_url: team_image,
     image: File.new(get_fixture(project_image)),
-    maximum_coins: 10_000_000
+    maximum_tokens: 10_000_000
   )
   award_type = create :award_type, amount: 100, name: 'Commit', project: project
   fixture_path = get_fixture "#{fixture}.json"

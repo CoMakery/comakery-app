@@ -31,7 +31,7 @@ describe GetAwardData do
 
     it "doesn't explode if you aren't logged in" do
       result = GetAwardData.call(authentication: nil, project: project)
-      expect(result.award_data[:award_amounts]).to eq({:my_project_coins => nil, :total_coins_issued => 20_150.0})
+      expect(result.award_data[:award_amounts]).to eq({:my_project_tokens => nil, :total_tokens_issued => 20_150.0})
     end
 
     it "returns a pretty hash of the awards for a project with summed amounts for each person" do
@@ -41,7 +41,7 @@ describe GetAwardData do
                                                                 {:net_amount=>6000, :name=>"bob bob", :avatar=>"https://slack.example.com/team-image-34-px.jpg"},
                                                                 {:net_amount=>150.0, :name=>"sam sam", :avatar=>"http://avatar.com/im_pretty.jpg"}])
 
-      expect(result.award_data[:award_amounts]).to eq({my_project_coins: 150.0, total_coins_issued: 20_150.0})
+      expect(result.award_data[:award_amounts]).to eq({my_project_tokens: 150.0, total_tokens_issued: 20_150.0})
     end
 
     it "shows values for each contributor for all 30 days" do

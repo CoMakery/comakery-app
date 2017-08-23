@@ -9,7 +9,7 @@ class Views::Shared::AwardFormTerms < Views::Base
       term "Contributions", project.exclusive_contributions_text
       term "Business Confidentiality", project.require_confidentiality_text
       term "Project confidentiality", project.require_confidentiality_text
-      numeric_term "Maximum #{project.payment_description}", project.maximum_coins_pretty
+      numeric_term "Maximum #{project.payment_description}", project.maximum_tokens_pretty
       numeric_term "Maximum #{project.payment_description} Awarded Per Month", project.maximum_royalties_per_month_pretty
       if project.revenue_share?
         span(class: 'revenue-sharing-only') {
@@ -21,9 +21,9 @@ class Views::Shared::AwardFormTerms < Views::Base
       end
     }
 
-    if project.project_coin?
+    if project.project_token?
       p {
-        text "Contributors are awarded Project Coins for contributions. Contributors do not receive Contributor Royalties or Revenue Sharing awards. The value of Project Coins is not defined by the CoMakery Contributor License, CoMakery Inc, or the CoMakery platform."
+        text "Contributors are awarded Project Tokens for contributions. Contributors do not receive Contributor Royalties or Revenue Sharing awards. The value of Project Tokens is not defined by the CoMakery Contributor License, CoMakery Inc, or the CoMakery platform."
       }
     end
   end

@@ -9,7 +9,7 @@ describe "projects/_description.html.rb" do
     assign :project, project
     assign :can_award, false
 
-    assign :award_data, {award_amounts: {my_project_coins: 0}}
+    assign :award_data, {award_amounts: {my_project_tokens: 0}}
     assign :current_auth, authentication
 
     allow(project).to receive(:total_awards_outstanding_pretty).and_return(20)
@@ -55,9 +55,9 @@ describe "projects/_description.html.rb" do
   end
 
 
-  describe 'project coin' do
+  describe 'project token' do
     before do
-      project.project_coin!
+      project.project_token!
       render
     end
 

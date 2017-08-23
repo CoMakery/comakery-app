@@ -59,7 +59,7 @@ class Mom
   end
 
   def sb_project(owner_account = create(:sb_authentication).account, **attrs)
-    project(owner_account, {slack_team_id: "swarmbot", title: "Swarmbot", payment_type: 'project_coin',}.merge(**attrs))
+    project(owner_account, {slack_team_id: "swarmbot", title: "Swarmbot", payment_type: 'project_token',}.merge(**attrs))
   end
 
   def project(owner_account = create(:account_with_auth), **attrs)
@@ -78,7 +78,7 @@ class Mom
         maximum_royalties_per_month: 10_000,
         legal_project_owner: "UberCatz Inc",
 
-        maximum_coins: 10_000_000
+        maximum_tokens: 10_000_000
     }
     Project.new(defaults.merge(attrs))
   end

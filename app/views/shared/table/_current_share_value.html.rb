@@ -10,23 +10,23 @@ class Views::Shared::Table::CurrentShareValue < Views::Projects::Base
         row(class: 'total-revenue table-box') {
           table {
             tr {
-              td(class: "coin-numbers") { text "" }
+              td(class: "token-numbers") { text "" }
               td {
-                span(class: "coin-numbers total-revenue-unpaid") { text "#{project.total_revenue_shared_unpaid_pretty} " }
+                span(class: "token-numbers total-revenue-unpaid") { text "#{project.total_revenue_shared_unpaid_pretty} " }
                 span { text "Contributor Pool Balance" }
               }
             }
             tr {
-              td(class: "coin-numbers") { text "÷" }
+              td(class: "token-numbers") { text "÷" }
               td {
-                span(class: "coin-numbers unpaid-revenue-shares") { text "#{project.total_awards_outstanding_pretty} " }
+                span(class: "token-numbers unpaid-revenue-shares") { text "#{project.total_awards_outstanding_pretty} " }
                 span { text 'Unpaid Revenue Shares' }
               }
             }
             tr(class: 'money') {
-              td(class: "coin-numbers") { text "=" }
+              td(class: "token-numbers") { text "=" }
               td {
-                span(class: "coin-numbers revenue-per-share") { text project.revenue_per_share_pretty }
+                span(class: "token-numbers revenue-per-share") { text project.revenue_per_share_pretty }
                 span { text ' Current Share Value' }
               }
             }

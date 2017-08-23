@@ -242,8 +242,8 @@ describe "when recording revenue" do
     end
   end
 
-  it "no revenues page displayed for project_coins" do
-    project.project_coin!
+  it "no revenues page displayed for project_tokens" do
+    project.project_token!
 
     login owner
     visit project_path(project)

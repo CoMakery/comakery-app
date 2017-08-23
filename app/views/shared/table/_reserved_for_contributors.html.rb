@@ -7,21 +7,21 @@ class Views::Shared::Table::ReservedForContributors < Views::Projects::Base
         row(class: 'money') { h3 "Reserved for Contributors" }
         row(class: 'table-box') {
           table() {
-            tr(class: "coin-numbers") {
+            tr(class: "token-numbers") {
               td {}
               td {
                 span(class: "total-revenue") { text "#{project.total_revenue_pretty} " }
                 span { text "Total Project Revenue" }
               }
             }
-            tr(class: "coin-numbers") {
+            tr(class: "token-numbers") {
               td { text "×" }
               td {
                 span(class: "royalty-percentage") { text "#{project.royalty_percentage_pretty} " }
                 span { text "Reserved for Contributors" }
               }
             }
-            tr(class: 'money coin-numbers') {
+            tr(class: 'money token-numbers') {
               td { text "=" }
               td {
                 span(class: "total-revenue-shared") { text "#{project.total_revenue_shared_pretty} " }

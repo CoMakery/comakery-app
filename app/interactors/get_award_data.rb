@@ -18,8 +18,8 @@ class GetAwardData
   end
 
   def award_amount_data(authentication, awards)
-    result = {total_coins_issued: awards.sum { |a| a.total_amount }}
-    result[:my_project_coins] = authentication ? awards.sum { |a| a.authentication_id == authentication.id ? a.total_amount : 0 } : nil
+    result = {total_tokens_issued: awards.sum { |a| a.total_amount }}
+    result[:my_project_tokens] = authentication ? awards.sum { |a| a.authentication_id == authentication.id ? a.total_amount : 0 } : nil
     result
   end
 

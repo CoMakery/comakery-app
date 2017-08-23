@@ -4,7 +4,7 @@ Latest build: [![Circle CI](https://circleci.com/gh/CoMakery/comakery-app/tree/m
 
 ## Project Vision
 
-CoMakery hangs out in Slack and creates Project Coins.
+CoMakery hangs out in Slack and creates Project Tokens.
 It helps you to distribute profit and tracks your fair share of projects you work on.
 
 ## Current Implementation Status

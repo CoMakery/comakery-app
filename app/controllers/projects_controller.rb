@@ -29,7 +29,7 @@ class ProjectsController < ApplicationController
     assign_slack_channels
 
     @project = Project.new(public: false,
-                           maximum_coins: 1_000_000,
+                           maximum_tokens: 1_000_000,
                            maximum_royalties_per_month: 50_000)
     @project.award_types.build(name: "Thanks", amount: 10)
     @project.award_types.build(name: "Software development hour", amount: 100)
@@ -108,7 +108,7 @@ class ProjectsController < ApplicationController
         :description,
         :ethereum_enabled,
         :image,
-        :maximum_coins,
+        :maximum_tokens,
         :public,
         :slack_channel,
         :title,

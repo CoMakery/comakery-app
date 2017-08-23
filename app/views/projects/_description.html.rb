@@ -31,9 +31,9 @@ class Views::Projects::Description < Views::Projects::Base
             p(class: "description") {
               text raw project.description_html
             }
-            if project.project_coin?
+            if project.project_token?
               p {
-                i 'This project does not offer royalties or a share of revenue. It does award project coins. Read the Project Terms for more details.'
+                i 'This project does not offer royalties or a share of revenue. It does award project tokens. Read the Project Terms for more details.'
               }
             end
           }
@@ -42,7 +42,7 @@ class Views::Projects::Description < Views::Projects::Base
             ul(class: 'menu simple awarded-info description-stats') {
               li_if(project.revenue_share?) {
                 h5 "Reserved For Contributors"
-                div(class: "coin-numbers revenue-percentage") {
+                div(class: "token-numbers revenue-percentage") {
                   text "#{project.royalty_percentage_pretty}"
                   span(class: "balance-type") { text " of project revenue" }
                   if project.revenue_sharing_end_date.present?
@@ -73,15 +73,15 @@ class Views::Projects::Description < Views::Projects::Base
   end
 
 
-  def total_coins_issued_pretty
-    number_with_precision(award_data[:award_amounts][:total_coins_issued], precision: 0, delimiter: ',')
+  def total_tokens_issued_pretty
+    number_with_precision(award_data[:award_amounts][:total_tokens_issued], precision: 0, delimiter: ',')
   end
 
-  def my_project_coins
-    award_data[:award_amounts][:my_project_coins]
+  def my_project_tokens
+    award_data[:award_amounts][:my_project_tokens]
   end
 
-  def total_coins_issued
-    award_data[:award_amounts][:total_coins_issued]
+  def total_tokens_issued
+    award_data[:award_amounts][:total_tokens_issued]
   end
 end

@@ -61,7 +61,7 @@ describe ProjectsController do
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
         expect(assigns[:project]).not_to be_public
-        expect(assigns[:project].maximum_coins).to eq(1_000_000)
+        expect(assigns[:project].maximum_tokens).to eq(1_000_000)
         expect(assigns[:project].award_types.size).to be > 4
 
         expect(assigns[:project].award_types.first).to be_a_new_record
@@ -87,9 +87,9 @@ describe ProjectsController do
               contributor_agreement_url: "http://docusign.com/here/is/my/signature",
               video_url: "https://www.youtube.com/watch?v=Dn3ZMhmmzK0",
               slack_channel: "slack_channel",
-              maximum_coins: "150",
+              maximum_tokens: "150",
               legal_project_owner: 'legal project owner',
-              payment_type: 'project_coin',
+              payment_type: 'project_token',
               award_types_attributes: [
                   {name: "Community Award", amount: 10, community_awardable: true},
                   {name: "Small Award", amount: 1000},
@@ -108,7 +108,7 @@ describe ProjectsController do
       expect(project.tracker).to eq("http://github.com/here/is/my/tracker")
       expect(project.contributor_agreement_url).to eq("http://docusign.com/here/is/my/signature")
       expect(project.video_url).to eq("https://www.youtube.com/watch?v=Dn3ZMhmmzK0")
-      expect(project.maximum_coins).to eq(150)
+      expect(project.maximum_tokens).to eq(150)
       expect(project.award_types.first.name).to eq("Community Award")
       expect(project.award_types.first.community_awardable).to eq(true)
       expect(project.award_types.second.name).to eq("Small Award")
@@ -269,7 +269,7 @@ describe ProjectsController do
                       description: "updated Project description here",
                       tracker: "http://github.com/here/is/my/tracker/updated",
                       legal_project_owner: 'legal project owner',
-                      payment_type: 'project_coin',
+                      payment_type: 'project_token',
                       award_types_attributes: [
                           {id: small_award_type.to_param, name: "Small Award", amount: 150},
                           {id: destroy_me_award_type.to_param, _destroy: true},
@@ -316,7 +316,7 @@ describe ProjectsController do
             put :update, id: cat_project.to_param,
                 project: {
                     legal_project_owner: 'legal project owner',
-                    payment_type: 'project_coin',
+                    payment_type: 'project_token',
                     award_types_attributes: [
                         {id: award_type.to_param, name: "Bigger Award", amount: 500},
                     ]
@@ -359,7 +359,7 @@ describe ProjectsController do
       context "when on team" do
         before do
           expect(GetAwardableAuthentications).to receive(:call).and_return(double(awardable_authentications: [awardable_auth]))
-          expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_coins: 0, total_coins_issued: 0}}))
+          expect(GetAwardData).to receive(:call).and_return(double(award_data: {contributions: [], award_amounts: {my_project_tokens: 0, total_tokens_issued: 0}}))
           expect(GetAwardableTypes).to receive(:call).and_return(double(awardable_types: [cat_award_type, cat_award_type_community], can_award: true))
         end
 
@@ -372,7 +372,7 @@ describe ProjectsController do
           expect(assigns[:awardable_authentications]).to eq([awardable_auth])
           expect(assigns[:can_award]).to eq(true)
           expect(assigns[:awardable_types].map(&:name).sort).to eq(["cat award type", "cat award type community"])
-          expect(assigns[:award_data]).to eq({:contributions => [], :award_amounts => {:my_project_coins => 0, :total_coins_issued => 0}})
+          expect(assigns[:award_data]).to eq({:contributions => [], :award_amounts => {:my_project_tokens => 0, :total_tokens_issued => 0}})
         end
       end
 

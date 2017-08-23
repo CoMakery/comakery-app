@@ -8,7 +8,7 @@ describe "shared/award_form_terms.html.rb" do
         title: 'Mindful Inc',
         royalty_percentage: 8,
         legal_project_owner: "The Legal Owner",
-        maximum_coins: 200_000,
+        maximum_tokens: 200_000,
         maximum_royalties_per_month: 27_000,
         require_confidentiality: true,
         exclusive_contributions: true,
@@ -93,9 +93,9 @@ describe "shared/award_form_terms.html.rb" do
     end
   end
 
-  describe 'with project coins' do
+  describe 'with project tokens' do
     before do
-      project.project_coin!
+      project.project_token!
     end
 
     it 'has legal terms without revenue sharing' do
@@ -103,8 +103,8 @@ describe "shared/award_form_terms.html.rb" do
       expect(rendered).to have_content "Status"
       expect(rendered).to have_content "Project Name"
 
-      expect(rendered).to have_content "Maximum Project Coins"
-      expect(rendered).to have_content "Maximum Project Coins Awarded Per Month"
+      expect(rendered).to have_content "Maximum Project Tokens"
+      expect(rendered).to have_content "Maximum Project Tokens Awarded Per Month"
       expect(rendered).to have_content "Contributions"
       expect(rendered).to have_content "Business Confidentiality"
       expect(rendered).to have_content "Project Confidentiality"

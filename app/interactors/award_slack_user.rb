@@ -1,5 +1,5 @@
 class AwardSlackUser
   include Interactor::Organizer
 
-  organize ProjectCoinsIssued, BuildAwardRecords
+  organize ProjectTokensIssued, BuildAwardRecords
 end

@@ -50,7 +50,7 @@ describe "viewing projects, creating and editing", :js do
 
     # valid #1
     fill_in "project_royalty_percentage", with: "10"
-    fill_in "project_maximum_coins", with: "12000"
+    fill_in "project_maximum_tokens", with: "12000"
     within('.royalty-calc tbody') do
       expect(page).to have_content('$1000 $100')
       expect(page).to have_content('$10000 $1000')
@@ -60,7 +60,7 @@ describe "viewing projects, creating and editing", :js do
 
     # valid #2
     fill_in "project_royalty_percentage", with: "5"
-    fill_in "project_maximum_coins", with: "24000"
+    fill_in "project_maximum_tokens", with: "24000"
 
     within('.royalty-calc tbody') do
       expect(page).to have_content('$1000 $50')
@@ -70,7 +70,7 @@ describe "viewing projects, creating and editing", :js do
     end
 
     # change the currency
-    select "Bitcoin (฿)", from: "project_denomination"
+    select "Bittoken (฿)", from: "project_denomination"
 
     within('.royalty-calc tbody') do
       expect(page).to have_content('฿1000 ฿50')
@@ -89,28 +89,28 @@ describe "viewing projects, creating and editing", :js do
     end
   end
 
-  describe 'displays alternate text for project coins' do
+  describe 'displays alternate text for project tokens' do
     it "when selecting payment type" do
       visit edit_project_path(project)
       expect(page).to have_css('.revenue-sharing-terms')
-      expect(page).to_not have_css('.project-coin-terms')
+      expect(page).to_not have_css('.project-token-terms')
       within('.revenue-sharing-terms .royalty-calc') { expect(page).to have_content(%r{Revenue.+Shared}) }
 
-      select "Project Coins", from: :project_payment_type
+      select "Project Tokens", from: :project_payment_type
       expect(page).to_not have_css('.revenue-sharing-terms')
-      expect(page).to have_css('.project-coin-terms')
-      within('.project-coin-terms') { expect(page).to have_content("About Project Coins") }
+      expect(page).to have_css('.project-token-terms')
+      within('.project-token-terms') { expect(page).to have_content("About Project Tokens") }
 
       select "Revenue Shares", from: :project_payment_type
       expect(page).to have_css('.revenue-sharing-terms')
-      expect(page).to_not have_css('.project-coin-terms')
+      expect(page).to_not have_css('.project-token-terms')
     end
 
     it "when editing an existing project" do
-      project.update(payment_type: :project_coin)
+      project.update(payment_type: :project_token)
       visit edit_project_path(project)
       expect(page).to_not have_css('.revenue-sharing-terms')
-      expect(page).to have_css('.project-coin-terms')
+      expect(page).to have_css('.project-token-terms')
     end
   end
 end

@@ -46,7 +46,7 @@ describe "viewing projects, creating and editing", :js do
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
     select "Revenue Shares", from: "project_payment_type"
-    fill_in "project_maximum_coins", with: "100000"
+    fill_in "project_maximum_tokens", with: "100000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
@@ -81,24 +81,24 @@ describe "viewing projects, creating and editing", :js do
     expect(page).to have_content "January 2, 2050"
   end
 
-  it "setup project with Project Coins" do
+  it "setup project with Project Tokens" do
     login(account)
 
     visit projects_path
 
     click_link "New Project"
     fill_in "Title", with: "Mindfulness App"
-    fill_in "project_maximum_coins", with: "210000"
+    fill_in "project_maximum_tokens", with: "210000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
-    select "Project Coins", from: "project_payment_type"
+    select "Project Tokens", from: "project_payment_type"
     check "Contributions are exclusive"
     check "Require project and business confidentiality"
 
     click_on "Save"
     expect(page).to have_content "Project created"
-    expect(page.find('.my-share')).to have_content "Project Coins 0"
+    expect(page.find('.my-share')).to have_content "Project Tokens 0"
     within ".project-terms" do
       expect(page).to have_content "Mindful Inc"
       expect(page).to have_content "Contributions: are exclusive"
@@ -106,7 +106,7 @@ describe "viewing projects, creating and editing", :js do
       expect(page).to have_content "Project Confidentiality: is required"
     end
 
-    within("#award-send") { expect(page).to have_content /award project coins/i }
+    within("#award-send") { expect(page).to have_content /award project tokens/i }
     select "@bobjohnson", from: "User"
     choose "Thanks"
     fill_in "Description", with: "Super fantastic fabulous programatic work on teh things, A++"
@@ -117,12 +117,12 @@ describe "viewing projects, creating and editing", :js do
     expect(page.find('.award-row')).to have_content "@bobjohnson 10 10"
 
     click_link "Awards"
-    expect(page.find('.award-type')).to have_content "Project Coin"
+    expect(page.find('.award-type')).to have_content "Project Token"
     expect(page.find('.award-total-amount')).to have_content "10"
 
     login(bobjohnsons_auth.account)
     visit account_path
-    expect(page.find('.award-type')).to have_content "Project Coin"
+    expect(page.find('.award-type')).to have_content "Project Token"
     expect(page.find('.award-total-amount')).to have_content "10"
   end
 
@@ -149,8 +149,8 @@ describe "viewing projects, creating and editing", :js do
       expect_denomination_eth
     end
 
-    it 'are hidden for project coins' do
-      project.update(payment_type: :project_coin)
+    it 'are hidden for project tokens' do
+      project.update(payment_type: :project_token)
       visit edit_project_path(project)
       expect_denomination_hidden
     end
@@ -167,7 +167,7 @@ describe "viewing projects, creating and editing", :js do
       end
 
       specify do
-        select "Bitcoin (฿)", from: "project_denomination"
+        select "Bittoken (฿)", from: "project_denomination"
         expect_denomination_btc
       end
 
@@ -176,8 +176,8 @@ describe "viewing projects, creating and editing", :js do
         expect_denomination_eth
       end
 
-      it 'hides the awards section when project coin is selected' do
-        select "Project Coins", from: 'project_payment_type'
+      it 'hides the awards section when project token is selected' do
+        select "Project Tokens", from: 'project_payment_type'
         expect_denomination_hidden
       end
     end
@@ -192,7 +192,7 @@ describe "viewing projects, creating and editing", :js do
     page.assert_selector('.fa-lock', count: 0)
 
     fill_in "Title", with: "Mindfulness App"
-    fill_in "project_maximum_coins", with: "100000"
+    fill_in "project_maximum_tokens", with: "100000"
     fill_in "Description", with: "This is a project"
     select "a-channel-name", from: "Slack Channel"
     fill_in "Project Owner's Legal Name", with: "Mindful Inc"
@@ -224,16 +224,16 @@ describe "viewing projects, creating and editing", :js do
     login(account)
 
     visit edit_project_path(project)
-    expect(page).to have_css("#project_maximum_coins")
-    expect(page).to_not have_css("#project_maximum_coins[disabled]")
+    expect(page).to have_css("#project_maximum_tokens")
+    expect(page).to_not have_css("#project_maximum_tokens[disabled]")
 
     project.update(ethereum_enabled: true)
     visit edit_project_path(project)
-    expect(page).to have_css("#project_maximum_coins[disabled]")
+    expect(page).to have_css("#project_maximum_tokens[disabled]")
   end
 
   def contract_term_fields
-    [:project_maximum_coins,
+    [:project_maximum_tokens,
      :project_denomination,
      :project_exclusive_contributions,
      :project_legal_project_owner,
@@ -246,7 +246,7 @@ describe "viewing projects, creating and editing", :js do
   def expect_denomination_usd
     page.assert_selector('span.denomination', text: "$", minimum: 4)
     page.assert_selector('span.denomination', text: "฿", count: 0)
-    page.assert_selector('span.denomination', text: "Project Coins", count: 0)
+    page.assert_selector('span.denomination', text: "Project Tokens", count: 0)
   end
 
   def expect_denomination_btc

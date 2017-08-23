@@ -43,7 +43,7 @@ module Views
                     question_tooltip "This is the currency that will be used for display by default. Revenues for revenue sharing will be counted in the currency it was received in."
                     f.select(:denomination,
                              [["US Dollars ($)", "USD"],
-                              ["Bitcoin (฿)", "BTC"],
+                              ["Bittoken (฿)", "BTC"],
                               ["Ether (Ξ)", "ETH"],
                              ],
                              {selected: project.denomination, include_blank: false},
@@ -130,19 +130,19 @@ module Views
                 with_errors(project, :payment_type) {
                   label {
                     required_label_text "Award Payment Type"
-                    question_tooltip "Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project coins for their work contributions."
+                    question_tooltip "Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project tokens for their work contributions."
                     f.select(:payment_type,
                              [["Revenue Shares", "revenue_share"],
-                              ["Project Coins", "project_coin"]],
+                              ["Project Tokens", "project_token"]],
                              {selected: project.payment_type, include_blank: false},
                              disabled: project.license_finalized?
                     )
                   }
                 }
-                with_errors(project, :maximum_coins) {
+                with_errors(project, :maximum_tokens) {
                   label {
                     required_label_text "Total Authorized"
-                    award_type_div f, :maximum_coins, type: "number", disabled: project.license_finalized? || project.ethereum_enabled?
+                    award_type_div f, :maximum_tokens, type: "number", disabled: project.license_finalized? || project.ethereum_enabled?
                   }
                 }
 
@@ -154,7 +154,7 @@ module Views
                                    disabled: project.license_finalized?
                   }
                 }
-                div(class: "revenue-sharing-terms #{'hide' if project.project_coin?}") {
+                div(class: "revenue-sharing-terms #{'hide' if project.project_token?}") {
                   with_errors(project, :royalty_percentage) {
                     label {
                       required_label_text "Revenue Shared With Contributors"
@@ -192,7 +192,7 @@ module Views
 
               column("large-6 small-12") {
                 br
-                div(class: "revenue-sharing-terms #{'hide' if project.project_coin?}") {
+                div(class: "revenue-sharing-terms #{'hide' if project.project_token?}") {
 
                   h5 "Example"
                   table(class: 'royalty-calc') {
@@ -211,13 +211,13 @@ module Views
                   }
                 }
 
-                div(class: "project-coin-terms #{'hide' if project.revenue_share?}") {
-                  h5 "About Project Coins"
+                div(class: "project-token-terms #{'hide' if project.revenue_share?}") {
+                  h5 "About Project Tokens"
                   p {
                     text %{
-                        Project Coins provide open ended and flexible award tracking.
+                        Project Tokens provide open ended and flexible award tracking.
                         They can be used for effort tracking, point systems, blockchain projects, and meta-currencies.
-                        Project Coin projects don't currently show the CoMakery Contribution License or pricing information.}
+                        Project Token projects don't currently show the CoMakery Contribution License or pricing information.}
 
                   }
                   p {

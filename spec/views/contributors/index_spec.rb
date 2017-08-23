@@ -35,7 +35,7 @@ describe "contributors/index.html.rb" do
       expect(rendered).to have_selector('td.holdings-value', text: "$0")
     end
 
-    it "shows table with Bitcoin" do
+    it "shows table with Bittoken" do
       project.update(denomination: :BTC)
       render
 
@@ -52,9 +52,9 @@ describe "contributors/index.html.rb" do
     end
   end
 
-  describe "with contributors and project coins" do
+  describe "with contributors and project tokens" do
     it "shows table without currency values" do
-      project.update(payment_type: :project_coin)
+      project.update(payment_type: :project_token)
       render
 
       expect(rendered).to have_text("Contributors")
@@ -74,7 +74,7 @@ describe "contributors/index.html.rb" do
 
   describe "without contributors" do
     before do
-      assign :award_data, {award_amounts: {total_coins_issued: 0}, contributions_summary: []}
+      assign :award_data, {award_amounts: {total_tokens_issued: 0}, contributions_summary: []}
     end
 
     it "hides table" do

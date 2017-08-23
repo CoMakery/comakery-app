@@ -6,7 +6,7 @@ describe AwardsController do
   let!(:other_auth) { create(:authentication, slack_team_id: "foo", account: create(:account, email: "other@example.com"), slack_user_id: 'other id') }
   let!(:different_team_account) { create(:account, email: "different@example.com").tap { |a| create(:authentication, slack_team_id: "bar", account: a, slack_user_id: 'different team member id') } }
 
-  let(:project) { create(:project, owner_account: issuer, slack_team_id: "foo", public: false, maximum_coins: 100_000_000) }
+  let(:project) { create(:project, owner_account: issuer, slack_team_id: "foo", public: false, maximum_tokens: 100_000_000) }
 
   describe "#index" do
     let!(:award) { create(:award, award_type: create(:award_type, project: project), authentication: other_auth, issuer: issuer) }
@@ -113,7 +113,7 @@ describe AwardsController do
         expect do
           post :create, project_id: project.to_param, award: {
               slack_user_id: "receiver id",
-              award_type_id: create(:award_type, amount: 10000, project: create(:project, slack_team_id: "hackerz", maximum_coins: 100_000)).to_param,
+              award_type_id: create(:award_type, amount: 10000, project: create(:project, slack_team_id: "hackerz", maximum_tokens: 100_000)).to_param,
               description: "I am teh haxor"
           }
           expect(response.status).to eq(302)

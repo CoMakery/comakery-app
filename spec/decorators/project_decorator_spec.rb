@@ -132,8 +132,8 @@ describe ProjectDecorator do
 
   describe "#payment_description" do
     specify do
-      project.project_coin!
-      expect(project.payment_description).to eq("Project Coins")
+      project.project_token!
+      expect(project.payment_description).to eq("Project Tokens")
     end
 
     specify do
@@ -144,8 +144,8 @@ describe ProjectDecorator do
 
   describe "#outstanding_award_description" do
     specify do
-      project.project_coin!
-      expect(project.outstanding_award_description).to eq("Project Coins")
+      project.project_token!
+      expect(project.outstanding_award_description).to eq("Project Tokens")
     end
 
     specify do

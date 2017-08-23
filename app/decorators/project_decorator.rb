@@ -4,12 +4,12 @@ class ProjectDecorator < Draper::Decorator
 
   PAYMENT_DESCRIPTIONS = {
       "revenue_share" => "Revenue Shares",
-      "project_coin" => "Project Coins",
+      "project_token" => "Project Tokens",
   }
 
   OUTSTANDING_AWARD_DESCRIPTIONS = {
       "revenue_share" => "Unpaid Revenue Shares",
-      "project_coin" => "Project Coins",
+      "project_token" => "Project Tokens",
   }
 
   def description_html
@@ -78,7 +78,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def total_awards_outstanding_pretty
-    # awards (e.g. project coins or revenue shares) are validated as whole numbers; they are rounded
+    # awards (e.g. project tokens or revenue shares) are validated as whole numbers; they are rounded
     number_with_precision(total_awards_outstanding, precision: 0, delimiter: ',')
   end
 
@@ -129,9 +129,9 @@ class ProjectDecorator < Draper::Decorator
   end
 
 
-  def share_of_revenue_unpaid_pretty(users_project_coins)
+  def share_of_revenue_unpaid_pretty(users_project_tokens)
     precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
-    "#{currency_denomination}#{number_with_precision(share_of_revenue_unpaid(users_project_coins).truncate(precision),
+    "#{currency_denomination}#{number_with_precision(share_of_revenue_unpaid(users_project_tokens).truncate(precision),
                                                      precision: precision,
                                                      delimiter: ',')}"
   end
@@ -156,5 +156,5 @@ class ProjectDecorator < Draper::Decorator
     end
   end
 
-  pretty_number :maximum_royalties_per_month, :maximum_coins
+  pretty_number :maximum_royalties_per_month, :maximum_tokens
 end

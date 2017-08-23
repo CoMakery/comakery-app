@@ -4,11 +4,11 @@ class BuildAwardRecords
   def call
     slack_user_id = context.slack_user_id
     award_params = context.award_params
-    total_coins_issued = context.total_coins_issued
+    total_tokens_issued = context.total_tokens_issued
     issuer = context.issuer
 
     context.fail!(message: "missing slack_user_id") unless slack_user_id.present?
-    context.fail!(message: "missing total_coins_issued") unless total_coins_issued.present?
+    context.fail!(message: "missing total_tokens_issued") unless total_tokens_issued.present?
 
     award_type = AwardType.find_by(id: award_params[:award_type_id])
     project = award_type&.project
@@ -29,8 +29,8 @@ class BuildAwardRecords
     ))
 
     #TODO: this should be an award validation
-    unless award.total_amount + total_coins_issued <= project.maximum_coins
-      context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable coins")
+    unless award.total_amount + total_tokens_issued <= project.maximum_tokens
+      context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable tokens")
     end
 
     unless award.valid?

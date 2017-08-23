@@ -28,11 +28,11 @@ class Views::Awards::Activity < Views::Base
     JAVASCRIPT
   end
 
-  def total_coins_issued
-    award_data[:award_amounts][:total_coins_issued]
+  def total_tokens_issued
+    award_data[:award_amounts][:total_tokens_issued]
   end
 
   def percentage_issued
-    total_coins_issued * 100 / project.maximum_coins.to_f
+    total_tokens_issued * 100 / project.maximum_tokens.to_f
   end
 end

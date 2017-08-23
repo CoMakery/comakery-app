@@ -38,8 +38,8 @@ describe "viewing projects, creating and editing", :js do
     attach_file "Project Image", Rails.root.join("spec", "fixtures", "helmet_cat.png")
     expect(find_field("Set project as public")).not_to be_checked
 
-    expect(find_field("project_maximum_coins")['value']).to eq("1000000")
-    fill_in "project_maximum_coins", with: "20000000"
+    expect(find_field("project_maximum_tokens")['value']).to eq("1000000")
+    fill_in "project_maximum_tokens", with: "20000000"
 
     award_type_inputs = get_award_type_rows
     award_type_inputs[0].all("input")[0].set "This is a small award type"

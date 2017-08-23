@@ -58,24 +58,24 @@ $ ->
     awardPaymentType()
 
   royaltyCalc()
-  $('#project_royalty_percentage, #project_maximum_coins, #project_denomination').change (e) ->
+  $('#project_royalty_percentage, #project_maximum_tokens, #project_denomination').change (e) ->
     royaltyCalc()
 
 awardPaymentType = () ->
   switch $('#project_payment_type option:selected').val()
-    when 'project_coin'
+    when 'project_token'
       $('.revenue-sharing-terms').addClass('hide')
-      $('.project-coin-terms').removeClass('hide')
-      $('span.award-type').html('Project Coins')
+      $('.project-token-terms').removeClass('hide')
+      $('span.award-type').html('Project Tokens')
     when 'revenue_share'
       $('.revenue-sharing-terms').removeClass('hide')
-      $('.project-coin-terms').addClass('hide')
+      $('.project-token-terms').addClass('hide')
       $('span.award-type').html('Revenue Shares')
 
 royaltyCalc = () ->
   return unless $('#project_denomination option:selected').html()
   percentage = $('#project_royalty_percentage').val()
-  maxAwarded = $('#project_maximum_coins').val()
+  maxAwarded = $('#project_maximum_tokens').val()
 
   schedule = $("<tbody>")
   currencyFromSelectedOption = $('#project_denomination option:selected').html().match(/\((.+?)\)/)[1]

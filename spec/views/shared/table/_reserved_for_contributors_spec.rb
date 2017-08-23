@@ -10,8 +10,8 @@ describe "shared/table/_reserved_for_contributors.html.rb" do
     render
   end
 
-  describe 'project coin' do
-    let(:project) { create :project, payment_type: :project_coin }
+  describe 'project token' do
+    let(:project) { create :project, payment_type: :project_token }
 
     specify { expect(rendered).to eq("") }
   end

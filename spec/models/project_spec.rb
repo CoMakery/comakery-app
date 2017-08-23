@@ -3,9 +3,9 @@ require 'rails_helper'
 describe Project do
   describe 'validations' do
     it 'requires attributes' do
-      expect(Project.new(payment_type: 'project_coin').tap(&:valid?).errors.full_messages.sort).
+      expect(Project.new(payment_type: 'project_token').tap(&:valid?).errors.full_messages.sort).
           to eq(["Description can't be blank",
-                 "Maximum coins must be greater than 0",
+                 "Maximum tokens must be greater than 0",
                  "Owner account can't be blank",
                  "Slack channel can't be blank",
                  "Slack team can't be blank",
@@ -33,8 +33,8 @@ describe Project do
         expect_royalty_fields_present
       end
 
-      it 'for project coin projects' do
-        project.payment_type = 'project_coin'
+      it 'for project token projects' do
+        project.payment_type = 'project_token'
         expect(project).to be_valid
       end
 
@@ -154,7 +154,7 @@ describe Project do
 
     describe "payment_type" do
       let(:project) { create(:project) }
-      let(:order) { [:revenue_share, :project_coin] }
+      let(:order) { [:revenue_share, :project_token] }
 
       it 'defaults to revenue_share' do
         expect(project.payment_type).to eq('revenue_share')
@@ -168,12 +168,12 @@ describe Project do
       end
     end
 
-    describe "maximum_coins" do
+    describe "maximum_tokens" do
       it "prevents modification if the record has been saved" do
         project = create(:project)
-        project.maximum_coins += 10
+        project.maximum_tokens += 10
         expect(project).not_to be_valid
-        expect(project.errors.full_messages).to be_include("Maximum coins can't be changed")
+        expect(project.errors.full_messages).to be_include("Maximum tokens can't be changed")
       end
     end
 
@@ -307,9 +307,9 @@ describe Project do
                                 slack_team_name: 'This is a slack team name',
                                 slack_team_image_34_url: 'http://foo.com/kittens-34.jpg',
                                 slack_team_image_132_url: 'http://foo.com/kittens-132.jpg',
-                                maximum_coins: 10_000_000,
+                                maximum_tokens: 10_000_000,
                                 legal_project_owner: 'legal project owner',
-                                payment_type: 'project_coin',
+                                payment_type: 'project_token',
                                 award_types_attributes: [
                                     {'name' => 'Small award', 'amount' => '1000'},
                                     {'name' => '', 'amount' => '1000'},
@@ -508,8 +508,8 @@ describe Project do
       end
     end
 
-    describe 'with project coin awards' do
-      let(:project) { create :project, payment_type: :project_coin }
+    describe 'with project token awards' do
+      let(:project) { create :project, payment_type: :project_token }
       it 'with percentage and revenue' do
         project.update(royalty_percentage: 10)
         project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
@@ -565,8 +565,8 @@ describe Project do
       end
     end
 
-    describe 'with project coin awards' do
-      let(:project) { create :project, payment_type: :project_coin }
+    describe 'with project token awards' do
+      let(:project) { create :project, payment_type: :project_token }
       it 'with percentage and revenue' do
         project.update(royalty_percentage: 10)
         project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
@@ -661,8 +661,8 @@ describe Project do
       end
     end
 
-    describe 'with project coin awards' do
-      let(:project) { create :project, payment_type: :project_coin }
+    describe 'with project token awards' do
+      let(:project) { create :project, payment_type: :project_token }
 
       it 'with percentage and revenue' do
         project.update(royalty_percentage: 10)
@@ -757,8 +757,8 @@ describe Project do
       end
     end
 
-    describe 'with project coin awards' do
-      let(:project) { create :project, payment_type: :project_coin }
+    describe 'with project token awards' do
+      let(:project) { create :project, payment_type: :project_token }
 
       it 'with percentage and revenue' do
         project.update(royalty_percentage: 10)
@@ -878,7 +878,7 @@ describe Project do
     let(:contract_address) { "0x03b3536e825a484F796B094e63011027620bc2a9" }
 
     it 'kicks off an ethereum token contract job' do
-      expect(Comakery::Ethereum).to receive(:token_contract).with(maxSupply: project.maximum_coins) {contract_address}
+      expect(Comakery::Ethereum).to receive(:token_contract).with(maxSupply: project.maximum_tokens) {contract_address}
       project.create_ethereum_contract!
       expect(project.ethereum_contract_address).to eq(contract_address)
     end

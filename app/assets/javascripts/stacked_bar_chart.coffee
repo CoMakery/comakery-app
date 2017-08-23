@@ -34,14 +34,14 @@ window.stackedBarChart = (selector, data)->
   # draws stacked rectangles
   data.forEach (d) ->
     y0 = 0
-    d.coins = color.domain().map((date) ->
+    d.tokens = color.domain().map((date) ->
       {
         date: date
         y0: y0
         y1: y0 += +d[date]
       }
     )
-    d.total = if d.coins.length > 0 then d.coins[d.coins.length - 1].y1 else 0
+    d.total = if d.tokens.length > 0 then d.tokens[d.tokens.length - 1].y1 else 0
 
   x.domain(data.map((d) -> d.date))
   y.domain([0, d3.max(data, (d) -> d.total)])
@@ -78,7 +78,7 @@ window.stackedBarChart = (selector, data)->
       .attr('transform', (d) -> 'translate(' + x(d.date) + ',0)')
 
   # graph bars
-  state.selectAll('rect').data((d) -> d.coins)
+  state.selectAll('rect').data((d) -> d.tokens)
     .enter()
     .append('rect')
     .attr('width', x.rangeBand())

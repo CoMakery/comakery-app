@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ProjectCoinsIssued do
+describe ProjectTokensIssued do
   let!(:project) { create(:sb_project) }
   let!(:auth1) { create(:sb_authentication) }
   let!(:auth2) { create(:sb_authentication) }
@@ -14,11 +14,11 @@ describe ProjectCoinsIssued do
   it "returns 0 for projects with no awards" do
     project = create(:project)
 
-    expect(ProjectCoinsIssued.call(project: project).total_coins_issued).to eq(0)
+    expect(ProjectTokensIssued.call(project: project).total_tokens_issued).to eq(0)
 
     create(:award_type, project: project)
 
-    expect(ProjectCoinsIssued.call(project: project).total_coins_issued).to eq(0)
+    expect(ProjectTokensIssued.call(project: project).total_tokens_issued).to eq(0)
   end
 
   describe do
@@ -32,19 +32,19 @@ describe ProjectCoinsIssued do
       create(:award, authentication: auth2, award_type: award_type_4)
     end
 
-    it "returns the total amount of coins awarded for a project" do
-      result = ProjectCoinsIssued.call(project: project)
+    it "returns the total amount of tokens awarded for a project" do
+      result = ProjectTokensIssued.call(project: project)
       expect(result).to be_success
-      expect(result.total_coins_issued).to eq(1 + 2 + 4 +
+      expect(result.total_tokens_issued).to eq(1 + 2 + 4 +
                                                   1 + 2 + 4)
     end
 
-    it "returns the total amount of coins awarded for a project with multiple award.quantity" do
+    it "returns the total amount of tokens awarded for a project with multiple award.quantity" do
       create(:award, authentication: auth2, award_type: award_type_4, quantity: 2)
 
-      result = ProjectCoinsIssued.call(project: project)
+      result = ProjectTokensIssued.call(project: project)
       expect(result).to be_success
-      expect(result.total_coins_issued).to eq(1 + 2 + 4 + 1 + 2 + 4 +
+      expect(result.total_tokens_issued).to eq(1 + 2 + 4 + 1 + 2 + 4 +
                                                   8)
     end
   end

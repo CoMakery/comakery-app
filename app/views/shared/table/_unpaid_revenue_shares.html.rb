@@ -9,23 +9,23 @@ class Views::Shared::Table::UnpaidRevenueShares < Views::Projects::Base
         row(class: 'total-revenue table-box') {
           table {
             tr {
-              td(class: "coin-numbers") {}
+              td(class: "token-numbers") {}
               td {
-                span(class: "coin-numbers total-awarded") { text "#{project.total_awarded_pretty} " }
+                span(class: "token-numbers total-awarded") { text "#{project.total_awarded_pretty} " }
                 span { text "Lifetime Revenue Shares Awarded" }
               }
             }
             tr {
-              td(class: "coin-numbers") { text "-" }
+              td(class: "token-numbers") { text "-" }
               td {
-                span(class: "coin-numbers awards-redeemed") { text "#{project.total_awards_redeemed_pretty} " }
+                span(class: "token-numbers awards-redeemed") { text "#{project.total_awards_redeemed_pretty} " }
                 span { text "Revenue Shares Paid" }
               }
             }
             tr(class: 'money') {
-              td(class: "coin-numbers") { text "=" }
+              td(class: "token-numbers") { text "=" }
               td {
-                span(class: "coin-numbers awards-outstanding") { text "#{project.total_awards_outstanding_pretty} " }
+                span(class: "token-numbers awards-outstanding") { text "#{project.total_awards_outstanding_pretty} " }
                 span { text "Unpaid Revenue Shares" }
               }
             }

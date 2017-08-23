@@ -315,8 +315,8 @@ describe "when redeeming revenue shares for payments" do
     end
   end
 
-  it "no payments page displayed for project_coins" do
-    project.project_coin!
+  it "no payments page displayed for project_tokens" do
+    project.project_token!
 
     login owner
     visit project_path(project)
