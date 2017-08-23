@@ -44,20 +44,19 @@ class AuthenticationDecorator < Draper::Decorator
     precision = Comakery::Currency::PRECISION[project.denomination]
     denomination = Comakery::Currency::DENOMINATIONS[project.denomination]
     "#{denomination}#{number_with_precision(amount_to_make_pretty.truncate(precision),
-                                            precision: precision,
-                                            delimiter: ',')}"
+      precision: precision,
+      delimiter: ',')}"
   end
 
   def rounded_currency(project, amount_to_make_pretty)
     precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[project.denomination]
     denomination = Comakery::Currency::DENOMINATIONS[project.denomination]
     "#{denomination}#{number_with_precision(amount_to_make_pretty.truncate(precision),
-                                            precision: precision,
-                                            delimiter: ',')}"
+      precision: precision,
+      delimiter: ',')}"
   end
 
   def pretty_award(award_amount_to_make_pretty)
     number_with_precision(award_amount_to_make_pretty, precision: 0, delimiter: ',')
   end
-
 end

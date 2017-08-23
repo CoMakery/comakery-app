@@ -1,4 +1,4 @@
-#TODO: this class can be refactored away
+# TODO: this class can be refactored away
 class ProjectTokensIssued
   include Interactor
 

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "awarding up to limit of maximum awardable tokens for a project" do
+describe 'awarding up to limit of maximum awardable tokens for a project' do
   let!(:current_auth) { create(:sb_authentication) }
   let!(:awardee_auth) { create(:sb_authentication) }
   let!(:project) { create(:sb_project, owner_account: current_auth.account, maximum_tokens: 2) }
@@ -17,11 +17,11 @@ describe "awarding up to limit of maximum awardable tokens for a project" do
 
     send_award
 
-    expect(page).to have_content "Successfully sent award to John Doe"
+    expect(page).to have_content 'Successfully sent award to John Doe'
 
     send_award
 
-    expect(page).to have_content "Successfully sent award to John Doe"
+    expect(page).to have_content 'Successfully sent award to John Doe'
 
     send_award
 
@@ -29,8 +29,8 @@ describe "awarding up to limit of maximum awardable tokens for a project" do
   end
 
   def send_award
-    select "John Doe - @johndoe", from: "User"
+    select 'John Doe - @johndoe', from: 'User'
     page.find("input[name='award[award_type_id]']").set(true)
-    click_on "Send Award"
+    click_on 'Send Award'
   end
 end

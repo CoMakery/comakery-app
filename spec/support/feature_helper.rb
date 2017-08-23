@@ -4,7 +4,7 @@ module FeatureHelper
   end
 
   def login(account)
-    page.set_rack_session(:account_id => account.id)
+    page.set_rack_session(account_id: account.id)
   end
 
   def ignore_js_errors

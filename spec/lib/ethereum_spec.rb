@@ -11,48 +11,45 @@ describe Comakery::Ethereum do
     end
   end
 
-  let(:ethereum_bridge) { "https://eth.example.com" }
-  let(:ethereum_bridge_api_key) { "abc123apikey" }
+  let(:ethereum_bridge) { 'https://eth.example.com' }
+  let(:ethereum_bridge_api_key) { 'abc123apikey' }
 
-  describe "#token_contract" do
-    it "should call out to the expected server" do
-      stub_request(:post, "https://eth.example.com/project")
-        .with(body: hash_including({
-          maxSupply: 101,
-          apiKey: 'abc123apikey'
-        }))
+  describe '#token_contract' do
+    it 'calls out to the expected server' do
+      stub_request(:post, 'https://eth.example.com/project')
+        .with(body: hash_including(maxSupply: 101,
+                                   apiKey: 'abc123apikey'))
         .to_return(
-          headers: {'Content-Type': 'application/json'},
-          body: {contractAddress: '0x9999999999999999999999999999999999999999'}.to_json
+          headers: { 'Content-Type': 'application/json' },
+          body: { contractAddress: '0x9999999999999999999999999999999999999999' }.to_json
         )
-      contractAddress = Comakery::Ethereum.token_contract(maxSupply: 101)
+      contractAddress = described_class.token_contract(maxSupply: 101)
       expect(contractAddress).to eq '0x9999999999999999999999999999999999999999'
     end
 
-    describe "with ETHEREUM_BRIDGE_API_KEY env var unset" do
+    describe 'with ETHEREUM_BRIDGE_API_KEY env var unset' do
       let(:ethereum_bridge_api_key) { nil }
-      it "should require that ETHEREUM_BRIDGE_API_KEY is set in ENV" do
-        expect {
-          Comakery::Ethereum.token_contract(maxSupply: 101)
-        }.to raise_error(/please set env var ETHEREUM_BRIDGE_API_KEY/)
+
+      it 'requires that ETHEREUM_BRIDGE_API_KEY is set in ENV' do
+        expect do
+          described_class.token_contract(maxSupply: 101)
+        end.to raise_error(/please set env var ETHEREUM_BRIDGE_API_KEY/)
       end
     end
   end
 
-  describe "#token_issue" do
-    it "should call out to the expected server" do
-      stub_request(:post, "https://eth.example.com/token_issue")
-        .with(body: hash_including({
-          contractAddress: '0xcccccccccccccccccccccccccccccccccccccccc',
-          recipient:       '0x2222222222222222222222222222222222222222',
-          amount: 100,
-          apiKey: 'abc123apikey'
-        }))
+  describe '#token_issue' do
+    it 'calls out to the expected server' do
+      stub_request(:post, 'https://eth.example.com/token_issue')
+        .with(body: hash_including(contractAddress: '0xcccccccccccccccccccccccccccccccccccccccc',
+                                   recipient:       '0x2222222222222222222222222222222222222222',
+                                   amount: 100,
+                                   apiKey: 'abc123apikey'))
         .to_return(
-          headers: {'Content-Type': 'application/json'},
-          body: {tx: '0x9999999999999999999999999999999999999999'}.to_json
+          headers: { 'Content-Type': 'application/json' },
+          body: { tx: '0x9999999999999999999999999999999999999999' }.to_json
         )
-      transactionId = Comakery::Ethereum.token_issue(
+      transactionId = described_class.token_issue(
         contractAddress: '0xcccccccccccccccccccccccccccccccccccccccc',
         recipient: '0x2222222222222222222222222222222222222222',
         amount: 100

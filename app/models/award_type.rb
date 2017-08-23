@@ -12,9 +12,9 @@ class AwardType < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :project, :name, :amount
+  validates :project, :name, :amount, presence: true
   validate :amount_didnt_change?, unless: :modifiable?
-  validates_numericality_of :amount, greater_than: 0
+  validates :amount, numericality: { greater_than: 0 }
 
   def self.invalid_params(attributes)
     attributes['name'].blank? || attributes['amount'].blank?
@@ -30,7 +30,7 @@ class AwardType < ActiveRecord::Base
 
   # TODO: remove temporary migration method after migrating all environments
   def self.write_all_award_amounts
-    AwardType.all.each { |award_type| award_type.write_award_amount }
+    AwardType.all.find_each(&:write_award_amount)
   end
 
   # TODO: remove temporary migration method after migrating all environments

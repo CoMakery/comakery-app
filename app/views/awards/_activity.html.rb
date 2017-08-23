@@ -2,23 +2,22 @@ class Views::Awards::Activity < Views::Base
   needs :project, :award_data, :current_auth
 
   def content
-    column {
-      div {
+    column do
+      div do
         h3 "#{project.payment_description} Awarded"
         br
 
         if award_data[:contributions].present?
-          p {
-            div(id: "contributions-chart")
-          }
+          p do
+            div(id: 'contributions-chart')
+          end
           content_for :js do
             make_charts
           end
         end
-      }
-    }
+      end
+    end
   end
-
 
   def make_charts
     text(<<-JAVASCRIPT.html_safe)

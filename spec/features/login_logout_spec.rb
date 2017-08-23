@@ -1,7 +1,7 @@
-require "rails_helper"
+require 'rails_helper'
 
-describe "logging in and out" do
-  let!(:project) { create :project, title: "This is a project", owner_account: account }
+describe 'logging in and out' do
+  let!(:project) { create :project, title: 'This is a project', owner_account: account }
   let!(:account) { create :account }
   let!(:authentication) { create :authentication, account_id: account.id }
 
@@ -12,20 +12,20 @@ describe "logging in and out" do
 
     visit root_path
 
-    expect(page).to have_content "Sign in"
+    expect(page).to have_content 'Sign in'
 
     page.set_rack_session(account_id: account.id)
 
     visit project_path(project)
 
-    expect(page).to have_content "This is a project"
+    expect(page).to have_content 'This is a project'
 
-    first('.menu').click_link "Sign out"
+    first('.menu').click_link 'Sign out'
 
-    expect(page).to have_content "Sign in"
+    expect(page).to have_content 'Sign in'
 
-    visit "/logout"
+    visit '/logout'
 
-    expect(page).to have_content "Sign in"
+    expect(page).to have_content 'Sign in'
   end
 end

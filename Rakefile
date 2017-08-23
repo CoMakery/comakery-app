@@ -5,10 +5,10 @@ require File.expand_path('../config/application', __FILE__)
 
 Rails.application.load_tasks
 
-Rake::Task["default"].clear
+Rake::Task['default'].clear
 
 task default: :specs_thorough
 
 task :specs_thorough do
-  system "bin/rspect"
+  system 'bin/rspect'
 end

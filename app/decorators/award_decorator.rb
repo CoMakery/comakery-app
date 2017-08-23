@@ -9,24 +9,20 @@ class AwardDecorator < Draper::Decorator
   def ethereum_transaction_address_short
     if object.ethereum_transaction_address
       "#{object.ethereum_transaction_address[0...10]}..."
-    else
-      nil
     end
   end
 
   def ethereum_transaction_explorer_url
     if object.ethereum_transaction_address
       "https://#{Rails.application.config.ethereum_explorer_site}/tx/#{object.ethereum_transaction_address}"
-    else
-      nil
     end
   end
 
   def unit_amount_pretty
-    number_with_delimiter(award.unit_amount, :delimiter => ',')
+    number_with_delimiter(award.unit_amount, delimiter: ',')
   end
 
   def total_amount_pretty
-    number_with_delimiter(award.total_amount, :seperator => ',')
+    number_with_delimiter(award.total_amount, seperator: ',')
   end
 end

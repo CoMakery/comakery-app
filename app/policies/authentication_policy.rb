@@ -13,4 +13,3 @@ class AuthenticationPolicy < ApplicationPolicy
     end
   end
 end
-

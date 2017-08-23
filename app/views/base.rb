@@ -2,7 +2,7 @@ module Views
   class Base < Fortitude::Widget
     doctype :html5
 
-    helper :attachment_field, :transform => :output_return_value
+    helper :attachment_field, transform: :output_return_value
 
     private
 
@@ -27,10 +27,10 @@ module Views
     def with_errors(object, field)
       errors = object.errors[field]
       if errors.any?
-        div(class: :error) {
+        div(class: :error) do
           yield
           small(errors.to_sentence, class: :error)
-        }
+        end
       else
         yield
       end
@@ -39,9 +39,9 @@ module Views
     def inline_errors(object, field)
       errors = object.errors[field]
       if errors.any?
-        div(class: :error) {
+        div(class: :error) do
           text("#{field.to_s.humanize} #{errors.to_sentence}")
-        }
+        end
       end
     end
 
@@ -54,20 +54,20 @@ module Views
       args.merge(class: classes)
     end
 
-    def question_tooltip(text, options={})
-      tooltip(text, options) {
-        i class: "fa fa-question"
-      }
+    def question_tooltip(text, options = {})
+      tooltip(text, options) do
+        i class: 'fa fa-question'
+      end
     end
 
-    def tooltip(text, options={}, &block)
+    def tooltip(text, options = {}, &block)
       span('data-tooltip': '',
-           'aria-haspopup': "true",
+           'aria-haspopup': 'true',
            'class': "has-tip #{options[:class]}",
-           'data-options': "show_on:large",
-           title: text) {
+           'data-options': 'show_on:large',
+           title: text) do
         block.yield
-      }
+      end
     end
 
     def markdown_to_html(markdown)
@@ -79,15 +79,13 @@ module Views
     end
 
     def li_if(variable, **opts)
-      if variable.present?
-        li(**opts) { yield }
-      end
+      li(**opts) { yield } if variable.present?
     end
 
     def required_label_text(label_text)
-      span(class: 'required') {
+      span(class: 'required') do
         text label_text
-      }
+      end
     end
   end
 end

@@ -7,6 +7,6 @@ class AdminRequiredConstraint
   private
 
   def current_user(request)
-    Account.find_by_id(request.session[:user_id])
+    Account.find_by(id: request.session[:user_id])
   end
 end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Metrics do
-  it "returns signups per week (last 12 weeks)" do
+  it 'returns signups per week (last 12 weeks)' do
     travel_to Time.zone.local(2014, 4, 1) do
       1.times { create(:account) }
     end
@@ -15,7 +15,7 @@ describe Metrics do
     end
 
     travel_to Time.zone.local(2014, 10, 31) do # Friday
-      metrics = Metrics.signups_per_week
+      metrics = described_class.signups_per_week
 
       expect(metrics[-1][:count]).to eq(3)
       expect(metrics[-2][:count]).to eq(0)
@@ -27,7 +27,7 @@ describe Metrics do
     end
   end
 
-  it "returns signups per day in the last week" do
+  it 'returns signups per day in the last week' do
     travel_to Time.zone.local(2014, 10, 23) do
       1.times { create(:account) }
     end
@@ -41,7 +41,7 @@ describe Metrics do
     end
 
     travel_to Time.zone.local(2014, 10, 31) do # Friday
-      metrics = Metrics.signups_per_day
+      metrics = described_class.signups_per_day
 
       expect(metrics[-1][:count]).to eq(3)
       expect(metrics[-2][:count]).to eq(0)
@@ -54,13 +54,13 @@ describe Metrics do
   end
 
   let(:mark_active) do
-    Proc.new { |a| a.update_attribute(:last_activity_at, Time.current) }
+    proc { |a| a.update_attribute(:last_activity_at, Time.current) }
   end
 
-  it "returns count of lapsed users" do
+  it 'returns count of lapsed users' do
     accounts = nil
     travel_to Time.zone.local(2014, 4, 1) do
-      accounts = 3.times.map { create(:account) }
+      accounts = Array.new(3) { create(:account) }
       # accounts[0] never active
       mark_active.call(accounts[1])
     end
@@ -70,7 +70,7 @@ describe Metrics do
     end
 
     travel_to Time.zone.local(2014, 10, 31) do # Friday
-      metrics = Metrics.lapsed
+      metrics = described_class.lapsed
 
       expect(metrics[:count]).to eq(2)
 
@@ -78,10 +78,10 @@ describe Metrics do
     end
   end
 
-  it "returns count of users who were last active x weeks ago" do
+  it 'returns count of users who were last active x weeks ago' do
     accounts = nil
     travel_to Time.zone.local(2014, 4, 1) do
-      accounts = 6.times.map { create(:account) }
+      accounts = Array.new(6) { create(:account) }
       mark_active.call(accounts[0])
     end
 
@@ -94,7 +94,7 @@ describe Metrics do
     end
 
     travel_to Time.zone.local(2014, 10, 31) do # Friday
-      metrics = Metrics.churn_per_week
+      metrics = described_class.churn_per_week
 
       expect(metrics[-1][:count]).to eq(3)
       expect(metrics[-2][:count]).to eq(0)
@@ -106,10 +106,10 @@ describe Metrics do
     end
   end
 
-  it "returns count of users who were last active x days ago" do
+  it 'returns count of users who were last active x days ago' do
     accounts = nil
     travel_to Time.zone.local(2014, 10, 23) do
-      accounts = 6.times.map { create(:account) }
+      accounts = Array.new(6) { create(:account) }
       mark_active.call(accounts[0])
     end
 
@@ -122,7 +122,7 @@ describe Metrics do
     end
 
     travel_to Time.zone.local(2014, 10, 31) do # Friday
-      metrics = Metrics.churn_per_day
+      metrics = described_class.churn_per_day
 
       expect(metrics[-1][:count]).to eq(3)
       expect(metrics[-2][:count]).to eq(0)

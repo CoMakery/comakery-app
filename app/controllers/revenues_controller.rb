@@ -1,6 +1,6 @@
 class RevenuesController < ApplicationController
-  before_filter :assign_project
-  skip_before_filter :require_login, only: :index
+  before_action :assign_project
+  skip_before_action :require_login, only: :index
 
   def index
     authorize @project, :show_revenue_info?
@@ -23,14 +23,15 @@ class RevenuesController < ApplicationController
   end
 
   private
+
   def assign_project
     @project = policy_scope(Project).find(params[:project_id]).decorate
   end
 
   def revenue_params
     params.require(:revenue).permit :amount,
-                                    :comment,
-                                    :transaction_reference,
-                                    :project_id
+      :comment,
+      :transaction_reference,
+      :project_id
   end
 end

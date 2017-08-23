@@ -16,7 +16,7 @@ class GetAwardableTypes
     end
 
     can_award = own_project?(current_account, project) ||
-        (awardable_types.any? { |awardable_type| awardable_type.community_awardable? } && belong_to_project?(current_account, project))
+                (awardable_types.any?(&:community_awardable?) && belong_to_project?(current_account, project))
 
     context.can_award = can_award
     context.awardable_types = awardable_types

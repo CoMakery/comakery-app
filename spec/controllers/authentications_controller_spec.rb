@@ -11,8 +11,8 @@ describe AuthenticationsController do
 
   before { login(recipient_auth.account) }
 
-  describe "#show" do
-    it "hella works" do
+  describe '#show' do
+    it 'hella works' do
       get :show
 
       expect(response.status).to eq(200)

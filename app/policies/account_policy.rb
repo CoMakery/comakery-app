@@ -9,20 +9,20 @@ class AccountPolicy < ApplicationPolicy
 
     def resolve
       return Account.none unless account
-      Account.joins(:authentications).where("authentications.slack_team_id = ?", account.slack_auth.slack_team_id)
+      Account.joins(:authentications).where('authentications.slack_team_id = ?', account.slack_auth.slack_team_id)
     end
   end
 
   def new?
     Rails.application.config.allow_signup
   end
-  alias_method :create?, :new?
+  alias create? new?
 
   def edit?
     admin? || user == record
   end
-  alias_method :update?, :edit?
-  alias_method :show?, :edit?
+  alias update? edit?
+  alias show? edit?
 
   def destroy?
     admin?

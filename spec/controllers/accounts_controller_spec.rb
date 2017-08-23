@@ -8,21 +8,21 @@ describe AccountsController do
 
   before { login(account) }
 
-  describe "#update" do
-    it "updates a valid ethereum address successfully" do
+  describe '#update' do
+    it 'updates a valid ethereum address successfully' do
       expect(CreateEthereumAwards).to receive(:call).with(awards: array_including(award1, award2))
       expect do
-        put :update, account: {ethereum_wallet: "0x#{'a'*40}"}
+        put :update, account: { ethereum_wallet: "0x#{'a' * 40}" }
         expect(response.status).to eq(302)
-      end.to change { account.reload.ethereum_wallet }.from(nil).to("0x#{'a'*40}")
+      end.to change { account.reload.ethereum_wallet }.from(nil).to("0x#{'a' * 40}")
 
       expect(response).to redirect_to account_url
-      expect(flash[:notice]).to eq("Ethereum account updated. If this is an unused account the address will not be visible on the Ethereum blockchain until it is part of a transaction.")
+      expect(flash[:notice]).to eq('Ethereum account updated. If this is an unused account the address will not be visible on the Ethereum blockchain until it is part of a transaction.')
     end
 
-    it "renders errors for an invalid ethereum address" do
+    it 'renders errors for an invalid ethereum address' do
       expect do
-        put :update, account: {ethereum_wallet: "not a valid ethereum address"}
+        put :update, account: { ethereum_wallet: 'not a valid ethereum address' }
         expect(response.status).to eq(200)
       end.not_to change { account.reload.ethereum_wallet }
 

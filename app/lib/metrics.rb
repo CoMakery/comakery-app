@@ -10,10 +10,10 @@ class Metrics
 
     def lapsed
       lapsed_as_of = 11.weeks.ago
-      lapsed = Account.
-        where("last_activity_at < ? OR last_activity_at IS NULL", lapsed_as_of).
-        count
-      { start: -Date::Infinity.new, count: lapsed}
+      lapsed = Account
+               .where('last_activity_at < ? OR last_activity_at IS NULL', lapsed_as_of)
+               .count
+      { start: -Date::Infinity.new, count: lapsed }
     end
 
     def churn_per_week
@@ -27,8 +27,8 @@ class Metrics
     private
 
     def count_per_week(scope, attr)
-      12.times.map do |i|
-        start_time = (i+1).weeks.ago
+      Array.new(12) do |i|
+        start_time = (i + 1).weeks.ago
         end_time = start_time + 7.days
         count = scope.where(attr => (start_time...end_time)).count
         { start: start_time, count: count }
@@ -36,8 +36,8 @@ class Metrics
     end
 
     def count_per_day(scope, attr)
-      7.times.map do |i|
-        start_time = (i+1).days.ago
+      Array.new(7) do |i|
+        start_time = (i + 1).days.ago
         end_time = start_time + 1.day
         count = scope.where(attr => (start_time...end_time)).count
         { start: start_time, count: count }

@@ -8,13 +8,12 @@ require_relative '../config/environment'
 
 BOTS = [
   'greenkeeperio-bot',
-  'Core Network Bot',
-]
+  'Core Network Bot'
+].freeze
 
-class RecipientError < StandardError ; end
+class RecipientError < StandardError; end
 
 class GitImporter
-
   def import
     parse_opts
     repo = clone_repo
@@ -24,20 +23,20 @@ class GitImporter
   end
 
   def parse_opts
-    @opts = Trollop::options do
-      opt :github_repo, "Github owner/repo, eg `ipfs/go-ipfs`", type: :string
-      opt :project_id, "Comakery project ID", type: :integer
-      opt :history, "Days of history (default: all)", type: :integer, default: nil
-      opt :ethereum, "Create awards on Ethereum blockchain", default: false
+    @opts = Trollop.options do
+      opt :github_repo, 'Github owner/repo, eg `ipfs/go-ipfs`', type: :string
+      opt :project_id, 'Comakery project ID', type: :integer
+      opt :history, 'Days of history (default: all)', type: :integer, default: nil
+      opt :ethereum, 'Create awards on Ethereum blockchain', default: false
     end
-    Trollop::die :github_repo, "must be of the form `owner/repo`" if @opts[:github_repo]&.split('/')&.length != 2
-    Trollop::die :project_id, "required" unless @opts[:project_id] && @opts[:project_id] > 0
+    Trollop.die :github_repo, 'must be of the form `owner/repo`' if @opts[:github_repo]&.split('/')&.length != 2
+    Trollop.die :project_id, 'required' unless @opts[:project_id] && @opts[:project_id] > 0
   end
 
   def clone_repo
     github_repo = @opts[:github_repo]
     local_repo = File.expand_path "../../tmp/import/github/#{github_repo}", __FILE__
-    if Dir.exists?(File.join local_repo, '.git')
+    if Dir.exist?(File.join(local_repo, '.git'))
       run "cd #{local_repo} && git pull"
     else
       run "rm -rf #{local_repo}"
@@ -50,13 +49,13 @@ class GitImporter
     { local_repo: local_repo }
   end
 
-  def parse_log repo
-    git_log = %{git log
+  def parse_log(repo)
+    git_log = %(git log
       --first-parent master
       --format='%H %x00 %an %x00 %ae %x00 %aI %x00 %s'
-    }
+    )
     if @opts[:history].present?
-      git_log += %{ --since="#{@opts[:history] + 1} days ago"}
+      git_log += %( --since="#{@opts[:history] + 1} days ago")
     end
 
     results = run "cd #{repo[:local_repo]} && #{git_log}", quiet: !$DEBUG
@@ -82,7 +81,7 @@ class GitImporter
     end
   end
 
-  def check_recipients commits
+  def check_recipients(commits)
     project = Project.find @opts[:project_id]
     author_names = commits.map { |commit| commit[:author_names] }.flatten.uniq.sort
     errors = []
@@ -93,12 +92,10 @@ class GitImporter
         errors << e.message
       end
     end
-    if errors.present?
-      raise RecipientError.new errors.join("\n")
-    end
+    raise RecipientError, errors.join("\n") if errors.present?
   end
 
-  def slack_user_id author_name
+  def slack_user_id(author_name)
     project = Project.find @opts[:project_id]
     name_to_user_name = {
       'Adam Apollo' => 'adamapollo',
@@ -108,7 +105,7 @@ class GitImporter
       'Harlan T Wood' => 'harlan',
       'harlantwood' => 'harlan',
       'Jack Senechal' => 'jack',
-      'Noah Thorp' => 'noahthorp',
+      'Noah Thorp' => 'noahthorp'
     }
     unless @slack
       slack_team_id = project.slack_team_id
@@ -123,20 +120,20 @@ class GitImporter
 
     user_name = name_to_user_name[author_name]
     unless user_name
-      raise RecipientError.new "Please add author '#{author_name}' to name_to_user_name map"
+      raise RecipientError, "Please add author '#{author_name}' to name_to_user_name map"
     end
 
     user_id = @slack_user_name_to_slack_id[user_name]
     unless user_id
-      raise RecipientError.new "Slack user name '#{user_name}' not found in Slack team '#{project.slack_team_name}'"
+      raise RecipientError, "Slack user name '#{user_name}' not found in Slack team '#{project.slack_team_name}'"
     end
     user_id
   end
 
-  def send_awards commits
+  def send_awards(commits)
     awards = 0
     project = Project.find @opts[:project_id]
-    award_type = project.award_types.order(:amount).first  # lowest award
+    award_type = project.award_types.order(:amount).first # lowest award
     commits.each do |commit|
       commit[:author_names].each do |author_name|
         proof_id = commit[:git_hash]

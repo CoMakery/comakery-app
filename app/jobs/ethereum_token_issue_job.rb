@@ -19,8 +19,8 @@ class EthereumTokenIssueJob
 
     if project.ethereum_contract_address.blank?
       # on raise, sidekiq will retry the job later:
-      raise ArgumentError.new("award ##{award.id} belongs to
-        project ##{project.id} which has no ethereum contract address (yet)")
+      raise ArgumentError, "award ##{award.id} belongs to
+        project ##{project.id} which has no ethereum contract address (yet)"
     else
       award.update! ethereum_transaction_address: Comakery::Ethereum.token_issue(args)
     end

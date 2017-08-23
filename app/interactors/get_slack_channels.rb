@@ -7,8 +7,8 @@ class GetSlackChannels
     begin
       response = current_account.slack.get_channels
       channels = response.channels
-                         .reject { |channel| channel.is_archived }
-                         .sort_by { |channel| channel["name"] }
+                         .reject(&:is_archived)
+                         .sort_by { |channel| channel['name'] }
                          .map(&:name)
 
       context.channels = channels

@@ -4,8 +4,8 @@ class RevenueDecorator < Draper::Decorator
 
   def amount_pretty
     "#{currency_denomination}#{number_with_precision(amount.truncate(Comakery::Currency::PRECISION[currency]),
-                                                     precision: Comakery::Currency::PRECISION[currency],
-                                                     delimiter: ',')}"
+      precision: Comakery::Currency::PRECISION[currency],
+      delimiter: ',')}"
   end
 
   def currency_denomination
