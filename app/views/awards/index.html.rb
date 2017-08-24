@@ -3,9 +3,9 @@ class Views::Awards::Index < Views::Base
 
   def content
     render partial: 'shared/project_header'
-    full_row do
+    full_row {
       render partial: 'awards/activity'
-    end
+    }
     pages
     render partial: 'shared/awards',
            locals: { project: project, awards: awards, show_recipient: true }
@@ -13,12 +13,12 @@ class Views::Awards::Index < Views::Base
   end
 
   def pages
-    full_row do
-      div(class: 'callout clearfix') do
-        div(class: 'pagination float-right') do
+    full_row {
+      div(class: 'callout clearfix') {
+        div(class: 'pagination float-right') {
           text paginate project.awards.page(params[:page])
-        end
-      end
-    end
+        }
+      }
+    }
   end
 end

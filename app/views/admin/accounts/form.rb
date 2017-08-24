@@ -4,30 +4,30 @@ class Views::Admin::Accounts::Form < Views::Base
 
   def content
     form_for([:admin, account]) do |f|
-      with_errors(account, :email) do
-        label do
+      with_errors(account, :email) {
+        label {
           text 'E-mail: '
           f.text_field :email
-        end
-      end
+        }
+      }
 
       if account.new_record?
-        with_errors(account, :password) do
-          label do
+        with_errors(account, :password) {
+          label {
             text 'Password: '
             f.password_field :password
-          end
-        end
+          }
+        }
       end
 
-      full_row do
+      full_row {
         label('Roles: ')
         f.collection_check_boxes :role_ids, roles, :id, :name
-      end
+      }
 
-      div(class: 'actions') do
+      div(class: 'actions') {
         f.submit class: buttonish
-      end
+      }
     end
   end
 end

@@ -16,6 +16,16 @@ AllCops:
   TargetRubyVersion: 2.3
   TargetRailsVersion: 4.2
 
+Layout/AlignParameters:
+  Enabled: true
+  EnforcedStyle: with_fixed_indentation
+
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
+Layout/IndentationConsistency:
+  Enabled: false
+
 Lint/EndAlignment:
   EnforcedStyleAlignWith: variable
 
@@ -42,9 +52,9 @@ RSpec/ExampleLength:
 RSpec/LetSetup:
   Enabled: false
 
-Layout/AlignParameters:
-  Enabled: true
-  EnforcedStyle: with_fixed_indentation
+Style/BlockDelimiters:
+  Exclude:
+    - 'app/views/**/*'
 
 Style/Documentation:
   Enabled: false
@@ -55,12 +65,6 @@ Style/FileName:
     - 'Guardfile'
 
 Style/FrozenStringLiteralComment:
-  Enabled: false
-
-Layout/IndentHash:
-  EnforcedStyle: consistent
-
-Layout/IndentationConsistency:
   Enabled: false
 
 Style/NumericLiterals:

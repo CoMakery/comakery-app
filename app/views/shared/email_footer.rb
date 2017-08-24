@@ -1,16 +1,16 @@
 class Views::Shared::EmailFooter < Views::EmailBase
   def content
-    full_row(class: :footer) do
-      td(class: 'text-pad') do
+    full_row(class: :footer) {
+      td(class: 'text-pad') {
         p 'Disclosures'
         p '...'
-      end
-    end
+      }
+    }
 
-    full_row do
-      center_td do
+    full_row {
+      center_td {
         div raw("&copy; #{Date.current.year} #{Rails.application.config.company_name} All Rights Reserved.")
-      end
-    end
+      }
+    }
   end
 end

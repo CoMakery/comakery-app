@@ -2,36 +2,36 @@ class Views::Accounts::New < Views::Base
   needs :account
 
   def content
-    row do
-      column(%i[small-12 large-6], class: 'large-centered') do
+    row {
+      column(%i[small-12 large-6], class: 'large-centered') {
         h1('Signup')
 
         form_for account do |f|
-          row do
-            column('large-12') do
-              with_errors(account, :email) do
-                label do
+          row {
+            column('large-12') {
+              with_errors(account, :email) {
+                label {
                   text 'E-mail: '
                   f.text_field :email
-                end
-              end
-            end
+                }
+              }
+            }
 
-            column('large-12') do
-              with_errors(account, :password) do
-                label do
+            column('large-12') {
+              with_errors(account, :password) {
+                label {
                   text 'Password: '
                   f.password_field :password
-                end
-              end
-            end
+                }
+              }
+            }
 
-            column('large-12') do
+            column('large-12') {
               f.submit class: buttonish(:medium)
-            end
-          end
+            }
+          }
         end
-      end
-    end
+      }
+    }
   end
 end

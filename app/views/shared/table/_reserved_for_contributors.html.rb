@@ -3,34 +3,34 @@ class Views::Shared::Table::ReservedForContributors < Views::Projects::Base
 
   def content
     if project.revenue_share?
-      column('large-4 medium-12 summary float-left reserved-for-contributors') do
+      column('large-4 medium-12 summary float-left reserved-for-contributors') {
         row(class: 'money') { h3 'Reserved for Contributors' }
-        row(class: 'table-box') do
-          table do
-            tr(class: 'token-numbers') do
+        row(class: 'table-box') {
+          table {
+            tr(class: 'token-numbers') {
               td {}
-              td do
+              td {
                 span(class: 'total-revenue') { text "#{project.total_revenue_pretty} " }
                 span { text 'Total Project Revenue' }
-              end
-            end
-            tr(class: 'token-numbers') do
+              }
+            }
+            tr(class: 'token-numbers') {
               td { text '×' }
-              td do
+              td {
                 span(class: 'royalty-percentage') { text "#{project.royalty_percentage_pretty} " }
                 span { text 'Reserved for Contributors' }
-              end
-            end
-            tr(class: 'money token-numbers') do
+              }
+            }
+            tr(class: 'money token-numbers') {
               td { text '=' }
-              td do
+              td {
                 span(class: 'total-revenue-shared') { text "#{project.total_revenue_shared_pretty} " }
                 span { text 'Reserved for Contributors' }
-              end
-            end
-          end
-        end
-      end
+              }
+            }
+          }
+        }
+      }
     end
   end
 end

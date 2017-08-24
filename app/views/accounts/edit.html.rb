@@ -4,34 +4,34 @@ module Views
       needs :account
 
       def content
-        row do
-          column('large-6') do
+        row {
+          column('large-6') {
             h2('Account Profile')
 
-            p do
+            p {
               text 'Email: '
               text account.email
-            end
+            }
 
             h4('Change Password')
 
             form_for account do |f|
-              with_errors(account, :old_password) do
-                label do
+              with_errors(account, :old_password) {
+                label {
                   text 'Old Password '
                   f.password_field :old_password
-                end
-              end
-              with_errors(account, :password) do
-                label do
+                }
+              }
+              with_errors(account, :password) {
+                label {
                   text 'New Password '
                   f.password_field :password
-                end
-              end
+                }
+              }
               f.submit 'Change', class: buttonish(:small, :expand)
             end
-          end
-        end
+          }
+        }
       end
     end
   end

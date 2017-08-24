@@ -4,25 +4,25 @@ class Views::Projects::Show < Views::Projects::Base
   def content
     render partial: 'shared/project_header'
 
-    div(class: 'project-head content') do
+    div(class: 'project-head content') {
       render partial: 'description'
-      row do
+      row {
         render partial: 'shared/award_progress_bar'
-      end
-    end
+      }
+    }
 
-    div(class: 'project-body content-box') do
-      row do
-        column('large-6 medium-12', id: 'awards') do
+    div(class: 'project-body content-box') {
+      row {
+        column('large-6 medium-12', id: 'awards') {
           render partial: 'award_send'
-        end
-        column('large-6 medium-12') do
-          row(class: 'project-terms') do
+        }
+        column('large-6 medium-12') {
+          row(class: 'project-terms') {
             h4 'Project Terms'
             render 'shared/award_form_terms'
-          end
-        end
-      end
-    end
+          }
+        }
+      }
+    }
   end
 end

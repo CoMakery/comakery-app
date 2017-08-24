@@ -3,23 +3,23 @@ class Views::Admin::Roles::Form < Views::Base
 
   def content
     form_for([:admin, role]) do |f|
-      with_errors(role, :name) do
-        label do
+      with_errors(role, :name) {
+        label {
           text 'Name: '
           f.text_field :name
-        end
-      end
+        }
+      }
 
-      with_errors(role, :key) do
-        label do
+      with_errors(role, :key) {
+        label {
           text 'Key: '
           f.text_field :key
-        end
-      end
+        }
+      }
 
-      div(class: 'actions') do
+      div(class: 'actions') {
         f.submit class: buttonish
-      end
+      }
     end
   end
 end

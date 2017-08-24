@@ -43,53 +43,53 @@ module Views
 
     # http://zurb.com/ink/docs.php#grid
     def row(args = {}, &block)
-      container do
-        td do
-          table(class: :row) do
+      container {
+        td {
+          table(class: :row) {
             tr(add_classes(args, []), &block)
             # technically, more rows are allowed in a container, but this is
             # easier?
-          end
-        end
-      end
+          }
+        }
+      }
     end
 
     # http://zurb.com/ink/docs.php#grid, see Full-Width Rows
     def wide_row(args = {}, &block)
-      table(add_classes(args, [:row])) do
-        tr do
-          center_td do
+      table(add_classes(args, [:row])) {
+        tr {
+          center_td {
             container(&block)
-          end
-        end
-      end
+          }
+        }
+      }
     end
 
     # http://zurb.com/ink/docs.php#grid
     def column(size = :twelve, args = {})
       wrapper_args = args.delete(:wrapper) || {}
-      td(add_classes(wrapper_args, [:wrapper])) do
-        table(add_classes(args, [size, :columns])) do
-          tr do
+      td(add_classes(wrapper_args, [:wrapper])) {
+        table(add_classes(args, [size, :columns])) {
+          tr {
             yield # must return a td, or a series of tds for sub-grids
 
             td(class: :expander)
-          end
-        end
-      end
+          }
+        }
+      }
     end
 
     # http://zurb.com/ink/docs.php#grid
     def last_column(size = :twelve, args = {})
-      td(class: %i[wrapper last]) do
-        table(add_classes(args, [size, :columns])) do
-          tr do
+      td(class: %i[wrapper last]) {
+        table(add_classes(args, [size, :columns])) {
+          tr {
             yield # must return a td, or a series of tds for sub-grids
 
             td(class: :expander)
-          end
-        end
-      end
+          }
+        }
+      }
     end
 
     def full_row(args = {}, &block)
@@ -97,15 +97,15 @@ module Views
     end
 
     def block_grid(size, _args = {})
-      container do
-        td do
-          table(class: "block-grid #{size}-up") do
-            tr do
+      container {
+        td {
+          table(class: "block-grid #{size}-up") {
+            tr {
               yield # series of td's
-            end
-          end
-        end
-      end
+            }
+          }
+        }
+      }
     end
 
     def center_img(src, args = {})

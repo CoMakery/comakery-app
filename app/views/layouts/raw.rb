@@ -1,8 +1,8 @@
 class Views::Layouts::Raw < Views::Base
   def content
     doctype!
-    html(lang: 'en') do
-      head do
+    html(lang: 'en') {
+      head {
         meta :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type'
         meta charset: 'utf-8'
         meta name: 'viewport', content: 'width=device-width, initial-scale=1.0'
@@ -40,43 +40,43 @@ class Views::Layouts::Raw < Views::Base
         favicon_link_tag 'favicon/favicon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png'
         favicon_link_tag 'favicon/manifest.json', rel: 'manifest', type: 'application/json'
         csrf_meta_tags
-      end
+      }
 
-      body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") do
-        div(class: 'contain-to-grid top-bar-container') do
-          div(class: 'top-bar large-10 medium-11 small-12 small-centered columns', 'data-topbar' => '', role: 'navigation') do
-            div(class: 'top-bar-title') do
-              span('data-hide-for' => 'medium', 'data-responsive-toggle' => 'responsive-menu') do
+      body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") {
+        div(class: 'contain-to-grid top-bar-container') {
+          div(class: 'top-bar large-10 medium-11 small-12 small-centered columns', 'data-topbar' => '', role: 'navigation') {
+            div(class: 'top-bar-title') {
+              span('data-hide-for' => 'medium', 'data-responsive-toggle' => 'responsive-menu') {
                 span(class: 'menu-icon dark', 'data-toggle' => '')
-              end
-              a(class: 'name', href: root_path) do
+              }
+              a(class: 'name', href: root_path) {
                 image_tag('comakery-logo.svg', class: 'logo')
-              end
-            end
+              }
+            }
             render partial: 'shared/navigation'
-          end
-        end
+          }
+        }
 
-        div(class: 'app-container row') do
-          div(class: 'large-10 medium-11 small-12 small-centered columns') do
+        div(class: 'app-container row') {
+          div(class: 'large-10 medium-11 small-12 small-centered columns') {
             flash.each do |name, msg|
-              div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '') do
-                button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
+              div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '') {
+                button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') {
                   span('aria-hidden' => true) { text raw '&times;' }
-                end
+                }
                 p(msg, id: "flash-msg-#{name}")
-              end
+              }
             end
-          end
+          }
 
           content_for?(:pre_body) ? yield(:pre_body) : ''
 
-          div(class: 'main') do
-            div(class: 'large-10 medium-11 small-12 small-centered columns') do
+          div(class: 'main') {
+            div(class: 'large-10 medium-11 small-12 small-centered columns') {
               content_for?(:body) ? yield(:body) : yield
-            end
-          end
-        end
+            }
+          }
+        }
         javascript_tag("
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -88,17 +88,17 @@ class Views::Layouts::Raw < Views::Base
         ")
 
         if content_for?(:footer)
-          footer(class: 'fat-footer') do
+          footer(class: 'fat-footer') {
             yield(:footer)
-          end
+          }
         end
 
         if content_for?(:js)
-          script do
+          script {
             yield(:js)
-          end
+          }
         end
-      end
-    end
+      }
+    }
   end
 end

@@ -2,50 +2,50 @@ class Views::Admin::Accounts::Index < Views::Base
   needs :accounts
 
   def content
-    full_row do
+    full_row {
       h1('Listing accounts')
 
-      p do
+      p {
         text 'Found '
         text(accounts.length)
         text ' accounts.'
-      end
-      table do
-        thead do
-          tr do
+      }
+      table {
+        thead {
+          tr {
             th('E-mail')
             th('Roles')
             th(colspan: '3')
-          end
-        end
+          }
+        }
 
-        tbody do
+        tbody {
           accounts.each do |account|
-            tr do
+            tr {
               td(account.email)
               td(account.roles.map(&:name).join(', '))
-              td do
+              td {
                 link_to 'Show', admin_account_path(account)
-              end
+              }
 
-              td do
+              td {
                 link_to 'Edit', edit_admin_account_path(account)
-              end
+              }
 
-              td do
+              td {
                 link_to 'Destroy', admin_account_path(account), method: :delete, data: { confirm: 'Are you sure?' }
-              end
-            end
+              }
+            }
           end
-        end
-      end
+        }
+      }
 
-      p do
+      p {
         link_to 'New Account', new_admin_account_path, class: buttonish
-      end
-      p do
+      }
+      p {
         link_to 'Back', admin_path
-      end
-    end
+      }
+    }
   end
 end
