@@ -23,40 +23,40 @@ class Project < ActiveRecord::Base
           quantity_redeemed: quantity_redeemed,
           share_value: project.revenue_per_share,
           currency: project.denomination,
-          payee: payee_auth).
-          tap { |n| n.truncate_total_value_to_currency_precision }
+          payee: payee_auth)
+        .tap(&:truncate_total_value_to_currency_precision)
     end
 
     def create_with_quantity(**attrs)
-      new_with_quantity(**attrs).tap { |n| n.save }
+      new_with_quantity(**attrs).tap(&:save)
     end
   end
 
-  has_many :contributors, through: :awards, source: :authentication # TODO deprecate in favor of contributors_distinct
+  has_many :contributors, through: :awards, source: :authentication # TODO: deprecate in favor of contributors_distinct
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
   has_many :revenues
 
   belongs_to :owner_account, class_name: Account
 
   enum payment_type: {
-      revenue_share: 0,
-      project_token: 1
+    revenue_share: 0,
+    project_token: 1
   }
 
   enum denomination: {
-      USD: 0,
-      BTC: 1,
-      ETH: 2
+    USD: 0,
+    BTC: 1,
+    ETH: 2
   }
 
-  validates_presence_of :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id,
-                        :slack_team_image_34_url, :slack_team_image_132_url, :title, :legal_project_owner,
-                        :denomination
+  validates :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id,
+    :slack_team_image_34_url, :slack_team_image_132_url, :title, :legal_project_owner,
+    :denomination, presence: true
 
-  validates_presence_of :royalty_percentage, :maximum_royalties_per_month, unless: :project_token?
+  validates :royalty_percentage, :maximum_royalties_per_month, presence: { unless: :project_token? }
 
-  validates_numericality_of :maximum_tokens, greater_than: 0
-  validates_numericality_of :royalty_percentage, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_nil: true
+  validates :maximum_tokens, numericality: { greater_than: 0 }
+  validates :royalty_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_nil: true }
 
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
@@ -64,34 +64,34 @@ class Project < ActiveRecord::Base
 
   validate :maximum_tokens_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
-  validates :ethereum_contract_address, ethereum_address: {type: :account, immutable: true} # see EthereumAddressable
+  validates :ethereum_contract_address, ethereum_address: { type: :account, immutable: true } # see EthereumAddressable
   validate :denomination_changeable
 
   before_save :set_transitioned_to_ethereum_enabled
 
   def self.with_last_activity_at
-    select(Project.column_names.map { |c| "projects.#{c}" }.<<("max(awards.created_at) as last_award_created_at").join(","))
-        .joins("left join award_types on projects.id = award_types.project_id")
-        .joins("left join awards on award_types.id = awards.award_type_id")
-        .group("projects.id")
-        .order("max(awards.created_at) desc nulls last, projects.created_at desc nulls last")
+    select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
+      .joins('left join award_types on projects.id = award_types.project_id')
+      .joins('left join awards on award_types.id = awards.award_type_id')
+      .group('projects.id')
+      .order('max(awards.created_at) desc nulls last, projects.created_at desc nulls last')
   end
 
   def create_ethereum_awards!
-    CreateEthereumAwards.call(awards: self.awards)
+    CreateEthereumAwards.call(awards: awards)
   end
 
   def create_ethereum_contract!
-    address = Comakery::Ethereum.token_contract(maxSupply: self.maximum_tokens)
-    self.update! ethereum_contract_address: address
+    address = Comakery::Ethereum.token_contract(maxSupply: maximum_tokens)
+    update! ethereum_contract_address: address
   end
 
   def self.for_account(account)
-    where(slack_team_id: account&.slack_auth.slack_team_id)
+    where(slack_team_id: account&.slack_auth&.slack_team_id)
   end
 
   def self.not_for_account(account)
-    where.not(slack_team_id: account&.slack_auth.slack_team_id)
+    where.not(slack_team_id: account&.slack_auth&.slack_team_id)
   end
 
   def self.public_projects
@@ -99,16 +99,14 @@ class Project < ActiveRecord::Base
   end
 
   def self.featured
-    order("featured asc")
+    order('featured asc')
   end
 
   def total_revenue
     revenues.total_amount
   end
 
-  def total_awarded
-    awards.total_awarded
-  end
+  delegate :total_awarded, to: :awards
 
   def total_awards_outstanding
     total_awarded - total_awards_redeemed
@@ -117,7 +115,6 @@ class Project < ActiveRecord::Base
   def total_awards_redeemed
     payments.sum(:quantity_redeemed)
   end
-
 
   def share_of_revenue_unpaid(awards)
     return BigDecimal(0) if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0 || awards.blank?
@@ -139,7 +136,7 @@ class Project < ActiveRecord::Base
 
   # truncated to 8 decimal places
   def revenue_per_share
-    return BigDecimal(0) if royalty_percentage.blank?|| total_awarded == 0
+    return BigDecimal(0) if royalty_percentage.blank? || total_awarded == 0
     (total_revenue_shared_unpaid / BigDecimal(total_awards_outstanding)).truncate(8)
   end
 
@@ -159,10 +156,10 @@ class Project < ActiveRecord::Base
     # taken from http://stackoverflow.com/questions/5909121/converting-a-regular-youtube-link-into-an-embedded-video
     # Regex from http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
     if video_url[/youtu\.be\/([^\?]*)/]
-      youtube_id = $1
+      youtube_id = Regexp.last_match(1)
     else
       video_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
-      youtube_id = $5
+      youtube_id = Regexp.last_match(5)
     end
     youtube_id
   end
@@ -171,14 +168,13 @@ class Project < ActiveRecord::Base
     !!@transitioned_to_ethereum_enabled
   end
 
-
   def share_revenue?
     revenue_share? && (royalty_percentage&.> 0)
   end
 
   def royalty_percentage=(x)
-    x_truncated = BigDecimal(x, ROYALTY_PERCENTAGE_PRECISION).truncate(ROYALTY_PERCENTAGE_PRECISION) unless x.blank?
-    write_attribute(:royalty_percentage, x_truncated)
+    x_truncated = BigDecimal(x, ROYALTY_PERCENTAGE_PRECISION).truncate(ROYALTY_PERCENTAGE_PRECISION) if x.present?
+    self[:royalty_percentage] = x_truncated
   end
 
   private
@@ -195,39 +191,39 @@ class Project < ActiveRecord::Base
     validate_url(:video_url)
     return if errors[:video_url].present?
 
-    errors[:video_url] << "must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'" unless youtube_id.present?
+    errors[:video_url] << "must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'" if youtube_id.blank?
   end
 
   def valid_ethereum_enabled
     if ethereum_enabled_changed? && ethereum_enabled == false
-      errors[:ethereum_enabled] << "cannot be set to false after it has been set to true"
+      errors[:ethereum_enabled] << 'cannot be set to false after it has been set to true'
     end
   end
 
   def set_transitioned_to_ethereum_enabled
     @transitioned_to_ethereum_enabled = ethereum_enabled_changed? &&
-        ethereum_enabled && ethereum_contract_address.blank?
+                                        ethereum_enabled && ethereum_contract_address.blank?
     true # don't halt filter
   end
 
   def validate_url(attribute_name)
-    uri = URI.parse(self.send(attribute_name) || "")
+    uri = URI.parse(send(attribute_name) || '')
   rescue URI::InvalidURIError
     uri = nil
   ensure
-    errors[attribute_name] << "must be a valid url" unless uri&.absolute?
+    errors[attribute_name] << 'must be a valid url' unless uri&.absolute?
     uri
   end
 
   def maximum_tokens_unchanged
-    if maximum_tokens_was > 0 and maximum_tokens_was != maximum_tokens
+    if maximum_tokens_was > 0 && maximum_tokens_was != maximum_tokens
       errors[:maximum_tokens] << "can't be changed"
     end
   end
 
   def denomination_changeable
-    errors.add(:denomination, "cannot be changed because the license terms are finalized") if license_finalized_was
-    errors.add(:denomination, "cannot be changed because revenue has been recorded") if revenues.any? && denomination_changed?
+    errors.add(:denomination, 'cannot be changed because the license terms are finalized') if license_finalized_was
+    errors.add(:denomination, 'cannot be changed because revenue has been recorded') if revenues.any? && denomination_changed?
   end
 
   def currency_precision

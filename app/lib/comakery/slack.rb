@@ -1,9 +1,8 @@
 class Comakery::Slack
-
   include ::Rails.application.routes.url_helpers
   include ActionView::Helpers::TextHelper
 
-  AVATAR = 'https://s3.amazonaws.com/comakery/spacekitty.jpg'
+  AVATAR = 'https://s3.amazonaws.com/comakery/spacekitty.jpg'.freeze
 
   def self.get(token)
     new(token)
@@ -20,7 +19,7 @@ class Comakery::Slack
     text = award_notifications_message(award)
 
     message_response = @client.chat_postMessage(
-      channel: '#'+award.project.slack_channel,
+      channel: '#' + award.project.slack_channel,
       text: text,
       link_names: 1,            # make @user a live link and notify @user
       username: 'CoMakery Bot',
@@ -29,7 +28,7 @@ class Comakery::Slack
     )
 
     @client.reactions_add(
-      channel: message_response[:channel],         # must be channel ID, not #channel-name
+      channel: message_response[:channel], # must be channel ID, not #channel-name
       timestamp: message_response[:message][:ts],
       name: 'thumbsup'
     )
@@ -38,22 +37,22 @@ class Comakery::Slack
   def award_notifications_message(award)
     text = ''
 
-    if award.self_issued?
-      text += %{ @#{award.issuer_slack_user_name} self-issued }
+    text += if award.self_issued?
+      %( @#{award.issuer_slack_user_name} self-issued )
     else
-      text += %{ @#{award.issuer_slack_user_name} sent
-        @#{award.recipient_slack_user_name} }
+      %( @#{award.issuer_slack_user_name} sent
+        @#{award.recipient_slack_user_name} )
     end
 
-    text += %{ a #{award.total_amount} token #{award.award_type.name} }
+    text += %( a #{award.total_amount} token #{award.award_type.name} )
 
-    text += %{ for "#{award.description}" } if award.description.present?
+    text += %( for "#{award.description}" ) if award.description.present?
 
-    text += %{
+    text += %(
       on the
       <#{project_url(award.project)}|#{award.project.title}>
       project.
-    }
+    )
 
     if award.project.ethereum_enabled && award.recipient_address.blank?
       text += " <#{account_url}|Set up your account> to receive Ethereum tokens."
@@ -67,7 +66,7 @@ class Comakery::Slack
     @client.users_list
   rescue Faraday::ConnectionFailed => e
     if Rails.env.development?
-      {members: []}
+      { members: [] }
     else
       raise e
     end

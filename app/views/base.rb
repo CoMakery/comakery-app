@@ -2,7 +2,7 @@ module Views
   class Base < Fortitude::Widget
     doctype :html5
 
-    helper :attachment_field, :transform => :output_return_value
+    helper :attachment_field, transform: :output_return_value
 
     private
 
@@ -54,17 +54,17 @@ module Views
       args.merge(class: classes)
     end
 
-    def question_tooltip(text, options={})
+    def question_tooltip(text, options = {})
       tooltip(text, options) {
-        i class: "fa fa-question"
+        i class: 'fa fa-question'
       }
     end
 
-    def tooltip(text, options={}, &block)
+    def tooltip(text, options = {}, &block)
       span('data-tooltip': '',
-           'aria-haspopup': "true",
+           'aria-haspopup': 'true',
            'class': "has-tip #{options[:class]}",
-           'data-options': "show_on:large",
+           'data-options': 'show_on:large',
            title: text) {
         block.yield
       }
@@ -79,9 +79,7 @@ module Views
     end
 
     def li_if(variable, **opts)
-      if variable.present?
-        li(**opts) { yield }
-      end
+      li(**opts) { yield } if variable.present?
     end
 
     def required_label_text(label_text)

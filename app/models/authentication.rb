@@ -4,11 +4,11 @@ class Authentication < ActiveRecord::Base
   belongs_to :account
   has_many :projects, foreign_key: :slack_team_id, primary_key: :slack_team_id
   has_many :awards
-  validates_presence_of :account, :provider, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :slack_team_name, :slack_user_id, :slack_user_name
+  validates :account, :provider, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :slack_team_name, :slack_user_id, :slack_user_name, presence: true
 
   def display_name
     if slack_first_name.present? || slack_last_name.present?
-      [ slack_first_name.presence, slack_last_name.presence ].compact.join(' ')
+      [slack_first_name.presence, slack_last_name.presence].compact.join(' ')
     else
       "@#{slack_user_name}"
     end

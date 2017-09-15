@@ -2,9 +2,9 @@ class Revenue < ActiveRecord::Base
   belongs_to :project
   belongs_to :recorded_by, class_name: Account
 
-  validates_presence_of :amount, :currency, :project, :recorded_by
-  validates :currency, inclusion: {in: Comakery::Currency::DENOMINATIONS.keys}
-  validates_numericality_of :amount, greater_than: 0
+  validates :amount, :currency, :project, :recorded_by, presence: true
+  validates :currency, inclusion: { in: Comakery::Currency::DENOMINATIONS.keys }
+  validates :amount, numericality: { greater_than: 0 }
   validate :amount_must_use_the_precision_of_the_currency
 
   def self.total_amount
@@ -12,8 +12,8 @@ class Revenue < ActiveRecord::Base
   end
 
   def amount=(x)
-    x.gsub!(',', '') if x.respond_to?(:sub!)
-    write_attribute(:amount, x)
+    x.delete!(',') if x.respond_to?(:sub!)
+    self[:amount] = x
   end
 
   def issuer_slack_icon

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "shared/_awards.html.rb" do
+describe 'shared/_awards.html.rb' do
   let!(:issuer) { create(:account) }
   let!(:recipient1) { create(:account) }
   let!(:recipient2) { create(:account) }
@@ -17,44 +17,44 @@ describe "shared/_awards.html.rb" do
   before { assign :show_recipient, true }
   before { assign :current_account, issuer }
 
-  describe "Description column" do
-    it "renders mardown as HTML" do
+  describe 'Description column' do
+    it 'renders mardown as HTML' do
       render
       assert_select '.description', html: %r{markdown <em>rocks</em>:}
       assert_select '.description', html: %r{<a href="http://www.auto.link"[^>]*>www.auto.link</a>}
     end
   end
 
-  describe "awards history" do
+  describe 'awards history' do
     before do
       award1.update(quantity: 2, unit_amount: 5, total_amount: 10)
       render
     end
     specify do
-      expect(rendered).to have_css ".award-type", text: "Revenue Share"
+      expect(rendered).to have_css '.award-type', text: 'Revenue Share'
     end
 
     specify do
-      expect(rendered).to have_css ".award-unit-amount", text: "5"
+      expect(rendered).to have_css '.award-unit-amount', text: '5'
     end
 
     specify do
-      expect(rendered).to have_css ".award-quantity", text: "2"
+      expect(rendered).to have_css '.award-quantity', text: '2'
     end
 
     specify do
-      expect(rendered).to have_css ".award-total-amount", text: "10"
+      expect(rendered).to have_css '.award-total-amount', text: '10'
     end
   end
 
-  describe "Blockchain Transaction column" do
+  describe 'Blockchain Transaction column' do
     describe 'when project is not ethereum enabled' do
       before { project.ethereum_enabled = false }
-      it "the column header is hidden" do
+      it 'the column header is hidden' do
         render
         expect(rendered).not_to have_css '.header.blockchain-address'
       end
-      it "the column cells are hidden" do
+      it 'the column cells are hidden' do
         render
         expect(rendered).not_to have_css '.blockchain-address'
       end

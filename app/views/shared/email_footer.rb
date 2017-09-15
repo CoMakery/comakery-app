@@ -1,9 +1,9 @@
 class Views::Shared::EmailFooter < Views::EmailBase
   def content
     full_row(class: :footer) {
-      td(class: "text-pad") {
-        p "Disclosures"
-        p "..."
+      td(class: 'text-pad') {
+        p 'Disclosures'
+        p '...'
       }
     }
 

@@ -1,6 +1,6 @@
 class AccountsMailer < ActionMailer::Base
   default from: Rails.application.config.contact_email
-  layout "email"
+  layout 'email'
 
   def reset_password_email(account)
     @account = account

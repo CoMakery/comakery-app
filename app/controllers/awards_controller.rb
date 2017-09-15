@@ -1,7 +1,7 @@
 class AwardsController < ApplicationController
-  before_filter :assign_project, only: [:create, :index]
-  before_filter :assign_current_auth, only: [:index]
-  skip_before_filter :require_login, only: :index
+  before_action :assign_project, only: %i[create index]
+  before_action :assign_current_auth, only: [:index]
+  skip_before_action :require_login, only: :index
 
   def index
     authorize @project, :show_contributions?
@@ -27,9 +27,8 @@ class AwardsController < ApplicationController
     else
       fail_and_redirect(result.message)
     end
-
   rescue Pundit::NotAuthorizedError
-    fail_and_redirect("Not authorized")
+    fail_and_redirect('Not authorized')
   end
 
   def fail_and_redirect(message)

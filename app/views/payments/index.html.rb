@@ -6,11 +6,11 @@ class Views::Payments::Index < Views::Projects::Base
     column {
       if current_auth.present?
         full_row {
-          column("small-12 content-box") {
+          column('small-12 content-box') {
             if policy(project).team_member? && current_user_has_awards?
-              form_for [project, payment], html: {class: 'conversational-form'} do |f|
+              form_for [project, payment], html: { class: 'conversational-form' } do |f|
                 row {
-                  text "Redeem "
+                  text 'Redeem '
                   f.number_field(:quantity_redeemed, class: 'input-group-field')
                   span(class: 'my-shares') do
                     text "of my #{current_auth.total_awards_remaining_pretty(project)} revenue shares"
@@ -18,9 +18,9 @@ class Views::Payments::Index < Views::Projects::Base
                 }
 
                 row {
-                  text "For "
+                  text 'For '
                   span(class: 'revenue-per-share') { text project.revenue_per_share_pretty }
-                  text " each"
+                  text ' each'
                 }
 
                 row {
@@ -29,20 +29,19 @@ class Views::Payments::Index < Views::Projects::Base
                 }
 
                 row {
-                  f.submit("Redeem My Revenue Shares", class: buttonish(:expand))
+                  f.submit('Redeem My Revenue Shares', class: buttonish(:expand))
                 }
               end
               row(class: 'conversational-form') {
-                span(class: 'help-text min-transaction-amount') { text "The minimum transaction amount is #{project.minimum_payment}"}
+                span(class: 'help-text min-transaction-amount') { text "The minimum transaction amount is #{project.minimum_payment}" }
               }
             else
               row(class: 'conversational-form no-awards-message') {
                 p {
-                  text "Earn "
-                  link_to "awards", project_path(project, anchor: "awards")
-                  text " by contributing to the project - then cash them out here for your share of the revenue."
+                  text 'Earn '
+                  link_to 'awards', project_path(project, anchor: 'awards')
+                  text ' by contributing to the project - then cash them out here for your share of the revenue.'
                 }
-
               }
             end
           }
@@ -56,33 +55,32 @@ class Views::Payments::Index < Views::Projects::Base
       br
       full_row {
         if project.payment_history.any?
-          h3 "Payments"
+          h3 'Payments'
 
-          div(class: "table-scroll table-box payments") {
+          div(class: 'table-scroll table-box payments') {
+            table(class: 'table-scroll', style: 'width: 100%') {
+              tr(class: 'header-row') {
+                th { text 'Date' }
+                th { text 'Payee' }
+                th { text 'Share Value' }
+                th { text 'Quantity' }
+                th { text 'Total Value' }
+                th { text 'Transaction Fee' }
 
-            table(class: "table-scroll", style: "width: 100%") {
-              tr(class: "header-row") {
-                th { text "Date" }
-                th { text "Payee" }
-                th { text "Share Value" }
-                th { text "Quantity" }
-                th { text "Total Value" }
-                th { text "Transaction Fee" }
-
-                th { text "Transaction Reference" }
-                th { text "Total Payment" }
-                th { text "Issuer" }
-                th { text "Status" }
+                th { text 'Transaction Reference' }
+                th { text 'Total Payment' }
+                th { text 'Issuer' }
+                th { text 'Status' }
               }
 
               project.payment_history.decorate.each do |payment|
-                tr(class: "award-row") {
+                tr(class: 'award-row') {
                   payment_td('created-at') { text payment.created_at }
 
                   payment_td('payee') {
                     if payment.payee_avatar
-                      img(src: payment.payee_avatar, class: "icon avatar-img")
-                      text " "
+                      img(src: payment.payee_avatar, class: 'icon avatar-img')
+                      text ' '
                     end
 
                     text payment.payee_name
@@ -100,7 +98,7 @@ class Views::Payments::Index < Views::Projects::Base
                         f.text_field :transaction_reference, value: payment.transaction_reference
                       end
 
-                      payment_td('total-payment') { f.submit "Reconcile", class: 'button' }
+                      payment_td('total-payment') { f.submit 'Reconcile', class: 'button' }
                     end
                   else
                     payment_td('transaction-fee') { text payment.transaction_fee_pretty }
@@ -110,20 +108,19 @@ class Views::Payments::Index < Views::Projects::Base
 
                   payment_td('issuer') {
                     if payment.issuer_avatar
-                      img(src: payment.issuer_avatar, class: "icon avatar-img")
-                      text " "
+                      img(src: payment.issuer_avatar, class: 'icon avatar-img')
+                      text ' '
                     end
 
                     text payment.issuer_name
                   }
                   payment_td('status') { text payment.status }
-
                 }
               end
             }
           }
         else
-          div(class: 'payments') { text "No payments yet." }
+          div(class: 'payments') { text 'No payments yet.' }
         end
       }
     }

@@ -9,7 +9,7 @@ class Views::Awards::Activity < Views::Base
 
         if award_data[:contributions].present?
           p {
-            div(id: "contributions-chart")
+            div(id: 'contributions-chart')
           }
           content_for :js do
             make_charts
@@ -18,7 +18,6 @@ class Views::Awards::Activity < Views::Base
       }
     }
   end
-
 
   def make_charts
     text(<<-JAVASCRIPT.html_safe)

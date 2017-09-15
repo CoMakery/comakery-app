@@ -9,11 +9,11 @@ class PaymentPolicy < ApplicationPolicy
 
   def create?
     @auth.present? &&
-        @payment.project.awards.where(authentication_id: @auth.id).present?
+      @payment.project.awards.where(authentication_id: @auth.id).present?
   end
 
   def update?
     @payment.project &&
-        ProjectPolicy.new(@account, @payment.project).update?
+      ProjectPolicy.new(@account, @payment.project).update?
   end
 end

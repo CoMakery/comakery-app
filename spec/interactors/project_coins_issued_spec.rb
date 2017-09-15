@@ -11,14 +11,14 @@ describe ProjectTokensIssued do
   let!(:cc_project) { create(:cc_project) }
   let!(:cc_award) { create(:award, award_type: create(:award_type, project: cc_project, amount: 1000)) }
 
-  it "returns 0 for projects with no awards" do
+  it 'returns 0 for projects with no awards' do
     project = create(:project)
 
-    expect(ProjectTokensIssued.call(project: project).total_tokens_issued).to eq(0)
+    expect(described_class.call(project: project).total_tokens_issued).to eq(0)
 
     create(:award_type, project: project)
 
-    expect(ProjectTokensIssued.call(project: project).total_tokens_issued).to eq(0)
+    expect(described_class.call(project: project).total_tokens_issued).to eq(0)
   end
 
   describe do
@@ -32,17 +32,17 @@ describe ProjectTokensIssued do
       create(:award, authentication: auth2, award_type: award_type_4)
     end
 
-    it "returns the total amount of tokens awarded for a project" do
-      result = ProjectTokensIssued.call(project: project)
+    it 'returns the total amount of tokens awarded for a project' do
+      result = described_class.call(project: project)
       expect(result).to be_success
       expect(result.total_tokens_issued).to eq(1 + 2 + 4 +
                                                   1 + 2 + 4)
     end
 
-    it "returns the total amount of tokens awarded for a project with multiple award.quantity" do
+    it 'returns the total amount of tokens awarded for a project with multiple award.quantity' do
       create(:award, authentication: auth2, award_type: award_type_4, quantity: 2)
 
-      result = ProjectTokensIssued.call(project: project)
+      result = described_class.call(project: project)
       expect(result).to be_success
       expect(result.total_tokens_issued).to eq(1 + 2 + 4 + 1 + 2 + 4 +
                                                   8)

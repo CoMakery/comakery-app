@@ -1,5 +1,4 @@
 class Comakery::Ethereum
-
   ADDRESS = {
     account: {
       length: 40
@@ -7,31 +6,30 @@ class Comakery::Ethereum
     transaction: {
       length: 64
     }
-  }
+  }.freeze
 
   include HTTParty
   # debug_output $stdout # good for debugging HTTP, but logs API key :(
 
   class << self
-
     TIMEOUT = 10.minutes
 
-    def token_contract params
+    def token_contract(params)
       call_ethereum_bridge('project', params, 'contractAddress')
     end
 
-    def token_issue params
+    def token_issue(params)
       call_ethereum_bridge('token_issue', params, 'tx')
     end
 
     def call_ethereum_bridge(path, params, response_key)
       ethereum_bridge = ENV['ETHEREUM_BRIDGE'].presence
       return if ethereum_bridge.nil? && Comakery::Application.config.allow_missing_ethereum_bridge
-      raise("please set env var ETHEREUM_BRIDGE") unless ethereum_bridge
-      raise("please set env var ETHEREUM_BRIDGE_API_KEY") unless ENV['ETHEREUM_BRIDGE_API_KEY'].present?
+      raise('please set env var ETHEREUM_BRIDGE') unless ethereum_bridge
+      raise('please set env var ETHEREUM_BRIDGE_API_KEY') if ENV['ETHEREUM_BRIDGE_API_KEY'].blank?
 
       url = URI.join ethereum_bridge, path
-      headers = { 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+      headers = { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
 
       private_params = params.merge apiKey: ENV['ETHEREUM_BRIDGE_API_KEY']
 

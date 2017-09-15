@@ -4,13 +4,13 @@ module Views
       def content
         row {
           column('medium-6', class: 'medium-centered') {
-            h2("Forgot your password?")
+            h2('Forgot your password?')
             form_tag password_resets_path, method: :post do
               label {
-                text "Email "
+                text 'Email '
                 text_field_tag :email
               }
-              submit_tag "Reset my password!", class: buttonish(:small, :expand)
+              submit_tag 'Reset my password!', class: buttonish(:small, :expand)
             end
           }
         }

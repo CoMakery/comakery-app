@@ -6,14 +6,14 @@ class AccountsController < ApplicationController
 
     if @current_account.save
       CreateEthereumAwards.call(awards: @current_account.awards)
-      redirect_to account_url, notice: "Ethereum account updated. " \
-        "If this is an unused account the address will not be visible on the " \
-        "Ethereum blockchain until it is part of a transaction."
+      redirect_to account_url, notice: 'Ethereum account updated. ' \
+        'If this is an unused account the address will not be visible on the ' \
+        'Ethereum blockchain until it is part of a transaction.'
     else
       @authentication = current_user.slack_auth
       @awards = @authentication.awards.includes(award_type: :project)
-      flash[:error] = current_account.errors.full_messages.join(" ")
-      render template: "authentications/show"
+      flash[:error] = current_account.errors.full_messages.join(' ')
+      render template: 'authentications/show'
     end
   end
 

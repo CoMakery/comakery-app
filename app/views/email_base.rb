@@ -81,7 +81,7 @@ module Views
 
     # http://zurb.com/ink/docs.php#grid
     def last_column(size = :twelve, args = {})
-      td(class: [:wrapper, :last]) {
+      td(class: %i[wrapper last]) {
         table(add_classes(args, [size, :columns])) {
           tr {
             yield # must return a td, or a series of tds for sub-grids
@@ -96,7 +96,7 @@ module Views
       row(args) { last_column(&block) }
     end
 
-    def block_grid(size, args = {})
+    def block_grid(size, _args = {})
       container {
         td {
           table(class: "block-grid #{size}-up") {

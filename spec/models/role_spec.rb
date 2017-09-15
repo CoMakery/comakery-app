@@ -3,6 +3,7 @@ require 'rails_helper'
 describe Role do
   context 'invalid' do
     subject(:role) { create :role }
+
     let(:existing_role) { create :role, name: 'Another Role' }
 
     specify { expect_invalid_value(:name, '') }
@@ -12,6 +13,7 @@ describe Role do
 
   context 'valid' do
     subject(:role) { create :role }
+
     let(:account1) { create :account, email: 'user1@example.com' }
     let(:account2) { create :account, email: 'user2@example.com' }
 

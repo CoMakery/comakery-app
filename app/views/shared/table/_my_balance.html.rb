@@ -3,32 +3,32 @@ class Views::Shared::Table::MyBalance < Views::Projects::Base
 
   def content
     if project.revenue_share?
-      column("large-4 medium-12 summary float-left my-balance") {
+      column('large-4 medium-12 summary float-left my-balance') {
         row(class: 'money') {
-          h3 "My Balance"
+          h3 'My Balance'
         }
         row(class: 'total-revenue table-box') {
           table {
             tr {
-              td(class: "token-numbers") { text "" }
+              td(class: 'token-numbers') { text '' }
               td {
-                span(class: "token-numbers total-awards-remaining") {
+                span(class: 'token-numbers total-awards-remaining') {
                   text current_auth.total_awards_remaining_pretty(project)
                 }
-                span { text " Unpaid Revenue Shares" }
+                span { text ' Unpaid Revenue Shares' }
               }
             }
             tr {
-              td(class: "token-numbers") { text "×" }
+              td(class: 'token-numbers') { text '×' }
               td {
-                span(class: "token-numbers revenue-per-share") { text project.revenue_per_share_pretty }
+                span(class: 'token-numbers revenue-per-share') { text project.revenue_per_share_pretty }
                 span { text ' Current Share Value' }
               }
             }
             tr(class: 'money') {
-              td(class: "token-numbers") { text "=" }
+              td(class: 'token-numbers') { text '=' }
               td {
-                span(class: "token-numbers total-revenue-unpaid") { text current_auth.total_revenue_unpaid_remaining_pretty(project) }
+                span(class: 'token-numbers total-revenue-unpaid') { text current_auth.total_revenue_unpaid_remaining_pretty(project) }
                 span { text ' My Balance' }
               }
             }

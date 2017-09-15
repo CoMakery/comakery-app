@@ -8,10 +8,10 @@ class Award < ActiveRecord::Base
   belongs_to :award_type
   delegate :project, to: :award_type
 
-  validates_presence_of :proof_id, :authentication, :award_type, :issuer, :unit_amount, :total_amount, :quantity
-  validates_numericality_of :quantity, :total_amount, :unit_amount, greater_than: 0
+  validates :proof_id, :authentication, :award_type, :issuer, :unit_amount, :total_amount, :quantity, presence: true
+  validates :quantity, :total_amount, :unit_amount, numericality: { greater_than: 0 }
 
-  validates :ethereum_transaction_address, ethereum_address: {type: :transaction, immutable: true}  # see EthereumAddressable
+  validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true } # see EthereumAddressable
 
   before_validation :ensure_proof_id_exists
 
@@ -20,7 +20,7 @@ class Award < ActiveRecord::Base
   end
 
   def ensure_proof_id_exists
-    self.proof_id ||= SecureRandom.base58(44)  # 58^44 > 2^256
+    self.proof_id ||= SecureRandom.base58(44) # 58^44 > 2^256
   end
 
   def ethereum_issue_ready?
@@ -66,7 +66,7 @@ class Award < ActiveRecord::Base
   end
 
   def total_amount=(x)
-    write_attribute(:total_amount, x.round)
+    self[:total_amount] = x.round
   end
 
   private

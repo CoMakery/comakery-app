@@ -5,8 +5,8 @@ class Views::Admin::Admin::Index < Views::Base
     end
 
     full_row {
-      h1("Admin::Admin#index")
-      p("Find me in app/views/admin/admin/index.html.erb")
+      h1('Admin::Admin#index')
+      p('Find me in app/views/admin/admin/index.html.erb')
     }
   end
 end

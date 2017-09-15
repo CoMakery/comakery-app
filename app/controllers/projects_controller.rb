@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
-  skip_before_filter :require_login, except: :new
-  before_filter :assign_current_auth
+  skip_before_action :require_login, except: :new
+  before_action :assign_current_auth
 
   def landing
     skip_authorization
@@ -19,7 +19,7 @@ class ProjectsController < ApplicationController
   def index
     @projects = policy_scope(Project).with_last_activity_at
     if params[:query].present?
-      @projects = @projects.where(["projects.title ilike :query OR projects.description ilike :query", query: "%#{params[:query]}%"])
+      @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
     end
     @projects = @projects.decorate
     @project_contributors = TopContributors.call(projects: @projects).contributors
@@ -31,18 +31,18 @@ class ProjectsController < ApplicationController
     @project = Project.new(public: false,
                            maximum_tokens: 1_000_000,
                            maximum_royalties_per_month: 50_000)
-    @project.award_types.build(name: "Thanks", amount: 10)
-    @project.award_types.build(name: "Software development hour", amount: 100)
-    @project.award_types.build(name: "Graphic design hour", amount: 100)
-    @project.award_types.build(name: "Product management hour", amount: 100)
-    @project.award_types.build(name: "Marketing hour", amount: 100)
+    @project.award_types.build(name: 'Thanks', amount: 10)
+    @project.award_types.build(name: 'Software development hour', amount: 100)
+    @project.award_types.build(name: 'Graphic design hour', amount: 100)
+    @project.award_types.build(name: 'Product management hour', amount: 100)
+    @project.award_types.build(name: 'Marketing hour', amount: 100)
 
-    @project.award_types.build(name: "Expert software development hour", amount: 150)
-    @project.award_types.build(name: "Expert graphic design hour", amount: 150)
-    @project.award_types.build(name: "Expert product management hour", amount: 150)
-    @project.award_types.build(name: "Expert marketing hour", amount: 150)
-    @project.award_types.build(name: "Blog post (600+ words)", amount: 150)
-    @project.award_types.build(name: "Long form article (2,000+ words)", amount: 2000)
+    @project.award_types.build(name: 'Expert software development hour', amount: 150)
+    @project.award_types.build(name: 'Expert graphic design hour', amount: 150)
+    @project.award_types.build(name: 'Expert product management hour', amount: 150)
+    @project.award_types.build(name: 'Expert marketing hour', amount: 150)
+    @project.award_types.build(name: 'Blog post (600+ words)', amount: 150)
+    @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
     authorize @project
   end
 
@@ -58,10 +58,10 @@ class ProjectsController < ApplicationController
                                                 slack_team_domain: auth.slack_team_domain))
     authorize @project
     if @project.save
-      flash[:notice] = "Project created"
+      flash[:notice] = 'Project created'
       redirect_to project_path(@project)
     else
-      flash[:error] = "Project saving failed, please correct the errors below"
+      flash[:error] = 'Project saving failed, please correct the errors below'
       assign_slack_channels
       render :new
     end
@@ -90,10 +90,10 @@ class ProjectsController < ApplicationController
     authorize @project
 
     if @project.save
-      flash[:notice] = "Project updated"
+      flash[:notice] = 'Project updated'
       respond_with @project, location: project_path(@project)
     else
-      flash[:error] = "Project update failed, please correct the errors below"
+      flash[:error] = 'Project update failed, please correct the errors below'
       assign_slack_channels
       render :edit
     end
@@ -103,35 +103,35 @@ class ProjectsController < ApplicationController
 
   def project_params
     params.require(:project).permit(
-        :revenue_sharing_end_date,
-        :contributor_agreement_url,
-        :description,
-        :ethereum_enabled,
-        :image,
-        :maximum_tokens,
-        :public,
-        :slack_channel,
-        :title,
-        :tracker,
-        :video_url,
-        :payment_type,
-        :exclusive_contributions,
-        :legal_project_owner,
-        :minimum_payment,
-        :minimum_revenue,
-        :require_confidentiality,
-        :royalty_percentage,
-        :maximum_royalties_per_month,
-        :license_finalized,
-        :denomination,
-        award_types_attributes: [
-            :_destroy,
-            :amount,
-            :community_awardable,
-            :id,
-            :name,
-            :description
-        ]
+      :revenue_sharing_end_date,
+      :contributor_agreement_url,
+      :description,
+      :ethereum_enabled,
+      :image,
+      :maximum_tokens,
+      :public,
+      :slack_channel,
+      :title,
+      :tracker,
+      :video_url,
+      :payment_type,
+      :exclusive_contributions,
+      :legal_project_owner,
+      :minimum_payment,
+      :minimum_revenue,
+      :require_confidentiality,
+      :royalty_percentage,
+      :maximum_royalties_per_month,
+      :license_finalized,
+      :denomination,
+      award_types_attributes: %i[
+        _destroy
+        amount
+        community_awardable
+        id
+        name
+        description
+      ]
     )
   end
 

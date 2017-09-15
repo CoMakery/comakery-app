@@ -1,4 +1,4 @@
-require "application_responder"
+require 'application_responder'
 
 class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
 
   # require account logins for all pages by default
   # (public pages use skip_before_filter :require_login)
-  before_filter :require_login
+  before_action :require_login
 
   # called from before_filter :require_login
   def not_authenticated
@@ -30,12 +30,12 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   def not_found
-    redirect_to "/404.html"
+    redirect_to '/404.html'
   end
 
   rescue_from Slack::Web::Api::Error do |exception|
     Rails.logger.error(exception.to_s)
-    flash[:error] = "Error talking to Slack, sorry!"
+    flash[:error] = 'Error talking to Slack, sorry!'
     session.delete(:account_id)
     redirect_to root_url
   end
@@ -56,13 +56,13 @@ class ApplicationController < ActionController::Base
   end
 
   def current_account
-    @current_account ||= Account.find_by_id(session[:account_id])
+    @current_account ||= Account.find_by(id: session[:account_id])
   end
   helper_method :current_account
-  alias :current_user :current_account
+  alias current_user current_account
   helper_method :current_user
 
-  def d the_proc
+  def d(the_proc)
     return if Rails.env.test?
     unless the_proc.instance_of?(Proc)
       return STDERR.puts("d expected an instance of Proc, got #{the_proc.try(:inspect)}")
@@ -77,5 +77,4 @@ class ApplicationController < ActionController::Base
       logger.debug value
     end
   end
-
 end

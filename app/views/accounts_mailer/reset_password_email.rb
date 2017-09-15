@@ -6,15 +6,15 @@ class Views::AccountsMailer::ResetPasswordEmail < Views::EmailBase
     full_row {
       td {
         h6 {
-          text "Hi "
+          text 'Hi '
           text(account.email)
-          text ","
+          text ','
         }
 
         p {
           text "We received a request to change your #{Rails.application.config.project_name} password. To do this, please "
-          link_to "follow this link", url
-          text "."
+          link_to 'follow this link', url
+          text '.'
         }
 
         p "If you didn't try to change your password, please disregard this email."

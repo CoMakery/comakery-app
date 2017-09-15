@@ -1,6 +1,6 @@
 class ContributorsController < ApplicationController
-  before_filter :assign_project
-  skip_before_filter :require_login, only: :index
+  before_action :assign_project
+  skip_before_action :require_login, only: :index
 
   def index
     authorize @project, :show_contributions?
@@ -8,6 +8,7 @@ class ContributorsController < ApplicationController
   end
 
   private
+
   def assign_project
     @project = policy_scope(Project).find(params[:project_id]).decorate
   end

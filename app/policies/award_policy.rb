@@ -11,9 +11,9 @@ class AwardPolicy < ApplicationPolicy
 
     def resolve
       if account
-        scope.joins(award_type: :project).where("projects.slack_team_id = ?", @account.slack_auth.slack_team_id)
+        scope.joins(award_type: :project).where('projects.slack_team_id = ?', @account.slack_auth.slack_team_id)
       else
-        scope.joins(award_type: :project).where("projects.public = ?", true)
+        scope.joins(award_type: :project).where('projects.public = ?', true)
       end
     end
   end
@@ -26,9 +26,9 @@ class AwardPolicy < ApplicationPolicy
   def create?
     project = @award&.award_type&.project
     @account &&
-        @award.issuer == @account &&
-        (@account == project&.owner_account || (@award&.award_type&.community_awardable? && @account.slack_auth != @award&.authentication)) &&
-        @award&.authentication.slack_team_id == project.slack_team_id &&
-        @award&.issuer&.authentications&.pluck(:slack_team_id).include?(project.slack_team_id)
+      @award.issuer == @account &&
+      (@account == project&.owner_account || (@award&.award_type&.community_awardable? && @account.slack_auth != @award&.authentication)) &&
+      @award&.authentication&.slack_team_id == project.slack_team_id &&
+      @award&.issuer&.authentications&.pluck(:slack_team_id)&.include?(project.slack_team_id)
   end
 end

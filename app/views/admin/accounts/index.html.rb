@@ -3,22 +3,21 @@ class Views::Admin::Accounts::Index < Views::Base
 
   def content
     full_row {
-      h1("Listing accounts")
+      h1('Listing accounts')
 
       p {
-        text "Found "
+        text 'Found '
         text(accounts.length)
-        text " accounts."
+        text ' accounts.'
       }
       table {
         thead {
           tr {
-            th("E-mail")
-            th("Roles")
-            th(colspan: "3")
+            th('E-mail')
+            th('Roles')
+            th(colspan: '3')
           }
         }
-
 
         tbody {
           accounts.each do |account|
@@ -40,7 +39,6 @@ class Views::Admin::Accounts::Index < Views::Base
           end
         }
       }
-
 
       p {
         link_to 'New Account', new_admin_account_path, class: buttonish

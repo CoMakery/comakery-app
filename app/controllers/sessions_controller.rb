@@ -1,10 +1,10 @@
 class SessionsController < ApplicationController
-  skip_before_filter :require_login
+  skip_before_action :require_login
   skip_after_action :verify_authorized, :verify_policy_scoped
-  before_filter :handle_beta_signup, only: :create
+  before_action :handle_beta_signup, only: :create
 
   def oauth_failure
-    flash[:error] = "Sorry, logging in failed... please try again, or email us at dev@comakery.com"
+    flash[:error] = 'Sorry, logging in failed... please try again, or email us at dev@comakery.com'
     redirect_to root_path
   end
 
@@ -27,9 +27,9 @@ class SessionsController < ApplicationController
   protected
 
   def handle_beta_signup
-    beta_instances = ENV["BETA_SLACK_INSTANCE_WHITELIST"]&.split(",")
+    beta_instances = ENV['BETA_SLACK_INSTANCE_WHITELIST']&.split(',')
     return if beta_instances.blank?
-    slack_team_name = request.env.dig('omniauth.auth', "info", "team_domain")
+    slack_team_name = request.env.dig('omniauth.auth', 'info', 'team_domain')
     return oauth_failure unless slack_team_name
     return if beta_instances.include?(slack_team_name)
     slack_auth_hash = SlackAuthHash.new(request.env['omniauth.auth'])

@@ -2,26 +2,27 @@ require 'rails_helper'
 
 describe Account do
   subject(:account) { create :account, password: '12345678' }
+
   let(:role1) { create :role, name: 'Fun 1' }
   let(:role2) { create :role, name: 'Fun 2' }
 
   describe 'validations' do
     it 'requires many attributes' do
-      expect(Account.new.tap(&:valid?).errors.full_messages.sort).to eq(["Email can't be blank"])
+      expect(described_class.new.tap(&:valid?).errors.full_messages.sort).to eq(["Email can't be blank"])
     end
 
-    it "requires #ethereum_wallet to be a valid ethereum address" do
+    it 'requires #ethereum_wallet to be a valid ethereum address' do
       expect(account.ethereum_wallet).to be_blank
       expect(account).to be_valid
 
-      expect(account.tap{|a|a.update(ethereum_wallet: "foo")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
-      expect(account.tap{|a|a.update(ethereum_wallet: "0x")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
-      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*39}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
-      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*41}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
-      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'g'*40}")}.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
+      expect(account.tap { |a| a.update(ethereum_wallet: 'foo') }.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
+      expect(account.tap { |a| a.update(ethereum_wallet: '0x') }.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
+      expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'a' * 39}") }.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
+      expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'a' * 41}") }.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
+      expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'g' * 40}") }.errors.full_messages).to eq(["Ethereum wallet should start with '0x', followed by a 40 character ethereum address"])
 
-      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'a'*40}")}).to be_valid
-      expect(account.tap{|a|a.update(ethereum_wallet: "0x#{'A'*40}")}).to be_valid
+      expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'a' * 40}") }).to be_valid
+      expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'A' * 40}") }).to be_valid
     end
   end
 
@@ -55,6 +56,7 @@ describe Account do
 
     context 'returns Slack instance if exists' do
       let!(:slack) { build :slack }
+
       before { subject.instance_variable_set(:@slack, slack) }
       specify do
         expect(subject.slack).to eq slack

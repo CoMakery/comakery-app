@@ -3,12 +3,12 @@ class Views::Admin::Accounts::Edit < Views::Base
 
   def content
     full_row {
-      h1("Editing account")
+      h1('Editing account')
 
       render 'form'
 
       link_to 'Show', admin_account_path(account)
-      text " | "
+      text ' | '
       link_to 'Back', admin_accounts_path
     }
   end

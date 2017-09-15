@@ -1,5 +1,5 @@
 class SlackAuthHash
-  class MissingAuthParamException < Exception; end
+  class MissingAuthParamException < RuntimeError; end
 
   def initialize(auth_hash)
     @auth_hash = auth_hash.to_h
@@ -15,7 +15,7 @@ class SlackAuthHash
                 slack_token: slack_token }
       message = "Slack auth hash is missing one or more required values:\n" \
         "#{JSON.pretty_generate attrs, indent: '    '}"
-      raise MissingAuthParamException.new(message)
+      raise MissingAuthParamException, message
     end
   end
 

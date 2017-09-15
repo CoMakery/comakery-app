@@ -1,6 +1,6 @@
 class PaymentsController < ApplicationController
-  before_filter :assign_project, :assign_current_auth
-  skip_before_filter :require_login, only: :index
+  before_action :assign_project, :assign_current_auth
+  skip_before_action :require_login, only: :index
 
   def index
     authorize @project, :show_revenue_info?
@@ -28,7 +28,7 @@ class PaymentsController < ApplicationController
   end
 
   def update
-    authorize @project #TODO: scope to project owner
+    authorize @project # TODO: scope to project owner
 
     update_params = params.require(:payment).permit :transaction_fee, :transaction_reference, :id
     @payment = Payment.find(params['id'])
@@ -42,9 +42,7 @@ class PaymentsController < ApplicationController
     @payment.reconciled = true
     @payment.issuer = @current_auth
 
-    unless @payment.save
-      flash[:error] = @payment.errors.full_messages.join(" ")
-    end
+    flash[:error] = @payment.errors.full_messages.join(' ') unless @payment.save
 
     redirect_to project_payments_path(@project)
   end

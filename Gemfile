@@ -5,42 +5,42 @@ gem 'airbrake'
 gem 'awesome_print'
 gem 'coffee-rails'
 gem 'compass-rails'
+gem 'd3-rails', '~>3.5'
 gem 'draper'
-gem "d3-rails", '~>3.5'
-gem "font-awesome-rails"
+gem 'font-awesome-rails'
+gem 'font_assets'
 gem 'fortitude'
 gem 'foundation-icons-sass-rails'
 gem 'foundation-rails', '~>6.2.4.0'
-gem 'font_assets'
 gem 'httparty'
 gem 'interactor'
 gem 'jquery-rails'
-gem "nilify_blanks"
+gem 'kaminari'
 gem 'modernizr-rails'
 gem 'momentjs-rails'
-gem 'omniauth-slack'
+gem 'nilify_blanks'
 gem 'omniauth'
+gem 'omniauth-slack'
 gem 'pg'
 gem 'postmark-rails'
 gem 'premailer-rails'
 gem 'puma'
 gem 'pundit'
-gem 'rails_12factor', group: :production
 gem 'rails', '4.2.7.1'
-gem "redcarpet"
-gem "refile", require: "refile/rails"
-gem "refile-mini_magick"
-gem "refile-s3"
+gem 'rails_12factor', group: :production
+gem 'redcarpet'
+gem 'refile', require: 'refile/rails'
+gem 'refile-mini_magick'
+gem 'refile-s3'
 gem 'responders'
 gem 'sass-rails'
-gem 'sinatra', :require => nil  # for sidekiq admin interface
 gem 'sdoc', group: :doc
 gem 'sidekiq'
 gem 'sidekiq-failures'
+gem 'sinatra', require: nil # for sidekiq admin interface
 gem 'slack-ruby-client'
 gem 'uglifier'
 gem 'underscore-rails'
-gem 'kaminari'
 
 group(:scripts) do
   gem 'easy_shell'
@@ -63,10 +63,11 @@ group(:development) do
   gem 'meta_request'
   gem 'pivotal_git_scripts'
   gem 'quiet_assets'
-  gem "rails_best_practices"
+  gem 'rails_best_practices'
   gem 'rubocop', require: false
-  gem 'spring-commands-rspec'
+  gem 'rubocop-rspec'
   gem 'spring'
+  gem 'spring-commands-rspec'
   gem 'web-console'
 end
 

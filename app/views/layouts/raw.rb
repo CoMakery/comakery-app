@@ -1,17 +1,17 @@
 class Views::Layouts::Raw < Views::Base
   def content
     doctype!
-    html(lang: "en") {
+    html(lang: 'en') {
       head {
-        meta :content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"
-        meta charset: "utf-8"
-        meta name: "viewport", content: "width=device-width, initial-scale=1.0"
+        meta :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type'
+        meta charset: 'utf-8'
+        meta name: 'viewport', content: 'width=device-width, initial-scale=1.0'
         description = content_for?(:description) ? capture { yield(:description) } : Rails.application.config.project_description
-        meta name: "description", content: description
-        meta name: "robots", content: "NOODP"  # don't use Open Director Project in search listing
-        meta name: "theme-color", content: "#ffffff"
-        meta name: "msapplication-TileColor", content: "#ffffff"
-        meta name: "msapplication-TileImage", content: "/assets/favicon/ms-icon-144x144.png"
+        meta name: 'description', content: description
+        meta name: 'robots', content: 'NOODP' # don't use Open Director Project in search listing
+        meta name: 'theme-color', content: '#ffffff'
+        meta name: 'msapplication-TileColor', content: '#ffffff'
+        meta name: 'msapplication-TileImage', content: '/assets/favicon/ms-icon-144x144.png'
 
         title content_for?(:title) ? capture { yield(:title) } : Rails.application.config.project_name
 
@@ -20,49 +20,49 @@ class Views::Layouts::Raw < Views::Base
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
         if ENV['AIRBRAKE_API_KEY'].present? && ENV['AIRBRAKE_PROJECT_ID'].present?
-          javascript_include_tag "airbrake-shim",
-                                 "data-airbrake-project-id" => ENV['AIRBRAKE_PROJECT_ID'],
-                                 "data-airbrake-project-key" => ENV['AIRBRAKE_API_KEY'],
-                                 "data-airbrake-environment-name" => ENV['APP_NAME']
+          javascript_include_tag 'airbrake-shim',
+            'data-airbrake-project-id' => ENV['AIRBRAKE_PROJECT_ID'],
+            'data-airbrake-project-key' => ENV['AIRBRAKE_API_KEY'],
+            'data-airbrake-environment-name' => ENV['APP_NAME']
         end
-        favicon_link_tag "favicon/apple-icon-57x57.png", rel:"apple-touch-icon", sizes:"57x57", type: 'image/png'
-        favicon_link_tag "favicon/apple-icon-60x60.png", rel:"apple-touch-icon", sizes:"60x60", type: 'image/png'
-        favicon_link_tag "favicon/apple-icon-72x72.png", rel:"apple-touch-icon", sizes:"72x72", type: 'image/png'
-        favicon_link_tag "favicon/apple-icon-76x76.png", rel:"apple-touch-icon", sizes:"76x76", type: 'image/png'
-        favicon_link_tag "favicon/apple-icon-114x114.png", rel:"apple-touch-icon", sizes:"114x114", type: 'image/png'
-        favicon_link_tag "favicon/apple-icon-120x120.png", rel:"apple-touch-icon", sizes:"120x120", type: 'image/png'
-        favicon_link_tag "favicon/apple-icon-144x144.png", rel:"apple-touch-icon", sizes:"144x144", type: 'image/png'
-        favicon_link_tag "favicon/apple-icon-152x152.png", rel:"apple-touch-icon", sizes:"152x152", type: 'image/png'
-        favicon_link_tag "favicon/apple-icon-180x180.png", rel:"apple-touch-icon", sizes:"180x180", type: 'image/png'
-        favicon_link_tag "favicon/android-icon-192x192.png", rel:"icon", sizes:"192x192", type: "image/png"
-        favicon_link_tag "favicon/favicon-32x32.png", rel:"icon", sizes:"32x32", type: "image/png"
-        favicon_link_tag "favicon/favicon-96x96.png", rel:"icon", sizes:"96x96", type: "image/png"
-        favicon_link_tag "favicon/favicon-16x16.png", rel:"icon", sizes:"16x16", type: "image/png"
-        favicon_link_tag "favicon/manifest.json", rel:"manifest", type: "application/json"
+        favicon_link_tag 'favicon/apple-icon-57x57.png', rel: 'apple-touch-icon', sizes: '57x57', type: 'image/png'
+        favicon_link_tag 'favicon/apple-icon-60x60.png', rel: 'apple-touch-icon', sizes: '60x60', type: 'image/png'
+        favicon_link_tag 'favicon/apple-icon-72x72.png', rel: 'apple-touch-icon', sizes: '72x72', type: 'image/png'
+        favicon_link_tag 'favicon/apple-icon-76x76.png', rel: 'apple-touch-icon', sizes: '76x76', type: 'image/png'
+        favicon_link_tag 'favicon/apple-icon-114x114.png', rel: 'apple-touch-icon', sizes: '114x114', type: 'image/png'
+        favicon_link_tag 'favicon/apple-icon-120x120.png', rel: 'apple-touch-icon', sizes: '120x120', type: 'image/png'
+        favicon_link_tag 'favicon/apple-icon-144x144.png', rel: 'apple-touch-icon', sizes: '144x144', type: 'image/png'
+        favicon_link_tag 'favicon/apple-icon-152x152.png', rel: 'apple-touch-icon', sizes: '152x152', type: 'image/png'
+        favicon_link_tag 'favicon/apple-icon-180x180.png', rel: 'apple-touch-icon', sizes: '180x180', type: 'image/png'
+        favicon_link_tag 'favicon/android-icon-192x192.png', rel: 'icon', sizes: '192x192', type: 'image/png'
+        favicon_link_tag 'favicon/favicon-32x32.png', rel: 'icon', sizes: '32x32', type: 'image/png'
+        favicon_link_tag 'favicon/favicon-96x96.png', rel: 'icon', sizes: '96x96', type: 'image/png'
+        favicon_link_tag 'favicon/favicon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png'
+        favicon_link_tag 'favicon/manifest.json', rel: 'manifest', type: 'application/json'
         csrf_meta_tags
       }
 
       body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") {
-        div(class: "contain-to-grid top-bar-container") {
-          div(class: "top-bar large-10 medium-11 small-12 small-centered columns", "data-topbar" => "", role: "navigation") {
-            div(class: "top-bar-title") {
-              span("data-hide-for" => "medium", "data-responsive-toggle" => "responsive-menu") {
-                span(class: "menu-icon dark", "data-toggle" => "")
+        div(class: 'contain-to-grid top-bar-container') {
+          div(class: 'top-bar large-10 medium-11 small-12 small-centered columns', 'data-topbar' => '', role: 'navigation') {
+            div(class: 'top-bar-title') {
+              span('data-hide-for' => 'medium', 'data-responsive-toggle' => 'responsive-menu') {
+                span(class: 'menu-icon dark', 'data-toggle' => '')
               }
-              a(class: "name", href: root_path) {
-                image_tag("comakery-logo.svg", class: "logo")
+              a(class: 'name', href: root_path) {
+                image_tag('comakery-logo.svg', class: 'logo')
               }
             }
             render partial: 'shared/navigation'
           }
         }
 
-        div(class: "app-container row") {
-          div(class: "large-10 medium-11 small-12 small-centered columns") {
+        div(class: 'app-container row') {
+          div(class: 'large-10 medium-11 small-12 small-centered columns') {
             flash.each do |name, msg|
-              div("aria-labelledby" => "flash-msg-#{name}", "aria-role" => "dialog", class: ['callout', 'flash-msg', name], "data-alert" => "", "data-closable" => "") {
-                button("class" => "close-button float-right", "aria-label" => "Close alert", "data-close" => "") {
-                  span("aria-hidden" => true) { text raw '&times;' }
+              div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '') {
+                button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') {
+                  span('aria-hidden' => true) { text raw '&times;' }
                 }
                 p(msg, id: "flash-msg-#{name}")
               }
@@ -71,8 +71,8 @@ class Views::Layouts::Raw < Views::Base
 
           content_for?(:pre_body) ? yield(:pre_body) : ''
 
-          div(class: "main") {
-            div(class: "large-10 medium-11 small-12 small-centered columns") {
+          div(class: 'main') {
+            div(class: 'large-10 medium-11 small-12 small-centered columns') {
               content_for?(:body) ? yield(:body) : yield
             }
           }

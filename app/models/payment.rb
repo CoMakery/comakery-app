@@ -5,9 +5,9 @@ class Payment < ActiveRecord::Base
   belongs_to :issuer, class_name: Authentication
   belongs_to :payee, class_name: Authentication
 
-  validates_presence_of :project, :payee, :total_value, :share_value, :quantity_redeemed, :currency
-  validates_numericality_of :quantity_redeemed, greater_than_or_equal_to: 0
-  validates_numericality_of :total_payment, greater_than_or_equal_to: 0, allow_nil: true
+  validates :project, :payee, :total_value, :share_value, :quantity_redeemed, :currency, presence: true
+  validates :quantity_redeemed, numericality: { greater_than_or_equal_to: 0 }
+  validates :total_payment, numericality: { greater_than_or_equal_to: 0, allow_nil: true }
 
   validate :payee_has_the_awards_they_are_redeeming
   validate :must_use_the_precision_of_the_currency_for_total_payment
@@ -52,14 +52,14 @@ class Payment < ActiveRecord::Base
   def check_total_value_calculation
     return if total_value.nil? || quantity_redeemed.nil?
     return if (share_value * quantity_redeemed).truncate(currency_precision) == total_value
-    errors.add(:total_value, "#{total_value} does not match the quantity #{quantity_redeemed}" +
+    errors.add(:total_value, "#{total_value} does not match the quantity #{quantity_redeemed}" \
         " and share value #{share_value}")
   end
 
   def check_total_payment_calculation
     return if total_payment.nil? || transaction_fee.nil?
     return if total_payment + transaction_fee == total_value
-    errors.add(:total_payment, "is not equal to the total value minus the transaction fee")
+    errors.add(:total_payment, 'is not equal to the total value minus the transaction fee')
   end
 
   def check_minimum_payment

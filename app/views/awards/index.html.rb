@@ -7,8 +7,8 @@ class Views::Awards::Index < Views::Base
       render partial: 'awards/activity'
     }
     pages
-    render partial: "shared/awards",
-           locals: {project: project, awards: awards, show_recipient: true}
+    render partial: 'shared/awards',
+           locals: { project: project, awards: awards, show_recipient: true }
     pages
   end
 

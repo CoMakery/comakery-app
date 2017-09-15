@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-describe "shared/table/_reserved_for_contributors.html.rb" do
-  let(:project) { raise "define let(:project) in your describe block" }
+describe 'shared/table/_reserved_for_contributors.html.rb' do
+  let(:project) { raise 'define let(:project) in your describe block' }
   let(:current_auth) { create :authentication }
 
   before do
@@ -13,7 +13,7 @@ describe "shared/table/_reserved_for_contributors.html.rb" do
   describe 'project token' do
     let(:project) { create :project, payment_type: :project_token }
 
-    specify { expect(rendered).to eq("") }
+    specify { expect(rendered).to eq('') }
   end
 
   describe 'USD' do

@@ -6,29 +6,29 @@ module Views
       def content
         row {
           column('large-6') {
-            h2("Account Profile")
+            h2('Account Profile')
 
             p {
-              text "Email: "
+              text 'Email: '
               text account.email
             }
 
-            h4("Change Password")
+            h4('Change Password')
 
             form_for account do |f|
               with_errors(account, :old_password) {
                 label {
-                  text "Old Password "
+                  text 'Old Password '
                   f.password_field :old_password
                 }
               }
               with_errors(account, :password) {
                 label {
-                  text "New Password "
+                  text 'New Password '
                   f.password_field :password
                 }
               }
-              f.submit "Change", class: buttonish(:small, :expand)
+              f.submit 'Change', class: buttonish(:small, :expand)
             end
           }
         }

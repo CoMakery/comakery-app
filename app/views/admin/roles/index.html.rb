@@ -3,14 +3,14 @@ class Views::Admin::Roles::Index < Views::Base
 
   def content
     full_row {
-      h1("Listing roles")
+      h1('Listing roles')
 
       table {
         thead {
           tr {
-            th("Name")
-            th("Key")
-            th(colspan: "3")
+            th('Name')
+            th('Key')
+            th(colspan: '3')
           }
         }
 

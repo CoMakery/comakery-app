@@ -1,7 +1,7 @@
 class Views::Admin::Roles::New < Views::Base
   def content
     full_row {
-      h1("New role")
+      h1('New role')
 
       render 'form'
 

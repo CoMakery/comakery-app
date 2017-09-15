@@ -3,12 +3,12 @@ class Views::Admin::Roles::Edit < Views::Base
 
   def content
     full_row {
-      h1("Editing role")
+      h1('Editing role')
 
       render 'form'
 
       link_to 'Show', admin_role_path(role)
-      text " | "
+      text ' | '
       link_to 'Back', admin_roles_path
     }
   end

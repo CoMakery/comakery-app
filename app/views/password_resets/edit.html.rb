@@ -8,12 +8,12 @@ module Views
         # TODO: this is nearly identical to Views::AccountClaims::Edit. Definitely refactor if it's similar to change-password.
         row {
           column('medium-6', class: 'medium-centered') {
-            h2("Set a password")
+            h2('Set a password')
             form_for account, url: password_reset_path(token), html: { method: :put } do |f|
               row {
                 column {
                   label {
-                    text "Email "
+                    text 'Email '
                     f.text_field :email, disabled: true
                   }
                 }
@@ -22,7 +22,7 @@ module Views
                 column {
                   with_errors(f.object, :password) {
                     label {
-                      text "Password "
+                      text 'Password '
                       f.password_field :password
                     }
                   }
@@ -30,7 +30,7 @@ module Views
               }
               row {
                 column {
-                  f.submit "Save", class: buttonish(:small, :expand)
+                  f.submit 'Save', class: buttonish(:small, :expand)
                 }
               }
             end

@@ -5,19 +5,19 @@ class Views::Admin::Roles::Form < Views::Base
     form_for([:admin, role]) do |f|
       with_errors(role, :name) {
         label {
-          text "Name: "
+          text 'Name: '
           f.text_field :name
         }
       }
 
       with_errors(role, :key) {
         label {
-          text "Key: "
+          text 'Key: '
           f.text_field :key
         }
       }
 
-      div(class: "actions") {
+      div(class: 'actions') {
         f.submit class: buttonish
       }
     end
