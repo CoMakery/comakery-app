@@ -50,7 +50,7 @@ class Views::Layouts::Raw < Views::Base
                 span(class: 'menu-icon dark', 'data-toggle' => '')
               }
               a(class: 'name', href: root_path) {
-                image_tag('comakery-logo.svg', class: 'logo')
+                image_tag(Rails.application.config.logo_image, class: 'logo')
               }
             }
             render partial: 'shared/navigation'

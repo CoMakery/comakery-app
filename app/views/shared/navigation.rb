@@ -97,16 +97,16 @@ class Views::Shared::Navigation < Views::Base
 
   def blog_link
     li {
-      link_to 'Media', 'https://media.comakery.com'
+      link_to 'Media', Rails.application.config.company_media
     }
   end
 
   def social_media_links
     li {
-      a(href: '//github.com/CoMakery') { i(class: 'fa fa-github') }
+      a(href: Rails.application.config.company_github_url) { i(class: 'fa fa-github') }
     }
     li {
-      a(href: '//twitter.com/comakery') { i(class: 'fa fa-twitter') }
+      a(href: Rails.application.config.company_twitter_url) { i(class: 'fa fa-twitter') }
     }
   end
 
