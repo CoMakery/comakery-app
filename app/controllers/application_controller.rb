@@ -13,15 +13,23 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  # one HTTP auth password for the entire site
-  if Rails.application.config.require_site_login
-    http_basic_authenticate_with name: Rails.application.config.site_username,
-                                 password: Rails.application.config.site_password
-  end
-
   # require account logins for all pages by default
   # (public pages use skip_before_filter :require_login)
   before_action :require_login
+  before_action :basic_auth
+
+  def basic_auth
+    return unless ENV.key?('BASIC_AUTH')
+
+    basic_auth_name, basic_auth_password = ENV.fetch('BASIC_AUTH').split(':')
+
+    return true unless basic_auth_name.present? && basic_auth_password.present?
+
+    site_name = Rails.application.config.project_name
+    authenticate_or_request_with_http_basic(site_name) do |name, password|
+      compare_all([name, basic_auth_name], [password, basic_auth_password])
+    end
+  end
 
   # called from before_filter :require_login
   def not_authenticated

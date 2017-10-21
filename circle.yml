@@ -16,12 +16,12 @@ database:
 test:
   override:
     - ./bin/rspect --format documentation
-    - ./bin/cop
+    - ./bin/rubocop
     - bundle exec brakeman --exit-on-warn
     # - rails_best_practices .
 
-deployment:
-  autodeploy:
-    branch: master
-    commands:
-      - bin/deploy staging $CIRCLE_SHA1
+#deployment:
+#  autodeploy:
+#    branch: master
+#    commands:
+#      - bin/deploy staging $CIRCLE_SHA1

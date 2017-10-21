@@ -6,6 +6,8 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+require_relative 'initializers/env'
+
 module Comakery
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -20,21 +22,20 @@ module Comakery
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    if ENV['APP_NAME'] == 'staging' || ENV['APP_NAME'] == 'demo'
-      config.require_site_login = true
-      config.site_username = 'comakery'
-      config.site_password = 'now'
-    else
-      config.require_site_login = false
-    end
-
     config.allow_signup = true
-    config.company_name = "CoMakery"
-    config.project_name = "CoMakery"
-    config.project_slug = "comakery"
+    config.company_github_url = env!('COMPANY_GITHUB_URL')
+    config.company_email = env!('COMPANY_EMAIL')
+    config.company_media = env!('COMPANY_MEDIA')
+    config.company_name = env!('COMPANY_NAME')
+    config.company_public_slack_url = env!('COMPANY_PUBLIC_SLACK_URL')
+    config.company_twitter_url = env!('COMPANY_TWITTER_URL')
+    config.logo_image = env!('LOGO_IMAGE')
+    config.project_name = env!('PROJECT_NAME')
+    config.project_slug = env!('PROJECT_SLUG', Dir.pwd.split(File::SEPARATOR).last.underscore) #, config.project_name.parameterize.underscore)
+    config.tech_support_email = env!('TECH_SUPPORT_EMAIL')
     # appears in main layout meta tag
     config.project_description = 'Collaborate on products and share the revenue. Easily pay people for work with equity and royalties before you have money. Easy royalties for app makers.'
-    config.contact_email = "hello@comakery.com"
+    # config.contact_email = "hello@ecsa.io"
 
     # lib/ is for code that is entirely independent of your Rails app
     # app/lib/ is for code that expects Rails (esp. models) but which is not itself a model
@@ -60,7 +61,7 @@ module Comakery
 
     config.airbrake = false
 
-    config.ethereum_explorer_site = ENV['ETHEREUM_EXPLORER_SITE'] || raise("Please set ETHEREUM_EXPLORER_SITE environment variable")
+    config.ethereum_explorer_site = env!('ETHEREUM_EXPLORER_SITE')
 
     config.allow_ethereum = ENV['ALLOW_ETHEREUM']
   end

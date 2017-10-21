@@ -4,13 +4,12 @@ class SessionsController < ApplicationController
   before_action :handle_beta_signup, only: :create
 
   def oauth_failure
-    flash[:error] = 'Sorry, logging in failed... please try again, or email us at dev@comakery.com'
+    flash[:error] = "Sorry, logging in failed... please try again, or email us at #{Rails.application.config.tech_support_email}"
     redirect_to root_path
   end
 
   def create
     begin
-      # d proc { request.env['omniauth.auth'] }
       @account = Authentication.find_or_create_from_auth_hash!(request.env['omniauth.auth'])
       session[:account_id] = @account.id
     rescue SlackAuthHash::MissingAuthParamException => e

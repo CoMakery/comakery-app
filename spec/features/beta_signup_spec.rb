@@ -20,6 +20,6 @@ describe 'Beta signup' do
 
     page.find(:css, 'input.opt-out').click
 
-    expect(page).to have_content 'You have not been added to the beta waiting list. Check back to see new public CoMakery projects!'
+    expect(page).to have_content 'You have not been added to the beta waiting list.'
   end
 end

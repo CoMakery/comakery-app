@@ -23,14 +23,9 @@ ActiveRecord::Migration.maintain_test_schema!
 RSpec.configure do |config|
   config.include ModelValidations, type: :model
 
-  config.include HttpAuthHelper, type: :controller
-  config.before(type: :controller) { http_login }
   if ENV['THOROUGH'].present?
     config.render_views # shows problems, but very slow
   end
-
-  config.include HttpAuthHelper, type: :request
-  config.include HttpAuthHelper::RequestOverrides, type: :request
 
   config.include FeatureHelper, type: :feature
   config.include SlackStubs, type: :feature
@@ -38,7 +33,7 @@ RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_path = Rails.root.join('spec', 'fixtures')
 
   config.before(:each) do
     Sidekiq::Worker.clear_all
