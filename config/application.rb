@@ -6,6 +6,8 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+require_relative 'initializers/i18n'
+
 module Comakery
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -16,25 +18,13 @@ module Comakery
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
 
-    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
-    # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    # config.i18n.default_locale = :de
-
-    if ENV['APP_NAME'] == 'staging' || ENV['APP_NAME'] == 'demo'
-      config.require_site_login = true
-      config.site_username = 'comakery'
-      config.site_password = 'now'
-    else
-      config.require_site_login = false
-    end
+    # all translations from config/locales/*.rb,yml are auto loaded.
+    config.i18n.default_locale = :app
+    config.i18n.fallbacks =[:en]
 
     config.allow_signup = true
-    config.company_name = "CoMakery"
-    config.project_name = "CoMakery"
-    config.project_slug = "comakery"
+    config.project_slug = Dir.pwd.split(File::SEPARATOR).last.underscore
     # appears in main layout meta tag
-    config.project_description = 'Collaborate on products and share the revenue. Easily pay people for work with equity and royalties before you have money. Easy royalties for app makers.'
-    config.contact_email = "hello@comakery.com"
 
     # lib/ is for code that is entirely independent of your Rails app
     # app/lib/ is for code that expects Rails (esp. models) but which is not itself a model

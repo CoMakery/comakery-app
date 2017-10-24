@@ -1,10 +1,8 @@
 # CoMakery
 
-Latest build: [![Circle CI](https://circleci.com/gh/CoMakery/comakery-app/tree/master.svg?style=svg)](https://circleci.com/gh/CoMakery/comakery-app/tree/master)
-
 ## Project Vision
 
-CoMakery hangs out in Slack and creates Project Tokens.
+CoMakery creates Project Tokens and notifies your team via Slack.
 It helps you to distribute profit and tracks your fair share of projects you work on.
 
 ## Current Implementation Status
@@ -12,9 +10,13 @@ It helps you to distribute profit and tracks your fair share of projects you wor
 This project is in open beta.
 It is being actively developed by CoMakery.
 
-## Project management
+## Configuration
 
-See https://github.com/CoMakery/comakery-app/projects/1
+We use Rails localization (i18n) for application-specific language.
+Every fork of this project will maintain their own `config/locales/app.yml`.
+
+We use environment variables for app "secrets", and values which vary between environments,
+eg staging and production.
 
 ## Local development
 
@@ -27,7 +29,7 @@ Set up .env:
 
 ```sh
 cp .env.dev .env
-heroku config -a comakery-demo -s | egrep '^(SLACK_|ETHEREUM_|ETHERCAMP_)' | sort >> .env
+heroku config -a <YOUR_HEROKU_APP> -s | egrep '^(SLACK_|ETHEREUM_|ETHERCAMP_)' | sort >> .env
 ```
 
 Basics :
@@ -64,16 +66,21 @@ To run your tests and git push your branch *only if tests pass*, run `bin/shipit
 Once your heroku user has access to the applications, you can run any of:
 
 ```
-bin/deploy demo
 bin/deploy staging
 bin/deploy production
 ```
 
+## Basic Auth
+
+Set an environment variable called `BASIC_AUTH` in the format
+`<username>:<password>` (e.g., `chewie:r0000ar`). Basic auth will be enabled if
+that environment variable exists.
+
 ## Sidekiq
 
-Visit https://(demo|staging|www).comakery.com/admin/sidekiq
+Visit <COMAKERY_INSTANCE>/admin/sidekiq
 
-Username admin, password is in 1Password
+Username admin, password is in heroku app settings
 
 ## Scheduled Jobs
 

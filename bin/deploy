@@ -7,14 +7,15 @@ Bundler.setup()
 require 'easy_shell'  # gives us `run`, which exits with error if commands fails
 
 if ARGV.empty?
-  STDERR.puts "Usage: bin/deploy staging|production|other [git_ref]"
+  STDERR.puts 'Usage: bin/deploy staging|production|other [git ref] [heroku base app name]'
   exit 1
 end
 
-heroku_env, git_ref = ARGV
+heroku_env, git_ref, app_name = ARGV
 git_ref ||= 'HEAD'
 
-heroku_app="comakery-#{heroku_env}"
+app_name ||= Dir.pwd.split(File::SEPARATOR).last
+heroku_app = "#{app_name}-#{heroku_env}"
 git_remotes = [
   "git@heroku.com:#{heroku_app}.git",
   "https://git.heroku.com/#{heroku_app}.git"

@@ -1,0 +1,15 @@
+app:
+  company_email: "hello@comakery.com"
+  company_github_url: "//github.com/CoMakery"
+  company_media: "https://media.comakery.com"
+  company_name: "CoMakery"
+  company_public_slack_url: "https://join-comakery-slack.herokuapp.com"
+  company_twitter_url: "//twitter.com/comakery"
+  contact_email: "hello@comakery.com"
+  landing_page_headlines:
+    - "Collaborate on Products"
+    - "Share the Revenue"
+  logo_image: "comakery-logo.svg"
+  project_description: "Collaborate on products and share the revenue. Easily pay people for work with equity and royalties before you have money. Easy royalties for app makers."
+  project_name: "CoMakery"
+  tech_support_email: "dev@comakery.com"

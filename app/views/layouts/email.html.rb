@@ -17,7 +17,7 @@ class Views::Layouts::Email < Views::EmailBase
               wide_row(class: :header) {
                 last_column {
                   td {
-                    span Rails.application.config.project_name, class: :logoType
+                    span I18n.t('project_name'), class: :logoType
                   }
                 }
               }

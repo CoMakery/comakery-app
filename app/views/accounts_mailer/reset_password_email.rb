@@ -12,7 +12,7 @@ class Views::AccountsMailer::ResetPasswordEmail < Views::EmailBase
         }
 
         p {
-          text "We received a request to change your #{Rails.application.config.project_name} password. To do this, please "
+          text "We received a request to change your #{I18n.t('project_name')} password. To do this, please "
           link_to 'follow this link', url
           text '.'
         }

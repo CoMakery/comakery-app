@@ -7,7 +7,7 @@ class Views::BetaSignups::New < Views::Base
   def content
     h1 'Sign Up For Free Beta Access'
 
-    p 'We will let you know when you can login to CoMakery from your slack instance'
+    p "We will let you know when you can login to #{I18n.t('project_name')} from your slack instance"
 
     form_for beta_signup do |f|
       row {

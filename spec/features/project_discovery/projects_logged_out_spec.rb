@@ -10,11 +10,6 @@ describe 'viewing projects, creating and editing', :js do
     it 'allows viewing public projects index and show' do
       visit root_path
 
-      within('.top-bar .slack-instance') do
-        expect(page).not_to have_content 'Citizen Code'
-        expect(page).not_to have_content 'CoMakery'
-      end
-
       expect(page).not_to have_content 'My Projects'
 
       expect(page).not_to have_content 'Cats with Lazers Project'
