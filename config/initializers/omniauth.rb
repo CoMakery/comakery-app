@@ -5,6 +5,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     'chat:write:bot',      # write to any channel or PM user (in their Slackbot PM channel)
     'reactions:write',     # create "reaction" emoticons
     'users:read',          # required to log in for some teams
+    'users:read.email',    # needed for new apps
     'team:read',           # required to log in for some teams
     'channels:read'
   ] * ','
