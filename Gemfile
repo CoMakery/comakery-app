@@ -52,19 +52,17 @@ group(:development, :test) do
   gem 'dotenv-rails'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rerun'
 end
 
 group(:development) do
   gem 'better_errors'
   gem 'brakeman', require: false
+  gem 'citizen-scripts', git: 'https://github.com/CoMakery/citizen-scripts.git', ref: 'dev', require: false
   gem 'git-storyid'
   # gem 'html2fortitude'  # requires old ruby_parser, try global "gem install html2fortitude" instead
-  gem 'foreman'
   gem 'letter_opener'
   gem 'meta_request'
   gem 'pivotal_git_scripts'
-  gem 'rails_best_practices'
   gem 'rubocop', '~>0.49.1', require: false
   gem 'rubocop-rspec', '~>1.15.0'
   gem 'spring'
