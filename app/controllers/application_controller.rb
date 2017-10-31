@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   # require account logins for all pages by default
-  # (public pages use skip_before_filter :require_login)
+  # (public pages use skip_before_action :require_login)
   before_action :require_login
   before_action :basic_auth
 

@@ -20,6 +20,7 @@ describe Award do
       expect(described_class.new(quantity: nil).tap(&:valid?).errors.full_messages)
         .to match_array([
                           "Authentication can't be blank",
+                          'Authentication must exist',
                           "Award type can't be blank",
                           "Issuer can't be blank",
                           "Quantity can't be blank",

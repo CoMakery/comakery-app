@@ -4,7 +4,7 @@ class FoosController < ApplicationController; end
 
 describe ApplicationController do
   controller FoosController do
-    skip_before_filter :require_login
+    skip_before_action :require_login
     skip_after_action :verify_policy_scoped
 
     def index
