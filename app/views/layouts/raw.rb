@@ -6,14 +6,14 @@ class Views::Layouts::Raw < Views::Base
         meta :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type'
         meta charset: 'utf-8'
         meta name: 'viewport', content: 'width=device-width, initial-scale=1.0'
-        description = content_for?(:description) ? capture { yield(:description) } : Rails.application.config.project_description
+        description = content_for?(:description) ? capture { yield(:description) } : I18n.t('project_description')
         meta name: 'description', content: description
         meta name: 'robots', content: 'NOODP' # don't use Open Director Project in search listing
         meta name: 'theme-color', content: '#ffffff'
         meta name: 'msapplication-TileColor', content: '#ffffff'
         meta name: 'msapplication-TileImage', content: '/assets/favicon/ms-icon-144x144.png'
 
-        title content_for?(:title) ? capture { yield(:title) } : Rails.application.config.project_name
+        title content_for?(:title) ? capture { yield(:title) } : I18n.t('project_name')
 
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
@@ -50,7 +50,7 @@ class Views::Layouts::Raw < Views::Base
                 span(class: 'menu-icon dark', 'data-toggle' => '')
               }
               a(class: 'name', href: root_path) {
-                image_tag('comakery-logo.svg', class: 'logo')
+                image_tag(I18n.t('logo_image'), class: 'logo')
               }
             }
             render partial: 'shared/navigation'

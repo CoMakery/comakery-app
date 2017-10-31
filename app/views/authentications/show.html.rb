@@ -6,7 +6,7 @@ class Views::Authentications::Show < Views::Base
       text 'You can download an Ethereum wallet from '
       link_to('Ethereum.org', 'http://www.ethereum.org', target: '_blank')
       text ' to create an account. Enter your Ethereum account address below. '
-      text 'Then you will receive your CoMakery awards in your Ethereum account!'
+      text 'Then you will receive your awards in your Ethereum account!'
     }
     p {
       link_to('Get a wallet now', 'http://www.ethereum.org', target: '_blank', class: buttonish)

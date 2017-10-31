@@ -56,6 +56,10 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
+    better_errors (2.4.0)
+      coderay (>= 1.0.0)
+      erubi (>= 1.0.0)
+      rack (>= 0.9.0)
     brakeman (3.6.2)
     builder (3.2.3)
     byebug (9.0.6)
@@ -121,6 +125,7 @@ GEM
       activesupport (>= 3.0)
       request_store (~> 1.0)
     easy_shell (0.0.1)
+    erubi (1.7.0)
     erubis (2.7.0)
     execjs (2.7.0)
     faraday (0.11.0)
@@ -503,6 +508,7 @@ PLATFORMS
 DEPENDENCIES
   airbrake
   awesome_print
+  better_errors
   brakeman
   capybara
   coffee-rails

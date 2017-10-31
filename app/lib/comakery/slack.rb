@@ -22,7 +22,7 @@ class Comakery::Slack
       channel: '#' + award.project.slack_channel,
       text: text,
       link_names: 1,            # make @user a live link and notify @user
-      username: 'CoMakery Bot',
+      username: "#{I18n.t('project_name')} Bot",
       as_user: false,           # don't post as *authed user*
       icon_url: AVATAR
     )

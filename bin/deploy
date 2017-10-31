@@ -16,8 +16,8 @@ git_ref ||= 'HEAD'
 
 heroku_app="comakery-#{heroku_env}"
 git_remotes = [
-  "git@heroku.com:#{heroku_app}.git",
-  "https://git.heroku.com/#{heroku_app}.git"
+    "git@heroku.com:#{heroku_app}.git",
+    "https://git.heroku.com/#{heroku_app}.git"
 ]
 
 run "heroku maintenance:on --app #{heroku_app}"

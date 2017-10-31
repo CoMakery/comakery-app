@@ -176,7 +176,7 @@ module Views
                   label {
                     f.check_box :license_finalized, disabled: project.license_finalized?
                     text 'The Contribution License Revenue Sharing Terms Are Finalized'
-                    div(class: 'help-text') { text 'Leave this unchecked if you want to use CoMakery for tracking contributions with no legal agreement for sharing revenue.' }
+                    div(class: 'help-text') { text "Leave this unchecked if you want to use #{I18n.t('project_name')} for tracking contributions with no legal agreement for sharing revenue." }
                   }
                 }
               }
@@ -210,7 +210,7 @@ module Views
                         Project Token projects don't currently show the CoMakery Contribution License or pricing information.)
                   }
                   p {
-                    link_to 'Send us an email', 'mailto:hello@comakery.com'
+                    link_to 'Send us an email', "mailto:#{I18n.t('company_email')}"
                     text ' to let us know how you are using them and how we can support you in using them.'
                   }
                 }
@@ -290,8 +290,8 @@ module Views
               with_errors(project, :public) {
                 label {
                   f.check_box :public
-                  text ' Set project as publicly visible on CoMakery '
-                  question_tooltip 'Decide whether or not to display this project in the CoMakery project index'
+                  text " Set project as publicly visible on #{I18n.t('project_name')} "
+                  question_tooltip "Decide whether or not to display this project in the #{I18n.t('project_name')} project index"
                 }
               }
               f.submit 'Save', class: buttonish(:expand)
@@ -332,7 +332,7 @@ module Views
           }
         else
           label {
-            link_to 'Contact us', 'mailto:hello@comakery.com'
+            link_to 'Contact us', "mailto:#{I18n.t('company_email')}"
             text " if you'd like to join the Ξthereum blockchain beta"
           }
           br

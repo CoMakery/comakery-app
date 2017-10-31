@@ -70,7 +70,7 @@ describe BetaSignupsController do
           end.not_to change { BetaSignup.count }
 
           expect(response.status).to eq(302)
-          expect(flash[:notice]).to eq('You have not been added to the beta waiting list. Check back to see new public CoMakery projects!')
+          expect(flash[:notice]).to eq("You have not been added to the beta waiting list. Check back to see new public #{I18n.t('project_name')} projects!")
         end
       end
     end

@@ -16,7 +16,7 @@ database:
 test:
   override:
     - ./bin/rspect --format documentation
-    - ./bin/cop
+    - ./bin/rubocop
     - bundle exec brakeman --exit-on-warn
     # - rails_best_practices .
 

@@ -18,7 +18,7 @@ class BetaSignupsController < ApplicationController
       end
       redirect_to root_url, notice: 'You have been added to the beta waiting list. Invite more people from your slack to sign up for the beta. We will be inviting the slack teams with the most beta list signups first!'
     else
-      redirect_to root_url, notice: 'You have not been added to the beta waiting list. Check back to see new public CoMakery projects!'
+      redirect_to root_url, notice: "You have not been added to the beta waiting list. Check back to see new public #{I18n.t('project_name')} projects!"
     end
   end
 

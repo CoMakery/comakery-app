@@ -17,7 +17,7 @@ describe Comakery::Slack do
       stub_request(:post, 'https://slack.com/api/chat.postMessage').with(body: hash_including(text: slack.award_notifications_message(award),
                                                                                               token: slack_token,
                                                                                               channel: '#super sweet slack channel',
-                                                                                              username: 'CoMakery Bot',
+                                                                                              username: / Bot/,
                                                                                               icon_url: Comakery::Slack::AVATAR,
                                                                                               as_user: 'false',
                                                                                               link_names: '1')).to_return(body: {

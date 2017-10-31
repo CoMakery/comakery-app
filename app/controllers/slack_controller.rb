@@ -4,13 +4,12 @@ class SlackController < ApplicationController
   protect_from_forgery with: :null_session
 
   def command(*_args)
-    #   d proc { args }
     render json: {
       response_type: 'in_channel',
       attachments: [
         {
-          text: %( Hi! CoMakery helps you share revenue with product teams.
-            For more intel, drop by #{ENV['APP_HOST']}
+          text: %( Hi! #{I18n.t('project_name')} helps you share revenue with product teams.
+            For more intel, drop by https://#{ENV['APP_HOST']}
           ).strip.gsub(/\s+/, ' ')
         }
       ]
