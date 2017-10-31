@@ -85,4 +85,12 @@ class ApplicationController < ActionController::Base
       logger.debug value
     end
   end
+
+  private
+
+  def compare_all(*pairs)
+    pairs.map do |a, b|
+      ActiveSupport::SecurityUtils.variable_size_secure_compare(a, b)
+    end.reduce(:&)
+  end
 end
