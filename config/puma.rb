@@ -17,8 +17,11 @@ on_worker_boot do
   # worker specific setup
   ActiveSupport.on_load(:active_record) do
     config = ActiveRecord::Base.configurations[Rails.env] ||
-                Rails.application.config.database_configuration[Rails.env]
+        Rails.application.config.database_configuration[Rails.env]
     config['pool'] = Integer(ENV['MAX_THREADS'] || 2)
     ActiveRecord::Base.establish_connection(config)
   end
 end
+
+# Allow puma to be restarted by `rails restart` command.
+plugin :tmp_restart
