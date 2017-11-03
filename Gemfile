@@ -26,7 +26,7 @@ gem 'postmark-rails'
 gem 'premailer-rails'
 gem 'puma'
 gem 'pundit'
-gem 'rails', '4.2.7.1'
+gem 'rails', '~>4.2.7.1'
 gem 'rails_12factor', group: :production
 gem 'redcarpet'
 gem 'refile', require: 'refile/rails'
@@ -65,8 +65,8 @@ group(:development) do
   gem 'pivotal_git_scripts'
   gem 'quiet_assets'
   gem 'rails_best_practices'
-  gem 'rubocop', require: false
-  gem 'rubocop-rspec'
+  gem 'rubocop', '~>0.49.1', require: false
+  gem 'rubocop-rspec', '~>1.15.0'
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'web-console'

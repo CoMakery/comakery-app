@@ -16,9 +16,6 @@ AllCops:
   TargetRubyVersion: 2.3
   TargetRailsVersion: 4.2
 
-Capybara/FeatureMethods:
-  Enabled: false
-
 Layout/AlignParameters:
   Enabled: true
   EnforcedStyle: with_fixed_indentation
@@ -62,7 +59,7 @@ Style/BlockDelimiters:
 Style/Documentation:
   Enabled: false
 
-Naming/FileName:
+Style/FileName:
   Exclude:
     - 'Gemfile'
     - 'Guardfile'

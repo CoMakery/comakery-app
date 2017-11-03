@@ -289,7 +289,7 @@ Security/JSONLoad:
     - 'importer/demo/create_awards.rb'
 
 # Offense count: 3
-Naming/AccessorMethodName:
+Style/AccessorMethodName:
   Exclude:
     - 'app/lib/comakery/slack.rb'
     - 'spec/rails_helper.rb'
@@ -313,7 +313,7 @@ Style/DoubleNegation:
 # Offense count: 1
 # Configuration parameters: ExpectMatchingDefinition, Regex, IgnoreExecutableScripts, AllowedAcronyms.
 # AllowedAcronyms: CLI, DSL, ACL, API, ASCII, CPU, CSS, DNS, EOF, GUID, HTML, HTTP, HTTPS, ID, IP, JSON, LHS, QPS, RAM, RHS, RPC, SLA, SMTP, SQL, SSH, TCP, TLS, TTL, UDP, UI, UID, UUID, URI, URL, UTF8, VM, XML, XMPP, XSRF, XSS
-Naming/FileName:
+Style/FileName:
   Exclude:
     - 'Guardfile'
 
@@ -359,14 +359,14 @@ Style/RegexpLiteral:
 # Offense count: 2
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase
-Naming/VariableName:
+Style/VariableName:
   Exclude:
     - 'spec/lib/ethereum_spec.rb'
 
 # Offense count: 12
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, normalcase, non_integer
-Naming/VariableNumber:
+Style/VariableNumber:
   Exclude:
     - 'spec/features/precise_financial_calculations_spec.rb'
     - 'spec/models/project_spec.rb'
