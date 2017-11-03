@@ -55,28 +55,28 @@ describe AwardPolicy do
     end
 
     it 'returns false when no account' do
-      expect(described_class.new(nil, build(:award, award_type: award_type_with_project)).create?).to be_falsey
+      expect(described_class.new(nil, build(:award, award_type: award_type_with_project))).not_to be_create
     end
 
     it "returns false when the sending account doesn't own the project and award type is NOT community awardable" do
-      expect(described_class.new(different_team_authentication, build(:award, award_type: award_type_with_project, authentication: receiving_authentication)).create?).to be_falsey
+      expect(described_class.new(different_team_authentication, build(:award, award_type: award_type_with_project, authentication: receiving_authentication))).not_to be_create
     end
 
     it 'returns true when the sending account is the owner or award type is community awardable and the issuer is NOT the receiver' do
-      expect(described_class.new(receiving_authentication.account, build(:award, award_type: community_award_type_with_project, authentication: receiving_authentication)).create?).to be_falsey
+      expect(described_class.new(receiving_authentication.account, build(:award, award_type: community_award_type_with_project, authentication: receiving_authentication))).not_to be_create
       expect(described_class.new(receiving_authentication.account, build(:award, award_type: community_award_type_with_project, authentication: account_authentication, issuer: receiving_authentication.account)).create?).to eq(true)
     end
 
     it "returns false when the receiving account doesn't belong to the project" do
-      expect(described_class.new(account, build(:award, award_type: award_type_with_project, authentication: other_authentication)).create?).to be_falsey
+      expect(described_class.new(account, build(:award, award_type: award_type_with_project, authentication: other_authentication))).not_to be_create
     end
 
     it "returns false when award doesn't have a award_type" do
-      expect(described_class.new(account, build(:award, award_type: nil)).create?).to be_falsey
+      expect(described_class.new(account, build(:award, award_type: nil))).not_to be_create
     end
 
     it "returns false when the award_type on the award does not belong to the account's project" do
-      expect(described_class.new(account, award_for_unowned_project).create?).to be_falsey
+      expect(described_class.new(account, award_for_unowned_project)).not_to be_create
     end
   end
 end

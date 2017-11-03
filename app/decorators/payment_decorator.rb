@@ -46,10 +46,10 @@ class PaymentDecorator < Draper::Decorator
   end
 
   def issuer_name
-    issuer.display_name if issuer && issuer.display_name
+    issuer.display_name if issuer&.display_name
   end
 
   def issuer_avatar
-    issuer.slack_icon if issuer && issuer.slack_icon
+    issuer.slack_icon if issuer&.slack_icon
   end
 end

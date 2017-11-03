@@ -13,6 +13,6 @@ class Role < ActiveRecord::Base
 
   def self.admin?(user)
     # load and iterate, instead of asking DB, so multiple calls are efficient
-    user && user.roles.include?(admin)
+    user&.roles&.include?(admin)
   end
 end
