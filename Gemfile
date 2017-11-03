@@ -26,7 +26,7 @@ gem 'postmark-rails'
 gem 'premailer-rails'
 gem 'puma'
 gem 'pundit'
-gem 'rails', '~>4.2.7.1'
+gem 'rails', '~>4.2.10'
 gem 'rails_12factor', group: :production
 gem 'redcarpet'
 gem 'refile', require: 'refile/rails'
