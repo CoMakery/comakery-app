@@ -24,7 +24,7 @@ describe GetSlackChannels do
     it 'fails the interactor' do
       result = described_class.call(current_account: current_account)
       expect(result).not_to be_success
-      expect(result.message).to eq('Slack API error - Slack::Web::Api::Error')
+      expect(result.message).to match(/Slack API error - Slack::Web::Api::Error/)
     end
   end
 end
