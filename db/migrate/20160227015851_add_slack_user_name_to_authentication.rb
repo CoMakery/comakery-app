@@ -1,6 +1,6 @@
 class Authentication < ActiveRecord::Base; end
 
-class AddSlackUserNameToAuthentication < ActiveRecord::Migration
+class AddSlackUserNameToAuthentication < ActiveRecord::Migration[4.2]
   def up
     Authentication.destroy_all
     add_column :authentications, :slack_user_name, :string, null: false

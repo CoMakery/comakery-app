@@ -1,4 +1,4 @@
-class AddProofIdToAwards < ActiveRecord::Migration
+class AddProofIdToAwards < ActiveRecord::Migration[4.2]
   def up
     add_column :awards, :proof_id, :text
 

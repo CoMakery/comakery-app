@@ -1,6 +1,6 @@
 class Project < ActiveRecord::Base; end
 
-class AddSlackTeamNameToProjects < ActiveRecord::Migration
+class AddSlackTeamNameToProjects < ActiveRecord::Migration[4.2]
   def up
     add_column :projects, :slack_team_name, :string
     Project.connection.execute("update projects set slack_team_name = (select authentications.slack_team_name from authentications where projects.slack_team_id = authentications.slack_team_id);")

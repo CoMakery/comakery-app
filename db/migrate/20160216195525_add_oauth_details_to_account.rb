@@ -1,4 +1,4 @@
-class AddOauthDetailsToAccount < ActiveRecord::Migration
+class AddOauthDetailsToAccount < ActiveRecord::Migration[4.2]
   def change
     change_column :accounts, :email, :string, null: true
     change_column :accounts, :crypted_password, :string, null: true

@@ -1,4 +1,4 @@
-class AddColumnsToPayments < ActiveRecord::Migration
+class AddColumnsToPayments < ActiveRecord::Migration[4.2]
   def change
     rename_column :payments, :recipient_id, :payee_id
     rename_column :payments, :amount, :total_value

@@ -1,4 +1,4 @@
-class DropColumnsFromProjects < ActiveRecord::Migration
+class DropColumnsFromProjects < ActiveRecord::Migration[4.2]
   def up
     remove_columns(:projects, :minimum_revenue, :minimum_payment)
   end

@@ -1,4 +1,4 @@
-class CreateRewardTypes < ActiveRecord::Migration
+class CreateRewardTypes < ActiveRecord::Migration[4.2]
   def change
     create_table :reward_types do |t|
       t.references :project, null: false
