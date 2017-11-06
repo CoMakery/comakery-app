@@ -34,7 +34,7 @@ class AwardsController < ApplicationController
   def fail_and_redirect(message)
     skip_authorization
     flash[:error] = "Failed sending award - #{message}"
-    redirect_to(:back)
+    redirect_back fallback_location: root_path
   end
 
   private

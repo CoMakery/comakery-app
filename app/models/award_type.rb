@@ -25,7 +25,7 @@ class AwardType < ActiveRecord::Base
   end
 
   def amount_didnt_change?
-    errors[:amount] = "can't be modified if there are existing awards" if amount_was != amount
+    errors.add(:amount, :invalid, message: "can't be modified if there are existing awards") if amount != amount_was
   end
 
   # TODO: remove temporary migration method after migrating all environments

@@ -6,7 +6,6 @@ describe Authentication do
       errors = described_class.new.tap(&:valid?).errors.full_messages
       expect(errors.sort).to eq([
                                   "Account can't be blank",
-                                  'Account must exist',
                                   "Provider can't be blank",
                                   "Slack team can't be blank",
                                   "Slack team image 132 url can't be blank",
