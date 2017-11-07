@@ -8,6 +8,7 @@ AllCops:
     - 'config/**/*'
     - 'db/schema.rb'
     - 'db/migrate/*.rb'
+    - 'node_modules/**/*'
     - 'tmp/**/*'
     - 'vendor/**/*'
   Include:
