@@ -14,7 +14,7 @@ describe PaymentsController do
     it 'owner can see' do
       login account
 
-      get :index, params: {project_id: my_project.id}
+      get :index, params: { project_id: my_project.id }
       expect(controller).to have_received(:policy_scope).with(Project)
       expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
     end
@@ -22,7 +22,7 @@ describe PaymentsController do
     it 'anonymous can access public' do
       other_project.update_attributes(public: true)
 
-      get :index, params: {project_id: other_project.id}
+      get :index, params: { project_id: other_project.id }
       expect(controller).to have_received(:policy_scope).with(Project)
       expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
     end
@@ -30,7 +30,7 @@ describe PaymentsController do
     it "anonymous can't access private" do
       other_project.update_attributes(public: false)
 
-      get :index, params: {project_id: other_project.id}
+      get :index, params: { project_id: other_project.id }
       expect(controller).to have_received(:policy_scope).with(Project)
       expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
       expect(response).to redirect_to('/404.html')
@@ -48,7 +48,7 @@ describe PaymentsController do
     describe 'owner success' do
       before do
         login account
-        get :create, params: {project_id: my_project.id, payment: { quantity_redeemed: 50 }}
+        get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: 50 } }
       end
 
       specify { expect(controller).to have_received(:policy_scope).with(Project) }
@@ -65,7 +65,7 @@ describe PaymentsController do
     describe 'owner invalid' do
       before do
         login account
-        get :create, params: {project_id: my_project.id, payment: { quantity_redeemed: '' }}
+        get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: '' } }
       end
 
       specify { expect(controller).to have_received(:policy_scope).with(Project) }
@@ -78,7 +78,7 @@ describe PaymentsController do
     describe 'not my project' do
       before do
         login account
-        get :create, params: {project_id: other_project.id, payment: { quantity_redeemed: 50 }}
+        get :create, params: { project_id: other_project.id, payment: { quantity_redeemed: 50 } }
       end
 
       specify { expect(controller).to have_received(:policy_scope).with(Project) }
@@ -90,7 +90,7 @@ describe PaymentsController do
 
     describe 'logged out' do
       before do
-        get :create, params: {project_id: my_project.id, payment: { quantity_redeemed: 50 }}
+        get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: 50 } }
       end
 
       specify { expect(controller).not_to have_received(:policy_scope).with(Project) }
@@ -110,7 +110,7 @@ describe PaymentsController do
     before do
       login account
       controller
-      patch :update, params: {project_id: my_project.id, id: payment.id, payment: { transaction_fee: 0.50, transaction_reference: 'abc' }}
+      patch :update, params: { project_id: my_project.id, id: payment.id, payment: { transaction_fee: 0.50, transaction_reference: 'abc' } }
       payment.reload
     end
 
@@ -142,7 +142,7 @@ describe PaymentsController do
     before do
       login account
       controller
-      patch :update, params: {project_id: my_project.id, id: payment.id, payment: { transaction_reference: 'abc' }}
+      patch :update, params: { project_id: my_project.id, id: payment.id, payment: { transaction_reference: 'abc' } }
       payment.reload
     end
 

@@ -2,8 +2,8 @@ class Payment < ActiveRecord::Base
   nilify_blanks
 
   belongs_to :project
-  belongs_to :issuer, class_name: Authentication
-  belongs_to :payee, class_name: Authentication
+  belongs_to :issuer, class_name: 'Authentication'
+  belongs_to :payee, class_name: 'Authentication'
 
   validates :project, :payee, :total_value, :share_value, :quantity_redeemed, :currency, presence: true
   validates :quantity_redeemed, numericality: { greater_than_or_equal_to: 0 }

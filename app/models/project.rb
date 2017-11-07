@@ -36,7 +36,7 @@ class Project < ActiveRecord::Base
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
   has_many :revenues
 
-  belongs_to :owner_account, class_name: Account
+  belongs_to :owner_account, class_name: 'Account'
 
   enum payment_type: {
     revenue_share: 0,

@@ -4,7 +4,7 @@ class Award < ActiveRecord::Base
   include EthereumAddressable
 
   belongs_to :authentication
-  belongs_to :issuer, class_name: Account
+  belongs_to :issuer, class_name: 'Account'
   belongs_to :award_type
   delegate :project, to: :award_type
 

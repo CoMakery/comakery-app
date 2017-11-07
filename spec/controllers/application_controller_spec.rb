@@ -46,7 +46,7 @@ describe ApplicationController do
       it 'redirects to root path and logs the error' do
         expect(Rails.logger).to receive(:error)
 
-        get :show, params: {id: 1}
+        get :show, params: { id: 1 }
 
         expect(response).to redirect_to root_url
       end
