@@ -1,4 +1,4 @@
-class Project < ActiveRecord::Base
+class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
 
   include SlackDomainable

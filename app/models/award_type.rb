@@ -1,4 +1,4 @@
-class AwardType < ActiveRecord::Base
+class AwardType < ApplicationRecord
   belongs_to :project
   has_many :awards, dependent: :restrict_with_exception do
     def create_with_quantity(quantity, issuer:, authentication:)

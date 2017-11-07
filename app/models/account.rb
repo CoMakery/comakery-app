@@ -1,4 +1,4 @@
-class Account < ActiveRecord::Base
+class Account < ApplicationRecord
   include EthereumAddressable
 
   has_many :account_roles, dependent: :destroy

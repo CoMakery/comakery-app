@@ -1,4 +1,4 @@
-class Revenue < ActiveRecord::Base
+class Revenue < ApplicationRecord
   belongs_to :project
   belongs_to :recorded_by, class_name: 'Account'
 

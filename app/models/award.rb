@@ -1,4 +1,4 @@
-class Award < ActiveRecord::Base
+class Award < ApplicationRecord
   paginates_per 50
 
   include EthereumAddressable
