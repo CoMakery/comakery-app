@@ -32,3 +32,6 @@
 /.tags[0-9]*
 junk.rb
 junk.txt
+/public/packs
+/public/packs-test
+/node_modules
