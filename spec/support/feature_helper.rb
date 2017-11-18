@@ -7,6 +7,10 @@ module FeatureHelper
     page.set_rack_session(account_id: account.id)
   end
 
+  def logout
+    page.set_rack_session(account_id: nil)
+  end
+
   def ignore_js_errors
     yield
   rescue Capybara::Poltergeist::JavascriptError
