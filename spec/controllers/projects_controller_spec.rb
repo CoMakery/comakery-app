@@ -231,9 +231,9 @@ describe ProjectsController do
                 description: 'updated Project description here',
                 tracker: 'http://github.com/here/is/my/tracker/updated',
                 award_types_attributes: [
-                  { id: small_award_type.to_param, name: 'Small Award', amount: 150, community_awardable: true },
-                  { id: destroy_me_award_type.to_param, _destroy: true },
-                  { name: 'Big Award', amount: 500 }
+                  { id: small_award_type.to_param, name: 'Small Award', amount: 150, community_awardable: true, _destroy: 'false' },
+                  { id: destroy_me_award_type.to_param, _destroy: '1' },
+                  { name: 'Big Award', amount: 500, _destroy: 'false' }
                 ]
               }
             }
@@ -278,9 +278,9 @@ describe ProjectsController do
                   legal_project_owner: 'legal project owner',
                   payment_type: 'project_token',
                   award_types_attributes: [
-                    { id: small_award_type.to_param, name: 'Small Award', amount: 150 },
-                    { id: destroy_me_award_type.to_param, _destroy: true },
-                    { name: 'Big Award', amount: 500 }
+                    { id: small_award_type.to_param, name: 'Small Award', amount: 150, _destroy: 'false' },
+                    { id: destroy_me_award_type.to_param, _destroy: '1' },
+                    { name: 'Big Award', amount: 500, _destroy: 'false' }
                   ]
                 }
               }
