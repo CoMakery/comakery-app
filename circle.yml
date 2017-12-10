@@ -15,10 +15,11 @@ database:
 
 test:
   override:
-    - ./bin/rspect --format documentation
-    - ./bin/rubocop
-    - bundle exec brakeman --exit-on-warn
-    # - rails_best_practices .
+    - >-
+      set -ex
+      ./bin/rspect --format documentation
+      ./bin/rubocop
+      bundle exec brakeman --exit-on-warn
 
 deployment:
   autodeploy:
