@@ -71,7 +71,6 @@ RSpec.configure do |config|
   config.after(:each, type: :feature) do
     logout
   end
-
 end
 
 def login_account(account)
