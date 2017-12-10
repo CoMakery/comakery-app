@@ -15,10 +15,9 @@ database:
 
 test:
   override:
-    - >-
-      set -ex
-      ./bin/rspect --format documentation
-      ./bin/rubocop
+    - >
+      ./bin/rspect --format documentation && \
+      ./bin/rubocop && \
       bundle exec brakeman --exit-on-warn
 
 deployment:
