@@ -1,4 +1,4 @@
-class AddAuthenticationIdRemoveAccountIdOnAwards < ActiveRecord::Migration
+class AddAuthenticationIdRemoveAccountIdOnAwards < ActiveRecord::Migration[4.2]
   def up
     add_column :awards, :authentication_id, :integer
     execute "update awards set authentication_id = auths.last_auth_id from (

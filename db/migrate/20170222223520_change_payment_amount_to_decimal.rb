@@ -1,4 +1,4 @@
-class ChangePaymentAmountToDecimal < ActiveRecord::Migration
+class ChangePaymentAmountToDecimal < ActiveRecord::Migration[4.2]
   def up
     change_column :payments, :amount, :decimal
   end

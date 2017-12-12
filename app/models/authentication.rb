@@ -1,4 +1,4 @@
-class Authentication < ActiveRecord::Base
+class Authentication < ApplicationRecord
   include SlackDomainable
 
   belongs_to :account

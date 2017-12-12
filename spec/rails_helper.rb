@@ -67,6 +67,10 @@ RSpec.configure do |config|
     'rack',
     'railties',
     'zeus'
+
+  config.after(:each, type: :feature) do
+    logout
+  end
 end
 
 def login_account(account)

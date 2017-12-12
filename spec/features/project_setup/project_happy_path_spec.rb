@@ -124,7 +124,7 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'Project Tracker', with: 'http://github.com/here/is/my/tracker'
     fill_in 'Video', with: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'
     uncheck 'Set project as public'
-    uncheck 'Publish to Ethereum Blockchain'
+    # uncheck 'Publish to Ethereum Blockchain'
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)

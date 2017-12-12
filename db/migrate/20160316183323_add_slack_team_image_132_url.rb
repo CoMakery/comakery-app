@@ -1,4 +1,4 @@
-class AddSlackTeamImage132Url < ActiveRecord::Migration
+class AddSlackTeamImage132Url < ActiveRecord::Migration[4.2]
   def up
     add_column :authentications, :slack_team_image_132_url, :string
     add_column :projects,        :slack_team_image_132_url, :string

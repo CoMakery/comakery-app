@@ -1,4 +1,4 @@
-class SorceryActivityLogging < ActiveRecord::Migration
+class SorceryActivityLogging < ActiveRecord::Migration[4.2]
   def change
     add_column :accounts, :last_login_at,     :datetime, :default => nil
     add_column :accounts, :last_logout_at,    :datetime, :default => nil

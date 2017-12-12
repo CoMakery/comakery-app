@@ -1,6 +1,6 @@
-class Revenue < ActiveRecord::Base
+class Revenue < ApplicationRecord
   belongs_to :project
-  belongs_to :recorded_by, class_name: Account
+  belongs_to :recorded_by, class_name: 'Account'
 
   validates :amount, :currency, :project, :recorded_by, presence: true
   validates :currency, inclusion: { in: Comakery::Currency::DENOMINATIONS.keys }

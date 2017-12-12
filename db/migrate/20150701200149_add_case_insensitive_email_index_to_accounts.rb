@@ -1,4 +1,4 @@
-class AddCaseInsensitiveEmailIndexToAccounts < ActiveRecord::Migration
+class AddCaseInsensitiveEmailIndexToAccounts < ActiveRecord::Migration[4.2]
   # see http://stackoverflow.com/questions/3265190/rails-postgres-functional-indexes
   def up
     execute <<-SQL

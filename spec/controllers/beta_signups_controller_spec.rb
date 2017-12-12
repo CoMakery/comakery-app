@@ -10,7 +10,7 @@ describe BetaSignupsController do
     end
 
     it 'sticks emails into the form field from params' do
-      get :new, email_address: 'bob@example.com'
+      get :new, params: { email_address: 'bob@example.com' }
 
       expect(response.status).to eq(200)
       expect(assigns[:beta_signup].email_address).to eq('bob@example.com')
@@ -24,7 +24,7 @@ describe BetaSignupsController do
 
       it 'updates the beta signup' do
         expect do
-          post :create, beta_signup: { email_address: 'bob@example.com' }, commit: Views::BetaSignups::New::OPT_IN_SUBMIT_BUTTON_TEXT
+          post :create, params: { beta_signup: { email_address: 'bob@example.com' }, commit: Views::BetaSignups::New::OPT_IN_SUBMIT_BUTTON_TEXT }
         end.not_to change { BetaSignup.count }
 
         expect(response.status).to eq(302)
@@ -39,7 +39,7 @@ describe BetaSignupsController do
     context "when the user goes straight to the beta sign up page so there isn't a beta signup" do
       it 'creates a signup based on a valid email' do
         expect do
-          post :create, beta_signup: { email_address: 'bob@example.com' }, commit: Views::BetaSignups::New::OPT_IN_SUBMIT_BUTTON_TEXT
+          post :create, params: { beta_signup: { email_address: 'bob@example.com' }, commit: Views::BetaSignups::New::OPT_IN_SUBMIT_BUTTON_TEXT }
         end.to change { BetaSignup.count }.by(1)
 
         expect(response.status).to eq(302)
@@ -54,7 +54,7 @@ describe BetaSignupsController do
       context 'when user enters bad email' do
         it 'tells the user' do
           expect do
-            post :create, beta_signup: { email_address: 'not an email' }, commit: Views::BetaSignups::New::OPT_IN_SUBMIT_BUTTON_TEXT
+            post :create, params: { beta_signup: { email_address: 'not an email' }, commit: Views::BetaSignups::New::OPT_IN_SUBMIT_BUTTON_TEXT }
           end.not_to change { BetaSignup.count }
 
           expect(response.status).to eq(200)
@@ -66,7 +66,7 @@ describe BetaSignupsController do
       context 'when user opts out' do
         it 'tells the user' do
           expect do
-            post :create, beta_signup: { email_address: 'not an email' }, commit: Views::BetaSignups::New::OPT_OUT_SUBMIT_BUTTON_TEXT
+            post :create, params: { beta_signup: { email_address: 'not an email' }, commit: Views::BetaSignups::New::OPT_OUT_SUBMIT_BUTTON_TEXT }
           end.not_to change { BetaSignup.count }
 
           expect(response.status).to eq(302)

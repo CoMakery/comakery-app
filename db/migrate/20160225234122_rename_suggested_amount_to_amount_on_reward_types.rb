@@ -1,4 +1,4 @@
-class RenameSuggestedAmountToAmountOnRewardTypes < ActiveRecord::Migration
+class RenameSuggestedAmountToAmountOnRewardTypes < ActiveRecord::Migration[4.2]
   def change
     rename_column :reward_types, :suggested_amount, :amount
     add_column :rewards, :reward_type_id, :integer, null: false

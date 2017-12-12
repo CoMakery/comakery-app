@@ -4,7 +4,7 @@ class FoosController < ApplicationController; end
 
 describe ApplicationController do
   controller FoosController do
-    skip_before_filter :require_login
+    skip_before_action :require_login
     skip_after_action :verify_policy_scoped
 
     def index
@@ -46,7 +46,7 @@ describe ApplicationController do
       it 'redirects to root path and logs the error' do
         expect(Rails.logger).to receive(:error)
 
-        get :show, id: 1
+        get :show, params: { id: 1 }
 
         expect(response).to redirect_to root_url
       end

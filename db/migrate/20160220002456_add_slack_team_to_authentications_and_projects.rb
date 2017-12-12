@@ -1,7 +1,7 @@
 class Authentication < ActiveRecord::Base; end
 class Project < ActiveRecord::Base; end
 
-class AddSlackTeamToAuthenticationsAndProjects < ActiveRecord::Migration
+class AddSlackTeamToAuthenticationsAndProjects < ActiveRecord::Migration[4.2]
   def up
     Authentication.destroy_all
     Project.destroy_all

@@ -1,4 +1,4 @@
-class CreateRevenue < ActiveRecord::Migration
+class CreateRevenue < ActiveRecord::Migration[4.2]
   def change
     create_table :revenues do |t|
       t.integer :project_id

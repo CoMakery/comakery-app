@@ -1,4 +1,4 @@
-class AddContractFieldsToProject < ActiveRecord::Migration
+class AddContractFieldsToProject < ActiveRecord::Migration[4.2]
   def change
     add_column :projects, :exclusive_contributions, :boolean
     add_column :projects, :legal_project_owner, :string

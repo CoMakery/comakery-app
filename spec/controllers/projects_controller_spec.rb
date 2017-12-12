@@ -79,23 +79,25 @@ describe ProjectsController do
     it 'when valid, creates a project and associates it with the current account' do
       expect do
         expect do
-          post :create, project: {
-            title: 'Project title here',
-            description: 'Project description here',
-            image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-            tracker: 'http://github.com/here/is/my/tracker',
-            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
-            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
-            slack_channel: 'slack_channel',
-            maximum_tokens: '150',
-            legal_project_owner: 'legal project owner',
-            payment_type: 'project_token',
-            award_types_attributes: [
-              { name: 'Community Award', amount: 10, community_awardable: true },
-              { name: 'Small Award', amount: 1000 },
-              { name: 'Big Award', amount: 2000 },
-              { name: '', amount: '' }
-            ]
+          post :create, params: {
+            project: {
+              title: 'Project title here',
+              description: 'Project description here',
+              image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              tracker: 'http://github.com/here/is/my/tracker',
+              contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
+              video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
+              slack_channel: 'slack_channel',
+              maximum_tokens: '150',
+              legal_project_owner: 'legal project owner',
+              payment_type: 'project_token',
+              award_types_attributes: [
+                { name: 'Community Award', amount: 10, community_awardable: true },
+                { name: 'Small Award', amount: 1000 },
+                { name: 'Big Award', amount: 2000 },
+                { name: '', amount: '' }
+              ]
+            }
           }
           expect(response.status).to eq(302)
         end.to change { Project.count }.by(1)
@@ -124,16 +126,18 @@ describe ProjectsController do
 
       expect do
         expect do
-          post :create, project: {
-            # title: "Project title here",
-            description: 'Project description here',
-            image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-            tracker: 'http://github.com/here/is/my/tracker',
-            award_types_attributes: [
-              { name: 'Small Award', amount: 1000, community_awardable: true },
-              { name: 'Big Award', amount: 2000 },
-              { name: '', amount: '' }
-            ]
+          post :create, params: {
+            project: {
+              # title: "Project title here",
+              description: 'Project description here',
+              image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              tracker: 'http://github.com/here/is/my/tracker',
+              award_types_attributes: [
+                { name: 'Small Award', amount: 1000, community_awardable: true },
+                { name: 'Big Award', amount: 2000 },
+                { name: '', amount: '' }
+              ]
+            }
           }
           expect(response.status).to eq(200)
         end.not_to change { Project.count }
@@ -184,14 +188,14 @@ describe ProjectsController do
       end
 
       it 'allows querying based on the title of the project, ignoring case' do
-        get :index, query: 'cats'
+        get :index, params: { query: 'cats' }
 
         expect(response.status).to eq(200)
         expect(assigns[:projects].map(&:title)).to eq(['Cats'])
       end
 
       it 'allows querying based on the title or description of the project, ignoring case' do
-        get :index, query: 'o'
+        get :index, params: { query: 'o' }
 
         expect(response.status).to eq(200)
         expect(assigns[:projects].map(&:title)).to eq(%w[Dogs Foxes])
@@ -204,7 +208,7 @@ describe ProjectsController do
       end
 
       it 'works' do
-        get :edit, id: cat_project.to_param
+        get :edit, params: { id: cat_project.to_param }
 
         expect(response.status).to eq(200)
         expect(assigns[:project]).to eq(cat_project)
@@ -220,17 +224,19 @@ describe ProjectsController do
 
         expect do
           expect do
-            put :update, id: cat_project.to_param,
-                         project: {
-                           title: 'updated Project title here',
-                           description: 'updated Project description here',
-                           tracker: 'http://github.com/here/is/my/tracker/updated',
-                           award_types_attributes: [
-                             { id: small_award_type.to_param, name: 'Small Award', amount: 150, community_awardable: true },
-                             { id: destroy_me_award_type.to_param, _destroy: true },
-                             { name: 'Big Award', amount: 500 }
-                           ]
-                         }
+            put :update, params: {
+              id: cat_project.to_param,
+              project: {
+                title: 'updated Project title here',
+                description: 'updated Project description here',
+                tracker: 'http://github.com/here/is/my/tracker/updated',
+                award_types_attributes: [
+                  { id: small_award_type.to_param, name: 'Small Award', amount: 150, community_awardable: true, _destroy: 'false' },
+                  { id: destroy_me_award_type.to_param, _destroy: '1' },
+                  { name: 'Big Award', amount: 500, _destroy: 'false' }
+                ]
+              }
+            }
             expect(response.status).to eq(302)
           end.to change { Project.count }.by(0)
         end.to change { AwardType.count }.by(0) # +1 and -1
@@ -263,19 +269,21 @@ describe ProjectsController do
 
           expect do
             expect do
-              put :update, id: cat_project.to_param,
-                           project: {
-                             title: '',
-                             description: 'updated Project description here',
-                             tracker: 'http://github.com/here/is/my/tracker/updated',
-                             legal_project_owner: 'legal project owner',
-                             payment_type: 'project_token',
-                             award_types_attributes: [
-                               { id: small_award_type.to_param, name: 'Small Award', amount: 150 },
-                               { id: destroy_me_award_type.to_param, _destroy: true },
-                               { name: 'Big Award', amount: 500 }
-                             ]
-                           }
+              put :update, params: {
+                id: cat_project.to_param,
+                project: {
+                  title: '',
+                  description: 'updated Project description here',
+                  tracker: 'http://github.com/here/is/my/tracker/updated',
+                  legal_project_owner: 'legal project owner',
+                  payment_type: 'project_token',
+                  award_types_attributes: [
+                    { id: small_award_type.to_param, name: 'Small Award', amount: 150, _destroy: 'false' },
+                    { id: destroy_me_award_type.to_param, _destroy: '1' },
+                    { name: 'Big Award', amount: 500, _destroy: 'false' }
+                  ]
+                }
+              }
               expect(response.status).to eq(200)
             end.not_to change { Project.count }
           end.not_to change { AwardType.count }
@@ -313,14 +321,16 @@ describe ProjectsController do
 
         expect do
           expect do
-            put :update, id: cat_project.to_param,
-                         project: {
-                           legal_project_owner: 'legal project owner',
-                           payment_type: 'project_token',
-                           award_types_attributes: [
-                             { id: award_type.to_param, name: 'Bigger Award', amount: 500 }
-                           ]
-                         }
+            put :update, params: {
+              id: cat_project.to_param,
+              project: {
+                legal_project_owner: 'legal project owner',
+                payment_type: 'project_token',
+                award_types_attributes: [
+                  { id: award_type.to_param, name: 'Bigger Award', amount: 500 }
+                ]
+              }
+            }
             expect(response.status).to eq(200)
             expect(flash[:error]).to eq('Project update failed, please correct the errors below')
           end.not_to change { Project.count }
@@ -334,12 +344,14 @@ describe ProjectsController do
 
         expect do
           expect do
-            put :update, id: cat_project.to_param,
-                         project: {
-                           award_types_attributes: [
-                             { id: award_type.to_param, name: 'Bigger Award', community_awardable: true, amount: award_type.amount }
-                           ]
-                         }
+            put :update, params: {
+              id: cat_project.to_param,
+              project: {
+                award_types_attributes: [
+                  { id: award_type.to_param, name: 'Bigger Award', community_awardable: true, amount: award_type.amount }
+                ]
+              }
+            }
             expect(response.status).to eq(302)
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
@@ -364,7 +376,7 @@ describe ProjectsController do
         end
 
         it 'allows team members to view projects and assigns awardable accounts from slack api and db and de-dups' do
-          get :show, id: cat_project.to_param
+          get :show, params: { id: cat_project.to_param }
 
           expect(response.code).to eq '200'
           expect(assigns(:project)).to eq cat_project
@@ -379,7 +391,7 @@ describe ProjectsController do
       it 'only denies non-owners to view projects' do
         cat_project.update(slack_team_id: 'some other team')
 
-        get :show, id: cat_project.to_param
+        get :show, params: { id: cat_project.to_param }
 
         expect(response.status).to eq(302)
         expect(assigns(:project)).to eq(cat_project)

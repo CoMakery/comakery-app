@@ -10,6 +10,9 @@ require_relative 'initializers/i18n'
 
 module Comakery
   class Application < Rails::Application
+    config.load_defaults '5.1'
+    config.active_record.belongs_to_required_by_default = false  # see https://blog.bigbinary.com/2016/02/15/rails-5-makes-belong-to-association-required-by-default.html
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -45,8 +48,6 @@ module Comakery
     end
 
     config.allow_missing_ethereum_bridge = false
-
-    config.active_record.raise_in_transactional_callbacks = true
 
     config.airbrake = false
 

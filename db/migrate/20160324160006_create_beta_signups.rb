@@ -1,4 +1,4 @@
-class CreateBetaSignups < ActiveRecord::Migration
+class CreateBetaSignups < ActiveRecord::Migration[4.2]
   def change
     create_table :beta_signups do |t|
       t.string :email_address, null: false

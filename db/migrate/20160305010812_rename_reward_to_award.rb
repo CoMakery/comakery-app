@@ -1,4 +1,4 @@
-class RenameRewardToAward < ActiveRecord::Migration
+class RenameRewardToAward < ActiveRecord::Migration[4.2]
   def up
     rename_column :rewards, :reward_type_id, :award_type_id
     rename_table :rewards, :awards
