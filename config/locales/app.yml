@@ -13,3 +13,7 @@ app:
   project_description: "Collaborate on products and share the revenue. Easily pay people for work with equity and royalties before you have money. Easy royalties for app makers."
   project_name: "CoMakery"
   tech_support_email: "dev@comakery.com"
+
+  views:
+    pagination:
+      truncate: "&hellip;"  # solves https://github.com/CoMakery/comakery-app/issues/698
