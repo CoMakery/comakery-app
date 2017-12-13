@@ -40,7 +40,6 @@ Metrics/LineLength:
 
 Performance/TimesMap:
   Exclude:
-    - 'bin/deploy'
     - 'spec/factories.rb'
 
 Rails:

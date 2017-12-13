@@ -15,10 +15,7 @@ database:
 
 test:
   override:
-    - ./bin/rspect --format documentation
-    - ./bin/rubocop
-    - bundle exec brakeman --exit-on-warn
-    # - rails_best_practices .
+    - bundle exec citizen checks
 
 general:
   artifacts:
@@ -28,4 +25,4 @@ deployment:
   autodeploy:
     branch: master
     commands:
-      - bin/deploy staging $CIRCLE_SHA1
+      - bundle exec citizen staging $CIRCLE_SHA1
