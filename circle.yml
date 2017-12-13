@@ -20,6 +20,10 @@ test:
     - bundle exec brakeman --exit-on-warn
     # - rails_best_practices .
 
+general:
+  artifacts:
+    - "coverage"
+
 deployment:
   autodeploy:
     branch: master
