@@ -57,7 +57,7 @@ describe 'viewing projects, creating and editing', :js do
         end
 
         it 'paginates when there are lots of awards' do
-          (60 - project.awards.count).times do
+          (305 - project.awards.count).times do
             create(:award, award_type: community_award_type, issuer: other_account, authentication: owner_auth)
           end
 
@@ -65,11 +65,13 @@ describe 'viewing projects, creating and editing', :js do
 
           click_link 'Awards'
           expect(page.all('table.award-rows tr.award-row').size).to eq(50)
+          expect(page).to have_content '1 2 3 4 5 … Next › Last »'
 
           within(page.all('.pagination').first) do
-            click_link '2'
+            click_link 'Last'
           end
-          expect(page.all('table.award-rows tr.award-row').size).to eq(10)
+          expect(page.all('table.award-rows tr.award-row').size).to eq(5)
+          expect(page).to have_content '« First ‹ Prev … 3 4 5 6 7'
         end
       end
     end
