@@ -2,28 +2,17 @@
 ENV['RAILS_ENV'] ||= 'test'
 
 require 'simplecov'
-SimpleCov.start do
-  # do not track:
-  add_filter %r{^/app/views/}
-  add_filter %r{^/config/}
-  add_filter %r{^/db/}
-  add_filter %r{^/spec/}
+SimpleCov.start :rails do
+  SimpleCov.minimum_coverage 96
+  SimpleCov.refuse_coverage_drop
 
-  add_group 'Controllers', 'app/controllers'
+  # add_filter == do not track coverage
+  add_filter %r{^/app/views/}
+
   add_group 'Decorators', 'app/decorators'
   add_group 'Interactors', 'app/interactors'
-  add_group 'Jobs', %w[app/jobs app/workers]
-  add_group 'Libraries', 'lib'
-  add_group 'Mailers', 'app/mailers'
-  add_group 'Models', 'app/models'
   add_group 'Policies', 'app/policies'
-
-  # always track, even if not required:
-  track_files '{app,lib}/**/*.rb'
 end
-
-SimpleCov.minimum_coverage 96
-SimpleCov.refuse_coverage_drop
 
 require 'spec_helper'
 require File.expand_path('../../config/environment', __FILE__)

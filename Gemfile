@@ -73,7 +73,6 @@ end
 group(:test) do
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'fuubar'
   gem 'guard-rspec', require: false
   gem 'phantomjs', require: 'phantomjs/poltergeist'
   gem 'poltergeist'
