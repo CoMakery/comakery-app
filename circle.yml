@@ -6,6 +6,8 @@ machine:
 
 dependencies:
   override:
+    - gem update --system
+    - gem update bundler
     - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
   cache_directories:
     - /home/ubuntu/.phantomjs
@@ -19,10 +21,7 @@ database:
 
 test:
   override:
-    - ./bin/rspect --format documentation
-    - ./bin/rubocop
-    - bundle exec brakeman --exit-on-warn
-    # - rails_best_practices .
+    - bundle exec citizen checks
 
 general:
   artifacts:
@@ -32,4 +31,4 @@ deployment:
   autodeploy:
     branch: master
     commands:
-      - bin/deploy staging $CIRCLE_SHA1
+      - bundle exec citizen staging $CIRCLE_SHA1

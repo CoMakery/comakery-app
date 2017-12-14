@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/CoMakery/citizen-scripts.git
+  revision: bfd015d25cecf86843846b883629a4fc13572f0c
+  ref: dev
+  specs:
+    citizen-scripts (1.2.0)
+
+GIT
   remote: https://github.com/refile/refile.git
   revision: 0b78f7de4dda6ee812d175ff9cd0bd485dbea4e4
   specs:
@@ -91,8 +98,6 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     chunky_png (1.3.8)
     cliver (0.3.2)
-    code_analyzer (0.4.8)
-      sexp_processor
     coderay (1.1.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
@@ -143,7 +148,6 @@ GEM
       request_store (~> 1.0)
     easy_shell (0.0.1)
     erubi (1.7.0)
-    erubis (2.7.0)
     execjs (2.7.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
@@ -154,8 +158,6 @@ GEM
       railties (>= 3.2, < 5.2)
     font_assets (0.1.14)
       rack
-    foreman (0.84.0)
-      thor (~> 0.19.1)
     formatador (0.2.5)
     fortitude (0.9.6)
       activesupport (>= 3.0)
@@ -362,14 +364,6 @@ GEM
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
-    rails_best_practices (1.19.0)
-      activesupport
-      code_analyzer (>= 0.4.8)
-      erubis
-      i18n
-      json
-      require_all
-      ruby-progressbar
     rails_serve_static_assets (0.0.5)
     rails_stdout_logging (0.0.5)
     railties (5.1.4)
@@ -395,9 +389,6 @@ GEM
       aws-sdk (~> 2.0)
       refile (~> 0.6.0)
     request_store (1.3.2)
-    require_all (1.4.0)
-    rerun (0.11.0)
-      listen (~> 3.0)
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
@@ -452,7 +443,6 @@ GEM
     selenium-webdriver (3.7.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.0)
-    sexp_processor (4.10.0)
     shellany (0.0.1)
     sidekiq (5.0.5)
       concurrent-ruby (~> 1.0)
@@ -535,6 +525,7 @@ DEPENDENCIES
   better_errors
   brakeman
   capybara
+  citizen-scripts!
   coffee-rails
   compass-rails
   d3-rails (~> 3.5)
@@ -544,7 +535,6 @@ DEPENDENCIES
   easy_shell
   font-awesome-rails
   font_assets
-  foreman
   fortitude
   foundation-icons-sass-rails
   foundation-rails (~> 6.2.4.0)
@@ -576,12 +566,10 @@ DEPENDENCIES
   rails (~> 5.1.4)
   rails-controller-testing
   rails_12factor
-  rails_best_practices
   redcarpet
   refile!
   refile-mini_magick
   refile-s3
-  rerun
   responders
   rspec-rails
   rubocop (~> 0.49.1)
@@ -607,4 +595,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.13.7
+   1.16.0
