@@ -3,7 +3,7 @@ ENV['RAILS_ENV'] ||= 'test'
 
 require 'simplecov'
 SimpleCov.start :rails do
-  SimpleCov.minimum_coverage 96
+  SimpleCov.minimum_coverage 97
   SimpleCov.refuse_coverage_drop
 
   # add_filter == do not track coverage
