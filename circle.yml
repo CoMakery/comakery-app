@@ -5,18 +5,18 @@ machine:
     America/Los_Angeles
 
 dependencies:
+  bundler:
+    without: [development]
+  cache_directories:
+    - /home/ubuntu/.phantomjs
   override:
     - gem update --system
-    - gem update bundler
     - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
     - npm i -g yarn@latest
     - yarn
-  cache_directories:
-    - /home/ubuntu/.phantomjs
 
 database:
   override:
-    - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p  # https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers
     - bundle exec rake db:create db:migrate               # check that migrations run successfully
     - bundle exec rake db:migrate VERSION=20160227015851  # migrate down until irreversible migration
     - git checkout db/schema.rb                           # revert to schema in repo
