@@ -6,8 +6,6 @@ machine:
 
 dependencies:
   override:
-    - gem update --system
-    - gem update bundler
     - bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
   cache_directories:
     - /home/ubuntu/.phantomjs
