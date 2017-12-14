@@ -33,4 +33,4 @@ deployment:
   autodeploy:
     branch: master
     commands:
-      - bundle exec citizen staging $CIRCLE_SHA1
+      - bundle exec citizen deploy staging $CIRCLE_SHA1 comakery
