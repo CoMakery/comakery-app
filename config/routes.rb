@@ -1,14 +1,6 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-
-  namespace :admin do
-    get '/' => 'admin#index'
-    resources :accounts
-    get '/metrics' => 'metrics#index'
-    resources :roles
-  end
-
   get "/account" => "authentications#show", as: "account"
   resource :account, only: [:update]
   resource :authentication, only: [:show]

@@ -22,7 +22,7 @@ SimpleCov.start do
   track_files '{app,lib}/**/*.rb'
 end
 
-SimpleCov.minimum_coverage 88.8
+SimpleCov.minimum_coverage 96
 SimpleCov.refuse_coverage_drop
 
 require 'spec_helper'
