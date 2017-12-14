@@ -29,7 +29,8 @@ class RevenuesController < ApplicationController
   end
 
   def revenue_params
-    params.require(:revenue).permit :amount,
+    params.require(:revenue).permit \
+      :amount,
       :comment,
       :transaction_reference,
       :project_id
