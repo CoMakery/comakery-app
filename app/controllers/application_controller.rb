@@ -70,6 +70,7 @@ class ApplicationController < ActionController::Base
   alias current_user current_account
   helper_method :current_user
 
+  # :nocov:
   def d(the_proc)
     return if Rails.env.test?
     unless the_proc.instance_of?(Proc)
