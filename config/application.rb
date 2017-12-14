@@ -13,8 +13,6 @@ module Comakery
     config.load_defaults '5.1'
     config.active_record.belongs_to_required_by_default = false  # see https://blog.bigbinary.com/2016/02/15/rails-5-makes-belong-to-association-required-by-default.html
 
-    config.active_record.whitelist_attributes = true
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
