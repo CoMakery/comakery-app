@@ -16,6 +16,7 @@ dependencies:
 
 database:
   override:
+    - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p  # https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers
     - bundle exec rake db:create db:migrate               # check that migrations run successfully
     - bundle exec rake db:migrate VERSION=20160227015851  # migrate down until irreversible migration
     - git checkout db/schema.rb                           # revert to schema in repo
