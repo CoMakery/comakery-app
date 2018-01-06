@@ -31,6 +31,7 @@ class Mom
     authentication(defaults.merge(attrs))
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def authentication(**attrs)
     @@authentication_count ||= 0
     @@authentication_count += 1

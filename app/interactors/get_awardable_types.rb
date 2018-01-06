@@ -1,6 +1,7 @@
 class GetAwardableTypes
   include Interactor
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def call
     current_account = context.current_account
     project = context.project

@@ -1,6 +1,7 @@
 class SlackAuthHash
   class MissingAuthParamException < RuntimeError; end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def initialize(auth_hash)
     @auth_hash = auth_hash.to_h
     unless provider && email_address && slack_team_id && slack_team_name && slack_team_image_34_url && slack_team_image_132_url && slack_user_id && slack_user_name && slack_token

@@ -34,6 +34,7 @@ class Comakery::Slack
     )
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def award_notifications_message(award)
     text = ''
 

@@ -17,6 +17,15 @@ AllCops:
   TargetRubyVersion: 2.3
   TargetRailsVersion: 4.2
 
+# Avoid complex methods.
+# Complex methods are hard to test and read.
+# Low cyclomatic complexity is the simplest indication of code quality, readability and maintainability.
+# Bypassing this check should trigger a team discussion
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/views/**/*'
+  Max: 4
+
 Layout/AlignParameters:
   Enabled: true
   EnforcedStyle: with_fixed_indentation

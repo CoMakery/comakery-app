@@ -26,6 +26,7 @@ class Payment < ApplicationRecord
 
   private
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def payee_has_the_awards_they_are_redeeming
     return unless payee.present? && project.present? && quantity_redeemed.present?
     new_amount_redeemed = quantity_redeemed_was.present? ? (quantity_redeemed - quantity_redeemed_was) : quantity_redeemed

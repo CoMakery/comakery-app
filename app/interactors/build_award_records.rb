@@ -1,6 +1,7 @@
 class BuildAwardRecords
   include Interactor
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def call
     slack_user_id = context.slack_user_id
     award_params = context.award_params

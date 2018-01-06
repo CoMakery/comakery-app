@@ -22,6 +22,7 @@ class Comakery::Ethereum
       call_ethereum_bridge('token_issue', params, 'tx')
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity
     def call_ethereum_bridge(path, params, response_key)
       ethereum_bridge = ENV['ETHEREUM_BRIDGE'].presence
       return if ethereum_bridge.nil? && Comakery::Application.config.allow_missing_ethereum_bridge
