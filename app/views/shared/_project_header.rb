@@ -43,13 +43,6 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
             }
           }
 
-          li {
-            a(href: project_licenses_path(project)) {
-              # i(class: "fa fa-gavel")
-              text 'Contribution License'
-            }
-          }
-
           li_if(project.slack_team_domain) {
             a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: '_blank', class: 'text-link') {
               i(class: 'fa fa-slack')

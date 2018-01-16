@@ -69,16 +69,6 @@ describe 'viewing projects, creating and editing', :js do
       expect(page).to have_content 'January 2, 2050'
     end
     within('#award-send') { expect(page).to have_content /award revenue shares/i }
-
-    within('.project-nav') { click_on 'Contribution License' }
-
-    expect(page).to have_content 'Mindful Inc'
-    expect(page).to have_content '7.99999%'
-    expect(page).to have_content 'Maximum Revenue Shares Awarded Per Month: 25,000'
-    expect(page).to have_content 'Maximum Revenue Shares: 100,000'
-    expect(page).to have_content 'Contributions: are exclusive'
-    expect(page).to have_content 'Business Confidentiality: is required'
-    expect(page).to have_content 'January 2, 2050'
   end
 
   it 'setup project with Project Tokens' do
