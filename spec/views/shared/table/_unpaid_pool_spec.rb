@@ -17,7 +17,7 @@ describe 'shared/table/_unpaid_pool.html.rb' do
   end
 
   describe 'USD' do
-    let(:project) { create :project, denomination: 'USD' }
+    let(:project) { create :project, denomination: 'USD', payment_type: :revenue_share }
 
     specify do
       expect(rendered).to have_css('.total-revenue-shared', text: '$0.00')
@@ -33,7 +33,7 @@ describe 'shared/table/_unpaid_pool.html.rb' do
   end
 
   describe 'BTC' do
-    let(:project) { create :project, denomination: 'BTC' }
+    let(:project) { create :project, denomination: 'BTC', payment_type: :revenue_share }
 
     specify do
       expect(rendered).to have_css('.total-revenue-shared', text: '฿0.00')

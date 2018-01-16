@@ -5,7 +5,7 @@ describe 'when recording revenue' do
   let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/owner.jpg') }
   let!(:other_account) { create(:account) }
   let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/other.jpg') }
-  let!(:project) { create(:project, public: true, owner_account: owner, slack_team_id: 'foo', require_confidentiality: false) }
+  let!(:project) { create(:project, public: true, payment_type: 'revenue_share', owner_account: owner, slack_team_id: 'foo', require_confidentiality: false) }
   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000, name: 'Code Contribution') }
 
   before do

@@ -80,9 +80,6 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'Title', with: 'This is a project'
     select 'a-channel-name', from: 'Slack Channel'
 
-    fill_in 'project_royalty_percentage', with: '7.99999'
-    fill_in 'project_maximum_royalties_per_month', with: '25000'
-
     click_on 'Save'
 
     expect(page).to have_content 'Project created'
@@ -90,9 +87,6 @@ describe 'viewing projects, creating and editing', :js do
     expect(page).to have_content 'This is a project description'
     expect(page.find('.project-image')[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
     expect(page).not_to have_link 'Project Tasks'
-
-    expect(page).to have_content 'Maximum Revenue Shares: 20,000,000'
-    expect(page.find('.revenue-percentage')).to have_content '7.99999%'
 
     expect(page).to have_content 'Lead by Glenn Spanky'
     expect(page).to have_content 'Citizen Code'

@@ -124,11 +124,6 @@ module Views
                   label {
                     required_label_text 'Award Payment Type'
                     question_tooltip 'Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project tokens for their work contributions.'
-                    f.select(:payment_type,
-                      [['Revenue Shares', 'revenue_share'],
-                       ['Project Tokens', 'project_token']],
-                      { selected: project.payment_type, include_blank: false },
-                      disabled: project.license_finalized?)
                   }
                 }
                 with_errors(project, :maximum_tokens) {

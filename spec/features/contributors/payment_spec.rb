@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'contributors' do
-  let!(:project) { create(:project, title: 'Project that needs awards', owner_account: owner_account, slack_team_id: 'team id', ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40) }
+  let!(:project) { create(:project, title: 'Project that needs awards', payment_type: 'revenue_share', owner_account: owner_account, slack_team_id: 'team id', ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40) }
   let!(:small_award_type) { create(:award_type, project: project, name: 'Small', amount: 10) }
   let!(:owner_account) { create(:account, email: 'hubert@example.com') }
   let!(:other_account) { create(:account, email: 'sherman@example.com') }

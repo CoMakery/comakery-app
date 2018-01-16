@@ -17,7 +17,7 @@ describe 'shared/table/_unpaid_revenue_shares.html.rb' do
   end
 
   describe 'revenue shares' do
-    let(:project) { create :project, denomination: 'USD' }
+    let(:project) { create :project, denomination: 'USD', payment_type: :revenue_share }
 
     specify do
       expect(rendered).to have_css('.total-awarded', text: '0')

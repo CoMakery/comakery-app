@@ -46,7 +46,7 @@ describe Authentication do
   describe '#percent_unpaid' do
     let!(:auth1) { create :authentication }
     let!(:auth2) { create :authentication }
-    let!(:project) { create :project }
+    let!(:project) { create :project, payment_type: 'revenue_share' }
     let!(:award_type) { create(:award_type, amount: 1, project: project) }
     let!(:revenue) { create :revenue, amount: 1000, project: project }
 
@@ -89,7 +89,7 @@ describe Authentication do
   describe '#total_awards_earned' do
     let!(:contributor) { create(:authentication) }
     let!(:bystander) { create(:authentication) }
-    let!(:project) { create :project }
+    let!(:project) { create :project, payment_type: 'revenue_share'  }
     let!(:award_type) { create(:award_type, amount: 10, project: project) }
     let!(:award1) { create :award, authentication: contributor, award_type: award_type }
     let!(:award2) { create :award, authentication: contributor, award_type: award_type, quantity: 3.5 }
@@ -107,7 +107,7 @@ describe Authentication do
     let!(:issuer) { create(:authentication) }
     let!(:contributor) { create(:authentication) }
     let!(:bystander) { create(:authentication) }
-    let!(:project) { create :project }
+    let!(:project) { create :project, payment_type: 'revenue_share'  }
     let!(:award_type) { create(:award_type, amount: 10, project: project) }
     let!(:revenue) { create :revenue, amount: 1000, project: project }
 
@@ -130,7 +130,7 @@ describe Authentication do
     let!(:issuer) { create(:authentication) }
     let!(:contributor) { create(:authentication) }
     let!(:bystander) { create(:authentication) }
-    let!(:project) { create :project }
+    let!(:project) { create :project, payment_type: 'revenue_share'  }
     let!(:revenue) { create :revenue, amount: 1000, project: project }
     let!(:award_type) { create(:award_type, amount: 10, project: project) }
     let!(:award1) { create :award, authentication: contributor, award_type: award_type }
@@ -150,7 +150,7 @@ describe Authentication do
   describe 'revenue' do
     let!(:contributor) { create(:authentication) }
     let!(:bystander) { create(:authentication) }
-    let!(:project) { create :project, royalty_percentage: 100 }
+    let!(:project) { create :project, royalty_percentage: 100, payment_type: 'revenue_share'  }
     let!(:award_type) { create(:award_type, amount: 1, project: project) }
     let!(:award1) { create :award, authentication: contributor, award_type: award_type, quantity: 50 }
     let!(:award2) { create :award, authentication: contributor, award_type: award_type, quantity: 50 }

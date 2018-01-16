@@ -27,6 +27,8 @@ describe 'shared/_awards.html.rb' do
 
   describe 'awards history' do
     before do
+      project.update(payment_type: :revenue_share)
+
       award1.update(quantity: 2, unit_amount: 5, total_amount: 10)
       render
     end

@@ -74,7 +74,6 @@ class Mom
       slack_team_image_34_url: 'https://slack.example.com/team-image-34-px.jpg',
       slack_team_image_132_url: 'https://slack.example.com/team-image-132-px.jpg',
       owner_account: owner_account,
-      payment_type: 'revenue_share',
       royalty_percentage: 5.9,
       maximum_royalties_per_month: 10_000,
       legal_project_owner: 'UberCatz Inc',

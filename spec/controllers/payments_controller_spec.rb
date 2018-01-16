@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe PaymentsController do
   let!(:account) { create(:account, email: 'account@example.com').tap { |a| create(:authentication, account: a, slack_team_id: 'foo', slack_user_name: 'account', slack_user_id: 'account slack_user_id', slack_team_domain: 'foobar') } }
-  let!(:my_project) { create(:project, title: 'Cats', description: 'Cats with lazers', owner_account: account, slack_team_id: 'foo') }
-  let!(:other_project) { create(:project, title: 'Dogs', description: 'Dogs with harpoons', owner_account: account, slack_team_id: 'bar') }
+  let!(:my_project) { create(:project, payment_type: 'revenue_share', title: 'Cats', description: 'Cats with lazers', owner_account: account, slack_team_id: 'foo') }
+  let!(:other_project) { create(:project, payment_type: 'revenue_share', title: 'Dogs', description: 'Dogs with harpoons', owner_account: account, slack_team_id: 'bar') }
 
   before do
     allow(controller).to receive(:policy_scope).and_call_original

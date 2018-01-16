@@ -40,69 +40,13 @@ describe 'viewing projects, creating and editing', :js do
     travel_back
   end
 
-  it 'calculator should dynamically display royalty schedule' do
-    visit edit_project_path(project)
-
-    # empty %
-    fill_in 'project_royalty_percentage', with: ''
-    within('.royalty-calc tbody') { expect(page).to have_content('$1000 $0') }
-
-    # valid #1
-    fill_in 'project_royalty_percentage', with: '10'
-    fill_in 'project_maximum_tokens', with: '12000'
-    within('.royalty-calc tbody') do
-      expect(page).to have_content('$1000 $100')
-      expect(page).to have_content('$10000 $1000')
-      expect(page).to have_content('$100000 $10000')
-      expect(page).to have_content('$1000000 $100000')
-    end
-
-    # valid #2
-    fill_in 'project_royalty_percentage', with: '5'
-    fill_in 'project_maximum_tokens', with: '24000'
-
-    within('.royalty-calc tbody') do
-      expect(page).to have_content('$1000 $50')
-      expect(page).to have_content('$10000 $500')
-      expect(page).to have_content('$100000 $5000')
-      expect(page).to have_content('$1000000 $50000')
-    end
-
-    # change the currency
-    select 'Bittoken (฿)', from: 'project_denomination'
-
-    within('.royalty-calc tbody') do
-      expect(page).to have_content('฿1000 ฿50')
-      expect(page).to have_content('฿10000 ฿500')
-      expect(page).to have_content('฿100000 ฿5000')
-      expect(page).to have_content('฿1000000 ฿50000')
-    end
-
-    select 'Ether (Ξ)', from: 'project_denomination'
-
-    within('.royalty-calc tbody') do
-      expect(page).to have_content('Ξ1000 Ξ50')
-      expect(page).to have_content('Ξ10000 Ξ500')
-      expect(page).to have_content('Ξ100000 Ξ5000')
-      expect(page).to have_content('Ξ1000000 Ξ50000')
-    end
-  end
-
   describe 'displays alternate text for project tokens' do
     it 'when selecting payment type' do
       visit edit_project_path(project)
-      expect(page).to have_css('.revenue-sharing-terms')
-      expect(page).not_to have_css('.project-token-terms')
-      within('.revenue-sharing-terms .royalty-calc') { expect(page).to have_content(/Revenue.+Shared/) }
-
-      select 'Project Tokens', from: :project_payment_type
       expect(page).not_to have_css('.revenue-sharing-terms')
+
       expect(page).to have_css('.project-token-terms')
       within('.project-token-terms') { expect(page).to have_content('About Project Tokens') }
-
-      select 'Revenue Shares', from: :project_payment_type
-      expect(page).to have_css('.revenue-sharing-terms')
-      expect(page).not_to have_css('.project-token-terms')
     end
 
     it 'when editing an existing project' do

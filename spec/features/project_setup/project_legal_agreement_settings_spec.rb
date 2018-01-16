@@ -38,49 +38,6 @@ describe 'viewing projects, creating and editing', :js do
     travel_back
   end
 
-  it 'setup revenue sharing project with USD' do
-    login(account)
-
-    visit projects_path
-
-    click_link 'New Project'
-    fill_in 'Title', with: 'Mindfulness App'
-    select 'Revenue Shares', from: 'project_payment_type'
-    fill_in 'project_maximum_tokens', with: '100000'
-    fill_in 'Description', with: 'This is a project'
-    select 'a-channel-name', from: 'Slack Channel'
-    fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
-    fill_in 'project_royalty_percentage', with: '7.99999'
-    fill_in 'project_maximum_royalties_per_month', with: '25000'
-    check 'Contributions are exclusive'
-    check 'Require project and business confidentiality'
-    fill_in 'Revenue Sharing End Date', with: '2050/01/02'
-
-    click_on 'Save'
-    expect(page).to have_content 'Project created'
-    expect(page.find('.my-balance')).to have_content '$0.00'
-    within '.project-terms' do
-      expect(page).to have_content 'Mindful Inc'
-      expect(page).to have_content '7.99999%'
-      expect(page).to have_content 'Maximum Revenue Shares Awarded Per Month: 25,000'
-      expect(page).to have_content 'Maximum Revenue Shares: 100,000'
-      expect(page).to have_content 'Contributions: are exclusive'
-      expect(page).to have_content 'Business Confidentiality: is required'
-      expect(page).to have_content 'January 2, 2050'
-    end
-    within('#award-send') { expect(page).to have_content /award revenue shares/i }
-
-    within('.project-nav') { click_on 'Contribution License' }
-
-    expect(page).to have_content 'Mindful Inc'
-    expect(page).to have_content '7.99999%'
-    expect(page).to have_content 'Maximum Revenue Shares Awarded Per Month: 25,000'
-    expect(page).to have_content 'Maximum Revenue Shares: 100,000'
-    expect(page).to have_content 'Contributions: are exclusive'
-    expect(page).to have_content 'Business Confidentiality: is required'
-    expect(page).to have_content 'January 2, 2050'
-  end
-
   it 'setup project with Project Tokens' do
     login(account)
 
@@ -92,7 +49,6 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'Description', with: 'This is a project'
     select 'a-channel-name', from: 'Slack Channel'
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
-    select 'Project Tokens', from: 'project_payment_type'
     check 'Contributions are exclusive'
     check 'Require project and business confidentiality'
 
@@ -128,6 +84,7 @@ describe 'viewing projects, creating and editing', :js do
 
   describe 'denominations shown' do
     before do
+      project.update_attribute(:payment_type, 'revenue_share')
       login(account)
     end
 
@@ -176,7 +133,6 @@ describe 'viewing projects, creating and editing', :js do
       end
 
       it 'hides the awards section when project token is selected' do
-        select 'Project Tokens', from: 'project_payment_type'
         expect_denomination_hidden
       end
     end
@@ -195,8 +151,6 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'Description', with: 'This is a project'
     select 'a-channel-name', from: 'Slack Channel'
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
-    fill_in 'project_royalty_percentage', with: '7.99999'
-    fill_in 'project_maximum_royalties_per_month', with: '25000'
     check 'Contributions are exclusive'
     check 'Require project and business confidentiality'
 
@@ -212,9 +166,6 @@ describe 'viewing projects, creating and editing', :js do
 
     click_on 'Save'
     click_on 'Settings'
-    contract_term_fields.each do |disabled_field_name|
-      expect(page).to have_css("##{disabled_field_name}[disabled]")
-    end
     page.assert_selector('.fa-lock', count: 1)
   end
 

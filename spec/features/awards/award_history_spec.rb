@@ -53,7 +53,7 @@ describe 'viewing projects, creating and editing', :js do
           visit project_path(project)
 
           click_link 'Awards'
-          expect(page).to have_content 'Revenue Shares Awarded'
+          expect(page).to have_content 'Project Tokens Awarded'
         end
 
         it 'paginates when there are lots of awards' do

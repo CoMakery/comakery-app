@@ -51,7 +51,6 @@ describe 'awarding users' do
       visit project_path(project)
 
       expect(page.find('.my-share')).to have_content '0'
-      expect(page.find('.my-balance')).to have_content '$0'
 
       choose 'Small'
       fill_in :award_quantity, with: '1.579'
@@ -75,7 +74,6 @@ describe 'awarding users' do
 
       within('.meter-box') do
         expect(page.find('.my-share')).to have_content '1,579'
-        expect(page.find('.my-balance')).to have_content '$0'
       end
 
       click_link 'Contributors'
@@ -109,7 +107,7 @@ describe 'awarding users' do
 
     expect(page.all('.award-rows .award-row').size).to eq(0)
 
-    expect(page).to have_content('Revenue Shares Awarded')
+    expect(page).to have_content('Project Tokens Awarded')
 
     click_link 'Overview'
 
@@ -138,7 +136,7 @@ describe 'awarding users' do
 
     expect(EthereumTokenIssueJob.jobs.length).to eq(0)
 
-    expect(page).to have_content 'Revenue Shares Awarded'
+    expect(page).to have_content 'Project Tokens Awarded'
     expect(page).to have_content 'Feb 29'
     expect(page).to have_content '1,000'
     expect(page).to have_content '(no account)'

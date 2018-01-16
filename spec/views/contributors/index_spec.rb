@@ -22,6 +22,8 @@ describe 'contributors/index.html.rb' do
   end
 
   describe 'with contributors and revenue shares' do
+    before { project.update(payment_type: :revenue_share) }
+
     it 'shows table with USD' do
       render
       expect(rendered).to have_text('Contributors')
@@ -52,7 +54,6 @@ describe 'contributors/index.html.rb' do
 
   describe 'with contributors and project tokens' do
     it 'shows table without currency values' do
-      project.update(payment_type: :project_token)
       render
 
       expect(rendered).to have_text('Contributors')

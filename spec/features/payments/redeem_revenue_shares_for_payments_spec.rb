@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe 'when redeeming revenue shares for payments' do
@@ -8,11 +10,12 @@ describe 'when redeeming revenue shares for payments' do
 
   let!(:project) do
     create(:project,
-      royalty_percentage: 100,
-      public: true,
-      owner_account: owner,
-      slack_team_id: 'lazercats',
-      require_confidentiality: false)
+           royalty_percentage: 100,
+           public: true,
+           payment_type: 'revenue_share',
+           owner_account: owner,
+           slack_team_id: 'lazercats',
+           require_confidentiality: false)
   end
   let!(:revenue) { create(:revenue, project: project, amount: 1234.5, currency: 'USD') }
 
@@ -180,21 +183,22 @@ describe 'when redeeming revenue shares for payments' do
   describe 'it displays correct currency precision for' do
     let!(:project) do
       create(:project,
-        royalty_percentage: 100,
-        public: true,
-        owner_account: owner,
-        slack_team_id: 'foo',
-        require_confidentiality: false)
+             royalty_percentage: 100,
+             public: true,
+             owner_account: owner,
+             slack_team_id: 'foo',
+             require_confidentiality: false)
     end
 
     describe 'usd' do
       let!(:project) do
         create(:project,
-          royalty_percentage: 100,
-          public: true,
-          owner_account: owner,
-          slack_team_id: 'lazercats',
-          require_confidentiality: false)
+               royalty_percentage: 100,
+               public: true,
+               payment_type: 'revenue_share',
+               owner_account: owner,
+               slack_team_id: 'lazercats',
+               require_confidentiality: false)
       end
 
       specify do
@@ -236,12 +240,13 @@ describe 'when redeeming revenue shares for payments' do
     describe 'btc' do
       let!(:project) do
         create(:project,
-          royalty_percentage: 100,
-          public: true,
-          owner_account: owner,
-          slack_team_id: 'lazercats',
-          require_confidentiality: false,
-          denomination: 'BTC')
+               royalty_percentage: 100,
+               public: true,
+               payment_type: 'revenue_share',
+               owner_account: owner,
+               slack_team_id: 'lazercats',
+               require_confidentiality: false,
+               denomination: 'BTC')
       end
 
       specify do
@@ -280,12 +285,13 @@ describe 'when redeeming revenue shares for payments' do
     describe 'eth' do
       let!(:project) do
         create(:project,
-          royalty_percentage: 100,
-          public: true,
-          owner_account: owner,
-          slack_team_id: 'lazercats',
-          require_confidentiality: false,
-          denomination: 'ETH')
+               royalty_percentage: 100,
+               public: true,
+               payment_type: 'revenue_share',
+               owner_account: owner,
+               slack_team_id: 'lazercats',
+               require_confidentiality: false,
+               denomination: 'ETH')
       end
 
       specify do
