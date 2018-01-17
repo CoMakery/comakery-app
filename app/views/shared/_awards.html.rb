@@ -17,7 +17,7 @@ class Views::Shared::Awards < Views::Base
             th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' }
           end
         }
-        awards.sort_by(&:created_at).reverse.each do |award|
+        awards.each do |award|
           tr(class: 'award-row') {
             td(class: 'small-1 award-type') {
               text project.payment_description

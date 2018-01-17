@@ -5,7 +5,7 @@ class AwardsController < ApplicationController
 
   def index
     authorize @project, :show_contributions?
-    @awards = @project.awards.page(params[:page]).decorate
+    @awards = @project.awards.order(id: :desc).page(params[:page]).decorate
     @award_data = GetAwardData.call(authentication: current_account&.slack_auth, project: @project).award_data
   end
 
