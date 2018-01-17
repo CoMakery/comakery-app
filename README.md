@@ -23,7 +23,7 @@ eg staging and production.
 Prerequisites:
 
 - PostgreSQL
-- Redis is you want to run delayed jobs
+- Redis if you want to run delayed jobs
 
 Set up .env:
 
@@ -66,6 +66,12 @@ To run your tests and git push your branch *only if tests pass*, run `bin/shipit
 Once your heroku user has access to the applications, you can run any of:
 
 ```
+citizen deploy staging master comakery
+citizen deploy production master comakery
+```
+
+**TODO:** Fix bin/deploy which calls citizen. It should take more intuitive arguments and give better instructions.
+```
 bin/deploy staging
 bin/deploy production
 ```
@@ -87,6 +93,64 @@ Username admin, password is in heroku app settings
 On staging and production, we use Heroku Scheduler to run `rails runner bin/patch_ethereum_awards`
 on a daily basis.  This task backfills "pending" ethereum awards, if they are no longer retired by Sidekiq.
 
+## Clear and regenerate dead sidekiq jobs
+
+If you are getting an out of memory error for Redis. The processed queue can take up a lot of memory. It can be cleared with `Sidekiq::Stats.new.reset`
+
+If the queue gets backed up or the regenerate script starts duplicating jobs, you can clear it out the Sidekiq job queue by running:
+
+```
+Sidekiq::Queue.all.each(&:clear)
+Sidekiq::RetrySet.new.clear
+Sidekiq::ScheduledSet.new.clear
+Sidekiq::Stats.new.reset
+Sidekiq::DeadSet.new.clear
+```
+
+You can regenerated the jobs manually with:
+```
+heroku run bundle exec rails runner bin/patch_ethereum_awards --app comakery-staging
+```
+
+## Redis Configuration On Heroku
+
+You can find the configuration details at the Heroku Overview Redis To Go link. Notice that this is **redis to go** and **NOT Heroku Redis**. This means that Heroku Redis commands will not work.
+
+You might get an error like `Redis::CommandError: OOM command not allowed when used memory > 'maxmemory'.`
+
+To remove old keys you can do the following. Use the correct environment for your needs.
+
+```
+heroku addons -a comakery-staging
+```
+
+You will see something like:
+```
+redistogo (redistogo-spherical-15306)          micro        $5/month   created
+ └─ as REDISTOGO
+```
+
+More info with:
+```
+heroku addons:info redistogo-spherical-15306
+```
+
+## Flushing Redis Directly
+
+Hopefully you won't need this...
+
+Consider clearing out the Sidekiq Redis jobs using the `Sidekiq::Queue.all.each(&:clear)` and related Sidekiq methods as described in other sections.
+
+You can connect to Redis To Go CLI with:
+```
+redis-cli -h lab.redistogo.com -p 9968 -a [password]
+```
+
+To flush the old keys
+```
+lab.redistogo.com:9968> flushdb
+```
+
 ## Github Importer
 
 To create an an award for each git commit in a github project, start by running this command:  
@@ -107,7 +171,7 @@ heroku run -r staging "importer/git_importer.rb --github-repo core-network/clien
 
 ## Deleting a project
 
-If you want to completely remove all trace of project `p` (be careful):
+If you want to completely remove all traces of project `p` (be careful):
 
 ```ruby
 p.award_types.each{|t| t.awards.destroy_all}
