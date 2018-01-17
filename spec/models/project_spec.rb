@@ -151,7 +151,7 @@ describe Project do
     end
 
     describe 'payment_type' do
-      let(:project) { create(:project, payment_type: 'revenue_share' ) }
+      let(:project) { create(:project, payment_type: 'revenue_share') }
       let(:order) { %i[revenue_share project_token] }
 
       it 'defaults to revenue_share' do

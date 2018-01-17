@@ -19,7 +19,7 @@ describe Payment do
   end
 
   describe 'validations' do
-    let(:project) { create :project, payment_type: 'revenue_share'  }
+    let(:project) { create :project, payment_type: 'revenue_share' }
     let(:award_type) { create :award_type, amount: 1, project: project }
     let(:payee_auth) { create :authentication }
     let(:payment) { described_class.new(payee: payee_auth, project: project, total_value: 1, share_value: 1, currency: 'USD') }
@@ -264,7 +264,7 @@ describe Payment do
   end
 
   describe 'scopes' do
-    let!(:project) { create :project, royalty_percentage: 100, payment_type: 'revenue_share'  }
+    let!(:project) { create :project, royalty_percentage: 100, payment_type: 'revenue_share' }
     let!(:award_type) { create :award_type, amount: 1, project: project }
     let!(:payee_auth) { create :authentication }
     let!(:award1) do

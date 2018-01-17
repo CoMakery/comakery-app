@@ -81,7 +81,7 @@ module Views
           div(class: 'content-box') {
             full_row {
               div(class: 'legal-box-header') {
-                h3 'Contribution License Terms'
+                h3 'Contribution License Terms (BETA)'
                 i(class: 'fa fa-lock') if project.license_finalized?
               }
             }
@@ -120,12 +120,6 @@ module Views
             }
             row {
               column('large-6 small-12') {
-                with_errors(project, :payment_type) {
-                  label {
-                    required_label_text 'Award Payment Type'
-                    question_tooltip 'Project collaborators to your project will receive royalties denominated in a specific currency or direct payments in project tokens for their work contributions.'
-                  }
-                }
                 with_errors(project, :maximum_tokens) {
                   label {
                     required_label_text 'Total Authorized'
@@ -167,13 +161,14 @@ module Views
                 br
                 ethereum_beta(f)
 
-                with_errors(project, :license_finalized) {
-                  label {
-                    f.check_box :license_finalized, disabled: project.license_finalized?
-                    text 'The Contribution License Revenue Sharing Terms Are Finalized'
-                    div(class: 'help-text') { text "Leave this unchecked if you want to use #{I18n.t('project_name')} for tracking contributions with no legal agreement for sharing revenue." }
-                  }
-                }
+                # # Uncomment this after legal review  of licenses, disclaimers, etc.
+                # with_errors(project, :license_finalized) {
+                #   label {
+                #     f.check_box :license_finalized, disabled: project.license_finalized?
+                #     text 'The Contribution License Revenue Sharing Terms Are Finalized'
+                #     div(class: 'help-text') { text "Leave this unchecked if you want to use #{I18n.t('project_name')} for tracking contributions with no legal agreement for sharing revenue." }
+                #   }
+                # }
               }
 
               column('large-6 small-12') {
@@ -202,7 +197,7 @@ module Views
                     text %(
                         Project Tokens provide open ended and flexible award tracking.
                         They can be used for effort tracking, point systems, blockchain projects, and meta-currencies.
-                        Project Token projects don't currently show the CoMakery Contribution License or pricing information.)
+                        )
                   }
                   p {
                     link_to 'Send us an email', "mailto:#{I18n.t('company_email')}"

@@ -10,12 +10,12 @@ describe 'when reconciling redeemed revenue shares' do
 
   let!(:project) do
     create(:project,
-           royalty_percentage: 100,
-           public: true,
-           owner_account: owner,
-           payment_type: 'revenue_share',
-           slack_team_id: 'lazercats',
-           require_confidentiality: false)
+      royalty_percentage: 100,
+      public: true,
+      owner_account: owner,
+      payment_type: 'revenue_share',
+      slack_team_id: 'lazercats',
+      require_confidentiality: false)
   end
   let!(:revenue) { create(:revenue, project: project, amount: 1234.5, currency: 'USD') }
 

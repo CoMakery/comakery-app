@@ -7,18 +7,18 @@ describe 'precise financial calculations across the integrated revenue sharing c
 
   let!(:owner_auth) do
     create(:authentication,
-           account: owner,
-           slack_team_id: 'foo',
-           slack_image_32_url: 'http://avatar.com/owner.jpg')
+      account: owner,
+      slack_team_id: 'foo',
+      slack_image_32_url: 'http://avatar.com/owner.jpg')
   end
 
   let!(:same_team_account) { create(:account, ethereum_wallet: "0x#{'1' * 40}") }
 
   let!(:same_team_account_auth) do
     create(:authentication,
-           account: same_team_account,
-           slack_team_id: 'lazercats',
-           slack_team_name: 'Lazer Cats')
+      account: same_team_account,
+      slack_team_id: 'lazercats',
+      slack_team_name: 'Lazer Cats')
   end
 
   before do
@@ -62,12 +62,12 @@ describe 'precise financial calculations across the integrated revenue sharing c
   describe 'empty' do
     let!(:project) do
       create(:project,
-             royalty_percentage: BigDecimal('99.999999'),
-             public: true,
-             payment_type: 'revenue_share',
-             owner_account: owner,
-             slack_team_id: 'foo',
-             require_confidentiality: false)
+        royalty_percentage: BigDecimal('99.999999'),
+        public: true,
+        payment_type: 'revenue_share',
+        owner_account: owner,
+        slack_team_id: 'foo',
+        require_confidentiality: false)
     end
 
     it_behaves_like 'check sums'
@@ -76,12 +76,12 @@ describe 'precise financial calculations across the integrated revenue sharing c
   describe 'with revenues, awards, and payments and simple numbers' do
     let!(:project) do
       create(:project,
-             royalty_percentage: BigDecimal('100'),
-             public: true,
-             owner_account: owner,
-             payment_type: 'revenue_share',
-             slack_team_id: 'foo',
-             require_confidentiality: false)
+        royalty_percentage: BigDecimal('100'),
+        public: true,
+        owner_account: owner,
+        payment_type: 'revenue_share',
+        slack_team_id: 'foo',
+        require_confidentiality: false)
     end
 
     let!(:code_award_type) do
@@ -91,14 +91,14 @@ describe 'precise financial calculations across the integrated revenue sharing c
     end
     let!(:same_team_award) do
       code_award_type.awards.create_with_quantity(50,
-                                                  issuer: owner,
-                                                  authentication: same_team_account_auth)
+        issuer: owner,
+        authentication: same_team_account_auth)
     end
 
     let!(:owner_award) do
       code_award_type.awards.create_with_quantity(50,
-                                                  issuer: owner,
-                                                  authentication: owner_auth)
+        issuer: owner,
+        authentication: owner_auth)
     end
 
     let!(:revenues) do
@@ -118,12 +118,12 @@ describe 'precise financial calculations across the integrated revenue sharing c
   describe 'with revenues, awards, and payments and decimal royalties' do
     let!(:project) do
       create(:project,
-             royalty_percentage: BigDecimal('99.99'),
-             public: true,
-             owner_account: owner,
-             payment_type: 'revenue_share',
-             slack_team_id: 'foo',
-             require_confidentiality: false)
+        royalty_percentage: BigDecimal('99.99'),
+        public: true,
+        owner_account: owner,
+        payment_type: 'revenue_share',
+        slack_team_id: 'foo',
+        require_confidentiality: false)
     end
 
     let!(:code_award_type) do
@@ -133,14 +133,14 @@ describe 'precise financial calculations across the integrated revenue sharing c
     end
     let!(:same_team_award) do
       code_award_type.awards.create_with_quantity(50,
-                                                  issuer: owner,
-                                                  authentication: same_team_account_auth)
+        issuer: owner,
+        authentication: same_team_account_auth)
     end
 
     let!(:owner_award) do
       code_award_type.awards.create_with_quantity(50,
-                                                  issuer: owner,
-                                                  authentication: owner_auth)
+        issuer: owner,
+        authentication: owner_auth)
     end
 
     let!(:revenues) do
@@ -171,12 +171,12 @@ describe 'precise financial calculations across the integrated revenue sharing c
   describe 'with 100% royalties' do
     let!(:project) do
       create(:project,
-             royalty_percentage: BigDecimal('100'),
-             public: true,
-             owner_account: owner,
-             payment_type: 'revenue_share',
-             slack_team_id: 'foo',
-             require_confidentiality: false)
+        royalty_percentage: BigDecimal('100'),
+        public: true,
+        owner_account: owner,
+        payment_type: 'revenue_share',
+        slack_team_id: 'foo',
+        require_confidentiality: false)
     end
 
     let!(:code_award_type) do
@@ -186,14 +186,14 @@ describe 'precise financial calculations across the integrated revenue sharing c
     end
     let!(:same_team_award) do
       code_award_type.awards.create_with_quantity(50_000_000,
-                                                  issuer: owner,
-                                                  authentication: same_team_account_auth)
+        issuer: owner,
+        authentication: same_team_account_auth)
     end
 
     let!(:owner_award) do
       code_award_type.awards.create_with_quantity(50_000_000,
-                                                  issuer: owner,
-                                                  authentication: owner_auth)
+        issuer: owner,
+        authentication: owner_auth)
     end
 
     let!(:revenues) do
@@ -214,12 +214,12 @@ describe 'precise financial calculations across the integrated revenue sharing c
 
     let!(:project) do
       create(:project,
-             royalty_percentage: royalty_percentage_with_20_nines,
-             public: true,
-             payment_type: 'revenue_share',
-             owner_account: owner,
-             slack_team_id: 'foo',
-             require_confidentiality: false)
+        royalty_percentage: royalty_percentage_with_20_nines,
+        public: true,
+        payment_type: 'revenue_share',
+        owner_account: owner,
+        slack_team_id: 'foo',
+        require_confidentiality: false)
     end
 
     let!(:code_award_type) do
@@ -229,14 +229,14 @@ describe 'precise financial calculations across the integrated revenue sharing c
     end
     let!(:same_team_award) do
       code_award_type.awards.create_with_quantity(50_000_000,
-                                                  issuer: owner,
-                                                  authentication: same_team_account_auth)
+        issuer: owner,
+        authentication: same_team_account_auth)
     end
 
     let!(:owner_award) do
       code_award_type.awards.create_with_quantity(50_000_000,
-                                                  issuer: owner,
-                                                  authentication: owner_auth)
+        issuer: owner,
+        authentication: owner_auth)
     end
 
     let!(:revenues) do
@@ -246,41 +246,41 @@ describe 'precise financial calculations across the integrated revenue sharing c
     end
 
     it_behaves_like 'precise revenue share value',
-                    quantity_redeemed: 0,
-                    expected_price_per_share: BigDecimal('0.' + ('9' * 8)),
-                    expected_share_of_revenue_unpaid_single_share_value: BigDecimal('0.' + ('9' * 2))
+      quantity_redeemed: 0,
+      expected_price_per_share: BigDecimal('0.' + ('9' * 8)),
+      expected_share_of_revenue_unpaid_single_share_value: BigDecimal('0.' + ('9' * 2))
 
     it_behaves_like 'precise revenue share value',
-                    quantity_redeemed: 7,
-                    expected_price_per_share: 1
+      quantity_redeemed: 7,
+      expected_price_per_share: 1
 
     it_behaves_like 'precise revenue share value',
-                    quantity_redeemed: 13,
-                    expected_price_per_share: 1
+      quantity_redeemed: 13,
+      expected_price_per_share: 1
 
     it_behaves_like 'precise revenue share value',
-                    quantity_redeemed: 25,
-                    expected_price_per_share: 1
+      quantity_redeemed: 25,
+      expected_price_per_share: 1
 
     it_behaves_like 'precise revenue share value',
-                    quantity_redeemed: (13 * 17 * 23),
-                    expected_price_per_share: 1
+      quantity_redeemed: (13 * 17 * 23),
+      expected_price_per_share: 1
 
     it_behaves_like 'precise revenue share value',
-                    quantity_redeemed: 99_999_999,
-                    expected_price_per_share: BigDecimal('0.' + ('9' * 8)),
-                    expected_share_of_revenue_unpaid_single_share_value: 0.99
+      quantity_redeemed: 99_999_999,
+      expected_price_per_share: BigDecimal('0.' + ('9' * 8)),
+      expected_share_of_revenue_unpaid_single_share_value: 0.99
   end
 
   it 'simple awards, revenue, and payments in USD' do
     # 1) create project
     project = create(:project,
-                     royalty_percentage: 100,
-                     public: true,
-                     payment_type: 'revenue_share',
-                     owner_account: owner,
-                     slack_team_id: 'foo',
-                     require_confidentiality: false)
+      royalty_percentage: 100,
+      public: true,
+      payment_type: 'revenue_share',
+      owner_account: owner,
+      slack_team_id: 'foo',
+      require_confidentiality: false)
 
     # project
     expect(project.total_revenue).to eq(0)
@@ -386,12 +386,12 @@ describe 'precise financial calculations across the integrated revenue sharing c
 
     # 1) create project
     project = create(:project,
-                     royalty_percentage: almost_100,
-                     public: true,
-                     owner_account: owner,
-                     payment_type: 'revenue_share',
-                     slack_team_id: 'foo',
-                     require_confidentiality: false)
+      royalty_percentage: almost_100,
+      public: true,
+      owner_account: owner,
+      payment_type: 'revenue_share',
+      slack_team_id: 'foo',
+      require_confidentiality: false)
 
     expect(project.reload.royalty_percentage).to eq(ninety_nine_point_13_nines)
 
