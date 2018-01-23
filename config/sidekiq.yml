@@ -3,4 +3,4 @@
   :concurrency: 1
   :queues:
     - [create_contract, 100]
-    - [transaction, 1]
+    - [transaction, 5]
