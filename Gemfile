@@ -42,7 +42,7 @@ gem 'slack-ruby-client'
 gem 'uglifier'
 gem 'underscore-rails'
 gem 'webpacker'
-
+gem 'figaro'
 group(:scripts) do
   gem 'easy_shell'
   gem 'trollop'
