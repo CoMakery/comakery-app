@@ -1,4 +1,5 @@
 class Account < ApplicationRecord
+  has_secure_password validations: false
   include EthereumAddressable
 
   has_many :account_roles, dependent: :destroy
@@ -8,9 +9,6 @@ class Account < ApplicationRecord
   default_scope { includes(:slack_auth) }
   has_many :account_roles, dependent: :destroy
   has_many :roles, through: :account_roles
-
-  attr_accessor :password, :password_required
-  validates :password, length: { minimum: 8 }, if: :password_required
 
   validates :email, presence: true
 

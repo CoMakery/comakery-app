@@ -42,7 +42,7 @@ gem 'slack-ruby-client'
 gem 'uglifier'
 gem 'underscore-rails'
 gem 'webpacker'
-gem 'devise'
+gem 'bcrypt'
 
 group(:scripts) do
   gem 'easy_shell'
