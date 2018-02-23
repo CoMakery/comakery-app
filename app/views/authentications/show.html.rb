@@ -14,7 +14,7 @@ class Views::Authentications::Show < Views::Base
     div(class: 'ethereum_wallet') {
       div(class: 'hide edit-ethereum-wallet') {
         row {
-          form_for authentication.account, url: '/account' do |f|
+          form_for current_account, url: '/account' do |f|
             with_errors(current_account, :ethereum_wallet) {
               column('small-3') {
                 label(for: :account_ethereum_wallet) {
@@ -42,7 +42,7 @@ class Views::Authentications::Show < Views::Base
           }
           column('small-9') {
             # link_to authentication.account.ethereum_wallet, "https://www.etherchain.org/account/#{authentication.account.ethereum_wallet}", target: "_blank"
-            text authentication.account.ethereum_wallet
+            text current_account.ethereum_wallet
           }
         }
       }
