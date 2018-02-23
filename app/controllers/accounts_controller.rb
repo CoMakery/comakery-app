@@ -1,4 +1,21 @@
 class AccountsController < ApplicationController
+  skip_before_action :require_login, only: [:new, :create]
+  skip_after_action :verify_authorized, :verify_policy_scoped, only: [:new, :create]
+
+  def new
+    @account = Account.new
+  end
+
+  def create
+    @account = Account.new create_params
+    if @account.save
+      session[:account_id] = @account.id
+      redirect_to root_path
+    else
+      render :new
+    end
+  end
+
   def update
     @current_account = current_account
     @current_account.attributes = account_params
@@ -21,5 +38,9 @@ class AccountsController < ApplicationController
 
   def account_params
     params.require(:account).permit(:ethereum_wallet)
+  end
+
+  def create_params
+    params.require(:account).permit(:email, :password)
   end
 end
