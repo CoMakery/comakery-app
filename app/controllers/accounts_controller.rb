@@ -10,6 +10,7 @@ class AccountsController < ApplicationController
     @account = Account.new create_params
     if @account.save
       session[:account_id] = @account.id
+      flash[:notice] = "Create account successfully"
       redirect_to root_path
     else
       render :new
