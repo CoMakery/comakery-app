@@ -6,9 +6,8 @@ describe AccountsController do
   let(:award1) { create(:award, authentication: authentication) }
   let(:award2) { create(:award, authentication: authentication) }
 
-  before { login(account) }
-
   describe '#update' do
+    before { login(account) }
     it 'updates a valid ethereum address successfully' do
       expect(CreateEthereumAwards).to receive(:call).with(awards: array_including(award1, award2))
       expect do
@@ -28,6 +27,65 @@ describe AccountsController do
 
       expect(flash[:error]).to eq("Ethereum wallet should start with '0x', followed by a 40 character ethereum address")
       expect(assigns[:current_account]).to be
+    end
+  end
+
+  describe '#create' do
+    it 'renders errors for invalid password' do
+      expect do
+        post :create, params: {
+          account: {
+            email: 'user@test.st',
+            password: '1'
+          }
+        }
+        expect(response.status).to eq(200)
+      end.to_not change { Account.count }
+      new_account = assigns[:account]
+      expect(new_account.errors.full_messages.first).to eq "Password is too short (minimum is 8 characters)"
+    end
+
+    it 'renders errors if email is blank' do
+      expect do
+        post :create, params: {
+          account: {
+            email: '',
+            password: '1234678'
+          }
+        }
+        expect(response.status).to eq(200)
+      end.to_not change { Account.count }
+      new_account = assigns[:account]
+      expect(new_account.errors.full_messages.first).to eq "Email can't be blank"
+    end
+
+    it 'sign up for new account' do
+      expect do
+        post :create, params: {
+          account: {
+            email: 'user@test.st',
+            password: '12345678'
+          }
+        }
+        expect(response.status).to eq(302)
+        new_account = assigns[:account]
+      end.to change { Account.count }.by(1)
+      expect(response).to redirect_to root_path
+    end
+
+    it 'renders errors if email has already been taken' do
+      Account.create(email: 'user@test.st', password: '12345678')
+      expect do
+        post :create, params: {
+          account: {
+            email: 'user@test.st',
+            password: '12345678'
+          }
+        }
+        expect(response.status).to eq(200)
+      end.to_not change { Account.count }
+      new_account = assigns[:account]
+      expect(new_account.errors.full_messages.first).to eq "Email has already been taken"
     end
   end
 end
