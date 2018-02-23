@@ -61,6 +61,7 @@ class ApplicationController < ActionController::Base
 
   def require_login
     not_authenticated unless session[:account_id]
+    flash[:error] = "Please check your email for confirmation" unless current_account.confirmed?
   end
 
   def current_account

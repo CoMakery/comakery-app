@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :accounts, only: [:new, :create]
   resources :password_resets, only: [:new, :create]
 
+  get "accounts/confirm/:token" => "accounts#confirm"
   get "/auth/slack/callback" => "sessions#create"
   get "/auth/slack" => "sessions#create", as: :login
 

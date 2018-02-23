@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
-  skip_before_action :require_login, only: [:new, :create]
-  skip_after_action :verify_authorized, :verify_policy_scoped, only: [:new, :create]
+  skip_before_action :require_login, only: [:new, :create, :confirm]
+  skip_after_action :verify_authorized, :verify_policy_scoped, only: [:new, :create, :confirm]
 
   def new
     @account = Account.new
@@ -8,13 +8,26 @@ class AccountsController < ApplicationController
 
   def create
     @account = Account.new create_params
+    @account.email_confirm_token = SecureRandom.hex
     if @account.save
       session[:account_id] = @account.id
-      flash[:notice] = "Create account successfully"
+      flash[:notice] = "Create account successfully. Please confirm your email before continue."
       redirect_to root_path
     else
       render :new
     end
+  end
+
+  def confirm
+    account = Account.find_by email_confirm_token: params[:token]
+    if account
+      account.confirm!
+      session[:account_id] = account.id
+      flash[:notice] = "Your email is confirmed successfully."
+    else
+      flash[:error] = "Invalid token"
+    end
+    redirect_to root_path
   end
 
   def update
