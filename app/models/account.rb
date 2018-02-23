@@ -6,6 +6,7 @@ class Account < ApplicationRecord
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :awards, through: :authentications, dependent: :destroy
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
+  has_many :slack_awards, through: :slack_auth, source: :awards
   default_scope { includes(:slack_auth) }
   has_many :account_roles, dependent: :destroy
   has_many :roles, through: :account_roles

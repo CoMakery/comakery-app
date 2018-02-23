@@ -4,6 +4,6 @@ class AuthenticationsController < ApplicationController
   def show
     @current_user = current_user
     @authentication = @current_user.slack_auth
-    @awards = @authentication.awards.includes(award_type: :project).decorate
+    @awards = @current_user.slack_awards.includes(award_type: :project).decorate
   end
 end
