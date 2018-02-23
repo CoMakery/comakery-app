@@ -31,4 +31,12 @@ class Account < ApplicationRecord
   def send_award_notifications(**args)
     slack.send_award_notifications(**args)
   end
+
+  def confirmed?
+    email_confirm_token.nil?
+  end
+
+  def confirm!
+    update_column :email_confirm_token, nil
+  end
 end
