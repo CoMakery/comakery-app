@@ -88,4 +88,19 @@ describe AccountsController do
       expect(new_account.errors.full_messages.first).to eq "Email has already been taken"
     end
   end
+
+  describe '#confirm' do
+    let!(:new_account){create(:account,email: "user@test.st",email_confirm_token: '1234qwer')}
+    it 'render errors for invalid confirmation token' do
+      get :confirm, params: {token: 'invalid token'}
+      expect(new_account.confirmed?).to be false
+      expect(flash[:error]).to eq 'Invalid token'
+    end
+
+    it 'confirm user email with given token' do
+      get :confirm, params: {token: '1234qwer'}
+      expect(new_account.reload.confirmed?).to be true
+      expect(flash[:notice]).to eq 'Your email is confirmed successfully.'
+    end
+  end
 end
