@@ -83,4 +83,13 @@ describe Account do
       expect(subject.slack).to have_received(:send_award_notifications)
     end
   end
+
+  describe 'authorize using password' do
+    it 'should not accept invalid password' do
+      expect(subject.authenticate('notright')).to be false
+    end
+    it 'should return account for valid password' do
+      expect(subject.authenticate('12345678')).to eq subject
+    end
+  end
 end
