@@ -36,6 +36,3 @@ junk.txt
 /public/packs-test
 /node_modules
 /config/database.yml
-
-# Ignore application configuration
-/config/application.yml
