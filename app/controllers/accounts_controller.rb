@@ -9,9 +9,11 @@ class AccountsController < ApplicationController
   def create
     @account = Account.new create_params
     @account.email_confirm_token = SecureRandom.hex
+    @account.password_required = true
     if @account.save
       session[:account_id] = @account.id
       flash[:notice] = "Create account successfully. Please confirm your email before continue."
+      UserMailer.confirm_email(@account).deliver
       redirect_to root_path
     else
       render :new

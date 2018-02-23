@@ -12,6 +12,8 @@ class Account < ApplicationRecord
   has_many :roles, through: :account_roles
 
   validates :email, presence: true, uniqueness: true
+  attr_accessor :password_required
+  validates :password, length: { minimum: 8 }, if: :password_required
 
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
 
