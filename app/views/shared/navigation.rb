@@ -87,7 +87,10 @@ class Views::Shared::Navigation < Views::Base
             }
           else
             li {
-              link_to 'Sign in', login_path
+              link_to 'Sign up', new_account_path
+            }
+            li {
+              link_to 'Sign in', new_session_path
             }
           end
         }
