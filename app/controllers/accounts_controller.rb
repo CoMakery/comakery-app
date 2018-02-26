@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
-  skip_before_action :require_login, only: [:new, :create, :confirm]
-  skip_after_action :verify_authorized, :verify_policy_scoped, only: [:new, :create, :confirm]
+  skip_before_action :require_login, only: %i[new create confirm]
+  skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm]
 
   def new
     @account = Account.new
@@ -12,7 +12,7 @@ class AccountsController < ApplicationController
     @account.password_required = true
     if @account.save
       session[:account_id] = @account.id
-      flash[:notice] = "Create account successfully. Please confirm your email before continue."
+      flash[:notice] = 'Create account successfully. Please confirm your email before continue.'
       UserMailer.confirm_email(@account).deliver
       redirect_to root_path
     else
@@ -25,9 +25,9 @@ class AccountsController < ApplicationController
     if account
       account.confirm!
       session[:account_id] = account.id
-      flash[:notice] = "Your email is confirmed successfully."
+      flash[:notice] = 'Your email is confirmed successfully.'
     else
-      flash[:error] = "Invalid token"
+      flash[:error] = 'Invalid token'
     end
     redirect_to root_path
   end
