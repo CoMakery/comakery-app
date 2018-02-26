@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
 
   def create
     begin
-      @account = Authentication.find_or_create_from_auth_hash!(request.env['omniauth.auth'])
+      @account = Authentication.find_or_create_from_auth_hash!(auth_hash)
       session[:account_id] = @account.id
     rescue SlackAuthHash::MissingAuthParamException => e
       flash[:error] = "Failed authentication - #{e}"
