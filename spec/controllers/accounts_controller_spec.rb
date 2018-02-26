@@ -40,9 +40,9 @@ describe AccountsController do
           }
         }
         expect(response.status).to eq(200)
-      end.to_not change { Account.count }
+      end.not_to change { Account.count }
       new_account = assigns[:account]
-      expect(new_account.errors.full_messages.first).to eq "Password is too short (minimum is 8 characters)"
+      expect(new_account.errors.full_messages.first).to eq 'Password is too short (minimum is 8 characters)'
     end
 
     it 'renders errors if email is blank' do
@@ -54,7 +54,7 @@ describe AccountsController do
           }
         }
         expect(response.status).to eq(200)
-      end.to_not change { Account.count }
+      end.not_to change { Account.count }
       new_account = assigns[:account]
       expect(new_account.errors.full_messages.first).to eq "Email can't be blank"
     end
@@ -68,7 +68,6 @@ describe AccountsController do
           }
         }
         expect(response.status).to eq(302)
-        new_account = assigns[:account]
       end.to change { Account.count }.by(1)
       expect(response).to redirect_to root_path
     end
@@ -83,22 +82,23 @@ describe AccountsController do
           }
         }
         expect(response.status).to eq(200)
-      end.to_not change { Account.count }
+      end.not_to change { Account.count }
       new_account = assigns[:account]
-      expect(new_account.errors.full_messages.first).to eq "Email has already been taken"
+      expect(new_account.errors.full_messages.first).to eq 'Email has already been taken'
     end
   end
 
   describe '#confirm' do
-    let!(:new_account){create(:account,email: "user@test.st",email_confirm_token: '1234qwer')}
+    let!(:new_account) { create(:account, email: 'user@test.st', email_confirm_token: '1234qwer') }
+
     it 'render errors for invalid confirmation token' do
-      get :confirm, params: {token: 'invalid token'}
+      get :confirm, params: { token: 'invalid token' }
       expect(new_account.confirmed?).to be false
       expect(flash[:error]).to eq 'Invalid token'
     end
 
     it 'confirm user email with given token' do
-      get :confirm, params: {token: '1234qwer'}
+      get :confirm, params: { token: '1234qwer' }
       expect(new_account.reload.confirmed?).to be true
       expect(flash[:notice]).to eq 'Your email is confirmed successfully.'
     end

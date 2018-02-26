@@ -85,10 +85,10 @@ describe Account do
   end
 
   describe 'authorize using password' do
-    it 'should not accept invalid password' do
+    it 'does not accept invalid password' do
       expect(subject.authenticate('notright')).to be false
     end
-    it 'should return account for valid password' do
+    it 'returns account for valid password' do
       expect(subject.authenticate('12345678')).to eq subject
     end
   end

@@ -22,10 +22,10 @@ class SessionsController < ApplicationController
     @account = Account.find_by email: params[:email]
     if @account && @account.authenticate(params[:password])
       session[:account_id] = @account.id
-      flash[:notice] = "Successful sign in"
+      flash[:notice] = 'Successful sign in'
       redirect_to root_path
     else
-      flash[:error] = "Invalid email or password"
+      flash[:error] = 'Invalid email or password'
       redirect_to new_session_path
     end
   end

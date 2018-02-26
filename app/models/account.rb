@@ -40,6 +40,6 @@ class Account < ApplicationRecord
   end
 
   def confirm!
-    update_column :email_confirm_token, nil
+    update email_confirm_token: nil
   end
 end
