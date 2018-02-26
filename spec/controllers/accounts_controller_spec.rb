@@ -30,6 +30,13 @@ describe AccountsController do
     end
   end
 
+  describe '#new' do
+    it 'redirect to signup page' do
+      get :new
+      expect(response.status).to eq 200
+    end
+  end
+
   describe '#create' do
     it 'renders errors for invalid password' do
       expect do
