@@ -35,6 +35,11 @@ class Account < ApplicationRecord
     slack.send_award_notifications(**args)
   end
 
+  def email_award_notifications(award)
+    message = slack.award_notifications_message(award)
+    UserMailer.send_award_notifications(email, message).deliver_now
+  end
+
   def confirmed?
     email_confirm_token.nil?
   end
