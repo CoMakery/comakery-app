@@ -94,9 +94,10 @@ describe Account do
   end
 
   describe '#email_award_notifications' do
-    let!(:auth){ create(:authentication, provider: 'slack', account: subject)}
+    let!(:auth) { create(:authentication, provider: 'slack', account: subject) }
     let(:project) { create(:project, owner_account: subject, slack_team_id: 'foo', public: false, maximum_tokens: 100_000_000) }
     let!(:award) { create(:award, award_type: create(:award_type, project: project), authentication: auth, issuer: subject) }
+
     it 'sends a Slack notification' do
       expect do
         subject.email_award_notifications award
