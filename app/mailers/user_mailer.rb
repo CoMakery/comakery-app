@@ -5,5 +5,8 @@ class UserMailer < ApplicationMailer
     mail to: account.email, subject: 'Confirm your account email'
   end
 
-  def send_award_notifications(award); end
+  def send_award_notifications(email, message)
+    @message = message
+    mail to: email, subject: 'you have received an award from Comakery'
+  end
 end

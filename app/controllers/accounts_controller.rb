@@ -13,7 +13,7 @@ class AccountsController < ApplicationController
     if @account.save
       session[:account_id] = @account.id
       flash[:notice] = 'Create account successfully. Please confirm your email before continue.'
-      UserMailer.confirm_email(@account).deliver
+      UserMailer.confirm_email(@account).deliver_now
       redirect_to root_path
     else
       render :new
