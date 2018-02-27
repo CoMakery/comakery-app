@@ -12,7 +12,7 @@ class AccountsController < ApplicationController
     @account.password_required = true
     if @account.save
       session[:account_id] = @account.id
-      flash[:notice] = 'Create account successfully. Please confirm your email before continue.'
+      flash[:notice] = 'Created account successfully. Please confirm your email before continuing.'
       UserMailer.confirm_email(@account).deliver_now
       redirect_to root_path
     else
@@ -25,7 +25,7 @@ class AccountsController < ApplicationController
     if account
       account.confirm!
       session[:account_id] = account.id
-      flash[:notice] = 'Your email is confirmed successfully.'
+      flash[:notice] = 'Success! Your email is confirmed.'
     else
       flash[:error] = 'Invalid token'
     end
