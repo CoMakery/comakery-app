@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resource :account, only: [:update]
   resource :authentication, only: [:show]
   resources :accounts, only: [:new, :create]
-  resources :password_resets, only: [:new, :create]
+  resources :password_resets, only: [:new, :create, :edit, :update]
 
   get "accounts/confirm/:token" => "accounts#confirm"
   get "/auth/slack/callback" => "sessions#create"

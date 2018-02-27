@@ -42,4 +42,9 @@ class Account < ApplicationRecord
   def confirm!
     update email_confirm_token: nil
   end
+
+  def send_reset_password_request
+    update reset_password_token: SecureRandom.hex
+    UserMailer.reset_password(self).deliver_now
+  end
 end
