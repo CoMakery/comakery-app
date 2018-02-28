@@ -3,31 +3,17 @@ class Views::Accounts::Show < Views::Base
 
   def content
     p {
-      text 'You can download an Ethereum wallet from '
-      link_to('Ethereum.org', 'http://www.ethereum.org', target: '_blank')
-      text ' to create an account. Enter your Ethereum account address below. '
-      text 'Then you will receive your awards in your Ethereum account!'
-    }
-    p {
       link_to('Get a wallet now', 'http://www.ethereum.org', target: '_blank', class: buttonish)
     }
     div(class: 'ethereum_wallet') {
       div(class: 'hide edit-ethereum-wallet') {
+        h4(style: 'border: none;'){
+          text 'Account Detail ('
+          a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Cancel' }
+          text ')'
+        }
         row {
           form_for current_account, url: '/account' do |f|
-            column('small-3') {
-              label(for: :account_ethereum_wallet) {
-                text 'Ethereum Address ('
-                a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Cancel' }
-                text ')'
-              }
-            }
-            column('small-9') {
-              with_errors(current_account, :ethereum_wallet) {
-                f.text_field :ethereum_wallet
-              }
-            }
-
             column('small-3') {
               label(for: :first_name) {
                 text 'First Name'
@@ -51,6 +37,17 @@ class Views::Accounts::Show < Views::Base
             }
 
             column('small-3') {
+              label(for: :account_ethereum_wallet) {
+                text 'Ethereum Address'
+              }
+            }
+            column('small-9') {
+              with_errors(current_account, :ethereum_wallet) {
+                f.text_field :ethereum_wallet
+              }
+            }
+
+            column('small-3') {
               label(for: :image) {
                 text 'Image'
               }
@@ -68,16 +65,10 @@ class Views::Accounts::Show < Views::Base
         }
       }
       div(class: 'view-ethereum-wallet') {
-        row {
-          column('small-3') {
-            text 'Ethereum Address ('
-            a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Edit' }
-            text ')'
-          }
-          column('small-9') {
-            # link_to authentication.account.ethereum_wallet, "https://www.etherchain.org/account/#{authentication.account.ethereum_wallet}", target: "_blank"
-            text current_account.ethereum_wallet
-          }
+        h4(style: 'border: none;') {
+          text 'Account Detail ('
+          a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Edit' }
+          text ')'
         }
         row {
           column('small-3') {
@@ -93,6 +84,14 @@ class Views::Accounts::Show < Views::Base
           }
           column('small-9') {
             text current_account.last_name
+          }
+        }
+        row {
+          column('small-3') {
+            text 'Ethereum Address'
+          }
+          column('small-9') {
+            text current_account.ethereum_wallet
           }
         }
         row {
