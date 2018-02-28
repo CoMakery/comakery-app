@@ -16,7 +16,7 @@ describe AccountsController do
       end.to change { account.reload.ethereum_wallet }.from(nil).to("0x#{'a' * 40}")
 
       expect(response).to redirect_to account_url
-      expect(flash[:notice]).to eq('Ethereum account updated. If this is an unused account the address will not be visible on the Ethereum blockchain until it is part of a transaction.')
+      expect(flash[:notice]).to eq('Your account details have been updated.')
     end
 
     it 'renders errors for an invalid ethereum address' do
@@ -107,7 +107,7 @@ describe AccountsController do
     it 'confirm user email with given token' do
       get :confirm, params: { token: '1234qwer' }
       expect(new_account.reload.confirmed?).to be true
-      expect(flash[:notice]).to eq 'Your email is confirmed successfully.'
+      expect(flash[:notice]).to eq 'Success! Your email is confirmed.'
     end
   end
 end

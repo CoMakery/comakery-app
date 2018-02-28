@@ -52,7 +52,7 @@ feature 'my account' do
       click_on 'Save'
     end
 
-    expect(page).to have_content 'Ethereum account updated'
+    expect(page).to have_content 'Your account details have been updated.'
     expect(page).to have_content "0x#{'a' * 40}"
   end
 

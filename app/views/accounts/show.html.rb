@@ -7,7 +7,7 @@ class Views::Accounts::Show < Views::Base
     }
     div(class: 'ethereum_wallet') {
       div(class: 'hide edit-ethereum-wallet') {
-        h4(style: 'border: none;'){
+        h4(style: 'border: none;') {
           text 'Account Detail ('
           a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Cancel' }
           text ')'
