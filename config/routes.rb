@@ -1,12 +1,12 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  get "/account" => "authentications#show", as: "account"
   resource :account, only: [:update]
   resource :authentication, only: [:show]
-  resources :accounts, only: [:new, :create]
+  resources :accounts, only: [:new, :create, :show]
   resources :password_resets, only: [:new, :create, :edit, :update]
 
+  get '/account' => "accounts#show"
   get "accounts/confirm/:token" => "accounts#confirm"
   get "/auth/slack/callback" => "sessions#create"
   get "/auth/slack" => "sessions#create", as: :login
