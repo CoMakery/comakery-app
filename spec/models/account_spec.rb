@@ -31,7 +31,7 @@ describe Account do
   end
 
   it 'enforces unique emails, case-insensitively' do
-    alice1 = create :account, email: 'alice@example.com'
+    create :account, email: 'alice@example.com'
     expect { create :account, email: 'Alice@example.com' }.to raise_error(ActiveRecord::RecordNotUnique)
   end
 
