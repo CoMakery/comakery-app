@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180228032644) do
+ActiveRecord::Schema.define(version: 20180228061341) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20180228032644) do
     t.datetime "updated_at", null: false
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
+    t.boolean "disabled"
     t.index ["project_id"], name: "index_award_types_on_project_id"
   end
 
