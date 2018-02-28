@@ -5,7 +5,7 @@ class GetAwardableAuthentications
     current_account = context.current_account
     project = context.project
 
-    unless current_account
+    unless current_account && current_account.slack_auth
       context.awardable_authentications = []
       return
     end
