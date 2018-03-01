@@ -1,5 +1,5 @@
 require 'rails_helper'
-require "refile/file_double"
+require 'refile/file_double'
 feature 'my account' do
   let!(:project) { create(:sb_project, ethereum_enabled: true) }
   let!(:auth) { create(:sb_authentication) }
@@ -73,7 +73,7 @@ feature 'my account' do
 
   scenario 'show account image' do
     account = auth.account
-    account.image = Refile::FileDouble.new("dummy", "avatar.png", content_type: "image/png")
+    account.image = Refile::FileDouble.new('dummy', 'avatar.png', content_type: 'image/png')
     account.save
     login(account)
     visit root_path
@@ -82,11 +82,11 @@ feature 'my account' do
 
   scenario 'show account name' do
     account = auth.account
-    account.first_name = "Tester"
-    account.last_name = "User"
+    account.first_name = 'Tester'
+    account.last_name = 'User'
     account.save
     login(account)
     visit root_path
-    expect(page).to have_content("Tester User")
+    expect(page).to have_content('Tester User')
   end
 end
