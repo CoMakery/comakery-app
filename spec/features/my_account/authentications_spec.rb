@@ -79,4 +79,14 @@ feature 'my account' do
     visit root_path
     expect(page).to have_css("img[src*='avatar.png']")
   end
+
+  scenario 'show account name' do
+    account = auth.account
+    account.first_name = "Tester"
+    account.last_name = "User"
+    account.save
+    login(account)
+    visit root_path
+    expect(page).to have_content("Tester User")
+  end
 end
