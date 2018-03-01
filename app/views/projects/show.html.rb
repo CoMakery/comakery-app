@@ -23,8 +23,8 @@ class Views::Projects::Show < Views::Projects::Base
           }
         }
       }
-      row{
-        column('medium-12'){
+      row {
+        column('medium-12') {
           h4 'Award Links'
           table(class: 'award-rows') {
             tr(class: 'header-row') {
@@ -49,7 +49,7 @@ class Views::Projects::Show < Views::Projects::Base
                   text award_link.quantity
                 }
                 td(class: 'small-2') {
-                  text raw award_link.created_at.strftime('%b %d, %Y').gsub(' ', '&nbsp;')
+                  text award_link.created_at.strftime('%b %d, %Y').gsub(' ', '&nbsp;')
                 }
                 td(class: 'small-1') {
                   text award_link.status

@@ -61,7 +61,7 @@ class Views::Projects::AwardSend < Views::Base
               column('small-4') {
                 br
                 check_box_tag :send_link, 1
-                label(for: 'send_link') {text "Send Link"}
+                label(for: 'send_link') { text 'Send Link' }
               }
               column('small-8') {
                 label(class: 'select-user') {
