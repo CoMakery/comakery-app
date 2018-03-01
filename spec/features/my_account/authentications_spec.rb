@@ -1,5 +1,5 @@
 require 'rails_helper'
-
+require "refile/file_double"
 feature 'my account' do
   let!(:project) { create(:sb_project, ethereum_enabled: true) }
   let!(:auth) { create(:sb_authentication) }
@@ -69,5 +69,14 @@ feature 'my account' do
 
     expect(EthereumTokenIssueJob.jobs.map { |job| job['args'] }.flatten).to \
       match_array([award2.id, award1.id])
+  end
+
+  scenario 'show account image' do
+    account = auth.account
+    account.image = Refile::FileDouble.new("dummy", "avatar.png", content_type: "image/png")
+    account.save
+    login(account)
+    visit root_path
+    expect(page).to have_css("img[src*='avatar.png']")
   end
 end
