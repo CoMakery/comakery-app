@@ -73,7 +73,9 @@ class Views::Shared::Navigation < Views::Base
           li(class: 'slack-instance') {
             if current_account
               div(class: 'top-bar-text') {
-                img(src: account_image(current_account, 34), class: 'project-icon')
+                if account_image(current_account, 34)
+                  img(src: account_image(current_account, 34), class: 'project-icon')
+                end
                 text current_account.name
               }
             end

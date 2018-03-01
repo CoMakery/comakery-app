@@ -99,7 +99,9 @@ class Views::Accounts::Show < Views::Base
             text 'Image'
           }
           column('small-9') {
-            image_tag attachment_url(current_account, :image, :fill, 300, 300)
+            if current_account.image.present?
+              image_tag attachment_url(current_account, :image, :fill, 300, 300)
+            end
           }
         }
       }
