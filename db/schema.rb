@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180301022608) do
+ActiveRecord::Schema.define(version: 20180301075212) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,16 @@ ActiveRecord::Schema.define(version: 20180301022608) do
     t.index ["account_id"], name: "index_authentications_on_account_id"
     t.index ["slack_team_id"], name: "index_authentications_on_slack_team_id"
     t.index ["slack_user_id"], name: "index_authentications_on_slack_user_id"
+  end
+
+  create_table "award_links", force: :cascade do |t|
+    t.integer "award_type_id"
+    t.decimal "quantity"
+    t.text "description"
+    t.string "status", default: "available"
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "award_types", id: :serial, force: :cascade do |t|

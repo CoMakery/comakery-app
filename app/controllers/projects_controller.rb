@@ -76,6 +76,7 @@ class ProjectsController < ApplicationController
     @awardable_types = awardable_types_result.awardable_types
     @can_award = awardable_types_result.can_award
     @award_data = GetAwardData.call(authentication: current_account&.slack_auth, project: @project).award_data
+    @award_links = @project.award_links
   end
 
   def edit

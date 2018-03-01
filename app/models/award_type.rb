@@ -11,7 +11,7 @@ class AwardType < ApplicationRecord
              authentication: authentication
     end
   end
-
+  has_many :award_links, dependent: :destroy
   validates :project, :name, :amount, presence: true
   validate :amount_didnt_change?, unless: :modifiable?
   validates :amount, numericality: { greater_than: 0 }

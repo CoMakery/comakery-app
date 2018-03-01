@@ -10,22 +10,34 @@ class AwardsController < ApplicationController
   end
 
   def create
-    result = AwardSlackUser.call(project: @project,
-                                 slack_user_id: params[:award][:slack_user_id],
-                                 issuer: current_account,
-                                 award_params: award_params.except(:slack_user_id))
-    if result.success?
-      award = result.award
-      authorize award
-      award.save!
-      CreateEthereumAwards.call(award: award)
-
-      current_account.send_award_notifications(award: award)
-
-      flash[:notice] = "Successfully sent award to #{award.recipient_display_name}"
-      redirect_to project_path(award.project)
+    if params[:send_link]
+      award_link = AwardLink.new award_params.except(:slack_user_id, :page)
+      award_link.token = SecureRandom.hex
+      if award_link.save
+        flash[:notice] = "Successfully generate an award link. #{award_link.link}"
+        skip_authorization
+        redirect_to project_path(@project)
+      else
+        fail_and_redirect(award_link.errors.full_messages.join(" "))
+      end
     else
-      fail_and_redirect(result.message)
+      result = AwardSlackUser.call(project: @project,
+                                   slack_user_id: params[:award][:slack_user_id],
+                                   issuer: current_account,
+                                   award_params: award_params.except(:slack_user_id))
+      if result.success?
+        award = result.award
+        authorize award
+        award.save!
+        CreateEthereumAwards.call(award: award)
+
+        current_account.send_award_notifications(award: award)
+
+        flash[:notice] = "Successfully sent award to #{award.recipient_display_name}"
+        redirect_to project_path(award.project)
+      else
+        fail_and_redirect(result.message)
+      end
     end
   rescue Pundit::NotAuthorizedError
     fail_and_redirect('Not authorized')
@@ -50,4 +62,5 @@ class AwardsController < ApplicationController
   def assign_current_auth
     @current_auth = current_account&.slack_auth&.decorate
   end
+
 end

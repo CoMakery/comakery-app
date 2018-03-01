@@ -14,7 +14,7 @@ class Project < ApplicationRecord
   accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
 
   has_many :awards, through: :award_types, dependent: :destroy
-
+  has_many :award_links, through: :award_types
   has_many :payments, dependent: :destroy do
     def new_with_quantity(quantity_redeemed:, payee_auth:)
       project = @association.owner

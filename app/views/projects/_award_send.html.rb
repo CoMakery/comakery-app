@@ -58,8 +58,13 @@ class Views::Projects::AwardSend < Views::Base
               }
             }
             row {
+              column('small-4') {
+                br
+                check_box_tag :send_link, 1
+                label(for: 'send_link') {text "Send Link"}
+              }
               column('small-8') {
-                label {
+                label(class: 'select-user') {
                   text 'User'
                   options = capture do
                     options_for_select([[nil, nil]].concat(awardable_authentications))
@@ -68,6 +73,7 @@ class Views::Projects::AwardSend < Views::Base
                 }
               }
             }
+
             row {
               column('small-12') {
                 with_errors(project, :description) {
