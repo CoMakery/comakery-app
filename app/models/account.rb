@@ -1,5 +1,6 @@
 class Account < ApplicationRecord
   has_secure_password validations: false
+  attachment :image
   include EthereumAddressable
 
   has_many :account_roles, dependent: :destroy
@@ -41,6 +42,22 @@ class Account < ApplicationRecord
 
   def confirm!
     update email_confirm_token: nil
+  end
+
+  def nav_image
+    if image.present?
+      attachment_url(self, :image, :fill, 34, 34)
+    elsif slack_auth
+      slack_auth.slack_team_image_34_url
+    end
+  end
+
+  def name
+    if first_name.blank? && last_name.blank?
+      slack_auth&.slack_team_name
+    else
+      [first_name, last_name].reject(&:blank?).join(' ')
+    end
   end
 
   def send_reset_password_request

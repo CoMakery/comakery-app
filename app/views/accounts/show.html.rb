@@ -54,7 +54,7 @@ class Views::Accounts::Show < Views::Base
             }
             column('small-9') {
               with_errors(current_account, :image) {
-                f.text_field :image
+                f.file_field :image
               }
             }
 
@@ -99,7 +99,7 @@ class Views::Accounts::Show < Views::Base
             text 'Image'
           }
           column('small-9') {
-            text current_account.image
+            image_tag attachment_url(current_account, :image, :fill, 300, 300)
           }
         }
       }

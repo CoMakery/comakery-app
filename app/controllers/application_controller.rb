@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
   layout 'raw'
-
   include Pundit
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index

@@ -71,10 +71,10 @@ class Views::Shared::Navigation < Views::Base
           social_media_links
 
           li(class: 'slack-instance') {
-            if current_account&.slack_auth
+            if current_account
               div(class: 'top-bar-text') {
-                img(src: current_account.slack_auth.slack_team_image_34_url, class: 'project-icon')
-                text current_account.slack_auth.slack_team_name
+                img(src: account_image(current_account, 34), class: 'project-icon')
+                text current_account.name
               }
             end
           }
