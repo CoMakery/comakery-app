@@ -47,20 +47,24 @@ class AccountsController < ApplicationController
 
   def receive_award
     award_link = AwardLink.find_by token: params[:token]
-    if award_link
+    if award_link && award_link.available?
       owner = award_link.owner
       award_params = { award_type_id: award_link.award_type_id, quantity: award_link.quantity, description: award_link.description }
       result = AwardSlackUser.call(project: award_link.award_type.project,
-                                   slack_user_id: current_account.slack_auth.slack_user_id,
+                                   slack_user_id: current_account.slack_auth&.slack_user_id,
                                    issuer: owner,
                                    award_params: award_params)
       if result.success?
         award = result.award
         award.save
+        award_link.update status: 'received'
         CreateEthereumAwards.call(award: award)
         owner.send_award_notifications(award: award)
         flash[:notice] = 'Successfully receive award to your account.'
         redirect_to account_path
+      else
+        flash[:error] = result.message
+        redirect_to root_path
       end
     else
       flash[:error] = 'Invalid award token.'

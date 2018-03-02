@@ -6,4 +6,14 @@ class AwardLink < ApplicationRecord
   def link
     "#{ActionMailer::Base.asset_host}/receive_award/#{token}"
   end
+
+  def display_status
+    return 'received' if status == 'received'
+    return 'expired' if created_at < Time.zone.today - 7.days
+    status
+  end
+
+  def available?
+    display_status == 'available'
+  end
 end

@@ -114,6 +114,7 @@ describe AccountsController do
   describe '#get_awards' do
     let!(:issuer) { create(:account, email: 'issuer@example.com').tap { |a| create(:authentication, slack_team_id: 'foo', account: a, slack_user_id: 'issuer id') } }
     let!(:receiver) { create(:account, email: 'receiver@example.com').tap { |a| create(:authentication, slack_team_id: 'foo', account: a, slack_user_id: 'issuer id') } }
+    let!(:receiver1) { create(:account, email: 'receiver1@example.com') }
 
     let!(:receiver_authentication) { create(:authentication, slack_first_name: 'Rece', slack_last_name: 'Iver', slack_team_id: 'foo', slack_user_name: 'receiver', slack_user_id: 'receiver id', account: create(:account, email: 'receiver2@example.com')) }
 
@@ -121,27 +122,56 @@ describe AccountsController do
     let!(:award_type) { create(:award_type, project: project) }
     let!(:award_link) { create(:award_link, quantity: 1, award_type: award_type, token: '12345') }
 
-    before do
-      login(receiver)
+    context "don't have slack" do
+      before do
+        login(receiver1)
+      end
+
+      it 'render error for invalid token' do
+        expect do
+          get :receive_award, params: { token: 'invalid token' }
+        end.not_to change { receiver1.awards.count }
+        expect(flash[:error]).to eq 'Invalid award token.'
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'render error for account without slack' do
+        receiver1.authentications.destroy_all
+        allow(AwardLink).to receive(:find_by).and_return(award_link)
+        allow(award_link).to receive(:owner).and_return(issuer)
+        allow(issuer).to receive(:send_award_notifications)
+        expect do
+          get :receive_award, params: { token: '12345' }
+        end.not_to change { receiver1.awards.count }
+        expect(flash[:error]).to eq 'missing slack_user_id'
+        expect(response).to redirect_to(root_path)
+      end
     end
 
-    it 'render error for invalid token' do
-      expect do
-        get :receive_award, params: { token: 'invalid token' }
-      end.not_to change { receiver.awards.count }
-      expect(flash[:error]).to eq 'Invalid award token.'
-      expect(response).to redirect_to(root_path)
-    end
+    context 'have slact authentication' do
+      before do
+        login(receiver)
+      end
 
-    it 'create award for account' do
-      allow(AwardLink).to receive(:find_by).and_return(award_link)
-      allow(award_link).to receive(:owner).and_return(issuer)
-      allow(issuer).to receive(:send_award_notifications)
-      expect do
-        get :receive_award, params: { token: '12345' }
-      end.to change { receiver.awards.count }.by(1)
-      expect(flash[:notice]).to eq 'Successfully receive award to your account.'
-      expect(response).to redirect_to(account_path)
+      it 'render error for invalid token' do
+        expect do
+          get :receive_award, params: { token: 'invalid token' }
+        end.not_to change { receiver.awards.count }
+        expect(flash[:error]).to eq 'Invalid award token.'
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'create award for account' do
+        allow(AwardLink).to receive(:find_by).and_return(award_link)
+        allow(award_link).to receive(:owner).and_return(issuer)
+        allow(issuer).to receive(:send_award_notifications)
+        expect do
+          get :receive_award, params: { token: '12345' }
+        end.to change { receiver.awards.count }.by(1)
+        expect(award_link.reload.display_status).to eq 'received'
+        expect(flash[:notice]).to eq 'Successfully receive award to your account.'
+        expect(response).to redirect_to(account_path)
+      end
     end
   end
 end
