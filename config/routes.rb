@@ -11,6 +11,9 @@ Rails.application.routes.draw do
   get "/auth/slack/callback" => "sessions#create"
   get "/auth/slack" => "sessions#create", as: :login
 
+  get "/auth/discord/callback" => "sessions#create"
+  get "/auth/discord" => "sessions#create", as: :login_discord
+
   get '/logout', to: "sessions#destroy"
 
   root 'projects#landing'
