@@ -18,80 +18,86 @@ class Views::Projects::AwardSend < Views::Base
         text 'for calculating Contributor Royalties.'
       }
       br
-      form_for [project, award] do |f|
-        div(class: 'award-types') {
-          project.award_types.order('amount asc').decorate.each do |award_type|
-            row(class: 'award-type-row') {
-              column('small-12') {
-                with_errors(project, :account_id) {
-                  label {
-                    row {
-                      if can_award
-                        column('small-1') {
-                          f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
-                        }
-                      end
-                      column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : 'small-12') {
-                        row {
-                          span(award_type.name)
-                          span(class: ' financial') {
-                            text " (#{award_type.amount_pretty})"
+      if project.max_award_used?
+        h4 { text "You can't send more awards than the project's maximum number of allowable tokens" }
+      elsif project.month_award_used?
+        h4 { text "You can't send more awards this month than the project's maximum number of allowable tokens per month" }
+      else
+        form_for [project, award] do |f|
+          div(class: 'award-types') {
+            project.award_types.order('amount asc').decorate.each do |award_type|
+              row(class: 'award-type-row') {
+                column('small-12') {
+                  with_errors(project, :account_id) {
+                    label {
+                      row {
+                        if can_award
+                          column('small-1') {
+                            f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
                           }
-                          text ' (Community Awardable)' if award_type.community_awardable?
-                          br
-                          span(class: 'help-text') { text raw(award_type.description_markdown) }
+                        end
+                        column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : 'small-12') {
+                          row {
+                            span(award_type.name)
+                            span(class: ' financial') {
+                              text " (#{award_type.amount_pretty})"
+                            }
+                            text ' (Community Awardable)' if award_type.community_awardable?
+                            br
+                            span(class: 'help-text') { text raw(award_type.description_markdown) }
+                          }
                         }
                       }
                     }
                   }
                 }
               }
-            }
-          end
-          if can_award
-            row {
-              column('small-2') {
-                label {
-                  text 'Quantity'
-                  f.text_field(:quantity, type: :text, default: 1, class: 'financial')
-                }
-              }
-            }
-            row {
-              column('small-4') {
-                br
-                check_box_tag :send_link, 1
-                label(for: 'send_link') { text 'Send Link' }
-              }
-              column('small-8') {
-                label(class: 'select-user') {
-                  text 'User'
-                  options = capture do
-                    options_for_select([[nil, nil]].concat(awardable_authentications))
-                  end
-                  select_tag 'award[slack_user_id]', options, html: { id: 'award_slack_user_id' }
-                }
-              }
-            }
-
-            row {
-              column('small-12') {
-                with_errors(project, :description) {
+            end
+            if can_award
+              row {
+                column('small-2') {
                   label {
-                    text 'Description'
-                    f.text_area(:description)
-                    link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text')
+                    text 'Quantity'
+                    f.text_field(:quantity, type: :text, default: 1, class: 'financial')
                   }
                 }
               }
-            }
-            row {
-              column('small-12') {
-                f.submit('Send Award', class: buttonish)
+              row {
+                column('small-4') {
+                  br
+                  check_box_tag :send_link, 1
+                  label(for: 'send_link') { text 'Send Link' }
+                }
+                column('small-8') {
+                  label(class: 'select-user') {
+                    text 'User'
+                    options = capture do
+                      options_for_select([[nil, nil]].concat(awardable_authentications))
+                    end
+                    select_tag 'award[slack_user_id]', options, html: { id: 'award_slack_user_id' }
+                  }
+                }
               }
-            }
-          end
-        }
+
+              row {
+                column('small-12') {
+                  with_errors(project, :description) {
+                    label {
+                      text 'Description'
+                      f.text_area(:description)
+                      link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text')
+                    }
+                  }
+                }
+              }
+              row {
+                column('small-12') {
+                  f.submit('Send Award', class: buttonish)
+                }
+              }
+            end
+          }
+        end
       end
     }
   end

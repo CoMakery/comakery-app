@@ -106,6 +106,18 @@ class Project < ApplicationRecord
     revenues.total_amount
   end
 
+  def max_award_used?
+    total_awarded >= maximum_tokens
+  end
+
+  def month_award_used?
+    total_month_awarded >= maximum_royalties_per_month
+  end
+
+  def total_month_awarded
+    awards.where('awards.created_at >= ?', Time.zone.today.beginning_of_month).sum(:total_amount)
+  end
+
   delegate :total_awarded, to: :awards
 
   def total_awards_outstanding
