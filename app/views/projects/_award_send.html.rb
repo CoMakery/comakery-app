@@ -72,22 +72,22 @@ class Views::Projects::AwardSend < Views::Base
                   f.text_field(:quantity, type: :text, default: 1, class: 'financial')
                 }
               }
-            }
 
-            row {
-              column('small-12') {
-                with_errors(project, :description) {
-                  label {
-                    text 'Description'
-                    f.text_area(:description)
-                    link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text')
+              row {
+                column('small-12') {
+                  with_errors(project, :description) {
+                    label {
+                      text 'Description'
+                      f.text_area(:description)
+                      link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text')
+                    }
                   }
                 }
               }
-            }
-            row {
-              column('small-12') {
-                f.submit('Send Award', class: buttonish)
+              row {
+                column('small-12') {
+                  f.submit('Send Award', class: buttonish)
+                }
               }
             }
           else

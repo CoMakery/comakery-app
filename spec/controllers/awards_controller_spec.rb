@@ -106,7 +106,7 @@ describe AwardsController do
           post :create, params: {
             project_id: project.to_param, award: {
               uid: 'receiver id',
-              award_type_id: create(:award_type, amount: 10000, project: create(:project, maximum_tokens: 100_000)).to_param,
+              award_type_id: create(:award_type, amount: 10000, project: create(:project, maximum_tokens: 100_000, maximum_royalties_per_month: 25000)).to_param,
               description: 'I am teh haxor',
               channel_id: project.channels.first.id
             }
