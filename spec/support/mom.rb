@@ -92,6 +92,15 @@ class Mom
     AwardType.new(defaults.merge(attrs))
   end
 
+  def award_link(**attrs)
+    defaults = {
+      quantity: 1,
+      description: 'link to send'
+    }
+    attrs[:award_type] = create(:award_type) unless attrs[:award_type]
+    AwardLink.new(defaults.merge(attrs))
+  end
+
   def award(authentication = create(:authentication), issuer = create(:account), **attrs)
     params = {
       authentication: authentication,

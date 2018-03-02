@@ -35,6 +35,8 @@ class AwardsController < ApplicationController
     fail_and_redirect('Not authorized')
   end
 
+  private
+
   def generate_link
     award_link = AwardLink.new award_params.except(:slack_user_id, :page)
     award_link.token = SecureRandom.hex
@@ -52,8 +54,6 @@ class AwardsController < ApplicationController
     flash[:error] = "Failed sending award - #{message}"
     redirect_back fallback_location: root_path
   end
-
-  private
 
   def award_params
     params.require(:award).permit(:slack_user_id, :award_type_id, :quantity, :description, :page)

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   get '/account' => "accounts#show"
   get "accounts/confirm/:token" => "accounts#confirm"
+  get '/receive_award/:token' => "accounts#receive_award"
   get "/auth/slack/callback" => "sessions#create"
   get "/auth/slack" => "sessions#create", as: :login
 
