@@ -1,18 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
 
-require 'simplecov'
-SimpleCov.start :rails do
-  SimpleCov.minimum_coverage 97
-  SimpleCov.refuse_coverage_drop
-
-  # add_filter == do not track coverage
-  add_filter %r{^/app/views/}
-
-  add_group 'Decorators', 'app/decorators'
-  add_group 'Interactors', 'app/interactors'
-  add_group 'Policies', 'app/policies'
-end
+require_relative 'support/simplecov_env'
+SimpleCovEnv.start!
 
 require 'spec_helper'
 require File.expand_path('../../config/environment', __FILE__)

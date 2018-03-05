@@ -27,7 +27,9 @@ database:
 
 test:
   override:
-    - bundle exec citizen checks
+    - bundle exec rake coverage
+    - bundle exec rspec --pattern 'spec/features/**/*_spec.rb' --format documentation
+    - bundle exec citizen quality
 
 general:
   artifacts:
