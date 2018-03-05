@@ -1,0 +1,55 @@
+#!/usr/bin/env ruby
+
+require 'simplecov'
+require 'awesome_print'
+require 'active_support'
+
+module SimpleCov
+  module ResultMerger
+    class << self
+      def resultset_files
+        Dir.glob(File.join(SimpleCov.coverage_path, '**', '.resultset.json')).sort
+        # Dir.glob(File.join(__dir__, '..', 'coverage', '*', '**', '.resultset.json')).sort
+      end
+
+      def resultset_hashes
+        resultset_files.map do |path|
+          # puts path  # debug
+          JSON.parse(File.read(path))
+        end
+      end
+
+      def resultset
+        resultset_hashes.reduce({}, :deep_merge)
+      end
+    end
+  end
+end
+
+SimpleCov.start do
+  command_name 'specs'
+  minimum_coverage 97
+  refuse_coverage_drop
+
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Decorators',  'app/decorators'
+  add_group 'Interactors', 'app/interactors'
+  add_group 'Jobs',        'app/jobs'
+  add_group 'Lib',         'app/lib'
+  add_group 'Mailers',     'app/mailers'
+  add_group 'Models',      'app/models'
+  add_group 'Policies',    'app/policies'
+  add_group 'Views',       'app/views'
+
+  # always track, even if not loaded during testing:
+  project_files = File.expand_path(File.join(__dir__, '../app/**/*.rb'))
+  # puts "~"*50
+  # puts project_files
+  # puts "~"*50
+  # puts  Dir[project_files]
+  # puts "~"*50
+  track_files project_files
+
+  merge_timeout 30 * 60 # 30 min
+end
+

@@ -51,6 +51,7 @@ end
 group(:development, :test) do
   gem 'brakeman', require: false
   gem 'citizen-scripts', git: 'https://github.com/CoMakery/citizen-scripts.git', ref: 'dev', require: false
+  gem 'colorize'
   gem 'dotenv-rails'
   gem 'pry-byebug'
   gem 'pry-rails'

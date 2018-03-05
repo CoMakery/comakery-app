@@ -27,7 +27,7 @@ Lint/AmbiguousRegexpLiteral:
     - 'spec/controllers/slack_controller_spec.rb'
     - 'spec/features/project_discovery/landing_page_spec.rb'
     - 'spec/features/project_setup/project_legal_agreement_settings_spec.rb'
-    - 'spec/lib/slack_spec.rb'
+    - 'spec/lib/comakery/slack_spec.rb'
     - 'spec/models/award_spec.rb'
     - 'spec/models/project_spec.rb'
     - 'spec/views/shared/award_form_terms_spec.rb'
@@ -134,12 +134,12 @@ RSpec/DescribeSymbol:
 RSpec/FilePath:
   Exclude:
     - 'spec/decorators/revennue_decorator_spec.rb'
-    - 'spec/interactors/create_ethereum_award_spec.rb'
+    - 'spec/interactors/create_ethereum_awards_spec.rb'
     - 'spec/interactors/project_coins_issued_spec.rb'
-    - 'spec/lib/currency_spec.rb'
-    - 'spec/lib/ethereum_spec.rb'
-    - 'spec/lib/markdown_spec.rb'
-    - 'spec/lib/slack_spec.rb'
+    - 'spec/lib/comakery/currency_spec.rb'
+    - 'spec/lib/comakery/ethereum_spec.rb'
+    - 'spec/lib/comakery/markdown_spec.rb'
+    - 'spec/lib/comakery/slack_spec.rb'
 
 # Offense count: 50
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -152,7 +152,7 @@ RSpec/MessageSpies:
     - 'spec/controllers/sessions_controller_spec.rb'
     - 'spec/controllers/slack_controller_spec.rb'
     - 'spec/decorators/project_decorator_spec.rb'
-    - 'spec/interactors/create_ethereum_award_spec.rb'
+    - 'spec/interactors/create_ethereum_awards_spec.rb'
     - 'spec/interactors/get_awardable_authentications_spec.rb'
     - 'spec/jobs/ethereum_token_contract_job_spec.rb'
     - 'spec/jobs/ethereum_token_issue_job_spec.rb'
@@ -188,20 +188,20 @@ RSpec/NestedGroups:
 # Offense count: 1
 RSpec/OverwritingSetup:
   Exclude:
-    - 'spec/lib/slack_spec.rb'
+    - 'spec/lib/comakery/slack_spec.rb'
 
 # Offense count: 4
 RSpec/RepeatedDescription:
   Exclude:
     - 'spec/features/revenues/project_owner_can_record_revenues_spec.rb'
-    - 'spec/lib/currency_spec.rb'
+    - 'spec/lib/comakery/currency_spec.rb'
 
 # Offense count: 6
 RSpec/RepeatedExample:
   Exclude:
     - 'spec/features/revenues/project_owner_can_record_revenues_spec.rb'
     - 'spec/policies/payment_policy_spec.rb'
-    - 'spec/views/projects/description_spec.rb'
+    - 'spec/views/projects/_description_spec.rb'
 
 # Offense count: 1
 RSpec/ScatteredLet:
@@ -221,14 +221,14 @@ RSpec/VerifiedDoubles:
     - 'spec/interactors/get_awardable_authentications_spec.rb'
     - 'spec/views/contributors/index_spec.rb'
     - 'spec/views/projects/_award_send_spec.rb'
-    - 'spec/views/projects/description_spec.rb'
+    - 'spec/views/projects/_description_spec.rb'
     - 'spec/views/projects/index_spec.rb'
 
 # Offense count: 6
 Rails/FilePath:
   Exclude:
     - 'spec/interactors/build_award_records_spec.rb'
-    - 'spec/lib/slack_spec.rb'
+    - 'spec/lib/comakery/slack_spec.rb'
     - 'spec/mailers/previews/accounts_mailer_preview.rb'
     - 'spec/rails_helper.rb'
 
@@ -361,7 +361,7 @@ Style/RegexpLiteral:
 # SupportedStyles: snake_case, camelCase
 Style/VariableName:
   Exclude:
-    - 'spec/lib/ethereum_spec.rb'
+    - 'spec/lib/comakery/ethereum_spec.rb'
 
 # Offense count: 12
 # Configuration parameters: EnforcedStyle, SupportedStyles.
