@@ -6,6 +6,13 @@ GIT
     citizen-scripts (1.2.0)
 
 GIT
+  remote: https://github.com/ducle/omniauth-discord.git
+  revision: 0ea3d6436522c0922f91b3295de194ab35ca98a6
+  specs:
+    omniauth-discord (0.1.5)
+      omniauth-oauth2 (~> 1.2)
+
+GIT
   remote: https://github.com/refile/refile.git
   revision: 0b78f7de4dda6ee812d175ff9cd0bd485dbea4e4
   specs:
@@ -278,8 +285,6 @@ GEM
     omniauth (1.7.1)
       hashie (>= 3.4.6, < 3.6.0)
       rack (>= 1.6.2, < 3)
-    omniauth-discord (0.1.0)
-      omniauth-oauth2 (~> 1.2)
     omniauth-oauth2 (1.3.1)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
@@ -548,7 +553,7 @@ DEPENDENCIES
   momentjs-rails
   nilify_blanks
   omniauth
-  omniauth-discord
+  omniauth-discord!
   omniauth-slack
   pg
   phantomjs
