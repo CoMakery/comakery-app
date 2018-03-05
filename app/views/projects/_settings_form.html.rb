@@ -219,7 +219,7 @@ module Views
                 column('small-1') {
                   text 'Amount '
                 }
-                column('small-2') {
+                column('small-1') {
                   text 'Community Awardable '
                   question_tooltip 'Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.'
                 }
@@ -227,6 +227,9 @@ module Views
                   text 'Description'
                   br
                   link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text')
+                }
+                column('small-1') {
+                  text 'Disable'
                 }
                 column('small-2') {
                   text 'Remove '
@@ -252,11 +255,14 @@ module Views
                       ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
                     end
                   }
-                  column('small-2', class: 'text-center') {
+                  column('small-1', class: 'text-center') {
                     ff.check_box :community_awardable
                   }
                   column('small-4', class: 'text-center') {
                     ff.text_area :description, class: 'award-type-description'
+                  }
+                  column('small-1', class: 'text-center') {
+                    ff.check_box :disabled
                   }
                   column('small-2', class: 'text-center') {
                     if ff.object&.modifiable?

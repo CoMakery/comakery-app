@@ -3,6 +3,7 @@ ruby '2.3.1'
 
 gem 'airbrake'
 gem 'awesome_print'
+gem 'bcrypt'
 gem 'coffee-rails'
 gem 'compass-rails'
 gem 'd3-rails', '~>3.5'

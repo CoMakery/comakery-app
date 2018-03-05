@@ -82,6 +82,36 @@ describe AwardsController do
     end
 
     context 'logged in' do
+      it 'generate award link' do
+        expect do
+          post :create, params: {
+            send_link: true,
+            project_id: project.to_param, award: {
+              award_type_id: award_type.to_param,
+              quantity: 1,
+              description: 'send this link to friends'
+            }
+          }
+          expect(response.status).to eq(302)
+        end.to change { project.award_links.count }.by(1)
+        award_link = AwardLink.last
+        expect(flash[:notice]).to eq("Successfully generate an award link. #{award_link.link}")
+      end
+
+      it 'render error for generating award link' do
+        expect do
+          post :create, params: {
+            send_link: true,
+            project_id: project.to_param, award: {
+              quantity: 1,
+              description: 'send this link to friends'
+            }
+          }
+          expect(response.status).to eq(302)
+        end.not_to change { project.award_links.count }
+        expect(flash[:error]).to eq("Failed sending award - Award type can't be blank")
+      end
+
       it 'records a award being created' do
         expect_any_instance_of(Account).to receive(:send_award_notifications)
         allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
@@ -116,7 +146,7 @@ describe AwardsController do
           post :create, params: {
             project_id: project.to_param, award: {
               slack_user_id: 'receiver id',
-              award_type_id: create(:award_type, amount: 10000, project: create(:project, slack_team_id: 'hackerz', maximum_tokens: 100_000)).to_param,
+              award_type_id: create(:award_type, amount: 10000, project: create(:project, slack_team_id: 'hackerz', maximum_tokens: 100_000, maximum_royalties_per_month: 25000)).to_param,
               description: 'I am teh haxor'
             }
           }

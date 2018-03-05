@@ -1,5 +1,6 @@
 class AwardType < ApplicationRecord
   belongs_to :project
+  has_one :owner, through: :project, source: :owner_account
   has_many :awards, dependent: :restrict_with_exception do
     def create_with_quantity(quantity, issuer:, authentication:)
       award_type = @association.owner
@@ -11,10 +12,12 @@ class AwardType < ApplicationRecord
              authentication: authentication
     end
   end
-
+  has_many :award_links, dependent: :destroy
   validates :project, :name, :amount, presence: true
   validate :amount_didnt_change?, unless: :modifiable?
   validates :amount, numericality: { greater_than: 0 }
+
+  scope :active, -> { where('award_types.disabled is null or award_types.disabled=false') }
 
   def self.invalid_params(attributes)
     attributes['name'].blank? || attributes['amount'].blank?

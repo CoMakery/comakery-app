@@ -15,7 +15,7 @@ class GetAwardableTypes
     else
       []
     end
-
+    awardable_types = awardable_types.active if awardable_types.present?
     can_award = own_project?(current_account, project) ||
                 (awardable_types.any?(&:community_awardable?) && belong_to_project?(current_account, project))
 

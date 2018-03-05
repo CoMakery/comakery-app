@@ -5,7 +5,7 @@ class Views::Projects::Landing < Views::Projects::Base
     if current_account&.slack_auth
       projects_header("#{current_account.slack_auth.slack_team_name} projects")
       projects_block(private_projects, private_project_contributors)
-    else
+    elsif !current_account
       content_for(:pre_body) {
         div(class: 'intro') {
           div(class: 'show-for-medium') {

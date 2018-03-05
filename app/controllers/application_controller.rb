@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
   layout 'raw'
-
   include Pundit
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
@@ -60,7 +59,12 @@ class ApplicationController < ActionController::Base
   end
 
   def require_login
-    not_authenticated unless session[:account_id]
+    if session[:account_id].blank? || !current_account.confirmed?
+      not_authenticated
+    elsif !current_account.confirmed?
+      flash[:error] = 'Please check your email for confirmation'
+      not_authenticated
+    end
   end
 
   def current_account

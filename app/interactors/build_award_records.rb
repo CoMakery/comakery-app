@@ -34,6 +34,10 @@ class BuildAwardRecords
       context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable tokens")
     end
 
+    if award.total_amount + project.total_month_awarded > project.maximum_royalties_per_month
+      context.fail!(message: "Sorry, you can't send more awards this month than the project's maximum number of allowable tokens per month")
+    end
+
     unless award.valid?
       context.award = award
       context.fail!(message: award.errors.full_messages.join(', '))
