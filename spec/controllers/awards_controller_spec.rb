@@ -146,7 +146,7 @@ describe AwardsController do
           post :create, params: {
             project_id: project.to_param, award: {
               slack_user_id: 'receiver id',
-              award_type_id: create(:award_type, amount: 10000, project: create(:project, slack_team_id: 'hackerz', maximum_tokens: 100_000)).to_param,
+              award_type_id: create(:award_type, amount: 10000, project: create(:project, slack_team_id: 'hackerz', maximum_tokens: 100_000, maximum_royalties_per_month: 25000)).to_param,
               description: 'I am teh haxor'
             }
           }
