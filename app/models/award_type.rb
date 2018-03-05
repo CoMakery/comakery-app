@@ -22,6 +22,10 @@ class AwardType < ApplicationRecord
     attributes['name'].blank? || attributes['amount'].blank?
   end
 
+  def active?
+    disabled.nil? || disabled == false
+  end
+
   def modifiable?
     awards.count == 0
   end

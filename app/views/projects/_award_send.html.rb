@@ -22,30 +22,32 @@ class Views::Projects::AwardSend < Views::Base
         div(class: 'award-types') {
           project.award_types.order('amount asc').decorate.each do |award_type|
             row(class: 'award-type-row') {
-              column('small-12') {
-                with_errors(project, :account_id) {
-                  label {
-                    row {
-                      if can_award
-                        column('small-1') {
-                          f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
-                        }
-                      end
-                      column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : 'small-12') {
-                        row {
-                          span(award_type.name)
-                          span(class: ' financial') {
-                            text " (#{award_type.amount_pretty})"
+              if award_type.active?
+                column('small-12') {
+                  with_errors(project, :account_id) {
+                    label {
+                      row {
+                        if can_award
+                          column('small-1') {
+                            f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
                           }
-                          text ' (Community Awardable)' if award_type.community_awardable?
-                          br
-                          span(class: 'help-text') { text raw(award_type.description_markdown) }
+                        end
+                        column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : 'small-12') {
+                          row {
+                            span(award_type.name)
+                            span(class: ' financial') {
+                              text " (#{award_type.amount_pretty})"
+                            }
+                            text ' (Community Awardable)' if award_type.community_awardable?
+                            br
+                            span(class: 'help-text') { text raw(award_type.description_markdown) }
+                          }
                         }
                       }
                     }
                   }
                 }
-              }
+              end
             }
           end
           if can_award
