@@ -2,9 +2,6 @@ class Views::Accounts::Show < Views::Base
   needs :current_account
 
   def content
-    p {
-      link_to('Get a wallet now', 'http://www.ethereum.org', target: '_blank', class: buttonish)
-    }
     div(class: 'ethereum_wallet') {
       div(class: 'hide edit-ethereum-wallet') {
         h4(style: 'border: none;') {
@@ -65,42 +62,41 @@ class Views::Accounts::Show < Views::Base
         }
       }
       div(class: 'view-ethereum-wallet') {
-        h4(style: 'border: none;') {
-          text 'Account Detail ('
-          a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Edit' }
-          text ')'
+        column('small-7 medium-5') {
+          h4(style: 'border: none;') {
+            text 'Account Detail ('
+            a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Edit' }
+            text ')'
+          }
+          row {
+            column('small-4') {
+              text 'First Name'
+            }
+            column('small-8') {
+              text current_account.first_name
+            }
+          }
+          row {
+            column('small-4') {
+              text 'Last Name'
+            }
+            column('small-8') {
+              text current_account.last_name
+            }
+          }
+          row {
+            column('small-4') {
+              text 'Ethereum Address'
+            }
+            column('small-8') {
+              text current_account.ethereum_wallet
+            }
+          }
         }
-        row {
-          column('small-3') {
-            text 'First Name'
-          }
-          column('small-9') {
-            text current_account.first_name
-          }
-        }
-        row {
-          column('small-3') {
-            text 'Last Name'
-          }
-          column('small-9') {
-            text current_account.last_name
-          }
-        }
-        row {
-          column('small-3') {
-            text 'Ethereum Address'
-          }
-          column('small-9') {
-            text current_account.ethereum_wallet
-          }
-        }
-        row {
-          column('small-3') {
-            text 'Image'
-          }
-          column('small-9') {
+        column('small-5 medium-7') {
+          row {
             if current_account.image.present?
-              image_tag attachment_url(current_account, :image, :fill, 300, 300)
+              image_tag attachment_url(current_account, :image, :fill, 130, 130), style: 'margin: 10px;'
             end
           }
         }
