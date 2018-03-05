@@ -66,7 +66,7 @@ class Views::Shared::Awards < Views::Base
               td(class: 'small-2 blockchain-address') {
                 if award.ethereum_transaction_explorer_url
                   link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
-                elsif award.recipient_address.blank? && current_account == award.recipient_account && show_recipient
+                elsif award.recipient_address.blank? && current_account == award.account && show_recipient
                   link_to '(no account)', account_path
                 elsif award.recipient_address.blank?
                   text '(no account)'

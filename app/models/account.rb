@@ -5,9 +5,8 @@ class Account < ApplicationRecord
 
   has_many :account_roles, dependent: :destroy
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
-  has_many :awards, through: :authentications, dependent: :destroy
+  has_many :awards, source: :receiver, dependent: :destroy
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
-  has_many :slack_awards, through: :slack_auth, source: :awards
   default_scope { includes(:slack_auth) }
   has_many :account_roles, dependent: :destroy
   has_many :roles, through: :account_roles
@@ -45,11 +44,7 @@ class Account < ApplicationRecord
   end
 
   def name
-    if first_name.blank? && last_name.blank?
-      slack_auth&.slack_team_name
-    else
-      [first_name, last_name].reject(&:blank?).join(' ')
-    end
+    [first_name, last_name].reject(&:blank?).join(' ')
   end
 
   def send_reset_password_request

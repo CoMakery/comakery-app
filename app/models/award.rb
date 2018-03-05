@@ -3,12 +3,11 @@ class Award < ApplicationRecord
 
   include EthereumAddressable
 
-  belongs_to :authentication
-  belongs_to :issuer, class_name: 'Account'
+  belongs_to :account
   belongs_to :award_type
-  delegate :project, to: :award_type
+  has_one :project, through: :award_type
 
-  validates :proof_id, :authentication, :award_type, :issuer, :unit_amount, :total_amount, :quantity, presence: true
+  validates :proof_id, :account, :award_type, :unit_amount, :total_amount, :quantity, presence: true
   validates :quantity, :total_amount, :unit_amount, numericality: { greater_than: 0 }
 
   validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true } # see EthereumAddressable
@@ -30,31 +29,27 @@ class Award < ApplicationRecord
   end
 
   def self_issued?
-    issuer_slack_auth&.slack_user_id == authentication&.slack_user_id
+    account_id == project.account_id
   end
 
   def recipient_display_name
-    authentication&.display_name
+    account.name
   end
 
   def recipient_slack_user_name
-    authentication&.slack_user_name
+    account.name
   end
 
   def recipient_address
-    recipient_account&.ethereum_wallet
-  end
-
-  def recipient_account
-    authentication&.account
+    account.ethereum_wallet
   end
 
   def issuer_display_name
-    issuer_slack_auth&.display_name
+    project.account.name
   end
 
   def issuer_slack_user_name
-    issuer_slack_auth&.slack_user_name
+    project.account.name
   end
 
   def issuer_slack_icon

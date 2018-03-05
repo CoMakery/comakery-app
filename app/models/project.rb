@@ -7,9 +7,6 @@ class Project < ApplicationRecord
   nilify_blanks
   attachment :image
 
-  has_many :authentications, foreign_key: :slack_team_id, primary_key: :slack_team_id
-  has_many :accounts, through: :authentications
-
   has_many :award_types, inverse_of: :project, dependent: :destroy
   accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
 
@@ -36,7 +33,7 @@ class Project < ApplicationRecord
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
   has_many :revenues
 
-  belongs_to :owner_account, class_name: 'Account'
+  belongs_to :account
 
   enum payment_type: {
     revenue_share: 0,
