@@ -29,7 +29,7 @@ class Project < ApplicationRecord
     end
   end
 
-  has_many :contributors, through: :awards, source: :authentication # TODO: deprecate in favor of contributors_distinct
+  has_many :contributors, through: :awards, source: :account # TODO: deprecate in favor of contributors_distinct
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
   has_many :revenues
 
