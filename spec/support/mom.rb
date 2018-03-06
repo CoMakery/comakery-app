@@ -52,8 +52,8 @@ class Mom
     project(account, { slack_team_id: 'citizencode', title: 'Citizen Code' }.merge(**attrs))
   end
 
-  def sb_project(account = create(:sb_authentication).account, **attrs)
-    project(account, { slack_team_id: 'swarmbot', title: 'Swarmbot', payment_type: 'project_token' }.merge(**attrs))
+  def sb_project(account = create(:account), **attrs)
+    project(account, { title: 'Swarmbot', payment_type: 'project_token' }.merge(**attrs))
   end
 
   def project(account = create(:account_with_auth), **attrs)

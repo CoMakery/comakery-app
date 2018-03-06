@@ -82,13 +82,13 @@ class Project < ApplicationRecord
     update! ethereum_contract_address: address
   end
 
-  def self.for_account(account)
-    where(slack_team_id: account&.slack_auth&.slack_team_id)
-  end
-
-  def self.not_for_account(account)
-    where.not(slack_team_id: account&.slack_auth&.slack_team_id)
-  end
+  # def self.for_account(account)
+  #   where(slack_team_id: account&.slack_auth&.slack_team_id)
+  # end
+  #
+  # def self.not_for_account(account)
+  #   where.not(slack_team_id: account&.slack_auth&.slack_team_id)
+  # end
 
   def self.public_projects
     where(public: true)
