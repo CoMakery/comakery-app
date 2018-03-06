@@ -219,57 +219,30 @@ describe Account do
     let!(:award1) { create :award, account: contributor, award_type: award_type, quantity: 50 }
     let!(:award2) { create :award, account: contributor, award_type: award_type, quantity: 50 }
 
-    describe '#total_revenue_paid' do
-      describe 'no revenue' do
-        specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
+    describe 'no revenue' do
+      specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
 
-        specify { expect(contributor.total_revenue_paid(project)).to eq 0 }
-      end
-
-      describe 'with revenue' do
-        let!(:revenue) { create :revenue, amount: 100, project: project }
-
-        specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
-
-        specify { expect(contributor.total_revenue_paid(project)).to eq 0 }
-      end
-
-      describe 'with revenue and payments' do
-        let!(:revenue) { create :revenue, amount: 100, project: project }
-        let!(:payment1) { project.payments.create_with_quantity quantity_redeemed: 25, account: contributor }
-        let!(:payment2) { project.payments.create_with_quantity quantity_redeemed: 14, account: contributor }
-
-        specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
-
-        specify { expect(contributor.total_revenue_paid(project)).to eq 39 }
-      end
+      specify { expect(contributor.total_revenue_paid(project)).to eq 0 }
     end
 
-    describe '#total_revenue_unpaid' do
-      describe 'no revenue' do
-        specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
+    describe 'with revenue' do
+      let!(:revenue) { create :revenue, amount: 100, project: project }
 
-        specify { expect(contributor.total_revenue_unpaid(project)).to eq 0 }
-      end
+      specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
+      specify { expect(contributor.total_revenue_paid(project)).to eq 0 }
+      specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
+      specify { expect(contributor.total_revenue_unpaid(project)).to eq 100 }
+    end
 
-      describe 'with revenue' do
-        let!(:revenue) { create :revenue, amount: 100, project: project }
+    describe 'with revenue and payments' do
+      let!(:revenue) { create :revenue, amount: 100, project: project }
+      let!(:payment1) { project.payments.create_with_quantity quantity_redeemed: 25, account: contributor }
+      let!(:payment2) { project.payments.create_with_quantity quantity_redeemed: 14, account: contributor }
 
-        specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
-
-        specify { expect(contributor.total_revenue_unpaid(project)).to eq 100 }
-      end
-
-      describe 'with revenue and payments' do
-        let!(:revenue) { create :revenue, amount: 100, project: project }
-        let!(:payment1) { project.payments.create_with_quantity quantity_redeemed: 25, account: contributor }
-        let!(:payment2) { project.payments.create_with_quantity quantity_redeemed: 14, account: contributor }
-
-        specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
-
-        specify { expect(contributor.total_revenue_unpaid(project)).to eq 61 }
-      end
+      specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
+      specify { expect(contributor.total_revenue_paid(project)).to eq 39 }
+      specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
+      specify { expect(contributor.total_revenue_unpaid(project)).to eq 61 }
     end
   end
-
 end

@@ -100,8 +100,7 @@ describe AwardType do
   describe '#awards#create_with_quantity' do
     let(:award_type) { create :award_type, amount: 1 }
     let(:account) { create :account }
-    let(:award) { award_type.awards.create_with_quantity 1.4, account: account}
-
+    let(:award) { award_type.awards.create_with_quantity 1.4, account: account }
 
     specify { expect(award.quantity).to eq(1.4) }
 

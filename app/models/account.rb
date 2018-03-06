@@ -68,11 +68,11 @@ class Account < ApplicationRecord
   end
 
   def percent_unpaid(project)
-    return BigDecimal('0') if project.total_awards_outstanding == 0
+    return BigDecimal('0') if project.total_awards_outstanding.zero?
     precise_percentage = (BigDecimal(total_awards_remaining(project)) * 100) / BigDecimal(project.total_awards_outstanding)
     precise_percentage.truncate(8)
   end
-  
+
   def send_reset_password_request
     update reset_password_token: SecureRandom.hex
     UserMailer.reset_password(self).deliver_now

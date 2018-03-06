@@ -334,7 +334,6 @@ describe Project do
         expect(described_class.count).to eq(5)
         expect(described_class.featured.with_last_activity_at.all.map(&:title)).to eq(%w[p3_4 p3_5 p1_8 p2_3 p3_6])
       end
-
     end
 
     describe '#community_award_types' do
