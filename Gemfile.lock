@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/ducle/omniauth-discord.git
-  revision: 0ea3d6436522c0922f91b3295de194ab35ca98a6
+  revision: a0fffd1a07cdb58ebb56750aa64c93710d1c12a2
   specs:
     omniauth-discord (0.1.5)
       omniauth-oauth2 (~> 1.2)
