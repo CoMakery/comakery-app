@@ -6,7 +6,7 @@ describe AwardsController do
   let!(:other_auth) { create(:authentication, slack_team_id: 'foo', account: create(:account, email: 'other@example.com'), slack_user_id: 'other id') }
   let!(:different_team_account) { create(:account, email: 'different@example.com').tap { |a| create(:authentication, slack_team_id: 'bar', account: a, slack_user_id: 'different team member id') } }
 
-  let(:project) { create(:project, owner_account: issuer, slack_team_id: 'foo', public: false, maximum_tokens: 100_000_000) }
+  let(:project) { create(:project, account: issuer, slack_team_id: 'foo', public: false, maximum_tokens: 100_000_000) }
 
   describe '#index' do
     let!(:award) { create(:award, award_type: create(:award_type, project: project), authentication: other_auth, issuer: issuer) }
@@ -26,7 +26,7 @@ describe AwardsController do
 
     context 'when logged out' do
       context 'with a public project' do
-        let!(:public_project) { create(:project, owner_account: issuer, slack_team_id: 'foo', public: true) }
+        let!(:public_project) { create(:project, account: issuer, slack_team_id: 'foo', public: true) }
         let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project), issuer: issuer) }
 
         it 'shows awards for public projects' do
@@ -39,7 +39,7 @@ describe AwardsController do
       end
 
       context 'with a private project' do
-        let!(:private_project) { create(:project, owner_account: issuer, slack_team_id: 'foo', public: false) }
+        let!(:private_project) { create(:project, account: issuer, slack_team_id: 'foo', public: false) }
         let!(:private_award) { create(:award, award_type: create(:award_type, project: private_project)) }
 
         it 'sends you away' do

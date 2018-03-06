@@ -26,7 +26,7 @@ class GetAwardableTypes
   private
 
   def own_project?(account, project)
-    belong_to_project?(account, project) && project&.owner_account == account
+    belong_to_project?(account, project) && project&.account == account
   end
 
   def belong_to_project?(account, project)

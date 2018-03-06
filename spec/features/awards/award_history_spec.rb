@@ -6,7 +6,7 @@ describe 'viewing projects, creating and editing', :js do
     let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/owner.jpg') }
     let!(:other_account) { create(:account) }
     let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/other.jpg') }
-    let!(:project) { create(:project, public: true, owner_account: owner, slack_team_id: 'foo') }
+    let!(:project) { create(:project, public: true, account: owner, slack_team_id: 'foo') }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }
     let!(:award) { create(:award, award_type: award_type, issuer: owner, authentication: other_account_auth) }

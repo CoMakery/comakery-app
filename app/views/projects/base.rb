@@ -52,7 +52,7 @@ class Views::Projects::Base < Views::Base
 
         div(class: 'contributors') {
           # this can go away when project owners become auths instead of accounts
-          owner_auth = project.owner_account.authentications.find_by(slack_team_id: project.slack_team_id)
+          owner_auth = project.account.authentications.find_by(slack_team_id: project.slack_team_id)
 
           ([owner_auth].compact + Array.wrap(contributors)).uniq(&:id).each do |contributor|
             tooltip(contributor.display_name) {

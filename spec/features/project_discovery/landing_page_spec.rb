@@ -2,12 +2,12 @@ require 'rails_helper'
 
 describe 'landing page', :js do
   let!(:account) { create(:account, email: 'gleenn@example.com').tap { |a| create(:authentication, account_id: a.id, slack_team_id: 'citizencode', slack_team_name: 'Citizen Code', slack_team_image_34_url: 'https://slack.example.com/awesome-team-image-34-px.jpg', slack_user_name: 'gleenn', slack_first_name: 'Glenn', slack_last_name: 'Spanky', slack_team_domain: 'citizencodedomain') } }
-  let!(:swarmbot_owner_account) { create(:account, email: 'swarm@example.com').tap { |a| create(:authentication, account_id: a.id, slack_team_id: 'swarmbot', slack_team_name: 'Citizen Code', slack_team_image_34_url: 'https://slack.example.com/swarmbot-team-image-34-px.jpg', slack_user_name: 'swarmy', slack_first_name: 'Swarm', slack_last_name: 'Bot', slack_team_domain: 'swarmbot') } }
+  let!(:swarmbot_account) { create(:account, email: 'swarm@example.com').tap { |a| create(:authentication, account_id: a.id, slack_team_id: 'swarmbot', slack_team_name: 'Citizen Code', slack_team_image_34_url: 'https://slack.example.com/swarmbot-team-image-34-px.jpg', slack_user_name: 'swarmy', slack_first_name: 'Swarm', slack_last_name: 'Bot', slack_team_domain: 'swarmbot') } }
 
   it 'when logged in shows some projects and the new button' do
     login(account)
 
-    7.times { |i| create(:project, owner_account: swarmbot_owner_account, title: "Public Project #{i}", public: true, slack_team_name: '3D Drones', slack_team_id: 'swarmbot') }
+    7.times { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", public: true, slack_team_name: '3D Drones', slack_team_id: 'swarmbot') }
     7.times { |i| create(:project, account, title: "Private Project #{i}", public: false, slack_team_id: 'citizencode', slack_team_name: 'Citizen Code') }
 
     visit root_path
@@ -35,8 +35,8 @@ describe 'landing page', :js do
   end
 
   it 'when logged out shows featured projects first' do
-    (1..3).each { |i| create(:project, owner_account: swarmbot_owner_account, title: "Featured Project #{i}", public: true, slack_team_name: '3D Drones', slack_team_id: 'swarmbot', featured: i) }
-    (1..7).each { |i| create(:project, owner_account: swarmbot_owner_account, title: "Public Project #{i}", public: true, slack_team_name: '3D Drones', slack_team_id: 'swarmbot') }
+    (1..3).each { |i| create(:project, account: swarmbot_account, title: "Featured Project #{i}", public: true, slack_team_name: '3D Drones', slack_team_id: 'swarmbot', featured: i) }
+    (1..7).each { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", public: true, slack_team_name: '3D Drones', slack_team_id: 'swarmbot') }
 
     (1..7).each { |i| create(:project, account, title: "Private Project #{i}", public: false, slack_team_id: 'citizencode', slack_team_name: 'Citizen Code') }
 

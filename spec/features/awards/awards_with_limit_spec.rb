@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'awarding up to limit of maximum awardable tokens for a project' do
   let!(:current_auth) { create(:sb_authentication) }
   let!(:awardee_auth) { create(:sb_authentication) }
-  let!(:project) { create(:sb_project, owner_account: current_auth.account, maximum_tokens: 2) }
+  let!(:project) { create(:sb_project, account: current_auth.account, maximum_tokens: 2) }
   let!(:award_type) { create(:award_type, project: project, amount: 1) }
 
   before do

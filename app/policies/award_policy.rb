@@ -28,7 +28,7 @@ class AwardPolicy < ApplicationPolicy
     project = @award&.award_type&.project
     @account &&
       @award.issuer == @account &&
-      (@account == project&.owner_account || (@award&.award_type&.community_awardable? && @account.slack_auth != @award&.authentication)) &&
+      (@account == project&.account || (@award&.award_type&.community_awardable? && @account.slack_auth != @award&.authentication)) &&
       @award&.authentication&.slack_team_id == project.slack_team_id &&
       @award&.issuer&.authentications&.pluck(:slack_team_id)&.include?(project.slack_team_id)
   end

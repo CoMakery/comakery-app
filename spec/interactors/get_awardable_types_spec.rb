@@ -18,12 +18,12 @@ describe GetAwardableTypes do
       let!(:swarmbot_only_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: 'swarmbot') } }
 
       let!(:citizencode_project) do
-        create(:project, owner_account: owner, slack_team_id: 'citizencode').tap do |p|
+        create(:project, account: owner, slack_team_id: 'citizencode').tap do |p|
           create(:award_type, project: p, community_awardable: false)
         end
       end
       let!(:swarmbot_project) do
-        create(:project, owner_account: owner, slack_team_id: 'swarmbot').tap do |p|
+        create(:project, account: owner, slack_team_id: 'swarmbot').tap do |p|
           create(:award_type, project: p, community_awardable: false)
         end
       end

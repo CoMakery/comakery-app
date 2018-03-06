@@ -115,7 +115,7 @@ describe ProjectsController do
       expect(project.award_types.first.community_awardable).to eq(true)
       expect(project.award_types.second.name).to eq('Small Award')
       expect(project.award_types.second.community_awardable).to eq(false)
-      expect(project.owner_account_id).to eq(account.id)
+      expect(project.account_id).to eq(account.id)
       expect(project.slack_channel).to eq('slack_channel')
       expect(project.slack_team_id).to eq(account.authentications.first.slack_team_id)
       expect(project.slack_team_name).to eq(account.authentications.first.slack_team_name)
@@ -151,7 +151,7 @@ describe ProjectsController do
       expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
       expect(project.award_types.first.name).to eq('Small Award')
       expect(project.award_types.first.community_awardable).to eq(true)
-      expect(project.owner_account_id).to eq(account.id)
+      expect(project.account_id).to eq(account.id)
 
       account_slack_auth = account.authentications.first
 
@@ -163,10 +163,10 @@ describe ProjectsController do
   end
 
   context 'with a project' do
-    let!(:cat_project) { create(:project, title: 'Cats', description: 'Cats with lazers', owner_account: account, slack_team_id: 'foo') }
-    let!(:dog_project) { create(:project, title: 'Dogs', description: 'Dogs with donuts', owner_account: account, slack_team_id: 'foo') }
-    let!(:yak_project) { create(:project, title: 'Yaks', description: 'Yaks with parser generaters', owner_account: account, slack_team_id: 'foo') }
-    let!(:fox_project) { create(:project, title: 'Foxes', description: 'Foxes with boxes', owner_account: account, slack_team_id: 'foo') }
+    let!(:cat_project) { create(:project, title: 'Cats', description: 'Cats with lazers', account: account, slack_team_id: 'foo') }
+    let!(:dog_project) { create(:project, title: 'Dogs', description: 'Dogs with donuts', account: account, slack_team_id: 'foo') }
+    let!(:yak_project) { create(:project, title: 'Yaks', description: 'Yaks with parser generaters', account: account, slack_team_id: 'foo') }
+    let!(:fox_project) { create(:project, title: 'Foxes', description: 'Foxes with boxes', account: account, slack_team_id: 'foo') }
 
     describe '#index' do
       let!(:cat_project_award) { create(:award, authentication: create(:authentication, slack_team_id: 'foo', slack_team_image_132_url: 'http://auth_avatar_2.jpg'), award_type: create(:award_type, project: cat_project, amount: 200), created_at: 2.days.ago) }

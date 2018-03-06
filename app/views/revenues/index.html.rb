@@ -5,7 +5,7 @@ class Views::Revenues::Index < Views::Projects::Base
     render partial: 'shared/project_header'
 
     column {
-      if project.owner_account == current_account
+      if project.account == current_account
         full_row { h3 'Record Project Revenue' }
         form_for [project, revenue] { |f|
           div(class: 'content-box summary menu simple') {

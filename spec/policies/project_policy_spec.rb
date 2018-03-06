@@ -1,27 +1,27 @@
 require 'rails_helper'
 
 describe ProjectPolicy do
-  let!(:project_owner_account) do
+  let!(:project_account) do
     create(:account).tap do |a|
       create(:authentication, account: a, slack_team_id: 'citizen code id', updated_at: 1.day.ago)
       create(:authentication, account: a, slack_team_id: 'other slack team id', updated_at: 2.days.ago)
     end
   end
-  let!(:my_public_project) { create(:project, title: 'public mine', owner_account: project_owner_account, public: true, slack_team_id: 'citizen code id') }
-  let!(:my_private_project) { create(:project, title: 'private mine', owner_account: project_owner_account, public: false, slack_team_id: 'citizen code id', require_confidentiality: false) }
-  let!(:my_public_project_business_confidential) { create(:project, title: 'private mine business confidential', owner_account: project_owner_account, public: true, slack_team_id: 'citizen code id', require_confidentiality: true) }
-  let!(:my_private_project_on_another_auth) { create(:project, title: 'private mine other auth', owner_account: project_owner_account, public: false, slack_team_id: 'other slack team id') }
+  let!(:my_public_project) { create(:project, title: 'public mine', account: project_account, public: true, slack_team_id: 'citizen code id') }
+  let!(:my_private_project) { create(:project, title: 'private mine', account: project_account, public: false, slack_team_id: 'citizen code id', require_confidentiality: false) }
+  let!(:my_public_project_business_confidential) { create(:project, title: 'private mine business confidential', account: project_account, public: true, slack_team_id: 'citizen code id', require_confidentiality: true) }
+  let!(:my_private_project_on_another_auth) { create(:project, title: 'private mine other auth', account: project_account, public: false, slack_team_id: 'other slack team id') }
 
   let!(:other_team_member) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: 'citizen code id') } }
-  let!(:others_public_project) { create(:project, title: 'public someone elses', owner_account: other_team_member, public: true, slack_team_id: 'citizen code id') }
-  let!(:others_private_project) { create(:project, title: 'private someone elses', owner_account: other_team_member, public: false, slack_team_id: 'citizen code id') }
+  let!(:others_public_project) { create(:project, title: 'public someone elses', account: other_team_member, public: true, slack_team_id: 'citizen code id') }
+  let!(:others_private_project) { create(:project, title: 'private someone elses', account: other_team_member, public: false, slack_team_id: 'citizen code id') }
 
   let!(:different_team_account) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: 'comakery id') } }
 
   describe ProjectPolicy::Scope do
     describe '#resolve' do
       it "returns all public projects and projects that belong to the current user's team" do
-        projects = ProjectPolicy::Scope.new(project_owner_account, Project).resolve
+        projects = ProjectPolicy::Scope.new(project_account, Project).resolve
 
         expect(projects.map(&:title).sort).to match_array([my_private_project,
                                                            others_private_project,
@@ -45,8 +45,8 @@ describe ProjectPolicy do
       not_authorized(nil, my_public_project, :send_award?)
       not_authorized(nil, my_private_project, :send_award?)
 
-      authorized(project_owner_account, my_public_project, :send_award?)
-      authorized(project_owner_account, my_private_project, :send_award?)
+      authorized(project_account, my_public_project, :send_award?)
+      authorized(project_account, my_private_project, :send_award?)
 
       not_authorized(other_team_member, my_public_project, :send_award?)
       not_authorized(other_team_member, my_private_project, :send_award?)
@@ -64,9 +64,9 @@ describe ProjectPolicy do
     end
 
     specify do
-      authorized(project_owner_account, my_public_project, :show_contributions?)
-      authorized(project_owner_account, my_public_project_business_confidential, :show_contributions?)
-      authorized(project_owner_account, my_private_project, :show_contributions?)
+      authorized(project_account, my_public_project, :show_contributions?)
+      authorized(project_account, my_public_project_business_confidential, :show_contributions?)
+      authorized(project_account, my_private_project, :show_contributions?)
     end
 
     specify do
@@ -83,7 +83,7 @@ describe ProjectPolicy do
   end
 
   describe '#show_revenue_info?' do
-    let(:policy) { described_class.new(project_owner_account, my_public_project) }
+    let(:policy) { described_class.new(project_account, my_public_project) }
 
     it 'relies on show_contributions? and show_contributions?' do
       expect(policy).to receive(:show_contributions?).and_return(true)
@@ -105,8 +105,8 @@ describe ProjectPolicy do
       expect(described_class.new(nil, my_public_project).send_community_award?).to be false
       expect(described_class.new(nil, my_private_project).send_community_award?).to be false
 
-      expect(described_class.new(project_owner_account, my_public_project).send_community_award?).to be true
-      expect(described_class.new(project_owner_account, my_private_project).send_community_award?).to be true
+      expect(described_class.new(project_account, my_public_project).send_community_award?).to be true
+      expect(described_class.new(project_account, my_private_project).send_community_award?).to be true
 
       expect(described_class.new(other_team_member, my_public_project).send_community_award?).to be true
       expect(described_class.new(other_team_member, my_private_project).send_community_award?).to be true
@@ -121,8 +121,8 @@ describe ProjectPolicy do
       expect(described_class.new(nil, my_public_project).index?).to be true
       expect(described_class.new(nil, my_private_project).index?).to be false
 
-      expect(described_class.new(project_owner_account, my_public_project).index?).to be true
-      expect(described_class.new(project_owner_account, my_private_project).index?).to be true
+      expect(described_class.new(project_account, my_public_project).index?).to be true
+      expect(described_class.new(project_account, my_private_project).index?).to be true
 
       expect(described_class.new(other_team_member, my_public_project).index?).to be true
       expect(described_class.new(other_team_member, my_private_project).index?).to be true
@@ -137,9 +137,9 @@ describe ProjectPolicy do
       expect(described_class.new(nil, my_public_project).show?).to be true
       expect(described_class.new(nil, others_private_project).show?).to be false
 
-      expect(described_class.new(project_owner_account, my_public_project).show?).to be true
-      expect(described_class.new(project_owner_account, my_private_project).show?).to be true
-      expect(described_class.new(project_owner_account, others_private_project).show?).to be true
+      expect(described_class.new(project_account, my_public_project).show?).to be true
+      expect(described_class.new(project_account, my_private_project).show?).to be true
+      expect(described_class.new(project_account, others_private_project).show?).to be true
 
       expect(described_class.new(other_team_member, others_public_project).show?).to be true
       expect(described_class.new(other_team_member, my_private_project).show?).to be true
@@ -155,11 +155,11 @@ describe ProjectPolicy do
         expect(described_class.new(nil, my_public_project).send(action)).to be false
         expect(described_class.new(nil, others_private_project).send(action)).to be false
 
-        expect(described_class.new(project_owner_account, my_public_project).send(action)).to be true
-        expect(described_class.new(project_owner_account, my_private_project).send(action)).to be true
+        expect(described_class.new(project_account, my_public_project).send(action)).to be true
+        expect(described_class.new(project_account, my_private_project).send(action)).to be true
 
-        expect(described_class.new(project_owner_account, others_public_project).send(action)).to be false
-        expect(described_class.new(project_owner_account, others_private_project).send(action)).to be false
+        expect(described_class.new(project_account, others_public_project).send(action)).to be false
+        expect(described_class.new(project_account, others_private_project).send(action)).to be false
 
         expect(described_class.new(other_team_member, my_public_project).send(action)).to be false
         expect(described_class.new(other_team_member, my_private_project).send(action)).to be false
@@ -171,7 +171,7 @@ describe ProjectPolicy do
   end
 
   permissions :team_member?, :send_community_award? do
-    specify { expect(described_class).to permit(project_owner_account, my_public_project) }
+    specify { expect(described_class).to permit(project_account, my_public_project) }
     specify { expect(described_class).to permit(other_team_member, my_public_project) }
 
     specify { expect(described_class).not_to permit(different_team_account, my_public_project) }

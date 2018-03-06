@@ -5,7 +5,7 @@ describe 'when recording revenue' do
   let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/owner.jpg') }
   let!(:other_account) { create(:account) }
   let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/other.jpg') }
-  let!(:project) { create(:project, public: true, payment_type: 'revenue_share', owner_account: owner, slack_team_id: 'foo', require_confidentiality: false) }
+  let!(:project) { create(:project, public: true, payment_type: 'revenue_share', account: owner, slack_team_id: 'foo', require_confidentiality: false) }
   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000, name: 'Code Contribution') }
 
   before do
@@ -108,8 +108,8 @@ describe 'when recording revenue' do
 
   it 'project members can see a summary of the project state' do
     project.update(royalty_percentage: 10)
-    project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-    project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+    project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+    project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
     award_type.awards.create_with_quantity(1.01, issuer: owner, authentication: owner_auth)
 
     login owner

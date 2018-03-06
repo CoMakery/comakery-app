@@ -6,7 +6,7 @@ describe LicensesController do
     create(:project,
       title: 'Cats with Lazers Project',
       description: 'cats with lazers',
-      owner_account: account,
+      account: account,
       slack_team_id: 'citizencode',
       public: true)
   end

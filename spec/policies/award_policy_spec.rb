@@ -4,10 +4,10 @@ describe AwardPolicy do
   let!(:account) { create(:account) }
   let!(:account_authentication) { create(:authentication, account: account, slack_team_id: 'lots of sweet awards') }
 
-  let!(:project) { create(:project, owner_account: account, slack_team_id: 'lots of sweet awards') }
-  let!(:other_project) { create(:project, owner_account: account, slack_team_id: 'other project') }
+  let!(:project) { create(:project, account: account, slack_team_id: 'lots of sweet awards') }
+  let!(:other_project) { create(:project, account: account, slack_team_id: 'other project') }
 
-  let!(:public_project) { create(:project, owner_account: create(:account), slack_team_id: 'public project', public: true) }
+  let!(:public_project) { create(:project, account: create(:account), slack_team_id: 'public project', public: true) }
   let(:award_type_with_public_project) { create(:award_type, project: public_project) }
   let(:award_with_public_project) { create(:award, award_type: award_type_with_public_project) }
 
@@ -21,7 +21,7 @@ describe AwardPolicy do
   let(:receiving_authentication) { create(:authentication, slack_team_id: 'lots of sweet awards') }
 
   let(:other_authentication) { create(:authentication, slack_team_id: 'other team') }
-  let(:unowned_project) { create(:project, owner_account: other_authentication.account) }
+  let(:unowned_project) { create(:project, account: other_authentication.account) }
 
   let(:different_team_authentication) { create(:authentication) }
 

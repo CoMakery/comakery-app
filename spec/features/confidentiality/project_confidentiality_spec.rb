@@ -70,7 +70,7 @@ end
 describe 'project confidentiality for the logged in project owner', :js do
   let!(:owner) { create(:account) }
   let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/owner.jpg') }
-  let!(:project) { create(:project, public: true, owner_account: owner, slack_team_id: 'foo', require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
+  let!(:project) { create(:project, public: true, account: owner, slack_team_id: 'foo', require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
 
   before do
     stub_slack_user_list

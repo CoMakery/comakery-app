@@ -65,7 +65,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
         royalty_percentage: BigDecimal('99.999999'),
         public: true,
         payment_type: 'revenue_share',
-        owner_account: owner,
+        account: owner,
         slack_team_id: 'foo',
         require_confidentiality: false)
     end
@@ -78,7 +78,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
       create(:project,
         royalty_percentage: BigDecimal('100'),
         public: true,
-        owner_account: owner,
+        account: owner,
         payment_type: 'revenue_share',
         slack_team_id: 'foo',
         require_confidentiality: false)
@@ -120,7 +120,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
       create(:project,
         royalty_percentage: BigDecimal('99.99'),
         public: true,
-        owner_account: owner,
+        account: owner,
         payment_type: 'revenue_share',
         slack_team_id: 'foo',
         require_confidentiality: false)
@@ -173,7 +173,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
       create(:project,
         royalty_percentage: BigDecimal('100'),
         public: true,
-        owner_account: owner,
+        account: owner,
         payment_type: 'revenue_share',
         slack_team_id: 'foo',
         require_confidentiality: false)
@@ -217,7 +217,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
         royalty_percentage: royalty_percentage_with_20_nines,
         public: true,
         payment_type: 'revenue_share',
-        owner_account: owner,
+        account: owner,
         slack_team_id: 'foo',
         require_confidentiality: false)
     end
@@ -278,7 +278,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
       royalty_percentage: 100,
       public: true,
       payment_type: 'revenue_share',
-      owner_account: owner,
+      account: owner,
       slack_team_id: 'foo',
       require_confidentiality: false)
 
@@ -388,7 +388,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
     project = create(:project,
       royalty_percentage: almost_100,
       public: true,
-      owner_account: owner,
+      account: owner,
       payment_type: 'revenue_share',
       slack_team_id: 'foo',
       require_confidentiality: false)

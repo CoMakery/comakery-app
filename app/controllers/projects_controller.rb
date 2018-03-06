@@ -50,7 +50,7 @@ class ProjectsController < ApplicationController
     # there could be multiple authentications... maybe this should be a drop down box to select which team
     # you are creating this project for if we actually allow multiple, simultaneous auths
     auth = current_account.slack_auth
-    @project = Project.new(project_params.merge(owner_account: current_account,
+    @project = Project.new(project_params.merge(account: current_account,
                                                 slack_team_image_34_url: auth.slack_team_image_34_url,
                                                 slack_team_image_132_url: auth.slack_team_image_132_url,
                                                 slack_team_id: auth.slack_team_id,

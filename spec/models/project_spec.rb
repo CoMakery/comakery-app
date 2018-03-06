@@ -298,7 +298,7 @@ describe Project do
     it 'has many award_types and accepts them as nested attributes' do
       project = described_class.create!(description: 'foo',
                                         title: 'This is a title',
-                                        owner_account: create(:account),
+                                        account: create(:account),
                                         slack_team_id: '123',
                                         slack_channel: 'slack_channel',
                                         slack_team_name: 'This is a slack team name',
@@ -388,7 +388,7 @@ describe Project do
 
   describe '#owner_slack_user_name' do
     let!(:owner) { create :account }
-    let!(:project) { create :project, owner_account: owner, slack_team_id: 'reds' }
+    let!(:project) { create :project, account: owner, slack_team_id: 'reds' }
 
     it 'returns the user name' do
       create(:authentication, account: owner, slack_team_id: 'reds', slack_first_name: 'John', slack_last_name: 'Doe', slack_user_name: 'johnny')
@@ -469,8 +469,8 @@ describe Project do
     let(:project_with_revenue) { create :project }
 
     before do
-      project_with_revenue.revenues.create(amount: 7, currency: 'USD', recorded_by: project_with_revenue.owner_account)
-      project_with_revenue.revenues.create(amount: 11, currency: 'USD', recorded_by: project_with_revenue.owner_account)
+      project_with_revenue.revenues.create(amount: 7, currency: 'USD', recorded_by: project_with_revenue.account)
+      project_with_revenue.revenues.create(amount: 11, currency: 'USD', recorded_by: project_with_revenue.account)
     end
 
     specify { expect(project_without_revenue.total_revenue).to eq(0) }
@@ -497,8 +497,8 @@ describe Project do
 
       it 'with percentage and revenue' do
         project.update(royalty_percentage: 10)
-        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         expect(project.total_revenue).to eq(1270)
         expect(project.total_revenue_shared).to eq(127)
         expect(project.total_revenue_shared).to be_a(BigDecimal)
@@ -510,8 +510,8 @@ describe Project do
 
       it 'with percentage and revenue' do
         project.update(royalty_percentage: 10)
-        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         expect(project.total_revenue).to eq(1270)
         expect(project.total_revenue_shared).to eq(0)
         expect(project.total_revenue_shared).to be_a(BigDecimal)
@@ -540,8 +540,8 @@ describe Project do
 
       it 'with percentage and revenue' do
         project.update(royalty_percentage: 10)
-        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         expect(project.total_revenue).to eq(1270)
         expect(project.total_revenue_shared_unpaid).to eq(127)
         expect(project.total_revenue_shared_unpaid).to be_a(BigDecimal)
@@ -549,8 +549,8 @@ describe Project do
 
       it 'with percentage, revenue, and payments' do
         project.update(royalty_percentage: 10)
-        project_award_type.awards.create_with_quantity(9, issuer: project.owner_account, authentication: authentication)
-        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
+        project_award_type.awards.create_with_quantity(9, issuer: project.account, authentication: authentication)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
         project.payments.new_with_quantity(quantity_redeemed: 2, payee_auth: authentication).save!
 
         expect(project.total_awarded).to eq(9)
@@ -567,8 +567,8 @@ describe Project do
 
       it 'with percentage and revenue' do
         project.update(royalty_percentage: 10)
-        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         expect(project.total_revenue).to eq(1270)
         expect(project.total_revenue_shared_unpaid).to eq(0)
         expect(project.total_revenue_shared_unpaid).to be_a(BigDecimal)
@@ -594,8 +594,8 @@ describe Project do
 
       it 'with percentage and revenue and now shares' do
         project.update(royalty_percentage: 10)
-        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         expect(project.total_revenue).to eq(1270)
         expect(project.revenue_per_share).to eq(0)
         expect(project.revenue_per_share).to be_a(BigDecimal)
@@ -609,8 +609,8 @@ describe Project do
         before do
           project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
           project.update(royalty_percentage: 10)
-          project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-          project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+          project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+          project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         end
 
         it 'to eight decimal places' do
@@ -629,8 +629,8 @@ describe Project do
         before do
           project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
           project.update(royalty_percentage: 10)
-          project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-          project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+          project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+          project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         end
 
         it 'has right starting conditions' do
@@ -662,8 +662,8 @@ describe Project do
 
       it 'with percentage and revenue' do
         project.update(royalty_percentage: 10)
-        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         expect(project.total_revenue).to eq(1270)
         expect(project.revenue_per_share).to eq(0)
         expect(project.revenue_per_share).to be_a(BigDecimal)
@@ -689,8 +689,8 @@ describe Project do
 
       it 'with percentage and revenue and no shares' do
         project.update(royalty_percentage: 10)
-        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         expect(project.total_revenue).to eq(1270)
         expect(project.share_of_revenue_unpaid(17)).to eq(0)
         expect(project.share_of_revenue_unpaid(17)).to be_a(BigDecimal)
@@ -704,8 +704,8 @@ describe Project do
         before do
           project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
           project.update(royalty_percentage: 10)
-          project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-          project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+          project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+          project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         end
 
         it 'returns a big decimal truncated to currency precision' do
@@ -735,8 +735,8 @@ describe Project do
           project.update(denomination: 'ETH')
           project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
           project.update(royalty_percentage: 10)
-          project.revenues.create(amount: 1000, currency: 'ETH', recorded_by: project.owner_account)
-          project.revenues.create(amount: 270, currency: 'ETH', recorded_by: project.owner_account)
+          project.revenues.create(amount: 1000, currency: 'ETH', recorded_by: project.account)
+          project.revenues.create(amount: 270, currency: 'ETH', recorded_by: project.account)
         end
 
         it 'returns an big decimal truncated to currency precision' do
@@ -757,8 +757,8 @@ describe Project do
 
       it 'with percentage and revenue' do
         project.update(royalty_percentage: 10)
-        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+        project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+        project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
         expect(project.total_revenue).to eq(1270)
         expect(project.share_of_revenue_unpaid(17)).to eq(0)
         expect(project.share_of_revenue_unpaid(17)).to be_a(BigDecimal)
@@ -774,10 +774,10 @@ describe Project do
 
     before do
       big_award.awards.create_with_quantity(1,
-        issuer: project.owner_account,
-        authentication: project.owner_account.authentications.first)
+        issuer: project.account,
+        authentication: project.account.authentications.first)
 
-      project.revenues.create(amount: billion_minus_one, currency: 'USD', recorded_by: project.owner_account)
+      project.revenues.create(amount: billion_minus_one, currency: 'USD', recorded_by: project.account)
     end
 
     it 'avoids multiplying rounding errors' do
@@ -812,8 +812,8 @@ describe Project do
     before do
       project_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
       project.update(royalty_percentage: 10)
-      project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-      project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
+      project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+      project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
     end
 
     it 'has right preconditions' do

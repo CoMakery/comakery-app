@@ -13,7 +13,7 @@ describe 'when redeeming revenue shares for payments' do
       royalty_percentage: 100,
       public: true,
       payment_type: 'revenue_share',
-      owner_account: owner,
+      account: owner,
       slack_team_id: 'lazercats',
       require_confidentiality: false)
   end
@@ -185,7 +185,7 @@ describe 'when redeeming revenue shares for payments' do
       create(:project,
         royalty_percentage: 100,
         public: true,
-        owner_account: owner,
+        account: owner,
         slack_team_id: 'foo',
         require_confidentiality: false)
     end
@@ -196,7 +196,7 @@ describe 'when redeeming revenue shares for payments' do
           royalty_percentage: 100,
           public: true,
           payment_type: 'revenue_share',
-          owner_account: owner,
+          account: owner,
           slack_team_id: 'lazercats',
           require_confidentiality: false)
       end
@@ -243,7 +243,7 @@ describe 'when redeeming revenue shares for payments' do
           royalty_percentage: 100,
           public: true,
           payment_type: 'revenue_share',
-          owner_account: owner,
+          account: owner,
           slack_team_id: 'lazercats',
           require_confidentiality: false,
           denomination: 'BTC')
@@ -288,7 +288,7 @@ describe 'when redeeming revenue shares for payments' do
           royalty_percentage: 100,
           public: true,
           payment_type: 'revenue_share',
-          owner_account: owner,
+          account: owner,
           slack_team_id: 'lazercats',
           require_confidentiality: false,
           denomination: 'ETH')

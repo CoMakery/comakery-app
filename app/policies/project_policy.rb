@@ -31,7 +31,7 @@ class ProjectPolicy < ApplicationPolicy
   alias index? show?
 
   def edit?
-    account.present? && project.owner_account == account
+    account.present? && project.account == account
   end
 
   alias update? edit?

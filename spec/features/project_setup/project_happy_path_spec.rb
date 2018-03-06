@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe 'viewing projects, creating and editing', :js do
-  let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', owner_account: account, slack_team_id: 'citizencode', public: false) }
-  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', owner_account: account, slack_team_id: 'citizencode', public: true) }
+  let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, slack_team_id: 'citizencode', public: false) }
+  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, slack_team_id: 'citizencode', public: true) }
   let!(:public_project_award_type) { create(:award_type, project: public_project) }
   let!(:public_project_award) { create(:award, award_type: public_project_award_type, created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, email: 'gleenn@example.com').tap { |a| create(:authentication, account_id: a.id, slack_team_id: 'citizencode', slack_team_domain: 'citizencodedomain', slack_team_name: 'Citizen Code', slack_team_image_34_url: 'https://slack.example.com/awesome-team-image-34-px.jpg', slack_team_image_132_url: 'https://slack.example.com/awesome-team-image-132-px.jpg', slack_user_name: 'gleenn', slack_first_name: 'Glenn', slack_last_name: 'Spanky') } }
@@ -170,7 +170,7 @@ describe 'viewing projects, creating and editing', :js do
   end
 
   describe 'removing award types on projects where there have been awards sent already' do
-    let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', owner_account: account, slack_team_id: 'citizencode', public: false, slack_channel: 'a-channel-name') }
+    let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, slack_team_id: 'citizencode', public: false, slack_channel: 'a-channel-name') }
     before { login(account) }
 
     let!(:award_type) { create(:award_type, project: project, name: "Big ol' award", amount: 40000, community_awardable: false) }

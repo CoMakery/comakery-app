@@ -3,8 +3,8 @@ require 'rails_helper'
 describe BuildAwardRecords do
   let!(:issuer) { create(:account).tap { |a| create(:authentication, account: a, slack_team_id: 'team id', slack_token: 'token') } }
   let!(:other_auth) { create(:authentication, account: issuer, slack_team_id: 'other team id', slack_token: 'token') }
-  let!(:project) { create(:project, owner_account: issuer, slack_team_id: 'team id') }
-  let!(:other_project) { create(:project, owner_account: issuer, slack_team_id: 'other team id') }
+  let!(:project) { create(:project, account: issuer, slack_team_id: 'team id') }
+  let!(:other_project) { create(:project, account: issuer, slack_team_id: 'other team id') }
   let!(:award_type) { create(:award_type, project: project) }
 
   let(:recipient) { create(:account, email: 'glenn@example.com') }

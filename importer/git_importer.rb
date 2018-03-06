@@ -109,7 +109,7 @@ class GitImporter
     }
     unless @slack
       slack_team_id = project.slack_team_id
-      auth = project.owner_account.authentications.order(updated_at: :desc).where(slack_team_id: slack_team_id).first
+      auth = project.account.authentications.order(updated_at: :desc).where(slack_team_id: slack_team_id).first
       @slack ||= Comakery::Slack.new(auth.slack_token)
       @slack_user_name_to_slack_id = {}
       members = @slack.get_users[:members]
@@ -145,7 +145,7 @@ class GitImporter
         result = AwardSlackUser.call(
           project: project,
           slack_user_id: slack_user_id(author_name),
-          issuer: project.owner_account,
+          issuer: project.account,
           award_params: {
             award_type_id: award_type.id,
             description: description,

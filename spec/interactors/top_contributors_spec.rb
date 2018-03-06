@@ -11,7 +11,7 @@ describe TopContributors do
     let!(:sb_auth4) { create(:sb_authentication, slack_user_name: 'sb4') }
     let!(:sb_auth5) { create(:sb_authentication, slack_user_name: 'sb5') }
     let!(:sb_auth6) { create(:sb_authentication, slack_user_name: 'sb6') }
-    let!(:sb_project) { create(:sb_project, owner_account: sb_account_owner) }
+    let!(:sb_project) { create(:sb_project, account: sb_account_owner) }
 
     let!(:small_award_type) { create(:award_type, project: sb_project, amount: 10) }
     let!(:medium_award_type) { create(:award_type, project: sb_project, amount: 500) }

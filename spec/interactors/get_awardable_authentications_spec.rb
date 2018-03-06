@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe GetAwardableAuthentications do
-  let!(:project) { create(:project, owner_account: project_owner) }
+  let!(:project) { create(:project, account: project_owner) }
   let!(:project_owner) { create(:account) }
   let!(:project_owner_auth) { create(:authentication, account: project_owner, slack_user_id: 'project_owner', slack_first_name: 'project_owner', slack_last_name: 'project_owner') }
   let(:other_auth) { create(:authentication, slack_user_id: 'slack user id 1', slack_first_name: nil, slack_last_name: nil) }

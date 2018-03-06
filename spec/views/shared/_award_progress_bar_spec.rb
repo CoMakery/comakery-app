@@ -9,7 +9,7 @@ describe 'shared/_award_progress_bar.html.rb' do
     create(:project,
       title: 'Cats with Lazers Project',
       description: 'cats with lazers',
-      owner_account: account,
+      account: account,
       slack_team_id: 'catlazer',
       public: false,
       payment_type: :revenue_share)

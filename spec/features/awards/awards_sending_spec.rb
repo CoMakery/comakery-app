@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe 'awarding users' do
-  let!(:project) { create(:project, title: 'Project that needs awards', owner_account: owner_account, slack_team_id: 'team id', ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40) }
-  let!(:same_team_project) { create(:project, title: 'Same Team Project', owner_account: owner_account, slack_team_id: 'team id') }
-  let!(:different_team_project) { create(:project, public: true, title: 'Different Team Project', owner_account: owner_account, slack_team_id: 'team id') }
+  let!(:project) { create(:project, title: 'Project that needs awards', account: account, slack_team_id: 'team id', ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40) }
+  let!(:same_team_project) { create(:project, title: 'Same Team Project', account: account, slack_team_id: 'team id') }
+  let!(:different_team_project) { create(:project, public: true, title: 'Different Team Project', account: account, slack_team_id: 'team id') }
 
   let!(:small_award_type) { create(:award_type, project: project, name: 'Small', amount: 1000) }
   let!(:large_award_type) { create(:award_type, project: project, name: 'Large', amount: 3000) }
@@ -14,11 +14,11 @@ describe 'awarding users' do
   let!(:different_large_award_type) { create(:award_type, project: different_team_project, name: 'Large', amount: 3000) }
   let!(:different_large_award) { create(:award, award_type: different_large_award_type, authentication: different_team_authentication) }
 
-  let!(:owner_account) { create(:account, email: 'hubert@example.com') }
+  let!(:account) { create(:account, email: 'hubert@example.com') }
   let!(:other_account) { create(:account, email: 'sherman@example.com') }
   let!(:different_team_account) { create(:account, email: 'different@example.com') }
 
-  let!(:owner_authentication) { create(:authentication, slack_user_name: 'hubert', slack_first_name: 'Hubert', slack_last_name: 'Sherbert', slack_user_id: 'hubert id', account: owner_account, slack_team_id: 'team id', slack_team_image_34_url: 'http://avatar.com/owner_team_avatar.jpg') }
+  let!(:owner_authentication) { create(:authentication, slack_user_name: 'hubert', slack_first_name: 'Hubert', slack_last_name: 'Sherbert', slack_user_id: 'hubert id', account: account, slack_team_id: 'team id', slack_team_image_34_url: 'http://avatar.com/owner_team_avatar.jpg') }
   let!(:other_authentication) { create(:authentication, slack_user_name: 'sherman', slack_user_id: 'sherman id', slack_first_name: 'Sherman', slack_last_name: 'Yessir', account: other_account, slack_team_id: 'team id', slack_image_32_url: 'http://avatar.com/other_account_avatar.jpg') }
   let!(:different_team_authentication) { create(:authentication, slack_user_name: 'different', slack_user_id: 'different id', slack_first_name: 'Different', slack_last_name: 'Different', account: different_team_account, slack_team_id: 'different team id', slack_image_32_url: 'http://avatar.com/different_team_account_avatar.jpg') }
 
@@ -46,7 +46,7 @@ describe 'awarding users' do
 
   describe "when a user doesn't have an account for yet" do
     it 'populates the dropdown to select the awardee and creates the account/auth for the user' do
-      login(owner_account)
+      login(account)
 
       visit project_path(project)
 
@@ -99,7 +99,7 @@ describe 'awarding users' do
     expect(page).not_to have_content('Send Award')
     expect(page).not_to have_content('User')
 
-    login(owner_account)
+    login(account)
 
     visit project_path(project)
 
@@ -160,7 +160,7 @@ describe 'awarding users' do
   it 'awarding a user with an ethereum account' do
     bob_account = create(:account, email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
 
-    login(owner_account)
+    login(account)
     visit project_path(project)
     choose 'Small'
     select 'bobjohnson', from: 'User'

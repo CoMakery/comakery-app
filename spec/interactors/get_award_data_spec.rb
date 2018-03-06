@@ -8,7 +8,7 @@ describe GetAwardData do
   let!(:bob) { create(:account, email: 'other@example.com') }
   let!(:bob_auth) { create(:authentication, slack_first_name: 'bob', slack_last_name: 'bob', slack_user_id: 'other id', slack_team_id: 'foo', account: bob, slack_user_name: 'other') }
 
-  let!(:project) { create(:project, title: 'Cats', owner_account: sam, slack_team_id: 'foo') }
+  let!(:project) { create(:project, title: 'Cats', account: sam, slack_team_id: 'foo') }
 
   let!(:award_type1) { create(:award_type, project: project, amount: 1000, name: 'Small Award') }
   let!(:award_type2) { create(:award_type, project: project, amount: 2000, name: 'Medium Award') }
