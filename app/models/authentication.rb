@@ -41,6 +41,19 @@ class Authentication < ApplicationRecord
     precise_percentage.truncate(8)
   end
 
+  def self.find_with_omniauth(auth_hash)
+    find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
+  end
+
+  def self.create_with_omniauth!(auth_hash)
+    account = Account.find_or_create_by!(email: auth_hash['info']['email'])
+    create(uid: auth_hash['uid'], provider: auth_hash['provider'],
+           oauth_response: auth_hash, email: auth_hash['info']['email'],
+           token: auth_hash['credentials']['token'],
+           account: account)
+    account
+  end
+
   def self.find_or_create_from_auth_hash!(auth_hash)
     slack_auth_hash = SlackAuthHash.new(auth_hash)
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180117023754) do
+ActiveRecord::Schema.define(version: 20180306070459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,21 +55,13 @@ ActiveRecord::Schema.define(version: 20180117023754) do
     t.string "provider", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string "slack_team_name", null: false
-    t.string "slack_team_id", null: false
-    t.string "slack_user_id", null: false
-    t.string "slack_token"
-    t.string "slack_user_name", null: false
-    t.string "slack_first_name"
-    t.string "slack_last_name"
-    t.string "slack_team_domain"
-    t.string "slack_team_image_34_url"
-    t.string "slack_team_image_132_url"
-    t.string "slack_image_32_url"
+    t.string "uid", null: false
+    t.string "token"
     t.jsonb "oauth_response"
+    t.string "email"
+    t.string "provider_team_id"
     t.index ["account_id"], name: "index_authentications_on_account_id"
-    t.index ["slack_team_id"], name: "index_authentications_on_slack_team_id"
-    t.index ["slack_user_id"], name: "index_authentications_on_slack_user_id"
+    t.index ["uid"], name: "index_authentications_on_uid"
   end
 
   create_table "award_types", id: :serial, force: :cascade do |t|
