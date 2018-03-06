@@ -1,7 +1,7 @@
 class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
 
-  include SlackDomainable
+  # include SlackDomainable
   include EthereumAddressable
 
   nilify_blanks
@@ -13,14 +13,14 @@ class Project < ApplicationRecord
   has_many :awards, through: :award_types, dependent: :destroy
 
   has_many :payments, dependent: :destroy do
-    def new_with_quantity(quantity_redeemed:, payee_auth:)
+    def new_with_quantity(quantity_redeemed:, account:)
       project = @association.owner
 
       new(total_value: BigDecimal(quantity_redeemed) * project.revenue_per_share,
           quantity_redeemed: quantity_redeemed,
           share_value: project.revenue_per_share,
           currency: project.denomination,
-          payee: payee_auth)
+          account: account)
         .tap(&:truncate_total_value_to_currency_precision)
     end
 
@@ -46,8 +46,7 @@ class Project < ApplicationRecord
     ETH: 2
   }
 
-  validates :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id,
-    :slack_team_image_34_url, :slack_team_image_132_url, :title, :legal_project_owner,
+  validates :description, :account, :slack_channel, :title, :legal_project_owner,
     :denomination, presence: true
 
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { unless: :project_token? }
@@ -146,9 +145,9 @@ class Project < ApplicationRecord
     AwardType.invalid_params(attributes)
   end
 
-  def owner_slack_user_name
-    owner_account.authentications.find_by(slack_team_id: slack_team_id)&.display_name
-  end
+  # def owner_slack_user_name
+  #   account.authentications.find_by(slack_team_id: slack_team_id)&.display_name
+  # end
 
   def youtube_id
     # taken from http://stackoverflow.com/questions/5909121/converting-a-regular-youtube-link-into-an-embedded-video

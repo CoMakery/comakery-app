@@ -37,17 +37,10 @@ class Mom
     @@authentication_count += 1
     defaults = {
       provider: 'slack',
-      slack_token: 'slack token',
-      slack_user_id: "slack user id #{@@authentication_count}",
-      slack_team_name: 'Slack Team',
-      slack_team_image_34_url: 'https://slack.example.com/team-image-34-px.jpg',
-      slack_team_image_132_url: 'https://slack.example.com/team-image-132-px.jpg',
-      slack_team_id: 'citizen code id',
-      slack_user_name: 'johndoe'
+      token: 'slack token',
+      uid: "slack user id #{@@authentication_count}"
     }
-    defaults[:account] = create(:account) unless attrs.key?(:account)
-    defaults[:slack_first_name] = 'John' unless attrs.key?(:slack_first_name) && attrs[:slack_first_name].nil?
-    defaults[:slack_last_name] = 'Doe' unless attrs.key?(:slack_last_name) && attrs[:slack_last_name].nil?
+    defaults[:account] = create(:account, first_name: 'John', last_name: 'Doe') unless attrs.key?(:account)
     Authentication.new(defaults.merge(attrs))
   end
 
@@ -55,25 +48,21 @@ class Mom
     BetaSignup.new(**attrs)
   end
 
-  def cc_project(owner_account = create(:cc_authentication).account, **attrs)
-    project(owner_account, { slack_team_id: 'citizencode', title: 'Citizen Code' }.merge(**attrs))
+  def cc_project(account = create(:cc_authentication).account, **attrs)
+    project(account, { slack_team_id: 'citizencode', title: 'Citizen Code' }.merge(**attrs))
   end
 
-  def sb_project(owner_account = create(:sb_authentication).account, **attrs)
-    project(owner_account, { slack_team_id: 'swarmbot', title: 'Swarmbot', payment_type: 'project_token' }.merge(**attrs))
+  def sb_project(account = create(:sb_authentication).account, **attrs)
+    project(account, { slack_team_id: 'swarmbot', title: 'Swarmbot', payment_type: 'project_token' }.merge(**attrs))
   end
 
-  def project(owner_account = create(:account_with_auth), **attrs)
+  def project(account = create(:account_with_auth), **attrs)
     defaults = {
       title: 'Uber for Cats',
       description: 'We are going to build amazing',
       tracker: 'https://github.com/example/uber_for_cats',
-      slack_team_id: 'citizen code id',
       slack_channel: 'slack_channel',
-      slack_team_name: 'Citizen Code',
-      slack_team_image_34_url: 'https://slack.example.com/team-image-34-px.jpg',
-      slack_team_image_132_url: 'https://slack.example.com/team-image-132-px.jpg',
-      owner_account: owner_account,
+      account: account,
       royalty_percentage: 5.9,
       maximum_royalties_per_month: 10_000,
       legal_project_owner: 'UberCatz Inc',
@@ -92,10 +81,9 @@ class Mom
     AwardType.new(defaults.merge(attrs))
   end
 
-  def award(authentication = create(:authentication), issuer = create(:account), **attrs)
+  def award(account = create(:account), **attrs)
     params = {
-      authentication: authentication,
-      issuer: issuer,
+      account: account,
       description: 'Great work',
       proof_id: 'abc123',
       quantity: 1,
@@ -138,7 +126,7 @@ class Mom
     Revenue.new amount: amount,
                 currency: currency,
                 project: project,
-                recorded_by: project.owner_account
+                recorded_by: project.account
   end
 end
 

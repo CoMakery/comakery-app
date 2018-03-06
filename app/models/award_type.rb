@@ -1,14 +1,13 @@
 class AwardType < ApplicationRecord
   belongs_to :project
   has_many :awards, dependent: :restrict_with_exception do
-    def create_with_quantity(quantity, issuer:, authentication:)
+    def create_with_quantity(quantity, account:)
       award_type = @association.owner
 
       create quantity: quantity,
              unit_amount: award_type.amount,
              total_amount: (quantity * award_type.amount),
-             issuer: issuer,
-             authentication: authentication
+             account: account
     end
   end
 

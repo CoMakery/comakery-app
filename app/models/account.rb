@@ -5,12 +5,12 @@ class Account < ApplicationRecord
 
   has_many :account_roles, dependent: :destroy
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
-  has_many :awards, source: :receiver, dependent: :destroy
+  has_many :awards, dependent: :destroy
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   default_scope { includes(:slack_auth) }
   has_many :account_roles, dependent: :destroy
   has_many :roles, through: :account_roles
-
+  has_many :projects
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required
   validates :password, length: { minimum: 8 }, if: :password_required
@@ -28,7 +28,7 @@ class Account < ApplicationRecord
   end
 
   def slack
-    @slack ||= Comakery::Slack.get(slack_auth.slack_token)
+    @slack ||= Comakery::Slack.get(slack_auth.token)
   end
 
   def send_award_notifications(**args)
@@ -47,6 +47,32 @@ class Account < ApplicationRecord
     [first_name, last_name].reject(&:blank?).join(' ')
   end
 
+  def total_awards_earned(project)
+    project.awards.where(account: self).sum(:total_amount)
+  end
+
+  def total_awards_paid(project)
+    project.payments.where(account: self).sum(:quantity_redeemed)
+  end
+
+  def total_awards_remaining(project)
+    total_awards_earned(project) - total_awards_paid(project)
+  end
+
+  def total_revenue_paid(project)
+    project.payments.where(account: self).sum(:total_value)
+  end
+
+  def total_revenue_unpaid(project)
+    project.share_of_revenue_unpaid(total_awards_remaining(project))
+  end
+
+  def percent_unpaid(project)
+    return BigDecimal('0') if project.total_awards_outstanding == 0
+    precise_percentage = (BigDecimal(total_awards_remaining(project)) * 100) / BigDecimal(project.total_awards_outstanding)
+    precise_percentage.truncate(8)
+  end
+  
   def send_reset_password_request
     update reset_password_token: SecureRandom.hex
     UserMailer.reset_password(self).deliver_now
