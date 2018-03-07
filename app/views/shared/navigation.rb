@@ -71,10 +71,12 @@ class Views::Shared::Navigation < Views::Base
           social_media_links
 
           li(class: 'slack-instance') {
-            if current_account&.slack_auth
+            if current_account
               div(class: 'top-bar-text') {
-                img(src: current_account.slack_auth.slack_team_image_34_url, class: 'project-icon')
-                text current_account.slack_auth.slack_team_name
+                if account_image(current_account, 34)
+                  img(src: account_image(current_account, 34), class: 'project-icon')
+                end
+                text current_account.name
               }
             end
           }
@@ -87,7 +89,10 @@ class Views::Shared::Navigation < Views::Base
             }
           else
             li {
-              link_to 'Sign in', login_path
+              link_to 'Sign up', new_account_path
+            }
+            li {
+              link_to 'Sign in', new_session_path
             }
           end
         }

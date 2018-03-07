@@ -131,6 +131,7 @@ class ProjectsController < ApplicationController
         id
         name
         description
+        disabled
       ]
     )
   end

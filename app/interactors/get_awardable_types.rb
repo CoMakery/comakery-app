@@ -7,15 +7,15 @@ class GetAwardableTypes
     project = context.project
 
     awardable_types = if !current_account
-      []
+      AwardType.none
     elsif own_project?(current_account, project)
       project.award_types
     elsif belong_to_project?(current_account, project)
       project.community_award_types
     else
-      []
+      AwardType.none
     end
-
+    awardable_types = awardable_types.active if awardable_types.present?
     can_award = own_project?(current_account, project) ||
                 (awardable_types.any?(&:community_awardable?) && belong_to_project?(current_account, project))
 

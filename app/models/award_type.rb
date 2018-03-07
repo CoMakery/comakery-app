@@ -16,8 +16,14 @@ class AwardType < ApplicationRecord
   validate :amount_didnt_change?, unless: :modifiable?
   validates :amount, numericality: { greater_than: 0 }
 
+  scope :active, -> { where('award_types.disabled is null or award_types.disabled=false') }
+
   def self.invalid_params(attributes)
     attributes['name'].blank? || attributes['amount'].blank?
+  end
+
+  def active?
+    disabled.nil? || disabled == false
   end
 
   def modifiable?

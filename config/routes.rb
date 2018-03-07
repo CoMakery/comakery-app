@@ -1,10 +1,13 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  get "/account" => "authentications#show", as: "account"
   resource :account, only: [:update]
   resource :authentication, only: [:show]
+  resources :accounts, only: [:new, :create, :show]
+  resources :password_resets, only: [:new, :create, :edit, :update]
 
+  get '/account' => "accounts#show"
+  get "accounts/confirm/:token" => "accounts#confirm", as: :confirm_email
   get "/auth/slack/callback" => "sessions#create"
   get "/auth/slack" => "sessions#create", as: :login
 
@@ -14,8 +17,11 @@ Rails.application.routes.draw do
 
   resources :beta_signups, only: [:new, :create]
 
-  resource :session, only: %i[create destroy] do
+  resource :session, only: %i[new create destroy] do
     get "oauth_failure"
+    collection do
+      post :sign_in
+    end
   end
   get '/session' => "sessions#create"
 

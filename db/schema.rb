@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180117023754) do
+ActiveRecord::Schema.define(version: 20180301022608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,14 @@ ActiveRecord::Schema.define(version: 20180117023754) do
     t.datetime "last_activity_at"
     t.string "last_login_from_ip_address"
     t.string "ethereum_wallet"
+    t.string "password_digest"
+    t.string "email_confirm_token"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "image_id"
+    t.string "image_filename"
+    t.string "image_content_zise"
+    t.string "image_content_type"
     t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
@@ -80,6 +88,7 @@ ActiveRecord::Schema.define(version: 20180117023754) do
     t.datetime "updated_at", null: false
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
+    t.boolean "disabled"
     t.index ["project_id"], name: "index_award_types_on_project_id"
   end
 

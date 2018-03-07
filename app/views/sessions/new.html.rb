@@ -4,7 +4,7 @@ class Views::Sessions::New < Views::Base
       column(%i[small-12 large-6], class: 'large-centered') {
         h1('Sign in')
 
-        form_tag session_path, method: 'post' do
+        form_tag sign_in_session_path, method: 'post' do
           row {
             column('large-12') {
               label {
@@ -19,6 +19,9 @@ class Views::Sessions::New < Views::Base
               }
               br
               submit_tag 'Sign In', class: buttonish(:medium), tabindex: 3
+              link_to '/auth/slack' do
+                image_tag 'sign_in_with_slack.png', style: 'height: 43px'
+              end
             }
           }
         end

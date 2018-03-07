@@ -2,14 +2,13 @@ module Views
   module PasswordResets
     class Edit < Views::Base
       needs :account
-      needs :token
 
       def content
         # TODO: this is nearly identical to Views::AccountClaims::Edit. Definitely refactor if it's similar to change-password.
         row {
           column('medium-6', class: 'medium-centered') {
             h2('Set a password')
-            form_for account, url: password_reset_path(token), html: { method: :put } do |f|
+            form_for account, url: password_reset_path(account.reset_password_token), html: { method: :put } do |f|
               row {
                 column {
                   label {

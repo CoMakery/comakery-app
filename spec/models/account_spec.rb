@@ -31,7 +31,7 @@ describe Account do
   end
 
   it 'enforces unique emails, case-insensitively' do
-    alice1 = create :account, email: 'alice@example.com'
+    create :account, email: 'alice@example.com'
     expect { create :account, email: 'Alice@example.com' }.to raise_error(ActiveRecord::RecordNotUnique)
   end
 
@@ -81,6 +81,15 @@ describe Account do
       allow(subject.slack).to receive(:send_award_notifications)
       subject.send_award_notifications
       expect(subject.slack).to have_received(:send_award_notifications)
+    end
+  end
+
+  describe 'authorize using password' do
+    it 'does not accept invalid password' do
+      expect(subject.authenticate('notright')).to be false
+    end
+    it 'returns account for valid password' do
+      expect(subject.authenticate('12345678')).to eq subject
     end
   end
 end
