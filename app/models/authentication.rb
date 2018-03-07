@@ -5,11 +5,13 @@ class Authentication < ApplicationRecord
   # has_many :projects, foreign_key: :slack_team_id, primary_key: :slack_team_id
   validates :account, :provider, :uid, presence: true
 
-  # def slack_team_ethereum_enabled?
-  #   allow_ethereum = Rails.application.config.allow_ethereum
-  #   allowed_domains = allow_ethereum.to_s.split(',').compact
-  #   allowed_domains.include?(slack_team_domain)
-  # end
+  #TODO update after refactor
+  def slack_team_ethereum_enabled?
+    allow_ethereum = Rails.application.config.allow_ethereum
+    allowed_domains = allow_ethereum.to_s.split(',').compact
+    # allowed_domains.include?(slack_team_domain)
+    true
+  end
 
   def self.find_with_omniauth(auth_hash)
     find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
