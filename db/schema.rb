@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180306070459) do
+ActiveRecord::Schema.define(version: 20180307033159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,15 @@ ActiveRecord::Schema.define(version: 20180306070459) do
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token"
   end
 
+  create_table "authentication_teams", force: :cascade do |t|
+    t.string "provider_team_id"
+    t.integer "authentication_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["authentication_id"], name: "index_authentication_teams_on_authentication_id"
+    t.index ["provider_team_id"], name: "index_authentication_teams_on_provider_team_id"
+  end
+
   create_table "authentications", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.string "provider", null: false
@@ -67,7 +76,6 @@ ActiveRecord::Schema.define(version: 20180306070459) do
     t.string "token"
     t.jsonb "oauth_response"
     t.string "email"
-    t.string "provider_team_id"
     t.index ["account_id"], name: "index_authentications_on_account_id"
     t.index ["uid"], name: "index_authentications_on_uid"
   end
