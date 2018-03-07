@@ -27,11 +27,11 @@ class Views::Projects::Base < Views::Base
   end
 
   def project_block(project, contributors)
-    row(class: "project#{project.slack_team_id == current_account&.slack_auth&.slack_team_id ? ' project-highlighted' : ''}", id: "project-#{project.to_param}") {
+    row(class: "#{current_account&.can_receive_award?(project) ? ' project-highlighted' : ''}", id: "project-#{project.to_param}") {
       a(href: project_path(project)) {
         div(class: 'sixteen-nine') {
           div(class: 'content') {
-            img(src: project_image(project), class: 'image-block')
+            img(src: project_image_url(project,132), class: 'image-block')
           }
         }
       }
@@ -41,22 +41,22 @@ class Views::Projects::Base < Views::Base
             a(project.title, href: project_path(project), class: 'project-link')
           }
           a(href: project_path(project)) {
-            i project.slack_team_name
+            i project.title#project.slack_team_name
           }
         }
         a(href: project_path(project)) {
-          img(src: project.slack_team_image_132_url, class: 'icon')
+          img(src: project_image_url(project,132), class: 'icon')
         }
 
         p(class: 'description no-last-award') { text project.description_text }
 
         div(class: 'contributors') {
           # this can go away when project owners become auths instead of accounts
-          owner_auth = project.account.authentications.find_by(slack_team_id: project.slack_team_id)
+          owner = project.account
 
-          ([owner_auth].compact + Array.wrap(contributors)).uniq(&:id).each do |contributor|
-            tooltip(contributor.display_name) {
-              img(src: contributor.slack_icon, class: 'contributor avatar-img')
+          ([owner].compact + Array.wrap(contributors)).uniq(&:id).each do |contributor|
+            tooltip(contributor.name) {
+              img(src: account_image_url(contributor, 34), class: 'contributor avatar-img')
             }
           end
         }

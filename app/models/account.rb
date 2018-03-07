@@ -73,6 +73,11 @@ class Account < ApplicationRecord
     precise_percentage.truncate(8)
   end
 
+  #TODO: check if account and project in same team
+  def can_receive_award?(project)
+    false
+  end
+
   def send_reset_password_request
     update reset_password_token: SecureRandom.hex
     UserMailer.reset_password(self).deliver_now
