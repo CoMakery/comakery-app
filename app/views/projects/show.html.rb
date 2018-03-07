@@ -5,7 +5,6 @@ class Views::Projects::Show < Views::Projects::Base
     render partial: 'shared/project_header'
 
     div(class: 'project-head content') {
-      text project_url(project)
       render partial: 'description'
       row {
         render partial: 'shared/award_progress_bar'
