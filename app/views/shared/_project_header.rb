@@ -42,13 +42,13 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
               text 'Payments'
             }
           }
-
-          li_if(project.slack_team_domain) {
-            a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: '_blank', class: 'text-link') {
-              i(class: 'fa fa-slack')
-              text 'Slack Channel'
-            }
-          }
+          #TODO: link to channel(s)
+          # li_if(project.slack_team_domain) {
+          #   a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: '_blank', class: 'text-link') {
+          #     i(class: 'fa fa-slack')
+          #     text 'Slack Channel'
+          #   }
+          # }
 
           li_if(project.tracker) {
             a(href: project.tracker, target: '_blank', class: 'text-link') {

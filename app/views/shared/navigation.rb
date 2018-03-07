@@ -14,8 +14,8 @@ class Views::Shared::Navigation < Views::Base
         div(class: 'small-12 columns') {
           if current_account&.slack_auth
             div(class: 'top-bar-text') {
-              img(src: current_account.slack_auth.slack_team_image_34_url, class: 'project-icon')
-              text current_account.slack_auth.slack_team_name
+              img(src: account_image_url(current_account, 34), class: 'project-icon')
+              text "Slack Team"
             }
           end
         }
@@ -39,8 +39,8 @@ class Views::Shared::Navigation < Views::Base
         div(class: 'small-12 columns') {
           if current_account&.slack_auth
             div(class: 'top-bar-text') {
-              img(src: current_account.slack_auth.slack_team_image_34_url, class: 'project-icon')
-              text current_account.slack_auth.slack_team_name
+              img(src: account_image_url(current_account, 34), class: 'project-icon')
+              text "current_account.slack_auth.slack_team_name"
             }
           end
         }

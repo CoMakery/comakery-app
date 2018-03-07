@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: :new
-  before_action :assign_current_auth
+  before_action :assign_current_account
 
   def landing
     skip_authorization
@@ -75,7 +75,7 @@ class ProjectsController < ApplicationController
     awardable_types_result = GetAwardableTypes.call(current_account: current_account, project: @project)
     @awardable_types = awardable_types_result.awardable_types
     @can_award = awardable_types_result.can_award
-    @award_data = GetAwardData.call(authentication: current_account&.slack_auth, project: @project).award_data
+    @award_data = GetAwardData.call(account: current_account, project: @project).award_data
   end
 
   def edit
@@ -141,7 +141,8 @@ class ProjectsController < ApplicationController
     @slack_channels = result.channels
   end
 
-  def assign_current_auth
-    @current_auth = current_account&.slack_auth&.decorate
+  def assign_current_account
+    @current_account_deco = current_account&.decorate
   end
+
 end

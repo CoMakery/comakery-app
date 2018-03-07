@@ -72,7 +72,7 @@ class Account < ApplicationRecord
     precise_percentage = (BigDecimal(total_awards_remaining(project)) * 100) / BigDecimal(project.total_awards_outstanding)
     precise_percentage.truncate(8)
   end
-
+  
   #TODO: check if account and project in same team
   def can_receive_award?(project)
     false

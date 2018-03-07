@@ -17,7 +17,8 @@ class ProjectPolicy < ApplicationPolicy
     def resolve
       if @account && @account.slack_auth
         projects = Project.arel_table
-        scope.where(projects[:public].eq(true).or(projects[:slack_team_id].eq(@account.slack_auth.slack_team_id)))
+        #TODO update after refactor project-channels
+        scope.where(projects[:public].eq(true))#.or(projects[:slack_team_id].eq(@account.slack_auth.slack_team_id)))
       else
         scope.where(public: true)
       end
@@ -45,9 +46,9 @@ class ProjectPolicy < ApplicationPolicy
   def show_revenue_info?
     project.share_revenue? && show_contributions?
   end
-
+  #TODO: update after refactor teams
   def team_member?
-    account.present? && account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
+    account.present? && project.account_id == account.id #account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
   end
 
   alias send_community_award? team_member?

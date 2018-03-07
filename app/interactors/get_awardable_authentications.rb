@@ -10,7 +10,7 @@ class GetAwardableAuthentications
       return
     end
 
-    slack = Comakery::Slack.get(current_account.slack_auth.slack_token)
+    slack = Comakery::Slack.get(current_account.slack_auth.token)
 
     all_awardable_authentications = slack.get_users[:members].map { |user| [api_formatted_name(user), user[:id]] }
     all_awardable_authentications = all_awardable_authentications.sort_by { |member| member.first.downcase.sub(/\A@/, '') }

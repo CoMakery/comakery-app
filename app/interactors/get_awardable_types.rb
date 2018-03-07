@@ -28,8 +28,8 @@ class GetAwardableTypes
   def own_project?(account, project)
     belong_to_project?(account, project) && project&.account == account
   end
-
+  #TODO update after refactor
   def belong_to_project?(account, project)
-    project&.slack_team_id == account&.slack_auth&.slack_team_id
+    project.account==account#project&.slack_team_id == account&.slack_auth&.slack_team_id
   end
 end

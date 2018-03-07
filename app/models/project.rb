@@ -30,7 +30,7 @@ class Project < ApplicationRecord
   end
 
   has_many :contributors, through: :awards, source: :account # TODO: deprecate in favor of contributors_distinct
-  has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
+  has_many :contributors_distinct, -> { distinct }, through: :awards, source: :account
   has_many :revenues
 
   belongs_to :account
@@ -82,13 +82,14 @@ class Project < ApplicationRecord
     update! ethereum_contract_address: address
   end
 
-  # def self.for_account(account)
-  #   where(slack_team_id: account&.slack_auth&.slack_team_id)
-  # end
-  #
-  # def self.not_for_account(account)
-  #   where.not(slack_team_id: account&.slack_auth&.slack_team_id)
-  # end
+  #TODO: will modify after refactor project-account-award
+  def self.for_account(account)
+    where(account_id: account.id)#where(slack_team_id: account&.slack_auth&.slack_team_id)
+  end
+  #TODO: will modify after refactor project-account-award
+  def self.not_for_account(account)
+    where.not(account_id: account.id)#where.not(slack_team_id: account&.slack_auth&.slack_team_id)
+  end
 
   def self.public_projects
     where(public: true)

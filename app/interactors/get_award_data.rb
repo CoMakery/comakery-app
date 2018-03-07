@@ -3,31 +3,31 @@ class GetAwardData
 
   def call
     project = context.project
-    authentication = context.authentication
+    account = context.account
 
-    awards = project.awards.includes(:authentication, :award_type)
+    awards = project.awards.includes(:account, :award_type)
     awards_array = awards.dup.to_a
 
     context.award_data = {
       contributions: contributions_data(awards_array),
       contributions_summary: contributions_summary(project),
       contributions_summary_pie_chart: contributions_summary_pie_chart(awards_array),
-      award_amounts: award_amount_data(authentication, awards_array),
+      award_amounts: award_amount_data(account, awards_array),
       contributions_by_day: contributions_by_day(awards)
     }
   end
 
-  def award_amount_data(authentication, awards)
+  def award_amount_data(account, awards)
     result = { total_tokens_issued: awards.sum(&:total_amount) }
-    result[:my_project_tokens] = authentication ? awards.sum { |a| a.authentication_id == authentication.id ? a.total_amount : 0 } : nil
+    result[:my_project_tokens] = account ? awards.sum { |a| a.account_id == account.id ? a.total_amount : 0 } : nil
     result
   end
 
   def contributions_summary(project)
     contributions = project.contributors_distinct.map do |contributor|
       {
-        name: contributor.display_name,
-        avatar: contributor.slack_icon,
+        name: contributor.name,
+        avatar: contributor.image,
         earned: contributor.total_awards_earned(project),
         paid: contributor.total_awards_paid(project),
         remaining: contributor.total_awards_remaining(project)
@@ -43,10 +43,10 @@ class GetAwardData
 
   def contributions_data(awards)
     awards.each_with_object({}) do |award, awards|
-      awards[award.authentication_id] ||= { net_amount: 0 }
-      awards[award.authentication_id][:name] ||= award.authentication.display_name || award.authentication.email
-      awards[award.authentication_id][:net_amount] += award.total_amount
-      awards[award.authentication_id][:avatar] ||= award.authentication.slack_icon
+      awards[award.account_id] ||= { net_amount: 0 }
+      awards[award.account_id][:name] ||= award.account.name || award.account.email
+      awards[award.account_id][:net_amount] += award.total_amount
+      awards[award.account_id][:avatar] ||= award.account.image
     end.values.sort_by { |award_data| -award_data[:net_amount] }
   end
 
@@ -67,11 +67,11 @@ class GetAwardData
                     .where('awards.created_at > ?', history.days.ago)
                     .order('awards.created_at asc')
 
-    contributor_auths = recent_awards.map(&:authentication).freeze
+    contributor_auths = recent_awards.map(&:account).freeze
     empty_row_template = contributor_auths.each_with_object({}) do |contributor_auth, contributors|
       # using display names is potentially problematic because these aren't unique, and also they could be a stale copy in our DB
       # from when the user last logged in
-      contributors[contributor_auth.display_name] = 0 if contributor_auth
+      contributors[contributor_auth.name] = 0 if contributor_auth
     end.freeze
 
     awards_by_date = recent_awards.group_by { |a| a.created_at.to_date.iso8601 }
@@ -100,10 +100,10 @@ class GetAwardData
     row = row.merge(empty_row_template.dup)
 
     (awards_on_day || []).each do |award|
-      next unless award.authentication
-      display_name = award.authentication.display_name
-      row[display_name] ||= 0
-      row[display_name] += award.total_amount
+      next unless award.account
+      name = award.account.name
+      row[name] ||= 0
+      row[name] += award.total_amount
     end
 
     row

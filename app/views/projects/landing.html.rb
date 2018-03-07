@@ -3,7 +3,7 @@ class Views::Projects::Landing < Views::Projects::Base
 
   def content
     if current_account&.slack_auth
-      projects_header("#{current_account.slack_auth.slack_team_name} projects")
+      projects_header("Projects")
       projects_block(private_projects, private_project_contributors)
     elsif !current_account
       content_for(:pre_body) {
