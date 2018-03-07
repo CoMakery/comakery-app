@@ -2,7 +2,7 @@ module SlackDomainable
   extend ActiveSupport::Concern
 
   included do
-    validate :valid_slack_team_domain
+    # validate :valid_slack_team_domain
   end
 
   def valid_slack_team_domain

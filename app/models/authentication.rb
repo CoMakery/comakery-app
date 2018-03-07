@@ -11,6 +11,22 @@ class Authentication < ApplicationRecord
   #   allowed_domains.include?(slack_team_domain)
   # end
 
+  def self.find_with_omniauth(auth_hash)
+    find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
+  end
+
+  def self.create_with_omniauth!(auth_hash)
+    account = Account.find_or_create_by!(email: auth_hash['info']['email']) do |a|
+      a.first_name = auth_hash['info']['first_name']
+      a.last_name = auth_hash['info']['last_name']
+    end
+    create(uid: auth_hash['uid'], provider: auth_hash['provider'],
+           oauth_response: auth_hash, email: auth_hash['info']['email'],
+           token: auth_hash['credentials']['token'],
+           account: account)
+    account
+  end
+
   def self.find_or_create_from_auth_hash!(auth_hash)
     slack_auth_hash = SlackAuthHash.new(auth_hash)
 

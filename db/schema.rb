@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180306031502) do
+ActiveRecord::Schema.define(version: 20180306070459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 20180306031502) do
     t.string "uid", null: false
     t.string "token"
     t.jsonb "oauth_response"
+    t.string "email"
+    t.string "provider_team_id"
     t.index ["account_id"], name: "index_authentications_on_account_id"
     t.index ["uid"], name: "index_authentications_on_uid"
   end
