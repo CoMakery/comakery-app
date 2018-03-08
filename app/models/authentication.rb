@@ -2,19 +2,20 @@ class Authentication < ApplicationRecord
   # include SlackDomainable
 
   belongs_to :account
-  # has_many :projects, foreign_key: :slack_team_id, primary_key: :slack_team_id
   validates :account, :provider, :uid, presence: true
 
   #TODO update after refactor
   def slack_team_ethereum_enabled?
-    allow_ethereum = Rails.application.config.allow_ethereum
-    allowed_domains = allow_ethereum.to_s.split(',').compact
+    # allow_ethereum = Rails.application.config.allow_ethereum
+    # allowed_domains = allow_ethereum.to_s.split(',').compact
     # allowed_domains.include?(slack_team_domain)
     true
   end
 
   def self.find_with_omniauth(auth_hash)
-    find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
+    authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
+    authentication.build_team auth_hash if authentication
+    authentication
   end
 
   def self.create_with_omniauth!(auth_hash)
@@ -22,11 +23,22 @@ class Authentication < ApplicationRecord
       a.first_name = auth_hash['info']['first_name']
       a.last_name = auth_hash['info']['last_name']
     end
-    create(uid: auth_hash['uid'], provider: auth_hash['provider'],
+    authentication = create(uid: auth_hash['uid'], provider: auth_hash['provider'],
            oauth_response: auth_hash, email: auth_hash['info']['email'],
            token: auth_hash['credentials']['token'],
            account: account)
+    authentication.build_team auth_hash
     account
+  end
+
+  def build_team auth_hash
+    return if auth_hash['info']['team_id'].blank?
+    team = Team.find_or_create_by team_id: auth_hash['info']['team_id'] do |t|
+      t.name = auth_hash['info']['team']
+      t.domain = auth_hash['info']['team_domain']
+      t.provider = auth_hash['provider']
+    end
+    team.accounts << account unless team.accounts.include?(account)
   end
 
   def self.find_or_create_from_auth_hash!(auth_hash)

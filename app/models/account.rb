@@ -5,6 +5,9 @@ class Account < ApplicationRecord
 
   has_many :account_roles, dependent: :destroy
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
+  has_many :account_teams, dependent: :destroy
+  has_many :teams, through: :account_teams
+  has_many :team_projects, through: :account_teams, source: :projects
   has_many :awards, dependent: :destroy
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   default_scope { includes(:slack_auth) }
@@ -18,6 +21,10 @@ class Account < ApplicationRecord
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
 
   before_save :downcase_email
+
+  def def provider_team_ids
+    authentication_teams.map(&:provider_team_id)
+  end
 
   def team_auth(slack_team_id)
     authentications.find_by(slack_team_id: slack_team_id)
@@ -72,7 +79,11 @@ class Account < ApplicationRecord
     precise_percentage = (BigDecimal(total_awards_remaining(project)) * 100) / BigDecimal(project.total_awards_outstanding)
     precise_percentage.truncate(8)
   end
-  
+
+  def public_projects
+    Project.where.not(id: team_projects.map(&:id))
+  end
+
   #TODO: check if account and project in same team
   def can_receive_award?(project)
     false

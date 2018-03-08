@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180307033159) do
+ActiveRecord::Schema.define(version: 20180308070834) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(version: 20180307033159) do
     t.datetime "updated_at"
     t.index ["account_id", "role_id"], name: "index_account_roles_on_account_id_and_role_id", unique: true
     t.index ["account_id"], name: "index_account_roles_on_account_id"
+  end
+
+  create_table "account_teams", force: :cascade do |t|
+    t.integer "account_id"
+    t.integer "team_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "accounts", id: :serial, force: :cascade do |t|
@@ -194,6 +201,16 @@ ActiveRecord::Schema.define(version: 20180307033159) do
     t.string "key", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "team_id"
+    t.string "name"
+    t.string "domain"
+    t.string "provider"
+    t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

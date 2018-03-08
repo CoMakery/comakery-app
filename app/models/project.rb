@@ -34,6 +34,7 @@ class Project < ApplicationRecord
   has_many :revenues
 
   belongs_to :account
+  has_many :authentication_teams, through: :account
 
   enum payment_type: {
     revenue_share: 0,
@@ -65,6 +66,9 @@ class Project < ApplicationRecord
 
   before_save :set_transitioned_to_ethereum_enabled
 
+  scope :publics, -> {where public: true}
+  scope :featured, -> {order :featured}
+
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
       .joins('left join award_types on projects.id = award_types.project_id')
@@ -89,14 +93,6 @@ class Project < ApplicationRecord
   #TODO: will modify after refactor project-account-award
   def self.not_for_account(account)
     where.not(account_id: account.id)#where.not(slack_team_id: account&.slack_auth&.slack_team_id)
-  end
-
-  def self.public_projects
-    where(public: true)
-  end
-
-  def self.featured
-    order('featured asc')
   end
 
   def total_revenue
