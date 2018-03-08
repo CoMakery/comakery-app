@@ -3,8 +3,8 @@ require 'rails_helper'
 describe AccountsController do
   let(:authentication) { create(:sb_authentication) }
   let(:account) { authentication.account }
-  let(:award1) { create(:award, authentication: authentication) }
-  let(:award2) { create(:award, authentication: authentication) }
+  let(:award1) { create(:award, account: account) }
+  let(:award2) { create(:award, account: account) }
 
   describe '#update' do
     before { login(account) }

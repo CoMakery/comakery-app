@@ -26,7 +26,7 @@ class Mom
   end
 
   def sb_authentication(**attrs)
-    defaults = { slack_team_id: 'swarmbot' }
+    defaults = { }
     defaults[:account] = account unless attrs.key?(:account)
     authentication(defaults.merge(attrs))
   end
