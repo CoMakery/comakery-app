@@ -86,15 +86,6 @@ class Project < ApplicationRecord
     update! ethereum_contract_address: address
   end
 
-  #TODO: will modify after refactor project-account-award
-  def self.for_account(account)
-    where(account_id: account.id)#where(slack_team_id: account&.slack_auth&.slack_team_id)
-  end
-  #TODO: will modify after refactor project-account-award
-  def self.not_for_account(account)
-    where.not(account_id: account.id)#where.not(slack_team_id: account&.slack_auth&.slack_team_id)
-  end
-
   def total_revenue
     revenues.total_amount
   end

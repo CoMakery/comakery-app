@@ -46,9 +46,9 @@ class ProjectPolicy < ApplicationPolicy
   def show_revenue_info?
     project.share_revenue? && show_contributions?
   end
-  #TODO: update after refactor teams
+
   def team_member?
-    account.present? && project.account_id == account.id #account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
+    account.team_projects.include?(project)
   end
 
   alias send_community_award? team_member?

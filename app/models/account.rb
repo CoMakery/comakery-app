@@ -84,9 +84,8 @@ class Account < ApplicationRecord
     Project.where.not(id: team_projects.map(&:id))
   end
 
-  #TODO: check if account and project in same team
   def can_receive_award?(project)
-    false
+    team_projects.include?(project)
   end
 
   def send_reset_password_request

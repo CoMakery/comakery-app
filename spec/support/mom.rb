@@ -117,6 +117,16 @@ class Mom
     Role.new name: name, key: (key || name)
   end
 
+  def team(**attrs)
+    defaults = {
+      team_id: "12EDF",
+      name: 'Team',
+      provider: "Slack",
+      domain: "test-app"
+    }
+    Team.new(defaults.merge(attrs))
+  end
+
   def valid_password
     'a password'
   end

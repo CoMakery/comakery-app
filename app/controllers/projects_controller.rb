@@ -5,8 +5,8 @@ class ProjectsController < ApplicationController
   def landing
     skip_authorization
     if current_account
-      @private_projects = current_account.team_projects.with_last_activity_at.limit(6).decorate #Project.with_last_activity_at.for_account(current_account).limit(6).decorate
-      @public_projects = current_account.public_projects.with_last_activity_at.limit(6).decorate #Project.with_last_activity_at.not_for_account(current_account).public_projects.limit(6).decorate
+      @private_projects = current_account.team_projects.with_last_activity_at.limit(6).decorate
+      @public_projects = current_account.public_projects.with_last_activity_at.limit(6).decorate
     else
       @private_projects = []
       @public_projects = policy_scope(Project).featured.with_last_activity_at.limit(6).decorate
