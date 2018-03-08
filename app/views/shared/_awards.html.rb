@@ -56,8 +56,8 @@ class Views::Shared::Awards < Views::Base
               }
             }
             td(class: 'small-2') {
-              if award.issuer_slack_icon
-                img(src: award.issuer_slack_icon, class: 'icon avatar-img')
+              if award.team_image
+                img(src: award.team_image, class: 'icon avatar-img')
                 text ' '
               end
               text award.issuer_display_name

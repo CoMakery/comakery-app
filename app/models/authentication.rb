@@ -37,6 +37,7 @@ class Authentication < ApplicationRecord
       t.name = auth_hash['info']['team']
       t.domain = auth_hash['info']['team_domain']
       t.provider = auth_hash['provider']
+      t.image = auth_hash.dig('extra', 'team_info', 'team', 'icon', 'image_132')
     end
     team.accounts << account unless team.accounts.include?(account)
   end

@@ -105,7 +105,7 @@ class Views::Accounts::Show < Views::Base
 
     hr
 
-    current_account.slack_awards.group_by { |award| award.project.id }.each do |(_, awards_for_project)|
+    current_account.awards.group_by { |award| award.project.id }.each do |(_, awards_for_project)|
       project = awards_for_project.first.project.decorate
       h3 {
         link_to project.title, project_awards_path(project)

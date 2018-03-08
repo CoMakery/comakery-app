@@ -34,7 +34,7 @@ class Project < ApplicationRecord
   has_many :revenues
 
   belongs_to :account
-  has_many :authentication_teams, through: :account
+  has_many :teams, through: :account
 
   enum payment_type: {
     revenue_share: 0,

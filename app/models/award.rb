@@ -52,12 +52,9 @@ class Award < ApplicationRecord
     project.account.name
   end
 
-  def issuer_slack_icon
-    issuer_slack_auth&.slack_icon
-  end
-
-  def issuer_slack_auth
-    issuer.team_auth(slack_team_id)
+  #TODO update after refactor award/channels
+  def team_image
+    project.teams.first&.image
   end
 
   def total_amount=(x)
