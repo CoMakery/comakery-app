@@ -6,8 +6,8 @@ describe AuthenticationsController do
   let!(:issuer_auth) { create(:sb_authentication, account: issuer_account) }
   let!(:recipient_auth) { create(:sb_authentication) }
   let!(:award_type) { create(:award_type, project: project) }
-  let!(:award1) { create(:award, award_type: award_type, authentication: recipient_auth, issuer: issuer_account) }
-  let!(:award2) { create(:award, award_type: award_type, authentication: recipient_auth, issuer: issuer_account) }
+  let!(:award1) { create(:award, award_type: award_type, account: recipient_auth.account) }
+  let!(:award2) { create(:award, award_type: award_type, account: recipient_auth.account) }
 
   before { login(recipient_auth.account) }
 
