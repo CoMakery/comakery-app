@@ -1,7 +1,7 @@
 module Views
   module Projects
     class SettingsForm < Views::Base
-      needs :project, :slack_channels, :providers
+      needs :project, :slack_channels, :providers, :provider_data
 
       def content
         form_for project do |f|
@@ -107,13 +107,13 @@ module Views
                     options = capture do
                       options_for_select([[nil, nil]].concat(providers.map{|c| [c.titleize,c]}), selected: ff.object.team_id)
                     end
-                    select_tag 'provider', options
+                    select_tag 'provider', options, class: "provider_select"
                   }
-                  column('small-3') {
+                  column('small-3 team-select-container') {
                     options = capture do
                       options_for_select([[nil, nil]], selected: ff.object.team_id)
                     end
-                    ff.select :team_id, options
+                    ff.select :team_id, options, {}, class: "team_select"
                   }
                   column('small-3') {
                     options = capture do

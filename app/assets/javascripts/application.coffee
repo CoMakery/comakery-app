@@ -52,6 +52,13 @@ $ ->
     removeElement.hide()
     removeElement.find("input[data-destroy]").val("1")
 
+  $(document).on "change", ".provider_select", (e) ->
+    $('.active-channel').removeClass('active-channel')
+    $closest = $(@).closest('.row')
+    $closest.addClass('active-channel')
+    $id = $closest.find('.team_select').attr('id')
+    $data = {elem_id: $id, provider: $(@).val()}
+    $.get("/projects/teams.js", $data)
   # Run on page ready then bind events
   awardPaymentType()
   $('#project_payment_type').change (e)->

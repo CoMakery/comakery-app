@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: :new
+  skip_after_action :verify_authorized, only: [:teams]
   before_action :assign_current_account
 
   def landing
@@ -100,6 +101,16 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def teams
+    @teams = current_account.teams.where(provider: params[:provider])
+    elem_id = params[:elem_id]
+    @elem_index = elem_id.split("_")[3] if elem_id
+
+    respond_to do |format|
+      format.js { render :layout => false }
+    end
+  end
+
   private
 
   def project_params
@@ -139,6 +150,15 @@ class ProjectsController < ApplicationController
 
   def assign_slack_channels
     @providers = current_account.teams.map(&:provider).uniq
+    @provider_data = {}
+    @providers.each do |provider|
+      teams = current_account.teams.where(provider: provider)
+      team_data = []
+      teams.each do |team|
+        team_data
+      end
+      @provider_data[provider] = teams
+    end
     result = GetSlackChannels.call(current_account: current_account)
     @slack_channels = result.channels
   end
