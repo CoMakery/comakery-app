@@ -43,6 +43,7 @@ class ProjectsController < ApplicationController
     @project.award_types.build(name: 'Expert marketing hour', amount: 150)
     @project.award_types.build(name: 'Blog post (600+ words)', amount: 150)
     @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
+    @project.channels.build if current_account.teams.any?
     authorize @project
   end
 
@@ -110,7 +111,6 @@ class ProjectsController < ApplicationController
       :image,
       :maximum_tokens,
       :public,
-      :slack_channel,
       :title,
       :tracker,
       :video_url,
@@ -132,11 +132,13 @@ class ProjectsController < ApplicationController
         name
         description
         disabled
-      ]
+      ],
+      channels_attributes: %i[id team_id name _destroy]
     )
   end
 
   def assign_slack_channels
+    @providers = current_account.teams.map(&:provider).uniq
     result = GetSlackChannels.call(current_account: current_account)
     @slack_channels = result.channels
   end

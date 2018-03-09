@@ -1,16 +1,22 @@
 require 'rails_helper'
 
 describe AwardsController do
-  let!(:issuer) { create(:account, email: 'issuer@example.com').tap { |a| create(:authentication, slack_team_id: 'foo', account: a, slack_user_id: 'issuer id') } }
-  let!(:receiver_authentication) { create(:authentication, slack_first_name: 'Rece', slack_last_name: 'Iver', slack_team_id: 'foo', slack_user_name: 'receiver', slack_user_id: 'receiver id', account: create(:account, email: 'receiver@example.com')) }
-  let!(:other_auth) { create(:authentication, slack_team_id: 'foo', account: create(:account, email: 'other@example.com'), slack_user_id: 'other id') }
-  let!(:different_team_account) { create(:account, email: 'different@example.com').tap { |a| create(:authentication, slack_team_id: 'bar', account: a, slack_user_id: 'different team member id') } }
+  let!(:team) {create :team}
+  let!(:issuer) { create(:account, email: 'issuer@example.com')}
+  let!(:receiver) { create(:account, email: 'receiver@example.com') }
+  let!(:other_account) { create(:account, mail: 'other@example.com') }
+  let!(:different_team_account) { create(:account, email: 'different@example.com')}
 
-  let(:project) { create(:project, account: issuer, slack_team_id: 'foo', public: false, maximum_tokens: 100_000_000) }
+  let(:project) { create(:project, account: issuer, public: false, maximum_tokens: 100_000_000) }
 
+  before do
+    team.accounts << issuer
+    team.accounts << receiver
+    team.accounts << other_account
+  end
   describe '#index' do
-    let!(:award) { create(:award, award_type: create(:award_type, project: project), authentication: other_auth, issuer: issuer) }
-    let!(:different_project_award) { create(:award, award_type: create(:award_type, project: create(:project)), authentication: other_auth, issuer: issuer) }
+    let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_account) }
+    let!(:different_project_award) { create(:award, award_type: create(:award_type, project: create(:project)), account: other_account) }
 
     context 'when logged in' do
       before { login(issuer) }
@@ -26,8 +32,8 @@ describe AwardsController do
 
     context 'when logged out' do
       context 'with a public project' do
-        let!(:public_project) { create(:project, account: issuer, slack_team_id: 'foo', public: true) }
-        let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project), issuer: issuer) }
+        let!(:public_project) { create(:project, account: issuer, public: true) }
+        let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
 
         it 'shows awards for public projects' do
           get :index, params: { project_id: public_project.to_param }
@@ -39,7 +45,7 @@ describe AwardsController do
       end
 
       context 'with a private project' do
-        let!(:private_project) { create(:project, account: issuer, slack_team_id: 'foo', public: false) }
+        let!(:private_project) { create(:project, account: issuer, public: false) }
         let!(:private_award) { create(:award, award_type: create(:award_type, project: private_project)) }
 
         it 'sends you away' do

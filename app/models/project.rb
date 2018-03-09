@@ -7,11 +7,10 @@ class Project < ApplicationRecord
   nilify_blanks
   attachment :image
 
+  belongs_to :account
   has_many :award_types, inverse_of: :project, dependent: :destroy
-  accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
-
   has_many :awards, through: :award_types, dependent: :destroy
-
+  has_many :channels, dependent: :destroy
   has_many :payments, dependent: :destroy do
     def new_with_quantity(quantity_redeemed:, account:)
       project = @association.owner
@@ -32,9 +31,10 @@ class Project < ApplicationRecord
   has_many :contributors, through: :awards, source: :account # TODO: deprecate in favor of contributors_distinct
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :account
   has_many :revenues
-
-  belongs_to :account
   has_many :teams, through: :account
+
+  accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
+  accepts_nested_attributes_for :channels, reject_if: :invalid_params, allow_destroy: true
 
   enum payment_type: {
     revenue_share: 0,
@@ -47,7 +47,7 @@ class Project < ApplicationRecord
     ETH: 2
   }
 
-  validates :description, :account, :slack_channel, :title, :legal_project_owner,
+  validates :description, :account, :title, :legal_project_owner,
     :denomination, presence: true
 
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { unless: :project_token? }

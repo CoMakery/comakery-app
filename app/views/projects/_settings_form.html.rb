@@ -1,7 +1,7 @@
 module Views
   module Projects
     class SettingsForm < Views::Base
-      needs :project, :slack_channels
+      needs :project, :slack_channels, :providers
 
       def content
         form_for project do |f|
@@ -74,6 +74,63 @@ module Views
                   }
                   text attachment_image_tag(project, :image, class: 'project-image')
                 }
+              }
+            }
+          }
+
+
+          div(class: 'content-box') {
+            div(class: 'award-types') {
+              div(class: 'legal-box-header') {
+                h3 'Communication Channels'
+              }
+              row {
+                column('small-3') {
+                  text 'Provider'
+                }
+                column('small-3') {
+                  text 'Team or Guild'
+                }
+                column('small-3') {
+                  text 'Channel'
+                }
+                column('small-3', class: 'text-center') {
+                  text 'Remove'
+                }
+              }
+
+              f.fields_for(:channels) do |ff|
+                row(class: "channel-row#{ff.object.team_id.nil? ? ' hide channel-template' : ''}") {
+                  ff.hidden_field :id
+                  ff.hidden_field :_destroy, 'data-destroy': ''
+                  column('small-3') {
+                    options = capture do
+                      options_for_select([[nil, nil]].concat(providers.map{|c| [c.titleize,c]}), selected: ff.object.team_id)
+                    end
+                    select_tag 'provider', options
+                  }
+                  column('small-3') {
+                    options = capture do
+                      options_for_select([[nil, nil]], selected: ff.object.team_id)
+                    end
+                    ff.select :team_id, options
+                  }
+                  column('small-3') {
+                    options = capture do
+                      options_for_select([[nil, nil]].concat(slack_channels), selected: ff.object.team_id)
+                    end
+                    ff.select :name, options
+                  }
+
+                  column('small-3', class: 'text-center') {
+                    a('×', href: '#', 'data-mark-and-hide': '.channel-row', class: 'close')
+                  }
+                }
+              end
+            }
+            row(class: 'add-channel') {
+              column {
+                p { a('+ add channel', href: '#', 'data-duplicate': '.channel-template') }
               }
             }
           }
@@ -231,7 +288,7 @@ module Views
                 column('small-1') {
                   text 'Disable'
                 }
-                column('small-2') {
+                column('small-2', class: 'text-center') {
                   text 'Remove '
                   question_tooltip 'Award type cannot be changed after awards have been issued.'
                 }
