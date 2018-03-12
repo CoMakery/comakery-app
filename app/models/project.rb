@@ -34,7 +34,7 @@ class Project < ApplicationRecord
   has_many :teams, through: :account
 
   accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
-  accepts_nested_attributes_for :channels, reject_if: :invalid_params, allow_destroy: true
+  accepts_nested_attributes_for :channels, reject_if: :invalid_channel, allow_destroy: true
 
   enum payment_type: {
     revenue_share: 0,
@@ -131,6 +131,10 @@ class Project < ApplicationRecord
 
   def invalid_params(attributes)
     AwardType.invalid_params(attributes)
+  end
+
+  def invalid_channel(attributes)
+    Channel.invalid_params(attributes)
   end
 
   # def owner_slack_user_name

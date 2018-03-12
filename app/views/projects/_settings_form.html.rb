@@ -1,7 +1,7 @@
 module Views
   module Projects
     class SettingsForm < Views::Base
-      needs :project, :slack_channels, :providers, :provider_data
+      needs :project, :providers, :provider_data
 
       def content
         form_for project do |f|
@@ -17,17 +17,7 @@ module Views
                     f.text_field :title
                   }
                 }
-                with_errors(project, :slack_channel) {
-                  label {
-                    i(class: 'fa fa-slack')
-                    required_label_text ' Slack Channel '
-                    question_tooltip 'Select where project notifications will be sent.'
-                    options = capture do
-                      options_for_select([[nil, nil]].concat(slack_channels), selected: project.slack_channel)
-                    end
-                    select_tag 'project[slack_channel]', options, html: { id: 'project_slack_channel' }
-                  }
-                }
+
                 with_errors(project, :description) {
                   label {
                     required_label_text 'Description'
@@ -100,26 +90,28 @@ module Views
               }
 
               f.fields_for(:channels) do |ff|
-                row(class: "channel-row#{ff.object.team_id.nil? ? ' hide channel-template' : ''}") {
+                row(class: "channel-row#{ff.object.team_id.blank? && ff.object.name.blank? ? ' hide channel-template' : ''}") {
                   ff.hidden_field :id
                   ff.hidden_field :_destroy, 'data-destroy': ''
                   column('small-3') {
                     options = capture do
-                      options_for_select([[nil, nil]].concat(providers.map{|c| [c.titleize,c]}), selected: ff.object.team_id)
+                      options_for_select([[nil, nil]].concat(providers.map{|c| [c.titleize,c]}), selected: ff.object.provider)
                     end
                     select_tag 'provider', options, class: "provider_select"
                   }
                   column('small-3 team-select-container') {
+                    options = []
                     options = capture do
-                      options_for_select([[nil, nil]], selected: ff.object.team_id)
-                    end
-                    ff.select :team_id, options, {}, class: "team_select"
+                      options_from_collection_for_select(ff.object.teams, :id, :name, ff.object.team_id)
+                    end unless ff.object.teams.blank?
+                    ff.select :team_id, options, {include_blank: true}, class: "team_select"
                   }
-                  column('small-3') {
+                  column('small-3 channel-select-container') {
+                    options = []
                     options = capture do
-                      options_for_select([[nil, nil]].concat(slack_channels), selected: ff.object.team_id)
-                    end
-                    ff.select :name, options
+                      options_for_select(ff.object.channels, selected: ff.object.name)
+                    end unless ff.object.get_channels.blank?
+                    ff.select :name, options, {include_blank: true}, class: "channel_select"
                   }
 
                   column('small-3', class: 'text-center') {

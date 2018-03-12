@@ -58,7 +58,16 @@ $ ->
     $closest.addClass('active-channel')
     $id = $closest.find('.team_select').attr('id')
     $data = {elem_id: $id, provider: $(@).val()}
-    $.get("/projects/teams.js", $data)
+    $.get("/teams.js", $data)
+
+  $(document).on "change", ".team_select", (e) ->
+    $('.active-channel').removeClass('active-channel')
+    $closest = $(@).closest('.row')
+    $closest.addClass('active-channel')
+    $id = $closest.find('.channel_select').attr('id')
+    $data = {elem_id: $id}
+    $.get("/teams/" + $(@).val() + "/channels.js", $data)
+
   # Run on page ready then bind events
   awardPaymentType()
   $('#project_payment_type').change (e)->

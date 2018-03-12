@@ -49,15 +49,7 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    # there could be multiple authentications... maybe this should be a drop down box to select which team
-    # you are creating this project for if we actually allow multiple, simultaneous auths
-    auth = current_account.slack_auth
-    @project = Project.new(project_params.merge(account: current_account,
-                                                slack_team_image_34_url: auth.slack_team_image_34_url,
-                                                slack_team_image_132_url: auth.slack_team_image_132_url,
-                                                slack_team_id: auth.slack_team_id,
-                                                slack_team_name: auth.slack_team_name,
-                                                slack_team_domain: auth.slack_team_domain))
+    @project = current_account.projects.build project_params
     authorize @project
     if @project.save
       flash[:notice] = 'Project created'
@@ -82,32 +74,22 @@ class ProjectsController < ApplicationController
 
   def edit
     @project = Project.includes(:award_types).find(params[:id])
+    @project.channels.build if current_account.teams.any?
     authorize @project
     assign_slack_channels
   end
 
   def update
-    @project = Project.includes(:award_types).find(params[:id])
-    @project.attributes = project_params
+    @project = Project.includes(:award_types, :channels).find(params[:id])
     authorize @project
 
-    if @project.save
+    if @project.update project_params
       flash[:notice] = 'Project updated'
       respond_with @project, location: project_path(@project)
     else
       flash[:error] = 'Project update failed, please correct the errors below'
       assign_slack_channels
       render :edit
-    end
-  end
-
-  def teams
-    @teams = current_account.teams.where(provider: params[:provider])
-    elem_id = params[:elem_id]
-    @elem_index = elem_id.split("_")[3] if elem_id
-
-    respond_to do |format|
-      format.js { render :layout => false }
     end
   end
 
@@ -159,8 +141,8 @@ class ProjectsController < ApplicationController
       end
       @provider_data[provider] = teams
     end
-    result = GetSlackChannels.call(current_account: current_account)
-    @slack_channels = result.channels
+    # result = GetSlackChannels.call(current_account: current_account)
+    # @slack_channels = result.channels
   end
 
   def assign_current_account

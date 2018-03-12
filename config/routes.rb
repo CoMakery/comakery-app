@@ -38,7 +38,12 @@ Rails.application.routes.draw do
     resources :payments, only: [:index, :create, :update]
     collection do
       get :landing
-      get :teams
+    end
+  end
+
+  resources :teams, only: [:index] do
+    member do
+      get :channels
     end
   end
 
