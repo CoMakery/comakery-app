@@ -2,6 +2,7 @@ class Authentication < ApplicationRecord
   # include SlackDomainable
 
   belongs_to :account
+  has_many :authentication_teams, dependent: :destroy
   validates :account, :provider, :uid, presence: true
 
   #TODO update after refactor
@@ -39,7 +40,7 @@ class Authentication < ApplicationRecord
       t.provider = auth_hash['provider']
       t.image = auth_hash.dig('extra', 'team_info', 'team', 'icon', 'image_132')
     end
-    team.accounts << account unless team.accounts.include?(account)
+    authentication_teams.find_or_create_by account_id: account.id, team_id: team.id
   end
 
   def self.find_or_create_from_auth_hash!(auth_hash)

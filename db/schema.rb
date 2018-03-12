@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180309024300) do
+ActiveRecord::Schema.define(version: 20180312022660) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,13 +22,6 @@ ActiveRecord::Schema.define(version: 20180309024300) do
     t.datetime "updated_at"
     t.index ["account_id", "role_id"], name: "index_account_roles_on_account_id_and_role_id", unique: true
     t.index ["account_id"], name: "index_account_roles_on_account_id"
-  end
-
-  create_table "account_teams", force: :cascade do |t|
-    t.integer "account_id"
-    t.integer "team_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "accounts", id: :serial, force: :cascade do |t|
@@ -66,12 +59,12 @@ ActiveRecord::Schema.define(version: 20180309024300) do
   end
 
   create_table "authentication_teams", force: :cascade do |t|
-    t.string "provider_team_id"
     t.integer "authentication_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "account_id"
+    t.integer "team_id"
     t.index ["authentication_id"], name: "index_authentication_teams_on_authentication_id"
-    t.index ["provider_team_id"], name: "index_authentication_teams_on_provider_team_id"
   end
 
   create_table "authentications", id: :serial, force: :cascade do |t|
@@ -85,6 +78,16 @@ ActiveRecord::Schema.define(version: 20180309024300) do
     t.string "email"
     t.index ["account_id"], name: "index_authentications_on_account_id"
     t.index ["uid"], name: "index_authentications_on_uid"
+  end
+
+  create_table "award_links", force: :cascade do |t|
+    t.integer "award_type_id"
+    t.decimal "quantity"
+    t.text "description"
+    t.string "status", default: "available"
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "award_types", id: :serial, force: :cascade do |t|
@@ -156,7 +159,7 @@ ActiveRecord::Schema.define(version: 20180309024300) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "public", default: false, null: false
-    t.integer "owner_account_id", null: false
+    t.integer "account_id", null: false
     t.string "image_id"
     t.string "slack_channel"
     t.integer "maximum_tokens", default: 0, null: false
@@ -177,7 +180,7 @@ ActiveRecord::Schema.define(version: 20180309024300) do
     t.string "image_filename"
     t.string "image_content_size"
     t.string "image_content_type"
-    t.index ["owner_account_id"], name: "index_projects_on_owner_account_id"
+    t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["public"], name: "index_projects_on_public"
   end
 
