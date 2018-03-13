@@ -3,6 +3,7 @@ class Views::Layouts::Raw < Views::Base
     doctype!
     html(lang: 'en') {
       head {
+        render partial: 'shared/unbounce.html'
         meta :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type'
         meta charset: 'utf-8'
         meta name: 'viewport', content: 'width=device-width, initial-scale=1.0'
