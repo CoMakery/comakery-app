@@ -2,24 +2,24 @@ require 'rails_helper'
 
 describe AwardsController do
   let!(:team) { create :team }
-  let!(:issuer) { create(:account, email: 'issuer@example.com') }
-  let!(:receiver) { create(:account, email: 'receiver@example.com') }
-  let!(:other_account) { create(:account, mail: 'other@example.com') }
-  let!(:different_team_account) { create(:account, email: 'different@example.com') }
+  let!(:issuer) { create(:authentication) }
+  let!(:receiver) { create(:authentication) }
+  let!(:other_auth) { create(:authentication) }
+  let!(:different_team_account) { create(:authentication) }
 
-  let(:project) { create(:project, account: issuer, public: false, maximum_tokens: 100_000_000) }
+  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000) }
 
   before do
-    team.accounts << issuer
-    team.accounts << receiver
-    team.accounts << other_account
+    team.build_authentication_team issuer
+    team.build_authentication_team receiver
+    team.build_authentication_team other_auth
   end
   describe '#index' do
-    let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_account) }
-    let!(:different_project_award) { create(:award, award_type: create(:award_type, project: create(:project)), account: other_account) }
+    let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_auth.account) }
+    let!(:different_project_award) { create(:award, award_type: create(:award_type, project: create(:project)), account: other_auth.account) }
 
     context 'when logged in' do
-      before { login(issuer) }
+      before { login(issuer.account) }
 
       it 'shows awards for current project' do
         get :index, params: { project_id: project.to_param }
@@ -32,7 +32,7 @@ describe AwardsController do
 
     context 'when logged out' do
       context 'with a public project' do
-        let!(:public_project) { create(:project, account: issuer, public: true) }
+        let!(:public_project) { create(:project, account: issuer.account, public: true) }
         let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
 
         it 'shows awards for public projects' do
@@ -45,7 +45,7 @@ describe AwardsController do
       end
 
       context 'with a private project' do
-        let!(:private_project) { create(:project, account: issuer, public: false) }
+        let!(:private_project) { create(:project, account: issuer.account, public: false) }
         let!(:private_award) { create(:award, award_type: create(:award_type, project: private_project)) }
 
         it 'sends you away' do
@@ -64,7 +64,7 @@ describe AwardsController do
       end
 
       specify do
-        login issuer
+        login issuer.account
 
         get :index, params: { project_id: project.id }
         expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
@@ -83,7 +83,7 @@ describe AwardsController do
     let(:award_type) { create(:award_type, project: project) }
 
     before do
-      login(issuer)
+      login(issuer.account)
       request.env['HTTP_REFERER'] = "/projects/#{project.to_param}"
     end
 

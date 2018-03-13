@@ -17,8 +17,7 @@ class ProjectPolicy < ApplicationPolicy
     def resolve
       if @account && @account.slack_auth
         projects = Project.arel_table
-        # TODO: update after refactor project-channels
-        scope.where(projects[:public].eq(true)) # .or(projects[:slack_team_id].eq(@account.slack_auth.slack_team_id)))
+        scope.where(projects[:public].eq(true).or(projects[:id].in(@account.team_projects.map(&:id))))
       else
         scope.where(public: true)
       end

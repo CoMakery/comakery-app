@@ -13,8 +13,7 @@ class PaymentsController < ApplicationController
 
     payment_params = params.require(:payment).permit :quantity_redeemed
 
-    @payment = @project.payments.new_with_quantity quantity_redeemed: payment_params[:quantity_redeemed],
-                                                   payee_auth: @current_auth
+    @payment = @project.payments.new_with_quantity quantity_redeemed: payment_params[:quantity_redeemed], account: current_account
     @payment.truncate_total_value_to_currency_precision
 
     authorize @payment, :create?
@@ -31,7 +30,7 @@ class PaymentsController < ApplicationController
     authorize @project # TODO: scope to project owner
 
     update_params = params.require(:payment).permit :transaction_fee, :transaction_reference, :id
-    @payment = Payment.find(params['id'])
+    @payment = current_account.payments.find(params['id'])
 
     authorize @payment, :update?
 
@@ -40,7 +39,6 @@ class PaymentsController < ApplicationController
     @payment.transaction_fee ||= 0
     @payment.total_payment = @payment.total_value - @payment.transaction_fee
     @payment.reconciled = true
-    @payment.issuer = @current_auth
 
     flash[:error] = @payment.errors.full_messages.join(' ') unless @payment.save
 

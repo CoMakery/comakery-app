@@ -7,7 +7,6 @@ describe LicensesController do
       title: 'Cats with Lazers Project',
       description: 'cats with lazers',
       account: account,
-      slack_team_id: 'citizencode',
       public: true)
   end
 
