@@ -13,9 +13,9 @@ RSpec.describe AuthenticationTeam, type: :model do
   end
 
   describe 'has many projects' do
-    let!(:authentication){create :authentication}
-    let!(:project){create :project, account: authentication.account}
-    let!(:team) {create :team}
+    let!(:authentication) { create :authentication }
+    let!(:project) { create :project, account: authentication.account }
+    let!(:team) { create :team }
 
     it 'return projects' do
       team.build_authentication_team authentication

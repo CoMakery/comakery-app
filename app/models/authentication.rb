@@ -5,7 +5,7 @@ class Authentication < ApplicationRecord
   has_many :authentication_teams, dependent: :destroy
   validates :account, :provider, :uid, presence: true
 
-  #TODO update after refactor
+  # TODO: update after refactor
   def slack_team_ethereum_enabled?
     # allow_ethereum = Rails.application.config.allow_ethereum
     # allowed_domains = allow_ethereum.to_s.split(',').compact
@@ -15,7 +15,7 @@ class Authentication < ApplicationRecord
 
   def self.find_with_omniauth(auth_hash)
     authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
-    authentication.build_team auth_hash if authentication
+    authentication&.build_team auth_hash
     authentication
   end
 
@@ -25,14 +25,14 @@ class Authentication < ApplicationRecord
       a.last_name = auth_hash['info']['last_name']
     end
     authentication = create(uid: auth_hash['uid'], provider: auth_hash['provider'],
-           oauth_response: auth_hash, email: auth_hash['info']['email'],
-           token: auth_hash['credentials']['token'],
-           account: account)
+                            oauth_response: auth_hash, email: auth_hash['info']['email'],
+                            token: auth_hash['credentials']['token'],
+                            account: account)
     authentication.build_team auth_hash
     account
   end
 
-  def build_team auth_hash
+  def build_team(auth_hash)
     return if auth_hash['info']['team_id'].blank?
     team = Team.find_or_create_by team_id: auth_hash['info']['team_id'] do |t|
       t.name = auth_hash['info']['team']

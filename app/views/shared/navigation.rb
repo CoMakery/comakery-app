@@ -15,7 +15,7 @@ class Views::Shared::Navigation < Views::Base
           if current_account&.slack_auth
             div(class: 'top-bar-text') {
               img(src: account_image_url(current_account, 34), class: 'project-icon')
-              text "Slack Team"
+              text 'Slack Team'
             }
           end
         }
@@ -40,7 +40,7 @@ class Views::Shared::Navigation < Views::Base
           if current_account&.slack_auth
             div(class: 'top-bar-text') {
               img(src: account_image_url(current_account, 34), class: 'project-icon')
-              text "current_account.slack_auth.slack_team_name"
+              text 'current_account.slack_auth.slack_team_name'
             }
           end
         }

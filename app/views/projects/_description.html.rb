@@ -25,7 +25,7 @@ class Views::Projects::Description < Views::Projects::Base
             p {
               text 'Lead by '
               b project.account.name
-              #TODO: team(s)
+              # TODO: team(s)
               # text ' with '
               # strong project.slack_team_name
             }

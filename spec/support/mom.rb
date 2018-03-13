@@ -26,7 +26,7 @@ class Mom
   end
 
   def sb_authentication(**attrs)
-    defaults = { }
+    defaults = {}
     defaults[:account] = account unless attrs.key?(:account)
     authentication(defaults.merge(attrs))
   end
@@ -119,10 +119,10 @@ class Mom
 
   def team(**attrs)
     defaults = {
-      team_id: "12EDF",
+      team_id: '12EDF',
       name: 'Team',
-      provider: "Slack",
-      domain: "test-app"
+      provider: 'Slack',
+      domain: 'test-app'
     }
     Team.new(defaults.merge(attrs))
   end

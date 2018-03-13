@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe AwardsController do
-  let!(:team) {create :team}
-  let!(:issuer) { create(:account, email: 'issuer@example.com')}
+  let!(:team) { create :team }
+  let!(:issuer) { create(:account, email: 'issuer@example.com') }
   let!(:receiver) { create(:account, email: 'receiver@example.com') }
   let!(:other_account) { create(:account, mail: 'other@example.com') }
-  let!(:different_team_account) { create(:account, email: 'different@example.com')}
+  let!(:different_team_account) { create(:account, email: 'different@example.com') }
 
   let(:project) { create(:project, account: issuer, public: false, maximum_tokens: 100_000_000) }
 

@@ -6,9 +6,7 @@ module Views
       def content
         form_for project do |f|
           div(class: 'content-box') {
-            div(class: 'legal-box-header') {
-              h3 'Project Settings'
-            }
+            div(class: 'legal-box-header') { h3 'Project Settings' }
             row {
               column('large-6 small-12') {
                 with_errors(project, :title) {
@@ -31,10 +29,7 @@ module Views
                     text 'Display Currency'
                     question_tooltip 'This is the currency that will be used for display by default. Revenues for revenue sharing will be counted in the currency it was received in.'
                     f.select(:denomination,
-                      [['US Dollars ($)', 'USD'],
-                       ['Bittoken (฿)', 'BTC'],
-                       ['Ether (Ξ)', 'ETH']],
-                      { selected: project.denomination, include_blank: false },
+                      [['US Dollars ($)', 'USD'], ['Bittoken (฿)', 'BTC'], ['Ether (Ξ)', 'ETH']], { selected: project.denomination, include_blank: false },
                       disabled: project.license_finalized? || project.revenues.any?)
                   }
                 }
@@ -68,64 +63,7 @@ module Views
             }
           }
 
-
-          div(class: 'content-box') {
-            div(class: 'award-types') {
-              div(class: 'legal-box-header') {
-                h3 'Communication Channels'
-              }
-              row {
-                column('small-3') {
-                  text 'Provider'
-                }
-                column('small-3') {
-                  text 'Team or Guild'
-                }
-                column('small-3') {
-                  text 'Channel'
-                }
-                column('small-3', class: 'text-center') {
-                  text 'Remove'
-                }
-              }
-
-              f.fields_for(:channels) do |ff|
-                row(class: "channel-row#{ff.object.team_id.blank? && ff.object.name.blank? ? ' hide channel-template' : ''}") {
-                  ff.hidden_field :id
-                  ff.hidden_field :_destroy, 'data-destroy': ''
-                  column('small-3') {
-                    options = capture do
-                      options_for_select([[nil, nil]].concat(providers.map{|c| [c.titleize,c]}), selected: ff.object.provider)
-                    end
-                    select_tag 'provider', options, class: "provider_select"
-                  }
-                  column('small-3 team-select-container') {
-                    options = []
-                    options = capture do
-                      options_from_collection_for_select(ff.object.teams, :id, :name, ff.object.team_id)
-                    end unless ff.object.teams.blank?
-                    ff.select :team_id, options, {include_blank: true}, class: "team_select"
-                  }
-                  column('small-3 channel-select-container') {
-                    options = []
-                    options = capture do
-                      options_for_select(ff.object.channels, selected: ff.object.name)
-                    end unless ff.object.get_channels.blank?
-                    ff.select :name, options, {include_blank: true}, class: "channel_select"
-                  }
-
-                  column('small-3', class: 'text-center') {
-                    a('×', href: '#', 'data-mark-and-hide': '.channel-row', class: 'close')
-                  }
-                }
-              end
-            }
-            row(class: 'add-channel') {
-              column {
-                p { a('+ add channel', href: '#', 'data-duplicate': '.channel-template') }
-              }
-            }
-          }
+          render partial: '/projects/form/channel', locals: { f: f, providers: providers }
 
           div(class: 'content-box') {
             full_row {
@@ -163,9 +101,7 @@ module Views
             }
             br
             full_row {
-              div(class: 'legal-box-header') {
-                h4 'Contributor Awards'
-              }
+              div(class: 'legal-box-header') { h4 'Contributor Awards' }
             }
             row {
               column('large-6 small-12') {
@@ -258,16 +194,10 @@ module Views
           }
           div(class: 'content-box') {
             div(class: 'award-types') {
-              div(class: 'legal-box-header') {
-                h3 'Awards Offered'
-              }
+              div(class: 'legal-box-header') { h3 'Awards Offered' }
               row {
-                column('small-3') {
-                  text 'Contribution Type'
-                }
-                column('small-1') {
-                  text 'Amount '
-                }
+                column('small-3') { text 'Contribution Type' }
+                column('small-1') { text 'Amount ' }
                 column('small-1') {
                   text 'Community Awardable '
                   question_tooltip 'Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.'
@@ -277,9 +207,7 @@ module Views
                   br
                   link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text')
                 }
-                column('small-1') {
-                  text 'Disable'
-                }
+                column('small-1') { text 'Disable' }
                 column('small-2', class: 'text-center') {
                   text 'Remove '
                   question_tooltip 'Award type cannot be changed after awards have been issued.'
@@ -291,9 +219,7 @@ module Views
                 row(class: "award-type-row#{ff.object.amount == 0 ? ' hide award-type-template' : ''}") {
                   ff.hidden_field :id
                   ff.hidden_field :_destroy, 'data-destroy': ''
-                  column('small-3') {
-                    ff.text_field :name
-                  }
+                  column('small-3') { ff.text_field :name }
                   column('small-1') {
                     readonly = !ff.object&.modifiable?
                     if readonly
@@ -304,15 +230,9 @@ module Views
                       ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
                     end
                   }
-                  column('small-1', class: 'text-center') {
-                    ff.check_box :community_awardable
-                  }
-                  column('small-4', class: 'text-center') {
-                    ff.text_area :description, class: 'award-type-description'
-                  }
-                  column('small-1', class: 'text-center') {
-                    ff.check_box :disabled
-                  }
+                  column('small-1', class: 'text-center') { ff.check_box :community_awardable }
+                  column('small-4', class: 'text-center') { ff.text_area :description, class: 'award-type-description' }
+                  column('small-1', class: 'text-center') { ff.check_box :disabled }
                   column('small-2', class: 'text-center') {
                     if ff.object&.modifiable?
                       a('×', href: '#', 'data-mark-and-hide': '.award-type-row', class: 'close')

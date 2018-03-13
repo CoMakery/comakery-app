@@ -27,11 +27,11 @@ class Views::Projects::Base < Views::Base
   end
 
   def project_block(project, contributors)
-    row(class: "#{current_account&.can_receive_award?(project) ? ' project-highlighted' : ''}", id: "project-#{project.to_param}") {
+    row(class: (current_account&.can_receive_award?(project) ? ' project-highlighted' : '').to_s, id: "project-#{project.to_param}") {
       a(href: project_path(project)) {
         div(class: 'sixteen-nine') {
           div(class: 'content') {
-            img(src: project_image_url(project,132), class: 'image-block')
+            img(src: project_image_url(project, 132), class: 'image-block')
           }
         }
       }
@@ -41,11 +41,11 @@ class Views::Projects::Base < Views::Base
             a(project.title, href: project_path(project), class: 'project-link')
           }
           a(href: project_path(project)) {
-            i project.title#project.slack_team_name
+            i project.title # project.slack_team_name
           }
         }
         a(href: project_path(project)) {
-          img(src: project_image_url(project,132), class: 'icon')
+          img(src: project_image_url(project, 132), class: 'icon')
         }
 
         p(class: 'description no-last-award') { text project.description_text }

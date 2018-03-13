@@ -126,13 +126,13 @@ describe Comakery::Slack do
     end
   end
 
-  describe '#get_channels' do
+  describe '#fetch_channels' do
     it 'returns the list of channels in the slack instance' do
       stub_request(:post, 'https://slack.com/api/channels.list')
         .with(body: { 'token' => 'token' })
         .to_return(body: File.read(Rails.root.join('spec', 'fixtures', 'channel_list_response.json')))
 
-      response = described_class.new('token').get_channels
+      response = described_class.new('token').fetch_channels
 
       expect(response['channels'][0]['id']).to eq('C000BE01L')
       expect(response['channels'][0]['name']).to eq('fun')

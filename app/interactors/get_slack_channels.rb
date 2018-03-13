@@ -5,7 +5,7 @@ class GetSlackChannels
     authentication_team = context.authentication_team
 
     begin
-      response = authentication_team.slack.get_channels
+      response = authentication_team.slack.fetch_channels
       channels = response.channels
                          .reject(&:is_archived)
                          .sort_by { |channel| channel['name'] }

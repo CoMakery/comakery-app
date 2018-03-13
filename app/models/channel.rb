@@ -2,27 +2,23 @@ class Channel < ApplicationRecord
   belongs_to :project
   belongs_to :team
 
-  delegate :provider, to: :project
-  validates :name, :team_id, :project, presence: true
+  validates :name, :team, :project, presence: true
 
   attr_accessor :channels
-  def provider
-    self.team.provider if self.team
-  end
+  delegate :provider, to: :team, allow_nil: true
 
-  def get_channels
+  def fetch_channels
     @channels ||= auth_team.channels if auth_team
     @channels
   end
 
   def teams
-    return project.teams.where(provider: self.provider) if self.project
-    []
+    return project.teams.where(provider: provider) if project
   end
 
   def auth_team
-    if self.project && self.team
-      @auth_team ||= self.team.authentication_teams.find_by account_id: self.project.account_id
+    if project && team
+      @auth_team ||= team.authentication_teams.find_by account_id: project.account_id
     end
     @auth_team
   end

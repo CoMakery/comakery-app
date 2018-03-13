@@ -7,7 +7,6 @@ describe Project do
         .to eq(["Description can't be blank",
                 'Maximum tokens must be greater than 0',
                 "Account can't be blank",
-                "Slack channel can't be blank",
                 "Title can't be blank",
                 "Legal project owner can't be blank"].sort)
     end

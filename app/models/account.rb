@@ -22,7 +22,7 @@ class Account < ApplicationRecord
 
   before_save :downcase_email
 
-  def def provider_team_ids
+  def def(_provider_team_ids)
     authentication_teams.map(&:provider_team_id)
   end
 

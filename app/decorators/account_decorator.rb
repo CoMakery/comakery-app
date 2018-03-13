@@ -2,10 +2,6 @@ class AccountDecorator < Draper::Decorator
   delegate_all
   include ActionView::Helpers::NumberHelper
 
-  def total_awards_remaining_pretty(project)
-    pretty_award total_awards_remaining(project)
-  end
-
   def total_awards_earned_pretty(project)
     pretty_award total_awards_earned(project)
   end

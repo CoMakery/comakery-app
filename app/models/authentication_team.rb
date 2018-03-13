@@ -17,6 +17,6 @@ class AuthenticationTeam < ApplicationRecord
   end
 
   def slack
-    @slack ||= Comakery::Slack.get(authentication.token) if authentication.provider=='slack'
+    @slack ||= Comakery::Slack.get(authentication.token) if authentication.provider == 'slack'
   end
 end

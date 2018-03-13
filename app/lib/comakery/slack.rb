@@ -77,7 +77,7 @@ class Comakery::Slack
     @client.users_info(user: slack_user_id)
   end
 
-  def get_channels
+  def fetch_channels
     @client.channels_list
   end
 end

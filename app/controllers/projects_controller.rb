@@ -136,7 +136,7 @@ class ProjectsController < ApplicationController
     @providers.each do |provider|
       teams = current_account.teams.where(provider: provider)
       team_data = []
-      teams.each do |team|
+      teams.each do |_team|
         team_data
       end
       @provider_data[provider] = teams
@@ -148,5 +148,4 @@ class ProjectsController < ApplicationController
   def assign_current_account
     @current_account_deco = current_account&.decorate
   end
-
 end

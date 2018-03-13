@@ -52,7 +52,7 @@ class Award < ApplicationRecord
     project.account.name
   end
 
-  #TODO update after refactor award/channels
+  # TODO: update after refactor award/channels
   def team_image
     project.teams.first&.image
   end
