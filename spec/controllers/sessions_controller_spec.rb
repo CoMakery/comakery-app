@@ -17,12 +17,13 @@ describe SessionsController do
   describe '#create' do
     let!(:account) { create(:account, email: 'bob@example.com') }
     let!(:authentication) { create(:authentication, provider: 'slack', account_id: account.id) }
-    let(:auth_hash) do
+    let!(:auth_hash) do
       {
+        'uid'=>'U9GATGPFH',
         'name' => 'bob johnson',
         'provider' => 'slack',
         'credentials' => { 'token' => 'these are credentials' },
-        'info' => { 'team' => 'Citizen Code', 'team_id' => 'this_is_a_team_id', 'user_id' => 'U00000000', 'user' => 'redman', 'first_name' => 'Red', 'last_name' => 'Man', 'team_domain' => 'citizencode' },
+        'info' => { 'email' => 'bob@example.com', 'team' => 'Citizen Code', 'team_id' => 'this_is_a_team_id', 'user_id' => 'U00000000', 'user' => 'redman', 'first_name' => 'Red', 'last_name' => 'Man', 'team_domain' => 'citizencode' },
         'extra' => {
           'user_info' => { 'user' => { 'profile' => { 'email' => 'bob@example.com', 'image_32' => 'https://avatars.com/avatars_32.jpg' }, 'real_name' => 'Real Name' } },
           'team_info' => { 'team' => { 'icon' => { 'image_34' => 'https://slack.example.com/team-image-34-px.jpg', 'image_132' => 'https://slack.example.com/team-image-132-px.jpg' } } }
@@ -52,18 +53,7 @@ describe SessionsController do
 
         assert_response :redirect
         assert_redirected_to root_path
-        expect(flash[:error]).to eq('Failed authentication - Slack auth hash is missing one or more required values:
-{
-    "provider": "slack",
-    "email_address": null,
-    "slack_team_id": null,
-    "slack_team_name": null,
-    "slack_team_image_34_url": null,
-    "slack_team_image_132_url": null,
-    "slack_user_id": null,
-    "slack_user_name": null,
-    "slack_token": "this is a token"
-}')
+        expect(flash[:error]).to eq('Failed authentication - Auth hash is missing one or more required values')
         expect(session[:account_id]).to be_nil
       end
     end
