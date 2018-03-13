@@ -1,11 +1,14 @@
 require 'rails_helper'
 
 describe RevenuesController do
-  let!(:account) { create(:account, email: 'account@example.com').tap { |a| create(:authentication, account: a, slack_team_id: 'foo', slack_user_name: 'account', slack_user_id: 'account slack_user_id', slack_team_domain: 'foobar') } }
-  let!(:my_project) { create(:project, title: 'Cats', description: 'Cats with lazers', account: account, slack_team_id: 'foo') }
-  let!(:other_project) { create(:project, title: 'Dogs', description: 'Dogs with harpoons', account: account, slack_team_id: 'bar') }
+  let!(:team) {create :team}
+  let!(:authentication){ create :authentication }
+  let!(:account) { authentication.account }
+  let!(:my_project) { create(:project, title: 'Cats', description: 'Cats with lazers', account: account) }
+  let!(:other_project) { create(:project, title: 'Dogs', description: 'Dogs with harpoons', account: create(:account)) }
 
   before do
+    team.build_authentication_team authentication
     allow(controller).to receive(:policy_scope).and_call_original
     allow(controller).to receive(:authorize).and_call_original
   end
