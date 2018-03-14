@@ -36,6 +36,7 @@ gem 'refile-s3'
 gem 'responders'
 gem 'sass-rails'
 gem 'sdoc', group: :doc
+gem 'sendgrid-ruby'
 gem 'sidekiq'
 gem 'sidekiq-failures'
 gem 'sinatra', require: nil # for sidekiq admin interface
