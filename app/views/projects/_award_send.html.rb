@@ -52,6 +52,44 @@ class Views::Projects::AwardSend < Views::Base
           end
           if can_award
             row {
+              column('small-12') {
+                label {
+                  text 'Communication Channel'
+                  options = []
+                  if project.channels.any?
+                    options = capture do
+                      options_from_collection_for_select(project.channels, :id, :name_with_channel)
+                    end
+                  end
+                  f.select :channel_id, options, {prompt: "Email"}
+                }
+              }
+            }
+            row {
+              column('small-12') {
+                label {
+                  text 'Email Address'
+                  f.text_field :uid
+                }
+              }
+            }
+
+            row {
+              column('small-12') {
+                label {
+                  text 'Award Type'
+                  options = []
+                  if project.channels.any?
+                    options = capture do
+                      options_from_collection_for_select(awardable_types, :id, :name)
+                    end
+                  end
+                  f.select :award_type_id, options, {}
+                }
+              }
+            }
+
+            row {
               column('small-2') {
                 label {
                   text 'Quantity'

@@ -7,6 +7,9 @@ class Channel < ApplicationRecord
   attr_accessor :channels
   delegate :provider, to: :team, allow_nil: true
 
+  def name_with_channel
+    "[#{provider}] #{team.name} ##{name}"
+  end
   def fetch_channels
     @channels ||= auth_team.channels if auth_team
     @channels
