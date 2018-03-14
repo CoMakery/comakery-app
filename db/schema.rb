@@ -80,16 +80,6 @@ ActiveRecord::Schema.define(version: 20180314023216) do
     t.index ["uid"], name: "index_authentications_on_uid"
   end
 
-  create_table "award_links", force: :cascade do |t|
-    t.integer "award_type_id"
-    t.decimal "quantity"
-    t.text "description"
-    t.string "status", default: "available"
-    t.string "token"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "award_types", id: :serial, force: :cascade do |t|
     t.integer "project_id", null: false
     t.string "name", null: false
@@ -161,7 +151,7 @@ ActiveRecord::Schema.define(version: 20180314023216) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "public", default: false, null: false
-    t.integer "account_id", null: false
+    t.integer "owner_account_id", null: false
     t.string "image_id"
     t.string "slack_channel"
     t.integer "maximum_tokens", default: 0, null: false
@@ -182,7 +172,7 @@ ActiveRecord::Schema.define(version: 20180314023216) do
     t.string "image_filename"
     t.string "image_content_size"
     t.string "image_content_type"
-    t.index ["account_id"], name: "index_projects_on_account_id"
+    t.index ["owner_account_id"], name: "index_projects_on_owner_account_id"
     t.index ["public"], name: "index_projects_on_public"
   end
 

@@ -61,10 +61,20 @@ class Views::Projects::AwardSend < Views::Base
                       options_from_collection_for_select(project.channels, :id, :name_with_channel)
                     end
                   end
-                  f.select :channel_id, options, {prompt: "Email"}
+                  f.select :channel_id, options, {prompt: "Email"}, class: 'fetch-channel-users'
                 }
               }
             }
+
+            row {
+              column('small-8') {
+                label {
+                  text 'User'
+                  f.select :uid], []
+                }
+              }
+            }
+
             row {
               column('small-12') {
                 label {

@@ -15,6 +15,7 @@ class Account < ApplicationRecord
   has_many :roles, through: :account_roles
   has_many :projects
   has_many :payments
+  has_many :channels, through: :projects
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required
   validates :password, length: { minimum: 8 }, if: :password_required

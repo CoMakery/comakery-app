@@ -68,6 +68,10 @@ $ ->
     $data = {elem_id: $id}
     $.get("/teams/" + $(@).val() + "/channels.js", $data)
 
+  $(document).on "change", ".fetch-channel-users", (e) ->
+    $data = {elem_id: $id}
+    $.get("/channels/" + $(@).val() + "/users.js")
+
   # Run on page ready then bind events
   awardPaymentType()
   $('#project_payment_type').change (e)->

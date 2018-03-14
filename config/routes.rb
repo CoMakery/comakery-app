@@ -47,6 +47,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :channes, only: [] do
+    member do
+      get :users
+    end
+  end
+
   unless Rails.env.development? || Rails.env.test?
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|
       username.present? && password.present? &&
