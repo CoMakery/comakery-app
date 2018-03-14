@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe PaymentsController do
-  let!(:team) {create :team}
-  let!(:authentication) {create :authentication}
+  let!(:team) { create :team }
+  let!(:authentication) { create :authentication }
   let!(:account) { authentication.account }
   let!(:my_project) { create(:project, payment_type: 'revenue_share', title: 'Cats', description: 'Cats with lazers', account: account) }
   let!(:other_project) { create(:project, payment_type: 'revenue_share', title: 'Dogs', description: 'Dogs with harpoons', account: create(:account)) }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180312022660) do
+ActiveRecord::Schema.define(version: 20180314023216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,6 +114,8 @@ ActiveRecord::Schema.define(version: 20180312022660) do
     t.decimal "quantity", default: "1.0"
     t.integer "total_amount"
     t.integer "unit_amount"
+    t.integer "channel_id"
+    t.string "uid"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
   end

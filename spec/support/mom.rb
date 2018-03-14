@@ -60,7 +60,6 @@ class Mom
       title: 'Uber for Cats',
       description: 'We are going to build amazing',
       tracker: 'https://github.com/example/uber_for_cats',
-      slack_channel: 'slack_channel',
       account: account,
       royalty_percentage: 5.9,
       maximum_royalties_per_month: 10_000,

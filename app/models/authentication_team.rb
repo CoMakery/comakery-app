@@ -5,6 +5,10 @@ class AuthenticationTeam < ApplicationRecord
   has_many :projects, through: :account
   validates :account, :team, :authentication, presence: true
 
+  def name
+    authentication.oauth_response['info']['name']
+  end
+
   def channels
     return @channels if @channels
     if slack

@@ -3,12 +3,11 @@ class BuildAwardRecords
 
   # rubocop:disable Metrics/CyclomaticComplexity
   def call
-    slack_user_id = context.slack_user_id
     award_params = context.award_params
     total_tokens_issued = context.total_tokens_issued
-    issuer = context.issuer
+    uid = award_params[:uid]
 
-    context.fail!(message: 'missing slack_user_id') if slack_user_id.blank?
+    context.fail!(message: 'missing uid or email') if uid.blank?
     context.fail!(message: 'missing total_tokens_issued') if total_tokens_issued.blank?
 
     award_type = AwardType.find_by(id: award_params[:award_type_id])
@@ -17,13 +16,12 @@ class BuildAwardRecords
 
     quantity = award_params[:quantity].presence || 1
 
-    authentication = Authentication.includes(:account).find_by(slack_user_id: slack_user_id)
-    authentication ||= create_authentication(context)
+    authentication = Authentication.includes(:account).find_by(uid: uid)
+    account = authentication&.account || create_account(context)
 
     # TODO: could be done with a award_type.build_award_with_quantity variation of award_type.create_award_with_quantity
     award = Award.new(award_params.merge(
-                        issuer: issuer,
-                        authentication_id: authentication.id,
+                        account_id: account.id,
                         unit_amount: award_type.amount,
                         quantity: quantity,
                         total_amount: award_type.amount * BigDecimal(quantity)
@@ -45,25 +43,20 @@ class BuildAwardRecords
 
   private
 
-  def create_authentication(context)
-    response = Comakery::Slack.new(context.issuer.slack_auth.slack_token).get_user_info(context.slack_user_id)
-    account = Account.find_or_create_by(email: response.user.profile.email)
-    unless account.valid?
-      context.fail!(message: account.errors.full_messages.join(', '))
+  def create_account(context)
+    uid = context.award_params[:uid]
+    if context.award_params[:channel_id]
+      channel = Channel.find context.award_params[:channel_id]
+      response = Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
+      account = Account.find_or_create_by(email: response.user.profile.email)
+      context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?
+      authentication = account.authentications.create(provider: 'slack', uid: uid)
+      context.fail!(message: authentication.errors.full_messages.join(', ')) unless authentication.valid?
+      channel.team.build_authentication_team authentication
+    else
+      account = Account.find_or_create_by(email: uid)
+      context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?
     end
-    authentication = Authentication.create(account: account,
-                                           provider: 'slack',
-                                           slack_team_name: context.project.slack_team_name,
-                                           slack_team_id: context.project.slack_team_id,
-                                           slack_team_image_34_url: context.project.slack_team_image_34_url,
-                                           slack_team_image_132_url: context.project.slack_team_image_132_url,
-                                           slack_user_name: response.user.name,
-                                           slack_user_id: context.slack_user_id)
-
-    unless authentication.valid?
-      context.fail!(message: authentication.errors.full_messages.join(', '))
-    end
-
-    authentication
+    account
   end
 end

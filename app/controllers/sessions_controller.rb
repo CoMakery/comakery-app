@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
     if @account
       session[:account_id] = @account.id
     else
-      flash[:error] = "Failed authentication - Auth hash is missing one or more required values"
+      flash[:error] = 'Failed authentication - Auth hash is missing one or more required values'
     end
     redirect_to root_path
   end

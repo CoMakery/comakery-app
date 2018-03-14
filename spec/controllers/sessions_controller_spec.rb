@@ -19,7 +19,7 @@ describe SessionsController do
     let!(:authentication) { create(:authentication, provider: 'slack', account_id: account.id) }
     let!(:auth_hash) do
       {
-        'uid'=>'U9GATGPFH',
+        'uid' => 'U9GATGPFH',
         'name' => 'bob johnson',
         'provider' => 'slack',
         'credentials' => { 'token' => 'these are credentials' },

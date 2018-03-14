@@ -10,10 +10,7 @@ class AwardsController < ApplicationController
   end
 
   def create
-    result = AwardSlackUser.call(project: @project,
-                                 slack_user_id: params[:award][:slack_user_id],
-                                 issuer: current_account,
-                                 award_params: award_params.except(:slack_user_id))
+    result = AwardSlackUser.call(project: @project, award_params: award_params)
     if result.success?
       award = result.award
       authorize award
@@ -40,7 +37,7 @@ class AwardsController < ApplicationController
   private
 
   def award_params
-    params.require(:award).permit(:slack_user_id, :award_type_id, :quantity, :description, :page)
+    params.require(:award).permit(:uid, :channel_id, :award_type_id, :quantity, :description)
   end
 
   def assign_project

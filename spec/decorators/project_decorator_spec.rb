@@ -240,8 +240,7 @@ describe ProjectDecorator do
   describe '#total_awarded_pretty' do
     before do
       award_type.awards.create_with_quantity(1_000,
-        issuer: create(:account),
-        authentication: create(:authentication))
+        account: create(:account))
     end
 
     specify { expect(project.total_awarded_pretty).to eq('1,337,000') }

@@ -16,6 +16,8 @@ class Channel < ApplicationRecord
     return project.teams.where(provider: provider) if project
   end
 
+  delegate :authentication, to: :auth_team
+
   def auth_team
     if project && team
       @auth_team ||= team.authentication_teams.find_by account_id: project.account_id

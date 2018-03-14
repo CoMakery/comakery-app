@@ -15,24 +15,25 @@ class Authentication < ApplicationRecord
 
   def self.find_with_omniauth(auth_hash)
     authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
-    authentication&.build_team auth_hash
+    if authentication
+      authentication.build_team auth_hash
+      authentication.update oauth_response: auth_hash
+    end
     authentication
   end
 
   def self.create_with_omniauth!(auth_hash)
-    begin
-      account = Account.find_or_create_by!(email: auth_hash['info']['email']) do |a|
-        a.first_name = auth_hash['info']['first_name']
-        a.last_name = auth_hash['info']['last_name']
-      end
-      authentication = account.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'],
-                              oauth_response: auth_hash, email: auth_hash['info']['email'],
-                              token: auth_hash['credentials']['token'])
-      authentication.build_team auth_hash
-      account
-    rescue
-      nil
+    account = Account.find_or_create_by!(email: auth_hash['info']['email']) do |a|
+      a.first_name = auth_hash['info']['first_name']
+      a.last_name = auth_hash['info']['last_name']
     end
+    authentication = account.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'],
+                                                    oauth_response: auth_hash, email: auth_hash['info']['email'],
+                                                    token: auth_hash['credentials']['token'])
+    authentication.build_team auth_hash
+    account
+  rescue
+    nil
   end
 
   def build_team(auth_hash)
