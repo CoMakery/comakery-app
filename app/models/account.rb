@@ -84,7 +84,7 @@ class Account < ApplicationRecord
   end
 
   def public_projects
-    Project.where.not(id: team_projects.map(&:id))
+    Project.publics.where.not(id: team_projects.map(&:id))
   end
 
   def can_receive_award?(project)
