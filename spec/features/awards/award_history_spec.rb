@@ -2,17 +2,20 @@ require 'rails_helper'
 
 describe 'viewing projects, creating and editing', :js do
   context 'when not owner' do
+    let!(:team) {create :team}
     let!(:owner) { create(:account) }
-    let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/owner.jpg') }
+    let!(:owner_auth) { create(:authentication, account: owner) }
     let!(:other_account) { create(:account) }
-    let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/other.jpg') }
-    let!(:project) { create(:project, public: true, account: owner, slack_team_id: 'foo') }
+    let!(:other_account_auth) { create(:authentication, account: other_account) }
+    let!(:project) { create(:project, public: true, account: owner) }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }
-    let!(:award) { create(:award, award_type: award_type, issuer: owner, authentication: other_account_auth) }
-    let!(:community_award) { create(:award, award_type: community_award_type, issuer: other_account, authentication: owner_auth) }
+    let!(:award) { create(:award, award_type: award_type, account: other_account) }
+    let!(:community_award) { create(:award, award_type: community_award_type, account: owner) }
 
     before do
+      team.build_authentication_team owner_auth
+      team.build_authentication_team other_account_auth
       stub_slack_user_list
       stub_slack_channel_list
     end
