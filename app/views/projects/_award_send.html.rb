@@ -20,36 +20,7 @@ class Views::Projects::AwardSend < Views::Base
       br
       form_for [project, award] do |f|
         div(class: 'award-types') {
-          project.award_types.order('amount asc').decorate.each do |award_type|
-            row(class: 'award-type-row') {
-              if award_type.active?
-                column('small-12') {
-                  with_errors(project, :account_id) {
-                    label {
-                      row {
-                        if can_award
-                          column('small-1') {
-                            f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
-                          }
-                        end
-                        column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : 'small-12') {
-                          row {
-                            span(award_type.name)
-                            span(class: ' financial') {
-                              text " (#{award_type.amount_pretty})"
-                            }
-                            text ' (Community Awardable)' if award_type.community_awardable?
-                            br
-                            span(class: 'help-text') { text raw(award_type.description_markdown) }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              end
-            }
-          end
+
           if can_award
             row {
               column('small-12') {
@@ -66,23 +37,20 @@ class Views::Projects::AwardSend < Views::Base
               }
             }
 
-            row {
-              column('small-8') {
-                label {
+            row(class: 'award-uid') {
+              column('small-12') {
+                label(class: 'uid-select hide') {
                   text 'User'
-                  f.select :uid], []
+                  f.select :uid, []
+                }
+
+                label(class: 'uid-email') {
+                  text 'Email Address'
+                  f.text_field :uid, class: 'award-email'
                 }
               }
             }
 
-            row {
-              column('small-12') {
-                label {
-                  text 'Email Address'
-                  f.text_field :uid
-                }
-              }
-            }
 
             row {
               column('small-12') {
@@ -107,17 +75,7 @@ class Views::Projects::AwardSend < Views::Base
                 }
               }
             }
-            row {
-              column('small-8') {
-                label {
-                  text 'User'
-                  options = capture do
-                    options_for_select([[nil, nil]].concat(awardable_authentications))
-                  end
-                  select_tag 'award[slack_user_id]', options, html: { id: 'award_slack_user_id' }
-                }
-              }
-            }
+
             row {
               column('small-12') {
                 with_errors(project, :description) {
@@ -134,6 +92,37 @@ class Views::Projects::AwardSend < Views::Base
                 f.submit('Send Award', class: buttonish)
               }
             }
+          else
+            project.award_types.order('amount asc').decorate.each do |award_type|
+              row(class: 'award-type-row') {
+                if award_type.active?
+                  column('small-12') {
+                    with_errors(project, :account_id) {
+                      label {
+                        row {
+                          if can_award
+                            column('small-1') {
+                              f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
+                            }
+                          end
+                          column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : 'small-12') {
+                            row {
+                              span(award_type.name)
+                              span(class: ' financial') {
+                                text " (#{award_type.amount_pretty})"
+                              }
+                              text ' (Community Awardable)' if award_type.community_awardable?
+                              br
+                              span(class: 'help-text') { text raw(award_type.description_markdown) }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                end
+              }
+            end            
           end
         }
       end

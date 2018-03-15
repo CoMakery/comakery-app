@@ -5,6 +5,7 @@ class Award < ApplicationRecord
 
   belongs_to :account
   belongs_to :award_type
+  belongs_to :channel, optional: true
   has_one :project, through: :award_type
 
   validates :proof_id, :account, :award_type, :unit_amount, :total_amount, :quantity, presence: true
@@ -32,12 +33,16 @@ class Award < ApplicationRecord
     account_id == project.account_id
   end
 
+  def recipient_auth_team
+    account.authentication_teams.find_by team_id: channel.team_id
+  end
+
   def recipient_display_name
     account.name
   end
 
   def recipient_slack_user_name
-    account.name
+    recipient_auth_team&.name || account.name
   end
 
   def recipient_address
@@ -49,7 +54,7 @@ class Award < ApplicationRecord
   end
 
   def issuer_slack_user_name
-    project.account.name
+    channel&.auth_team&.name || project.account.name
   end
 
   # TODO: update after refactor award/channels

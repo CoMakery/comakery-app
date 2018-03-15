@@ -69,8 +69,16 @@ $ ->
     $.get("/teams/" + $(@).val() + "/channels.js", $data)
 
   $(document).on "change", ".fetch-channel-users", (e) ->
-    $data = {elem_id: $id}
-    $.get("/channels/" + $(@).val() + "/users.js")
+    if $(@).val()
+      $('.award-email').attr('name','')
+      $('.uid-email').addClass('hide')
+      $('.uid-select').removeClass('hide')
+      $.get("/channels/" + $(@).val() + "/users.js")
+    else
+      $('.member-select').attr('name','')
+      $('.award-email').attr('name','award[uid]')
+      $('.uid-email').removeClass('hide')
+      $('.uid-select').addClass('hide')
 
   # Run on page ready then bind events
   awardPaymentType()

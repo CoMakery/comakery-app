@@ -47,7 +47,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :channes, only: [] do
+  resources :channels, only: [] do
     member do
       get :users
     end

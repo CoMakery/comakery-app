@@ -22,7 +22,7 @@ class Channel < ApplicationRecord
 
   def slack_members(account=nil)
     return @members if @members
-    slack = team.slack
+    slack = auth_team.slack
     @members = slack.get_users[:members].map { |user| [api_formatted_name(user), user[:id]] }
     @members = @members.sort_by { |member| member.first.downcase.sub(/\A@/, '') }
     @members = @members.reject { |member| member.second == auth_team.authentication.uid } unless account == project.account

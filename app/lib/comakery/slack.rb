@@ -19,7 +19,7 @@ class Comakery::Slack
     text = award_notifications_message(award)
 
     message_response = @client.chat_postMessage(
-      channel: '#' + award.project.slack_channel,
+      channel: '#' + award.channel.name,
       text: text,
       link_names: 1,            # make @user a live link and notify @user
       username: "#{I18n.t('project_name')} Bot",
