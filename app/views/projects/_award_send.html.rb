@@ -59,7 +59,7 @@ class Views::Projects::AwardSend < Views::Base
                   options = []
                   if project.channels.any?
                     options = capture do
-                      options_from_collection_for_select(awardable_types, :id, :name)
+                      options_from_collection_for_select(awardable_types.order('amount asc').decorate, :id, :name_with_amount)
                     end
                   end
                   f.select :award_type_id, options, {}
@@ -122,7 +122,7 @@ class Views::Projects::AwardSend < Views::Base
                   }
                 end
               }
-            end            
+            end
           end
         }
       end

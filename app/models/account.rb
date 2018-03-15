@@ -53,7 +53,8 @@ class Account < ApplicationRecord
   end
 
   def name
-    [first_name, last_name].reject(&:blank?).join(' ')
+    full_name = [first_name, last_name].reject(&:blank?).join(' ')
+    full_name.blank? ? email : full_name
   end
 
   def total_awards_earned(project)

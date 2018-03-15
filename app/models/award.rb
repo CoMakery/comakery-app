@@ -38,7 +38,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_display_name
-    account.name
+    account.name || account.email
   end
 
   def recipient_slack_user_name

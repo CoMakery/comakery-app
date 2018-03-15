@@ -39,7 +39,7 @@ class Views::Shared::Awards < Views::Base
             }
             if show_recipient
               td(class: 'small-2 recipient') {
-                img(src: award.authentication.slack_icon, class: 'icon avatar-img')
+                img(src: account_image_url(award.account, 27), class: 'icon avatar-img')
                 text ' ' + award.recipient_display_name
               }
             end

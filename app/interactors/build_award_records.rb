@@ -45,7 +45,7 @@ class BuildAwardRecords
 
   def create_account(context)
     uid = context.award_params[:uid]
-    if context.award_params[:channel_id]
+    unless context.award_params[:channel_id].blank?
       channel = Channel.find context.award_params[:channel_id]
       response = Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
       account = Account.find_or_create_by(email: response.user.profile.email)
