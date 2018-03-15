@@ -27,9 +27,10 @@ class Authentication < ApplicationRecord
       a.first_name = auth_hash['info']['first_name']
       a.last_name = auth_hash['info']['last_name']
     end
-    authentication = account.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'],
-                                                    oauth_response: auth_hash, email: auth_hash['info']['email'],
-                                                    token: auth_hash['credentials']['token'])
+    authentication = account.authentications.find_or_create_by(uid: auth_hash['uid'], provider: auth_hash['provider']) do |a|
+      a.oauth_response = auth_hash
+      a.token = auth_hash['credentials']['token']
+    end
     authentication.build_team auth_hash
     account
   rescue

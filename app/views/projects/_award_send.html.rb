@@ -20,7 +20,6 @@ class Views::Projects::AwardSend < Views::Base
       br
       form_for [project, award] do |f|
         div(class: 'award-types') {
-
           if can_award
             row {
               column('small-12') {
@@ -32,7 +31,7 @@ class Views::Projects::AwardSend < Views::Base
                       options_from_collection_for_select(project.channels, :id, :name_with_channel)
                     end
                   end
-                  f.select :channel_id, options, {prompt: "Email"}, class: 'fetch-channel-users'
+                  f.select :channel_id, options, { prompt: 'Email' }, class: 'fetch-channel-users'
                 }
               }
             }
@@ -50,7 +49,6 @@ class Views::Projects::AwardSend < Views::Base
                 }
               }
             }
-
 
             row {
               column('small-12') {
@@ -100,12 +98,7 @@ class Views::Projects::AwardSend < Views::Base
                     with_errors(project, :account_id) {
                       label {
                         row {
-                          if can_award
-                            column('small-1') {
-                              f.radio_button(:award_type_id, award_type.to_param, disabled: !awardable_types.include?(award_type))
-                            }
-                          end
-                          column(can_award ? "small-10 end #{awardable_types.include?(award_type) ? '' : 'grayed-out'}" : 'small-12') {
+                          column('small-12') {
                             row {
                               span(award_type.name)
                               span(class: ' financial') {

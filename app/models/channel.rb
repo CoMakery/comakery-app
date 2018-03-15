@@ -20,7 +20,7 @@ class Channel < ApplicationRecord
     return project.teams.where(provider: provider) if project
   end
 
-  def slack_members(account=nil)
+  def slack_members(account = nil)
     return @members if @members
     slack = auth_team.slack
     @members = slack.get_users[:members].map { |user| [api_formatted_name(user), user[:id]] }
@@ -43,6 +43,7 @@ class Channel < ApplicationRecord
   end
 
   private
+
   def api_formatted_name(user)
     real_name = [user[:profile][:first_name].presence, user[:profile][:last_name].presence].compact.join(' ')
     [real_name.presence, "@#{user[:name]}"].compact.join(' - ')

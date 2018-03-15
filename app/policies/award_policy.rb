@@ -23,10 +23,9 @@ class AwardPolicy < ApplicationPolicy
     @award = award
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def create?
     project = @award&.project
     @account &&
-      (@account == project&.account || (@award&.award_type&.community_awardable? && @account != @award&.account)) 
+      (@account == project&.account || (@award&.award_type&.community_awardable? && @account != @award&.account))
   end
 end

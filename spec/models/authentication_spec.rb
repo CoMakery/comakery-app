@@ -63,6 +63,7 @@ describe Authentication do
   describe '.find_or_create_from_auth_hash' do
     let(:auth_hash) do
       {
+        'uid' => 'ACDSF',
         'provider' => 'slack',
         'credentials' => {
           'token' => 'xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa'
@@ -79,6 +80,7 @@ describe Authentication do
           }
         },
         'info' => {
+          'email' => 'bob@example.com',
           'name' => 'Bob Roberts',
           'first_name' => 'Bob',
           'last_name' => 'Roberts',
@@ -91,20 +93,9 @@ describe Authentication do
       }
     end
 
-    context 'when nothing changed from last login' do
-      it 'updates the timestamp on the authentications' do
-        travel_to Date.new 2015
-        account = described_class.find_or_create_from_auth_hash!(auth_hash)
-        travel_to Date.new 2016
-        expect do
-          described_class.find_or_create_from_auth_hash!(auth_hash)
-        end.to change { account.slack_auth.reload.updated_at }
-      end
-    end
-
     context 'when no account exists yet' do
       it 'creates an account and authentications for that account' do
-        account = described_class.find_or_create_from_auth_hash!(auth_hash)
+        account = described_class.create_with_omniauth!(auth_hash)
 
         expect(account.email).to eq('bob@example.com')
 
@@ -113,7 +104,7 @@ describe Authentication do
         expect(auth.provider).to eq('slack')
         expect(account.first_name).to eq('Bob')
         expect(account.last_name).to eq('Roberts')
-        expect(auth.uid).to eq('slack user id')
+        expect(auth.uid).to eq('ACDSF')
         expect(auth.token).to eq('xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa')
         expect(auth.oauth_response).to eq(auth_hash)
       end
@@ -123,9 +114,7 @@ describe Authentication do
       it 'blows up' do
         expect do
           expect do
-            expect do
-              described_class.find_or_create_from_auth_hash!({})
-            end.to raise_error(SlackAuthHash::MissingAuthParamException)
+            described_class.create_with_omniauth!({})
           end.not_to change { Account.count }
         end.not_to change { described_class.count }
       end
@@ -137,7 +126,7 @@ describe Authentication do
         create(:authentication,
           account_id: account.id,
           provider: 'slack',
-          uid: 'slack user id',
+          uid: 'ACDSF',
           token: 'slack token')
       end
 
@@ -145,10 +134,9 @@ describe Authentication do
         result = nil
         expect do
           expect do
-            result = described_class.find_or_create_from_auth_hash!(auth_hash)
+            result = described_class.create_with_omniauth!(auth_hash)
           end.not_to change { Account.count }
         end.not_to change { described_class.count }
-
         expect(result.id).to eq(account.id)
       end
     end

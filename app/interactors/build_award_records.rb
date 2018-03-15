@@ -45,7 +45,10 @@ class BuildAwardRecords
 
   def create_account(context)
     uid = context.award_params[:uid]
-    unless context.award_params[:channel_id].blank?
+    if context.award_params[:channel_id].present?
+      account = Account.find_or_create_by(email: uid)
+      context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?
+    else
       channel = Channel.find context.award_params[:channel_id]
       response = Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
       account = Account.find_or_create_by(email: response.user.profile.email)
@@ -53,9 +56,6 @@ class BuildAwardRecords
       authentication = account.authentications.create(provider: 'slack', uid: uid)
       context.fail!(message: authentication.errors.full_messages.join(', ')) unless authentication.valid?
       channel.team.build_authentication_team authentication
-    else
-      account = Account.find_or_create_by(email: uid)
-      context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?
     end
     account
   end
