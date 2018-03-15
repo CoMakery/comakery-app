@@ -25,7 +25,8 @@ class AwardPolicy < ApplicationPolicy
 
   def create?
     project = @award&.project
-    @account &&
-      (@account == project&.account || (@award&.award_type&.community_awardable? && @account != @award&.account))
+    result = project.award_types.includes(@award.award_type)
+    result &&= (@account && @account == project.account) || (@award&.award_type&.community_awardable? && @account != @award&.account)
+    result
   end
 end

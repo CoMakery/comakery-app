@@ -13,6 +13,7 @@ describe AwardsController do
     team.build_authentication_team issuer
     team.build_authentication_team receiver
     team.build_authentication_team other_auth
+    project.channels.create(team: team, name: 'general')
   end
   describe '#index' do
     let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_auth.account) }
@@ -95,22 +96,22 @@ describe AwardsController do
         expect do
           post :create, params: {
             project_id: project.to_param, award: {
-              slack_user_id: receiver_authentication.slack_user_id,
+              uid: receiver.uid,
               award_type_id: award_type.to_param,
               quantity: 1.5,
-              description: 'This rocks!!11'
+              description: 'This rocks!!11',
+              channel_id: project.channels.first.id
             }
           }
           expect(response.status).to eq(302)
         end.to change { project.awards.count }.by(1)
 
         expect(response).to redirect_to(project_path(project))
-        expect(flash[:notice]).to eq('Successfully sent award to Rece Iver')
+        expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.name}")
 
         award = Award.last
         expect(award.award_type).to eq(award_type)
-        expect(award.authentication).to eq(receiver_authentication)
-        expect(award.issuer).to eq(issuer)
+        expect(award.account).to eq(receiver.account)
         expect(award.description).to eq('This rocks!!11')
         expect(award.quantity).to eq(1.5)
         expect(EthereumTokenIssueJob.jobs.first['args']).to eq([award.id])
@@ -121,24 +122,10 @@ describe AwardsController do
         expect do
           post :create, params: {
             project_id: project.to_param, award: {
-              slack_user_id: 'receiver id',
-              award_type_id: create(:award_type, amount: 10000, project: create(:project, slack_team_id: 'hackerz', maximum_tokens: 100_000)).to_param,
-              description: 'I am teh haxor'
-            }
-          }
-          expect(response.status).to eq(302)
-        end.not_to change { project.awards.count }
-        expect(flash[:error]).to eq('Failed sending award - Not authorized')
-      end
-
-      it "renders error if you specify a slack user id that doesn't belong to a project" do
-        expect_any_instance_of(Account).not_to receive(:send_award_notifications)
-        expect do
-          post :create, params: {
-            project_id: project.to_param, award: {
-              slack_user_id: 'different team member id',
-              award_type_id: award_type.to_param,
-              description: 'I am teh haxor'
+              uid: 'receiver id',
+              award_type_id: create(:award_type, amount: 10000, project: create(:project, maximum_tokens: 100_000)).to_param,
+              description: 'I am teh haxor',
+              channel_id: project.channels.first.id
             }
           }
           expect(response.status).to eq(302)
@@ -150,7 +137,7 @@ describe AwardsController do
         expect do
           post :create, params: {
             project_id: project.to_param, award: {
-              slack_user_id: receiver_authentication.slack_user_id,
+              uid: receiver.uid,
               description: 'This rocks!!11'
             }
           }
