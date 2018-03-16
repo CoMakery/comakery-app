@@ -9,8 +9,9 @@ describe 'viewing projects, creating and editing', :js do
     let!(:other_account_auth) { create(:authentication, account: other_account) }
     let!(:project) { create(:project, public: true, account: owner) }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
+    let!(:channel) { create(:channel, project: project, team: team)}
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }
-    let!(:award) { create(:award, award_type: award_type, account: other_account) }
+    let!(:award) { create(:award, award_type: award_type, account: other_account, channel: channel) }
     let!(:community_award) { create(:award, award_type: community_award_type, account: owner) }
 
     before do
@@ -22,15 +23,16 @@ describe 'viewing projects, creating and editing', :js do
 
     context 'when logged in as non-owner' do
       context 'viewing projects' do
-        before { login(other_account) }
+        before { login(owner) }
 
         it 'shows radio buttons for community awardable awards' do
           visit project_path(project)
 
           within('.award-types') do
-            expect(page.all('input[type=radio]').size).to eq(2)
-            expect(page.all('input[type=radio][disabled=disabled]').size).to eq(1)
-            expect(page).to have_content 'User'
+            expect(page.all('input[type=text]').size).to eq(2)
+            expect(page).to have_content 'Communication Channel'
+            expect(page).to have_content 'Email Address'
+            expect(page).to have_content 'Award Type'
             expect(page).to have_content 'Description'
           end
         end
@@ -43,8 +45,7 @@ describe 'viewing projects, creating and editing', :js do
           visit project_path(project)
 
           within('.award-types') do
-            expect(page.all('input[type=radio]').size).to eq(0)
-            expect(page.all('input[type=radio][disabled=disabled]').size).to eq(0)
+            expect(page.all('input[type=text]').size).to eq(0)
             expect(page).not_to have_content 'User'
             expect(page).not_to have_content 'Description'
           end
@@ -61,7 +62,7 @@ describe 'viewing projects, creating and editing', :js do
 
         it 'paginates when there are lots of awards' do
           (305 - project.awards.count).times do
-            create(:award, award_type: community_award_type, issuer: other_account, authentication: owner_auth)
+            create(:award, award_type: community_award_type, issuer: other_account, account: owner)
           end
 
           visit project_path(project)

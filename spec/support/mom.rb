@@ -70,6 +70,15 @@ class Mom
     Project.new(defaults.merge(attrs))
   end
 
+  def channel(**attrs)
+    defaults = {
+      team: create(:team),
+      project: create(:project),
+      name: 'general'
+    }
+    Channel.new defaults.merge(attrs)
+  end
+
   def award_type(**attrs)
     defaults = {
       amount: 1337,
