@@ -10,7 +10,7 @@ class AwardsController < ApplicationController
   end
 
   def create
-    result = AwardSlackUser.call(project: @project, award_params: award_params)
+    result = AwardSlackUser.call(project: @project, issuer: current_account, award_params: award_params)
     if result.success?
       award = result.award
       authorize award

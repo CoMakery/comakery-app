@@ -82,6 +82,7 @@ class Mom
   def award(account = create(:account), **attrs)
     params = {
       account: account,
+      issuer: create(:account),
       description: 'Great work',
       proof_id: 'abc123',
       quantity: 1,

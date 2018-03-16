@@ -5,7 +5,9 @@ class Award < ApplicationRecord
 
   belongs_to :account
   belongs_to :award_type
+  belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
+  has_one :team, through: :channel
   has_one :project, through: :award_type
 
   validates :proof_id, :account, :award_type, :unit_amount, :total_amount, :quantity, presence: true
@@ -30,7 +32,7 @@ class Award < ApplicationRecord
   end
 
   def self_issued?
-    account_id == project.account_id
+    account_id == issuer_id
   end
 
   def recipient_auth_team
@@ -50,25 +52,19 @@ class Award < ApplicationRecord
   end
 
   def issuer_display_name
-    project.account.name
+    issuer.name
   end
 
   def issuer_slack_user_name
-    channel&.auth_team&.name || project.account.name
+    team&.auth_team&.authentication_team_by_account(issuer)&.name || issuer.name
   end
 
-  # TODO: update after refactor award/channels
   def team_image
-    project.teams.first&.image
+    team&.image
   end
 
   def total_amount=(x)
     self[:total_amount] = x.round
   end
 
-  private
-
-  def slack_team_id
-    project.slack_team_id
-  end
 end

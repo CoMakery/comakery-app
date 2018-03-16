@@ -6,6 +6,7 @@ class BuildAwardRecords
     award_params = context.award_params
     total_tokens_issued = context.total_tokens_issued
     uid = award_params[:uid]
+    issuer = context[:issuer]
 
     context.fail!(message: 'missing uid or email') if uid.blank?
     context.fail!(message: 'missing total_tokens_issued') if total_tokens_issued.blank?
@@ -22,6 +23,7 @@ class BuildAwardRecords
     # TODO: could be done with a award_type.build_award_with_quantity variation of award_type.create_award_with_quantity
     award = Award.new(award_params.merge(
                         account_id: account.id,
+                        issuer_id: issuer.id,
                         unit_amount: award_type.amount,
                         quantity: quantity,
                         total_amount: award_type.amount * BigDecimal(quantity)

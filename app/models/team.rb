@@ -5,4 +5,8 @@ class Team < ApplicationRecord
   def build_authentication_team(authentication)
     authentication_teams.find_or_create_by authentication: authentication, account: authentication.account
   end
+
+  def authentication_team_by_account account
+    authentication_teams.find_by account_id: account.id
+  end
 end
