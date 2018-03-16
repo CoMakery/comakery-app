@@ -41,7 +41,7 @@ class Views::Projects::Base < Views::Base
             a(project.title, href: project_path(project), class: 'project-link')
           }
           a(href: project_path(project)) {
-            i project.title # project.slack_team_name
+            i project.account.name # project.slack_team_name
           }
         }
         a(href: project_path(project)) {
@@ -51,7 +51,6 @@ class Views::Projects::Base < Views::Base
         p(class: 'description no-last-award') { text project.description_text }
 
         div(class: 'contributors') {
-          # this can go away when project owners become auths instead of accounts
           owner = project.account
 
           ([owner].compact + Array.wrap(contributors)).uniq(&:id).each do |contributor|

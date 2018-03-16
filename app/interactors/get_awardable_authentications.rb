@@ -14,7 +14,7 @@ class GetAwardableAuthentications
 
     all_awardable_authentications = slack.get_users[:members].map { |user| [api_formatted_name(user), user[:id]] }
     all_awardable_authentications = all_awardable_authentications.sort_by { |member| member.first.downcase.sub(/\A@/, '') }
-    all_awardable_authentications = all_awardable_authentications.reject { |member| member.second == current_account.slack_auth.slack_user_id } unless current_account == project.account
+    all_awardable_authentications = all_awardable_authentications.reject { |member| member.second == current_account.slack_auth.uid } unless current_account == project.account
 
     context.awardable_authentications = all_awardable_authentications
   end
