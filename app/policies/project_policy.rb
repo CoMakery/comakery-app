@@ -47,7 +47,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def team_member?
-    account.team_projects.include?(project)
+    account&.team_projects&.include?(project)
   end
 
   alias send_community_award? team_member?

@@ -68,11 +68,13 @@ shared_examples "can't see revenue data" do
 end
 
 describe 'project confidentiality for the logged in project owner', :js do
+  let!(:team) { create :team }
   let!(:owner) { create(:account) }
-  let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/owner.jpg') }
-  let!(:project) { create(:project, public: true, account: owner, slack_team_id: 'foo', require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
+  let!(:owner_auth) { create(:authentication, account: owner) }
+  let!(:project) { create(:project, public: true, account: owner, require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
 
   before do
+    team.build_authentication_team owner_auth
     stub_slack_user_list
     stub_slack_channel_list
     login owner
@@ -115,7 +117,7 @@ describe 'project confidentiality for the logged in project owner', :js do
 end
 
 describe 'project confidentiality for logged out users', :js do
-  let!(:project) { create(:project, public: true, slack_team_id: 'foo', require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
+  let!(:project) { create(:project, public: true, require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
 
   describe 'public project that requires confidentiality' do
     before do
