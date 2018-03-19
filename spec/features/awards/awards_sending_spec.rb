@@ -99,7 +99,7 @@ describe 'awarding users' do
 
     visit root_path
 
-    within('.project-highlighted', text: 'Project that needs awards') do
+    within('.project', text: 'Project that needs awards') do
       click_link 'Project that needs awards'
     end
 
