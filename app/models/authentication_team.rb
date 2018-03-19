@@ -6,7 +6,7 @@ class AuthenticationTeam < ApplicationRecord
   validates :account, :team, :authentication, presence: true
 
   def name
-    authentication.oauth_response['info']['name']
+    authentication.oauth_response['info']['name'] if authentication.oauth_response
   end
 
   def channels

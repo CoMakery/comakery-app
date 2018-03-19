@@ -57,7 +57,7 @@ class BuildAwardRecords
       channel.team.build_authentication_team authentication
     else
       account = Account.find_or_create_by(email: uid)
-      context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?      
+      context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?
     end
     account
   end

@@ -56,15 +56,12 @@ class Award < ApplicationRecord
   end
 
   def issuer_slack_user_name
-    team&.auth_team&.authentication_team_by_account(issuer)&.name || issuer.name
+    team&.authentication_team_by_account(issuer)&.name || issuer.name
   end
 
-  def team_image
-    team&.image
-  end
+  delegate :image, to: :team, prefix: true, allow_nil: true
 
   def total_amount=(x)
     self[:total_amount] = x.round
   end
-
 end

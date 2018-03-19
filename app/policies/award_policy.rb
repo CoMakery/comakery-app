@@ -21,17 +21,21 @@ class AwardPolicy < ApplicationPolicy
   def initialize(account, award)
     @account = account
     @award = award
+    @project = @award.project
   end
 
   def create?
-    project = @award&.award_type&.project
-    result = @account && @award.issuer == @account &&
-    (@account == project&.account || (@award&.award_type&.community_awardable? && @account != @award&.account))
-    if @award.channel
-      result &&=
-      @award&.channel.in?(project.channels) &&
-      @award&.issuer&.teams.include?(@award&.team)
-    end
-    result
+    return false unless @award.issuer == @account
+    same_channel? && (@account == @project&.account || community?)
+  end
+
+  def same_channel?
+    return true unless @award.channel
+    return true if @award.channel.in?(@project.channels) && @award.issuer.teams.include?(@award.team)
+    true
+  end
+
+  def community?
+    @award&.award_type&.community_awardable? && @account != @award&.account
   end
 end

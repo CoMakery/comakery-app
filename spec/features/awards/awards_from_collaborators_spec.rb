@@ -42,6 +42,5 @@ describe 'Collaborator projects' do
     login(collab1)
 
     visit bookmark_project_path
-
   end
 end

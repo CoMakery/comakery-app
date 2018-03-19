@@ -12,11 +12,11 @@ describe 'awarding users' do
   let!(:different_team_authentication) { create(:authentication, account: different_team_account) }
 
   let!(:project) { create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40) }
-  let!(:same_team_project) { create(:project, title: 'Same Team Project', account: account)}
+  let!(:same_team_project) { create(:project, title: 'Same Team Project', account: account) }
   let!(:different_team_project) { create(:project, public: true, title: 'Different Team Project', account: different_team_account) }
 
-  let!(:channel) {create(:channel, team: team, project: project, name: "channel")}
-  let!(:other_channel) {create(:channel, team: other_team, project: different_team_project, name: "other channel")}
+  let!(:channel) { create(:channel, team: team, project: project, name: 'channel') }
+  let!(:other_channel) { create(:channel, team: other_team, project: different_team_project, name: 'other channel') }
 
   let!(:small_award_type) { create(:award_type, project: project, name: 'Small', amount: 1000) }
   let!(:large_award_type) { create(:award_type, project: project, name: 'Large', amount: 3000) }
@@ -27,7 +27,6 @@ describe 'awarding users' do
   let!(:different_large_award_type) { create(:award_type, project: different_team_project, name: 'Large', amount: 3000) }
   let!(:different_large_award) { create(:award, issuer: different_team_account, award_type: different_large_award_type, account: different_team_account) }
 
-
   before do
     team.build_authentication_team owner_authentication
     team.build_authentication_team other_authentication
@@ -35,7 +34,6 @@ describe 'awarding users' do
 
     travel_to(DateTime.parse('Mon, 29 Feb 2016 00:00:00 +0000')) # so we can check for fixed date of award
 
-    expect_any_instance_of(Account).to receive(:send_award_notifications)
     stub_slack_user_list([{ "id": 'U99M9QYFQ', "team_id": 'team id', "name": 'bobjohnson', "profile": { "email": 'bobjohnson@example.com' } }])
     stub_request(:post, 'https://slack.com/api/users.info').to_return(body: {
       ok: true,
@@ -56,29 +54,30 @@ describe 'awarding users' do
 
   describe "when a user doesn't have an account for yet" do
     it 'populates the dropdown to select the awardee and creates the account/auth for the user' do
+      expect_any_instance_of(Account).to receive(:send_award_notifications)
       login(account)
 
       visit project_path(project)
 
       expect(page.find('.my-share')).to have_content '0'
 
-      choose 'Small'
       fill_in :award_quantity, with: '1.579'
-      expect(page.all('select#award_slack_user_id option').map(&:text).sort).to eq(['', '@bobjohnson'])
-      select 'bobjohnson', from: 'User'
+      select "[Slack] #{team.name} #channel", from: 'Communication Channel'
+
+      fill_in 'Email Address', with: 'U99M9QYFQ'
 
       click_button 'Send'
 
-      expect(page).to have_content 'Successfully sent award to @bobjohnson'
+      expect(page).to have_content 'Successfully sent award to bobjohnson@example.com'
 
-      bobjohnsons_auth = Authentication.find_by(slack_user_name: 'bobjohnson')
+      bobjohnsons_auth = Authentication.find_by(uid: 'U99M9QYFQ')
       expect(bobjohnsons_auth).not_to be_nil
 
       login(bobjohnsons_auth.account)
 
-      visit project_awards_path(bobjohnsons_auth.projects.first)
+      visit project_awards_path(project)
 
-      expect(page).to have_content '@bobjohnson'
+      expect(page).to have_content 'bobjohnson@example.com'
 
       click_link('Overview')
 
@@ -89,8 +88,7 @@ describe 'awarding users' do
       click_link 'Contributors'
 
       within('.contributors') do
-        expect(page.all("img[src='https://slack.example.com/team-image-34-px.jpg']").size).to eq(1)
-        expect(page.find('.contributor')).to have_content '@bobjohnson'
+        expect(page.find('.contributor')).to have_content 'bobjohnson@example.com'
         expect(page.find('.award-holdings')).to have_content '1,579'
       end
     end
@@ -131,7 +129,7 @@ describe 'awarding users' do
       expect(page.all('input[type=text]').size).to eq(2)
     end
 
-    expect(page.all('select#award_channel_id option').map(&:text).sort).to eq(["Email", "[Slack] #{team.name} #channel"])
+    expect(page.all('select#award_channel_id option').map(&:text).sort).to eq(['Email', "[Slack] #{team.name} #channel"])
     fill_in 'Description', with: 'Super fantastic fabulous programatic work on teh things, A++'
     fill_in 'Email Address', with: 'tester@test.st'
 
@@ -158,19 +156,19 @@ describe 'awarding users' do
     expect(page).to have_content('Project that needs awards')
 
     visit landing_projects_path
-
   end
 
   it 'awarding a user with an ethereum account' do
+    expect_any_instance_of(Account).to receive(:send_award_notifications)
     bob_account = create(:account, email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
 
     login(account)
     visit project_path(project)
-    choose 'Small'
-    select 'bobjohnson', from: 'User'
+    select "[Slack] #{team.name} #channel", from: 'Communication Channel'
+    fill_in 'Email Address', with: 'U99M9QYFQ'
     click_button 'Send'
 
-    expect(page).to have_content 'Successfully sent award to @bobjohnson'
+    expect(page).to have_content 'Successfully sent award to bobjohnson@example.com'
     expect(EthereumTokenIssueJob.jobs.length).to eq(1)
     expect(EthereumTokenIssueJob.jobs.first['args']).to eq([Award.last.id])
   end
