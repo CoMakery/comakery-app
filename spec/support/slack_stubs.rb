@@ -4,16 +4,17 @@ module SlackStubs
   end
 
   def slack_user_from_auth(auth)
+    auth_team = AuthenticationTeam.find_by(authentication: auth)
     {
-      "id": auth.slack_user_id,
-      "team_id": auth.slack_team_id,
-      "name": auth.slack_user_name,
+      "id": auth.uid,
+      "team_id": auth_team&.team_id,
+      "name": auth.account.name,
       "deleted": false,
       "profile": {
-        "first_name": auth.slack_first_name,
-        "last_name": auth.slack_last_name,
-        "real_name": "#{auth.slack_first_name} #{auth.slack_last_name}",
-        "real_name_normalized": "#{auth.slack_first_name} #{auth.slack_last_name}",
+        "first_name": auth.account.first_name,
+        "last_name": auth.account.last_name,
+        "real_name": auth.account.name,
+        "real_name_normalized": auth.account.name,
         "email": auth.account.email
       }
     }
