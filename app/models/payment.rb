@@ -3,7 +3,7 @@ class Payment < ApplicationRecord
 
   belongs_to :project
   belongs_to :account
-  belongs_to :issuer, class_name: "Account"
+  belongs_to :issuer, class_name: 'Account'
 
   validates :project, :account, :total_value, :share_value, :quantity_redeemed, :currency, presence: true
   validates :quantity_redeemed, numericality: { greater_than_or_equal_to: 0 }
