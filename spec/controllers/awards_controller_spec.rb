@@ -118,6 +118,9 @@ describe AwardsController do
       end
 
       it "renders error if you specify a award type that doesn't belong to a project" do
+        stub_request(:post, 'https://slack.com/api/users.info')
+          .with(body: { 'token' => 'slack token', 'user' => 'receiver id' })
+          .to_return(status: 200, body: File.read(Rails.root.join('spec', 'fixtures', 'users_info_response.json')), headers: {})
         expect_any_instance_of(Account).not_to receive(:send_award_notifications)
         expect do
           post :create, params: {
