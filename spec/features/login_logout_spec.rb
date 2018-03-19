@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'logging in and out' do
-  let!(:team) {create :team}
+  let!(:team) { create :team }
   let!(:project) { create :project, title: 'This is a project', account: account }
   let!(:account) { create :account }
   let!(:authentication) { create :authentication, account_id: account.id }

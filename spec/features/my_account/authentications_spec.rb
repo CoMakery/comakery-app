@@ -1,17 +1,22 @@
 require 'rails_helper'
 require 'refile/file_double'
 feature 'my account' do
+  let!(:team) { create :team }
   let!(:project) { create(:sb_project, ethereum_enabled: true) }
   let!(:auth) { create(:sb_authentication) }
-  let!(:issuer) { create(:sb_authentication, slack_user_name: 'John Collins') }
+  let!(:issuer) { create(:sb_authentication) }
   let!(:award_type) { create(:award_type, project: project, amount: 1337) }
   let!(:award1) do
-    create(:award, award_type: award_type, authentication: auth,
+    create(:award, award_type: award_type, account: auth.account,
                    issuer: issuer.account, created_at: Date.new(2016, 3, 25))
   end
   let!(:award2) do
-    create(:award, award_type: award_type, authentication: auth,
+    create(:award, award_type: award_type, account: auth.account,
                    issuer: issuer.account, created_at: Date.new(2016, 3, 25))
+  end
+
+  before do
+    team.build_authentication_team auth
   end
 
   scenario 'viewing' do
@@ -27,7 +32,7 @@ feature 'my account' do
     expect(page).to have_content 'Mar 25, 2016'
     expect(page).to have_content 'Contribution'
     expect(page).to have_content 'Great work'
-    expect(page).to have_content 'John Doe'
+    expect(page).to have_content auth.account.email
   end
 
   scenario 'editing, and adding an ethereum address' do
