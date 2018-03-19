@@ -52,7 +52,7 @@ class Award < ApplicationRecord
   end
 
   def issuer_display_name
-    issuer.name
+    issuer&.name
   end
 
   def issuer_slack_user_name

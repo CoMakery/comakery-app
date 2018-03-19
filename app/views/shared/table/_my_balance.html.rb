@@ -1,5 +1,5 @@
 class Views::Shared::Table::MyBalance < Views::Projects::Base
-  needs :project, :current_auth
+  needs :project, :current_account_deco
 
   def content
     if project.revenue_share?
@@ -13,7 +13,7 @@ class Views::Shared::Table::MyBalance < Views::Projects::Base
               td(class: 'token-numbers') { text '' }
               td {
                 span(class: 'token-numbers total-awards-remaining') {
-                  text current_auth.total_awards_remaining_pretty(project)
+                  text current_account_deco.total_awards_remaining_pretty(project)
                 }
                 span { text ' Unpaid Revenue Shares' }
               }
@@ -28,7 +28,7 @@ class Views::Shared::Table::MyBalance < Views::Projects::Base
             tr(class: 'money') {
               td(class: 'token-numbers') { text '=' }
               td {
-                span(class: 'token-numbers total-revenue-unpaid') { text current_auth.total_revenue_unpaid_remaining_pretty(project) }
+                span(class: 'token-numbers total-revenue-unpaid') { text current_account_deco.total_revenue_unpaid_remaining_pretty(project) }
                 span { text ' My Balance' }
               }
             }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180316015613) do
+ActiveRecord::Schema.define(version: 20180319071252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 20180316015613) do
     t.string "currency"
     t.integer "status", default: 0
     t.boolean "reconciled", default: false
+    t.integer "issuer_id"
     t.index ["account_id"], name: "index_payments_on_account_id"
     t.index ["project_id"], name: "index_payments_on_project_id"
   end

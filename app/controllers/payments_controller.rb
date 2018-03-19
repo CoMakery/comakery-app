@@ -1,5 +1,5 @@
 class PaymentsController < ApplicationController
-  before_action :assign_project, :assign_current_auth
+  before_action :assign_project, :assign_current_account
   skip_before_action :require_login, only: :index
 
   def index
@@ -30,7 +30,7 @@ class PaymentsController < ApplicationController
     authorize @project # TODO: scope to project owner
 
     update_params = params.require(:payment).permit :transaction_fee, :transaction_reference, :id
-    @payment = current_account.payments.find(params['id'])
+    @payment = Payment.find(params['id'])
 
     authorize @payment, :update?
 
@@ -39,6 +39,7 @@ class PaymentsController < ApplicationController
     @payment.transaction_fee ||= 0
     @payment.total_payment = @payment.total_value - @payment.transaction_fee
     @payment.reconciled = true
+    @payment.issuer = current_account
 
     flash[:error] = @payment.errors.full_messages.join(' ') unless @payment.save
 
@@ -51,7 +52,7 @@ class PaymentsController < ApplicationController
     @project = policy_scope(Project).find(params[:project_id]).decorate
   end
 
-  def assign_current_auth
-    @current_auth = current_account&.slack_auth&.decorate
+  def assign_current_account
+    @current_account_deco = current_account&.decorate
   end
 end
