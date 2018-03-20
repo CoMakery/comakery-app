@@ -20,7 +20,7 @@ class Mom
   end
 
   def cc_authentication(**attrs)
-    defaults = { slack_team_id: 'citizencode' }
+    defaults = { }
     defaults[:account] = account unless attrs.key?(:account)
     authentication(defaults.merge(attrs))
   end
@@ -48,7 +48,7 @@ class Mom
   end
 
   def cc_project(account = create(:cc_authentication).account, **attrs)
-    project(account, { slack_team_id: 'citizencode', title: 'Citizen Code' }.merge(**attrs))
+    project(account, { title: 'Citizen Code' }.merge(**attrs))
   end
 
   def sb_project(account = create(:account), **attrs)
