@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe BuildAwardRecords do
-  let(:team) { create :team }
+  let!(:team) { create :team }
   let!(:authentication) { create :authentication }
   let!(:issuer) { authentication.account }
   let!(:other_auth) { create(:authentication, account: issuer, token: 'token') }
@@ -26,7 +26,7 @@ describe BuildAwardRecords do
       expect do
         expect do
           expect do
-            result = described_class.call(project: project, award_params: {
+            result = described_class.call(project: project, issuer: issuer, award_params: {
               award_type_id: award_type.to_param,
               description: 'This rocks!!11',
               uid: recipient_authentication.uid,
@@ -49,7 +49,7 @@ describe BuildAwardRecords do
         expect do
           expect do
             expect do
-              result = described_class.call(project: project, award_params: {
+              result = described_class.call(project: project, issuer: issuer, award_params: {
                 award_type_id: nil,
                 description: 'This rocks!!11',
                 uid: recipient_authentication.uid
@@ -70,7 +70,7 @@ describe BuildAwardRecords do
       award_type.update!(amount: project.maximum_tokens + 1)
 
       expect do
-        result = described_class.call(project: project, award_params: {
+        result = described_class.call(project: project, issuer: issuer, award_params: {
           award_type_id: award_type.to_param,
           uid: recipient_authentication.uid
         }, total_tokens_issued: 0)
@@ -84,7 +84,7 @@ describe BuildAwardRecords do
       recipient_authentication
       award_type.update(amount: 1)
       expect do
-        result = described_class.call(project: project,
+        result = described_class.call(project: project, issuer: issuer,
                                       award_params: { award_type_id: award_type.to_param,
                                                       quantity: 2,
                                                       uid: recipient_authentication.uid },
@@ -98,7 +98,7 @@ describe BuildAwardRecords do
 
   context 'when the uid is missing' do
     it 'fails' do
-      result = described_class.call(project: project, award_params: {}, total_tokens_issued: 0)
+      result = described_class.call(project: project, issuer: issuer, award_params: {}, total_tokens_issued: 0)
       expect(result).not_to be_success
     end
   end
@@ -116,7 +116,7 @@ describe BuildAwardRecords do
         expect do
           expect do
             expect do
-              result = described_class.call(project: project, award_params: {
+              result = described_class.call(project: project, issuer: issuer, award_params: {
                 award_type_id: award_type.to_param,
                 description: 'This rocks!!11',
                 uid: 'U99M9QYFQ',
@@ -143,7 +143,7 @@ describe BuildAwardRecords do
 
     it 'creates the auth with the slack details from the project' do
       expect do
-        result = described_class.call(project: project, award_params: {
+        result = described_class.call(project: project, issuer: issuer, award_params: {
           award_type_id: award_type.to_param,
           description: 'This rocks!!11',
           uid: 'U99M9QYFQ',
@@ -159,7 +159,7 @@ describe BuildAwardRecords do
       result = nil
       expect do
         expect do
-          result = described_class.call(project: project, award_params: {
+          result = described_class.call(project: project, issuer: issuer, award_params: {
             award_type_id: award_type.to_param,
             description: 'This rocks!!11',
             uid: 'U99M9QYFQ',

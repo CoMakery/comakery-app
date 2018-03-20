@@ -42,11 +42,11 @@ class GetAwardData
   end
 
   def contributions_data(awards)
-    awards.each_with_object({}) do |award, awards|
-      awards[award.account_id] ||= { net_amount: 0 }
-      awards[award.account_id][:name] ||= award.account.name || award.account.email
-      awards[award.account_id][:net_amount] += award.total_amount
-      awards[award.account_id][:avatar] ||= award.account.image
+    awards.each_with_object({}) do |award, a_hash|
+      a_hash[award.account_id] ||= { net_amount: 0 }
+      a_hash[award.account_id][:name] ||= award.account.name || award.account.email
+      a_hash[award.account_id][:net_amount] += award.total_amount
+      a_hash[award.account_id][:avatar] ||= award.account.image
     end.values.sort_by { |award_data| -award_data[:net_amount] }
   end
 
@@ -67,11 +67,11 @@ class GetAwardData
                     .where('awards.created_at > ?', history.days.ago)
                     .order('awards.created_at asc')
 
-    contributor_auths = recent_awards.map(&:account).freeze
-    empty_row_template = contributor_auths.each_with_object({}) do |contributor_auth, contributors|
+    accounts = recent_awards.map(&:account).freeze
+    empty_row_template = accounts.each_with_object({}) do |account, contributors|
       # using display names is potentially problematic because these aren't unique, and also they could be a stale copy in our DB
       # from when the user last logged in
-      contributors[contributor_auth.name] = 0 if contributor_auth
+      contributors[account.name] = 0 if account
     end.freeze
 
     awards_by_date = recent_awards.group_by { |a| a.created_at.to_date.iso8601 }
