@@ -239,7 +239,7 @@ describe ProjectDecorator do
 
   describe '#total_awarded_pretty' do
     before do
-      award_type.awards.create_with_quantity(1_000,
+      award_type.awards.create_with_quantity(1_000, issuer: project.account,
         account: create(:account))
     end
 
