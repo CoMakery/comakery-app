@@ -36,7 +36,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_auth_team
-    account.authentication_teams.find_by team_id: channel.team_id
+    account.authentication_teams.find_by team_id: channel.team_id if channel
   end
 
   def recipient_display_name

@@ -1,16 +1,23 @@
 require 'rails_helper'
 
 describe Comakery::Slack do
-  let!(:recipient) { create(:account) }
+  let!(:team) { create :team }
+  let!(:recipient) { create(:account, first_name: 'newt') }
   let!(:recipient_authentication) { create(:authentication, account: recipient) }
-  let!(:issuer) { create :account }
-  let!(:issuer_authentication) { create :authentication, account: issuer, slack_token: 'xyz', slack_user_name: 'jim', slack_team_id: 'a team' }
-  let!(:recipient_authentication) { create :authentication, account: recipient, slack_user_name: 'newt', slack_token: 'abc', slack_team_id: 'a team' }
-  let!(:project) { create :project, slack_team_id: 'a team', slack_channel: 'super sweet slack channel' }
+  let!(:issuer) { create :account, first_name: 'jim' }
+  let!(:issuer_authentication) { create :authentication, account: issuer, token: 'xyz' }
+  let!(:recipient_authentication) { create :authentication, account: recipient, token: 'abc' }
+  let!(:project) { create :project }
+  let!(:channel) { create :channel, project: project, team: team, name: 'super sweet slack channel' }
   let!(:award_type) { create :award_type, project: project }
-  let!(:award) { create :award, award_type: award_type, issuer: issuer, authentication: recipient_authentication, quantity: 2 }
+  let!(:award) { create :award, channel: channel, award_type: award_type, issuer: issuer, account: recipient, quantity: 2 }
   let!(:slack) { described_class.new(slack_token) }
-  let!(:slack_token) { issuer_authentication.slack_token }
+  let!(:slack_token) { issuer_authentication.token }
+
+  before do
+    team.build_authentication_team issuer_authentication
+    team.build_authentication_team recipient_authentication
+  end
 
   describe '#send_award_notifications' do
     it 'sends a notification to Slack with correct params' do
@@ -43,7 +50,7 @@ describe Comakery::Slack do
     end
 
     describe 'when the issuer sends to themselves' do
-      before { award.update! authentication: issuer_authentication }
+      before { award.update! account: issuer }
       it 'is self-issued' do
         message = slack.award_notifications_message(award)
         expect(message).to match /@jim self-issued/
@@ -67,7 +74,7 @@ describe Comakery::Slack do
 
     it 'links to the project' do
       message = slack.award_notifications_message(award)
-      expect(message).to match %r{<https://localhost:3000/projects/#{project.id}\|Uber for Cats> project}
+      expect(message).to match %r{<http://localhost:3000/projects/#{project.id}\|Uber for Cats> project}
     end
 
     describe 'when project is ethereum enabled and recipient has no ethereum address' do
@@ -76,7 +83,7 @@ describe Comakery::Slack do
         recipient.update! ethereum_wallet: nil
         message = slack.award_notifications_message(award)
         expect(message).to match \
-          %r{<https://localhost:3000/account\|Set up your account> to receive Ethereum tokens\.}
+          %r{<http://localhost:3000/account\|Set up your account> to receive Ethereum tokens\.}
       end
     end
 
