@@ -8,7 +8,6 @@ describe 'projects/_award_send.html.rb' do
   before do
     assign :project, project
     assign :award, award
-    assign :awardable_authentications, project.authentications
     assign :awardable_types, project.award_types
     assign :can_award, true
 

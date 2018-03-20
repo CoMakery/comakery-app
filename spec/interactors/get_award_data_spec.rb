@@ -128,7 +128,7 @@ describe GetAwardData do
       expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 10, total_amount: 10, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 33, account: create(:account, first_name: 'b', last_name: 'b')), create(:award, unit_amount: 20, total_amount: 20, account: create(:account, first_name: 'c', last_name: 'c'))], 1)).to eq([{ net_amount: 33, name: 'b b', avatar: nil }, { net_amount: 30, name: 'Other' }])
     end
     it 'gathers shows all entries if less than threshold' do
-      expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 10, total_amount: 10, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 33, account: create(:account, first_name: 'b', last_name: 'b')), ceate(:award, unit_amount: 20, total_amount: 20, account: create(:account, first_name: 'c', last_name: 'c'))], 3)).to eq([{ net_amount: 33, name: 'b b', avatar: nil }, { net_amount: 20, name: 'c c', avatar: nil }, { net_amount: 10, name: 'a a', avatar: nil }])
+      expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 10, total_amount: 10, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 33, account: create(:account, first_name: 'b', last_name: 'b')), create(:award, unit_amount: 20, total_amount: 20, account: create(:account, first_name: 'c', last_name: 'c'))], 3)).to eq([{ net_amount: 33, name: 'b b', avatar: nil }, { net_amount: 20, name: 'c c', avatar: nil }, { net_amount: 10, name: 'a a', avatar: nil }])
     end
   end
 

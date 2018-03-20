@@ -1,5 +1,5 @@
 class Views::Projects::AwardSend < Views::Base
-  needs :project, :award, :awardable_authentications, :awardable_types, :can_award
+  needs :project, :award, :awardable_types, :can_award
 
   def content
     div(id: 'award-send') {
