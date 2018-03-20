@@ -160,7 +160,7 @@ describe 'awarding users' do
 
   it 'awarding a user with an ethereum account' do
     expect_any_instance_of(Account).to receive(:send_award_notifications)
-    bob_account = create(:account, email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
+    create(:account, email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
 
     login(account)
     visit project_path(project)

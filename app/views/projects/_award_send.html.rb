@@ -55,7 +55,7 @@ class Views::Projects::AwardSend < Views::Base
                 label {
                   text 'Award Type'
                   options = []
-                  if project.channels.any?
+                  if awardable_types.any?
                     options = capture do
                       options_from_collection_for_select(awardable_types.order('amount asc').decorate, :id, :name_with_amount)
                     end

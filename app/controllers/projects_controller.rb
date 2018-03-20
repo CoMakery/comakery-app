@@ -65,8 +65,8 @@ class ProjectsController < ApplicationController
     @project = Project.includes(:award_types).find(params[:id]).decorate
     authorize @project
     @award = Award.new
-    @awardable_authentications = GetAwardableAuthentications.call(current_account: current_account, project: @project).awardable_authentications
-    awardable_types_result = GetAwardableTypes.call(current_account: current_account, project: @project)
+    @awardable_authentications = GetAwardableAuthentications.call(account: current_account, project: @project).awardable_authentications
+    awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
     @awardable_types = awardable_types_result.awardable_types
     @can_award = awardable_types_result.can_award
     @award_data = GetAwardData.call(account: current_account, project: @project).award_data
