@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe ProjectTokensIssued do
-  let!(:team) {create :team}
+  let!(:team) { create :team }
   let!(:project) { create(:sb_project) }
   let!(:auth1) { create(:sb_authentication) }
   let!(:auth2) { create(:sb_authentication) }
-  let!(:account1) {auth1.account}
-  let!(:account2) {auth2.account}
+  let!(:account1) { auth1.account }
+  let!(:account2) { auth2.account }
   let!(:award_type_1) { create(:award_type, project: project, amount: 1) }
   let!(:award_type_2) { create(:award_type, project: project, amount: 2) }
   let!(:award_type_4) { create(:award_type, project: project, amount: 4) }

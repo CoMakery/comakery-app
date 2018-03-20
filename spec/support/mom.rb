@@ -20,7 +20,7 @@ class Mom
   end
 
   def cc_authentication(**attrs)
-    defaults = { }
+    defaults = {}
     defaults[:account] = account unless attrs.key?(:account)
     authentication(defaults.merge(attrs))
   end
