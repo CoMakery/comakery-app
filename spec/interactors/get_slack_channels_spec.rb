@@ -1,7 +1,13 @@
 require 'rails_helper'
 
 describe GetSlackChannels do
-  let(:current_account) { create(:account).tap { |a| create(:authentication, account: a) } }
+  let(:team) { create :team }
+  let(:account) { create(:account) }
+  let(:authentication) { create(:authentication, account: account) }
+
+  before do
+    team.build_authentication_team authentication
+  end
 
   context 'on successful api call' do
     before do
@@ -10,7 +16,7 @@ describe GetSlackChannels do
 
     describe '#call' do
       it 'returns a list of channels with their ids, excluding archived channels, sorted alphabetically' do
-        result = described_class.call(current_account: current_account)
+        result = described_class.call(authentication_team: authentication.authentication_teams.last)
         expect(result.channels).to eq(%w[boring_channel fun huge_channel])
       end
     end
@@ -22,7 +28,7 @@ describe GetSlackChannels do
     end
 
     it 'fails the interactor' do
-      result = described_class.call(current_account: current_account)
+      result = described_class.call(authentication_team: authentication.authentication_teams.last)
       expect(result).not_to be_success
       expect(result.message).to match(/Slack API error - Slack::Web::Api::Error/)
     end

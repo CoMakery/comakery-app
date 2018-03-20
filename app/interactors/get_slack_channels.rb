@@ -3,7 +3,6 @@ class GetSlackChannels
 
   def call
     authentication_team = context.authentication_team
-
     begin
       response = authentication_team.slack.fetch_channels
       channels = response.channels
