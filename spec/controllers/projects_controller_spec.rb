@@ -315,9 +315,8 @@ describe ProjectsController do
       end
 
       it "does allow modification of award_types' non-amount attributes when the award_type has awards already sent" do
-        cat_project.award_types.create!(name: 'Medium Award', amount: 300, community_awardable: false).tap do |award_type|
-          create(:award, award_type: award_type)
-        end
+        award_type=cat_project.award_types.create!(name: 'Medium Award', amount: 300, community_awardable: false)
+        create(:award, award_type: award_type)
 
         expect do
           expect do
