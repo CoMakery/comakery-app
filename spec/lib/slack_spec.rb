@@ -74,7 +74,7 @@ describe Comakery::Slack do
 
     it 'links to the project' do
       message = slack.award_notifications_message(award)
-      expect(message).to match %r{<http://localhost:3000/projects/#{project.id}\|Uber for Cats> project}
+      expect(message).to match %r{<https?://localhost:3000/projects/#{project.id}\|Uber for Cats> project}
     end
 
     describe 'when project is ethereum enabled and recipient has no ethereum address' do
@@ -83,7 +83,7 @@ describe Comakery::Slack do
         recipient.update! ethereum_wallet: nil
         message = slack.award_notifications_message(award)
         expect(message).to match \
-          %r{<http://localhost:3000/account\|Set up your account> to receive Ethereum tokens\.}
+          %r{<https?://localhost:3000/account\|Set up your account> to receive Ethereum tokens\.}
       end
     end
 

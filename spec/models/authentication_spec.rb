@@ -141,4 +141,77 @@ describe Authentication do
       end
     end
   end
+
+  describe 'Authentication by Discord' do
+    let(:auth_hash) do
+      {
+        'uid' => 'discord-user',
+        'provider' => 'discord',
+        'credentials' => {
+          'token' => 'xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa'
+        },
+        'info' => {
+          'email' => 'bob@example.com',
+          'name' => 'Bob Roberts',
+          'first_name' => 'Bob',
+          'last_name' => 'Roberts'
+        }
+      }
+    end
+
+    before do
+      stub_discord_guilds
+    end
+
+    context 'when no account exists yet' do
+      it 'creates an account and authentications for that account' do
+        account = described_class.create_with_omniauth!(auth_hash)
+
+        expect(account.email).to eq('bob@example.com')
+
+        auth = account.authentications.last
+
+        expect(auth.provider).to eq('discord')
+        expect(account.first_name).to eq('Bob')
+        expect(account.last_name).to eq('Roberts')
+        expect(auth.uid).to eq('discord-user')
+        expect(auth.token).to eq('xoxp-0000000000-1111111111-22222222222-aaaaaaaaaa')
+        expect(auth.oauth_response).to eq(auth_hash)
+
+        team = Team.first
+        expect(team.accounts).to eq [account]
+      end
+    end
+
+    context 'when there is a related account' do
+      let!(:account) { create(:account, email: 'bob@example.com') }
+      let!(:authentication) do
+        create(:authentication,
+          account_id: account.id,
+          provider: 'discord',
+          uid: 'discord-user',
+          token: 'discord token')
+      end
+
+      it '#find_with_omniauth' do
+        result = nil
+        expect do
+          expect do
+            result = described_class.find_with_omniauth(auth_hash)
+          end.not_to change { Account.count }
+        end.not_to change { described_class.count }
+        expect(result.id).to eq(authentication.id)
+      end
+
+      it '#create_with_omniauth' do
+        result = nil
+        expect do
+          expect do
+            result = described_class.create_with_omniauth!(auth_hash)
+          end.not_to change { Account.count }
+        end.not_to change { described_class.count }
+        expect(result.id).to eq(account.id)
+      end
+    end
+  end
 end

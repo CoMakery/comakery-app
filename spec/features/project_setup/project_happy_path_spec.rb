@@ -122,7 +122,7 @@ describe 'viewing projects, creating and editing', :js do
     expect(page).to have_link 'Project Tasks'
     expect(page.all('.project-video iframe').size).to eq(1)
 
-    expect(page.all('select#award_award_type_id option').map(&:text)).to eq(['1,000 This is a small award type', '2,000 This is a medium award type', '3,000 This is a large award type'])
+    expect(page.all('select#award_award_type_id option').count).to eq(3)
 
     visit('/projects')
 
