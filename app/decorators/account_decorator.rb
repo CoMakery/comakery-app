@@ -6,20 +6,12 @@ class AccountDecorator < Draper::Decorator
     pretty_award total_awards_earned(project)
   end
 
-  def total_awards_paid_pretty(project)
-    pretty_award total_awards_paid(project)
-  end
-
   def total_awards_remaining_pretty(project)
     pretty_award total_awards_remaining(project)
   end
 
   def total_revenue_unpaid_remaining_pretty(project)
     pretty_currency(project, total_revenue_unpaid(project))
-  end
-
-  def total_revenue_unpaid_remaining_rounded(project)
-    rounded_currency(project, total_revenue_unpaid(project))
   end
 
   def total_revenue_earned_pretty(project)
@@ -38,14 +30,6 @@ class AccountDecorator < Draper::Decorator
 
   def pretty_currency(project, amount_to_make_pretty)
     precision = Comakery::Currency::PRECISION[project.denomination]
-    denomination = Comakery::Currency::DENOMINATIONS[project.denomination]
-    "#{denomination}#{number_with_precision(amount_to_make_pretty.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
-  def rounded_currency(project, amount_to_make_pretty)
-    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[project.denomination]
     denomination = Comakery::Currency::DENOMINATIONS[project.denomination]
     "#{denomination}#{number_with_precision(amount_to_make_pretty.truncate(precision),
       precision: precision,
