@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe 'shared/_award_progress_bar.html.rb' do
-  let!(:team){create :team}
-  let(:account) { create(:account, first_name: 'Glenn', last_name: 'Spanky', email: 'gleenn@example.com').tap { |a| create(:authentication, account_id: a.id ) } }
+  let!(:team) { create :team }
+  let(:account) { create(:account, first_name: 'Glenn', last_name: 'Spanky', email: 'gleenn@example.com').tap { |a| create(:authentication, account_id: a.id) } }
 
   let(:other_team_account) { create(:account, first_name: 'Bob', last_name: 'Junior', email: 'bob@example.com').tap { |a| create(:authentication, account_id: a.id) } }
 

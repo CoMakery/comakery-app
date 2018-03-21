@@ -149,11 +149,11 @@ describe Award do
       let(:account) { create :account }
 
       before do
-        project1_award_type.awards.create_with_quantity(5, account: account)
-        project1_award_type.awards.create_with_quantity(5, account: account)
+        project1_award_type.awards.create_with_quantity(5, issuer: project1.account, account: account)
+        project1_award_type.awards.create_with_quantity(5, issuer: project1.account, account: account)
 
-        project2_award_type.awards.create_with_quantity(3, account: account)
-        project2_award_type.awards.create_with_quantity(7, account: account)
+        project2_award_type.awards.create_with_quantity(3, issuer: project2.account, account: account)
+        project2_award_type.awards.create_with_quantity(7, issuer: project2.account, account: account)
       end
 
       it 'is able to scope to a project' do

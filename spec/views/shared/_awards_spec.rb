@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'shared/_awards.html.rb' do
-  let!(:team) {create :team}
+  let!(:team) { create :team }
   let!(:issuer) { create(:account) }
   let!(:recipient1) { create(:account) }
   let!(:recipient2) { create(:account) }
