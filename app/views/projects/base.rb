@@ -41,7 +41,7 @@ class Views::Projects::Base < Views::Base
             a(project.title, href: project_path(project), class: 'project-link')
           }
           a(href: project_path(project)) {
-            i project.account.name # project.slack_team_name
+            i project.legal_project_owner
           }
         }
         a(href: project_path(project)) {
