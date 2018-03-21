@@ -25,14 +25,6 @@ class Account < ApplicationRecord
 
   before_save :downcase_email
 
-  def def(_provider_team_ids)
-    authentication_teams.map(&:provider_team_id)
-  end
-
-  def team_auth(slack_team_id)
-    authentications.find_by(slack_team_id: slack_team_id)
-  end
-
   def downcase_email
     self.email = email.try(:downcase)
   end

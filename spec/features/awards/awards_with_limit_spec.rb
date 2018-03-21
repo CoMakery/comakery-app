@@ -34,7 +34,7 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
   end
 
   def send_award
-    select "[Slack] #{team.name} #channel", from: 'Communication Channel'
+    select "[slack] #{team.name} #channel", from: 'Communication Channel'
     fill_in 'Email Address', with: awardee_auth.uid
     click_on 'Send Award'
   end

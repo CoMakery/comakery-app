@@ -62,7 +62,7 @@ describe 'awarding users' do
       expect(page.find('.my-share')).to have_content '0'
 
       fill_in :award_quantity, with: '1.579'
-      select "[Slack] #{team.name} #channel", from: 'Communication Channel'
+      select "[slack] #{team.name} #channel", from: 'Communication Channel'
 
       fill_in 'Email Address', with: 'U99M9QYFQ'
 
@@ -129,7 +129,7 @@ describe 'awarding users' do
       expect(page.all('input[type=text]').size).to eq(2)
     end
 
-    expect(page.all('select#award_channel_id option').map(&:text).sort).to eq(['Email', "[Slack] #{team.name} #channel"])
+    expect(page.all('select#award_channel_id option').map(&:text).sort).to eq(['Email', "[slack] #{team.name} #channel"])
     fill_in 'Description', with: 'Super fantastic fabulous programatic work on teh things, A++'
     fill_in 'Email Address', with: 'tester@test.st'
 
@@ -164,7 +164,7 @@ describe 'awarding users' do
 
     login(account)
     visit project_path(project)
-    select "[Slack] #{team.name} #channel", from: 'Communication Channel'
+    select "[slack] #{team.name} #channel", from: 'Communication Channel'
     fill_in 'Email Address', with: 'U99M9QYFQ'
     click_button 'Send'
 

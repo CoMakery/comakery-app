@@ -1,5 +1,4 @@
 class Authentication < ApplicationRecord
-
   belongs_to :account
   has_many :authentication_teams, dependent: :destroy
   validates :account, :provider, :uid, presence: true
@@ -38,10 +37,6 @@ class Authentication < ApplicationRecord
 
   def slack?
     provider == 'slack'
-  end
-
-  def discord?
-    provider == 'discord'
   end
 
   def build_team(auth_hash)

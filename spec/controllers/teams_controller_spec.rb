@@ -24,14 +24,14 @@ describe TeamsController do
   end
 
   describe '#channels' do
-    it "return channels list for slack" do
+    it 'return channels list for slack' do
       get :channels, xhr: true, params: { id: team.id }
       expect(response.status).to eq(200)
       expect(assigns[:auth_team]).to eq(team.authentication_teams.first)
       expect(assigns[:channels]).to eq(['a-channel-name'])
     end
 
-    it "return channels list for discord" do
+    it 'return channels list for discord' do
       authentication.destroy
       get :channels, xhr: true, params: { id: team1.id }
       expect(response.status).to eq(200)
