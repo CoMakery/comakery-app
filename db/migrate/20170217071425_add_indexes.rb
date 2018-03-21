@@ -6,7 +6,6 @@ class AddIndexes < ActiveRecord::Migration[4.2]
 
     add_index :authentications, :account_id
 
-    add_index :awards, :issuer_id
     add_index :awards, :award_type_id
 
     add_index :payments, :project_id
