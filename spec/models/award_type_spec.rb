@@ -100,7 +100,7 @@ describe AwardType do
   describe '#awards#create_with_quantity' do
     let(:award_type) { create :award_type, amount: 1 }
     let(:account) { create :account }
-    let(:award) { award_type.awards.create_with_quantity 1.4, account: account }
+    let(:award) { award_type.awards.create_with_quantity 1.4, account: account, issuer: account }
 
     specify { expect(award.quantity).to eq(1.4) }
 
@@ -111,7 +111,7 @@ describe AwardType do
     specify { expect(award).to be_persisted }
 
     it 'rounds up when >= x.5' do
-      roundup_award = award_type.awards.create_with_quantity(1.5, account: account)
+      roundup_award = award_type.awards.create_with_quantity(1.5, account: account, issuer: account)
       expect(roundup_award.total_amount).to eq(2)
     end
   end
