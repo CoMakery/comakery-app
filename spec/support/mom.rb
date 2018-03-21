@@ -130,7 +130,7 @@ class Mom
     defaults = {
       team_id: SecureRandom.hex(5),
       name: "Team-#{SecureRandom.hex(2)}",
-      provider: 'Slack',
+      provider: 'slack',
       domain: "test-app-#{SecureRandom.hex(2)}"
     }
     Team.new(defaults.merge(attrs))
