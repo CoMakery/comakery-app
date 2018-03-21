@@ -7,7 +7,7 @@ describe 'contributors/index.html.rb' do
   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1, name: 'Code Contribution') }
 
   before do
-    award_type.awards.create_with_quantity(50, issuer: owner, authentication: authentication)
+    award_type.awards.create_with_quantity(50, issuer: owner, account: authentication.account)
     assign :project, project
     assign :award_data, contributions_summary: [
       { avatar: 'http://google.com',
