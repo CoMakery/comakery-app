@@ -111,11 +111,11 @@ class Mom
     Payment.new(currency: currency, **attrs)
   end
 
-  def project_payment(quantity_redeemed: 1, payee_auth: create(:authentication), project: create(:project))
+  def project_payment(quantity_redeemed: 1, account: create(:account), project: create(:project))
     project
       .payments
       .new_with_quantity(quantity_redeemed: quantity_redeemed,
-                         payee_auth: payee_auth)
+                         account: account)
   end
 
   def slack(authentication = create(:authentication))
