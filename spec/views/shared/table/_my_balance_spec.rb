@@ -6,7 +6,7 @@ describe 'shared/table/_my_balance.html.rb' do
 
   before do
     assign :project, project.decorate
-    assign :current_auth, current_auth.decorate
+    assign :current_account_deco, current_auth.account.decorate
     render
   end
 
