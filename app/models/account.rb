@@ -12,7 +12,6 @@ class Account < ApplicationRecord
   has_many :awards, dependent: :destroy
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   default_scope { includes(:slack_auth) }
-  has_many :account_roles, dependent: :destroy
   has_many :roles, through: :account_roles
   has_many :projects
   has_many :payments

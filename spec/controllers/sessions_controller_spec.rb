@@ -123,8 +123,9 @@ describe SessionsController do
 
   describe '#sign_in' do
     let!(:account) { create(:account, email: 'user@example.com', password: '12345678') }
+    let!(:account1) { create(:account, email: 'user1@example.com', password: '12345678', email_confirm_token: '1234') }
 
-    it 'prevent login with invalid account' do
+    it 'prevent login with wrong password' do
       post :sign_in, params: { email: 'user@example.com', password: 'invalid' }
       expect(flash[:error]).to eq 'Invalid email or password'
       expect(response).to redirect_to new_session_path

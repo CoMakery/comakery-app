@@ -53,6 +53,17 @@ describe ProjectsController do
       end
     end
 
+    context 'when logged in with unconfirmed account' do
+      let!(:account1) { create :account, email_confirm_token: '123' }
+
+      it 'redirects to home page' do
+        login account1
+        get :new
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
     context 'when slack returns successful api calls' do
       render_views
 
