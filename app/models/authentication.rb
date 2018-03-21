@@ -1,5 +1,4 @@
 class Authentication < ApplicationRecord
-  # include SlackDomainable
 
   belongs_to :account
   has_many :authentication_teams, dependent: :destroy

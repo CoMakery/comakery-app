@@ -1,7 +1,6 @@
 class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
 
-  # include SlackDomainable
   include EthereumAddressable
 
   nilify_blanks
