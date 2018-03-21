@@ -6,9 +6,6 @@ class CreateAuthenticationTeams < ActiveRecord::Migration[5.1]
       t.timestamps
     end
     remove_column :authentications, :provider_team_id, :integer
-
-    add_index :authentication_teams, :provider_team_id
-    add_index :authentication_teams, :authentication_id
   end
 
 end
