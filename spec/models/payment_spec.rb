@@ -147,7 +147,7 @@ describe Payment do
       end
       let!(:award) do
         award_type.awards.create_with_quantity(100, issuer: project.account,
-          account: account)
+                                                    account: account)
       end
 
       it 'is valid when they add up' do
@@ -190,7 +190,7 @@ describe Payment do
       end
       let!(:award) do
         award_type.awards.create_with_quantity(100, issuer: project.account,
-          account: account)
+                                                    account: account)
       end
 
       before do
@@ -267,7 +267,7 @@ describe Payment do
     let!(:account) { create :account }
     let!(:award1) do
       award_type.awards.create_with_quantity(100, issuer: project.account,
-        account: account)
+                                                  account: account)
     end
     let!(:revenues) { project.revenues.create!(amount: 300, currency: 'USD', recorded_by: project.account) }
 

@@ -388,11 +388,11 @@ describe Project do
       let(:account) { create :account }
 
       before do
-        project1_award_type.awards.create_with_quantity(5, account: account)
-        project1_award_type.awards.create_with_quantity(5, account: account)
+        project1_award_type.awards.create_with_quantity(5, issuer: account, account: account)
+        project1_award_type.awards.create_with_quantity(5, issuer: account, account: account)
 
-        project2_award_type.awards.create_with_quantity(3, account: account)
-        project2_award_type.awards.create_with_quantity(7, account: account)
+        project2_award_type.awards.create_with_quantity(3, issuer: account, account: account)
+        project2_award_type.awards.create_with_quantity(7, issuer: account, account: account)
       end
 
       it 'returns the total amount of awards issued for the project' do
@@ -487,7 +487,7 @@ describe Project do
 
       it 'with percentage, revenue, and payments' do
         project.update(royalty_percentage: 10)
-        project_award_type.awards.create_with_quantity(9, account: account)
+        project_award_type.awards.create_with_quantity(9, issuer: project.account, account: account)
         project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
         project.payments.new_with_quantity(quantity_redeemed: 2, account: account).save!
 
@@ -545,7 +545,7 @@ describe Project do
         let(:account) { create :account }
 
         before do
-          project_award_type.awards.create_with_quantity(5, account: account)
+          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -565,7 +565,7 @@ describe Project do
         let(:expected_revenue_per_share) { BigDecimal('3.628571428571428571') }
 
         before do
-          project_award_type.awards.create_with_quantity(5, account: account)
+          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -640,7 +640,7 @@ describe Project do
         let(:account) { create :account }
 
         before do
-          project_award_type.awards.create_with_quantity(5, account: account)
+          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -671,7 +671,7 @@ describe Project do
 
         before do
           project.update(denomination: 'ETH')
-          project_award_type.awards.create_with_quantity(5, account: account)
+          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'ETH', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'ETH', recorded_by: project.account)
@@ -711,7 +711,7 @@ describe Project do
     let(:big_award) { create :award_type, project: project, amount: billion_minus_one }
 
     before do
-      big_award.awards.create_with_quantity(1, account: project.account)
+      big_award.awards.create_with_quantity(1, issuer: project.account, account: project.account)
 
       project.revenues.create(amount: billion_minus_one, currency: 'USD', recorded_by: project.account)
     end
@@ -746,7 +746,7 @@ describe Project do
     let!(:account) { create :account }
 
     before do
-      project_award_type.awards.create_with_quantity(5, account: account)
+      project_award_type.awards.create_with_quantity(5, issuer: project.account, account: account)
       project.update(royalty_percentage: 10)
       project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
       project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -791,7 +791,7 @@ describe Project do
     let!(:account) { create :account }
 
     let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
-    let!(:awards) { project_award_type.awards.create_with_quantity(5, account: account) }
+    let!(:awards) { project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account) }
 
     specify { expect(project.awards.size).to eq(1) }
 
