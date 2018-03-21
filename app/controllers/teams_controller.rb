@@ -13,7 +13,7 @@ class TeamsController < ApplicationController
 
   def channels
     @auth_team = current_account.authentication_teams.find_by team_id: params[:id]
-    @channels = @auth_team.channels
+    @channels = @auth_team ? @auth_team.channels : []
     elem_id = params[:elem_id]
     @elem_index = elem_id.split('_')[3] if elem_id
     respond_to do |format|
