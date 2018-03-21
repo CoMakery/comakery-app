@@ -8,8 +8,8 @@ class AccountPolicy < ApplicationPolicy
     end
 
     def resolve
-      return Account.none unless account
-      Account.joins(:authentications).where('authentications.slack_team_id = ?', account.slack_auth.slack_team_id)
+      return Account.none unless @scope && @account
+      @scope.accounts
     end
   end
 
