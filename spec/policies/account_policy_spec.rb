@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe AccountPolicy do
-  let!(:team1) {create :team}
-  let!(:team2) {create :team}
+  let!(:team1) { create :team }
+  let!(:team2) { create :team }
   let!(:team_foobar_account1) { create(:account).tap { |a| create(:authentication, account: a) } }
   let!(:team_foobar_account2) { create(:account).tap { |a| create(:authentication, account: a) } }
   let!(:team_fizzbuzz_account1) { create(:account).tap { |a| create(:authentication, account: a) } }

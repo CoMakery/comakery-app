@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe AuthenticationPolicy do
-  let!(:team) {create :team}
+  let!(:team) { create :team }
   let!(:authentication1) { create(:sb_authentication) }
   let!(:authentication2) { create(:sb_authentication) }
   let!(:authentication3) { create(:cc_authentication) }

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe AwardPolicy do
-  let!(:team) {create :team}
+  let!(:team) { create :team }
   let!(:account) { create(:account) }
   let!(:account_authentication) { create(:authentication, account: account) }
 
