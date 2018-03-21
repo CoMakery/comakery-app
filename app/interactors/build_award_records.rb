@@ -34,12 +34,6 @@ class BuildAwardRecords
       context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable tokens")
     end
 
-    unless award.valid?
-      context.award = award
-      context.fail!(message: award.errors.full_messages.join(', '))
-      return
-    end
-
     context.award = award
   end
 
