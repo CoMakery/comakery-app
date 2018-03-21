@@ -8,6 +8,7 @@ class Account < ApplicationRecord
   has_many :authentication_teams, dependent: :destroy
   has_many :teams, through: :authentication_teams
   has_many :team_projects, through: :teams, source: :projects
+  has_many :team_awards, through: :team_projects, source: :awards
   has_many :awards, dependent: :destroy
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   default_scope { includes(:slack_auth) }

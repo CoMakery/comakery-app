@@ -11,7 +11,7 @@ class AwardPolicy < ApplicationPolicy
 
     def resolve
       if account
-        scope.joins(award_type: :project).where('projects.slack_team_id = ?', @account.slack_auth.slack_team_id)
+        account.team_awards
       else
         scope.joins(award_type: :project).where('projects.public = ?', true)
       end
