@@ -17,7 +17,7 @@ class BuildAwardRecords
 
     quantity = award_params[:quantity].presence || 1
 
-    channel = Channel.find context.channel_id
+    channel = Channel.find_by id: context.channel_id
     authentication = Authentication.includes(:account).find_by(uid: uid)
     account = authentication&.account || create_account(context, channel)
 
