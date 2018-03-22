@@ -11,14 +11,15 @@ class BuildAwardRecords
     context.fail!(message: 'missing uid or email') if uid.blank?
     context.fail!(message: 'missing total_tokens_issued') if total_tokens_issued.blank?
 
-    award_type = AwardType.find_by(id: award_params[:award_type_id])
+    award_type = AwardType.find_by(id: context.award_type_id)
     project = award_type&.project
     context.fail!(message: 'missing award type') unless project
 
     quantity = award_params[:quantity].presence || 1
 
+    channel = Channel.find context.channel_id
     authentication = Authentication.includes(:account).find_by(uid: uid)
-    account = authentication&.account || create_account(context)
+    account = authentication&.account || create_account(context, channel)
 
     # TODO: could be done with a award_type.build_award_with_quantity variation of award_type.create_award_with_quantity
     award = Award.new(award_params.merge(
@@ -28,6 +29,8 @@ class BuildAwardRecords
                         quantity: quantity,
                         total_amount: award_type.amount * BigDecimal(quantity)
     ))
+    award.award_type = award_type
+    award.channel = channel
 
     # TODO: this should be an award validation
     unless award.total_amount + total_tokens_issued <= project.maximum_tokens
@@ -39,10 +42,9 @@ class BuildAwardRecords
 
   private
 
-  def create_account(context)
+  def create_account(context, channel)
     uid = context.award_params[:uid]
-    if context.award_params[:channel_id].present?
-      channel = Channel.find context.award_params[:channel_id]
+    if channel
       response = Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
       account = Account.find_or_create_by(email: response.user.profile.email)
       context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?
