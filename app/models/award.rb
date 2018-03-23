@@ -1,4 +1,5 @@
 class Award < ApplicationRecord
+  include ::Rails.application.routes.url_helpers
   paginates_per 50
 
   include EthereumAddressable
@@ -43,7 +44,7 @@ class Award < ApplicationRecord
     account.name || account.email
   end
 
-  def recipient_slack_user_name
+  def recipient_user_name
     recipient_auth_team&.name || account.name
   end
 
@@ -55,8 +56,30 @@ class Award < ApplicationRecord
     issuer&.name
   end
 
-  def issuer_slack_user_name
+  def issuer_user_name
     team&.authentication_team_by_account(issuer)&.name || issuer.name
+  end
+
+  def notifications_message
+    text = messge_info
+    text = "for \"#{description}\"" if description.present?
+
+    text = "#{text} on the <#{project_url(project)}|#{project.title}> project."
+
+    if project.ethereum_enabled && recipient_address.blank?
+      text = "#{text} <#{account_url}|Set up your account> to receive Ethereum tokens."
+    end
+
+    text.strip!.gsub!(/\s+/, ' ')
+    text
+  end
+
+  def messge_info
+    if self_issued?
+      "@#{issuer_user_name} self-issued"
+    else
+      "@#{issuer_user_name} sent @#{recipient_user_name} a #{total_amount} token #{award_type.name}"
+    end
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true

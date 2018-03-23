@@ -2,7 +2,7 @@ class Channel < ApplicationRecord
   belongs_to :project
   belongs_to :team
 
-  validates :name, :team, :project, presence: true
+  validates :channel_id, :team, :project, presence: true
 
   attr_accessor :channels
   delegate :provider, to: :team, allow_nil: true
@@ -44,10 +44,16 @@ class Channel < ApplicationRecord
   end
 
   def self.invalid_params(attributes)
-    attributes['name'].blank? || attributes['team_id'].blank?
+    attributes['channel_id'].blank? || attributes['team_id'].blank?
   end
 
+  before_save :assign_name
+
   private
+
+  def assign_name
+    self.name = team.discord? ? team.channel_name(channel_id) : channel_id
+  end
 
   def api_formatted_name(user)
     real_name = [user[:profile][:first_name].presence, user[:profile][:last_name].presence].compact.join(' ')

@@ -20,16 +20,42 @@ class Comakery::Discord
   end
 
   def add_bot_link
-    "https://discordapp.com/api/oauth2/authorize?client_id=#{ENV['DISCORD_CLIENT_ID']}&scope=bot&permissions=1"
+    "https://discordapp.com/api/oauth2/authorize?client_id=#{ENV['DISCORD_CLIENT_ID']}&scope=bot&permissions=536870913"
+  end
+
+  def webhook(channel_id)
+    webhook = webhooks(channel_id).select { |h| h['name'] == 'Comakery' }.first
+    return webhook if webhook
+    @path = "/channels/#{channel_id}/webhooks"
+    @data = { name: 'Comakery' }.to_json
+    post_result
+  end
+
+  def webhooks(channel_id)
+    @path = "/channels/#{channel_id}/webhooks"
+    result
+  end
+
+  def send_message(award)
+    channel_id = award.channel.channel_id
+    wh = webhook channel_id
+    @path = "/webhooks/#{wh['id']}/#{wh['token']}"
+    @data = { content: award.notifications_message }.to_json
+    post_result(false)
   end
 
   private
 
   def result
-    url = "https://discordapp.com/api/v7#{@path}"
+    url = "https://discordapp.com/api#{@path}"
     res = RestClient.get(url, Authorization: @token)
     JSON.parse(res)
-  rescue
-    []
+  end
+
+  def post_result(parse_json = true)
+    url = "https://discordapp.com/api#{@path}"
+    header = { Authorization: @token, content_type: :json, accept: :json }
+    res = RestClient.post(url, @data, header)
+    parse_json ? JSON.parse(res) : res
   end
 end

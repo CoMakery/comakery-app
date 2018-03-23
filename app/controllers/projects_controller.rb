@@ -125,7 +125,7 @@ class ProjectsController < ApplicationController
         description
         disabled
       ],
-      channels_attributes: %i[id team_id name _destroy]
+      channels_attributes: %i[id team_id channel_id _destroy]
     )
   end
 

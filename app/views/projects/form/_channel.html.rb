@@ -35,10 +35,10 @@ class Views::Projects::Form::Channel < Views::Base
               options = []
               if ff.object.fetch_channels.present?
                 options = capture do
-                  options_for_select(ff.object.channels, selected: ff.object.name)
+                  options_for_select(ff.object.channels, selected: ff.object.channel_id)
                 end
               end
-              ff.select :name, options, { include_blank: true }, class: 'channel_select'
+              ff.select :channel_id, options, { include_blank: true }, class: 'channel_select'
             }
             column('small-3', class: 'text-center') {
               a('×', href: '#', 'data-mark-and-hide': '.channel-row', class: 'close')

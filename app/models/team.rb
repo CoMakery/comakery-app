@@ -32,14 +32,20 @@ class Team < ApplicationRecord
     channels.reject { |c| c['parent_id'].nil? }
   end
 
-  def channel_names
-    return @channel_names if @channel_names
-    @channel_names = []
+  def channel_name(channel_id)
+    return unless channel_id
+    channel = channels.select { |c| c['id'] == channel_id }.first
+    channel['name'] if channel
+  end
+
+  def channel_for_selects
+    return @channel_for_selects if @channel_for_selects
+    @channel_for_selects = []
     child_channels.each do |channel|
       parent_name = parent_channels[channel['parent_id']]
-      @channel_names << "#{parent_name} - #{channel['name']}"
+      @channel_for_selects << ["#{parent_name} - #{channel['name']}", channel['id']]
     end
-    @channel_names
+    @channel_for_selects
   end
 
   def members
