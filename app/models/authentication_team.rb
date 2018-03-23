@@ -15,7 +15,7 @@ class AuthenticationTeam < ApplicationRecord
       result = GetSlackChannels.call(authentication_team: self)
       @channels = result.channels
     else
-      @channels = []
+      @channels = team.channel_names
     end
     @channels
   end
