@@ -74,6 +74,7 @@ class Mom
     defaults = {
       team: create(:team),
       project: create(:project),
+      channel_id: SecureRandom.hex(5),
       name: 'general'
     }
     Channel.new defaults.merge(attrs)

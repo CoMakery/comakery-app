@@ -11,6 +11,7 @@ describe TeamsController do
     team.build_authentication_team authentication
     team1.build_authentication_team discord_auth
     stub_slack_channel_list
+    stub_discord_channels
     login account
   end
 
@@ -36,7 +37,7 @@ describe TeamsController do
       get :channels, xhr: true, params: { id: team1.id }
       expect(response.status).to eq(200)
       expect(assigns[:auth_team]).to eq(team1.authentication_teams.first)
-      expect(assigns[:channels]).to eq([])
+      expect(assigns[:channels]).to eq([['Text Channel - general', 'channel_id']])
     end
   end
 end

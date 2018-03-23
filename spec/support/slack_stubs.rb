@@ -50,4 +50,26 @@ module SlackStubs
     response = '[{"icon": null, "id": "team_id", "name": "discord guild"}]'
     RestClient.stub(:get) { response }
   end
+
+  def stub_discord_channels
+    response = '[{"parent_id": null, "id": "parent_id", "name": "Text Channel"},{"parent_id": "parent_id", "id": "channel_id", "name": "general"}]'
+    RestClient.stub(:get) { response }
+  end
+
+  def stub_discord_members
+    response = '[{"user": {"id": "123", "username": "jason", "name": "Jason"}},{"user": {"id": "234", "username": "bob", "name": "Bob"}}]'
+    RestClient.stub(:get) { response }
+  end
+
+  def stub_discord_webhooks
+    response = '[{"id": "123", "name": "Comakery"}]'
+    RestClient.stub(:get) { response }
+    RestClient.stub(:post) { true }
+  end
+
+  def stub_create_discord_webhooks
+    response = '[{"id": "123", "name": "another webhook"}]'
+    RestClient.stub(:get) { response }
+    RestClient.stub(:post) { '{"id": "123", "name": "Comakery"}' }
+  end
 end

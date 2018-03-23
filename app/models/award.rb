@@ -61,8 +61,8 @@ class Award < ApplicationRecord
   end
 
   def notifications_message
-    text = messge_info
-    text = "for \"#{description}\"" if description.present?
+    text = message_info
+    text = "#{text} for \"#{description}\"" if description.present?
 
     text = "#{text} on the <#{project_url(project)}|#{project.title}> project."
 
@@ -70,11 +70,12 @@ class Award < ApplicationRecord
       text = "#{text} <#{account_url}|Set up your account> to receive Ethereum tokens."
     end
 
-    text.strip!.gsub!(/\s+/, ' ')
+    text.strip!
+    text.gsub!(/\s+/, ' ')
     text
   end
 
-  def messge_info
+  def message_info
     if self_issued?
       "@#{issuer_user_name} self-issued"
     else

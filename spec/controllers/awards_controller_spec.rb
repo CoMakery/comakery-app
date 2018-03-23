@@ -10,10 +10,11 @@ describe AwardsController do
   let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000) }
 
   before do
+    stub_discord_channels
     team.build_authentication_team issuer
     team.build_authentication_team receiver
     team.build_authentication_team other_auth
-    project.channels.create(team: team, name: 'general')
+    project.channels.create(team: team, channel_id: '123')
   end
   describe '#index' do
     let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_auth.account) }
@@ -73,7 +74,6 @@ describe AwardsController do
 
       specify do
         project.update_attributes(public: true)
-
         get :index, params: { project_id: project.id }
         expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
       end
