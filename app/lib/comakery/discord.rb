@@ -14,6 +14,11 @@ class Comakery::Discord
     result
   end
 
+  def members(team)
+    @path = "/guilds/#{team.team_id}/members"
+    result
+  end
+
   def add_bot_link
     "https://discordapp.com/api/oauth2/authorize?client_id=#{ENV['DISCORD_CLIENT_ID']}&scope=bot&permissions=1"
   end

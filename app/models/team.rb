@@ -42,6 +42,16 @@ class Team < ApplicationRecord
     @channel_names
   end
 
+  def members
+    return [] unless discord?
+    d_client = Comakery::Discord.new
+    @members ||= d_client.members(self)
+  end
+
+  def members_for_select
+    members.map { |m| [m['user']['username'], m['user']['id']] }
+  end
+
   def discord?
     provider == 'discord'
   end

@@ -3,7 +3,7 @@ class ChannelsController < ApplicationController
 
   def users
     channel = current_account.channels.find params[:id]
-    @slack_members = channel.slack_members(current_account)
+    @members = channel.members(current_account)
     respond_to do |format|
       format.js { render layout: false }
     end

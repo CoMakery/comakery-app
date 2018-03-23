@@ -20,6 +20,11 @@ class Channel < ApplicationRecord
     return project.teams.where(provider: provider) if project
   end
 
+  def members(account = nil)
+    return @members if @members
+    @members = team.discord? ? team.members_for_select : slack_members(account)
+  end
+
   def slack_members(account = nil)
     return @members if @members
     slack = auth_team.slack
