@@ -1,7 +1,7 @@
 require 'rest-client'
 class Comakery::Discord
   def initialize(token = nil)
-    @token = token ? "Bearer #{token}" : 'Bot NDI2MjM1MTc2NDg2Njk5MDA4.DZXpfw.4qFMkXNNO8_NC-xlcsfYQCaMJmE'
+    @token = token ? "Bearer #{token}" : "Bot #{ENV['DISCORD_BOT_TOKEN']}"
   end
 
   def guilds
