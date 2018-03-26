@@ -2,11 +2,12 @@ class AwardsController < ApplicationController
   before_action :assign_project, only: %i[create index]
   before_action :assign_current_auth, only: [:index]
   skip_before_action :require_login, only: :index
+  skip_after_action :verify_authorized
 
   def index
     authorize @project, :show_contributions?
     @awards = @project.awards.order(id: :desc).page(params[:page]).decorate
-    @award_data = GetAwardData.call(authentication: current_account&.slack_auth, project: @project).award_data
+    @award_data = GetAwardData.call(account: current_account, project: @project).award_data
   end
 
   def create
@@ -19,6 +20,7 @@ class AwardsController < ApplicationController
         CreateEthereumAwards.call(award: award)
         current_account.send_award_notifications(award)
       end
+      award.send_confirm_email
       flash[:notice] = "Successfully sent award to #{award.recipient_display_name}"
       redirect_to project_path(award.project)
     else
@@ -26,6 +28,12 @@ class AwardsController < ApplicationController
     end
   rescue Pundit::NotAuthorizedError
     fail_and_redirect('Not authorized')
+  end
+
+  def confirm
+    award = Award.find_by confirm_token: params[:token]
+    award&.confirm!
+    redirect_to project_path(award.project)
   end
 
   def fail_and_redirect(message)

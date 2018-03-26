@@ -39,6 +39,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get "awards/confirm/:token" => "awards#confirm", as: :confirm_award
+
   resources :teams, only: [:index] do
     member do
       get :channels

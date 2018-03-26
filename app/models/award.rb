@@ -18,6 +18,8 @@ class Award < ApplicationRecord
 
   before_validation :ensure_proof_id_exists
 
+  scope :confirmed, -> { where confirm_token: nil }
+
   def self.total_awarded
     sum(:total_amount)
   end
@@ -83,6 +85,21 @@ class Award < ApplicationRecord
     end
   end
 
+  def send_confirm_email
+    UserMailer.send_award_notifications(self).deliver_now unless discord? || confirmed?
+  end
+
+  def confirm!
+    update confirm_token: nil
+  end
+
+  def confirmed?
+    confirm_token.blank?
+  end
+
+  def discord?
+    team && team.discord?
+  end
   delegate :image, to: :team, prefix: true, allow_nil: true
 
   def total_amount=(x)

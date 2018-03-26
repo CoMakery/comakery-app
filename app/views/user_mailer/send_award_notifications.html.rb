@@ -1,8 +1,10 @@
 class Views::UserMailer::SendAwardNotifications < Views::Base
-  needs :message
+  needs :url
   def content
     row {
-      text message
+      text 'Please click '
+      link_to 'here', url
+      text ' to receive your award'
     }
   end
 end

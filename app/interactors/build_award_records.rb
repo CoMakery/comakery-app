@@ -19,7 +19,14 @@ class BuildAwardRecords
 
     channel = Channel.find_by id: context.channel_id
     authentication = Authentication.includes(:account).find_by(uid: uid)
-    account = authentication&.account || create_account(context, channel)
+
+    confirm_token = nil
+    if authentication
+      account = authentication.account
+    else
+      account = create_account(context, channel)
+      confirm_token = SecureRandom.hex
+    end
 
     # TODO: could be done with a award_type.build_award_with_quantity variation of award_type.create_award_with_quantity
     award = Award.new(award_params.merge(
@@ -29,6 +36,7 @@ class BuildAwardRecords
                         quantity: quantity,
                         total_amount: award_type.amount * BigDecimal(quantity)
     ))
+    award.confirm_token = confirm_token
     award.award_type = award_type
     award.channel = channel
 
@@ -45,10 +53,16 @@ class BuildAwardRecords
   def create_account(context, channel)
     uid = context.award_params[:uid]
     if channel
-      response = Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
-      account = Account.find_or_create_by(email: response.user.profile.email)
+      team = channel.team
+      if team.discord?
+        email = "#{uid}@discordapp.com"
+      else
+        response = Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
+        email = response.user.profile.email
+      end
+      account = Account.find_or_create_by(email: email)
       context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?
-      authentication = account.authentications.create(provider: 'slack', uid: uid)
+      authentication = account.authentications.create(provider: team.provider, uid: uid)
       context.fail!(message: authentication.errors.full_messages.join(', ')) unless authentication.valid?
       channel.team.build_authentication_team authentication
     else

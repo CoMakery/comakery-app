@@ -23,6 +23,11 @@ class Comakery::Discord
     "https://discordapp.com/api/oauth2/authorize?client_id=#{ENV['DISCORD_CLIENT_ID']}&scope=bot&permissions=536870913"
   end
 
+  def user(uid)
+    @path = "/users/#{uid}"
+    result
+  end
+
   def webhook(channel_id)
     webhook = webhooks(channel_id).select { |h| h['name'] == 'Comakery' }.first
     return webhook if webhook
