@@ -6,6 +6,10 @@ describe Account do
   let(:role1) { create :role, name: 'Fun 1' }
   let(:role2) { create :role, name: 'Fun 2' }
 
+  before do
+    stub_discord_channels
+  end
+
   describe 'validations' do
     it 'requires many attributes' do
       expect(described_class.new.tap(&:valid?).errors.full_messages.sort).to eq(["Email can't be blank"])
@@ -74,12 +78,18 @@ describe Account do
   end
 
   describe '#send_award_notifications' do
+    let!(:team) { create :team }
+    let!(:project) { create :project, account: subject }
+    let!(:award_type) { create :award_type, project: project }
+    let!(:channel) { create :channel, team: team, project: project }
+    let!(:award) { create :award, award_type: award_type, issuer: subject, channel: channel }
+
     before do
       create :authentication, provider: 'slack', account: subject
     end
     it 'sends a Slack notification' do
       allow(subject.slack).to receive(:send_award_notifications)
-      subject.send_award_notifications
+      subject.send_award_notifications award
       expect(subject.slack).to have_received(:send_award_notifications)
     end
   end

@@ -15,7 +15,7 @@ describe BuildAwardRecords do
   before do
     team.build_authentication_team authentication
     team.build_authentication_team recipient_authentication
-    project.channels.create(team: team, name: 'slack_channel')
+    project.channels.create(team: team, channel_id: 'channel_id', name: 'slack_channel')
   end
 
   context 'when the account/auth exists already in the db' do
@@ -107,7 +107,7 @@ describe BuildAwardRecords do
       it 'creates the auth, and returns the award' do
         recipient
         stub_request(:post, 'https://slack.com/api/users.info')
-          .with(body: { 'token' => 'slack token', 'user' => 'U99M9QYFQ' },
+          .with(body: { 'token' => 'slack token', 'user' => 'U99M9QYFQ_other' },
                 headers: { 'Accept' => 'application/json; charset=utf-8', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Slack Ruby Client/0.11.0' })
           .to_return(status: 200, body: File.read(Rails.root.join('spec/fixtures/users_info_response.json')), headers: {})
 
@@ -116,10 +116,8 @@ describe BuildAwardRecords do
           expect do
             expect do
               result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
-                award_type_id: award_type.to_param,
                 description: 'This rocks!!11',
-                uid: 'U99M9QYFQ',
-                channel_id: project.channels.first.id
+                uid: 'U99M9QYFQ_other'
               }, total_tokens_issued: 0)
               expect(result.message).to be_nil
               expect(result.award).to be_a_new_record
@@ -143,10 +141,8 @@ describe BuildAwardRecords do
     it 'creates the auth with the slack details from the project' do
       expect do
         result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
-          award_type_id: award_type.to_param,
           description: 'This rocks!!11',
-          uid: 'U99M9QYFQ',
-          channel_id: project.channels.last.id
+          uid: 'U99M9QYFQ'
         }, total_tokens_issued: 0)
         expect(result.message).to be_nil
       end.to change { Authentication.count }.by(1)
