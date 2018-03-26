@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180323041505) do
+ActiveRecord::Schema.define(version: 20180326041415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,14 +119,6 @@ ActiveRecord::Schema.define(version: 20180323041505) do
     t.integer "issuer_id"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
-  end
-
-  create_table "beta_signups", id: :serial, force: :cascade do |t|
-    t.string "email_address", null: false
-    t.string "name"
-    t.string "slack_instance"
-    t.boolean "opt_in", default: false, null: false
-    t.jsonb "oauth_response"
   end
 
   create_table "channels", force: :cascade do |t|

@@ -43,10 +43,6 @@ class Mom
     Authentication.new(defaults.merge(attrs))
   end
 
-  def beta_signup(**attrs)
-    BetaSignup.new(**attrs)
-  end
-
   def cc_project(account = create(:cc_authentication).account, **attrs)
     project(account, { title: 'Citizen Code' }.merge(**attrs))
   end
