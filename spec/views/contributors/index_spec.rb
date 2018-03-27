@@ -17,7 +17,7 @@ describe 'contributors/index.html.rb' do
 
     allow(view).to receive(:policy).and_return(double('project policy',
       edit?: false,
-      show_contributions?: true,
+      can_be_access?: true,
       show_revenue_info?: true))
   end
 

@@ -1,16 +1,14 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: :new
-  skip_after_action :verify_authorized, only: [:teams]
   before_action :assign_current_account
 
   def landing
-    skip_authorization
     if current_account
       @private_projects = current_account.team_projects.with_last_activity_at.limit(6).decorate
       @public_projects = current_account.public_projects.with_last_activity_at.limit(6).decorate
     else
       @private_projects = []
-      @public_projects = policy_scope(Project).featured.with_last_activity_at.limit(6).decorate
+      @public_projects = Project.publics.featured.with_last_activity_at.limit(6).decorate
     end
     @private_project_contributors = TopContributors.call(projects: @private_projects).contributors
     @public_project_contributors = TopContributors.call(projects: @public_projects).contributors
@@ -18,7 +16,7 @@ class ProjectsController < ApplicationController
   end
 
   def index
-    @projects = policy_scope(Project).with_last_activity_at
+    @projects = Project.with_last_activity_at
     if params[:query].present?
       @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
     end
@@ -45,12 +43,12 @@ class ProjectsController < ApplicationController
     @project.award_types.build(name: 'Blog post (600+ words)', amount: 150)
     @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
     @project.channels.build if current_account.teams.any?
-    authorize @project
+
   end
 
   def create
     @project = current_account.projects.build project_params
-    authorize @project
+
     if @project.save
       flash[:notice] = 'Project created'
       redirect_to project_path(@project)
@@ -63,7 +61,7 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.includes(:award_types).find(params[:id]).decorate
-    authorize @project
+
     @award = Award.new
     awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
     @awardable_types = awardable_types_result.awardable_types
@@ -74,13 +72,13 @@ class ProjectsController < ApplicationController
   def edit
     @project = Project.includes(:award_types).find(params[:id])
     @project.channels.build if current_account.teams.any?
-    authorize @project
+
     assign_slack_channels
   end
 
   def update
     @project = Project.includes(:award_types, :channels).find(params[:id])
-    authorize @project
+
 
     if @project.update project_params
       flash[:notice] = 'Project updated'

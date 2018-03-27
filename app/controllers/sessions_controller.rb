@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_action :require_login
-  skip_after_action :verify_authorized, :verify_policy_scoped
+  
 
   def oauth_failure
     flash[:error] = "Sorry, logging in failed... please try again, or email us at #{I18n.t('tech_support_email')}"

@@ -27,7 +27,6 @@ gem 'pg'
 gem 'postmark-rails'
 gem 'premailer-rails'
 gem 'puma'
-gem 'pundit'
 gem 'rails', '~>5.1.4'
 gem 'rails_12factor', group: :production
 gem 'redcarpet'

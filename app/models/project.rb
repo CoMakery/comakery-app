@@ -160,6 +160,23 @@ class Project < ApplicationRecord
     revenue_share? && (royalty_percentage&.> 0)
   end
 
+  def public?
+    public==true
+  end
+
+  def private?
+    !public?
+  end
+
+  def can_be_access?(account)
+    return true if public? && !require_confidentiality?
+    account && account.same_team_project?(self)
+  end
+
+  def show_revenue_info?(account)
+    share_revenue? && can_be_access?(account)
+  end
+
   def royalty_percentage=(x)
     x_truncated = BigDecimal(x, ROYALTY_PERCENTAGE_PRECISION).truncate(ROYALTY_PERCENTAGE_PRECISION) if x.present?
     self[:royalty_percentage] = x_truncated

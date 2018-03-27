@@ -9,8 +9,6 @@ describe PaymentsController do
 
   before do
     team.build_authentication_team authentication
-    allow(controller).to receive(:policy_scope).and_call_original
-    allow(controller).to receive(:authorize).and_call_original
   end
 
   describe '#index' do
@@ -18,24 +16,21 @@ describe PaymentsController do
       login account
 
       get :index, params: { project_id: my_project.id }
-      expect(controller).to have_received(:policy_scope).with(Project)
-      expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
+      expect(assigns[:project]).to eq(my_project)
     end
 
     it 'anonymous can access public' do
       other_project.update_attributes(public: true)
 
       get :index, params: { project_id: other_project.id }
-      expect(controller).to have_received(:policy_scope).with(Project)
-      expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
+      expect(assigns[:project]).to eq(other_project)
     end
 
     it "anonymous can't access private" do
       other_project.update_attributes(public: false)
 
       get :index, params: { project_id: other_project.id }
-      expect(controller).to have_received(:policy_scope).with(Project)
-      expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
+      expect(assigns[:project]).to be_nil
       expect(response).to redirect_to('/404.html')
     end
   end
@@ -53,16 +48,7 @@ describe PaymentsController do
         login account
         get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: 50 } }
       end
-
-      specify { expect(controller).to have_received(:policy_scope).with(Project) }
-
-      specify { expect(controller).to have_received(:authorize).with(kind_of(Payment), :create?) }
-
-      specify { expect(controller).to have_received(:authorize).with(kind_of(Project)) }
-
-      specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
-
-      specify { expect(response).to redirect_to(project_payments_path(my_project)) }
+      specify {expect(assigns[:project]).to eq(my_project) }
     end
 
     describe 'owner invalid' do
@@ -70,10 +56,6 @@ describe PaymentsController do
         login account
         get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: '' } }
       end
-
-      specify { expect(controller).to have_received(:policy_scope).with(Project) }
-
-      specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
       specify { expect(response).to render_template('payments/index') }
     end
@@ -83,11 +65,6 @@ describe PaymentsController do
         login account
         get :create, params: { project_id: other_project.id, payment: { quantity_redeemed: 50 } }
       end
-
-      specify { expect(controller).to have_received(:policy_scope).with(Project) }
-
-      specify { expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project')) }
-
       specify { expect(response).to redirect_to('/404.html') }
     end
 
@@ -95,10 +72,6 @@ describe PaymentsController do
       before do
         get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: 50 } }
       end
-
-      specify { expect(controller).not_to have_received(:policy_scope).with(Project) }
-
-      specify { expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
       specify { expect(response).to redirect_to(root_url) }
     end
@@ -116,14 +89,6 @@ describe PaymentsController do
       patch :update, params: { project_id: my_project.id, id: payment.id, payment: { transaction_fee: 0.50, transaction_reference: 'abc' } }
       payment.reload
     end
-
-    specify { expect(controller).to have_received(:policy_scope).with(Project) }
-
-    specify { expect(controller).to have_received(:authorize).with(kind_of(Payment), :update?) }
-
-    specify { expect(controller).to have_received(:authorize).with(kind_of(Project)) }
-
-    specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
     specify { expect(response).to redirect_to(project_payments_path(my_project)) }
 

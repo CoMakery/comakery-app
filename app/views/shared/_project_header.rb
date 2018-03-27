@@ -19,25 +19,25 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
             }
           }
 
-          li_if(policy(project).show_contributions?) {
+          li_if(project.can_be_access?(current_account)) {
             a(href: project_contributors_path(project)) {
               text ' Contributors'
             }
           }
 
-          li_if(policy(project).show_contributions?) {
+          li_if(project.can_be_access?(current_account)) {
             a(href: project_awards_path(project)) {
               text 'Awards'
             }
           }
 
-          li_if(policy(project).show_revenue_info?) {
+          li_if(project.show_revenue_info?(current_account)) {
             a(href: project_revenues_path(project)) {
               text 'Revenues'
             }
           }
 
-          li_if(policy(project).show_revenue_info?) {
+          li_if(project.show_revenue_info?(current_account)) {
             a(href: project_payments_path(project)) {
               text 'Payments'
             }
@@ -62,7 +62,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
               target: '_blank', class: 'text-link'
           }
 
-          li_if(policy(project).edit?) {
+          li_if(current_user && project.account==current_user) {
             a(class: 'edit', href: edit_project_path(project)) {
               i(class: 'fa fa-pencil') {}
               text 'Settings'

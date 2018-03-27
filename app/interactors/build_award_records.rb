@@ -7,13 +7,13 @@ class BuildAwardRecords
     total_tokens_issued = context.total_tokens_issued
     uid = award_params[:uid]
     issuer = context[:issuer]
-
+    project = context[:project]
     context.fail!(message: 'missing uid or email') if uid.blank?
     context.fail!(message: 'missing total_tokens_issued') if total_tokens_issued.blank?
 
     award_type = AwardType.find_by(id: context.award_type_id)
-    project = award_type&.project
-    context.fail!(message: 'missing award type') unless project
+    context.fail!(message: 'missing award type') unless award_type
+    context.fail!(message: 'Not authorized') unless project.id==award_type.project_id
 
     quantity = award_params[:quantity].presence || 1
 

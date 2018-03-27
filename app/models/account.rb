@@ -3,16 +3,15 @@ class Account < ApplicationRecord
   attachment :image
   include EthereumAddressable
 
-  has_many :account_roles, dependent: :destroy
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :authentication_teams, dependent: :destroy
   has_many :teams, through: :authentication_teams
   has_many :team_projects, through: :teams, source: :projects
   has_many :team_awards, through: :team_projects, source: :awards
   has_many :awards, dependent: :destroy
+  has_many :award_projects, through: :awards, source: :project
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   default_scope { includes(:slack_auth) }
-  has_many :roles, through: :account_roles
   has_many :projects
   has_many :payments
   has_many :channels, through: :projects
@@ -39,10 +38,6 @@ class Account < ApplicationRecord
     else
       slack.send_award_notifications(award: award)
     end
-  end
-
-  def confirmed?
-    email_confirm_token.nil?
   end
 
   def confirm!
@@ -84,8 +79,12 @@ class Account < ApplicationRecord
     Project.publics.where.not(id: team_projects.map(&:id))
   end
 
+  def confirmed?
+    email_confirm_token.nil?
+  end
+
   def same_team_project?(project)
-    team_projects.include?(project)
+    team_projects.include?(project) || award_projects.include?(project)
   end
 
   def send_reset_password_request

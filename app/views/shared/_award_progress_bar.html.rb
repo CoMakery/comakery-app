@@ -1,9 +1,8 @@
 class Views::Shared::AwardProgressBar < Views::Base
-  include Pundit
   needs :project, :current_account_deco
 
   def content
-    return unless current_account_deco.present? && policy(project).team_member?
+    return unless current_account_deco.present? && current_account.same_team_project?(project)
     div(class: 'meter-box') {
       div(class: 'meter-text') {
         if current_account_deco.percent_unpaid(project) <= 20

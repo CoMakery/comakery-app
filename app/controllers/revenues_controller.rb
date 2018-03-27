@@ -3,14 +3,10 @@ class RevenuesController < ApplicationController
   skip_before_action :require_login, only: :index
 
   def index
-    authorize @project, :show_revenue_info?
-
     @revenue = @project.revenues.new
   end
 
   def create
-    authorize @project
-
     @revenue = @project.revenues.new(revenue_params)
     @revenue.currency = @project.denomination
     @revenue.recorded_by = current_account
@@ -25,7 +21,9 @@ class RevenuesController < ApplicationController
   private
 
   def assign_project
-    @project = policy_scope(Project).find(params[:project_id]).decorate
+    project = Project.find(params[:project_id])
+    @project = project.decorate if project.can_be_access?(current_account)
+    redirect_to root_path unless @project
   end
 
   def revenue_params

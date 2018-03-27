@@ -3,9 +3,6 @@ require 'rails_helper'
 describe Account do
   subject(:account) { create :account, password: '12345678' }
 
-  let(:role1) { create :role, name: 'Fun 1' }
-  let(:role2) { create :role, name: 'Fun 2' }
-
   before do
     stub_discord_channels
   end
@@ -28,10 +25,6 @@ describe Account do
       expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'a' * 40}") }).to be_valid
       expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'A' * 40}") }).to be_valid
     end
-  end
-
-  it 'can have roles' do
-    account.roles = [role1, role2]
   end
 
   it 'enforces unique emails, case-insensitively' do

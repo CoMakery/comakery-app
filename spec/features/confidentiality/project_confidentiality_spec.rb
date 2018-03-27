@@ -38,7 +38,7 @@ shared_examples "can't see revenue data" do
   end
   it "can't access the revenues page" do
     visit project_revenues_path(project)
-    expect(page).to have_current_path('/404.html')
+    expect(page).to have_current_path(root_path)
   end
   it "doesn't have a contributors link" do
     visit project_path(project)
@@ -46,7 +46,7 @@ shared_examples "can't see revenue data" do
   end
   it "can't access the contributors page" do
     visit project_contributors_path(project)
-    expect(page).to have_current_path('/404.html')
+    expect(page).to have_current_path(root_path)
   end
 
   it "doesn't show revenue data on the overview page" do
@@ -63,7 +63,7 @@ shared_examples "can't see revenue data" do
 
   it "can't access the awards page" do
     visit project_awards_path(project)
-    expect(page).to have_current_path('/404.html')
+    expect(page).to have_current_path(root_path)
   end
 end
 

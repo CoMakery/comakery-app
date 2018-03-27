@@ -1,6 +1,5 @@
 class AccountsController < ApplicationController
   skip_before_action :require_login, only: %i[new create confirm]
-  skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm show]
 
   def new
     @account = Account.new
@@ -34,8 +33,6 @@ class AccountsController < ApplicationController
 
   def update
     @current_account = current_account
-    authorize @current_account
-
     if @current_account.update(account_params)
       CreateEthereumAwards.call(awards: @current_account.awards)
       redirect_to account_url, notice: 'Your account details have been updated.'
