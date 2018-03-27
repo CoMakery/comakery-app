@@ -5,6 +5,7 @@ class FoosController < ApplicationController; end
 describe ApplicationController do
   controller FoosController do
     skip_before_action :require_login
+    skip_after_action :verify_policy_scoped
 
     def index
       raise ActiveRecord::RecordNotFound
@@ -12,6 +13,10 @@ describe ApplicationController do
 
     def new
       raise Slack::Web::Api::Error, 'boom'
+    end
+
+    def show
+      raise Pundit::NotAuthorizedError, 'boooom'
     end
   end
 
@@ -34,6 +39,16 @@ describe ApplicationController do
         expect(session).not_to have_key(:account_id)
         expect(response).to redirect_to root_url
         expect(flash[:error]).to eq('Error talking to Slack, sorry!')
+      end
+    end
+
+    describe 'Pundit::NotAuthorizedError' do
+      it 'redirects to root path and logs the error' do
+        expect(Rails.logger).to receive(:error)
+
+        get :show, params: { id: 1 }
+
+        expect(response).to redirect_to root_url
       end
     end
   end

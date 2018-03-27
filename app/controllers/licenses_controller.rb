@@ -7,7 +7,7 @@ class LicensesController < ApplicationController
   private
 
   def assign_project
-    @project = Project.find(params[:project_id]).decorate
+    @project = policy_scope(Project).find(params[:project_id]).decorate
     @current_account = current_account
   end
 end

@@ -1,8 +1,10 @@
 class AwardsController < ApplicationController
   before_action :assign_project, only: %i[create index]
   skip_before_action :require_login, only: %i[index confirm]
+  skip_after_action :verify_authorized
 
   def index
+    authorize @project, :show_contributions?
     @awards = @project.awards
     @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
     @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
@@ -13,6 +15,7 @@ class AwardsController < ApplicationController
     result = AwardSlackUser.call(project: @project, issuer: current_account, award_type_id: params[:award][:award_type_id], channel_id: params[:award][:channel_id], award_params: award_params)
     if result.success?
       award = result.award
+      authorize award
       award.save!
       if award.channel
         CreateEthereumAwards.call(award: award)
@@ -24,6 +27,8 @@ class AwardsController < ApplicationController
     else
       fail_and_redirect(result.message)
     end
+  rescue Pundit::NotAuthorizedError
+    fail_and_redirect('Not authorized')
   end
 
   def confirm
@@ -43,6 +48,7 @@ class AwardsController < ApplicationController
   end
 
   def fail_and_redirect(message)
+    skip_authorization
     flash[:error] = "Failed sending award - #{message}"
     redirect_back fallback_location: root_path
   end

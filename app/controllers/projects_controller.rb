@@ -1,8 +1,10 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: :new
+  skip_after_action :verify_authorized, only: [:teams]
   before_action :assign_current_account
 
   def landing
+    skip_authorization
     if current_account
       @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
@@ -10,7 +12,7 @@ class ProjectsController < ApplicationController
     else
       @archived_projects = []
       @team_projects = []
-      @my_projects = Project.public_listed.featured.with_last_activity_at.limit(6).decorate
+      @my_projects = policy_scope(Project).public_listed.featured.with_last_activity_at.limit(6).decorate
     end
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
@@ -51,11 +53,13 @@ class ProjectsController < ApplicationController
     @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
+    authorize @project
   end
 
   def create
     @project = current_account.projects.build project_params
     @project.long_id = params[:long_id] || SecureRandom.hex(20)
+    authorize @project
     if @project.save
       flash[:notice] = 'Project created'
       redirect_to project_detail_path
@@ -87,12 +91,14 @@ class ProjectsController < ApplicationController
     @project = current_account.projects.includes(:award_types).find(params[:id])
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
+    authorize @project
     assign_slack_channels
   end
 
   def update
     @project = current_account.projects.includes(:award_types, :channels).find(params[:id])
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
+    authorize @project
     if @project.update project_params
       flash[:notice] = 'Project updated'
       respond_with @project, location: project_detail_path

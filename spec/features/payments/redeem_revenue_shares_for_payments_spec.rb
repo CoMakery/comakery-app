@@ -384,7 +384,7 @@ describe 'when redeeming revenue shares for payments' do
       expect(page).not_to have_link 'Payments'
 
       visit project_payments_path(project)
-      expect(page).to have_current_path(root_path)
+      expect(page).to have_current_path('/404.html')
     end
   end
 end

@@ -5,7 +5,7 @@ class Views::Projects::Base < Views::Base
         h2 section_heading
       }
       column('small-12 medium-2') {
-        a('New Project', class: buttonish('float-right'), href: new_project_path) if current_account
+        a('New Project', class: buttonish('float-right'), href: new_project_path) if policy(Project).new?
       }
     }
   end

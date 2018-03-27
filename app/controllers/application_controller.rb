@@ -4,6 +4,9 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
   layout 'raw'
+  include Pundit
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -42,6 +45,17 @@ class ApplicationController < ActionController::Base
     flash[:error] = 'Error talking to Slack, sorry!'
     session.delete(:account_id)
     redirect_to root_url
+  end
+
+  # called when a policy authorization fails
+  rescue_from Pundit::NotAuthorizedError do |exception|
+    Rails.logger.error(exception.to_s)
+    redirect_to root_path
+  end
+
+  # use like: before_filter :require_admin
+  def require_admin
+    authorize :application, :admin?
   end
 
   def require_login
