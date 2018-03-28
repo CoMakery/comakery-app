@@ -1,5 +1,5 @@
 class Views::Awards::Index < Views::Base
-  needs :project, :awards, :current_auth
+  needs :project, :awards
 
   def content
     render partial: 'shared/project_header'

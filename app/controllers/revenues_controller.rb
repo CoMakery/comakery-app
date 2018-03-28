@@ -22,7 +22,7 @@ class RevenuesController < ApplicationController
 
   def assign_project
     project = Project.find(params[:project_id])
-    @project = project.decorate if project.can_be_access?(current_account)
+    @project = project.decorate if project.can_be_access?(current_account) && project.share_revenue?
     redirect_to root_path unless @project
   end
 

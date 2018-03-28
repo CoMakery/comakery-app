@@ -1,6 +1,5 @@
 class AwardsController < ApplicationController
   before_action :assign_project, only: %i[create index]
-  before_action :assign_current_auth, only: [:index]
   skip_before_action :require_login, only: :index
 
   def index
@@ -40,9 +39,5 @@ class AwardsController < ApplicationController
 
   def award_params
     params.require(:award).permit(:uid, :quantity, :description)
-  end
-
-  def assign_current_auth
-    @current_auth = current_account&.slack_auth&.decorate
   end
 end

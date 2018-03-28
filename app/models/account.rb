@@ -79,6 +79,22 @@ class Account < ApplicationRecord
     Project.publics.where.not(id: team_projects.map(&:id))
   end
 
+  def private_project_ids
+    @private_project_ids = team_projects.map(&:id) | award_projects.map(&:id)
+  end
+
+  def accessable_project_ids
+    @accessable_project_ids = private_project_ids | Project.publics.map(&:id)
+  end
+
+  def private_projects
+    @private_projects ||= Project.where id: private_project_ids
+  end
+
+  def accessable_projects
+    @accessable_projects ||= Project.where id: accessable_project_ids
+  end
+
   def confirmed?
     email_confirm_token.nil?
   end

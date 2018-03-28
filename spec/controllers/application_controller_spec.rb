@@ -13,7 +13,6 @@ describe ApplicationController do
     def new
       raise Slack::Web::Api::Error, 'boom'
     end
-
   end
 
   describe 'errors' do

@@ -90,7 +90,7 @@ class Views::Payments::Index < Views::Projects::Base
 
                   payment_td('total-value') { text payment.total_value_pretty }
 
-                  if !payment.reconciled? && current_user && project.account==current_user
+                  if !payment.reconciled? && current_user && project.account == current_user
                     form_for([project, payment]) do |f|
                       payment_td('transaction-fee') { f.text_field :transaction_fee, value: payment.transaction_fee }
 

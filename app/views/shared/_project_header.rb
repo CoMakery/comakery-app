@@ -1,5 +1,5 @@
 class Views::Shared::ProjectHeader < Views::Projects::Base
-  needs :project
+  needs :project, :current_account
 
   def content
     content_for(:title) { project.title.strip }
@@ -62,7 +62,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
               target: '_blank', class: 'text-link'
           }
 
-          li_if(current_user && project.account==current_user) {
+          li_if(current_account && project.account == current_account) {
             a(class: 'edit', href: edit_project_path(project)) {
               i(class: 'fa fa-pencil') {}
               text 'Settings'

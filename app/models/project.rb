@@ -161,7 +161,7 @@ class Project < ApplicationRecord
   end
 
   def public?
-    public==true
+    public == true
   end
 
   def private?

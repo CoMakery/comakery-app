@@ -1,6 +1,4 @@
 class TeamsController < ApplicationController
-  
-
   def index
     @teams = current_account.teams.where(provider: params[:provider])
     elem_id = params[:elem_id]

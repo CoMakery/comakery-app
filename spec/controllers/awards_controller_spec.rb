@@ -54,7 +54,7 @@ describe AwardsController do
           get :index, params: { project_id: private_project.to_param }
 
           expect(response.status).to eq(302)
-          expect(response).to redirect_to('/404.html')
+          expect(response).to redirect_to(root_path)
         end
       end
     end

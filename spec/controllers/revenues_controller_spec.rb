@@ -9,12 +9,14 @@ describe RevenuesController do
 
   before do
     team.build_authentication_team authentication
+    my_project.revenue_share!
+    other_project.revenue_share!
   end
 
   describe '#index' do
     it 'owner can see' do
       login account
-
+      expect(my_project.revenue_share?).to be true
       get :index, params: { project_id: my_project.id }
       expect(assigns[:project]).to eq(my_project)
     end
@@ -31,7 +33,7 @@ describe RevenuesController do
 
       get :index, params: { project_id: other_project.id }
       expect(assigns[:project]).to be_nil
-      expect(response).to redirect_to('/404.html')
+      expect(response).to redirect_to(root_path)
     end
   end
 
@@ -60,7 +62,7 @@ describe RevenuesController do
         get :create, params: { project_id: other_project.id, revenue: { amount: 50 } }
       end
 
-      specify { expect(response).to redirect_to('/404.html') }
+      specify { expect(response).to redirect_to(root_path) }
     end
 
     describe 'logged out' do

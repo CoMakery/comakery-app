@@ -1,6 +1,4 @@
 class ChannelsController < ApplicationController
-  
-
   def users
     channel = current_account.channels.find params[:id]
     @members = channel.members(current_account)

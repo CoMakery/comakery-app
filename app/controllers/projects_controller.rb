@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @private_projects = current_account.team_projects.with_last_activity_at.limit(6).decorate
+      @private_projects = current_account.private_projects.with_last_activity_at.limit(6).decorate
       @public_projects = current_account.public_projects.with_last_activity_at.limit(6).decorate
     else
       @private_projects = []
@@ -16,7 +16,12 @@ class ProjectsController < ApplicationController
   end
 
   def index
-    @projects = Project.with_last_activity_at
+    @projects = if current_account
+      current_account.accessable_projects.with_last_activity_at
+    else
+      Project.publics.with_last_activity_at
+    end
+
     if params[:query].present?
       @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
     end
@@ -43,7 +48,6 @@ class ProjectsController < ApplicationController
     @project.award_types.build(name: 'Blog post (600+ words)', amount: 150)
     @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
     @project.channels.build if current_account.teams.any?
-
   end
 
   def create
@@ -78,7 +82,6 @@ class ProjectsController < ApplicationController
 
   def update
     @project = Project.includes(:award_types, :channels).find(params[:id])
-
 
     if @project.update project_params
       flash[:notice] = 'Project updated'

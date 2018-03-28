@@ -2,7 +2,7 @@ class Views::Shared::AwardProgressBar < Views::Base
   needs :project, :current_account_deco
 
   def content
-    return unless current_account_deco.present? && current_account.same_team_project?(project)
+    return unless current_account_deco.present? && current_account_deco.same_team_project?(project)
     div(class: 'meter-box') {
       div(class: 'meter-text') {
         if current_account_deco.percent_unpaid(project) <= 20

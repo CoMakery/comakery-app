@@ -31,7 +31,7 @@ describe PaymentsController do
 
       get :index, params: { project_id: other_project.id }
       expect(assigns[:project]).to be_nil
-      expect(response).to redirect_to('/404.html')
+      expect(response).to redirect_to(root_path)
     end
   end
 
@@ -48,7 +48,7 @@ describe PaymentsController do
         login account
         get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: 50 } }
       end
-      specify {expect(assigns[:project]).to eq(my_project) }
+      specify { expect(assigns[:project]).to eq(my_project) }
     end
 
     describe 'owner invalid' do
@@ -65,7 +65,7 @@ describe PaymentsController do
         login account
         get :create, params: { project_id: other_project.id, payment: { quantity_redeemed: 50 } }
       end
-      specify { expect(response).to redirect_to('/404.html') }
+      specify { expect(response).to redirect_to(root_path) }
     end
 
     describe 'logged out' do
