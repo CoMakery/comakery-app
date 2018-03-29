@@ -13,31 +13,31 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
       }
       full_row {
         ul(class: 'menu') {
-          li {
+          li(class: ('active' if controller_name == 'projects').to_s) {
             a(href: project_path(project)) {
               text 'Overview'
             }
           }
 
-          li_if(project.can_be_access?(current_account)) {
+          li_if(project.can_be_access?(current_account), class: ('active' if controller_name == 'contributors').to_s) {
             a(href: project_contributors_path(project)) {
               text ' Contributors'
             }
           }
 
-          li_if(project.can_be_access?(current_account)) {
+          li_if(project.can_be_access?(current_account), class: ('active' if controller_name == 'awards').to_s) {
             a(href: project_awards_path(project)) {
               text 'Awards'
             }
           }
 
-          li_if(project.show_revenue_info?(current_account)) {
+          li_if(project.show_revenue_info?(current_account), class: ('active' if controller_name == 'revenues').to_s) {
             a(href: project_revenues_path(project)) {
               text 'Revenues'
             }
           }
 
-          li_if(project.show_revenue_info?(current_account)) {
+          li_if(project.show_revenue_info?(current_account), class: ('active' if controller_name == 'payments').to_s) {
             a(href: project_payments_path(project)) {
               text 'Payments'
             }
