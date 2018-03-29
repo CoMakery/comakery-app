@@ -24,12 +24,23 @@ class Views::Accounts::Show < Views::Base
 
             column('small-3') {
               label(for: :last_name) {
-                text 'First Name'
+                text 'Last Name'
               }
             }
             column('small-9') {
               with_errors(current_account, :last_name) {
                 f.text_field :last_name
+              }
+            }
+
+            column('small-3') {
+              label(for: :nickname) {
+                text 'Nickname'
+              }
+            }
+            column('small-9') {
+              with_errors(current_account, :nickname) {
+                f.text_field :nickname
               }
             }
 
@@ -82,6 +93,14 @@ class Views::Accounts::Show < Views::Base
             }
             column('small-8') {
               text current_account.last_name
+            }
+          }
+          row {
+            column('small-4') {
+              text 'Nickname'
+            }
+            column('small-8') {
+              text current_account.nickname
             }
           }
           row {

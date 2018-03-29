@@ -45,7 +45,7 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    params.require(:account).permit(:ethereum_wallet, :first_name, :last_name, :image)
+    params.require(:account).permit(:ethereum_wallet, :first_name, :last_name, :nickname, :image)
   end
 
   def create_params
