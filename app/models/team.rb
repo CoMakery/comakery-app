@@ -43,7 +43,7 @@ class Team < ApplicationRecord
     @channel_for_selects = []
     child_channels.each do |channel|
       parent_name = parent_channels[channel['parent_id']]
-      @channel_for_selects << ["#{parent_name} - #{channel['name']}", channel['id']]
+      @channel_for_selects << ["#{parent_name} - #{channel['name']}", channel['id']] if parent_name == 'Text Channels'
     end
     @channel_for_selects
   end
