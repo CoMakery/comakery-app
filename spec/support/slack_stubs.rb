@@ -52,7 +52,7 @@ module SlackStubs
   end
 
   def stub_discord_channels
-    response = '[{"parent_id": null, "id": "parent_id", "name": "Text Channel"},{"parent_id": "parent_id", "id": "channel_id", "name": "general"}]'
+    response = '[{"parent_id": null, "id": "parent_id", "name": "Text Channels"},{"parent_id": "parent_id", "id": "channel_id", "name": "general"}]'
     RestClient.stub(:get) { response }
   end
 
