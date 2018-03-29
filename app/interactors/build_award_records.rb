@@ -14,6 +14,9 @@ class BuildAwardRecords
     award_type = AwardType.find_by(id: context.award_type_id)
     context.fail!(message: 'missing award type') unless award_type
     context.fail!(message: 'Not authorized') unless project.id == award_type.project_id
+    if context.issuer != project.account && !award_type.community_awardable?
+      context.fail!(message: 'Not authorized')
+    end
 
     quantity = award_params[:quantity].presence || 1
 
