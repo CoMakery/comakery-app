@@ -67,6 +67,8 @@ class Project < ApplicationRecord
 
   scope :publics, -> { where public: true }
   scope :featured, -> { order :featured }
+  scope :archived, -> { where archived: true }
+  scope :active, -> { where.not archived: true }
 
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))

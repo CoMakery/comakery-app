@@ -186,6 +186,13 @@ describe ProjectsController do
         expect(assigns[:project_contributors].keys).to eq([cat_project, dog_project, yak_project])
       end
 
+      it "don't show up archived projects" do
+        get :index
+        fox_project.update archived: true
+        expect(response.status).to eq(200)
+        expect(assigns[:projects].map(&:title)).to eq(%w[Dogs Cats Yaks])
+      end
+
       it 'allows querying based on the title of the project, ignoring case' do
         get :index, params: { query: 'cats' }
 

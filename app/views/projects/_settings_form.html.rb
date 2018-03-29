@@ -259,6 +259,12 @@ module Views
                   question_tooltip "Decide whether or not to display this project in the #{I18n.t('project_name')} project index"
                 }
               }
+              with_errors(project, :archived) {
+                label {
+                  f.check_box :archived
+                  text ' Archive project '
+                }
+              }
               f.submit 'Save', class: buttonish(:expand)
             }
           }

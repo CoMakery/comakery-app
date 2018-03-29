@@ -4,11 +4,11 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @private_projects = current_account.private_projects.with_last_activity_at.limit(6).decorate
-      @public_projects = current_account.public_projects.with_last_activity_at.limit(6).decorate
+      @private_projects = current_account.private_projects.active.with_last_activity_at.limit(6).decorate
+      @public_projects = current_account.public_projects.active.with_last_activity_at.limit(6).decorate
     else
       @private_projects = []
-      @public_projects = Project.publics.featured.with_last_activity_at.limit(6).decorate
+      @public_projects = Project.publics.active.featured.with_last_activity_at.limit(6).decorate
     end
     @private_project_contributors = TopContributors.call(projects: @private_projects).contributors
     @public_project_contributors = TopContributors.call(projects: @public_projects).contributors
@@ -17,9 +17,9 @@ class ProjectsController < ApplicationController
 
   def index
     @projects = if current_account
-      current_account.accessable_projects.with_last_activity_at
+      current_account.accessable_projects.active.with_last_activity_at
     else
-      Project.publics.with_last_activity_at
+      Project.publics.active.with_last_activity_at
     end
 
     if params[:query].present?
@@ -74,14 +74,14 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = Project.includes(:award_types).find(params[:id])
+    @project = current_account.projects.includes(:award_types).find(params[:id])
     @project.channels.build if current_account.teams.any?
 
     assign_slack_channels
   end
 
   def update
-    @project = Project.includes(:award_types, :channels).find(params[:id])
+    @project = current_account.projects.includes(:award_types, :channels).find(params[:id])
 
     if @project.update project_params
       flash[:notice] = 'Project updated'
@@ -117,6 +117,7 @@ class ProjectsController < ApplicationController
       :maximum_royalties_per_month,
       :license_finalized,
       :denomination,
+      :archived,
       award_types_attributes: %i[
         _destroy
         amount
