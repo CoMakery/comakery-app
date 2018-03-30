@@ -24,8 +24,8 @@ describe ProjectsController do
       get :landing
 
       expect(response.status).to eq(200)
-      expect(assigns[:private_projects].map(&:title)).to match_array(%w[my_private_project my_public_project])
-      expect(assigns[:public_projects].map(&:title)).to match_array(['other_public_project'])
+      expect(assigns[:private_projects].map(&:title)).to match_array(%w[my_private_project])
+      expect(assigns[:public_projects].map(&:title)).to match_array(["my_public_project", "other_public_project"])
       expect(assigns[:private_project_contributors].keys).to eq([])
       expect(assigns[:public_project_contributors].keys).to eq([])
     end

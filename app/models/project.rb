@@ -66,6 +66,7 @@ class Project < ApplicationRecord
   before_save :set_transitioned_to_ethereum_enabled
 
   scope :publics, -> { where public: true }
+  scope :privates, -> { where.not public: true }
   scope :featured, -> { order :featured }
   scope :archived, -> { where archived: true }
   scope :active, -> { where.not archived: true }
@@ -182,9 +183,10 @@ class Project < ApplicationRecord
     !public?
   end
 
-  def can_be_access?(account)
+  def can_be_access?(check_account)
+    return true if account==check_account
     return true if public? && !require_confidentiality?
-    account && account.same_team_project?(self)
+    check_account && check_account.same_team_project?(self)
   end
 
   def show_revenue_info?(account)
