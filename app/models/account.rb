@@ -49,6 +49,10 @@ class Account < ApplicationRecord
     full_name.blank? ? email : full_name
   end
 
+  def nick
+    nickname || name
+  end
+
   def total_awards_earned(project)
     project.awards.where(account: self).sum(:total_amount)
   end

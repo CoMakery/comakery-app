@@ -43,7 +43,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_display_name
-    account.name || account.email
+    account.nick
   end
 
   def recipient_user_name
@@ -55,7 +55,7 @@ class Award < ApplicationRecord
   end
 
   def issuer_display_name
-    issuer&.name
+    issuer&.nick
   end
 
   def issuer_user_name
