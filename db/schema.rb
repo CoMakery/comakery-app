@@ -10,19 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180329084836) do
+ActiveRecord::Schema.define(version: 20180330045830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "account_roles", id: :serial, force: :cascade do |t|
-    t.integer "account_id", null: false
-    t.integer "role_id", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["account_id", "role_id"], name: "index_account_roles_on_account_id_and_role_id", unique: true
-    t.index ["account_id"], name: "index_account_roles_on_account_id"
-  end
 
   create_table "accounts", id: :serial, force: :cascade do |t|
     t.string "email"
@@ -195,13 +186,6 @@ ActiveRecord::Schema.define(version: 20180329084836) do
     t.integer "recorded_by_id"
     t.index ["project_id"], name: "index_revenues_on_project_id"
     t.index ["recorded_by_id"], name: "index_revenues_on_recorded_by_id"
-  end
-
-  create_table "roles", id: :serial, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "key", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "teams", force: :cascade do |t|
