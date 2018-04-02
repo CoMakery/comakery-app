@@ -16,7 +16,7 @@ class Views::Shared::Awards < Views::Base
           if project.ethereum_enabled
             th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' }
           end
-          th(class: 'small-1') { text 'status' }
+          th(class: 'small-1', style: 'text-align: center') { text 'status' }
         }
         awards.each do |award|
           tr(class: 'award-row') {
@@ -76,12 +76,20 @@ class Views::Shared::Awards < Views::Base
                 end
               }
             end
-            td(class: 'small-1') {
-              text award_status(award)
+            td(class: 'small-1', style: 'text-align: center') {
+              display_status(award)
             }
           }
         end
       }
     }
+  end
+
+  def display_status(award)
+    if award.confirmed?
+      i(class: 'fa fa-check-square')
+    else
+      show_recipient ? text('Emailed') : link_to('confirm', confirm_award_path(award.confirm_token))
+    end
   end
 end
