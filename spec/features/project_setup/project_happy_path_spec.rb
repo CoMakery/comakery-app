@@ -128,6 +128,8 @@ describe 'viewing projects, creating and editing', :js do
 
     expect(page).to have_content 'This is an edited project'
 
+    Project.last.channels.create(team: team, channel_id: 'channel id')
+    expect(Project.last.channels.count).to eq 1
     login(same_team_account)
 
     visit('/projects')

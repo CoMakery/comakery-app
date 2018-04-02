@@ -107,6 +107,10 @@ class Account < ApplicationRecord
     team_projects.include?(project) || award_projects.include?(project)
   end
 
+  def same_team_or_owned_project?(project)
+    project.account_id == id || team_projects.include?(project) || award_projects.include?(project)
+  end
+
   def send_reset_password_request
     update reset_password_token: SecureRandom.hex
     UserMailer.reset_password(self).deliver_now

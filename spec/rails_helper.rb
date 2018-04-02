@@ -102,6 +102,10 @@ def get_award_type_rows
   page.all('.award-type-row')
 end
 
+def get_channel_rows
+  page.all('.channel-row')
+end
+
 def click_remove(award_type_row)
   award_type_row.find('a[data-mark-and-hide]').click
 end

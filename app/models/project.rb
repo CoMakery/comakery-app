@@ -184,7 +184,7 @@ class Project < ApplicationRecord
   end
 
   def can_be_access?(check_account)
-    return true if account==check_account
+    return true if account == check_account
     return true if public? && !require_confidentiality?
     check_account && check_account.same_team_project?(self)
   end
