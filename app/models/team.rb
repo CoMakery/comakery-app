@@ -5,8 +5,9 @@ class Team < ApplicationRecord
   has_many :channels
   has_many :projects, -> { distinct }, through: :channels
 
-  def build_authentication_team(authentication)
-    authentication_teams.find_or_create_by authentication: authentication, account: authentication.account
+  def build_authentication_team(authentication, manager=false)
+    auth_team = authentication_teams.find_or_create_by authentication: authentication, account: authentication.account
+    auth_team.update manager: manager
   end
 
   def authentication_team_by_account(account)

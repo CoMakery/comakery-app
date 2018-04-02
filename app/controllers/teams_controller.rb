@@ -1,6 +1,6 @@
 class TeamsController < ApplicationController
   def index
-    @teams = current_account.teams.where(provider: params[:provider])
+    @teams = current_account.manager_teams.where(provider: params[:provider])
     elem_id = params[:elem_id]
     @elem_index = elem_id.split('_')[3] if elem_id
 

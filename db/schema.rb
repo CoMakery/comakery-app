@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180330045830) do
+ActiveRecord::Schema.define(version: 20180402073726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20180330045830) do
     t.datetime "updated_at", null: false
     t.integer "account_id"
     t.integer "team_id"
+    t.boolean "manager", default: false
     t.index ["authentication_id"], name: "index_authentication_teams_on_authentication_id"
   end
 
