@@ -32,10 +32,10 @@ class BuildAwardRecords
       confirm_token = SecureRandom.hex
       email = uid
     end
-    account_id = account ? account.id : -1
+
     # TODO: could be done with a award_type.build_award_with_quantity variation of award_type.create_award_with_quantity
     award = Award.new(award_params.merge(
-                        account_id: account_id,
+                        account: account,
                         issuer_id: issuer.id,
                         unit_amount: award_type.amount,
                         quantity: quantity,

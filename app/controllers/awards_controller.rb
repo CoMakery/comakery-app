@@ -1,6 +1,6 @@
 class AwardsController < ApplicationController
   before_action :assign_project, only: %i[create index]
-  skip_before_action :require_login, only: :index
+  skip_before_action :require_login, only: %i[index confirm]
 
   def index
     @awards = @project.awards.order(id: :desc).page(params[:page]).decorate
@@ -25,9 +25,19 @@ class AwardsController < ApplicationController
   end
 
   def confirm
-    award = Award.find_by confirm_token: params[:token]
-    award&.confirm!
-    redirect_to project_path(award.project)
+    if current_account
+      award = Award.find_by confirm_token: params[:token]
+      if award
+        award.confirm!(current_account)
+        redirect_to project_path(award.project)
+      else
+        flash[:error] = 'Invalid award token!'
+        redirect_to root_path
+      end
+    else
+      session[:award_token] = params[:token]
+      redirect_to new_session_path
+    end
   end
 
   def fail_and_redirect(message)

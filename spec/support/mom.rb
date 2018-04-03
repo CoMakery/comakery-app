@@ -78,8 +78,9 @@ class Mom
   end
 
   def award(account = create(:account), **attrs)
+    account_id = account.is_a?(Account) ? account.id : account
     params = {
-      account: account,
+      account_id: account_id,
       issuer: create(:account),
       description: 'Great work',
       proof_id: 'abc123',

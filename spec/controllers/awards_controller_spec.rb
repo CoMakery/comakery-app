@@ -132,4 +132,28 @@ describe AwardsController do
       end
     end
   end
+
+  describe '#confirm' do
+    let!(:award) { create(:award, award_type: create(:award_type, project: project), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '1234') }
+
+    it 'redirect_to login page' do
+      get :confirm, params: { token: 1234 }
+      expect(response).to redirect_to(new_session_path)
+      expect(session[:award_token]).to eq '1234'
+    end
+
+    it 'redirect_to show error for invalid token' do
+      login receiver.account
+      get :confirm, params: { token: 12345 }
+      expect(response).to redirect_to(root_path)
+      expect(flash[:error]).to eq 'Invalid award token!'
+    end
+
+    it 'add awardto account' do
+      login receiver.account
+      get :confirm, params: { token: 1234 }
+      expect(response).to redirect_to(project_path(award.project))
+      expect(award.reload.account_id).to eq receiver.account_id
+    end
+  end
 end

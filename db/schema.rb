@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180403064841) do
+ActiveRecord::Schema.define(version: 20180403090006) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 20180403064841) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "award_type_id", null: false
-    t.integer "account_id", null: false
+    t.integer "account_id"
     t.string "ethereum_transaction_address"
     t.text "proof_id", null: false
     t.string "proof_link"

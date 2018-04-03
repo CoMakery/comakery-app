@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
     else
       flash[:error] = 'Failed authentication - Auth hash is missing one or more required values'
     end
-    redirect_to root_path
+    redirect_to redirect_path
   end
 
   def sign_in
@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
     if @account && @account.authenticate(params[:password])
       session[:account_id] = @account.id
       flash[:notice] = 'Successful sign in'
-      redirect_to root_path
+      redirect_to redirect_path
     else
       flash[:error] = 'Invalid email or password'
       redirect_to new_session_path
@@ -38,5 +38,15 @@ class SessionsController < ApplicationController
 
   def auth_hash
     request.env['omniauth.auth']
+  end
+
+  def redirect_path
+    token = session[:award_token]
+    if token
+      session[:award_token] = nil
+      confirm_award_path(token)
+    else
+      root_path
+    end
   end
 end

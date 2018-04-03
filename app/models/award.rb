@@ -89,8 +89,8 @@ class Award < ApplicationRecord
     UserMailer.send_award_notifications(self).deliver_now unless discord? || confirmed?
   end
 
-  def confirm!
-    update confirm_token: nil
+  def confirm!(account)
+    update confirm_token: nil, account: account
   end
 
   def confirmed?
