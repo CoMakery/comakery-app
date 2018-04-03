@@ -7,7 +7,7 @@ class UserMailer < ApplicationMailer
   def send_award_notifications(award)
     @award = award
     @url = confirm_award_url(token: award.confirm_token)
-    mail to: award.account.email, subject: 'Confirm award from Comakery'
+    mail to: award.email, subject: 'Confirm award from Comakery'
   end
 
   def reset_password(account)

@@ -68,7 +68,7 @@ describe 'awarding users' do
 
       click_button 'Send'
 
-      expect(page).to have_content 'Successfully sent award to bobjohnson@example.com'
+      expect(page).to have_content 'Successfully sent award to bobjohnson'
 
       bobjohnsons_auth = Authentication.find_by(uid: 'U99M9QYFQ')
       expect(bobjohnsons_auth).not_to be_nil
@@ -77,7 +77,7 @@ describe 'awarding users' do
 
       visit project_awards_path(project)
 
-      expect(page).to have_content 'bobjohnson@example.com'
+      expect(page).to have_content 'bobjohnson'
 
       click_link('Overview')
 
@@ -88,7 +88,7 @@ describe 'awarding users' do
       click_link 'Contributors'
 
       within('.contributors') do
-        expect(page.find('.contributor')).to have_content 'bobjohnson@example.com'
+        expect(page.find('.contributor')).to have_content 'bobjohnson'
         expect(page.find('.award-holdings')).to have_content '1,579'
       end
     end
@@ -160,7 +160,7 @@ describe 'awarding users' do
 
   it 'awarding a user with an ethereum account' do
     expect_any_instance_of(Account).to receive(:send_award_notifications)
-    create(:account, email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
+    create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
 
     login(account)
     visit project_path(project)
@@ -168,7 +168,7 @@ describe 'awarding users' do
     fill_in 'Email Address', with: 'U99M9QYFQ'
     click_button 'Send'
 
-    expect(page).to have_content 'Successfully sent award to bobjohnson@example.com'
+    expect(page).to have_content 'Successfully sent award to bobjohnson'
     expect(EthereumTokenIssueJob.jobs.length).to eq(1)
     expect(EthereumTokenIssueJob.jobs.first['args']).to eq([Award.last.id])
   end

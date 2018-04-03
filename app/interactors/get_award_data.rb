@@ -44,9 +44,9 @@ class GetAwardData
   def contributions_data(awards)
     awards.each_with_object({}) do |award, a_hash|
       a_hash[award.account_id] ||= { net_amount: 0 }
-      a_hash[award.account_id][:name] ||= award.account.name || award.account.email
+      a_hash[award.account_id][:name] ||= award.recipient_display_name
       a_hash[award.account_id][:net_amount] += award.total_amount
-      a_hash[award.account_id][:avatar] ||= award.account.image
+      a_hash[award.account_id][:avatar] ||= award.account.image if award.account
     end.values.sort_by { |award_data| -award_data[:net_amount] }
   end
 

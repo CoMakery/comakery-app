@@ -13,26 +13,26 @@ class Authentication < ApplicationRecord
 
   def self.find_with_omniauth(auth_hash)
     authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
-    if authentication
-      authentication.update oauth_response: auth_hash, token: auth_hash['credentials']['token'] if auth_hash.present?
-      authentication.build_team auth_hash
-    end
+    authentication&.update_info auth_hash
     authentication
   end
 
   def self.create_with_omniauth!(auth_hash)
-    account = Account.find_or_create_by!(email: auth_hash['info']['email']) do |a|
-      a.first_name = auth_hash['info']['first_name']
-      a.last_name = auth_hash['info']['last_name']
-    end
-    authentication = account.authentications.find_or_create_by(uid: auth_hash['uid'], provider: auth_hash['provider']) do |a|
-      a.oauth_response = auth_hash
-      a.token = auth_hash['credentials']['token']
-    end
-    authentication.build_team auth_hash
-    account
+    account = Account.find_or_create_by!(email: auth_hash['info']['email'])
+    authentication = account.authentications.find_or_create_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
+    authentication.update_info auth_hash
+    authentication.account
   rescue
     nil
+  end
+
+  def update_info(auth_hash)
+    account.first_name = auth_hash['info']['first_name'] if account.first_name.blank?
+    account.last_name = auth_hash['info']['last_name'] if account.last_name.blank?
+    account.nickname = auth_hash['info']['name'] if account.nickname.blank?
+    account.save
+    update oauth_response: auth_hash, token: auth_hash['credentials']['token']
+    build_team auth_hash
   end
 
   def slack?

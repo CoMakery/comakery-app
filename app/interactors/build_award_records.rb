@@ -26,17 +26,20 @@ class BuildAwardRecords
     confirm_token = nil
     if authentication
       account = authentication.account
-    else
+    elsif channel
       account = create_account(context, channel)
+    else
       confirm_token = SecureRandom.hex
+      email = uid
     end
-
+    account_id = account ? account.id : -1
     # TODO: could be done with a award_type.build_award_with_quantity variation of award_type.create_award_with_quantity
     award = Award.new(award_params.merge(
-                        account_id: account.id,
+                        account_id: account_id,
                         issuer_id: issuer.id,
                         unit_amount: award_type.amount,
                         quantity: quantity,
+                        email: email,
                         total_amount: award_type.amount * BigDecimal(quantity)
     ))
     award.confirm_token = confirm_token
@@ -59,23 +62,23 @@ class BuildAwardRecords
 
   def create_account(context, channel)
     uid = context.award_params[:uid]
-    if channel
-      team = channel.team
-      if team.discord?
-        email = "#{uid}@discordapp.com"
-      else
-        response = Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
-        email = response.user.profile.email
-      end
-      account = Account.find_or_create_by(email: email)
-      context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?
-      authentication = account.authentications.create(provider: team.provider, uid: uid)
-      context.fail!(message: authentication.errors.full_messages.join(', ')) unless authentication.valid?
-      channel.team.build_authentication_team authentication
+
+    team = channel.team
+    if team.discord?
+      email = "#{uid}@discordapp.com"
     else
-      account = Account.find_or_create_by(email: uid)
-      context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?
+      response = Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
+      email = response.user.profile.email
+      nickname = response.user.name
     end
+    account = Account.find_or_create_by(email: email)
+    account.nickname = nickname
+    account.save
+    context.fail!(message: account.errors.full_messages.join(', ')) unless account.valid?
+    authentication = account.authentications.create(provider: team.provider, uid: uid)
+    context.fail!(message: authentication.errors.full_messages.join(', ')) unless authentication.valid?
+    channel.team.build_authentication_team authentication
+
     account
   end
 end

@@ -47,8 +47,8 @@ class Account < ApplicationRecord
   end
 
   def name
-    full_name = [first_name, last_name].reject(&:blank?).join(' ')
-    full_name.blank? ? email : full_name
+    return nickname if nickname.present?
+    [first_name, last_name].reject(&:blank?).join(' ')
   end
 
   def nick

@@ -3,7 +3,8 @@ require 'refile/file_double'
 feature 'my account' do
   let!(:team) { create :team }
   let!(:project) { create(:sb_project, ethereum_enabled: true) }
-  let!(:auth) { create(:sb_authentication) }
+  let!(:account) { create :account, nickname: 'jason' }
+  let!(:auth) { create(:sb_authentication, account: account) }
   let!(:issuer) { create(:sb_authentication) }
   let!(:award_type) { create(:award_type, project: project, amount: 1337) }
   let!(:award1) do
@@ -32,7 +33,7 @@ feature 'my account' do
     expect(page).to have_content 'Mar 25, 2016'
     expect(page).to have_content 'Contribution'
     expect(page).to have_content 'Great work'
-    expect(page).to have_content auth.account.email
+    expect(page).to have_content auth.account.name
   end
 
   scenario 'editing, and adding an ethereum address' do
@@ -77,7 +78,6 @@ feature 'my account' do
   end
 
   scenario 'show account image' do
-    account = auth.account
     account.image = Refile::FileDouble.new('dummy', 'avatar.png', content_type: 'image/png')
     account.save
     login(account)
@@ -86,12 +86,8 @@ feature 'my account' do
   end
 
   scenario 'show account name' do
-    account = auth.account
-    account.first_name = 'Tester'
-    account.last_name = 'User'
-    account.save
     login(account)
     visit root_path
-    expect(page).to have_content('Tester User')
+    expect(page).to have_content('jason')
   end
 end

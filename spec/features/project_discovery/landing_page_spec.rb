@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'landing page', :js do
   let!(:team) { create :team }
-  let!(:account) { create(:account, email: 'gleenn@example.com') }
+  let!(:account) { create(:account, nickname: 'gleenn', email: 'gleenn@example.com') }
   let!(:authentication) { create :authentication, account: account }
   let!(:swarmbot_account) { create(:account, email: 'swarm@example.com') }
   let(:swarmbot_authentication) { create :authentication, account: swarmbot_account }
@@ -20,7 +20,7 @@ describe 'landing page', :js do
     visit root_path
 
     within('.top-bar .slack-instance') do
-      expect(page).to have_content 'gleenn@example.com'
+      expect(page).to have_content 'gleenn'
     end
 
     within('h2') { expect(page.text).to eq('Projects') }

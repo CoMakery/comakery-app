@@ -4,14 +4,14 @@ class Award < ApplicationRecord
 
   include EthereumAddressable
 
-  belongs_to :account
+  belongs_to :account, optional: true
   belongs_to :award_type
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
   has_one :team, through: :channel
   has_one :project, through: :award_type
 
-  validates :proof_id, :account, :award_type, :unit_amount, :total_amount, :quantity, presence: true
+  validates :proof_id, :award_type, :unit_amount, :total_amount, :quantity, presence: true
   validates :quantity, :total_amount, :unit_amount, numericality: { greater_than: 0 }
 
   validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true } # see EthereumAddressable
@@ -43,7 +43,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_display_name
-    account.nick
+    account ? account.nick : email
   end
 
   def recipient_user_name
@@ -51,7 +51,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_address
-    account.ethereum_wallet
+    account&.ethereum_wallet
   end
 
   def issuer_display_name
