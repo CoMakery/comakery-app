@@ -6,7 +6,7 @@ class Account < ApplicationRecord
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :authentication_teams, dependent: :destroy
   has_many :teams, through: :authentication_teams
-  has_many :manager_auth_teams, -> {where("manager=true or provider='slack'")}, class_name: "AuthenticationTeam"
+  has_many :manager_auth_teams, -> { where("manager=true or provider='slack'") }, class_name: 'AuthenticationTeam'
   has_many :manager_teams, through: :manager_auth_teams, source: :team
   has_many :team_projects, through: :teams, source: :projects
   has_many :team_awards, through: :team_projects, source: :awards

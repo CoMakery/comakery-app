@@ -55,6 +55,8 @@ class Comakery::Discord
     url = "https://discordapp.com/api#{@path}"
     res = RestClient.get(url, Authorization: @token)
     JSON.parse(res)
+  rescue RestClient::Forbidden => e
+    { error: e.message }
   end
 
   def post_result(parse_json = true)

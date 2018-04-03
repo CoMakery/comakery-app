@@ -24,12 +24,12 @@ describe Comakery::Discord do
 
     it 'return list of guilds' do
       stub_discord_guilds
-      expect(discord_client.guilds).to eq [{ 'icon' => nil, 'id' => 'team_id', 'name' => 'discord guild' }]
+      expect(discord_client.guilds).to eq [{ 'icon' => nil, 'id' => 'team_id', 'name' => 'discord guild', 'permissions' => 40 }]
     end
 
     it 'return list of guild channels' do
       stub_discord_guilds
-      expect(discord_client.channels(team)).to eq [{ 'icon' => nil, 'id' => 'team_id', 'name' => 'discord guild' }]
+      expect(discord_client.channels(team)).to eq [{ 'icon' => nil, 'id' => 'team_id', 'name' => 'discord guild', 'permissions' => 40 }]
     end
 
     it 'return list of guild members' do

@@ -62,14 +62,14 @@ class Authentication < ApplicationRecord
         t.provider = 'discord'
         t.image = guild['icon']
       end
-      team.build_authentication_team self, is_manager?(guild['permissions'], guild['owner'])
+      team.build_authentication_team self, manager?(guild['permissions'], guild['owner'])
     end
   end
 
-  def is_manager?(permission, owner)
+  def manager?(permission, owner)
     return true if owner
     return true if permission ^ 32 < permission
     return true if permission ^ 8 < permission
-    return false
+    false
   end
 end

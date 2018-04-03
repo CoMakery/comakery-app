@@ -47,7 +47,7 @@ module SlackStubs
   end
 
   def stub_discord_guilds
-    response = '[{"icon": null, "id": "team_id", "name": "discord guild"}]'
+    response = '[{"icon": null, "id": "team_id", "name": "discord guild", "permissions": 40}]'
     RestClient.stub(:get) { response }
   end
 
