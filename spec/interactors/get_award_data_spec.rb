@@ -4,7 +4,7 @@ describe GetAwardData do
   let!(:team) { create :team }
   let!(:sam) { create(:account, email: 'account@example.com', first_name: 'sam', last_name: 'sam') }
   let!(:sam_auth) { create(:authentication, account: sam) }
-  let!(:john) { create(:account, email: 'receiver@example.com', first_name: 'john') }
+  let!(:john) { create(:account, email: 'receiver@example.com', first_name: 'john', last_name: 'john') }
   let!(:john_auth) { create(:authentication, account: john, uid: 'U8888UVMH') }
   let!(:bob) { create(:account, email: 'other@example.com', first_name: 'bob', last_name: 'bob') }
   let!(:bob_auth) { create(:authentication, account: bob) }
@@ -42,7 +42,7 @@ describe GetAwardData do
     it 'returns a pretty hash of the awards for a project with summed amounts for each person' do
       result = described_class.call(account: sam, project: project)
 
-      expect(result.award_data[:contributions]).to match_array([{ net_amount: 14000, name: 'john', avatar: nil },
+      expect(result.award_data[:contributions]).to match_array([{ net_amount: 14000, name: 'john john', avatar: nil },
                                                                 { net_amount: 6000, name: 'bob bob', avatar: nil },
                                                                 { net_amount: 150.0, name: 'sam sam', avatar: nil }])
 
@@ -53,17 +53,17 @@ describe GetAwardData do
       result = described_class.call(account: sam, project: project)
 
       awarded_account_names = Award.select('account_id, max(id) as id').group('account_id').all.map { |a| a.account.name }
-      expect(awarded_account_names).to match_array(['john', 'sam sam', 'bob bob'])
+      expect(awarded_account_names).to match_array(['john john', 'sam sam', 'bob bob'])
 
       contributions = result.award_data[:contributions_by_day].select do |cbd|
-        cbd['john'] > 0
+        cbd['john john'] > 0
       end
 
       expect(contributions).to eq([
-                                    { 'date' => '2016-02-08', 'sam sam' => 0, 'john' => 2000.0, 'bob bob' => 0 },
-                                    { 'date' => '2016-03-01', 'sam sam' => 0, 'john' => 2000.0, 'bob bob' => 0 },
-                                    { 'date' => '2016-03-02', 'sam sam' => 0, 'john' => 4000.0, 'bob bob' => 2000.0 },
-                                    { 'date' => '2016-03-08', 'sam sam' => 0, 'john' => 6000.0, 'bob bob' => 4000.0 }
+                                    { 'date' => '2016-02-08', 'sam sam' => 0, 'john john' => 2000.0, 'bob bob' => 0 },
+                                    { 'date' => '2016-03-01', 'sam sam' => 0, 'john john' => 2000.0, 'bob bob' => 0 },
+                                    { 'date' => '2016-03-02', 'sam sam' => 0, 'john john' => 4000.0, 'bob bob' => 2000.0 },
+                                    { 'date' => '2016-03-08', 'sam sam' => 0, 'john john' => 6000.0, 'bob bob' => 4000.0 }
                                   ])
     end
   end
@@ -108,7 +108,7 @@ describe GetAwardData do
       specify do
         contributions = described_class.new.contributions_summary(project)
         expect(contributions).to eq([
-                                      { name: 'john',
+                                      { name: 'john john',
                                         avatar: nil,
                                         earned: 2000,
                                         paid: 10,
@@ -139,8 +139,8 @@ describe GetAwardData do
 
     it 'returns a row of data with defaults for missing data and summed amounts for multiple awards on the sam same day' do
       interactor = described_class.new
-      template = { 'bob bob' => 0, 'sam sam' => 0, 'john' => 0, 'some other guy' => 0 }.freeze
-      expect(interactor.contributor_by_day_row(template, '20160302', [johns_award, johns_award2, bobs_award])).to eq('john' => 4000,
+      template = { 'bob bob' => 0, 'sam sam' => 0, 'john john' => 0, 'some other guy' => 0 }.freeze
+      expect(interactor.contributor_by_day_row(template, '20160302', [johns_award, johns_award2, bobs_award])).to eq('john john' => 4000,
                                                                                                                      'bob bob' => 1000,
                                                                                                                      'some other guy' => 0,
                                                                                                                      'sam sam' => 0,

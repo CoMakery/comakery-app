@@ -2,6 +2,8 @@ class Mom
   def account(**attrs)
     defaults = {
       email: "me+#{Random.new.urlsafe_base64}@example.com",
+      first_name: 'Account',
+      last_name: (1..100).to_a.sample,
       password: valid_password
     }
     Account.new(defaults.merge(attrs))

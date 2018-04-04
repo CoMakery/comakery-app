@@ -98,13 +98,13 @@ describe Award do
   end
 
   describe '#issuer_display_name' do
-    let!(:issuer) { create :account, first_name: 'johnny' }
+    let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny' }
     let!(:project) { create :project, account: issuer }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
     it 'returns the user name' do
-      expect(award.issuer_display_name).to eq('johnny')
+      expect(award.issuer_display_name).to eq('johnny johnny')
     end
   end
 

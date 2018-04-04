@@ -2,9 +2,9 @@ require 'rails_helper'
 
 describe Comakery::Slack do
   let!(:team) { create :team }
-  let!(:recipient) { create(:account, first_name: 'newt') }
+  let!(:recipient) { create(:account, first_name: 'newt', last_name: 'newt') }
   let!(:recipient_authentication) { create(:authentication, account: recipient) }
-  let!(:issuer) { create :account, first_name: 'jim' }
+  let!(:issuer) { create :account, first_name: 'jim', last_name: 'jim' }
   let!(:issuer_authentication) { create :authentication, account: issuer, token: 'xyz' }
   let!(:recipient_authentication) { create :authentication, account: recipient, token: 'abc' }
   let!(:project) { create :project }
@@ -45,7 +45,7 @@ describe Comakery::Slack do
     describe 'when the issuer sends to someone else' do
       it 'is from issuer to recipient' do
         message = award.notifications_message
-        expect(message).to match /@jim sent @newt a 2674 token Contribution/
+        expect(message).to match /@jim jim sent @newt newt a 2674 token Contribution/
       end
     end
 
@@ -53,7 +53,7 @@ describe Comakery::Slack do
       before { award.update! account: issuer }
       it 'is self-issued' do
         message = award.notifications_message
-        expect(message).to match /@jim self-issued/
+        expect(message).to match /@jim jim self-issued/
       end
     end
 

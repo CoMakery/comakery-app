@@ -18,8 +18,9 @@ class Account < ApplicationRecord
   has_many :payments
   has_many :channels, through: :projects
   validates :email, presence: true, uniqueness: true
-  attr_accessor :password_required
+  attr_accessor :password_required, :name_required
   validates :password, length: { minimum: 8 }, if: :password_required
+  validates :first_name, :last_name, presence: true, if: :name_required
 
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
 

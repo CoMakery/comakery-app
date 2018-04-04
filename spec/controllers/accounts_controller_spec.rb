@@ -71,6 +71,8 @@ describe AccountsController do
         post :create, params: {
           account: {
             email: 'user@test.st',
+            first_name: 'User',
+            last_name: 'Tester',
             password: '12345678'
           }
         }
@@ -85,6 +87,8 @@ describe AccountsController do
         post :create, params: {
           account: {
             email: 'user@test.st',
+            first_name: 'User',
+            last_name: 'Tester',
             password: '12345678'
           }
         }
