@@ -43,7 +43,7 @@ class Award < ApplicationRecord
   end
 
   def recipient_display_name
-    account ? account.nick : email
+    account ? account.name : email
   end
 
   def recipient_user_name
