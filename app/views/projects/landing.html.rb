@@ -2,10 +2,10 @@ class Views::Projects::Landing < Views::Projects::Base
   needs :private_projects, :public_projects, :private_project_contributors, :public_project_contributors
 
   def content
-    if current_account&.slack_auth
+    if current_account
       projects_header('Projects')
       projects_block(private_projects, private_project_contributors)
-    elsif !current_account
+    else
       content_for(:pre_body) {
         div(class: 'intro') {
           div(class: 'show-for-medium') {

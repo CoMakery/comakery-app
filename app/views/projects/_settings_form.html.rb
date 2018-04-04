@@ -289,7 +289,7 @@ module Views
       end
 
       def ethereum_beta(form)
-        if current_account.slack_auth.slack_team_ethereum_enabled?
+        if current_account.slack_auth&.slack_team_ethereum_enabled?
           with_errors(project, :ethereum_enabled) {
             label {
               form.check_box :ethereum_enabled, disabled: project.ethereum_enabled
