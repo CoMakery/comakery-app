@@ -112,10 +112,6 @@ class Mom
     Comakery::Slack.new(authentication)
   end
 
-  def role(name: 'A Role', key: nil)
-    Role.new name: name, key: (key || name)
-  end
-
   def team(**attrs)
     defaults = {
       team_id: SecureRandom.hex(5),
