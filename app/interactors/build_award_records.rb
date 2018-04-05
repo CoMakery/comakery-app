@@ -68,8 +68,8 @@ class BuildAwardRecords
       email = "#{uid}@discordapp.com"
     else
       response = Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
-      email = response.user.profile.email
       nickname = response.user.name
+      email = response.user.profile.email || "#{uid}@slackbot.com"
     end
     account = Account.find_or_create_by(email: email)
     account.nickname = nickname

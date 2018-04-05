@@ -75,7 +75,7 @@ class Views::Accounts::Show < Views::Base
       div(class: 'view-ethereum-wallet') {
         column('small-7 medium-5') {
           h4(style: 'border: none;') {
-            text 'Account Detail ('
+            text 'Account Details ('
             a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Edit' }
             text ')'
           }

@@ -2,7 +2,6 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   resource :account, only: [:update]
-  resource :authentication, only: [:show]
   resources :accounts, only: [:new, :create, :show]
   resources :password_resets, only: [:new, :create, :edit, :update]
 
