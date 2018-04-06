@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   get '/account' => "accounts#show"
   get "accounts/confirm/:token" => "accounts#confirm", as: :confirm_email
+  get "accounts/confirm-authentication/:token" => "accounts#confirm_authentication", as: :confirm_authentication
   get "/auth/slack/callback" => "sessions#create"
   get "/auth/slack" => "sessions#create", as: :login
 

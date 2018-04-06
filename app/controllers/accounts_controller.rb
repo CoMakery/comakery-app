@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  skip_before_action :require_login, only: %i[new create confirm]
+  skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
 
   def new
     @account = Account.new
@@ -25,6 +25,18 @@ class AccountsController < ApplicationController
     if account
       account.confirm!
       session[:account_id] = account.id
+      flash[:notice] = 'Success! Your email is confirmed.'
+    else
+      flash[:error] = 'Invalid token'
+    end
+    redirect_to root_path
+  end
+
+  def confirm_authentication
+    authentication = Authentication.find_by confirm_token: params[:token]
+    if authentication
+      authentication.confirm!
+      session[:account_id] = authentication.account_id
       flash[:notice] = 'Success! Your email is confirmed.'
     else
       flash[:error] = 'Invalid token'

@@ -7,10 +7,12 @@ class SessionsController < ApplicationController
   end
 
   def create
-    authentication = Authentication.find_with_omniauth(auth_hash)
-    @account = authentication&.account || Authentication.create_with_omniauth!(auth_hash)
-    if @account
-      session[:account_id] = @account.id
+    authentication = Authentication.find_or_create_by_omniauth(auth_hash)
+    if authentication && authentication.confirmed?
+      session[:account_id] = authentication.account_id
+    elsif authentication
+      UserMailer.confirm_authentication(authentication).deliver_now
+      flash[:error] = 'Please check your email for confirmation instruction'
     else
       flash[:error] = 'Failed authentication - Auth hash is missing one or more required values'
     end

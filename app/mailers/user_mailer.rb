@@ -4,6 +4,12 @@ class UserMailer < ApplicationMailer
     mail to: account.email, subject: 'Confirm your account email'
   end
 
+  def confirm_authentication(authentication)
+    @authentication = authentication
+    @url = confirm_authentication_url(token: authentication.confirm_token)
+    mail to: authentication.account.email, subject: 'Confirm your account email'
+  end
+
   def send_award_notifications(award)
     @award = award
     @url = confirm_award_url(token: award.confirm_token)

@@ -11,6 +11,17 @@ class Authentication < ApplicationRecord
     true
   end
 
+  def self.find_or_create_by_omniauth(auth_hash)
+    authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
+    if authentication
+      authentication.update_info auth_hash if authentication.confirmed?
+    else
+      account = Account.find_or_create_by email: auth_hash['info']['email']
+      authentication = account.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'], confirm_token: SecureRandom.hex)
+    end
+    authentication
+  end
+
   def self.find_with_omniauth(auth_hash)
     authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
     authentication&.update_info auth_hash
@@ -37,6 +48,10 @@ class Authentication < ApplicationRecord
 
   def slack?
     provider == 'slack'
+  end
+
+  def confirmed?
+    confirm_token.blank?
   end
 
   def build_team(auth_hash)
@@ -71,5 +86,9 @@ class Authentication < ApplicationRecord
     return true if permission ^ 32 < permission
     return true if permission ^ 8 < permission
     false
+  end
+
+  def confirm!
+    update confirm_token: nil
   end
 end
