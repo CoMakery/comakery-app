@@ -124,14 +124,14 @@ describe Authentication do
           token: 'slack token')
       end
 
-      it 'returns the existing account' do
+      it 'returns the existing authentication' do
         result = nil
         expect do
           expect do
             result = described_class.find_or_create_by_omniauth(auth_hash)
           end.not_to change { Account.count }
         end.not_to change { described_class.count }
-        expect(result.id).to eq(account.id)
+        expect(result.id).to eq(authentication.id)
       end
     end
   end
