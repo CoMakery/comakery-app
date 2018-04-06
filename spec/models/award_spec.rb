@@ -4,6 +4,7 @@ describe Award do
   describe 'associations' do
     it 'has the expected associations' do
       described_class.create!(
+        issuer: create(:account),
         account: create(:account),
         award_type: create(:award_type),
         proof_id: 'xyz123',
