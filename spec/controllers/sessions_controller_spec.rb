@@ -41,7 +41,7 @@ describe SessionsController do
 
         assert_response :redirect
         assert_redirected_to root_path
-        expect(session[:account_id]).to eq(account.id)
+        expect(flash[:error]).to eq('Please check your email for confirmation instruction')
       end
     end
 

@@ -15,26 +15,11 @@ class Authentication < ApplicationRecord
     authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
     if authentication
       authentication.update_info auth_hash if authentication.confirmed?
-    else
+    elsif auth_hash['info']
       account = Account.find_or_create_by email: auth_hash['info']['email']
-      authentication = account.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'], confirm_token: SecureRandom.hex)
+      authentication = account.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'], confirm_token: SecureRandom.hex, oauth_response: auth_hash)
     end
     authentication
-  end
-
-  def self.find_with_omniauth(auth_hash)
-    authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
-    authentication&.update_info auth_hash
-    authentication
-  end
-
-  def self.create_with_omniauth!(auth_hash)
-    account = Account.find_or_create_by!(email: auth_hash['info']['email'])
-    authentication = account.authentications.find_or_create_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
-    authentication.update_info auth_hash
-    authentication.account
-  rescue
-    nil
   end
 
   def update_info(auth_hash)
@@ -90,5 +75,6 @@ class Authentication < ApplicationRecord
 
   def confirm!
     update confirm_token: nil
+    update_info oauth_response
   end
 end
