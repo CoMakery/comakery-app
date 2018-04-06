@@ -2,6 +2,15 @@ class AccountDecorator < Draper::Decorator
   delegate_all
   include ActionView::Helpers::NumberHelper
 
+  def name
+    return nickname if nickname.present?
+    [first_name, last_name].reject(&:blank?).join(' ')
+  end
+
+  def nick
+    nickname || name
+  end
+
   def total_awards_earned_pretty(project)
     pretty_award total_awards_earned(project)
   end
