@@ -114,4 +114,20 @@ describe AccountsController do
       expect(flash[:notice]).to eq 'Success! Your email is confirmed.'
     end
   end
+
+  describe '#confirm_authentication' do
+    let!(:authentication) { create(:authentication, confirm_token: '1234qwer') }
+
+    it 'render errors for invalid confirmation token' do
+      get :confirm_authentication, params: { token: 'invalid token' }
+      expect(authentication.confirmed?).to be false
+      expect(flash[:error]).to eq 'Invalid token'
+    end
+
+    it 'confirm user email with given token' do
+      get :confirm_authentication, params: { token: '1234qwer' }
+      expect(authentication.reload.confirmed?).to be true
+      expect(flash[:notice]).to eq 'Success! Your email is confirmed.'
+    end
+  end
 end

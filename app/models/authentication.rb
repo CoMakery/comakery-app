@@ -23,12 +23,17 @@ class Authentication < ApplicationRecord
   end
 
   def update_info(auth_hash)
+    return if auth_hash.blank?
+    update_account auth_hash
+    update oauth_response: auth_hash, token: auth_hash['credentials']['token']
+    build_team auth_hash
+  end
+
+  def update_account(auth_hash)
     account.first_name = auth_hash['info']['first_name'] if account.first_name.blank?
     account.last_name = auth_hash['info']['last_name'] if account.last_name.blank?
     account.nickname = auth_hash['info']['name'] if account.nickname.blank?
     account.save
-    update oauth_response: auth_hash, token: auth_hash['credentials']['token']
-    build_team auth_hash
   end
 
   def slack?

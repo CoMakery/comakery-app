@@ -16,7 +16,6 @@ describe SessionsController do
 
   describe '#create' do
     let!(:account) { create(:account, email: 'bob@example.com') }
-    let!(:authentication) { create(:authentication, provider: 'slack', account_id: account.id) }
     let!(:auth_hash) do
       {
         'uid' => 'U9GATGPFH',
@@ -32,16 +31,42 @@ describe SessionsController do
     end
 
     context 'with valid login credentials' do
-      it 'succeeds' do
+      it 'create authentication' do
         request.env['omniauth.auth'] = auth_hash
 
         expect do
           post :create
         end.to change { Authentication.count }.by(1)
-
+        auth = Authentication.last
+        expect(auth.confirmed?).to eq false
+        expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
         assert_redirected_to root_path
-        expect(flash[:error]).to eq('Please check your email for confirmation instruction')
+      end
+
+      it 'login confirmed authentication' do
+        create :authentication, uid: 'U9GATGPFH', account: account
+        request.env['omniauth.auth'] = auth_hash
+        post :create
+        auth = Authentication.last
+        expect(auth.confirmed?).to eq true
+        expect(session[:account_id]).to eq account.id
+        assert_response :redirect
+        assert_redirected_to root_path
+      end
+
+      it 'create new un-confirmed authentication' do
+        create :authentication, uid: 'another_id_same_email', account: account
+        request.env['omniauth.auth'] = auth_hash
+
+        expect do
+          post :create
+        end.to change { Authentication.count }.by(1)
+        auth = Authentication.last
+        expect(auth.confirmed?).to eq false
+        expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
+        assert_response :redirect
+        assert_redirected_to root_path
       end
     end
 
