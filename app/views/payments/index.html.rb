@@ -1,19 +1,19 @@
 class Views::Payments::Index < Views::Projects::Base
-  needs :project, :payment, :current_auth
+  needs :project, :payment, :current_account_deco
 
   def content
     render partial: 'shared/project_header'
     column {
-      if current_auth.present?
+      if current_account_deco.present?
         full_row {
           column('small-12 content-box') {
-            if policy(project).team_member? && current_user_has_awards?
+            if current_account_deco.same_team_project?(project) && current_user_has_awards?
               form_for [project, payment], html: { class: 'conversational-form' } do |f|
                 row {
                   text 'Redeem '
                   f.number_field(:quantity_redeemed, class: 'input-group-field')
                   span(class: 'my-shares') do
-                    text "of my #{current_auth.total_awards_remaining_pretty(project)} revenue shares"
+                    text "of my #{current_account_deco.total_awards_remaining_pretty(project)} revenue shares"
                   end
                 }
 
@@ -90,7 +90,7 @@ class Views::Payments::Index < Views::Projects::Base
 
                   payment_td('total-value') { text payment.total_value_pretty }
 
-                  if !payment.reconciled? && policy(project).edit?
+                  if !payment.reconciled? && current_user && project.account == current_user
                     form_for([project, payment]) do |f|
                       payment_td('transaction-fee') { f.text_field :transaction_fee, value: payment.transaction_fee }
 
@@ -137,6 +137,6 @@ class Views::Payments::Index < Views::Projects::Base
   end
 
   def current_user_has_awards?
-    current_auth.total_awards_remaining(project) > 0
+    current_account_deco.account.total_awards_remaining(project) > 0
   end
 end

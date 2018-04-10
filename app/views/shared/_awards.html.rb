@@ -16,6 +16,7 @@ class Views::Shared::Awards < Views::Base
           if project.ethereum_enabled
             th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' }
           end
+          th(class: 'small-1', style: 'text-align: center') { text 'status' }
         }
         awards.each do |award|
           tr(class: 'award-row') {
@@ -39,7 +40,7 @@ class Views::Shared::Awards < Views::Base
             }
             if show_recipient
               td(class: 'small-2 recipient') {
-                img(src: award.authentication.slack_icon, class: 'icon avatar-img')
+                img(src: account_image_url(award.account, 27), class: 'icon avatar-img')
                 text ' ' + award.recipient_display_name
               }
             end
@@ -56,8 +57,8 @@ class Views::Shared::Awards < Views::Base
               }
             }
             td(class: 'small-2') {
-              if award.issuer_slack_icon
-                img(src: award.issuer_slack_icon, class: 'icon avatar-img')
+              if award.team_image
+                img(src: award.team_image, class: 'icon avatar-img')
                 text ' '
               end
               text award.issuer_display_name
@@ -66,7 +67,7 @@ class Views::Shared::Awards < Views::Base
               td(class: 'small-2 blockchain-address') {
                 if award.ethereum_transaction_explorer_url
                   link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
-                elsif award.recipient_address.blank? && current_account == award.recipient_account && show_recipient
+                elsif award.recipient_address.blank? && current_account == award.account && show_recipient
                   link_to '(no account)', account_path
                 elsif award.recipient_address.blank?
                   text '(no account)'
@@ -75,9 +76,20 @@ class Views::Shared::Awards < Views::Base
                 end
               }
             end
+            td(class: 'small-1', style: 'text-align: center') {
+              display_status(award)
+            }
           }
         end
       }
     }
+  end
+
+  def display_status(award)
+    if award.confirmed?
+      i(class: 'fa fa-check-square')
+    else
+      show_recipient ? text('Emailed') : link_to('confirm', confirm_award_path(award.confirm_token))
+    end
   end
 end

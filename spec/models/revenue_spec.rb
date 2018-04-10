@@ -71,11 +71,11 @@ describe Revenue do
       let!(:project2) { create :project }
 
       before do
-        project1.revenues.create(amount: 3, currency: 'USD', recorded_by: project1.owner_account)
-        project1.revenues.create(amount: 5, currency: 'USD', recorded_by: project1.owner_account)
+        project1.revenues.create(amount: 3, currency: 'USD', recorded_by: project1.account)
+        project1.revenues.create(amount: 5, currency: 'USD', recorded_by: project1.account)
 
-        project2.revenues.create(amount: 7, currency: 'USD', recorded_by: project1.owner_account)
-        project2.revenues.create(amount: 11, currency: 'USD', recorded_by: project1.owner_account)
+        project2.revenues.create(amount: 7, currency: 'USD', recorded_by: project1.account)
+        project2.revenues.create(amount: 11, currency: 'USD', recorded_by: project1.account)
       end
 
       specify do

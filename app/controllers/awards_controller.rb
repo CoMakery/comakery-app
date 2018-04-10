@@ -1,38 +1,46 @@
 class AwardsController < ApplicationController
   before_action :assign_project, only: %i[create index]
-  before_action :assign_current_auth, only: [:index]
-  skip_before_action :require_login, only: :index
+  skip_before_action :require_login, only: %i[index confirm]
 
   def index
-    authorize @project, :show_contributions?
     @awards = @project.awards.order(id: :desc).page(params[:page]).decorate
-    @award_data = GetAwardData.call(authentication: current_account&.slack_auth, project: @project).award_data
+    @award_data = GetAwardData.call(account: current_account, project: @project).award_data
   end
 
   def create
-    result = AwardSlackUser.call(project: @project,
-                                 slack_user_id: params[:award][:slack_user_id],
-                                 issuer: current_account,
-                                 award_params: award_params.except(:slack_user_id))
+    result = AwardSlackUser.call(project: @project, issuer: current_account, award_type_id: params[:award][:award_type_id], channel_id: params[:award][:channel_id], award_params: award_params)
     if result.success?
       award = result.award
-      authorize award
       award.save!
-      CreateEthereumAwards.call(award: award)
-
-      current_account.send_award_notifications(award: award)
-
+      if award.channel
+        CreateEthereumAwards.call(award: award)
+        current_account.send_award_notifications(award)
+      end
+      award.send_confirm_email
       flash[:notice] = "Successfully sent award to #{award.recipient_display_name}"
       redirect_to project_path(award.project)
     else
       fail_and_redirect(result.message)
     end
-  rescue Pundit::NotAuthorizedError
-    fail_and_redirect('Not authorized')
+  end
+
+  def confirm
+    if current_account
+      award = Award.find_by confirm_token: params[:token]
+      if award
+        award.confirm!(current_account)
+        redirect_to project_path(award.project)
+      else
+        flash[:error] = 'Invalid award token!'
+        redirect_to root_path
+      end
+    else
+      session[:award_token] = params[:token]
+      redirect_to new_session_path
+    end
   end
 
   def fail_and_redirect(message)
-    skip_authorization
     flash[:error] = "Failed sending award - #{message}"
     redirect_back fallback_location: root_path
   end
@@ -40,14 +48,6 @@ class AwardsController < ApplicationController
   private
 
   def award_params
-    params.require(:award).permit(:slack_user_id, :award_type_id, :quantity, :description, :page)
-  end
-
-  def assign_project
-    @project = policy_scope(Project).find(params[:project_id]).decorate
-  end
-
-  def assign_current_auth
-    @current_auth = current_account&.slack_auth&.decorate
+    params.require(:award).permit(:uid, :quantity, :description)
   end
 end

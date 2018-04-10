@@ -7,6 +7,6 @@ class LicensesController < ApplicationController
   private
 
   def assign_project
-    @project = policy_scope(Project).find(params[:project_id]).decorate
+    @project = Project.find(params[:project_id]).decorate
   end
 end

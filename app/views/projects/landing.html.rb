@@ -2,10 +2,10 @@ class Views::Projects::Landing < Views::Projects::Base
   needs :private_projects, :public_projects, :private_project_contributors, :public_project_contributors
 
   def content
-    if current_account&.slack_auth
-      projects_header("#{current_account.slack_auth.slack_team_name} projects")
+    if current_account
+      projects_header('Projects')
       projects_block(private_projects, private_project_contributors)
-    elsif !current_account
+    else
       content_for(:pre_body) {
         div(class: 'intro') {
           div(class: 'show-for-medium') {
@@ -36,6 +36,7 @@ class Views::Projects::Landing < Views::Projects::Base
               }
             }
             a('Sign in with Slack', class: buttonish << 'margin-small', href: login_path)
+            a('Sign in with Discord', class: buttonish << 'margin-small', href: login_discord_path)
             a("or join #{t('company_name')}'s Slack", class: 'beta-signup', href: t('company_public_slack_url'))
           }
         }

@@ -6,6 +6,13 @@ GIT
     citizen-scripts (1.2.0)
 
 GIT
+  remote: https://github.com/ducle/omniauth-discord.git
+  revision: a0fffd1a07cdb58ebb56750aa64c93710d1c12a2
+  specs:
+    omniauth-discord (0.1.5)
+      omniauth-oauth2 (~> 1.2)
+
+GIT
   remote: https://github.com/refile/refile.git
   revision: 0b78f7de4dda6ee812d175ff9cd0bd485dbea4e4
   specs:
@@ -318,8 +325,6 @@ GEM
       pry (>= 0.10.4)
     public_suffix (3.0.1)
     puma (3.11.0)
-    pundit (1.1.0)
-      activesupport (>= 3.0.0)
     rack (2.0.3)
     rack-contrib (2.0.1)
       rack (~> 2.0)
@@ -546,6 +551,7 @@ DEPENDENCIES
   momentjs-rails
   nilify_blanks
   omniauth
+  omniauth-discord!
   omniauth-slack
   pg
   phantomjs
@@ -555,7 +561,6 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma
-  pundit
   rack_session_access
   rails (~> 5.1.4)
   rails-controller-testing
@@ -590,4 +595,4 @@ RUBY VERSION
    ruby 2.3.1p112
 
 BUNDLED WITH
-   1.16.0
+   1.16.1

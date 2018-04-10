@@ -101,7 +101,7 @@ end
 def project_factory(owner, params)
   project = Project.find_by(
     title: params[:title],
-    owner_account_id: owner.id,
+    account_id: owner.id,
     slack_team_name: params[:slack_team_name]
   )
   if project

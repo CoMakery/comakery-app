@@ -34,7 +34,7 @@ class PaymentDecorator < Draper::Decorator
   end
 
   def payee_name
-    payee.display_name
+    account.name
   end
 
   def status
@@ -42,14 +42,12 @@ class PaymentDecorator < Draper::Decorator
   end
 
   def payee_avatar
-    payee.slack_icon
+    account.image
   end
 
-  def issuer_name
-    issuer.display_name if issuer&.display_name
-  end
+  delegate :name, to: :issuer, prefix: true, allow_nil: true
 
   def issuer_avatar
-    issuer.slack_icon if issuer&.slack_icon
+    issuer&.image
   end
 end

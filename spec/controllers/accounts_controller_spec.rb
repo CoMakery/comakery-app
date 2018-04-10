@@ -3,8 +3,8 @@ require 'rails_helper'
 describe AccountsController do
   let(:authentication) { create(:sb_authentication) }
   let(:account) { authentication.account }
-  let(:award1) { create(:award, authentication: authentication) }
-  let(:award2) { create(:award, authentication: authentication) }
+  let(:award1) { create(:award, account: account) }
+  let(:award2) { create(:award, account: account) }
 
   describe '#update' do
     before { login(account) }
@@ -71,6 +71,8 @@ describe AccountsController do
         post :create, params: {
           account: {
             email: 'user@test.st',
+            first_name: 'User',
+            last_name: 'Tester',
             password: '12345678'
           }
         }
@@ -85,6 +87,8 @@ describe AccountsController do
         post :create, params: {
           account: {
             email: 'user@test.st',
+            first_name: 'User',
+            last_name: 'Tester',
             password: '12345678'
           }
         }
@@ -107,6 +111,22 @@ describe AccountsController do
     it 'confirm user email with given token' do
       get :confirm, params: { token: '1234qwer' }
       expect(new_account.reload.confirmed?).to be true
+      expect(flash[:notice]).to eq 'Success! Your email is confirmed.'
+    end
+  end
+
+  describe '#confirm_authentication' do
+    let!(:authentication) { create(:authentication, confirm_token: '1234qwer') }
+
+    it 'render errors for invalid confirmation token' do
+      get :confirm_authentication, params: { token: 'invalid token' }
+      expect(authentication.confirmed?).to be false
+      expect(flash[:error]).to eq 'Invalid token'
+    end
+
+    it 'confirm user email with given token' do
+      get :confirm_authentication, params: { token: '1234qwer' }
+      expect(authentication.reload.confirmed?).to be true
       expect(flash[:notice]).to eq 'Success! Your email is confirmed.'
     end
   end

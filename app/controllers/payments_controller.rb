@@ -1,23 +1,16 @@
 class PaymentsController < ApplicationController
-  before_action :assign_project, :assign_current_auth
+  before_action :assign_project, :assign_current_account
   skip_before_action :require_login, only: :index
 
   def index
-    authorize @project, :show_revenue_info?
-
     @payment = @project.payments.new
   end
 
   def create
-    authorize @project
-
     payment_params = params.require(:payment).permit :quantity_redeemed
 
-    @payment = @project.payments.new_with_quantity quantity_redeemed: payment_params[:quantity_redeemed],
-                                                   payee_auth: @current_auth
+    @payment = @project.payments.new_with_quantity quantity_redeemed: payment_params[:quantity_redeemed], account: current_account
     @payment.truncate_total_value_to_currency_precision
-
-    authorize @payment, :create?
 
     if @payment.save
       flash[:notice] = "#{@payment.decorate.total_value_pretty} pending payment by the project owner."
@@ -28,19 +21,14 @@ class PaymentsController < ApplicationController
   end
 
   def update
-    authorize @project # TODO: scope to project owner
-
     update_params = params.require(:payment).permit :transaction_fee, :transaction_reference, :id
     @payment = Payment.find(params['id'])
-
-    authorize @payment, :update?
-
     @payment.transaction_fee = update_params[:transaction_fee]
     @payment.transaction_reference = update_params[:transaction_reference]
     @payment.transaction_fee ||= 0
     @payment.total_payment = @payment.total_value - @payment.transaction_fee
     @payment.reconciled = true
-    @payment.issuer = @current_auth
+    @payment.issuer = current_account
 
     flash[:error] = @payment.errors.full_messages.join(' ') unless @payment.save
 
@@ -50,10 +38,12 @@ class PaymentsController < ApplicationController
   private
 
   def assign_project
-    @project = policy_scope(Project).find(params[:project_id]).decorate
+    project = Project.find(params[:project_id])
+    @project = project.decorate if project.share_revenue? && project.can_be_access?(current_account)
+    redirect_to root_path unless @project
   end
 
-  def assign_current_auth
-    @current_auth = current_account&.slack_auth&.decorate
+  def assign_current_account
+    @current_account_deco = current_account&.decorate
   end
 end

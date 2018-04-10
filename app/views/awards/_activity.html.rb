@@ -1,5 +1,5 @@
 class Views::Awards::Activity < Views::Base
-  needs :project, :award_data, :current_auth
+  needs :project, :award_data
 
   def content
     column {

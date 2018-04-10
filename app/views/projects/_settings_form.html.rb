@@ -1,14 +1,12 @@
 module Views
   module Projects
     class SettingsForm < Views::Base
-      needs :project, :slack_channels
+      needs :project, :providers, :provider_data
 
       def content
         form_for project do |f|
           div(class: 'content-box') {
-            div(class: 'legal-box-header') {
-              h3 'Project Settings'
-            }
+            div(class: 'legal-box-header') { h3 'Project Settings' }
             row {
               column('large-6 small-12') {
                 with_errors(project, :title) {
@@ -17,17 +15,7 @@ module Views
                     f.text_field :title
                   }
                 }
-                with_errors(project, :slack_channel) {
-                  label {
-                    i(class: 'fa fa-slack')
-                    required_label_text ' Slack Channel '
-                    question_tooltip 'Select where project notifications will be sent.'
-                    options = capture do
-                      options_for_select([[nil, nil]].concat(slack_channels), selected: project.slack_channel)
-                    end
-                    select_tag 'project[slack_channel]', options, html: { id: 'project_slack_channel' }
-                  }
-                }
+
                 with_errors(project, :description) {
                   label {
                     required_label_text 'Description'
@@ -41,10 +29,7 @@ module Views
                     text 'Display Currency'
                     question_tooltip 'This is the currency that will be used for display by default. Revenues for revenue sharing will be counted in the currency it was received in.'
                     f.select(:denomination,
-                      [['US Dollars ($)', 'USD'],
-                       ['Bittoken (฿)', 'BTC'],
-                       ['Ether (Ξ)', 'ETH']],
-                      { selected: project.denomination, include_blank: false },
+                      [['US Dollars ($)', 'USD'], ['Bittoken (฿)', 'BTC'], ['Ether (Ξ)', 'ETH']], { selected: project.denomination, include_blank: false },
                       disabled: project.license_finalized? || project.revenues.any?)
                   }
                 }
@@ -77,6 +62,8 @@ module Views
               }
             }
           }
+
+          render partial: '/projects/form/channel', locals: { f: f, providers: providers }
 
           div(class: 'content-box') {
             full_row {
@@ -114,9 +101,7 @@ module Views
             }
             br
             full_row {
-              div(class: 'legal-box-header') {
-                h4 'Contributor Awards'
-              }
+              div(class: 'legal-box-header') { h4 'Contributor Awards' }
             }
             row {
               column('large-6 small-12') {
@@ -209,16 +194,10 @@ module Views
           }
           div(class: 'content-box') {
             div(class: 'award-types') {
-              div(class: 'legal-box-header') {
-                h3 'Awards Offered'
-              }
+              div(class: 'legal-box-header') { h3 'Awards Offered' }
               row {
-                column('small-3') {
-                  text 'Contribution Type'
-                }
-                column('small-1') {
-                  text 'Amount '
-                }
+                column('small-3') { text 'Contribution Type' }
+                column('small-1') { text 'Amount ' }
                 column('small-1') {
                   text 'Community Awardable '
                   question_tooltip 'Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.'
@@ -228,10 +207,8 @@ module Views
                   br
                   link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text')
                 }
-                column('small-1') {
-                  text 'Disable'
-                }
-                column('small-2') {
+                column('small-1') { text 'Disable' }
+                column('small-2', class: 'text-center') {
                   text 'Remove '
                   question_tooltip 'Award type cannot be changed after awards have been issued.'
                 }
@@ -242,9 +219,7 @@ module Views
                 row(class: "award-type-row#{ff.object.amount == 0 ? ' hide award-type-template' : ''}") {
                   ff.hidden_field :id
                   ff.hidden_field :_destroy, 'data-destroy': ''
-                  column('small-3') {
-                    ff.text_field :name
-                  }
+                  column('small-3') { ff.text_field :name }
                   column('small-1') {
                     readonly = !ff.object&.modifiable?
                     if readonly
@@ -255,15 +230,9 @@ module Views
                       ff.text_field :amount, type: :number, class: 'text-right', readonly: readonly
                     end
                   }
-                  column('small-1', class: 'text-center') {
-                    ff.check_box :community_awardable
-                  }
-                  column('small-4', class: 'text-center') {
-                    ff.text_area :description, class: 'award-type-description'
-                  }
-                  column('small-1', class: 'text-center') {
-                    ff.check_box :disabled
-                  }
+                  column('small-1', class: 'text-center') { ff.check_box :community_awardable }
+                  column('small-4', class: 'text-center') { ff.text_area :description, class: 'award-type-description' }
+                  column('small-1', class: 'text-center') { ff.check_box :disabled }
                   column('small-2', class: 'text-center') {
                     if ff.object&.modifiable?
                       a('×', href: '#', 'data-mark-and-hide': '.award-type-row', class: 'close')
@@ -290,6 +259,12 @@ module Views
                   question_tooltip "Decide whether or not to display this project in the #{I18n.t('project_name')} project index"
                 }
               }
+              with_errors(project, :archived) {
+                label {
+                  f.check_box :archived
+                  text ' Archive project '
+                }
+              }
               f.submit 'Save', class: buttonish(:expand)
             }
           }
@@ -314,7 +289,7 @@ module Views
       end
 
       def ethereum_beta(form)
-        if current_account.slack_auth.slack_team_ethereum_enabled?
+        if current_account.slack_auth&.slack_team_ethereum_enabled?
           with_errors(project, :ethereum_enabled) {
             label {
               form.check_box :ethereum_enabled, disabled: project.ethereum_enabled

@@ -1,5 +1,5 @@
 class Views::Projects::Show < Views::Projects::Base
-  needs :project, :award, :awardable_authentications, :awardable_types, :award_data, :can_award
+  needs :project, :award, :awardable_types, :award_data, :can_award
 
   def content
     render partial: 'shared/project_header'

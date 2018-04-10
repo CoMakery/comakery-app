@@ -16,12 +16,8 @@ class Revenue < ApplicationRecord
     self[:amount] = x
   end
 
-  def issuer_slack_icon
-    recorded_by&.slack_auth&.slack_icon
-  end
-
   def issuer_display_name
-    recorded_by&.slack_auth&.display_name
+    recorded_by&.nick
   end
 
   private

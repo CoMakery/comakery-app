@@ -1,90 +1,85 @@
 class Authentication < ApplicationRecord
-  include SlackDomainable
-
   belongs_to :account
-  has_many :projects, foreign_key: :slack_team_id, primary_key: :slack_team_id
-  has_many :awards
-  validates :account, :provider, :slack_team_id, :slack_team_image_34_url, :slack_team_image_132_url, :slack_team_name, :slack_user_id, :slack_user_name, presence: true
+  has_many :authentication_teams, dependent: :destroy
+  validates :account, :provider, :uid, presence: true
 
-  def display_name
-    if slack_first_name.present? || slack_last_name.present?
-      [slack_first_name.presence, slack_last_name.presence].compact.join(' ')
-    else
-      "@#{slack_user_name}"
+  # TODO: update after refactor
+  def slack_team_ethereum_enabled?
+    # allow_ethereum = Rails.application.config.allow_ethereum
+    # allowed_domains = allow_ethereum.to_s.split(',').compact
+    # allowed_domains.include?(slack_team_domain)
+    true
+  end
+
+  def self.find_or_create_by_omniauth(auth_hash)
+    authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
+    if authentication
+      authentication.update_info auth_hash if authentication.confirmed?
+    elsif auth_hash['info']
+      account = Account.find_or_create_by email: auth_hash['info']['email']
+      authentication = account.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'], confirm_token: SecureRandom.hex, oauth_response: auth_hash)
+    end
+    authentication
+  end
+
+  def update_info(auth_hash)
+    return if auth_hash.blank?
+    update_account auth_hash
+    update oauth_response: auth_hash, token: auth_hash['credentials']['token']
+    build_team auth_hash
+  end
+
+  def update_account(auth_hash)
+    account.first_name = auth_hash['info']['first_name'] if account.first_name.blank?
+    account.last_name = auth_hash['info']['last_name'] if account.last_name.blank?
+    account.nickname = auth_hash['info']['name'] if account.nickname.blank?
+    account.save
+  end
+
+  def slack?
+    provider == 'slack'
+  end
+
+  def confirmed?
+    confirm_token.blank?
+  end
+
+  def build_team(auth_hash)
+    slack? ? build_slack_team(auth_hash) : build_discord_team
+  end
+
+  def build_slack_team(auth_hash)
+    return if auth_hash['info']['team_id'].blank?
+    team = Team.find_or_create_by team_id: auth_hash['info']['team_id'] do |t|
+      t.name = auth_hash['info']['team']
+      t.domain = auth_hash['info']['team_domain']
+      t.provider = auth_hash['provider']
+      t.image = auth_hash.dig('extra', 'team_info', 'team', 'icon', 'image_132')
+    end
+    team.build_authentication_team self
+  end
+
+  def build_discord_team
+    discord = Comakery::Discord.new(token)
+    discord.guilds.each do |guild|
+      team = Team.find_or_create_by team_id: guild['id'] do |t|
+        t.name = guild['name']
+        t.provider = 'discord'
+        t.image = guild['icon']
+      end
+      team.build_authentication_team self, manager?(guild['permissions'], guild['owner'])
     end
   end
 
-  def slack_icon
-    slack_image_32_url || slack_team_image_34_url
+  def manager?(permission, owner)
+    return true if owner
+    return true if permission ^ 32 < permission
+    return true if permission ^ 8 < permission
+    false
   end
 
-  def slack_team_ethereum_enabled?
-    allow_ethereum = Rails.application.config.allow_ethereum
-    allowed_domains = allow_ethereum.to_s.split(',').compact
-    allowed_domains.include?(slack_team_domain)
-  end
-
-  def total_awards_earned(project)
-    project.awards.where(authentication: self).sum(:total_amount)
-  end
-
-  def total_awards_paid(project)
-    project.payments.where(payee: self).sum(:quantity_redeemed)
-  end
-
-  def total_awards_remaining(project)
-    total_awards_earned(project) - total_awards_paid(project)
-  end
-
-  def total_revenue_paid(project)
-    project.payments.where(payee: self).sum(:total_value)
-  end
-
-  def total_revenue_unpaid(project)
-    project.share_of_revenue_unpaid(total_awards_remaining(project))
-  end
-
-  def percent_unpaid(project)
-    return BigDecimal('0') if project.total_awards_outstanding == 0
-    precise_percentage = (BigDecimal(total_awards_remaining(project)) * 100) / BigDecimal(project.total_awards_outstanding)
-    precise_percentage.truncate(8)
-  end
-
-  def self.find_or_create_from_auth_hash!(auth_hash)
-    slack_auth_hash = SlackAuthHash.new(auth_hash)
-
-    account = Account.find_or_create_by(email: slack_auth_hash.email_address)
-
-    # find the "slack" authentication *for the given slack user* if exists
-    # note that we persist an authentication for every team
-    authentication = Authentication.find_or_initialize_by(
-      provider: slack_auth_hash.provider,
-      slack_user_id: slack_auth_hash.slack_user_id,
-      slack_team_id: slack_auth_hash.slack_team_id
-    )
-    authentication.update!(
-      account_id: account.id,
-      slack_user_name: slack_auth_hash.slack_user_name,
-      slack_first_name: slack_auth_hash.slack_first_name,
-      slack_last_name: slack_auth_hash.slack_last_name,
-      slack_team_name: slack_auth_hash.slack_team_name,
-      slack_image_32_url: slack_auth_hash.slack_image_32_url,
-      slack_team_image_34_url: slack_auth_hash.slack_team_image_34_url,
-      slack_team_image_132_url: slack_auth_hash.slack_team_image_132_url,
-      slack_token: slack_auth_hash.slack_token,
-      slack_team_domain: slack_auth_hash.slack_team_domain,
-      oauth_response: auth_hash
-    )
-    authentication.touch # we must change updated_at manually: update! does not change updated_at if attrs have not changed
-
-    # This will go away when we create a Team model <https://github.com/CoMakery/comakery-app/issues/113>
-    Project.where(slack_team_id: slack_auth_hash.slack_team_id).update_all(
-      slack_team_name: slack_auth_hash.slack_team_name,
-      slack_team_image_34_url: slack_auth_hash.slack_team_image_34_url,
-      slack_team_image_132_url: slack_auth_hash.slack_team_image_132_url,
-      slack_team_domain: slack_auth_hash.slack_team_domain
-    )
-
-    account
+  def confirm!
+    update confirm_token: nil
+    update_info oauth_response
   end
 end

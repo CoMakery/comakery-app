@@ -16,10 +16,10 @@ class Comakery::Slack
   end
 
   def send_award_notifications(award:)
-    text = award_notifications_message(award)
+    text = award.notifications_message
 
     message_response = @client.chat_postMessage(
-      channel: '#' + award.project.slack_channel,
+      channel: '#' + award.channel.name,
       text: text,
       link_names: 1,            # make @user a live link and notify @user
       username: "#{I18n.t('project_name')} Bot",
@@ -32,35 +32,6 @@ class Comakery::Slack
       timestamp: message_response[:message][:ts],
       name: 'thumbsup'
     )
-  end
-
-  # rubocop:disable Metrics/CyclomaticComplexity
-  def award_notifications_message(award)
-    text = ''
-
-    text += if award.self_issued?
-      %( @#{award.issuer_slack_user_name} self-issued )
-    else
-      %( @#{award.issuer_slack_user_name} sent
-        @#{award.recipient_slack_user_name} )
-    end
-
-    text += %( a #{award.total_amount} token #{award.award_type.name} )
-
-    text += %( for "#{award.description}" ) if award.description.present?
-
-    text += %(
-      on the
-      <#{project_url(award.project)}|#{award.project.title}>
-      project.
-    )
-
-    if award.project.ethereum_enabled && award.recipient_address.blank?
-      text += " <#{account_url}|Set up your account> to receive Ethereum tokens."
-    end
-
-    text.strip!.gsub!(/\s+/, ' ')
-    text
   end
 
   def get_users
@@ -77,7 +48,7 @@ class Comakery::Slack
     @client.users_info(user: slack_user_id)
   end
 
-  def get_channels
+  def fetch_channels
     @client.channels_list
   end
 end

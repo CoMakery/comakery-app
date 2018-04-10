@@ -5,7 +5,7 @@ class Views::Revenues::Index < Views::Projects::Base
     render partial: 'shared/project_header'
 
     column {
-      if project.owner_account == current_account
+      if project.account == current_account
         full_row { h3 'Record Project Revenue' }
         form_for [project, revenue] { |f|
           div(class: 'content-box summary menu simple') {
@@ -81,10 +81,8 @@ class Views::Revenues::Index < Views::Projects::Base
                     div(class: 'margin-small margin-collapse inline-block') { text revenue.transaction_reference }
                   }
                   td(class: 'recorded-by small-2') {
-                    if revenue.issuer_slack_icon
-                      img(src: revenue.issuer_slack_icon, class: 'icon avatar-img')
+                    img(src: account_image_url(revenue.recorded_by, 34), class: 'icon avatar-img')
                       text ' '
-                    end
 
                     div(class: 'margin-small margin-collapse inline-block') { text revenue.issuer_display_name }
                   }

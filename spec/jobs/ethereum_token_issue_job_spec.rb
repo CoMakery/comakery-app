@@ -39,7 +39,7 @@ describe EthereumTokenIssueJob do
     let(:award_type) { create :award_type, amount: 2, project: project }
     let(:issuer) { create :account }
     let(:authentication) { create :authentication }
-    let(:award) { award_type.awards.create_with_quantity 1.5, issuer: issuer, authentication: authentication }
+    let(:award) { award_type.awards.create_with_quantity 1.5, issuer: issuer, account: authentication.account }
 
     before do
       allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }

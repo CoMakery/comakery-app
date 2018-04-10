@@ -1,5 +1,5 @@
 class Views::Projects::Description < Views::Projects::Base
-  needs :project, :can_award, :award_data, :current_auth
+  needs :project, :can_award, :award_data
 
   def content
     div {
@@ -24,9 +24,10 @@ class Views::Projects::Description < Views::Projects::Base
             h4 'About'
             p {
               text 'Lead by '
-              b project.owner_slack_user_name.to_s
-              text ' with '
-              strong project.slack_team_name
+              b project.account.name
+              # TODO: team(s)
+              # text ' with '
+              # strong project.slack_team_name
             }
             p(class: 'description') {
               text raw project.description_html

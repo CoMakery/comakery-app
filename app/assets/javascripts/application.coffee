@@ -52,6 +52,34 @@ $ ->
     removeElement.hide()
     removeElement.find("input[data-destroy]").val("1")
 
+  $(document).on "change", ".provider_select", (e) ->
+    $('.active-channel').removeClass('active-channel')
+    $closest = $(@).closest('.row')
+    $closest.addClass('active-channel')
+    $id = $closest.find('.team_select').attr('id')
+    $data = {elem_id: $id, provider: $(@).val()}
+    $.get("/teams.js", $data)
+
+  $(document).on "change", ".team_select", (e) ->
+    $('.active-channel').removeClass('active-channel')
+    $closest = $(@).closest('.row')
+    $closest.addClass('active-channel')
+    $id = $closest.find('.channel_select').attr('id')
+    $data = {elem_id: $id}
+    $.get("/teams/" + $(@).val() + "/channels.js", $data)
+
+  $(document).on "change", ".fetch-channel-users", (e) ->
+    if $(@).val()
+      $('.award-email').attr('name','')
+      $('.uid-email').addClass('hide')
+      $('.uid-select').removeClass('hide')
+      $.get("/channels/" + $(@).val() + "/users.js")
+    else
+      $('.member-select').attr('name','')
+      $('.award-email').attr('name','award[uid]')
+      $('.uid-email').removeClass('hide')
+      $('.uid-select').addClass('hide')
+
   # Run on page ready then bind events
   awardPaymentType()
   $('#project_payment_type').change (e)->

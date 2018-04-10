@@ -24,12 +24,23 @@ class Views::Accounts::Show < Views::Base
 
             column('small-3') {
               label(for: :last_name) {
-                text 'First Name'
+                text 'Last Name'
               }
             }
             column('small-9') {
               with_errors(current_account, :last_name) {
                 f.text_field :last_name
+              }
+            }
+
+            column('small-3') {
+              label(for: :nickname) {
+                text 'Nickname'
+              }
+            }
+            column('small-9') {
+              with_errors(current_account, :nickname) {
+                f.text_field :nickname
               }
             }
 
@@ -64,7 +75,7 @@ class Views::Accounts::Show < Views::Base
       div(class: 'view-ethereum-wallet') {
         column('small-7 medium-5') {
           h4(style: 'border: none;') {
-            text 'Account Detail ('
+            text 'Account Details ('
             a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Edit' }
             text ')'
           }
@@ -82,6 +93,14 @@ class Views::Accounts::Show < Views::Base
             }
             column('small-8') {
               text current_account.last_name
+            }
+          }
+          row {
+            column('small-4') {
+              text 'Nickname'
+            }
+            column('small-8') {
+              text current_account.nickname
             }
           }
           row {
@@ -105,7 +124,7 @@ class Views::Accounts::Show < Views::Base
 
     hr
 
-    current_account.slack_awards.group_by { |award| award.project.id }.each do |(_, awards_for_project)|
+    current_account.awards.group_by { |award| award.project.id }.each do |(_, awards_for_project)|
       project = awards_for_project.first.project.decorate
       h3 {
         link_to project.title, project_awards_path(project)

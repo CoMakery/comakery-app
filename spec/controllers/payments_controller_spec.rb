@@ -1,13 +1,14 @@
 require 'rails_helper'
 
 describe PaymentsController do
-  let!(:account) { create(:account, email: 'account@example.com').tap { |a| create(:authentication, account: a, slack_team_id: 'foo', slack_user_name: 'account', slack_user_id: 'account slack_user_id', slack_team_domain: 'foobar') } }
-  let!(:my_project) { create(:project, payment_type: 'revenue_share', title: 'Cats', description: 'Cats with lazers', owner_account: account, slack_team_id: 'foo') }
-  let!(:other_project) { create(:project, payment_type: 'revenue_share', title: 'Dogs', description: 'Dogs with harpoons', owner_account: account, slack_team_id: 'bar') }
+  let!(:team) { create :team }
+  let!(:authentication) { create :authentication }
+  let!(:account) { authentication.account }
+  let!(:my_project) { create(:project, payment_type: 'revenue_share', title: 'Cats', description: 'Cats with lazers', account: account) }
+  let!(:other_project) { create(:project, payment_type: 'revenue_share', title: 'Dogs', description: 'Dogs with harpoons', account: create(:account)) }
 
   before do
-    allow(controller).to receive(:policy_scope).and_call_original
-    allow(controller).to receive(:authorize).and_call_original
+    team.build_authentication_team authentication
   end
 
   describe '#index' do
@@ -15,25 +16,22 @@ describe PaymentsController do
       login account
 
       get :index, params: { project_id: my_project.id }
-      expect(controller).to have_received(:policy_scope).with(Project)
-      expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
+      expect(assigns[:project]).to eq(my_project)
     end
 
     it 'anonymous can access public' do
       other_project.update_attributes(public: true)
 
       get :index, params: { project_id: other_project.id }
-      expect(controller).to have_received(:policy_scope).with(Project)
-      expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
+      expect(assigns[:project]).to eq(other_project)
     end
 
     it "anonymous can't access private" do
       other_project.update_attributes(public: false)
 
       get :index, params: { project_id: other_project.id }
-      expect(controller).to have_received(:policy_scope).with(Project)
-      expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
-      expect(response).to redirect_to('/404.html')
+      expect(assigns[:project]).to be_nil
+      expect(response).to redirect_to(root_path)
     end
   end
 
@@ -42,7 +40,7 @@ describe PaymentsController do
     let!(:revenue) { create :revenue, amount: 100, project: my_project }
 
     before do
-      award_type.awards.create_with_quantity(50, issuer: my_project.owner_account, authentication: account.slack_auth)
+      award_type.awards.create_with_quantity(50, issuer: account, account: account)
     end
 
     describe 'owner success' do
@@ -50,16 +48,7 @@ describe PaymentsController do
         login account
         get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: 50 } }
       end
-
-      specify { expect(controller).to have_received(:policy_scope).with(Project) }
-
-      specify { expect(controller).to have_received(:authorize).with(kind_of(Payment), :create?) }
-
-      specify { expect(controller).to have_received(:authorize).with(kind_of(Project)) }
-
-      specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
-
-      specify { expect(response).to redirect_to(project_payments_path(my_project)) }
+      specify { expect(assigns[:project]).to eq(my_project) }
     end
 
     describe 'owner invalid' do
@@ -67,10 +56,6 @@ describe PaymentsController do
         login account
         get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: '' } }
       end
-
-      specify { expect(controller).to have_received(:policy_scope).with(Project) }
-
-      specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
       specify { expect(response).to render_template('payments/index') }
     end
@@ -80,12 +65,7 @@ describe PaymentsController do
         login account
         get :create, params: { project_id: other_project.id, payment: { quantity_redeemed: 50 } }
       end
-
-      specify { expect(controller).to have_received(:policy_scope).with(Project) }
-
-      specify { expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project')) }
-
-      specify { expect(response).to redirect_to('/404.html') }
+      specify { expect(response).to redirect_to(root_path) }
     end
 
     describe 'logged out' do
@@ -93,19 +73,15 @@ describe PaymentsController do
         get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: 50 } }
       end
 
-      specify { expect(controller).not_to have_received(:policy_scope).with(Project) }
-
-      specify { expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project')) }
-
       specify { expect(response).to redirect_to(root_url) }
     end
   end
 
   describe 'update' do
     let!(:award_type) { create(:award_type, amount: 1, project: my_project) }
-    let!(:award) { award_type.awards.create_with_quantity(1, issuer: account, authentication: account.slack_auth) }
+    let!(:award) { award_type.awards.create_with_quantity(1, issuer: account, account: account) }
     let!(:revenue) { my_project.revenues.create(amount: 100, currency: 'USD', recorded_by: account) }
-    let!(:payment) { my_project.payments.create_with_quantity(quantity_redeemed: 1, payee_auth: account.slack_auth) }
+    let!(:payment) { my_project.payments.create_with_quantity(quantity_redeemed: 1, account: account) }
 
     before do
       login account
@@ -113,14 +89,6 @@ describe PaymentsController do
       patch :update, params: { project_id: my_project.id, id: payment.id, payment: { transaction_fee: 0.50, transaction_reference: 'abc' } }
       payment.reload
     end
-
-    specify { expect(controller).to have_received(:policy_scope).with(Project) }
-
-    specify { expect(controller).to have_received(:authorize).with(kind_of(Payment), :update?) }
-
-    specify { expect(controller).to have_received(:authorize).with(kind_of(Project)) }
-
-    specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
     specify { expect(response).to redirect_to(project_payments_path(my_project)) }
 
@@ -135,9 +103,9 @@ describe PaymentsController do
 
   describe 'update with blank transaction fee' do
     let!(:award_type) { create(:award_type, amount: 1, project: my_project) }
-    let!(:award) { award_type.awards.create_with_quantity(1, issuer: account, authentication: account.slack_auth) }
+    let!(:award) { award_type.awards.create_with_quantity(1, issuer: account, account: account) }
     let!(:revenue) { my_project.revenues.create(amount: 100, currency: 'USD', recorded_by: account) }
-    let!(:payment) { my_project.payments.create_with_quantity(quantity_redeemed: 1, payee_auth: account.slack_auth) }
+    let!(:payment) { my_project.payments.create_with_quantity(quantity_redeemed: 1, account: account) }
 
     before do
       login account

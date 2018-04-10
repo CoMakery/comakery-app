@@ -56,3 +56,18 @@
   border-bottom: none;
   cursor: default;
 }
+
+.menu > li{
+  padding: 0 1rem;
+}
+.menu > li > a {
+  display: block;
+  padding: 0.5rem 0;
+  line-height: 1;
+}
+
+.menu > .active > a {
+  border-bottom: 4px solid #ccc;
+  background: none;
+  color: #2199e8;
+}

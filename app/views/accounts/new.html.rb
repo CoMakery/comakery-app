@@ -18,6 +18,33 @@ class Views::Accounts::New < Views::Base
             }
 
             column('large-12') {
+              with_errors(account, :first_name) {
+                label {
+                  text 'First Name: '
+                  f.text_field :first_name
+                }
+              }
+            }
+
+            column('large-12') {
+              with_errors(account, :last_name) {
+                label {
+                  text 'Last Name: '
+                  f.text_field :last_name
+                }
+              }
+            }
+
+            column('large-12') {
+              with_errors(account, :nickname) {
+                label {
+                  text 'Nickname: '
+                  f.text_field :nickname
+                }
+              }
+            }
+
+            column('large-12') {
               with_errors(account, :password) {
                 label {
                   text 'Password: '

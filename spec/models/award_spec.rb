@@ -4,8 +4,8 @@ describe Award do
   describe 'associations' do
     it 'has the expected associations' do
       described_class.create!(
-        authentication: create(:authentication),
         issuer: create(:account),
+        account: create(:account),
         award_type: create(:award_type),
         proof_id: 'xyz123',
         total_amount: 100,
@@ -19,9 +19,7 @@ describe Award do
     it 'requires things be present' do
       expect(described_class.new(quantity: nil).tap(&:valid?).errors.full_messages)
         .to match_array([
-                          "Authentication can't be blank",
                           "Award type can't be blank",
-                          "Issuer can't be blank",
                           "Quantity can't be blank",
                           "Unit amount can't be blank",
                           "Total amount can't be blank",
@@ -101,44 +99,25 @@ describe Award do
   end
 
   describe '#issuer_display_name' do
-    let!(:issuer) { create :account }
-    let!(:project) { create :project, slack_team_id: 'reds' }
+    let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny' }
+    let!(:project) { create :project, account: issuer }
     let!(:award_type) { create :award_type, project: project }
-    let!(:award) { create :award, issuer: issuer, award_type: award_type }
+    let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
     it 'returns the user name' do
-      create(:authentication, account: issuer, slack_team_id: 'reds', slack_user_name: 'johnny', slack_first_name: nil, slack_last_name: nil)
-      expect(award.issuer_display_name).to eq('@johnny')
-    end
-
-    it 'returns the auth for the correct team, even if older' do
-      travel_to Date.new(2015)
-      create(:authentication, account: issuer, slack_team_id: 'reds', slack_user_name: 'johnny-red', slack_first_name: nil, slack_last_name: nil)
-      travel_to Date.new(2016)
-      create(:authentication, account: issuer, slack_team_id: 'blues', slack_user_name: 'johnny-blue', slack_first_name: nil, slack_last_name: nil)
-      expect(award.issuer_display_name).to eq('@johnny-red')
-    end
-
-    it "doesn't explode if auth is missing" do
-      expect(award.issuer_display_name).to be_nil
+      expect(award.issuer_display_name).to eq('johnny johnny')
     end
   end
 
   context 'recipient names' do
-    let!(:recipient) { create(:authentication, slack_team_id: 'reds', slack_first_name: 'Betty', slack_last_name: 'Ross', slack_user_name: 'betty') }
-    let!(:project) { create :project, slack_team_id: 'reds' }
+    let!(:recipient) { create(:account, first_name: 'Betty', last_name: 'Ross') }
+    let!(:project) { create :project }
     let!(:award_type) { create :award_type, project: project }
-    let!(:award) { create :award, authentication: recipient, award_type: award_type }
+    let!(:award) { create :award, account: recipient, award_type: award_type }
 
     describe '#recipient_display_name' do
       it 'returns the full name' do
         expect(award.recipient_display_name).to eq('Betty Ross')
-      end
-    end
-
-    describe '#recipient_slack_user_name' do
-      it 'returns the user name' do
-        expect(award.recipient_slack_user_name).to eq('betty')
       end
     end
   end
@@ -167,15 +146,14 @@ describe Award do
       let!(:project1_award_type) { (create :award_type, project: project1, amount: 3) }
       let(:project2) { create :project }
       let!(:project2_award_type) { (create :award_type, project: project2, amount: 5) }
-      let(:issuer) { create :account }
-      let(:authentication) { create :authentication }
+      let(:account) { create :account }
 
       before do
-        project1_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
-        project1_award_type.awards.create_with_quantity(5, issuer: issuer, authentication: authentication)
+        project1_award_type.awards.create_with_quantity(5, issuer: project1.account, account: account)
+        project1_award_type.awards.create_with_quantity(5, issuer: project1.account, account: account)
 
-        project2_award_type.awards.create_with_quantity(3, issuer: issuer, authentication: authentication)
-        project2_award_type.awards.create_with_quantity(7, issuer: issuer, authentication: authentication)
+        project2_award_type.awards.create_with_quantity(3, issuer: project2.account, account: account)
+        project2_award_type.awards.create_with_quantity(7, issuer: project2.account, account: account)
       end
 
       it 'is able to scope to a project' do

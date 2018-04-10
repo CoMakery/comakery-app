@@ -19,8 +19,13 @@ class Views::Sessions::New < Views::Base
               }
               br
               submit_tag 'Sign In', class: buttonish(:medium), tabindex: 3
-              link_to '/auth/slack' do
-                image_tag 'sign_in_with_slack.png', style: 'height: 43px'
+              link_to '/auth/slack', class: 'auth-button' do
+                image_tag 'slack.png', style: 'height: 38px'
+                text 'Sign in with Slack'
+              end
+              link_to login_discord_path, class: 'auth-button' do
+                image_tag 'discord.png', style: 'height: 40px'
+                text 'Sign in with Discord'
               end
             }
           }

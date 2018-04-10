@@ -2,20 +2,21 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   resource :account, only: [:update]
-  resource :authentication, only: [:show]
   resources :accounts, only: [:new, :create, :show]
   resources :password_resets, only: [:new, :create, :edit, :update]
 
   get '/account' => "accounts#show"
   get "accounts/confirm/:token" => "accounts#confirm", as: :confirm_email
+  get "accounts/confirm-authentication/:token" => "accounts#confirm_authentication", as: :confirm_authentication
   get "/auth/slack/callback" => "sessions#create"
   get "/auth/slack" => "sessions#create", as: :login
+
+  get "/auth/discord/callback" => "sessions#create"
+  get "/auth/discord" => "sessions#create", as: :login_discord
 
   get '/logout', to: "sessions#destroy"
 
   root 'projects#landing'
-
-  resources :beta_signups, only: [:new, :create]
 
   resource :session, only: %i[new create destroy] do
     get "oauth_failure"
@@ -35,6 +36,20 @@ Rails.application.routes.draw do
     resources :payments, only: [:index, :create, :update]
     collection do
       get :landing
+    end
+  end
+
+  get "awards/confirm/:token" => "awards#confirm", as: :confirm_award
+
+  resources :teams, only: [:index] do
+    member do
+      get :channels
+    end
+  end
+
+  resources :channels, only: [] do
+    member do
+      get :users
     end
   end
 

@@ -7,18 +7,14 @@ describe 'contributors/index.html.rb' do
   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1, name: 'Code Contribution') }
 
   before do
-    award_type.awards.create_with_quantity(50, issuer: owner, authentication: authentication)
+    award_type.awards.create_with_quantity(50, issuer: owner, account: authentication.account)
     assign :project, project
+    assign :current_account, owner
     assign :award_data, contributions_summary: [
       { avatar: 'http://google.com',
         earned: 10,
         name: 'Tony! Toni! Toné!' }
     ]
-
-    allow(view).to receive(:policy).and_return(double('project policy',
-      edit?: false,
-      show_contributions?: true,
-      show_revenue_info?: true))
   end
 
   describe 'with contributors and revenue shares' do

@@ -1,0 +1,5 @@
+<%if channels.any?%>
+  <%= select_tag "project[channels_attributes][#{elem_index}][channel_id]", options_for_select(channels), include_blank: true, class: 'channel_select'%>
+<% else %>
+  <%= link_to "Enable Bot On Discord", Comakery::Discord.new.add_bot_link, style: "margin-top: 15px; position: absolute;", target: "_blank"%>
+<% end %>

@@ -1,29 +1,24 @@
 class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
 
-  include SlackDomainable
   include EthereumAddressable
 
   nilify_blanks
   attachment :image
 
-  has_many :authentications, foreign_key: :slack_team_id, primary_key: :slack_team_id
-  has_many :accounts, through: :authentications
-
+  belongs_to :account
   has_many :award_types, inverse_of: :project, dependent: :destroy
-  accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
-
   has_many :awards, through: :award_types, dependent: :destroy
-
+  has_many :channels, -> { order :created_at }, dependent: :destroy
   has_many :payments, dependent: :destroy do
-    def new_with_quantity(quantity_redeemed:, payee_auth:)
+    def new_with_quantity(quantity_redeemed:, account:)
       project = @association.owner
 
       new(total_value: BigDecimal(quantity_redeemed) * project.revenue_per_share,
           quantity_redeemed: quantity_redeemed,
           share_value: project.revenue_per_share,
           currency: project.denomination,
-          payee: payee_auth)
+          account: account)
         .tap(&:truncate_total_value_to_currency_precision)
     end
 
@@ -32,11 +27,13 @@ class Project < ApplicationRecord
     end
   end
 
-  has_many :contributors, through: :awards, source: :authentication # TODO: deprecate in favor of contributors_distinct
-  has_many :contributors_distinct, -> { distinct }, through: :awards, source: :authentication
+  has_many :contributors, through: :awards, source: :account # TODO: deprecate in favor of contributors_distinct
+  has_many :contributors_distinct, -> { distinct }, through: :awards, source: :account
   has_many :revenues
+  has_many :teams, through: :account
 
-  belongs_to :owner_account, class_name: 'Account'
+  accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
+  accepts_nested_attributes_for :channels, reject_if: :invalid_channel, allow_destroy: true
 
   enum payment_type: {
     revenue_share: 0,
@@ -49,8 +46,7 @@ class Project < ApplicationRecord
     ETH: 2
   }
 
-  validates :description, :owner_account, :slack_channel, :slack_team_name, :slack_team_id,
-    :slack_team_image_34_url, :slack_team_image_132_url, :title, :legal_project_owner,
+  validates :description, :account, :title, :legal_project_owner,
     :denomination, presence: true
 
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { unless: :project_token? }
@@ -69,6 +65,12 @@ class Project < ApplicationRecord
 
   before_save :set_transitioned_to_ethereum_enabled
 
+  scope :publics, -> { where public: true }
+  scope :privates, -> { where.not public: true }
+  scope :featured, -> { order :featured }
+  scope :archived, -> { where archived: true }
+  scope :active, -> { where.not archived: true }
+
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
       .joins('left join award_types on projects.id = award_types.project_id')
@@ -86,24 +88,20 @@ class Project < ApplicationRecord
     update! ethereum_contract_address: address
   end
 
-  def self.for_account(account)
-    where(slack_team_id: account&.slack_auth&.slack_team_id)
-  end
-
-  def self.not_for_account(account)
-    where.not(slack_team_id: account&.slack_auth&.slack_team_id)
-  end
-
-  def self.public_projects
-    where(public: true)
-  end
-
-  def self.featured
-    order('featured asc')
-  end
-
   def total_revenue
     revenues.total_amount
+  end
+
+  def max_award_used?
+    total_awarded >= maximum_tokens
+  end
+
+  def month_award_used?
+    total_month_awarded >= maximum_royalties_per_month
+  end
+
+  def total_month_awarded
+    awards.where('awards.created_at >= ?', Time.zone.today.beginning_of_month).sum(:total_amount)
   end
 
   delegate :total_awarded, to: :awards
@@ -149,9 +147,13 @@ class Project < ApplicationRecord
     AwardType.invalid_params(attributes)
   end
 
-  def owner_slack_user_name
-    owner_account.authentications.find_by(slack_team_id: slack_team_id)&.display_name
+  def invalid_channel(attributes)
+    Channel.invalid_params(attributes)
   end
+
+  # def owner_slack_user_name
+  #   account.authentications.find_by(slack_team_id: slack_team_id)&.display_name
+  # end
 
   def youtube_id
     # taken from http://stackoverflow.com/questions/5909121/converting-a-regular-youtube-link-into-an-embedded-video
@@ -171,6 +173,24 @@ class Project < ApplicationRecord
 
   def share_revenue?
     revenue_share? && (royalty_percentage&.> 0)
+  end
+
+  def public?
+    public == true
+  end
+
+  def private?
+    !public?
+  end
+
+  def can_be_access?(check_account)
+    return true if account == check_account
+    return true if public? && !require_confidentiality?
+    check_account && check_account.same_team_project?(self)
+  end
+
+  def show_revenue_info?(account)
+    share_revenue? && can_be_access?(account)
   end
 
   def royalty_percentage=(x)

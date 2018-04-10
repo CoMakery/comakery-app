@@ -50,5 +50,9 @@ module Comakery
     config.ethereum_explorer_site = ENV['ETHEREUM_EXPLORER_SITE'] || raise("Please set ETHEREUM_EXPLORER_SITE environment variable")
 
     config.allow_ethereum = ENV['ALLOW_ETHEREUM']
+
+    config.generators do |g|
+      g.test_framework :rspec
+    end
   end
 end
