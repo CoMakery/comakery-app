@@ -42,8 +42,12 @@ class Award < ApplicationRecord
     account.authentication_teams.find_by team_id: channel.team_id if channel
   end
 
+  def part_of_email
+    "#{email.split('@').first}@..." if email
+  end
+
   def recipient_display_name
-    account ? account.name : email
+    account ? account.name : part_of_email
   end
 
   def recipient_user_name
