@@ -87,11 +87,11 @@ class Account < ApplicationRecord
   end
 
   def private_project_ids
-    @private_project_ids = team_projects.map(&:id) | projects.privates.map(&:id)
+    @private_project_ids = team_projects.map(&:id) | projects.privates.map(&:id) | award_projects.map(&:id)
   end
 
   def accessable_project_ids
-    @accessable_project_ids = private_project_ids | Project.publics.map(&:id) | award_projects.map(&:id)
+    @accessable_project_ids = private_project_ids | Project.publics.map(&:id)
   end
 
   def private_projects
