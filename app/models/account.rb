@@ -56,6 +56,10 @@ class Account < ApplicationRecord
     nickname || name
   end
 
+  def award_by_project(project)
+    project.awards.where(account: self)
+  end
+
   def total_awards_earned(project)
     project.awards.where(account: self).sum(:total_amount)
   end

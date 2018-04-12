@@ -80,6 +80,9 @@ $ ->
       $('.uid-email').removeClass('hide')
       $('.uid-select').addClass('hide')
 
+  $(document).on 'mouseover', 'tr.award-row', (e) ->
+    $(@).find('.overlay').show()
+
   # Run on page ready then bind events
   awardPaymentType()
   $('#project_payment_type').change (e)->
