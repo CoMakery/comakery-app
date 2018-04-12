@@ -44,9 +44,6 @@ class Views::Projects::Base < Views::Base
             i project.legal_project_owner
           }
         }
-        a(href: project_path(project)) {
-          img(src: project_image_url(project, 132), class: 'icon')
-        }
 
         p(class: 'description no-last-award') { text project.description_text }
 
