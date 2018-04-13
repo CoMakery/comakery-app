@@ -80,8 +80,11 @@ $ ->
       $('.uid-email').removeClass('hide')
       $('.uid-select').addClass('hide')
 
-  $(document).on 'mouseover', 'tr.award-row', (e) ->
-    $(@).find('.overlay').show()
+  $('tr.award-row')
+    .on 'mouseover', (e) ->
+      $(@).find('.overlay').show()
+    .on 'mouseout', (e) ->
+      $(@).find('.overlay').hide()
 
   # Run on page ready then bind events
   awardPaymentType()
