@@ -6,6 +6,7 @@ class RefactorProjects < ActiveRecord::Migration[5.1]
     remove_column :projects, :slack_team_image_34_url, :string
     remove_column :projects, :slack_team_image_132_url, :string
     rename_column :accounts, :image_content_zise, :image_content_size
+    rename_column :accounts, :owner_account_id, :account_id
     add_column :projects, :image_filename, :string
     add_column :projects, :image_content_size, :string
     add_column :projects, :image_content_type, :string
