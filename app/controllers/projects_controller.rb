@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   def landing
     if current_account
       @private_projects = current_account.private_projects.active.with_last_activity_at.limit(6).decorate
-      @archived_projects = current_account.accessable_projects.archived.with_last_activity_at.limit(6).decorate
+      @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
       @public_projects = current_account.public_projects.active.with_last_activity_at.limit(6).decorate
     else
       @private_projects = []
