@@ -29,7 +29,7 @@ namespace :dev do
 
     Project.all.each do |project|
       next unless project.slack_channel
-      channel = project.channels.find_or_create_by name: project.slack_channel, team: project.teams.last
+      channel = project.channels.find_or_create_by name: project.slack_channel, channel_id: project.slack_channel,team: project.teams.last
       project.awards.each do |award|
         award.update channel_id: channel.id
         puts award.errors.full_messages
@@ -37,4 +37,5 @@ namespace :dev do
       puts channel.errors.full_messages
     end
   end
+
 end
