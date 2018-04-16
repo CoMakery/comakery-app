@@ -71,6 +71,7 @@ class Project < ApplicationRecord
   scope :archived, -> { where archived: true }
   scope :active, -> { where.not archived: true }
 
+  attr_accessor :unlisted
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
       .joins('left join award_types on projects.id = award_types.project_id')
@@ -198,7 +199,17 @@ class Project < ApplicationRecord
     self[:royalty_percentage] = x_truncated
   end
 
+  before_save :set_long_id
+
   private
+
+  def set_long_id
+    if unlisted
+      self.long_id = SecureRandom.hex = SecureRandom.hex(20) if long_id.blank?
+    else
+      self.long_id = nil
+    end
+  end
 
   def valid_tracker_url
     validate_url(:tracker)
