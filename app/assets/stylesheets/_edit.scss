@@ -3,6 +3,11 @@ body.projects-edit, body.projects-new, body.projects-create  {
   //   max-width: 57em;
   // }
 }
+
+body.projects-edit {
+  .vertical.menu li { padding: 0 0;}
+}
+
 form.edit_project, form.new_project {
   input#project_image {
     border: 1px solid #ccc;

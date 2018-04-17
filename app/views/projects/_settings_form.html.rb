@@ -6,7 +6,8 @@ module Views
       def content
         form_for project do |f|
           div(class: 'content-box') {
-            div(class: 'legal-box-header') { h3 'Project Settings' }
+            a(name: 'basics')
+            div(class: 'legal-box-header') { h3 'General Info' }
             row {
               column('large-6 small-12') {
                 with_errors(project, :title) {
@@ -66,6 +67,7 @@ module Views
           render partial: '/projects/form/channel', locals: { f: f, providers: providers }
 
           div(class: 'content-box') {
+            a(name: 'contribution-license')
             full_row {
               div(class: 'legal-box-header') {
                 h3 'Contribution License Terms (BETA)'
@@ -194,6 +196,7 @@ module Views
           }
           div(class: 'content-box') {
             div(class: 'award-types') {
+              a(name: 'awards')
               div(class: 'legal-box-header') { h3 'Awards Offered' }
               row {
                 column('small-3') { text 'Contribution Type' }
