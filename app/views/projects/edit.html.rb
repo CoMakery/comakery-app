@@ -7,7 +7,7 @@ class Views::Projects::Edit < Views::Base
     full_row { h3 'Project Settings' }
     div(class: 'row') {
       div(class: 'columns large-2') {
-        ul(class: 'vertical menu') {
+        ul(class: 'vertical menu scrollingBox') {
           li { a(href: '#basics') {
               span 'Basics'
             }

@@ -80,6 +80,8 @@ $ ->
       $('.uid-email').removeClass('hide')
       $('.uid-select').addClass('hide')
 
+  floatingLeftMenuItems()
+
   # Run on page ready then bind events
   awardPaymentType()
   $('#project_payment_type').change (e)->
@@ -115,3 +117,13 @@ royaltyCalc = () ->
       "<td>#{denomination}#{contributorPayment.toLocaleString()}</td>"
 
   $('.royalty-calc tbody').replaceWith(schedule)
+
+floatingLeftMenuItems = () ->
+  offsetPixels = 200
+  $(window).scroll ->
+    if $(window).scrollTop() > offsetPixels
+      $('.scrollingBox').css
+        'position': 'fixed'
+        'top': '15px'
+    else
+      $('.scrollingBox').css 'position': 'static'
