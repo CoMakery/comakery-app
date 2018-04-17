@@ -11,7 +11,7 @@ namespace :dev do
           account.first_name = oauth['info']['name']
         else
           account.first_name = oauth['info']['first_name']
-          account.last_name = oauth['info']['first_name']
+          account.last_name = oauth['info']['last_name']
         end
       end
       if oauth['info']['image'].present?
