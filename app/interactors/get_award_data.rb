@@ -1,6 +1,8 @@
 class GetAwardData
   include Interactor
-
+  include ApplicationHelper
+  include Refile::AttachmentHelper
+  include ActionView::Helpers
   def call
     project = context.project
     account = context.account
@@ -27,7 +29,7 @@ class GetAwardData
     contributions = project.contributors_distinct.map do |contributor|
       {
         name: contributor.name,
-        avatar: contributor.image,
+        avatar: account_image_url(contributor, 34),
         earned: contributor.total_awards_earned(project),
         paid: contributor.total_awards_paid(project),
         remaining: contributor.total_awards_remaining(project)
