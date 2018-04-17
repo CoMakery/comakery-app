@@ -17,7 +17,7 @@ describe ProjectsController do
     let!(:my_public_project) { create(:project, account: account, public: true, title: 'my_public_project') }
 
     before do
-      expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
+      expect(TopContributors).to receive(:call).exactly(4).times.and_return(double(success?: true, contributors: {}))
     end
 
     it 'returns your private projects, and public projects that *do not* belong to you' do

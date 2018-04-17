@@ -265,6 +265,12 @@ module Views
                   text ' Archive project '
                 }
               }
+              with_errors(project, :unlisted) {
+                label {
+                  f.check_box :unlisted, {}, true, false
+                  text " Unlisted#{'. Access url: ' + project_url(project.long_id) if project.unlisted?}"
+                }
+              }
               f.submit 'Save', class: buttonish(:expand)
             }
           }

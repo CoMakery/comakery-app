@@ -69,7 +69,8 @@ class Project < ApplicationRecord
   scope :privates, -> { where.not public: true }
   scope :featured, -> { order :featured }
   scope :archived, -> { where archived: true }
-  scope :active, -> { where.not archived: true }
+  scope :unlisted, -> { where.not long_id: nil }
+  scope :active, -> { where 'projects.archived <> true and projects.long_id is null' }
 
   attr_accessor :unlisted
   def self.with_last_activity_at
@@ -194,6 +195,10 @@ class Project < ApplicationRecord
     share_revenue? && can_be_access?(account)
   end
 
+  def unlisted?
+    long_id.present?
+  end
+
   def royalty_percentage=(x)
     x_truncated = BigDecimal(x, ROYALTY_PERCENTAGE_PRECISION).truncate(ROYALTY_PERCENTAGE_PRECISION) if x.present?
     self[:royalty_percentage] = x_truncated
@@ -205,7 +210,7 @@ class Project < ApplicationRecord
 
   def set_long_id
     if unlisted
-      self.long_id = SecureRandom.hex = SecureRandom.hex(20) if long_id.blank?
+      self.long_id = SecureRandom.hex(20) if long_id.blank?
     else
       self.long_id = nil
     end

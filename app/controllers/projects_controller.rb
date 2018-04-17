@@ -6,15 +6,18 @@ class ProjectsController < ApplicationController
     if current_account
       @private_projects = current_account.private_projects.active.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
+      @unlisted_projects = current_account.projects.unlisted.with_last_activity_at.limit(6).decorate
       @public_projects = current_account.public_projects.active.with_last_activity_at.limit(6).decorate
     else
       @private_projects = []
       @archived_projects = []
+      @unlisted_projects = []
       @public_projects = Project.publics.active.featured.with_last_activity_at.limit(6).decorate
     end
     @private_project_contributors = TopContributors.call(projects: @private_projects).contributors
     @public_project_contributors = TopContributors.call(projects: @public_projects).contributors
     @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
+    @unlisted_project_contributors = TopContributors.call(projects: @unlisted_projects).contributors
     @slack_auth = current_account&.slack_auth
   end
 
@@ -67,19 +70,23 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.includes(:award_types).find(params[:id]).decorate
-
-    @award = Award.new
-    awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
-    @awardable_types = awardable_types_result.awardable_types
-    @can_award = awardable_types_result.can_award
-    @award_data = GetAwardData.call(account: current_account, project: @project).award_data
+    @projects = Project.where(id: params[:id]).or(Project.where(long_id: params[:id]))
+    @project = @projects.includes(:award_types).first&.decorate
+    if @project
+      @award = Award.new
+      awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
+      @awardable_types = awardable_types_result.awardable_types
+      @can_award = awardable_types_result.can_award
+      @award_data = GetAwardData.call(account: current_account, project: @project).award_data
+    else
+      redirect_to root_path
+    end
   end
 
   def edit
     @project = current_account.projects.includes(:award_types).find(params[:id])
     @project.channels.build if current_account.teams.any?
-
+    @project.unlisted = @project.unlisted?
     assign_slack_channels
   end
 
@@ -121,6 +128,7 @@ class ProjectsController < ApplicationController
       :license_finalized,
       :denomination,
       :archived,
+      :unlisted,
       award_types_attributes: %i[
         _destroy
         amount
