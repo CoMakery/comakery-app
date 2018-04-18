@@ -7,24 +7,7 @@ class Views::Projects::Edit < Views::Base
     full_row { h3 'Project Settings' }
     div(class: 'row') {
       div(class: 'columns large-2') {
-        ul(class: 'vertical menu scrollingBox') {
-          li { a(href: '#basics') {
-              span 'Basics'
-            }
-          }
-          li { a(href: '#communication-channels') {
-              span 'Communication Channels'
-            }
-          }
-          li { a(href: '#contribution-license') {
-              span 'Contribution License'
-            }
-          }
-          li { a(href: '#awards') {
-              span 'Awards'
-            }
-          }
-        }
+        render partial: 'left_menu_items'
       }
       div(class: 'columns large-10') {
         render partial: 'settings_form', locals: { project: project.decorate }
