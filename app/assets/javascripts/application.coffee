@@ -80,6 +80,14 @@ $ ->
       $('.uid-email').removeClass('hide')
       $('.uid-select').addClass('hide')
 
+  $(document).on "keyup", "input#award_quantity", (e) ->
+    value = $(@).val()
+    arr=value.split('.')
+    if arr[1]
+      if arr[1].length > 2
+        $(@).val(value.slice(0,-1))
+        return false
+
   $('tr.award-row')
     .on 'mouseover', (e) ->
       $(@).find('.overlay').show()
