@@ -39,12 +39,12 @@ class Project < ApplicationRecord
     revenue_share: 0,
     project_token: 1
   }
-
   enum denomination: {
     USD: 0,
     BTC: 1,
     ETH: 2
   }
+  enum visibility: [:member, :public_listed, :member_unlisted, :public_unlisted, :archived]
 
   validates :description, :account, :title, :legal_project_owner,
     :denomination, presence: true
