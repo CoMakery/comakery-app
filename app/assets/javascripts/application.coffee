@@ -119,11 +119,11 @@ royaltyCalc = () ->
   $('.royalty-calc tbody').replaceWith(schedule)
 
 floatingLeftMenuItems = () ->
-  offsetPixels = 200
+  offsetPixels = 150
   $(window).scroll ->
     if $(window).scrollTop() > offsetPixels
       $('.scrollingBox').css
         'position': 'fixed'
-        'top': '15px'
+        'top': '1px'
     else
       $('.scrollingBox').css 'position': 'static'
