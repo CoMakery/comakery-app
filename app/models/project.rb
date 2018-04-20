@@ -44,7 +44,7 @@ class Project < ApplicationRecord
     BTC: 1,
     ETH: 2
   }
-  enum visibility: [:member, :public_listed, :member_unlisted, :public_unlisted, :archived]
+  enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
 
   validates :description, :account, :title, :legal_project_owner,
     :denomination, presence: true

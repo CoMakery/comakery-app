@@ -260,29 +260,16 @@ module Views
             }
           }
 
-          full_row {
-            column {
-              with_errors(project, :public) {
-                label {
-                  f.check_box :public
-                  text " Set project as publicly visible on #{I18n.t('project_name')} "
-                  question_tooltip "Decide whether or not to display this project in the #{I18n.t('project_name')} project index"
-                }
-              }
-              with_errors(project, :archived) {
-                label {
-                  f.check_box :archived
-                  text ' Archive project '
-                }
-              }
-              with_errors(project, :unlisted) {
-                label {
-                  f.check_box :unlisted, {}, true, false
-                  text " Unlisted#{'. Access url: ' + project_url(project.long_id) if project.unlisted?}"
-                }
-              }
-              f.submit 'Save', class: buttonish(:expand, :last_submit)
+          row {
+            column('small-5') {
+              options = capture do
+                options_for_select(visibility_options, selected: f.object.visibility)
+              end
+              f.select :visibility, options
             }
+          }
+          full_row {
+            f.submit 'Save', class: buttonish(:expand, :last_submit)
           }
         end
       end
@@ -324,6 +311,10 @@ module Views
           }
           br
         end
+      end
+
+      def visibility_options
+        [['Logged in team members', 'member'], ['Publicly listed in CoMakery searches', 'public_listed'], ['Logged in team member via unlisted url', 'member_unlisted'], ['Unlisted url (no login required)', 'public_unlisted'], ['Archived (visible to me only)', 'archived']]
       end
     end
   end

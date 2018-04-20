@@ -113,7 +113,6 @@ class ProjectsController < ApplicationController
       :ethereum_enabled,
       :image,
       :maximum_tokens,
-      :public,
       :title,
       :tracker,
       :video_url,
@@ -127,8 +126,7 @@ class ProjectsController < ApplicationController
       :maximum_royalties_per_month,
       :license_finalized,
       :denomination,
-      :archived,
-      :unlisted,
+      :visibility,
       award_types_attributes: %i[
         _destroy
         amount
