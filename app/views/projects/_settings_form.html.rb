@@ -63,9 +63,13 @@ module Views
               }
             }
           }
-
+          full_row {
+            f.submit 'Save', class: buttonish(:expand)
+          }
           render partial: '/projects/form/channel', locals: { f: f, providers: providers }
-
+          full_row {
+            f.submit 'Save', class: buttonish(:expand)
+          }
           div(class: 'content-box') {
             a(name: 'contribution-license')
             full_row {
@@ -194,6 +198,9 @@ module Views
               }
             }
           }
+          full_row {
+            f.submit 'Save', class: buttonish(:expand)
+          }
           div(class: 'content-box') {
             div(class: 'award-types') {
               a(name: 'awards')
@@ -268,7 +275,7 @@ module Views
                   text ' Archive project '
                 }
               }
-              f.submit 'Save', class: buttonish(:expand)
+              f.submit 'Save', class: buttonish(:expand, :last_submit)
             }
           }
         end

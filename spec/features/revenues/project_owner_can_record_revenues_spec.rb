@@ -75,7 +75,7 @@ describe 'when recording revenue' do
     check 'Contributions are exclusive'
     check 'Require project and business confidentiality'
 
-    click_on 'Save'
+    click_on 'Save', class: 'last_submit'
     expect(page).to have_current_path(project_path(project))
     expect(page).not_to have_content('cannot be changed because revenue has been recorded')
     expect(page).not_to have_css('.error')
