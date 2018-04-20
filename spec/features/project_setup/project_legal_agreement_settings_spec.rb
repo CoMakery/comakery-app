@@ -54,7 +54,7 @@ describe 'viewing projects, creating and editing', :js do
     check 'Contributions are exclusive'
     check 'Require project and business confidentiality'
 
-    click_on 'Save'
+    click_on 'Save', class: 'last_submit'
     expect(page).to have_content 'Project created'
     expect(page.find('.my-share')).to have_content 'Project Tokens 0'
     within '.project-terms' do
@@ -138,7 +138,7 @@ describe 'viewing projects, creating and editing', :js do
     check 'Contributions are exclusive'
     check 'Require project and business confidentiality'
 
-    click_on 'Save'
+    click_on 'Save', class: 'last_submit'
     expect(page).to have_content 'Project created'
 
     click_on 'Settings'
@@ -149,7 +149,7 @@ describe 'viewing projects, creating and editing', :js do
 
     # check 'project_license_finalized'
 
-    click_on 'Save'
+    click_on 'Save', class: 'last_submit'
     click_on 'Settings'
     # page.assert_selector('.fa-lock', count: 1)
   end

@@ -78,7 +78,7 @@ describe 'viewing projects, creating and editing', :js do
     expect(award_type_inputs.size).to eq(4)
     fill_in 'Title', with: 'This is a project'
 
-    click_on 'Save'
+    click_on 'Save', class: 'last_submit'
 
     expect(page).to have_content 'Project created'
     expect(page).to have_content 'This is a project'
@@ -111,7 +111,7 @@ describe 'viewing projects, creating and editing', :js do
     expect(award_type_inputs.size).to eq(3)
 
     # youtube player throws js errors, ignore them:
-    ignore_js_errors { click_on 'Save' }
+    ignore_js_errors { click_on 'Save', class: 'last_submit' }
     ignore_js_errors { expect(page).to have_content 'Project updated' }
 
     expect(EthereumTokenContractJob.jobs.length).to eq(0)
@@ -169,7 +169,7 @@ describe 'viewing projects, creating and editing', :js do
         page.find("input[name*='[title]']").set('fancy title')
         page.find("input[name*='[community_awardable]']").set(true)
 
-        click_on 'Save'
+        click_on 'Save', class: 'last_submit'
 
         visit edit_project_path(project)
         award_type_amount_input = page.find("input[name*='[amount]']")
@@ -200,7 +200,7 @@ describe 'viewing projects, creating and editing', :js do
         page.find("input[name*='[title]']").set('fancy title')
         page.find("input[name*='[community_awardable]']").set(true)
 
-        click_on 'Save'
+        click_on 'Save', class: 'last_submit'
 
         visit edit_project_path(project)
 

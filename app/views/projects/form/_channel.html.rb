@@ -3,6 +3,7 @@ class Views::Projects::Form::Channel < Views::Base
 
   def content
     div(class: 'content-box') {
+      a(name: 'communication-channels')
       div(class: 'award-types') {
         div(class: 'legal-box-header') { h3 'Communication Channels' }
         row {

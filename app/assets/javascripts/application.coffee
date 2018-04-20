@@ -93,7 +93,8 @@ $ ->
       $(@).find('.overlay').show()
     .on 'mouseout', (e) ->
       $(@).find('.overlay').hide()
-
+      
+  floatingLeftMenuItems()
   # Run on page ready then bind events
   awardPaymentType()
   $('#project_payment_type').change (e)->
@@ -129,3 +130,13 @@ royaltyCalc = () ->
       "<td>#{denomination}#{contributorPayment.toLocaleString()}</td>"
 
   $('.royalty-calc tbody').replaceWith(schedule)
+
+floatingLeftMenuItems = () ->
+  offsetPixels = 150
+  $(window).scroll ->
+    if $(window).scrollTop() > offsetPixels
+      $('.scrollingBox').css
+        'position': 'fixed'
+        'top': '1px'
+    else
+      $('.scrollingBox').css 'position': 'static'

@@ -3,6 +3,15 @@ body.projects-edit, body.projects-new, body.projects-create  {
   //   max-width: 57em;
   // }
 }
+
+body.projects-edit {
+  .vertical.menu li { padding: 0 0;}
+  .vertical.menu { width: 175px; }
+  @media only screen and (max-width: 1024px) {
+    .vertical.menu { display: none; }
+  }
+}
+
 form.edit_project, form.new_project {
   input#project_image {
     border: 1px solid #ccc;
