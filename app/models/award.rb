@@ -42,8 +42,12 @@ class Award < ApplicationRecord
     account.authentication_teams.find_by team_id: channel.team_id if channel
   end
 
+  def part_of_email
+    "#{email.split('@').first}@..." if email
+  end
+
   def recipient_display_name
-    account ? account.name : email
+    account ? account.name : part_of_email
   end
 
   def recipient_user_name
@@ -66,14 +70,32 @@ class Award < ApplicationRecord
     text = message_info
     text = "#{text} for \"#{description}\"" if description.present?
 
-    text = "#{text} on the <#{project_url(project)}|#{project.title}> project."
-
-    if project.ethereum_enabled && recipient_address.blank?
-      text = "#{text} <#{account_url}|Set up your account> to receive Ethereum tokens."
+    text = if discord?
+      "#{text} #{discord_message}"
+    else
+      "#{text} #{slack_message}"
     end
 
     text.strip!
     text.gsub!(/\s+/, ' ')
+    text
+  end
+
+  def discord_message
+    text = "on the #{project.title} project: #{project_url(project)}."
+
+    if project.ethereum_enabled && recipient_address.blank?
+      text = "#{text} Set up your account: #{account_url} to receive Ethereum tokens."
+    end
+    text
+  end
+
+  def slack_message
+    text = "on the <#{project_url(project)}|#{project.title}> project."
+
+    if project.ethereum_enabled && recipient_address.blank?
+      text = "#{text} <#{account_url}|Set up your account> to receive Ethereum tokens."
+    end
     text
   end
 

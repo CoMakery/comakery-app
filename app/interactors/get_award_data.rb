@@ -1,6 +1,8 @@
 class GetAwardData
   include Interactor
-
+  include ApplicationHelper
+  include Refile::AttachmentHelper
+  include ActionView::Helpers
   def call
     project = context.project
     account = context.account
@@ -23,11 +25,17 @@ class GetAwardData
     result
   end
 
+  def avatar(account)
+    url = account_image_url(account, 34)
+    url = '/assets/default_account_image.jpg' if url == '/default_account_image.jpg'
+    url
+  end
+
   def contributions_summary(project)
     contributions = project.contributors_distinct.map do |contributor|
       {
         name: contributor.name,
-        avatar: contributor.image,
+        avatar: avatar(contributor),
         earned: contributor.total_awards_earned(project),
         paid: contributor.total_awards_paid(project),
         remaining: contributor.total_awards_remaining(project)
@@ -46,7 +54,7 @@ class GetAwardData
       a_hash[award.account_id] ||= { net_amount: 0 }
       a_hash[award.account_id][:name] ||= award.recipient_display_name
       a_hash[award.account_id][:net_amount] += award.total_amount
-      a_hash[award.account_id][:avatar] ||= award.account.image if award.account
+      a_hash[award.account_id][:avatar] ||= avatar(award.account) if award.account
     end.values.sort_by { |award_data| -award_data[:net_amount] }
   end
 

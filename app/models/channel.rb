@@ -17,7 +17,7 @@ class Channel < ApplicationRecord
   end
 
   def teams
-    return project.teams.where(provider: provider) if project
+    return project.account.manager_teams.where(provider: provider) if project
   end
 
   def members(account = nil)

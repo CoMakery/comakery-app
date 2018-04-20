@@ -135,7 +135,7 @@ describe 'awarding users' do
 
     click_button 'Send'
 
-    expect(page).to have_content 'Successfully sent award to tester@test.st'
+    expect(page).to have_content 'Successfully sent award to tester@...'
 
     click_link 'Awards'
 
@@ -147,7 +147,7 @@ describe 'awarding users' do
     expect(page).to have_content '(no account)'
     expect(page).to have_content 'Small'
     expect(page).to have_content 'Super fantastic fabulous programatic work on teh things, A++'
-    expect(page).to have_content 'tester@test.st'
+    expect(page).to have_content 'tester@...'
 
     expect(page.all('.award-rows .award-row').size).to eq(1)
 

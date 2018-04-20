@@ -69,8 +69,10 @@ class Project < ApplicationRecord
   scope :privates, -> { where.not public: true }
   scope :featured, -> { order :featured }
   scope :archived, -> { where archived: true }
-  scope :active, -> { where.not archived: true }
+  scope :unlisted, -> { where.not long_id: nil }
+  scope :active, -> { where 'projects.archived <> true and projects.long_id is null' }
 
+  attr_accessor :unlisted
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
       .joins('left join award_types on projects.id = award_types.project_id')
@@ -193,12 +195,26 @@ class Project < ApplicationRecord
     share_revenue? && can_be_access?(account)
   end
 
+  def unlisted?
+    long_id.present?
+  end
+
   def royalty_percentage=(x)
     x_truncated = BigDecimal(x, ROYALTY_PERCENTAGE_PRECISION).truncate(ROYALTY_PERCENTAGE_PRECISION) if x.present?
     self[:royalty_percentage] = x_truncated
   end
 
+  before_save :set_long_id
+
   private
+
+  def set_long_id
+    if unlisted
+      self.long_id = SecureRandom.hex(20) if long_id.blank?
+    else
+      self.long_id = nil
+    end
+  end
 
   def valid_tracker_url
     validate_url(:tracker)

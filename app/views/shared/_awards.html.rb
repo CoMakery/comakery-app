@@ -57,8 +57,8 @@ class Views::Shared::Awards < Views::Base
               }
             }
             td(class: 'small-2') {
-              if award.team_image
-                img(src: award.team_image, class: 'icon avatar-img')
+              if award.issuer
+                img(src: account_image_url(award.issuer, 27), class: 'icon avatar-img')
                 text ' '
               end
               text award.issuer_display_name

@@ -43,6 +43,19 @@ class Views::Contributors::Index < Views::Projects::Base
                     span(class: 'margin-small') {
                       text contributor.total_awards_earned_pretty(project)
                     }
+                    table(class: 'table-scroll table-box overlay') {
+                      tr {
+                        th(style: 'padding-bottom: 20px') {
+                          text 'Contributions by Task'
+                        }
+                      }
+                      contributor.award_by_project(project).each do |award|
+                        tr {
+                          td { text award.award_type.name }
+                          td { text award.decorate.total_amount_pretty }
+                        }
+                      end
+                    }
                   }
                   td(class: 'award-holdings financial') {
                     span(class: 'margin-small') {
