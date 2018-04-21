@@ -5,8 +5,7 @@ module Views
 
       def content
         form_for project do |f|
-          div(class: 'content-box') {
-            a(name: 'basics')
+          div(class: 'content-box', 'data-id': 'basics') {
             div(class: 'legal-box-header') { h3 'General Info' }
             row {
               column('large-6 small-12') {
@@ -70,8 +69,7 @@ module Views
           full_row {
             f.submit 'Save', class: buttonish(:expand)
           }
-          div(class: 'content-box') {
-            a(name: 'contribution-license')
+          div(class: 'content-box', 'data-id': 'contribution-license') {
             full_row {
               div(class: 'legal-box-header') {
                 h3 'Contribution License Terms (BETA)'
@@ -201,9 +199,8 @@ module Views
           full_row {
             f.submit 'Save', class: buttonish(:expand)
           }
-          div(class: 'content-box') {
+          div(class: 'content-box', 'data-id': 'awards') {
             div(class: 'award-types') {
-              a(name: 'awards')
               div(class: 'legal-box-header') { h3 'Awards Offered' }
               row {
                 column('small-3') { text 'Contribution Type' }

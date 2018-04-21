@@ -88,12 +88,30 @@ $ ->
         $(@).val(value.slice(0,-1))
         return false
 
+  $(document).on 'click', '.scrollingBox.menu a', ->
+    href = $(this).attr 'href'
+    anchor = href.substr href.indexOf('#') + 1
+    $('html, body').animate { scrollTop: $('div[data-id=' + anchor + ']').offset().top }, 1000
+
+  $(document).on 'scroll', (event) ->
+    scrollPos = $(document).scrollTop() + 10
+    $('.scrollingBox.menu a').each ->
+      currLink = $(this)
+      href = currLink.attr 'href'
+      anchor = href.substr href.indexOf('#') + 1
+      refElement = $('div[data-id=' + anchor + ']')
+      if refElement.position().top <= scrollPos and refElement.position().top + refElement.height() > scrollPos
+        $('.scrollingBox.menu a').removeClass 'active-menu'
+        currLink.addClass 'active-menu'
+      else
+        currLink.removeClass 'active-menu'
+
   $('tr.award-row')
     .on 'mouseover', (e) ->
       $(@).find('.overlay').show()
     .on 'mouseout', (e) ->
       $(@).find('.overlay').hide()
-      
+
   floatingLeftMenuItems()
   # Run on page ready then bind events
   awardPaymentType()
@@ -137,6 +155,6 @@ floatingLeftMenuItems = () ->
     if $(window).scrollTop() > offsetPixels
       $('.scrollingBox').css
         'position': 'fixed'
-        'top': '1px'
+        'top': '50px'
     else
       $('.scrollingBox').css 'position': 'static'
