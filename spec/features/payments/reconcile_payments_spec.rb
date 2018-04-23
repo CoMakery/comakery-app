@@ -12,7 +12,7 @@ describe 'when reconciling redeemed revenue shares' do
   let!(:project) do
     create(:project,
       royalty_percentage: 100,
-      public: true,
+      visibility: 'public_listed',
       account: owner,
       payment_type: 'revenue_share',
       require_confidentiality: false)

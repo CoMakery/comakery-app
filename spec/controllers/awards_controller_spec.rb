@@ -34,7 +34,7 @@ describe AwardsController do
 
     context 'when logged out' do
       context 'with a public project' do
-        let!(:public_project) { create(:project, account: issuer.account, public: true) }
+        let!(:public_project) { create(:project, account: issuer.account, visibility: 'public_listed') }
         let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
 
         it 'shows awards for public projects' do

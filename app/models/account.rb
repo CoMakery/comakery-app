@@ -87,15 +87,15 @@ class Account < ApplicationRecord
   end
 
   def public_projects
-    Project.publics.where.not(id: team_projects.map(&:id)).or(Project.where(id: award_projects.map(&:id)))
+    Project.public_listed.where.not(id: private_project_ids)
   end
 
   def private_project_ids
-    @private_project_ids = team_projects.map(&:id) | projects.privates.map(&:id) | award_projects.map(&:id)
+    @private_project_ids = team_projects.map(&:id) | projects.member.map(&:id) | award_projects.map(&:id)
   end
 
   def accessable_project_ids
-    @accessable_project_ids = private_project_ids | Project.publics.map(&:id)
+    @accessable_project_ids = private_project_ids | Project.public_listed.map(&:id)
   end
 
   def private_projects

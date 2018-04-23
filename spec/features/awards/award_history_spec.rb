@@ -7,7 +7,7 @@ describe 'viewing projects, creating and editing', :js do
     let!(:owner_auth) { create(:authentication, account: owner) }
     let!(:other_account) { create(:account) }
     let!(:other_account_auth) { create(:authentication, account: other_account) }
-    let!(:project) { create(:project, public: true, account: owner) }
+    let!(:project) { create(:project, visibility: 'public_listed', account: owner) }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
     let!(:channel) { create(:channel, project: project, team: team) }
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }

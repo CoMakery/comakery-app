@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180420070535) do
+ActiveRecord::Schema.define(version: 20180423025725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,7 +173,6 @@ ActiveRecord::Schema.define(version: 20180420070535) do
     t.string "image_filename"
     t.string "image_content_size"
     t.string "image_content_type"
-    t.boolean "archived", default: false
     t.string "long_id"
     t.integer "visibility", default: 0
     t.index ["account_id"], name: "index_projects_on_account_id"

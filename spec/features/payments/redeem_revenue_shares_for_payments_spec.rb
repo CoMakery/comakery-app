@@ -12,7 +12,7 @@ describe 'when redeeming revenue shares for payments' do
   let!(:project) do
     create(:project,
       royalty_percentage: 100,
-      public: true,
+      visibility: 'public_listed',
       payment_type: 'revenue_share',
       account: owner,
       require_confidentiality: false)
@@ -188,7 +188,7 @@ describe 'when redeeming revenue shares for payments' do
     let!(:project) do
       create(:project,
         royalty_percentage: 100,
-        public: true,
+        visibility: 'public_listed',
         account: owner,
         require_confidentiality: false)
     end
@@ -197,7 +197,7 @@ describe 'when redeeming revenue shares for payments' do
       let!(:project) do
         create(:project,
           royalty_percentage: 100,
-          public: true,
+          visibility: 'public_listed',
           payment_type: 'revenue_share',
           account: owner,
           require_confidentiality: false)
@@ -243,7 +243,7 @@ describe 'when redeeming revenue shares for payments' do
       let!(:project) do
         create(:project,
           royalty_percentage: 100,
-          public: true,
+          visibility: 'public_listed',
           payment_type: 'revenue_share',
           account: owner,
           require_confidentiality: false,
@@ -287,7 +287,7 @@ describe 'when redeeming revenue shares for payments' do
       let!(:project) do
         create(:project,
           royalty_percentage: 100,
-          public: true,
+          visibility: 'public_listed',
           payment_type: 'revenue_share',
           account: owner,
           require_confidentiality: false,
@@ -354,7 +354,7 @@ describe 'when redeeming revenue shares for payments' do
 
   describe 'non-members' do
     before do
-      project.update_attributes(require_confidentiality: false, public: true)
+      project.update_attributes(require_confidentiality: false, visibility: 'public_listed')
       visit logout_path
     end
 
@@ -378,7 +378,7 @@ describe 'when redeeming revenue shares for payments' do
     end
 
     it "non-members can't see payments if it's a private project" do
-      project.update_attribute(:public, false)
+      project.member!
 
       visit project_path(project)
       expect(page).not_to have_link 'Payments'

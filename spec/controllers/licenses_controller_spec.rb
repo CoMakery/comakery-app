@@ -7,7 +7,7 @@ describe LicensesController do
       title: 'Cats with Lazers Project',
       description: 'cats with lazers',
       account: account,
-      public: true)
+      visibility: 'public_listed')
   end
 
   describe '#index' do

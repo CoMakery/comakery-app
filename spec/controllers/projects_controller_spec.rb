@@ -10,11 +10,43 @@ describe ProjectsController do
     login(account)
   end
 
+  describe '#unlisted' do
+    let!(:public_unlisted_project) { create(:project, account: account, visibility: 'public_unlisted', title: 'Unlisted Project') }
+    let!(:member_unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'Unlisted Project') }
+    let!(:account2) { create :account }
+    let!(:authentication2) { create(:authentication, account: account2) }
+
+    it 'everyone can access public unlisted project via long id' do
+      get :unlisted, params: { long_id: public_unlisted_project.long_id }
+      expect(response.code).to eq '200'
+      expect(assigns(:project)).to eq public_unlisted_project
+    end
+
+    it 'other team member cannot access member unlisted project' do
+      login account2
+      get :unlisted, params: { long_id: member_unlisted_project.long_id }
+      expect(response).to redirect_to(root_url)
+    end
+
+    it 'team member can access member unlisted project' do
+      team.build_authentication_team authentication2
+      login account2
+      get :unlisted, params: { long_id: member_unlisted_project.long_id }
+      expect(response.code).to eq '302'
+      expect(assigns(:project)).to eq member_unlisted_project
+    end
+
+    it 'cannot access unlisted project by id' do
+      get :show, params: { id: public_unlisted_project.id }
+      expect(response).to redirect_to('/404.html')
+    end
+  end
+
   describe '#landing' do
-    let!(:other_public_project) { create(:project, public: true, title: 'other_public_project') }
+    let!(:other_public_project) { create(:project, visibility: 'public_listed', title: 'other_public_project') }
     let!(:other_private_project) { create(:project, public: false, title: 'other_private_project') }
     let!(:my_private_project) { create(:project, account: account, title: 'my_private_project') }
-    let!(:my_public_project) { create(:project, account: account, public: true, title: 'my_public_project') }
+    let!(:my_public_project) { create(:project, account: account, visibility: 'public_listed', title: 'my_public_project') }
 
     before do
       expect(TopContributors).to receive(:call).exactly(4).times.and_return(double(success?: true, contributors: {}))
@@ -186,13 +218,6 @@ describe ProjectsController do
         expect(assigns[:project_contributors].keys).to eq([cat_project, dog_project, yak_project])
       end
 
-      it "don't show up archived projects" do
-        get :index
-        fox_project.update archived: true
-        expect(response.status).to eq(200)
-        expect(assigns[:projects].map(&:title)).to eq(%w[Dogs Cats Yaks])
-      end
-
       it 'allows querying based on the title of the project, ignoring case' do
         get :index, params: { query: 'cats' }
 
@@ -205,6 +230,21 @@ describe ProjectsController do
 
         expect(response.status).to eq(200)
         expect(assigns[:projects].map(&:title)).to eq(%w[Dogs Foxes])
+      end
+
+      it 'only show public projects for not login user' do
+        logout
+        fox_project.public_listed!
+        get :index
+        expect(assigns[:projects].map(&:title)).to eq(['Foxes'])
+      end
+
+      it 'dont show archived projects for not login user' do
+        logout
+        cat_project.archived!
+        fox_project.public_listed!
+        get :index
+        expect(assigns[:projects].map(&:title)).to eq(['Foxes'])
       end
     end
 

@@ -65,14 +65,10 @@ class Project < ApplicationRecord
 
   before_save :set_transitioned_to_ethereum_enabled
 
-  scope :publics, -> { where public: true }
-  scope :privates, -> { where.not public: true }
   scope :featured, -> { order :featured }
-  scope :archived, -> { where archived: true }
-  scope :unlisted, -> { where.not long_id: nil }
-  scope :active, -> { where 'projects.archived <> true and projects.long_id is null' }
+  scope :unlisted, -> { where 'projects.visibility in(2,3)' }
+  scope :listed, -> { where 'projects.visibility not in(2,3)' }
 
-  attr_accessor :unlisted
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
       .joins('left join award_types on projects.id = award_types.project_id')
@@ -177,17 +173,22 @@ class Project < ApplicationRecord
     revenue_share? && (royalty_percentage&.> 0)
   end
 
+  def show_id
+    unlisted? ? long_id : id
+  end
+
   def public?
-    public == true
+    public_listed?
   end
 
   def private?
-    !public?
+    member?
   end
 
   def can_be_access?(check_account)
     return true if account == check_account
     return true if public? && !require_confidentiality?
+    return true if public_unlisted?
     check_account && check_account.same_team_project?(self)
   end
 
@@ -196,7 +197,7 @@ class Project < ApplicationRecord
   end
 
   def unlisted?
-    long_id.present?
+    member_unlisted? || public_unlisted?
   end
 
   def royalty_percentage=(x)
@@ -204,17 +205,7 @@ class Project < ApplicationRecord
     self[:royalty_percentage] = x_truncated
   end
 
-  before_save :set_long_id
-
   private
-
-  def set_long_id
-    if unlisted
-      self.long_id = SecureRandom.hex(20) if long_id.blank?
-    else
-      self.long_id = nil
-    end
-  end
 
   def valid_tracker_url
     validate_url(:tracker)

@@ -4,15 +4,15 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @private_projects = current_account.private_projects.active.with_last_activity_at.limit(6).decorate
+      @private_projects = current_account.private_projects.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
       @unlisted_projects = current_account.projects.unlisted.with_last_activity_at.limit(6).decorate
-      @public_projects = current_account.public_projects.active.with_last_activity_at.limit(6).decorate
+      @public_projects = current_account.public_projects.with_last_activity_at.limit(6).decorate
     else
       @private_projects = []
       @archived_projects = []
       @unlisted_projects = []
-      @public_projects = Project.publics.active.featured.with_last_activity_at.limit(6).decorate
+      @public_projects = Project.public_listed.featured.with_last_activity_at.limit(6).decorate
     end
     @private_project_contributors = TopContributors.call(projects: @private_projects).contributors
     @public_project_contributors = TopContributors.call(projects: @public_projects).contributors
@@ -23,9 +23,9 @@ class ProjectsController < ApplicationController
 
   def index
     @projects = if current_account
-      current_account.accessable_projects.active.with_last_activity_at
+      current_account.accessable_projects.with_last_activity_at
     else
-      Project.publics.active.with_last_activity_at
+      Project.public_listed.with_last_activity_at
     end
 
     if params[:query].present?
@@ -54,11 +54,12 @@ class ProjectsController < ApplicationController
     @project.award_types.build(name: 'Blog post (600+ words)', amount: 150)
     @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
     @project.channels.build if current_account.teams.any?
+    @project.long_id ||= SecureRandom.hex(20)
   end
 
   def create
     @project = current_account.projects.build project_params
-
+    @project.long_id ||= SecureRandom.hex(20)
     if @project.save
       flash[:notice] = 'Project created'
       redirect_to project_path(@project)
@@ -70,14 +71,19 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @projects = Project.where(id: params[:id]).or(Project.where(long_id: params[:id]))
-    @project = @projects.includes(:award_types).first&.decorate
-    if @project
-      @award = Award.new
-      awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
-      @awardable_types = awardable_types_result.awardable_types
-      @can_award = awardable_types_result.can_award
-      @award_data = GetAwardData.call(account: current_account, project: @project).award_data
+    @project = Project.listed.includes(:award_types).find(params[:id]).decorate
+    if @project&.can_be_access?(current_account)
+      set_award
+    else
+      redirect_to root_path
+    end
+  end
+
+  def unlisted
+    @project = Project.includes(:award_types).find_by(long_id: params[:long_id])&.decorate
+    if @project&.can_be_access?(current_account)
+      set_award
+      render :show
     else
       redirect_to root_path
     end
@@ -86,13 +92,13 @@ class ProjectsController < ApplicationController
   def edit
     @project = current_account.projects.includes(:award_types).find(params[:id])
     @project.channels.build if current_account.teams.any?
-    @project.unlisted = @project.unlisted?
+    @project.long_id ||= SecureRandom.hex(20)
     assign_slack_channels
   end
 
   def update
     @project = current_account.projects.includes(:award_types, :channels).find(params[:id])
-
+    @project.long_id ||= SecureRandom.hex(20)
     if @project.update project_params
       flash[:notice] = 'Project updated'
       respond_with @project, location: project_path(@project)
@@ -127,6 +133,7 @@ class ProjectsController < ApplicationController
       :license_finalized,
       :denomination,
       :visibility,
+      :long_id,
       award_types_attributes: %i[
         _destroy
         amount
@@ -157,5 +164,13 @@ class ProjectsController < ApplicationController
 
   def assign_current_account
     @current_account_deco = current_account&.decorate
+  end
+
+  def set_award
+    @award = Award.new
+    awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
+    @awardable_types = awardable_types_result.awardable_types
+    @can_award = awardable_types_result.can_award
+    @award_data = GetAwardData.call(account: current_account, project: @project).award_data
   end
 end

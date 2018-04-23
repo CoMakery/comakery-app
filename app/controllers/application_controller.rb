@@ -60,8 +60,9 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def assign_project
-    project = Project.find(params[:project_id])
-    @project = project.decorate if project.can_be_access?(current_account)
+    project = Project.find_by id: params[:project_id]
+    project = Project.find_by long_id: params[:project_id] unless project
+    @project = project&.decorate if project&.can_be_access?(current_account)
     redirect_to root_path unless @project
   end
 

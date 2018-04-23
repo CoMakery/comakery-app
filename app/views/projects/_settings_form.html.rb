@@ -256,15 +256,29 @@ module Views
               }
             }
           }
-
-          row {
-            column('small-5') {
-              options = capture do
-                options_for_select(visibility_options, selected: f.object.visibility)
-              end
-              f.select :visibility, options
+          div(class: 'content-box', 'data-id': 'visibility') {
+            div(class: 'award-types') {
+              div(class: 'legal-box-header') { h3 'visibility' }
+              row {
+                column('small-5') {
+                  options = capture do
+                    options_for_select(visibility_options, selected: f.object.visibility)
+                  end
+                  text 'Project Visible To'
+                  f.select :visibility, options
+                }
+              }
+              row {
+                column('small-5') {
+                  text 'Project URL'
+                  br
+                  text unlisted_project_url(f.object.long_id)
+                  f.hidden_field :long_id
+                }
+              }
             }
           }
+
           full_row {
             f.submit 'Save', class: buttonish(:expand, :last_submit)
           }

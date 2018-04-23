@@ -14,7 +14,7 @@ describe 'landing page', :js do
   it 'when logged in shows some projects and the new button' do
     login(account)
 
-    7.times { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", public: true) }
+    7.times { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", visibility: 'public_listed') }
     7.times { |i| create(:project, account, title: "Private Project #{i}", public: false) }
 
     visit root_path
@@ -39,8 +39,8 @@ describe 'landing page', :js do
   end
 
   it 'when logged out shows featured projects first' do
-    (1..3).each { |i| create(:project, account: swarmbot_account, title: "Featured Project #{i}", public: true, featured: i) }
-    (1..7).each { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", public: true) }
+    (1..3).each { |i| create(:project, account: swarmbot_account, title: "Featured Project #{i}", visibility: 'public_listed', featured: i) }
+    (1..7).each { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", visibility: 'public_listed') }
 
     (1..7).each { |i| create(:project, account, title: "Private Project #{i}", public: false) }
 
