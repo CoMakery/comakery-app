@@ -273,7 +273,7 @@ module Views
                   text 'Project URL'
                   br
                   text unlisted_project_url(f.object.long_id)
-                  f.hidden_field :long_id
+                  hidden_field_tag :long_id, f.object.long_id
                 }
               }
             }

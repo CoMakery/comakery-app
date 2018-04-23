@@ -59,7 +59,7 @@ class ProjectsController < ApplicationController
 
   def create
     @project = current_account.projects.build project_params
-    @project.long_id ||= SecureRandom.hex(20)
+    @project.long_id = params[:long_id] || SecureRandom.hex(20)
     if @project.save
       flash[:notice] = 'Project created'
       redirect_to project_path(@project)
@@ -98,7 +98,7 @@ class ProjectsController < ApplicationController
 
   def update
     @project = current_account.projects.includes(:award_types, :channels).find(params[:id])
-    @project.long_id ||= SecureRandom.hex(20)
+    @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     if @project.update project_params
       flash[:notice] = 'Project updated'
       respond_with @project, location: project_path(@project)
@@ -133,7 +133,6 @@ class ProjectsController < ApplicationController
       :license_finalized,
       :denomination,
       :visibility,
-      :long_id,
       award_types_attributes: %i[
         _destroy
         amount
