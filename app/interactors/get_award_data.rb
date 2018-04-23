@@ -32,21 +32,12 @@ class GetAwardData
   end
 
   def contributions_summary(project)
-    contributions = project.contributors_distinct.map do |contributor|
-      {
-        name: contributor.name,
-        avatar: avatar(contributor),
-        earned: contributor.total_awards_earned(project),
-        paid: contributor.total_awards_paid(project),
-        remaining: contributor.total_awards_remaining(project)
-      }
-    end
-
-    highest_earned_first(contributions)
+    contributions = project.contributors_distinct
+    highest_earned_first(contributions, project)
   end
 
-  def highest_earned_first(contributions)
-    contributions.sort { |a, b| b[:earned] <=> a[:earned] }
+  def highest_earned_first(contributions, project)
+    contributions.sort { |a, b| b.total_awards_earned(project) <=> a.total_awards_earned(project) }
   end
 
   def contributions_data(awards)

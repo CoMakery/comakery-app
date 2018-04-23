@@ -58,8 +58,8 @@ class Views::Projects::Description < Views::Projects::Base
                 li(class: 'top-contributors') {
                   h5 'Top Contributors'
                   award_data[:contributions_summary].first(5).each do |contributor|
-                    tooltip(contributor[:name]) {
-                      img(src: contributor[:avatar], class: 'avatar-img')
+                    tooltip(contributor.name) {
+                      img(src: account_image_url(contributor, 34), class: 'avatar-img')
                     }
                   end
                 }

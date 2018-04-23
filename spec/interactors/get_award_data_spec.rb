@@ -107,18 +107,7 @@ describe GetAwardData do
 
       specify do
         contributions = described_class.new.contributions_summary(project)
-        expect(contributions).to eq([
-                                      { name: 'john john',
-                                        avatar: '/assets/default_account_image.jpg',
-                                        earned: 2000,
-                                        paid: 10,
-                                        remaining: 1990 },
-                                      { name: 'sam sam',
-                                        avatar: '/assets/default_account_image.jpg',
-                                        earned: 1000,
-                                        paid: 5,
-                                        remaining: 995 }
-                                    ])
+        expect(contributions).to eq([john, sam])
       end
     end
   end
