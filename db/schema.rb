@@ -57,7 +57,6 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.integer "account_id"
     t.integer "team_id"
     t.boolean "manager", default: false
-    t.index ["authentication_id"], name: "index_authentication_teams_on_authentication_id"
   end
 
   create_table "authentications", id: :serial, force: :cascade do |t|
@@ -71,17 +70,6 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.string "email"
     t.string "confirm_token"
     t.index ["account_id"], name: "index_authentications_on_account_id"
-    t.index ["uid"], name: "index_authentications_on_uid"
-  end
-
-  create_table "award_links", force: :cascade do |t|
-    t.integer "award_type_id"
-    t.decimal "quantity"
-    t.text "description"
-    t.string "status", default: "available"
-    t.string "token"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "award_types", id: :serial, force: :cascade do |t|
@@ -97,6 +85,7 @@ ActiveRecord::Schema.define(version: 20180423025725) do
   end
 
   create_table "awards", id: :serial, force: :cascade do |t|
+    t.integer "issuer_id", null: false
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -110,10 +99,8 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.integer "unit_amount"
     t.integer "channel_id"
     t.string "uid"
-    t.integer "issuer_id"
     t.string "confirm_token"
     t.string "email"
-    t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
   end
 
@@ -128,6 +115,7 @@ ActiveRecord::Schema.define(version: 20180423025725) do
 
   create_table "payments", id: :serial, force: :cascade do |t|
     t.integer "project_id"
+    t.integer "issuer_id"
     t.integer "account_id"
     t.decimal "total_value"
     t.datetime "created_at", null: false
@@ -140,8 +128,6 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.string "currency"
     t.integer "status", default: 0
     t.boolean "reconciled", default: false
-    t.integer "issuer_id"
-    t.index ["account_id"], name: "index_payments_on_account_id"
     t.index ["project_id"], name: "index_payments_on_project_id"
   end
 
