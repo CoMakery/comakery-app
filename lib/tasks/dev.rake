@@ -41,11 +41,7 @@ namespace :dev do
   task update_project_visible: [:environment] do
     public_projects = Project.where(public: true)
     private_projects = Project.where.not(public: true)
-    public_projects.each do |p|
-      p.public_listed!
-    end
-    private_projects.each do |p|
-      p.member!
-    end
+    public_projects.each(&:public_listed!)
+    private_projects.each(&:member!)
   end
 end
