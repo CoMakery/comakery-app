@@ -40,8 +40,8 @@ class Views::Shared::Awards < Views::Base
             }
             if show_recipient
               td(class: 'small-2 recipient') {
-                img(src: account_image_url(award.account, 27), class: 'icon avatar-img')
-                text ' ' + award.recipient_display_name
+                img(src: account_image_url(award.account, 27), class: 'icon avatar-img', style: 'margin-right: 5px;')
+                text award.recipient_display_name
               }
             end
             td(class: 'small-2 description') {
@@ -58,8 +58,7 @@ class Views::Shared::Awards < Views::Base
             }
             td(class: 'small-2') {
               if award.issuer
-                img(src: account_image_url(award.issuer, 27), class: 'icon avatar-img')
-                text ' '
+                img(src: account_image_url(award.issuer, 27), class: 'icon avatar-img', style: 'margin-right: 5px;')
               end
               text award.issuer_display_name
             }
