@@ -36,6 +36,13 @@ form.edit_project, form.new_project {
   .add-award-type {
     margin-bottom: 2em;
   }
+  .small-1.award-amount {
+    padding: 0;
+    input {
+      padding-left: 0.1rem;
+      padding-right: 0.1rem;
+    }
+  }
   input[type="checkbox"] {
     margin-top: .7em;
   }
