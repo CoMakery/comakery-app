@@ -69,10 +69,10 @@ module Views
           full_row {
             f.submit 'Save', class: buttonish(:expand)
           }
-          div(class: 'content-box', 'data-id': 'contribution-license') {
+          div(class: 'content-box', 'data-id': 'contribution-terms') {
             full_row {
               div(class: 'legal-box-header') {
-                h3 'Contribution License Terms (BETA)'
+                h3 'Contribution Terms'
                 i(class: 'fa fa-lock') if project.license_finalized?
               }
             }
@@ -258,7 +258,7 @@ module Views
           }
           div(class: 'content-box', 'data-id': 'visibility') {
             div(class: 'award-types') {
-              div(class: 'legal-box-header') { h3 'visibility' }
+              div(class: 'legal-box-header') { h3 'Visibility' }
               row {
                 column('small-5') {
                   options = capture do
