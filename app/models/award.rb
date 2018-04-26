@@ -59,7 +59,7 @@ class Award < ApplicationRecord
   end
 
   def issuer_display_name
-    issuer&.nick
+    issuer&.name
   end
 
   def issuer_user_name
