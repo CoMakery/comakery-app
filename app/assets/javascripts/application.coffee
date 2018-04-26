@@ -160,5 +160,6 @@ floatingLeftMenuItems = () ->
       $('.scrollingBox').css
         'position': 'fixed'
         'top': '50px'
+        'width': $('.scrollingBox').closest('div').width() + 30
     else
       $('.scrollingBox').css 'position': 'static'
