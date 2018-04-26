@@ -106,11 +106,15 @@ $ ->
       else
         currLink.removeClass 'active-menu'
 
-  $('tr.award-row')
+    $('tr.award-row')
     .on 'mouseover', (e) ->
       $(@).find('.overlay').show()
     .on 'mouseout', (e) ->
       $(@).find('.overlay').hide()
+
+  $('.copiable').click ->
+    $(".copy-source").select()
+    document.execCommand('Copy')
 
   floatingLeftMenuItems()
   # Run on page ready then bind events

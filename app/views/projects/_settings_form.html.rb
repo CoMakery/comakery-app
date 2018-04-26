@@ -264,17 +264,26 @@ module Views
                   options = capture do
                     options_for_select(visibility_options, selected: f.object.visibility)
                   end
-                  text 'Project Visible To'
-                  f.select :visibility, options
+                  label {
+                    text 'Project Visible To'
+                    f.select :visibility, options
+                  }
                 }
               }
               row {
-                column('small-5') {
+                label(style: 'margin-left: 15px;') {
                   text 'Project URL'
-                  br
-                  text unlisted_project_url(f.object.long_id)
+                }
+                column('small-5') {
+                  text_field_tag :unlisted_url, unlisted_project_url(f.object.long_id), name: nil, class: 'copy-source'
                   hidden_field_tag :long_id, f.object.long_id
                 }
+                column('small-1', style: 'padding-left: 0; margin-left: -16px; margin-top: 8px') {
+                  a(class: 'copiable', style: 'padding: 9px; border: 1px solid #ccc;') {
+                    image_tag 'Octicons-clippy.png', size: '20x20'
+                  }
+                }
+                column('small-1') {}
               }
             }
           }
