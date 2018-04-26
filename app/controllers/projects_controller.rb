@@ -62,7 +62,7 @@ class ProjectsController < ApplicationController
     @project.long_id = params[:long_id] || SecureRandom.hex(20)
     if @project.save
       flash[:notice] = 'Project created'
-      redirect_to project_path(@project)
+      redirect_to project_detail_path
     else
       flash[:error] = 'Project saving failed, please correct the errors below'
       assign_slack_channels
@@ -101,7 +101,7 @@ class ProjectsController < ApplicationController
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     if @project.update project_params
       flash[:notice] = 'Project updated'
-      respond_with @project, location: project_path(@project)
+      respond_with @project, location: project_detail_path
     else
       flash[:error] = 'Project update failed, please correct the errors below'
       assign_slack_channels
@@ -171,5 +171,9 @@ class ProjectsController < ApplicationController
     @awardable_types = awardable_types_result.awardable_types
     @can_award = awardable_types_result.can_award
     @award_data = GetAwardData.call(account: current_account, project: @project).award_data
+  end
+
+  def project_detail_path
+    @project.unlisted? ? unlisted_project_path(@project.long_id) : project_path(@project)
   end
 end
