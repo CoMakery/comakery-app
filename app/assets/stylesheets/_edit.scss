@@ -24,6 +24,11 @@ form.edit_project, form.new_project {
     height: auto;
     width: auto;
   }
+  .button.cancel {
+    background-color: #e6e6e6;
+    color: #0a0a0a;
+    border: 1px solid #cacaca;
+  }
   textarea {
     height: 9em;
   }

@@ -61,14 +61,11 @@ module Views
                 }
               }
             }
+            render_cancel_and_save_buttons(f)
           }
-          full_row {
-            f.submit 'Save', class: buttonish(:expand)
-          }
+
           render partial: '/projects/form/channel', locals: { f: f, providers: providers }
-          full_row {
-            f.submit 'Save', class: buttonish(:expand)
-          }
+
           div(class: 'content-box', 'data-id': 'contribution-terms') {
             full_row {
               div(class: 'legal-box-header') {
@@ -195,9 +192,7 @@ module Views
                 }
               }
             }
-          }
-          full_row {
-            f.submit 'Save', class: buttonish(:expand)
+            render_cancel_and_save_buttons(f)
           }
           div(class: 'content-box', 'data-id': 'awards') {
             div(class: 'award-types') {
@@ -255,6 +250,7 @@ module Views
                 p { a('+ add award type', href: '#', 'data-duplicate': '.award-type-template') }
               }
             }
+            render_cancel_and_save_buttons(f)
           }
           div(class: 'content-box', 'data-id': 'visibility') {
             div(class: 'award-types') {
@@ -335,6 +331,13 @@ module Views
 
       def visibility_options
         [['Logged in team members', 'member'], ['Publicly listed in CoMakery searches', 'public_listed'], ['Logged in team member via unlisted url', 'member_unlisted'], ['Unlisted url (no login required)', 'public_unlisted'], ['Archived (visible to me only)', 'archived']]
+      end
+
+      def render_cancel_and_save_buttons(form)
+        full_row_right {
+          link_to 'Cancel', project, class: 'button cancel'
+          form.submit 'Save', class: buttonish(:expand)
+        }
       end
     end
   end
