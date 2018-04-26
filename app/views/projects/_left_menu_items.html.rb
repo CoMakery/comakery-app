@@ -12,13 +12,18 @@ class Views::Projects::LeftMenuItems < Views::Base
         }
       }
       li {
-        a(href: '#contribution-license') {
-          span 'Contribution License'
+        a(href: '#contribution-terms') {
+          span 'Contribution Terms'
         }
       }
       li {
         a(href: '#awards') {
           span 'Awards'
+        }
+      }
+      li {
+        a(href: '#visibility') {
+          span 'Visibility'
         }
       }
     }

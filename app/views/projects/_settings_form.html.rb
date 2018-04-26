@@ -69,10 +69,10 @@ module Views
           full_row {
             f.submit 'Save', class: buttonish(:expand)
           }
-          div(class: 'content-box', 'data-id': 'contribution-license') {
+          div(class: 'content-box', 'data-id': 'contribution-terms') {
             full_row {
               div(class: 'legal-box-header') {
-                h3 'Contribution License Terms (BETA)'
+                h3 'Contribution Terms'
                 i(class: 'fa fa-lock') if project.license_finalized?
               }
             }
@@ -227,7 +227,7 @@ module Views
                   ff.hidden_field :id
                   ff.hidden_field :_destroy, 'data-destroy': ''
                   column('small-3') { ff.text_field :name }
-                  column('small-1') {
+                  column('small-2') {
                     readonly = !ff.object&.modifiable?
                     if readonly
                       tooltip("Award types' amounts can't be modified if there are existing awards", if: readonly) do
@@ -240,7 +240,7 @@ module Views
                   column('small-1', class: 'text-center') { ff.check_box :community_awardable }
                   column('small-4', class: 'text-center') { ff.text_area :description, class: 'award-type-description' }
                   column('small-1', class: 'text-center') { ff.check_box :disabled }
-                  column('small-2', class: 'text-center') {
+                  column('small-1', class: 'text-center') {
                     if ff.object&.modifiable?
                       a('×', href: '#', 'data-mark-and-hide': '.award-type-row', class: 'close')
                     else
@@ -258,7 +258,7 @@ module Views
           }
           div(class: 'content-box', 'data-id': 'visibility') {
             div(class: 'award-types') {
-              div(class: 'legal-box-header') { h3 'visibility' }
+              div(class: 'legal-box-header') { h3 'Visibility' }
               row {
                 column('small-5') {
                   options = capture do
