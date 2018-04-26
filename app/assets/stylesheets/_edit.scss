@@ -5,8 +5,18 @@ body.projects-edit, body.projects-new, body.projects-create  {
 }
 
 body.projects-edit {
-  .vertical.menu li { padding: 0 0;}
+  .vertical.menu li {
+    padding: 0 0;
+    a { color: grey; }
+    a.active-menu {
+      background-color: whitesmoke;
+      &:visited, &:link {
+        background-color: whitesmoke;
+      }
+    }
+  }
   .vertical.menu { width: 175px; }
+
   @media only screen and (max-width: 1024px) {
     .vertical.menu { display: none; }
   }
