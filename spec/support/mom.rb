@@ -79,10 +79,8 @@ class Mom
     AwardType.new(defaults.merge(attrs))
   end
 
-  def award(account = create(:account), **attrs)
-    account_id = account.is_a?(Account) ? account.id : account
+  def award(**attrs)
     params = {
-      account_id: account_id,
       issuer: create(:account),
       description: 'Great work',
       proof_id: 'abc123',

@@ -13,6 +13,7 @@ namespace :dev do
           account.first_name = oauth['info']['first_name']
           account.last_name = oauth['info']['last_name']
         end
+        account.nickname = oauth['info']['user']
       end
       if oauth['info']['image'].present?
         begin
@@ -28,20 +29,18 @@ namespace :dev do
     end
 
     Project.all.each do |project|
+      vis = project.public == true ? 1 : 0
+      # rubocop:disable SkipsModelValidations
+      project.update_column :visibility, vis
       next unless project.slack_channel
       channel = project.channels.find_or_create_by name: project.slack_channel, team: project.teams.last
       project.awards.each do |award|
-        award.update channel_id: channel.id
+        auth = Authentication.find_by id: award.account_id
+        account_id = auth ? auth.account_id : award.account_id
+        award.update channel_id: channel.id, account_id: account_id
         puts award.errors.full_messages
       end
       puts channel.errors.full_messages
     end
-  end
-
-  task update_project_visible: [:environment] do
-    public_projects = Project.where(public: true)
-    private_projects = Project.where.not(public: true)
-    public_projects.each(&:public_listed!)
-    private_projects.each(&:member!)
   end
 end
