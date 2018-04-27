@@ -52,6 +52,7 @@ class Views::Projects::Base < Views::Base
           owner = project.account
 
           ([owner].compact + Array.wrap(contributors)).uniq(&:id).each do |contributor|
+            contributor = contributor.decorate
             tooltip(contributor.name) {
               img(src: account_image_url(contributor, 34), class: 'contributor avatar-img')
             }

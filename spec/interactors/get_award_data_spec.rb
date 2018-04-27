@@ -52,7 +52,7 @@ describe GetAwardData do
     it 'shows values for each contributor for all 30 days' do
       result = described_class.call(account: sam, project: project)
 
-      awarded_account_names = Award.select('account_id, max(id) as id').group('account_id').all.map { |a| a.account.name }
+      awarded_account_names = Award.select('account_id, max(id) as id').group('account_id').all.map { |a| a.account.decorate.name }
       expect(awarded_account_names).to match_array(['john john', 'sam sam', 'bob bob'])
 
       contributions = result.award_data[:contributions_by_day].select do |cbd|

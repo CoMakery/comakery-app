@@ -42,6 +42,7 @@ class GetAwardData
 
   def contributions_data(awards)
     awards.each_with_object({}) do |award, a_hash|
+      award = award.decorate
       a_hash[award.account_id] ||= { net_amount: 0 }
       a_hash[award.account_id][:name] ||= award.recipient_display_name
       a_hash[award.account_id][:net_amount] += award.total_amount
@@ -70,7 +71,7 @@ class GetAwardData
     empty_row_template = accounts.each_with_object({}) do |account, contributors|
       # using display names is potentially problematic because these aren't unique, and also they could be a stale copy in our DB
       # from when the user last logged in
-      contributors[account.name] = 0 if account
+      contributors[account.decorate.name] = 0 if account
     end.freeze
 
     awards_by_date = recent_awards.group_by { |a| a.created_at.to_date.iso8601 }
@@ -100,7 +101,7 @@ class GetAwardData
 
     (awards_on_day || []).each do |award|
       next unless award.account
-      name = award.account.name
+      name = award.account.decorate.name
       row[name] ||= 0
       row[name] += award.total_amount
     end

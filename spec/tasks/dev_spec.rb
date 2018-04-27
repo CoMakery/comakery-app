@@ -54,7 +54,7 @@ describe 'rake dev:migrate', type: :task do
     account.reload
     expect(account.first_name).to eq 'Bob'
     expect(account.last_name).to eq 'Roberts'
-    expect(account.nickname).to eq 'bobroberts'
+    expect(account.decorate.nickname).to eq 'bobroberts'
     project.reload
     project1.reload
     award.reload

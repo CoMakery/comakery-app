@@ -106,9 +106,9 @@ describe Account do
 
   describe '#name' do
     it 'returns the first and last name and falls back to the user name' do
-      expect(build(:account, first_name: 'Bob', last_name: 'Johnson').name).to eq('Bob Johnson')
-      expect(build(:account, first_name: nil, last_name: 'Johnson').name).to eq('Johnson')
-      expect(build(:account, first_name: 'Bob', last_name: '').name).to eq('Bob')
+      expect(build(:account, first_name: 'Bob', last_name: 'Johnson').decorate.name).to eq('Bob Johnson')
+      expect(build(:account, first_name: nil, last_name: 'Johnson').decorate.name).to eq('Johnson')
+      expect(build(:account, first_name: 'Bob', last_name: '').decorate.name).to eq('Bob')
     end
   end
 

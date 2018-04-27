@@ -30,7 +30,7 @@ class Award < ApplicationRecord
 
   def ethereum_issue_ready?
     project.ethereum_enabled &&
-      recipient_address.present? &&
+      account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end
 
@@ -40,30 +40,6 @@ class Award < ApplicationRecord
 
   def recipient_auth_team
     account.authentication_teams.find_by team_id: channel.team_id if channel
-  end
-
-  def part_of_email
-    "#{email.split('@').first}@..." if email
-  end
-
-  def recipient_display_name
-    account ? account.name : part_of_email
-  end
-
-  def recipient_user_name
-    recipient_auth_team&.name || account.name
-  end
-
-  def recipient_address
-    account&.ethereum_wallet
-  end
-
-  def issuer_display_name
-    issuer&.name
-  end
-
-  def issuer_user_name
-    team&.authentication_team_by_account(issuer)&.name || issuer.name
   end
 
   def notifications_message

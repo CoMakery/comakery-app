@@ -52,7 +52,7 @@ class Channel < ApplicationRecord
   private
 
   def assign_name
-    self.name = team.discord? ? team.channel_name(channel_id) : channel_id
+    self.name = team.discord? ? team.decorate.channel_name(channel_id) : channel_id
   end
 
   def api_formatted_name(user)

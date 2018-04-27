@@ -69,7 +69,7 @@ describe 'when redeeming revenue shares for payments' do
     click_on 'Redeem My Revenue Shares'
 
     within '.payments' do
-      expect(page.find('.payee')).to have_content(same_team_account.name)
+      expect(page.find('.payee')).to have_content(same_team_account.decorate.name)
       expect(page.find('.quantity-redeemed')).to have_content('2')
       expect(page.find('.share-value')).to have_content(/^\$12.34500000$/)
       expect(page.find('.total-value')).to have_content('$24.69')
@@ -213,7 +213,7 @@ describe 'when redeeming revenue shares for payments' do
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
 
-        expect(page.find('.payee')).to have_content(owner.name)
+        expect(page.find('.payee')).to have_content(owner.decorate.name)
         expect(page.find('.quantity-redeemed')).to have_content('50')
         expect(page.find('.share-value')).to have_content('$55.55500000')
         expect(page.find('.total-value')).to have_content('$2,777.75')
@@ -258,7 +258,7 @@ describe 'when redeeming revenue shares for payments' do
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
 
-        expect(page.find('.payee')).to have_content(owner.name)
+        expect(page.find('.payee')).to have_content(owner.decorate.name)
         expect(page.find('.quantity-redeemed')).to have_content('50')
         expect(page.find('.share-value')).to have_content('฿12.34500000')
         expect(page.find('.total-value')).to have_content('฿617.25000000')
@@ -302,7 +302,7 @@ describe 'when redeeming revenue shares for payments' do
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
 
-        expect(page.find('.payee')).to have_content(owner.name)
+        expect(page.find('.payee')).to have_content(owner.decorate.name)
         expect(page.find('.quantity-redeemed')).to have_content('50')
         expect(page.find('.share-value')).to have_content('Ξ12.34500000')
         expect(page.find('.total-value')).to have_content('Ξ617.25000000')

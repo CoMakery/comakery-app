@@ -39,7 +39,7 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
     visit project_path(project1)
 
     send_award(channel1)
-    expect(page).to have_content "Successfully sent award to #{Award.last.recipient_display_name}"
+    expect(page).to have_content "Successfully sent award to #{Award.last.decorate.recipient_display_name}"
 
     send_award(channel1)
     expect(page).to have_content "Sorry, you can't send more awards than the project's maximum number of allowable tokens"

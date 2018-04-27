@@ -87,7 +87,7 @@ describe AwardsController do
         end.to change { project.awards.count }.by(1)
 
         expect(response).to redirect_to(project_path(project))
-        expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.name}")
+        expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.decorate.name}")
 
         award = Award.last
         expect(award.award_type).to eq(award_type)

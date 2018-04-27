@@ -47,15 +47,6 @@ class Account < ApplicationRecord
     update email_confirm_token: nil
   end
 
-  def name
-    return nickname if nickname.present?
-    [first_name, last_name].reject(&:blank?).join(' ')
-  end
-
-  def nick
-    nickname || name
-  end
-
   def award_by_project(project)
     groups = project.awards.where(account: self).group_by { |a| a.award_type.name }
     arr = []

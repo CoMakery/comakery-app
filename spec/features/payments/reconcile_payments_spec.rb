@@ -45,7 +45,7 @@ describe 'when reconciling redeemed revenue shares' do
     click_on 'Redeem My Revenue Shares'
 
     within '.payments' do
-      expect(page.find('.payee')).to have_content(owner.name)
+      expect(page.find('.payee')).to have_content(owner.decorate.name)
       expect(page.find('.quantity-redeemed')).to have_content('2')
       expect(page.find('.share-value')).to have_content('$12.34500000')
       expect(page.find('.total-value')).to have_content('$24.69')
@@ -58,7 +58,7 @@ describe 'when reconciling redeemed revenue shares' do
     end
 
     within '.payments' do
-      expect(page.find('.payee')).to have_content(owner.name)
+      expect(page.find('.payee')).to have_content(owner.decorate.name)
       expect(page.find('.quantity-redeemed')).to have_content('2')
       expect(page.find('.share-value')).to have_content('$12.34500000')
       expect(page.find('.total-value')).to have_content('$24.69')
@@ -97,7 +97,7 @@ describe 'when reconciling redeemed revenue shares' do
     click_on 'Redeem My Revenue Shares'
 
     within '.payments' do
-      expect(page.find('.payee')).to have_content(same_team_account.name)
+      expect(page.find('.payee')).to have_content(same_team_account.decorate.name)
       expect(page.find('.quantity-redeemed')).to have_content('2')
       expect(page.find('.share-value')).to have_content('$12.34500000')
       expect(page.find('.total-value')).to have_content('$24.69')

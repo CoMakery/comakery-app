@@ -117,7 +117,7 @@ describe Award do
 
     describe '#recipient_display_name' do
       it 'returns the full name' do
-        expect(award.recipient_display_name).to eq('Betty Ross')
+        expect(award.decorate.recipient_display_name).to eq('Betty Ross')
       end
     end
   end
