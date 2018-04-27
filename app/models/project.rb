@@ -178,17 +178,21 @@ class Project < ApplicationRecord
   end
 
   def public?
-    public_listed?
+    public_listed? || public_unlisted?
   end
 
   def private?
     member?
   end
 
+  def acccess_unlisted?(check_account)
+    return true if public_unlisted?
+    return true if member_unlisted? && check_account&.same_team_project?(self)
+  end
+
   def can_be_access?(check_account)
     return true if account == check_account
     return true if public? && !require_confidentiality?
-    return true if public_unlisted?
     check_account && check_account.same_team_project?(self)
   end
 

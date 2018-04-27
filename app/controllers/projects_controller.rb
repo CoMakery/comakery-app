@@ -72,16 +72,12 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.listed.includes(:award_types).find(params[:id]).decorate
-    if @project&.can_be_access?(current_account)
-      set_award
-    else
-      redirect_to root_path
-    end
+    set_award
   end
 
   def unlisted
     @project = Project.includes(:award_types).find_by(long_id: params[:long_id])&.decorate
-    if @project&.can_be_access?(current_account)
+    if @project&.acccess_unlisted?(current_account)
       set_award
       render :show
     else
