@@ -2,8 +2,8 @@ class Views::Projects::LeftMenuItems < Views::Base
   def content
     ul(class: 'vertical menu scrollingBox') {
       li {
-        a(href: '#basics') {
-          span 'Basics'
+        a(href: '#general-info') {
+          span 'General Info'
         }
       }
       li {
@@ -17,8 +17,8 @@ class Views::Projects::LeftMenuItems < Views::Base
         }
       }
       li {
-        a(href: '#awards') {
-          span 'Awards'
+        a(href: '#awards-offered') {
+          span 'Awards Offered'
         }
       }
       li {

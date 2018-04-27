@@ -5,7 +5,7 @@ module Views
 
       def content
         form_for project do |f|
-          div(class: 'content-box', 'data-id': 'basics') {
+          div(class: 'content-box', 'data-id': 'general-info') {
             div(class: 'legal-box-header') { h3 'General Info' }
             row {
               column('large-6 small-12') {
@@ -194,7 +194,7 @@ module Views
             }
             render_cancel_and_save_buttons(f)
           }
-          div(class: 'content-box', 'data-id': 'awards') {
+          div(class: 'content-box', 'data-id': 'awards-offered') {
             div(class: 'award-types') {
               div(class: 'legal-box-header') { h3 'Awards Offered' }
               row {
