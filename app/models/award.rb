@@ -69,7 +69,7 @@ class Award < ApplicationRecord
   def slack_message
     text = "on the <#{project_url(project)}|#{project.title}> project."
 
-    if project.ethereum_enabled && recipient_address.blank?
+    if project.ethereum_enabled && decorate.recipient_address.blank?
       text = "#{text} <#{account_url}|Set up your account> to receive Ethereum tokens."
     end
     text
@@ -77,9 +77,9 @@ class Award < ApplicationRecord
 
   def message_info
     if self_issued?
-      "@#{issuer_user_name} self-issued"
+      "@#{decorate.issuer_user_name} self-issued"
     else
-      "@#{issuer_user_name} sent @#{recipient_user_name} a #{total_amount} token #{award_type.name}"
+      "@#{decorate.issuer_user_name} sent @#{decorate.recipient_user_name} a #{total_amount} token #{award_type.name}"
     end
   end
 

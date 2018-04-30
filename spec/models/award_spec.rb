@@ -105,7 +105,7 @@ describe Award do
     let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
     it 'returns the user name' do
-      expect(award.issuer_display_name).to eq('johnny johnny')
+      expect(award.decorate.issuer_display_name).to eq('johnny johnny')
     end
   end
 

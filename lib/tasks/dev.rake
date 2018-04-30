@@ -6,7 +6,7 @@ namespace :dev do
       next unless oauth
       authentication.build_team oauth
       account = authentication.account
-      if account.name.blank?
+      if account.decorate.name.blank?
         if oauth['info']['first_name'].blank? && oauth['info']['last_name'].blank?
           account.first_name = oauth['info']['name']
         else

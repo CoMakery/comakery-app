@@ -11,7 +11,7 @@ describe EthereumTokenIssueJob do
 
   it 'returns an ethereum transaction address on completion' do
     allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
-    expect(Comakery::Ethereum).to receive(:token_issue).with(recipient: award.recipient_address,
+    expect(Comakery::Ethereum).to receive(:token_issue).with(recipient: award.decorate.recipient_address,
                                                              amount: award.award_type.amount,
                                                              contractAddress: award.project.ethereum_contract_address,
                                                              proofId: '873!') { transaction_adddress }
@@ -51,7 +51,7 @@ describe EthereumTokenIssueJob do
     end
 
     it 'uses the award total_amount' do
-      expect(Comakery::Ethereum).to receive(:token_issue).with(recipient: award.recipient_address,
+      expect(Comakery::Ethereum).to receive(:token_issue).with(recipient: award.decorate.recipient_address,
                                                                amount: award.total_amount,
                                                                contractAddress: award.project.ethereum_contract_address,
                                                                proofId: award.proof_id) { transaction_adddress }

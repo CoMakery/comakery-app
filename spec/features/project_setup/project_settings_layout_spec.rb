@@ -1,13 +1,12 @@
 require 'rails_helper'
 
 describe 'project settings layout' do
-  before { login(account) }
-
   let!(:account) { create(:account, first_name: 'Glenn', last_name: 'Spanky', email: 'gleenn@example.com') }
   let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false) }
 
   before do
     Capybara.page.current_window.resize_to(2000, 4000) # (height, width)
+    login(account)
   end
 
   it 'active menu item', js: true do
