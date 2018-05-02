@@ -204,7 +204,7 @@ module Views
                   text 'Community Awardable '
                   question_tooltip 'Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.'
                 }
-                column('small-4') {
+                column('small-4 lb-description') {
                   text 'Description'
                   br
                   link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text')
