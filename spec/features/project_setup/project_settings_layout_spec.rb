@@ -10,6 +10,24 @@ describe 'project settings layout:', js: true do
     visit edit_project_path(project)
   end
 
+  it 'width of window == 1024' do
+    Capybara.page.current_window.resize_to(1024, 2000)
+    expect(page).to have_no_link('General Info')
+    expect(page).to have_no_link('Communication Channels')
+    expect(page).to have_no_link('Contribution Terms')
+    expect(page).to have_no_link('Awards Offered')
+    expect(page).to have_no_link('Visibility')
+  end
+
+  it 'width of window < 1024' do
+    Capybara.page.current_window.resize_to(100, 2000)
+    expect(page).to have_no_link('General Info')
+    expect(page).to have_no_link('Communication Channels')
+    expect(page).to have_no_link('Contribution Terms')
+    expect(page).to have_no_link('Awards Offered')
+    expect(page).to have_no_link('Visibility')
+  end
+
   it 'click on \'Visibility\' menu item' do
     click_on_left_menu('Visibility', 'visibility')
   end
