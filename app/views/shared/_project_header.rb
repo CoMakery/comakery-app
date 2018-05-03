@@ -14,7 +14,8 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
       full_row {
         ul(class: 'menu') {
           li(class: ('active' if controller_name == 'projects').to_s) {
-            a(href: project_path(project.show_id)) {
+            path = project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
+            a(href: path) {
               text 'Overview'
             }
           }
