@@ -39,7 +39,7 @@ class Views::Projects::Base < Views::Base
       div(class: 'info') {
         div(class: 'text-overlay') {
           h5 {
-            a(project.title, href: project_path(project), class: 'project-link')
+            a(project.title, href: path, class: 'project-link')
           }
           a(href: path) {
             i project.legal_project_owner

@@ -80,6 +80,8 @@ class ProjectsController < ApplicationController
     if @project&.acccess_unlisted?(current_account)
       set_award
       render :show
+    elsif @project&.can_be_access?(current_account)
+      redirect_to project_path(@project)
     else
       redirect_to root_path
     end
