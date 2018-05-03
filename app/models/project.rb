@@ -13,8 +13,8 @@ class Project < ApplicationRecord
   has_many :payments, dependent: :destroy do
     def new_with_quantity(quantity_redeemed:, account:)
       project = @association.owner
-
-      new(total_value: BigDecimal(quantity_redeemed) * project.revenue_per_share,
+      quantity = quantity_redeemed.blank? ? 0 : quantity_redeemed
+      new(total_value: BigDecimal(quantity) * project.revenue_per_share,
           quantity_redeemed: quantity_redeemed,
           share_value: project.revenue_per_share,
           currency: project.denomination,

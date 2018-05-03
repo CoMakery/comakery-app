@@ -45,7 +45,8 @@ class Comakery::Discord
     channel_id = award.channel.channel_id
     wh = webhook channel_id
     @path = "/webhooks/#{wh['id']}/#{wh['token']}"
-    @data = { content: award.notifications_message }.to_json
+    message = AwardMessage.call(award: award).notifications_message
+    @data = { content: message }.to_json
     post_result(false)
   end
 

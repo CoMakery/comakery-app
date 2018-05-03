@@ -54,7 +54,7 @@ describe PaymentsController do
     describe 'owner invalid' do
       before do
         login account
-        get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: '' } }
+        get :create, params: { project_id: my_project.id, payment: { quantity_redeemed: 0 } }
       end
 
       specify { expect(response).to render_template('payments/index') }

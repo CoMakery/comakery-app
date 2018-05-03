@@ -16,8 +16,7 @@ class Comakery::Slack
   end
 
   def send_award_notifications(award:)
-    text = award.notifications_message
-
+    text = AwardMessage.call(award: award).notifications_message
     message_response = @client.chat_postMessage(
       channel: '#' + award.channel.name,
       text: text,

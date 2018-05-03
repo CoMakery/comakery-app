@@ -1,5 +1,4 @@
 class Award < ApplicationRecord
-  include ::Rails.application.routes.url_helpers
   paginates_per 50
 
   include EthereumAddressable
@@ -40,47 +39,6 @@ class Award < ApplicationRecord
 
   def recipient_auth_team
     account.authentication_teams.find_by team_id: channel.team_id if channel
-  end
-
-  def notifications_message
-    text = message_info
-    text = "#{text} for \"#{description}\"" if description.present?
-
-    text = if discord?
-      "#{text} #{discord_message}"
-    else
-      "#{text} #{slack_message}"
-    end
-
-    text.strip!
-    text.gsub!(/\s+/, ' ')
-    text
-  end
-
-  def discord_message
-    text = "on the #{project.title} project: #{project_url(project)}."
-
-    if project.ethereum_enabled && recipient_address.blank?
-      text = "#{text} Set up your account: #{account_url} to receive Ethereum tokens."
-    end
-    text
-  end
-
-  def slack_message
-    text = "on the <#{project_url(project)}|#{project.title}> project."
-
-    if project.ethereum_enabled && decorate.recipient_address.blank?
-      text = "#{text} <#{account_url}|Set up your account> to receive Ethereum tokens."
-    end
-    text
-  end
-
-  def message_info
-    if self_issued?
-      "@#{decorate.issuer_user_name} self-issued"
-    else
-      "@#{decorate.issuer_user_name} sent @#{decorate.recipient_user_name} a #{total_amount} token #{award_type.name}"
-    end
   end
 
   def send_confirm_email
