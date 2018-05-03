@@ -393,6 +393,7 @@ progress {
       vertical-align: middle;
 
       float: left;
+      max-width: 100%;
       height: 100%;
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
@@ -434,6 +435,7 @@ progress {
     }
 
     .complete-text {
+      max-width: 100%;
       vertical-align: bottom;
       text-align: right;
       padding-left: 6px;
