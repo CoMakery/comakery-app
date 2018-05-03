@@ -233,7 +233,7 @@ module Views
                     end
                   }
                   column('small-1', class: 'text-center') { ff.check_box :community_awardable }
-                  column('small-4', class: 'text-center') { ff.text_area :description, class: 'award-type-description' }
+                  column('small-4', class: 'text-center lb-description') { ff.text_area :description, class: 'award-type-description' }
                   column('small-1', class: 'text-center') { ff.check_box :disabled }
                   column('small-2', class: 'text-center') {
                     if ff.object&.modifiable?
