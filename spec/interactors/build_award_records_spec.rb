@@ -40,6 +40,19 @@ describe BuildAwardRecords do
       expect(result.award.save).to eq(true)
     end
 
+    it 'when award type is not community_awardable' do
+      recipient
+      recipient_authentication
+      award_type.update community_awardable: false
+
+      result = described_class.call(project: project, issuer: create(:account), award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
+        description: 'This rocks!!11',
+        uid: recipient_authentication.uid
+      }, total_tokens_issued: 0)
+      expect(result).not_to be_success
+      expect(result.message).to eq 'Not authorized'
+    end
+
     context 'when the award is not valid because of bad award type' do
       it 'fails with a nice message' do
         recipient
