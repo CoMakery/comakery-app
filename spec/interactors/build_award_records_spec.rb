@@ -16,6 +16,8 @@ describe BuildAwardRecords do
   before do
     team.build_authentication_team authentication
     team.build_authentication_team recipient_authentication
+    discord_team.build_authentication_team authentication
+    discord_team.build_authentication_team recipient_authentication
     project.channels.create(team: team, channel_id: 'channel_id', name: 'slack_channel')
   end
 
@@ -185,15 +187,14 @@ describe BuildAwardRecords do
 
     it 'create the account, auth, and for discord returns the award' do
       stub_discord_channels
-      project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
+      channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
       result = nil
       expect do
         expect do
-          result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.last.id, award_params: {
+          result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: channel.id, award_params: {
             award_type_id: award_type.to_param,
             description: 'This rocks!!11',
-            uid: 'U99M9QYFQ',
-            channel_id: project.channels.last.id
+            uid: '123445'
           }, total_tokens_issued: 0)
           expect(result.message).to be_nil
           expect(result.award).to be_a_new_record
