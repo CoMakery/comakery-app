@@ -4,9 +4,9 @@ describe AwardsController do
   let!(:team) { create :team }
   let!(:discord_team) { create :team, provider: 'discord' }
   let!(:issuer) { create(:authentication) }
-  let!(:issuer_discord) { create(:authentication, account: issuer.account) }
+  let!(:issuer_discord) { create(:authentication, account: issuer.account, provider: 'discord') }
   let!(:receiver) { create(:authentication) }
-  let!(:receiver_discord) { create(:authentication, account: receiver.account) }
+  let!(:receiver_discord) { create(:authentication, account: receiver.account, provider: 'discord') }
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
@@ -126,6 +126,7 @@ describe AwardsController do
         expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.decorate.name}")
 
         award = Award.last
+        expect(award.discord?).to be_truthy
         expect(award.award_type).to eq(award_type)
         expect(award.account).to eq(receiver.account)
         expect(award.description).to eq('This rocks!!11')

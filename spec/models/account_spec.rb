@@ -72,6 +72,7 @@ describe Account do
 
   describe '#send_award_notifications' do
     let!(:team) { create :team }
+    let!(:discord_team) { create :team, provider: 'discord' }
     let!(:project) { create :project, account: subject }
     let!(:award_type) { create :award_type, project: project }
     let!(:channel) { create :channel, team: team, project: project }
@@ -84,6 +85,15 @@ describe Account do
       allow(subject.slack).to receive(:send_award_notifications)
       subject.send_award_notifications award
       expect(subject.slack).to have_received(:send_award_notifications)
+    end
+
+    it 'sends a Discord notification' do
+      stub_discord_channels
+      channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
+      award = create :award, award_type: award_type, issuer: subject, channel: channel
+      allow(subject.discord_client).to receive(:send_message)
+      subject.send_award_notifications award
+      expect(subject.discord_client).to have_received(:send_message)
     end
   end
 

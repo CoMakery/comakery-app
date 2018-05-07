@@ -34,9 +34,12 @@ class Account < ApplicationRecord
     @slack ||= Comakery::Slack.get(slack_auth.token)
   end
 
+  def discord_client
+    @discord_client ||= Comakery::Discord.new
+  end
+
   def send_award_notifications(award)
     if award.team.discord?
-      discord_client = Comakery::Discord.new
       discord_client.send_message award
     else
       slack.send_award_notifications(award: award)
