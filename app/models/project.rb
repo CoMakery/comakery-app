@@ -81,21 +81,8 @@ class Project < ApplicationRecord
     CreateEthereumAwards.call(awards: awards)
   end
 
-  def create_ethereum_contract!
-    address = Comakery::Ethereum.token_contract(maxSupply: maximum_tokens)
-    update! ethereum_contract_address: address
-  end
-
   def total_revenue
     revenues.total_amount
-  end
-
-  def max_award_used?
-    total_awarded >= maximum_tokens
-  end
-
-  def month_award_used?
-    total_month_awarded >= maximum_royalties_per_month
   end
 
   def total_month_awarded
@@ -179,10 +166,6 @@ class Project < ApplicationRecord
 
   def public?
     public_listed? || public_unlisted?
-  end
-
-  def private?
-    member?
   end
 
   def access_unlisted?(check_account)
