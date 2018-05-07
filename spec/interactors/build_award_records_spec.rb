@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe BuildAwardRecords do
   let!(:team) { create :team }
+  let!(:discord_team) { create :team, provider: 'discord' }
   let!(:authentication) { create :authentication }
   let!(:issuer) { authentication.account }
   let!(:other_auth) { create(:authentication, account: issuer, token: 'token') }
@@ -168,6 +169,27 @@ describe BuildAwardRecords do
       expect do
         expect do
           result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
+            award_type_id: award_type.to_param,
+            description: 'This rocks!!11',
+            uid: 'U99M9QYFQ',
+            channel_id: project.channels.last.id
+          }, total_tokens_issued: 0)
+          expect(result.message).to be_nil
+          expect(result.award).to be_a_new_record
+          expect(result.award.award_type).to eq(award_type)
+          expect(result.award.account).to eq(Account.last)
+        end.not_to change { Award.count }
+      end.to change { Account.count }.by(1)
+      expect(result.award.save).to eq(true)
+    end
+
+    it 'create the account, auth, and for discord returns the award' do
+      stub_discord_channels
+      project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
+      result = nil
+      expect do
+        expect do
+          result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.last.id, award_params: {
             award_type_id: award_type.to_param,
             description: 'This rocks!!11',
             uid: 'U99M9QYFQ',
