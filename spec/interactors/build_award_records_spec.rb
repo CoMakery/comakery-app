@@ -6,18 +6,20 @@ describe BuildAwardRecords do
   let!(:authentication) { create :authentication }
   let!(:issuer) { authentication.account }
   let!(:other_auth) { create(:authentication, account: issuer, token: 'token') }
+  let!(:discord_auth) { create(:authentication, account: issuer, token: 'discord_token', provider: 'discord') }
   let!(:project) { create(:project, account: issuer) }
   let!(:other_project) { create(:project, account: create(:account)) }
   let!(:award_type) { create(:award_type, project: project) }
 
   let(:recipient) { create(:account, email: 'glenn@example.com') }
   let(:recipient_authentication) { create(:authentication, account: recipient) }
+  let!(:recipient_discord_auth) { create(:authentication, account: recipient, provider: 'discord') }
 
   before do
     team.build_authentication_team authentication
     team.build_authentication_team recipient_authentication
-    discord_team.build_authentication_team authentication
-    discord_team.build_authentication_team recipient_authentication
+    discord_team.build_authentication_team discord_auth
+    discord_team.build_authentication_team recipient_discord_auth
     project.channels.create(team: team, channel_id: 'channel_id', name: 'slack_channel')
   end
 
@@ -30,6 +32,27 @@ describe BuildAwardRecords do
         expect do
           expect do
             result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
+              description: 'This rocks!!11',
+              uid: recipient_authentication.uid
+            }, total_tokens_issued: 0)
+            expect(result).to be_success
+            expect(result.award).to be_a_new_record
+            expect(result.award.award_type).to eq(award_type)
+            expect(result.award.account).to eq(recipient)
+          end.not_to change { Award.count }
+        end.not_to change { Authentication.count }
+      end.not_to change { Account.count }
+      expect(result.award.save).to eq(true)
+    end
+
+    it 'builds a award for the given discord user id with the matching account from the db' do
+      stub_discord_channels
+      channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
+      result = nil
+      expect do
+        expect do
+          expect do
+            result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: channel.id, award_params: {
               description: 'This rocks!!11',
               uid: recipient_authentication.uid
             }, total_tokens_issued: 0)
