@@ -185,7 +185,7 @@ class Project < ApplicationRecord
     member?
   end
 
-  def acccess_unlisted?(check_account)
+  def access_unlisted?(check_account)
     return true if public_unlisted?
     return true if member_unlisted? && check_account&.same_team_or_owned_project?(self)
   end

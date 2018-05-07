@@ -77,7 +77,7 @@ class ProjectsController < ApplicationController
 
   def unlisted
     @project = Project.includes(:award_types).find_by(long_id: params[:long_id])&.decorate
-    if @project&.acccess_unlisted?(current_account)
+    if @project&.access_unlisted?(current_account)
       set_award
       render :show
     elsif @project&.can_be_access?(current_account)
