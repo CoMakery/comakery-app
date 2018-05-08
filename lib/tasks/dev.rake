@@ -7,12 +7,8 @@ namespace :dev do
       authentication.build_team oauth
       account = authentication.account
       if account.decorate.name.blank?
-        if oauth['info']['first_name'].blank? && oauth['info']['last_name'].blank?
-          account.first_name = oauth['info']['name']
-        else
-          account.first_name = oauth['info']['first_name']
-          account.last_name = oauth['info']['last_name']
-        end
+        account.first_name = oauth['info']['first_name']
+        account.last_name = oauth['info']['last_name']
         account.nickname = oauth['info']['user']
       end
       if oauth['info']['image'].present?
@@ -20,8 +16,6 @@ namespace :dev do
           open(oauth['info']['image'], 'rb') do |file|
             account.image = file
           end
-        rescue
-          puts "can't open #{oauth['info']['image']} - ##{authentication.id}"
         end
       end
       account.save
