@@ -54,7 +54,11 @@ Rails.application.routes.draw do
   end
 
   namespace :api, defaults: { format: :json } do
-    resources :accounts, only: [:create]
+    resources :accounts, only: [:create] do
+      collection do
+        get :find_by_public_address
+      end
+    end
   end
 
   unless Rails.env.development? || Rails.env.test?
