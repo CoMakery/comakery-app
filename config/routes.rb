@@ -53,6 +53,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :api, defaults: { format: :json } do
+    resources :accounts, only: [:create]
+  end
+
   unless Rails.env.development? || Rails.env.test?
     Sidekiq::Web.use Rack::Auth::Basic do |username, password|
       username.present? && password.present? &&
