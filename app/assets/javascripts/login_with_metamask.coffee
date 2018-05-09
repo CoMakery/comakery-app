@@ -5,11 +5,13 @@ loginWithMetaMask.handleAuthenticate = (ref) ->
   signature = ref.signature
   fetch('/api/accounts/auth',
     body: JSON.stringify(
-      publicAddress: publicAddress
+      public_address: publicAddress
       signature: signature)
     headers: 'Content-Type': 'application/json'
-    method: 'POST').then (response) ->
-    response.json()
+    method: 'POST').then((response) ->
+      response.json()
+    ).then (data) ->
+      window.location = '/' if data['success']
 
 loginWithMetaMask.handleSignup = (publicAddress, network) ->
   fetch('/api/accounts',
@@ -19,7 +21,7 @@ loginWithMetaMask.handleSignup = (publicAddress, network) ->
     response.json()
 
 loginWithMetaMask.handleSignMessage = (ref) ->
-  publicAddress = ref.publicAddress
+  publicAddress = ref.public_address
   nonce = ref.nonce
   new Promise((resolve, reject) ->
     web3.personal.sign web3.fromUtf8('Comakery, I am signing my nonce: ' + nonce), publicAddress, (err, signature) ->
