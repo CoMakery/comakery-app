@@ -22,7 +22,7 @@ class Account < ApplicationRecord
   validates :password, length: { minimum: 8 }, if: :password_required
   validates :first_name, :last_name, presence: true, if: :name_required
 
-  validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
+  validates :public_address, uniqueness: { case_sensitive: false, scope: :network_id }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
 
   before_save :downcase_email

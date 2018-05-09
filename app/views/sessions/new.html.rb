@@ -27,6 +27,10 @@ class Views::Sessions::New < Views::Base
                 image_tag 'discord.png', style: 'height: 40px'
                 text 'Sign in with Discord'
               end
+              br
+              link_to 'javascript:void(0)', class: 'auth-button signin-with-metamask' do
+                text 'Sign in with MetaMask'
+              end
             }
           }
         end

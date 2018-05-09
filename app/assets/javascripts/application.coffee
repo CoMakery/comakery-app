@@ -130,6 +130,9 @@ $ ->
     $(".copy-source").select()
     document.execCommand('Copy')
 
+  $(document).on 'click', '.signin-with-metamask', ->
+    loginWithMetaMask.handleClick()
+
   floatingLeftMenuItems()
   # Run on page ready then bind events
   awardPaymentType()

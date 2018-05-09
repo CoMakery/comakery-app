@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     resources :accounts, only: [:create] do
       collection do
         get :find_by_public_address
-        post :verify_signature
+        post :auth
       end
     end
   end
