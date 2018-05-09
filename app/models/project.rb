@@ -9,7 +9,7 @@ class Project < ApplicationRecord
   belongs_to :account
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
-  has_many :channels, -> { order :created_at }, dependent: :destroy
+  has_many :channels, -> { order :created_at }, inverse_of: :project, dependent: :destroy
   has_many :payments, dependent: :destroy do
     def new_with_quantity(quantity_redeemed:, account:)
       project = @association.owner
