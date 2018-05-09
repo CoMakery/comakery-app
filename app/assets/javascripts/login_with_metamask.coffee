@@ -42,13 +42,12 @@ loginWithMetaMask.handleClick = ->
     return
   publicAddress = web3.eth.coinbase.toLowerCase()
   # state loading: true
-  fetch('/api/accounts/find_by_public_address?publicAddress=' + publicAddress).then((response) ->
+  fetch('/api/accounts/find_by_public_address?public_address=' + publicAddress).then((response) ->
     response.json()
-  ).then((users) ->
-    if users.length then users[0] else loginWithMetaMask.handleSignup(publicAddress, web3.version.network)
+  ).then((data) ->
+    if data then data['account'] else loginWithMetaMask.handleSignup(publicAddress, web3.version.network)
   ).then(loginWithMetaMask.handleSignMessage).then(loginWithMetaMask.handleAuthenticate).then(onLoggedIn).catch (err) ->
     window.alert err
     # state loading: false
     return
   return
-

@@ -1,8 +1,8 @@
 class Api::AccountsController < Api::ApiController
   def create
     render(json: { failed: true }) && return if params[:public_address].blank?
-    @account = Account.find_or_initialize_by(public_address: params[:public_address], network_id: params[:network_id])
-    @account.assign_attributes nonce: rand.to_s[2..6], email: "#{params[:public_address]}_#{params[:network_id]}@comakery.com", system_email: true
+    @account = Account.find_or_initialize_by(public_address: params[:public_address])
+    @account.assign_attributes nonce: rand.to_s[2..6], email: "#{params[:public_address]}@comakery.com", network_id: params[:network_id], system_email: true
     if @account.save
       render json: { account: @account.as_json(only: %i[id public_address nonce]) }
     else
