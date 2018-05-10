@@ -34,7 +34,7 @@ loginWithMetaMask.handleSignMessage = (ref) ->
 )
 
 loginWithMetaMask.handleClick = ->
-  # onLoggedIn = null
+  $target = $('.auth-button.signin-with-metamask')
   if !window.web3
     window.alert 'Please install MetaMask first.'
     return
@@ -44,13 +44,12 @@ loginWithMetaMask.handleClick = ->
     window.alert 'Please activate MetaMask first.'
     return
   publicAddress = web3.eth.coinbase.toLowerCase()
-  # state loading: true
+  $target.find('span').text('Loading ...')
   fetch('/api/accounts/find_by_public_address?public_address=' + publicAddress).then((response) ->
     response.json()
   ).then((data) ->
     if data.public_address then data else loginWithMetaMask.handleSignup(publicAddress, web3.version.network)
-  ).then(loginWithMetaMask.handleSignMessage).then(loginWithMetaMask.handleAuthenticate).then(onLoggedIn).catch (err) ->
-    window.alert err
-    # state loading: false
+  ).then(loginWithMetaMask.handleSignMessage).then(loginWithMetaMask.handleAuthenticate).catch (err) ->
+    $target.find('span').text('Sign in with MetaMask')
     return
   return
