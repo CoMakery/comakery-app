@@ -15,7 +15,8 @@ describe 'landing page', :js do
     login(account)
 
     7.times { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", visibility: 'public_listed') }
-    7.times { |i| create(:project, account, title: "Private Project #{i}", public: false) }
+    7.times { |i| create(:project, account, title: "Private Project #{i}", visibility: 'member') }
+    7.times { |i| create(:project, account, title: "Archived Project #{i}", visibility: 'archived') }
 
     visit root_path
 
@@ -23,11 +24,10 @@ describe 'landing page', :js do
       expect(page).to have_content 'gleenn'
     end
 
-    within('h2') { expect(page.text).to eq('Projects') }
+    within('h2') { expect(page.text).to eq('mine') }
     expect(page).to have_content 'New Project'
 
     expect(page.all('.project').size).to eq(12)
-    expect(page).to have_content 'Public Project'
 
     click_link 'Browse All'
 

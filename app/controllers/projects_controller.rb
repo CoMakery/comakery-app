@@ -4,13 +4,9 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      # @private_projects = current_account.private_projects.with_last_activity_at.limit(6).decorate
-      # @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
-      # @unlisted_projects = current_account.projects.unlisted.with_last_activity_at.limit(6).decorate
-      # @public_projects = current_account.public_projects.with_last_activity_at.limit(6).decorate
-      @my_projects = current_account.projects.visible.with_last_activity_at.limit(6).decorate
+      @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
-      @team_projects = current_account.team_projects.with_last_activity_at.limit(6).decorate
+      @team_projects = current_account.other_member_projects.with_last_activity_at.limit(6).decorate
     else
       @archived_projects = []
       @team_projects = []

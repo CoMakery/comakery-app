@@ -89,6 +89,10 @@ class Account < ApplicationRecord
     Project.public_listed.where.not(id: private_project_ids)
   end
 
+  def other_member_projects
+    team_projects.where.not(account_id: id)
+  end
+
   def private_project_ids
     @private_project_ids = team_projects.map(&:id) | projects.member.map(&:id) | award_projects.map(&:id)
   end
