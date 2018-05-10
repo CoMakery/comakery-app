@@ -11,7 +11,7 @@ loginWithMetaMask.handleAuthenticate = (ref) ->
     method: 'POST').then((response) ->
       response.json()
     ).then (data) ->
-      window.location = '/' if data['success']
+      window.location = '/' if data.success
 
 loginWithMetaMask.handleSignup = (publicAddress, network) ->
   fetch('/api/accounts',
@@ -47,7 +47,7 @@ loginWithMetaMask.handleClick = ->
   fetch('/api/accounts/find_by_public_address?public_address=' + publicAddress).then((response) ->
     response.json()
   ).then((data) ->
-    if data then data['account'] else loginWithMetaMask.handleSignup(publicAddress, web3.version.network)
+    if data.public_address then data else loginWithMetaMask.handleSignup(publicAddress, web3.version.network)
   ).then(loginWithMetaMask.handleSignMessage).then(loginWithMetaMask.handleAuthenticate).then(onLoggedIn).catch (err) ->
     window.alert err
     # state loading: false
