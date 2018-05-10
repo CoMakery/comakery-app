@@ -4,6 +4,7 @@ loginWithMetaMask.handleAuthenticate = (ref) ->
   publicAddress = ref.publicAddress
   signature = ref.signature
   fetch('/api/accounts/auth',
+    credentials: 'same-origin'
     body: JSON.stringify(
       public_address: publicAddress
       signature: signature)

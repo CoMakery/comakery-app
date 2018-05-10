@@ -26,7 +26,10 @@ class Api::AccountsController < Api::ApiController
     else
       msg = "Comakery, I am signing my nonce: #{@account.nonce}"
       @matched = eth_util.verify_signature(params[:public_address], params[:signature], msg)
-      @account.update!(nonce: rand.to_s[2..6]) if @matched
+      if @matched
+        @account.update!(nonce: rand.to_s[2..6])
+        session[:account_id] = @account.id
+      end
       render json: { success: @matched }
     end
   end
