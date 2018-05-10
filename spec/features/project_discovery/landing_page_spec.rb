@@ -15,6 +15,7 @@ describe 'landing page', :js do
     login(account)
 
     7.times { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", visibility: 'public_listed') }
+    7.times { |i| create(:project, title: "other Private Project #{i}", visibility: 'member') }
     7.times { |i| create(:project, account, title: "Private Project #{i}", visibility: 'member') }
     7.times { |i| create(:project, account, title: "Archived Project #{i}", visibility: 'archived') }
 
@@ -34,7 +35,7 @@ describe 'landing page', :js do
     within('h2') { expect(page.text).to eq('Projects') }
     expect(page).to have_content 'New Project'
 
-    expect(page.all('.project').size).to eq(14)
+    expect(page.all('.project').size).to eq(21)
     expect(page).to have_content 'Public Project'
   end
 

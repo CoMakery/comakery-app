@@ -85,28 +85,17 @@ class Account < ApplicationRecord
     precise_percentage.truncate(8)
   end
 
-  def public_projects
-    Project.public_listed.where.not(id: private_project_ids)
-  end
-
   def other_member_projects
     team_projects.where.not(account_id: id)
   end
 
-  def private_project_ids
-    @private_project_ids = team_projects.map(&:id) | projects.member.map(&:id) | award_projects.map(&:id)
-  end
-
-  def accessable_project_ids
-    @accessable_project_ids = private_project_ids | Project.public_listed.map(&:id)
-  end
-
-  def private_projects
-    @private_projects ||= Project.where id: private_project_ids
-  end
-
   def accessable_projects
-    @accessable_projects ||= Project.where id: accessable_project_ids
+    Project.joins("
+      left join awards a1 on a1.account_id=projects.account_id
+      left join channels on channels.project_id=projects.id
+      left join teams on teams.id=channels.team_id
+      left join authentication_teams on authentication_teams.team_id=teams.id")
+           .where("(authentication_teams.account_id=#{id} and channels.id is not null) or projects.visibility=1 or a1.account_id=#{id} or projects.account_id=#{id}").distinct
   end
 
   def confirmed?

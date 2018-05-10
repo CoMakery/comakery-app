@@ -258,4 +258,32 @@ describe Account do
       specify { expect(contributor.total_revenue_unpaid(project)).to eq 61 }
     end
   end
+
+  describe '#accessable_projects' do
+    let!(:team) { create :team }
+    let!(:authentication) { create :authentication, account: account }
+    let!(:account1) { create :account }
+    let!(:authentication1) { create :authentication, account: account1 }
+    let!(:project1) { create :project, account: account, visibility: 'member', title: 'my private project' }
+    let!(:project2) { create :project, account: account, visibility: 'public_listed', title: 'my public project' }
+    let!(:project3) { create :project, account: account, visibility: 'archived', title: 'archived project' }
+    let!(:project4) { create :project, account: account, visibility: 'public_unlisted', title: 'unlisted project' }
+    let!(:project5) { create :project, account: account1, visibility: 'member', title: 'member project' }
+    let!(:project6) { create :project, visibility: 'member', title: 'other team private project' }
+    let!(:project7) { create :project, visibility: 'public_listed', title: 'other team public project' }
+
+    before do
+      team.build_authentication_team authentication
+      team.build_authentication_team authentication1
+      project1.channels.create(team: team, channel_id: 'general')
+      project2.channels.create(team: team, channel_id: 'general')
+      project3.channels.create(team: team, channel_id: 'general')
+      project4.channels.create(team: team, channel_id: 'general')
+      project5.channels.create(team: team, channel_id: 'general')
+    end
+
+    it 'show my accessable projects' do
+      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'member project', 'other team public project']
+    end
+  end
 end
