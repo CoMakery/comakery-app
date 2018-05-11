@@ -114,4 +114,16 @@ class Account < ApplicationRecord
     update reset_password_token: SecureRandom.hex
     UserMailer.reset_password(self).deliver_now
   end
+
+  after_update :check_email_update
+
+  private
+
+  def check_email_update
+    if email_changed?
+      # rubocop:disable SkipsModelValidations
+      update_column :email_confirm_token, SecureRandom.hex
+      UserMailer.confirm_email(self).deliver
+    end
+  end
 end

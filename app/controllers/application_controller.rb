@@ -28,8 +28,8 @@ class ApplicationController < ActionController::Base
   end
 
   # called from before_filter :require_login
-  def not_authenticated
-    redirect_to root_path
+  def not_authenticated(msg = nil)
+    redirect_to root_path, alert: msg
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
@@ -45,10 +45,10 @@ class ApplicationController < ActionController::Base
   end
 
   def require_login
-    if session[:account_id].blank? || !current_account.confirmed?
+    if session[:account_id].blank?
       not_authenticated
     elsif !current_account.confirmed?
-      not_authenticated
+      not_authenticated('Please confirm your email before continuing.')
     end
   end
 

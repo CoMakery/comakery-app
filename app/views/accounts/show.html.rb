@@ -12,6 +12,17 @@ class Views::Accounts::Show < Views::Base
         row {
           form_for current_account, url: '/account' do |f|
             column('small-3') {
+              label(for: :email) {
+                text 'Email'
+              }
+            }
+            column('small-9') {
+              with_errors(current_account, :email) {
+                f.text_field :email
+              }
+            }
+
+            column('small-3') {
               label(for: :first_name) {
                 text 'First Name'
               }
