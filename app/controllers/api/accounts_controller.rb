@@ -11,7 +11,7 @@ class Api::AccountsController < Api::ApiController
   end
 
   def find_by_public_address
-    if (@account = Account.find_by public_address: params[:public_address]).present?
+    if params[:public_address].present? && (@account = Account.find_by public_address: params[:public_address])
       render json: @account.as_json(only: %i[id public_address nonce])
     else
       render json: {}
