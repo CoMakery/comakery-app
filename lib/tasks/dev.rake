@@ -2,6 +2,7 @@ require 'open-uri'
 namespace :dev do
   task migrate: [:environment] do
     Authentication.all.each do |authentication|
+      next unless authentication.slack?
       oauth = authentication.oauth_response
       next unless oauth
       authentication.build_team oauth
@@ -16,6 +17,9 @@ namespace :dev do
           open(oauth['info']['image'], 'rb') do |file|
             account.image = file
           end
+        # rubocop:disable Lint/RescueException
+        rescue Exception => e
+          puts e.message
         end
       end
       account.save

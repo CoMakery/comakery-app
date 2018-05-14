@@ -42,7 +42,7 @@ describe 'rake dev:migrate', type: :task do
     expect { task.execute }.not_to raise_error
   end
 
-  it 'migrate date' do
+  it 'migrate data' do
     account = create(:account, first_name: nil, last_name: nil)
     authentication = create(:authentication, account: account, oauth_response: auth_hash)
     project = create(:project, account: account, public: true, slack_channel: 'general')
@@ -62,5 +62,17 @@ describe 'rake dev:migrate', type: :task do
     expect(project1.public_listed?).to be_falsey
     expect(award.channel).to eq Channel.first
     expect(award.account).to eq account
+  end
+
+  it 'migrate data - ignore missing missing image' do
+    auth_hash['info']['image'] = Rails.root.join('spec', 'fixtures', 'not_exist.png')
+    account = create(:account, first_name: nil, last_name: nil)
+    create(:authentication, account: account, oauth_response: auth_hash)
+
+    task.execute
+    account.reload
+    expect(account.first_name).to eq 'Bob'
+    expect(account.last_name).to eq 'Roberts'
+    expect(account.decorate.nickname).to eq 'bobroberts'
   end
 end
