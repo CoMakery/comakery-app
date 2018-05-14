@@ -22,13 +22,25 @@ describe Api::AccountsController do
     end
   end
 
-  it '#create' do
-    expect { post :create, params: { public_address: public_address, network_id: 1 }, format: :json }.to change(Account, :count).by(1)
+  describe '#create' do
+    it 'success' do
+      post :create, params: { public_address: public_address, network_id: 1 }, format: :json
+      expect(response.content_type).to eq 'application/json'
+      parsed_response = JSON.parse response.body, symbolize_names: true
+      expect(parsed_response[:public_address]).to eq(public_address)
+      expect(parsed_response[:ethereum_wallet]).to eq(public_address)
+    end
 
-    post :create, params: { public_address: public_address, network_id: 1 }, format: :json
-    expect(response.content_type).to eq 'application/json'
-    parsed_response = JSON.parse response.body, symbolize_names: true
-    expect(parsed_response[:public_address]).to eq(public_address)
+    it 'failure' do
+      post :create, params: { public_address: public_address, network_id: 1 }, format: :json
+      post :create, params: { public_address: public_address, network_id: 2 }, format: :json
+      parsed_response = JSON.parse response.body, symbolize_names: true
+      expect(parsed_response[:failed]).to be true
+    end
+
+    it 'count changed' do
+      expect { post :create, params: { public_address: public_address, network_id: 1 }, format: :json }.to change(Account, :count).by(1)
+    end
   end
 
   it '#auth' do
