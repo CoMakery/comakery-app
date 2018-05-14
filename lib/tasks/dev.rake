@@ -22,7 +22,7 @@ namespace :dev do
           puts e.message
         end
       end
-      account.save
+      account.save(validate: false)
       puts account.errors.full_messages
     end
 
@@ -35,7 +35,7 @@ namespace :dev do
       project.awards.each do |award|
         auth = Authentication.find_by id: award.account_id
         account_id = auth ? auth.account_id : award.account_id
-        award.update channel_id: channel.id, account_id: account_id
+        award.update_columns channel_id: channel.id, account_id: account_id
         puts award.errors.full_messages
       end
       puts channel.errors.full_messages

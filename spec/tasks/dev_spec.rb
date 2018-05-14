@@ -64,6 +64,28 @@ describe 'rake dev:migrate', type: :task do
     expect(award.account).to eq account
   end
 
+  it 'migrate data skip project validation' do
+    account = create(:account, first_name: nil, last_name: nil)
+    authentication = create(:authentication, account: account, oauth_response: auth_hash)
+    project = create(:project, account: account, public: true, slack_channel: 'general', license_finalized: true)
+    project1 = create(:project, account: account, public: false, slack_channel: 'general')
+    award_type = create(:award_type, project: project)
+    award = create(:award, account_id: authentication.id, award_type: award_type)
+
+    task.execute
+    account.reload
+    expect(account.first_name).to eq 'Bob'
+    expect(account.last_name).to eq 'Roberts'
+    expect(account.decorate.nickname).to eq 'bobroberts'
+    project.reload
+    project1.reload
+    award.reload
+    expect(project.public_listed?).to be_truthy
+    expect(project1.public_listed?).to be_falsey
+    expect(award.channel).to eq Channel.first
+    expect(award.account).to eq account
+  end
+
   it 'migrate data - ignore missing missing image' do
     auth_hash['info']['image'] = Rails.root.join('spec', 'fixtures', 'not_exist.png')
     account = create(:account, first_name: nil, last_name: nil)
