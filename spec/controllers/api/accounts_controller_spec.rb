@@ -38,22 +38,33 @@ describe Api::AccountsController do
       expect(parsed_response[:failed]).to be true
     end
 
-    it 'count changed' do
+    it 'count of accounts changed' do
       expect { post :create, params: { public_address: public_address, network_id: 1 }, format: :json }.to change(Account, :count).by(1)
     end
   end
 
-  it '#auth' do
-    post :create, params: { public_address: public_address, network_id: 1 }, format: :json
-    account = Account.last
-    account.update(nonce: '18822')
-    post :auth, params: { public_address: public_address, signature: signature }, format: :json
-    parsed_response = JSON.parse response.body, symbolize_names: true
-    expect(parsed_response[:success]).to be true
+  describe '#auth' do
+    before { post :create, params: { public_address: public_address, network_id: 1 }, format: :json }
 
-    # use this signature again
-    post :auth, params: { public_address: public_address, signature: signature }, format: :json
-    parsed_response = JSON.parse response.body, symbolize_names: true
-    expect(parsed_response[:success]).to be false
+    it 'with valid \'public_address\' param' do
+      account = Account.last
+      account.update(nonce: '18822')
+      post :auth, params: { public_address: public_address, signature: signature }, format: :json
+      parsed_response = JSON.parse response.body, symbolize_names: true
+      expect(parsed_response[:success]).to be true
+
+      # use this signature again
+      post :auth, params: { public_address: public_address, signature: signature }, format: :json
+      parsed_response = JSON.parse response.body, symbolize_names: true
+      expect(parsed_response[:success]).to be false
+    end
+
+    it 'with invalid \'public_address\' param' do
+      account = Account.last
+      account.update(nonce: '18822')
+      post :auth, params: { public_address: 'invalid', signature: signature }, format: :json
+      parsed_response = JSON.parse response.body, symbolize_names: true
+      expect(parsed_response[:success]).to be false
+    end
   end
 end
