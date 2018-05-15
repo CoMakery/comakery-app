@@ -44,7 +44,7 @@ describe 'rake dev:migrate', type: :task do
 
   it 'migrate data' do
     account = create(:account, first_name: nil, last_name: nil)
-    authentication = create(:authentication, account: account, oauth_response: auth_hash)
+    authentication = create(:authentication, account: account, oauth_response: auth_hash, slack_first_name: 'Bob', slack_last_name: 'Roberts', slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
     project = create(:project, account: account, public: true, slack_channel: 'general')
     project1 = create(:project, account: account, public: false, slack_channel: 'general')
     award_type = create(:award_type, project: project)
@@ -68,7 +68,7 @@ describe 'rake dev:migrate', type: :task do
 
   it 'migrate data skip project validation' do
     account = create(:account, first_name: nil, last_name: nil)
-    authentication = create(:authentication, account: account, oauth_response: auth_hash)
+    authentication = create(:authentication, account: account, oauth_response: auth_hash, slack_first_name: 'Bob', slack_last_name: 'Roberts', slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
     project = create(:project, account: account, public: true, slack_channel: 'general', license_finalized: true)
     project1 = create(:project, account: account, public: false, slack_channel: 'general')
     award_type = create(:award_type, project: project)
@@ -89,9 +89,8 @@ describe 'rake dev:migrate', type: :task do
   end
 
   it 'migrate data - ignore missing missing image' do
-    auth_hash['info']['image'] = Rails.root.join('spec', 'fixtures', 'not_exist.png')
     account = create(:account, first_name: nil, last_name: nil)
-    create(:authentication, account: account, oauth_response: auth_hash)
+    create(:authentication, account: account, oauth_response: auth_hash, slack_first_name: 'Bob', slack_last_name: 'Roberts', slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
 
     task.execute
     account.reload

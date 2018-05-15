@@ -4,17 +4,16 @@ namespace :dev do
     Authentication.all.each do |authentication|
       next unless authentication.slack?
       oauth = authentication.oauth_response
-      next unless oauth
-      authentication.build_team oauth
+      authentication.build_team(oauth) if oauth
       account = authentication.account
-      if account.decorate.name.blank?
-        account.first_name = oauth['info']['first_name']
-        account.last_name = oauth['info']['last_name']
-        account.nickname = oauth['info']['user']
-      end
-      if oauth['info']['image'].present?
+
+      account.first_name = authentication.slack_first_name
+      account.last_name = authentication.slack_last_name
+      account.nickname = authentication.slack_user_name
+
+      if authentication.slack_image_32_url.present?
         begin
-          open(oauth['info']['image'], 'rb') do |file|
+          open(authentication.slack_image_32_url, 'rb') do |file|
             account.image = file
           end
         # rubocop:disable Lint/RescueException

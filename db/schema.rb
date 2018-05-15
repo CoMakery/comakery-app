@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180508085905) do
+ActiveRecord::Schema.define(version: 20180423025725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,14 +43,9 @@ ActiveRecord::Schema.define(version: 20180508085905) do
     t.string "image_content_size"
     t.string "image_content_type"
     t.string "nickname"
-    t.string "public_address"
-    t.string "nonce"
-    t.string "network_id"
-    t.boolean "system_email", default: false
     t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
-    t.index ["public_address"], name: "index_accounts_on_public_address"
     t.index ["remember_me_token"], name: "index_accounts_on_remember_me_token"
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token"
   end
@@ -71,6 +66,10 @@ ActiveRecord::Schema.define(version: 20180508085905) do
     t.datetime "updated_at"
     t.string "uid", null: false
     t.string "token"
+    t.string "slack_user_name"
+    t.string "slack_first_name"
+    t.string "slack_last_name"
+    t.string "slack_image_32_url"
     t.jsonb "oauth_response"
     t.string "email"
     t.string "confirm_token"
