@@ -62,6 +62,8 @@ describe 'rake dev:migrate', type: :task do
     expect(project1.public_listed?).to be_falsey
     expect(award.channel).to eq Channel.first
     expect(award.account).to eq account
+    expect(project.channels.count).to eq 1
+    expect(project1.channels.count).to eq 1
   end
 
   it 'migrate data skip project validation' do

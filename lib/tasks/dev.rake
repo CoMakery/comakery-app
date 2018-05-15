@@ -31,7 +31,7 @@ namespace :dev do
       # rubocop:disable SkipsModelValidations
       project.update_column :visibility, vis
       next unless project.slack_channel
-      channel = project.channels.find_or_create_by name: project.slack_channel, team: project.teams.last
+      channel = project.channels.find_or_create_by channel_id: project.slack_channel, team: project.teams.last
       project.awards.each do |award|
         auth = Authentication.find_by id: award.account_id
         account_id = auth ? auth.account_id : award.account_id
