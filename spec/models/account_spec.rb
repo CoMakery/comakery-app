@@ -114,14 +114,6 @@ describe Account do
     end
   end
 
-  describe '#name' do
-    it 'returns the first and last name and falls back to the user name' do
-      expect(build(:account, first_name: 'Bob', last_name: 'Johnson').decorate.name).to eq('Bob Johnson')
-      expect(build(:account, first_name: nil, last_name: 'Johnson').decorate.name).to eq('Johnson')
-      expect(build(:account, first_name: 'Bob', last_name: '').decorate.name).to eq('Bob')
-    end
-  end
-
   describe '#total_awards_earned' do
     let!(:contributor) { create(:account) }
     let!(:bystander) { create(:account) }
