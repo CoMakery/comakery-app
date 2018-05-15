@@ -3,8 +3,9 @@ class Views::Projects::Landing < Views::Projects::Base
 
   def content
     if current_account
+      projects_header('')
       if my_projects.any?
-        projects_header('mine')
+        full_row { h1 'mine' }
         projects_block(my_projects, my_project_contributors)
       end
       if team_projects.any?

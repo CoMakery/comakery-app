@@ -25,7 +25,7 @@ describe 'landing page', :js do
       expect(page).to have_content 'gleenn'
     end
 
-    within('h2') { expect(page.text).to eq('mine') }
+    expect(page).to have_content 'mine'
     expect(page).to have_content 'New Project'
 
     expect(page.all('.project').size).to eq(12)
