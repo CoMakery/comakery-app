@@ -92,6 +92,14 @@ class Views::Accounts::Show < Views::Base
           }
           row {
             column('small-4') {
+              text 'Email'
+            }
+            column('small-8') {
+              text current_account.email
+            }
+          }
+          row {
+            column('small-4') {
               text 'First Name'
             }
             column('small-8') {

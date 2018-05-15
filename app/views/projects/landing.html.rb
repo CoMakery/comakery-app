@@ -3,8 +3,10 @@ class Views::Projects::Landing < Views::Projects::Base
 
   def content
     if current_account
-      projects_header('mine')
-      projects_block(my_projects, my_project_contributors)
+      if my_projects.any?
+        projects_header('mine')
+        projects_block(my_projects, my_project_contributors)
+      end
       if team_projects.any?
         full_row { h1 'team' }
         projects_block(team_projects, team_project_contributors)
