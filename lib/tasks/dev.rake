@@ -6,9 +6,12 @@ namespace :dev do
       oauth = authentication.oauth_response
       authentication.build_team(oauth) if oauth
       account = authentication.account
-
-      account.first_name = authentication.slack_first_name
-      account.last_name = authentication.slack_last_name
+      if authentication.slack_first_name || authentication.slack_last_name
+        account.first_name = authentication.slack_first_name
+        account.last_name = authentication.slack_last_name
+      else
+        account.nickname = authentication.slack_user_name
+      end
 
       if authentication.slack_image_32_url.present?
         begin

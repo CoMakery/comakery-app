@@ -95,4 +95,26 @@ describe 'rake dev:migrate', type: :task do
     expect(account.first_name).to eq 'Bob'
     expect(account.last_name).to eq 'Roberts'
   end
+
+  it "migrate data - don't use slack user name if first_name, last_name exist" do
+    account = create(:account, first_name: nil, last_name: nil)
+    create(:authentication, account: account, oauth_response: auth_hash, slack_first_name: 'Bob', slack_last_name: 'Roberts', slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+
+    task.execute
+    account.reload
+    expect(account.first_name).to eq 'Bob'
+    expect(account.last_name).to eq 'Roberts'
+    expect(account.nickname).to be_nil
+  end
+
+  it 'migrate data - use slack user name as nickname if first_name, last_name exist' do
+    account = create(:account, first_name: nil, last_name: nil)
+    create(:authentication, account: account, oauth_response: auth_hash, slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+
+    task.execute
+    account.reload
+    expect(account.first_name).to be_nil
+    expect(account.last_name).to be_nil
+    expect(account.nickname).to eq 'bobroberts'
+  end
 end
