@@ -9,7 +9,6 @@ namespace :dev do
 
       account.first_name = authentication.slack_first_name
       account.last_name = authentication.slack_last_name
-      account.nickname = authentication.slack_user_name
 
       if authentication.slack_image_32_url.present?
         begin
