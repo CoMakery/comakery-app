@@ -181,5 +181,11 @@ describe Award do
       award1.update channel_id: project.channels.last.id
       expect(award1.reload.discord?).to be_truthy
     end
+
+    it 'round total_amount' do
+      award.total_amount = 2.2
+      award.save
+      expect(award.reload.total_amount).to eq 2
+    end
   end
 end
