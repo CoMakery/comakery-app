@@ -34,7 +34,6 @@ gem 'refile-mini_magick'
 gem 'refile-s3'
 gem 'responders'
 gem 'sass-rails'
-gem 'schmooze'
 gem 'sdoc', group: :doc
 gem 'sendgrid-ruby'
 gem 'sidekiq'

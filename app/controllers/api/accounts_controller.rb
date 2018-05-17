@@ -20,18 +20,16 @@ class Api::AccountsController < Api::ApiController
   end
 
   def auth
-    eth_util = EthereumUtilSchmoozer.new(Rails.root)
     @account = Account.find_by public_address: params[:public_address]
     if params[:public_address].blank? || @account.nil?
       render json: { success: false }
     else
-      msg = "Comakery, I am signing my nonce: #{@account.nonce}"
-      @matched = eth_util.verify_signature(params[:public_address], params[:signature], msg)
-      if @matched
+      matched = @account.nonce == params[:nonce]
+      if matched
         @account.update!(nonce: rand.to_s[2..6])
         session[:account_id] = @account.id
       end
-      render json: { success: @matched }
+      render json: { success: matched }
     end
   end
 end

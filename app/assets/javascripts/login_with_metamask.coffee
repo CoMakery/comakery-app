@@ -1,13 +1,13 @@
 window.loginWithMetaMask = {}
 
 loginWithMetaMask.handleAuthenticate = (ref) ->
-  publicAddress = ref.publicAddress
-  signature = ref.signature
+  publicAddress = ref.public_address
+  nonce = ref.nonce
   fetch('/api/accounts/auth',
     credentials: 'same-origin'
     body: JSON.stringify(
       public_address: publicAddress
-      signature: signature)
+      nonce: nonce)
     headers: 'Content-Type': 'application/json'
     method: 'POST').then((response) ->
       response.json()
@@ -20,18 +20,6 @@ loginWithMetaMask.handleSignup = (publicAddress, network) ->
     headers: 'Content-Type': 'application/json'
     method: 'POST').then (response) ->
     response.json()
-
-loginWithMetaMask.handleSignMessage = (ref) ->
-  publicAddress = ref.public_address
-  nonce = ref.nonce
-  new Promise((resolve, reject) ->
-    web3.personal.sign web3.fromUtf8('Comakery, I am signing my nonce: ' + nonce), publicAddress, (err, signature) ->
-      if err
-        return reject(err)
-      resolve
-        publicAddress: publicAddress
-        signature: signature
-)
 
 loginWithMetaMask.handleClick = ->
   $target = $('.auth-button.signin-with-metamask')
@@ -49,7 +37,7 @@ loginWithMetaMask.handleClick = ->
     response.json()
   ).then((data) ->
     if data.public_address then data else loginWithMetaMask.handleSignup(publicAddress, web3.version.network)
-  ).then(loginWithMetaMask.handleSignMessage).then(loginWithMetaMask.handleAuthenticate).catch (err) ->
+  ).then(loginWithMetaMask.handleAuthenticate).catch (err) ->
     $target.find('span').text('Sign in with MetaMask')
     return
   return
