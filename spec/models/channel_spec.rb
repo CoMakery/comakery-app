@@ -56,5 +56,18 @@ RSpec.describe Channel, type: :model do
       channel = create :channel, project: project, channel_id: 'channel_id', team: team1
       expect(channel.name).to eq 'general'
     end
+
+    it 'invalid_params' do
+      attributes = {}
+      expect(described_class.invalid_params(attributes)).to eq true
+      attributes['channel_id'] = 1
+      expect(described_class.invalid_params(attributes)).to eq true
+      attributes['channel_id'] = nil
+      attributes['team_id'] = 10
+      expect(described_class.invalid_params(attributes)).to eq true
+      attributes['channel_id'] = 1
+      attributes['team_id'] = 10
+      expect(described_class.invalid_params(attributes)).to eq false
+    end
   end
 end
