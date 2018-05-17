@@ -24,12 +24,12 @@ loginWithMetaMask.handleSignup = (publicAddress, network) ->
 loginWithMetaMask.handleClick = ->
   $target = $('.auth-button.signin-with-metamask')
   if !window.web3
-    window.alert 'Please install MetaMask first.'
+    $('#metamaskModal1').foundation('open')
     return
   if !web3
     web3 = new Web3(window.web3.currentProvider)
   if !web3.eth.coinbase
-    window.alert 'Please activate MetaMask first.'
+    $('#metamaskModal1').foundation('open')
     return
   publicAddress = web3.eth.coinbase.toLowerCase()
   $target.find('span').text('Loading ...')

@@ -38,5 +38,6 @@ class Views::Sessions::New < Views::Base
         end
       }
     }
+    render 'metamask_modal'
   end
 end
