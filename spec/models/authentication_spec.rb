@@ -221,4 +221,11 @@ describe Authentication do
       end
     end
   end
+
+  it 'set authentication confirm' do
+    authentication = create :authentication, confirm_token: '1235'
+    expect(authentication.confirmed?).to be_falsey
+    authentication.confirm!
+    expect(authentication.reload.confirmed?).to be_truthy
+  end
 end
