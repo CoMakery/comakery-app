@@ -45,7 +45,9 @@ class Views::Projects::Landing < Views::Projects::Base
             }
             a('Sign in with Slack', class: buttonish << 'margin-small', href: login_path)
             a('Sign in with Discord', class: buttonish << 'margin-small', href: login_discord_path)
+            a('Sign in with MetaMask', class: buttonish << 'margin-small signin-with-metamask', href: 'javascript:void(0)')
             a("or join #{t('company_name')}'s Slack", class: 'beta-signup', href: t('company_public_slack_url'))
+            render 'sessions/metamask_modal'
           }
         }
         div(class: 'how-it-works') {
