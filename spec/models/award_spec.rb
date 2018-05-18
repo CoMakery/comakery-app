@@ -146,7 +146,7 @@ describe Award do
   describe 'helper methods' do
     let!(:team) { create :team }
     let!(:team1) { create :team, provider: 'discord' }
-    let!(:account) { create :account }
+    let!(:account) { create :account, email: 'reciver@test.st' }
     let!(:authentication) { create :authentication, account: account }
     let!(:account1) { create :account }
     let!(:authentication1) { create :authentication, account: account1, provider: 'discord' }
@@ -186,6 +186,29 @@ describe Award do
       award.total_amount = 2.2
       award.save
       expect(award.reload.total_amount).to eq 2
+    end
+
+    it 'return recipient_auth_team' do
+      auth_team = account1.authentication_teams.last
+      award1.channel = project.channels.last
+      award1.save
+      expect(award.recipient_auth_team).to be_nil
+      expect(award1.recipient_auth_team).to eq auth_team
+    end
+
+    it 'send send_confirm_email' do
+      award.update email: 'reciver@test.st'
+      expect { award.send_confirm_email }.to change { ActionMailer::Base.deliveries.count }.by(0)
+      award.update confirm_token: '1234'
+      expect { award.send_confirm_email }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+
+    it 'confirm award' do
+      award.update email: 'reciver@test.st', confirm_token: '1234'
+      award.confirm!(account1)
+      award.reload
+      expect(award.account).to eq account1
+      expect(award.confirmed?).to eq true
     end
   end
 end
