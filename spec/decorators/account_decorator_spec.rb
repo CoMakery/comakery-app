@@ -83,6 +83,28 @@ describe AccountDecorator do
     end
   end
 
+  describe '#percentage_of_unpaid_pretty' do
+    let!(:contributor) { create(:account) }
+    let!(:bystander) { create(:account) }
+    let!(:project) { create :project, payment_type: 'revenue_share' }
+    let!(:award_type) { create(:award_type, amount: 10, project: project) }
+    let!(:revenue) { create :revenue, amount: 1000, project: project }
+
+    before do
+      award_type.awards.create_with_quantity(2, account: contributor, issuer: project.account)
+      project.payments.create_with_quantity(quantity_redeemed: 10, account: contributor)
+      project.payments.create_with_quantity(quantity_redeemed: 1, account: contributor)
+    end
+
+    specify do
+      expect(bystander.decorate.percentage_of_unpaid_pretty(project)).to eq '0.0%'
+    end
+
+    specify do
+      expect(contributor.decorate.percentage_of_unpaid_pretty(project)).to eq '100.0%'
+    end
+  end
+
   describe 'revenue' do
     let!(:contributor) { create(:account) }
     let!(:bystander) { create(:account) }
