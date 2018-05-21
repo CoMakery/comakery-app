@@ -94,13 +94,14 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "award_type_id", null: false
-    t.integer "account_id"
+    t.integer "authentication_id", null: false
     t.string "ethereum_transaction_address"
     t.text "proof_id", null: false
     t.string "proof_link"
     t.decimal "quantity", default: "1.0"
     t.integer "total_amount"
     t.integer "unit_amount"
+    t.integer "account_id"
     t.integer "channel_id"
     t.string "uid"
     t.string "confirm_token"

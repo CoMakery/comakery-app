@@ -48,7 +48,7 @@ describe 'rake dev:migrate', type: :task do
     project = create(:project, account: account, public: true, slack_channel: 'general')
     project1 = create(:project, account: account, public: false, slack_channel: 'general')
     award_type = create(:award_type, project: project)
-    award = create(:award, account_id: authentication.id, award_type: award_type)
+    award = create(:award, authentication_id: authentication.id, award_type: award_type)
 
     task.execute
     account.reload
@@ -71,7 +71,7 @@ describe 'rake dev:migrate', type: :task do
     project = create(:project, account: account, public: true, slack_channel: 'general', license_finalized: true)
     project1 = create(:project, account: account, public: false, slack_channel: 'general')
     award_type = create(:award_type, project: project)
-    award = create(:award, account_id: authentication.id, award_type: award_type)
+    award = create(:award, authentication_id: authentication.id, award_type: award_type)
 
     task.execute
     account.reload

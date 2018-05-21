@@ -4,6 +4,7 @@ class Award < ApplicationRecord
   include EthereumAddressable
 
   belongs_to :account, optional: true
+  belongs_to :authentication, optional: true
   belongs_to :award_type
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
