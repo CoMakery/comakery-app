@@ -51,7 +51,7 @@ class Account < ApplicationRecord
   end
 
   def award_by_project(project)
-    groups = project.awards.where(account: self).group_by { |a| a.award_type.name }
+    groups = project.awards.order(created_at: :desc).where(account: self).group_by { |a| a.award_type.name }
     arr = []
     groups.each do |group|
       arr << { name: group[0], total: group[1].sum(&:total_amount) }

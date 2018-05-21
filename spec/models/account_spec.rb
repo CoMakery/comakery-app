@@ -293,7 +293,7 @@ describe Account do
     award_type1 = create :award_type, project: project, name: 'type 2', amount: 20
     create :award, award_type: award_type, account: account
     create :award, award_type: award_type1, account: account
-    expect(account.award_by_project(project)).to eq [{ name: 'type 1', total: 10 }, { name: 'type 2', total: 20 }]
+    expect(account.award_by_project(project)).to eq [{ name: 'type 2', total: 20 }, { name: 'type 1', total: 10 }]
   end
   describe 'team projects' do
     let!(:team) { create :team }
