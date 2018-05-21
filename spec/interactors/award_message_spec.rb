@@ -46,5 +46,18 @@ describe AwardMessage do
       award = award.decorate
       expect(result.notifications_message).to eq "@#{award.issuer_user_name} sent @#{award.recipient_user_name} a #{award.total_amount} token #{award.award_type.name} for \"Great work\" on the #{award.project.title} project: #{project_url(award.project)}. Set up your account: #{account_url} to receive Ethereum tokens."
     end
+
+    it 'generate self issued message' do
+      stub_discord_channels
+      channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'slack_channel')
+      award = create :award, award_type: award_type, issuer: issuer, account: issuer, channel: channel
+      result = described_class.call(award: award)
+      award = award.decorate
+      expect(result.notifications_message).to eq "@#{award.issuer_user_name} self-issued for \"Great work\" on the #{award.project.title} project: #{project_url(award.project)}."
+      project.update ethereum_enabled: true
+      result = described_class.call(award: award.reload)
+      award = award.decorate
+      expect(result.notifications_message).to eq "@#{award.issuer_user_name} self-issued for \"Great work\" on the #{award.project.title} project: #{project_url(award.project)}. Set up your account: #{account_url} to receive Ethereum tokens."
+    end
   end
 end
