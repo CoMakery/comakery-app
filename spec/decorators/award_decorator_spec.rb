@@ -10,6 +10,10 @@ describe AwardDecorator do
     it 'returns the user name' do
       expect(award.decorate.issuer_display_name).to eq('johnny johnny')
     end
+
+    it 'issuer_user_name' do
+      expect(award.decorate.issuer_user_name).to eq 'johnny johnny'
+    end
   end
 
   context 'recipient names' do
@@ -26,7 +30,7 @@ describe AwardDecorator do
 
     describe '#recipient_user_name' do
       it 'returns the recipient name' do
-        expect(award.decorate.recipient_display_name).to eq('Betty Ross')
+        expect(award.decorate.recipient_user_name).to eq('Betty Ross')
       end
     end
 
