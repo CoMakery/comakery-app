@@ -139,4 +139,48 @@ describe 'rake dev:migrate', type: :task do
     expect(account.last_name).to eq 'Roberts'
     expect(account.nickname).to be_nil
   end
+
+  it 'migrate data - clear the nickname if adding first name' do
+    account = create(:account, nickname: 'bobroberts', first_name: nil, last_name: nil)
+    create(:authentication, account: account, oauth_response: auth_hash, slack_user_name: 'bobroberts', slack_first_name: 'Bob', slack_last_name: nil, slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+
+    task.execute
+    account.reload
+    expect(account.first_name).to eq 'Bob'
+    expect(account.last_name).to be_nil
+    expect(account.nickname).to be_nil
+  end
+
+  it 'migrate data - clear the nickname if adding last name' do
+    account = create(:account, nickname: 'bobroberts', first_name: nil, last_name: nil)
+    create(:authentication, account: account, oauth_response: auth_hash, slack_user_name: 'bobroberts', slack_first_name: nil, slack_last_name: 'Roberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+
+    task.execute
+    account.reload
+    expect(account.first_name).to be_nil
+    expect(account.last_name).to eq 'Roberts'
+    expect(account.nickname).to be_nil
+  end
+
+  it 'migrate data - should fill in just account last name if first name present' do
+    account = create(:account, nickname: nil, first_name: 'Randy', last_name: nil)
+    create(:authentication, account: account, oauth_response: auth_hash, slack_user_name: 'bobroberts', slack_first_name: nil, slack_last_name: 'Roberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+
+    task.execute
+    account.reload
+    expect(account.first_name).to eq 'Randy'
+    expect(account.last_name).to eq 'Roberts'
+    expect(account.nickname).to be_nil
+  end
+
+  it 'migrate data - should fill in just account first name if last name present' do
+    account = create(:account, nickname: nil, first_name: nil, last_name: 'Jenkins')
+    create(:authentication, account: account, oauth_response: auth_hash, slack_user_name: 'bobroberts', slack_first_name: 'Bob', slack_last_name: 'Roberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+
+    task.execute
+    account.reload
+    expect(account.first_name).to eq 'Bob'
+    expect(account.last_name).to eq 'Jenkins'
+    expect(account.nickname).to be_nil
+  end
 end

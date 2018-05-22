@@ -7,8 +7,9 @@ namespace :dev do
       authentication.build_team(oauth) if oauth
       account = authentication.account
       if authentication.slack_first_name || authentication.slack_last_name
-        account.first_name = authentication.slack_first_name
-        account.last_name = authentication.slack_last_name
+        account.first_name ||= authentication.slack_first_name
+        account.last_name ||= authentication.slack_last_name
+        account.nickname = nil
       elsif account.first_name.blank? && account.last_name.blank?
         account.nickname = authentication.slack_user_name
       end
