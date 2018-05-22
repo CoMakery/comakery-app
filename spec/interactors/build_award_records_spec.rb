@@ -23,6 +23,17 @@ describe BuildAwardRecords do
     project.channels.create(team: team, channel_id: 'channel_id', name: 'slack_channel')
   end
 
+  context 'send email award' do
+    it 'send award notification to email' do
+      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: nil, award_params: {
+        description: 'This rocks!!11',
+        uid: 'test@test.st'
+      }, total_tokens_issued: 0)
+
+      expect(result.award.confirm_token).not_to be_nil
+      expect(result.award.email).to eq 'test@test.st'
+    end
+  end
   context 'when the account/auth exists already in the db' do
     it 'builds a award for the given slack user id with the matching account from the db' do
       recipient
@@ -114,6 +125,19 @@ describe BuildAwardRecords do
         expect(result).not_to be_success
         expect(result.message).to eq("Sorry, you can't send more awards than the project's maximum number of allowable tokens")
       end.not_to change { Award.count }
+    end
+
+    it 'returns an error message if reach maximum token per month' do
+      recipient
+      recipient_authentication
+      award_type.update!(amount: project.maximum_tokens - 1)
+
+      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
+        award_type_id: award_type.to_param,
+        uid: recipient_authentication.uid
+      }, total_tokens_issued: 0)
+      expect(result.message).to eq("Sorry, you can't send more awards this month than the project's maximum number of allowable tokens per month")
+      expect(result).not_to be_success
     end
 
     it 'raises based on award.total_amount with multiple award unit quantity' do
