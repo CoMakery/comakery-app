@@ -63,7 +63,6 @@ describe 'awarding users' do
 
       fill_in :award_quantity, with: '1.579'
       select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
-
       fill_in 'Email Address', with: 'U99M9QYFQ'
 
       click_button 'Send'
