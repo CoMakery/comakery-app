@@ -17,6 +17,7 @@ describe ProjectsController do
   describe '#unlisted' do
     let!(:public_unlisted_project) { create(:project, account: account, visibility: 'public_unlisted', title: 'Unlisted Project') }
     let!(:member_unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'Unlisted Project') }
+    let!(:normal_project) { create :project, account: account }
     let!(:account2) { create :account }
     let!(:authentication2) { create(:authentication, account: account2) }
 
@@ -38,6 +39,12 @@ describe ProjectsController do
       get :unlisted, params: { long_id: member_unlisted_project.long_id }
       expect(response.code).to eq '302'
       expect(assigns(:project)).to eq member_unlisted_project
+    end
+
+    it 'redirect_to project/id page for normal project' do
+      login account
+      get :unlisted, params: { long_id: normal_project.long_id }
+      expect(response).to redirect_to(project_path(normal_project))
     end
 
     it 'cannot access unlisted project by id' do
