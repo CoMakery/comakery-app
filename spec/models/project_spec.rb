@@ -11,6 +11,12 @@ describe Project do
                 "Legal project owner can't be blank"].sort)
     end
 
+    it 'rails error if not found Ethereum address' do
+      stub_const('Comakery::Ethereum::ADDRESS', {})
+      expect(Comakery::Ethereum::ADDRESS['account']).to be_nil
+      expect { described_class.create(payment_type: 'project_token', ethereum_contract_address: '111') }.to raise_error(ArgumentError)
+    end
+
     describe 'payment types' do
       let(:project) { build :project, royalty_percentage: nil, maximum_royalties_per_month: nil }
 
