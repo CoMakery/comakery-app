@@ -107,7 +107,7 @@ describe 'rake dev:migrate', type: :task do
     expect(account.nickname).to be_nil
   end
 
-  it 'migrate data - use slack user name as nickname if first_name, last_name exist' do
+  it 'migrate data - use slack user name as nickname if first_name, last_name do not exist' do
     account = create(:account, first_name: nil, last_name: nil)
     create(:authentication, account: account, oauth_response: auth_hash, slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
 
@@ -116,5 +116,27 @@ describe 'rake dev:migrate', type: :task do
     expect(account.first_name).to be_nil
     expect(account.last_name).to be_nil
     expect(account.nickname).to eq 'bobroberts'
+  end
+
+  it 'migrate data - do not add a nickname if the account already has a first_name' do
+    account = create(:account, first_name: 'Bob', last_name: nil)
+    create(:authentication, account: account, oauth_response: auth_hash, slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+
+    task.execute
+    account.reload
+    expect(account.first_name).to eq 'Bob'
+    expect(account.last_name).to be_nil
+    expect(account.nickname).to be_nil
+  end
+
+  it 'migrate data - do not add a nickname if the account already has a last_name' do
+    account = create(:account, first_name: nil, last_name: 'Roberts')
+    create(:authentication, account: account, oauth_response: auth_hash, slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+
+    task.execute
+    account.reload
+    expect(account.first_name).to be_nil
+    expect(account.last_name).to eq 'Roberts'
+    expect(account.nickname).to be_nil
   end
 end

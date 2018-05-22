@@ -9,7 +9,7 @@ namespace :dev do
       if authentication.slack_first_name || authentication.slack_last_name
         account.first_name = authentication.slack_first_name
         account.last_name = authentication.slack_last_name
-      else
+      elsif account.first_name.blank? && account.last_name.blank?
         account.nickname = authentication.slack_user_name
       end
 
