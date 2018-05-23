@@ -38,7 +38,7 @@ Rails.application.routes.draw do
       get :landing
     end
   end
-
+  get '/p/:long_id' => "projects#unlisted", as: :unlisted_project
   get "awards/confirm/:token" => "awards#confirm", as: :confirm_award
 
   resources :teams, only: [:index] do

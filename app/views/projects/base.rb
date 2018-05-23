@@ -27,8 +27,9 @@ class Views::Projects::Base < Views::Base
   end
 
   def project_block(project, contributors)
+    path = project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
     row(class: (current_account&.same_team_or_owned_project?(project) ? 'project project-highlighted' : 'project').to_s, id: "project-#{project.to_param}") {
-      a(href: project_path(project)) {
+      a(href: path) {
         div(class: 'sixteen-nine') {
           div(class: 'content') {
             img(src: project_image_url(project, 132), class: 'image-block')
@@ -38,9 +39,9 @@ class Views::Projects::Base < Views::Base
       div(class: 'info') {
         div(class: 'text-overlay') {
           h5 {
-            a(project.title, href: project_path(project), class: 'project-link')
+            a(project.title, href: path, class: 'project-link')
           }
-          a(href: project_path(project)) {
+          a(href: path) {
             i project.legal_project_owner
           }
         }
@@ -51,6 +52,7 @@ class Views::Projects::Base < Views::Base
           owner = project.account
 
           ([owner].compact + Array.wrap(contributors)).uniq(&:id).each do |contributor|
+            contributor = contributor.decorate
             tooltip(contributor.name) {
               img(src: account_image_url(contributor, 34), class: 'contributor avatar-img')
             }

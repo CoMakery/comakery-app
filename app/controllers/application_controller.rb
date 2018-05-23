@@ -28,8 +28,8 @@ class ApplicationController < ActionController::Base
   end
 
   # called from before_filter :require_login
-  def not_authenticated
-    redirect_to root_path
+  def not_authenticated(msg = nil)
+    redirect_to root_path, alert: msg
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
@@ -45,10 +45,10 @@ class ApplicationController < ActionController::Base
   end
 
   def require_login
-    if session[:account_id].blank? || !current_account.confirmed?
+    if session[:account_id].blank?
       not_authenticated
     elsif !current_account.confirmed?
-      not_authenticated
+      not_authenticated('Please confirm your email before continuing.')
     end
   end
 
@@ -60,8 +60,9 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def assign_project
-    project = Project.find(params[:project_id])
-    @project = project.decorate if project.can_be_access?(current_account)
+    project = Project.find_by id: params[:project_id]
+    project = Project.find_by long_id: params[:project_id] unless project
+    @project = project&.decorate if project&.can_be_access?(current_account)
     redirect_to root_path unless @project
   end
 

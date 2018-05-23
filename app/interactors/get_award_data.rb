@@ -32,25 +32,17 @@ class GetAwardData
   end
 
   def contributions_summary(project)
-    contributions = project.contributors_distinct.map do |contributor|
-      {
-        name: contributor.name,
-        avatar: avatar(contributor),
-        earned: contributor.total_awards_earned(project),
-        paid: contributor.total_awards_paid(project),
-        remaining: contributor.total_awards_remaining(project)
-      }
-    end
-
-    highest_earned_first(contributions)
+    contributions = project.contributors_distinct
+    highest_earned_first(contributions, project)
   end
 
-  def highest_earned_first(contributions)
-    contributions.sort { |a, b| b[:earned] <=> a[:earned] }
+  def highest_earned_first(contributions, project)
+    contributions.sort { |a, b| b.total_awards_earned(project) <=> a.total_awards_earned(project) }
   end
 
   def contributions_data(awards)
     awards.each_with_object({}) do |award, a_hash|
+      award = award.decorate
       a_hash[award.account_id] ||= { net_amount: 0 }
       a_hash[award.account_id][:name] ||= award.recipient_display_name
       a_hash[award.account_id][:net_amount] += award.total_amount
@@ -79,7 +71,7 @@ class GetAwardData
     empty_row_template = accounts.each_with_object({}) do |account, contributors|
       # using display names is potentially problematic because these aren't unique, and also they could be a stale copy in our DB
       # from when the user last logged in
-      contributors[account.name] = 0 if account
+      contributors[account.decorate.name] = 0 if account
     end.freeze
 
     awards_by_date = recent_awards.group_by { |a| a.created_at.to_date.iso8601 }
@@ -109,7 +101,7 @@ class GetAwardData
 
     (awards_on_day || []).each do |award|
       next unless award.account
-      name = award.account.name
+      name = award.account.decorate.name
       row[name] ||= 0
       row[name] += award.total_amount
     end

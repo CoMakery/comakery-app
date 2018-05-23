@@ -12,7 +12,7 @@ describe 'when redeeming revenue shares for payments' do
   let!(:project) do
     create(:project,
       royalty_percentage: 100,
-      public: true,
+      visibility: 'public_listed',
       payment_type: 'revenue_share',
       account: owner,
       require_confidentiality: false)
@@ -69,7 +69,7 @@ describe 'when redeeming revenue shares for payments' do
     click_on 'Redeem My Revenue Shares'
 
     within '.payments' do
-      expect(page.find('.payee')).to have_content(same_team_account.name)
+      expect(page.find('.payee')).to have_content(same_team_account.decorate.name)
       expect(page.find('.quantity-redeemed')).to have_content('2')
       expect(page.find('.share-value')).to have_content(/^\$12.34500000$/)
       expect(page.find('.total-value')).to have_content('$24.69')
@@ -188,7 +188,7 @@ describe 'when redeeming revenue shares for payments' do
     let!(:project) do
       create(:project,
         royalty_percentage: 100,
-        public: true,
+        visibility: 'public_listed',
         account: owner,
         require_confidentiality: false)
     end
@@ -197,7 +197,7 @@ describe 'when redeeming revenue shares for payments' do
       let!(:project) do
         create(:project,
           royalty_percentage: 100,
-          public: true,
+          visibility: 'public_listed',
           payment_type: 'revenue_share',
           account: owner,
           require_confidentiality: false)
@@ -213,7 +213,7 @@ describe 'when redeeming revenue shares for payments' do
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
 
-        expect(page.find('.payee')).to have_content(owner.name)
+        expect(page.find('.payee')).to have_content(owner.decorate.name)
         expect(page.find('.quantity-redeemed')).to have_content('50')
         expect(page.find('.share-value')).to have_content('$55.55500000')
         expect(page.find('.total-value')).to have_content('$2,777.75')
@@ -243,7 +243,7 @@ describe 'when redeeming revenue shares for payments' do
       let!(:project) do
         create(:project,
           royalty_percentage: 100,
-          public: true,
+          visibility: 'public_listed',
           payment_type: 'revenue_share',
           account: owner,
           require_confidentiality: false,
@@ -258,7 +258,7 @@ describe 'when redeeming revenue shares for payments' do
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
 
-        expect(page.find('.payee')).to have_content(owner.name)
+        expect(page.find('.payee')).to have_content(owner.decorate.name)
         expect(page.find('.quantity-redeemed')).to have_content('50')
         expect(page.find('.share-value')).to have_content('฿12.34500000')
         expect(page.find('.total-value')).to have_content('฿617.25000000')
@@ -287,7 +287,7 @@ describe 'when redeeming revenue shares for payments' do
       let!(:project) do
         create(:project,
           royalty_percentage: 100,
-          public: true,
+          visibility: 'public_listed',
           payment_type: 'revenue_share',
           account: owner,
           require_confidentiality: false,
@@ -302,7 +302,7 @@ describe 'when redeeming revenue shares for payments' do
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
 
-        expect(page.find('.payee')).to have_content(owner.name)
+        expect(page.find('.payee')).to have_content(owner.decorate.name)
         expect(page.find('.quantity-redeemed')).to have_content('50')
         expect(page.find('.share-value')).to have_content('Ξ12.34500000')
         expect(page.find('.total-value')).to have_content('Ξ617.25000000')
@@ -354,7 +354,7 @@ describe 'when redeeming revenue shares for payments' do
 
   describe 'non-members' do
     before do
-      project.update_attributes(require_confidentiality: false, public: true)
+      project.update_attributes(require_confidentiality: false, visibility: 'public_listed')
       visit logout_path
     end
 
@@ -378,7 +378,7 @@ describe 'when redeeming revenue shares for payments' do
     end
 
     it "non-members can't see payments if it's a private project" do
-      project.update_attribute(:public, false)
+      project.member!
 
       visit project_path(project)
       expect(page).not_to have_link 'Payments'

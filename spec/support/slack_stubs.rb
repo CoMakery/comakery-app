@@ -8,13 +8,13 @@ module SlackStubs
     {
       "id": auth.uid,
       "team_id": auth_team&.team_id,
-      "name": auth.account.name,
+      "name": auth.account.decorate.name,
       "deleted": false,
       "profile": {
         "first_name": auth.account.first_name,
         "last_name": auth.account.last_name,
-        "real_name": auth.account.name,
-        "real_name_normalized": auth.account.name,
+        "real_name": auth.account.decorate.name,
+        "real_name_normalized": auth.account.decorate.name,
         "email": auth.account.email
       }
     }

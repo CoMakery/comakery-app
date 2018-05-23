@@ -22,7 +22,7 @@ describe RevenuesController do
     end
 
     it 'anonymous can access public' do
-      other_project.update_attributes(public: true)
+      other_project.update_attributes(visibility: 'public_listed')
 
       get :index, params: { project_id: other_project.id }
       expect(assigns[:project]).to eq(other_project)

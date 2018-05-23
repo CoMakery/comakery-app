@@ -72,6 +72,7 @@ describe Account do
 
   describe '#send_award_notifications' do
     let!(:team) { create :team }
+    let!(:discord_team) { create :team, provider: 'discord' }
     let!(:project) { create :project, account: subject }
     let!(:award_type) { create :award_type, project: project }
     let!(:channel) { create :channel, team: team, project: project }
@@ -84,6 +85,15 @@ describe Account do
       allow(subject.slack).to receive(:send_award_notifications)
       subject.send_award_notifications award
       expect(subject.slack).to have_received(:send_award_notifications)
+    end
+
+    it 'sends a Discord notification' do
+      stub_discord_channels
+      channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
+      award = create :award, award_type: award_type, issuer: subject, channel: channel
+      allow(subject.discord_client).to receive(:send_message)
+      subject.send_award_notifications award
+      expect(subject.discord_client).to have_received(:send_message)
     end
   end
 
@@ -101,14 +111,6 @@ describe Account do
       account = create(:account)
       project = create(:project, account_id: account.id)
       expect(account.projects).to match_array([project])
-    end
-  end
-
-  describe '#name' do
-    it 'returns the first and last name and falls back to the user name' do
-      expect(build(:account, first_name: 'Bob', last_name: 'Johnson').name).to eq('Bob Johnson')
-      expect(build(:account, first_name: nil, last_name: 'Johnson').name).to eq('Johnson')
-      expect(build(:account, first_name: 'Bob', last_name: '').name).to eq('Bob')
     end
   end
 
@@ -246,6 +248,34 @@ describe Account do
       specify { expect(contributor.total_revenue_paid(project)).to eq 39 }
       specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
       specify { expect(contributor.total_revenue_unpaid(project)).to eq 61 }
+    end
+  end
+
+  describe '#accessable_projects' do
+    let!(:team) { create :team }
+    let!(:authentication) { create :authentication, account: account }
+    let!(:account1) { create :account }
+    let!(:authentication1) { create :authentication, account: account1 }
+    let!(:project1) { create :project, account: account, visibility: 'member', title: 'my private project' }
+    let!(:project2) { create :project, account: account, visibility: 'public_listed', title: 'my public project' }
+    let!(:project3) { create :project, account: account, visibility: 'archived', title: 'archived project' }
+    let!(:project4) { create :project, account: account, visibility: 'public_unlisted', title: 'unlisted project' }
+    let!(:project5) { create :project, account: account1, visibility: 'member', title: 'member project' }
+    let!(:project6) { create :project, visibility: 'member', title: 'other team private project' }
+    let!(:project7) { create :project, visibility: 'public_listed', title: 'other team public project' }
+
+    before do
+      team.build_authentication_team authentication
+      team.build_authentication_team authentication1
+      project1.channels.create(team: team, channel_id: 'general')
+      project2.channels.create(team: team, channel_id: 'general')
+      project3.channels.create(team: team, channel_id: 'general')
+      project4.channels.create(team: team, channel_id: 'general')
+      project5.channels.create(team: team, channel_id: 'general')
+    end
+
+    it 'show my accessable projects' do
+      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'member project', 'other team public project']
     end
   end
 end

@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'viewing projects, creating and editing', :js do
   let!(:team) { create :team }
   let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false) }
-  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, public: true) }
+  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, visibility: 'public_listed') }
   let!(:public_project_award_type) { create(:award_type, project: public_project) }
   let!(:public_project_award) { create(:award, award_type: public_project_award_type, created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, first_name: 'Glenn', last_name: 'Spanky', email: 'gleenn@example.com') }
@@ -41,7 +41,6 @@ describe 'viewing projects, creating and editing', :js do
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
 
     attach_file 'Project Image', Rails.root.join('spec', 'fixtures', 'helmet_cat.png')
-    expect(find_field('Set project as public')).not_to be_checked
 
     expect(find_field('project_maximum_tokens')['value']).to eq('1000000')
     fill_in 'project_maximum_tokens', with: '20000000'
@@ -78,7 +77,7 @@ describe 'viewing projects, creating and editing', :js do
     expect(award_type_inputs.size).to eq(4)
     fill_in 'Title', with: 'This is a project'
 
-    click_on 'Save'
+    click_on 'Save', class: 'last_submit'
 
     expect(page).to have_content 'Project created'
     expect(page).to have_content 'This is a project'
@@ -95,13 +94,10 @@ describe 'viewing projects, creating and editing', :js do
 
     expect(page.find('.project-image')[:src]).to match(/helmet_cat.png/)
 
-    expect(page).to have_unchecked_field('Set project as public')
     fill_in 'Title', with: 'This is an edited project'
     fill_in 'Description', with: 'This is an edited project description which is very informative'
     fill_in 'Project Tracker', with: 'http://github.com/here/is/my/tracker'
     fill_in 'Video', with: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'
-    uncheck 'Set project as public'
-    # uncheck 'Publish to Ethereum Blockchain'
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)
@@ -111,7 +107,7 @@ describe 'viewing projects, creating and editing', :js do
     expect(award_type_inputs.size).to eq(3)
 
     # youtube player throws js errors, ignore them:
-    ignore_js_errors { click_on 'Save' }
+    ignore_js_errors { click_on 'Save', class: 'last_submit' }
     ignore_js_errors { expect(page).to have_content 'Project updated' }
 
     expect(EthereumTokenContractJob.jobs.length).to eq(0)
@@ -169,7 +165,7 @@ describe 'viewing projects, creating and editing', :js do
         page.find("input[name*='[title]']").set('fancy title')
         page.find("input[name*='[community_awardable]']").set(true)
 
-        click_on 'Save'
+        click_on 'Save', class: 'last_submit'
 
         visit edit_project_path(project)
         award_type_amount_input = page.find("input[name*='[amount]']")
@@ -200,7 +196,7 @@ describe 'viewing projects, creating and editing', :js do
         page.find("input[name*='[title]']").set('fancy title')
         page.find("input[name*='[community_awardable]']").set(true)
 
-        click_on 'Save'
+        click_on 'Save', class: 'last_submit'
 
         visit edit_project_path(project)
 

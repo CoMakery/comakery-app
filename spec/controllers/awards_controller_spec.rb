@@ -2,8 +2,11 @@ require 'rails_helper'
 
 describe AwardsController do
   let!(:team) { create :team }
+  let!(:discord_team) { create :team, provider: 'discord' }
   let!(:issuer) { create(:authentication) }
+  let!(:issuer_discord) { create(:authentication, account: issuer.account, provider: 'discord') }
   let!(:receiver) { create(:authentication) }
+  let!(:receiver_discord) { create(:authentication, account: receiver.account, provider: 'discord') }
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
@@ -14,6 +17,8 @@ describe AwardsController do
     team.build_authentication_team issuer
     team.build_authentication_team receiver
     team.build_authentication_team other_auth
+    discord_team.build_authentication_team issuer_discord
+    discord_team.build_authentication_team receiver_discord
     project.channels.create(team: team, channel_id: '123')
   end
   describe '#index' do
@@ -34,7 +39,7 @@ describe AwardsController do
 
     context 'when logged out' do
       context 'with a public project' do
-        let!(:public_project) { create(:project, account: issuer.account, public: true) }
+        let!(:public_project) { create(:project, account: issuer.account, visibility: 'public_listed') }
         let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
 
         it 'shows awards for public projects' do
@@ -69,7 +74,7 @@ describe AwardsController do
     end
 
     context 'logged in' do
-      it 'records a award being created' do
+      it 'records a slack award being created' do
         expect_any_instance_of(Account).to receive(:send_award_notifications)
         allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
 
@@ -87,9 +92,41 @@ describe AwardsController do
         end.to change { project.awards.count }.by(1)
 
         expect(response).to redirect_to(project_path(project))
-        expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.name}")
+        expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.decorate.name}")
 
         award = Award.last
+        expect(award.award_type).to eq(award_type)
+        expect(award.account).to eq(receiver.account)
+        expect(award.description).to eq('This rocks!!11')
+        expect(award.quantity).to eq(1.5)
+        expect(EthereumTokenIssueJob.jobs.first['args']).to eq([award.id])
+      end
+
+      it 'records a discord award being created' do
+        expect_any_instance_of(Account).to receive(:send_award_notifications)
+        allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
+
+        stub_discord_channels
+        channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
+
+        expect do
+          post :create, params: {
+            project_id: project.to_param, award: {
+              uid: receiver_discord.uid,
+              award_type_id: award_type.to_param,
+              quantity: 1.5,
+              description: 'This rocks!!11',
+              channel_id: channel.id
+            }
+          }
+          expect(response.status).to eq(302)
+        end.to change { project.awards.count }.by(1)
+
+        expect(response).to redirect_to(project_path(project))
+        expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.decorate.name}")
+
+        award = Award.last
+        expect(award.discord?).to be_truthy
         expect(award.award_type).to eq(award_type)
         expect(award.account).to eq(receiver.account)
         expect(award.description).to eq('This rocks!!11')

@@ -24,7 +24,7 @@ class Views::Projects::Description < Views::Projects::Base
             h4 'About'
             p {
               text 'Lead by '
-              b project.account.name
+              b project.account.decorate.name
               # TODO: team(s)
               # text ' with '
               # strong project.slack_team_name
@@ -58,8 +58,8 @@ class Views::Projects::Description < Views::Projects::Base
                 li(class: 'top-contributors') {
                   h5 'Top Contributors'
                   award_data[:contributions_summary].first(5).each do |contributor|
-                    tooltip(contributor[:name]) {
-                      img(src: contributor[:avatar], class: 'avatar-img')
+                    tooltip(contributor.decorate.name) {
+                      img(src: account_image_url(contributor, 34), class: 'avatar-img')
                     }
                   end
                 }

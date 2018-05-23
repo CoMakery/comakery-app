@@ -24,7 +24,7 @@ class Views::Contributors::Index < Views::Projects::Base
 
       full_row {
         if award_data[:contributions_summary].present?
-          div(class: 'table-scroll table-box contributors') {
+          div(class: 'table-scroll table-box contributors', style: 'margin-bottom: 300px') {
             table(class: 'table-scroll', style: 'width: 100%') {
               tr(class: 'header-row') {
                 th 'Contributors'
@@ -37,24 +37,26 @@ class Views::Contributors::Index < Views::Projects::Base
                 tr(class: 'award-row') {
                   td(class: 'contributor') {
                     img(src: account_image_url(contributor, 27), class: 'icon avatar-img')
-                    div(class: 'margin-small margin-collapse inline-block') { text contributor.name }
+                    div(class: 'margin-small margin-collapse inline-block') {
+                      text contributor.name
+                      table(class: 'table-scroll table-box overlay') {
+                        tr {
+                          th(style: 'padding-bottom: 20px') {
+                            text 'Contribution Summary'
+                          }
+                        }
+                        contributor.award_by_project(project).each do |award|
+                          tr {
+                            td { text award[:name] }
+                            td { text number_with_delimiter(award[:total], seperator: ',') }
+                          }
+                        end
+                      }
+                    }
                   }
                   td(class: 'awards-earned financial') {
                     span(class: 'margin-small') {
                       text contributor.total_awards_earned_pretty(project)
-                    }
-                    table(class: 'table-scroll table-box overlay') {
-                      tr {
-                        th(style: 'padding-bottom: 20px') {
-                          text 'Contributions by Task'
-                        }
-                      }
-                      contributor.award_by_project(project).each do |award|
-                        tr {
-                          td { text award.award_type.name }
-                          td { text award.decorate.total_amount_pretty }
-                        }
-                      end
                     }
                   }
                   td(class: 'award-holdings financial') {

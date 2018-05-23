@@ -23,10 +23,6 @@ class AccountDecorator < Draper::Decorator
     pretty_currency(project, total_revenue_unpaid(project))
   end
 
-  def total_revenue_earned_pretty(project)
-    pretty_currency(project, total_revenue_earned(project))
-  end
-
   def total_revenue_paid_pretty(project)
     pretty_currency(project, total_revenue_paid(project))
   end

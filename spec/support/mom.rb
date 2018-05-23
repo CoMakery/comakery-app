@@ -54,7 +54,7 @@ class Mom
       royalty_percentage: 5.9,
       maximum_royalties_per_month: 10_000,
       legal_project_owner: 'UberCatz Inc',
-
+      long_id: SecureRandom.hex(20),
       maximum_tokens: 10_000_000
     }
     Project.new(defaults.merge(attrs))
@@ -79,10 +79,8 @@ class Mom
     AwardType.new(defaults.merge(attrs))
   end
 
-  def award(account = create(:account), **attrs)
-    account_id = account.is_a?(Account) ? account.id : account
+  def award(**attrs)
     params = {
-      account_id: account_id,
       issuer: create(:account),
       description: 'Great work',
       proof_id: 'abc123',

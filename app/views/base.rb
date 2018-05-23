@@ -18,6 +18,10 @@ module Views
       row { column { yield } }
     end
 
+    def full_row_right
+      row { column('text-right') { yield } }
+    end
+
     def buttonish(size = :small, *extras)
       result = %i[button radius]
       result << size

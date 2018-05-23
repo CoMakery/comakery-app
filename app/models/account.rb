@@ -34,9 +34,12 @@ class Account < ApplicationRecord
     @slack ||= Comakery::Slack.get(slack_auth.token)
   end
 
+  def discord_client
+    @discord_client ||= Comakery::Discord.new
+  end
+
   def send_award_notifications(award)
     if award.team.discord?
-      discord_client = Comakery::Discord.new
       discord_client.send_message award
     else
       slack.send_award_notifications(award: award)
@@ -47,17 +50,13 @@ class Account < ApplicationRecord
     update email_confirm_token: nil
   end
 
-  def name
-    return nickname if nickname.present?
-    [first_name, last_name].reject(&:blank?).join(' ')
-  end
-
-  def nick
-    nickname || name
-  end
-
   def award_by_project(project)
-    project.awards.where(account: self)
+    groups = project.awards.where(account: self).group_by { |a| a.award_type.name }
+    arr = []
+    groups.each do |group|
+      arr << { name: group[0], total: group[1].sum(&:total_amount) }
+    end
+    arr
   end
 
   def total_awards_earned(project)
@@ -86,24 +85,17 @@ class Account < ApplicationRecord
     precise_percentage.truncate(8)
   end
 
-  def public_projects
-    Project.publics.where.not(id: team_projects.map(&:id)).or(Project.where(id: award_projects.map(&:id)))
-  end
-
-  def private_project_ids
-    @private_project_ids = team_projects.map(&:id) | projects.privates.map(&:id) | award_projects.map(&:id)
-  end
-
-  def accessable_project_ids
-    @accessable_project_ids = private_project_ids | Project.publics.map(&:id)
-  end
-
-  def private_projects
-    @private_projects ||= Project.where id: private_project_ids
+  def other_member_projects
+    team_projects.where.not(account_id: id)
   end
 
   def accessable_projects
-    @accessable_projects ||= Project.where id: accessable_project_ids
+    Project.joins("
+      left join awards a1 on a1.account_id=projects.account_id
+      left join channels on channels.project_id=projects.id
+      left join teams on teams.id=channels.team_id
+      left join authentication_teams on authentication_teams.team_id=teams.id")
+           .where("(authentication_teams.account_id=#{id} and channels.id is not null) or projects.visibility=1 or a1.account_id=#{id} or projects.account_id=#{id}").distinct
   end
 
   def confirmed?
@@ -121,5 +113,17 @@ class Account < ApplicationRecord
   def send_reset_password_request
     update reset_password_token: SecureRandom.hex
     UserMailer.reset_password(self).deliver_now
+  end
+
+  after_update :check_email_update
+
+  private
+
+  def check_email_update
+    if saved_change_to_email?
+      # rubocop:disable SkipsModelValidations
+      update_column :email_confirm_token, SecureRandom.hex
+      UserMailer.confirm_email(self).deliver
+    end
   end
 end

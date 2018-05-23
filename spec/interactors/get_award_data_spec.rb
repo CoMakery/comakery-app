@@ -52,7 +52,7 @@ describe GetAwardData do
     it 'shows values for each contributor for all 30 days' do
       result = described_class.call(account: sam, project: project)
 
-      awarded_account_names = Award.select('account_id, max(id) as id').group('account_id').all.map { |a| a.account.name }
+      awarded_account_names = Award.select('account_id, max(id) as id').group('account_id').all.map { |a| a.account.decorate.name }
       expect(awarded_account_names).to match_array(['john john', 'sam sam', 'bob bob'])
 
       contributions = result.award_data[:contributions_by_day].select do |cbd|
@@ -107,18 +107,7 @@ describe GetAwardData do
 
       specify do
         contributions = described_class.new.contributions_summary(project)
-        expect(contributions).to eq([
-                                      { name: 'john john',
-                                        avatar: '/assets/default_account_image.jpg',
-                                        earned: 2000,
-                                        paid: 10,
-                                        remaining: 1990 },
-                                      { name: 'sam sam',
-                                        avatar: '/assets/default_account_image.jpg',
-                                        earned: 1000,
-                                        paid: 5,
-                                        remaining: 995 }
-                                    ])
+        expect(contributions).to eq([john, sam])
       end
     end
   end

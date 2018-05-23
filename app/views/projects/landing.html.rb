@@ -1,17 +1,20 @@
 class Views::Projects::Landing < Views::Projects::Base
-  needs :private_projects, :archived_projects, :unlisted_projects, :public_projects, :private_project_contributors, :archived_project_contributors, :public_project_contributors, :unlisted_project_contributors
+  needs :my_projects, :archived_projects, :team_projects, :my_project_contributors, :archived_project_contributors, :team_project_contributors
 
   def content
     if current_account
-      projects_header('Projects')
-      projects_block(private_projects, private_project_contributors)
-      if archived_projects.any?
-        full_row { h1 'Archived Projects' }
-        projects_block(archived_projects, archived_project_contributors)
+      projects_header('')
+      if my_projects.any?
+        full_row { h1 'mine' }
+        projects_block(my_projects, my_project_contributors)
       end
-      if unlisted_projects.any?
-        full_row { h1 'unlisted Projects' }
-        projects_block(unlisted_projects, archived_project_contributors)
+      if team_projects.any?
+        full_row { h1 'team' }
+        projects_block(team_projects, team_project_contributors)
+      end
+      if archived_projects.any?
+        full_row { h1 'archived' }
+        projects_block(archived_projects, archived_project_contributors)
       end
     else
       content_for(:pre_body) {
@@ -70,10 +73,9 @@ class Views::Projects::Landing < Views::Projects::Base
           }
         }
       }
+      full_row { h1 'Featured Projects' }
+      projects_block(my_projects, my_project_contributors)
     end
-
-    full_row { h1 'Featured Projects' }
-    projects_block(public_projects, public_project_contributors)
 
     a('Browse All', href: projects_path, class: 'more')
   end

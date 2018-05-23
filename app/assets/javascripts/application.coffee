@@ -88,12 +88,49 @@ $ ->
         $(@).val(value.slice(0,-1))
         return false
 
-  $('tr.award-row')
+  $(document).on 'click', '.scrollingBox.menu a', ->
+    href = $(this).attr 'href'
+    anchor = href.substr href.indexOf('#') + 1
+    $('html, body').animate { scrollTop: $('div[data-id=' + anchor + ']').offset().top }, 1000
+    if $(document).scrollTop() >= document.body.offsetHeight - window.innerHeight
+      $('.scrollingBox.menu a').removeClass 'active-menu'
+      $(this).addClass 'active-menu'
+    else
+      $(this).closest('.menu').attr 'data-hash', anchor
+
+  $(document).on 'scroll', (event) ->
+    limit = document.body.offsetHeight - window.innerHeight
+    scrollPos = $(document).scrollTop() + 10
+    currentAnchor = $('.scrollingBox.menu').attr 'data-hash'
+    if currentAnchor
+      topOfCurrentAnchor = $('div[data-id=' + currentAnchor + ']').offset().top
+      $('.scrollingBox.menu a').removeClass 'active-menu'
+      $('.scrollingBox.menu a[href$=' + currentAnchor + ']').addClass 'active-menu'
+      if $(document).scrollTop() == topOfCurrentAnchor || $(document).scrollTop() >= limit
+        $('.scrollingBox.menu').removeAttr 'data-hash'
+    else
+      $('.scrollingBox.menu a').each ->
+        currLink = $(this)
+        href = currLink.attr 'href'
+        anchor = href.substr href.indexOf('#') + 1
+        refElement = $('div[data-id=' + anchor + ']')
+        if refElement.position().top <= scrollPos and refElement.position().top + refElement.height() > scrollPos
+          $('.scrollingBox.menu a').removeClass 'active-menu'
+          currLink.addClass 'active-menu'
+        else
+          currLink.removeClass 'active-menu'
+
+    $('tr.award-row')
     .on 'mouseover', (e) ->
       $(@).find('.overlay').show()
     .on 'mouseout', (e) ->
       $(@).find('.overlay').hide()
 
+  $('.copiable').click ->
+    $(".copy-source").select()
+    document.execCommand('Copy')
+
+  floatingLeftMenuItems()
   # Run on page ready then bind events
   awardPaymentType()
   $('#project_payment_type').change (e)->
@@ -129,3 +166,14 @@ royaltyCalc = () ->
       "<td>#{denomination}#{contributorPayment.toLocaleString()}</td>"
 
   $('.royalty-calc tbody').replaceWith(schedule)
+
+floatingLeftMenuItems = () ->
+  offsetPixels = 150
+  $(window).scroll ->
+    if $(window).scrollTop() > offsetPixels
+      $('.scrollingBox').css
+        'position': 'fixed'
+        'top': '50px'
+        'width': $('.scrollingBox').closest('div').width() + 30
+    else
+      $('.scrollingBox').css 'position': 'static'

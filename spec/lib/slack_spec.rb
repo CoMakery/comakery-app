@@ -11,6 +11,7 @@ describe Comakery::Slack do
   let!(:channel) { create :channel, project: project, team: team, name: 'super sweet slack channel' }
   let!(:award_type) { create :award_type, project: project }
   let!(:award) { create :award, channel: channel, award_type: award_type, issuer: issuer, account: recipient, quantity: 2 }
+  let!(:message) { AwardMessage.call(award: award).notifications_message }
   let!(:slack) { described_class.new(slack_token) }
   let!(:slack_token) { issuer_authentication.token }
 
@@ -21,7 +22,7 @@ describe Comakery::Slack do
 
   describe '#send_award_notifications' do
     it 'sends a notification to Slack with correct params' do
-      stub_request(:post, 'https://slack.com/api/chat.postMessage').with(body: hash_including(text: award.notifications_message,
+      stub_request(:post, 'https://slack.com/api/chat.postMessage').with(body: hash_including(text: message,
                                                                                               token: slack_token,
                                                                                               channel: "##{channel.name}",
                                                                                               username: / Bot/,
@@ -44,7 +45,6 @@ describe Comakery::Slack do
   describe '#award_notifications_message' do
     describe 'when the issuer sends to someone else' do
       it 'is from issuer to recipient' do
-        message = award.notifications_message
         expect(message).to match /@jim jim sent @newt newt a 2674 token Contribution/
       end
     end
@@ -52,14 +52,13 @@ describe Comakery::Slack do
     describe 'when the issuer sends to themselves' do
       before { award.update! account: issuer }
       it 'is self-issued' do
-        message = award.notifications_message
+        message = AwardMessage.call(award: award).notifications_message
         expect(message).to match /@jim jim self-issued/
       end
     end
 
     describe 'when the award has a description' do
       it 'includes award description' do
-        message = award.notifications_message
         expect(message).to match /for "Great work"/
       end
     end
@@ -67,13 +66,12 @@ describe Comakery::Slack do
     describe 'when the award has no description' do
       before { award.update! description: '' }
       it 'includes award description' do
-        message = award.notifications_message
+        message = AwardMessage.call(award: award).notifications_message
         expect(message).not_to match /for ".*"/m
       end
     end
 
     it 'links to the project' do
-      message = award.notifications_message
       expect(message).to match %r{<https?://localhost:3000/projects/#{project.id}\|Uber for Cats> project}
     end
 
@@ -81,7 +79,7 @@ describe Comakery::Slack do
       it 'links to recipient account' do
         project.update! ethereum_enabled: true
         recipient.update! ethereum_wallet: nil
-        message = award.notifications_message
+        message = AwardMessage.call(award: award.reload).notifications_message
         expect(message).to match \
           %r{<https?://localhost:3000/account\|Set up your account> to receive Ethereum tokens\.}
       end
@@ -91,7 +89,7 @@ describe Comakery::Slack do
       it 'does not link to recipient account' do
         project.update! ethereum_enabled: false
         recipient.update! ethereum_wallet: nil
-        message = award.notifications_message
+        message = AwardMessage.call(award: award).notifications_message
         expect(message).not_to match %r{/account}
       end
     end
@@ -100,7 +98,7 @@ describe Comakery::Slack do
       it 'does not link to recipient account' do
         project.update! ethereum_enabled: true
         recipient.update! ethereum_wallet: '0x' + 'a' * 40
-        message = award.notifications_message
+        message = AwardMessage.call(award: award).notifications_message
         expect(message).not_to match %r{/account}
       end
     end

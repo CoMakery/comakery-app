@@ -27,7 +27,7 @@ describe GetAwardableTypes do
           create(:award_type, project: p, community_awardable: false)
         end
       end
-      let!(:other_project) { create(:project, public: true) }
+      let!(:other_project) { create(:project, visibility: 'public_listed') }
 
       before do
         team1.build_authentication_team authentication

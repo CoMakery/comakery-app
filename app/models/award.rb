@@ -1,10 +1,10 @@
 class Award < ApplicationRecord
-  include ::Rails.application.routes.url_helpers
   paginates_per 50
 
   include EthereumAddressable
 
   belongs_to :account, optional: true
+  belongs_to :authentication, optional: true
   belongs_to :award_type
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
@@ -30,7 +30,7 @@ class Award < ApplicationRecord
 
   def ethereum_issue_ready?
     project.ethereum_enabled &&
-      recipient_address.present? &&
+      account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end
 
@@ -40,71 +40,6 @@ class Award < ApplicationRecord
 
   def recipient_auth_team
     account.authentication_teams.find_by team_id: channel.team_id if channel
-  end
-
-  def part_of_email
-    "#{email.split('@').first}@..." if email
-  end
-
-  def recipient_display_name
-    account ? account.name : part_of_email
-  end
-
-  def recipient_user_name
-    recipient_auth_team&.name || account.name
-  end
-
-  def recipient_address
-    account&.ethereum_wallet
-  end
-
-  def issuer_display_name
-    issuer&.nick
-  end
-
-  def issuer_user_name
-    team&.authentication_team_by_account(issuer)&.name || issuer.name
-  end
-
-  def notifications_message
-    text = message_info
-    text = "#{text} for \"#{description}\"" if description.present?
-
-    text = if discord?
-      "#{text} #{discord_message}"
-    else
-      "#{text} #{slack_message}"
-    end
-
-    text.strip!
-    text.gsub!(/\s+/, ' ')
-    text
-  end
-
-  def discord_message
-    text = "on the #{project.title} project: #{project_url(project)}."
-
-    if project.ethereum_enabled && recipient_address.blank?
-      text = "#{text} Set up your account: #{account_url} to receive Ethereum tokens."
-    end
-    text
-  end
-
-  def slack_message
-    text = "on the <#{project_url(project)}|#{project.title}> project."
-
-    if project.ethereum_enabled && recipient_address.blank?
-      text = "#{text} <#{account_url}|Set up your account> to receive Ethereum tokens."
-    end
-    text
-  end
-
-  def message_info
-    if self_issued?
-      "@#{issuer_user_name} self-issued"
-    else
-      "@#{issuer_user_name} sent @#{recipient_user_name} a #{total_amount} token #{award_type.name}"
-    end
   end
 
   def send_confirm_email

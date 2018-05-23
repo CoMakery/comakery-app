@@ -13,7 +13,7 @@ describe 'awarding users' do
 
   let!(:project) { create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40) }
   let!(:same_team_project) { create(:project, title: 'Same Team Project', account: account) }
-  let!(:different_team_project) { create(:project, public: true, title: 'Different Team Project', account: different_team_account) }
+  let!(:different_team_project) { create(:project, visibility: 'public_listed', title: 'Different Team Project', account: different_team_account) }
 
   let!(:channel) { create(:channel, team: team, project: project, name: 'channel') }
   let!(:other_channel) { create(:channel, team: other_team, project: different_team_project, name: 'other channel') }

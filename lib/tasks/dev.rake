@@ -2,36 +2,40 @@ require 'open-uri'
 namespace :dev do
   task migrate: [:environment] do
     Authentication.all.each do |authentication|
+      next unless authentication.slack?
       oauth = authentication.oauth_response
-      next unless oauth
-      authentication.build_team oauth
+      authentication.build_team(oauth) if oauth
       account = authentication.account
-      if account.name.blank?
-        if oauth['info']['first_name'].blank? && oauth['info']['last_name'].blank?
-          account.first_name = oauth['info']['name']
-        else
-          account.first_name = oauth['info']['first_name']
-          account.last_name = oauth['info']['last_name']
-        end
+      if authentication.slack_first_name || authentication.slack_last_name
+        account.first_name ||= authentication.slack_first_name
+        account.last_name ||= authentication.slack_last_name
+        account.nickname = nil
+      elsif account.first_name.blank? && account.last_name.blank?
+        account.nickname = authentication.slack_user_name
       end
-      if oauth['info']['image'].present?
+      image_url = oauth['info']['image'] if oauth
+      image_url ||= authentication.slack_image_32_url
+      if image_url.present?
         begin
-          open(oauth['info']['image'], 'rb') do |file|
+          open(image_url, 'rb') do |file|
             account.image = file
           end
-        rescue
-          puts "can't open #{oauth['info']['image']} - ##{authentication.id}"
+        # rubocop:disable Lint/RescueException
+        rescue Exception => e
+          puts e.message
         end
       end
-      account.save
+      account.save(validate: false)
       puts account.errors.full_messages
     end
 
     Project.all.each do |project|
-      next unless project.slack_channel
-      channel = project.channels.find_or_create_by name: project.slack_channel, team: project.teams.last
+      vis = project.public == true ? 1 : 0
+      # rubocop:disable SkipsModelValidations
+      project.update_column :visibility, vis
+      channel = project.channels.find_or_create_by channel_id: project.slack_channel, team: project.teams.last if project.slack_channel
       project.awards.each do |award|
-        award.update channel_id: channel.id
+        award.update_columns channel_id: channel&.id, account_id: award.authentication&.account_id
         puts award.errors.full_messages
       end
       puts channel.errors.full_messages

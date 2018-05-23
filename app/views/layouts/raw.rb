@@ -24,6 +24,8 @@ class Views::Layouts::Raw < Views::Base
         # javascript_pack_tag 'hello_react'  # NOTE this fails in fortitude
         # javascript_include_tag Webpacker.manifest.lookup!('hello_react.js')  # this succeeds
 
+        javascript_include_tag 'jquery.visible' if Rails.env.test?
+
         if ENV['AIRBRAKE_API_KEY'].present? && ENV['AIRBRAKE_PROJECT_ID'].present?
           javascript_include_tag 'airbrake-shim',
             'data-airbrake-project-id' => ENV['AIRBRAKE_PROJECT_ID'],
