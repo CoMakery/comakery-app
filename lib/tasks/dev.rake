@@ -12,10 +12,11 @@ namespace :dev do
       elsif account.first_name.blank? && account.last_name.blank?
         account.nickname = authentication.slack_user_name
       end
-
-      if authentication.slack_image_32_url.present?
+      image_url = oauth['info']['image'] if oauth
+      image_url ||= authentication.slack_image_32_url
+      if image_url.present?
         begin
-          open(authentication.slack_image_32_url, 'rb') do |file|
+          open(image_url, 'rb') do |file|
             account.image = file
           end
         # rubocop:disable Lint/RescueException
