@@ -1,5 +1,5 @@
 class Views::Licenses::Index < Views::Projects::Base
-  needs :project
+  needs :project, :current_account
 
   def content
     render partial: 'shared/project_header'
