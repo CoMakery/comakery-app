@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'awarding users' do
   let!(:team) { create :team }
   let!(:other_team) { create :team }
-  let!(:account) { create(:account, email: 'hubert@example.com') }
+  let!(:account) { create(:account, email: 'hubert@example.com', first_name: 'Michael', last_name: 'Jackson') }
   let!(:other_account) { create(:account, email: 'sherman@example.com') }
   let!(:different_team_account) { create(:account, email: 'different@example.com') }
 
@@ -15,7 +15,7 @@ describe 'awarding users' do
   let!(:same_team_project) { create(:project, title: 'Same Team Project', account: account) }
   let!(:different_team_project) { create(:project, visibility: 'public_listed', title: 'Different Team Project', account: different_team_account) }
 
-  let!(:channel) { create(:channel, team: team, project: project, name: 'channel') }
+  let!(:channel) { create(:channel, team: team, project: project, channel_id: 'channel id') }
   let!(:other_channel) { create(:channel, team: other_team, project: different_team_project, name: 'other channel') }
 
   let!(:small_award_type) { create(:award_type, project: project, name: 'Small', amount: 1000) }
@@ -55,6 +55,7 @@ describe 'awarding users' do
   describe "when a user doesn't have an account for yet" do
     it 'populates the dropdown to select the awardee and creates the account/auth for the user' do
       expect_any_instance_of(Account).to receive(:send_award_notifications)
+
       login(account)
 
       visit project_path(project)
@@ -71,7 +72,8 @@ describe 'awarding users' do
 
       bobjohnsons_auth = Authentication.find_by(uid: 'U99M9QYFQ')
       expect(bobjohnsons_auth).not_to be_nil
-
+      award = Award.last
+      expect(AwardMessage.call(award: award).notifications_message).to match '@Michael Jackson sent @bobjohnson a 1579 token Small'
       login(bobjohnsons_auth.account)
 
       visit project_awards_path(project)
