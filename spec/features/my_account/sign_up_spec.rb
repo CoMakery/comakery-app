@@ -13,6 +13,6 @@ describe 'my account' do
     fill_in 'Password', with: '12345678'
     click_on 'Create Account'
     expect(page).to have_content('Created account successfully. Please confirm your email before continuing.')
-    expect(Account.first&.decorate.name).to eq 'Tester Dev'
+    expect(Account.first&.decorate&.name).to eq 'Tester Dev'
   end
 end

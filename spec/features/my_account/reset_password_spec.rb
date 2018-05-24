@@ -13,4 +13,15 @@ describe 'reset password' do
     click_on 'Reset my password!'
     expect(page).to have_content 'please check your email for reset password instructions'
   end
+
+  scenario 'update password' do
+    account.update reset_password_token: '12345'
+    visit edit_password_reset_path('invalidtoken')
+    expect(page).to have_content 'Invalid reset password token'
+    visit edit_password_reset_path('12345')
+    expect(page).to have_content 'Set a password'
+    fill_in 'account[password]', with: '12345678'
+    click_on 'Save'
+    expect(page).to have_content 'Successful reset password'
+  end
 end
