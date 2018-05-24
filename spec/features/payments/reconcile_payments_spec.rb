@@ -35,6 +35,11 @@ describe 'when reconciling redeemed revenue shares' do
 
     award_type.awards.create_with_quantity(50, issuer: owner, account: same_team_account)
     award_type.awards.create_with_quantity(50, issuer: owner, account: owner)
+
+    open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') do |file|
+      owner.image = file
+    end
+    owner.save
   end
 
   it 'owner can reconcile revenue shares' do
@@ -106,5 +111,12 @@ describe 'when reconciling redeemed revenue shares' do
 
       page.assert_selector('input', count: 0)
     end
+  end
+
+  it 'other team member cannot reconcile payments' do
+    login other_account
+    visit project_path(project)
+    click_link 'Payments'
+    expect(page).to have_content 'by contributing to the project - then cash them out here for your share of the revenue'
   end
 end

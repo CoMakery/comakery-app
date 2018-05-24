@@ -11,7 +11,7 @@ describe 'awarding users' do
   let!(:other_authentication) { create(:authentication, account: other_account) }
   let!(:different_team_authentication) { create(:authentication, account: different_team_account) }
 
-  let!(:project) { create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40) }
+  let!(:project) { create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, revenue_sharing_end_date: Time.zone.now + 3.days) }
   let!(:same_team_project) { create(:project, title: 'Same Team Project', account: account) }
   let!(:different_team_project) { create(:project, visibility: 'public_listed', title: 'Different Team Project', account: different_team_account) }
 
@@ -55,7 +55,7 @@ describe 'awarding users' do
   describe "when a user doesn't have an account for yet" do
     it 'populates the dropdown to select the awardee and creates the account/auth for the user' do
       expect_any_instance_of(Account).to receive(:send_award_notifications)
-
+      project.revenue_share!
       login(account)
 
       visit project_path(project)

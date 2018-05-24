@@ -70,16 +70,4 @@ class Views::Projects::Description < Views::Projects::Base
       }
     }
   end
-
-  def total_tokens_issued_pretty
-    number_with_precision(award_data[:award_amounts][:total_tokens_issued], precision: 0, delimiter: ',')
-  end
-
-  def my_project_tokens
-    award_data[:award_amounts][:my_project_tokens]
-  end
-
-  def total_tokens_issued
-    award_data[:award_amounts][:total_tokens_issued]
-  end
 end

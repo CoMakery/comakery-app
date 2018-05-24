@@ -60,6 +60,16 @@ describe 'viewing projects, creating and editing', :js do
           expect(page).to have_content 'Project Tokens Awarded'
         end
 
+        it 'show link to ethereum transaction' do
+          project.update ethereum_enabled: true
+          award.update ethereum_transaction_address: '0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
+          login(owner)
+          visit project_path(project.reload)
+
+          click_link 'Awards'
+          expect(page).to have_content 'Blockchain Transaction'
+        end
+
         it 'paginates when there are lots of awards' do
           (305 - project.awards.count).times do
             create(:award, award_type: community_award_type, issuer: other_account, account: owner)
