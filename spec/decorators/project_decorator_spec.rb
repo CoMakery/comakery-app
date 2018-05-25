@@ -53,6 +53,11 @@ describe ProjectDecorator do
       project.ETH!
       expect(pretty_method_call).to match(/^Ξ9.9{18}$/)
     end
+
+    specify do
+      expect(project.decorate.revenue_history).to eq []
+      expect(project.decorate.payment_history).to eq []
+    end
   end
 
   describe 'revenue_per_share_pretty method truncates' do
@@ -402,5 +407,18 @@ describe ProjectDecorator do
       expect(project.revenue_sharing_end_date_pretty)
         .to eq('January 2, 2123')
     end
+  end
+
+  it '#description_text' do
+    expect(project.decorate.description_text(12)).to eq 'We are go...'
+    expect(project.decorate.description_text(4)).to eq 'W...'
+  end
+
+  it '#contributors_by_award_amount' do
+    expect(project.contributors_by_award_amount).to eq []
+  end
+
+  it 'maximum_royalties_per_month_pretty' do
+    expect(project.maximum_royalties_per_month_pretty).to eq '10,000'
   end
 end

@@ -86,9 +86,10 @@ describe 'rake dev:migrate', type: :task do
     expect(award.account).to eq account
   end
 
-  it 'migrate data - ignore missing missing image' do
+  it 'migrate data - ignore missing image' do
     account = create(:account, first_name: nil, last_name: nil)
-    create(:authentication, account: account, oauth_response: auth_hash, slack_first_name: 'Bob', slack_last_name: 'Roberts', slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+    auth_hash['info']['image'] = Rails.root.join('spec', 'fixtures', 'invalid.png')
+    create(:authentication, account: account, oauth_response: auth_hash, slack_first_name: 'Bob', slack_last_name: 'Roberts', slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat1.png'))
 
     task.execute
     account.reload

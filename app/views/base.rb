@@ -49,10 +49,6 @@ module Views
       end
     end
 
-    def to_json(*args)
-      as_json(*args).to_json
-    end
-
     def add_classes(args, classes)
       classes += Array(args.fetch(:class, []))
       args.merge(class: classes)

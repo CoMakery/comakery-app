@@ -278,4 +278,70 @@ describe Account do
       expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'member project', 'other team public project']
     end
   end
+
+  it 'confirm email' do
+    account = create :account, email_confirm_token: '12345'
+    expect(account.confirmed?).to be_falsey
+    account.confirm!
+    expect(account.reload.confirmed?).to be_truthy
+  end
+
+  it 'return array of award by project' do
+    account = create :account
+    project = create :project
+    award_type = create :award_type, project: project, name: 'type 1', amount: 10
+    award_type1 = create :award_type, project: project, name: 'type 2', amount: 20
+    create :award, award_type: award_type, account: account
+    create :award, award_type: award_type1, account: account
+    expect(account.award_by_project(project)).to eq [{ name: 'type 2', total: 20 }, { name: 'type 1', total: 10 }]
+  end
+  describe 'team projects' do
+    let!(:team) { create :team }
+    let!(:account) { create :account }
+    let!(:authentication) { create :authentication, account: account }
+    let!(:team_account) { create :account }
+    let!(:team_authentication) { create :authentication, account: team_account }
+    let!(:project) { create :project, account: account }
+    let!(:team_project) { create :project, account: team_account }
+
+    before do
+      team.build_authentication_team authentication
+      team.build_authentication_team team_authentication
+      create :channel, team: team, project: team_project, channel_id: 'general'
+    end
+
+    it 'return projects of same team members' do
+      expect(account.other_member_projects.map(&:id)).to eq [team_project.id]
+    end
+
+    it 'check if a project in same team' do
+      other_project = create :project
+      expect(account.same_team_project?(project)).to be_falsey
+      expect(account.same_team_project?(other_project)).to be_falsey
+      expect(account.same_team_project?(team_project)).to be_truthy
+    end
+    it 'check if a project in same team or self owned' do
+      other_project = create :project
+      expect(account.same_team_or_owned_project?(project)).to be_truthy
+      expect(account.same_team_or_owned_project?(other_project)).to be_falsey
+      expect(account.same_team_or_owned_project?(team_project)).to be_truthy
+    end
+  end
+
+  it 'send send_reset_password_request' do
+    account.send_reset_password_request
+    expect(account.reset_password_token).not_to be_nil
+  end
+
+  it 'set account to unconfirm it update email' do
+    account.email = 'new@test.st'
+    account.save
+    expect(account.reload.confirmed?).to be_falsey
+  end
+
+  it '#downcase_email' do
+    account.email = 'NEW@TEST.st'
+    account.save
+    expect(account.reload.email).to eq 'new@test.st'
+  end
 end

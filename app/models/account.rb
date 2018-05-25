@@ -56,7 +56,7 @@ class Account < ApplicationRecord
     groups.each do |group|
       arr << { name: group[0], total: group[1].sum(&:total_amount) }
     end
-    arr
+    arr.sort { |i, j| j[:total] <=> i[:total] }
   end
 
   def total_awards_earned(project)

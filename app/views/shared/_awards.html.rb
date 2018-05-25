@@ -49,11 +49,7 @@ class Views::Shared::Awards < Views::Base
               span(class: 'help-text') {
                 text raw ": #{markdown_to_html award.description}" if award.description.present?
                 br
-                if award.proof_link
-                  link_to award.proof_id, award.proof_link, target: '_blank'
-                else
-                  span award.proof_id
-                end
+                span award.proof_id
               }
             }
             td(class: 'small-2') {

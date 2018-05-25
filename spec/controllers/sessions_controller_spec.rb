@@ -108,5 +108,11 @@ describe SessionsController do
       expect(flash[:notice]).to eq 'Successful sign in'
       expect(response).to redirect_to root_path
     end
+
+    it 'redirect to confirm award page' do
+      session[:award_token] = 123
+      post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+      expect(response).to redirect_to confirm_award_path(123)
+    end
   end
 end
