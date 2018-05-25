@@ -131,6 +131,7 @@ class ProjectsController < ApplicationController
       :license_finalized,
       :denomination,
       :visibility,
+      :ethereum_contract_address,
       award_types_attributes: %i[
         _destroy
         amount

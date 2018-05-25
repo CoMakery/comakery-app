@@ -106,6 +106,13 @@ module Views
             }
             row {
               column('large-6 small-12') {
+                with_errors(project, :ethereum_contract_address) {
+                  label {
+                    text 'Ethereum Contract Address'
+                    f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
+                  }
+                }
+
                 with_errors(project, :maximum_tokens) {
                   label {
                     required_label_text 'Total Authorized'
