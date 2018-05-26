@@ -107,6 +107,10 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def transfer_tokens
+    @project = current_account.projects.find(params[:id])
+  end
+
   private
 
   def project_params
