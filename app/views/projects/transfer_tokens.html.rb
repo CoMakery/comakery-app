@@ -19,5 +19,4 @@ class Views::Projects::TransferTokens < Views::Projects::Base
     end
     render 'sessions/metamask_modal'
   end
-
 end
