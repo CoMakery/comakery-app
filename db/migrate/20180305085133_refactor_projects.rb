@@ -1,6 +1,6 @@
 class RefactorProjects < ActiveRecord::Migration[5.1]
   def change
-    remove_column :projects, :slack_team_id, :string
+    # remove_column :projects, :slack_team_id, :string
     remove_column :projects, :slack_team_name, :string
     remove_column :projects, :slack_team_domain, :string
     remove_column :projects, :slack_team_image_34_url, :string
@@ -10,5 +10,6 @@ class RefactorProjects < ActiveRecord::Migration[5.1]
     add_column :projects, :image_filename, :string
     add_column :projects, :image_content_size, :string
     add_column :projects, :image_content_type, :string
+    change_column_null :projects, :slack_team_id, true
   end
 end

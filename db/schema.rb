@@ -14,7 +14,6 @@ ActiveRecord::Schema.define(version: 20180423025725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
 
   create_table "accounts", id: :serial, force: :cascade do |t|
     t.string "email"
@@ -44,6 +43,7 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.string "image_content_size"
     t.string "image_content_type"
     t.string "nickname"
+    t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
     t.index ["remember_me_token"], name: "index_accounts_on_remember_me_token"
@@ -74,7 +74,6 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.string "email"
     t.string "confirm_token"
     t.index ["account_id"], name: "index_authentications_on_account_id"
-    t.index ["uid"], name: "index_authentications_on_uid"
   end
 
   create_table "award_types", id: :serial, force: :cascade do |t|
@@ -107,9 +106,7 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.string "uid"
     t.string "confirm_token"
     t.string "email"
-    t.index ["authentication_id"], name: "index_awards_on_authentication_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
-    t.index ["issuer_id"], name: "index_awards_on_issuer_id"
   end
 
   create_table "channels", force: :cascade do |t|
@@ -136,8 +133,6 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.string "currency"
     t.integer "status", default: 0
     t.boolean "reconciled", default: false
-    t.index ["account_id"], name: "index_payments_on_account_id"
-    t.index ["issuer_id"], name: "index_payments_on_issuer_id"
     t.index ["project_id"], name: "index_payments_on_project_id"
   end
 
@@ -149,6 +144,7 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.datetime "updated_at", null: false
     t.boolean "public", default: false, null: false
     t.integer "account_id", null: false
+    t.string "slack_team_id"
     t.string "image_id"
     t.string "slack_channel"
     t.integer "maximum_tokens", default: 0, null: false
@@ -173,6 +169,7 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.integer "visibility", default: 0
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["public"], name: "index_projects_on_public"
+    t.index ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public"
   end
 
   create_table "revenues", id: :serial, force: :cascade do |t|

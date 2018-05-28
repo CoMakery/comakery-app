@@ -33,7 +33,8 @@ namespace :dev do
       vis = project.public == true ? 1 : 0
       # rubocop:disable SkipsModelValidations
       project.update_column :visibility, vis
-      channel = project.channels.find_or_create_by channel_id: project.slack_channel, team: project.teams.last if project.slack_channel
+      team = Team.find_by team_id: project.slack_team_id
+      channel = project.channels.find_or_create_by channel_id: project.slack_channel, team: team if project.slack_channel
       project.awards.each do |award|
         award.update_columns channel_id: channel&.id, account_id: award.authentication&.account_id
         puts award.errors.full_messages
