@@ -11,7 +11,7 @@ class EthereumTokenIssueJob
     return unless award.ethereum_issue_ready?
     project = award.project
     args = {
-      recipient: award.recipient_address,
+      recipient: award.decorate.recipient_address,
       amount: award.total_amount,
       proofId: award.proof_id,
       contractAddress: project.ethereum_contract_address

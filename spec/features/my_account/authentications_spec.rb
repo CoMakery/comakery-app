@@ -33,7 +33,7 @@ feature 'my account' do
     expect(page).to have_content 'Mar 25, 2016'
     expect(page).to have_content 'Contribution'
     expect(page).to have_content 'Great work'
-    expect(page).to have_content auth.account.name
+    expect(page).to have_content auth.account.decorate.name
   end
 
   scenario 'editing, and adding an ethereum address' do
@@ -82,6 +82,8 @@ feature 'my account' do
     account.save
     login(account)
     visit root_path
+    expect(page).to have_css("img[src*='avatar.png']")
+    first('.menu').click_link 'Account'
     expect(page).to have_css("img[src*='avatar.png']")
   end
 

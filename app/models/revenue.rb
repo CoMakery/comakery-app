@@ -17,7 +17,7 @@ class Revenue < ApplicationRecord
   end
 
   def issuer_display_name
-    recorded_by&.nick
+    recorded_by&.decorate&.nick
   end
 
   private

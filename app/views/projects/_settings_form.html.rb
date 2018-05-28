@@ -5,8 +5,8 @@ module Views
 
       def content
         form_for project do |f|
-          div(class: 'content-box') {
-            div(class: 'legal-box-header') { h3 'Project Settings' }
+          div(class: 'content-box', 'data-id': 'general-info') {
+            div(class: 'legal-box-header') { h3 'General Info' }
             row {
               column('large-6 small-12') {
                 with_errors(project, :title) {
@@ -61,14 +61,15 @@ module Views
                 }
               }
             }
+            render_cancel_and_save_buttons(f)
           }
 
           render partial: '/projects/form/channel', locals: { f: f, providers: providers }
 
-          div(class: 'content-box') {
+          div(class: 'content-box', 'data-id': 'contribution-terms') {
             full_row {
               div(class: 'legal-box-header') {
-                h3 'Contribution License Terms (BETA)'
+                h3 'Contribution Terms'
                 i(class: 'fa fa-lock') if project.license_finalized?
               }
             }
@@ -191,8 +192,9 @@ module Views
                 }
               }
             }
+            render_cancel_and_save_buttons(f)
           }
-          div(class: 'content-box') {
+          div(class: 'content-box', 'data-id': 'awards-offered') {
             div(class: 'award-types') {
               div(class: 'legal-box-header') { h3 'Awards Offered' }
               row {
@@ -202,7 +204,7 @@ module Views
                   text 'Community Awardable '
                   question_tooltip 'Check this box if you want people on your team to be able to award others. Otherwise only the project owner can send awards.'
                 }
-                column('small-4') {
+                column('small-4 lb-description') {
                   text 'Description'
                   br
                   link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text')
@@ -220,7 +222,7 @@ module Views
                   ff.hidden_field :id
                   ff.hidden_field :_destroy, 'data-destroy': ''
                   column('small-3') { ff.text_field :name }
-                  column('small-1') {
+                  column('small-1 award-amount') {
                     readonly = !ff.object&.modifiable?
                     if readonly
                       tooltip("Award types' amounts can't be modified if there are existing awards", if: readonly) do
@@ -231,7 +233,7 @@ module Views
                     end
                   }
                   column('small-1', class: 'text-center') { ff.check_box :community_awardable }
-                  column('small-4', class: 'text-center') { ff.text_area :description, class: 'award-type-description' }
+                  column('small-4', class: 'text-center lb-description') { ff.text_area :description, class: 'award-type-description' }
                   column('small-1', class: 'text-center') { ff.check_box :disabled }
                   column('small-2', class: 'text-center') {
                     if ff.object&.modifiable?
@@ -248,25 +250,42 @@ module Views
                 p { a('+ add award type', href: '#', 'data-duplicate': '.award-type-template') }
               }
             }
+            render_cancel_and_save_buttons(f)
+          }
+          div(class: 'content-box', 'data-id': 'visibility') {
+            div(class: 'award-types') {
+              div(class: 'legal-box-header') { h3 'Visibility' }
+              row {
+                column('small-5') {
+                  options = capture do
+                    options_for_select(visibility_options, selected: f.object.visibility)
+                  end
+                  label {
+                    text 'Project Visible To'
+                    f.select :visibility, options
+                  }
+                }
+              }
+              row {
+                label(style: 'margin-left: 15px;') {
+                  text 'Project URL'
+                }
+                column('small-5') {
+                  text_field_tag :unlisted_url, unlisted_project_url(f.object.long_id), name: nil, class: 'copy-source'
+                  hidden_field_tag :long_id, f.object.long_id
+                }
+                column('small-1', style: 'padding-left: 0; margin-left: -16px; margin-top: 8px') {
+                  a(class: 'copiable', style: 'padding: 9px; border: 1px solid #ccc;') {
+                    image_tag 'Octicons-clippy.png', size: '20x20'
+                  }
+                }
+                column('small-1') {}
+              }
+            }
           }
 
           full_row {
-            column {
-              with_errors(project, :public) {
-                label {
-                  f.check_box :public
-                  text " Set project as publicly visible on #{I18n.t('project_name')} "
-                  question_tooltip "Decide whether or not to display this project in the #{I18n.t('project_name')} project index"
-                }
-              }
-              with_errors(project, :archived) {
-                label {
-                  f.check_box :archived
-                  text ' Archive project '
-                }
-              }
-              f.submit 'Save', class: buttonish(:expand)
-            }
+            f.submit 'Save', class: buttonish(:expand, :last_submit)
           }
         end
       end
@@ -308,6 +327,17 @@ module Views
           }
           br
         end
+      end
+
+      def visibility_options
+        [['Logged in team members', 'member'], ['Publicly listed in CoMakery searches', 'public_listed'], ['Logged in team member via unlisted url', 'member_unlisted'], ['Unlisted url (no login required)', 'public_unlisted'], ['Archived (visible to me only)', 'archived']]
+      end
+
+      def render_cancel_and_save_buttons(form)
+        full_row_right {
+          link_to 'Cancel', project, class: 'button cancel'
+          form.submit 'Save', class: buttonish(:expand)
+        }
       end
     end
   end

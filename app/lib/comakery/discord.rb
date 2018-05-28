@@ -23,11 +23,6 @@ class Comakery::Discord
     "https://discordapp.com/api/oauth2/authorize?client_id=#{ENV['DISCORD_CLIENT_ID']}&scope=bot&permissions=536870913"
   end
 
-  def user(uid)
-    @path = "/users/#{uid}"
-    result
-  end
-
   def webhook(channel_id)
     webhook = webhooks(channel_id).select { |h| h['name'] == 'Comakery' }.first
     return webhook if webhook
@@ -45,7 +40,8 @@ class Comakery::Discord
     channel_id = award.channel.channel_id
     wh = webhook channel_id
     @path = "/webhooks/#{wh['id']}/#{wh['token']}"
-    @data = { content: award.notifications_message }.to_json
+    message = AwardMessage.call(award: award).notifications_message
+    @data = { content: message }.to_json
     post_result(false)
   end
 

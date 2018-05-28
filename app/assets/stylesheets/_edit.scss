@@ -3,6 +3,23 @@ body.projects-edit, body.projects-new, body.projects-create  {
   //   max-width: 57em;
   // }
 }
+
+body.projects-edit {
+  .vertical.menu li {
+    padding: 0 0;
+    a { color: grey; }
+    a.active-menu {
+      background-color: whitesmoke;
+      &:visited, &:link {
+        background-color: whitesmoke;
+      }
+    }
+  }
+  @media only screen and (max-width: 1024px) {
+    .vertical.menu { display: none; }
+  }
+}
+
 form.edit_project, form.new_project {
   input#project_image {
     border: 1px solid #ccc;
@@ -15,6 +32,11 @@ form.edit_project, form.new_project {
     height: auto;
     width: auto;
   }
+  .button.cancel {
+    background-color: #e6e6e6;
+    color: #0a0a0a;
+    border: 1px solid #cacaca;
+  }
   textarea {
     height: 9em;
   }
@@ -26,6 +48,16 @@ form.edit_project, form.new_project {
 
   .add-award-type {
     margin-bottom: 2em;
+  }
+  .small-1.award-amount {
+    padding: 0;
+    input {
+      padding-left: 0.1rem;
+      padding-right: 0.1rem;
+    }
+  }
+  .lb-description {
+    padding-left: 35px;
   }
   input[type="checkbox"] {
     margin-top: .7em;

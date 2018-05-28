@@ -40,8 +40,8 @@ class Views::Shared::Awards < Views::Base
             }
             if show_recipient
               td(class: 'small-2 recipient') {
-                img(src: account_image_url(award.account, 27), class: 'icon avatar-img')
-                text ' ' + award.recipient_display_name
+                img(src: account_image_url(award.account, 27), class: 'icon avatar-img', style: 'margin-right: 5px;')
+                text award.recipient_display_name
               }
             end
             td(class: 'small-2 description') {
@@ -49,17 +49,12 @@ class Views::Shared::Awards < Views::Base
               span(class: 'help-text') {
                 text raw ": #{markdown_to_html award.description}" if award.description.present?
                 br
-                if award.proof_link
-                  link_to award.proof_id, award.proof_link, target: '_blank'
-                else
-                  span award.proof_id
-                end
+                span award.proof_id
               }
             }
             td(class: 'small-2') {
-              if award.team_image
-                img(src: award.team_image, class: 'icon avatar-img')
-                text ' '
+              if award.issuer
+                img(src: account_image_url(award.issuer, 27), class: 'icon avatar-img', style: 'margin-right: 5px;')
               end
               text award.issuer_display_name
             }

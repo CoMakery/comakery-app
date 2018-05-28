@@ -42,9 +42,9 @@ describe GetAwardData do
     it 'returns a pretty hash of the awards for a project with summed amounts for each person' do
       result = described_class.call(account: sam, project: project)
 
-      expect(result.award_data[:contributions]).to match_array([{ net_amount: 14000, name: 'john john', avatar: nil },
-                                                                { net_amount: 6000, name: 'bob bob', avatar: nil },
-                                                                { net_amount: 150.0, name: 'sam sam', avatar: nil }])
+      expect(result.award_data[:contributions]).to match_array([{ net_amount: 14000, name: 'john john', avatar: '/assets/default_account_image.jpg' },
+                                                                { net_amount: 6000, name: 'bob bob', avatar: '/assets/default_account_image.jpg' },
+                                                                { net_amount: 150.0, name: 'sam sam', avatar: '/assets/default_account_image.jpg' }])
 
       expect(result.award_data[:award_amounts]).to eq(my_project_tokens: 150.0, total_tokens_issued: 20_150.0)
     end
@@ -52,7 +52,7 @@ describe GetAwardData do
     it 'shows values for each contributor for all 30 days' do
       result = described_class.call(account: sam, project: project)
 
-      awarded_account_names = Award.select('account_id, max(id) as id').group('account_id').all.map { |a| a.account.name }
+      awarded_account_names = Award.select('account_id, max(id) as id').group('account_id').all.map { |a| a.account.decorate.name }
       expect(awarded_account_names).to match_array(['john john', 'sam sam', 'bob bob'])
 
       contributions = result.award_data[:contributions_by_day].select do |cbd|
@@ -77,9 +77,9 @@ describe GetAwardData do
                  create(:award, award_type: create(:award_type, amount: 2000), account: create(:account, first_name: 'c', last_name: 'c'))
                ]
       )).to eq([
-                 { net_amount: 3000, name: 'b b', avatar: nil },
-                 { net_amount: 2000, name: 'c c', avatar: nil },
-                 { net_amount: 1000, name: 'a a', avatar: nil }
+                 { net_amount: 3000, name: 'b b', avatar: '/assets/default_account_image.jpg' },
+                 { net_amount: 2000, name: 'c c', avatar: '/assets/default_account_image.jpg' },
+                 { net_amount: 1000, name: 'a a', avatar: '/assets/default_account_image.jpg' }
                ])
     end
   end
@@ -107,28 +107,17 @@ describe GetAwardData do
 
       specify do
         contributions = described_class.new.contributions_summary(project)
-        expect(contributions).to eq([
-                                      { name: 'john john',
-                                        avatar: nil,
-                                        earned: 2000,
-                                        paid: 10,
-                                        remaining: 1990 },
-                                      { name: 'sam sam',
-                                        avatar: nil,
-                                        earned: 1000,
-                                        paid: 5,
-                                        remaining: 995 }
-                                    ])
+        expect(contributions).to eq([john, sam])
       end
     end
   end
 
   describe '#contributions_summary_pie_chart' do
     it "gathers extra entries into 'other'" do
-      expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 10, total_amount: 10, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 33, account: create(:account, first_name: 'b', last_name: 'b')), create(:award, unit_amount: 20, total_amount: 20, account: create(:account, first_name: 'c', last_name: 'c'))], 1)).to eq([{ net_amount: 33, name: 'b b', avatar: nil }, { net_amount: 30, name: 'Other' }])
+      expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 10, total_amount: 10, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 33, account: create(:account, first_name: 'b', last_name: 'b')), create(:award, unit_amount: 20, total_amount: 20, account: create(:account, first_name: 'c', last_name: 'c'))], 1)).to eq([{ net_amount: 33, name: 'b b', avatar: '/assets/default_account_image.jpg' }, { net_amount: 30, name: 'Other' }])
     end
     it 'gathers shows all entries if less than threshold' do
-      expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 10, total_amount: 10, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 33, account: create(:account, first_name: 'b', last_name: 'b')), create(:award, unit_amount: 20, total_amount: 20, account: create(:account, first_name: 'c', last_name: 'c'))], 3)).to eq([{ net_amount: 33, name: 'b b', avatar: nil }, { net_amount: 20, name: 'c c', avatar: nil }, { net_amount: 10, name: 'a a', avatar: nil }])
+      expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 10, total_amount: 10, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 33, account: create(:account, first_name: 'b', last_name: 'b')), create(:award, unit_amount: 20, total_amount: 20, account: create(:account, first_name: 'c', last_name: 'c'))], 3)).to eq([{ net_amount: 33, name: 'b b', avatar: '/assets/default_account_image.jpg' }, { net_amount: 20, name: 'c c', avatar: '/assets/default_account_image.jpg' }, { net_amount: 10, name: 'a a', avatar: '/assets/default_account_image.jpg' }])
     end
   end
 
@@ -145,6 +134,19 @@ describe GetAwardData do
                                                                                                                      'some other guy' => 0,
                                                                                                                      'sam sam' => 0,
                                                                                                                      'date' => '20160302')
+    end
+  end
+
+  describe '#contributions_by_day' do
+    let!(:contributor) { create :account, first_name: 'Amy', last_name: 'Win' }
+    let!(:new_project) { create(:project, title: 'Dogs', account: sam) }
+    let!(:award_type) { create(:award_type, project: new_project, amount: 1000, name: 'Small Award') }
+    let!(:award) { create(:award, award_type: award_type, quantity: 0.15, account: contributor, created_at: Time.zone.today - 200.days) }
+
+    it 'return contributors by day' do
+      result = described_class.call(account: contributor, project: new_project)
+      h = { 'date' => '2015-10-10' }
+      expect(result[:award_data][:contributions_by_day].first).to eq h
     end
   end
 end

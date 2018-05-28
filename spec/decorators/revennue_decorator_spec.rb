@@ -24,4 +24,15 @@ describe RevenueDecorator do
       expect(revenue.amount_pretty).to eq('Ξ9.999999999999999999')
     end
   end
+  specify do
+    expect(revenue.currency_denomination).to eq('$')
+  end
+  specify do
+    revenue.currency = 'BTC'
+    expect(revenue.currency_denomination).to eq('฿')
+  end
+  specify do
+    revenue.currency = 'ETH'
+    expect(revenue.currency_denomination).to eq('Ξ')
+  end
 end

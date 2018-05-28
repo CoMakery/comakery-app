@@ -62,7 +62,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
     let!(:project) do
       create(:project,
         royalty_percentage: BigDecimal('99.999999'),
-        public: true,
+        visibility: 'public_listed',
         payment_type: 'revenue_share',
         account: owner,
         require_confidentiality: false)
@@ -75,7 +75,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
     let!(:project) do
       create(:project,
         royalty_percentage: BigDecimal('100'),
-        public: true,
+        visibility: 'public_listed',
         account: owner,
         payment_type: 'revenue_share',
         require_confidentiality: false)
@@ -116,7 +116,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
     let!(:project) do
       create(:project,
         royalty_percentage: BigDecimal('99.99'),
-        public: true,
+        visibility: 'public_listed',
         account: owner,
         payment_type: 'revenue_share',
         require_confidentiality: false)
@@ -168,7 +168,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
     let!(:project) do
       create(:project,
         royalty_percentage: BigDecimal('100'),
-        public: true,
+        visibility: 'public_listed',
         account: owner,
         payment_type: 'revenue_share',
         require_confidentiality: false)
@@ -210,7 +210,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
     let!(:project) do
       create(:project,
         royalty_percentage: royalty_percentage_with_20_nines,
-        public: true,
+        visibility: 'public_listed',
         payment_type: 'revenue_share',
         account: owner,
         require_confidentiality: false)
@@ -270,7 +270,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
     # 1) create project
     project = create(:project,
       royalty_percentage: 100,
-      public: true,
+      visibility: 'public_listed',
       payment_type: 'revenue_share',
       account: owner,
       require_confidentiality: false)
@@ -380,7 +380,7 @@ describe 'precise financial calculations across the integrated revenue sharing c
     # 1) create project
     project = create(:project,
       royalty_percentage: almost_100,
-      public: true,
+      visibility: 'public_listed',
       account: owner,
       payment_type: 'revenue_share',
       require_confidentiality: false)

@@ -3,6 +3,7 @@ class Views::Layouts::Raw < Views::Base
     doctype!
     html(lang: 'en') {
       head {
+        render partial: 'shared/unbounce.html'
         meta :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type'
         meta charset: 'utf-8'
         meta name: 'viewport', content: 'width=device-width, initial-scale=1.0'
@@ -22,6 +23,8 @@ class Views::Layouts::Raw < Views::Base
 
         # javascript_pack_tag 'hello_react'  # NOTE this fails in fortitude
         # javascript_include_tag Webpacker.manifest.lookup!('hello_react.js')  # this succeeds
+
+        javascript_include_tag 'jquery.visible' if Rails.env.test?
 
         if ENV['AIRBRAKE_API_KEY'].present? && ENV['AIRBRAKE_PROJECT_ID'].present?
           javascript_include_tag 'airbrake-shim',

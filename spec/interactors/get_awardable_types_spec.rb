@@ -27,21 +27,22 @@ describe GetAwardableTypes do
           create(:award_type, project: p, community_awardable: false)
         end
       end
-      let!(:other_project) { create(:project, public: true) }
+      let!(:other_project) { create(:project, visibility: 'public_listed') }
 
       before do
         team1.build_authentication_team authentication
+        team2.build_authentication_team authentication
         team2.build_authentication_team swarmbot_only_auth
       end
 
-      it "returns true if you are an owner of the project and your slack_auth slack_team_id is the same as the project's" do
+      it 'returns true if you are an owner' do
         expect(described_class.call(project: citizencode_project, account: owner).can_award).to be_truthy
       end
 
-      it "returns true if account's slack auth is the same as the project and the project has community awardable awards" do
-        create(:award_type, project: swarmbot_project, community_awardable: true)
-
-        expect(described_class.call(project: swarmbot_project, account: swarmbot_only_account).can_award).to be_truthy
+      it 'returns true if you are in same team with the owner' do
+        create(:award_type, project: citizencode_project, community_awardable: true)
+        citizencode_project.channels.create(team: team2, channel_id: 'general')
+        expect(described_class.call(project: citizencode_project, account: swarmbot_only_account).can_award).to be_truthy
       end
 
       it 'returns false otherwise' do

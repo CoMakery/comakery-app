@@ -98,4 +98,11 @@ describe Revenue do
       expect(revenue.amount).to eq(90_123_456_789.56)
     end
   end
+
+  it '#issuer_display_name' do
+    account = create :account, first_name: 'Michael', last_name: 'Jackson'
+    project = create :project, account: account
+    revenue = create :revenue, project: project
+    expect(revenue.issuer_display_name).to eq 'Michael Jackson'
+  end
 end

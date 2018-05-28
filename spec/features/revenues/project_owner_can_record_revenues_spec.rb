@@ -6,7 +6,7 @@ describe 'when recording revenue' do
   let!(:owner_auth) { create(:authentication, account: owner) }
   let!(:other_account) { create(:account) }
   let!(:other_account_auth) { create(:authentication, account: other_account) }
-  let!(:project) { create(:project, public: true, payment_type: 'revenue_share', require_confidentiality: false, account: owner) }
+  let!(:project) { create(:project, visibility: 'public_listed', payment_type: 'revenue_share', require_confidentiality: false, account: owner) }
   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000, name: 'Code Contribution') }
 
   before do
@@ -75,7 +75,7 @@ describe 'when recording revenue' do
     check 'Contributions are exclusive'
     check 'Require project and business confidentiality'
 
-    click_on 'Save'
+    click_on 'Save', class: 'last_submit'
     expect(page).to have_current_path(project_path(project))
     expect(page).not_to have_content('cannot be changed because revenue has been recorded')
     expect(page).not_to have_css('.error')
@@ -269,7 +269,7 @@ describe 'when recording revenue' do
 
   describe 'non-members' do
     before do
-      project.update_attributes(require_confidentiality: false, public: true)
+      project.update_attributes(require_confidentiality: false, visibility: 'public_listed')
       visit logout_path
     end
 
@@ -293,7 +293,7 @@ describe 'when recording revenue' do
     end
 
     it "non-members can't see revenues if it's a private project" do
-      project.update_attribute(:public, false)
+      project.member!
 
       visit project_path(project)
       expect(page).not_to have_link 'Revenues'

@@ -12,6 +12,17 @@ class Views::Accounts::Show < Views::Base
         row {
           form_for current_account, url: '/account' do |f|
             column('small-3') {
+              label(for: :email) {
+                text 'Email'
+              }
+            }
+            column('small-9') {
+              with_errors(current_account, :email) {
+                f.text_field :email
+              }
+            }
+
+            column('small-3') {
               label(for: :first_name) {
                 text 'First Name'
               }
@@ -78,6 +89,14 @@ class Views::Accounts::Show < Views::Base
             text 'Account Details ('
             a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Edit' }
             text ')'
+          }
+          row {
+            column('small-4') {
+              text 'Email'
+            }
+            column('small-8') {
+              text current_account.email
+            }
           }
           row {
             column('small-4') {

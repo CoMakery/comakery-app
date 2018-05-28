@@ -189,5 +189,43 @@ describe Authentication do
         expect(result.id).to eq(authentication.id)
       end
     end
+
+    context '#manager?' do
+      let!(:account) { create(:account, email: 'bob@example.com') }
+      let!(:authentication) do
+        create(:authentication,
+          account_id: account.id,
+          provider: 'discord',
+          uid: 'discord-user',
+          token: 'discord token')
+      end
+
+      it 'return true is be owner' do
+        expect(authentication.manager?(128, true)).to be_truthy
+      end
+
+      it 'return true if has admin permission and manager permission' do
+        expect(authentication.manager?(40, false)).to be_truthy
+      end
+
+      it 'return true if has admin permission' do
+        expect(authentication.manager?(8, false)).to be_truthy
+      end
+
+      it 'return true if has server manager permission' do
+        expect(authentication.manager?(32, false)).to be_truthy
+      end
+
+      it 'return false if does not has server manager or admin permission' do
+        expect(authentication.manager?(128, false)).to be_falsey
+      end
+    end
+  end
+
+  it 'set authentication confirm' do
+    authentication = create :authentication, confirm_token: '1235'
+    expect(authentication.confirmed?).to be_falsey
+    authentication.confirm!
+    expect(authentication.reload.confirmed?).to be_truthy
   end
 end

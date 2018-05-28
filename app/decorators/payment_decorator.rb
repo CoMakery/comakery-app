@@ -34,7 +34,7 @@ class PaymentDecorator < Draper::Decorator
   end
 
   def payee_name
-    account.name
+    account.decorate.name
   end
 
   def status
@@ -45,7 +45,9 @@ class PaymentDecorator < Draper::Decorator
     account.image
   end
 
-  delegate :name, to: :issuer, prefix: true, allow_nil: true
+  def issuer_name
+    issuer&.decorate&.name
+  end
 
   def issuer_avatar
     issuer&.image

@@ -7,7 +7,7 @@ describe 'viewing projects, creating and editing', :js do
     let!(:owner_auth) { create(:authentication, account: owner) }
     let!(:other_account) { create(:account) }
     let!(:other_account_auth) { create(:authentication, account: other_account) }
-    let!(:project) { create(:project, public: true, account: owner) }
+    let!(:project) { create(:project, visibility: 'public_listed', account: owner) }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
     let!(:channel) { create(:channel, project: project, team: team) }
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }
@@ -58,6 +58,16 @@ describe 'viewing projects, creating and editing', :js do
 
           click_link 'Awards'
           expect(page).to have_content 'Project Tokens Awarded'
+        end
+
+        it 'show link to ethereum transaction' do
+          project.update ethereum_enabled: true
+          award.update ethereum_transaction_address: '0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
+          login(owner)
+          visit project_path(project.reload)
+
+          click_link 'Awards'
+          expect(page).to have_content 'Blockchain Transaction'
         end
 
         it 'paginates when there are lots of awards' do

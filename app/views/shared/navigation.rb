@@ -1,5 +1,6 @@
 class Views::Shared::Navigation < Views::Base
   def content
+    current_account_deco = current_account&.decorate
     div(class: 'show-for-small-only') {
       div(class: 'clear-both') {}
       div(class: 'row project-search') {
@@ -74,7 +75,7 @@ class Views::Shared::Navigation < Views::Base
             if current_account
               div(class: 'top-bar-text') {
                 img(src: account_image_url(current_account, 34), class: 'project-icon')
-                text current_account.name
+                text current_account_deco.name
               }
             end
           }

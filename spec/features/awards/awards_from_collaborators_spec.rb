@@ -33,7 +33,7 @@ describe 'Collaborator projects' do
     award_type_inputs[0].find("input[name*='[amount]']").set '10'
     award_type_inputs[0].find("input[name*='[community_awardable]'][type='checkbox']").set(true)
 
-    click_on 'Save'
+    click_on 'Save', class: 'last_submit'
 
     expect(page).to have_content 'Project created'
 

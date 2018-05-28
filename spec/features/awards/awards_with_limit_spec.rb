@@ -17,7 +17,7 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
 
     login(current_auth.account)
     stub_slack_user_list([slack_user_from_auth(awardee_auth)])
-    allow_any_instance_of(Account).to receive(:send_award_notifications)
+    allow_any_instance_of(Award).to receive(:send_award_notifications)
   end
 
   it 'limit to send award by month' do
@@ -25,11 +25,11 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
 
     send_award
 
-    expect(page).to have_content "Successfully sent award to #{Award.last.recipient_display_name}"
+    expect(page).to have_content "Successfully sent award to #{Award.last.decorate.recipient_display_name}"
 
     send_award
 
-    expect(page).to have_content "Successfully sent award to #{Award.last.recipient_display_name}"
+    expect(page).to have_content "Successfully sent award to #{Award.last.decorate.recipient_display_name}"
 
     send_award
     expect(page).to have_content "Sorry, you can't send more awards this month than the project's maximum number of allowable tokens per month"
@@ -39,7 +39,7 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
     visit project_path(project1)
 
     send_award(channel1)
-    expect(page).to have_content "Successfully sent award to #{Award.last.recipient_display_name}"
+    expect(page).to have_content "Successfully sent award to #{Award.last.decorate.recipient_display_name}"
 
     send_award(channel1)
     expect(page).to have_content "Sorry, you can't send more awards than the project's maximum number of allowable tokens"

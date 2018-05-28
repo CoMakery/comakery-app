@@ -7,7 +7,7 @@ class Views::Revenues::Index < Views::Projects::Base
     column {
       if project.account == current_account
         full_row { h3 'Record Project Revenue' }
-        form_for [project, revenue] { |f|
+        form_for [project, revenue] do |f|
           div(class: 'content-box summary menu simple') {
             row {
               column('large-4 float-left') {
@@ -44,7 +44,7 @@ class Views::Revenues::Index < Views::Projects::Base
               f.submit('Record Revenue', class: buttonish(:expand))
             }
           }
-        }
+        end
       end
 
       full_row {

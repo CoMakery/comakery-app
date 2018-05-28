@@ -1,10 +1,10 @@
 class Award < ApplicationRecord
-  include ::Rails.application.routes.url_helpers
   paginates_per 50
 
   include EthereumAddressable
 
   belongs_to :account, optional: true
+  belongs_to :authentication, optional: true
   belongs_to :award_type
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
@@ -30,7 +30,7 @@ class Award < ApplicationRecord
 
   def ethereum_issue_ready?
     project.ethereum_enabled &&
-      recipient_address.present? &&
+      account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end
 
@@ -42,51 +42,23 @@ class Award < ApplicationRecord
     account.authentication_teams.find_by team_id: channel.team_id if channel
   end
 
-  def recipient_display_name
-    account ? account.name : email
-  end
-
-  def recipient_user_name
-    recipient_auth_team&.name || account.name
-  end
-
-  def recipient_address
-    account&.ethereum_wallet
-  end
-
-  def issuer_display_name
-    issuer&.nick
-  end
-
-  def issuer_user_name
-    team&.authentication_team_by_account(issuer)&.name || issuer.name
-  end
-
-  def notifications_message
-    text = message_info
-    text = "#{text} for \"#{description}\"" if description.present?
-
-    text = "#{text} on the <#{project_url(project)}|#{project.title}> project."
-
-    if project.ethereum_enabled && recipient_address.blank?
-      text = "#{text} <#{account_url}|Set up your account> to receive Ethereum tokens."
-    end
-
-    text.strip!
-    text.gsub!(/\s+/, ' ')
-    text
-  end
-
-  def message_info
-    if self_issued?
-      "@#{issuer_user_name} self-issued"
-    else
-      "@#{issuer_user_name} sent @#{recipient_user_name} a #{total_amount} token #{award_type.name}"
-    end
-  end
-
   def send_confirm_email
     UserMailer.send_award_notifications(self).deliver_now unless discord? || confirmed?
+  end
+
+  def discord_client
+    @discord_client ||= Comakery::Discord.new
+  end
+
+  def send_award_notifications
+    if team.discord?
+      discord_client.send_message self
+    else
+      auth_team = team.authentication_team_by_account issuer
+      token = auth_team.authentication.token
+      slack = Comakery::Slack.get(token)
+      slack.send_award_notifications(award: self)
+    end
   end
 
   def confirm!(account)

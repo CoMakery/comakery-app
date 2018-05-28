@@ -2,7 +2,7 @@ class Views::Projects::Form::Channel < Views::Base
   needs :f, :providers
 
   def content
-    div(class: 'content-box') {
+    div(class: 'content-box', 'data-id': 'communication-channels') {
       div(class: 'award-types') {
         div(class: 'legal-box-header') { h3 'Communication Channels' }
         row {
@@ -51,6 +51,14 @@ class Views::Projects::Form::Channel < Views::Base
           p { a('+ add channel', href: '#', 'data-duplicate': '.channel-template') }
         }
       }
+      render_cancel_and_save_buttons(f)
+    }
+  end
+
+  def render_cancel_and_save_buttons(form)
+    full_row_right {
+      link_to 'Cancel', f.object, class: 'button cancel'
+      form.submit 'Save', class: buttonish(:expand)
     }
   end
 end

@@ -9,12 +9,12 @@ class Project < ApplicationRecord
   belongs_to :account
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
-  has_many :channels, -> { order :created_at }, dependent: :destroy
+  has_many :channels, -> { order :created_at }, inverse_of: :project, dependent: :destroy
   has_many :payments, dependent: :destroy do
     def new_with_quantity(quantity_redeemed:, account:)
       project = @association.owner
-
-      new(total_value: BigDecimal(quantity_redeemed) * project.revenue_per_share,
+      quantity = quantity_redeemed.blank? ? 0 : quantity_redeemed
+      new(total_value: BigDecimal(quantity) * project.revenue_per_share,
           quantity_redeemed: quantity_redeemed,
           share_value: project.revenue_per_share,
           currency: project.denomination,
@@ -39,12 +39,12 @@ class Project < ApplicationRecord
     revenue_share: 0,
     project_token: 1
   }
-
   enum denomination: {
     USD: 0,
     BTC: 1,
     ETH: 2
   }
+  enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
 
   validates :description, :account, :title, :legal_project_owner,
     :denomination, presence: true
@@ -65,11 +65,11 @@ class Project < ApplicationRecord
 
   before_save :set_transitioned_to_ethereum_enabled
 
-  scope :publics, -> { where public: true }
-  scope :privates, -> { where.not public: true }
   scope :featured, -> { order :featured }
-  scope :archived, -> { where archived: true }
-  scope :active, -> { where.not archived: true }
+  scope :unlisted, -> { where 'projects.visibility in(2,3)' }
+  scope :listed, -> { where 'projects.visibility not in(2,3)' }
+  scope :visible, -> { where 'projects.visibility not in(2,3,4)' }
+  scope :unarchived, -> { where.not visibility: 4 }
 
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
@@ -83,21 +83,8 @@ class Project < ApplicationRecord
     CreateEthereumAwards.call(awards: awards)
   end
 
-  def create_ethereum_contract!
-    address = Comakery::Ethereum.token_contract(maxSupply: maximum_tokens)
-    update! ethereum_contract_address: address
-  end
-
   def total_revenue
     revenues.total_amount
-  end
-
-  def max_award_used?
-    total_awarded >= maximum_tokens
-  end
-
-  def month_award_used?
-    total_month_awarded >= maximum_royalties_per_month
   end
 
   def total_month_awarded
@@ -175,12 +162,17 @@ class Project < ApplicationRecord
     revenue_share? && (royalty_percentage&.> 0)
   end
 
-  def public?
-    public == true
+  def show_id
+    unlisted? ? long_id : id
   end
 
-  def private?
-    !public?
+  def public?
+    public_listed? || public_unlisted?
+  end
+
+  def access_unlisted?(check_account)
+    return true if public_unlisted?
+    return true if member_unlisted? && check_account&.same_team_or_owned_project?(self)
   end
 
   def can_be_access?(check_account)
@@ -191,6 +183,10 @@ class Project < ApplicationRecord
 
   def show_revenue_info?(account)
     share_revenue? && can_be_access?(account)
+  end
+
+  def unlisted?
+    member_unlisted? || public_unlisted?
   end
 
   def royalty_percentage=(x)

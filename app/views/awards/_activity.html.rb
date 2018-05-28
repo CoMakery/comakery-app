@@ -26,12 +26,4 @@ class Views::Awards::Activity < Views::Base
       });
     JAVASCRIPT
   end
-
-  def total_tokens_issued
-    award_data[:award_amounts][:total_tokens_issued]
-  end
-
-  def percentage_issued
-    total_tokens_issued * 100 / project.maximum_tokens.to_f
-  end
 end

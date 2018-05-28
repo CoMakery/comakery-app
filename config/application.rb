@@ -34,10 +34,6 @@ module Comakery
     config.autoload_paths << Rails.root.join("app", "lib")
     config.autoload_paths << Rails.root.join("app", "interactors")
 
-    # e-mail
-    config.action_mailer.delivery_method = :postmark
-    config.action_mailer.postmark_settings = { :api_key => ENV['POSTMARK_API_KEY'] }
-
     routes.default_url_options[:host] = ENV['APP_HOST'] || "localhost:#{ENV['PORT'] || 3000}"
     routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'] || 'https://'
 

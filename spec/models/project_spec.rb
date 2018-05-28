@@ -11,6 +11,12 @@ describe Project do
                 "Legal project owner can't be blank"].sort)
     end
 
+    it 'rails error if not found Ethereum address' do
+      stub_const('Comakery::Ethereum::ADDRESS', {})
+      expect(Comakery::Ethereum::ADDRESS['account']).to be_nil
+      expect { described_class.create(payment_type: 'project_token', ethereum_contract_address: '111') }.to raise_error(ArgumentError)
+    end
+
     describe 'payment types' do
       let(:project) { build :project, royalty_percentage: nil, maximum_royalties_per_month: nil }
 
@@ -801,14 +807,133 @@ describe Project do
     end
   end
 
-  describe '#create_ethereum_contract!' do
-    let(:project) { create :project }
-    let(:contract_address) { '0x03b3536e825a484F796B094e63011027620bc2a9' }
+  describe '#show_id' do
+    let(:project) { create :project, long_id: '12345' }
 
-    it 'kicks off an ethereum token contract job' do
-      expect(Comakery::Ethereum).to receive(:token_contract).with(maxSupply: project.maximum_tokens) { contract_address }
-      project.create_ethereum_contract!
-      expect(project.ethereum_contract_address).to eq(contract_address)
+    it 'show id for listed project' do
+      expect(project.show_id).to eq(project.id)
     end
+
+    it 'show long id for unlisted project' do
+      project.public_unlisted!
+      expect(project.show_id).to eq('12345')
+    end
+  end
+
+  describe '#access_unlisted' do
+    let(:team) { create :team }
+    let(:account) { create :account }
+    let(:auth) { create :authentication, account: account }
+    let(:project) { create :project, account: account, long_id: '12345' }
+    let(:same_team_account) { create :account }
+    let(:auth1) { create :authentication, account: same_team_account }
+    let(:other_team_account) { create :account }
+
+    before do
+      team.build_authentication_team auth
+      team.build_authentication_team auth1
+      project.channels.create(team: team, channel_id: '123')
+    end
+
+    it 'can acccess public unlisted project via long_id' do
+      project.public_unlisted!
+      expect(project.access_unlisted?(nil)).to be_truthy
+    end
+
+    it 'other team members can not access member_unlisted project' do
+      project.member_unlisted!
+      expect(project.access_unlisted?(other_team_account)).to be_falsey
+    end
+
+    it 'owner can access member_unlisted project' do
+      project.member_unlisted!
+      expect(project.access_unlisted?(account)).to be_truthy
+    end
+
+    it 'same team members can access member_unlisted project' do
+      project.member_unlisted!
+      expect(project.access_unlisted?(same_team_account)).to be_truthy
+    end
+  end
+
+  describe '#can_be_access' do
+    let(:team) { create :team }
+    let(:account) { create :account }
+    let(:auth) { create :authentication, account: account }
+    let(:project) { create :project, account: account, long_id: '12345' }
+    let(:same_team_account) { create :account }
+    let(:auth1) { create :authentication, account: same_team_account }
+    let(:other_team_account) { create :account }
+
+    before do
+      team.build_authentication_team auth
+      team.build_authentication_team auth1
+      project.channels.create(team: team, channel_id: '123')
+    end
+
+    it 'everyone can acccess public project' do
+      project.public_listed!
+      expect(project.can_be_access?(nil)).to be_truthy
+    end
+
+    it 'other team members can not access public project with require_confidentiality' do
+      project.update require_confidentiality: true
+      expect(project.can_be_access?(other_team_account)).to be_falsey
+    end
+
+    it 'owner can access project' do
+      project.member!
+      expect(project.can_be_access?(account)).to be_truthy
+    end
+
+    it 'same team members can access member_unlisted project' do
+      project.member!
+      expect(project.can_be_access?(same_team_account)).to be_truthy
+    end
+  end
+
+  it 'total_month_awarded' do
+    project = create :project
+    award_type = create :award_type, project: project, amount: 10
+    award_type2 = create :award_type, project: project, amount: 20
+    award = create :award, award_type: award_type
+    create :award, award_type: award_type2
+    expect(project.total_month_awarded).to eq 30
+    award.update created_at: DateTime.current - 35.days
+    expect(project.total_month_awarded).to eq 20
+  end
+
+  it 'check invalid channel' do
+    project = create :project
+    attributes = {}
+    expect(project.invalid_channel(attributes)).to eq true
+    attributes['channel_id'] = 'general'
+    attributes['team_id'] = 1
+    expect(project.invalid_channel(attributes)).to eq false
+  end
+
+  it 'check share revenue' do
+    project = create :project
+    expect(project.share_revenue?).to eq false
+    project.revenue_share!
+    project.update royalty_percentage: 0
+    expect(project.share_revenue?).to eq false
+    project.update royalty_percentage: 10
+    expect(project.share_revenue?).to eq true
+  end
+
+  it 'check if user can access revenue info' do
+    account = create :account
+    other_account = create :account
+    project = create :project, account: account
+    expect(project.share_revenue?).to eq false
+    project.revenue_share!
+    project.update royalty_percentage: 0
+    expect(project.share_revenue?).to eq false
+    expect(project.show_revenue_info?(account)).to eq false
+    project.update royalty_percentage: 10
+    expect(project.share_revenue?).to eq true
+    expect(project.show_revenue_info?(account)).to eq true
+    expect(project.show_revenue_info?(other_account)).to eq false
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180406065159) do
+ActiveRecord::Schema.define(version: 20180423025725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,7 +57,6 @@ ActiveRecord::Schema.define(version: 20180406065159) do
     t.integer "account_id"
     t.integer "team_id"
     t.boolean "manager", default: false
-    t.index ["authentication_id"], name: "index_authentication_teams_on_authentication_id"
   end
 
   create_table "authentications", id: :serial, force: :cascade do |t|
@@ -67,21 +66,14 @@ ActiveRecord::Schema.define(version: 20180406065159) do
     t.datetime "updated_at"
     t.string "uid", null: false
     t.string "token"
+    t.string "slack_user_name"
+    t.string "slack_first_name"
+    t.string "slack_last_name"
+    t.string "slack_image_32_url"
     t.jsonb "oauth_response"
     t.string "email"
     t.string "confirm_token"
     t.index ["account_id"], name: "index_authentications_on_account_id"
-    t.index ["uid"], name: "index_authentications_on_uid"
-  end
-
-  create_table "award_links", force: :cascade do |t|
-    t.integer "award_type_id"
-    t.decimal "quantity"
-    t.text "description"
-    t.string "status", default: "available"
-    t.string "token"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "award_types", id: :serial, force: :cascade do |t|
@@ -97,23 +89,23 @@ ActiveRecord::Schema.define(version: 20180406065159) do
   end
 
   create_table "awards", id: :serial, force: :cascade do |t|
+    t.integer "issuer_id", null: false
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "award_type_id", null: false
-    t.integer "account_id"
+    t.integer "authentication_id"
     t.string "ethereum_transaction_address"
     t.text "proof_id", null: false
     t.string "proof_link"
     t.decimal "quantity", default: "1.0"
     t.integer "total_amount"
     t.integer "unit_amount"
+    t.integer "account_id"
     t.integer "channel_id"
     t.string "uid"
-    t.integer "issuer_id"
     t.string "confirm_token"
     t.string "email"
-    t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
   end
 
@@ -128,6 +120,7 @@ ActiveRecord::Schema.define(version: 20180406065159) do
 
   create_table "payments", id: :serial, force: :cascade do |t|
     t.integer "project_id"
+    t.integer "issuer_id"
     t.integer "account_id"
     t.decimal "total_value"
     t.datetime "created_at", null: false
@@ -140,8 +133,6 @@ ActiveRecord::Schema.define(version: 20180406065159) do
     t.string "currency"
     t.integer "status", default: 0
     t.boolean "reconciled", default: false
-    t.integer "issuer_id"
-    t.index ["account_id"], name: "index_payments_on_account_id"
     t.index ["project_id"], name: "index_payments_on_project_id"
   end
 
@@ -153,6 +144,7 @@ ActiveRecord::Schema.define(version: 20180406065159) do
     t.datetime "updated_at", null: false
     t.boolean "public", default: false, null: false
     t.integer "account_id", null: false
+    t.string "slack_team_id"
     t.string "image_id"
     t.string "slack_channel"
     t.integer "maximum_tokens", default: 0, null: false
@@ -173,9 +165,11 @@ ActiveRecord::Schema.define(version: 20180406065159) do
     t.string "image_filename"
     t.string "image_content_size"
     t.string "image_content_type"
-    t.boolean "archived", default: false
+    t.string "long_id"
+    t.integer "visibility", default: 0
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["public"], name: "index_projects_on_public"
+    t.index ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public"
   end
 
   create_table "revenues", id: :serial, force: :cascade do |t|
