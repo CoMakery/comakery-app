@@ -7,7 +7,7 @@ class Views::Projects::TransferTokens < Views::Projects::Base
       f.hidden_field :ethereum_contract_address
       row {
         label {
-          text 'Receiver Address'
+          text 'Recipient Address'
           text_field_tag :receiver_address
         }
         label {
