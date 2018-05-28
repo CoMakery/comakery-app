@@ -17,7 +17,7 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
 
     login(current_auth.account)
     stub_slack_user_list([slack_user_from_auth(awardee_auth)])
-    allow_any_instance_of(Account).to receive(:send_award_notifications)
+    allow_any_instance_of(Award).to receive(:send_award_notifications)
   end
 
   it 'limit to send award by month' do
