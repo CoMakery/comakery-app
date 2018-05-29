@@ -21,6 +21,7 @@ class GetContributorData
 
   def contributions_summary_pie_chart(awards, fully_shown = 12)
     contributions = contributions_data(awards)
+    contributions = contributions.sort_by { |c| -c[:net_amount] }
     summary = contributions[0...fully_shown]
     if contributions.size > fully_shown
       other = { name: 'Other' }

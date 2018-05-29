@@ -10,9 +10,8 @@ describe 'contributors/index.html.rb' do
     award_type.awards.create_with_quantity(50, issuer: owner, account: authentication.account)
     assign :project, project
     assign :current_account, owner
-    assign :award_data, contributions_summary: [
-      { avatar: 'http://google.com',
-        earned: 10,
+    assign :award_data, contributions_summary_pie_chart: [
+      { net_amount: 50,
         name: 'Tony! Toni! Toné!' }
     ]
   end

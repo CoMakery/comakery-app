@@ -3,6 +3,6 @@ class ContributorsController < ApplicationController
   skip_before_action :require_login, only: :index
 
   def index
-    @award_data = GetContributorData.call(account: current_account, project: @project).award_data
+    @award_data = GetContributorData.call(project: @project).award_data
   end
 end
