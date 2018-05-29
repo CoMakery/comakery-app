@@ -61,6 +61,11 @@ module SlackStubs
     RestClient.stub(:get) { response }
   end
 
+  def stub_discord_user
+    response = '{"username": "jason", "discriminator": "4088", "id": "123"}'
+    RestClient.stub(:get) { response }
+  end
+
   def stub_discord_webhooks
     response = '[{"id": "123", "name": "Comakery"}]'
     RestClient.stub(:get) { response }

@@ -236,6 +236,7 @@ describe BuildAwardRecords do
       stub_discord_channels
       channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
       result = nil
+      stub_discord_user
       expect do
         expect do
           result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: channel.id, award_params: {
