@@ -66,6 +66,9 @@ class BuildAwardRecords
     team = channel.team
     if team.discord?
       email = "#{uid}@discordapp.com"
+      discord_client = Comakery::Discord.new
+      info = discord_client.user_info(uid)
+      nickname = info['username']
     else
       response = Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
       nickname = response.user.name
