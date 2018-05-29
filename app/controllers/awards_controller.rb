@@ -4,7 +4,7 @@ class AwardsController < ApplicationController
 
   def index
     @awards = @project.awards.order(id: :desc).page(params[:page]).decorate
-    @award_data = GetAwardData.call(account: current_account, project: @project).award_data
+    @award_data = GetAwardData.call(project: @project).award_data
   end
 
   def create
