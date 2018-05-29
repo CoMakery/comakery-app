@@ -64,7 +64,7 @@ describe ProjectsController do
       expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
       other_member_project.channels.create(team: team, channel_id: 'general')
     end
-    
+
     it 'returns your private projects, and public projects that *do not* belong to you' do
       get :landing
 

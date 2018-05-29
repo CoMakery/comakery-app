@@ -1,8 +1,6 @@
 class GetAwardData
   include Interactor
-  include ApplicationHelper
-  include Refile::AttachmentHelper
-  include ActionView::Helpers
+
   def call
     project = context.project
     awards = project.awards.includes(:account, :award_type)

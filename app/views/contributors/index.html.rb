@@ -5,7 +5,7 @@ class Views::Contributors::Index < Views::Projects::Base
     render partial: 'shared/project_header'
     column {
       full_row {
-        if award_data[:contributions].present?
+        if award_data[:contributions_summary_pie_chart].present?
           column('large-4 medium-12 summary float-left') {
             h3 "Lifetime #{project.payment_description} Awarded To Contributors"
 
@@ -23,7 +23,7 @@ class Views::Contributors::Index < Views::Projects::Base
       }
 
       full_row {
-        if award_data[:contributions_summary].present?
+        if award_data[:contributions_summary_pie_chart].present?
           div(class: 'table-scroll table-box contributors', style: 'margin-bottom: 300px') {
             table(class: 'table-scroll', style: 'width: 100%') {
               tr(class: 'header-row') {
