@@ -14,7 +14,7 @@ describe 'contributors/index.html.rb' do
       { net_amount: 50,
         name: 'Tony! Toni! Toné!' }
     ]
-    assign :contributors, project.contributors_by_award_amount.page(1).decorate
+    assign :contributors, project.contributors_by_award_amount.page(1)
   end
 
   describe 'with contributors and revenue shares' do
@@ -69,7 +69,8 @@ describe 'contributors/index.html.rb' do
 
   describe 'without contributors' do
     before do
-      assign :award_data, award_amounts: { total_tokens_issued: 0 }, contributions_summary: []
+      assign :award_data, award_amounts: { total_tokens_issued: 0 }, contributions_summary_pie_chart: []
+      assign :contributors, Account.none.page(1)
     end
 
     it 'hides table' do
