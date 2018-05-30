@@ -32,7 +32,7 @@ class Views::Projects::Base < Views::Base
       a(href: path) {
         div(class: 'sixteen-nine') {
           div(class: 'content') {
-            img(src: project_image_url(project, 132), class: 'image-block')
+            img(src: project_image_url(project, 367), class: 'image-block')
           }
         }
       }
