@@ -3,7 +3,7 @@ class AwardsController < ApplicationController
   skip_before_action :require_login, only: %i[index confirm]
 
   def index
-    @awards = @project.awards.order(id: :desc).page(params[:page]).decorate
+    @awards = @project.awards.order(created_at: :desc).page(params[:page]).decorate
     @award_data = GetAwardData.call(project: @project).award_data
   end
 
