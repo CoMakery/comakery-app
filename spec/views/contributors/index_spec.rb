@@ -14,6 +14,7 @@ describe 'contributors/index.html.rb' do
       { net_amount: 50,
         name: 'Tony! Toni! Toné!' }
     ]
+    assign :contributors, project.contributors_by_award_amount.page(1).decorate
   end
 
   describe 'with contributors and revenue shares' do

@@ -56,6 +56,7 @@ describe 'awarding users' do
     it 'populates the dropdown to select the awardee and creates the account/auth for the user' do
       expect_any_instance_of(Award).to receive(:send_award_notifications)
       project.revenue_share!
+      project.reload
       login(account)
 
       visit project_path(project)
@@ -74,6 +75,7 @@ describe 'awarding users' do
       expect(bobjohnsons_auth).not_to be_nil
       award = Award.last
       expect(AwardMessage.call(award: award).notifications_message).to match '@Michael Jackson sent @bobjohnson a 1579 token Small'
+      bobjohnsons_auth.account.confirm!
       login(bobjohnsons_auth.account)
 
       visit project_awards_path(project)

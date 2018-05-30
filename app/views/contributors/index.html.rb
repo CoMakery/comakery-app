@@ -1,5 +1,5 @@
 class Views::Contributors::Index < Views::Projects::Base
-  needs :project, :award_data
+  needs :project, :award_data, :contributors
 
   def content
     render partial: 'shared/project_header'
@@ -22,8 +22,9 @@ class Views::Contributors::Index < Views::Projects::Base
         render partial: 'shared/table/unpaid_pool'
       }
 
+      pages
       full_row {
-        if award_data[:contributions_summary_pie_chart].present?
+        if contributors.present?
           div(class: 'table-scroll table-box contributors', style: 'margin-bottom: 300px') {
             table(class: 'table-scroll', style: 'width: 100%') {
               tr(class: 'header-row') {
@@ -33,7 +34,7 @@ class Views::Contributors::Index < Views::Projects::Base
                 th { text 'Unpaid Revenue Share Balance' } if project.revenue_share?
                 th { text 'Lifetime Paid' } if project.revenue_share?
               }
-              project.contributors_by_award_amount.each do |contributor|
+              contributors.decorate.each do |contributor|
                 tr(class: 'award-row') {
                   td(class: 'contributor') {
                     img(src: account_image_url(contributor, 27), class: 'icon avatar-img')
@@ -85,6 +86,7 @@ class Views::Contributors::Index < Views::Projects::Base
           }
         end
       }
+      pages
     }
   end
 
@@ -100,5 +102,15 @@ class Views::Contributors::Index < Views::Projects::Base
     award_data[:contributions_summary_pie_chart].map do |award|
       { label: award[:name], value: award[:net_amount] }
     end.to_json
+  end
+
+  def pages
+    full_row {
+      div(class: 'callout clearfix') {
+        div(class: 'pagination float-right') {
+          text paginate contributors
+        }
+      }
+    }
   end
 end
