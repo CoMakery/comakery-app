@@ -41,9 +41,6 @@ class Views::Projects::Base < Views::Base
           h5 {
             a(project.title, href: path, class: 'project-link')
           }
-          a(href: path) {
-            i project.legal_project_owner
-          }
         }
 
         p(class: 'description no-last-award') { text project.description_text }
