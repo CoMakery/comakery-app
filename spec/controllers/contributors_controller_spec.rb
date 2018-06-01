@@ -30,7 +30,7 @@ describe ContributorsController do
 
       expect(response.status).to eq(200)
       expect(assigns[:project]).to eq(project)
-      expect(assigns[:award_data][:contributions]).to match_array([{ net_amount: 1337, name: 'John Doe', avatar: '/assets/default_account_image.jpg' }])
+      expect(assigns[:award_data][:contributions_summary_pie_chart]).to match_array([{ net_amount: 1337, name: 'John Doe' }])
     end
   end
 end

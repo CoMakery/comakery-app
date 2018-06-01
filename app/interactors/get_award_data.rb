@@ -1,64 +1,12 @@
 class GetAwardData
   include Interactor
-  include ApplicationHelper
-  include Refile::AttachmentHelper
-  include ActionView::Helpers
+
   def call
     project = context.project
-    account = context.account
-
     awards = project.awards.includes(:account, :award_type)
-    awards_array = awards.dup.to_a
-
     context.award_data = {
-      contributions: contributions_data(awards_array),
-      contributions_summary: contributions_summary(project),
-      contributions_summary_pie_chart: contributions_summary_pie_chart(awards_array),
-      award_amounts: award_amount_data(account, awards_array),
       contributions_by_day: contributions_by_day(awards)
     }
-  end
-
-  def award_amount_data(account, awards)
-    result = { total_tokens_issued: awards.sum(&:total_amount) }
-    result[:my_project_tokens] = account ? awards.sum { |a| a.account_id == account.id ? a.total_amount : 0 } : nil
-    result
-  end
-
-  def avatar(account)
-    url = account_image_url(account, 34)
-    url = '/assets/default_account_image.jpg' if url == '/default_account_image.jpg'
-    url
-  end
-
-  def contributions_summary(project)
-    contributions = project.contributors_distinct
-    highest_earned_first(contributions, project)
-  end
-
-  def highest_earned_first(contributions, project)
-    contributions.sort { |a, b| b.total_awards_earned(project) <=> a.total_awards_earned(project) }
-  end
-
-  def contributions_data(awards)
-    awards.each_with_object({}) do |award, a_hash|
-      award = award.decorate
-      a_hash[award.account_id] ||= { net_amount: 0 }
-      a_hash[award.account_id][:name] ||= award.recipient_display_name
-      a_hash[award.account_id][:net_amount] += award.total_amount
-      a_hash[award.account_id][:avatar] ||= avatar(award.account) if award.account
-    end.values.sort_by { |award_data| -award_data[:net_amount] }
-  end
-
-  def contributions_summary_pie_chart(awards, fully_shown = 12)
-    contributions = contributions_data(awards)
-    summary = contributions[0...fully_shown]
-    if contributions.size > fully_shown
-      other = { name: 'Other' }
-      other[:net_amount] = contributions[fully_shown..-1].sum { |award| award[:net_amount] }
-      summary << other
-    end
-    summary
   end
 
   def contributions_by_day(awards_scope)

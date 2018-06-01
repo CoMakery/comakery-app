@@ -1,4 +1,5 @@
 class Account < ApplicationRecord
+  paginates_per 50
   has_secure_password validations: false
   attachment :image
   include EthereumAddressable
@@ -23,6 +24,10 @@ class Account < ApplicationRecord
   validates :first_name, :last_name, presence: true, if: :name_required
 
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
+
+  def self.order_by_award(_project_id)
+    select('accounts.*, (select sum(total_amount) from awards where account_id = accounts.id) as total').distinct.order('total desc')
+  end
 
   before_save :downcase_email
 

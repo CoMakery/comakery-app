@@ -29,7 +29,6 @@ describe BuildAwardRecords do
         description: 'This rocks!!11',
         uid: 'test@test.st'
       }, total_tokens_issued: 0)
-
       expect(result.award.confirm_token).not_to be_nil
       expect(result.award.email).to eq 'test@test.st'
     end

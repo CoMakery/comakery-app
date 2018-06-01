@@ -7,7 +7,7 @@ class Views::Awards::Activity < Views::Base
         h3 "#{project.payment_description} Awarded"
         br
 
-        if award_data[:contributions].present?
+        if award_data[:contributions_by_day].present?
           p {
             div(id: 'contributions-chart')
           }

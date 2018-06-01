@@ -130,11 +130,15 @@ $ ->
     $(".copy-source").select()
     document.execCommand('Copy')
 
+  $('input[name=mine]').click (e) ->
+    window.location.href = $(@).val()
+
+  $('#project_payment_type').change (e)->
+    awardPaymentType()
+
   floatingLeftMenuItems()
   # Run on page ready then bind events
   awardPaymentType()
-  $('#project_payment_type').change (e)->
-    awardPaymentType()
 
   royaltyCalc()
   $('#project_royalty_percentage, #project_maximum_tokens, #project_denomination').change (e) ->
