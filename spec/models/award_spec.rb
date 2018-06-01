@@ -211,4 +211,34 @@ describe Award do
       expect(award.confirmed?).to eq true
     end
   end
+
+  describe '#send_award_notifications' do
+    let!(:team) { create :team }
+    let!(:account) { create :account }
+    let!(:authentication) { create :authentication, account: account }
+    let!(:discord_team) { create :team, provider: 'discord' }
+    let!(:project) { create :project, account: account }
+    let!(:award_type) { create :award_type, project: project }
+    let!(:channel) { create :channel, team: team, project: project }
+    let!(:award) { create :award, award_type: award_type, issuer: account, channel: channel }
+
+    before do
+      team.build_authentication_team authentication
+    end
+
+    it 'sends a Slack notification' do
+      allow(award).to receive(:send_award_notifications)
+      award.send_award_notifications
+      expect(award).to have_received(:send_award_notifications)
+    end
+
+    it 'sends a Discord notification' do
+      stub_discord_channels
+      channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
+      award = create :award, award_type: award_type, issuer: account, channel: channel
+      allow(award.discord_client).to receive(:send_message)
+      award.send_award_notifications
+      expect(award.discord_client).to have_received(:send_message)
+    end
+  end
 end

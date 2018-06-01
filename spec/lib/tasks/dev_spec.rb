@@ -45,8 +45,8 @@ describe 'rake dev:migrate', type: :task do
   it 'migrate data' do
     account = create(:account, first_name: nil, last_name: nil)
     authentication = create(:authentication, account: account, oauth_response: auth_hash, slack_first_name: 'Bob', slack_last_name: 'Roberts', slack_user_name: 'bobroberts', slack_image_32_url: Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
-    project = create(:project, account: account, public: true, slack_channel: 'general')
-    project1 = create(:project, account: account, public: false, slack_channel: 'general')
+    project = create(:project, account: account, public: true, slack_channel: 'general', slack_team_id: 'slack team id')
+    project1 = create(:project, account: account, public: false, slack_channel: 'general', 'slack_team_id': 'slack team id')
     award_type = create(:award_type, project: project)
     award = create(:award, authentication_id: authentication.id, award_type: award_type)
 

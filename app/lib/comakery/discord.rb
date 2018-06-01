@@ -14,6 +14,11 @@ class Comakery::Discord
     result
   end
 
+  def user_info(uid)
+    @path = "/users/#{uid}"
+    result
+  end
+
   def members(team)
     @path = "/guilds/#{team.team_id}/members"
     result

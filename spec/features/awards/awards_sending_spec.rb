@@ -54,7 +54,7 @@ describe 'awarding users' do
 
   describe "when a user doesn't have an account for yet" do
     it 'populates the dropdown to select the awardee and creates the account/auth for the user' do
-      expect_any_instance_of(Account).to receive(:send_award_notifications)
+      expect_any_instance_of(Award).to receive(:send_award_notifications)
       project.revenue_share!
       login(account)
 
@@ -160,7 +160,7 @@ describe 'awarding users' do
   end
 
   it 'awarding a user with an ethereum account' do
-    expect_any_instance_of(Account).to receive(:send_award_notifications)
+    expect_any_instance_of(Award).to receive(:send_award_notifications)
     create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
 
     login(account)
