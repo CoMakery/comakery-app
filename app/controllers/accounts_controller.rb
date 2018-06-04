@@ -58,6 +58,6 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    params.require(:account).permit(:email, :ethereum_wallet, :first_name, :last_name, :nickname, :image, :password)
+    params.require(:account).permit(:email, :ethereum_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
   end
 end

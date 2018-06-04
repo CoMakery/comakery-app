@@ -45,6 +45,25 @@ class Views::Accounts::New < Views::Base
             }
 
             column('large-12') {
+              with_errors(account, :date_of_birth) {
+                label {
+                  text 'Date of Birth: '
+                  f.text_field :date_of_birth, class: 'datepicker'
+                }
+              }
+            }
+
+            column('large-12') {
+              f.object.country ||= 'United States of America'
+              with_errors(account, :country) {
+                label {
+                  text 'Country: '
+                  f.select :country, Country.all.sort
+                }
+              }
+            }
+
+            column('large-12') {
               with_errors(account, :password) {
                 label {
                   text 'Password: '

@@ -12,6 +12,7 @@
 #
 # = require jquery
 # = require jquery_ujs
+# = require jquery-ui
 # = require d3
 # = require d3pie
 # = require foundation
@@ -22,6 +23,12 @@
 
 $ ->
   $(document).foundation()
+
+  $('.datepicker').datepicker({
+    defaultDate: '01/01/2000',
+    changeYear: true,
+    yearRange: '1950:2010'
+  })
 
   # lets hope we never have more than 1000 initial records (award types only have 3 by default)
   nextIdentifier = 1000
