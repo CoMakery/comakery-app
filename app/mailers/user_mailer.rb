@@ -21,4 +21,10 @@ class UserMailer < ApplicationMailer
     @url = edit_password_reset_url(account.reset_password_token)
     mail to: account.email, subject: "'Confirm your account email'"
   end
+
+  def underage_alert(account, old_age)
+    @account = account
+    @old_age = old_age
+    mail to: 'support@comakery.com', subject: '[Support] Potential Underage User'
+  end
 end
