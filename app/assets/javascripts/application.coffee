@@ -31,6 +31,9 @@ $ ->
     yearRange: '1950:2010'
   })
 
+  if $('.datepicker').val()
+    $('.datepicker').datepicker("setDate",new Date($('.datepicker').val()))
+
   # lets hope we never have more than 1000 initial records (award types only have 3 by default)
   nextIdentifier = 1000
   $("*[data-duplicate]").click (e)->
