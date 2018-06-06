@@ -52,9 +52,17 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def check_account_info
+    current_account.name_required = true
+    unless current_account.valid?
+      redirect_to account_path, alert: 'please update your account info'
+    end
+  end
+
   def current_account
     @current_account ||= Account.find_by(id: session[:account_id])
   end
+
   helper_method :current_account
   alias current_user current_account
   helper_method :current_user

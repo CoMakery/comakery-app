@@ -73,7 +73,7 @@ class Views::Accounts::Show < Views::Base
             }
             column('small-9') {
               with_errors(current_account, :country) {
-                f.select :country, Country.all.sort
+                f.select :country, Country.all.sort, prompt: 'select country'
               }
             }
 
