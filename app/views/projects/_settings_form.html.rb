@@ -29,7 +29,7 @@ module Views
                     text 'Display Currency'
                     question_tooltip 'This is the currency that will be used for display by default. Revenues for revenue sharing will be counted in the currency it was received in.'
                     f.select(:denomination,
-                      [['US Dollars ($)', 'USD'], ['Bittoken (฿)', 'BTC'], ['Ether (Ξ)', 'ETH']], { selected: project.denomination, include_blank: false },
+                      [['US Dollars ($)', 'USD'], ['Bitcoin (฿)', 'BTC'], ['Ether (Ξ)', 'ETH']], { selected: project.denomination, include_blank: false },
                       disabled: project.license_finalized? || project.revenues.any?)
                   }
                 }
