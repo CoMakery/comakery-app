@@ -12,8 +12,8 @@ RSpec.describe PagesController, type: :controller do
   end
 
   it 'access prohibited use policy' do
-    get :prohibited_use_policy
-    expect(response).to render_template('pages/prohibited_use_policy')
+    get :prohibited_use
+    expect(response).to render_template('pages/prohibited_use')
   end
 
   it 'access user agreement' do
