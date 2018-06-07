@@ -115,7 +115,7 @@ module Views
 
                 with_errors(project, :maximum_tokens) {
                   label {
-                    required_label_text 'Total Authorized'
+                    required_label_text 'Total Token Budget'
                     award_type_div f, :maximum_tokens, type: 'number', disabled: project.license_finalized? || project.ethereum_enabled?
                   }
                 }
