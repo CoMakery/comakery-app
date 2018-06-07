@@ -47,7 +47,7 @@ class Project < ApplicationRecord
   enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
 
   validates :description, :account, :title, :legal_project_owner,
-    :denomination, presence: true
+    :denomination, :token_symbol, presence: true
 
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { unless: :project_token? }
 

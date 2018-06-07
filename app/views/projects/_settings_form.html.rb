@@ -150,7 +150,12 @@ module Views
                     }
                   }
                 }
-
+                with_errors(project, :token_symbol) {
+                  label {
+                    required_label_text 'Token Symbol'
+                    f.text_field :token_symbol
+                  }
+                }
                 br
                 ethereum_beta(f)
 

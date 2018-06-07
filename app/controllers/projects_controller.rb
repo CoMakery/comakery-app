@@ -133,6 +133,7 @@ class ProjectsController < ApplicationController
       :denomination,
       :visibility,
       :ethereum_contract_address,
+      :token_symbol,
       award_types_attributes: %i[
         _destroy
         amount
