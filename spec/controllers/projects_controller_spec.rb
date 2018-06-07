@@ -5,14 +5,19 @@ describe ProjectsController do
   let!(:authentication) { create(:authentication) }
   let!(:account) { authentication.account }
 
+  let!(:account1) { create :account }
+  let!(:authentication1) { create(:authentication, account: account) }
+
   before do
     team.build_authentication_team authentication
+    team.build_authentication_team authentication1
     login(account)
   end
 
   describe '#unlisted' do
     let!(:public_unlisted_project) { create(:project, account: account, visibility: 'public_unlisted', title: 'Unlisted Project') }
     let!(:member_unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'Unlisted Project') }
+    let!(:normal_project) { create :project, account: account }
     let!(:account2) { create :account }
     let!(:authentication2) { create(:authentication, account: account2) }
 
@@ -36,6 +41,12 @@ describe ProjectsController do
       expect(assigns(:project)).to eq member_unlisted_project
     end
 
+    it 'redirect_to project/id page for normal project' do
+      login account
+      get :unlisted, params: { long_id: normal_project.long_id }
+      expect(response).to redirect_to(project_path(normal_project))
+    end
+
     it 'cannot access unlisted project by id' do
       get :show, params: { id: public_unlisted_project.id }
       expect(response).to redirect_to('/404.html')
@@ -43,23 +54,24 @@ describe ProjectsController do
   end
 
   describe '#landing' do
-    let!(:other_public_project) { create(:project, visibility: 'public_listed', title: 'other_public_project') }
-    let!(:other_private_project) { create(:project, public: false, title: 'other_private_project') }
-    let!(:my_private_project) { create(:project, account: account, title: 'my_private_project') }
-    let!(:my_public_project) { create(:project, account: account, visibility: 'public_listed', title: 'my_public_project') }
+    let!(:public_project) { create(:project, visibility: 'public_listed', title: 'public project', account: account) }
+    let!(:archived_project) { create(:project, visibility: 'archived', title: 'archived project', account: account) }
+    let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project') }
+    let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project') }
+    let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project') }
 
     before do
-      expect(TopContributors).to receive(:call).exactly(4).times.and_return(double(success?: true, contributors: {}))
+      expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
+      other_member_project.channels.create(team: team, channel_id: 'general')
     end
 
     it 'returns your private projects, and public projects that *do not* belong to you' do
       get :landing
 
       expect(response.status).to eq(200)
-      expect(assigns[:private_projects].map(&:title)).to match_array(%w[my_private_project])
-      expect(assigns[:public_projects].map(&:title)).to match_array(%w[my_public_project other_public_project])
-      expect(assigns[:private_project_contributors].keys).to eq([])
-      expect(assigns[:public_project_contributors].keys).to eq([])
+      expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'unlisted project', 'member project'])
+      expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
+      expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
     end
 
     it 'renders nicely even if you are not logged in' do
@@ -68,8 +80,9 @@ describe ProjectsController do
       get :landing
 
       expect(response.status).to eq(200)
-      expect(assigns[:private_projects].map(&:title)).to eq([])
-      expect(assigns[:public_projects].map(&:title)).to match_array(%w[my_public_project other_public_project])
+      expect(assigns[:archived_projects].map(&:title)).to eq([])
+      expect(assigns[:team_projects].map(&:title)).to eq []
+      expect(assigns[:my_projects].map(&:title)).to match_array(['public project'])
     end
   end
 

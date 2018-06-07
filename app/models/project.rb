@@ -9,7 +9,7 @@ class Project < ApplicationRecord
   belongs_to :account
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
-  has_many :channels, -> { order :created_at }, dependent: :destroy
+  has_many :channels, -> { order :created_at }, inverse_of: :project, dependent: :destroy
   has_many :payments, dependent: :destroy do
     def new_with_quantity(quantity_redeemed:, account:)
       project = @association.owner
@@ -68,6 +68,8 @@ class Project < ApplicationRecord
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
   scope :listed, -> { where 'projects.visibility not in(2,3)' }
+  scope :visible, -> { where 'projects.visibility not in(2,3,4)' }
+  scope :unarchived, -> { where.not visibility: 4 }
 
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))

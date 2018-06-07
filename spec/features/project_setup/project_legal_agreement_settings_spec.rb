@@ -106,7 +106,7 @@ describe 'viewing projects, creating and editing', :js do
       end
 
       specify do
-        select 'Bittoken (฿)', from: 'project_denomination'
+        select 'Bitcoin (฿)', from: 'project_denomination'
         expect_denomination_btc
       end
 

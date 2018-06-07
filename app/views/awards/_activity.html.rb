@@ -7,7 +7,7 @@ class Views::Awards::Activity < Views::Base
         h3 "#{project.payment_description} Awarded"
         br
 
-        if award_data[:contributions].present?
+        if award_data[:contributions_by_day].present?
           p {
             div(id: 'contributions-chart')
           }
@@ -25,13 +25,5 @@ class Views::Awards::Activity < Views::Base
         window.stackedBarChart("#contributions-chart", #{award_data[:contributions_by_day].to_json});
       });
     JAVASCRIPT
-  end
-
-  def total_tokens_issued
-    award_data[:award_amounts][:total_tokens_issued]
-  end
-
-  def percentage_issued
-    total_tokens_issued * 100 / project.maximum_tokens.to_f
   end
 end

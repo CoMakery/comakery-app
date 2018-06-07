@@ -75,7 +75,7 @@ describe AwardsController do
 
     context 'logged in' do
       it 'records a slack award being created' do
-        expect_any_instance_of(Account).to receive(:send_award_notifications)
+        expect_any_instance_of(Award).to receive(:send_award_notifications)
         allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
 
         expect do
@@ -103,8 +103,8 @@ describe AwardsController do
       end
 
       it 'records a discord award being created' do
-        expect_any_instance_of(Account).to receive(:send_award_notifications)
-        allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
+        expect_any_instance_of(Award).to receive(:send_award_notifications)
+        allow_any_instance_of(Account).to receive(:ethereum_issue_ready?) { true }
 
         stub_discord_channels
         channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
@@ -131,7 +131,6 @@ describe AwardsController do
         expect(award.account).to eq(receiver.account)
         expect(award.description).to eq('This rocks!!11')
         expect(award.quantity).to eq(1.5)
-        expect(EthereumTokenIssueJob.jobs.first['args']).to eq([award.id])
       end
 
       it "renders error if you specify a award type that doesn't belong to a project" do

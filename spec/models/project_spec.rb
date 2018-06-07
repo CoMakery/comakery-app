@@ -11,6 +11,12 @@ describe Project do
                 "Legal project owner can't be blank"].sort)
     end
 
+    it 'rails error if not found Ethereum address' do
+      stub_const('Comakery::Ethereum::ADDRESS', {})
+      expect(Comakery::Ethereum::ADDRESS['account']).to be_nil
+      expect { described_class.create(payment_type: 'project_token', ethereum_contract_address: '111') }.to raise_error(ArgumentError)
+    end
+
     describe 'payment types' do
       let(:project) { build :project, royalty_percentage: nil, maximum_royalties_per_month: nil }
 
@@ -884,5 +890,50 @@ describe Project do
       project.member!
       expect(project.can_be_access?(same_team_account)).to be_truthy
     end
+  end
+
+  it 'total_month_awarded' do
+    project = create :project
+    award_type = create :award_type, project: project, amount: 10
+    award_type2 = create :award_type, project: project, amount: 20
+    award = create :award, award_type: award_type
+    create :award, award_type: award_type2
+    expect(project.total_month_awarded).to eq 30
+    award.update created_at: DateTime.current - 35.days
+    expect(project.total_month_awarded).to eq 20
+  end
+
+  it 'check invalid channel' do
+    project = create :project
+    attributes = {}
+    expect(project.invalid_channel(attributes)).to eq true
+    attributes['channel_id'] = 'general'
+    attributes['team_id'] = 1
+    expect(project.invalid_channel(attributes)).to eq false
+  end
+
+  it 'check share revenue' do
+    project = create :project
+    expect(project.share_revenue?).to eq false
+    project.revenue_share!
+    project.update royalty_percentage: 0
+    expect(project.share_revenue?).to eq false
+    project.update royalty_percentage: 10
+    expect(project.share_revenue?).to eq true
+  end
+
+  it 'check if user can access revenue info' do
+    account = create :account
+    other_account = create :account
+    project = create :project, account: account
+    expect(project.share_revenue?).to eq false
+    project.revenue_share!
+    project.update royalty_percentage: 0
+    expect(project.share_revenue?).to eq false
+    expect(project.show_revenue_info?(account)).to eq false
+    project.update royalty_percentage: 10
+    expect(project.share_revenue?).to eq true
+    expect(project.show_revenue_info?(account)).to eq true
+    expect(project.show_revenue_info?(other_account)).to eq false
   end
 end

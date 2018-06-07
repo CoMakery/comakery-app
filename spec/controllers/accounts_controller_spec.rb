@@ -19,6 +19,18 @@ describe AccountsController do
       expect(flash[:notice]).to eq('Your account details have been updated.')
     end
 
+    it 'set account to unconfirm status if change email' do
+      expect(CreateEthereumAwards).to receive(:call).with(awards: array_including(award1, award2))
+
+      put :update, params: { account: { email: 'another@test.st' } }
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to account_url
+      expect(flash[:notice]).to eq('Your account details have been updated.')
+      account.reload
+      expect(account.email).to eq 'another@test.st'
+      expect(account.confirmed?).to be_falsey
+    end
+
     it 'renders errors for an invalid ethereum address' do
       expect do
         put :update, params: { account: { ethereum_wallet: 'not a valid ethereum address' } }
@@ -73,6 +85,8 @@ describe AccountsController do
             email: 'user@test.st',
             first_name: 'User',
             last_name: 'Tester',
+            date_of_birth: '2000-01-01',
+            country: 'America',
             password: '12345678'
           }
         }

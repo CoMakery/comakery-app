@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
 
   # require account logins for all pages by default
   # (public pages use skip_before_action :require_login)
-  before_action :require_login
+  before_action :require_login, :check_age
   before_action :basic_auth
 
   def basic_auth
@@ -28,8 +28,8 @@ class ApplicationController < ActionController::Base
   end
 
   # called from before_filter :require_login
-  def not_authenticated
-    redirect_to root_path
+  def not_authenticated(msg = nil)
+    redirect_to root_path, alert: msg
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
@@ -45,16 +45,30 @@ class ApplicationController < ActionController::Base
   end
 
   def require_login
-    if session[:account_id].blank? || !current_account.confirmed?
+    if session[:account_id].blank?
       not_authenticated
     elsif !current_account.confirmed?
-      not_authenticated
+      not_authenticated('Please confirm your email before continuing.')
+    end
+  end
+
+  def check_age
+    current_account&.name_required = true
+
+    redirect_to account_path, alert: 'Sorry, you must be 16 years or older to use this website' if current_account&.valid? && current_account.age < 16 && controller_name != 'accounts'
+  end
+
+  def check_account_info
+    current_account.name_required = true
+    unless current_account.valid?
+      redirect_to account_path, alert: 'please update your account info'
     end
   end
 
   def current_account
     @current_account ||= Account.find_by(id: session[:account_id])
   end
+
   helper_method :current_account
   alias current_user current_account
   helper_method :current_user

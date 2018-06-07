@@ -32,7 +32,7 @@ class Views::Projects::Base < Views::Base
       a(href: path) {
         div(class: 'sixteen-nine') {
           div(class: 'content') {
-            img(src: project_image_url(project, 132), class: 'image-block')
+            img(src: project_image_url(project, 367), class: 'image-block')
           }
         }
       }
@@ -40,9 +40,6 @@ class Views::Projects::Base < Views::Base
         div(class: 'text-overlay') {
           h5 {
             a(project.title, href: path, class: 'project-link')
-          }
-          a(href: path) {
-            i project.legal_project_owner
           }
         }
 

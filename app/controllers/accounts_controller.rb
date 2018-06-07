@@ -46,8 +46,12 @@ class AccountsController < ApplicationController
 
   def update
     @current_account = current_account
+    old_age = @current_account.age
     if @current_account.update(account_params.merge(name_required: true))
       CreateEthereumAwards.call(awards: @current_account.awards)
+      if @current_account.age != old_age && @current_account.age >= 16
+        UserMailer.underage_alert(@current_account, old_age).deliver_now
+      end
       redirect_to account_url, notice: 'Your account details have been updated.'
     else
       flash[:error] = current_account.errors.full_messages.join(' ')
@@ -58,6 +62,6 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    params.require(:account).permit(:email, :ethereum_wallet, :first_name, :last_name, :nickname, :image, :password)
+    params.require(:account).permit(:email, :ethereum_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
   end
 end

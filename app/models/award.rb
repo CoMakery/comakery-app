@@ -4,6 +4,7 @@ class Award < ApplicationRecord
   include EthereumAddressable
 
   belongs_to :account, optional: true
+  belongs_to :authentication, optional: true
   belongs_to :award_type
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
@@ -43,6 +44,21 @@ class Award < ApplicationRecord
 
   def send_confirm_email
     UserMailer.send_award_notifications(self).deliver_now unless discord? || confirmed?
+  end
+
+  def discord_client
+    @discord_client ||= Comakery::Discord.new
+  end
+
+  def send_award_notifications
+    if team.discord?
+      discord_client.send_message self
+    else
+      auth_team = team.authentication_team_by_account issuer
+      token = auth_team.authentication.token
+      slack = Comakery::Slack.get(token)
+      slack.send_award_notifications(award: self)
+    end
   end
 
   def confirm!(account)

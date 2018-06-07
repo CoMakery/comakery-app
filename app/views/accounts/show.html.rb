@@ -12,6 +12,17 @@ class Views::Accounts::Show < Views::Base
         row {
           form_for current_account, url: '/account' do |f|
             column('small-3') {
+              label(for: :email) {
+                text 'Email'
+              }
+            }
+            column('small-9') {
+              with_errors(current_account, :email) {
+                f.text_field :email
+              }
+            }
+
+            column('small-3') {
               label(for: :first_name) {
                 text 'First Name'
               }
@@ -41,6 +52,28 @@ class Views::Accounts::Show < Views::Base
             column('small-9') {
               with_errors(current_account, :nickname) {
                 f.text_field :nickname
+              }
+            }
+
+            column('small-3') {
+              label(for: :date_of_birth) {
+                text 'Date of Birth'
+              }
+            }
+            column('small-9') {
+              with_errors(current_account, :date_of_birth) {
+                f.text_field :date_of_birth, class: 'datepicker'
+              }
+            }
+
+            column('small-3') {
+              label(for: :country) {
+                text 'Country'
+              }
+            }
+            column('small-9') {
+              with_errors(current_account, :country) {
+                f.select :country, Country.all.sort, prompt: 'select country'
               }
             }
 
@@ -81,6 +114,14 @@ class Views::Accounts::Show < Views::Base
           }
           row {
             column('small-4') {
+              text 'Email'
+            }
+            column('small-8') {
+              text current_account.email
+            }
+          }
+          row {
+            column('small-4') {
               text 'First Name'
             }
             column('small-8') {
@@ -101,6 +142,22 @@ class Views::Accounts::Show < Views::Base
             }
             column('small-8') {
               text current_account.nickname
+            }
+          }
+          row {
+            column('small-4') {
+              text 'Date of Birth'
+            }
+            column('small-8') {
+              text current_account.date_of_birth.strftime('%m-%d-%Y') if current_account.date_of_birth
+            }
+          }
+          row {
+            column('small-4') {
+              text 'Country'
+            }
+            column('small-8') {
+              text current_account.country
             }
           }
           row {

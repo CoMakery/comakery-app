@@ -132,10 +132,6 @@ class Views::Payments::Index < Views::Projects::Base
     }
   end
 
-  def conversational
-    span(class: 'conversational-form') { yield }
-  end
-
   def current_user_has_awards?
     current_account_deco.account.total_awards_remaining(project) > 0
   end

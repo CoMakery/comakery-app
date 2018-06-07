@@ -4,21 +4,18 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @private_projects = current_account.private_projects.with_last_activity_at.limit(6).decorate
+      check_account_info
+      @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
-      @unlisted_projects = current_account.projects.unlisted.with_last_activity_at.limit(6).decorate
-      @public_projects = current_account.public_projects.with_last_activity_at.limit(6).decorate
+      @team_projects = current_account.other_member_projects.with_last_activity_at.limit(6).decorate
     else
-      @private_projects = []
       @archived_projects = []
-      @unlisted_projects = []
-      @public_projects = Project.public_listed.featured.with_last_activity_at.limit(6).decorate
+      @team_projects = []
+      @my_projects = Project.public_listed.featured.with_last_activity_at.limit(6).decorate
     end
-    @private_project_contributors = TopContributors.call(projects: @private_projects).contributors
-    @public_project_contributors = TopContributors.call(projects: @public_projects).contributors
+    @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
+    @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
     @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
-    @unlisted_project_contributors = TopContributors.call(projects: @unlisted_projects).contributors
-    @slack_auth = current_account&.slack_auth
   end
 
   def index
@@ -38,9 +35,9 @@ class ProjectsController < ApplicationController
   def new
     assign_slack_channels
 
-    @project = Project.new(public: false,
-                           maximum_tokens: 1_000_000,
-                           maximum_royalties_per_month: 50_000)
+    @project = current_account.projects.build(public: false,
+                                              maximum_tokens: 1_000_000,
+                                              maximum_royalties_per_month: 50_000)
     @project.award_types.build(name: 'Thanks', amount: 10)
     @project.award_types.build(name: 'Software development hour', amount: 100)
     @project.award_types.build(name: 'Graphic design hour', amount: 100)

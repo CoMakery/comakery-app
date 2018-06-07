@@ -3,8 +3,10 @@ class AwardsController < ApplicationController
   skip_before_action :require_login, only: %i[index confirm]
 
   def index
-    @awards = @project.awards.order(id: :desc).page(params[:page]).decorate
-    @award_data = GetAwardData.call(account: current_account, project: @project).award_data
+    @awards = @project.awards
+    @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
+    @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
+    @award_data = GetAwardData.call(project: @project).award_data
   end
 
   def create
@@ -14,7 +16,7 @@ class AwardsController < ApplicationController
       award.save!
       if award.channel
         CreateEthereumAwards.call(award: award)
-        current_account.send_award_notifications(award)
+        award.send_award_notifications
       end
       award.send_confirm_email
       flash[:notice] = "Successfully sent award to #{award.decorate.recipient_display_name}"

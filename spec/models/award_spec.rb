@@ -98,30 +98,6 @@ describe Award do
     end
   end
 
-  describe '#issuer_display_name' do
-    let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny' }
-    let!(:project) { create :project, account: issuer }
-    let!(:award_type) { create :award_type, project: project }
-    let!(:award) { create :award, award_type: award_type, issuer: issuer }
-
-    it 'returns the user name' do
-      expect(award.decorate.issuer_display_name).to eq('johnny johnny')
-    end
-  end
-
-  context 'recipient names' do
-    let!(:recipient) { create(:account, first_name: 'Betty', last_name: 'Ross') }
-    let!(:project) { create :project }
-    let!(:award_type) { create :award_type, project: project }
-    let!(:award) { create :award, account: recipient, award_type: award_type }
-
-    describe '#recipient_display_name' do
-      it 'returns the full name' do
-        expect(award.decorate.recipient_display_name).to eq('Betty Ross')
-      end
-    end
-  end
-
   describe '#total_amount should round' do
     specify do
       award = create :award, quantity: 1.4, unit_amount: 1, total_amount: 1.4
@@ -164,6 +140,105 @@ describe Award do
       it 'returns the total amount of awards issued' do
         expect(described_class.total_awarded).to eq(80)
       end
+    end
+  end
+
+  describe 'helper methods' do
+    let!(:team) { create :team }
+    let!(:team1) { create :team, provider: 'discord' }
+    let!(:account) { create :account, email: 'reciver@test.st' }
+    let!(:authentication) { create :authentication, account: account }
+    let!(:account1) { create :account }
+    let!(:authentication1) { create :authentication, account: account1, provider: 'discord' }
+    let!(:project) { create :project, account: account }
+    let!(:award_type) { (create :award_type, project: project, amount: 3) }
+    let!(:award) { create :award, award_type: award_type, issuer: account, account: account }
+    let!(:award1) { create :award, award_type: award_type, issuer: account, account: account1 }
+
+    before do
+      team.build_authentication_team authentication
+      team1.build_authentication_team authentication1
+      stub_discord_channels
+      project.channels.create(team: team1, channel_id: 'general')
+    end
+
+    it 'check for ethereum issue ready' do
+      expect(award.ethereum_issue_ready?).to be_falsey
+
+      project.update ethereum_enabled: true
+      account.update ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423'
+
+      expect(award.reload.ethereum_issue_ready?).to be_truthy
+    end
+    it 'check self_issued award' do
+      expect(award.self_issued?).to be_truthy
+      expect(award1.self_issued?).to be_falsey
+    end
+
+    it 'check discord award' do
+      expect(award.discord?).to be_falsey
+      expect(award1.discord?).to be_falsey
+      award1.update channel_id: project.channels.last.id
+      expect(award1.reload.discord?).to be_truthy
+    end
+
+    it 'round total_amount' do
+      award.total_amount = 2.2
+      award.save
+      expect(award.reload.total_amount).to eq 2
+    end
+
+    it 'return recipient_auth_team' do
+      auth_team = account1.authentication_teams.last
+      award1.channel = project.channels.last
+      award1.save
+      expect(award.recipient_auth_team).to be_nil
+      expect(award1.recipient_auth_team).to eq auth_team
+    end
+
+    it 'send send_confirm_email' do
+      award.update email: 'reciver@test.st'
+      expect { award.send_confirm_email }.to change { ActionMailer::Base.deliveries.count }.by(0)
+      award.update confirm_token: '1234'
+      expect { award.send_confirm_email }.to change { ActionMailer::Base.deliveries.count }.by(1)
+    end
+
+    it 'confirm award' do
+      award.update email: 'reciver@test.st', confirm_token: '1234'
+      award.confirm!(account1)
+      award.reload
+      expect(award.account).to eq account1
+      expect(award.confirmed?).to eq true
+    end
+  end
+
+  describe '#send_award_notifications' do
+    let!(:team) { create :team }
+    let!(:account) { create :account }
+    let!(:authentication) { create :authentication, account: account }
+    let!(:discord_team) { create :team, provider: 'discord' }
+    let!(:project) { create :project, account: account }
+    let!(:award_type) { create :award_type, project: project }
+    let!(:channel) { create :channel, team: team, project: project }
+    let!(:award) { create :award, award_type: award_type, issuer: account, channel: channel }
+
+    before do
+      team.build_authentication_team authentication
+    end
+
+    it 'sends a Slack notification' do
+      allow(award).to receive(:send_award_notifications)
+      award.send_award_notifications
+      expect(award).to have_received(:send_award_notifications)
+    end
+
+    it 'sends a Discord notification' do
+      stub_discord_channels
+      channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
+      award = create :award, award_type: award_type, issuer: account, channel: channel
+      allow(award.discord_client).to receive(:send_message)
+      award.send_award_notifications
+      expect(award.discord_client).to have_received(:send_message)
     end
   end
 end

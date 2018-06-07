@@ -12,6 +12,7 @@
 #
 # = require jquery
 # = require jquery_ujs
+# = require jquery-ui
 # = require d3
 # = require d3pie
 # = require foundation
@@ -22,6 +23,16 @@
 
 $ ->
   $(document).foundation()
+
+  $('.datepicker').datepicker({
+    dateFormat: 'yy/mm/dd',
+    defaultDate: '2000/01/01',
+    changeYear: true,
+    yearRange: '1950:2010'
+  })
+
+  if $('.datepicker').val()
+    $('.datepicker').datepicker("setDate",new Date($('.datepicker').val()))
 
   # lets hope we never have more than 1000 initial records (award types only have 3 by default)
   nextIdentifier = 1000
@@ -88,6 +99,9 @@ $ ->
         $(@).val(value.slice(0,-1))
         return false
 
+  $(document).on 'click', '.signin-with-metamask', ->
+    loginWithMetaMask.handleClick()
+
   $(document).on 'click', '.scrollingBox.menu a', ->
     href = $(this).attr 'href'
     anchor = href.substr href.indexOf('#') + 1
@@ -130,14 +144,15 @@ $ ->
     $(".copy-source").select()
     document.execCommand('Copy')
 
-  $(document).on 'click', '.signin-with-metamask', ->
-    loginWithMetaMask.handleClick()
+  $('input[name=mine]').click (e) ->
+    window.location.href = $(@).val()
+
+  $('#project_payment_type').change (e)->
+    awardPaymentType()
 
   floatingLeftMenuItems()
   # Run on page ready then bind events
   awardPaymentType()
-  $('#project_payment_type').change (e)->
-    awardPaymentType()
 
   royaltyCalc()
   $('#project_royalty_percentage, #project_maximum_tokens, #project_denomination').change (e) ->

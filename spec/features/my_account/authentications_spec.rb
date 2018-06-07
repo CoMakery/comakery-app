@@ -83,6 +83,8 @@ feature 'my account' do
     login(account)
     visit root_path
     expect(page).to have_css("img[src*='avatar.png']")
+    first('.menu').click_link 'Account'
+    expect(page).to have_css("img[src*='avatar.png']")
   end
 
   scenario 'show account name' do

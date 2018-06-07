@@ -139,7 +139,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def contributors_by_award_amount
-    contributors_distinct.decorate.to_a.sort_by { |c| c.total_awards_earned(project) }.reverse!
+    contributors_distinct.order_by_award(id)
   end
 
   private

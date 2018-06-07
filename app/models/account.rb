@@ -1,4 +1,5 @@
 class Account < ApplicationRecord
+  paginates_per 50
   has_secure_password validations: false
   attachment :image
   include EthereumAddressable
@@ -20,10 +21,14 @@ class Account < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required, :name_required
   validates :password, length: { minimum: 8 }, if: :password_required
-  validates :first_name, :last_name, presence: true, if: :name_required
+  validates :first_name, :last_name, :country, :date_of_birth, presence: true, if: :name_required
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
+
+  def self.order_by_award(_project_id)
+    select('accounts.*, (select sum(total_amount) from awards where account_id = accounts.id) as total').distinct.order('total desc')
+  end
 
   before_save :downcase_email
 
@@ -33,18 +38,6 @@ class Account < ApplicationRecord
 
   def slack
     @slack ||= Comakery::Slack.get(slack_auth.token)
-  end
-
-  def discord_client
-    @discord_client ||= Comakery::Discord.new
-  end
-
-  def send_award_notifications(award)
-    if award.team.discord?
-      discord_client.send_message award
-    else
-      slack.send_award_notifications(award: award)
-    end
   end
 
   def confirm!
@@ -57,7 +50,7 @@ class Account < ApplicationRecord
     groups.each do |group|
       arr << { name: group[0], total: group[1].sum(&:total_amount) }
     end
-    arr
+    arr.sort { |i, j| j[:total] <=> i[:total] }
   end
 
   def total_awards_earned(project)
@@ -86,24 +79,17 @@ class Account < ApplicationRecord
     precise_percentage.truncate(8)
   end
 
-  def public_projects
-    Project.public_listed.where.not(id: private_project_ids)
-  end
-
-  def private_project_ids
-    @private_project_ids = team_projects.map(&:id) | projects.member.map(&:id) | award_projects.map(&:id)
-  end
-
-  def accessable_project_ids
-    @accessable_project_ids = private_project_ids | Project.public_listed.map(&:id)
-  end
-
-  def private_projects
-    @private_projects ||= Project.where id: private_project_ids
+  def other_member_projects
+    team_projects.where.not(account_id: id)
   end
 
   def accessable_projects
-    @accessable_projects ||= Project.where id: accessable_project_ids
+    Project.joins("
+      left join awards a1 on a1.account_id=projects.account_id
+      left join channels on channels.project_id=projects.id
+      left join teams on teams.id=channels.team_id
+      left join authentication_teams on authentication_teams.team_id=teams.id")
+           .where("(authentication_teams.account_id=#{id} and channels.id is not null) or projects.visibility=1 or a1.account_id=#{id} or projects.account_id=#{id}").distinct
   end
 
   def confirmed?
@@ -121,5 +107,22 @@ class Account < ApplicationRecord
   def send_reset_password_request
     update reset_password_token: SecureRandom.hex
     UserMailer.reset_password(self).deliver_now
+  end
+
+  def age
+    now = Time.zone.now.to_date
+    now.year - date_of_birth.year - (now.month > date_of_birth.month || (now.month == date_of_birth.month && now.day >= date_of_birth.day) ? 0 : 1)
+  end
+
+  after_update :check_email_update
+
+  private
+
+  def check_email_update
+    if saved_change_to_email?
+      # rubocop:disable SkipsModelValidations
+      update_column :email_confirm_token, SecureRandom.hex
+      UserMailer.confirm_email(self).deliver
+    end
   end
 end

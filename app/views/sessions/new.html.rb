@@ -1,7 +1,7 @@
 class Views::Sessions::New < Views::Base
   def content
     row {
-      column(%i[small-12 large-6], class: 'large-centered') {
+      column(%i[small-12 medium-8 large-6], class: 'large-centered', style: 'min-width: 543px') {
         h1('Sign in')
 
         form_tag sign_in_session_path, method: 'post' do

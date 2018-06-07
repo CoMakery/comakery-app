@@ -18,6 +18,11 @@ Rails.application.routes.draw do
 
   root 'projects#landing'
 
+  get '/user-agreement' => "pages#user_agreement"
+  get '/e-sign-disclosure' => "pages#e_sign_disclosure"
+  get '/privacy-policy' => "pages#privacy_policy"
+  get '/prohibited-use' => "pages#prohibited_use"
+
   resource :session, only: %i[new create destroy] do
     get "oauth_failure"
     collection do
