@@ -108,7 +108,6 @@ describe 'awarding users' do
 
     expect(page).to have_content('Project that needs awards')
     expect(page).not_to have_content('Send Award')
-    expect(page).not_to have_content('User')
 
     login(account)
 

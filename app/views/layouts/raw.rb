@@ -85,8 +85,8 @@ class Views::Layouts::Raw < Views::Base
           }
         }
 
-        full_row{
-          div(class: 'large-10 medium-11 small-12 small-centered columns'){
+        full_row {
+          div(class: 'large-10 medium-11 small-12 small-centered columns') {
             footer(class: 'fat-footer', style: 'text-align: center; padding-bottom: 20px;') {
               link_to 'Home', root_path
               text ' | '

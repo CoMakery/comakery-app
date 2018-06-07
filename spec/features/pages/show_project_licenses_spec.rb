@@ -1,7 +1,6 @@
 require 'rails_helper'
 require 'refile/file_double'
 feature 'pages' do
-
   scenario '#user_agreement' do
     visit root_path
     click_link 'User Agreement'
