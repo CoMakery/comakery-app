@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   root 'projects#landing'
 
+  get '/user-agreement' => "pages#user_agreement"
+  
   resource :session, only: %i[new create destroy] do
     get "oauth_failure"
     collection do
