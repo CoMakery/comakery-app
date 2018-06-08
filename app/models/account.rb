@@ -109,13 +109,20 @@ class Account < ApplicationRecord
   end
 
   def age
-    now = Time.zone.now.to_date
-    now.year - date_of_birth.year - (now.month > date_of_birth.month || (now.month == date_of_birth.month && now.day >= date_of_birth.day) ? 0 : 1)
+    return nil unless date_of_birth
+    calculate_age
   end
 
   after_update :check_email_update
 
   private
+
+  def calculate_age
+    now = Time.zone.now.to_date
+    result = now.year - date_of_birth.year
+    result -= 1 if now.month < date_of_birth.month || now.month == date_of_birth.month && now.day < date_of_birth.day
+    result
+  end
 
   def check_email_update
     if saved_change_to_email?
