@@ -1,6 +1,6 @@
 USER AGREEMENT
 
-This is a contract between you and CoMakery, Inc. ("CoMakery"). By signing up to use or using an account through CoMakery.com, or any associated websites, APIs, blockchain smart contracts or mobile applications (collectively the "CoMakery Site"), you agree that you have read, understood, accept and are bound by all of the terms and conditions contained in this Agreement, as well as our privacy policy located at [www.comakery.com/privacy-policy](http://www.comakery.com/privacy-policy) and E-Sign Consent Authorization located at www.comakery.com/e-sign-consent-disclosure.
+This is a contract between you and CoMakery, Inc. ("CoMakery"). By signing up to use or using an account through CoMakery.com, or any associated websites, APIs, blockchain smart contracts or mobile applications (collectively the "CoMakery Site"), you agree that you have read, understood, accept and are bound by all of the terms and conditions contained in this Agreement, as well as our privacy policy located at [Privacy Policy](/privacy-policy) and E-Sign Consent Authorization located at [E-Sign](/e-sign-disclosure).
 
 _Last updated: June 3, 2018_
 

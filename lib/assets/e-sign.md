@@ -6,7 +6,7 @@ This policy describes how CoMakery delivers communications to you electronically
 
 You agree and consent to receive electronically all communications, agreements, documents, notices and disclosures (collectively, "Communications") that we provide in connection with your CoMakery Account and your use of CoMakery Services. Communications include:
 
-- Terms of use and policies you agree to (e.g., the CoMakery User Agreement and Privacy Policy), including updates to these agreements or policies;
+- Terms of use and policies you agree to (e.g., the CoMakery [User Agreement](/user-agreement) and [Privacy Policy](/privacy-policy)), including updates to these agreements or policies;
 - Account details, history, transaction receipts, confirmations, and any other Account or transaction information;
 - Legal, regulatory, and tax disclosures or statements we may be required to make available to you; and
 - Responses to claims or customer support inquiries filed in connection with your Account.
