@@ -95,6 +95,11 @@ class Account < ApplicationRecord
     email_confirm_token.nil?
   end
 
+  def confirmed_and_valid?
+    self.name_required = true
+    valid? && confirmed?
+  end
+
   def same_team_project?(project)
     team_projects.include?(project) || award_projects.include?(project)
   end

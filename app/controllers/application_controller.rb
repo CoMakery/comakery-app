@@ -53,9 +53,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_age
-    current_account&.name_required = true
-
-    redirect_to account_path, alert: 'Sorry, you must be 16 years or older to use this website' if current_account&.valid? && current_account.age < 16 && controller_name != 'accounts'
+    redirect_to account_path, alert: 'Sorry, you must be 16 years or older to use this website' if current_account&.confirmed_and_valid? && current_account.age < 16 && controller_name != 'accounts'
   end
 
   def check_account_info
