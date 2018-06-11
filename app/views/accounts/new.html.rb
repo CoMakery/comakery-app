@@ -12,7 +12,7 @@ class Views::Accounts::New < Views::Base
               with_errors(account, :email) {
                 label {
                   text 'E-mail: '
-                  f.text_field :email
+                  f.email_field :email
                 }
               }
             }

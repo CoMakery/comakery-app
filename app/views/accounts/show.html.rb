@@ -18,7 +18,7 @@ class Views::Accounts::Show < Views::Base
             }
             column('small-9') {
               with_errors(current_account, :email) {
-                f.text_field :email
+                f.email_field :email
               }
             }
 
