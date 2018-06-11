@@ -47,7 +47,7 @@ class Project < ApplicationRecord
   enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
 
   validates :description, :account, :title, :legal_project_owner,
-    :denomination, :token_symbol, presence: true
+    :denomination, presence: true
 
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { unless: :project_token? }
 
@@ -62,6 +62,7 @@ class Project < ApplicationRecord
   validate :valid_ethereum_enabled
   validates :ethereum_contract_address, ethereum_address: { type: :account, immutable: true } # see EthereumAddressable
   validate :denomination_changeable
+  # validates :token_symbol, presence: true, if: proc { ethereum_contract_address.present? }
 
   before_save :set_transitioned_to_ethereum_enabled
 
