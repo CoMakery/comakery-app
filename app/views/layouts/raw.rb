@@ -90,7 +90,7 @@ class Views::Layouts::Raw < Views::Base
             footer(class: 'fat-footer', style: 'text-align: center; padding-bottom: 20px;') {
               link_to 'Home', root_path
               text ' | '
-              link_to 'Contact Us', 'javascript:;'
+              link_to 'Contact Us', 'mailto:support@comakery.com'
               text ' | '
               link_to 'User Agreement', '/user-agreement'
               text ' | '
