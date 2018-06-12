@@ -6,9 +6,6 @@ class Views::Projects::Show < Views::Projects::Base
 
     div(class: 'project-head content') {
       render partial: 'description'
-      row {
-        render partial: 'shared/award_progress_bar'
-      }
     }
 
     div(class: 'project-body content-box') {

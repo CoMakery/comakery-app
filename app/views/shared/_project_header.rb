@@ -59,7 +59,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           }
 
           li_if(project.ethereum_contract_explorer_url) {
-            link_to 'Ξthereum Smart Contract', project.ethereum_contract_explorer_url,
+            link_to 'Ξthereum Token', project.ethereum_contract_explorer_url,
               target: '_blank', class: 'text-link'
           }
 

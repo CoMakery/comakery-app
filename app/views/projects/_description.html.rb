@@ -53,19 +53,31 @@ class Views::Projects::Description < Views::Projects::Base
                   end
                 }
               }
-
-              if award_data[:contributions_summary].present?
-                li(class: 'top-contributors') {
-                  h5 'Top Contributors'
-                  award_data[:contributions_summary].first(5).each do |contributor|
-                    tooltip(contributor.decorate.name) {
-                      img(src: account_image_url(contributor, 34), class: 'avatar-img')
-                    }
-                  end
-                }
-              end
             }
           }
+        }
+      }
+      row {
+        column('large-6 small-12') {
+          column('large-6 small-12') {
+            h5 'Team Leaders'
+            tooltip(project.account.decorate.name) {
+              img(src: account_image_url(project.account, 34), class: 'avatar-img')
+            }
+          }
+
+          column('large-6 small-12') {
+            h5 'Top Contributors'
+            project.top_contributors.each do |contributor|
+              tooltip(contributor.decorate.name) {
+                img(src: account_image_url(contributor, 34), class: 'avatar-img')
+              }
+            end
+          }
+        }
+
+        column('large-6 small-12') {
+          render partial: 'shared/project_award_progress_bar'
         }
       }
     }
