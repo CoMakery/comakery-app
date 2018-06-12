@@ -1,3 +1,4 @@
+require 'zip'
 class AccountsController < ApplicationController
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
 
@@ -54,6 +55,22 @@ class AccountsController < ApplicationController
     else
       flash[:error] = current_account.errors.full_messages.join(' ')
       render :show
+    end
+  end
+
+  def download_data
+    respond_to do |format|
+      format.html
+      format.zip do
+        compressed_filestream = Zip::OutputStream.write_buffer do |zos|
+          zos.put_next_entry 'profile.csv'
+          zos.print current_account.to_csv
+          zos.put_next_entry 'awards.csv'
+          zos.print current_account.awards_csv
+        end
+        compressed_filestream.rewind
+        send_data compressed_filestream.read, filename: 'my-data.zip'
+      end
     end
   end
 

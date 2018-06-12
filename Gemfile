@@ -35,6 +35,7 @@ gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile.gi
 gem 'refile-mini_magick'
 gem 'refile-s3'
 gem 'responders'
+gem 'rubyzip'
 gem 'sass-rails'
 gem 'sdoc', group: :doc
 gem 'sendgrid-ruby'

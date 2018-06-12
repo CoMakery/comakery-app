@@ -169,6 +169,7 @@ class Views::Accounts::Show < Views::Base
             }
           }
         }
+
         column('small-5 medium-7') {
           row {
             if current_account.image.present?
@@ -176,6 +177,11 @@ class Views::Accounts::Show < Views::Base
             end
           }
         }
+      }
+    }
+    column('small-12') {
+      row(style: 'text-align: center; padding: 20px') {
+        link_to 'Download My Data', download_data_accounts_path(format: :zip)
       }
     }
 

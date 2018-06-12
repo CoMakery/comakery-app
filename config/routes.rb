@@ -2,7 +2,12 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   resource :account, only: [:update]
-  resources :accounts, only: [:new, :create, :show]
+  resources :accounts, only: [:new, :create, :show] do
+    collection do
+      get :download_data
+    end
+  end
+
   resources :password_resets, only: [:new, :create, :edit, :update]
 
   get '/account' => "accounts#show"
