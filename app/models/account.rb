@@ -24,6 +24,7 @@ class Account < ApplicationRecord
   validates :first_name, :last_name, :country, :date_of_birth, presence: true, if: :name_required
 
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
 
   def self.order_by_award(_project_id)
     select('accounts.*, (select sum(total_amount) from awards where account_id = accounts.id) as total').distinct.order('total desc')
