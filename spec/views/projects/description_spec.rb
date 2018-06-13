@@ -10,6 +10,7 @@ describe 'projects/_description.html.rb' do
 
     assign :award_data, award_amounts: { my_project_tokens: 0 }
     assign :current_auth, authentication
+    assign :current_account_deco, authentication.account.decorate
 
     allow(project).to receive(:total_awards_outstanding_pretty).and_return(20)
 

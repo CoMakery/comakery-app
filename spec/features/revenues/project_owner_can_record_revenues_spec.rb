@@ -138,26 +138,12 @@ describe 'when recording revenue' do
       end
     end
 
-    it 'share value appears on project page' do
-      visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$0.00')
-    end
-
-    it 'share value appears on project page' do
-      visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$0.00')
-    end
-
     it 'holdings value appears on the project show page' do
       award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('Revenue Shares 7,000')
-      expect(page.find('.my-balance')).to have_content('$0.59')
 
       award_type.awards.create_with_quantity(5, issuer: owner, account: other_account)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('7,000')
-      expect(page.find('.my-balance')).to have_content('$0.35')
     end
   end
 

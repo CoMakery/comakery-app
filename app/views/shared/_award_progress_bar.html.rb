@@ -1,23 +1,18 @@
-class Views::Shared::AwardProgressBar < Views::Base
+class Views::Shared::ProjectAwardProgressBar < Views::Base
   needs :project, :current_account_deco
 
   def content
     return unless current_account_deco.present? && current_account_deco.same_team_or_owned_project?(project)
     div(class: 'meter-box') {
       div(class: 'meter-text') {
-        if current_account_deco.percent_unpaid(project) <= 20
-          complete { br }
-          incomplete {
-            h4 project.payment_description
-            meter_text_balances
-          }
-        else
-          complete {
-            h4 project.payment_description
-            meter_text_balances
-          }
-          incomplete {}
-        end
+        column('small-6', style: 'padding-left: 0') {
+          text 'CAS Token Awarded'
+        }
+        column('small-6', style: 'text-align: right; padding-right: 0') {
+          text current_account_deco.total_awards_remaining_pretty(project)
+          text ' of '
+          text project.total_awards_outstanding
+        }
       }
 
       if current_account_deco.percent_unpaid(project) >= 20
@@ -25,18 +20,6 @@ class Views::Shared::AwardProgressBar < Views::Base
       else
         meter(right: percent_mine_pretty)
       end
-
-      div(class: 'meter-text') {
-        div(class: 'end-text') {
-          text 'Contributor Pool Balance'
-          br
-          text "#{project.payment_description} #{project.total_awarded_pretty}"
-          if project.revenue_share?
-            br
-            text project.total_revenue_shared_unpaid_pretty.to_s
-          end
-        }
-      }
     }
   end
 

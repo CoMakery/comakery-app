@@ -77,7 +77,7 @@ class Views::Projects::Description < Views::Projects::Base
         }
 
         column('large-6 small-12') {
-          render partial: 'shared/project_award_progress_bar'
+          render partial: 'shared/award_progress_bar'
         }
       }
     }
