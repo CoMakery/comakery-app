@@ -59,7 +59,8 @@ class ApplicationController < ActionController::Base
   def check_account_info
     current_account.name_required = true
     unless current_account.valid?
-      redirect_to account_path, alert: 'please update your account info'
+      flash[:error] = "To help us comply with regulations, please update your account info for #{current_account.errors.keys.join(', ').humanize.titleize}"
+      redirect_to account_path
     end
   end
 
