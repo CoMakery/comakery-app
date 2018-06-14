@@ -25,6 +25,7 @@ class Account < ApplicationRecord
 
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
+  validate :validate_age, on: :create
 
   def self.order_by_award(_project_id)
     select('accounts.*, (select sum(total_amount) from awards where account_id = accounts.id) as total').distinct.order('total desc')
@@ -101,6 +102,11 @@ class Account < ApplicationRecord
     valid? && confirmed?
   end
 
+  def valid_and_underage?
+    self.name_required = true
+    valid? && age < 16
+  end
+
   def same_team_project?(project)
     team_projects.include?(project) || award_projects.include?(project)
   end
@@ -138,6 +144,10 @@ class Account < ApplicationRecord
   after_update :check_email_update
 
   private
+
+  def validate_age
+    errors.add(:date_of_birth, 'must be 16 years or older.') if age && age < 16
+  end
 
   def calculate_age
     now = Time.zone.now.to_date

@@ -47,13 +47,13 @@ class ApplicationController < ActionController::Base
   def require_login
     if session[:account_id].blank?
       not_authenticated
-    elsif !current_account.confirmed? && current_account.age > 16
+    elsif !current_account.confirmed? && !current_account.valid_and_underage?
       not_authenticated('Please confirm your email before continuing.')
     end
   end
 
   def check_age
-    redirect_to account_path, alert: 'Sorry, you must be 16 years or older to use this website' if current_account && current_account.age < 16 && controller_name != 'accounts'
+    redirect_to account_path, alert: 'Sorry, you must be 16 years or older to use this website' if current_account && current_account.valid_and_underage? && controller_name != 'accounts'
   end
 
   def check_account_info
