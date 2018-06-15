@@ -77,7 +77,9 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    params.require(:account).permit(:email, :ethereum_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
+    result = params.require(:account).permit(:email, :ethereum_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
+    result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y') if result[:date_of_birth]
+    result
   end
 
   def check_date(old_age)

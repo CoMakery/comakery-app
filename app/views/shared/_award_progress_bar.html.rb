@@ -1,4 +1,4 @@
-class Views::Shared::ProjectAwardProgressBar < Views::Base
+class Views::Shared::AwardProgressBar < Views::Base
   needs :project, :current_account_deco
 
   def content

@@ -107,7 +107,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(
+    result = params.require(:project).permit(
       :revenue_sharing_end_date,
       :contributor_agreement_url,
       :description,
@@ -139,6 +139,8 @@ class ProjectsController < ApplicationController
       ],
       channels_attributes: %i[id team_id channel_id _destroy]
     )
+    result[:revenue_sharing_end_date] = DateTime.strptime(result[:revenue_sharing_end_date], '%m/%d/%Y') if result[:revenue_sharing_end_date]
+    result
   end
 
   def assign_slack_channels

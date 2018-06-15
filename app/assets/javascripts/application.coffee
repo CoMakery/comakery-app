@@ -25,8 +25,8 @@ $ ->
   $(document).foundation()
 
   $('.datepicker').datepicker({
-    dateFormat: 'yy/mm/dd',
-    defaultDate: '2000/01/01',
+    dateFormat: 'mm/dd/yy',
+    defaultDate: '01/01/2000',
     changeYear: true,
     yearRange: '1950:2010'
   })
