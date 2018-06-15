@@ -22,13 +22,7 @@ class Views::Projects::Description < Views::Projects::Base
         column('large-6 small-12 header-graphic') {
           full_row {
             h4 'About'
-            p {
-              text 'Lead by '
-              b project.account.decorate.name
-              # TODO: team(s)
-              # text ' with '
-              # strong project.slack_team_name
-            }
+
             p(class: 'description') {
               text raw project.description_html
             }
