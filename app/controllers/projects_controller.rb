@@ -139,7 +139,7 @@ class ProjectsController < ApplicationController
       ],
       channels_attributes: %i[id team_id channel_id _destroy]
     )
-    result[:revenue_sharing_end_date] = DateTime.strptime(result[:revenue_sharing_end_date], '%m/%d/%Y') if result[:revenue_sharing_end_date]
+    result[:revenue_sharing_end_date] = DateTime.strptime(result[:revenue_sharing_end_date], '%m/%d/%Y') if result[:revenue_sharing_end_date].present?
     result
   end
 
