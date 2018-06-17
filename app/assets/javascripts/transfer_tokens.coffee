@@ -1,10 +1,3 @@
-transferTokens = (web3, contractAddress, abi, amount, toAddress) ->
-  contract = web3.eth.contract(abi) # see abi in abi.js
-  contractIns = contract.at(contractAddress)
-  contractIns.transfer toAddress, web3.toWei(amount, 'ether'), (err, data) ->
-    console.log err
-    console.log data
-
 alertMsg = (modal, msg) ->
   modal.find('.alert-msg').text(msg)
   modal.foundation('open')
@@ -26,10 +19,10 @@ $ ->
     if contractAddress && toAddress && amount
       contract = web3.eth.contract(abi) # see abi in abi.js
       contractIns = contract.at(contractAddress)
-      contractIns.balanceOf web3.eth.coinbase, (err, result) ->
+      web3.eth.getBalance web3.eth.coinbase, (err, result) ->
         if result && parseFloat(balance = web3.fromWei(result.toNumber(), 'ether')) >= parseFloat(amount)
-          contractIns.transfer toAddress, web3.toWei(amount, 'ether'), (err, data) ->
-            console.log err
+          contractIns.issue toAddress, web3.toWei(amount, 'ether'), 'proofId-1', (err, data) ->
+            console.log err if err
             if data
               console.log data
               toAddress = $('.transfer-tokens-form #receiver_address').val('')
