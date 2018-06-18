@@ -66,25 +66,27 @@ class Views::Projects::Description < Views::Projects::Base
         }
       }
       row {
-        column('large-6 small-12') {
+        column('large-6 small-12', style: 'color: #9a9a9a') {
           column('large-6 small-12') {
-            h5 'Team Leaders'
+            text 'Team Leaders'
+            br
             tooltip(project.account.decorate.name) {
-              img(src: account_image_url(project.account, 34), class: 'avatar-img')
+              img(src: account_image_url(project.account, 34), class: 'avatar-img', style: 'margin-top: 2px')
             }
           }
 
           column('large-6 small-12') {
-            h5 'Top Contributors'
+            text 'Top Contributors'
+            br
             project.top_contributors.each do |contributor|
               tooltip(contributor.decorate.name) {
-                img(src: account_image_url(contributor, 34), class: 'avatar-img')
+                img(src: account_image_url(contributor, 34), class: 'avatar-img', style: 'margin-top: 2px')
               }
             end
           }
         }
 
-        column('large-6 small-12') {
+        column('large-6 small-12', style: 'color: #9a9a9a') {
           render partial: 'shared/award_progress_bar'
         }
       }
