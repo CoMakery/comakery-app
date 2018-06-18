@@ -9,16 +9,16 @@ class Views::Shared::AwardProgressBar < Views::Base
           text 'CAS Token Awarded'
         }
         column('small-6', style: 'text-align: right; padding-right: 0') {
-          text current_account_deco.total_awards_remaining_pretty(project)
+          text project.total_awarded_pretty
           text ' of '
-          text project.total_awards_outstanding
+          text project.maximum_tokens_pretty
         }
       }
 
-      if current_account_deco.percent_unpaid(project) >= 20
-        meter(left: percent_mine_pretty)
+      if project.percent_awarded >= 15
+        meter(left: project.percent_awarded_pretty)
       else
-        meter(right: percent_mine_pretty)
+        meter(right: project.percent_awarded_pretty)
       end
     }
   end
@@ -47,7 +47,7 @@ class Views::Shared::AwardProgressBar < Views::Base
 
   def meter(left: ' ', right: ' ')
     div(class: ' meter ') {
-      span(class: ' complete ', style: "width: #{current_account_deco.percentage_of_unpaid_pretty(project)}") {
+      span(class: ' complete ', style: "width: #{project.percent_awarded_pretty};") {
         text left
       }
       span(class: ' incomplete ') { text right }

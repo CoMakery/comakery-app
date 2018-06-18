@@ -204,6 +204,10 @@ class Project < ApplicationRecord
     self[:royalty_percentage] = x_truncated
   end
 
+  def percent_awarded
+    total_awarded * 100.0 / maximum_tokens
+  end
+
   private
 
   def valid_tracker_url
