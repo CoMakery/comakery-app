@@ -10,7 +10,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
         column('small-12') {
           h2 {
             text project.title
-            span(style: 'color: #9A9A9A;'){
+            span(style: 'color: #9A9A9A;') {
               text " by #{project.account.decorate.name}"
             }
           }
