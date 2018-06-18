@@ -19,9 +19,9 @@ $ ->
     if contractAddress && toAddress && amount
       contract = web3.eth.contract(abi) # see abi in abi.js
       contractIns = contract.at(contractAddress)
-      web3.eth.getBalance web3.eth.coinbase, (err, result) ->
+      contractIns.balanceOf web3.eth.coinbase, (err, result) ->
         if result && parseFloat(balance = web3.fromWei(result.toNumber(), 'ether')) >= parseFloat(amount)
-          contractIns.issue toAddress, web3.toWei(amount, 'ether'), 'proofId-1', (err, data) ->
+          contractIns.transfer toAddress, web3.toWei(amount, 'ether'), (err, data) ->
             console.log err if err
             if data
               console.log data
