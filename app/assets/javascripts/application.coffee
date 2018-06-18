@@ -23,7 +23,6 @@
 
 $ ->
   $(document).foundation()
-
   $('.datepicker').datepicker({
     dateFormat: 'mm/dd/yy',
     defaultDate: '01/01/2000',
@@ -154,6 +153,9 @@ $ ->
   royaltyCalc()
   $('#project_royalty_percentage, #project_maximum_tokens, #project_denomination').change (e) ->
     royaltyCalc()
+
+  if $('.preview-content').height() > 310
+    $('.read-more').show()
 
 awardPaymentType = () ->
   switch $('#project_payment_type option:selected').val()
