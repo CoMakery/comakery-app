@@ -146,7 +146,7 @@ class Account < ApplicationRecord
   private
 
   def validate_age
-    errors.add(:date_of_birth, 'must be 16 years or older.') if age && age < 16
+    errors.add(:date_of_birth, 'You must be at least 16 years old to use CoMakery.') if age && age < 16
   end
 
   def calculate_age
