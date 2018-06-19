@@ -62,7 +62,6 @@ class Project < ApplicationRecord
   validate :valid_ethereum_enabled
   validates :ethereum_contract_address, ethereum_address: { type: :account, immutable: true } # see EthereumAddressable
   validate :denomination_changeable
-  # validates :token_symbol, presence: true, if: proc { ethereum_contract_address.present? }
 
   before_save :set_transitioned_to_ethereum_enabled
 

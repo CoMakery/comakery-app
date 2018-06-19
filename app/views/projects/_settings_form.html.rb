@@ -152,7 +152,7 @@ module Views
                 }
                 with_errors(project, :token_symbol) {
                   label {
-                    required_label_text 'Token Symbol'
+                    text 'Token Symbol'
                     f.text_field :token_symbol
                   }
                 }
@@ -186,20 +186,6 @@ module Views
                         td(class: 'revenue-shared') {}
                       }
                     }
-                  }
-                }
-
-                div(class: "project-token-terms #{'hide' if project.revenue_share?}") {
-                  h5 'About Project Tokens'
-                  p {
-                    text %(
-                        Project Tokens provide open ended and flexible award tracking.
-                        They can be used for effort tracking, point systems, blockchain projects, and meta-currencies.
-                        )
-                  }
-                  p {
-                    link_to 'Send us an email', "mailto:#{I18n.t('company_email')}"
-                    text ' to let us know how you are using them and how we can support you in using them.'
                   }
                 }
               }
