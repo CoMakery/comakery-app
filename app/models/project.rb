@@ -208,6 +208,29 @@ class Project < ApplicationRecord
     total_awarded * 100.0 / maximum_tokens
   end
 
+  def awards_for_chart
+    result = []
+    recents = awards.where('awards.created_at > ?', 150.days.ago).order(:created_at)
+    date_groups = recents.group_by { |a| a.created_at.strftime('%Y-%m-%d') }
+    contributors = {}
+    recents.map(&:account).uniq.each do |a|
+      name = a&.decorate&.name || 'Others'
+      contributors[name] = 0
+    end
+    date_groups.each do |group|
+      item = {}
+      item[:date] = group[0]
+      item = item.merge(contributors)
+      user_groups = group[1].group_by(&:account)
+      user_groups.each do |ugroup|
+        name = ugroup[0]&.decorate&.name || 'Others'
+        item[name] = ugroup[1].sum(&:total_amount)
+      end
+      result << item
+    end
+    result
+  end
+
   private
 
   def valid_tracker_url

@@ -1,5 +1,5 @@
 class Views::Projects::Description < Views::Projects::Base
-  needs :project, :can_award, :award_data
+  needs :project, :can_award
 
   def content
     div {
