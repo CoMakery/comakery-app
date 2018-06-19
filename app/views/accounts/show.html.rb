@@ -149,7 +149,7 @@ class Views::Accounts::Show < Views::Base
               text 'Date of Birth'
             }
             column('small-8') {
-              text current_account.date_of_birth.strftime('%m-%d-%Y') if current_account.date_of_birth
+              text current_account.date_of_birth.strftime('%m/%d/%Y') if current_account.date_of_birth
             }
           }
           row {
