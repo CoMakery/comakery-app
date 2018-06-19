@@ -168,6 +168,12 @@ class Views::Accounts::Show < Views::Base
               text current_account.ethereum_wallet
             }
           }
+
+          row(style: 'padding: 10px 0') {
+            column('small-12') {
+              link_to 'Download My Data', download_data_accounts_path(format: :zip)
+            }
+          }
         }
 
         column('small-5 medium-7') {
@@ -177,11 +183,6 @@ class Views::Accounts::Show < Views::Base
             end
           }
         }
-      }
-    }
-    column('small-12') {
-      row(style: 'text-align: center; padding: 20px') {
-        link_to 'Download My Data', download_data_accounts_path(format: :zip)
       }
     }
 
