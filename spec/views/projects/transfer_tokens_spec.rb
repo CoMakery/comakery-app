@@ -9,8 +9,8 @@ describe 'projects/transfer_tokens.html.rb' do
   end
 
   specify do
-    expect(rendered).to have_content("Recipient Address")
-    expect(rendered).to have_content("Amount")
-    expect(rendered).to have_link("Transfer tokens")
+    expect(rendered).to have_content('Recipient Address')
+    expect(rendered).to have_content('Amount')
+    expect(rendered).to have_link('Transfer tokens')
   end
 end
