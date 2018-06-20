@@ -1,6 +1,6 @@
-PROHIBITED USE, PROHIBITED BUSINESSES AND CONDITIONAL USE
+#**PROHIBITED USE, PROHIBITED BUSINESSES AND CONDITIONAL USE**
 
-**Prohibited Use**
+##**Prohibited Use**
 
 You may not use your CoMakery Account to engage in the following categories of activity ("Prohibited Uses"). The specific types of use listed below are representative, but not exhaustive. If you are uncertain as to whether or not your use of CoMakery Services involves a Prohibited Use, or have questions about how these requirements apply to you, please contact us at support@comakery.com. By opening a CoMakery Account, you confirm that you will not use your Account to do any of the following:
 
@@ -11,7 +11,7 @@ You may not use your CoMakery Account to engage in the following categories of a
 - **Gambling:**  Lotteries; bidding fee auctions; sports forecasting or odds making; fantasy sports leagues with cash prizes; internet gaming; contests; sweepstakes; games of chance
 - **Intellectual Property Infringement:**  Engage in transactions involving items that infringe or violate any copyright, trademark, right of publicity or privacy or any other proprietary right under the law, including but not limited to sales, distribution, or access to counterfeit music, movies, software, or other licensed materials without the appropriate authorization from the rights holder; use of CoMakery intellectual property, name, or logo, including use of CoMakery trade or service marks, without express consent from CoMakery or in a manner that otherwise harms CoMakery or the CoMakery brand; any action that implies an untrue endorsement by or affiliation with CoMakery
 
-**Prohibited Businesses**
+##**Prohibited Businesses**
 
 In addition to the Prohibited Uses described above, the following categories of businesses, business practices, and sale items are barred from CoMakery Services ("Prohibited Businesses"). Most Prohibited Businesses categories are imposed by network rules or the requirements of certain of the banking providers or processors and other service providers we may currently use or choose to use in the future. The specific types of use listed below are representative, but not exhaustive. If you are uncertain as to whether or not your use of CoMakery Services involves a Prohibited Business, or have questions about how these requirements apply to you, please contact us at support@comakery.com.
 
@@ -30,7 +30,7 @@ By opening a CoMakery Account, you confirm that you will not use CoMakery Servic
 - **Unfair, predatory or deceptive practices:**  Investment opportunities or other services that promise high rewards; Sale or resale of a service without added benefit to the buyer; resale of government offerings without authorization or added value; sites that we determine in our sole discretion to be unfair, deceptive, or predatory towards consumers
 - **High risk businesses:**  any businesses that we believe poses elevated financial risk, legal liability, or violates card network or bank policies
 
-**Conditional Use**
+##**Conditional Use**
 
 Express written consent and approval from CoMakery must be obtained prior to using CoMakery Services for the following categories of business and/or use ("Conditional Uses"). Consent may be requested by contacting us at support@comakery.com. CoMakery may also require you to agree to additional conditions, make supplemental representations and warranties, complete enhanced on-boarding procedures, and operate subject to restrictions if you use CoMakery Services in connection with any of following businesses, activities, or practices:
 

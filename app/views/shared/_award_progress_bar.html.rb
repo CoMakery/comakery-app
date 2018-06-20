@@ -5,38 +5,21 @@ class Views::Shared::AwardProgressBar < Views::Base
     return unless current_account_deco.present? && current_account_deco.same_team_or_owned_project?(project)
     div(class: 'meter-box') {
       div(class: 'meter-text') {
-        if current_account_deco.percent_unpaid(project) <= 20
-          complete { br }
-          incomplete {
-            h4 project.payment_description
-            meter_text_balances
-          }
-        else
-          complete {
-            h4 project.payment_description
-            meter_text_balances
-          }
-          incomplete {}
-        end
-      }
-
-      if current_account_deco.percent_unpaid(project) >= 20
-        meter(left: percent_mine_pretty)
-      else
-        meter(right: percent_mine_pretty)
-      end
-
-      div(class: 'meter-text') {
-        div(class: 'end-text') {
-          text 'Contributor Pool Balance'
-          br
-          text "#{project.payment_description} #{project.total_awarded_pretty}"
-          if project.revenue_share?
-            br
-            text project.total_revenue_shared_unpaid_pretty.to_s
-          end
+        column('small-6', style: 'padding-left: 0') {
+          text 'CAS Token Awarded'
+        }
+        column('small-6', style: 'text-align: right; padding-right: 0') {
+          text project.total_awarded_pretty
+          text ' of '
+          text project.maximum_tokens_pretty
         }
       }
+
+      if project.percent_awarded >= 15
+        meter(left: project.percent_awarded_pretty)
+      else
+        meter(right: project.percent_awarded_pretty)
+      end
     }
   end
 
@@ -64,7 +47,7 @@ class Views::Shared::AwardProgressBar < Views::Base
 
   def meter(left: ' ', right: ' ')
     div(class: ' meter ') {
-      span(class: ' complete ', style: "width: #{current_account_deco.percentage_of_unpaid_pretty(project)}") {
+      span(class: ' complete ', style: "width: #{project.percent_awarded_pretty};") {
         text left
       }
       span(class: ' incomplete ') { text right }

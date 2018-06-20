@@ -4,6 +4,7 @@
 @import 'foundation';
 @import 'foundation-icons';
 @import 'compass';
+// @import 'motion-ui/motion-ui';
 
 // @import 'settings_default';  // From Foundation
 @import 'settings_custom';       // CoMakery
@@ -67,7 +68,7 @@
 }
 
 .menu > .active > a {
-  border-bottom: 4px solid #ccc;
+  border-bottom: 4px solid #2199e8;
   background: none;
   color: #2199e8;
 }

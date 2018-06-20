@@ -1,3 +1,4 @@
+require 'zip'
 class AccountsController < ApplicationController
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
 
@@ -57,10 +58,28 @@ class AccountsController < ApplicationController
     end
   end
 
+  def download_data
+    respond_to do |format|
+      format.html
+      format.zip do
+        compressed_filestream = Zip::OutputStream.write_buffer do |zos|
+          zos.put_next_entry 'profile.csv'
+          zos.print current_account.to_csv
+          zos.put_next_entry 'awards.csv'
+          zos.print current_account.awards_csv
+        end
+        compressed_filestream.rewind
+        send_data compressed_filestream.read, filename: 'my-data.zip'
+      end
+    end
+  end
+
   protected
 
   def account_params
-    params.require(:account).permit(:email, :ethereum_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
+    result = params.require(:account).permit(:email, :ethereum_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
+    result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y') if result[:date_of_birth].present?
+    result
   end
 
   def check_date(old_age)

@@ -25,6 +25,8 @@ class Account < ApplicationRecord
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
+  validate :validate_age, on: :create
 
   def self.order_by_award(_project_id)
     select('accounts.*, (select sum(total_amount) from awards where account_id = accounts.id) as total').distinct.order('total desc')
@@ -101,6 +103,11 @@ class Account < ApplicationRecord
     valid? && confirmed?
   end
 
+  def valid_and_underage?
+    self.name_required = true
+    valid? && age < 16
+  end
+
   def same_team_project?(project)
     team_projects.include?(project) || award_projects.include?(project)
   end
@@ -119,9 +126,29 @@ class Account < ApplicationRecord
     calculate_age
   end
 
+  def to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << ['First Name', 'Last Name', 'Email', 'Nickname', 'Date of Birth', 'Age', 'Country']
+      csv << [first_name, last_name, email, nickname, date_of_birth, age]
+    end
+  end
+
+  def awards_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << ['Project', 'Award Type', 'Total Amount', 'Issuer', 'Date']
+      awards.order(:created_at).decorate.each do |award|
+        csv << [award.project.title, award.award_type.name, award.total_amount_pretty, award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]
+      end
+    end
+  end
+
   after_update :check_email_update
 
   private
+
+  def validate_age
+    errors.add(:date_of_birth, 'You must be at least 16 years old to use CoMakery.') if age && age < 16
+  end
 
   def calculate_age
     now = Time.zone.now.to_date

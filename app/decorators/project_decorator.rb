@@ -84,8 +84,16 @@ class ProjectDecorator < Draper::Decorator
     number_with_precision(total_awarded, precision: 0, delimiter: ',')
   end
 
+  def maximum_tokens_pretty
+    number_with_precision(maximum_tokens, precision: 0, delimiter: ',')
+  end
+
   def total_awards_redeemed_pretty
     number_with_precision(total_awards_redeemed, precision: 0, delimiter: ',')
+  end
+
+  def percent_awarded_pretty
+    "#{number_with_precision(percent_awarded, precision: 3, delimiter: ',')}%"
   end
 
   def revenue_per_share_pretty

@@ -25,7 +25,7 @@ class Views::Contributors::Index < Views::Projects::Base
       pages
       full_row {
         if contributors.present?
-          div(class: 'table-scroll table-box contributors', style: 'margin-bottom: 300px') {
+          div(class: 'table-scroll table-box contributors') {
             table(class: 'table-scroll', style: 'width: 100%') {
               tr(class: 'header-row') {
                 th 'Contributors'

@@ -85,7 +85,7 @@ describe AccountsController do
             email: 'user@test.st',
             first_name: 'User',
             last_name: 'Tester',
-            date_of_birth: '2000-01-01',
+            date_of_birth: '01/01/2000',
             country: 'America',
             password: '12345678'
           }

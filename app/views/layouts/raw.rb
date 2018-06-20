@@ -18,6 +18,7 @@ class Views::Layouts::Raw < Views::Base
 
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
+        stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat'
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
 

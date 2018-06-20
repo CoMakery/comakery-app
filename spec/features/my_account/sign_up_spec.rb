@@ -10,7 +10,7 @@ describe 'my account' do
     fill_in 'account[email]', with: 'test@test.st'
     fill_in 'First Name', with: 'Tester'
     fill_in 'Last Name', with: 'Dev'
-    fill_in 'Date of Birth', with: '2000/01/01'
+    fill_in 'Date of Birth', with: '01/01/2000'
     fill_in 'Password', with: '12345678'
     click_on 'Create Account'
     expect(page).to have_content('Created account successfully. Please confirm your email before continuing.')

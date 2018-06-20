@@ -1,10 +1,10 @@
-COMAKERY PRIVACY POLICY
+#COMAKERY PRIVACY POLICY
 
 This Privacy Policy describes how CoMakery, Inc. ("CoMakery") collects, uses, stores, shares, and protects your information whenever you use comakery.com, a CoMakery mobile app, any CoMakery or APIs, third party applications relying on such an APIs, or any CoMakery blockchain smart contracts (the "CoMakery Site") or any CoMakery Services. By using the CoMakery Site and CoMakery Administrative Services, you consent to the data practices described in this statement. We may periodically post changes to this Privacy Policy on this page, and it is your responsibility to review this Privacy Policy frequently and we encourage you to visit this page often. When required by law, we will notify you of any changes to this Privacy Policy.
 
 _Last updated:_ June 3, 2018
 
-HOW WE COLLECT INFORMATION ABOUT YOU
+##HOW WE COLLECT INFORMATION ABOUT YOU
 
 When you use CoMakery Services, we collect information sent to us through your computer, mobile phone, or other access device. This information may include your IP address, device information including, but not limited to, identifier, device name and type, operating system, location, mobile network information, and standard web log information, such as your browser type, traffic to and from our site, and the pages you accessed on our website. CoMakery does not intentionally collect information from or about any individual who is under 13 years old.
 
@@ -21,7 +21,7 @@ You may choose to provide us with access to certain personal information stored 
 
 Finally, we may collect additional information you may disclose to our customer support team.
 
-HOW WE USE COOKIES
+##HOW WE USE COOKIES
 
 When you access our website or content or use our application or CoMakery Services, we or companies we work with may place small data files called cookies or pixel tags on your computer or other device. We use these technologies to:
 
@@ -38,7 +38,7 @@ We encode our cookies so that only we can interpret the information stored in th
 
 You may encounter CoMakery cookies or pixel tags on websites that we do not control. For example, if you view a web page created by a third party or use an application developed by a third party, there may be a cookie or pixel tag placed by the web page or application. Likewise, these third parties may place cookies or pixel tags that are not subject to our control and the CoMakery Privacy Policy does not cover their use.
 
-HOW WE PROTECT AND STORE PERSONAL INFORMATION
+##HOW WE PROTECT AND STORE PERSONAL INFORMATION
 
 Throughout this policy, we use the term "personal information" to describe information that can be associated with a specific person and can be used to identify that person. This Privacy Policy does not apply to personal information that has been anonymized so that it does not and cannot be used to identify a specific user. CoMakery takes reasonable precautions, as described herein, to protect your personal information from loss, misuse, unauthorized access, disclosure, alteration, and destruction.
 
@@ -46,7 +46,7 @@ We store and process your personal and transactional information, including cert
 
 We store our customers' personal information securely throughout the life of the customer's CoMakery Account. CoMakery will retain your personal information for a minimum of five years or as necessary to comply with our legal obligations or to resolve disputes.
 
-HOW WE USE THE PERSONAL INFORMATION WE COLLECT
+##HOW WE USE THE PERSONAL INFORMATION WE COLLECT
 
 Our primary purpose in collecting personal information is to provide you with a secure, smooth, efficient, and customized experience. We may use your personal information to:
 
@@ -60,7 +60,7 @@ Our primary purpose in collecting personal information is to provide you with a 
 
 We will not use your personal information for purposes other than those purposes we have disclosed to you, without your permission. From time to time we may request your permission to allow us to share your personal information with third parties. You may opt out of having your personal information shared with third parties, or from allowing us to use your personal information for any purpose that is incompatible with the purposes for which we originally collected it or subsequently obtained your authorization. If you choose to so limit the use of your personal information, certain features or CoMakery Services may not be available to you.
 
-MARKETING
+##MARKETING
 
 We will never sell or rent your personal information to third parties.
 
@@ -72,7 +72,7 @@ In connection with potential transfers of Coins between you and a third party, i
 
 If you authorize one or more third-party applications to access your CoMakery account, then information you have provided to CoMakery may be shared with those third parties. Unless you provide further authorization, these third parties are not allowed to use this information for any purpose other than to facilitate your transactions using CoMakery services.
 
-HOW WE SHARE PERSONAL INFORMATION WITH OTHER PARTIES
+##HOW WE SHARE PERSONAL INFORMATION WITH OTHER PARTIES
 
 We may share your personal information with:
 
@@ -92,10 +92,10 @@ If you establish a CoMakery account indirectly on a third party website or via a
 
 In general, we will notify you of material changes to this policy by updating the last updated date at the top of this page, and we will provide you with explicit notice of material changes as required by law. We recommend that you visit this page frequently to check for changes.
 
-HOW YOU CAN ACCESS OR CHANGE YOUR PERSONAL INFORMATION
+##HOW YOU CAN ACCESS OR CHANGE YOUR PERSONAL INFORMATION
 
 You are entitled to review, correct, or amend your personal information, or to delete that information where it is inaccurate, and you may do so at any time by logging in to your account and clicking "Account". This right shall only be limited where the burden or expense of providing access would be disproportionate to the risks to your privacy in the case in question, or where the rights of persons other than you would be violated. If you close your CoMakery account, we will mark your account in our database as "Closed," but will keep your account information in our database for a period of time described above. This is necessary in order to deter fraud, by ensuring that persons who try to commit fraud will not be able to avoid detection simply by closing their account and opening a new account. However, if you close your account, your personally identifiable information will not be used by us for any further purposes, nor sold or shared with third parties, except as necessary to prevent fraud and assist law enforcement, as required by law, or in accordance with this Privacy Policy.
 
-HOW YOU CAN CONTACT US ABOUT PRIVACY QUESTIONS
+##HOW YOU CAN CONTACT US ABOUT PRIVACY QUESTIONS
 
 If you have questions or concerns regarding this policy, or if you have a complaint, you can contact us at support@comakery.com.

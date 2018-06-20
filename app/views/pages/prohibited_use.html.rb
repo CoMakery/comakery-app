@@ -1,4 +1,4 @@
-class Views::Pages::ProhibitedUsePolicy < Views::Base
+class Views::Pages::ProhibitedUse < Views::Base
   # rubocop:disable Rails/OutputSafety
   def content
     column('license-markdown') {

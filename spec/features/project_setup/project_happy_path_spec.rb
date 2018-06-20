@@ -85,8 +85,6 @@ describe 'viewing projects, creating and editing', :js do
 
     expect(page).not_to have_link 'Project Tasks'
 
-    expect(page).to have_content 'Lead by Glenn Spanky'
-
     expect(Project.last.award_types.count).to eq(4)
     expect(page.all('select#award_award_type_id option').map(&:text)).to eq(['1,000 This is a small award type', '2,000 This is a medium award type', '3,000 This is a large award type', '5,000 This is a super big award type'])
 
