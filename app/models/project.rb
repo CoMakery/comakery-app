@@ -70,7 +70,7 @@ class Project < ApplicationRecord
   scope :listed, -> { where 'projects.visibility not in(2,3)' }
   scope :visible, -> { where 'projects.visibility not in(2,3,4)' }
   scope :unarchived, -> { where.not visibility: 4 }
-
+  scope :publics, -> { where 'projects.visibility in(1,3)' }
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
       .joins('left join award_types on projects.id = award_types.project_id')

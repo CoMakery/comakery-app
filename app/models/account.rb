@@ -92,6 +92,10 @@ class Account < ApplicationRecord
            .where("(authentication_teams.account_id=#{id} and channels.id is not null) or projects.visibility=1 or a1.account_id=#{id} or projects.account_id=#{id}").distinct
   end
 
+  def confirmed?
+    email_confirm_token.nil?
+  end
+
   def same_team_project?(project)
     team_projects.include?(project)
   end

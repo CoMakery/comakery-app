@@ -19,12 +19,8 @@ class AccountPolicy < ApplicationPolicy
   alias create? new?
 
   def edit?
-    admin? || user == record
+    user == record
   end
   alias update? edit?
   alias show? edit?
-
-  def destroy?
-    admin?
-  end
 end

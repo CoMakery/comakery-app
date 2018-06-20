@@ -43,7 +43,7 @@ describe AwardsController do
         let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
 
         it 'shows awards for public projects' do
-          get :index, params: { project_id: public_project.to_param }
+          get :index, params: { project_id: public_project.id }
 
           expect(response.status).to eq(200)
           expect(assigns[:project]).to eq(public_project)
@@ -78,7 +78,7 @@ describe AwardsController do
       end
 
       specify do
-        project.update_attributes(public: true)
+        project.public_listed!
         get :index, params: { project_id: project.id }
         expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
       end

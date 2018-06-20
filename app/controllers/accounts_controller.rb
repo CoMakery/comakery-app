@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
-  skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm show]
+  skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm confirm_authentication show]
 
   def new
     @account = Account.new

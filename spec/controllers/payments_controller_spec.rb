@@ -35,7 +35,7 @@ describe PaymentsController do
 
       get :index, params: { project_id: other_project.id }
       expect(assigns[:project]).to be_nil
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to('/404.html')
     end
   end
 
@@ -88,7 +88,7 @@ describe PaymentsController do
 
       specify { expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
-      specify { expect(response).to redirect_to(root_path) }
+      specify { expect(response).to redirect_to('/404.html') }
     end
 
     describe 'logged out' do

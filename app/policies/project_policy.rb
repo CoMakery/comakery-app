@@ -16,10 +16,9 @@ class ProjectPolicy < ApplicationPolicy
 
     def resolve
       if @account
-        projects = Project.arel_table
-        scope.where(projects[:public].eq(true).or(projects[:id].in(@account.team_projects.map(&:id))))
+        account.accessable_projects
       else
-        scope.where(public: true)
+        scope.publics
       end
     end
   end
@@ -43,11 +42,15 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show_revenue_info?
-    project.share_revenue? && show_contributions?
+    project.show_revenue_info?(account)
   end
 
   def team_member?
-    account&.team_projects&.include?(project)
+    account&.same_team_project?(project)
+  end
+
+  def unlisted?
+    project&.can_be_access?(account)
   end
 
   alias send_community_award? team_member?

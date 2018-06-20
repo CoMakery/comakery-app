@@ -1,10 +1,9 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: :new
-  skip_after_action :verify_authorized, only: [:teams]
+  skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
   def landing
-    skip_authorization
     if current_account
       @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
@@ -20,11 +19,7 @@ class ProjectsController < ApplicationController
   end
 
   def index
-    @projects = if current_account
-      current_account.accessable_projects.with_last_activity_at
-    else
-      Project.public_listed.with_last_activity_at
-    end
+    @projects = policy_scope(Project).with_last_activity_at
 
     if params[:query].present?
       @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
@@ -72,11 +67,13 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.listed.includes(:award_types).find(params[:id]).decorate
+    authorize @project
     set_award
   end
 
   def unlisted
     @project = Project.includes(:award_types).find_by(long_id: params[:long_id])&.decorate
+    authorize @project
     if @project&.access_unlisted?(current_account)
       set_award
       render :show
