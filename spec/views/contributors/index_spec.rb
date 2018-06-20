@@ -56,8 +56,8 @@ describe 'contributors/index.html.rb' do
       expect(rendered).to have_selector('td.contributor')
       expect(rendered).to have_selector('td.contributor', text: 'John Doe')
       expect(rendered).to have_selector('td.awards-earned', text: '50')
-      expect(rendered).to have_selector('td.award-holdings', text: '50')
 
+      expect(rendered).not_to have_selector('td.award-holdings', text: '50')
       expect(rendered).not_to have_selector('td.paid', text: '$0')
       expect(rendered).not_to have_selector('td.holdings-value', text: '$0')
       expect(rendered).not_to have_content('$')

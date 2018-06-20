@@ -116,3 +116,12 @@ form {
   margin-right: 25px;
 }
 
+.project-desc{
+  max-height: 310px;
+  overflow: hidden;
+}
+
+.read-more{
+  margin-top: 10px;
+  display: none;
+}

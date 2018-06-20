@@ -1,5 +1,5 @@
 class Views::Projects::Description < Views::Projects::Base
-  needs :project, :can_award, :award_data
+  needs :project, :can_award
 
   def content
     div {
@@ -22,21 +22,29 @@ class Views::Projects::Description < Views::Projects::Base
         column('large-6 small-12 header-graphic') {
           full_row {
             h4 'About'
-            p {
-              text 'Lead by '
-              b project.account.decorate.name
-              # TODO: team(s)
-              # text ' with '
-              # strong project.slack_team_name
-            }
-            p(class: 'description') {
-              text raw project.description_html
-            }
-            if project.project_token?
-              p {
-                i 'This project does not offer royalties or a share of revenue. It does award project tokens. Read the Project Terms for more details.'
+            div(class: 'project-desc') {
+              div(class: 'preview-content') {
+                p(class: 'description') {
+                  text raw project.description_html
+                }
+                if project.project_token?
+                  p {
+                    i 'This project does not offer royalties or a share of revenue. It does award project tokens. Read the Project Terms for more details.'
+                  }
+                end
               }
-            end
+            }
+            div(class: 'read-more') {
+              link_to 'More..', 'javascript:;', class: 'more-link', data: { open: 'full-description' }
+            }
+            div(id: 'full-description', class: 'reveal', 'data-reveal': true) {
+              text raw project.description_html
+              button(class: 'close-button', 'data-close': true, 'aria-label': 'Close modal', type: 'button') {
+                span('aria-hidden': 'true') {
+                  text '&times;'.html_safe
+                }
+              }
+            }
           }
           full_row {
             ul(class: 'menu simple awarded-info description-stats') {
@@ -53,19 +61,33 @@ class Views::Projects::Description < Views::Projects::Base
                   end
                 }
               }
-
-              if award_data[:contributions_summary].present?
-                li(class: 'top-contributors') {
-                  h5 'Top Contributors'
-                  award_data[:contributions_summary].first(5).each do |contributor|
-                    tooltip(contributor.decorate.name) {
-                      img(src: account_image_url(contributor, 34), class: 'avatar-img')
-                    }
-                  end
-                }
-              end
             }
           }
+        }
+      }
+      row {
+        column('large-6 small-12', style: 'color: #9a9a9a') {
+          column('large-6 small-12') {
+            text 'Team Leaders'
+            br
+            tooltip(project.account.decorate.name) {
+              img(src: account_image_url(project.account, 34), class: 'avatar-img', style: 'margin-top: 2px')
+            }
+          }
+
+          column('large-6 small-12') {
+            text 'Top Contributors'
+            br
+            project.top_contributors.each do |contributor|
+              tooltip(contributor.decorate.name) {
+                img(src: account_image_url(contributor, 34), class: 'avatar-img', style: 'margin-top: 2px')
+              }
+            end
+          }
+        }
+
+        column('large-6 small-12', style: 'color: #9a9a9a') {
+          render partial: 'shared/award_progress_bar'
         }
       }
     }

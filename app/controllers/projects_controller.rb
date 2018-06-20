@@ -4,6 +4,7 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
+      check_account_info
       @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
       @team_projects = current_account.other_member_projects.with_last_activity_at.limit(6).decorate
@@ -106,7 +107,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(
+    result = params.require(:project).permit(
       :revenue_sharing_end_date,
       :contributor_agreement_url,
       :description,
@@ -138,6 +139,8 @@ class ProjectsController < ApplicationController
       ],
       channels_attributes: %i[id team_id channel_id _destroy]
     )
+    result[:revenue_sharing_end_date] = DateTime.strptime(result[:revenue_sharing_end_date], '%m/%d/%Y') if result[:revenue_sharing_end_date].present?
+    result
   end
 
   def assign_slack_channels
@@ -164,7 +167,6 @@ class ProjectsController < ApplicationController
     awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
     @awardable_types = awardable_types_result.awardable_types
     @can_award = awardable_types_result.can_award
-    @award_data = GetAwardData.call(account: current_account, project: @project).award_data
   end
 
   def project_detail_path

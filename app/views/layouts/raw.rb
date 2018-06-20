@@ -18,6 +18,7 @@ class Views::Layouts::Raw < Views::Base
 
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
+        stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat'
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
 
@@ -84,6 +85,27 @@ class Views::Layouts::Raw < Views::Base
             }
           }
         }
+
+        full_row {
+          div(class: 'large-10 medium-11 small-12 small-centered columns') {
+            footer(class: 'fat-footer', style: 'text-align: center; padding-bottom: 20px;') {
+              link_to 'Home', root_path
+              text ' | '
+              link_to 'Contact Us', 'mailto:support@comakery.com'
+              text ' | '
+              link_to 'User Agreement', '/user-agreement'
+              text ' | '
+              link_to 'Prohibited Use', '/prohibited-use'
+              text ' | '
+              link_to 'E-Sign Disclosure', '/e-sign-disclosure'
+              text ' | '
+              link_to 'Privacy Policy', '/privacy-policy'
+              br
+              text 'Ⓒ Comakery 2018'
+            }
+          }
+        }
+
         javascript_tag("
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

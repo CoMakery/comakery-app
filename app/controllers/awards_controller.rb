@@ -6,7 +6,6 @@ class AwardsController < ApplicationController
     @awards = @project.awards
     @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
     @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
-    @award_data = GetAwardData.call(project: @project).award_data
   end
 
   def create

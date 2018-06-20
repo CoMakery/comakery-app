@@ -1,0 +1,40 @@
+#**PROHIBITED USE, PROHIBITED BUSINESSES AND CONDITIONAL USE**
+
+##**Prohibited Use**
+
+You may not use your CoMakery Account to engage in the following categories of activity ("Prohibited Uses"). The specific types of use listed below are representative, but not exhaustive. If you are uncertain as to whether or not your use of CoMakery Services involves a Prohibited Use, or have questions about how these requirements apply to you, please contact us at support@comakery.com. By opening a CoMakery Account, you confirm that you will not use your Account to do any of the following:
+
+- **Unlawful Activity:**  Activity which would violate, or assist in violation of, any law, statute, ordinance, or regulation, sanctions programs administered in the countries where CoMakery conducts business, including but not limited to the U.S. Department of Treasury's Office of Foreign Assets Control ("OFAC"), or which would involve proceeds of any unlawful activity; publish, distribute or disseminate any unlawful material or information
+- **Abusive Activity:**  Actions which impose an unreasonable or disproportionately large load on our infrastructure, or detrimentally interfere with, intercept, or expropriate any system, data, or information; transmit or upload any material to the CoMakery Site that contains viruses, trojan horses, worms, or any other harmful or deleterious programs; attempt to gain unauthorized access to the CoMakery Site, other CoMakery Accounts, computer systems or networks connected to the CoMakery Site, through password mining or any other means; use CoMakery Account information of another party to access or use the CoMakery Site, except in the case of specific Merchants and/or applications which are specifically authorized by a user to access such user's CoMakery Account and information; or transfer your account access or rights to your account to a third party, unless by operation of law or with the express permission of CoMakery
+- **Abuse Other Users:**  Interfere with another individual's or entity's access to or use of any CoMakery Services; defame, abuse, extort, harass, stalk, threaten or otherwise violate or infringe the legal rights (such as, but not limited to, rights of privacy, publicity and intellectual property) of others; incite, threaten, facilitate, promote, or encourage hate, racial intolerance, or violent acts against others; harvest or otherwise collect information from the CoMakery Site about others, including without limitation email addresses, without proper consent
+- **Fraud:**  Activity which operates to defraud CoMakery, CoMakery users, or any other person; provide any false, inaccurate, or misleading information to CoMakery
+- **Gambling:**  Lotteries; bidding fee auctions; sports forecasting or odds making; fantasy sports leagues with cash prizes; internet gaming; contests; sweepstakes; games of chance
+- **Intellectual Property Infringement:**  Engage in transactions involving items that infringe or violate any copyright, trademark, right of publicity or privacy or any other proprietary right under the law, including but not limited to sales, distribution, or access to counterfeit music, movies, software, or other licensed materials without the appropriate authorization from the rights holder; use of CoMakery intellectual property, name, or logo, including use of CoMakery trade or service marks, without express consent from CoMakery or in a manner that otherwise harms CoMakery or the CoMakery brand; any action that implies an untrue endorsement by or affiliation with CoMakery
+
+##**Prohibited Businesses**
+
+In addition to the Prohibited Uses described above, the following categories of businesses, business practices, and sale items are barred from CoMakery Services ("Prohibited Businesses"). Most Prohibited Businesses categories are imposed by network rules or the requirements of certain of the banking providers or processors and other service providers we may currently use or choose to use in the future. The specific types of use listed below are representative, but not exhaustive. If you are uncertain as to whether or not your use of CoMakery Services involves a Prohibited Business, or have questions about how these requirements apply to you, please contact us at support@comakery.com.
+
+By opening a CoMakery Account, you confirm that you will not use CoMakery Services in connection with any of following businesses, activities, practices, or items:
+
+- **Investment and Credit Services:**  Securities brokers; mortgage consulting or debt reduction services; credit counseling or repair; real estate opportunities; investment schemes
+- **Restricted Financial Services:**  Check cashing, bail bonds; collections agencies
+- **Intellectual Property or Proprietary Rights Infringement:**  Sales, distribution, or access to counterfeit music, movies, software, or other licensed materials without the appropriate authorization from the rights holder
+- **Counterfeit or Unauthorized Goods:**  Unauthorized sale or resale of brand name or designer products or services; sale of goods or services that are illegally imported or exported or which are stolen
+- **Regulated Products and Services:**  Marijuana dispensaries and related businesses; sale of tobacco, e-cigarettes, and e-liquid; online prescription or pharmaceutical services; age restricted goods or services; weapons and munitions; gunpowder and other explosives; fireworks and related goods; toxic, flammable, and radioactive materials; products and services with varying legal status on a state-by-state basis
+- **Drugs and Drug Paraphernalia:**  Sale of narcotics, controlled substances, and any equipment designed for making or using drugs, such as bongs, vaporizers, and hookahs
+- **Pseudo-Pharmaceuticals:**  Pharmaceuticals and other products that make health claims that have not been approved or verified by the applicable local and/or national regulatory body
+- **Substances designed to mimic illegal drugs:**  Sale of a legal substance that provides the same effect as an illegal drug (e.g., salvia, kratom)
+- **Adult Content and Services:**  Pornography and other obscene materials (including literature, imagery and other media); sites offering any sexually-related services such as prostitution, escorts, pay-per view, adult live chat features
+- **Multi-level Marketing:**  Pyramid schemes, network marketing, and referral marketing programs
+- **Unfair, predatory or deceptive practices:**  Investment opportunities or other services that promise high rewards; Sale or resale of a service without added benefit to the buyer; resale of government offerings without authorization or added value; sites that we determine in our sole discretion to be unfair, deceptive, or predatory towards consumers
+- **High risk businesses:**  any businesses that we believe poses elevated financial risk, legal liability, or violates card network or bank policies
+
+##**Conditional Use**
+
+Express written consent and approval from CoMakery must be obtained prior to using CoMakery Services for the following categories of business and/or use ("Conditional Uses"). Consent may be requested by contacting us at support@comakery.com. CoMakery may also require you to agree to additional conditions, make supplemental representations and warranties, complete enhanced on-boarding procedures, and operate subject to restrictions if you use CoMakery Services in connection with any of following businesses, activities, or practices:
+
+- **Money Services:**  Money transmitters, Digital Currency transmitters; currency or Digital Currency exchanges or dealers; gift cards; prepaid cards; distribution or sale of in-game currency unless the merchant is the operator of the virtual world; act as a payment intermediary or aggregator or otherwise resell any of the CoMakery services
+- **Charities:**  Acceptance of donations for nonprofit enterprise
+- **Games of Skill:**  Games which are not defined as gambling under this Agreement or by law, but which require an entry fee and award a prize
+- **Religious/Spiritual Organizations:**  Operation of a for-profit religious or spiritual organization

@@ -2,7 +2,12 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
   resource :account, only: [:update]
-  resources :accounts, only: [:new, :create, :show]
+  resources :accounts, only: [:new, :create, :show] do
+    collection do
+      get :download_data
+    end
+  end
+
   resources :password_resets, only: [:new, :create, :edit, :update]
 
   get '/account' => "accounts#show"
@@ -18,6 +23,11 @@ Rails.application.routes.draw do
 
   root 'projects#landing'
 
+  get '/user-agreement' => "pages#user_agreement"
+  get '/e-sign-disclosure' => "pages#e_sign_disclosure"
+  get '/privacy-policy' => "pages#privacy_policy"
+  get '/prohibited-use' => "pages#prohibited_use"
+
   resource :session, only: %i[new create destroy] do
     get "oauth_failure"
     collection do
@@ -30,7 +40,6 @@ Rails.application.routes.draw do
 
   resources :projects do
     resources :awards, only: [:index, :create]
-    resources :licenses, only: [:index]
     resources :contributors, only: [:index]
     resources :revenues, only: [:index, :create]
     resources :payments, only: [:index, :create, :update]

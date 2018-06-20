@@ -29,8 +29,20 @@ describe BuildAwardRecords do
         description: 'This rocks!!11',
         uid: 'test@test.st'
       }, total_tokens_issued: 0)
+
       expect(result.award.confirm_token).not_to be_nil
       expect(result.award.email).to eq 'test@test.st'
+      expect(result.award.save).to eq(true)
+    end
+
+    it 'fail with invalid email' do
+      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: nil, award_params: {
+        description: 'This rocks!!11',
+        uid: 'invalid email'
+      }, total_tokens_issued: 0)
+
+      expect(result.award.valid?).to eq(false)
+      expect(result.award.errors.full_messages).to eq(['Email is invalid'])
     end
   end
   context 'when the account/auth exists already in the db' do
@@ -80,6 +92,19 @@ describe BuildAwardRecords do
       recipient
       recipient_authentication
       award_type.update community_awardable: false
+
+      result = described_class.call(project: project, issuer: create(:account), award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
+        description: 'This rocks!!11',
+        uid: recipient_authentication.uid
+      }, total_tokens_issued: 0)
+      expect(result).not_to be_success
+      expect(result.message).to eq 'Not authorized'
+    end
+
+    it 'when award type is not belongs to project' do
+      recipient
+      recipient_authentication
+      award_type.update project_id: other_project.id
 
       result = described_class.call(project: project, issuer: create(:account), award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
         description: 'This rocks!!11',

@@ -61,8 +61,6 @@ describe 'awarding users' do
 
       visit project_path(project)
 
-      expect(page.find('.my-share')).to have_content '0'
-
       fill_in :award_quantity, with: '1.579'
       select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
       fill_in 'Email Address', with: 'U99M9QYFQ'
@@ -84,10 +82,6 @@ describe 'awarding users' do
 
       click_link('Overview')
 
-      within('.meter-box') do
-        expect(page.find('.my-share')).to have_content '1,579'
-      end
-
       click_link 'Contributors'
 
       within('.contributors') do
@@ -108,7 +102,6 @@ describe 'awarding users' do
 
     expect(page).to have_content('Project that needs awards')
     expect(page).not_to have_content('Send Award')
-    expect(page).not_to have_content('User')
 
     login(account)
 

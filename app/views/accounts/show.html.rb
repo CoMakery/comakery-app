@@ -18,7 +18,7 @@ class Views::Accounts::Show < Views::Base
             }
             column('small-9') {
               with_errors(current_account, :email) {
-                f.text_field :email
+                f.email_field :email
               }
             }
 
@@ -52,6 +52,28 @@ class Views::Accounts::Show < Views::Base
             column('small-9') {
               with_errors(current_account, :nickname) {
                 f.text_field :nickname
+              }
+            }
+
+            column('small-3') {
+              label(for: :account_date_of_birth) {
+                text 'Date of Birth'
+              }
+            }
+            column('small-9') {
+              with_errors(current_account, :date_of_birth) {
+                f.text_field :date_of_birth, class: 'datepicker', value: f.object.date_of_birth&.strftime('%m/%d/%Y')
+              }
+            }
+
+            column('small-3') {
+              label(for: :country) {
+                text 'Country'
+              }
+            }
+            column('small-9') {
+              with_errors(current_account, :country) {
+                f.select :country, Country.all.sort, prompt: 'select country'
               }
             }
 
@@ -124,13 +146,36 @@ class Views::Accounts::Show < Views::Base
           }
           row {
             column('small-4') {
+              text 'Date of Birth'
+            }
+            column('small-8') {
+              text current_account.date_of_birth.strftime('%m/%d/%Y') if current_account.date_of_birth
+            }
+          }
+          row {
+            column('small-4') {
+              text 'Country'
+            }
+            column('small-8') {
+              text current_account.country
+            }
+          }
+          row {
+            column('small-4') {
               text 'Ethereum Address'
             }
             column('small-8') {
               text current_account.ethereum_wallet
             }
           }
+
+          row(style: 'padding: 10px 0') {
+            column('small-12') {
+              link_to 'Download My Data', download_data_accounts_path(format: :zip)
+            }
+          }
         }
+
         column('small-5 medium-7') {
           row {
             if current_account.image.present?
