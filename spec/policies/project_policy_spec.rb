@@ -6,13 +6,17 @@ describe ProjectPolicy do
   let!(:project_account) { create :account }
   let!(:authentication) { create(:authentication, account: project_account) }
 
-  let!(:my_public_project) { create(:project, title: 'public mine', account: project_account, public: true) }
+  let!(:my_public_project) { create(:project, title: 'public mine', account: project_account, visibility: 'public_listed') }
   let!(:my_private_project) { create(:project, title: 'private mine', account: project_account, public: false, require_confidentiality: false) }
-  let!(:my_public_project_business_confidential) { create(:project, title: 'private mine business confidential', account: project_account, public: true, require_confidentiality: true) }
+  let!(:my_public_project_business_confidential) { create(:project, title: 'private mine business confidential', account: project_account, visibility: 'public_listed', require_confidentiality: true) }
+
+  let!(:channel) { create :channel, team: team1, project: my_public_project, name: 'channel', channel_id: 'channel' }
+  let!(:other_channel) { create :channel, team: team1, project: my_private_project, name: 'other_channel', channel_id: 'other_channel' }
+  let!(:confidential_channel) { create :channel, team: team1, project: my_public_project_business_confidential, name: 'confidential_channel', channel_id: 'confidential_channel' }
 
   let!(:other_team_member) { create(:account) }
   let!(:other_team_member_auth) { create(:authentication, account: other_team_member) }
-  let!(:others_public_project) { create(:project, title: 'public someone elses', account: other_team_member, public: true) }
+  let!(:others_public_project) { create(:project, title: 'public someone elses', account: other_team_member, visibility: 'public_listed') }
   let!(:others_private_project) { create(:project, title: 'private someone elses', account: other_team_member, public: false) }
 
   let!(:different_team_account) { create(:account).tap { |a| create(:authentication, account: a) } }
@@ -28,7 +32,6 @@ describe ProjectPolicy do
         projects = ProjectPolicy::Scope.new(project_account, Project).resolve
 
         expect(projects.map(&:title).sort).to match_array([my_private_project,
-                                                           others_private_project,
                                                            my_public_project,
                                                            my_public_project_business_confidential,
                                                            others_public_project].map(&:title).sort)
@@ -90,7 +93,6 @@ describe ProjectPolicy do
     let(:policy) { described_class.new(project_account, my_public_project) }
 
     it 'relies on show_contributions? and show_contributions?' do
-      expect(policy).to receive(:show_contributions?).and_return(true)
       expect(my_public_project).to receive(:share_revenue?).and_return(true)
 
       expect(policy.show_revenue_info?).to be true
@@ -143,7 +145,7 @@ describe ProjectPolicy do
 
       expect(described_class.new(project_account, my_public_project).show?).to be true
       expect(described_class.new(project_account, my_private_project).show?).to be true
-      expect(described_class.new(project_account, others_private_project).show?).to be true
+      expect(described_class.new(project_account, others_private_project).show?).to be false
 
       expect(described_class.new(other_team_member, others_public_project).show?).to be true
       expect(described_class.new(other_team_member, my_private_project).show?).to be true

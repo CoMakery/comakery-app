@@ -13,14 +13,6 @@ class Mom
     account(**attrs).tap { |a| create(:authentication, account: a) }
   end
 
-  def account_role(account, role)
-    AccountRole.new account: account, role: role
-  end
-
-  def admin_role
-    role name: 'Admin', key: Role::ADMIN_ROLE_KEY
-  end
-
   def cc_authentication(**attrs)
     defaults = {}
     defaults[:account] = account unless attrs.key?(:account)

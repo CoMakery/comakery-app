@@ -7,17 +7,18 @@ describe AwardPolicy do
 
   let!(:project) { create(:project, account: account) }
   let!(:other_project) { create(:project, account: account) }
-
+  let!(:channel) { create :channel, team: team, project: project, name: 'channel', channel_id: 'channel' }
+  let!(:other_channel) { create :channel, team: team, project: other_project, name: 'other_channel', channel_id: 'other_channel' }
   let!(:public_project) { create(:project, account: create(:account), public: true) }
   let(:award_type_with_public_project) { create(:award_type, project: public_project) }
   let(:award_with_public_project) { create(:award, award_type: award_type_with_public_project) }
 
   let(:award_type_with_project) { create(:award_type, project: project) }
   let(:community_award_type_with_project) { create(:award_type, project: project, community_awardable: true) }
-  let(:award_with_project) { build(:award, award_type: award_type_with_project, account: receiving_authentication.account, issuer: account) }
+  let(:award_with_project) { build(:award, award_type: award_type_with_project, account: receiving_authentication.account, issuer: account, channel: channel) }
 
   let(:award_type_with_other_project) { create(:award_type, project: other_project) }
-  let(:award_with_other_project) { build(:award, award_type: award_type_with_other_project, account: account, issuer: account) }
+  let(:award_with_other_project) { build(:award, award_type: award_type_with_other_project, account: account, issuer: account, channel: other_channel) }
 
   let(:receiving_authentication) { create(:authentication) }
 

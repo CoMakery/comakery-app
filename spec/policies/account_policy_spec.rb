@@ -28,18 +28,4 @@ describe AccountPolicy do
       expect(described_class.new(nil, nil).new?).to be_truthy
     end
   end
-
-  describe 'destroy?' do
-    let!(:account) { create :account }
-
-    it "user can't delete account" do
-      expect(described_class.new(account, nil).destroy?).to be_falsey
-    end
-
-    it 'admin can delete account' do
-      role = create :admin_role
-      account.roles << role
-      expect(described_class.new(account, nil).destroy?).to be_truthy
-    end
-  end
 end

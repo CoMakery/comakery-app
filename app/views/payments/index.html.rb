@@ -133,6 +133,6 @@ class Views::Payments::Index < Views::Projects::Base
   end
 
   def current_user_has_awards?
-    current_account_deco.account.total_awards_remaining(project) > 0
+    current_account_deco.total_awards_remaining(project) > 0
   end
 end
