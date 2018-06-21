@@ -40,7 +40,6 @@ describe RevenuesController do
       expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
       expect(response).to redirect_to('/404.html')
       expect(assigns[:project]).to be_nil
-      expect(response).to redirect_to(root_path)
     end
   end
 
@@ -81,7 +80,7 @@ describe RevenuesController do
 
       specify { expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
-      specify { expect(response).to redirect_to(root_path) }
+      specify { expect(response).to redirect_to('/404.html') }
     end
 
     describe 'logged out' do

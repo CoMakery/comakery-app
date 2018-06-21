@@ -38,7 +38,7 @@ shared_examples "can't see revenue data" do
   end
   it "can't access the revenues page" do
     visit project_revenues_path(project)
-    expect(page).to have_current_path('/404.html')
+    expect(page).to have_current_path(root_path)
   end
   it "doesn't have a contributors link" do
     visit project_path(project)
@@ -46,7 +46,7 @@ shared_examples "can't see revenue data" do
   end
   it "can't access the contributors page" do
     visit project_contributors_path(project)
-    expect(page).to have_current_path('/404.html')
+    expect(page).to have_current_path(root_path)
   end
 
   it "doesn't show revenue data on the overview page" do
@@ -63,7 +63,7 @@ shared_examples "can't see revenue data" do
 
   it "can't access the awards page" do
     visit project_awards_path(project)
-    expect(page).to have_current_path('/404.html')
+    expect(page).to have_current_path(root_path)
   end
 end
 
@@ -117,7 +117,7 @@ describe 'project confidentiality for the logged in project owner', :js do
 end
 
 describe 'project confidentiality for logged out users', :js do
-  let!(:project) { create(:project, public: true, require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
+  let!(:project) { create(:project, visibility: 'public_listed', require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
 
   describe 'public project that requires confidentiality' do
     before do
@@ -162,7 +162,7 @@ describe 'project confidentiality for logged out users', :js do
 
     describe 'public project that does not require confidentiality' do
       before do
-        project.update_attribute(:public, true)
+        project.public_listed!
         project.update_attribute(:require_confidentiality, false)
       end
 

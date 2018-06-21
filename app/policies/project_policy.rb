@@ -46,7 +46,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def team_member?
-    account&.same_team_project?(project)
+    account==project.account || account&.same_team_project?(project)
   end
 
   def unlisted?
