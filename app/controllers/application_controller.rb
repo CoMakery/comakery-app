@@ -53,11 +53,6 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
-  # use like: before_filter :require_admin
-  def require_admin
-    authorize :application, :admin?
-  end
-
   def require_login
     if session[:account_id].blank?
       not_authenticated
