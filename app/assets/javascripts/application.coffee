@@ -23,19 +23,6 @@
 # = require_tree .
 
 $ ->
-
-  window.cookieconsent.initialise({
-    "palette": {
-      "popup": {
-        "background": "#237afc"
-      },
-      "button": {
-        "background": "#fff",
-        "text": "#237afc"
-      }
-    }
-  })
-
   $(document).foundation()
   $('.datepicker').datepicker({
     dateFormat: 'mm/dd/yy',

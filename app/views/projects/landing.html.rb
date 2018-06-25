@@ -80,5 +80,26 @@ class Views::Projects::Landing < Views::Projects::Base
     end
 
     a('Browse All', href: projects_path, class: 'more')
+    content_for :js do
+      cookieconsent
+    end
+  end
+
+  def cookieconsent
+    text(<<-JAVASCRIPT.html_safe)
+      $(function() {
+        window.cookieconsent.initialise({
+          "palette": {
+            "popup": {
+              "background": "#237afc"
+            },
+            "button": {
+              "background": "#fff",
+              "text": "#237afc"
+            }
+          }
+        })
+      });
+    JAVASCRIPT
   end
 end
