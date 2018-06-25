@@ -19,6 +19,8 @@ class Views::Layouts::Raw < Views::Base
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat'
+        stylesheet_link_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css'
+        javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js'
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
 
@@ -33,6 +35,7 @@ class Views::Layouts::Raw < Views::Base
             'data-airbrake-project-key' => ENV['AIRBRAKE_API_KEY'],
             'data-airbrake-environment-name' => ENV['APP_NAME']
         end
+
         favicon_link_tag 'favicon/apple-icon-57x57.png', rel: 'apple-touch-icon', sizes: '57x57', type: 'image/png'
         favicon_link_tag 'favicon/apple-icon-60x60.png', rel: 'apple-touch-icon', sizes: '60x60', type: 'image/png'
         favicon_link_tag 'favicon/apple-icon-72x72.png', rel: 'apple-touch-icon', sizes: '72x72', type: 'image/png'
