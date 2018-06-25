@@ -22,7 +22,7 @@ class ProjectDecorator < Draper::Decorator
 
   def ethereum_contract_explorer_url
     if ethereum_contract_address
-      "https://#{Rails.application.config.ethereum_explorer_site}/address/#{project.ethereum_contract_address}"
+      "https://#{Rails.application.config.ethereum_explorer_site}/token/#{project.ethereum_contract_address}"
     end
   end
 
