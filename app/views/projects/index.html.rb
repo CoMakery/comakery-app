@@ -15,6 +15,5 @@ class Views::Projects::Index < Views::Projects::Base
     projects_block(projects, project_contributors)
 
     a('Browse All', href: projects_path) if params[:query]
-
   end
 end

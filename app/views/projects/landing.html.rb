@@ -85,6 +85,7 @@ class Views::Projects::Landing < Views::Projects::Base
     end
   end
 
+  # rubocop:disable Rails/OutputSafety
   def cookieconsent
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
