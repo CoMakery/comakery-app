@@ -144,7 +144,7 @@ module Views
                   with_errors(project, :revenue_sharing_end_date) {
                     label {
                       text 'Revenue Sharing End Date'
-                      f.text_field :revenue_sharing_end_date, class: 'datepicker', placeholder: 'mm/dd/yyyy', value: f.object.revenue_sharing_end_date&.strftime('%m/%d/%Y'), disabled: project.license_finalized?
+                      f.text_field :revenue_sharing_end_date, class: 'datepicker-no-limit', placeholder: 'mm/dd/yyyy', value: f.object.revenue_sharing_end_date&.strftime('%m/%d/%Y'), disabled: project.license_finalized?
                       div(class: 'help-text') { text '"mm/dd/yyy" means revenue sharing does not end.' }
                     }
                   }
