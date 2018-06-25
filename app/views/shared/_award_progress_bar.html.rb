@@ -6,7 +6,7 @@ class Views::Shared::AwardProgressBar < Views::Base
     div(class: 'meter-box') {
       div(class: 'meter-text') {
         column('small-6', style: 'padding-left: 0') {
-          text 'CAS Token Awarded'
+          text project.tokens_awarded_with_symbol
         }
         column('small-6', style: 'text-align: right; padding-right: 0') {
           text project.total_awarded_pretty

@@ -150,6 +150,11 @@ class ProjectDecorator < Draper::Decorator
     contributors_distinct.order_by_award(id)
   end
 
+  def tokens_awarded_with_symbol
+    symbol = token_symbol || 'CAS'
+    "#{symbol} tokens awarded"
+  end
+
   private
 
   def self.pretty_number(*currency_methods)
