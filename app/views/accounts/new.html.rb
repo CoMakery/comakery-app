@@ -48,7 +48,7 @@ class Views::Accounts::New < Views::Base
               with_errors(account, :date_of_birth) {
                 label {
                   text 'Date of Birth: *'
-                  f.text_field :date_of_birth, class: 'datepicker'
+                  f.text_field :date_of_birth, placeholder: 'mm/dd/yyyy', class: 'datepicker'
                 }
               }
             }

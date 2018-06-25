@@ -62,7 +62,7 @@ class Views::Accounts::Show < Views::Base
             }
             column('small-9') {
               with_errors(current_account, :date_of_birth) {
-                f.text_field :date_of_birth, class: 'datepicker', value: f.object.date_of_birth&.strftime('%m/%d/%Y')
+                f.text_field :date_of_birth, class: 'datepicker', placeholder: 'mm/dd/yyyy', value: f.object.date_of_birth&.strftime('%m/%d/%Y')
               }
             }
 
