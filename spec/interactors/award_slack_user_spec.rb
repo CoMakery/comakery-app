@@ -25,11 +25,10 @@ describe AwardSlackUser do
 
   context 'send email award' do
     it 'send award notification to email' do
-      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: nil, award_params: {
-        description: 'This rocks!!11',
-        uid: 'test@test.st'
-      }, total_tokens_issued: 0)
-
+      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: nil, description: 'This rocks!!11',
+                                    quantity: 1,
+                                    uid: 'test@test.st',
+                                    total_tokens_issued: 0)
       expect(result.award.confirm_token).not_to be_nil
       expect(result.award.email).to eq 'test@test.st'
     end
