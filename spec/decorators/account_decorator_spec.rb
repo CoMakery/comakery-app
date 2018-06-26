@@ -24,6 +24,14 @@ describe AccountDecorator do
     end
   end
 
+  describe '#can_send_awards?' do
+    let!(:project) { create :project, payment_type: 'project_token' }
+
+    specify do
+      expect(build(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e').decorate.can_send_awards?(project)).to be false
+    end
+  end
+
   describe '#total_awards_earned_pretty' do
     let!(:contributor) { create(:account) }
     let!(:bystander) { create(:account) }

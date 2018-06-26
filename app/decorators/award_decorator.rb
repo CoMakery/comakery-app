@@ -15,7 +15,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def json_for_sending_awards
-    to_json(only: %i[id total_amount], methods: [:issuer_address], include: { account: { only: :ethereum_wallet }, project: { only: :ethereum_contract_address } })
+    to_json(only: %i[id total_amount], methods: [:issuer_address], include: { account: { only: %i[id ethereum_wallet] }, project: { only: %i[id ethereum_contract_address] } })
   end
 
   def unit_amount_pretty

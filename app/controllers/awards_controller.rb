@@ -1,6 +1,8 @@
 class AwardsController < ApplicationController
-  before_action :assign_project, only: %i[create index]
-  skip_before_action :require_login, only: %i[index confirm]
+  skip_before_action :verify_authenticity_token, only: :update_transaction_address
+
+  before_action :assign_project, only: %i[create index update_transaction_address]
+  skip_before_action :require_login, only: %i[index confirm update_transaction_address]
 
   def index
     @awards = @project.awards
@@ -36,6 +38,13 @@ class AwardsController < ApplicationController
       session[:award_token] = params[:token]
       redirect_to new_session_path
     end
+  end
+
+  def update_transaction_address
+    @award = @project.awards.find params[:id]
+    @award.update! ethereum_transaction_address: params[:tx]
+    @award = @award.decorate
+    render layout: false
   end
 
   def fail_and_redirect(message)

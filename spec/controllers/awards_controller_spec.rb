@@ -191,4 +191,17 @@ describe AwardsController do
       expect(award.reload.account_id).to eq receiver.account_id
     end
   end
+
+  describe '#update_transaction_address' do
+    let(:transaction_address) { '0xdb6f4aad1b0de83284855aafafc1b0a4961f4864b8a627b5e2009f5a6b2346cd' }
+    let!(:award) { create(:award, award_type: create(:award_type, project: project), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '1234') }
+
+    it 'success' do
+      login issuer.account
+      post :update_transaction_address, format: 'js', params: {
+        project_id: project.to_param, id: award.id, tx: transaction_address
+      }
+      expect(award.reload.ethereum_transaction_address).to eq transaction_address
+    end
+  end
 end
