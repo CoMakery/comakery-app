@@ -13,10 +13,7 @@ class AwardsController < ApplicationController
     if result.success?
       award = result.award
       award.save!
-      if award.channel
-        CreateEthereumAwards.call(award: award)
-        award.send_award_notifications
-      end
+      award.send_award_notifications if award.channel
       award.send_confirm_email
       flash[:notice] = "Successfully sent award to #{award.decorate.recipient_display_name}"
       redirect_to project_path(award.project)

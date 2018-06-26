@@ -99,7 +99,6 @@ describe AwardsController do
         expect(award.account).to eq(receiver.account)
         expect(award.description).to eq('This rocks!!11')
         expect(award.quantity).to eq(1.5)
-        expect(EthereumTokenIssueJob.jobs.first['args']).to eq([award.id])
       end
 
       it 'records a discord award being created' do

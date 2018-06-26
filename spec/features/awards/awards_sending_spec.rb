@@ -165,7 +165,6 @@ describe 'awarding users' do
     click_button 'Send'
 
     expect(page).to have_content 'Successfully sent award to bobjohnson'
-    expect(EthereumTokenIssueJob.jobs.length).to eq(1)
-    expect(EthereumTokenIssueJob.jobs.first['args']).to eq([Award.last.id])
+    expect(EthereumTokenIssueJob.jobs.length).to eq(0)
   end
 end

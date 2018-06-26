@@ -9,7 +9,6 @@ describe AccountsController do
   describe '#update' do
     before { login(account) }
     it 'updates a valid ethereum address successfully' do
-      expect(CreateEthereumAwards).to receive(:call).with(awards: array_including(award1, award2))
       expect do
         put :update, params: { account: { ethereum_wallet: "0x#{'a' * 40}" } }
         expect(response.status).to eq(302)
@@ -20,8 +19,6 @@ describe AccountsController do
     end
 
     it 'set account to unconfirm status if change email' do
-      expect(CreateEthereumAwards).to receive(:call).with(awards: array_including(award1, award2))
-
       put :update, params: { account: { email: 'another@test.st' } }
       expect(response.status).to eq(302)
       expect(response).to redirect_to account_url
