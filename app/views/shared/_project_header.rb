@@ -76,11 +76,6 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
               text 'Settings'
             }
           }
-          li_if(current_account && project.account == current_account) {
-            a(class: 'text-link', href: transfer_tokens_project_path(project)) {
-              text 'Transfer Tokens'
-            }
-          }
         }
       }
     }

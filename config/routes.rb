@@ -46,9 +46,6 @@ Rails.application.routes.draw do
     collection do
       get :landing
     end
-    member do
-      get :transfer_tokens
-    end
   end
   get '/p/:long_id' => "projects#unlisted", as: :unlisted_project
   get "awards/confirm/:token" => "awards#confirm", as: :confirm_award
