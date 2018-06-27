@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe AwardDecorator do
   describe '#issuer_display_name' do
-    let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny' }
+    let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
     let!(:project) { create :project, account: issuer }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, award_type: award_type, issuer: issuer }
@@ -13,6 +13,10 @@ describe AwardDecorator do
 
     it 'issuer_user_name' do
       expect(award.decorate.issuer_user_name).to eq 'johnny johnny'
+    end
+
+    it 'issuer_address' do
+      expect(award.decorate.issuer_address).to eq '0xD8655aFe58B540D8372faaFe48441AeEc3bec453'
     end
   end
 
