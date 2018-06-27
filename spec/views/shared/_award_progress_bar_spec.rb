@@ -27,19 +27,7 @@ describe 'shared/_award_progress_bar.html.rb' do
       render
     end
 
-    specify { expect(rendered).to eq('') }
-  end
-
-  describe 'with current auth from another slack team' do
-    before do
-      view.stub(:current_user) { other_team_account }
-
-      assign :project, project.decorate
-      assign :current_account_deco, other_team_account.decorate
-      render
-    end
-
-    specify { expect(rendered).to eq('') }
+    specify { expect(rendered).to have_css('.meter-box') }
   end
 
   describe 'with current auth from the project slack team' do
