@@ -31,4 +31,4 @@ $ ->
               # update_transaction_address_project_award_path
               $.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', tx: tx)
         else
-          alertMsg $('#metamaskModal1'), 'Amount should not be greater than balance ' + balance
+          alertMsg $('#metamaskModal1'), 'Token balance amount should be greater than ' + amount
