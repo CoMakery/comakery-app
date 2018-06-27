@@ -203,5 +203,12 @@ describe AwardsController do
       }
       expect(award.reload.ethereum_transaction_address).to eq transaction_address
     end
+
+    it 'failure' do
+      post :update_transaction_address, format: 'js', params: {
+        project_id: project.to_param, id: award.id, tx: transaction_address
+      }
+      expect(award.reload.ethereum_transaction_address).to be_nil
+    end
   end
 end
