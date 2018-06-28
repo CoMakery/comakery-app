@@ -29,7 +29,7 @@ module Views
                     text 'Display Currency'
                     question_tooltip 'This is the currency that will be used for display by default. Revenues for revenue sharing will be counted in the currency it was received in.'
                     f.select(:denomination,
-                      [['US Dollars ($)', 'USD'], ['Bittoken (฿)', 'BTC'], ['Ether (Ξ)', 'ETH']], { selected: project.denomination, include_blank: false },
+                      [['US Dollars ($)', 'USD'], ['Bitcoin (฿)', 'BTC'], ['Ether (Ξ)', 'ETH']], { selected: project.denomination, include_blank: false },
                       disabled: project.license_finalized? || project.revenues.any?)
                   }
                 }
@@ -106,9 +106,16 @@ module Views
             }
             row {
               column('large-6 small-12') {
+                with_errors(project, :ethereum_contract_address) {
+                  label {
+                    text 'Ethereum Contract Address'
+                    f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
+                  }
+                }
+
                 with_errors(project, :maximum_tokens) {
                   label {
-                    required_label_text 'Total Authorized'
+                    required_label_text 'Total Token Budget'
                     award_type_div f, :maximum_tokens, type: 'number', disabled: project.license_finalized? || project.ethereum_enabled?
                   }
                 }
@@ -137,13 +144,17 @@ module Views
                   with_errors(project, :revenue_sharing_end_date) {
                     label {
                       text 'Revenue Sharing End Date'
-                      f.date_field :revenue_sharing_end_date,
-                        disabled: project.license_finalized?
+                      f.text_field :revenue_sharing_end_date, class: 'datepicker-no-limit', placeholder: 'mm/dd/yyyy', value: f.object.revenue_sharing_end_date&.strftime('%m/%d/%Y'), disabled: project.license_finalized?
                       div(class: 'help-text') { text '"mm/dd/yyy" means revenue sharing does not end.' }
                     }
                   }
                 }
-
+                with_errors(project, :token_symbol) {
+                  label {
+                    text 'Token Symbol'
+                    f.text_field :token_symbol
+                  }
+                }
                 br
                 ethereum_beta(f)
 
@@ -174,20 +185,6 @@ module Views
                         td(class: 'revenue-shared') {}
                       }
                     }
-                  }
-                }
-
-                div(class: "project-token-terms #{'hide' if project.revenue_share?}") {
-                  h5 'About Project Tokens'
-                  p {
-                    text %(
-                        Project Tokens provide open ended and flexible award tracking.
-                        They can be used for effort tracking, point systems, blockchain projects, and meta-currencies.
-                        )
-                  }
-                  p {
-                    link_to 'Send us an email', "mailto:#{I18n.t('company_email')}"
-                    text ' to let us know how you are using them and how we can support you in using them.'
                   }
                 }
               }

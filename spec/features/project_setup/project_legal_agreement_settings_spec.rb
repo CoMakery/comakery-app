@@ -56,7 +56,7 @@ describe 'viewing projects, creating and editing', :js do
 
     click_on 'Save', class: 'last_submit'
     expect(page).to have_content 'Project created'
-    expect(page.find('.my-share')).to have_content 'Project Tokens 0'
+
     within '.project-terms' do
       expect(page).to have_content 'Mindful Inc'
       expect(page).to have_content 'Contributions: are exclusive'
@@ -106,7 +106,7 @@ describe 'viewing projects, creating and editing', :js do
       end
 
       specify do
-        select 'Bittoken (฿)', from: 'project_denomination'
+        select 'Bitcoin (฿)', from: 'project_denomination'
         expect_denomination_btc
       end
 

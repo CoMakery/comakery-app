@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180423025725) do
+ActiveRecord::Schema.define(version: 20180607153802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,9 +43,16 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.string "image_content_size"
     t.string "image_content_type"
     t.string "nickname"
+    t.string "country"
+    t.date "date_of_birth"
+    t.string "public_address"
+    t.string "nonce"
+    t.string "network_id"
+    t.boolean "system_email", default: false
     t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
+    t.index ["public_address"], name: "index_accounts_on_public_address"
     t.index ["remember_me_token"], name: "index_accounts_on_remember_me_token"
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token"
   end
@@ -167,6 +174,7 @@ ActiveRecord::Schema.define(version: 20180423025725) do
     t.string "image_content_type"
     t.string "long_id"
     t.integer "visibility", default: 0
+    t.string "token_symbol"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["public"], name: "index_projects_on_public"
     t.index ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public"

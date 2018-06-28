@@ -21,9 +21,12 @@ class Account < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required, :name_required
   validates :password, length: { minimum: 8 }, if: :password_required
-  validates :first_name, :last_name, presence: true, if: :name_required
+  validates :first_name, :last_name, :country, :date_of_birth, presence: true, if: :name_required
 
+  validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
+  validate :validate_age, on: :create
 
   def self.order_by_award(_project_id)
     select('accounts.*, (select sum(total_amount) from awards where account_id = accounts.id) as total').distinct.order('total desc')
@@ -95,6 +98,16 @@ class Account < ApplicationRecord
     email_confirm_token.nil?
   end
 
+  def confirmed_and_valid?
+    self.name_required = true
+    valid? && confirmed?
+  end
+
+  def valid_and_underage?
+    self.name_required = true
+    valid? && age < 16
+  end
+
   def same_team_project?(project)
     team_projects.include?(project) || award_projects.include?(project)
   end
@@ -108,9 +121,41 @@ class Account < ApplicationRecord
     UserMailer.reset_password(self).deliver_now
   end
 
+  def age
+    return nil unless date_of_birth
+    calculate_age
+  end
+
+  def to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << ['First Name', 'Last Name', 'Email', 'Nickname', 'Date of Birth', 'Age', 'Country']
+      csv << [first_name, last_name, email, nickname, date_of_birth, age]
+    end
+  end
+
+  def awards_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << ['Project', 'Award Type', 'Total Amount', 'Issuer', 'Date']
+      awards.order(:created_at).decorate.each do |award|
+        csv << [award.project.title, award.award_type.name, award.total_amount_pretty, award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]
+      end
+    end
+  end
+
   after_update :check_email_update
 
   private
+
+  def validate_age
+    errors.add(:date_of_birth, 'You must be at least 16 years old to use CoMakery.') if age && age < 16
+  end
+
+  def calculate_age
+    now = Time.zone.now.to_date
+    result = now.year - date_of_birth.year
+    result -= 1 if now.month < date_of_birth.month || now.month == date_of_birth.month && now.day < date_of_birth.day
+    result
+  end
 
   def check_email_update
     if saved_change_to_email?

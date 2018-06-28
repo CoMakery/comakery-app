@@ -13,7 +13,7 @@ class TopContributors
   end
 
   def top_contributors(project, n)
-    all_columns = (Account.column_names - %w[password_digest system_email]).map { |column| "max(accounts.#{column}) as #{column}" }.join(', ')
+    all_columns = (Account.column_names - %w[password_digest public_address nonce network_id system_email]).map { |column| "max(accounts.#{column}) as #{column}" }.join(', ')
     Account
       .select("#{all_columns}, sum(award_total_amount) as total_awarded, max(last_awarded_at) as last_awarded_at")
       .from(project.contributors

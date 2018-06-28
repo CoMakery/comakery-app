@@ -1,7 +1,7 @@
 class UserMailer < ApplicationMailer
   def confirm_email(account)
     @url = confirm_email_url(token: account.email_confirm_token)
-    mail to: account.email, subject: "Let's Make It Official. Confirm Your Email w/ CoMakery"
+    mail from: 'confirm@comakery.com', to: account.email, subject: "Let's Make It Official. Confirm Your Email w/ CoMakery"
   end
 
   def confirm_authentication(authentication)
@@ -20,5 +20,11 @@ class UserMailer < ApplicationMailer
   def reset_password(account)
     @url = edit_password_reset_url(account.reset_password_token)
     mail to: account.email, subject: "'Confirm your account email'"
+  end
+
+  def underage_alert(account, old_age)
+    @account = account
+    @old_age = old_age
+    mail to: 'support@comakery.com', subject: '[Support] Potential Underage User'
   end
 end

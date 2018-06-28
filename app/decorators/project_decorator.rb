@@ -22,7 +22,7 @@ class ProjectDecorator < Draper::Decorator
 
   def ethereum_contract_explorer_url
     if ethereum_contract_address
-      "https://#{Rails.application.config.ethereum_explorer_site}/address/#{project.ethereum_contract_address}"
+      "https://#{Rails.application.config.ethereum_explorer_site}/token/#{project.ethereum_contract_address}"
     end
   end
 
@@ -84,8 +84,16 @@ class ProjectDecorator < Draper::Decorator
     number_with_precision(total_awarded, precision: 0, delimiter: ',')
   end
 
+  def maximum_tokens_pretty
+    number_with_precision(maximum_tokens, precision: 0, delimiter: ',')
+  end
+
   def total_awards_redeemed_pretty
     number_with_precision(total_awards_redeemed, precision: 0, delimiter: ',')
+  end
+
+  def percent_awarded_pretty
+    "#{number_with_precision(percent_awarded, precision: 3, delimiter: ',')}%"
   end
 
   def revenue_per_share_pretty
@@ -140,6 +148,10 @@ class ProjectDecorator < Draper::Decorator
 
   def contributors_by_award_amount
     contributors_distinct.order_by_award(id)
+  end
+
+  def tokens_awarded_with_symbol
+    token_symbol ? "#{token_symbol} Tokens Awarded" : 'Tokens Awarded'
   end
 
   private

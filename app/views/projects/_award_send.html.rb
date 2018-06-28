@@ -10,13 +10,6 @@ class Views::Projects::AwardSend < Views::Base
           h3 "Earn #{project.payment_description}"
         end
       }
-      row(class: 'help-text') {
-        text 'The '
-        a(href: project_licenses_path(project)) { text 'Contribution License' }
-        text ' refers to this '
-        strong "'Award Form' "
-        text 'for calculating Contributor Royalties.'
-      }
       br
       form_for [project, award] do |f|
         div(class: 'award-types') {

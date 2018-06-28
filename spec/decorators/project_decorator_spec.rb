@@ -105,7 +105,7 @@ describe ProjectDecorator do
 
     specify do
       expect(project.ethereum_contract_explorer_url)
-        .to include("#{Rails.application.config.ethereum_explorer_site}/address/#{project.ethereum_contract_address}")
+        .to include("#{Rails.application.config.ethereum_explorer_site}/token/#{project.ethereum_contract_address}")
     end
   end
 

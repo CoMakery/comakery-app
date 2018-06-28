@@ -8,7 +8,14 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
     div(class: 'project-nav') {
       full_row {
         column('small-12') {
-          h2 project.title
+          h2 {
+            text project.title
+            if project.legal_project_owner.present?
+              span(style: 'color: #9A9A9A;') {
+                text " by #{project.legal_project_owner}"
+              }
+            end
+          }
         }
       }
       full_row {
@@ -59,7 +66,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           }
 
           li_if(project.ethereum_contract_explorer_url) {
-            link_to 'Ξthereum Smart Contract', project.ethereum_contract_explorer_url,
+            link_to 'Ξthereum Token', project.ethereum_contract_explorer_url,
               target: '_blank', class: 'text-link'
           }
 

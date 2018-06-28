@@ -22,7 +22,7 @@ feature 'my account' do
 
   scenario 'viewing' do
     visit root_path
-    expect(page).not_to have_content 'Account'
+    expect(page).not_to have_link 'Account'
     login(auth.account)
 
     visit root_path

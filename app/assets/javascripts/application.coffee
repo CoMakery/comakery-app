@@ -12,16 +12,34 @@
 #
 # = require jquery
 # = require jquery_ujs
+# = require jquery-ui
 # = require d3
 # = require d3pie
 # = require foundation
 # = require moment
 # = require underscore
 # = require chart_colors
+#  require cookieconsent
 # = require_tree .
 
 $ ->
   $(document).foundation()
+  $('.datepicker').datepicker({
+    dateFormat: 'mm/dd/yy',
+    defaultDate: '01/01/2000',
+    changeYear: true,
+    yearRange: '1950:2010'
+  })
+
+  $('.datepicker-no-limit').datepicker({
+    dateFormat: 'mm/dd/yy',
+    changeYear: true
+  })
+
+  if $('.datepicker').val()
+    $('.datepicker').datepicker("setDate",new Date($('.datepicker').val()))
+  if $('.datepicker-no-limit').val()
+    $('.datepicker-nolimit').datepicker("setDate",new Date($('.datepicker').val()))
 
   # lets hope we never have more than 1000 initial records (award types only have 3 by default)
   nextIdentifier = 1000
@@ -88,6 +106,9 @@ $ ->
         $(@).val(value.slice(0,-1))
         return false
 
+  $(document).on 'click', '.signin-with-metamask', ->
+    loginWithMetaMask.handleClick()
+
   $(document).on 'click', '.scrollingBox.menu a', ->
     href = $(this).attr 'href'
     anchor = href.substr href.indexOf('#') + 1
@@ -143,6 +164,9 @@ $ ->
   royaltyCalc()
   $('#project_royalty_percentage, #project_maximum_tokens, #project_denomination').change (e) ->
     royaltyCalc()
+
+  if $('.preview-content').height() > 310
+    $('.read-more').show()
 
 awardPaymentType = () ->
   switch $('#project_payment_type option:selected').val()

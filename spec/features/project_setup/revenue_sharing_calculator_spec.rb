@@ -47,16 +47,12 @@ describe 'viewing projects, creating and editing', :js do
     it 'when selecting payment type' do
       visit edit_project_path(project)
       expect(page).not_to have_css('.revenue-sharing-terms')
-
-      expect(page).to have_css('.project-token-terms')
-      within('.project-token-terms') { expect(page).to have_content('About Project Tokens') }
     end
 
     it 'when editing an existing project' do
       project.update(payment_type: :project_token)
       visit edit_project_path(project)
       expect(page).not_to have_css('.revenue-sharing-terms')
-      expect(page).to have_css('.project-token-terms')
     end
   end
 end

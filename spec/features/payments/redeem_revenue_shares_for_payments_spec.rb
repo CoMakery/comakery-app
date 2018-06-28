@@ -56,11 +56,6 @@ describe 'when redeeming revenue shares for payments' do
 
     click_link 'Payments'
 
-    within('.my-balance') do
-      expect(page.find('.total-awards-remaining')).to have_content('50')
-      expect(page.find('.total-revenue-unpaid')).to have_content('$617.25')
-    end
-
     within('.current-share-value') do
       expect(page.find('.revenue-per-share')).to have_content(/^\$12.34500000$/)
     end
@@ -75,11 +70,6 @@ describe 'when redeeming revenue shares for payments' do
       expect(page.find('.total-value')).to have_content('$24.69')
       expect(page.find('.status')).to have_content('Unpaid')
       expect(page.find('.transaction-fee').value).to be_blank
-    end
-
-    within('.my-balance') do
-      expect(page.find('.total-awards-remaining')).to have_content('48')
-      expect(page.find('.total-revenue-unpaid')).to have_content('$592.56')
     end
 
     within('.current-share-value') do
@@ -130,23 +120,13 @@ describe 'when redeeming revenue shares for payments' do
       expect(page.find('#flash-msg-notice')).to have_content('$1.23 pending payment by the project owner')
     end
 
-    it 'share value appears on project page' do
-      visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$54.32')
-    end
-
     it 'holdings value appears on the project show page' do
       award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('51')
-      expect(page.find('.my-balance')).to have_content('$58.60')
 
       award_type.awards.create_with_quantity(1, issuer: owner, account: owner)
       award_type.awards.create_with_quantity(5, issuer: owner, account: other_account)
       visit project_path(project)
-
-      expect(page.find('.my-share')).to have_content('52')
-      expect(page.find('.my-balance')).to have_content('$56.40')
     end
   end
 
@@ -167,7 +147,6 @@ describe 'when redeeming revenue shares for payments' do
     visit project_path(project)
     click_link 'Payments'
 
-    expect(page).not_to have_css('.my-shares')
     expect(page).to have_content('Earn awards by contributing')
     within('.no-awards-message') { click_on 'awards' }
     expect(current_path).to eq(project_path(project))

@@ -11,8 +11,8 @@ class Views::Accounts::New < Views::Base
             column('large-12') {
               with_errors(account, :email) {
                 label {
-                  text 'E-mail: '
-                  f.text_field :email
+                  text 'E-mail: *'
+                  f.email_field :email
                 }
               }
             }
@@ -20,7 +20,7 @@ class Views::Accounts::New < Views::Base
             column('large-12') {
               with_errors(account, :first_name) {
                 label {
-                  text 'First Name: '
+                  text 'First Name: *'
                   f.text_field :first_name
                 }
               }
@@ -29,7 +29,7 @@ class Views::Accounts::New < Views::Base
             column('large-12') {
               with_errors(account, :last_name) {
                 label {
-                  text 'Last Name: '
+                  text 'Last Name: *'
                   f.text_field :last_name
                 }
               }
@@ -45,9 +45,28 @@ class Views::Accounts::New < Views::Base
             }
 
             column('large-12') {
+              with_errors(account, :date_of_birth) {
+                label {
+                  text 'Date of Birth: *'
+                  f.text_field :date_of_birth, placeholder: 'mm/dd/yyyy', class: 'datepicker'
+                }
+              }
+            }
+
+            column('large-12') {
+              f.object.country ||= 'United States of America'
+              with_errors(account, :country) {
+                label {
+                  text 'Country: *'
+                  f.select :country, Country.all.sort
+                }
+              }
+            }
+
+            column('large-12') {
               with_errors(account, :password) {
                 label {
-                  text 'Password: '
+                  text 'Password: *'
                   f.password_field :password
                 }
               }

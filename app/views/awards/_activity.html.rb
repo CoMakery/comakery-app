@@ -1,5 +1,5 @@
 class Views::Awards::Activity < Views::Base
-  needs :project, :award_data
+  needs :project
 
   def content
     column {
@@ -7,7 +7,7 @@ class Views::Awards::Activity < Views::Base
         h3 "#{project.payment_description} Awarded"
         br
 
-        if award_data[:contributions_by_day].present?
+        if project.awards_for_chart.present?
           p {
             div(id: 'contributions-chart')
           }
@@ -22,7 +22,7 @@ class Views::Awards::Activity < Views::Base
   def make_charts
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
-        window.stackedBarChart("#contributions-chart", #{award_data[:contributions_by_day].to_json});
+        window.stackedBarChart("#contributions-chart", #{project.awards_for_chart.to_json});
       });
     JAVASCRIPT
   end

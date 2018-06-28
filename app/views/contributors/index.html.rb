@@ -25,12 +25,12 @@ class Views::Contributors::Index < Views::Projects::Base
       pages
       full_row {
         if contributors.present?
-          div(class: 'table-scroll table-box contributors', style: 'margin-bottom: 300px') {
+          div(class: 'table-scroll table-box contributors') {
             table(class: 'table-scroll', style: 'width: 100%') {
               tr(class: 'header-row') {
                 th 'Contributors'
                 th { text "Lifetime #{project.payment_description} Awarded" }
-                th { text "Unpaid #{project.payment_description}" }
+                th { text "Unpaid #{project.payment_description}" } if project.revenue_share?
                 th { text 'Unpaid Revenue Share Balance' } if project.revenue_share?
                 th { text 'Lifetime Paid' } if project.revenue_share?
               }
@@ -60,20 +60,19 @@ class Views::Contributors::Index < Views::Projects::Base
                       text contributor.total_awards_earned_pretty(project)
                     }
                   }
-                  td(class: 'award-holdings financial') {
-                    span(class: 'margin-small') {
-                      text text contributor.total_awards_remaining_pretty(project)
-                    }
-                  }
-
                   if project.revenue_share?
+                    td(class: 'award-holdings financial') {
+                      span(class: 'margin-small') {
+                        text text contributor.total_awards_remaining_pretty(project)
+                      }
+                    }
+
                     td(class: 'holdings-value financial') {
                       span(class: 'margin-small') {
                         text contributor.total_revenue_unpaid_remaining_pretty(project)
                       }
                     }
-                  end
-                  if project.revenue_share?
+
                     td(class: 'paid hidden financial') {
                       span(class: 'margin-small') {
                         text contributor.total_revenue_paid_pretty(project)
