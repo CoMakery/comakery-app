@@ -23,7 +23,6 @@ shared_examples 'can see revenue data' do
     visit project_contributors_path(project)
     expect(page).to have_current_path(project_contributors_path(project))
   end
-
 end
 
 shared_examples "can't see revenue data" do
@@ -166,7 +165,6 @@ describe 'project confidentiality for logged out users', :js do
         visit project_contributors_path(project)
         expect(page).to have_current_path(project_contributors_path(project))
       end
-
     end
 
   describe 'private project that requires confidentiality' do
