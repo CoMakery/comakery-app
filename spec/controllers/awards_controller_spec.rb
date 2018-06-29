@@ -5,7 +5,7 @@ describe AwardsController do
   let!(:discord_team) { create :team, provider: 'discord' }
   let!(:issuer) { create(:authentication) }
   let!(:issuer_discord) { create(:authentication, account: issuer.account, provider: 'discord') }
-  let!(:receiver) { create(:authentication) }
+  let!(:receiver) { create(:authentication, account: create(:account, ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
   let!(:receiver_discord) { create(:authentication, account: receiver.account, provider: 'discord') }
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
