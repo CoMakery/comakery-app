@@ -11,6 +11,7 @@ SimpleCov.start :rails do
 
   add_group 'Decorators', 'app/decorators'
   add_group 'Interactors', 'app/interactors'
+  add_group 'Policies', 'app/policies'
 end
 
 require 'spec_helper'
@@ -18,6 +19,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'rack_session_access/capybara'
 require 'sidekiq/testing'
+require 'pundit/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -90,6 +92,7 @@ def login_account(account)
 end
 
 def login(account)
+  account.authentications.first || create(:authentication, account_id: account.id)
   session[:account_id] = account.id
   account
 end

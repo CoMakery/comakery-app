@@ -154,7 +154,7 @@ class Account < ApplicationRecord
   end
 
   def same_team_project?(project)
-    team_projects.include?(project) || award_projects.include?(project)
+    team_projects.include?(project)
   end
 
   def same_team_or_owned_project?(project)

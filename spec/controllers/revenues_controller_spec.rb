@@ -11,6 +11,8 @@ describe RevenuesController do
     team.build_authentication_team authentication
     my_project.revenue_share!
     other_project.revenue_share!
+    allow(controller).to receive(:policy_scope).and_call_original
+    allow(controller).to receive(:authorize).and_call_original
   end
 
   describe '#index' do
@@ -18,22 +20,26 @@ describe RevenuesController do
       login account
       expect(my_project.revenue_share?).to be true
       get :index, params: { project_id: my_project.id }
-      expect(assigns[:project]).to eq(my_project)
+      expect(controller).to have_received(:policy_scope).with(Project)
+      expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
     end
 
     it 'anonymous can access public' do
       other_project.update_attributes(visibility: 'public_listed')
 
       get :index, params: { project_id: other_project.id }
-      expect(assigns[:project]).to eq(other_project)
+      expect(controller).to have_received(:policy_scope).with(Project)
+      expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
     end
 
     it "anonymous can't access private" do
       other_project.update_attributes(public: false)
 
       get :index, params: { project_id: other_project.id }
+      expect(controller).to have_received(:policy_scope).with(Project)
+      expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
+      expect(response).to redirect_to('/404.html')
       expect(assigns[:project]).to be_nil
-      expect(response).to redirect_to(root_path)
     end
   end
 
@@ -44,6 +50,10 @@ describe RevenuesController do
         get :create, params: { project_id: my_project.id, revenue: { amount: 50 } }
       end
 
+      specify { expect(controller).to have_received(:policy_scope).with(Project) }
+
+      specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
+
       specify { expect(response).to redirect_to(project_revenues_path(my_project)) }
     end
 
@@ -52,6 +62,10 @@ describe RevenuesController do
         login account
         get :create, params: { project_id: my_project.id, revenue: { amount: '' } }
       end
+
+      specify { expect(controller).to have_received(:policy_scope).with(Project) }
+
+      specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
       specify { expect(response).to render_template('revenues/index') }
     end
@@ -62,13 +76,21 @@ describe RevenuesController do
         get :create, params: { project_id: other_project.id, revenue: { amount: 50 } }
       end
 
-      specify { expect(response).to redirect_to(root_path) }
+      specify { expect(controller).to have_received(:policy_scope).with(Project) }
+
+      specify { expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project')) }
+
+      specify { expect(response).to redirect_to('/404.html') }
     end
 
     describe 'logged out' do
       before do
         get :create, params: { project_id: my_project.id, revenue: { amount: 50 } }
       end
+
+      specify { expect(controller).not_to have_received(:policy_scope).with(Project) }
+
+      specify { expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
       specify { expect(response).to redirect_to(root_url) }
     end

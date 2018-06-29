@@ -16,7 +16,7 @@ describe ChannelsController do
   end
 
   describe '#users' do
-    let!(:channel) { create :channel, team: team, project: project, name: 'channel' }
+    let!(:channel) { create :channel, team: team, project: project, name: 'channel', channel_id: 'channel' }
     let!(:team1) { create :team, provider: 'discord' }
     let!(:d_channel) { create :channel, team: team1, project: project }
 

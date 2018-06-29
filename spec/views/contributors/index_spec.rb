@@ -15,6 +15,10 @@ describe 'contributors/index.html.rb' do
         name: 'Tony! Toni! Toné!' }
     ]
     assign :contributors, project.contributors_by_award_amount.page(1)
+    allow(view).to receive(:policy).and_return(double('project policy',
+      edit?: false,
+      show_contributions?: true,
+      show_revenue_info?: true))
   end
 
   describe 'with contributors and revenue shares' do
