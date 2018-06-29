@@ -17,11 +17,7 @@ class AwardsController < ApplicationController
       award.save!
       award.send_award_notifications if award.channel
       award.send_confirm_email
-      msg = "Successfully sent award to #{award.decorate.recipient_display_name}"
-      if !self_issued? && award.decorate.recipient_address.blank?
-        msg = "The award recipient hasn't entered a blockchain address for us to send the award to. When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page."
-      end
-      flash[:notice] = msg.html_safe
+      generate_message(award)
       redirect_to project_path(award.project)
     else
       fail_and_redirect(result.message)
@@ -57,6 +53,14 @@ class AwardsController < ApplicationController
   end
 
   private
+
+  def generate_message(award)
+    flash[:notice] = if !award.self_issued? && award.decorate.recipient_address.blank?
+      "The award recipient hasn't entered a blockchain address for us to send the award to. When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page."
+    else
+      "Successfully sent award to #{award.decorate.recipient_display_name}"
+    end
+  end
 
   def award_params
     params.require(:award).permit(:uid, :quantity, :description)
