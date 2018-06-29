@@ -67,7 +67,7 @@ describe 'awarding users' do
 
       click_button 'Send'
 
-      expect(page).to have_content 'Successfully sent award to bobjohnson'
+      expect(page).to have_content 'When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page'
 
       bobjohnsons_auth = Authentication.find_by(uid: 'U99M9QYFQ')
       expect(bobjohnsons_auth).not_to be_nil
@@ -131,7 +131,7 @@ describe 'awarding users' do
 
     click_button 'Send'
 
-    expect(page).to have_content 'Successfully sent award to tester@...'
+    expect(page).to have_content 'When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page'
 
     click_link 'Awards'
 
@@ -165,7 +165,6 @@ describe 'awarding users' do
     click_button 'Send'
 
     expect(page).to have_content 'Successfully sent award to bobjohnson'
-    expect(EthereumTokenIssueJob.jobs.length).to eq(1)
-    expect(EthereumTokenIssueJob.jobs.first['args']).to eq([Award.last.id])
+    expect(EthereumTokenIssueJob.jobs.length).to eq(0)
   end
 end

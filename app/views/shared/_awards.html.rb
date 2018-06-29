@@ -66,6 +66,11 @@ class Views::Shared::Awards < Views::Base
                   link_to '(no account)', account_path
                 elsif award.recipient_address.blank?
                   text '(no account)'
+                elsif current_account.decorate.can_send_awards?(project)
+                  link_to 'javascript:void(0)', class: 'metamask-transfer-btn transfer-tokens-btn', 'data-id': award.id, 'data-info': award.json_for_sending_awards do
+                    span 'Send'
+                    image_tag 'metamask2.png'
+                  end
                 else
                   text '(pending)'
                 end

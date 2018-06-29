@@ -73,8 +73,7 @@ feature 'my account' do
       click_on 'Save'
     end
 
-    expect(EthereumTokenIssueJob.jobs.map { |job| job['args'] }.flatten).to \
-      match_array([award2.id, award1.id])
+    expect(EthereumTokenIssueJob.jobs.length).to eq(0)
   end
 
   scenario 'show account image' do

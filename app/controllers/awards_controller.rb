@@ -1,5 +1,7 @@
 class AwardsController < ApplicationController
-  before_action :assign_project, only: %i[create index]
+  skip_before_action :verify_authenticity_token, only: :update_transaction_address
+
+  before_action :assign_project, only: %i[create index update_transaction_address]
   skip_before_action :require_login, only: %i[index confirm]
   skip_after_action :verify_authorized
 
@@ -16,12 +18,9 @@ class AwardsController < ApplicationController
       award = result.award
       authorize award
       award.save!
-      if award.channel
-        CreateEthereumAwards.call(award: award)
-        award.send_award_notifications
-      end
+      award.send_award_notifications if award.channel
       award.send_confirm_email
-      flash[:notice] = "Successfully sent award to #{award.decorate.recipient_display_name}"
+      generate_message(award)
       redirect_to project_path(award.project)
     else
       fail_and_redirect(result.message)
@@ -46,6 +45,13 @@ class AwardsController < ApplicationController
     end
   end
 
+  def update_transaction_address
+    @award = @project.awards.find params[:id]
+    @award.update! ethereum_transaction_address: params[:tx]
+    @award = @award.decorate
+    render layout: false
+  end
+
   def fail_and_redirect(message)
     skip_authorization
     flash[:error] = "Failed sending award - #{message}"
@@ -53,6 +59,14 @@ class AwardsController < ApplicationController
   end
 
   private
+
+  def generate_message(award)
+    flash[:notice] = if !award.self_issued? && award.decorate.recipient_address.blank?
+      "The award recipient hasn't entered a blockchain address for us to send the award to. When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page."
+    else
+      "Successfully sent award to #{award.decorate.recipient_display_name}"
+    end
+  end
 
   def award_params
     params.require(:award).permit(:uid, :quantity, :description)

@@ -5,7 +5,7 @@ describe AwardsController do
   let!(:discord_team) { create :team, provider: 'discord' }
   let!(:issuer) { create(:authentication) }
   let!(:issuer_discord) { create(:authentication, account: issuer.account, provider: 'discord') }
-  let!(:receiver) { create(:authentication) }
+  let!(:receiver) { create(:authentication, account: create(:account, ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
   let!(:receiver_discord) { create(:authentication, account: receiver.account, provider: 'discord') }
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
@@ -119,7 +119,6 @@ describe AwardsController do
         expect(award.account).to eq(receiver.account)
         expect(award.description).to eq('This rocks!!11')
         expect(award.quantity).to eq(1.5)
-        expect(EthereumTokenIssueJob.jobs.first['args']).to eq([award.id])
       end
 
       it 'records a discord award being created' do
@@ -210,6 +209,26 @@ describe AwardsController do
       get :confirm, params: { token: 1234 }
       expect(response).to redirect_to(project_path(award.project))
       expect(award.reload.account_id).to eq receiver.account_id
+    end
+  end
+
+  describe '#update_transaction_address' do
+    let(:transaction_address) { '0xdb6f4aad1b0de83284855aafafc1b0a4961f4864b8a627b5e2009f5a6b2346cd' }
+    let!(:award) { create(:award, award_type: create(:award_type, project: project), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '1234') }
+
+    it 'success' do
+      login issuer.account
+      post :update_transaction_address, format: 'js', params: {
+        project_id: project.to_param, id: award.id, tx: transaction_address
+      }
+      expect(award.reload.ethereum_transaction_address).to eq transaction_address
+    end
+
+    it 'failure' do
+      post :update_transaction_address, format: 'js', params: {
+        project_id: project.to_param, id: award.id, tx: transaction_address
+      }
+      expect(award.reload.ethereum_transaction_address).to be_nil
     end
   end
 end

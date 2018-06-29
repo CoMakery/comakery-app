@@ -51,7 +51,6 @@ class AccountsController < ApplicationController
     old_age = @current_account.age || 16
     authorize @current_account
     if @current_account.update(account_params.merge(name_required: true))
-      CreateEthereumAwards.call(awards: @current_account.awards)
       check_date(old_age) if old_age < 16
       redirect_to account_url, notice: 'Your account details have been updated.'
     else

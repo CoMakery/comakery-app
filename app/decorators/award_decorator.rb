@@ -14,6 +14,10 @@ class AwardDecorator < Draper::Decorator
     end
   end
 
+  def json_for_sending_awards
+    to_json(only: %i[id total_amount], methods: [:issuer_address], include: { account: { only: %i[id ethereum_wallet] }, project: { only: %i[id ethereum_contract_address] } })
+  end
+
   def unit_amount_pretty
     number_with_delimiter(award.unit_amount, delimiter: ',')
   end
@@ -36,6 +40,10 @@ class AwardDecorator < Draper::Decorator
 
   def recipient_address
     account&.ethereum_wallet
+  end
+
+  def issuer_address
+    issuer&.ethereum_wallet
   end
 
   def issuer_display_name

@@ -11,6 +11,10 @@ class AccountDecorator < Draper::Decorator
     nickname || name
   end
 
+  def can_send_awards?(project)
+    project&.account == self && project&.ethereum_contract_address?
+  end
+
   def total_awards_earned_pretty(project)
     pretty_award total_awards_earned(project)
   end
