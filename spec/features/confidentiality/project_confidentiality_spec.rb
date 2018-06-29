@@ -24,11 +24,6 @@ shared_examples 'can see revenue data' do
     expect(page).to have_current_path(project_contributors_path(project))
   end
 
-  it 'does show revenue data on the overview page' do
-    visit project_path(project)
-    expect(page).to have_css('.my-share')
-    expect(page).to have_css('.my-balance')
-  end
 end
 
 shared_examples "can't see revenue data" do
@@ -47,13 +42,6 @@ shared_examples "can't see revenue data" do
   it "can't access the contributors page" do
     visit project_contributors_path(project)
     expect(page).to have_current_path(root_path)
-  end
-
-  it "doesn't show revenue data on the overview page" do
-    visit project_path(project)
-
-    expect(page).not_to have_css('.my-share')
-    expect(page).not_to have_css('.my-balance')
   end
 
   it "doesn't have the awards link" do
@@ -142,13 +130,6 @@ describe 'project confidentiality for logged out users', :js do
       expect(page).to have_current_path(root_path)
     end
 
-    it "doesn't show revenue data on the overview page" do
-      visit project_path(project)
-
-      expect(page).not_to have_css('.my-share')
-      expect(page).not_to have_css('.my-balance')
-    end
-
     it "doesn't have the awards link" do
       visit project_path(project)
       expect(page).not_to have_link 'Awards'
@@ -186,12 +167,6 @@ describe 'project confidentiality for logged out users', :js do
         expect(page).to have_current_path(project_contributors_path(project))
       end
 
-      it 'does show revenue data on the overview page' do
-        visit project_path(project)
-
-        expect(page).not_to have_css('.my-share')
-        expect(page).not_to have_css('.my-balance')
-      end
     end
 
   describe 'private project that requires confidentiality' do
