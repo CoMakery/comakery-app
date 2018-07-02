@@ -222,12 +222,11 @@ describe ProjectsController do
       end
 
       include ActionView::Helpers::DateHelper
-      it 'lists the projects ordered by most recent award date desc' do
+      it 'lists the projects ordered by most recently modify date' do
         get :index
 
         expect(response.status).to eq(200)
-        expect(assigns[:projects].map(&:title)).to eq(%w[Dogs Cats Yaks Foxes])
-        expect(assigns[:projects].map { |p| time_ago_in_words(p.last_award_created_at) if p.last_award_created_at }).to eq(['1 day', '2 days', '3 days', nil])
+        expect(assigns[:projects].map(&:title)).to eq(%w[Yaks Dogs Cats Foxes])
         expect(assigns[:project_contributors].keys).to eq([cat_project, dog_project, yak_project])
       end
 

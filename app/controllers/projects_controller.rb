@@ -20,12 +20,12 @@ class ProjectsController < ApplicationController
   end
 
   def index
-    @projects = policy_scope(Project).with_last_activity_at
+    @projects = policy_scope(Project)
 
     if params[:query].present?
       @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
     end
-    @projects = @projects.decorate
+    @projects = @projects.order(updated_at: :desc).decorate
     @project_contributors = TopContributors.call(projects: @projects).contributors
   end
 
