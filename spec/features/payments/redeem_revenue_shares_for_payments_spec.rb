@@ -35,8 +35,9 @@ describe 'when redeeming revenue shares for payments' do
     stub_slack_user_list
     stub_slack_channel_list
 
-    award_type.awards.create_with_quantity(50, issuer: owner, account: same_team_account)
-    award_type.awards.create_with_quantity(50, issuer: owner, account: owner)
+    channel = project.channels.create(team: team, channel_id: 'general')
+    create :award, quantity: 50, issuer: owner, account: owner, channel: channel, award_type: award_type
+    create :award, quantity: 50, issuer: owner, account: same_team_account, channel: channel, award_type: award_type
   end
 
   it 'revenue page looks sensible when there are no entries recorded yet' do
@@ -363,7 +364,7 @@ describe 'when redeeming revenue shares for payments' do
       expect(page).not_to have_link 'Payments'
 
       visit project_payments_path(project)
-      expect(page).to have_current_path(root_path)
+      expect(page).to have_current_path('/404.html')
     end
   end
 end

@@ -2,18 +2,21 @@ class AwardsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :update_transaction_address
 
   before_action :assign_project, only: %i[create index update_transaction_address]
-  skip_before_action :require_login, only: %i[index confirm update_transaction_address]
+  skip_before_action :require_login, only: %i[index confirm]
+  skip_after_action :verify_authorized
 
   def index
+    authorize @project, :show_contributions?
     @awards = @project.awards
     @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
     @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
   end
 
   def create
-    result = AwardSlackUser.call(project: @project, issuer: current_account, award_type_id: params[:award][:award_type_id], channel_id: params[:award][:channel_id], award_params: award_params)
+    result = AwardSlackUser.call(project: @project, issuer: current_account, award_type_id: params[:award][:award_type_id], channel_id: params[:award][:channel_id], uid: params[:award][:uid], quantity: params[:award][:quantity], description: params[:award][:description])
     if result.success?
       award = result.award
+      authorize award
       award.save!
       award.send_award_notifications if award.channel
       award.send_confirm_email
@@ -22,6 +25,8 @@ class AwardsController < ApplicationController
     else
       fail_and_redirect(result.message)
     end
+  rescue Pundit::NotAuthorizedError
+    fail_and_redirect('Not authorized')
   end
 
   def confirm
@@ -48,6 +53,7 @@ class AwardsController < ApplicationController
   end
 
   def fail_and_redirect(message)
+    skip_authorization
     flash[:error] = "Failed sending award - #{message}"
     redirect_back fallback_location: root_path
   end

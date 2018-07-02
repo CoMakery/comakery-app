@@ -4,6 +4,9 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
   layout 'raw'
+  include Pundit
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -44,6 +47,12 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
 
+  # called when a policy authorization fails
+  rescue_from Pundit::NotAuthorizedError do |exception|
+    Rails.logger.error(exception.to_s)
+    redirect_to root_path
+  end
+
   def require_login
     if session[:account_id].blank?
       not_authenticated
@@ -73,8 +82,8 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def assign_project
-    project = Project.find_by id: params[:project_id]
-    project = Project.find_by long_id: params[:project_id] unless project
+    project = policy_scope(Project).find_by id: params[:project_id]
+    project = policy_scope(Project).find_by long_id: params[:project_id] unless project
     @project = project&.decorate if project&.can_be_access?(current_account)
     redirect_to root_path unless @project
   end

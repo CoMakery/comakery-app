@@ -285,7 +285,7 @@ describe 'when recording revenue' do
       expect(page).not_to have_link 'Revenues'
 
       visit project_revenues_path(project)
-      expect(page).to have_current_path(root_path)
+      expect(page).to have_current_path('/404.html')
     end
   end
 end

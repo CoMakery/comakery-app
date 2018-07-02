@@ -33,8 +33,9 @@ describe 'when reconciling redeemed revenue shares' do
     stub_slack_user_list
     stub_slack_channel_list
 
-    award_type.awards.create_with_quantity(50, issuer: owner, account: same_team_account)
-    award_type.awards.create_with_quantity(50, issuer: owner, account: owner)
+    channel = project.channels.create(team: team, channel_id: 'general')
+    create :award, quantity: 50, issuer: owner, account: owner, channel: channel, award_type: award_type
+    create :award, quantity: 50, issuer: owner, account: same_team_account, channel: channel, award_type: award_type
 
     open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') do |file|
       owner.image = file
@@ -95,6 +96,8 @@ describe 'when reconciling redeemed revenue shares' do
   end
 
   it 'non-project owner cannot reconcile payments' do
+    expect(same_team_account&.same_team_project?(project)).to eq true
+    expect(same_team_account.total_awards_remaining(project) > 0).to eq true
     login same_team_account
     visit project_path(project)
     click_link 'Payments'

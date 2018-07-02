@@ -94,7 +94,7 @@ describe 'awarding users' do
   it 'for a user with an account but no ethereum address' do
     login(other_account)
 
-    visit root_path
+    visit projects_path
 
     within('.project', text: 'Project that needs awards') do
       click_link 'Project that needs awards'

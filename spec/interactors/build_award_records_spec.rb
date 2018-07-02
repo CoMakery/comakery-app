@@ -25,13 +25,24 @@ describe BuildAwardRecords do
 
   context 'send email award' do
     it 'send award notification to email' do
-      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: nil, award_params: {
-        description: 'This rocks!!11',
-        uid: 'test@test.st'
-      }, total_tokens_issued: 0)
+      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: nil, quantity: 1,
+                                    description: 'This rocks!!11',
+                                    uid: 'test@test.st',
+                                    total_tokens_issued: 0)
 
       expect(result.award.confirm_token).not_to be_nil
       expect(result.award.email).to eq 'test@test.st'
+      expect(result.award.save).to eq(true)
+    end
+
+    it 'fails with invalid email' do
+      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: nil, quantity: 1,
+                                    description: 'This rocks!!11',
+                                    uid: 'invalid email',
+                                    total_tokens_issued: 0)
+
+      expect(result.award.valid?).to eq(false)
+      expect(result.award.errors.full_messages).to eq(['Email is invalid'])
     end
   end
   context 'when the account/auth exists already in the db' do
@@ -42,10 +53,10 @@ describe BuildAwardRecords do
       expect do
         expect do
           expect do
-            result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
-              description: 'This rocks!!11',
-              uid: recipient_authentication.uid
-            }, total_tokens_issued: 0)
+            result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, quantity: 1,
+                                          description: 'This rocks!!11',
+                                          uid: recipient_authentication.uid,
+                                          total_tokens_issued: 0)
             expect(result).to be_success
             expect(result.award).to be_a_new_record
             expect(result.award.award_type).to eq(award_type)
@@ -63,10 +74,10 @@ describe BuildAwardRecords do
       expect do
         expect do
           expect do
-            result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: channel.id, award_params: {
-              description: 'This rocks!!11',
-              uid: recipient_authentication.uid
-            }, total_tokens_issued: 0)
+            result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: channel.id, quantity: 1,
+                                          description: 'This rocks!!11',
+                                          uid: recipient_authentication.uid,
+                                          total_tokens_issued: 0)
             expect(result).to be_success
             expect(result.award).to be_a_new_record
             expect(result.award.award_type).to eq(award_type)
@@ -82,10 +93,21 @@ describe BuildAwardRecords do
       recipient_authentication
       award_type.update community_awardable: false
 
-      result = described_class.call(project: project, issuer: create(:account), award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
-        description: 'This rocks!!11',
-        uid: recipient_authentication.uid
-      }, total_tokens_issued: 0)
+      result = described_class.call(project: project, issuer: create(:account), award_type_id: award_type.to_param, channel_id: project.channels.first.id, quantity: 1,
+                                    description: 'This rocks!!11',
+                                    uid: recipient_authentication.uid,
+                                    total_tokens_issued: 0)
+      expect(result).not_to be_success
+      expect(result.message).to eq 'Not authorized'
+    end
+
+    it 'when the award_type does not belongs to project' do
+      recipient
+      recipient_authentication
+      award_type.update project_id: other_project.id
+
+      result = described_class.call(project: project, issuer: create(:account), award_type_id: award_type.to_param, channel_id: project.channels.first.id, description: 'This rocks!!11', uid: recipient_authentication.uid,
+                                    total_tokens_issued: 0)
       expect(result).not_to be_success
       expect(result.message).to eq 'Not authorized'
     end
@@ -97,11 +119,11 @@ describe BuildAwardRecords do
         expect do
           expect do
             expect do
-              result = described_class.call(project: project, issuer: issuer, channel_id: project.channels.first.id, award_params: {
-                award_type_id: nil,
-                description: 'This rocks!!11',
-                uid: recipient_authentication.uid
-              }, total_tokens_issued: 0)
+              result = described_class.call(project: project, issuer: issuer, channel_id: project.channels.first.id, quantity: 1,
+                                            award_type_id: nil,
+                                            description: 'This rocks!!11',
+                                            uid: recipient_authentication.uid,
+                                            total_tokens_issued: 0)
               expect(result).not_to be_success
               expect(result.message).to eq('missing award type')
             end.not_to change { Award.count }
@@ -118,10 +140,9 @@ describe BuildAwardRecords do
       award_type.update!(amount: project.maximum_tokens + 1)
 
       expect do
-        result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
-          award_type_id: award_type.to_param,
-          uid: recipient_authentication.uid
-        }, total_tokens_issued: 0)
+        result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, quantity: 1,
+                                      uid: recipient_authentication.uid,
+                                      total_tokens_issued: 0)
         expect(result).not_to be_success
         expect(result.message).to eq("Sorry, you can't send more awards than the project's maximum number of allowable tokens")
       end.not_to change { Award.count }
@@ -132,10 +153,9 @@ describe BuildAwardRecords do
       recipient_authentication
       award_type.update!(amount: project.maximum_tokens - 1)
 
-      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
-        award_type_id: award_type.to_param,
-        uid: recipient_authentication.uid
-      }, total_tokens_issued: 0)
+      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, quantity: 1,
+                                    uid: recipient_authentication.uid,
+                                    total_tokens_issued: 0)
       expect(result.message).to eq("Sorry, you can't send more awards this month than the project's maximum number of allowable tokens per month")
       expect(result).not_to be_success
     end
@@ -146,10 +166,8 @@ describe BuildAwardRecords do
       award_type.update(amount: 1)
       expect do
         result = described_class.call(project: project, issuer: issuer, channel_id: project.channels.first.id, award_type_id: award_type.to_param,
-                                      award_params: {
-                                        quantity: 2,
-                                        uid: recipient_authentication.uid
-                                      },
+                                      quantity: 2,
+                                      uid: recipient_authentication.uid,
                                       total_tokens_issued: project.maximum_tokens - 1)
 
         expect(result).not_to be_success
@@ -160,7 +178,14 @@ describe BuildAwardRecords do
 
   context 'when the uid is missing' do
     it 'fails' do
-      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {}, total_tokens_issued: 0)
+      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, total_tokens_issued: 0, quantity: 1)
+      expect(result).not_to be_success
+    end
+  end
+
+  context 'when quantity is missing' do
+    it 'fails' do
+      result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, total_tokens_issued: 0, uid: recipient_authentication.uid)
       expect(result).not_to be_success
     end
   end
@@ -178,17 +203,17 @@ describe BuildAwardRecords do
         expect do
           expect do
             expect do
-              result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
-                description: 'This rocks!!11',
-                uid: 'U99M9QYFQ_other'
-              }, total_tokens_issued: 0)
+              result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, quantity: 1,
+                                            description: 'This rocks!!11',
+                                            uid: 'U99M9QYFQ_other',
+                                            total_tokens_issued: 0)
               expect(result.message).to be_nil
               expect(result.award).to be_a_new_record
               expect(result.award.award_type).to eq(award_type)
+              expect(result.award.save).to eq(true)
             end.not_to change { Award.count }
           end.to change { Authentication.count }.by(1)
-        end.not_to change { Account.count }
-        expect(result.award.save).to eq(true)
+        end
       end
     end
   end
@@ -203,10 +228,10 @@ describe BuildAwardRecords do
 
     it 'creates the auth with the slack details from the project' do
       expect do
-        result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
-          description: 'This rocks!!11',
-          uid: 'U99M9QYFQ'
-        }, total_tokens_issued: 0)
+        result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, quantity: 1,
+                                      description: 'This rocks!!11',
+                                      uid: 'U99M9QYFQ',
+                                      total_tokens_issued: 0)
         expect(result.message).to be_nil
       end.to change { Authentication.count }.by(1)
       created_account = Account.last
@@ -217,12 +242,10 @@ describe BuildAwardRecords do
       result = nil
       expect do
         expect do
-          result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, award_params: {
-            award_type_id: award_type.to_param,
-            description: 'This rocks!!11',
-            uid: 'U99M9QYFQ',
-            channel_id: project.channels.last.id
-          }, total_tokens_issued: 0)
+          result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: project.channels.first.id, quantity: 1,
+                                        description: 'This rocks!!11',
+                                        uid: 'U99M9QYFQ',
+                                        total_tokens_issued: 0)
           expect(result.message).to be_nil
           expect(result.award).to be_a_new_record
           expect(result.award.award_type).to eq(award_type)
@@ -239,11 +262,10 @@ describe BuildAwardRecords do
       stub_discord_user
       expect do
         expect do
-          result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: channel.id, award_params: {
-            award_type_id: award_type.to_param,
-            description: 'This rocks!!11',
-            uid: '123445'
-          }, total_tokens_issued: 0)
+          result = described_class.call(project: project, issuer: issuer, award_type_id: award_type.to_param, channel_id: channel.id, quantity: 1,
+                                        description: 'This rocks!!11',
+                                        uid: '123445',
+                                        total_tokens_issued: 0)
           expect(result.message).to be_nil
           expect(result.award).to be_a_new_record
           expect(result.award.award_type).to eq(award_type)

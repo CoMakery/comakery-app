@@ -151,8 +151,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def tokens_awarded_with_symbol
-    symbol = token_symbol || 'CAS'
-    "#{symbol} Tokens awarded"
+    token_symbol ? "#{token_symbol} Tokens Awarded" : 'Tokens Awarded'
   end
 
   private

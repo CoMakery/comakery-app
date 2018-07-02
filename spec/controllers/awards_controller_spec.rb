@@ -43,7 +43,7 @@ describe AwardsController do
         let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
 
         it 'shows awards for public projects' do
-          get :index, params: { project_id: public_project.to_param }
+          get :index, params: { project_id: public_project.id }
 
           expect(response.status).to eq(200)
           expect(assigns[:project]).to eq(public_project)
@@ -61,6 +61,26 @@ describe AwardsController do
           expect(response.status).to eq(302)
           expect(response).to redirect_to(root_path)
         end
+      end
+    end
+
+    describe 'checks policy' do
+      before do
+        allow(controller).to receive(:policy_scope).and_call_original
+        allow(controller).to receive(:authorize).and_call_original
+      end
+
+      specify do
+        login issuer.account
+
+        get :index, params: { project_id: project.id }
+        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
+      end
+
+      specify do
+        project.public_listed!
+        get :index, params: { project_id: project.id }
+        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
       end
     end
   end

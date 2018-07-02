@@ -40,10 +40,10 @@ describe 'viewing projects, creating and editing', :js do
       within('h2') { expect(page.text).to eq('Projects') }
       expect(page).to have_content 'There were 3 search results for: "s"'
 
-      expect(page.all('a.project-link').map(&:text)).to eq(['Public Project', 'Birds with Shoes Project', 'Cats with Lazers Project'])
+      expect(page.all('a.project-link').map(&:text)).to eq(['Public Project', 'Cats with Lazers Project', 'Birds with Shoes Project'])
 
       title_and_highlightedness = page.all('.project').map { |project| [project.find('a.project-link').text, project[:class].include?('project-highlighted')] }
-      expect(title_and_highlightedness).to eq([['Public Project', true], ['Birds with Shoes Project', false], ['Cats with Lazers Project', true]])
+      expect(title_and_highlightedness).to eq([['Public Project', true], ['Cats with Lazers Project', true], ['Birds with Shoes Project', false]])
 
       click_link 'Browse All'
 

@@ -4,7 +4,7 @@ class Mom
       email: "me+#{Random.new.urlsafe_base64}@example.com",
       first_name: 'Account',
       last_name: (1..100).to_a.sample,
-      date_of_birth: '2000/01/01',
+      date_of_birth: '1990/01/01',
       country: 'United States of America',
       password: valid_password
     }
