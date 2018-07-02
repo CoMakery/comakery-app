@@ -150,7 +150,7 @@ class Account < ApplicationRecord
 
   def valid_and_underage?
     self.name_required = true
-    valid? && age < 16
+    valid? && age < 18
   end
 
   def same_team_project?(project)
@@ -192,7 +192,7 @@ class Account < ApplicationRecord
   private
 
   def validate_age
-    errors.add(:date_of_birth, 'You must be at least 16 years old to use CoMakery.') if age && age < 16
+    errors.add(:date_of_birth, 'You must be at least 18 years old to use CoMakery.') if age && age < 18
   end
 
   def calculate_age

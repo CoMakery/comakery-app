@@ -48,10 +48,10 @@ class AccountsController < ApplicationController
 
   def update
     @current_account = current_account
-    old_age = @current_account.age || 16
+    old_age = @current_account.age || 18
     authorize @current_account
     if @current_account.update(account_params.merge(name_required: true))
-      check_date(old_age) if old_age < 16
+      check_date(old_age) if old_age < 18
       redirect_to account_url, notice: 'Your account details have been updated.'
     else
       flash[:error] = current_account.errors.full_messages.join(' ')
@@ -84,7 +84,7 @@ class AccountsController < ApplicationController
   end
 
   def check_date(old_age)
-    if @current_account.age >= 16
+    if @current_account.age >= 18
       UserMailer.underage_alert(@current_account, old_age).deliver_now
     end
   end
