@@ -59,7 +59,7 @@ class Views::Projects::AwardSend < Views::Base
             }
 
             row {
-              column('small-2') {
+              column('small-3') {
                 label {
                   text 'Quantity'
                   f.text_field(:quantity, type: :text, default: 1, class: 'financial')

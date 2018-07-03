@@ -13,7 +13,8 @@ class AwardsController < ApplicationController
   end
 
   def create
-    result = AwardSlackUser.call(project: @project, issuer: current_account, award_type_id: params[:award][:award_type_id], channel_id: params[:award][:channel_id], uid: params[:award][:uid], quantity: params[:award][:quantity], description: params[:award][:description])
+    quantity = params[:award][:quantity]&.delete(',')
+    result = AwardSlackUser.call(project: @project, issuer: current_account, award_type_id: params[:award][:award_type_id], channel_id: params[:award][:channel_id], uid: params[:award][:uid], quantity: quantity, description: params[:award][:description])
     if result.success?
       award = result.award
       authorize award

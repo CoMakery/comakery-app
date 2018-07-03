@@ -32,7 +32,7 @@ class BuildAwardRecords
     context.fail!(message: 'missing uid or email') if context.uid.blank?
     context.fail!(message: 'missing total_tokens_issued') if context.total_tokens_issued.blank?
 
-    unless context.total_amount + context.total_tokens_issued <= context.project.maximum_tokens
+    if context.total_amount + context.total_tokens_issued > context.project.maximum_tokens
       context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable tokens")
     end
 

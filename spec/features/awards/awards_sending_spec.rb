@@ -11,7 +11,7 @@ describe 'awarding users' do
   let!(:other_authentication) { create(:authentication, account: other_account) }
   let!(:different_team_authentication) { create(:authentication, account: different_team_account) }
 
-  let!(:project) { create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, revenue_sharing_end_date: Time.zone.now + 3.days) }
+  let!(:project) { create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, revenue_sharing_end_date: Time.zone.now + 3.days, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000) }
   let!(:same_team_project) { create(:project, title: 'Same Team Project', account: account) }
   let!(:different_team_project) { create(:project, visibility: 'public_listed', title: 'Different Team Project', account: different_team_account) }
 
@@ -166,5 +166,21 @@ describe 'awarding users' do
 
     expect(page).to have_content 'Successfully sent award to bobjohnson'
     expect(EthereumTokenIssueJob.jobs.length).to eq(0)
+  end
+  describe 'validates' do
+    it 'awarding accept commas for quantity' do
+      expect_any_instance_of(Award).to receive(:send_award_notifications)
+      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
+      # project.update_columns maximum_tokens: 10000000, maximum_royalties_per_month: 10000000
+      login(account)
+      visit project_path(project.reload)
+      select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
+      fill_in 'Email Address', with: 'U99M9QYFQ'
+      fill_in 'Quantity', with: '1,00.1'
+      click_button 'Send'
+
+      expect(page).to have_content 'Successfully sent award to bobjohnson'
+      expect(EthereumTokenIssueJob.jobs.length).to eq(0)
+    end
   end
 end
