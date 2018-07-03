@@ -167,20 +167,50 @@ describe 'awarding users' do
     expect(page).to have_content 'Successfully sent award to bobjohnson'
     expect(EthereumTokenIssueJob.jobs.length).to eq(0)
   end
+
   describe 'validates' do
+    let!(:account) { create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40) }
+
+    before do
+      login(account)
+    end
+
+    it 'shows last award info' do
+      expect_any_instance_of(Award).to receive(:send_award_notifications)
+      visit project_path(project)
+      expect(page).not_to have_content 'Last Award Information'
+      select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
+      fill_in 'Email Address', with: 'U99M9QYFQ'
+      click_button 'Send'
+
+      expect(page).to have_content 'Successfully sent award to bobjohnson'
+      expect(page).to have_content 'Last Award Information'
+      expect(page).to have_content "Communication Channel: [slack] #{team.name} #channel"
+      expect(page).to have_content 'Award Type: Small'
+    end
+
     it 'awarding accept commas for quantity' do
       expect_any_instance_of(Award).to receive(:send_award_notifications)
-      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
-      # project.update_columns maximum_tokens: 10000000, maximum_royalties_per_month: 10000000
-      login(account)
-      visit project_path(project.reload)
+      visit project_path(project)
+      expect(page).not_to have_content 'Last Award Information'
       select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
       fill_in 'Email Address', with: 'U99M9QYFQ'
       fill_in 'Quantity', with: '1,00.1'
       click_button 'Send'
-
       expect(page).to have_content 'Successfully sent award to bobjohnson'
-      expect(EthereumTokenIssueJob.jobs.length).to eq(0)
+    end
+
+    it 'keeps award form value on fail' do
+      visit project_path(project)
+      select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
+      fill_in 'Email Address', with: 'U99M9QYFQ'
+      fill_in 'Quantity', with: '-1'
+      fill_in 'Description', with: 'Thanks for test'
+      click_button 'Send'
+      expect(page).to have_content 'Quantity must be greater than 0'
+      expect(find_field('Quantity').value).to eq '-1'
+      expect(find_field('Communication Channel').value).to eq channel.id.to_s
+      expect(find_field('Description').value).to eq 'Thanks for test'
     end
   end
 end
