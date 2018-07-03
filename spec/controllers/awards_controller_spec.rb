@@ -166,12 +166,12 @@ describe AwardsController do
               channel_id: project.channels.first.id
             }
           }
-          expect(response.status).to eq(302)
+          expect(response.status).to eq(200)
         end.not_to change { project.awards.count }
         expect(flash[:error]).to eq('Failed sending award - Not authorized')
       end
 
-      it 'redirects back to projects show if error saving' do
+      it 'renders back to projects show if error saving' do
         expect do
           post :create, params: {
             project_id: project.to_param, award: {
@@ -179,10 +179,9 @@ describe AwardsController do
               description: 'This rocks!!11'
             }
           }
-          expect(response.status).to eq(302)
+          expect(response.status).to eq(200)
         end.not_to change { project.awards.count }
 
-        expect(response).to redirect_to(project_path(project))
         expect(flash[:error]).to eq('Failed sending award - missing award type')
       end
     end

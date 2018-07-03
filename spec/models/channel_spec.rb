@@ -28,7 +28,7 @@ RSpec.describe Channel, type: :model do
     end
 
     it 'return name with provider' do
-      expect(channel.name_with_channel).to eq '[slack] My Team #general'
+      expect(channel.name_with_provider).to eq '[slack] My Team #general'
     end
 
     it '#fetch_channels' do

@@ -53,4 +53,12 @@ class AwardDecorator < Draper::Decorator
   def issuer_user_name
     team&.authentication_team_by_account(issuer)&.name || issuer.decorate.name
   end
+
+  def communication_channel
+    if channel
+      channel.name_with_provider
+    else
+      'Email'
+    end
+  end
 end

@@ -52,6 +52,7 @@ class Award < ApplicationRecord
   end
 
   def send_award_notifications
+    return unless channel
     if team.discord?
       discord_client.send_message self
     else

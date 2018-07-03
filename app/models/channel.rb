@@ -7,7 +7,8 @@ class Channel < ApplicationRecord
   attr_accessor :channels
   delegate :provider, to: :team, allow_nil: true
 
-  def name_with_channel
+  def name_with_provider
+    return name unless team
     "[#{provider}] #{team.name} ##{name}"
   end
 

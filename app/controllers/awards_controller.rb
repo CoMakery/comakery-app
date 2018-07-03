@@ -18,13 +18,16 @@ class AwardsController < ApplicationController
     if result.success?
       award = result.award
       authorize award
-      award.save!
-      award.send_award_notifications if award.channel
-      award.send_confirm_email
-      generate_message(award)
-      redirect_to project_path(award.project)
+      if award.save
+        award.send_award_notifications
+        award.send_confirm_email
+        generate_message(award)
+        redirect_to project_path(award.project)
+      else
+        render_back(award.errors.full_messages.first)
+      end
     else
-      fail_and_redirect(result.message)
+      render_back(result.message)
     end
   rescue Pundit::NotAuthorizedError
     fail_and_redirect('Not authorized')
@@ -70,6 +73,17 @@ class AwardsController < ApplicationController
   end
 
   def award_params
-    params.require(:award).permit(:uid, :quantity, :description)
+    params.require(:award).permit(:uid, :quantity, :description, :channel_id, :award_type_id)
+  end
+
+  def render_back(msg)
+    authorize @project
+    @award = Award.new(award_params)
+    @award.email = params[:award][:uid] unless @award.channel_id
+    awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
+    @awardable_types = awardable_types_result.awardable_types
+    @can_award = awardable_types_result.can_award
+    flash[:error] = "Failed sending award - #{msg}"
+    render template: 'projects/show'
   end
 end
