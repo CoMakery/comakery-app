@@ -73,12 +73,14 @@ class AwardsController < ApplicationController
   end
 
   def award_params
-    params.require(:award).permit(:uid, :quantity, :description, :channel_id, :award_type_id)
+    params.require(:award).permit(:uid, :quantity, :description)
   end
 
   def render_back(msg)
     authorize @project
     @award = Award.new(award_params)
+    @award.channel_id = params[:award][:channel_id]
+    @award.award_type_id = params[:award][:award_type_id]
     @award.email = params[:award][:uid] unless @award.channel_id
     awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
     @awardable_types = awardable_types_result.awardable_types
