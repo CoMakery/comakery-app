@@ -57,4 +57,12 @@ describe Comakery::Ethereum do
       expect(transactionId).to eq '0x9999999999999999999999999999999999999999'
     end
   end
+
+  describe 'token_symbol' do
+    it 'get token symbol' do
+      contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
+      stub_token_symbol(contract_address, 'FCBB')
+      expect(described_class.token_symbol(contract_address)).to eq 'FCBB'
+    end
+  end
 end
