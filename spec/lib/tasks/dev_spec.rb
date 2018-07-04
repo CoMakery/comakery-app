@@ -59,7 +59,7 @@ describe 'rake dev:migrate', type: :task do
     award.reload
     expect(project.public_listed?).to be_truthy
     expect(project1.public_listed?).to be_falsey
-    expect(award.channel).to eq Channel.last
+    expect(award.channel.name).to eq 'general'
     expect(award.account).to eq account
     expect(project.channels.count).to eq 1
     expect(project1.channels.count).to eq 1
