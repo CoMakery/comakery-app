@@ -51,5 +51,22 @@ class Comakery::Ethereum
         "
       end
     end
+
+    def token_symbol(contract_address)
+      url = "https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=#{contract_address}&page=1&offset=1"
+
+      begin
+        response = get url
+        json = JSON.parse response.body
+        return json['result'][0]['tokenSymbol'] if json['result'][0]
+      rescue => error
+        raise "Error received: #{response.parsed_response.inspect}
+          From request to: #{url}
+          Original error:
+          #{error.message}
+          #{error.backtrace}
+        "
+      end
+    end
   end
 end

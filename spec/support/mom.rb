@@ -57,7 +57,8 @@ class Mom
       maximum_royalties_per_month: 10_000,
       legal_project_owner: 'UberCatz Inc',
       long_id: SecureRandom.hex(20),
-      maximum_tokens: 10_000_000
+      maximum_tokens: 10_000_000,
+      token_symbol: 'FCBB'
     }
     Project.new(defaults.merge(attrs))
   end

@@ -231,7 +231,15 @@ class Project < ApplicationRecord
     result
   end
 
+  before_save :populate_token_symbol
+
   private
+
+  def populate_token_symbol
+    if ethereum_contract_address.present? && token_symbol.blank?
+      self.token_symbol = Comakery::Ethereum.token_symbol(ethereum_contract_address)
+    end
+  end
 
   def valid_tracker_url
     validate_url(:tracker)
