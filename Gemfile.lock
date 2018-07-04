@@ -279,7 +279,7 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     nio4r (2.1.0)
-    nokogiri (1.8.3)
+    nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     nokogiri-happymapper (0.6.0)
       nokogiri (~> 1.5)
@@ -581,6 +581,7 @@ DEPENDENCIES
   rack_session_access
   rails (~> 5.1.4)
   rails-controller-testing
+  rails-html-sanitizer (~> 1.0.4)
   rails_12factor
   redcarpet
   refile!
@@ -598,7 +599,7 @@ DEPENDENCIES
   sidekiq
   sidekiq-failures
   simplecov
-  sinatra
+  sinatra (~> 2.0.2)
   slack-ruby-client
   spring
   spring-commands-rspec
