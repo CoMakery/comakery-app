@@ -17,6 +17,21 @@
   }
 }
 
+.landing-header{
+  background-image: url('Header-Background.jpg');
+  background-size: cover;
+  min-height: 510px;
+  text-align: center;
+  color: #fff;
+  padding-top: 160px;
+  h1{
+    font-size: 32px;
+  }
+  h3{
+    font-size: 18px;
+  }
+}
+
 .contain-to-grid .top-bar {
   padding: 1em 2em;
 
