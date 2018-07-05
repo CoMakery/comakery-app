@@ -10,8 +10,10 @@ class Views::Pages::Landing < Views::Base
         }
       }
     end
-    div(class: 'whois') {
-      image_tag 'whois/H1-TEXT.png'
+    column('large-12', style: 'text-align: center') {
+      image_tag 'whois/H1-TEXT.png', style: 'height: 48px; margin-left: 180px;'
+    }
+    column('large-12') {
       row(style: 'margin-top: 30px') {
         column('large-7') {
           column('large-7 no-h-pad') {
@@ -105,6 +107,35 @@ class Views::Pages::Landing < Views::Base
           }
         }
       }
+    }
+
+    div(class: 'work-blockchain') {
+      image_tag 'workonblockchain/header.jpg'
+      column('large-6') {
+        column('large-9') {
+          h3(style: 'margin-top: 30px;') {
+            text 'Featured Project'
+          }
+        }
+        column('large-3 text-right') {
+          image_tag 'workonblockchain/vevue-circle.png', size: '72x72'
+        }
+        column('large-12', style: 'margin-top: 30px') {
+          p {
+            text 'Vevue is revolutionizing the way people interact with distribute, watch, and appreciate video content using blockchain technology.'
+          }
+          p {
+            text 'The CoMakery platform connected talented developer and community managers to Vevue, each of them earning tokens while helping accelerate the project to bootstrap towards a successful $2.5 Million ICO.'
+          }
+        }
+      }
+      column('large-6') {
+        image_tag 'workonblockchain/vevue-picture.jpg'
+      }
+    }
+
+    column('large-12', style: 'text-align: center; margin-top: 30px') {
+      image_tag 'howitwork/H1-text.png', style: 'height: 38px; margin-left: 225px;'
     }
   end
 end
