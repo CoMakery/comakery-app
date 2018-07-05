@@ -1,9 +1,9 @@
-class Views::Layouts::Raw < Views::Base
+class Views::Layouts::Application < Views::Base
   def content
     doctype!
     html(lang: 'en') {
       head {
-        render partial: 'google_tag_manager.html'
+        render partial: 'layouts/google_tag_manager.html'
         render partial: 'shared/unbounce.html'
         meta :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type'
         meta charset: 'utf-8'
@@ -55,19 +55,12 @@ class Views::Layouts::Raw < Views::Base
       }
 
       body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") {
-        render partial: 'google_tag_no_script.html'
+        render partial: 'layouts/google_tag_no_script.html'
         div(class: 'contain-to-grid top-bar-container') {
-          div(class: 'top-bar large-10 medium-11 small-12 small-centered columns', 'data-topbar' => '', role: 'navigation') {
-            div(class: 'top-bar-title') {
-              span('data-hide-for' => 'medium', 'data-responsive-toggle' => 'responsive-menu') {
-                span(class: 'menu-icon dark', 'data-toggle' => '')
-              }
-              a(class: 'name', href: root_path) {
-                image_tag(I18n.t('logo_image'), class: 'logo')
-              }
-            }
-            render partial: 'shared/navigation'
-          }
+          link_to root_path do
+            image_tag 'comakery.png', class: 'logo'
+          end
+          render partial: 'layouts/navigation'
         }
 
         div(class: 'app-container row') {

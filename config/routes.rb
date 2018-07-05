@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   get '/logout', to: "sessions#destroy"
 
-  root 'projects#landing'
+  root 'pages#landing'
 
   get '/user-agreement' => "pages#user_agreement"
   get '/e-sign-disclosure' => "pages#e_sign_disclosure"

@@ -1,5 +1,20 @@
 .contain-to-grid {
-  background-color: white;
+  background-color: #3a3a3a;
+  padding: 20px;
+  .logo{
+    height: 24px;
+  }
+  .menu{
+    float: right;
+    color: #fff;
+    a{
+      color: #fff;
+    }
+  }
+  .avatar{
+    height: 32px;
+    margin-right: 5px;
+  }
 }
 
 .contain-to-grid .top-bar {
