@@ -83,25 +83,43 @@ class Views::Layouts::Application < Views::Base
           }
         }
 
-        full_row {
+        row(class: 'footer') {
           div(class: 'large-10 medium-11 small-12 small-centered columns') {
-            footer(class: 'fat-footer', style: 'text-align: center; padding-bottom: 20px;') {
-              link_to 'Home', root_path
-              text ' | '
-              link_to 'Contact Us', 'mailto:support@comakery.com'
-              text ' | '
-              link_to 'User Agreement', '/user-agreement'
-              text ' | '
-              link_to 'Prohibited Use', '/prohibited-use'
-              text ' | '
-              link_to 'E-Sign Disclosure', '/e-sign-disclosure'
-              text ' | '
-              link_to 'Privacy Policy', '/privacy-policy'
-              br
-              text 'Ⓒ Comakery 2018'
+            column('small-12'){
+              column('medium-3'){
+                image_tag 'comakery-icon.svg', size: '52x52'
+                br
+                text 'COMAKERY'
+              }
+              column('medium-3'){
+                strong{
+                  text 'ABOUT COMAKERY'
+                  br
+                  link_to 'Home', root_path
+                  br
+                  link_to 'About Us', 'javascript:;'
+                }
+              }
+              column('medium-3'){
+                strong{
+                  text 'JOIN'
+                  br
+                  link_to 'Contributors', 'javascript:;'
+                  br
+                  link_to 'Foundations', 'javascript:;'
+                }
+              }
+              column('medium-3'){
+                strong{
+                  text 'LEGAL'
+                  br
+                  link_to 'Privacy Policy', '/privacy-policy'
+                }
+              }
             }
           }
         }
+
 
         javascript_tag("
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

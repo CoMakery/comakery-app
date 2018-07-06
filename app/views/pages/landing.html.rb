@@ -2,6 +2,7 @@ class Views::Pages::Landing < Views::Base
   def content
     content_for :pre_body do
       div(class: 'landing-header') {
+        image_tag 'Labyrinth-White-Small.png', size: '52x52'
         h1 {
           text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
         }
