@@ -159,6 +159,27 @@ class Views::Pages::Landing < Views::Base
           text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
         }
       }
+
+      column('medium-12 home-signup-bg'){
+        h2 'Sign Up To Learn More'
+        p{
+          text 'Be the first to hear about new projects and announcements'
+        }
+        br
+        form_for Account.new do |f|
+          column('medium-12 no-h-pad'){
+            column('medium-5 no-h-pad'){
+              f.text_field :email
+            }
+            column('medium-2'){
+              f.submit 'SIGN UP', class: 'signup-btn'
+            }
+            column('medium-5'){
+
+            }
+          }
+        end
+      }
     }
 
   end

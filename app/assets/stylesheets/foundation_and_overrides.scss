@@ -120,3 +120,17 @@
   background-size: 70px;
   padding-top: 15px;
 }
+
+.home-signup-bg{
+  background-image: url('signup.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 300px;
+  color: #fff;
+  padding: 70px 50px;
+  margin-top: 40px;
+  .signup-btn{
+    background-color: #3a3a3a;
+    padding: 8px 20px;
+  }
+}
