@@ -56,9 +56,16 @@ class Views::Layouts::Application < Views::Base
 
       body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") {
         render partial: 'layouts/google_tag_no_script.html'
-        div(class: 'contain-to-grid top-bar-container') {
+        div(class: 'contain-to-grid top-bar-container show-for-medium') {
           link_to root_path do
             image_tag 'comakery.png', class: 'logo'
+          end
+          render partial: 'layouts/navigation'
+        }
+
+        div(class: 'contain-to-grid top-bar-container hide-for-medium') {
+          link_to root_path do
+            image_tag 'comakery.png', style: 'height: 18px'
           end
           render partial: 'layouts/navigation'
         }
@@ -86,12 +93,12 @@ class Views::Layouts::Application < Views::Base
         row(class: 'footer') {
           div(class: 'large-10 medium-11 small-12 small-centered columns') {
             column('small-12'){
-              column('medium-3'){
+              column('small-3'){
                 image_tag 'comakery-icon.svg', size: '52x52'
                 br
                 text 'COMAKERY'
               }
-              column('medium-3'){
+              column('small-3'){
                 strong{
                   text 'ABOUT COMAKERY'
                   br
@@ -100,7 +107,7 @@ class Views::Layouts::Application < Views::Base
                   link_to 'About Us', 'javascript:;'
                 }
               }
-              column('medium-3'){
+              column('small-3'){
                 strong{
                   text 'JOIN'
                   br
@@ -109,7 +116,7 @@ class Views::Layouts::Application < Views::Base
                   link_to 'Foundations', 'javascript:;'
                 }
               }
-              column('medium-3'){
+              column('small-3'){
                 strong{
                   text 'LEGAL'
                   br
