@@ -88,3 +88,35 @@
 .pink-text{
   color: #fb40e5;
 }
+
+.hiw-bg{
+  background-image: url('howitwork/dotted-lines.jpg');
+  width: 160px;
+  height: 600px;
+  background-position-x: 15px;
+  background-repeat: no-repeat;
+}
+
+.hiw-signup-bg{
+  background-image: url('howitwork/blue1.jpg');
+  background-repeat: no-repeat;
+  background-position: 250px 0px;
+  background-size: 70px;
+  padding-top: 15px;
+}
+
+.hiw-earn-bg{
+  background-image: url('howitwork/pink1.jpg');
+  background-repeat: no-repeat;
+  background-position: 185px 0px;
+  background-size: 70px;
+  padding-top: 15px;
+}
+
+.hiw-discover-bg{
+  background-image: url('howitwork/purple1.jpg');
+  background-repeat: no-repeat;
+  background-position: 325px 0px;
+  background-size: 70px;
+  padding-top: 15px;
+}
