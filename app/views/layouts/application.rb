@@ -72,10 +72,13 @@ class Views::Layouts::Application < Views::Base
 
         div(class: 'app-container row') {
           div(class: 'large-10 medium-11 small-12 small-centered columns') {
-            flash.each do |name, _msg|
+            flash.each do |name, msg|
               div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '') {
                 button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') {
                   span('aria-hidden' => true) { text 'x' }
+                  p(id: "flash-msg-#{name}"){
+                    text msg
+                  }
                 }
               }
             end

@@ -49,7 +49,7 @@ class SessionsController < ApplicationController
       session[:award_token] = nil
       confirm_award_path(token)
     else
-      root_path
+      mine_project_path
     end
   end
 end

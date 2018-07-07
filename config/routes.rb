@@ -38,6 +38,7 @@ Rails.application.routes.draw do
 
   post '/slack/command' => "slack#command"
 
+  get '/projects/mine' => "projects#landing", as: :mine_project
   resources :projects do
     resources :awards, only: [:index, :create] do
       post :update_transaction_address, on: :member
@@ -49,6 +50,7 @@ Rails.application.routes.draw do
       get :landing
     end
   end
+
   get '/p/:long_id' => "projects#unlisted", as: :unlisted_project
   get "awards/confirm/:token" => "awards#confirm", as: :confirm_award
 
