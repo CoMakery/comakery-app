@@ -21,9 +21,7 @@ describe 'landing page', :js do
 
     visit root_path
 
-    within('.top-bar .slack-instance') do
-      expect(page).to have_content 'gleenn'
-    end
+    expect(page).to have_content 'gleenn'
 
     expect(page).to have_content 'mine'
     expect(page).to have_content 'New Project'
@@ -45,7 +43,7 @@ describe 'landing page', :js do
 
     (1..7).each { |i| create(:project, account, title: "Private Project #{i}", public: false) }
 
-    visit root_path
+    visit mine_project_path
 
     expect(page.all('.project').size).to eq(6)
     within('.main') do

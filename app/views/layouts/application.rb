@@ -76,9 +76,9 @@ class Views::Layouts::Application < Views::Base
               div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '') {
                 button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') {
                   span('aria-hidden' => true) { text 'x' }
-                  p(id: "flash-msg-#{name}"){
-                    text msg
-                  }
+                }
+                span(id: "flash-msg-#{name}") {
+                  text msg
                 }
               }
             end
@@ -95,14 +95,14 @@ class Views::Layouts::Application < Views::Base
 
         row(class: 'footer') {
           div(class: 'large-10 medium-11 small-12 small-centered columns') {
-            column('small-12'){
-              column('small-3'){
+            column('small-12') {
+              column('small-3') {
                 image_tag 'comakery-icon.svg', size: '52x52'
                 br
                 text 'COMAKERY'
               }
-              column('small-3'){
-                strong{
+              column('small-3') {
+                strong {
                   text 'ABOUT COMAKERY'
                   br
                   link_to 'Home', root_path
@@ -110,8 +110,8 @@ class Views::Layouts::Application < Views::Base
                   link_to 'About Us', 'javascript:;'
                 }
               }
-              column('small-3'){
-                strong{
+              column('small-3') {
+                strong {
                   text 'JOIN'
                   br
                   link_to 'Contributors', 'javascript:;'
@@ -119,8 +119,8 @@ class Views::Layouts::Application < Views::Base
                   link_to 'Foundations', 'javascript:;'
                 }
               }
-              column('small-3'){
-                strong{
+              column('small-3') {
+                strong {
                   text 'LEGAL'
                   br
                   link_to 'Privacy Policy', '/privacy-policy'
@@ -129,7 +129,6 @@ class Views::Layouts::Application < Views::Base
             }
           }
         }
-
 
         javascript_tag("
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

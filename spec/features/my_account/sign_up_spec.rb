@@ -3,8 +3,8 @@ require 'rails_helper'
 describe 'my account' do
   scenario 'signup' do
     visit root_path
-    click_link 'Sign up'
-    expect(page).to have_content 'Signup'
+    first('.menu').click_link 'SIGN UP'
+    expect(page).to have_content 'SIGN UP'
     click_on 'Create Account'
     expect(page).to have_content("can't be blank", count: 4)
     fill_in 'account[email]', with: 'test@test.st'

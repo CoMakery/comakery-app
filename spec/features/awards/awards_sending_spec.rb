@@ -81,9 +81,9 @@ describe 'awarding users' do
       expect(page).to have_content 'bobjohnson'
 
       click_link('Overview')
-
-      click_link 'Contributors'
-
+      within('.project-nav') do
+        click_link 'Contributors'
+      end
       within('.contributors') do
         expect(page.find('.contributor')).to have_content 'bobjohnson'
         expect(page.find('.award-holdings')).to have_content '1,579'

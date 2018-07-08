@@ -14,7 +14,7 @@ describe 'viewing projects, creating and editing', :js do
 
   describe 'while logged out' do
     it 'allows viewing public projects index and show' do
-      visit root_path
+      visit mine_project_path
 
       expect(page).not_to have_content 'My Projects'
 
@@ -27,13 +27,6 @@ describe 'viewing projects, creating and editing', :js do
 
       expect(page).to have_current_path(project_path(public_project))
 
-      expect(page).to have_content 'Public Project'
-    end
-
-    it 'allows searching' do
-      visit root_path
-      fill_in 'query', with: 'public'
-      click_on 'Search'
       expect(page).to have_content 'Public Project'
     end
   end

@@ -2,7 +2,7 @@ class Views::Accounts::Show < Views::Base
   needs :current_account
 
   def content
-    div(class: 'ethereum_wallet') {
+    div(class: 'ethereum_wallet', style: 'margin-top: 10px;') {
       div(class: 'hide edit-ethereum-wallet') {
         h4(style: 'border: none;') {
           text 'Account Detail ('

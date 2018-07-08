@@ -16,6 +16,7 @@ class SessionsController < ApplicationController
       flash[:error] = 'Please check your email for confirmation instruction'
     else
       flash[:error] = 'Failed authentication - Auth hash is missing one or more required values'
+      @path = root_path
     end
     redirect_to redirect_path
   end
@@ -48,6 +49,8 @@ class SessionsController < ApplicationController
     if token
       session[:award_token] = nil
       confirm_award_path(token)
+    elsif @path
+      @path
     else
       mine_project_path
     end

@@ -4,7 +4,7 @@ class Views::Pages::Landing < Views::Base
       div(class: 'landing-header') {
         image_tag 'Labyrinth-White-Small.png', size: '52x52', class: 'show-for-medium header-icon'
         image_tag 'Labyrinth-White-Small.png', size: '32x32', class: 'hide-for-medium header-icon'
-        div(class: 'show-for-large'){
+        div(class: 'show-for-large') {
           h1(style: 'margin-top: 90px;') {
             text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
           }
@@ -12,7 +12,7 @@ class Views::Pages::Landing < Views::Base
             text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
           }
         }
-        div(class: 'show-for-medium-only'){
+        div(class: 'show-for-medium-only') {
           h1(style: 'margin-top: 60px;') {
             text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
           }
@@ -21,11 +21,11 @@ class Views::Pages::Landing < Views::Base
           }
         }
 
-        div(class: 'hide-for-medium'){
+        div(class: 'hide-for-medium') {
           h1(style: 'margin-top: 10px; font-size: 18px') {
             text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
           }
-          h3(style: 'margin-top: 10px; font-size: 12px; margin-bottom: 10px')  {
+          h3(style: 'margin-top: 10px; font-size: 12px; margin-bottom: 10px') {
             text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
           }
         }
@@ -79,7 +79,7 @@ class Views::Pages::Landing < Views::Base
 
       row(style: 'margin-top: 20px') {
         column('medium-5 show-for-large', style: 'color: #fff;') {
-          text "."
+          text '.'
         }
         column('medium-7 show-for-large') {
           column('medium-5') {
@@ -152,7 +152,7 @@ class Views::Pages::Landing < Views::Base
       }
       row(style: 'margin-top: 20px') {
         column('medium-5 show-for-large', style: 'color: #fff;') {
-          text "."
+          text '.'
         }
         column('medium-7 show-for-large') {
           column('medium-5') {
@@ -232,79 +232,68 @@ class Views::Pages::Landing < Views::Base
     column('medium-12', style: 'text-align: center; margin-top: 30px') {
       image_tag 'howitwork/H1-text.png', style: 'height: 38px; margin-left: 20%'
     }
-    column('medium-12 show-for-large'){
-      column('medium-5 text-right no-h-pad', style: 'margin-top: -13px'){
-        column('medium-12 no-h-pad hiw-signup-bg'){
-          h3{
-            text 'Sign Up'
-          }
+    column('medium-12 show-for-large') {
+      column('medium-5 text-right no-h-pad', style: 'margin-top: -13px') {
+        column('medium-12 no-h-pad hiw-signup-bg') {
+          h3 'Sign Up'
           text 'Share your email address or join our Slack / Telegram channels, and let us know about your area of expertise.'
         }
-        column('medium-12 no-h-pad hiw-earn-bg', style: 'margin-top: 403px'){
-          h3{
-            text 'Earn Tokens'
-          }
+        column('medium-12 no-h-pad hiw-earn-bg', style: 'margin-top: 403px') {
+          h3 'Earn Tokens'
           text 'See a project and task your interested in working on? Apply to the project, start working on the tasks, and get paid in tokens.'
         }
       }
-      column('medium-7 hiw-bg no-h-pad', style: 'float: left'){
-        column('medium-12 hiw-discover-bg', style: 'margin-top: 235px; padding-left: 160px;'){
+      column('medium-7 hiw-bg no-h-pad', style: 'float: left') {
+        column('medium-12 hiw-discover-bg', style: 'margin-top: 235px; padding-left: 160px;') {
           h3 'Discover Opportunities'
           text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
         }
       }
     }
 
-    column('medium-12 hide-for-large'){
-      column('small-2 text-right'){
+    column('medium-12 hide-for-large') {
+      column('small-2 text-right') {
         image_tag 'howitwork/blue1.jpg', size: '52x52'
       }
-      column('small-10 no-h-pad'){
-        h3{
-          text 'Sign Up'
-        }
+      column('small-10 no-h-pad') {
+        h3 'Sign Up'
         text 'Share your email address or join our Slack / Telegram channels, and let us know about your area of expertise.'
       }
-      column('small-2 text-right'){
+      column('small-2 text-right') {
         image_tag 'howitwork/purple1.jpg', size: '52x52'
       }
-      column('small-10 no-h-pad'){
-        h3{
-          text 'Earn Tokens'
-        }
+      column('small-10 no-h-pad') {
+        h3 'Earn Tokens'
         text 'See a project and task your interested in working on? Apply to the project, start working on the tasks, and get paid in tokens.'
       }
-      column('small-2 text-right'){
+      column('small-2 text-right') {
         image_tag 'howitwork/purple1.jpg', size: '52x52'
       }
-      column('small-10 no-h-pad'){
+      column('small-10 no-h-pad') {
         h3 'Discover Opportunities'
         text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
       }
     }
 
-    column('medium-12 home-signup-bg'){
-      column('medium-12'){
+    column('medium-12 home-signup-bg') {
+      column('medium-12') {
         h2 'Sign Up To Learn More'
-        p{
+        p {
           text 'Be the first to hear about new projects and announcements'
         }
         br
         form_for Account.new do |f|
-          column('medium-12 no-h-pad'){
-            column('medium-5 small-9 no-h-pad'){
+          column('medium-12 no-h-pad') {
+            column('medium-5 small-9 no-h-pad') {
               f.text_field :email
             }
-            column('medium-2 small-3'){
+            column('medium-2 small-3') {
               f.submit 'SIGN UP', class: 'signup-btn'
             }
-            column('medium-5'){
-
-            }
+            column('medium-5') {}
           }
         end
       }
     }
-
   end
 end

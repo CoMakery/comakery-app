@@ -36,7 +36,9 @@ shared_examples "can't see revenue data" do
   end
   it "doesn't have a contributors link" do
     visit project_path(project)
-    expect(page).not_to have_link 'Contributors'
+    within('.project-nav') do
+      expect(page).not_to have_link 'Contributors'
+    end
   end
   it "can't access the contributors page" do
     visit project_contributors_path(project)
@@ -122,7 +124,9 @@ describe 'project confidentiality for logged out users', :js do
     end
     it "doesn't have a contributors link" do
       visit project_path(project)
-      expect(page).not_to have_link 'Contributors'
+      within('.project-nav') do
+        expect(page).not_to have_link 'Contributors'
+      end
     end
     it "can't access the contributors page" do
       visit project_contributors_path(project)
