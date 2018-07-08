@@ -8,7 +8,7 @@ class Views::Pages::Landing < Views::Base
           h1(style: 'margin-top: 90px;') {
             text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
           }
-          h3(style: 'margin-bottom: 130px') {
+          h2(style: 'margin-bottom: 130px') {
             text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
           }
         }
@@ -16,7 +16,7 @@ class Views::Pages::Landing < Views::Base
           h1(style: 'margin-top: 60px;') {
             text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
           }
-          h3(style: 'margin-bottom: 50px') {
+          h2(style: 'margin-bottom: 50px') {
             text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
           }
         }
@@ -24,7 +24,7 @@ class Views::Pages::Landing < Views::Base
           h1(style: 'margin-top: 10px; font-size: 18px') {
             text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
           }
-          h3(style: 'margin-top: 10px; font-size: 12px; margin-bottom: 10px') {
+          h2(style: 'margin-top: 10px; font-size: 12px; margin-bottom: 10px') {
             text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
           }
         }
@@ -41,13 +41,13 @@ class Views::Pages::Landing < Views::Base
       row(style: 'margin-top: 30px') {
         column('medium-7 show-for-large') {
           column('medium-7 no-h-pad') {
-            column('medium-6 no-h-pad', style: 'text-align: right;') {
+            column('medium-5 no-h-pad', style: 'text-align: right;') {
               h2(style: 'font-size: 72px; color: #8A8A8A; margin-right: -13px;') {
                 text '&'
               }
             }
-            column('medium-6 no-h-pad', style: 'height: 108px;') {
-              h3(style: 'line-height: 30px; margin-top: 20px;') {
+            column('medium-7 no-h-pad', style: 'height: 108px;') {
+              h1(style: 'line-height: 30px; margin-top: 20px;') {
                 text 'Engineers'
                 br
                 text 'Developers'
@@ -83,7 +83,7 @@ class Views::Pages::Landing < Views::Base
           }
           column('medium-7 no-h-pad') {
             column('medium-12 no-h-pad', style: 'height: 108px;') {
-              h3(style: 'line-height: 30px; margin-top: 20px;') {
+              h1(style: 'line-height: 30px; margin-top: 20px;') {
                 text 'Community'
                 br
                 text 'Manager'
@@ -100,7 +100,7 @@ class Views::Pages::Landing < Views::Base
             image_tag 'whois/community-manager.jpg', size: '220x220'
           }
           column('small-8 no-h-pad') {
-            h3(style: 'margin-top: 20px;') {
+            h1(style: 'margin-top: 20px;') {
               text 'Community Manager'
             }
             text 'Organize, guide and build communities shaped by the desire to contribute to projects and earn tokens.'
@@ -111,13 +111,13 @@ class Views::Pages::Landing < Views::Base
       row(style: 'margin-top: 20px') {
         column('medium-7 show-for-large') {
           column('medium-7 no-h-pad') {
-            column('medium-6 no-h-pad', style: 'text-align: right;') {
+            column('medium-5 no-h-pad', style: 'text-align: right;') {
               h2(style: 'font-size: 72px; color: #8A8A8A; margin-right: -13px;') {
                 text '&'
               }
             }
-            column('medium-6 no-h-pad', style: 'height: 108px;') {
-              h3(style: 'line-height: 30px; margin-top: 20px;') {
+            column('medium-7 no-h-pad', style: 'height: 108px;') {
+              h1(style: 'line-height: 30px; margin-top: 20px;') {
                 text 'Designers'
                 br
                 text 'Marketers'
@@ -136,7 +136,7 @@ class Views::Pages::Landing < Views::Base
             image_tag 'whois/designers-marketers.jpg', size: '220x220'
           }
           column('small-8 no-h-pad') {
-            h3(style: 'margin-top: 20px;') {
+            h1(style: 'margin-top: 20px;') {
               text 'Designers & Marketers'
             }
             text 'The world of blockchain is evolving at light speed, and so too are the creative and marketing needs of blockchain projects.'
@@ -153,7 +153,7 @@ class Views::Pages::Landing < Views::Base
           }
           column('medium-7 no-h-pad') {
             column('medium-12 no-h-pad', style: 'height: 108px;') {
-              h3(style: 'line-height: 30px; margin-top: 20px;') {
+              h1(style: 'line-height: 30px; margin-top: 20px;') {
                 text 'Project'
                 br
                 text 'Visionaries'
@@ -169,7 +169,7 @@ class Views::Pages::Landing < Views::Base
             image_tag 'whois/project-visionary.jpg', size: '220x220'
           }
           column('small-8 no-h-pad') {
-            h3(style: 'margin-top: 20px;') {
+            h1(style: 'margin-top: 20px;') {
               text 'Project Visionaries'
             }
             text 'Discover unique projects, join their teams, and work with world-class talent to set and execute the product roadmap.'
@@ -181,7 +181,7 @@ class Views::Pages::Landing < Views::Base
       image_tag 'workonblockchain/header.jpg'
       column('large-6 show-for-large') {
         column('medium-9') {
-          h3(style: 'margin-top: 30px;') {
+          h2(style: 'margin-top: 30px;') {
             text 'Featured Project'
           }
         }
@@ -202,7 +202,7 @@ class Views::Pages::Landing < Views::Base
       }
       column('small-12 hide-for-large') {
         column('small-9') {
-          h3(style: 'margin-top: 30px;') {
+          h2(style: 'margin-top: 30px;') {
             text 'Featured Project'
           }
         }
@@ -225,17 +225,17 @@ class Views::Pages::Landing < Views::Base
     column('medium-12 show-for-large') {
       column('medium-5 text-right no-h-pad', style: 'margin-top: -13px') {
         column('medium-12 no-h-pad hiw-signup-bg') {
-          h3 'Sign Up'
+          h2 'Sign Up'
           text 'Share your email address or join our Slack / Telegram channels, and let us know about your area of expertise.'
         }
-        column('medium-12 no-h-pad hiw-earn-bg', style: 'margin-top: 403px') {
-          h3 'Earn Tokens'
+        column('medium-12 no-h-pad hiw-earn-bg', style: 'margin-top: 415px') {
+          h2 'Earn Tokens'
           text 'See a project and task your interested in working on? Apply to the project, start working on the tasks, and get paid in tokens.'
         }
       }
       column('medium-7 hiw-bg no-h-pad', style: 'float: left') {
         column('medium-12 hiw-discover-bg', style: 'margin-top: 235px; padding-left: 160px;') {
-          h3 'Discover Opportunities'
+          h2 'Discover Opportunities'
           text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
         }
       }
@@ -245,27 +245,27 @@ class Views::Pages::Landing < Views::Base
         image_tag 'howitwork/blue1.jpg', size: '52x52'
       }
       column('small-10 no-h-pad') {
-        h3 'Sign Up'
+        h2 'Sign Up'
         text 'Share your email address or join our Slack / Telegram channels, and let us know about your area of expertise.'
       }
       column('small-2 text-right') {
-        image_tag 'howitwork/purple1.jpg', size: '52x52'
+        image_tag 'howitwork/pink1.jpg', size: '52x52'
       }
       column('small-10 no-h-pad') {
-        h3 'Earn Tokens'
+        h2 'Earn Tokens'
         text 'See a project and task your interested in working on? Apply to the project, start working on the tasks, and get paid in tokens.'
       }
       column('small-2 text-right') {
         image_tag 'howitwork/purple1.jpg', size: '52x52'
       }
       column('small-10 no-h-pad') {
-        h3 'Discover Opportunities'
+        h2 'Discover Opportunities'
         text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
       }
     }
     column('medium-12 home-signup-bg') {
       column('medium-12') {
-        h2 'Sign Up To Learn More'
+        h1 'Sign Up To Learn More'
         p {
           text 'Be the first to hear about new projects and announcements'
         }

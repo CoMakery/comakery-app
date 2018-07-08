@@ -107,7 +107,7 @@
 .hiw-earn-bg{
   background-image: url('howitwork/pink1.jpg');
   background-repeat: no-repeat;
-  background-position: 185px 0px;
+  background-position: 200px 0px;
   background-size: 70px;
   padding-top: 15px;
 }
@@ -115,7 +115,7 @@
 .hiw-discover-bg{
   background-image: url('howitwork/purple1.jpg');
   background-repeat: no-repeat;
-  background-position: 485px 0px;
+  background-position: 465px 0px;
   background-size: 70px;
   padding-top: 15px;
 }
@@ -131,6 +131,7 @@
   .signup-btn{
     background-color: #3a3a3a;
     padding: 8px 20px;
+    font-size: 17px;
   }
 }
 
@@ -142,5 +143,31 @@
   a{
     color: #3a3a3a;
     font-weight: normal;
+  }
+}
+
+.pages-landing{
+  font-size: 14px;
+  h1{
+    font-size: 34px;
+  }
+  h2{
+    font-size: 28px;
+  }
+  .landing-header{
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    color: #fff;
+
+    .header-icon{
+      padding-top: 20px;
+    }
+    h1{
+      font-size: 32px;
+    }
+    h2{
+      font-size: 18px;
+    }
   }
 }

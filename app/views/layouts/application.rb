@@ -97,7 +97,7 @@ class Views::Layouts::Application < Views::Base
           div(class: 'large-10 medium-11 small-12 small-centered columns') {
             column('small-12') {
               column('small-3') {
-                image_tag 'comakery-icon.svg', size: '52x52'
+                image_tag 'comakery-icon.svg', size: '48x48'
                 br
                 text 'COMAKERY'
               }
