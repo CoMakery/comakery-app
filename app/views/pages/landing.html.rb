@@ -20,7 +20,6 @@ class Views::Pages::Landing < Views::Base
             text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
           }
         }
-
         div(class: 'hide-for-medium') {
           h1(style: 'margin-top: 10px; font-size: 18px') {
             text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
@@ -54,7 +53,6 @@ class Views::Pages::Landing < Views::Base
                 text 'Developers'
               }
             }
-
             column('medium-12 text-right no-h-pad', style: 'margin-top: -10px') {
               text 'Ethereum Solidity, Javascript, Elixir, GO, Ruby on Rails, Truffle... we match your specialty with projects to push your boundaries.'
             }
@@ -63,7 +61,6 @@ class Views::Pages::Landing < Views::Base
             image_tag 'whois/developers-engineers.jpg', size: '220x220'
           }
         }
-
         column('medium-12 hide-for-large') {
           column('small-4 text-right') {
             image_tag 'whois/developers-engineers.jpg', size: '220x220'
@@ -76,7 +73,6 @@ class Views::Pages::Landing < Views::Base
           }
         }
       }
-
       row(style: 'margin-top: 20px') {
         column('medium-5 show-for-large', style: 'color: #fff;') {
           text '.'
@@ -93,7 +89,6 @@ class Views::Pages::Landing < Views::Base
                 text 'Manager'
               }
             }
-
             column('medium-12 no-h-pad', style: 'margin-top: -10px') {
               text 'Organize, guide and build communities shaped by the desire to contribute to projects and earn tokens.'
             }
@@ -128,7 +123,6 @@ class Views::Pages::Landing < Views::Base
                 text 'Marketers'
               }
             }
-
             column('medium-12 text-right no-h-pad', style: 'margin-top: -10px') {
               text 'The world of blockchain is evolving at light speed, and so too are the creative and marketing needs of blockchain projects.'
             }
@@ -137,7 +131,6 @@ class Views::Pages::Landing < Views::Base
             image_tag 'whois/designers-marketers.jpg', size: '220x220'
           }
         }
-
         column('medium-12 hide-for-large') {
           column('small-4 text-right') {
             image_tag 'whois/designers-marketers.jpg', size: '220x220'
@@ -166,7 +159,6 @@ class Views::Pages::Landing < Views::Base
                 text 'Visionaries'
               }
             }
-
             column('medium-12 no-h-pad', style: 'margin-top: -10px') {
               text 'Discover unique projects, join their teams, and work with world-class talent to set and execute the product roadmap.'
             }
@@ -185,7 +177,6 @@ class Views::Pages::Landing < Views::Base
         }
       }
     }
-
     div(class: 'work-blockchain') {
       image_tag 'workonblockchain/header.jpg'
       column('large-6 show-for-large') {
@@ -228,7 +219,6 @@ class Views::Pages::Landing < Views::Base
         }
       }
     }
-
     column('medium-12', style: 'text-align: center; margin-top: 30px') {
       image_tag 'howitwork/H1-text.png', style: 'height: 38px; margin-left: 20%'
     }
@@ -250,7 +240,6 @@ class Views::Pages::Landing < Views::Base
         }
       }
     }
-
     column('medium-12 hide-for-large') {
       column('small-2 text-right') {
         image_tag 'howitwork/blue1.jpg', size: '52x52'
@@ -274,7 +263,6 @@ class Views::Pages::Landing < Views::Base
         text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
       }
     }
-
     column('medium-12 home-signup-bg') {
       column('medium-12') {
         h2 'Sign Up To Learn More'
