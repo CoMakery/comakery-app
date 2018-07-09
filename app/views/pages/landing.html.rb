@@ -52,9 +52,18 @@ class Views::Pages::Landing < Views::Base
         }
         column('medium-12 home-signup-bg') {
           column('medium-12') {
-            h1 'Sign Up To Learn More'
-            p {
-              text 'Be the first to hear about new projects and announcements'
+            div(class: 'show-for-medium') {
+              h1 'Sign Up To Learn More'
+              p {
+                text 'Be the first to hear about new projects and announcements'
+              }
+            }
+
+            div(class: 'hide-for-medium', style: 'text-align: center') {
+              h1 'Sign Up To Learn More'
+              p {
+                text 'Be the first to hear about new projects and announcements'
+              }
             }
             br
             form_for Account.new do |f|
