@@ -101,15 +101,16 @@ html, body{
 
 .hiw-bg{
   background-image: asset-url('howitwork/dotted-lines.jpg');
-  height: 600px;
+  height: 400px;
   background-position-x: 15px;
   background-repeat: no-repeat;
+  background-size: 55px 400px;
 }
 
 .hiw-signup-bg{
   background-image: asset-url('howitwork/blue1.jpg');
   background-repeat: no-repeat;
-  background-position: 250px 0px;
+  background-position: 82% 0px;
   background-size: 70px;
   padding-top: 15px;
 }
@@ -117,7 +118,7 @@ html, body{
 .hiw-earn-bg{
   background-image: asset-url('howitwork/pink1.jpg');
   background-repeat: no-repeat;
-  background-position: 200px 0px;
+  background-position: 70% 0px;
   background-size: 70px;
   padding-top: 15px;
 }
@@ -125,7 +126,7 @@ html, body{
 .hiw-discover-bg{
   background-image: asset-url('howitwork/purple1.jpg');
   background-repeat: no-repeat;
-  background-position: 465px 0px;
+  background-position: 75% 0px;
   background-size: 70px;
   padding-top: 15px;
 }
