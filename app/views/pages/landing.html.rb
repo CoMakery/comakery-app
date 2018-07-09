@@ -77,28 +77,28 @@ class Views::Pages::Landing < Views::Base
   def header
     div(class: 'landing-header') {
       image_tag 'Labyrinth-White-Small.png', size: '52x52', class: 'show-for-medium header-icon'
-      image_tag 'Labyrinth-White-Small.png', size: '32x32', class: 'hide-for-medium header-icon'
+      image_tag 'Labyrinth-White-Small.png', size: '24x24', class: 'hide-for-medium header-icon'
       div(class: 'show-for-large') {
         h1(style: 'margin-top: 90px;') {
           text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
         }
-        h2(style: 'margin-bottom: 130px') {
+        h2(style: 'margin-bottom: 8%') {
           text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
         }
       }
       div(class: 'show-for-medium-only') {
-        h1(style: 'margin-top: 60px;') {
+        h1(style: 'margin-top: 4%; font-size: 20px') {
           text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
         }
-        h2(style: 'margin-bottom: 50px') {
+        h2(style: 'margin-bottom: 6%;font-size: 16px;') {
           text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
         }
       }
       div(class: 'hide-for-medium') {
-        h1(style: 'margin-top: 10px; font-size: 18px') {
+        h1(style: 'margin-top: 10px; font-size: 14px') {
           text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
         }
-        h2(style: 'margin-top: 10px; font-size: 12px; margin-bottom: 10px') {
+        h2(style: 'margin-top: 10px; font-size: 10px; margin-bottom: 10px') {
           text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
         }
       }
