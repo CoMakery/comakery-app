@@ -6,7 +6,7 @@ class Views::Pages::Landing < Views::Base
         image_tag 'Labyrinth-White-Small.png', size: '32x32', class: 'hide-for-medium header-icon'
         div(class: 'show-for-large') {
           h1(style: 'margin-top: 90px;') {
-            text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
+            text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
           }
           h2(style: 'margin-bottom: 130px') {
             text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
@@ -14,7 +14,7 @@ class Views::Pages::Landing < Views::Base
         }
         div(class: 'show-for-medium-only') {
           h1(style: 'margin-top: 60px;') {
-            text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
+            text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
           }
           h2(style: 'margin-bottom: 50px') {
             text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
@@ -22,7 +22,7 @@ class Views::Pages::Landing < Views::Base
         }
         div(class: 'hide-for-medium') {
           h1(style: 'margin-top: 10px; font-size: 18px') {
-            text 'JOIN INCREDIABLE BLOCKCHAIN PROJECTS'
+            text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
           }
           h2(style: 'margin-top: 10px; font-size: 12px; margin-bottom: 10px') {
             text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
@@ -86,7 +86,7 @@ class Views::Pages::Landing < Views::Base
               h1(style: 'line-height: 30px; margin-top: 20px;') {
                 text 'Community'
                 br
-                text 'Manager'
+                text 'Managers'
               }
             }
             column('medium-12 no-h-pad', style: 'margin-top: -10px') {
@@ -101,7 +101,7 @@ class Views::Pages::Landing < Views::Base
           }
           column('small-8 no-h-pad') {
             h1(style: 'margin-top: 20px;') {
-              text 'Community Manager'
+              text 'Community Managers'
             }
             text 'Organize, guide and build communities shaped by the desire to contribute to projects and earn tokens.'
           }

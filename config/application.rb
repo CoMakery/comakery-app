@@ -37,6 +37,7 @@ module Comakery
     routes.default_url_options[:host] = ENV['APP_HOST'] || "localhost:#{ENV['PORT'] || 3000}"
     routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'] || 'https://'
 
+    config.assets.paths << Rails.root.join("app", "assets", "fonts")
     cloudfront_host = ENV['CLOUDFRONT_HOST']
     if cloudfront_host.present?
       config.action_controller.asset_host = cloudfront_host
