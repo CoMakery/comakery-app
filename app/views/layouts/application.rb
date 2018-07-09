@@ -107,21 +107,27 @@ class Views::Layouts::Application < Views::Base
                   br
                   link_to 'Home', root_path
                   br
-                  link_to 'About Us', 'javascript:;'
+                  link_to 'Contact Us', 'mailto:support@comakery.com'
                 }
               }
               column('small-3') {
                 strong {
                   text 'JOIN'
                   br
-                  link_to 'Contributors', 'javascript:;'
+                  link_to 'Contributors', new_account_path
                   br
-                  link_to 'Foundations', 'javascript:;'
+                  link_to 'Foundations', new_account_path
                 }
               }
               column('small-3') {
                 strong {
                   text 'LEGAL'
+                  br
+                  link_to 'User Agreement', user_agreement_path
+                  br
+                  link_to 'Prohibited Use', prohibited_use_path
+                  br
+                  link_to 'E-Sign Disclosure', e_sign_disclosure_path
                   br
                   link_to 'Privacy Policy', '/privacy-policy'
                 }

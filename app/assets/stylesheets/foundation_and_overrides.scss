@@ -53,6 +53,16 @@
 // CoMakery custom styles
 @import 'main';
 
+html, body{
+  min-height: 100%;
+  height: 100%
+}
+
+.app-container{
+  min-height: 100%;
+  padding-bottom: 180px;
+}
+
 .has-tip {
   border-bottom: none;
   cursor: default;
@@ -136,10 +146,13 @@
 }
 
 .footer{
+  clear: both;
   background-color: #eee;
   padding: 30px 0px;
-  max-width: 100%;
-  margin-top: 20px;
+  min-width: 100%;
+  position: relative;
+  bottom: 0;
+  margin-top: -160px;
   a{
     color: #3a3a3a;
     font-weight: normal;
