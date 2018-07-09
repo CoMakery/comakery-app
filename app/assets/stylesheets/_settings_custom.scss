@@ -3,13 +3,13 @@
 @font-face {
   font-family: 'Montserrat';
   font-weight: normal;
-  src: url('Montserrat/Montserrat-Regular.ttf')  format('truetype')
+  src: asset-url('Montserrat/Montserrat-Regular.ttf')  format('truetype')
 }
 
 @font-face {
   font-family: 'MontserratBold';
   font-weight: normal;
-  src: url('Montserrat/Montserrat-Bold.ttf')  format('truetype')
+  src: asset-url('Montserrat/Montserrat-Bold.ttf')  format('truetype')
 }
 // Colors
 

@@ -100,14 +100,14 @@ html, body{
 }
 
 .hiw-bg{
-  background-image: url('howitwork/dotted-lines.jpg');
+  background-image: asset-url('howitwork/dotted-lines.jpg');
   height: 600px;
   background-position-x: 15px;
   background-repeat: no-repeat;
 }
 
 .hiw-signup-bg{
-  background-image: url('howitwork/blue1.jpg');
+  background-image: asset-url('howitwork/blue1.jpg');
   background-repeat: no-repeat;
   background-position: 250px 0px;
   background-size: 70px;
@@ -115,7 +115,7 @@ html, body{
 }
 
 .hiw-earn-bg{
-  background-image: url('howitwork/pink1.jpg');
+  background-image: asset-url('howitwork/pink1.jpg');
   background-repeat: no-repeat;
   background-position: 200px 0px;
   background-size: 70px;
@@ -123,7 +123,7 @@ html, body{
 }
 
 .hiw-discover-bg{
-  background-image: url('howitwork/purple1.jpg');
+  background-image: asset-url('howitwork/purple1.jpg');
   background-repeat: no-repeat;
   background-position: 465px 0px;
   background-size: 70px;
@@ -131,7 +131,7 @@ html, body{
 }
 
 .home-signup-bg{
-  background-image: url('signup.jpg');
+  background-image: asset-url('signup.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   height: 300px;
