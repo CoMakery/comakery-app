@@ -14,12 +14,11 @@ $ ->
       return
     award = JSON.parse $(this).attr('data-info')
 
-    issuerAddress = award.issuer_address
     contractAddress = award.project.ethereum_contract_address
     toAddress = award.account.ethereum_wallet
     amount = award.total_amount
 
-    if issuerAddress && contractAddress && toAddress && amount && issuerAddress.toLowerCase() == web3.eth.coinbase
+    if contractAddress && toAddress && amount
       contract = web3.eth.contract(abi) # see abi in abi.js
       contractIns = contract.at(contractAddress)
       contractIns.balanceOf web3.eth.coinbase, (err, result) ->
