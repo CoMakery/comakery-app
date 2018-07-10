@@ -134,7 +134,7 @@ html, body{
 .home-signup-bg{
   background-image: asset-url('signup.jpg');
   background-repeat: no-repeat;
-  background-size: 100% 300px;
+  background-size: cover;
   height: 300px;
   color: #fff;
   padding: 70px 50px;
@@ -143,6 +143,12 @@ html, body{
     background-color: #3a3a3a;
     padding: 8px 20px;
     font-size: 17px;
+  }
+}
+@media (max-width: 900px) {
+  .home-signup-bg{
+    background-image: asset-url('mobile-sign-up.jpg');
+    background-size: 100% 300px;
   }
 }
 
