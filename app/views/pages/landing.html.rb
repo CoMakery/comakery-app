@@ -4,85 +4,8 @@ class Views::Pages::Landing < Views::Base
       header
       whois
       workonblockchain
-
-      div(class: 'large-10 medium-11 small-12 small-centered columns') {
-        column('medium-12', style: 'text-align: center; margin-top: 30px;margin-bottom: 40px;') {
-          image_tag 'howitwork/H1-text.png', style: 'height: 38px; margin-left: 15%'
-        }
-        column('medium-12 show-for-large') {
-          column('medium-2', style: 'color: #fff') {
-            text '.'
-          }
-          column('medium-4 text-right no-h-pad', style: 'margin-top: -13px') {
-            column('medium-12 no-h-pad hiw-signup-bg') {
-              h2 'Sign Up'
-              text 'Share your email address or join our Slack / Telegram channels, and let us know about your area of expertise.'
-            }
-            column('medium-12 no-h-pad hiw-earn-bg', style: 'margin-top: 255px') {
-              h2 'Earn Tokens'
-              text 'See a project and task your interested in working on? Apply to the project, start working on the tasks, and get paid in tokens.'
-            }
-          }
-          column('medium-5 hiw-bg no-h-pad', style: 'float: left') {
-            column('medium-12 hiw-discover-bg', style: 'margin-top: 155px; padding-left: 90px;') {
-              h2 'Discover Opportunities'
-              text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
-            }
-          }
-        }
-        column('medium-12 hide-for-large') {
-          column('small-2 text-right') {
-            image_tag 'howitwork/blue1.jpg', size: '52x52'
-          }
-          column('small-10 no-h-pad') {
-            h2 'Sign Up'
-            text 'Share your email address or join our Slack / Telegram channels, and let us know about your area of expertise.'
-          }
-          column('small-2 text-right') {
-            image_tag 'howitwork/pink1.jpg', size: '52x52'
-          }
-          column('small-10 no-h-pad') {
-            h2 'Earn Tokens'
-            text 'See a project and task your interested in working on? Apply to the project, start working on the tasks, and get paid in tokens.'
-          }
-          column('small-2 text-right') {
-            image_tag 'howitwork/purple1.jpg', size: '52x52'
-          }
-          column('small-10 no-h-pad') {
-            h2 'Discover Opportunities'
-            text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
-          }
-        }
-        column('medium-12 home-signup-bg') {
-          column('medium-12') {
-            div(class: 'show-for-medium') {
-              h1 'Sign Up To Learn More'
-              p {
-                text 'Be the first to hear about new projects and announcements'
-              }
-            }
-
-            div(class: 'hide-for-medium', style: 'text-align: center') {
-              h1 'Sign Up To Learn More'
-              p {
-                text 'Be the first to hear about new projects and announcements'
-              }
-            }
-            br
-            form_for Account.new do |f|
-              column('medium-12 no-h-pad') {
-                column('medium-5 small-9 no-h-pad') {
-                  f.text_field :email
-                }
-                column('medium-2 small-3') {
-                  f.submit 'SIGN UP', class: 'signup-btn'
-                }
-                column('medium-5') {}
-              }
-            end
-          }
-        }
-      }
+      howitwork
+      signup_to_learn
     end
   end
 
@@ -318,6 +241,93 @@ class Views::Pages::Landing < Views::Base
           p {
             text 'The CoMakery platform connected talented developer and community managers to Vevue, each of them earning tokens while helping accelerate the project to bootstrap towards a successful $2.5 Million ICO.'
           }
+        }
+      }
+    }
+  end
+
+  def howitwork
+    div(class: 'large-10 medium-11 small-12 small-centered columns') {
+      column('medium-12', style: 'text-align: center; margin-top: 30px;margin-bottom: 40px;') {
+        image_tag 'howitwork/H1-text.png', style: 'height: 38px; margin-left: 15%'
+      }
+      column('medium-12 show-for-large') {
+        column('medium-2', style: 'color: #fff') {
+          text '.'
+        }
+        column('medium-4 text-right no-h-pad', style: 'margin-top: -13px') {
+          column('medium-12 no-h-pad hiw-signup-bg') {
+            h2 'Sign Up'
+            text 'Share your email address or join our Slack / Telegram channels, and let us know about your area of expertise.'
+          }
+          column('medium-12 no-h-pad hiw-earn-bg', style: 'margin-top: 255px') {
+            h2 'Earn Tokens'
+            text 'See a project and task your interested in working on? Apply to the project, start working on the tasks, and get paid in tokens.'
+          }
+        }
+        column('medium-5 hiw-bg no-h-pad', style: 'float: left') {
+          column('medium-12 hiw-discover-bg', style: 'margin-top: 155px; padding-left: 90px;') {
+            h2 'Discover Opportunities'
+            text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
+          }
+        }
+      }
+      column('medium-12 hide-for-large') {
+        column('small-2 text-right') {
+          image_tag 'howitwork/blue1.jpg', size: '52x52'
+        }
+        column('small-10 no-h-pad') {
+          h2 'Sign Up'
+          text 'Share your email address or join our Slack / Telegram channels, and let us know about your area of expertise.'
+        }
+        column('small-2 text-right') {
+          image_tag 'howitwork/pink1.jpg', size: '52x52'
+        }
+        column('small-10 no-h-pad') {
+          h2 'Earn Tokens'
+          text 'See a project and task your interested in working on? Apply to the project, start working on the tasks, and get paid in tokens.'
+        }
+        column('small-2 text-right') {
+          image_tag 'howitwork/purple1.jpg', size: '52x52'
+        }
+        column('small-10 no-h-pad') {
+          h2 'Discover Opportunities'
+          text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
+        }
+      }
+
+    }
+  end
+
+  def signup_to_learn
+    div(class: 'large-10 medium-12 no-h-pad small-centered columns') {
+      column('medium-12 no-h-pad home-signup-bg') {
+        column('medium-12') {
+          div(class: 'show-for-medium') {
+            h1 'Sign Up To Learn More'
+            p {
+              text 'Be the first to hear about new projects and announcements'
+            }
+          }
+
+          div(class: 'hide-for-medium', style: 'text-align: center') {
+            h1 'Sign Up To Learn More'
+            p {
+              text 'Be the first to hear about new projects and announcements'
+            }
+          }
+          br
+          form_for Account.new do |f|
+            column('medium-12 no-h-pad') {
+              column('medium-5 small-9 no-h-pad') {
+                f.text_field :email
+              }
+              column('medium-2 small-3') {
+                f.submit 'SIGN UP', class: 'signup-btn'
+              }
+              column('medium-5') {}
+            }
+          end
         }
       }
     }
