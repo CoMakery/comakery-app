@@ -168,7 +168,8 @@ class ProjectsController < ApplicationController
   end
 
   def set_award
-    @award = Award.new
+    last_award = @project.awards.last
+    @award = Award.new channel: last_award&.channel, award_type: last_award&.award_type
     awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
     @awardable_types = awardable_types_result.awardable_types
     @can_award = awardable_types_result.can_award

@@ -6,14 +6,6 @@ class Views::Projects::AwardSend < Views::Base
       row(class: 'awarded-info-header') {
         if can_award
           h3 "Award #{project.payment_description}"
-          if project.awards.last
-            h5 'Last Award Information:'
-            div(style: 'margin-left: 15px;') {
-              text "Communication Channel: #{project.awards.last.decorate.communication_channel}"
-              br
-              text "Award Type: #{project.awards.last.award_type.name}"
-            }
-          end
         else
           h3 "Earn #{project.payment_description}"
         end
@@ -39,7 +31,7 @@ class Views::Projects::AwardSend < Views::Base
 
             row(class: 'award-uid') {
               column('small-12') {
-                if award.channel
+                if award.channel && award.channel.members(current_account).any?
                   label(class: 'uid-select') {
                     options = capture do
                       options_for_select(award.channel.members(current_account), award.uid)

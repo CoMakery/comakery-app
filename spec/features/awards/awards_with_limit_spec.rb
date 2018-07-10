@@ -22,14 +22,7 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
 
   it 'limit to send award by month' do
     visit project_path(project)
-
-    send_award
-
-    expect(page).to have_content "Successfully sent award to #{Award.last.decorate.recipient_display_name}"
-
-    send_award
-
-    expect(page).to have_content "Successfully sent award to #{Award.last.decorate.recipient_display_name}"
+    fill_in 'Quantity', with: 2.5
 
     send_award
     expect(page).to have_content "Sorry, you can't send more awards this month than the project's maximum number of allowable tokens per month"
@@ -38,8 +31,7 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
   it 'limit send award with project maximum token' do
     visit project_path(project1)
 
-    send_award(channel1)
-    expect(page).to have_content "Successfully sent award to #{Award.last.decorate.recipient_display_name}"
+    fill_in 'Quantity', with: 3.5
 
     send_award(channel1)
     expect(page).to have_content "Sorry, you can't send more awards than the project's maximum number of allowable tokens"

@@ -175,18 +175,18 @@ describe 'awarding users' do
       login(account)
     end
 
-    it 'shows last award info' do
+    it 'maintain last award info for new award' do
       expect_any_instance_of(Award).to receive(:send_award_notifications)
       visit project_path(project)
-      expect(page).not_to have_content 'Last Award Information'
       select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
+      select 'Large', from: 'Award Type'
       fill_in 'Email Address', with: 'U99M9QYFQ'
       click_button 'Send'
 
       expect(page).to have_content 'Successfully sent award to bobjohnson'
-      expect(page).to have_content 'Last Award Information'
-      expect(page).to have_content "Communication Channel: [slack] #{team.name} #channel"
-      expect(page).to have_content 'Award Type: Small'
+      expect(find_field('Communication Channel').value).to eq channel.id.to_s
+      expect(find_field('Award Type').value).to eq large_award_type.id.to_s
+      expect(find_field('Quantity').value).to eq '1.0'
     end
 
     it 'awarding accept commas for quantity' do
