@@ -18,7 +18,7 @@ class Views::Layouts::Navigation < Views::Base
         }
       else
         li {
-          link_to 'ABOUT US', 'javascript:;'
+          link_to 'CONTACT US', 'mailto:support@comakery.com'
         }
         li {
           link_to 'SIGN IN', new_session_path
@@ -46,7 +46,7 @@ class Views::Layouts::Navigation < Views::Base
         }
       else
         li {
-          link_to 'ABOUT US', 'javascript:;'
+          link_to 'CONTACT US', 'mailto:support@comakery.com'
         }
         li {
           link_to 'SIGN IN', new_session_path

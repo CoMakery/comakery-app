@@ -152,6 +152,13 @@ html, body{
   }
 }
 
+@media(max-width: 700px){
+  .menu > li {
+    padding: 0 0.3rem;
+    font-size: 10px;
+  }
+}
+
 .footer{
   clear: both;
   background-color: #eee;
