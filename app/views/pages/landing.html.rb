@@ -12,7 +12,6 @@ class Views::Pages::Landing < Views::Base
   def header
     div(class: 'landing-header') {
       image_tag 'Labyrinth-White-Small.png', size: '52x52', class: 'show-for-medium header-icon'
-      image_tag 'Labyrinth-White-Small.png', size: '24x24', class: 'hide-for-medium header-icon'
       div(class: 'show-for-large') {
         h1(style: 'margin-top: 90px;') {
           text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
@@ -30,7 +29,7 @@ class Views::Pages::Landing < Views::Base
         }
       }
       div(class: 'hide-for-medium') {
-        h1(style: 'margin-top: 10px; font-size: 14px') {
+        h1(style: 'margin-top: 30px; font-size: 14px') {
           text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
         }
         h2(style: 'margin-top: 10px; font-size: 10px; margin-bottom: 10px') {
@@ -48,7 +47,7 @@ class Views::Pages::Landing < Views::Base
   def whois
     div(class: 'large-10 medium-11 small-12 small-centered columns') {
       column('medium-12', style: 'text-align: center') {
-        image_tag 'whois/H1-TEXT.png', style: 'height: 48px; margin-left: 15%'
+        image_tag 'whois/H1-TEXT.png', style: 'margin-left: 15%'
       }
       column('medium-12') {
         column('medium-12 no-v-pad', style: 'margin-top: 30px;') {
