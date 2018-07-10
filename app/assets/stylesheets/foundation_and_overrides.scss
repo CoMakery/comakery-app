@@ -145,6 +145,11 @@ html, body{
     font-size: 17px;
   }
 }
+
+.main{
+  padding-top: 50px;
+}
+
 @media (max-width: 900px) {
   .home-signup-bg{
     background-image: asset-url('mobile-sign-up.jpg');
