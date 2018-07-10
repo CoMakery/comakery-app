@@ -206,7 +206,7 @@ class Views::Pages::Landing < Views::Base
             }
           }
           column('medium-3 text-right') {
-            image_tag 'workonblockchain/vevue-circle.png', size: '72x72'
+            image_tag 'workonblockchain/vevue-logo.png', style: 'width: 172px'
           }
           column('medium-12', style: 'margin-top: 30px') {
             p {
