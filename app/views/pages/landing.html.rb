@@ -295,7 +295,6 @@ class Views::Pages::Landing < Views::Base
           text 'Use the Comakery platform to discover unique blockchain projects and the tasks they need strong leadership to own and execute upon.'
         }
       }
-
     }
   end
 
