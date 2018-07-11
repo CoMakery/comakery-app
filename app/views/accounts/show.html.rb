@@ -161,10 +161,8 @@ class Views::Accounts::Show < Views::Base
             }
           }
           row {
-            column('medium-3') {
-              span(style: 'height: 2.475rem; margin-top: 8px;') {
-                text 'Ethereum Address'
-              }
+            column('medium-3', style: 'margin-top: 8px;') {
+              text 'Ethereum Address'
             }
             column('medium-9') {
               text_field_tag :ethereum_wallet, current_account.ethereum_wallet, class: 'copy-source', style: 'border: none; box-shadow: unset; padding: 2px 0; display: unset; width: 390px;'
