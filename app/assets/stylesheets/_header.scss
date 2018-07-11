@@ -2,13 +2,15 @@
   background-color: #3a3a3a;
   padding: 20px;
   .logo{
-    height: 24px;
+    height: 20px;
   }
   .menu{
     float: right;
     color: #fff;
+    margin-top: -4px;
     a{
       color: #fff;
+      font-weight: bold;
     }
   }
   .avatar{
