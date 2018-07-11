@@ -75,9 +75,28 @@ class Views::Accounts::New < Views::Base
             column('large-12') {
               f.submit class: buttonish(:medium)
             }
+            column('large-12', style: 'margin-top: 10px') {
+              link_to '/auth/slack', class: 'auth-button' do
+                image_tag 'slack.png', style: 'height: 38px'
+                text 'Sign up with Slack'
+              end
+              link_to login_discord_path, class: 'auth-button' do
+                image_tag 'discord.png', style: 'height: 40px'
+                text 'Sign up with Discord'
+              end
+            }
+            column('large-12', style: 'margin-top: 10px') {
+              div(class: 'signin-with-metamask-wrapper') {
+                link_to 'javascript:void(0)', class: 'auth-button signin-with-metamask' do
+                  image_tag 'metamask.png', style: 'height: 28px'
+                  span 'Sign up with MetaMask'
+                end
+              }
+            }
           }
         end
       }
     }
+    render 'sessions/metamask_modal'
   end
 end
