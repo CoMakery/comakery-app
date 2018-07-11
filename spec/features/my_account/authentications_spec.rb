@@ -59,7 +59,7 @@ feature 'my account' do
     end
 
     expect(page).to have_content 'Your account details have been updated.'
-    expect(page).to have_content "0x#{'a' * 40}"
+    expect(page.find('#ethereum_wallet').value).to eq "0x#{'a' * 40}"
   end
 
   scenario 'adding an ethereum address sends ethereum tokens, for awards' do
