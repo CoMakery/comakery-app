@@ -27,11 +27,6 @@ class Views::Projects::Description < Views::Projects::Base
                 p(class: 'description') {
                   text raw project.description_html
                 }
-                if project.project_token?
-                  p {
-                    i 'This project does not offer royalties or a share of revenue. It does award project tokens. Read the Project Terms for more details.'
-                  }
-                end
               }
             }
             div(class: 'read-more') {
