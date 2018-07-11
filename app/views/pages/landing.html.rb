@@ -193,19 +193,23 @@ class Views::Pages::Landing < Views::Base
   end
 
   def workonblockchain
-    div(class: 'work-blockchain') {
-      image_tag 'workonblockchain/header.jpg', style: 'width: 100%'
+    column('medium-12 show-for-large', style: 'color: #fff;') {
+      text '.'
     }
     div(class: 'large-10 medium-11 small-12 small-centered columns') {
+      div(class: 'work-blockchain') {
+        image_tag 'workonblockchain/header.png', style: 'width: 100%'
+      }
+
       column('large-12 show-for-large blue-box') {
         column('large-6') {
-          column('medium-9') {
+          column('medium-8') {
             h2(style: 'margin-top: 30px;') {
               text 'Featured Project'
             }
           }
-          column('medium-3 text-right') {
-            image_tag 'workonblockchain/vevue-logo.png', style: 'width: 172px'
+          column('medium-4 text-right') {
+            image_tag 'workonblockchain/vevue-logo.png', style: 'width: 205px'
           }
           column('medium-12', style: 'margin-top: 30px') {
             p {
