@@ -8,7 +8,7 @@ describe 'shared/_awards.html.rb' do
   let!(:issuer_auth) { create(:authentication, account: issuer) }
   let!(:recipient1_auth) { create(:authentication, account: recipient1) }
   let!(:recipient2_auth) { create(:authentication, account: recipient2) }
-  let!(:project) { create(:project, ethereum_enabled: true) }
+  let!(:project) { create(:project, ethereum_enabled: true, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367') }
   let!(:award_type) { create(:award_type, project: project) }
   let!(:award1) { create(:award, award_type: award_type, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
   let!(:award2) { create(:award, award_type: award_type, description: 'awesome', issuer: issuer, account: recipient2).decorate }
@@ -58,7 +58,10 @@ describe 'shared/_awards.html.rb' do
 
   describe 'Blockchain Transaction column' do
     describe 'when project is not ethereum enabled' do
-      before { project.ethereum_enabled = false }
+      before do
+        project.ethereum_enabled = false
+        project.ethereum_contract_address = nil
+      end
       it 'the column header is hidden' do
         render
         expect(rendered).not_to have_css '.header.blockchain-address'

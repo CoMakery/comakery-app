@@ -13,7 +13,7 @@ class Views::Shared::Awards < Views::Base
           th(class: 'small-2') { text 'Recipient' } if show_recipient
           th(class: 'small-2') { text 'Contribution' }
           th(class: 'small-2') { text 'Authorized By' }
-          if project.ethereum_enabled
+          if project.ethereum_contract_address?
             th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' }
           end
           th(class: 'small-1', style: 'text-align: center') { text 'status' }
@@ -58,7 +58,7 @@ class Views::Shared::Awards < Views::Base
               end
               text award.issuer_display_name
             }
-            if project.ethereum_enabled
+            if project.ethereum_contract_address?
               td(class: 'small-2 blockchain-address') {
                 if award.ethereum_transaction_explorer_url
                   link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'

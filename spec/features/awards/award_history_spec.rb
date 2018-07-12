@@ -61,7 +61,7 @@ describe 'viewing projects, creating and editing', :js do
         end
 
         it 'show link to ethereum transaction' do
-          project.update ethereum_enabled: true
+          project.update ethereum_enabled: true, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367'
           award.update ethereum_transaction_address: '0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
           login(owner)
           visit project_path(project.reload)
