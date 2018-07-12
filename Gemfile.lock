@@ -566,6 +566,7 @@ DEPENDENCIES
   modernizr-rails
   momentjs-rails
   nilify_blanks
+  nokogiri
   omniauth
   omniauth-discord!
   omniauth-slack
