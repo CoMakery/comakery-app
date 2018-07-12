@@ -155,8 +155,6 @@ module Views
                     f.text_field :token_symbol
                   }
                 }
-                br
-                ethereum_beta(f)
 
                 # # Uncomment this after legal review  of licenses, disclaimers, etc.
                 # with_errors(project, :license_finalized) {
@@ -302,28 +300,6 @@ module Views
           span(class: 'input-group-label percentage') { text '%' }
           form.text_field field_name, **opts
         }
-      end
-
-      def ethereum_beta(form)
-        if current_account.slack_auth&.slack_team_ethereum_enabled?
-          with_errors(project, :ethereum_enabled) {
-            label {
-              form.check_box :ethereum_enabled, disabled: project.ethereum_enabled
-              text ' Publish to Ethereum Blockchain '
-              question_tooltip "WARING: This is irreversible.
-                      This will issue blockchain tokens for all existing and
-                      future awards for users with ethereum accounts.
-                      This information is public with anonymized account names
-                      and cannot be revoked."
-            }
-          }
-        else
-          label {
-            link_to 'Contact us', "mailto:#{I18n.t('company_email')}"
-            text " if you'd like to join the Ξthereum blockchain beta"
-          }
-          br
-        end
       end
 
       def visibility_options
