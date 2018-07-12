@@ -939,7 +939,7 @@ describe Project do
 
   it 'populate_token_symbol' do
     contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
-    stub_token_symbol(contract_address, 'FCBB')
+    stub_token_symbol
     project = create :project, token_symbol: nil, ethereum_contract_address: contract_address
     expect project.token_symbol = 'FCBB'
   end

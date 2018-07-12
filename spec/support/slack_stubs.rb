@@ -78,9 +78,11 @@ module SlackStubs
     RestClient.stub(:post) { '{"id": "123", "name": "Comakery"}' }
   end
 
-  def stub_token_symbol(contract_address, symbol)
-    stub_request(:get, "https://etherscan.io/tokens?q=#{contract_address}")
-      .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent' => 'Ruby' })
-      .to_return(status: 200, body: '', headers: {})
+  # rubocop:disable RSpec/MessageSpies
+  # rubocop:disable RSpec/AnyInstance
+  def stub_token_symbol
+    expect(Comakery::Ethereum).to receive(:open).and_return(File.new(Rails.root.join('spec', 'fixtures', 'dummy.html')))
+    allow_any_instance_of(NilClass).to receive(:next) { 'symbol = FCBB' }
+    allow_any_instance_of(String).to receive(:text) { 'symbol = FCBB' }
   end
 end

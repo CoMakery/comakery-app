@@ -58,13 +58,9 @@ describe Comakery::Ethereum do
     end
   end
 
-  # rubocop:disable RSpec/MessageSpies
-  # rubocop:disable RSpec/AnyInstance
   describe 'token_symbol' do
     it 'get token symbol' do
-      expect(described_class).to receive(:open).and_return(File.new(Rails.root.join('spec', 'fixtures', 'dummy.html')))
-      allow_any_instance_of(NilClass).to receive(:next) { 'symbol = FCBB' }
-      allow_any_instance_of(String).to receive(:text) { 'symbol = FCBB' }
+      stub_token_symbol
       expect(described_class.token_symbol('0x2222222222222222222222222222222222222222')).to eq 'FCBB'
     end
   end
