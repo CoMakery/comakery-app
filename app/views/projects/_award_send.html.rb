@@ -18,11 +18,10 @@ class Views::Projects::AwardSend < Views::Base
               column('small-12') {
                 label {
                   text 'Communication Channel'
-                  options = []
-                  if project.channels.any?
-                    options = capture do
-                      options_from_collection_for_select([Channel.new(name: 'Email')] + project.channels, :id, :name_with_provider, award.channel_id)
-                    end
+                  project_channels = [Channel.new(name: 'Email')]
+                  project_channels += project.channels if project.channels.any?
+                  options = capture do
+                    options_from_collection_for_select(project_channels, :id, :name_with_provider, award.channel_id)
                   end
                   f.select :channel_id, options, {}, class: 'fetch-channel-users'
                 }
