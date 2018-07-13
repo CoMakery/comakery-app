@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   resources :password_resets, only: [:new, :create, :edit, :update]
 
-  get '/account' => "accounts#show"
+  get '/account' => "accounts#show", as: :show_account
   get "accounts/confirm/:token" => "accounts#confirm", as: :confirm_email
   get "accounts/confirm-authentication/:token" => "accounts#confirm_authentication", as: :confirm_authentication
   get "/auth/slack/callback" => "sessions#create"
