@@ -106,6 +106,14 @@ module Views
             }
             row {
               column('large-6 small-12') {
+                options = capture do
+                  options_for_select(ethereum_network_options, selected: f.object.ethereum_network)
+                end
+                label {
+                  text 'Ethereum Network'
+                  f.select :ethereum_network, options
+                }
+
                 with_errors(project, :ethereum_contract_address) {
                   label {
                     text 'Ethereum Contract Address'
@@ -305,6 +313,10 @@ module Views
 
       def visibility_options
         [['Logged in team members', 'member'], ['Publicly listed in CoMakery searches', 'public_listed'], ['Logged in team member via unlisted url', 'member_unlisted'], ['Unlisted url (no login required)', 'public_unlisted'], ['Archived (visible to me only)', 'archived']]
+      end
+
+      def ethereum_network_options
+        [[], ['Main Ethereum Network', 'main'], ['Ropsten Test Network', 'ropsten'], ['Kovan Test Network', 'kovan'], ['Rinkeby Test Network', 'rinkeby']]
       end
 
       def render_cancel_and_save_buttons(form)
