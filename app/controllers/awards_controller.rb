@@ -47,6 +47,7 @@ class AwardsController < ApplicationController
       end
     else
       session[:award_token] = params[:token]
+      flash[:notice] = 'Log in to claim your award!'
       redirect_to new_session_path
     end
   end
