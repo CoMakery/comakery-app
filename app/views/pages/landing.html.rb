@@ -226,18 +226,18 @@ class Views::Pages::Landing < Views::Base
       }
 
       column('small-12 hide-for-large', style: 'margin-top: 10px;') {
-        column('small-12 no-h-pad') {
+        column('small-12 no-h-pad', style: 'margin-bottom: 10px;') {
           image_tag 'workonblockchain/vevue-picture.jpg'
         }
         column('small-9') {
-          h2(style: 'margin-top: 30px;') {
+          h2 {
             text 'Featured Project'
           }
         }
         column('small-3 text-right') {
-          image_tag 'workonblockchain/vevue-circle.png', size: '72x72'
+          image_tag 'workonblockchain/vevue-logo.png', style: 'width: 100%;'
         }
-        column('medium-12', style: 'margin-top: 30px') {
+        column('medium-12') {
           p {
             text 'Vevue is revolutionizing the way people interact with distribute, watch, and appreciate video content using blockchain technology.'
           }
