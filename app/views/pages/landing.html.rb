@@ -196,7 +196,7 @@ class Views::Pages::Landing < Views::Base
     column('medium-12', style: 'color: #fff;margin-top: 10px') {
       text '.'
     }
-    div(class: 'large-10 medium-11 small-12 small-centered columns') {
+    div(class: 'large-10 medium-11 small-12 small-centered columns no-h-pad') {
       div(class: 'work-blockchain') {
         image_tag 'workonblockchain/header.png', style: 'width: 100%'
       }
@@ -225,7 +225,7 @@ class Views::Pages::Landing < Views::Base
         }
       }
 
-      column('small-12 hide-for-large') {
+      column('small-12 hide-for-large', style: 'margin-top: 10px;') {
         column('small-12 no-h-pad') {
           image_tag 'workonblockchain/vevue-picture.jpg'
         }
