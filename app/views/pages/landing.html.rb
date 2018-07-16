@@ -193,7 +193,7 @@ class Views::Pages::Landing < Views::Base
   end
 
   def workonblockchain
-    column('medium-12 show-for-large', style: 'color: #fff;') {
+    column('medium-12', style: 'color: #fff;margin-top: 10px') {
       text '.'
     }
     div(class: 'large-10 medium-11 small-12 small-centered columns') {
