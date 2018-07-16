@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180607153802) do
+ActiveRecord::Schema.define(version: 20180713104634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -175,6 +175,7 @@ ActiveRecord::Schema.define(version: 20180607153802) do
     t.string "long_id"
     t.integer "visibility", default: 0
     t.string "token_symbol"
+    t.string "ethereum_network"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["public"], name: "index_projects_on_public"
     t.index ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public"

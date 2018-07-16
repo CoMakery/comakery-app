@@ -106,6 +106,14 @@ module Views
             }
             row {
               column('large-6 small-12') {
+                options = capture do
+                  options_for_select(ethereum_network_options, selected: f.object.ethereum_network)
+                end
+                label {
+                  text 'Ethereum Network'
+                  f.select :ethereum_network, options
+                }
+
                 with_errors(project, :ethereum_contract_address) {
                   label {
                     text 'Ethereum Contract Address'
@@ -139,24 +147,23 @@ module Views
                     }
                   }
                 }
-
-                div {
-                  with_errors(project, :revenue_sharing_end_date) {
-                    label {
-                      text 'Revenue Sharing End Date'
-                      f.text_field :revenue_sharing_end_date, class: 'datepicker-no-limit', placeholder: 'mm/dd/yyyy', value: f.object.revenue_sharing_end_date&.strftime('%m/%d/%Y'), disabled: project.license_finalized?
-                      div(class: 'help-text') { text '"mm/dd/yyy" means revenue sharing does not end.' }
+                if project.revenue_share?
+                  div {
+                    with_errors(project, :revenue_sharing_end_date) {
+                      label {
+                        text 'Revenue Sharing End Date'
+                        f.text_field :revenue_sharing_end_date, class: 'datepicker-no-limit', placeholder: 'mm/dd/yyyy', value: f.object.revenue_sharing_end_date&.strftime('%m/%d/%Y'), disabled: project.license_finalized?
+                        div(class: 'help-text') { text '"mm/dd/yyy" means revenue sharing does not end.' }
+                      }
                     }
                   }
-                }
+                end
                 with_errors(project, :token_symbol) {
                   label {
                     text 'Token Symbol'
                     f.text_field :token_symbol
                   }
                 }
-                br
-                ethereum_beta(f)
 
                 # # Uncomment this after legal review  of licenses, disclaimers, etc.
                 # with_errors(project, :license_finalized) {
@@ -304,30 +311,12 @@ module Views
         }
       end
 
-      def ethereum_beta(form)
-        if current_account.slack_auth&.slack_team_ethereum_enabled?
-          with_errors(project, :ethereum_enabled) {
-            label {
-              form.check_box :ethereum_enabled, disabled: project.ethereum_enabled
-              text ' Publish to Ethereum Blockchain '
-              question_tooltip "WARING: This is irreversible.
-                      This will issue blockchain tokens for all existing and
-                      future awards for users with ethereum accounts.
-                      This information is public with anonymized account names
-                      and cannot be revoked."
-            }
-          }
-        else
-          label {
-            link_to 'Contact us', "mailto:#{I18n.t('company_email')}"
-            text " if you'd like to join the Ξthereum blockchain beta"
-          }
-          br
-        end
-      end
-
       def visibility_options
         [['Logged in team members', 'member'], ['Publicly listed in CoMakery searches', 'public_listed'], ['Logged in team member via unlisted url', 'member_unlisted'], ['Unlisted url (no login required)', 'public_unlisted'], ['Archived (visible to me only)', 'archived']]
+      end
+
+      def ethereum_network_options
+        [[], ['Main Ethereum Network', 'main'], ['Ropsten Test Network', 'ropsten'], ['Kovan Test Network', 'kovan'], ['Rinkeby Test Network', 'rinkeby']]
       end
 
       def render_cancel_and_save_buttons(form)

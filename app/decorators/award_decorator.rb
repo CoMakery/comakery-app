@@ -10,7 +10,9 @@ class AwardDecorator < Draper::Decorator
 
   def ethereum_transaction_explorer_url
     if object.ethereum_transaction_address
-      "https://#{Rails.application.config.ethereum_explorer_site}/tx/#{object.ethereum_transaction_address}"
+      site = object.project&.ethereum_network? ? "#{object.project.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
+      site = 'etherscan.io' if site == 'main.etherscan.io'
+      "https://#{site}/tx/#{object.ethereum_transaction_address}"
     end
   end
 

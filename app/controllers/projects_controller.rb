@@ -131,6 +131,7 @@ class ProjectsController < ApplicationController
       :license_finalized,
       :denomination,
       :visibility,
+      :ethereum_network,
       :ethereum_contract_address,
       :token_symbol,
       award_types_attributes: %i[

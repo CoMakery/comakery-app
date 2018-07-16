@@ -37,7 +37,9 @@ class AwardsController < ApplicationController
     if current_account
       award = Award.find_by confirm_token: params[:token]
       if award
-        award.confirm!(current_account)
+        if award.confirm!(current_account)
+          flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+        end
         redirect_to project_path(award.project)
       else
         flash[:error] = 'Invalid award token!'
@@ -45,6 +47,7 @@ class AwardsController < ApplicationController
       end
     else
       session[:award_token] = params[:token]
+      flash[:notice] = 'Log in to claim your award!'
       redirect_to new_session_path
     end
   end
