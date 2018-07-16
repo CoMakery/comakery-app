@@ -78,7 +78,7 @@ class Views::Pages::Landing < Views::Base
               image_tag 'whois/developers-engineers.jpg', size: '220x220'
             }
             column('small-8 no-h-pad') {
-              h3(style: 'margin-top: 20px;') {
+              h1(style: 'margin-top: 20px;') {
                 text 'Engineers & Developers'
               }
               text 'Ethereum Solidity, Javascript, Elixir, GO, Ruby on Rails, Truffle... we match your specialty with projects to push your boundaries.'
