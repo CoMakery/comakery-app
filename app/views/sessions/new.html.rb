@@ -18,24 +18,28 @@ class Views::Sessions::New < Views::Base
                 password_field_tag :password, nil, tabindex: 2
               }
               br
-              submit_tag 'Sign In', class: buttonish(:medium), tabindex: 3
-              link_to '/auth/slack', class: 'auth-button' do
-                image_tag 'slack.png', style: 'height: 38px'
-                text 'Sign in with Slack'
-              end
-              link_to login_discord_path, class: 'auth-button' do
-                image_tag 'discord.png', style: 'height: 40px'
-                text 'Sign in with Discord'
-              end
-              div(class: 'signin-with-metamask-wrapper', style: 'margin-left: 0') {
-                link_to 'javascript:void(0)', class: 'auth-button signin-with-metamask' do
-                  image_tag 'metamask.png', style: 'height: 28px'
-                  span 'Sign in with MetaMask'
-                end
-              }
+              submit_tag 'Sign In', class: buttonish(:medium), style: 'margin: 0', tabindex: 3
             }
           }
         end
+        column('large-12 no-h-pad', style: 'margin-top: 30px') {
+          h3 'Or Sign In With'
+        }
+        column('large-12 no-h-pad', style: 'margin-top: 10px') {
+          link_to 'javascript:void(0)', class: 'auth-button metamask signin-with-metamask' do
+            span 'MetaMask'
+          end
+        }
+        column('large-12 no-h-pad', style: 'margin-top: 10px') {
+          link_to '/auth/slack', class: 'auth-button slack' do
+            text 'Slack'
+          end
+        }
+        column('large-12 no-h-pad', style: 'margin-top: 10px') {
+          link_to login_discord_path, class: 'auth-button discord' do
+            text 'Discord'
+          end
+        }
       }
     }
     render 'metamask_modal'
