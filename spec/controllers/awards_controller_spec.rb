@@ -203,11 +203,22 @@ describe AwardsController do
       expect(flash[:error]).to eq 'Invalid award token!'
     end
 
-    it 'add awardto account' do
+    it 'add award to account' do
       login receiver.account
       get :confirm, params: { token: 1234 }
       expect(response).to redirect_to(project_path(award.project))
       expect(award.reload.account_id).to eq receiver.account_id
+      expect(flash[:notice]).to eq "Congratulations, you just claimed your award! Your Ethereum address is #{receiver.account.ethereum_wallet} you can change your Ethereum address on your account page."
+    end
+
+    it 'add award to account. notice about update wallet address' do
+      account = receiver.account
+      account.update ethereum_wallet: nil
+      login receiver.account
+      get :confirm, params: { token: 1234 }
+      expect(response).to redirect_to(project_path(award.project))
+      expect(award.reload.account_id).to eq receiver.account_id
+      expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress')).to be_truthy
     end
   end
 
