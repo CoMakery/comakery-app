@@ -32,9 +32,9 @@ class Views::Projects::Description < Views::Projects::Base
             div(class: 'read-more') {
               link_to 'More..', 'javascript:;', class: 'more-link', data: { open: 'full-description' }
             }
-            div(id: 'full-description', class: 'reveal', 'data-reveal': true) {
+            div(id: 'full-description', class: 'reveal', 'data-reveal': true, style: 'padding-top: 1.5rem;') {
               text raw project.description_html
-              button(class: 'close-button', 'data-close': true, 'aria-label': 'Close modal', type: 'button') {
+              button(class: 'close-button', 'data-close': true, 'aria-label': 'Close modal', type: 'button', style: 'top: 0; right: 0.5rem;') {
                 span('aria-hidden': 'true') {
                   text '&times;'.html_safe
                 }
