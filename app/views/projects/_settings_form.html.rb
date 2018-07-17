@@ -124,14 +124,14 @@ module Views
                 with_errors(project, :maximum_tokens) {
                   label {
                     required_label_text 'Total Token Budget'
-                    award_type_div f, :maximum_tokens, type: 'number', disabled: project.license_finalized? || project.ethereum_enabled?
+                    f.text_field :maximum_tokens, type: 'number', disabled: project.license_finalized? || project.ethereum_enabled?
                   }
                 }
 
                 with_errors(project, :maximum_royalties_per_month) {
                   label {
                     required_label_text 'Maximum Awarded Per Month'
-                    award_type_div f, :maximum_royalties_per_month,
+                    f.text_field :maximum_royalties_per_month,
                       type: :number, placeholder: '25000',
                       disabled: project.license_finalized?
                   }
