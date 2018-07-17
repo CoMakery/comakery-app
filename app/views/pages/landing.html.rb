@@ -21,9 +21,7 @@ class Views::Pages::Landing < Views::Base
         }
       }
       div(class: 'show-for-medium-only') {
-        h1(style: 'margin-top: 4%; font-size: 20px') {
-          text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
-        }
+        h1(style: 'margin-top: 4%; font-size: 20px') { text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS' }
         h2(style: 'margin-bottom: 6%;font-size: 16px;') {
           text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
         }
@@ -40,7 +38,6 @@ class Views::Pages::Landing < Views::Base
         image_tag 'Header-Button.png', style: 'width: 15%'
       end
     }
-
     image_tag 'Header-Background.jpg', class: 'header-bg'
   end
 
@@ -53,19 +50,19 @@ class Views::Pages::Landing < Views::Base
         column('medium-12 no-v-pad', style: 'margin-top: 30px;') {
           column('medium-7 show-for-large') {
             column('medium-7 no-h-pad') {
-              column('medium-5 no-h-pad', style: 'text-align: right;') {
-                h2(style: 'font-size: 72px; color: #8A8A8A; margin-right: -13px;') {
-                  text '&'
+              div(style: 'float: right; padding-right: 35px') {
+                column('medium-3 no-h-pad', style: 'text-align: right;') {
+                  h2(style: 'font-size: 72px; color: #8A8A8A; margin-right: -13px;') { text '&' }
+                }
+                column('medium-9 no-h-pad', style: 'height: 108px;') {
+                  h1(style: 'line-height: 30px; margin-top: 20px;') {
+                    text 'Engineers'
+                    br
+                    text 'Developers'
+                  }
                 }
               }
-              column('medium-7 no-h-pad', style: 'height: 108px;') {
-                h1(style: 'line-height: 30px; margin-top: 20px;') {
-                  text 'Engineers'
-                  br
-                  text 'Developers'
-                }
-              }
-              column('medium-12 text-right no-h-pad', style: 'margin-top: -10px') {
+              column('medium-12 text-right', style: 'margin-top: -10px') {
                 text 'Ethereum Solidity, Javascript, Elixir, GO, Ruby on Rails, Truffle... we match your specialty with projects to push your boundaries.'
               }
             }
@@ -123,19 +120,21 @@ class Views::Pages::Landing < Views::Base
         column('medium-12 no-v-pad', style: 'margin-top: 20px;') {
           column('medium-7 show-for-large') {
             column('medium-7 no-h-pad') {
-              column('medium-5 no-h-pad', style: 'text-align: right;') {
-                h2(style: 'font-size: 72px; color: #8A8A8A; margin-right: -13px;') {
-                  text '&'
+              div(style: 'float: right; padding-right: 35px') {
+                column('medium-3 no-h-pad', style: 'text-align: right;') {
+                  h2(style: 'font-size: 72px; color: #8A8A8A; margin-right: -13px;') {
+                    text '&'
+                  }
+                }
+                column('medium-9 no-h-pad', style: 'height: 108px;') {
+                  h1(style: 'line-height: 30px; margin-top: 20px;') {
+                    text 'Designers'
+                    br
+                    text 'Marketers'
+                  }
                 }
               }
-              column('medium-7 no-h-pad', style: 'height: 108px;') {
-                h1(style: 'line-height: 30px; margin-top: 20px;') {
-                  text 'Designers'
-                  br
-                  text 'Marketers'
-                }
-              }
-              column('medium-12 text-right no-h-pad', style: 'margin-top: -10px') {
+              column('medium-12 text-right', style: 'margin-top: -10px') {
                 text 'The world of blockchain is evolving at light speed, and so too are the creative and marketing needs of blockchain projects.'
               }
             }
