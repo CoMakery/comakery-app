@@ -3,7 +3,6 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
 
   def content
     content_for(:title) { project.title.strip }
-    content_for(:description) { project.description_text(150) }
 
     div(class: 'project-nav') {
       full_row {
@@ -20,7 +19,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
       }
       full_row {
         ul(class: 'menu') {
-          li(class: ('active' if controller_name == 'projects').to_s) {
+          li(class: ('active' if controller_name == 'projects' && params[:action] != 'edit').to_s) {
             path = project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
             a(href: path) {
               text 'Overview'
@@ -70,7 +69,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
               target: '_blank', class: 'text-link'
           }
 
-          li_if(current_account && project.account == current_account) {
+          li_if(current_account && project.account == current_account, class: ('active' if controller_name == 'projects' && params[:action] == 'edit')) {
             a(class: 'edit', href: edit_project_path(project)) {
               i(class: 'fa fa-pencil') {}
               text 'Settings'

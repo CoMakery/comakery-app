@@ -2,10 +2,8 @@ class Views::Projects::Edit < Views::Base
   needs :project
 
   def content
-    content_for(:title) { "Editing: #{project.title.strip}" }
-    content_for(:description) { project.decorate.description_text(150) }
-    full_row { h3 'Project Settings' }
-    div(class: 'row') {
+    render partial: 'shared/project_header'
+    column('large-12 no-h-pad') {
       div(class: 'columns large-2') {
         render partial: 'left_menu_items'
       }
