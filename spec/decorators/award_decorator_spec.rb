@@ -1,6 +1,17 @@
 require 'rails_helper'
 
 describe AwardDecorator do
+  let!(:team) { create :team }
+  let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
+  let!(:authentication) { create :authentication, account: issuer }
+  let!(:project) { create :project, account: issuer }
+  let!(:award_type) { create :award_type, project: project }
+  let!(:channel) { create :channel, project: project, team: team, channel_id: 'channel' }
+
+  before do
+    team.build_authentication_team authentication
+  end
+
   describe '#issuer_display_name' do
     let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
     let!(:project) { create :project, account: issuer }
@@ -83,5 +94,13 @@ describe AwardDecorator do
   it 'display part_of_email' do
     award = create :award, quantity: 2.5, email: 'test@test.st'
     expect(award.decorate.part_of_email).to eq 'test@...'
+  end
+
+  it '#communication_channel' do
+    award = create :award, quantity: 2.5, email: 'test@test.st'
+    expect(award.decorate.communication_channel).to eq 'Email'
+
+    award = create :award, award_type: award_type, quantity: 1, channel: channel
+    expect(award.decorate.communication_channel).to eq channel.name_with_provider
   end
 end
