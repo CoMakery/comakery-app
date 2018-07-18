@@ -61,7 +61,6 @@ class AccountsController < ApplicationController
 
   def download_data
     respond_to do |format|
-      format.html
       format.zip do
         compressed_filestream = Zip::OutputStream.write_buffer do |zos|
           zos.put_next_entry 'profile.csv'

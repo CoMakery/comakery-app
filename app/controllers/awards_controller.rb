@@ -29,8 +29,6 @@ class AwardsController < ApplicationController
     else
       render_back(result.message)
     end
-  rescue Pundit::NotAuthorizedError
-    fail_and_redirect('Not authorized')
   end
 
   def confirm
@@ -55,12 +53,6 @@ class AwardsController < ApplicationController
     @award.update! ethereum_transaction_address: params[:tx]
     @award = @award.decorate
     render layout: false
-  end
-
-  def fail_and_redirect(message)
-    skip_authorization
-    flash[:error] = "Failed sending award - #{message}"
-    redirect_back fallback_location: root_path
   end
 
   private
