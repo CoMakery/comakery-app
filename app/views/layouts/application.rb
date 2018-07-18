@@ -36,7 +36,7 @@ class Views::Layouts::Application < Views::Base
             'data-airbrake-project-key' => ENV['AIRBRAKE_API_KEY'],
             'data-airbrake-environment-name' => ENV['APP_NAME']
         end
-
+        favicon_link_tag 'favicon/favicon.ico'
         favicon_link_tag 'favicon/apple-icon-57x57.png', rel: 'apple-touch-icon', sizes: '57x57', type: 'image/png'
         favicon_link_tag 'favicon/apple-icon-60x60.png', rel: 'apple-touch-icon', sizes: '60x60', type: 'image/png'
         favicon_link_tag 'favicon/apple-icon-72x72.png', rel: 'apple-touch-icon', sizes: '72x72', type: 'image/png'
