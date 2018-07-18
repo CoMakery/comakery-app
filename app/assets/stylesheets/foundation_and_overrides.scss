@@ -99,6 +99,14 @@ html, body{
   color: #fb40e5 !important;
 }
 
+.whois-bg{
+  background-image: asset-url('whois/H1-TEXT.png');
+  height: 52px;
+  background-position-x: 15px;
+  background-repeat: no-repeat;
+  background-size: 52px 1196px;
+}
+
 .hiw-bg{
   background-image: asset-url('howitwork/dotted-lines.jpg');
   height: 400px;

@@ -29,17 +29,13 @@ class AwardsController < ApplicationController
     else
       render_back(result.message)
     end
-  rescue Pundit::NotAuthorizedError
-    fail_and_redirect('Not authorized')
   end
 
   def confirm
     if current_account
       award = Award.find_by confirm_token: params[:token]
       if award
-        if award.confirm!(current_account)
-          flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-        end
+        flash[:notice] = confirm_message if award.confirm!(current_account)
         redirect_to project_path(award.project)
       else
         flash[:error] = 'Invalid award token!'
@@ -57,12 +53,6 @@ class AwardsController < ApplicationController
     @award.update! ethereum_transaction_address: params[:tx]
     @award = @award.decorate
     render layout: false
-  end
-
-  def fail_and_redirect(message)
-    skip_authorization
-    flash[:error] = "Failed sending award - #{message}"
-    redirect_back fallback_location: root_path
   end
 
   private
@@ -90,5 +80,13 @@ class AwardsController < ApplicationController
     @can_award = awardable_types_result.can_award
     flash[:error] = "Failed sending award - #{msg}"
     render template: 'projects/show'
+  end
+
+  def confirm_message
+    if current_account.ethereum_wallet.present?
+      "Congratulations, you just claimed your award! Your Ethereum address is #{current_account.ethereum_wallet} you can change your Ethereum address on your account page."
+    else
+      "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    end
   end
 end

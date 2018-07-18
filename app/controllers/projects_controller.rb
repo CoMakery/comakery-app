@@ -86,7 +86,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = current_account.projects.includes(:award_types).find(params[:id])
+    @project = current_account.projects.includes(:award_types).find(params[:id]).decorate
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
     authorize @project
@@ -101,6 +101,7 @@ class ProjectsController < ApplicationController
       flash[:notice] = 'Project updated'
       respond_with @project, location: project_detail_path
     else
+      @project = @project.decorate
       flash[:error] = 'Project update failed, please correct the errors below'
       assign_slack_channels
       render :edit

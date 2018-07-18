@@ -4,7 +4,7 @@ class Views::Accounts::New < Views::Base
   def content
     row {
       column(%i[small-12 large-6], class: 'large-centered') {
-        h1('Signup')
+        h1('Sign Up With Email')
 
         form_for account do |f|
           row {
@@ -73,28 +73,28 @@ class Views::Accounts::New < Views::Base
             }
 
             column('large-12') {
-              f.submit class: buttonish(:medium)
-            }
-            column('large-12', style: 'margin-top: 10px') {
-              link_to '/auth/slack', class: 'auth-button' do
-                image_tag 'slack.png', style: 'height: 38px'
-                text 'Sign up with Slack'
-              end
-              link_to login_discord_path, class: 'auth-button' do
-                image_tag 'discord.png', style: 'height: 40px'
-                text 'Sign up with Discord'
-              end
-            }
-            column('large-12', style: 'margin-top: 10px') {
-              div(class: 'signin-with-metamask-wrapper') {
-                link_to 'javascript:void(0)', class: 'auth-button signin-with-metamask' do
-                  image_tag 'metamask.png', style: 'height: 28px'
-                  span 'Sign up with MetaMask'
-                end
-              }
+              f.submit 'Create Your Account', class: buttonish(:medium), style: 'margin: 0'
             }
           }
         end
+        column('large-12 no-h-pad', style: 'margin-top: 30px') {
+          h3 'Or Sign Up With'
+        }
+        column('large-12 no-h-pad', style: 'margin-top: 10px') {
+          link_to 'javascript:void(0)', class: 'auth-button metamask signin-with-metamask' do
+            span 'MetaMask'
+          end
+        }
+        column('large-12 no-h-pad', style: 'margin-top: 10px') {
+          link_to '/auth/slack', class: 'auth-button slack' do
+            text 'Slack'
+          end
+        }
+        column('large-12 no-h-pad', style: 'margin-top: 10px') {
+          link_to login_discord_path, class: 'auth-button discord' do
+            text 'Discord'
+          end
+        }
       }
     }
     render 'sessions/metamask_modal'
