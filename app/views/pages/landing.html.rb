@@ -87,10 +87,10 @@ class Views::Pages::Landing < Views::Base
             text '.'
           }
           column('medium-7 show-for-large') {
-            column('medium-5') {
+            column('medium-5', style: 'max-width: 250px') {
               image_tag 'whois/community-manager.jpg', size: '220x220'
             }
-            column('medium-7 no-h-pad') {
+            column('medium-7 no-h-pad', style: 'float: left') {
               column('medium-12 no-h-pad', style: 'height: 108px;') {
                 h1(style: 'line-height: 30px; margin-top: 20px;') {
                   text 'Community'
@@ -159,10 +159,10 @@ class Views::Pages::Landing < Views::Base
             text '.'
           }
           column('medium-7 show-for-large') {
-            column('medium-5') {
+            column('medium-5', style: 'max-width: 250px') {
               image_tag 'whois/project-visionary.jpg', size: '220x220'
             }
-            column('medium-7 no-h-pad') {
+            column('medium-7 no-h-pad', style: 'float: left') {
               column('medium-12 no-h-pad', style: 'height: 108px;') {
                 h1(style: 'line-height: 30px; margin-top: 20px;') {
                   text 'Project'
