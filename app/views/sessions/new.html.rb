@@ -25,17 +25,17 @@ class Views::Sessions::New < Views::Base
         }
         column('large-12 no-h-pad', style: 'margin-top: 5px') {
           link_to 'javascript:void(0)', class: 'auth-button metamask signin-with-metamask' do
-            span 'MetaMask'
+            span 'Sigin in with MetaMask'
           end
         }
         column('large-12 no-h-pad', style: 'margin-top: 20px') {
           link_to '/auth/slack', class: 'auth-button slack' do
-            text 'Slack'
+            text 'Sign in with Slack'
           end
         }
         column('large-12 no-h-pad', style: 'margin-top: 20px') {
           link_to login_discord_path, class: 'auth-button discord' do
-            text 'Discord'
+            text 'Sign in with Discord'
           end
         }
       }

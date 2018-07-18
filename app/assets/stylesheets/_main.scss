@@ -473,6 +473,11 @@ progress {
   background-size: 28px;
   background-position: 8px;
 }
+
+.sessions-new .auth-button{
+  width: 237px;
+}
+
 .auth-button.metamask{
   background-image: asset_url('metamask.png');
 }
