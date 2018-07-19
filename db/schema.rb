@@ -43,12 +43,12 @@ ActiveRecord::Schema.define(version: 20180713104634) do
     t.string "image_content_size"
     t.string "image_content_type"
     t.string "nickname"
-    t.string "country"
-    t.date "date_of_birth"
     t.string "public_address"
     t.string "nonce"
     t.string "network_id"
     t.boolean "system_email", default: false
+    t.string "country"
+    t.date "date_of_birth"
     t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
