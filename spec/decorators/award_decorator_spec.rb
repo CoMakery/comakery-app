@@ -57,11 +57,12 @@ describe AwardDecorator do
   context 'json_for_sending_awards' do
     let!(:recipient) { create :account, id: 529, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec488' }
     let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-    let!(:project) { create :project, id: 512, account: issuer, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005' }
+    let!(:project) { create :project, id: 512, account: issuer }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, id: 521, award_type: award_type, issuer: issuer, account: recipient }
 
     it 'valid' do
+      award.project.ethereum_contract_address = '0x8023214bf21b1467be550d9b889eca672355c005'
       expected = %({"id":521,"total_amount":1337,"issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488"},"project":{"id":512,"ethereum_contract_address":"0x8023214bf21b1467be550d9b889eca672355c005"}})
       expect(award.decorate.json_for_sending_awards).to eq(expected)
     end

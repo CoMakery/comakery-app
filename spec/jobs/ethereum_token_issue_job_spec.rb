@@ -4,7 +4,7 @@ describe EthereumTokenIssueJob do
   let(:contract_address) { '0x' + 'a' * 40 }
   let(:recipient_address) { '0x' + 'b' * 40 }
   let(:transaction_adddress) { '0x' + 'c' * 64 }
-  let(:project) { create :project, ethereum_contract_address: contract_address }
+  let(:project) { create :project, ethereum_contract_address: contract_address, ethereum_network: 'N/A' }
   let(:award_type) { create :award_type, project: project, amount: 2 }
   let(:award) { create :award, award_type: award_type, proof_id: '873!' }
   let(:job) { described_class.new }

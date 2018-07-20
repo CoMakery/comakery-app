@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe EthereumTokenContractJob do
-  let(:project) { create :project, maximum_tokens: 101 }
+  let(:project) { create :project, maximum_tokens: 101, ethereum_network: 'N/A' }
   let(:job) { described_class.new }
   let(:address) { '0x' + 'a' * 40 }
 
