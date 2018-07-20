@@ -38,7 +38,7 @@ class Views::Pages::Landing < Views::Base
         image_tag 'Header-Button.png', style: 'width: 150px'
       end
     }
-    div(class: 'large-centered columns', style: 'max-width: 1300px'){
+    div(class: 'large-centered columns no-h-pad', style: 'max-width: 1300px'){
       image_tag 'Header-Background.jpg', class: 'header-bg'
     }
   end
@@ -328,7 +328,9 @@ class Views::Pages::Landing < Views::Base
                 f.text_field :email
               }
               column('medium-2 small-3') {
-                f.submit 'SIGN UP', class: 'signup-btn'
+                button(type: 'submit', class: 'signup-btn'){
+                  text 'SIGN UP'
+                }
               }
               column('medium-5') {}
             }
