@@ -22,23 +22,25 @@ class Views::Pages::Landing < Views::Base
       }
       div(class: 'show-for-medium-only') {
         h1(style: 'margin-top: 4%; font-size: 20px') { text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS' }
-        h2(style: 'margin-bottom: 6%;font-size: 16px;') {
+        h2(style: 'margin-bottom: 5%;font-size: 16px;') {
           text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
         }
       }
       div(class: 'hide-for-medium') {
-        h1(style: 'margin-top: 30px; font-size: 14px') {
+        h1(style: 'margin-top: 20px; font-size: 14px') {
           text 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
         }
-        h2(style: 'margin-top: 10px; font-size: 10px; margin-bottom: 10px') {
+        h2(style: 'margin-top: 10px; font-size: 10px; margin-bottom: 15px') {
           text 'DISCOVER PROJECTS | LIST YOUR OWN | GET PAID IN TOKENS'
         }
       }
       link_to new_account_path do
-        image_tag 'Header-Button.png', style: 'width: 15%'
+        image_tag 'Header-Button.png', style: 'width: 150px'
       end
     }
-    image_tag 'Header-Background.jpg', class: 'header-bg'
+    div(class: 'large-centered columns', style: 'max-width: 1300px'){
+      image_tag 'Header-Background.jpg', class: 'header-bg'
+    }
   end
 
   def whois
@@ -50,7 +52,7 @@ class Views::Pages::Landing < Views::Base
       column('medium-12') {
         column('medium-12 no-v-pad', style: 'margin-top: 30px;') {
           column('medium-7 show-for-large') {
-            column('medium-7 no-h-pad') {
+            column('medium-7 no-h-pad', style: 'position: relative; z-index: 2') {
               div(style: 'float: right; padding-right: 35px') {
                 column('medium-3 no-h-pad', style: 'text-align: right;') {
                   h2(style: 'font-size: 72px; color: #8A8A8A; margin-right: -13px;') { text '&' }
@@ -120,7 +122,7 @@ class Views::Pages::Landing < Views::Base
 
         column('medium-12 no-v-pad', style: 'margin-top: 20px;') {
           column('medium-7 show-for-large') {
-            column('medium-7 no-h-pad') {
+            column('medium-7 no-h-pad', style: 'position: relative; z-index: 2') {
               div(style: 'float: right; padding-right: 35px') {
                 column('medium-3 no-h-pad', style: 'text-align: right;') {
                   h2(style: 'font-size: 72px; color: #8A8A8A; margin-right: -13px;') {
@@ -198,7 +200,7 @@ class Views::Pages::Landing < Views::Base
     }
     div(class: 'large-10 medium-11 small-12 small-centered columns no-h-pad') {
       div(class: 'work-blockchain') {
-        image_tag 'workonblockchain/header.png', style: 'width: 100%'
+        image_tag 'workonblockchain/header.jpg', style: 'width: 100%'
       }
 
       column('large-12 show-for-large blue-box') {
