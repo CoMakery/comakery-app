@@ -52,16 +52,19 @@ class Comakery::Ethereum
       end
     end
 
-    def token_symbol(contract_address)
-      url = "https://etherscan.io/tokens?q=#{contract_address}"
+    def token_symbol(contract_address, project = nil)
+      site = project&.ethereum_network? ? "#{project.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
+      site = 'etherscan.io' if site == 'main.etherscan.io'
+      url = "https://#{site}/tokens?q=#{contract_address}"
       doc = Nokogiri::HTML(open(url))
-      elem = doc.css('.fa-angle-right')[2].next
+      elem = doc.css('.fa-angle-right')[2]&.next
       symbol = begin
                  elem.text.strip
                rescue
                  ''
                end
       symbol = symbol.gsub('symbol = ', '')
+      symbol = '%invalid%' if doc.css('.fa-angle-right').blank? || doc.css('.alert-warning')[0]&.text&.include?('Sorry,')
       symbol
     end
   end
