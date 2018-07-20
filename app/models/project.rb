@@ -231,13 +231,17 @@ class Project < ApplicationRecord
     result
   end
 
-  before_save :populate_token_symbol, :enable_ethereum
+  before_validation :populate_token_symbol
+  before_save :enable_ethereum
 
   private
 
   def populate_token_symbol
-    if ethereum_contract_address.present? && token_symbol.blank?
-      self.token_symbol = Comakery::Ethereum.token_symbol(ethereum_contract_address)
+    if ethereum_contract_address.present? && project_token?
+      symbol = Comakery::Ethereum.token_symbol(ethereum_contract_address, self)
+      self.token_symbol = symbol if token_symbol.blank?
+      self.token_symbol = '' if token_symbol == '%invalid%'
+      ethereum_contract_address_exist_on_network?(symbol)
     end
   end
 
@@ -284,6 +288,12 @@ class Project < ApplicationRecord
   def maximum_tokens_unchanged
     if maximum_tokens_was > 0 && maximum_tokens_was != maximum_tokens
       errors[:maximum_tokens] << "can't be changed"
+    end
+  end
+
+  def ethereum_contract_address_exist_on_network?(symbol)
+    if (ethereum_contract_address_changed? || ethereum_network_changed?) && symbol == '%invalid%'
+      errors[:ethereum_contract_address] << 'should exist on the ethereum network'
     end
   end
 
