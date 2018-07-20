@@ -167,7 +167,7 @@ class Views::Pages::Landing < Views::Base
             }
             column('medium-7 no-h-pad', style: 'float: left') {
               column('medium-12 no-h-pad', style: 'height: 108px;') {
-                h1(style: 'line-height: 30px; margin-top: 20px;') {
+                h1(style: 'line-height: 36px; margin-top: 20px;') {
                   text 'Project'
                   br
                   text 'Visionaries'
@@ -198,7 +198,7 @@ class Views::Pages::Landing < Views::Base
     column('medium-12', style: 'color: #fff;margin-top: 10px') {
       text '.'
     }
-    div(class: 'large-10 medium-11 small-12 small-centered columns no-h-pad') {
+    div(class: 'large-10 medium-12 small-12 small-centered columns no-h-pad') {
       div(class: 'work-blockchain') {
         image_tag 'workonblockchain/header.jpg', style: 'width: 100%'
       }
@@ -206,7 +206,7 @@ class Views::Pages::Landing < Views::Base
       column('large-12 show-for-large blue-box') {
         column('large-6') {
           column('medium-8') {
-            h2(style: 'margin-top: 30px;') {
+            h2(style: 'margin-top: 6px;') {
               text 'Featured Project'
             }
           }
@@ -228,17 +228,18 @@ class Views::Pages::Landing < Views::Base
       }
 
       column('small-12 hide-for-large', style: 'margin-top: 10px;') {
-        column('small-12 no-h-pad', style: 'margin-bottom: 10px;') {
+        column('small-12 no-h-pad', style: 'margin-bottom: 10px; text-align: center;') {
+          column('small-6 text-right') {
+            h2(style: 'margin-top: 10px; font-size:22px;') {
+              text 'Featured Project'
+            }
+          }
+          column('small-6') {
+            image_tag 'workonblockchain/vevue-logo.png', style: 'width: 133px;'
+          }
           image_tag 'workonblockchain/vevue-picture.jpg'
         }
-        column('small-9') {
-          h2 {
-            text 'Featured Project'
-          }
-        }
-        column('small-3 text-right') {
-          image_tag 'workonblockchain/vevue-logo.png', style: 'width: 100%;'
-        }
+
         column('medium-12') {
           p {
             text 'Vevue is revolutionizing the way people interact with distribute, watch, and appreciate video content using blockchain technology.'
