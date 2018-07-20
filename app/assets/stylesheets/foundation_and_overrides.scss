@@ -111,6 +111,7 @@ html, body{
   background-image: asset-url('howitwork/dotted-lines.jpg');
   height: 400px;
   background-position-x: 15px;
+  background-position-x: 5px;
   background-repeat: no-repeat;
   background-size: 55px 400px;
 }
@@ -134,9 +135,10 @@ html, body{
 .hiw-discover-bg{
   background-image: asset-url('howitwork/purple1.jpg');
   background-repeat: no-repeat;
-  background-position: 75% 0px;
   background-size: 70px;
   padding-top: 15px;
+  padding-left: 75px;
+  height: 70px;
 }
 
 .home-signup-bg{
