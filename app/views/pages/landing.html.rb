@@ -44,7 +44,7 @@ class Views::Pages::Landing < Views::Base
   def whois
     div(class: 'large-10 medium-11 small-12 small-centered columns') {
       column('medium-12 no-h-pad whois-bg', style: 'text-align: center; margin-top: 20px;') {
-        image_tag 'whois/header-front.jpg', style: 'height: 20px; margin-top: 10px;'
+        image_tag 'whois/header-front.png', style: 'height: 20px; margin-top: 10px;'
       }
 
       column('medium-12') {
