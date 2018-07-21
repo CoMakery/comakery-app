@@ -265,7 +265,6 @@ Rails/SkipsModelValidations:
     - 'spec/features/confidentiality/project_confidentiality_spec.rb'
     - 'spec/features/payments/redeem_revenue_shares_for_payments_spec.rb'
     - 'spec/features/revenues/project_owner_can_record_revenues_spec.rb'
-    - 'spec/features/awards/award_history_spec.rb'
     - 'spec/jobs/ethereum_token_issue_job_spec.rb'
     - 'spec/lib/metrics_spec.rb'
 

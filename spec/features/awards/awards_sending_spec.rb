@@ -11,7 +11,10 @@ describe 'awarding users' do
   let!(:other_authentication) { create(:authentication, account: other_account) }
   let!(:different_team_authentication) { create(:authentication, account: different_team_account) }
 
-  let!(:project) { build(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, revenue_sharing_end_date: Time.zone.now + 3.days, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000).tap { |o| o.save(validate: false) } }
+  let!(:project) do
+    stub_token_symbol
+    create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, revenue_sharing_end_date: Time.zone.now + 3.days, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000)
+  end
   let!(:same_team_project) { create(:project, title: 'Same Team Project', account: account) }
   let!(:different_team_project) { create(:project, visibility: 'public_listed', title: 'Different Team Project', account: different_team_account) }
 
