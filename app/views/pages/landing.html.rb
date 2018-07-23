@@ -283,36 +283,67 @@ class Views::Pages::Landing < Views::Base
   end
 
   def signup_to_learn
-    div(class: 'large-10 medium-12 no-h-pad small-centered columns') {
+    div(class: 'large-10 medium-12 no-h-pad medium-centered columns') {
       column('medium-12 no-h-pad home-signup-bg') {
         column('medium-12') {
-          div(class: 'show-for-medium') {
+          div(class: 'show-for-large') {
             h1 'Sign Up To Learn More'
             p {
               text 'Be the first to hear about new projects and announcements'
             }
+            br
+            form_for Account.new do |f|
+              column('medium-12 no-h-pad') {
+                column('medium-5 small-9 no-h-pad') {
+                  f.text_field :email
+                }
+                column('medium-2 small-3') {
+                  button(type: 'submit', class: 'signup-btn') {
+                    text 'SIGN UP'
+                  }
+                }
+                column('medium-5') {}
+              }
+            end
           }
 
-          div(class: 'hide-for-medium', style: 'text-align: center') {
+          div(class: 'show-for-medium-only', style: 'text-align: center') {
             h1 'Sign Up To Learn More'
             p {
               text 'Be the first to hear about new projects and announcements'
             }
-          }
-          br
-          form_for Account.new do |f|
-            column('medium-12 no-h-pad') {
-              column('medium-5 small-9 no-h-pad') {
-                f.text_field :email
-              }
-              column('medium-2 small-3') {
+            br
+            form_for Account.new do |f|
+              column('medium-12 no-h-pad') {
+
+                f.text_field :email, style: "display: inline; width: 400px;"
+
                 button(type: 'submit', class: 'signup-btn') {
                   text 'SIGN UP'
                 }
+
               }
-              column('medium-5') {}
+            end
+          }
+
+          div(class: 'hide-for-medium', style: 'text-align: center') {
+            h1(style: 'font-size: 28px;'){ text 'Sign Up To Learn More' }
+            p {
+              text 'Be the first to hear about new projects and announcements'
             }
-          end
+            br
+            form_for Account.new do |f|
+              column('medium-12 no-h-pad') {
+
+                f.text_field :email, style: "display: inline; width: 200px"
+
+                button(type: 'submit', class: 'signup-btn') {
+                  text 'SIGN UP'
+                }
+
+              }
+            end
+          }
         }
       }
     }
