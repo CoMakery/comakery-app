@@ -107,7 +107,7 @@ module Views
             row {
               column('large-6 small-12') {
                 options = capture do
-                  options_for_select(ethereum_network_options, selected: f.object.ethereum_network)
+                  options_for_select(ethereum_network_options, selected: f.object.ethereum_network.presence || 'main')
                 end
                 label {
                   text 'Ethereum Network'
