@@ -36,7 +36,7 @@ class Views::Pages::Landing < Views::Base
   def whois
     div(class: 'large-10 medium-11 small-12 small-centered columns') {
       column('medium-12 no-h-pad whois-bg', style: 'text-align: center; margin-top: 20px;') {
-        image_tag 'whois/header-front.png', style: 'height: 20px; margin-top: 10px;'
+        image_tag 'whois/header-front.png', class: 'whois-header'
       }
 
       column('medium-12') {
@@ -225,7 +225,7 @@ class Views::Pages::Landing < Views::Base
   def howitwork
     div(class: 'small-12 small-centered columns') {
       column('medium-12', style: 'text-align: center; margin-top: 30px;margin-bottom: 40px;') {
-        image_tag 'howitwork/H1-text.png', style: 'height: 38px; margin-left: 15%'
+        image_tag 'howitwork/H1-text.png', class: 'hiw-header'
       }
       column('medium-12 show-for-large') {
         column('medium-2', style: 'color: #fff') { text '.' }
