@@ -16,7 +16,7 @@ class Views::Sessions::New < Views::Base
                 link_to 'Forgot?', new_password_reset_path
                 password_field_tag :password, nil, tabindex: 2
               }
-              submit_tag 'Sign In With Email', class: buttonish(:medium), style: 'margin: 0', tabindex: 3
+              submit_tag 'SIGN IN WITH EMAIL', class: buttonish(:medium), style: 'margin: 0', tabindex: 3
             }
           }
         end
