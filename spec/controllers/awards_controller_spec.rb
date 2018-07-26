@@ -193,7 +193,7 @@ describe AwardsController do
     it 'redirect_to login page' do
       get :confirm, params: { token: 1234 }
       expect(response).to redirect_to(new_account_path)
-      expect(session[:award_token]).to eq true
+      expect(session[:redeem]).to eq true
     end
 
     it 'redirect_to show error for invalid token' do
@@ -208,7 +208,7 @@ describe AwardsController do
       get :confirm, params: { token: 1234 }
       expect(response).to redirect_to(project_path(award.project))
       expect(award.reload.account_id).to eq receiver.account_id
-      expect(flash[:notice]).to eq "Congratulations, you just claimed your award! Your Ethereum address is #{receiver.account.ethereum_wallet} you can change your Ethereum address on your account page."
+      expect(flash[:notice].include?('Congratulations, you just claimed your award!')).to be_truthy
     end
 
     it 'add award to account. notice about update wallet address' do

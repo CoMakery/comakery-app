@@ -110,7 +110,7 @@ describe SessionsController do
     end
 
     it 'notice to redeem award' do
-      session[:award_token] = true
+      session[:redeem] = true
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice]).to eq 'Please click the link in your email to claim your contributor token award!'
       expect(response).to redirect_to my_project_path

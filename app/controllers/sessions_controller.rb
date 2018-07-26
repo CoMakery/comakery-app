@@ -51,9 +51,9 @@ class SessionsController < ApplicationController
   end
 
   def redirect_path
-    token = session[:award_token]
+    token = session[:redeem]
     if token
-      session[:award_token] = nil
+      session[:redeem] = nil
       flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
       my_project_path
     elsif @path
