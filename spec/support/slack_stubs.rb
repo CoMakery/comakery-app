@@ -77,4 +77,12 @@ module SlackStubs
     RestClient.stub(:get) { response }
     RestClient.stub(:post) { '{"id": "123", "name": "Comakery"}' }
   end
+
+  # rubocop:disable RSpec/MessageSpies
+  # rubocop:disable RSpec/AnyInstance
+  def stub_token_symbol
+    expect(Comakery::Ethereum).to receive(:open).and_return(File.new(Rails.root.join('spec', 'fixtures', 'dummy.html')))
+    allow_any_instance_of(NilClass).to receive(:next) { 'symbol = FCBB' }
+    allow_any_instance_of(String).to receive(:text) { 'symbol = FCBB' }
+  end
 end

@@ -27,4 +27,8 @@ class Team < ApplicationRecord
   def discord?
     provider == 'discord'
   end
+
+  def slack?
+    provider == 'slack'
+  end
 end

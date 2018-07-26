@@ -15,6 +15,7 @@ class Award < ApplicationRecord
   validates :quantity, :total_amount, :unit_amount, numericality: { greater_than: 0 }
 
   validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true } # see EthereumAddressable
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
 
   before_validation :ensure_proof_id_exists
 
@@ -51,6 +52,7 @@ class Award < ApplicationRecord
   end
 
   def send_award_notifications
+    return unless channel
     if team.discord?
       discord_client.send_message self
     else

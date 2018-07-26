@@ -28,6 +28,7 @@ class Views::Awards::Index < Views::Base
     render partial: 'shared/awards',
            locals: { project: project, awards: awards, show_recipient: true }
     pages
+    render 'sessions/metamask_modal' if current_account&.decorate&.can_send_awards?(project)
   end
 
   def pages

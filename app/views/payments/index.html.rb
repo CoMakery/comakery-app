@@ -7,7 +7,7 @@ class Views::Payments::Index < Views::Projects::Base
       if current_account_deco.present?
         full_row {
           column('small-12 content-box') {
-            if current_account_deco.same_team_project?(project) && current_user_has_awards?
+            if policy(project).team_member? && current_user_has_awards?
               form_for [project, payment], html: { class: 'conversational-form' } do |f|
                 row {
                   text 'Redeem '
@@ -90,7 +90,7 @@ class Views::Payments::Index < Views::Projects::Base
 
                   payment_td('total-value') { text payment.total_value_pretty }
 
-                  if !payment.reconciled? && current_user && project.account == current_user
+                  if !payment.reconciled? && policy(project).edit?
                     form_for([project, payment]) do |f|
                       payment_td('transaction-fee') { f.text_field :transaction_fee, value: payment.transaction_fee }
 
@@ -133,6 +133,6 @@ class Views::Payments::Index < Views::Projects::Base
   end
 
   def current_user_has_awards?
-    current_account_deco.account.total_awards_remaining(project) > 0
+    current_account_deco.total_awards_remaining(project) > 0
   end
 end

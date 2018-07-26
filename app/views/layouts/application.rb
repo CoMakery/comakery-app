@@ -1,8 +1,9 @@
-class Views::Layouts::Raw < Views::Base
+class Views::Layouts::Application < Views::Base
   def content
     doctype!
     html(lang: 'en') {
       head {
+        render partial: 'layouts/google_tag_manager.html'
         render partial: 'shared/unbounce.html'
         meta :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type'
         meta charset: 'utf-8'
@@ -18,7 +19,7 @@ class Views::Layouts::Raw < Views::Base
 
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
-        stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat'
+        stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat:400,700'
         stylesheet_link_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css'
         javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js'
         javascript_include_tag :modernizr
@@ -35,7 +36,7 @@ class Views::Layouts::Raw < Views::Base
             'data-airbrake-project-key' => ENV['AIRBRAKE_API_KEY'],
             'data-airbrake-environment-name' => ENV['APP_NAME']
         end
-
+        favicon_link_tag 'favicon/favicon.ico'
         favicon_link_tag 'favicon/apple-icon-57x57.png', rel: 'apple-touch-icon', sizes: '57x57', type: 'image/png'
         favicon_link_tag 'favicon/apple-icon-60x60.png', rel: 'apple-touch-icon', sizes: '60x60', type: 'image/png'
         favicon_link_tag 'favicon/apple-icon-72x72.png', rel: 'apple-touch-icon', sizes: '72x72', type: 'image/png'
@@ -54,28 +55,31 @@ class Views::Layouts::Raw < Views::Base
       }
 
       body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") {
-        div(class: 'contain-to-grid top-bar-container') {
-          div(class: 'top-bar large-10 medium-11 small-12 small-centered columns', 'data-topbar' => '', role: 'navigation') {
-            div(class: 'top-bar-title') {
-              span('data-hide-for' => 'medium', 'data-responsive-toggle' => 'responsive-menu') {
-                span(class: 'menu-icon dark', 'data-toggle' => '')
-              }
-              a(class: 'name', href: root_path) {
-                image_tag(I18n.t('logo_image'), class: 'logo')
-              }
-            }
-            render partial: 'shared/navigation'
-          }
+        render partial: 'layouts/google_tag_no_script.html'
+        div(class: 'contain-to-grid top-bar-container show-for-medium') {
+          link_to root_path do
+            image_tag 'comakery.png', class: 'logo'
+          end
+          render partial: 'layouts/navigation'
+        }
+
+        div(class: 'contain-to-grid top-bar-container hide-for-medium') {
+          link_to root_path do
+            image_tag 'comakery.png', style: 'height: 18px'
+          end
+          render partial: 'layouts/navigation'
         }
 
         div(class: 'app-container row') {
           div(class: 'large-10 medium-11 small-12 small-centered columns') {
             flash.each do |name, msg|
-              div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '') {
+              div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') {
                 button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') {
-                  span('aria-hidden' => true) { text raw '&times;' }
+                  span('aria-hidden' => true) { text 'x' }
                 }
-                p(msg, id: "flash-msg-#{name}")
+                span(id: "flash-msg-#{name}") {
+                  text ActiveSupport::SafeBuffer.new(msg)
+                }
               }
             end
           }
@@ -89,26 +93,46 @@ class Views::Layouts::Raw < Views::Base
           }
         }
 
-        full_row {
+        row(class: 'footer') {
           div(class: 'large-10 medium-11 small-12 small-centered columns') {
-            footer(class: 'fat-footer', style: 'text-align: center; padding-bottom: 20px;') {
-              link_to 'Home', root_path
-              text ' | '
-              link_to 'Contact Us', 'mailto:support@comakery.com'
-              text ' | '
-              link_to 'User Agreement', '/user-agreement'
-              text ' | '
-              link_to 'Prohibited Use', '/prohibited-use'
-              text ' | '
-              link_to 'E-Sign Disclosure', '/e-sign-disclosure'
-              text ' | '
-              link_to 'Privacy Policy', '/privacy-policy'
-              br
-              text 'Ⓒ Comakery 2018'
+            column('small-12') {
+              column('small-3') {
+                image_tag 'Logo_Gradient.png', size: '100x100'
+              }
+              column('small-3') {
+                strong {
+                  text 'ABOUT COMAKERY'
+                  br
+                  link_to 'Home', root_path
+                  br
+                  link_to 'Contact Us', 'mailto:support@comakery.com'
+                }
+              }
+              column('small-3') {
+                strong {
+                  text 'JOIN'
+                  br
+                  link_to 'Contributors', new_account_path
+                  br
+                  link_to 'Foundations', new_account_path
+                }
+              }
+              column('small-3') {
+                strong {
+                  text 'LEGAL'
+                  br
+                  link_to 'User Agreement', user_agreement_path
+                  br
+                  link_to 'Prohibited Use', prohibited_use_path
+                  br
+                  link_to 'E-Sign Disclosure', e_sign_disclosure_path
+                  br
+                  link_to 'Privacy Policy', '/privacy-policy'
+                }
+              }
             }
           }
         }
-
         javascript_tag("
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

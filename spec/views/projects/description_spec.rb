@@ -34,10 +34,6 @@ describe 'projects/_description.html.rb' do
     end
 
     specify do
-      expect(rendered).not_to have_content 'This project does not offer royalties'
-    end
-
-    specify do
       expect(rendered).not_to have_content('until')
     end
   end
@@ -61,11 +57,5 @@ describe 'projects/_description.html.rb' do
     end
 
     specify { expect(rendered).not_to have_selector('.revenue-percentage') }
-
-    specify { expect(rendered).to have_content 'This project does not offer royalties' }
-
-    specify do
-      expect(rendered).to have_content 'This project does not offer royalties'
-    end
   end
 end

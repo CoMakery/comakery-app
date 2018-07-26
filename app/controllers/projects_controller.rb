@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: :new
+  skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
   def landing
@@ -11,7 +12,7 @@ class ProjectsController < ApplicationController
     else
       @archived_projects = []
       @team_projects = []
-      @my_projects = Project.public_listed.featured.with_last_activity_at.limit(6).decorate
+      @my_projects = policy_scope(Project).public_listed.featured.with_last_activity_at.limit(6).decorate
     end
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
@@ -19,16 +20,12 @@ class ProjectsController < ApplicationController
   end
 
   def index
-    @projects = if current_account
-      current_account.accessable_projects.with_last_activity_at
-    else
-      Project.public_listed.with_last_activity_at
-    end
+    @projects = policy_scope(Project)
 
     if params[:query].present?
       @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
     end
-    @projects = @projects.decorate
+    @projects = @projects.order(updated_at: :desc).decorate
     @project_contributors = TopContributors.call(projects: @projects).contributors
   end
 
@@ -52,11 +49,13 @@ class ProjectsController < ApplicationController
     @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
+    authorize @project
   end
 
   def create
     @project = current_account.projects.build project_params
     @project.long_id = params[:long_id] || SecureRandom.hex(20)
+    authorize @project
     if @project.save
       flash[:notice] = 'Project created'
       redirect_to project_detail_path
@@ -69,11 +68,13 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.listed.includes(:award_types).find(params[:id]).decorate
+    authorize @project
     set_award
   end
 
   def unlisted
     @project = Project.includes(:award_types).find_by(long_id: params[:long_id])&.decorate
+    authorize @project
     if @project&.access_unlisted?(current_account)
       set_award
       render :show
@@ -85,19 +86,22 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = current_account.projects.includes(:award_types).find(params[:id])
+    @project = current_account.projects.includes(:award_types).find(params[:id]).decorate
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
+    authorize @project
     assign_slack_channels
   end
 
   def update
     @project = current_account.projects.includes(:award_types, :channels).find(params[:id])
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
+    authorize @project
     if @project.update project_params
       flash[:notice] = 'Project updated'
       respond_with @project, location: project_detail_path
     else
+      @project = @project.decorate
       flash[:error] = 'Project update failed, please correct the errors below'
       assign_slack_channels
       render :edit
@@ -107,6 +111,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
+    params[:project][:ethereum_network] = nil if params[:project][:ethereum_network].blank?
     result = params.require(:project).permit(
       :revenue_sharing_end_date,
       :contributor_agreement_url,
@@ -128,6 +133,7 @@ class ProjectsController < ApplicationController
       :license_finalized,
       :denomination,
       :visibility,
+      :ethereum_network,
       :ethereum_contract_address,
       :token_symbol,
       award_types_attributes: %i[
@@ -165,7 +171,8 @@ class ProjectsController < ApplicationController
   end
 
   def set_award
-    @award = Award.new
+    last_award = @project.awards.last
+    @award = Award.new channel: last_award&.channel, award_type: last_award&.award_type
     awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
     @awardable_types = awardable_types_result.awardable_types
     @can_award = awardable_types_result.can_award

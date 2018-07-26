@@ -53,6 +53,16 @@
 // CoMakery custom styles
 @import 'main';
 
+html, body{
+  min-height: 100%;
+  height: 100%
+}
+
+.app-container{
+  min-height: 100%;
+  padding-bottom: 180px;
+}
+
 .has-tip {
   border-bottom: none;
   cursor: default;
@@ -78,4 +88,157 @@
   position: absolute;
   display: none;
   margin-left: 70px;
+}
+
+.no-h-pad{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.pink-text{
+  color: #fb40e5 !important;
+}
+
+.whois-bg{
+  background-image: asset-url('whois/header-back.jpg');
+  height: 52px;
+  background-position-x: 80%;
+  background-repeat: no-repeat;
+  background-size: 800px 40px;
+}
+
+.hiw-bg{
+  background-image: asset-url('howitwork/dotted-lines.jpg');
+  height: 400px;
+  background-position-x: 15px;
+  background-position-x: 5px;
+  background-repeat: no-repeat;
+  background-size: 55px 400px;
+}
+
+.hiw-signup-bg{
+  background-image: asset-url('howitwork/blue1.jpg');
+  background-repeat: no-repeat;
+  background-position: 82% 0px;
+  background-size: 70px;
+  padding-top: 15px;
+}
+
+.hiw-earn-bg{
+  background-image: asset-url('howitwork/pink1.jpg');
+  background-repeat: no-repeat;
+  background-position: 70% 0px;
+  background-size: 70px;
+  padding-top: 15px;
+}
+
+.hiw-discover-bg{
+  background-image: asset-url('howitwork/purple1.jpg');
+  background-repeat: no-repeat;
+  background-size: 70px;
+  padding-top: 15px;
+  padding-left: 75px;
+  height: 70px;
+}
+
+.home-signup-bg{
+  background-image: asset-url('signup.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 300px;
+  color: #fff;
+  padding: 70px 50px;
+  margin-top: 40px;
+  .signup-btn{
+    background-color: #3a3a3a;
+    padding: 11px 20px;
+    font-size: 17px;
+    width: 110px;
+    height: 40px;
+  }
+}
+
+.main{
+  padding-top: 50px;
+}
+
+.whois-header{
+  height: 30px;
+  margin-top: 5px;
+}
+
+.hiw-header{
+  height: 58px;
+  margin-left: 15%;
+}
+
+@media (max-width: 900px) {
+  .home-signup-bg{
+    background-image: asset-url('mobile-sign-up.jpg');
+    background-size: 100% 300px;
+  }
+
+  .whois-header{
+    max-height: 20px;
+    max-width: 100%;
+  }
+
+  .hiw-header{
+    height: 38px;
+  }
+}
+
+@media(max-width: 700px){
+  .menu > li {
+    padding: 0 0.3rem;
+    font-size: 10px;
+  }
+}
+
+.footer{
+  clear: both;
+  background-color: #eee;
+  padding: 30px 0px;
+  min-width: 100%;
+  position: relative;
+  bottom: 0;
+  margin-top: -160px;
+  a{
+    color: #3a3a3a;
+    font-weight: normal;
+  }
+}
+
+.pages-landing{
+  font-size: 14px;
+  h1{
+    font-size: 34px;
+  }
+  h2{
+    font-size: 28px;
+  }
+  .landing-header{
+    text-align: center;
+    width: 100%;
+    position: absolute;
+    color: #fff;
+
+    .header-icon{
+      padding-top: 20px;
+    }
+    h1{
+      font-size: 32px;
+    }
+    h2{
+      font-size: 18px;
+    }
+  }
+}
+
+.blue-box{
+  border: 2px solid #5037f7;
+  border-top: none;
+  padding-top: 10px;
+  padding-bottom: 40px;
+  margin-top: 10px
 }

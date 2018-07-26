@@ -18,28 +18,42 @@ class Views::Projects::AwardSend < Views::Base
               column('small-12') {
                 label {
                   text 'Communication Channel'
-                  options = []
-                  if project.channels.any?
-                    options = capture do
-                      options_from_collection_for_select(project.channels, :id, :name_with_channel)
-                    end
+                  project_channels = [Channel.new(name: 'Email')]
+                  project_channels += project.channels if project.channels.any?
+                  options = capture do
+                    options_from_collection_for_select(project_channels, :id, :name_with_provider, award.channel_id)
                   end
-                  f.select :channel_id, options, { prompt: 'Email' }, class: 'fetch-channel-users'
+                  f.select :channel_id, options, {}, class: 'fetch-channel-users'
                 }
               }
             }
 
             row(class: 'award-uid') {
               column('small-12') {
-                label(class: 'uid-select hide') {
-                  text 'User'
-                  f.select :uid, []
-                }
+                if award.channel && award.channel.members(current_account).any?
+                  label(class: 'uid-select') {
+                    options = capture do
+                      options_for_select(award.channel.members(current_account), award.uid)
+                    end
+                    text 'User'
+                    f.select :uid, options, include_blank: true, class: 'member-select'
+                  }
 
-                label(class: 'uid-email') {
-                  text 'Email Address'
-                  f.text_field :uid, class: 'award-email'
-                }
+                  label(class: 'uid-email hide') {
+                    text 'Email Address'
+                    f.text_field :uid, class: 'award-email', value: award.email, name: nil
+                  }
+                else
+                  label(class: 'uid-select hide') {
+                    text 'User'
+                    f.select :uid, []
+                  }
+
+                  label(class: 'uid-email') {
+                    text 'Email Address'
+                    f.text_field :uid, class: 'award-email', value: award.email
+                  }
+                end
               }
             }
 
@@ -50,7 +64,7 @@ class Views::Projects::AwardSend < Views::Base
                   options = []
                   if awardable_types.any?
                     options = capture do
-                      options_from_collection_for_select(awardable_types.order('amount asc').decorate, :id, :name_with_amount)
+                      options_from_collection_for_select(awardable_types.order('amount asc').decorate, :id, :name_with_amount, award.award_type_id)
                     end
                   end
                   f.select :award_type_id, options, {}
@@ -59,7 +73,7 @@ class Views::Projects::AwardSend < Views::Base
             }
 
             row {
-              column('small-2') {
+              column('small-3') {
                 label {
                   text 'Quantity'
                   f.text_field(:quantity, type: :text, default: 1, class: 'financial')

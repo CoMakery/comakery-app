@@ -1,5 +1,6 @@
 class Views::Shared::AwardProgressBar < Views::Base
-  needs :project, :current_account_deco
+  include Pundit
+  needs :project
 
   def content
     div(class: 'meter-box') {

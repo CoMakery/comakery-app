@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'awarding up to limit of maximum awardable tokens for a project' do
   let!(:team) { create(:team) }
   let!(:current_auth) { create(:sb_authentication) }
-  let!(:awardee_auth) { create(:sb_authentication) }
+  let!(:awardee_auth) { create(:sb_authentication, account: create(:account, ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
   let!(:project) { create(:sb_project, account: current_auth.account, maximum_tokens: 3, maximum_royalties_per_month: 2) }
   let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 1, maximum_royalties_per_month: 1) }
   let!(:award_type) { create(:award_type, project: project, amount: 1) }
@@ -22,14 +22,7 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
 
   it 'limit to send award by month' do
     visit project_path(project)
-
-    send_award
-
-    expect(page).to have_content "Successfully sent award to #{Award.last.decorate.recipient_display_name}"
-
-    send_award
-
-    expect(page).to have_content "Successfully sent award to #{Award.last.decorate.recipient_display_name}"
+    fill_in 'Quantity', with: 2.5
 
     send_award
     expect(page).to have_content "Sorry, you can't send more awards this month than the project's maximum number of allowable tokens per month"
@@ -38,8 +31,7 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
   it 'limit send award with project maximum token' do
     visit project_path(project1)
 
-    send_award(channel1)
-    expect(page).to have_content "Successfully sent award to #{Award.last.decorate.recipient_display_name}"
+    fill_in 'Quantity', with: 3.5
 
     send_award(channel1)
     expect(page).to have_content "Sorry, you can't send more awards than the project's maximum number of allowable tokens"

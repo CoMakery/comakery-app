@@ -20,12 +20,6 @@ class Views::Shared::AwardFormTerms < Views::Base
         }
       end
     }
-
-    if project.project_token?
-      p {
-        text 'Contributors are awarded Project Tokens for contributions. Contributors do not receive Contributor Royalties or Revenue Sharing awards. The value of Project Tokens is not defined by the CoMakery Contributor License, CoMakery Inc, or the CoMakery platform.'
-      }
-    end
   end
 
   def term(term_name, trailing_text = '')

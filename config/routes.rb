@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   resources :password_resets, only: [:new, :create, :edit, :update]
 
-  get '/account' => "accounts#show"
+  get '/account' => "accounts#show", as: :show_account
   get "accounts/confirm/:token" => "accounts#confirm", as: :confirm_email
   get "accounts/confirm-authentication/:token" => "accounts#confirm_authentication", as: :confirm_authentication
   get "/auth/slack/callback" => "sessions#create"
@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   get '/logout', to: "sessions#destroy"
 
-  root 'projects#landing'
+  root 'pages#landing'
 
   get '/user-agreement' => "pages#user_agreement"
   get '/e-sign-disclosure' => "pages#e_sign_disclosure"
@@ -38,8 +38,11 @@ Rails.application.routes.draw do
 
   post '/slack/command' => "slack#command"
 
+  get '/projects/mine' => "projects#landing", as: :mine_project
   resources :projects do
-    resources :awards, only: [:index, :create]
+    resources :awards, only: [:index, :create] do
+      post :update_transaction_address, on: :member
+    end
     resources :contributors, only: [:index]
     resources :revenues, only: [:index, :create]
     resources :payments, only: [:index, :create, :update]
@@ -47,6 +50,7 @@ Rails.application.routes.draw do
       get :landing
     end
   end
+
   get '/p/:long_id' => "projects#unlisted", as: :unlisted_project
   get "awards/confirm/:token" => "awards#confirm", as: :confirm_award
 

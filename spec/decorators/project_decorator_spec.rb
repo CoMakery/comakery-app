@@ -99,7 +99,7 @@ describe ProjectDecorator do
 
   describe 'with ethereum contract' do
     let(:project) do
-      create(:project,
+      build(:project,
         ethereum_contract_address: '0xa234567890b234567890a234567890b234567890').decorate
     end
 

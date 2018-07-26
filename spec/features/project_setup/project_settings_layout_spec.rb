@@ -55,7 +55,5 @@ def click_on_left_menu(link_text, anchor)
   expect(page.evaluate_script("$('.content-box[data-id=#{anchor}]').visible()")).to be false
   click_link link_text
   sleep 2
-  expect(page).to have_link(link_text, class: 'active-menu')
   expect(page.evaluate_script("$('.content-box[data-id=#{anchor}]').visible()")).to be true
-  expect(page.evaluate_script("$('.menu .active-menu').length")).to eq 1
 end

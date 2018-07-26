@@ -5,7 +5,7 @@ describe AwardsController do
   let!(:discord_team) { create :team, provider: 'discord' }
   let!(:issuer) { create(:authentication) }
   let!(:issuer_discord) { create(:authentication, account: issuer.account, provider: 'discord') }
-  let!(:receiver) { create(:authentication) }
+  let!(:receiver) { create(:authentication, account: create(:account, ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
   let!(:receiver_discord) { create(:authentication, account: receiver.account, provider: 'discord') }
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
@@ -43,7 +43,7 @@ describe AwardsController do
         let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
 
         it 'shows awards for public projects' do
-          get :index, params: { project_id: public_project.to_param }
+          get :index, params: { project_id: public_project.id }
 
           expect(response.status).to eq(200)
           expect(assigns[:project]).to eq(public_project)
@@ -61,6 +61,26 @@ describe AwardsController do
           expect(response.status).to eq(302)
           expect(response).to redirect_to(root_path)
         end
+      end
+    end
+
+    describe 'checks policy' do
+      before do
+        allow(controller).to receive(:policy_scope).and_call_original
+        allow(controller).to receive(:authorize).and_call_original
+      end
+
+      specify do
+        login issuer.account
+
+        get :index, params: { project_id: project.id }
+        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
+      end
+
+      specify do
+        project.public_listed!
+        get :index, params: { project_id: project.id }
+        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
       end
     end
   end
@@ -99,7 +119,6 @@ describe AwardsController do
         expect(award.account).to eq(receiver.account)
         expect(award.description).to eq('This rocks!!11')
         expect(award.quantity).to eq(1.5)
-        expect(EthereumTokenIssueJob.jobs.first['args']).to eq([award.id])
       end
 
       it 'records a discord award being created' do
@@ -147,12 +166,12 @@ describe AwardsController do
               channel_id: project.channels.first.id
             }
           }
-          expect(response.status).to eq(302)
+          expect(response.status).to eq(200)
         end.not_to change { project.awards.count }
         expect(flash[:error]).to eq('Failed sending award - Not authorized')
       end
 
-      it 'redirects back to projects show if error saving' do
+      it 'renders back to projects show if error saving' do
         expect do
           post :create, params: {
             project_id: project.to_param, award: {
@@ -160,10 +179,9 @@ describe AwardsController do
               description: 'This rocks!!11'
             }
           }
-          expect(response.status).to eq(302)
+          expect(response.status).to eq(200)
         end.not_to change { project.awards.count }
 
-        expect(response).to redirect_to(project_path(project))
         expect(flash[:error]).to eq('Failed sending award - missing award type')
       end
     end
@@ -185,11 +203,42 @@ describe AwardsController do
       expect(flash[:error]).to eq 'Invalid award token!'
     end
 
-    it 'add awardto account' do
+    it 'add award to account' do
       login receiver.account
       get :confirm, params: { token: 1234 }
       expect(response).to redirect_to(project_path(award.project))
       expect(award.reload.account_id).to eq receiver.account_id
+      expect(flash[:notice]).to eq "Congratulations, you just claimed your award! Your Ethereum address is #{receiver.account.ethereum_wallet} you can change your Ethereum address on your account page."
+    end
+
+    it 'add award to account. notice about update wallet address' do
+      account = receiver.account
+      account.update ethereum_wallet: nil
+      login receiver.account
+      get :confirm, params: { token: 1234 }
+      expect(response).to redirect_to(project_path(award.project))
+      expect(award.reload.account_id).to eq receiver.account_id
+      expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress')).to be_truthy
+    end
+  end
+
+  describe '#update_transaction_address' do
+    let(:transaction_address) { '0xdb6f4aad1b0de83284855aafafc1b0a4961f4864b8a627b5e2009f5a6b2346cd' }
+    let!(:award) { create(:award, award_type: create(:award_type, project: project), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '1234') }
+
+    it 'success' do
+      login issuer.account
+      post :update_transaction_address, format: 'js', params: {
+        project_id: project.to_param, id: award.id, tx: transaction_address
+      }
+      expect(award.reload.ethereum_transaction_address).to eq transaction_address
+    end
+
+    it 'failure' do
+      post :update_transaction_address, format: 'js', params: {
+        project_id: project.to_param, id: award.id, tx: transaction_address
+      }
+      expect(award.reload.ethereum_transaction_address).to be_nil
     end
   end
 end

@@ -4,7 +4,7 @@ class Views::Accounts::New < Views::Base
   def content
     row {
       column(%i[small-12 large-6], class: 'large-centered') {
-        h1('Signup')
+        h1('Sign Up With Email')
 
         form_for account do |f|
           row {
@@ -73,11 +73,30 @@ class Views::Accounts::New < Views::Base
             }
 
             column('large-12') {
-              f.submit class: buttonish(:medium)
+              f.submit 'Create Your Account', class: buttonish(:medium), style: 'margin: 0'
             }
           }
         end
+        column('large-12 no-h-pad', style: 'margin-top: 30px') {
+          h3 'Or Sign Up With'
+        }
+        column('large-12 no-h-pad', style: 'margin-top: 10px') {
+          link_to 'javascript:void(0)', class: 'auth-button metamask signin-with-metamask' do
+            span 'MetaMask'
+          end
+        }
+        column('large-12 no-h-pad', style: 'margin-top: 10px') {
+          link_to '/auth/slack', class: 'auth-button slack' do
+            text 'Slack'
+          end
+        }
+        column('large-12 no-h-pad', style: 'margin-top: 10px') {
+          link_to login_discord_path, class: 'auth-button discord' do
+            text 'Discord'
+          end
+        }
       }
     }
+    render 'sessions/metamask_modal'
   end
 end

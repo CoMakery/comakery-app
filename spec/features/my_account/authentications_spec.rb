@@ -22,11 +22,11 @@ feature 'my account' do
 
   scenario 'viewing' do
     visit root_path
-    expect(page).not_to have_link 'Account'
+    expect(page).not_to have_link 'ACCOUNT'
     login(auth.account)
 
     visit root_path
-    first('.menu').click_link 'Account'
+    first('.menu').click_link 'ACCOUNT'
 
     expect(page).to have_content 'Swarmbot'
     expect(page).to have_content '1,337'
@@ -39,7 +39,7 @@ feature 'my account' do
   scenario 'editing, and adding an ethereum address' do
     login(auth.account)
     visit root_path
-    first('.menu').click_link 'Account'
+    first('.menu').click_link 'ACCOUNT'
 
     within('.ethereum_wallet') do
       click_link 'Edit'
@@ -59,13 +59,13 @@ feature 'my account' do
     end
 
     expect(page).to have_content 'Your account details have been updated.'
-    expect(page).to have_content "0x#{'a' * 40}"
+    expect(page.find('#ethereum_wallet').value).to eq "0x#{'a' * 40}"
   end
 
   scenario 'adding an ethereum address sends ethereum tokens, for awards' do
     login(auth.account)
     visit root_path
-    first('.menu').click_link 'Account'
+    first('.menu').click_link 'ACCOUNT'
 
     within('.ethereum_wallet') do
       click_link 'Edit'
@@ -73,8 +73,7 @@ feature 'my account' do
       click_on 'Save'
     end
 
-    expect(EthereumTokenIssueJob.jobs.map { |job| job['args'] }.flatten).to \
-      match_array([award2.id, award1.id])
+    expect(EthereumTokenIssueJob.jobs.length).to eq(0)
   end
 
   scenario 'show account image' do
@@ -83,7 +82,7 @@ feature 'my account' do
     login(account)
     visit root_path
     expect(page).to have_css("img[src*='avatar.png']")
-    first('.menu').click_link 'Account'
+    first('.menu').click_link 'ACCOUNT'
     expect(page).to have_css("img[src*='avatar.png']")
   end
 

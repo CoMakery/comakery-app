@@ -1,5 +1,5 @@
 class Channel < ApplicationRecord
-  belongs_to :project
+  belongs_to :project, touch: true
   belongs_to :team
 
   validates :channel_id, :team, :project, presence: true
@@ -7,7 +7,8 @@ class Channel < ApplicationRecord
   attr_accessor :channels
   delegate :provider, to: :team, allow_nil: true
 
-  def name_with_channel
+  def name_with_provider
+    return name unless team
     "[#{provider}] #{team.name} ##{name}"
   end
 

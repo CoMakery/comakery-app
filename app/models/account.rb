@@ -28,11 +28,56 @@ class Account < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validate :validate_age, on: :create
 
-  def self.order_by_award(_project_id)
-    select('accounts.*, (select sum(total_amount) from awards where account_id = accounts.id) as total').distinct.order('total desc')
-  end
+  class << self
+    def order_by_award(_project_id)
+      select('accounts.*, (select sum(total_amount) from awards where account_id = accounts.id) as total').distinct.order('total desc')
+    end
 
+    def find_or_create_for_authentication(uid, channel)
+      authentication = Authentication.find_by(uid: uid)
+      if authentication
+        account = authentication.account
+      elsif channel
+        account = find_or_create_by(email: fetch_email(uid, channel))
+        account.nickname = fetch_nickname(uid, channel)
+        errors = if account.save
+          account.create_authentication_and_build_team(uid, channel)
+        else
+          account.errors.full_messages.join(', ')
+        end
+      end
+      [account, errors]
+    end
+
+    def fetch_email(uid, channel)
+      email = "#{uid}@discordapp.com"
+      email = slack_info(uid, channel).user.profile.email || "#{uid}@slackbot.com" if channel.team.slack?
+      email
+    end
+
+    def fetch_nickname(uid, channel)
+      channel.team.discord? ? discord_info(uid)['username'] : slack_info(uid, channel).user.name
+    end
+
+    def slack_info(uid, channel)
+      @slack_info ||= Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
+    end
+
+    def discord_info(uid)
+      @discord_info = Comakery::Discord.new.user_info(uid)
+    end
+  end
   before_save :downcase_email
+
+  def create_authentication_and_build_team(uid, channel)
+    auth = authentications.create(provider: channel.team.provider, uid: uid)
+    if auth.valid?
+      channel.team.build_authentication_team auth
+    else
+      errors = auth.errors.full_messages.join(', ')
+    end
+    errors
+  end
 
   def downcase_email
     self.email = email.try(:downcase)
@@ -105,11 +150,11 @@ class Account < ApplicationRecord
 
   def valid_and_underage?
     self.name_required = true
-    valid? && age < 16
+    valid? && age < 18
   end
 
   def same_team_project?(project)
-    team_projects.include?(project) || award_projects.include?(project)
+    team_projects.include?(project)
   end
 
   def same_team_or_owned_project?(project)
@@ -147,7 +192,7 @@ class Account < ApplicationRecord
   private
 
   def validate_age
-    errors.add(:date_of_birth, 'You must be at least 16 years old to use CoMakery.') if age && age < 16
+    errors.add(:date_of_birth, 'You must be at least 18 years old to use CoMakery.') if age && age < 18
   end
 
   def calculate_age

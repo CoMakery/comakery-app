@@ -22,13 +22,16 @@ gem 'kaminari'
 gem 'modernizr-rails'
 gem 'momentjs-rails'
 gem 'nilify_blanks'
+gem 'nokogiri'
 gem 'omniauth'
 gem 'omniauth-discord', git: 'https://github.com/ducle/omniauth-discord.git'
 gem 'omniauth-slack'
 gem 'pg'
 gem 'premailer-rails'
 gem 'puma'
+gem 'pundit'
 gem 'rails', '~>5.1.4'
+gem 'rails-html-sanitizer', '~> 1.0.4'
 gem 'rails_12factor', group: :production
 gem 'redcarpet'
 gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile.git' # remove git path when version > refile gem > 0.6.2 is released (0.6.2 requires old conflicting rack)
@@ -41,7 +44,7 @@ gem 'sdoc', group: :doc
 gem 'sendgrid-ruby'
 gem 'sidekiq'
 gem 'sidekiq-failures'
-gem 'sinatra', require: nil # for sidekiq admin interface
+gem 'sinatra', '~> 2.0.2', require: nil # for sidekiq admin interface
 gem 'slack-ruby-client'
 gem 'uglifier'
 gem 'underscore-rails'

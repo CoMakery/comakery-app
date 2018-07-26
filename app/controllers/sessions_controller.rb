@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   skip_before_action :require_login, :check_age
+  skip_after_action :verify_authorized, :verify_policy_scoped
 
   def oauth_failure
     flash[:error] = "Sorry, logging in failed... please try again, or email us at #{I18n.t('tech_support_email')}"
@@ -15,17 +16,23 @@ class SessionsController < ApplicationController
       flash[:error] = 'Please check your email for confirmation instruction'
     else
       flash[:error] = 'Failed authentication - Auth hash is missing one or more required values'
+      @path = root_path
     end
     redirect_to redirect_path
   end
 
   def sign_in
     @account = Account.find_by email: params[:email]
-    if @account && @account.authenticate(params[:password])
-      session[:account_id] = @account.id
-      flash[:notice] = 'Successful sign in'
-      redirect_to redirect_path
-    else
+    begin
+      if @account && @account.authenticate(params[:password])
+        session[:account_id] = @account.id
+        flash[:notice] = 'Successful sign in'
+        redirect_to redirect_path
+      else
+        flash[:error] = 'Invalid email or password'
+        redirect_to new_session_path
+      end
+    rescue StandardError
       flash[:error] = 'Invalid email or password'
       redirect_to new_session_path
     end
@@ -47,8 +54,10 @@ class SessionsController < ApplicationController
     if token
       session[:award_token] = nil
       confirm_award_path(token)
+    elsif @path
+      @path
     else
-      root_path
+      mine_project_path
     end
   end
 end

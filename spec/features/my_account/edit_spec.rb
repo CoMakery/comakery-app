@@ -6,7 +6,7 @@ describe 'my account' do
   scenario 'edit account infomation' do
     login account
     visit root_path
-    first('.menu').click_link 'Account'
+    first('.menu').click_link 'ACCOUNT'
     expect(page).to have_content 'Account Details'
     click_link 'Edit'
     fill_in 'account[first_name]', with: ''

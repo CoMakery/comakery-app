@@ -5,13 +5,13 @@ class Views::Projects::Show < Views::Projects::Base
     render partial: 'shared/project_header'
 
     div(class: 'project-head content') {
-      render partial: 'description'
+      render partial: 'projects/description'
     }
 
     div(class: 'project-body content-box') {
       row {
         column('large-6 medium-12', id: 'awards') {
-          render partial: 'award_send'
+          render partial: 'projects/award_send'
         }
         column('large-6 medium-12') {
           row(class: 'project-terms') {

@@ -45,6 +45,12 @@ class Project < ApplicationRecord
     ETH: 2
   }
   enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
+  enum ethereum_network: {
+    main:    'Main Ethereum Network',
+    ropsten: 'Ropsten Test Network',
+    kovan:   'Kovan Test Network',
+    rinkeby: 'Rinkeby Test Network'
+  }
 
   validates :description, :account, :title, :legal_project_owner,
     :denomination, presence: true
@@ -70,7 +76,7 @@ class Project < ApplicationRecord
   scope :listed, -> { where 'projects.visibility not in(2,3)' }
   scope :visible, -> { where 'projects.visibility not in(2,3,4)' }
   scope :unarchived, -> { where.not visibility: 4 }
-
+  scope :publics, -> { where 'projects.visibility in(1,3)' }
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
       .joins('left join award_types on projects.id = award_types.project_id')
@@ -231,7 +237,23 @@ class Project < ApplicationRecord
     result
   end
 
+  before_validation :populate_token_symbol
+  before_save :enable_ethereum
+
   private
+
+  def populate_token_symbol
+    if ethereum_contract_address.present? && project_token?
+      symbol = Comakery::Ethereum.token_symbol(ethereum_contract_address, self)
+      self.token_symbol = symbol if token_symbol.blank?
+      self.token_symbol = '' if token_symbol == '%invalid%'
+      ethereum_contract_address_exist_on_network?(symbol)
+    end
+  end
+
+  def enable_ethereum
+    self.ethereum_enabled = ethereum_contract_address.present? unless ethereum_enabled
+  end
 
   def valid_tracker_url
     validate_url(:tracker)
@@ -272,6 +294,12 @@ class Project < ApplicationRecord
   def maximum_tokens_unchanged
     if maximum_tokens_was > 0 && maximum_tokens_was != maximum_tokens
       errors[:maximum_tokens] << "can't be changed"
+    end
+  end
+
+  def ethereum_contract_address_exist_on_network?(symbol)
+    if (ethereum_contract_address_changed? || ethereum_network_changed?) && symbol == '%invalid%'
+      errors[:ethereum_contract_address] << 'should exist on the ethereum network'
     end
   end
 

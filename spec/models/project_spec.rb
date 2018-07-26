@@ -14,6 +14,7 @@ describe Project do
     it 'rails error if not found Ethereum address' do
       stub_const('Comakery::Ethereum::ADDRESS', {})
       expect(Comakery::Ethereum::ADDRESS['account']).to be_nil
+      stub_token_symbol
       expect { described_class.create(payment_type: 'project_token', ethereum_contract_address: '111') }.to raise_error(ArgumentError)
     end
 
@@ -200,23 +201,31 @@ describe Project do
       let(:address) { '0x' + 'a' * 40 }
 
       it 'validates with a valid ethereum address' do
+        stub_token_symbol
         expect(build(:project, ethereum_contract_address: nil)).to be_valid
         expect(build(:project, ethereum_contract_address: "0x#{'a' * 40}")).to be_valid
+        stub_token_symbol
         expect(build(:project, ethereum_contract_address: "0x#{'A' * 40}")).to be_valid
       end
 
       it 'does not validate with an invalid ethereum address' do
         expected_error_message = "Ethereum contract address should start with '0x', followed by a 40 character ethereum address"
+        stub_token_symbol
         expect(build(:project, ethereum_contract_address: 'foo').tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        stub_token_symbol
         expect(build(:project, ethereum_contract_address: '0x').tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        stub_token_symbol
         expect(build(:project, ethereum_contract_address: "0x#{'a' * 39}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        stub_token_symbol
         expect(build(:project, ethereum_contract_address: "0x#{'a' * 41}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        stub_token_symbol
         expect(build(:project, ethereum_contract_address: "0x#{'g' * 40}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
       end
 
       it { expect(project.ethereum_contract_address).to eq(nil) }
 
       it 'can be set' do
+        stub_token_symbol
         project.ethereum_contract_address = address
         project.save!
         project.reload
@@ -224,6 +233,7 @@ describe Project do
       end
 
       it 'once set cannot be set unset' do
+        stub_token_symbol
         project.ethereum_contract_address = address
         project.save!
         project.ethereum_contract_address = nil
@@ -233,9 +243,11 @@ describe Project do
       end
 
       it 'once set it cannot be set to another value' do
+        stub_token_symbol
         project.ethereum_contract_address = address
         project.save!
         project.ethereum_contract_address = '0x' + 'b' * 40
+        stub_token_symbol
         expect(project).not_to be_valid
         expect(project.errors.full_messages.to_sentence).to match \
           /Ethereum contract address cannot be changed after it has been set/
@@ -372,7 +384,9 @@ describe Project do
     end
 
     it 'is false if an existing project with an account is transitioned from ethereum_enabled = false to true' do
+      stub_token_symbol
       project = create(:project, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' * 40)
+      stub_token_symbol
       project.update!(ethereum_enabled: true)
       expect(project.transitioned_to_ethereum_enabled?).to eq(false)
     end
@@ -935,5 +949,20 @@ describe Project do
     expect(project.share_revenue?).to eq true
     expect(project.show_revenue_info?(account)).to eq true
     expect(project.show_revenue_info?(other_account)).to eq false
+  end
+
+  it 'populate_token_symbol' do
+    contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
+    stub_token_symbol
+    project = create :project, token_symbol: nil, ethereum_contract_address: contract_address
+    expect project.token_symbol = 'FCBB'
+  end
+
+  it 'can manual input token_symbol' do
+    contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
+    # stub_token_symbol(contract_address, 'FCBB')
+    stub_token_symbol
+    project = create :project, token_symbol: 'AAA', ethereum_contract_address: contract_address
+    expect project.token_symbol = 'AAA'
   end
 end

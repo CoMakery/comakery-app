@@ -16,7 +16,7 @@ describe 'logging in and out' do
 
     visit root_path
 
-    expect(page).to have_content 'Sign in'
+    expect(page).to have_content 'SIGN IN'
 
     page.set_rack_session(account_id: account.id)
 
@@ -24,12 +24,12 @@ describe 'logging in and out' do
 
     expect(page).to have_content 'This is a project'
 
-    first('.menu').click_link 'Sign out'
+    first('.menu').click_link 'SIGN OUT'
 
-    expect(page).to have_content 'Sign in'
+    expect(page).to have_content 'SIGN IN'
 
     visit '/logout'
 
-    expect(page).to have_content 'Sign in'
+    expect(page).to have_content 'SIGN IN'
   end
 end

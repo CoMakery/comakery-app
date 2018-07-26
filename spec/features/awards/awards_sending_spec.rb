@@ -11,7 +11,10 @@ describe 'awarding users' do
   let!(:other_authentication) { create(:authentication, account: other_account) }
   let!(:different_team_authentication) { create(:authentication, account: different_team_account) }
 
-  let!(:project) { create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, revenue_sharing_end_date: Time.zone.now + 3.days) }
+  let!(:project) do
+    stub_token_symbol
+    create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, revenue_sharing_end_date: Time.zone.now + 3.days, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000)
+  end
   let!(:same_team_project) { create(:project, title: 'Same Team Project', account: account) }
   let!(:different_team_project) { create(:project, visibility: 'public_listed', title: 'Different Team Project', account: different_team_account) }
 
@@ -67,7 +70,7 @@ describe 'awarding users' do
 
       click_button 'Send'
 
-      expect(page).to have_content 'Successfully sent award to bobjohnson'
+      expect(page).to have_content 'When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page'
 
       bobjohnsons_auth = Authentication.find_by(uid: 'U99M9QYFQ')
       expect(bobjohnsons_auth).not_to be_nil
@@ -81,9 +84,9 @@ describe 'awarding users' do
       expect(page).to have_content 'bobjohnson'
 
       click_link('Overview')
-
-      click_link 'Contributors'
-
+      within('.project-nav') do
+        click_link 'Contributors'
+      end
       within('.contributors') do
         expect(page.find('.contributor')).to have_content 'bobjohnson'
         expect(page.find('.award-holdings')).to have_content '1,579'
@@ -94,7 +97,7 @@ describe 'awarding users' do
   it 'for a user with an account but no ethereum address' do
     login(other_account)
 
-    visit root_path
+    visit projects_path
 
     within('.project', text: 'Project that needs awards') do
       click_link 'Project that needs awards'
@@ -131,7 +134,7 @@ describe 'awarding users' do
 
     click_button 'Send'
 
-    expect(page).to have_content 'Successfully sent award to tester@...'
+    expect(page).to have_content 'When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page'
 
     click_link 'Awards'
 
@@ -165,7 +168,52 @@ describe 'awarding users' do
     click_button 'Send'
 
     expect(page).to have_content 'Successfully sent award to bobjohnson'
-    expect(EthereumTokenIssueJob.jobs.length).to eq(1)
-    expect(EthereumTokenIssueJob.jobs.first['args']).to eq([Award.last.id])
+    expect(EthereumTokenIssueJob.jobs.length).to eq(0)
+  end
+
+  describe 'validates' do
+    let!(:account) { create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40) }
+
+    before do
+      login(account)
+    end
+
+    it 'maintain last award info for new award' do
+      expect_any_instance_of(Award).to receive(:send_award_notifications)
+      visit project_path(project)
+      select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
+      select 'Large', from: 'Award Type'
+      fill_in 'Email Address', with: 'U99M9QYFQ'
+      click_button 'Send'
+
+      expect(page).to have_content 'Successfully sent award to bobjohnson'
+      expect(find_field('Communication Channel').value).to eq channel.id.to_s
+      expect(find_field('Award Type').value).to eq large_award_type.id.to_s
+      expect(find_field('Quantity').value).to eq '1.0'
+    end
+
+    it 'awarding accept commas for quantity' do
+      expect_any_instance_of(Award).to receive(:send_award_notifications)
+      visit project_path(project)
+      expect(page).not_to have_content 'Last Award Information'
+      select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
+      fill_in 'Email Address', with: 'U99M9QYFQ'
+      fill_in 'Quantity', with: '1,00.1'
+      click_button 'Send'
+      expect(page).to have_content 'Successfully sent award to bobjohnson'
+    end
+
+    it 'keeps award form value on fail' do
+      visit project_path(project)
+      select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
+      fill_in 'Email Address', with: 'U99M9QYFQ'
+      fill_in 'Quantity', with: '-1'
+      fill_in 'Description', with: 'Thanks for test'
+      click_button 'Send'
+      expect(page).to have_content 'Quantity must be greater than 0'
+      expect(find_field('Quantity').value).to eq '-1'
+      expect(find_field('Communication Channel').value).to eq channel.id.to_s
+      expect(find_field('Description').value).to eq 'Thanks for test'
+    end
   end
 end

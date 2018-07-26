@@ -23,6 +23,7 @@ body {
       margin-bottom: .7em;
     }
   }
+  color: #3A3A3A;
 }
 
 .app-container {
@@ -460,11 +461,31 @@ progress {
 }
 
 .auth-button{
+  float: left;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 11px;
+  padding: 8px;
+  padding-left: 60px;
+  width: 180px;
   color: inherit;
   margin-right: 5px;
+  background-repeat: no-repeat;
+  background-size: 28px;
+  background-position: 8px;
+}
+
+.sessions-new .auth-button{
+  width: 237px;
+}
+
+.auth-button.metamask{
+  background-image: asset_url('metamask.png');
+}
+.auth-button.slack{
+  background-image: asset_url('slack.png');
+}
+.auth-button.discord{
+  background-image: asset_url('discord.png');
 }
 
 .signin-with-metamask-wrapper {
@@ -476,4 +497,3 @@ progress {
 h1, h2, h3, h4, h5, h6{
   font-weight: bold;
 }
-
