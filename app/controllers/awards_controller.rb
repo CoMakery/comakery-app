@@ -84,7 +84,7 @@ class AwardsController < ApplicationController
 
   def confirm_message
     if current_account.ethereum_wallet.present?
-      "Congratulations, you just claimed your award! Your Ethereum address is #{current_account.ethereum_wallet} you can change your Ethereum address on your account page."
+      "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}."
     else
       "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
     end
