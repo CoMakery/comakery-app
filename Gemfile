@@ -46,6 +46,7 @@ gem 'sidekiq'
 gem 'sidekiq-failures'
 gem 'sinatra', '~> 2.0.2', require: nil # for sidekiq admin interface
 gem 'slack-ruby-client'
+gem 'sprockets', '~>3.7.2'
 gem 'uglifier'
 gem 'underscore-rails'
 gem 'webpacker'
