@@ -192,8 +192,8 @@ describe AwardsController do
 
     it 'redirect_to login page' do
       get :confirm, params: { token: 1234 }
-      expect(response).to redirect_to(new_session_path)
-      expect(session[:award_token]).to eq '1234'
+      expect(response).to redirect_to(new_account_path)
+      expect(session[:award_token]).to eq true
     end
 
     it 'redirect_to show error for invalid token' do

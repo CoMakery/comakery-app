@@ -41,7 +41,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq false
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
-        assert_redirected_to my_project_path
+        assert_redirected_to root_path
       end
 
       it 'login confirmed authentication' do
@@ -66,7 +66,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq false
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
-        assert_redirected_to my_project_path
+        assert_redirected_to root_path
       end
     end
 
@@ -109,10 +109,11 @@ describe SessionsController do
       expect(response).to redirect_to my_project_path
     end
 
-    it 'redirect to confirm award page' do
-      session[:award_token] = 123
+    it 'notice to redeem award' do
+      session[:award_token] = true
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(response).to redirect_to confirm_award_path(123)
+      expect(flash[:notice]).to eq 'Please click the link in your email to claim your contributor token award!'
+      expect(response).to redirect_to my_project_path
     end
   end
 end
