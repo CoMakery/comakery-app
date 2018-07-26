@@ -45,6 +45,12 @@ class Project < ApplicationRecord
     ETH: 2
   }
   enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
+  enum ethereum_network: {
+    main:    'Main Ethereum Network',
+    ropsten: 'Ropsten Test Network',
+    kovan:   'Kovan Test Network',
+    rinkeby: 'Rinkeby Test Network'
+  }
 
   validates :description, :account, :title, :legal_project_owner,
     :denomination, presence: true

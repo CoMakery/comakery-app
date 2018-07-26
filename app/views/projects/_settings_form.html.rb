@@ -111,7 +111,7 @@ module Views
                 end
                 label {
                   text 'Ethereum Network'
-                  f.select :ethereum_network, options
+                  f.select :ethereum_network, options, include_blank: true
                 }
 
                 with_errors(project, :ethereum_contract_address) {
@@ -316,7 +316,7 @@ module Views
       end
 
       def ethereum_network_options
-        [[], ['Main Ethereum Network', 'main'], ['Ropsten Test Network', 'ropsten'], ['Kovan Test Network', 'kovan'], ['Rinkeby Test Network', 'rinkeby']]
+        Project.ethereum_networks.invert
       end
 
       def render_cancel_and_save_buttons(form)
