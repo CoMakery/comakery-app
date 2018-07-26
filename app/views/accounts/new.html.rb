@@ -73,7 +73,7 @@ class Views::Accounts::New < Views::Base
             }
 
             column('large-12') {
-              f.submit 'Create Your Account', class: buttonish(:medium), style: 'margin: 0'
+              f.submit 'CREATE YOUR ACCOUNT', class: buttonish(:medium), style: 'margin: 0'
             }
           }
         end

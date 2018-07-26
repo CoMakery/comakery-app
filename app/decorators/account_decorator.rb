@@ -11,6 +11,10 @@ class AccountDecorator < Draper::Decorator
     nickname || name
   end
 
+  def etherscan_address
+    "https://etherscan.io/address/#{ethereum_wallet}"
+  end
+
   def can_send_awards?(project)
     project&.account == self && project&.ethereum_contract_address?
   end

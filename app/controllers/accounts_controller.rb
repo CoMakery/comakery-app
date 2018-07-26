@@ -28,10 +28,15 @@ class AccountsController < ApplicationController
       account.confirm!
       session[:account_id] = account.id
       flash[:notice] = 'Success! Your email is confirmed.'
+      if session[:redeem]
+        flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
+        session[:redeem] = nil
+      end
+      redirect_to my_project_path
     else
       flash[:error] = 'Invalid token'
+      redirect_to root_path
     end
-    redirect_to root_path
   end
 
   def confirm_authentication
