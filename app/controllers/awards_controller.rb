@@ -42,9 +42,9 @@ class AwardsController < ApplicationController
         redirect_to root_path
       end
     else
-      session[:award_token] = params[:token]
-      flash[:notice] = 'Log in to claim your award!'
-      redirect_to new_session_path
+      session[:award_token] = true
+      flash[:notice] = "Please #{view_context.link_to 'log in', new_session_path} or #{view_context.link_to 'signup', new_account_path} before receiving your award"
+      redirect_to new_account_path
     end
   end
 

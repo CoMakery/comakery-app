@@ -43,7 +43,7 @@ describe 'landing page', :js do
 
     (1..7).each { |i| create(:project, account, title: "Private Project #{i}", public: false) }
 
-    visit mine_project_path
+    visit my_project_path
 
     expect(page.all('.project').size).to eq(6)
     within('.main') do
