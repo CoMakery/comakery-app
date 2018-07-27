@@ -22,12 +22,14 @@ class Comakery::Ethereum
       call_ethereum_bridge('token_issue', params, 'tx')
     end
 
-    # rubocop:disable Metrics/CyclomaticComplexity
     def call_ethereum_bridge(path, params, response_key)
-      ethereum_bridge = ENV['ETHEREUM_BRIDGE'].presence
-      return if ethereum_bridge.nil? && Comakery::Application.config.allow_missing_ethereum_bridge
-      raise('please set env var ETHEREUM_BRIDGE') unless ethereum_bridge
-      raise('please set env var ETHEREUM_BRIDGE_API_KEY') if ENV['ETHEREUM_BRIDGE_API_KEY'].blank?
+      ethereum_bridge = ENV['ETHEREUM_BRIDGE']
+      if ethereum_bridge.blank?
+        return if Comakery::Application.config.allow_missing_ethereum_bridge
+        raise('please set env var ETHEREUM_BRIDGE')
+      elsif ENV['ETHEREUM_BRIDGE_API_KEY'].blank?
+        raise('please set env var ETHEREUM_BRIDGE_API_KEY')
+      end
 
       url = URI.join ethereum_bridge, path
       headers = { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
@@ -54,7 +56,7 @@ class Comakery::Ethereum
 
     def token_symbol(contract_address, project = nil)
       site = project&.ethereum_network? ? "#{project.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
-      site = 'etherscan.io' if site == 'main.etherscan.io'
+      site = site.gsub('main.', '')
       url = "https://#{site}/tokens?q=#{contract_address}"
       doc = Nokogiri::HTML(open(url))
       elem = doc.css('.fa-angle-right')[2]&.next

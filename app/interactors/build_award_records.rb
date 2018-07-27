@@ -1,7 +1,6 @@
 class BuildAwardRecords
   include Interactor
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def call
     context.award_type = AwardType.find_by(id: context.award_type_id)
     context.total_amount = context.award_type.amount * BigDecimal(context.quantity) if context.award_type && context.quantity
@@ -23,20 +22,39 @@ class BuildAwardRecords
   private
 
   def validate_data
-    context.fail!(message: 'missing award type') unless context.award_type
-    context.fail!(message: 'Not authorized') unless context.project.id == context.award_type.project_id
-    if context.issuer != context.project.account && !context.award_type.community_awardable?
+    validate_award_type
+    validate_authorized
+    validate_quantity
+    validate_uid
+    validate_amount
+  end
+
+  def validate_award_type
+    context.fail!(message: 'missing award type') if context.award_type.blank?
+  end
+
+  def validate_authorized
+    if context.project.id != context.award_type.project_id
+      context.fail!(message: 'Not authorized')
+    elsif context.issuer != context.project.account && !context.award_type.community_awardable?
       context.fail!(message: 'Not authorized')
     end
+  end
+
+  def validate_quantity
     context.fail!(message: 'quantity must greater than 0') if context.quantity.blank?
+  end
+
+  def validate_uid
     context.fail!(message: 'missing uid or email') if context.uid.blank?
-    context.fail!(message: 'missing total_tokens_issued') if context.total_tokens_issued.blank?
+  end
 
-    if context.total_amount + context.total_tokens_issued > context.project.maximum_tokens
+  def validate_amount
+    if context.total_tokens_issued.blank?
+      context.fail!(message: 'missing total_tokens_issued')
+    elsif context.total_amount + context.total_tokens_issued > context.project.maximum_tokens
       context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable tokens")
-    end
-
-    if context.total_amount + context.project.total_month_awarded > context.project.maximum_royalties_per_month
+    elsif context.total_amount + context.project.total_month_awarded > context.project.maximum_royalties_per_month
       context.fail!(message: "Sorry, you can't send more awards this month than the project's maximum number of allowable tokens per month")
     end
   end

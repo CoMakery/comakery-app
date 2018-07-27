@@ -1,31 +1,31 @@
 class Views::Projects::LeftMenuItems < Views::Base
   def content
-    ul(class: 'vertical menu scrollingBox') {
-      li {
-        a(href: '#general-info') {
+    ul(class: 'vertical menu scrollingBox') do
+      li do
+        a(href: '#general-info') do
           span 'General Info'
-        }
-      }
-      li {
-        a(href: '#communication-channels') {
+        end
+      end
+      li do
+        a(href: '#communication-channels') do
           span 'Communication Channels'
-        }
-      }
-      li {
-        a(href: '#contribution-terms') {
+        end
+      end
+      li do
+        a(href: '#contribution-terms') do
           span 'Contribution Terms'
-        }
-      }
-      li {
-        a(href: '#awards-offered') {
+        end
+      end
+      li do
+        a(href: '#awards-offered') do
           span 'Awards Offered'
-        }
-      }
-      li {
-        a(href: '#visibility') {
+        end
+      end
+      li do
+        a(href: '#visibility') do
           span 'Visibility'
-        }
-      }
-    }
+        end
+      end
+    end
   end
 end

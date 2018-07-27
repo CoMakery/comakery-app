@@ -3,27 +3,27 @@ class Views::Awards::Index < Views::Base
 
   def content
     render partial: 'shared/project_header'
-    full_row {
+    full_row do
       render partial: 'awards/activity'
-    }
+    end
     pages
     if current_account
-      full_row {
-        div(class: 'small-1', style: 'float: left') {
-          label {
+      full_row do
+        div(class: 'small-1', style: 'float: left') do
+          label do
             checked = params[:mine] == 'true' ? false : true
             radio_button_tag 'mine', url_for, checked
             text 'all'
-          }
-        }
-        div(class: 'small-1', style: 'float: left') {
-          label {
+          end
+        end
+        div(class: 'small-1', style: 'float: left') do
+          label do
             checked = params[:mine] == 'true' ? true : false
             radio_button_tag 'mine', url_for(mine: true), checked
             text 'mine'
-          }
-        }
-      }
+          end
+        end
+      end
     end
     render partial: 'shared/awards',
            locals: { project: project, awards: awards, show_recipient: true }
@@ -32,12 +32,12 @@ class Views::Awards::Index < Views::Base
   end
 
   def pages
-    full_row {
-      div(class: 'callout clearfix') {
-        div(class: 'pagination float-right') {
+    full_row do
+      div(class: 'callout clearfix') do
+        div(class: 'pagination float-right') do
           text paginate project.awards.page(params[:page])
-        }
-      }
-    }
+        end
+      end
+    end
   end
 end

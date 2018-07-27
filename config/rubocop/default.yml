@@ -24,7 +24,7 @@ AllCops:
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/views/**/*'
-  Max: 4
+  Max: 5
 
 Layout/AlignParameters:
   Enabled: true
@@ -64,9 +64,6 @@ RSpec/ExampleLength:
 RSpec/LetSetup:
   Enabled: false
 
-Style/BlockDelimiters:
-  Exclude:
-    - 'app/views/**/*'
 
 Style/Documentation:
   Enabled: false

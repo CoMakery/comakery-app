@@ -117,7 +117,6 @@ class Project < ApplicationRecord
     payments.sum(:quantity_redeemed)
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def share_of_revenue_unpaid(awards)
     return BigDecimal(0) if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0 || awards.blank?
     (BigDecimal(awards) * revenue_per_share).truncate(currency_precision)

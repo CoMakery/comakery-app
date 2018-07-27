@@ -89,7 +89,7 @@ class ApplicationController < ActionController::Base
   end
 
   # :nocov:
-  # rubocop:disable Metrics/CyclomaticComplexity
+
   def d(the_proc)
     return if Rails.env.test?
     unless the_proc.instance_of?(Proc)
