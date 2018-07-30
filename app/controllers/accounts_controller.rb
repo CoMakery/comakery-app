@@ -4,7 +4,7 @@ class AccountsController < ApplicationController
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm confirm_authentication show download_data]
 
   def new
-    @account = Account.new
+    @account = Account.new(email: params[:account_email])
   end
 
   def create
