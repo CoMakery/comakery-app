@@ -59,15 +59,22 @@ class Comakery::Ethereum
       site = site.gsub('main.', '')
       url = "https://#{site}/tokens?q=#{contract_address}"
       doc = Nokogiri::HTML(open(url))
-      elem = doc.css('.fa-angle-right')[2]&.next
-      symbol = begin
-                 elem.text.strip
-               rescue
-                 ''
-               end
-      symbol = symbol.gsub('symbol = ', '')
-      symbol = '%invalid%' if doc.css('.fa-angle-right').blank? || doc.css('.alert-warning')[0]&.text&.include?('Sorry,')
-      symbol
+      sym_elem = doc.css('.fa-angle-right')[2]&.next
+      dec_elem = doc.css('.fa-angle-right')[3]&.next
+      begin
+        symbol = sym_elem.text.strip
+        symbol = symbol.gsub('symbol = ', '')
+      rescue
+        ''
+      end
+      begin
+        decimals = dec_elem.text.strip
+        decimals = decimals.gsub('decimals = ', '')
+      rescue
+        '0'
+      end
+
+      [symbol, decimals]
     end
   end
 end

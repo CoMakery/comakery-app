@@ -243,9 +243,9 @@ class Project < ApplicationRecord
 
   def populate_token_symbol
     if ethereum_contract_address.present? && project_token?
-      symbol = Comakery::Ethereum.token_symbol(ethereum_contract_address, self)
+      symbol, decimals = Comakery::Ethereum.token_symbol(ethereum_contract_address, self)
       self.token_symbol = symbol if token_symbol.blank?
-      self.token_symbol = '' if token_symbol == '%invalid%'
+      self.decimal_places = decimals if decimal_places.blank?
       ethereum_contract_address_exist_on_network?(symbol)
     end
   end

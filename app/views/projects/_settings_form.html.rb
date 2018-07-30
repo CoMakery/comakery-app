@@ -158,10 +158,18 @@ module Views
                     end
                   end
                 end
+
                 with_errors(project, :token_symbol) do
                   label do
                     text 'Token Symbol'
                     f.text_field :token_symbol
+                  end
+                end
+
+                with_errors(project, :decimal_places) do
+                  label do
+                    text 'Decimal Places'
+                    f.text_field :decimal_places
                   end
                 end
 
@@ -256,40 +264,44 @@ module Views
             end
             render_cancel_and_save_buttons(f)
           end
-          div(class: 'content-box', 'data-id': 'visibility') do
-            div(class: 'award-types') do
-              div(class: 'legal-box-header') { h3 'Visibility' }
-              row do
-                column('small-5') do
-                  options = capture do
-                    options_for_select(visibility_options, selected: f.object.visibility)
-                  end
-                  label do
-                    text 'Project Visible To'
-                    f.select :visibility, options
-                  end
-                end
-              end
-              row do
-                label(style: 'margin-left: 15px;') do
-                  text 'Project URL'
-                end
-                column('small-5') do
-                  text_field_tag :unlisted_url, unlisted_project_url(f.object.long_id), name: nil, class: 'copy-source'
-                  hidden_field_tag :long_id, f.object.long_id
-                end
-                column('small-1', style: 'padding-left: 0; margin-left: -16px; margin-top: 8px') do
-                  a(class: 'copiable', style: 'padding: 9px; border: 1px solid #ccc;') do
-                    image_tag 'Octicons-clippy.png', size: '20x20'
-                  end
-                end
-                column('small-1') {}
-              end
-            end
-          end
+          visibility_block(f, visibility_options)
 
           full_row do
             f.submit 'Save', class: buttonish(:expand, :last_submit)
+          end
+        end
+      end
+
+      def visibility_block(f, visibility_options)
+        div(class: 'content-box', 'data-id': 'visibility') do
+          div(class: 'award-types') do
+            div(class: 'legal-box-header') { h3 'Visibility' }
+            row do
+              column('small-5') do
+                options = capture do
+                  options_for_select(visibility_options, selected: f.object.visibility)
+                end
+                label do
+                  text 'Project Visible To'
+                  f.select :visibility, options
+                end
+              end
+            end
+            row do
+              label(style: 'margin-left: 15px;') do
+                text 'Project URL'
+              end
+              column('small-5') do
+                text_field_tag :unlisted_url, unlisted_project_url(f.object.long_id), name: nil, class: 'copy-source'
+                hidden_field_tag :long_id, f.object.long_id
+              end
+              column('small-1', style: 'padding-left: 0; margin-left: -16px; margin-top: 8px') do
+                a(class: 'copiable', style: 'padding: 9px; border: 1px solid #ccc;') do
+                  image_tag 'Octicons-clippy.png', size: '20x20'
+                end
+              end
+              column('small-1') {}
+            end
           end
         end
       end
