@@ -4,7 +4,9 @@ class Api::AccountsController < Api::ApiController
     @account = Account.new(public_address: params[:public_address])
     @account.assign_attributes nonce: rand.to_s[2..6], email: "#{params[:public_address]}@comakery.com", network_id: params[:network_id], system_email: true
     @account.ethereum_wallet = @account.public_address
-    if @account.save
+    if @account.valid?
+      @account.email = nil
+      @account.save(validate: false)
       render json: @account.as_json(only: %i[id public_address nonce ethereum_wallet])
     else
       render json: { failed: true }
