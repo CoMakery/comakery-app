@@ -28,7 +28,8 @@ class Api::AccountsController < Api::ApiController
     else
       matched = @account.nonce == params[:nonce]
       if matched
-        @account.update!(nonce: rand.to_s[2..6])
+        @account.nonce = rand.to_s[2..6]
+        @account.save(validate: false)
         session[:account_id] = @account.id
       end
       render json: { success: matched }
