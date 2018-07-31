@@ -144,9 +144,8 @@ describe AccountsController do
 
   describe '#download_data' do
     before { login(account) }
-    let!(:authentication) { create(:authentication, confirm_token: '1234qwer') }
 
-    it 'render errors for invalid confirmation token' do
+    it 'download_data' do
       get :download_data, params: { format: 'zip' }
     end
   end

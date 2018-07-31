@@ -317,4 +317,10 @@ describe Account do
     account.save
     expect(account.reload.email).to eq 'new@test.st'
   end
+
+  it 'awards_csv' do
+    award = create(:award, account: account)
+    award = award.decorate
+    expect(account.awards_csv).to eq "Project,Award Type,Total Amount,Issuer,Date\nUber for Cats,Contribution,50,#{award.issuer_display_name},\"#{award.created_at.strftime('%b %d, %Y')}\"\n"
+  end
 end

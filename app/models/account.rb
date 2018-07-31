@@ -42,8 +42,6 @@ class Account < ApplicationRecord
         account.nickname = fetch_nickname(uid, channel)
         errors = if account.save
           account.create_authentication_and_build_team(uid, channel)
-        else
-          account.errors.full_messages.join(', ')
         end
       end
       [account, errors]
@@ -71,12 +69,8 @@ class Account < ApplicationRecord
 
   def create_authentication_and_build_team(uid, channel)
     auth = authentications.create(provider: channel.team.provider, uid: uid)
-    if auth.valid?
-      channel.team.build_authentication_team auth
-    else
-      errors = auth.errors.full_messages.join(', ')
-    end
-    errors
+    channel.team.build_authentication_team auth if auth.valid?
+    auth.errors.full_messages.join(', ')
   end
 
   def downcase_email
@@ -141,11 +135,6 @@ class Account < ApplicationRecord
 
   def confirmed?
     email_confirm_token.nil?
-  end
-
-  def confirmed_and_valid?
-    self.name_required = true
-    valid? && confirmed?
   end
 
   def valid_and_underage?
