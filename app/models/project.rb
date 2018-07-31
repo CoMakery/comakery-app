@@ -236,13 +236,17 @@ class Project < ApplicationRecord
     result
   end
 
+  def populate_token?
+    ethereum_contract_address.present? && project_token? && (token_symbol.blank? || decimal_places.blank?)
+  end
+
   before_validation :populate_token_symbol
   before_save :enable_ethereum
 
   private
 
   def populate_token_symbol
-    if ethereum_contract_address.present? && project_token?
+    if populate_token?
       symbol, decimals = Comakery::Ethereum.token_symbol(ethereum_contract_address, self)
       self.token_symbol = symbol if token_symbol.blank?
       self.decimal_places = decimals if decimal_places.blank?
