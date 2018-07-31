@@ -80,8 +80,6 @@ class ProjectsController < ApplicationController
       render :show
     elsif @project&.can_be_access?(current_account)
       redirect_to project_path(@project)
-    else
-      redirect_to root_path
     end
   end
 

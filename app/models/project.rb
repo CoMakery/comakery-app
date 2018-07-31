@@ -297,7 +297,7 @@ class Project < ApplicationRecord
   end
 
   def ethereum_contract_address_exist_on_network?(symbol)
-    if (ethereum_contract_address_changed? || ethereum_network_changed?) && symbol == '%invalid%'
+    if (ethereum_contract_address_changed? || ethereum_network_changed?) && symbol.blank?
       errors[:ethereum_contract_address] << 'should exist on the ethereum network'
     end
   end
