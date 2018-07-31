@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
     if authentication && authentication.confirmed?
       session[:account_id] = authentication.account_id
     elsif authentication
-      UserMailer.confirm_authentication(authentication).deliver_now
+      UserMailer.confirm_authentication(authentication).deliver
       flash[:error] = 'Please check your email for confirmation instruction'
       @path = root_path
     else

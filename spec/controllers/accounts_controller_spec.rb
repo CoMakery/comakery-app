@@ -28,6 +28,13 @@ describe AccountsController do
       expect(account.confirmed?).to be_falsey
     end
 
+    it 'send email to admin notice about underage' do
+      account.update date_of_birth: '2010-01-01'
+      put :update, params: { account: { date_of_birth: '01/01/1900' } }
+        expect(response).to redirect_to account_url
+      expect(flash[:notice]).to eq('Your account details have been updated.')
+    end
+
     it 'renders errors for an invalid ethereum address' do
       expect do
         put :update, params: { account: { ethereum_wallet: 'not a valid ethereum address' } }
