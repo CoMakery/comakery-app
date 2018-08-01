@@ -219,17 +219,36 @@ describe Award do
     let!(:discord_team) { create :team, provider: 'discord' }
     let!(:project) { create :project, account: account }
     let!(:award_type) { create :award_type, project: project }
-    let!(:channel) { create :channel, team: team, project: project, channel_id: 'channel_id', name: 'slack_channel' }
-    let!(:award) { create :award, award_type: award_type, issuer: account, channel: channel }
+    let!(:channel) { create :channel, team: team, project: project, channel_id: 'channel_id', name: 'channel_id' }
+    let!(:account1) { create :account }
+    let!(:authentication1) { create :authentication, account: account1 }
+    let!(:award) { create :award, award_type: award_type, issuer: account, channel: channel, account: account1 }
+
+    let!(:message) { AwardMessage.call(award: award).notifications_message }
 
     before do
       team.build_authentication_team authentication
     end
 
     it 'sends a Slack notification' do
-      allow(award).to receive(:send_award_notifications)
+      # allow(award.slack_client).to receive(:send_award_notifications)
+      message = AwardMessage.call(award: award).notifications_message
+      token = authentication1.token
+      stub_request(:post, 'https://slack.com/api/chat.postMessage').with(body: hash_including(text: message,
+                                                                                              token: token,
+                                                                                              channel: "##{channel.name}",
+                                                                                              username: / Bot/,
+                                                                                              icon_url: Comakery::Slack::AVATAR,
+                                                                                              as_user: 'false',
+                                                                                              link_names: '1')).to_return(body: {
+                                                                                                ok: true,
+                                                                                                channel: 'channel id',
+                                                                                                message: { ts: 'this is a timestamp' }
+                                                                                              }.to_json)
+      stub_request(:post, 'https://slack.com/api/reactions.add').with(body: hash_including(channel: 'channel id',
+                                                                                           timestamp: 'this is a timestamp',
+                                                                                           name: 'thumbsup')).to_return(body: { ok: true }.to_json)
       award.send_award_notifications
-      expect(award).to have_received(:send_award_notifications)
     end
 
     it 'sends a Discord notification' do
