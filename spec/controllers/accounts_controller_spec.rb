@@ -131,6 +131,13 @@ describe AccountsController do
       expect(new_account.reload.confirmed?).to be true
       expect(flash[:notice]).to eq 'Success! Your email is confirmed.'
     end
+
+    it 'notice about redeem award' do
+      session[:redeem] = true
+      get :confirm, params: { token: '1234qwer' }
+      expect(new_account.reload.confirmed?).to be true
+      expect(flash[:notice]).to eq 'Please click the link in your email to claim your contributor token award!'
+    end
   end
 
   describe '#confirm_authentication' do
