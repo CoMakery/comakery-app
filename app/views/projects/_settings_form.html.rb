@@ -306,14 +306,6 @@ module Views
         end
       end
 
-      def award_type_div(form, field_name, **opts)
-        opts[:class] = "#{opts[:class]} input-group-field"
-        div(class: 'input-group') do
-          span(class: 'input-group-label award-type') { text project.currency_denomination }
-          form.text_field field_name, **opts
-        end
-      end
-
       def percentage_div(form, field_name, **opts)
         opts[:class] = "#{opts[:class]} input-group-field"
 
