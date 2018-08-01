@@ -30,5 +30,4 @@ class ApplicationPolicy
   def create?
     account.present?
   end
-
 end

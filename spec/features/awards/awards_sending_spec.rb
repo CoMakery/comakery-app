@@ -80,7 +80,6 @@ describe 'awarding users' do
       login(bobjohnsons_auth.account)
 
       visit project_awards_path(project)
-
       expect(page).to have_content 'bobjohnson'
 
       click_link('Overview')
@@ -92,6 +91,14 @@ describe 'awarding users' do
         expect(page.find('.award-holdings')).to have_content '1,579'
       end
     end
+  end
+
+  it 'list awards' do
+    receiver = create :account, email: 'test@test.st', ethereum_wallet: '0x' + 'b' * 40
+    award = create :award, account: receiver, award_type: small_award_type
+    login(account)
+    visit project_awards_path(project)
+    expect(page).to have_content 'Send'
   end
 
   it 'for a user with an account but no ethereum address' do

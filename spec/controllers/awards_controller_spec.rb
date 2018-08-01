@@ -35,6 +35,16 @@ describe AwardsController do
         expect(assigns[:project]).to eq(project)
         expect(assigns[:awards]).to match_array([award])
       end
+
+      it 'shows metamask awards' do
+        stub_token_symbol
+        project.update ethereum_contract_address: '0x' + 'a' * 40
+        get :index, params: { project_id: project.to_param }
+
+        expect(response.status).to eq(200)
+        expect(assigns[:project]).to eq(project)
+        expect(assigns[:awards]).to match_array([award])
+      end
     end
 
     context 'when logged out' do
