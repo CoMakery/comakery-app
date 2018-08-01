@@ -50,9 +50,7 @@ class BuildAwardRecords
   end
 
   def validate_amount
-    if context.total_tokens_issued.blank?
-      context.fail!(message: 'missing total_tokens_issued')
-    elsif context.total_amount + context.total_tokens_issued > context.project.maximum_tokens
+    if context.total_amount + context.total_tokens_issued > context.project.maximum_tokens
       context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable tokens")
     elsif context.total_amount + context.project.total_month_awarded > context.project.maximum_royalties_per_month
       context.fail!(message: "Sorry, you can't send more awards this month than the project's maximum number of allowable tokens per month")
