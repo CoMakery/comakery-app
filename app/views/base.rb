@@ -74,10 +74,6 @@ module Views
       Comakery::Markdown.to_html(markdown)
     end
 
-    def markdown_to_legal_doc_html(markdown)
-      Comakery::Markdown.to_legal_doc_html(markdown)
-    end
-
     def li_if(variable, **opts)
       li(**opts) { yield } if variable.present?
     end
