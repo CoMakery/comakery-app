@@ -17,7 +17,14 @@ RSpec.describe PagesController, type: :controller do
   end
 
   it 'access user agreement' do
+    # allow(ENV).to receive(:[]).with('BASIC_AUTH').and_return('test:test')
     get :user_agreement
     expect(response).to render_template('pages/user_agreement')
+  end
+
+  it 'basic auth' do
+    ENV.stub(:key?){'test:test'}
+    ENV.stub(:fetch){'test:test'}
+    get :landing
   end
 end
