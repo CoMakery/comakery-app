@@ -27,6 +27,14 @@ describe Comakery::Ethereum do
       expect(contractAddress).to eq '0x9999999999999999999999999999999999999999'
     end
 
+    describe 'with ETHEREUM_BRIDGE env var unset' do
+      let(:ethereum_bridge) { nil }
+
+      it 'requires that ETHEREUM_BRIDGEis set in ENV' do
+        expect(described_class.token_contract(maxSupply: 101)).to be_nil
+      end
+    end
+
     describe 'with ETHEREUM_BRIDGE_API_KEY env var unset' do
       let(:ethereum_bridge_api_key) { nil }
 

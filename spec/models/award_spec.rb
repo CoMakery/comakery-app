@@ -219,7 +219,7 @@ describe Award do
     let!(:discord_team) { create :team, provider: 'discord' }
     let!(:project) { create :project, account: account }
     let!(:award_type) { create :award_type, project: project }
-    let!(:channel) { create :channel, team: team, project: project }
+    let!(:channel) { create :channel, team: team, project: project, channel_id: 'channel_id', name: 'slack_channel' }
     let!(:award) { create :award, award_type: award_type, issuer: account, channel: channel }
 
     before do

@@ -23,8 +23,8 @@ RSpec.describe PagesController, type: :controller do
   end
 
   it 'basic auth' do
-    ENV.stub(:key?){'test:test'}
-    ENV.stub(:fetch){'test:test'}
+    ENV.stub(:key?) { 'test:test' }
+    ENV.stub(:fetch) { 'test:test' }
     get :landing
   end
 end

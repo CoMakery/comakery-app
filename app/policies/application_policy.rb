@@ -23,10 +23,6 @@ class ApplicationPolicy
     end
   end
 
-  def show?
-    account.present?
-  end
-
   def new?
     account.present?
   end
@@ -35,11 +31,4 @@ class ApplicationPolicy
     account.present?
   end
 
-  def edit?
-    account.present?
-  end
-
-  def update?
-    account.present?
-  end
 end

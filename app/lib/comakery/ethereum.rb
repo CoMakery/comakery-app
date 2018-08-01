@@ -26,7 +26,6 @@ class Comakery::Ethereum
       ethereum_bridge = ENV['ETHEREUM_BRIDGE']
       if ethereum_bridge.blank?
         return if Comakery::Application.config.allow_missing_ethereum_bridge
-        raise('please set env var ETHEREUM_BRIDGE')
       elsif ENV['ETHEREUM_BRIDGE_API_KEY'].blank?
         raise('please set env var ETHEREUM_BRIDGE_API_KEY')
       end
