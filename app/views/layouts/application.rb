@@ -94,7 +94,7 @@ class Views::Layouts::Application < Views::Base
         end
 
         row(class: 'footer') do
-          div(class: 'large-10 medium-11 small-12 small-centered columns') do
+          div(class: 'large-2 small-centered columns', style: 'max-width: 1044px') do
             column('small-12') do
               column('small-3') do
                 image_tag 'Logo_Gradient.png', size: '100x100'

@@ -39,7 +39,7 @@ class Views::Pages::Landing < Views::Base
         image_tag 'whois/header-front.png', class: 'whois-header'
       end
 
-      column('medium-12') do
+      column('medium-12', style: 'max-width: 1044px;') do
         column('medium-12 no-v-pad', style: 'margin-top: 30px;') do
           column('medium-7 show-for-large') do
             column('medium-7 no-h-pad', style: 'position: relative; z-index: 2') do
@@ -172,7 +172,7 @@ class Views::Pages::Landing < Views::Base
 
   def workonblockchain
     column('medium-12', style: 'color: #fff;margin-top: 10px') { text '.' }
-    div(class: 'large-10 medium-12 small-12 small-centered columns no-h-pad') do
+    div(class: 'large-12 small-centered columns no-h-pad', style: 'max-width: 1044px;') do
       div(class: 'work-blockchain') do
         image_tag 'workonblockchain/header.jpg', style: 'width: 100%'
       end
@@ -223,7 +223,7 @@ class Views::Pages::Landing < Views::Base
   end
 
   def howitwork
-    div(class: 'small-12 small-centered columns') do
+    div(class: 'small-12 small-centered columns', style: 'max-width: 1044px;') do
       column('medium-12', style: 'text-align: center; margin-top: 30px;margin-bottom: 40px;') do
         image_tag 'howitwork/H1-text.png', class: 'hiw-header'
       end
@@ -283,7 +283,7 @@ class Views::Pages::Landing < Views::Base
   end
 
   def signup_to_learn
-    div(class: 'large-10 medium-12 no-h-pad medium-centered columns') do
+    div(class: 'large-10 medium-12 no-h-pad medium-centered columns', style: 'max-width: 1044px;') do
       column('medium-12 no-h-pad home-signup-bg') do
         column('medium-12') do
           div(class: 'show-for-large') do
