@@ -34,12 +34,12 @@ class Views::Pages::Landing < Views::Base
   end
 
   def whois
-    div(class: 'large-10 medium-11 small-12 small-centered columns') do
+    div(class: 'large-10 medium-11 small-12 small-centered columns', style: 'max-width: 1044px;') do
       column('medium-12 no-h-pad whois-bg', style: 'text-align: center; margin-top: 20px;') do
         image_tag 'whois/header-front.png', class: 'whois-header'
       end
 
-      column('medium-12', style: 'max-width: 1044px;') do
+      column('medium-12') do
         column('medium-12 no-v-pad', style: 'margin-top: 30px;') do
           column('medium-7 show-for-large') do
             column('medium-7 no-h-pad', style: 'position: relative; z-index: 2') do
