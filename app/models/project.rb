@@ -213,6 +213,10 @@ class Project < ApplicationRecord
     total_awarded * 100.0 / maximum_tokens
   end
 
+  def decimal_places_value
+    10**decimal_places.to_i
+  end
+
   def awards_for_chart
     result = []
     recents = awards.where('awards.created_at > ?', 150.days.ago).order(:created_at)

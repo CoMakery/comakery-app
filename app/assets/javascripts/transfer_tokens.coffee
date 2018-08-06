@@ -16,7 +16,7 @@ $ ->
 
     contractAddress = award.project.ethereum_contract_address
     toAddress = award.account.ethereum_wallet
-    amount = award.total_amount
+    amount = award.amount_to_send
 
     if contractAddress && toAddress && amount
       contract = web3.eth.contract(abi) # see abi in abi.js

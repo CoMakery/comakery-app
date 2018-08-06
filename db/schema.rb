@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180730020434) do
+ActiveRecord::Schema.define(version: 20180806041107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 20180730020434) do
     t.text "proof_id", null: false
     t.string "proof_link"
     t.decimal "quantity", default: "1.0"
-    t.integer "total_amount"
+    t.decimal "total_amount"
     t.integer "unit_amount"
     t.integer "account_id"
     t.integer "channel_id"

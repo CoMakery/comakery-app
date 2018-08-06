@@ -17,15 +17,19 @@ class AwardDecorator < Draper::Decorator
   end
 
   def json_for_sending_awards
-    to_json(only: %i[id total_amount], methods: [:issuer_address], include: { account: { only: %i[id ethereum_wallet] }, project: { only: %i[id ethereum_contract_address] } })
+    to_json(only: %i[id total_amount], methods: %i[issuer_address amount_to_send], include: { account: { only: %i[id ethereum_wallet] }, project: { only: %i[id ethereum_contract_address] } })
   end
 
   def unit_amount_pretty
-    number_with_delimiter(award.unit_amount, delimiter: ',')
+    number_with_delimiter(unit_amount)
   end
 
   def total_amount_pretty
-    number_with_delimiter(award.total_amount, seperator: ',')
+    if project.decimal_places.to_i == 0
+      number_with_delimiter(total_amount.to_i)
+    else
+      number_to_currency(BigDecimal(amount_to_send) / project.decimal_places_value, precision: project.decimal_places, unit: '')
+    end
   end
 
   def part_of_email

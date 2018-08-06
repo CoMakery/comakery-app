@@ -39,6 +39,10 @@ class Award < ApplicationRecord
     account_id == issuer_id
   end
 
+  def amount_to_send
+    (total_amount * project.decimal_places_value).to_i
+  end
+
   def recipient_auth_team
     account.authentication_teams.find_by team_id: channel.team_id if channel
   end

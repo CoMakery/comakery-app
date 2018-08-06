@@ -134,6 +134,7 @@ class ProjectsController < ApplicationController
       :ethereum_network,
       :ethereum_contract_address,
       :token_symbol,
+      :decimal_places,
       award_types_attributes: %i[
         _destroy
         amount

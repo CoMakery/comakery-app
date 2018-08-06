@@ -75,7 +75,7 @@ describe 'awarding users' do
       bobjohnsons_auth = Authentication.find_by(uid: 'U99M9QYFQ')
       expect(bobjohnsons_auth).not_to be_nil
       award = Award.last
-      expect(AwardMessage.call(award: award).notifications_message).to match '@Michael Jackson sent @bobjohnson a 1579 token Small'
+      expect(AwardMessage.call(award: award).notifications_message).to match '@Michael Jackson sent @bobjohnson a 1579.0 token Small'
       bobjohnsons_auth.account.confirm!
       login(bobjohnsons_auth.account)
 
@@ -94,10 +94,12 @@ describe 'awarding users' do
   end
 
   it 'list awards' do
+    project.update decimal_places: 2
     receiver = create :account, email: 'test@test.st', ethereum_wallet: '0x' + 'b' * 40
-    award = create :award, account: receiver, award_type: small_award_type
+    create :award, account: receiver, award_type: small_award_type
     login(account)
     visit project_awards_path(project)
+    expect(page).to have_content '1,000.00'
     expect(page).to have_content 'Send'
   end
 
