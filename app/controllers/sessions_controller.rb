@@ -59,6 +59,9 @@ class SessionsController < ApplicationController
     elsif @path
       @path
     else
+      if current_account.awards.any? && current_account.ethereum_wallet.blank?
+        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+      end
       my_project_path
     end
   end

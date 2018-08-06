@@ -25,7 +25,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def total_amount_pretty
-    if project.decimal_places.to_i == 0
+    if project.decimal_places.to_i.zero?
       number_with_delimiter(total_amount.to_i)
     else
       number_to_currency(BigDecimal(amount_to_send) / project.decimal_places_value, precision: project.decimal_places, unit: '')
