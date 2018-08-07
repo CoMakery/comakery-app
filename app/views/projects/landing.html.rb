@@ -80,9 +80,9 @@ class Views::Projects::Landing < Views::Projects::Base
     end
 
     a('Browse All', href: projects_path, class: 'more')
-    content_for :js do
-      cookieconsent
-    end
+    # content_for :js do
+    #   cookieconsent
+    # end
   end
 
   # rubocop:disable Rails/OutputSafety

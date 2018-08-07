@@ -19,7 +19,7 @@
 # = require moment
 # = require underscore
 # = require chart_colors
-#  require cookieconsent
+# = require cookie_consent
 # = require_tree .
 
 $ ->
