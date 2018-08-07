@@ -236,6 +236,9 @@ describe Account do
     let!(:project5) { create :project, account: account1, visibility: 'member', title: 'member project' }
     let!(:project6) { create :project, visibility: 'member', title: 'other team private project' }
     let!(:project7) { create :project, visibility: 'public_listed', title: 'other team public project' }
+    let!(:project8) { create :project, visibility: 'member', title: 'award project' }
+    let!(:award_type) { create :award_type, project: project8 }
+    let!(:award) { create :award, award_type: award_type, account: account }
 
     before do
       team.build_authentication_team authentication
@@ -248,7 +251,11 @@ describe Account do
     end
 
     it 'show my accessable projects' do
-      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'member project', 'other team public project']
+      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'member project', 'other team public project', 'award project']
+    end
+
+    it 'other member projects including award projects' do
+      expect(account.other_member_projects.map(&:title)).to match_array ['member project', 'award project']
     end
   end
 

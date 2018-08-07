@@ -121,16 +121,23 @@ class Account < ApplicationRecord
   end
 
   def other_member_projects
-    team_projects.where.not(account_id: id)
+    Project.joins("
+      left join award_types at1 on at1.project_id=projects.id
+      left join awards on awards.award_type_id=at1.id
+      left join channels on channels.project_id=projects.id
+      left join teams on teams.id=channels.team_id
+      left join authentication_teams on authentication_teams.team_id=teams.id")
+           .where("((authentication_teams.account_id=#{id} and channels.id is not null) or awards.account_id=#{id}) and projects.account_id <> #{id}").distinct
   end
 
   def accessable_projects
     Project.joins("
-      left join awards a1 on a1.account_id=projects.account_id
+      left join award_types at1 on at1.project_id=projects.id
+      left join awards on awards.award_type_id=at1.id
       left join channels on channels.project_id=projects.id
       left join teams on teams.id=channels.team_id
       left join authentication_teams on authentication_teams.team_id=teams.id")
-           .where("(authentication_teams.account_id=#{id} and channels.id is not null) or projects.visibility=1 or a1.account_id=#{id} or projects.account_id=#{id}").distinct
+           .where("(authentication_teams.account_id=#{id} and channels.id is not null) or projects.visibility=1 or awards.account_id=#{id} or projects.account_id=#{id}").distinct
   end
 
   def confirmed?
