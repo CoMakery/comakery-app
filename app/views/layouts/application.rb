@@ -57,10 +57,12 @@ class Views::Layouts::Application < Views::Base
       body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") do
         render partial: 'layouts/google_tag_no_script.html'
         div(class: 'contain-to-grid top-bar-container show-for-medium') do
-          link_to root_path do
-            image_tag 'comakery.png', class: 'logo'
+          div(class: 'large-centered columns no-h-pad', style: 'max-width: 1535px') do
+            link_to root_path do
+              image_tag 'comakery.png', class: 'logo'
+            end
+            render partial: 'layouts/navigation'
           end
-          render partial: 'layouts/navigation'
         end
 
         div(class: 'contain-to-grid top-bar-container hide-for-medium') do

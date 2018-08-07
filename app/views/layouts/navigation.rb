@@ -23,7 +23,7 @@ class Views::Layouts::Navigation < Views::Base
         li do
           link_to 'SIGN IN', new_session_path
         end
-        li do
+        li(style: 'padding-right: 0') do
           link_to 'SIGN UP', new_account_path, class: 'pink-text'
         end
       end
