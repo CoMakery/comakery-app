@@ -75,8 +75,8 @@ class Views::Pages::Landing < Views::Base
         end
         column('medium-12 no-v-pad', style: 'margin-top: 20px;') do
           column('medium-5 show-for-large', style: 'color: #fff;') { text '.' }
-          column('medium-7 show-for-large') do
-            column('medium-5', style: 'max-width: 250px') do
+          column('medium-7 show-for-large', style: 'padding-left: 0; padding-right: 40px') do
+            column('medium-5', style: 'max-width: 250px; padding-left: 0;') do
               image_tag 'whois/community-manager.jpg', size: '220x220'
             end
             column('medium-7 no-h-pad', style: 'float: left') do
@@ -139,8 +139,8 @@ class Views::Pages::Landing < Views::Base
         end
         column('medium-12 no-v-pad', style: 'margin-top: 20px;') do
           column('medium-5 show-for-large', style: 'color: #fff;') { text '.' }
-          column('medium-7 show-for-large') do
-            column('medium-5', style: 'max-width: 250px') do
+          column('medium-7 show-for-large', style: 'padding-left: 0; padding-right: 40px') do
+            column('medium-5', style: 'max-width: 250px; padding-left: 0;') do
               image_tag 'whois/project-visionary.jpg', size: '220x220'
             end
             column('medium-7 no-h-pad', style: 'float: left') do
@@ -172,7 +172,7 @@ class Views::Pages::Landing < Views::Base
 
   def workonblockchain
     column('medium-12', style: 'color: #fff;margin-top: 10px') { text '.' }
-    div(class: 'large-12 small-centered columns no-h-pad', style: 'max-width: 1044px;') do
+    div(class: 'large-12 small-centered columns no-h-pad', style: 'max-width: 900px;') do
       div(class: 'work-blockchain') do
         image_tag 'workonblockchain/header.jpg', style: 'width: 100%'
       end
@@ -283,7 +283,7 @@ class Views::Pages::Landing < Views::Base
   end
 
   def signup_to_learn
-    div(class: 'large-10 medium-12 no-h-pad medium-centered columns', style: 'max-width: 1044px;') do
+    div(class: 'large-10 medium-12 no-h-pad medium-centered columns', style: 'max-width: 900px;') do
       column('medium-12 no-h-pad home-signup-bg') do
         column('medium-12') do
           div(class: 'show-for-large') do
