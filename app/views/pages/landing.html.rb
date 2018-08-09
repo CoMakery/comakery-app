@@ -192,6 +192,10 @@ class Views::Pages::Landing < Views::Base
             p do
               text 'The CoMakery platform connected talented developer and community managers to Vevue, each of them earning tokens while helping accelerate the project to bootstrap towards a successful $2.5 Million ICO.'
             end
+
+            p do
+              link_to 'See How Vevue Uses CoMakery', 'https://www.comakery.com/projects/59'
+            end
           end
         end
         column('large-6') do
