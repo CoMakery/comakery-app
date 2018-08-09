@@ -26,8 +26,9 @@ jobs:
     # VM instead of a container) see https://circleci.com/docs/2.0/executor-types/
     # To see the list of pre-built images that CircleCI provides for most common languages see
     # https://circleci.com/docs/2.0/circleci-images/
+    #circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
     docker:
-    - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
+    - image: circleci/ruby:2.4.4-jessie-node-browsers 
       command: /sbin/init
     steps:
     # Machine Setup
