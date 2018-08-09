@@ -4,7 +4,7 @@ class Views::Projects::Description < Views::Projects::Base
   def content
     div do
       row do
-        column('large-6 small-12') do
+        column('large-6 small-12', style: 'padding-left: 0') do
           if project.video_url
             div(class: 'project-video') do
               div(class: 'flex-video widescreen') do

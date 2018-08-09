@@ -89,7 +89,7 @@ class Views::Layouts::Application < Views::Base
           content_for?(:pre_body) ? yield(:pre_body) : ''
 
           div(class: 'main') do
-            div(class: 'large-10 medium-11 small-12 small-centered columns') do
+            div(class: 'large-10 medium-11 small-12 small-centered columns no-h-pad', style: 'max-width: 1535px;') do
               content_for?(:body) ? yield(:body) : yield
             end
           end

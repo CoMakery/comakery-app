@@ -5,7 +5,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
     content_for(:title) { project.title.strip }
 
     div(class: 'project-nav') do
-      full_row do
+      row do
         column('small-12') do
           h2 do
             text project.title
@@ -17,7 +17,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           end
         end
       end
-      full_row do
+      row do
         ul(class: 'menu') do
           li(class: ('active' if controller_name == 'projects' && params[:action] != 'edit').to_s) do
             path = project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
