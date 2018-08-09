@@ -41,7 +41,7 @@ jobs:
     # This is based on your 1.0 configuration file or project settings
     - run:
         working_directory: ~/CoMakery/comakery-app
-        command: rm -f CoMakery/comakery-app/.rvmrc; echo 2.3.1 > CoMakery/comakery-app/.ruby-version; rvm use 2.3.1 --default
+        command: rm -f CoMakery/comakery-app/.rvmrc; echo 2.4.4 > CoMakery/comakery-app/.ruby-version; rvm use 2.4.4 --default
     - run:
         working_directory: ~/CoMakery/comakery-app
         command: nvm install 8 && nvm alias default 8
