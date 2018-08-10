@@ -67,6 +67,7 @@ jobs:
     - run: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
     - run: node -v
     - run: npm i -g yarn@latest
+    - run: yarn upgrade --latest
     - run: yarn --version
     # Save dependency cache
     - save_cache:
