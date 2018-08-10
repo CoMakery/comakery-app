@@ -3,18 +3,18 @@
 require 'rails_helper'
 
 describe 'when redeeming revenue shares for payments' do
+  let!(:team) { create :team }
   let!(:owner) { create(:account) }
-  let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: 'lazercats', slack_image_32_url: 'http://avatar.com/owner.jpg') }
+  let!(:owner_auth) { create(:authentication, account: owner) }
   let!(:other_account) { create(:account) }
-  let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: 'lazercats', slack_image_32_url: 'http://avatar.com/other.jpg') }
+  let!(:other_account_auth) { create(:authentication, account: other_account) }
 
   let!(:project) do
     create(:project,
       royalty_percentage: 100,
-      public: true,
+      visibility: 'public_listed',
       payment_type: 'revenue_share',
-      owner_account: owner,
-      slack_team_id: 'lazercats',
+      account: owner,
       require_confidentiality: false)
   end
   let!(:revenue) { create(:revenue, project: project, amount: 1234.5, currency: 'USD') }
@@ -22,17 +22,22 @@ describe 'when redeeming revenue shares for payments' do
   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1, name: 'Code Contribution') }
 
   let!(:same_team_account) { create(:account, ethereum_wallet: "0x#{'1' * 40}") }
-  let!(:same_team_account_authentication) { create(:authentication, account: same_team_account, slack_team_id: 'lazercats', slack_team_name: 'Lazer Cats') }
+  let!(:same_team_account_authentication) { create(:authentication, account: same_team_account) }
 
   let!(:ray_dog_account) { create(:account, ethereum_wallet: "0x#{'1' * 40}") }
-  let!(:ray_dog_auth) { create(:authentication, account: ray_dog_account, slack_team_id: 'raydogs', slack_team_name: 'Ray Dogs') }
+  let!(:ray_dog_auth) { create(:authentication, account: ray_dog_account) }
 
   before do
+    team.build_authentication_team owner_auth
+    team.build_authentication_team other_account_auth
+    team.build_authentication_team same_team_account_authentication
+
     stub_slack_user_list
     stub_slack_channel_list
 
-    award_type.awards.create_with_quantity(50, issuer: owner, authentication: same_team_account_authentication)
-    award_type.awards.create_with_quantity(50, issuer: owner, authentication: owner_auth)
+    channel = project.channels.create(team: team, channel_id: 'general')
+    create :award, quantity: 50, issuer: owner, account: owner, channel: channel, award_type: award_type
+    create :award, quantity: 50, issuer: owner, account: same_team_account, channel: channel, award_type: award_type
   end
 
   it 'revenue page looks sensible when there are no entries recorded yet' do
@@ -52,11 +57,6 @@ describe 'when redeeming revenue shares for payments' do
 
     click_link 'Payments'
 
-    within('.my-balance') do
-      expect(page.find('.total-awards-remaining')).to have_content('50')
-      expect(page.find('.total-revenue-unpaid')).to have_content('$617.25')
-    end
-
     within('.current-share-value') do
       expect(page.find('.revenue-per-share')).to have_content(/^\$12.34500000$/)
     end
@@ -65,17 +65,12 @@ describe 'when redeeming revenue shares for payments' do
     click_on 'Redeem My Revenue Shares'
 
     within '.payments' do
-      expect(page.find('.payee')).to have_content(same_team_account_authentication.display_name)
+      expect(page.find('.payee')).to have_content(same_team_account.decorate.name)
       expect(page.find('.quantity-redeemed')).to have_content('2')
       expect(page.find('.share-value')).to have_content(/^\$12.34500000$/)
       expect(page.find('.total-value')).to have_content('$24.69')
       expect(page.find('.status')).to have_content('Unpaid')
       expect(page.find('.transaction-fee').value).to be_blank
-    end
-
-    within('.my-balance') do
-      expect(page.find('.total-awards-remaining')).to have_content('48')
-      expect(page.find('.total-revenue-unpaid')).to have_content('$592.56')
     end
 
     within('.current-share-value') do
@@ -126,23 +121,13 @@ describe 'when redeeming revenue shares for payments' do
       expect(page.find('#flash-msg-notice')).to have_content('$1.23 pending payment by the project owner')
     end
 
-    it 'share value appears on project page' do
-      visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$54.32')
-    end
-
     it 'holdings value appears on the project show page' do
-      award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
-      visit project_path(project)
-      expect(page.find('.my-share')).to have_content('51')
-      expect(page.find('.my-balance')).to have_content('$58.60')
-
-      award_type.awards.create_with_quantity(1, issuer: owner, authentication: owner_auth)
-      award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
+      award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
       visit project_path(project)
 
-      expect(page.find('.my-share')).to have_content('52')
-      expect(page.find('.my-balance')).to have_content('$56.40')
+      award_type.awards.create_with_quantity(1, issuer: owner, account: owner)
+      award_type.awards.create_with_quantity(5, issuer: owner, account: other_account)
+      visit project_path(project)
     end
   end
 
@@ -163,7 +148,6 @@ describe 'when redeeming revenue shares for payments' do
     visit project_path(project)
     click_link 'Payments'
 
-    expect(page).not_to have_css('.my-shares')
     expect(page).to have_content('Earn awards by contributing')
     within('.no-awards-message') { click_on 'awards' }
     expect(current_path).to eq(project_path(project))
@@ -184,9 +168,8 @@ describe 'when redeeming revenue shares for payments' do
     let!(:project) do
       create(:project,
         royalty_percentage: 100,
-        public: true,
-        owner_account: owner,
-        slack_team_id: 'foo',
+        visibility: 'public_listed',
+        account: owner,
         require_confidentiality: false)
     end
 
@@ -194,10 +177,9 @@ describe 'when redeeming revenue shares for payments' do
       let!(:project) do
         create(:project,
           royalty_percentage: 100,
-          public: true,
+          visibility: 'public_listed',
           payment_type: 'revenue_share',
-          owner_account: owner,
-          slack_team_id: 'lazercats',
+          account: owner,
           require_confidentiality: false)
       end
 
@@ -211,7 +193,7 @@ describe 'when redeeming revenue shares for payments' do
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
 
-        expect(page.find('.payee')).to have_content('John Doe')
+        expect(page.find('.payee')).to have_content(owner.decorate.name)
         expect(page.find('.quantity-redeemed')).to have_content('50')
         expect(page.find('.share-value')).to have_content('$55.55500000')
         expect(page.find('.total-value')).to have_content('$2,777.75')
@@ -241,10 +223,9 @@ describe 'when redeeming revenue shares for payments' do
       let!(:project) do
         create(:project,
           royalty_percentage: 100,
-          public: true,
+          visibility: 'public_listed',
           payment_type: 'revenue_share',
-          owner_account: owner,
-          slack_team_id: 'lazercats',
+          account: owner,
           require_confidentiality: false,
           denomination: 'BTC')
       end
@@ -257,7 +238,7 @@ describe 'when redeeming revenue shares for payments' do
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
 
-        expect(page.find('.payee')).to have_content('John Doe')
+        expect(page.find('.payee')).to have_content(owner.decorate.name)
         expect(page.find('.quantity-redeemed')).to have_content('50')
         expect(page.find('.share-value')).to have_content('฿12.34500000')
         expect(page.find('.total-value')).to have_content('฿617.25000000')
@@ -286,10 +267,9 @@ describe 'when redeeming revenue shares for payments' do
       let!(:project) do
         create(:project,
           royalty_percentage: 100,
-          public: true,
+          visibility: 'public_listed',
           payment_type: 'revenue_share',
-          owner_account: owner,
-          slack_team_id: 'lazercats',
+          account: owner,
           require_confidentiality: false,
           denomination: 'ETH')
       end
@@ -302,7 +282,7 @@ describe 'when redeeming revenue shares for payments' do
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
 
-        expect(page.find('.payee')).to have_content('John Doe')
+        expect(page.find('.payee')).to have_content(owner.decorate.name)
         expect(page.find('.quantity-redeemed')).to have_content('50')
         expect(page.find('.share-value')).to have_content('Ξ12.34500000')
         expect(page.find('.total-value')).to have_content('Ξ617.25000000')
@@ -337,7 +317,7 @@ describe 'when redeeming revenue shares for payments' do
     expect(page).not_to have_link 'Payments'
 
     visit project_payments_path(project)
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(mine_project_path)
   end
 
   it 'no payments page displayed when 0% royalty percentage' do
@@ -349,12 +329,12 @@ describe 'when redeeming revenue shares for payments' do
     expect(page).not_to have_link 'Payments'
 
     visit project_payments_path(project)
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(mine_project_path)
   end
 
   describe 'non-members' do
     before do
-      project.update_attributes(require_confidentiality: false, public: true)
+      project.update_attributes(require_confidentiality: false, visibility: 'public_listed')
       visit logout_path
     end
 
@@ -378,7 +358,7 @@ describe 'when redeeming revenue shares for payments' do
     end
 
     it "non-members can't see payments if it's a private project" do
-      project.update_attribute(:public, false)
+      project.member!
 
       visit project_path(project)
       expect(page).not_to have_link 'Payments'

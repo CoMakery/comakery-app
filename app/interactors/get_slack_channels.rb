@@ -2,10 +2,9 @@ class GetSlackChannels
   include Interactor
 
   def call
-    current_account = context.current_account
-
+    authentication_team = context.authentication_team
     begin
-      response = current_account.slack.get_channels
+      response = authentication_team.slack.fetch_channels
       channels = response.channels
                          .reject(&:is_archived)
                          .sort_by { |channel| channel['name'] }

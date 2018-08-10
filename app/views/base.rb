@@ -18,6 +18,10 @@ module Views
       row { column { yield } }
     end
 
+    def full_row_right
+      row { column('text-right') { yield } }
+    end
+
     def buttonish(size = :small, *extras)
       result = %i[button radius]
       result << size
@@ -43,10 +47,6 @@ module Views
           text("#{field.to_s.humanize} #{errors.to_sentence}")
         }
       end
-    end
-
-    def to_json(*args)
-      as_json(*args).to_json
     end
 
     def add_classes(args, classes)

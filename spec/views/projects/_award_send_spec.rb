@@ -8,7 +8,6 @@ describe 'projects/_award_send.html.rb' do
   before do
     assign :project, project
     assign :award, award
-    assign :awardable_authentications, project.authentications
     assign :awardable_types, project.award_types
     assign :can_award, true
 
@@ -19,8 +18,6 @@ describe 'projects/_award_send.html.rb' do
     before { assign :can_award, true }
     it 'award-types description markdown as HTML' do
       render
-      assert_select '.award-types .help-text', html: %r{markdown <em>rocks</em>:}
-      assert_select '.award-types .help-text', html: %r{<a href="http://www.auto.link"[^>]*>www.auto.link</a>}
     end
   end
 

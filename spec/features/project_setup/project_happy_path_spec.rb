@@ -1,16 +1,21 @@
 require 'rails_helper'
 
 describe 'viewing projects, creating and editing', :js do
-  let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', owner_account: account, slack_team_id: 'citizencode', public: false) }
-  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', owner_account: account, slack_team_id: 'citizencode', public: true) }
+  let!(:team) { create :team }
+  let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false) }
+  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, visibility: 'public_listed') }
   let!(:public_project_award_type) { create(:award_type, project: public_project) }
   let!(:public_project_award) { create(:award, award_type: public_project_award_type, created_at: Date.new(2016, 1, 9)) }
-  let!(:account) { create(:account, email: 'gleenn@example.com').tap { |a| create(:authentication, account_id: a.id, slack_team_id: 'citizencode', slack_team_domain: 'citizencodedomain', slack_team_name: 'Citizen Code', slack_team_image_34_url: 'https://slack.example.com/awesome-team-image-34-px.jpg', slack_team_image_132_url: 'https://slack.example.com/awesome-team-image-132-px.jpg', slack_user_name: 'gleenn', slack_first_name: 'Glenn', slack_last_name: 'Spanky') } }
+  let!(:account) { create(:account, first_name: 'Glenn', last_name: 'Spanky', email: 'gleenn@example.com') }
+  let!(:authentication) { create(:authentication, account: account) }
   let!(:same_team_account) { create(:account, ethereum_wallet: "0x#{'1' * 40}") }
-  let!(:same_team_account_authentication) { create(:authentication, account: same_team_account, slack_team_id: 'citizencode', slack_team_name: 'Citizen Code') }
-  let!(:other_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id, slack_team_id: 'comakery', slack_team_name: 'CoMakery') } }
+  let!(:same_team_account_authentication) { create(:authentication, account: same_team_account) }
+  let!(:other_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id) } }
 
   before do
+    team.build_authentication_team authentication
+    team.build_authentication_team same_team_account_authentication
+
     Rails.application.config.allow_ethereum = 'citizencodedomain'
     travel_to Date.new(2016, 1, 10)
     stub_slack_user_list
@@ -36,7 +41,6 @@ describe 'viewing projects, creating and editing', :js do
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
 
     attach_file 'Project Image', Rails.root.join('spec', 'fixtures', 'helmet_cat.png')
-    expect(find_field('Set project as public')).not_to be_checked
 
     expect(find_field('project_maximum_tokens')['value']).to eq('1000000')
     fill_in 'project_maximum_tokens', with: '20000000'
@@ -71,54 +75,27 @@ describe 'viewing projects, creating and editing', :js do
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)
-
-    click_on 'Save'
-
-    expect(page).to have_content "Title can't be blank"
-    expect(page).to have_content "Slack Channel can't be blank"
-
     fill_in 'Title', with: 'This is a project'
-    select 'a-channel-name', from: 'Slack Channel'
 
-    click_on 'Save'
+    click_on 'Save', class: 'last_submit'
 
     expect(page).to have_content 'Project created'
     expect(page).to have_content 'This is a project'
     expect(page).to have_content 'This is a project description'
-    expect(page.find('.project-image')[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
+
     expect(page).not_to have_link 'Project Tasks'
 
-    expect(page).to have_content 'Lead by Glenn Spanky'
-    expect(page).to have_content 'Citizen Code'
-
-    award_type_rows = get_award_type_rows
     expect(Project.last.award_types.count).to eq(4)
-    expect(award_type_rows.size).to eq(4)
-
-    expect(award_type_rows[0]).to have_content 'This is a small award type'
-    expect(award_type_rows[0]).to have_content 'Say hi to earn this'
-    expect(award_type_rows[0]).to have_content '1,000'
-
-    expect(award_type_rows[1]).to have_content 'This is a medium award type'
-    expect(award_type_rows[1]).to have_content '2,000'
-
-    expect(award_type_rows[2]).to have_content 'This is a large award type'
-    expect(award_type_rows[2]).to have_content '3,000'
-
-    expect(award_type_rows[3]).to have_content 'This is a super big award type'
-    expect(award_type_rows[3]).to have_content '5,000'
+    expect(page.all('select#award_award_type_id option').map(&:text)).to eq(['1,000 This is a small award type', '2,000 This is a medium award type', '3,000 This is a large award type', '5,000 This is a super big award type'])
 
     click_on 'Settings'
 
-    expect(page.find('.project-image')[:src]).to match(%r{/attachments/[A-Za-z0-9/]+/image})
+    expect(page.find('.project-image')[:src]).to match(/helmet_cat.png/)
 
-    expect(page).to have_unchecked_field('Set project as public')
     fill_in 'Title', with: 'This is an edited project'
     fill_in 'Description', with: 'This is an edited project description which is very informative'
     fill_in 'Project Tracker', with: 'http://github.com/here/is/my/tracker'
     fill_in 'Video', with: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'
-    uncheck 'Set project as public'
-    # uncheck 'Publish to Ethereum Blockchain'
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)
@@ -128,7 +105,7 @@ describe 'viewing projects, creating and editing', :js do
     expect(award_type_inputs.size).to eq(3)
 
     # youtube player throws js errors, ignore them:
-    ignore_js_errors { click_on 'Save' }
+    ignore_js_errors { click_on 'Save', class: 'last_submit' }
     ignore_js_errors { expect(page).to have_content 'Project updated' }
 
     expect(EthereumTokenContractJob.jobs.length).to eq(0)
@@ -137,19 +114,16 @@ describe 'viewing projects, creating and editing', :js do
     expect(page).to have_content 'This is an edited project'
     expect(page).to have_content 'This is an edited project description which is very informative'
     expect(page).to have_link 'Project Tasks'
-    expect(page).to have_link 'Slack Channel', href: 'https://citizencodedomain.slack.com/messages/a-channel-name'
     expect(page.all('.project-video iframe').size).to eq(1)
 
-    award_type_inputs = get_award_type_rows
-    expect(award_type_inputs.size).to eq(3)
-    expect(page).to have_content 'This is a medium award type (2,000) (Community Awardable)'
-
-    expect(award_type_inputs.size).to eq(3)
+    expect(page.all('select#award_award_type_id option').count).to eq(3)
 
     visit('/projects')
 
     expect(page).to have_content 'This is an edited project'
 
+    Project.last.channels.create(team: team, channel_id: 'channel id')
+    expect(Project.last.channels.count).to eq 1
     login(same_team_account)
 
     visit('/projects')
@@ -170,9 +144,10 @@ describe 'viewing projects, creating and editing', :js do
   end
 
   describe 'removing award types on projects where there have been awards sent already' do
-    let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', owner_account: account, slack_team_id: 'citizencode', public: false, slack_channel: 'a-channel-name') }
+    let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false) }
     before { login(account) }
 
+    let!(:channel) { create :channel, project: project, team: team, name: 'a channel' }
     let!(:award_type) { create(:award_type, project: project, name: "Big ol' award", amount: 40000, community_awardable: false) }
 
     context 'without awards' do
@@ -180,7 +155,7 @@ describe 'viewing projects, creating and editing', :js do
         visit edit_project_path(project)
         award_type_amount_input = page.find("input[name*='[amount]']")
 
-        expect(page.all('a[data-mark-and-hide]').size).to eq(1)
+        expect(page.all('a[data-mark-and-hide]').size).to eq(2)
         expect(award_type_amount_input[:value]).to eq('40000')
         expect(award_type_amount_input[:readonly]).to be_falsey
 
@@ -188,7 +163,7 @@ describe 'viewing projects, creating and editing', :js do
         page.find("input[name*='[title]']").set('fancy title')
         page.find("input[name*='[community_awardable]']").set(true)
 
-        click_on 'Save'
+        click_on 'Save', class: 'last_submit'
 
         visit edit_project_path(project)
         award_type_amount_input = page.find("input[name*='[amount]']")
@@ -201,13 +176,13 @@ describe 'viewing projects, creating and editing', :js do
     end
 
     context 'with awards' do
-      let!(:award) { create(:award, award_type: award_type, authentication: same_team_account_authentication) }
+      let!(:award) { create(:award, award_type: award_type, account: same_team_account) }
 
       it 'prevents destroying the award types' do
         visit edit_project_path(project)
         award_type_amount_input = page.find("input[name*='[amount]']")
 
-        expect(page.all('a[data-mark-and-hide]').size).to eq(0)
+        expect(page.all('a[data-mark-and-hide]').size).to eq(1)
         expect(page).to have_content '(1 award sent)'
         expect(award_type_amount_input[:value]).to eq('40000')
         expect(award_type_amount_input[:readonly]).to eq('readonly')
@@ -219,7 +194,7 @@ describe 'viewing projects, creating and editing', :js do
         page.find("input[name*='[title]']").set('fancy title')
         page.find("input[name*='[community_awardable]']").set(true)
 
-        click_on 'Save'
+        click_on 'Save', class: 'last_submit'
 
         visit edit_project_path(project)
 

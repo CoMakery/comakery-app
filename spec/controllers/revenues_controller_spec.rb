@@ -1,11 +1,16 @@
 require 'rails_helper'
 
 describe RevenuesController do
-  let!(:account) { create(:account, email: 'account@example.com').tap { |a| create(:authentication, account: a, slack_team_id: 'foo', slack_user_name: 'account', slack_user_id: 'account slack_user_id', slack_team_domain: 'foobar') } }
-  let!(:my_project) { create(:project, title: 'Cats', description: 'Cats with lazers', owner_account: account, slack_team_id: 'foo') }
-  let!(:other_project) { create(:project, title: 'Dogs', description: 'Dogs with harpoons', owner_account: account, slack_team_id: 'bar') }
+  let!(:team) { create :team }
+  let!(:authentication) { create :authentication }
+  let!(:account) { authentication.account }
+  let!(:my_project) { create(:project, title: 'Cats', description: 'Cats with lazers', account: account) }
+  let!(:other_project) { create(:project, title: 'Dogs', description: 'Dogs with harpoons', account: create(:account)) }
 
   before do
+    team.build_authentication_team authentication
+    my_project.revenue_share!
+    other_project.revenue_share!
     allow(controller).to receive(:policy_scope).and_call_original
     allow(controller).to receive(:authorize).and_call_original
   end
@@ -13,14 +18,14 @@ describe RevenuesController do
   describe '#index' do
     it 'owner can see' do
       login account
-
+      expect(my_project.revenue_share?).to be true
       get :index, params: { project_id: my_project.id }
       expect(controller).to have_received(:policy_scope).with(Project)
       expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
     end
 
     it 'anonymous can access public' do
-      other_project.update_attributes(public: true)
+      other_project.update_attributes(visibility: 'public_listed')
 
       get :index, params: { project_id: other_project.id }
       expect(controller).to have_received(:policy_scope).with(Project)
@@ -34,6 +39,7 @@ describe RevenuesController do
       expect(controller).to have_received(:policy_scope).with(Project)
       expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
       expect(response).to redirect_to('/404.html')
+      expect(assigns[:project]).to be_nil
     end
   end
 

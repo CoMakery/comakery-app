@@ -12,16 +12,34 @@
 #
 # = require jquery
 # = require jquery_ujs
+# = require jquery-ui
 # = require d3
 # = require d3pie
 # = require foundation
 # = require moment
 # = require underscore
 # = require chart_colors
+#  require cookieconsent
 # = require_tree .
 
 $ ->
   $(document).foundation()
+  $('.datepicker').datepicker({
+    dateFormat: 'mm/dd/yy',
+    defaultDate: '01/01/2000',
+    changeYear: true,
+    yearRange: '1950:2010'
+  })
+
+  $('.datepicker-no-limit').datepicker({
+    dateFormat: 'mm/dd/yy',
+    changeYear: true
+  })
+
+  if $('.datepicker').val()
+    $('.datepicker').datepicker("setDate",new Date($('.datepicker').val()))
+  if $('.datepicker-no-limit').val()
+    $('.datepicker-nolimit').datepicker("setDate",new Date($('.datepicker').val()))
 
   # lets hope we never have more than 1000 initial records (award types only have 3 by default)
   nextIdentifier = 1000
@@ -52,14 +70,103 @@ $ ->
     removeElement.hide()
     removeElement.find("input[data-destroy]").val("1")
 
-  # Run on page ready then bind events
-  awardPaymentType()
+  $(document).on "change", ".provider_select", (e) ->
+    $('.active-channel').removeClass('active-channel')
+    $closest = $(@).closest('.row')
+    $closest.addClass('active-channel')
+    $id = $closest.find('.team_select').attr('id')
+    $data = {elem_id: $id, provider: $(@).val()}
+    $.get("/teams.js", $data)
+
+  $(document).on "change", ".team_select", (e) ->
+    $('.active-channel').removeClass('active-channel')
+    $closest = $(@).closest('.row')
+    $closest.addClass('active-channel')
+    $id = $closest.find('.channel_select').attr('id')
+    $data = {elem_id: $id}
+    $.get("/teams/" + $(@).val() + "/channels.js", $data)
+
+  $(document).on "change", ".fetch-channel-users", (e) ->
+    if $(@).val()
+      $('.award-email').attr('name','')
+      $('.uid-email').addClass('hide')
+      $('.uid-select').removeClass('hide')
+      $.get("/channels/" + $(@).val() + "/users.js")
+    else
+      $('.member-select').attr('name','')
+      $('.award-email').attr('name','award[uid]')
+      $('.uid-email').removeClass('hide')
+      $('.uid-select').addClass('hide')
+
+  $(document).on "keyup", "input#award_quantity", (e) ->
+    value = $(@).val()
+    arr=value.split('.')
+    if arr[1]
+      if arr[1].length > 2
+        $(@).val(value.slice(0,-1))
+        return false
+
+  $(document).on 'click', '.signin-with-metamask', ->
+    loginWithMetaMask.handleClick()
+
+  $(document).on 'click', '.scrollingBox.menu a', ->
+    href = $(this).attr 'href'
+    anchor = href.substr href.indexOf('#') + 1
+    $('html, body').animate { scrollTop: $('div[data-id=' + anchor + ']').offset().top }, 1000
+    if $(document).scrollTop() >= document.body.offsetHeight - window.innerHeight
+      $('.scrollingBox.menu a').removeClass 'active-menu'
+      $(this).addClass 'active-menu'
+    else
+      $(this).closest('.menu').attr 'data-hash', anchor
+
+  $(document).on 'scroll', (event) ->
+    limit = document.body.offsetHeight - window.innerHeight
+    scrollPos = $(document).scrollTop() + 10
+    currentAnchor = $('.scrollingBox.menu').attr 'data-hash'
+    if currentAnchor
+      topOfCurrentAnchor = $('div[data-id=' + currentAnchor + ']').offset().top
+      $('.scrollingBox.menu a').removeClass 'active-menu'
+      $('.scrollingBox.menu a[href$=' + currentAnchor + ']').addClass 'active-menu'
+      if $(document).scrollTop() == topOfCurrentAnchor || $(document).scrollTop() >= limit
+        $('.scrollingBox.menu').removeAttr 'data-hash'
+    else
+      $('.scrollingBox.menu a').each ->
+        currLink = $(this)
+        href = currLink.attr 'href'
+        anchor = href.substr href.indexOf('#') + 1
+        refElement = $('div[data-id=' + anchor + ']')
+        if refElement.position().top <= scrollPos and refElement.position().top + refElement.height() > scrollPos
+          $('.scrollingBox.menu a').removeClass 'active-menu'
+          currLink.addClass 'active-menu'
+        else
+          currLink.removeClass 'active-menu'
+
+    $('tr.award-row')
+    .on 'mouseover', (e) ->
+      $(@).find('.overlay').show()
+    .on 'mouseout', (e) ->
+      $(@).find('.overlay').hide()
+
+  $('.copiable').click ->
+    $(".copy-source").select()
+    document.execCommand('Copy')
+
+  $('input[name=mine]').click (e) ->
+    window.location.href = $(@).val()
+
   $('#project_payment_type').change (e)->
     awardPaymentType()
+
+  floatingLeftMenuItems()
+  # Run on page ready then bind events
+  awardPaymentType()
 
   royaltyCalc()
   $('#project_royalty_percentage, #project_maximum_tokens, #project_denomination').change (e) ->
     royaltyCalc()
+
+  if $('.preview-content').height() > 310
+    $('.read-more').show()
 
 awardPaymentType = () ->
   switch $('#project_payment_type option:selected').val()
@@ -87,3 +194,14 @@ royaltyCalc = () ->
       "<td>#{denomination}#{contributorPayment.toLocaleString()}</td>"
 
   $('.royalty-calc tbody').replaceWith(schedule)
+
+floatingLeftMenuItems = () ->
+  offsetPixels = 150
+  $(window).scroll ->
+    if $(window).scrollTop() > offsetPixels
+      $('.scrollingBox').css
+        'position': 'fixed'
+        'top': '50px'
+        'width': $('.scrollingBox').closest('div').width() + 30
+    else
+      $('.scrollingBox').css 'position': 'static'

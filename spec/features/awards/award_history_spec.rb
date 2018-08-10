@@ -2,32 +2,37 @@ require 'rails_helper'
 
 describe 'viewing projects, creating and editing', :js do
   context 'when not owner' do
+    let!(:team) { create :team }
     let!(:owner) { create(:account) }
-    let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/owner.jpg') }
+    let!(:owner_auth) { create(:authentication, account: owner) }
     let!(:other_account) { create(:account) }
-    let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/other.jpg') }
-    let!(:project) { create(:project, public: true, owner_account: owner, slack_team_id: 'foo') }
+    let!(:other_account_auth) { create(:authentication, account: other_account) }
+    let!(:project) { create(:project, visibility: 'public_listed', account: owner) }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
+    let!(:channel) { create(:channel, project: project, team: team) }
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }
-    let!(:award) { create(:award, award_type: award_type, issuer: owner, authentication: other_account_auth) }
-    let!(:community_award) { create(:award, award_type: community_award_type, issuer: other_account, authentication: owner_auth) }
+    let!(:award) { create(:award, award_type: award_type, account: other_account, channel: channel) }
+    let!(:community_award) { create(:award, award_type: community_award_type, account: owner) }
 
     before do
+      team.build_authentication_team owner_auth
+      team.build_authentication_team other_account_auth
       stub_slack_user_list
       stub_slack_channel_list
     end
 
     context 'when logged in as non-owner' do
       context 'viewing projects' do
-        before { login(other_account) }
+        before { login(owner) }
 
         it 'shows radio buttons for community awardable awards' do
           visit project_path(project)
 
           within('.award-types') do
-            expect(page.all('input[type=radio]').size).to eq(2)
-            expect(page.all('input[type=radio][disabled=disabled]').size).to eq(1)
-            expect(page).to have_content 'User'
+            expect(page.all('input[type=text]').size).to eq(2)
+            expect(page).to have_content 'Communication Channel'
+            expect(page).to have_content 'Email Address'
+            expect(page).to have_content 'Award Type'
             expect(page).to have_content 'Description'
           end
         end
@@ -40,8 +45,7 @@ describe 'viewing projects, creating and editing', :js do
           visit project_path(project)
 
           within('.award-types') do
-            expect(page.all('input[type=radio]').size).to eq(0)
-            expect(page.all('input[type=radio][disabled=disabled]').size).to eq(0)
+            expect(page.all('input[type=text]').size).to eq(0)
             expect(page).not_to have_content 'User'
             expect(page).not_to have_content 'Description'
           end
@@ -56,9 +60,20 @@ describe 'viewing projects, creating and editing', :js do
           expect(page).to have_content 'Project Tokens Awarded'
         end
 
+        it 'show link to ethereum transaction' do
+          stub_token_symbol
+          project.update ethereum_enabled: true, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367'
+          award.update ethereum_transaction_address: '0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
+          login(owner)
+          visit project_path(project.reload)
+
+          click_link 'Awards'
+          expect(page).to have_content 'Blockchain Transaction'
+        end
+
         it 'paginates when there are lots of awards' do
           (305 - project.awards.count).times do
-            create(:award, award_type: community_award_type, issuer: other_account, authentication: owner_auth)
+            create(:award, award_type: community_award_type, issuer: other_account, account: owner)
           end
 
           visit project_path(project)

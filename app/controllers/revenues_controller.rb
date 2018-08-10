@@ -25,7 +25,9 @@ class RevenuesController < ApplicationController
   private
 
   def assign_project
-    @project = policy_scope(Project).find(params[:project_id]).decorate
+    project = policy_scope(Project).find(params[:project_id])
+    @project = project.decorate if project.can_be_access?(current_account) && project.share_revenue?
+    redirect_to root_path unless @project
   end
 
   def revenue_params

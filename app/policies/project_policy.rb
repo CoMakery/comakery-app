@@ -15,11 +15,10 @@ class ProjectPolicy < ApplicationPolicy
     end
 
     def resolve
-      if account
-        projects = Project.arel_table
-        scope.where(projects[:public].eq(true).or(projects[:slack_team_id].eq(@account.slack_auth.slack_team_id)))
+      if @account
+        account.accessable_projects
       else
-        scope.where(public: true)
+        scope.publics
       end
     end
   end
@@ -31,7 +30,7 @@ class ProjectPolicy < ApplicationPolicy
   alias index? show?
 
   def edit?
-    account.present? && project.owner_account == account
+    account.present? && project.account == account
   end
 
   alias update? edit?
@@ -43,11 +42,15 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show_revenue_info?
-    project.share_revenue? && show_contributions?
+    project.show_revenue_info?(account)
   end
 
   def team_member?
-    account.present? && account.authentications.pluck(:slack_team_id).include?(project.slack_team_id)
+    account&.same_team_or_owned_project?(project)
+  end
+
+  def unlisted?
+    project&.can_be_access?(account)
   end
 
   alias send_community_award? team_member?

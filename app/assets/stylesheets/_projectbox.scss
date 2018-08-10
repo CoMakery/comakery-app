@@ -31,10 +31,11 @@
     }
 
     .text-overlay {
+      min-height: 60px;
       position: absolute;
       background-color: #444;
       width: 100%;
-      padding: 6px 5px 6px 85px;
+      padding: 6px 5px 0px 14px;
       top: -75px;
       opacity: 0.9;
       color: white;
@@ -48,7 +49,7 @@
       h5 {
         margin: 0;
         font-weight: 600;
-        margin-bottom: -.2em;
+        margin-bottom: 0;
       }
     }
     p {

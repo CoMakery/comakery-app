@@ -33,6 +33,9 @@ Layout/AlignParameters:
 Layout/IndentHash:
   EnforcedStyle: consistent
 
+Metrics/PerceivedComplexity:
+  Max: 15
+
 Layout/IndentationConsistency:
   Enabled: false
 

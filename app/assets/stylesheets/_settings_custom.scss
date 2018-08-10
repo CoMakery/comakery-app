@@ -1,5 +1,16 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,900,100,200,300,500,600,700,800,100italic,200italic,300italic,400italic,500italic,600italic,700italic,800italic,900italic);
 
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: normal;
+  src: asset-url('Montserrat/Montserrat-Regular.ttf')  format('truetype')
+}
+
+@font-face {
+  font-family: 'MontserratBold';
+  font-weight: normal;
+  src: asset-url('Montserrat/Montserrat-Bold.ttf')  format('truetype')
+}
 // Colors
 
 $primary-color: #0066FF;
@@ -27,7 +38,7 @@ $global-radius: 2px;
 // Fonts
 
 $body-font-family: Roboto, Raleway, Lato, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
-$header-font-family: $body-font-family;
+$header-font-family: MontserratBold, Roboto, Raleway, Lato, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
 $global-weight-normal: 475;
 $global-weight-bold: 775;
 
@@ -51,5 +62,5 @@ $topbar-link-dropdown-padding: ($topbar-height / 3);
 
 // Buttons
 
-$button-background: $primary-color;
+$button-background: $skyblue;
 $button-radius: $global-radius;

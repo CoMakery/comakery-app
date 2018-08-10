@@ -1,16 +1,26 @@
 require 'rails_helper'
 
 describe 'shared/_awards.html.rb' do
+  let!(:team) { create :team }
   let!(:issuer) { create(:account) }
   let!(:recipient1) { create(:account) }
   let!(:recipient2) { create(:account) }
-  let!(:issuer_auth) { create(:authentication, slack_team_id: 'cats', account: issuer) }
-  let!(:recipient1_auth) { create(:authentication, slack_team_id: 'cats', account: recipient1) }
-  let!(:recipient2_auth) { create(:authentication, slack_team_id: 'cats', account: recipient2) }
-  let!(:project) { create(:project, ethereum_enabled: true, slack_team_id: 'cats') }
+  let!(:issuer_auth) { create(:authentication, account: issuer) }
+  let!(:recipient1_auth) { create(:authentication, account: recipient1) }
+  let!(:recipient2_auth) { create(:authentication, account: recipient2) }
+  let!(:project) do
+    stub_token_symbol
+    create(:project, ethereum_enabled: true, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367')
+  end
   let!(:award_type) { create(:award_type, project: project) }
-  let!(:award1) { create(:award, award_type: award_type, description: 'markdown _rocks_: www.auto.link', issuer: issuer, authentication: recipient1_auth).decorate }
-  let!(:award2) { create(:award, award_type: award_type, description: 'awesome', issuer: issuer, authentication: recipient2_auth).decorate }
+  let!(:award1) { create(:award, award_type: award_type, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
+  let!(:award2) { create(:award, award_type: award_type, description: 'awesome', issuer: issuer, account: recipient2).decorate }
+
+  before do
+    team.build_authentication_team issuer_auth
+    team.build_authentication_team recipient1_auth
+    team.build_authentication_team recipient2_auth
+  end
 
   before { assign :project, project.decorate }
   before { assign :awards, [award1] }
@@ -51,7 +61,10 @@ describe 'shared/_awards.html.rb' do
 
   describe 'Blockchain Transaction column' do
     describe 'when project is not ethereum enabled' do
-      before { project.ethereum_enabled = false }
+      before do
+        project.ethereum_enabled = false
+        project.ethereum_contract_address = nil
+      end
       it 'the column header is hidden' do
         render
         expect(rendered).not_to have_css '.header.blockchain-address'

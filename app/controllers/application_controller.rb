@@ -3,8 +3,7 @@ require 'application_responder'
 class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   respond_to :html
-  layout 'raw'
-
+  # layout 'raw'
   include Pundit
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
@@ -15,7 +14,7 @@ class ApplicationController < ActionController::Base
 
   # require account logins for all pages by default
   # (public pages use skip_before_action :require_login)
-  before_action :require_login
+  before_action :require_login, :check_age
   before_action :basic_auth
 
   def basic_auth
@@ -32,8 +31,8 @@ class ApplicationController < ActionController::Base
   end
 
   # called from before_filter :require_login
-  def not_authenticated
-    redirect_to root_path
+  def not_authenticated(msg = nil)
+    redirect_to root_path, alert: msg
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
@@ -54,22 +53,40 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
-  # use like: before_filter :require_admin
-  def require_admin
-    authorize :application, :admin?
+  def require_login
+    if session[:account_id].blank?
+      not_authenticated
+    elsif !current_account.confirmed? && !current_account.valid_and_underage?
+      not_authenticated('Please confirm your email before continuing.')
+    end
   end
 
-  def require_login
-    not_authenticated unless session[:account_id]
-    flash[:error] = "Please check your email for confirmation" unless current_account.confirmed?
+  def check_age
+    redirect_to account_path, alert: 'Sorry, you must be 18 years or older to use this website' if current_account && current_account.valid_and_underage? && controller_name != 'accounts'
+  end
+
+  def check_account_info
+    current_account.name_required = true
+    unless current_account.valid?
+      flash[:error] = "To help us comply with regulations, please update your account info for #{current_account.errors.keys.join(', ').humanize.titleize}"
+      redirect_to account_path
+    end
   end
 
   def current_account
     @current_account ||= Account.find_by(id: session[:account_id])
   end
+
   helper_method :current_account
   alias current_user current_account
   helper_method :current_user
+
+  def assign_project
+    project = policy_scope(Project).find_by id: params[:project_id]
+    project = policy_scope(Project).find_by long_id: params[:project_id] unless project
+    @project = project&.decorate if project&.can_be_access?(current_account)
+    redirect_to root_path unless @project
+  end
 
   # :nocov:
   # rubocop:disable Metrics/CyclomaticComplexity

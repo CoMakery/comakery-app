@@ -3,67 +3,48 @@ class BuildAwardRecords
 
   # rubocop:disable Metrics/CyclomaticComplexity
   def call
-    slack_user_id = context.slack_user_id
-    award_params = context.award_params
-    total_tokens_issued = context.total_tokens_issued
-    issuer = context.issuer
+    context.award_type = AwardType.find_by(id: context.award_type_id)
+    context.total_amount = context.award_type.amount * BigDecimal(context.quantity) if context.award_type && context.quantity
 
-    context.fail!(message: 'missing slack_user_id') if slack_user_id.blank?
-    context.fail!(message: 'missing total_tokens_issued') if total_tokens_issued.blank?
+    validate_data
 
-    award_type = AwardType.find_by(id: award_params[:award_type_id])
-    project = award_type&.project
-    context.fail!(message: 'missing award type') unless project
-
-    quantity = award_params[:quantity].presence || 1
-
-    authentication = Authentication.includes(:account).find_by(slack_user_id: slack_user_id)
-    authentication ||= create_authentication(context)
-
-    # TODO: could be done with a award_type.build_award_with_quantity variation of award_type.create_award_with_quantity
-    award = Award.new(award_params.merge(
-                        issuer: issuer,
-                        authentication_id: authentication.id,
-                        unit_amount: award_type.amount,
-                        quantity: quantity,
-                        total_amount: award_type.amount * BigDecimal(quantity)
-    ))
-
-    # TODO: this should be an award validation
-    unless award.total_amount + total_tokens_issued <= project.maximum_tokens
-      context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable tokens")
+    context.channel = Channel.find_by id: context.channel_id
+    account = find_or_create_account
+    unless account
+      confirm_token = SecureRandom.hex
+      email = context.uid
     end
 
-    unless award.valid?
-      context.award = award
-      context.fail!(message: award.errors.full_messages.join(', '))
-      return
-    end
-
-    context.award = award
+    context.award = Award.new(account: account, issuer_id: context.issuer.id, unit_amount: context.award_type.amount, description: context.description,
+                              quantity: context.quantity, email: email, total_amount: context.total_amount, confirm_token: confirm_token,
+                              award_type: context.award_type, channel: context.channel)
   end
 
   private
 
-  def create_authentication(context)
-    response = Comakery::Slack.new(context.issuer.slack_auth.slack_token).get_user_info(context.slack_user_id)
-    account = Account.find_or_create_by(email: response.user.profile.email)
-    unless account.valid?
-      context.fail!(message: account.errors.full_messages.join(', '))
+  def validate_data
+    context.fail!(message: 'missing award type') unless context.award_type
+    context.fail!(message: 'Not authorized') unless context.project.id == context.award_type.project_id
+    if context.issuer != context.project.account && !context.award_type.community_awardable?
+      context.fail!(message: 'Not authorized')
     end
-    authentication = Authentication.create(account: account,
-                                           provider: 'slack',
-                                           slack_team_name: context.project.slack_team_name,
-                                           slack_team_id: context.project.slack_team_id,
-                                           slack_team_image_34_url: context.project.slack_team_image_34_url,
-                                           slack_team_image_132_url: context.project.slack_team_image_132_url,
-                                           slack_user_name: response.user.name,
-                                           slack_user_id: context.slack_user_id)
+    context.fail!(message: 'quantity must greater than 0') if context.quantity.blank?
+    context.fail!(message: 'missing uid or email') if context.uid.blank?
+    context.fail!(message: 'missing total_tokens_issued') if context.total_tokens_issued.blank?
 
-    unless authentication.valid?
-      context.fail!(message: authentication.errors.full_messages.join(', '))
+    if context.total_amount + context.total_tokens_issued > context.project.maximum_tokens
+      context.fail!(message: "Sorry, you can't send more awards than the project's maximum number of allowable tokens")
     end
 
-    authentication
+    if context.total_amount + context.project.total_month_awarded > context.project.maximum_royalties_per_month
+      context.fail!(message: "Sorry, you can't send more awards this month than the project's maximum number of allowable tokens per month")
+    end
+  end
+
+  def find_or_create_account
+    account, errors = Account.find_or_create_for_authentication(context.uid, context.channel)
+    return unless account
+    context.fail!(message: errors) if errors.present?
+    account
   end
 end

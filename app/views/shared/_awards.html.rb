@@ -13,9 +13,10 @@ class Views::Shared::Awards < Views::Base
           th(class: 'small-2') { text 'Recipient' } if show_recipient
           th(class: 'small-2') { text 'Contribution' }
           th(class: 'small-2') { text 'Authorized By' }
-          if project.ethereum_enabled
+          if project.ethereum_contract_address?
             th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' }
           end
+          th(class: 'small-1', style: 'text-align: center') { text 'status' }
         }
         awards.each do |award|
           tr(class: 'award-row') {
@@ -39,8 +40,8 @@ class Views::Shared::Awards < Views::Base
             }
             if show_recipient
               td(class: 'small-2 recipient') {
-                img(src: award.authentication.slack_icon, class: 'icon avatar-img')
-                text ' ' + award.recipient_display_name
+                img(src: account_image_url(award.account, 27), class: 'icon avatar-img', style: 'margin-right: 5px;')
+                text award.recipient_display_name
               }
             end
             td(class: 'small-2 description') {
@@ -48,36 +49,47 @@ class Views::Shared::Awards < Views::Base
               span(class: 'help-text') {
                 text raw ": #{markdown_to_html award.description}" if award.description.present?
                 br
-                if award.proof_link
-                  link_to award.proof_id, award.proof_link, target: '_blank'
-                else
-                  span award.proof_id
-                end
+                span award.proof_id
               }
             }
             td(class: 'small-2') {
-              if award.issuer_slack_icon
-                img(src: award.issuer_slack_icon, class: 'icon avatar-img')
-                text ' '
+              if award.issuer
+                img(src: account_image_url(award.issuer, 27), class: 'icon avatar-img', style: 'margin-right: 5px;')
               end
               text award.issuer_display_name
             }
-            if project.ethereum_enabled
+            if project.ethereum_contract_address?
               td(class: 'small-2 blockchain-address') {
                 if award.ethereum_transaction_explorer_url
                   link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
-                elsif award.recipient_address.blank? && current_account == award.recipient_account && show_recipient
+                elsif award.recipient_address.blank? && current_account == award.account && show_recipient
                   link_to '(no account)', account_path
                 elsif award.recipient_address.blank?
                   text '(no account)'
+                elsif current_account.decorate.can_send_awards?(project)
+                  link_to 'javascript:void(0)', class: 'metamask-transfer-btn transfer-tokens-btn', 'data-id': award.id, 'data-info': award.json_for_sending_awards do
+                    span 'Send'
+                    image_tag 'metamask2.png'
+                  end
                 else
                   text '(pending)'
                 end
               }
             end
+            td(class: 'small-1', style: 'text-align: center') {
+              display_status(award)
+            }
           }
         end
       }
     }
+  end
+
+  def display_status(award)
+    if award.confirmed?
+      i(class: 'fa fa-check-square')
+    else
+      show_recipient ? text('Emailed') : link_to('confirm', confirm_award_path(award.confirm_token))
+    end
   end
 end

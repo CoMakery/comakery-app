@@ -2,6 +2,10 @@ class Mom
   def account(**attrs)
     defaults = {
       email: "me+#{Random.new.urlsafe_base64}@example.com",
+      first_name: 'Account',
+      last_name: (1..100).to_a.sample,
+      date_of_birth: '1990/01/01',
+      country: 'United States of America',
       password: valid_password
     }
     Account.new(defaults.merge(attrs))
@@ -11,76 +15,62 @@ class Mom
     account(**attrs).tap { |a| create(:authentication, account: a) }
   end
 
-  def account_role(account, role)
-    AccountRole.new account: account, role: role
-  end
-
-  def admin_role
-    role name: 'Admin', key: Role::ADMIN_ROLE_KEY
-  end
-
   def cc_authentication(**attrs)
-    defaults = { slack_team_id: 'citizencode' }
+    defaults = {}
     defaults[:account] = account unless attrs.key?(:account)
     authentication(defaults.merge(attrs))
   end
 
   def sb_authentication(**attrs)
-    defaults = { slack_team_id: 'swarmbot' }
+    defaults = {}
     defaults[:account] = account unless attrs.key?(:account)
     authentication(defaults.merge(attrs))
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def authentication(**attrs)
     @@authentication_count ||= 0
     @@authentication_count += 1
     defaults = {
       provider: 'slack',
-      slack_token: 'slack token',
-      slack_user_id: "slack user id #{@@authentication_count}",
-      slack_team_name: 'Slack Team',
-      slack_team_image_34_url: 'https://slack.example.com/team-image-34-px.jpg',
-      slack_team_image_132_url: 'https://slack.example.com/team-image-132-px.jpg',
-      slack_team_id: 'citizen code id',
-      slack_user_name: 'johndoe'
+      token: 'slack token',
+      uid: "slack user id #{@@authentication_count}"
     }
-    defaults[:account] = create(:account) unless attrs.key?(:account)
-    defaults[:slack_first_name] = 'John' unless attrs.key?(:slack_first_name) && attrs[:slack_first_name].nil?
-    defaults[:slack_last_name] = 'Doe' unless attrs.key?(:slack_last_name) && attrs[:slack_last_name].nil?
+    defaults[:account] = create(:account, first_name: 'John', last_name: 'Doe') unless attrs.key?(:account)
     Authentication.new(defaults.merge(attrs))
   end
 
-  def beta_signup(**attrs)
-    BetaSignup.new(**attrs)
+  def cc_project(account = create(:cc_authentication).account, **attrs)
+    project(account, { title: 'Citizen Code' }.merge(**attrs))
   end
 
-  def cc_project(owner_account = create(:cc_authentication).account, **attrs)
-    project(owner_account, { slack_team_id: 'citizencode', title: 'Citizen Code' }.merge(**attrs))
+  def sb_project(account = create(:account), **attrs)
+    project(account, { title: 'Swarmbot', payment_type: 'project_token' }.merge(**attrs))
   end
 
-  def sb_project(owner_account = create(:sb_authentication).account, **attrs)
-    project(owner_account, { slack_team_id: 'swarmbot', title: 'Swarmbot', payment_type: 'project_token' }.merge(**attrs))
-  end
-
-  def project(owner_account = create(:account_with_auth), **attrs)
+  def project(account = create(:account_with_auth), **attrs)
     defaults = {
       title: 'Uber for Cats',
       description: 'We are going to build amazing',
       tracker: 'https://github.com/example/uber_for_cats',
-      slack_team_id: 'citizen code id',
-      slack_channel: 'slack_channel',
-      slack_team_name: 'Citizen Code',
-      slack_team_image_34_url: 'https://slack.example.com/team-image-34-px.jpg',
-      slack_team_image_132_url: 'https://slack.example.com/team-image-132-px.jpg',
-      owner_account: owner_account,
+      account: account,
       royalty_percentage: 5.9,
       maximum_royalties_per_month: 10_000,
       legal_project_owner: 'UberCatz Inc',
-
-      maximum_tokens: 10_000_000
+      long_id: SecureRandom.hex(20),
+      maximum_tokens: 10_000_000,
+      token_symbol: 'FCBB'
     }
     Project.new(defaults.merge(attrs))
+  end
+
+  def channel(**attrs)
+    defaults = {
+      team: create(:team),
+      project: create(:project),
+      channel_id: SecureRandom.hex(5),
+      name: 'general'
+    }
+    Channel.new defaults.merge(attrs)
   end
 
   def award_type(**attrs)
@@ -92,10 +82,9 @@ class Mom
     AwardType.new(defaults.merge(attrs))
   end
 
-  def award(authentication = create(:authentication), issuer = create(:account), **attrs)
+  def award(**attrs)
     params = {
-      authentication: authentication,
-      issuer: issuer,
+      issuer: create(:account),
       description: 'Great work',
       proof_id: 'abc123',
       quantity: 1,
@@ -115,19 +104,25 @@ class Mom
     Payment.new(currency: currency, **attrs)
   end
 
-  def project_payment(quantity_redeemed: 1, payee_auth: create(:authentication), project: create(:project))
+  def project_payment(quantity_redeemed: 1, account: create(:account), project: create(:project))
     project
       .payments
       .new_with_quantity(quantity_redeemed: quantity_redeemed,
-                         payee_auth: payee_auth)
+                         account: account)
   end
 
   def slack(authentication = create(:authentication))
     Comakery::Slack.new(authentication)
   end
 
-  def role(name: 'A Role', key: nil)
-    Role.new name: name, key: (key || name)
+  def team(**attrs)
+    defaults = {
+      team_id: SecureRandom.hex(5),
+      name: "Team-#{SecureRandom.hex(2)}",
+      provider: 'slack',
+      domain: "test-app-#{SecureRandom.hex(2)}"
+    }
+    Team.new(defaults.merge(attrs))
   end
 
   def valid_password
@@ -138,7 +133,7 @@ class Mom
     Revenue.new amount: amount,
                 currency: currency,
                 project: project,
-                recorded_by: project.owner_account
+                recorded_by: project.account
   end
 end
 

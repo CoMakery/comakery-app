@@ -11,7 +11,6 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     - 'spec/controllers/accounts_controller_spec.rb'
     - 'spec/controllers/awards_controller_spec.rb'
-    - 'spec/controllers/beta_signups_controller_spec.rb'
     - 'spec/controllers/projects_controller_spec.rb'
     - 'spec/interactors/build_award_records_spec.rb'
     - 'spec/models/authentication_spec.rb'
@@ -178,7 +177,6 @@ RSpec/NamedSubject:
 RSpec/NestedGroups:
   Exclude:
     - 'spec/controllers/awards_controller_spec.rb'
-    - 'spec/controllers/beta_signups_controller_spec.rb'
     - 'spec/controllers/projects_controller_spec.rb'
     - 'spec/features/awards/award_history_spec.rb'
     - 'spec/models/authentication_spec.rb'
@@ -240,7 +238,6 @@ Rails/Output:
     - 'app/views/accounts_mailer/reset_password_email.rb'
     - 'app/views/admin/admin/index.html.rb'
     - 'app/views/admin/metrics/index.html.rb'
-    - 'app/views/beta_signups/new.html.rb'
     - 'app/views/layouts/raw.rb'
     - 'app/views/projects/_description.html.rb'
     - 'app/views/projects/base.rb'

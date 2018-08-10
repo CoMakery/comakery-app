@@ -1,36 +1,46 @@
 require 'rails_helper'
 
 describe 'awarding up to limit of maximum awardable tokens for a project' do
+  let!(:team) { create(:team) }
   let!(:current_auth) { create(:sb_authentication) }
-  let!(:awardee_auth) { create(:sb_authentication) }
-  let!(:project) { create(:sb_project, owner_account: current_auth.account, maximum_tokens: 2) }
+  let!(:awardee_auth) { create(:sb_authentication, account: create(:account, ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
+  let!(:project) { create(:sb_project, account: current_auth.account, maximum_tokens: 3, maximum_royalties_per_month: 2) }
+  let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 1, maximum_royalties_per_month: 1) }
   let!(:award_type) { create(:award_type, project: project, amount: 1) }
+  let!(:channel) { create(:channel, team: team, project: project, name: 'channel') }
+  let!(:channel1) { create(:channel, team: team, project: project1, name: 'channel1') }
+  let!(:award_type1) { create(:award_type, project: project1, amount: 1) }
 
   before do
+    team.build_authentication_team current_auth
+    team.build_authentication_team awardee_auth
+
     login(current_auth.account)
     stub_slack_user_list([slack_user_from_auth(awardee_auth)])
-    allow_any_instance_of(Account).to receive(:send_award_notifications)
+    allow_any_instance_of(Award).to receive(:send_award_notifications)
   end
 
-  specify do
+  it 'limit to send award by month' do
     visit project_path(project)
+    fill_in 'Quantity', with: 2.5
 
     send_award
+    expect(page).to have_content "Sorry, you can't send more awards this month than the project's maximum number of allowable tokens per month"
+  end
 
-    expect(page).to have_content 'Successfully sent award to John Doe'
+  it 'limit send award with project maximum token' do
+    visit project_path(project1)
 
-    send_award
+    fill_in 'Quantity', with: 3.5
 
-    expect(page).to have_content 'Successfully sent award to John Doe'
-
-    send_award
-
+    send_award(channel1)
     expect(page).to have_content "Sorry, you can't send more awards than the project's maximum number of allowable tokens"
   end
 
-  def send_award
-    select 'John Doe - @johndoe', from: 'User'
-    page.find("input[name='award[award_type_id]']").set(true)
+  def send_award(ch = nil)
+    ch ||= channel
+    select "[slack] #{team.name} ##{ch.name}", from: 'Communication Channel'
+    fill_in 'Email Address', with: awardee_auth.uid
     click_on 'Send Award'
   end
 end

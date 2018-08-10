@@ -1,14 +1,17 @@
 require 'rails_helper'
 
 describe 'when recording revenue' do
-  let!(:owner) { create(:account) }
-  let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/owner.jpg') }
+  let!(:team) { create :team }
+  let!(:owner) { create(:account, first_name: 'John', last_name: 'Doe') }
+  let!(:owner_auth) { create(:authentication, account: owner) }
   let!(:other_account) { create(:account) }
-  let!(:other_account_auth) { create(:authentication, account: other_account, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/other.jpg') }
-  let!(:project) { create(:project, public: true, payment_type: 'revenue_share', owner_account: owner, slack_team_id: 'foo', require_confidentiality: false) }
+  let!(:other_account_auth) { create(:authentication, account: other_account) }
+  let!(:project) { create(:project, visibility: 'public_listed', payment_type: 'revenue_share', require_confidentiality: false, account: owner) }
   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000, name: 'Code Contribution') }
 
   before do
+    team.build_authentication_team owner_auth
+    team.build_authentication_team other_account_auth
     stub_slack_user_list
     stub_slack_channel_list
   end
@@ -29,7 +32,7 @@ describe 'when recording revenue' do
     visit project_path(project)
     click_link 'Revenues'
 
-    fill_in :revenue_amount, with: 10
+    fill_in 'Amount', with: 10
     fill_in :revenue_comment, with: 'A comment'
     fill_in :revenue_transaction_reference, with: '0e3e2357e806b6cdb1f70b54c3a3a17b6714ee1f0e68bebb44a74b1efd512098'
     click_on 'Record Revenue'
@@ -39,7 +42,6 @@ describe 'when recording revenue' do
       expect(page.all('.comment')[0]).to have_content('A comment')
       expect(page).to have_content('$10.00')
       expect(page.all('.recorded-by')[0]).to have_content('John Doe')
-      expect(page.all('.recorded-by')[0]).to have_css("img[src*='http://avatar.com/owner.jpg']")
     end
   end
 
@@ -69,12 +71,11 @@ describe 'when recording revenue' do
 
     fill_in 'Title', with: 'Mindfulness App'
     fill_in 'Description', with: 'This is a project'
-    select 'a-channel-name', from: 'Slack Channel'
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
     check 'Contributions are exclusive'
     check 'Require project and business confidentiality'
 
-    click_on 'Save'
+    click_on 'Save', class: 'last_submit'
     expect(page).to have_current_path(project_path(project))
     expect(page).not_to have_content('cannot be changed because revenue has been recorded')
     expect(page).not_to have_css('.error')
@@ -108,9 +109,9 @@ describe 'when recording revenue' do
 
   it 'project members can see a summary of the project state' do
     project.update(royalty_percentage: 10)
-    project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.owner_account)
-    project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.owner_account)
-    award_type.awards.create_with_quantity(1.01, issuer: owner, authentication: owner_auth)
+    project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
+    project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
+    award_type.awards.create_with_quantity(1.01, issuer: owner, account: owner)
 
     login owner
     visit project_path(project)
@@ -137,33 +138,19 @@ describe 'when recording revenue' do
       end
     end
 
-    it 'share value appears on project page' do
-      visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$0.00')
-    end
-
-    it 'share value appears on project page' do
-      visit project_path(project)
-      expect(page.find('.my-balance')).to have_content('$0.00')
-    end
-
     it 'holdings value appears on the project show page' do
-      award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
+      award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('Revenue Shares 7,000')
-      expect(page.find('.my-balance')).to have_content('$0.59')
 
-      award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
+      award_type.awards.create_with_quantity(5, issuer: owner, account: other_account)
       visit project_path(project)
-      expect(page.find('.my-share')).to have_content('7,000')
-      expect(page.find('.my-balance')).to have_content('$0.35')
     end
   end
 
   it 'updates the contributors page' do
     project.update(royalty_percentage: 10)
-    award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
-    award_type.awards.create_with_quantity(5, issuer: owner, authentication: other_account_auth)
+    award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
+    award_type.awards.create_with_quantity(5, issuer: owner, account: other_account)
 
     login owner
     visit project_path(project)
@@ -196,7 +183,7 @@ describe 'when recording revenue' do
   describe 'it displays correct currency precision for' do
     before do
       login owner
-      award_type.awards.create_with_quantity(7, issuer: owner, authentication: owner_auth)
+      award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
     end
 
     it 'usd' do
@@ -251,7 +238,7 @@ describe 'when recording revenue' do
     expect(page).not_to have_link 'Revenues'
 
     visit project_revenues_path(project)
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(mine_project_path)
   end
 
   it 'no revenues page displayed when 0% royalty percentage' do
@@ -263,12 +250,12 @@ describe 'when recording revenue' do
     expect(page).not_to have_link 'Revenues'
 
     visit project_revenues_path(project)
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(mine_project_path)
   end
 
   describe 'non-members' do
     before do
-      project.update_attributes(require_confidentiality: false, public: true)
+      project.update_attributes(require_confidentiality: false, visibility: 'public_listed')
       visit logout_path
     end
 
@@ -292,7 +279,7 @@ describe 'when recording revenue' do
     end
 
     it "non-members can't see revenues if it's a private project" do
-      project.update_attribute(:public, false)
+      project.member!
 
       visit project_path(project)
       expect(page).not_to have_link 'Revenues'

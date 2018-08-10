@@ -1,15 +1,15 @@
 class AuthenticationPolicy < ApplicationPolicy
   class Scope < Scope
-    attr_reader :account, :scope
+    attr_reader :account, :team
 
-    def initialize(account, scope)
+    def initialize(account, team)
       @account = account
-      @scope = scope
+      @team = team
     end
 
     def resolve
-      return Authentication.none unless account
-      Authentication.where(slack_team_id: account.slack_auth.slack_team_id)
+      return Authentication.none unless account && team
+      team.authentications
     end
   end
 end

@@ -71,11 +71,11 @@ describe Revenue do
       let!(:project2) { create :project }
 
       before do
-        project1.revenues.create(amount: 3, currency: 'USD', recorded_by: project1.owner_account)
-        project1.revenues.create(amount: 5, currency: 'USD', recorded_by: project1.owner_account)
+        project1.revenues.create(amount: 3, currency: 'USD', recorded_by: project1.account)
+        project1.revenues.create(amount: 5, currency: 'USD', recorded_by: project1.account)
 
-        project2.revenues.create(amount: 7, currency: 'USD', recorded_by: project1.owner_account)
-        project2.revenues.create(amount: 11, currency: 'USD', recorded_by: project1.owner_account)
+        project2.revenues.create(amount: 7, currency: 'USD', recorded_by: project1.account)
+        project2.revenues.create(amount: 11, currency: 'USD', recorded_by: project1.account)
       end
 
       specify do
@@ -97,5 +97,12 @@ describe Revenue do
       revenue.save!
       expect(revenue.amount).to eq(90_123_456_789.56)
     end
+  end
+
+  it '#issuer_display_name' do
+    account = create :account, first_name: 'Michael', last_name: 'Jackson'
+    project = create :project, account: account
+    revenue = create :revenue, project: project
+    expect(revenue.issuer_display_name).to eq 'Michael Jackson'
   end
 end

@@ -3,13 +3,12 @@ class PaymentPolicy < ApplicationPolicy
 
   def initialize(account, payment)
     @account = account
-    @auth = account&.slack_auth
     @payment = payment
   end
 
   def create?
-    @auth.present? &&
-      @payment.project.awards.where(authentication_id: @auth.id).present?
+    @account.present? &&
+      @payment.project.awards.where(account_id: @account.id).present?
   end
 
   def update?

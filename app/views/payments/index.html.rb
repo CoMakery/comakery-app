@@ -1,10 +1,10 @@
 class Views::Payments::Index < Views::Projects::Base
-  needs :project, :payment, :current_auth
+  needs :project, :payment, :current_account_deco
 
   def content
     render partial: 'shared/project_header'
     column {
-      if current_auth.present?
+      if current_account_deco.present?
         full_row {
           column('small-12 content-box') {
             if policy(project).team_member? && current_user_has_awards?
@@ -13,7 +13,7 @@ class Views::Payments::Index < Views::Projects::Base
                   text 'Redeem '
                   f.number_field(:quantity_redeemed, class: 'input-group-field')
                   span(class: 'my-shares') do
-                    text "of my #{current_auth.total_awards_remaining_pretty(project)} revenue shares"
+                    text "of my #{current_account_deco.total_awards_remaining_pretty(project)} revenue shares"
                   end
                 }
 
@@ -132,11 +132,7 @@ class Views::Payments::Index < Views::Projects::Base
     }
   end
 
-  def conversational
-    span(class: 'conversational-form') { yield }
-  end
-
   def current_user_has_awards?
-    current_auth.total_awards_remaining(project) > 0
+    current_account_deco.total_awards_remaining(project) > 0
   end
 end

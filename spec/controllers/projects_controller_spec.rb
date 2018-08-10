@@ -1,28 +1,77 @@
 require 'rails_helper'
 
 describe ProjectsController do
-  let!(:account) { create(:account, email: 'account@example.com').tap { |a| create(:authentication, account: a, slack_team_id: 'foo', slack_user_name: 'account', slack_user_id: 'account slack_user_id', slack_team_domain: 'foobar') } }
+  let!(:team) { create :team }
+  let!(:authentication) { create(:authentication) }
+  let!(:account) { authentication.account }
 
-  before { login(account) }
+  let!(:account1) { create :account }
+  let!(:authentication1) { create(:authentication, account: account) }
+
+  before do
+    team.build_authentication_team authentication
+    team.build_authentication_team authentication1
+    login(account)
+  end
+
+  describe '#unlisted' do
+    let!(:public_unlisted_project) { create(:project, account: account, visibility: 'public_unlisted', title: 'Unlisted Project') }
+    let!(:member_unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'Unlisted Project') }
+    let!(:normal_project) { create :project, account: account }
+    let!(:account2) { create :account }
+    let!(:authentication2) { create(:authentication, account: account2) }
+
+    it 'everyone can access public unlisted project via long id' do
+      get :unlisted, params: { long_id: public_unlisted_project.long_id }
+      expect(response.code).to eq '200'
+      expect(assigns(:project)).to eq public_unlisted_project
+    end
+
+    it 'other team member cannot access member unlisted project' do
+      login account2
+      get :unlisted, params: { long_id: member_unlisted_project.long_id }
+      expect(response).to redirect_to(root_url)
+    end
+
+    it 'team member can access member unlisted project' do
+      team.build_authentication_team authentication2
+      login account2
+      get :unlisted, params: { long_id: member_unlisted_project.long_id }
+      expect(response.code).to eq '302'
+      expect(assigns(:project)).to eq member_unlisted_project
+    end
+
+    it 'redirect_to project/id page for normal project' do
+      login account
+      get :unlisted, params: { long_id: normal_project.long_id }
+      expect(response).to redirect_to(project_path(normal_project))
+    end
+
+    it 'cannot access unlisted project by id' do
+      get :show, params: { id: public_unlisted_project.id }
+      expect(response).to redirect_to('/404.html')
+    end
+  end
 
   describe '#landing' do
-    let!(:other_public_project) { create(:project, slack_team_id: 'somebody else', public: true, title: 'other_public_project') }
-    let!(:other_private_project) { create(:project, slack_team_id: 'somebody else', public: false, title: 'other_private_project') }
-    let!(:my_private_project) { create(:project, slack_team_id: 'foo', title: 'my_private_project') }
-    let!(:my_public_project) { create(:project, slack_team_id: 'foo', public: true, title: 'my_public_project') }
+    let!(:public_project) { create(:project, visibility: 'public_listed', title: 'public project', account: account) }
+    let!(:archived_project) { create(:project, visibility: 'archived', title: 'archived project', account: account) }
+    let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project') }
+    let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project') }
+    let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project') }
 
     before do
-      expect(TopContributors).to receive(:call).twice.and_return(double(success?: true, contributors: {}))
+      expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
+      other_member_project.channels.create(team: team, channel_id: 'general')
     end
 
     it 'returns your private projects, and public projects that *do not* belong to you' do
       get :landing
 
       expect(response.status).to eq(200)
-      expect(assigns[:private_projects].map(&:title)).to match_array(%w[my_private_project my_public_project])
-      expect(assigns[:public_projects].map(&:title)).to match_array(['other_public_project'])
-      expect(assigns[:private_project_contributors].keys).to eq([])
-      expect(assigns[:public_project_contributors].keys).to eq([])
+      expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'unlisted project', 'member project'])
+      expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
+      expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
     end
 
     it 'renders nicely even if you are not logged in' do
@@ -31,8 +80,9 @@ describe ProjectsController do
       get :landing
 
       expect(response.status).to eq(200)
-      expect(assigns[:private_projects].map(&:title)).to eq([])
-      expect(assigns[:public_projects].map(&:title)).to match_array(%w[my_public_project other_public_project])
+      expect(assigns[:archived_projects].map(&:title)).to eq([])
+      expect(assigns[:team_projects].map(&:title)).to eq []
+      expect(assigns[:my_projects].map(&:title)).to match_array(['public project'])
     end
   end
 
@@ -48,12 +98,19 @@ describe ProjectsController do
       end
     end
 
+    context 'when logged in with unconfirmed account' do
+      let!(:account1) { create :account, email_confirm_token: '123' }
+
+      it 'redirects to home page' do
+        login account1
+        get :new
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
     context 'when slack returns successful api calls' do
       render_views
-
-      before do
-        expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: %w[foo bar]))
-      end
 
       it 'works' do
         get :new
@@ -67,8 +124,6 @@ describe ProjectsController do
         expect(assigns[:project].award_types.first).to be_a_new_record
         expect(assigns[:project].award_types.first.name).to eq('Thanks')
         expect(assigns[:project].award_types.first.amount).to eq(10)
-
-        expect(assigns[:slack_channels]).to eq(%w[foo bar])
       end
     end
   end
@@ -115,15 +170,10 @@ describe ProjectsController do
       expect(project.award_types.first.community_awardable).to eq(true)
       expect(project.award_types.second.name).to eq('Small Award')
       expect(project.award_types.second.community_awardable).to eq(false)
-      expect(project.owner_account_id).to eq(account.id)
-      expect(project.slack_channel).to eq('slack_channel')
-      expect(project.slack_team_id).to eq(account.authentications.first.slack_team_id)
-      expect(project.slack_team_name).to eq(account.authentications.first.slack_team_name)
+      expect(project.account_id).to eq(account.id)
     end
 
     it 'when valid, re-renders with errors' do
-      expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: %w[foo bar]))
-
       expect do
         expect do
           post :create, params: {
@@ -151,39 +201,32 @@ describe ProjectsController do
       expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
       expect(project.award_types.first.name).to eq('Small Award')
       expect(project.award_types.first.community_awardable).to eq(true)
-      expect(project.owner_account_id).to eq(account.id)
-
-      account_slack_auth = account.authentications.first
-
-      expect(project.slack_team_id).to eq(account_slack_auth.slack_team_id)
-      expect(project.slack_team_name).to eq(account_slack_auth.slack_team_name)
-      expect(project.slack_team_domain).to eq('foobar')
+      expect(project.account_id).to eq(account.id)
       expect(project.award_types.size).to eq(3) # 2 + 1 template
     end
   end
 
   context 'with a project' do
-    let!(:cat_project) { create(:project, title: 'Cats', description: 'Cats with lazers', owner_account: account, slack_team_id: 'foo') }
-    let!(:dog_project) { create(:project, title: 'Dogs', description: 'Dogs with donuts', owner_account: account, slack_team_id: 'foo') }
-    let!(:yak_project) { create(:project, title: 'Yaks', description: 'Yaks with parser generaters', owner_account: account, slack_team_id: 'foo') }
-    let!(:fox_project) { create(:project, title: 'Foxes', description: 'Foxes with boxes', owner_account: account, slack_team_id: 'foo') }
+    let!(:cat_project) { create(:project, title: 'Cats', description: 'Cats with lazers', account: account) }
+    let!(:dog_project) { create(:project, title: 'Dogs', description: 'Dogs with donuts', account: account) }
+    let!(:yak_project) { create(:project, title: 'Yaks', description: 'Yaks with parser generaters', account: account) }
+    let!(:fox_project) { create(:project, title: 'Foxes', description: 'Foxes with boxes', account: account) }
 
     describe '#index' do
-      let!(:cat_project_award) { create(:award, authentication: create(:authentication, slack_team_id: 'foo', slack_team_image_132_url: 'http://auth_avatar_2.jpg'), award_type: create(:award_type, project: cat_project, amount: 200), created_at: 2.days.ago) }
-      let!(:dog_project_award) { create(:award, authentication: create(:authentication, slack_team_id: 'foo', slack_team_image_132_url: 'http://auth_avatar_1.jpg'), award_type: create(:award_type, project: dog_project, amount: 100), created_at: 1.day.ago) }
-      let!(:yak_project_award) { create(:award, authentication: create(:authentication, slack_team_id: 'foo', slack_team_image_132_url: 'http://auth_avatar_3.jpg'), award_type: create(:award_type, project: yak_project, amount: 300), created_at: 3.days.ago) }
+      let!(:cat_project_award) { create(:award, account: create(:account), award_type: create(:award_type, project: cat_project, amount: 200), created_at: 2.days.ago) }
+      let!(:dog_project_award) { create(:award, account: create(:account), award_type: create(:award_type, project: dog_project, amount: 100), created_at: 1.day.ago) }
+      let!(:yak_project_award) { create(:award, account: create(:account), award_type: create(:award_type, project: yak_project, amount: 300), created_at: 3.days.ago) }
 
       before do
         expect(TopContributors).to receive(:call).and_return(double(success?: true, contributors: { cat_project => [], dog_project => [], yak_project => [] }))
       end
 
       include ActionView::Helpers::DateHelper
-      it 'lists the projects ordered by most recent award date desc' do
+      it 'lists the projects ordered by most recently modify date' do
         get :index
 
         expect(response.status).to eq(200)
-        expect(assigns[:projects].map(&:title)).to eq(%w[Dogs Cats Yaks Foxes])
-        expect(assigns[:projects].map { |p| time_ago_in_words(p.last_award_created_at) if p.last_award_created_at }).to eq(['1 day', '2 days', '3 days', nil])
+        expect(assigns[:projects].map(&:title)).to eq(%w[Yaks Dogs Cats Foxes])
         expect(assigns[:project_contributors].keys).to eq([cat_project, dog_project, yak_project])
       end
 
@@ -200,19 +243,29 @@ describe ProjectsController do
         expect(response.status).to eq(200)
         expect(assigns[:projects].map(&:title)).to eq(%w[Dogs Foxes])
       end
+
+      it 'only show public projects for not login user' do
+        logout
+        fox_project.public_listed!
+        get :index
+        expect(assigns[:projects].map(&:title)).to eq(['Foxes'])
+      end
+
+      it 'dont show archived projects for not login user' do
+        logout
+        cat_project.archived!
+        fox_project.public_listed!
+        get :index
+        expect(assigns[:projects].map(&:title)).to eq(['Foxes'])
+      end
     end
 
     describe '#edit' do
-      before do
-        expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: %w[foo bar]))
-      end
-
       it 'works' do
         get :edit, params: { id: cat_project.to_param }
 
         expect(response.status).to eq(200)
         expect(assigns[:project]).to eq(cat_project)
-        expect(assigns[:slack_channels]).to eq(%w[foo bar])
       end
     end
 
@@ -261,8 +314,6 @@ describe ProjectsController do
       context 'with rendered views' do
         render_views
         it 're-renders with errors when updating fails' do
-          expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: %w[foo bar]))
-
           small_award_type = cat_project.award_types.create!(name: 'Small Award', amount: 100)
           medium_award_type = cat_project.award_types.create!(name: 'Medium Award', amount: 300)
           destroy_me_award_type = cat_project.award_types.create!(name: 'Destroy Me Award', amount: 400)
@@ -293,8 +344,6 @@ describe ProjectsController do
           expect(project.title).to eq('')
           expect(project.description).to eq('updated Project description here')
           expect(project.tracker).to eq('http://github.com/here/is/my/tracker/updated')
-          expect(assigns[:slack_channels]).to eq(%w[foo bar])
-
           award_types = project.award_types.sort_by(&:amount)
           expect(award_types.size).to eq((expected_rows = 4) + (expected_template_rows = 1))
 
@@ -313,8 +362,6 @@ describe ProjectsController do
       end
 
       it "doesn't allow modification of award_types' amounts when the award_type has awards already sent" do
-        expect(GetSlackChannels).to receive(:call).and_return(double(success?: true, channels: %w[foo bar]))
-
         award_type = cat_project.award_types.create!(name: 'Medium Award', amount: 300).tap do |award_type|
           create(:award, award_type: award_type)
         end
@@ -338,9 +385,8 @@ describe ProjectsController do
       end
 
       it "does allow modification of award_types' non-amount attributes when the award_type has awards already sent" do
-        award_type = cat_project.award_types.create!(name: 'Medium Award', amount: 300, community_awardable: false).tap do |award_type|
-          create(:award, award_type: award_type)
-        end
+        award_type = cat_project.award_types.create!(name: 'Medium Award', amount: 300, community_awardable: false)
+        create(:award, award_type: award_type)
 
         expect do
           expect do
@@ -366,35 +412,23 @@ describe ProjectsController do
     describe '#show' do
       let!(:cat_award_type) { create(:award_type, name: 'cat award type', project: cat_project, community_awardable: false) }
       let!(:cat_award_type_community) { create(:award_type, name: 'cat award type community', project: cat_project, community_awardable: true) }
-      let!(:awardable_auth) { create(:authentication, slack_team_id: 'foo', slack_user_name: 'account2') }
+      let!(:awardable_auth) { create(:authentication) }
 
-      context 'when on team' do
-        before do
-          expect(GetAwardableAuthentications).to receive(:call).and_return(double(awardable_authentications: [awardable_auth]))
-          expect(GetAwardData).to receive(:call).and_return(double(award_data: { contributions: [], award_amounts: { my_project_tokens: 0, total_tokens_issued: 0 } }))
-          expect(GetAwardableTypes).to receive(:call).and_return(double(awardable_types: [cat_award_type, cat_award_type_community], can_award: true))
-        end
-
-        it 'allows team members to view projects and assigns awardable accounts from slack api and db and de-dups' do
-          get :show, params: { id: cat_project.to_param }
-
-          expect(response.code).to eq '200'
-          expect(assigns(:project)).to eq cat_project
-          expect(assigns[:award]).to be_new_record
-          expect(assigns[:awardable_authentications]).to eq([awardable_auth])
-          expect(assigns[:can_award]).to eq(true)
-          expect(assigns[:awardable_types].map(&:name).sort).to eq(['cat award type', 'cat award type community'])
-          expect(assigns[:award_data]).to eq(contributions: [], award_amounts: { my_project_tokens: 0, total_tokens_issued: 0 })
-        end
+      before do
+        expect(GetAwardableTypes).to receive(:call).and_return(double(awardable_types: [cat_award_type, cat_award_type_community], can_award: true))
       end
 
-      it 'only denies non-owners to view projects' do
-        cat_project.update(slack_team_id: 'some other team')
+      context 'when on team' do
+        it 'allows team members to view projects and assigns awardable accounts from slack api and db and de-dups' do
+          login(account)
+          get :show, params: { id: cat_project.to_param }
 
-        get :show, params: { id: cat_project.to_param }
-
-        expect(response.status).to eq(302)
-        expect(assigns(:project)).to eq(cat_project)
+          # expect(response.code).to eq '200'
+          expect(assigns(:project)).to eq cat_project
+          expect(assigns[:award]).to be_new_record
+          expect(assigns[:can_award]).to eq(true)
+          expect(assigns[:awardable_types].map(&:name).sort).to eq(['cat award type', 'cat award type community'])
+        end
       end
     end
   end

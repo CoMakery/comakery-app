@@ -7,14 +7,14 @@ describe 'contributors/index.html.rb' do
   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1, name: 'Code Contribution') }
 
   before do
-    award_type.awards.create_with_quantity(50, issuer: owner, authentication: authentication)
+    award_type.awards.create_with_quantity(50, issuer: owner, account: authentication.account)
     assign :project, project
-    assign :award_data, contributions_summary: [
-      { avatar: 'http://google.com',
-        earned: 10,
+    assign :current_account, owner
+    assign :award_data, contributions_summary_pie_chart: [
+      { net_amount: 50,
         name: 'Tony! Toni! Toné!' }
     ]
-
+    assign :contributors, project.contributors_by_award_amount.page(1)
     allow(view).to receive(:policy).and_return(double('project policy',
       edit?: false,
       show_contributions?: true,
@@ -60,8 +60,8 @@ describe 'contributors/index.html.rb' do
       expect(rendered).to have_selector('td.contributor')
       expect(rendered).to have_selector('td.contributor', text: 'John Doe')
       expect(rendered).to have_selector('td.awards-earned', text: '50')
-      expect(rendered).to have_selector('td.award-holdings', text: '50')
 
+      expect(rendered).not_to have_selector('td.award-holdings', text: '50')
       expect(rendered).not_to have_selector('td.paid', text: '$0')
       expect(rendered).not_to have_selector('td.holdings-value', text: '$0')
       expect(rendered).not_to have_content('$')
@@ -73,7 +73,8 @@ describe 'contributors/index.html.rb' do
 
   describe 'without contributors' do
     before do
-      assign :award_data, award_amounts: { total_tokens_issued: 0 }, contributions_summary: []
+      assign :award_data, award_amounts: { total_tokens_issued: 0 }, contributions_summary_pie_chart: []
+      assign :contributors, Account.none.page(1)
     end
 
     it 'hides table' do

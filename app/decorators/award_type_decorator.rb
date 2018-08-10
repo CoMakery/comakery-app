@@ -9,4 +9,8 @@ class AwardTypeDecorator < Draper::Decorator
   def amount_pretty
     number_with_precision(award_type.amount, precision: 0, delimiter: ',')
   end
+
+  def name_with_amount
+    "#{amount_pretty}  #{name}"
+  end
 end

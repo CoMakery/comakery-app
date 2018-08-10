@@ -11,7 +11,7 @@ class AwardPolicy < ApplicationPolicy
 
     def resolve
       if account
-        scope.joins(award_type: :project).where('projects.slack_team_id = ?', @account.slack_auth.slack_team_id)
+        account.team_awards
       else
         scope.joins(award_type: :project).where('projects.public = ?', true)
       end
@@ -21,15 +21,21 @@ class AwardPolicy < ApplicationPolicy
   def initialize(account, award)
     @account = account
     @award = award
+    @project = @award.project
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def create?
-    project = @award&.award_type&.project
-    @account &&
-      @award.issuer == @account &&
-      (@account == project&.owner_account || (@award&.award_type&.community_awardable? && @account.slack_auth != @award&.authentication)) &&
-      @award&.authentication&.slack_team_id == project.slack_team_id &&
-      @award&.issuer&.authentications&.pluck(:slack_team_id)&.include?(project.slack_team_id)
+    return false unless @award.issuer == @account
+    same_channel? && (@account == @project&.account || community?)
+  end
+
+  def same_channel?
+    return true unless @award.channel
+    return true if @award.channel.in?(@project.channels) && @award.issuer.teams.include?(@award.team)
+    true
+  end
+
+  def community?
+    @award&.award_type&.community_awardable? && @account != @award&.account
   end
 end

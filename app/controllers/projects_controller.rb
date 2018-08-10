@@ -1,36 +1,40 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: :new
-  before_action :assign_current_auth
+  skip_after_action :verify_authorized, only: %i[teams landing]
+  before_action :assign_current_account
 
   def landing
-    skip_authorization
     if current_account
-      @private_projects = Project.with_last_activity_at.for_account(current_account).limit(6).decorate
-      @public_projects = Project.with_last_activity_at.not_for_account(current_account).public_projects.limit(6).decorate
+      check_account_info
+      @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
+      @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
+      @team_projects = current_account.other_member_projects.with_last_activity_at.limit(6).decorate
     else
-      @private_projects = []
-      @public_projects = policy_scope(Project).featured.with_last_activity_at.limit(6).decorate
+      @archived_projects = []
+      @team_projects = []
+      @my_projects = policy_scope(Project).public_listed.featured.with_last_activity_at.limit(6).decorate
     end
-    @private_project_contributors = TopContributors.call(projects: @private_projects).contributors
-    @public_project_contributors = TopContributors.call(projects: @public_projects).contributors
-    @slack_auth = current_account&.slack_auth
+    @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
+    @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
+    @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
   end
 
   def index
-    @projects = policy_scope(Project).with_last_activity_at
+    @projects = policy_scope(Project)
+
     if params[:query].present?
       @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
     end
-    @projects = @projects.decorate
+    @projects = @projects.order(updated_at: :desc).decorate
     @project_contributors = TopContributors.call(projects: @projects).contributors
   end
 
   def new
     assign_slack_channels
 
-    @project = Project.new(public: false,
-                           maximum_tokens: 1_000_000,
-                           maximum_royalties_per_month: 50_000)
+    @project = current_account.projects.build(public: false,
+                                              maximum_tokens: 1_000_000,
+                                              maximum_royalties_per_month: 50_000)
     @project.award_types.build(name: 'Thanks', amount: 10)
     @project.award_types.build(name: 'Software development hour', amount: 100)
     @project.award_types.build(name: 'Graphic design hour', amount: 100)
@@ -43,23 +47,18 @@ class ProjectsController < ApplicationController
     @project.award_types.build(name: 'Expert marketing hour', amount: 150)
     @project.award_types.build(name: 'Blog post (600+ words)', amount: 150)
     @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
+    @project.channels.build if current_account.teams.any?
+    @project.long_id ||= SecureRandom.hex(20)
     authorize @project
   end
 
   def create
-    # there could be multiple authentications... maybe this should be a drop down box to select which team
-    # you are creating this project for if we actually allow multiple, simultaneous auths
-    auth = current_account.slack_auth
-    @project = Project.new(project_params.merge(owner_account: current_account,
-                                                slack_team_image_34_url: auth.slack_team_image_34_url,
-                                                slack_team_image_132_url: auth.slack_team_image_132_url,
-                                                slack_team_id: auth.slack_team_id,
-                                                slack_team_name: auth.slack_team_name,
-                                                slack_team_domain: auth.slack_team_domain))
+    @project = current_account.projects.build project_params
+    @project.long_id = params[:long_id] || SecureRandom.hex(20)
     authorize @project
     if @project.save
       flash[:notice] = 'Project created'
-      redirect_to project_path(@project)
+      redirect_to project_detail_path
     else
       flash[:error] = 'Project saving failed, please correct the errors below'
       assign_slack_channels
@@ -68,31 +67,41 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.includes(:award_types).find(params[:id]).decorate
+    @project = Project.listed.includes(:award_types).find(params[:id]).decorate
     authorize @project
-    @award = Award.new
-    @awardable_authentications = GetAwardableAuthentications.call(current_account: current_account, project: @project).awardable_authentications
-    awardable_types_result = GetAwardableTypes.call(current_account: current_account, project: @project)
-    @awardable_types = awardable_types_result.awardable_types
-    @can_award = awardable_types_result.can_award
-    @award_data = GetAwardData.call(authentication: current_account&.slack_auth, project: @project).award_data
+    set_award
+  end
+
+  def unlisted
+    @project = Project.includes(:award_types).find_by(long_id: params[:long_id])&.decorate
+    authorize @project
+    if @project&.access_unlisted?(current_account)
+      set_award
+      render :show
+    elsif @project&.can_be_access?(current_account)
+      redirect_to project_path(@project)
+    else
+      redirect_to root_path
+    end
   end
 
   def edit
-    @project = Project.includes(:award_types).find(params[:id])
+    @project = current_account.projects.includes(:award_types).find(params[:id]).decorate
+    @project.channels.build if current_account.teams.any?
+    @project.long_id ||= SecureRandom.hex(20)
     authorize @project
     assign_slack_channels
   end
 
   def update
-    @project = Project.includes(:award_types).find(params[:id])
-    @project.attributes = project_params
+    @project = current_account.projects.includes(:award_types, :channels).find(params[:id])
+    @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
-
-    if @project.save
+    if @project.update project_params
       flash[:notice] = 'Project updated'
-      respond_with @project, location: project_path(@project)
+      respond_with @project, location: project_detail_path
     else
+      @project = @project.decorate
       flash[:error] = 'Project update failed, please correct the errors below'
       assign_slack_channels
       render :edit
@@ -102,15 +111,14 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(
+    params[:project][:ethereum_network] = nil if params[:project][:ethereum_network].blank?
+    result = params.require(:project).permit(
       :revenue_sharing_end_date,
       :contributor_agreement_url,
       :description,
       :ethereum_enabled,
       :image,
       :maximum_tokens,
-      :public,
-      :slack_channel,
       :title,
       :tracker,
       :video_url,
@@ -124,6 +132,10 @@ class ProjectsController < ApplicationController
       :maximum_royalties_per_month,
       :license_finalized,
       :denomination,
+      :visibility,
+      :ethereum_network,
+      :ethereum_contract_address,
+      :token_symbol,
       award_types_attributes: %i[
         _destroy
         amount
@@ -131,16 +143,42 @@ class ProjectsController < ApplicationController
         id
         name
         description
-      ]
+        disabled
+      ],
+      channels_attributes: %i[id team_id channel_id _destroy]
     )
+    result[:revenue_sharing_end_date] = DateTime.strptime(result[:revenue_sharing_end_date], '%m/%d/%Y') if result[:revenue_sharing_end_date].present?
+    result
   end
 
   def assign_slack_channels
-    result = GetSlackChannels.call(current_account: current_account)
-    @slack_channels = result.channels
+    @providers = current_account.teams.map(&:provider).uniq
+    @provider_data = {}
+    @providers.each do |provider|
+      teams = current_account.teams.where(provider: provider)
+      team_data = []
+      teams.each do |_team|
+        team_data
+      end
+      @provider_data[provider] = teams
+    end
+    # result = GetSlackChannels.call(current_account: current_account)
+    # @slack_channels = result.channels
   end
 
-  def assign_current_auth
-    @current_auth = current_account&.slack_auth&.decorate
+  def assign_current_account
+    @current_account_deco = current_account&.decorate
+  end
+
+  def set_award
+    last_award = @project.awards.last
+    @award = Award.new channel: last_award&.channel, award_type: last_award&.award_type
+    awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
+    @awardable_types = awardable_types_result.awardable_types
+    @can_award = awardable_types_result.can_award
+  end
+
+  def project_detail_path
+    @project.unlisted? ? unlisted_project_path(@project.long_id) : project_path(@project)
   end
 end

@@ -23,7 +23,7 @@ describe AwardType do
   end
 
   describe 'associations' do
-    let(:project) { create(:project, owner_account: create(:account)) }
+    let(:project) { create(:project, account: create(:account)) }
     let(:award_type) { create(:award_type, project: project) }
     let(:award) { create(:award, award_type: award_type) }
 
@@ -99,13 +99,8 @@ describe AwardType do
 
   describe '#awards#create_with_quantity' do
     let(:award_type) { create :award_type, amount: 1 }
-    let(:issuer) { create :account }
-    let(:authentication) { create :authentication }
-    let(:award) do
-      award_type.awards.create_with_quantity 1.4,
-        issuer: issuer,
-        authentication: authentication
-    end
+    let(:account) { create :account }
+    let(:award) { award_type.awards.create_with_quantity 1.4, account: account, issuer: account }
 
     specify { expect(award.quantity).to eq(1.4) }
 
@@ -116,10 +111,28 @@ describe AwardType do
     specify { expect(award).to be_persisted }
 
     it 'rounds up when >= x.5' do
-      roundup_award = award_type.awards.create_with_quantity(1.5,
-        issuer: issuer,
-        authentication: authentication)
+      roundup_award = award_type.awards.create_with_quantity(1.5, account: account, issuer: account)
       expect(roundup_award.total_amount).to eq(2)
     end
+  end
+
+  it 'invalid_params' do
+    attributes = {}
+    expect(described_class.invalid_params(attributes)).to eq true
+    attributes['name'] = 'name'
+    expect(described_class.invalid_params(attributes)).to eq true
+    attributes['name'] = nil
+    attributes['amount'] = 10
+    expect(described_class.invalid_params(attributes)).to eq true
+    attributes['name'] = 'name'
+    attributes['amount'] = 10
+    expect(described_class.invalid_params(attributes)).to eq false
+  end
+
+  it 'check for active status' do
+    award_type = create :award_type
+    expect(award_type.active?).to eq true
+    award_type.update disabled: true
+    expect(award_type.reload.active?).to eq false
   end
 end

@@ -1,5 +1,34 @@
 .contain-to-grid {
-  background-color: white;
+  background-color: #3a3a3a;
+  padding: 20px;
+  .logo{
+    height: 20px;
+  }
+  .menu{
+    float: right;
+    color: #fff;
+    margin-top: -4px;
+    a{
+      color: #fff;
+      font-weight: bold;
+    }
+  }
+  .avatar{
+    height: 32px;
+    margin-right: 5px;
+  }
+}
+
+.contain-to-grid.hide-for-medium{
+  padding: 17px;
+  .menu{
+    margin-top: -3px;
+  }
+}
+
+.header-bg{
+  width: 100%;
+  z-index: -1;
 }
 
 .contain-to-grid .top-bar {
@@ -56,6 +85,8 @@
   .project-icon {
     margin-right: 10px;
     margin-left: 10px;
+    width: 34px;
+    height: 34px;
   }
   @media screen and (max-width: 39.9375em) {
     .project-icon {
@@ -74,4 +105,3 @@
     }
   }
 }
-

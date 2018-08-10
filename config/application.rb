@@ -34,13 +34,10 @@ module Comakery
     config.autoload_paths << Rails.root.join("app", "lib")
     config.autoload_paths << Rails.root.join("app", "interactors")
 
-    # e-mail
-    config.action_mailer.delivery_method = :postmark
-    config.action_mailer.postmark_settings = { :api_key => ENV['POSTMARK_API_KEY'] }
-
     routes.default_url_options[:host] = ENV['APP_HOST'] || "localhost:#{ENV['PORT'] || 3000}"
     routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'] || 'https://'
 
+    config.assets.paths << Rails.root.join("app", "assets", "fonts")
     cloudfront_host = ENV['CLOUDFRONT_HOST']
     if cloudfront_host.present?
       config.action_controller.asset_host = cloudfront_host
@@ -54,5 +51,9 @@ module Comakery
     config.ethereum_explorer_site = ENV['ETHEREUM_EXPLORER_SITE'] || raise("Please set ETHEREUM_EXPLORER_SITE environment variable")
 
     config.allow_ethereum = ENV['ALLOW_ETHEREUM']
+
+    config.generators do |g|
+      g.test_framework :rspec
+    end
   end
 end

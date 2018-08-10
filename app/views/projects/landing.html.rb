@@ -1,10 +1,21 @@
 class Views::Projects::Landing < Views::Projects::Base
-  needs :private_projects, :public_projects, :private_project_contributors, :public_project_contributors
+  needs :my_projects, :archived_projects, :team_projects, :my_project_contributors, :archived_project_contributors, :team_project_contributors
 
   def content
-    if current_account&.slack_auth
-      projects_header("#{current_account.slack_auth.slack_team_name} projects")
-      projects_block(private_projects, private_project_contributors)
+    if current_account
+      projects_header('')
+      if my_projects.any?
+        full_row { h1 'mine' }
+        projects_block(my_projects, my_project_contributors)
+      end
+      if team_projects.any?
+        full_row { h1 'team' }
+        projects_block(team_projects, team_project_contributors)
+      end
+      if archived_projects.any?
+        full_row { h1 'archived' }
+        projects_block(archived_projects, archived_project_contributors)
+      end
     else
       content_for(:pre_body) {
         div(class: 'intro') {
@@ -36,7 +47,10 @@ class Views::Projects::Landing < Views::Projects::Base
               }
             }
             a('Sign in with Slack', class: buttonish << 'margin-small', href: login_path)
+            a('Sign in with Discord', class: buttonish << 'margin-small', href: login_discord_path)
+            a('Sign in with MetaMask', class: buttonish << 'margin-small signin-with-metamask', href: 'javascript:void(0)')
             a("or join #{t('company_name')}'s Slack", class: 'beta-signup', href: t('company_public_slack_url'))
+            render 'sessions/metamask_modal'
           }
         }
         div(class: 'how-it-works') {
@@ -61,11 +75,32 @@ class Views::Projects::Landing < Views::Projects::Base
           }
         }
       }
+      full_row { h1 'Featured Projects' }
+      projects_block(my_projects, my_project_contributors)
     end
 
-    full_row { h1 'Featured Projects' }
-    projects_block(public_projects, public_project_contributors)
-
     a('Browse All', href: projects_path, class: 'more')
+    content_for :js do
+      cookieconsent
+    end
+  end
+
+  # rubocop:disable Rails/OutputSafety
+  def cookieconsent
+    text(<<-JAVASCRIPT.html_safe)
+      $(function() {
+        window.cookieconsent.initialise({
+          "palette": {
+            "popup": {
+              "background": "#237afc"
+            },
+            "button": {
+              "background": "#fff",
+              "text": "#237afc"
+            }
+          }
+        })
+      });
+    JAVASCRIPT
   end
 end

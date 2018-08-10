@@ -3,17 +3,23 @@ class Award < ApplicationRecord
 
   include EthereumAddressable
 
-  belongs_to :authentication
-  belongs_to :issuer, class_name: 'Account'
+  belongs_to :account, optional: true
+  belongs_to :authentication, optional: true
   belongs_to :award_type
-  delegate :project, to: :award_type
+  belongs_to :issuer, class_name: 'Account'
+  belongs_to :channel, optional: true
+  has_one :team, through: :channel
+  has_one :project, through: :award_type
 
-  validates :proof_id, :authentication, :award_type, :issuer, :unit_amount, :total_amount, :quantity, presence: true
+  validates :proof_id, :award_type, :unit_amount, :total_amount, :quantity, presence: true
   validates :quantity, :total_amount, :unit_amount, numericality: { greater_than: 0 }
 
   validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true } # see EthereumAddressable
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
 
   before_validation :ensure_proof_id_exists
+
+  scope :confirmed, -> { where confirm_token: nil }
 
   def self.total_awarded
     sum(:total_amount)
@@ -25,53 +31,52 @@ class Award < ApplicationRecord
 
   def ethereum_issue_ready?
     project.ethereum_enabled &&
-      recipient_address.present? &&
+      account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end
 
   def self_issued?
-    issuer_slack_auth&.slack_user_id == authentication&.slack_user_id
+    account_id == issuer_id
   end
 
-  def recipient_display_name
-    authentication&.display_name
+  def recipient_auth_team
+    account.authentication_teams.find_by team_id: channel.team_id if channel
   end
 
-  def recipient_slack_user_name
-    authentication&.slack_user_name
+  def send_confirm_email
+    UserMailer.send_award_notifications(self).deliver_now unless discord? || confirmed?
   end
 
-  def recipient_address
-    recipient_account&.ethereum_wallet
+  def discord_client
+    @discord_client ||= Comakery::Discord.new
   end
 
-  def recipient_account
-    authentication&.account
+  def send_award_notifications
+    return unless channel
+    if team.discord?
+      discord_client.send_message self
+    else
+      auth_team = team.authentication_team_by_account issuer
+      token = auth_team.authentication.token
+      slack = Comakery::Slack.get(token)
+      slack.send_award_notifications(award: self)
+    end
   end
 
-  def issuer_display_name
-    issuer_slack_auth&.display_name
+  def confirm!(account)
+    update confirm_token: nil, account: account
   end
 
-  def issuer_slack_user_name
-    issuer_slack_auth&.slack_user_name
+  def confirmed?
+    confirm_token.blank?
   end
 
-  def issuer_slack_icon
-    issuer_slack_auth&.slack_icon
+  def discord?
+    team && team.discord?
   end
-
-  def issuer_slack_auth
-    issuer.team_auth(slack_team_id)
-  end
+  delegate :image, to: :team, prefix: true, allow_nil: true
 
   def total_amount=(x)
     self[:total_amount] = x.round
-  end
-
-  private
-
-  def slack_team_id
-    project.slack_team_id
   end
 end

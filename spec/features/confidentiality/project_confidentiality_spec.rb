@@ -23,12 +23,6 @@ shared_examples 'can see revenue data' do
     visit project_contributors_path(project)
     expect(page).to have_current_path(project_contributors_path(project))
   end
-
-  it 'does show revenue data on the overview page' do
-    visit project_path(project)
-    expect(page).to have_css('.my-share')
-    expect(page).to have_css('.my-balance')
-  end
 end
 
 shared_examples "can't see revenue data" do
@@ -38,22 +32,17 @@ shared_examples "can't see revenue data" do
   end
   it "can't access the revenues page" do
     visit project_revenues_path(project)
-    expect(page).to have_current_path('/404.html')
+    expect(page).to have_current_path(root_path)
   end
   it "doesn't have a contributors link" do
     visit project_path(project)
-    expect(page).not_to have_link 'Contributors'
+    within('.project-nav') do
+      expect(page).not_to have_link 'Contributors'
+    end
   end
   it "can't access the contributors page" do
     visit project_contributors_path(project)
-    expect(page).to have_current_path('/404.html')
-  end
-
-  it "doesn't show revenue data on the overview page" do
-    visit project_path(project)
-
-    expect(page).not_to have_css('.my-share')
-    expect(page).not_to have_css('.my-balance')
+    expect(page).to have_current_path(root_path)
   end
 
   it "doesn't have the awards link" do
@@ -63,16 +52,18 @@ shared_examples "can't see revenue data" do
 
   it "can't access the awards page" do
     visit project_awards_path(project)
-    expect(page).to have_current_path('/404.html')
+    expect(page).to have_current_path(root_path)
   end
 end
 
 describe 'project confidentiality for the logged in project owner', :js do
+  let!(:team) { create :team }
   let!(:owner) { create(:account) }
-  let!(:owner_auth) { create(:authentication, account: owner, slack_team_id: 'foo', slack_image_32_url: 'http://avatar.com/owner.jpg') }
-  let!(:project) { create(:project, public: true, owner_account: owner, slack_team_id: 'foo', require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
+  let!(:owner_auth) { create(:authentication, account: owner) }
+  let!(:project) { create(:project, public: true, account: owner, require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
 
   before do
+    team.build_authentication_team owner_auth
     stub_slack_user_list
     stub_slack_channel_list
     login owner
@@ -115,7 +106,7 @@ describe 'project confidentiality for the logged in project owner', :js do
 end
 
 describe 'project confidentiality for logged out users', :js do
-  let!(:project) { create(:project, public: true, slack_team_id: 'foo', require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
+  let!(:project) { create(:project, visibility: 'public_listed', require_confidentiality: false, payment_type: :revenue_share, royalty_percentage: 10) }
 
   describe 'public project that requires confidentiality' do
     before do
@@ -133,18 +124,13 @@ describe 'project confidentiality for logged out users', :js do
     end
     it "doesn't have a contributors link" do
       visit project_path(project)
-      expect(page).not_to have_link 'Contributors'
+      within('.project-nav') do
+        expect(page).not_to have_link 'Contributors'
+      end
     end
     it "can't access the contributors page" do
       visit project_contributors_path(project)
       expect(page).to have_current_path(root_path)
-    end
-
-    it "doesn't show revenue data on the overview page" do
-      visit project_path(project)
-
-      expect(page).not_to have_css('.my-share')
-      expect(page).not_to have_css('.my-balance')
     end
 
     it "doesn't have the awards link" do
@@ -160,7 +146,7 @@ describe 'project confidentiality for logged out users', :js do
 
     describe 'public project that does not require confidentiality' do
       before do
-        project.update_attribute(:public, true)
+        project.public_listed!
         project.update_attribute(:require_confidentiality, false)
       end
 
@@ -182,13 +168,6 @@ describe 'project confidentiality for logged out users', :js do
       it 'can access the contributors page' do
         visit project_contributors_path(project)
         expect(page).to have_current_path(project_contributors_path(project))
-      end
-
-      it 'does show revenue data on the overview page' do
-        visit project_path(project)
-
-        expect(page).not_to have_css('.my-share')
-        expect(page).not_to have_css('.my-balance')
       end
     end
 

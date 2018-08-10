@@ -7,7 +7,7 @@ SimpleCov.start :rails do
   SimpleCov.refuse_coverage_drop
 
   # add_filter == do not track coverage
-  add_filter %r{^/app/views/}
+  # add_filter %r{^/app/views/}
 
   add_group 'Decorators', 'app/decorators'
   add_group 'Interactors', 'app/interactors'
@@ -103,6 +103,10 @@ end
 
 def get_award_type_rows
   page.all('.award-type-row')
+end
+
+def get_channel_rows
+  page.all('.channel-row')
 end
 
 def click_remove(award_type_row)
