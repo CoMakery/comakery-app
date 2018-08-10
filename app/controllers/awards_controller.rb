@@ -22,6 +22,7 @@ class AwardsController < ApplicationController
         award.send_award_notifications
         award.send_confirm_email
         generate_message(award)
+        session[:last_award_id] = award.id if award.account && award.account.ethereum_wallet?
         redirect_to project_path(award.project)
       else
         render_back(award.errors.full_messages.first)

@@ -127,5 +127,18 @@ class Views::Projects::AwardSend < Views::Base
         end
       end
     end
+    last_award_id = session.delete(:last_award_id)
+    if (last_award = Award.find_by(id: last_award_id)) && current_account.decorate.can_send_awards?(last_award.project)
+      render 'sessions/metamask_modal'
+      javascript_tag(transfer_tokens_script(last_award))
+    end
+  end
+
+  def transfer_tokens_script(last_award)
+    %(
+      $(function() {
+        transferTokens(JSON.parse('#{last_award.decorate.json_for_sending_awards}'));
+      });
+    )
   end
 end
