@@ -128,7 +128,7 @@ class Views::Projects::AwardSend < Views::Base
       end
     end
     last_award_id = session.delete(:last_award_id)
-    if (last_award = Award.find_by(id: last_award_id)) && current_account.decorate.can_send_awards?(last_award.project)
+    if (last_award = Award.find_by(id: last_award_id)) && current_account.decorate.can_send_awards?(last_award.project) && !last_award.ethereum_transaction_address?
       render 'sessions/metamask_modal'
       javascript_tag(transfer_tokens_script(last_award))
     end
