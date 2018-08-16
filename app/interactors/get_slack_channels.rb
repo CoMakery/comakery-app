@@ -11,7 +11,7 @@ class GetSlackChannels
                          .map(&:name)
 
       context.channels = channels
-    rescue Slack::Web::Api::Error => e
+    rescue StandardError => e
       context.fail!(message: "Slack API error - #{e}")
     end
   end

@@ -16,7 +16,7 @@ describe AwardTypeDecorator do
     end
 
     it 'name_with_amount' do
-      expect(award_type.decorate.name_with_amount).to eq('1,337  Contribution')
+      expect(award_type.decorate.name_with_amount).to eq('1,337 Contribution')
     end
   end
 end
