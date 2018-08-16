@@ -83,7 +83,4 @@ class Award < ApplicationRecord
   end
   delegate :image, to: :team, prefix: true, allow_nil: true
 
-  def total_amount=(x)
-    self[:total_amount] = x.round
-  end
 end
