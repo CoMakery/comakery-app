@@ -47,7 +47,8 @@ describe Api::AccountsController do
 
     it 'with valid \'public_address\' param' do
       account = Account.last
-      account.update(nonce: '18822')
+      account.nonce = '18822'
+      account.save(validate: false)
       post :auth, params: { public_address: public_address, nonce: nonce }, format: :json
       parsed_response = JSON.parse response.body, symbolize_names: true
       expect(parsed_response[:success]).to be true

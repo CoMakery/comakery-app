@@ -117,7 +117,6 @@ class Project < ApplicationRecord
     payments.sum(:quantity_redeemed)
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
   def share_of_revenue_unpaid(awards)
     return BigDecimal(0) if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0 || awards.blank?
     (BigDecimal(awards) * revenue_per_share).truncate(currency_precision)
@@ -214,6 +213,10 @@ class Project < ApplicationRecord
     total_awarded * 100.0 / maximum_tokens
   end
 
+  def decimal_places_value
+    10**decimal_places.to_i
+  end
+
   def awards_for_chart
     result = []
     recents = awards.where('awards.created_at > ?', 150.days.ago).order(:created_at)
@@ -237,16 +240,20 @@ class Project < ApplicationRecord
     result
   end
 
+  def populate_token?
+    ethereum_contract_address.present? && project_token? && (token_symbol.blank? || decimal_places.blank?)
+  end
+
   before_validation :populate_token_symbol
   before_save :enable_ethereum
 
   private
 
   def populate_token_symbol
-    if ethereum_contract_address.present? && project_token?
-      symbol = Comakery::Ethereum.token_symbol(ethereum_contract_address, self)
+    if populate_token?
+      symbol, decimals = Comakery::Ethereum.token_symbol(ethereum_contract_address, self)
       self.token_symbol = symbol if token_symbol.blank?
-      self.token_symbol = '' if token_symbol == '%invalid%'
+      self.decimal_places = decimals if decimal_places.blank?
       ethereum_contract_address_exist_on_network?(symbol)
     end
   end
@@ -298,7 +305,7 @@ class Project < ApplicationRecord
   end
 
   def ethereum_contract_address_exist_on_network?(symbol)
-    if (ethereum_contract_address_changed? || ethereum_network_changed?) && symbol == '%invalid%'
+    if (ethereum_contract_address_changed? || ethereum_network_changed?) && symbol.blank?
       errors[:ethereum_contract_address] << 'should exist on the ethereum network'
     end
   end

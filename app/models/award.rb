@@ -39,6 +39,10 @@ class Award < ApplicationRecord
     account_id == issuer_id
   end
 
+  def amount_to_send
+    (total_amount * project.decimal_places_value).to_i
+  end
+
   def recipient_auth_team
     account.authentication_teams.find_by team_id: channel.team_id if channel
   end
@@ -51,15 +55,18 @@ class Award < ApplicationRecord
     @discord_client ||= Comakery::Discord.new
   end
 
+  def slack_client
+    auth_team = team.authentication_team_by_account issuer
+    token = auth_team.authentication.token
+    Comakery::Slack.get(token)
+  end
+
   def send_award_notifications
     return unless channel
     if team.discord?
       discord_client.send_message self
     else
-      auth_team = team.authentication_team_by_account issuer
-      token = auth_team.authentication.token
-      slack = Comakery::Slack.get(token)
-      slack.send_award_notifications(award: self)
+      slack_client.send_award_notifications(award: self)
     end
   end
 
@@ -75,8 +82,4 @@ class Award < ApplicationRecord
     team && team.discord?
   end
   delegate :image, to: :team, prefix: true, allow_nil: true
-
-  def total_amount=(x)
-    self[:total_amount] = x.round
-  end
 end

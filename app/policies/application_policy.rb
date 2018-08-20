@@ -1,20 +1,20 @@
 class ApplicationPolicy
-  attr_reader :user, :record
+  attr_reader :account, :record
 
-  def initialize(user, record)
-    @user = user
+  def initialize(account, record)
+    @account = account
     @record = record
   end
 
   def scope
-    Pundit.policy_scope!(user, record.class)
+    Pundit.policy_scope!(account, record.class)
   end
 
   class Scope
-    attr_reader :user, :scope
+    attr_reader :account, :scope
 
-    def initialize(user, scope)
-      @user = user
+    def initialize(account, scope)
+      @account = account
       @scope = scope
     end
 
@@ -23,23 +23,11 @@ class ApplicationPolicy
     end
   end
 
-  def show?
-    account.present?
-  end
-
   def new?
     account.present?
   end
 
   def create?
-    account.present?
-  end
-
-  def edit?
-    account.present?
-  end
-
-  def update?
     account.present?
   end
 end

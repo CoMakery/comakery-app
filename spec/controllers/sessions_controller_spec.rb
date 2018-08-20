@@ -41,7 +41,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq false
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
-        assert_redirected_to mine_project_path
+        assert_redirected_to root_path
       end
 
       it 'login confirmed authentication' do
@@ -52,7 +52,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq true
         expect(session[:account_id]).to eq account.id
         assert_response :redirect
-        assert_redirected_to mine_project_path
+        assert_redirected_to my_project_path
       end
 
       it 'create new un-confirmed authentication' do
@@ -66,7 +66,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq false
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
-        assert_redirected_to mine_project_path
+        assert_redirected_to root_path
       end
     end
 
@@ -106,13 +106,14 @@ describe SessionsController do
     it 'allow valid user to login' do
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice]).to eq 'Successful sign in'
-      expect(response).to redirect_to mine_project_path
+      expect(response).to redirect_to my_project_path
     end
 
-    it 'redirect to confirm award page' do
-      session[:award_token] = 123
+    it 'notice to redeem award' do
+      session[:redeem] = true
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(response).to redirect_to confirm_award_path(123)
+      expect(flash[:notice]).to eq 'Please click the link in your email to claim your contributor token award!'
+      expect(response).to redirect_to my_project_path
     end
   end
 end

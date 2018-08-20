@@ -421,4 +421,8 @@ describe ProjectDecorator do
   it 'maximum_royalties_per_month_pretty' do
     expect(project.maximum_royalties_per_month_pretty).to eq '10,000'
   end
+
+  it 'maximum_tokens_pretty' do
+    expect(project.maximum_tokens_pretty).to eq '10,000,000'
+  end
 end

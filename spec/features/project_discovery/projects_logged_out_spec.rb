@@ -14,7 +14,7 @@ describe 'viewing projects, creating and editing', :js do
 
   describe 'while logged out' do
     it 'allows viewing public projects index and show' do
-      visit mine_project_path
+      visit my_project_path
 
       expect(page).not_to have_content 'My Projects'
 

@@ -28,6 +28,13 @@ describe AccountsController do
       expect(account.confirmed?).to be_falsey
     end
 
+    it 'send email to admin notice about underage' do
+      account.update date_of_birth: '2010-01-01'
+      put :update, params: { account: { date_of_birth: '01/01/1900' } }
+        expect(response).to redirect_to account_url
+      expect(flash[:notice]).to eq('Your account details have been updated.')
+    end
+
     it 'renders errors for an invalid ethereum address' do
       expect do
         put :update, params: { account: { ethereum_wallet: 'not a valid ethereum address' } }
@@ -124,6 +131,13 @@ describe AccountsController do
       expect(new_account.reload.confirmed?).to be true
       expect(flash[:notice]).to eq 'Success! Your email is confirmed.'
     end
+
+    it 'notice about redeem award' do
+      session[:redeem] = true
+      get :confirm, params: { token: '1234qwer' }
+      expect(new_account.reload.confirmed?).to be true
+      expect(flash[:notice]).to eq 'Please click the link in your email to claim your contributor token award!'
+    end
   end
 
   describe '#confirm_authentication' do
@@ -144,9 +158,8 @@ describe AccountsController do
 
   describe '#download_data' do
     before { login(account) }
-    let!(:authentication) { create(:authentication, confirm_token: '1234qwer') }
 
-    it 'render errors for invalid confirmation token' do
+    it 'download_data' do
       get :download_data, params: { format: 'zip' }
     end
   end

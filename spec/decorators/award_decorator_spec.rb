@@ -63,7 +63,7 @@ describe AwardDecorator do
 
     it 'valid' do
       award.project.ethereum_contract_address = '0x8023214bf21b1467be550d9b889eca672355c005'
-      expected = %({"id":521,"total_amount":1337,"issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488"},"project":{"id":512,"ethereum_contract_address":"0x8023214bf21b1467be550d9b889eca672355c005"}})
+      expected = %({"id":521,"total_amount":"1337.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":1337,"account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488"},"project":{"id":512,"ethereum_contract_address":"0x8023214bf21b1467be550d9b889eca672355c005"}})
       expect(award.decorate.json_for_sending_awards).to eq(expected)
     end
 

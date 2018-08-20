@@ -31,10 +31,10 @@ module Views
     def with_errors(object, field)
       errors = object.errors[field]
       if errors.any?
-        div(class: :error) {
+        div(class: :error) do
           yield
           small(errors.to_sentence, class: :error)
-        }
+        end
       else
         yield
       end
@@ -43,9 +43,9 @@ module Views
     def inline_errors(object, field)
       errors = object.errors[field]
       if errors.any?
-        div(class: :error) {
+        div(class: :error) do
           text("#{field.to_s.humanize} #{errors.to_sentence}")
-        }
+        end
       end
     end
 
@@ -55,9 +55,9 @@ module Views
     end
 
     def question_tooltip(text, options = {})
-      tooltip(text, options) {
+      tooltip(text, options) do
         i class: 'fa fa-question'
-      }
+      end
     end
 
     def tooltip(text, options = {}, &block)
@@ -65,17 +65,13 @@ module Views
            'aria-haspopup': 'true',
            'class': "has-tip #{options[:class]}",
            'data-options': 'show_on:large',
-           title: text) {
+           title: text) do
         block.yield
-      }
+      end
     end
 
     def markdown_to_html(markdown)
       Comakery::Markdown.to_html(markdown)
-    end
-
-    def markdown_to_legal_doc_html(markdown)
-      Comakery::Markdown.to_legal_doc_html(markdown)
     end
 
     def li_if(variable, **opts)
@@ -83,9 +79,9 @@ module Views
     end
 
     def required_label_text(label_text)
-      span(class: 'required') {
+      span(class: 'required') do
         text label_text
-      }
+      end
     end
   end
 end

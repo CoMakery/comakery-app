@@ -2,21 +2,21 @@ class Views::Awards::Activity < Views::Base
   needs :project
 
   def content
-    column {
-      div {
+    column do
+      div do
         h3 "#{project.payment_description} Awarded"
         br
 
         if project.awards_for_chart.present?
-          p {
+          p do
             div(id: 'contributions-chart')
-          }
+          end
           content_for :js do
             make_charts
           end
         end
-      }
-    }
+      end
+    end
   end
 
   def make_charts

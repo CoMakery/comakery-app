@@ -38,7 +38,7 @@ Rails.application.routes.draw do
 
   post '/slack/command' => "slack#command"
 
-  get '/projects/mine' => "projects#landing", as: :mine_project
+  get '/projects/mine' => "projects#landing", as: :my_project
   resources :projects do
     resources :awards, only: [:index, :create] do
       post :update_transaction_address, on: :member
