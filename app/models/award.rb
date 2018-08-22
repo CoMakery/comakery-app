@@ -81,5 +81,6 @@ class Award < ApplicationRecord
   def discord?
     team && team.discord?
   end
+
   delegate :image, to: :team, prefix: true, allow_nil: true
 end

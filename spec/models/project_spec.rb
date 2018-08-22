@@ -198,6 +198,8 @@ describe Project do
 
     describe '#ethereum_contract_address' do
       let(:project) { create(:project) }
+      let(:award_type) { create(:award_type, project: project) }
+      let(:award) { create(:award, award_type: award_type) }
       let(:address) { '0x' + 'a' * 40 }
 
       it 'validates with a valid ethereum address' do
@@ -232,25 +234,17 @@ describe Project do
         expect(project.ethereum_contract_address).to eq(address)
       end
 
-      it 'once set cannot be set unset' do
+      it 'once has finished transaction cannot be set to another value' do
         stub_token_symbol
         project.ethereum_contract_address = address
         project.save!
-        project.ethereum_contract_address = nil
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages.to_sentence).to match \
-          /Ethereum contract address cannot be changed after it has been set/
-      end
-
-      it 'once set it cannot be set to another value' do
-        stub_token_symbol
-        project.ethereum_contract_address = address
-        project.save!
+        award.update ethereum_transaction_address: '0x' + 'a' * 64
+        project.reload
         project.ethereum_contract_address = '0x' + 'b' * 40
         stub_token_symbol
         expect(project).not_to be_valid
         expect(project.errors.full_messages.to_sentence).to match \
-          /Ethereum contract address cannot be changed after it has been set/
+          /cannot be changed if has completed transactions/
       end
     end
 

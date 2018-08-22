@@ -117,7 +117,7 @@ module Views
                 with_errors(project, :ethereum_contract_address) do
                   label do
                     text 'Ethereum Contract Address'
-                    f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
+                    f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', disabled: project.completed_awards.any?
                   end
                 end
 
@@ -169,7 +169,7 @@ module Views
                 with_errors(project, :decimal_places) do
                   label do
                     text 'Decimal Places'
-                    f.text_field :decimal_places
+                    f.text_field :decimal_places, disabled: project.completed_awards.any?
                   end
                 end
 
