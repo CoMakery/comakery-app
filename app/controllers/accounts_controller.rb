@@ -7,6 +7,11 @@ class AccountsController < ApplicationController
     @account = Account.new(email: params[:account_email])
   end
 
+  def show
+    @projects = Project.left_outer_joins(:awards).where.not(awards: { id: nil }).uniq
+    @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(15)
+  end
+
   def create
     @account = Account.new account_params
     @account.email_confirm_token = SecureRandom.hex

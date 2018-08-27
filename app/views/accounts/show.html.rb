@@ -1,5 +1,5 @@
 class Views::Accounts::Show < Views::Base
-  needs :current_account
+  needs :current_account, :projects, :awards
 
   def content
     div(class: 'ethereum_wallet', style: 'margin-top: 10px;') do
@@ -108,9 +108,10 @@ class Views::Accounts::Show < Views::Base
       div(class: 'view-ethereum-wallet') do
         column('medium-12 large-9 no-h-pad') do
           h4(style: 'border: none;') do
-            text 'Account Details ('
-            a(href: '#', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet') { text 'Edit' }
-            text ')'
+            text 'Account Details '
+            a(href: 'javascript:;') do
+              i(class: 'fa fa-cog', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet')
+            end
           end
           row do
             column('small-3') do
@@ -165,42 +166,87 @@ class Views::Accounts::Show < Views::Base
               text 'Ethereum Address'
             end
             column('medium-9') do
-              text_field_tag :ethereum_wallet, current_account.ethereum_wallet, class: 'copy-source', style: 'border: none; box-shadow: unset; padding: 2px 0; display: unset; width: 390px;'
-              a(class: 'copiable', style: 'padding: 3px; border: 1px solid #ccc; margin-top: -3px;') do
-                image_tag 'Octicons-clippy.png', size: '20x20'
+              if current_account.ethereum_wallet.present?
+                text_field_tag :ethereum_wallet, current_account.ethereum_wallet, class: 'fake-link copy-source', style: 'border: none; box-shadow: unset; padding: 2px 0; display: unset; width: 390px; cursor: pointer; background-color: unset;', readonly: true, data: { href: current_account.decorate.etherscan_address }
+                a(class: 'copiable', style: 'padding: 3px; border: 1px solid #ccc; margin-top: -3px;') do
+                  image_tag 'Octicons-clippy.png', size: '20x20'
+                end
               end
             end
           end
         end
 
-        column('medium-12 large-3') do
+        column('medium-12 large-3 text-right') do
           row do
+            link_to download_data_accounts_path(format: :zip) do
+              text 'Download My Data '
+              i(class: 'fa fa-download')
+            end
             if current_account.image.present?
-              image_tag attachment_url(current_account, :image, :fill, 130, 130), style: 'margin: 10px;'
+              image_tag attachment_url(current_account, :image, :fill, 190, 190), style: 'margin-top: 10px;'
             end
           end
         end
       end
+    end
+    award_summary
+    awards_table
+  end
 
-      column('small-12', style: 'padding: 10px 0') do
-        column('small-12') do
-          link_to 'Download My Data', download_data_accounts_path(format: :zip)
+  def award_summary
+    column('medium-12 no-h-pad') do
+      h4(style: 'border: none;') do
+        text 'Award Summary'
+      end
+      div(class: 'table-scroll table-box', style: 'margin-right: 0; min-width: 100%') do
+        table(class: 'award-rows', style: 'min-width: 100%') do
+          tr(class: 'header-row') do
+            th(class: 'small-4') { text 'Project' }
+            th(class: 'small-1') { text 'Token' }
+            th(class: 'small-2') { text 'Total Awarded' }
+            th(class: 'small-5') { text 'Token Contract Address' }
+          end
+
+          projects.each do |project, _awards|
+            project = project.decorate
+            tr(class: 'award-row') do
+              td(class: 'small-4') do
+                link_to project.title, project_awards_path(project, mine: true)
+              end
+              td(class: 'small-1') do
+                text project.token_symbol || 'pending'
+              end
+              td(class: 'small-2') do
+                text project.total_awarded_pretty
+              end
+              td(class: 'small-5') do
+                if project.ethereum_contract_address
+                  link_to project.ethereum_contract_address, project.ethereum_contract_explorer_url
+                else
+                  text 'pending'
+                end
+              end
+            end
+          end
         end
       end
     end
+  end
 
-    hr
-
-    current_account.awards.group_by { |award| award.project.id }.each do |(_, awards_for_project)|
-      project = awards_for_project.first.project.decorate
-      h3 do
-        link_to project.title, project_awards_path(project)
+  def awards_table
+    column('medium-12 no-h-pad') do
+      h4(style: 'border: none;') do
+        text 'Awards'
       end
-      render partial: 'shared/awards', locals: {
-        awards: AwardDecorator.decorate_collection(awards_for_project),
-        show_recipient: false,
+
+      project = awards.first&.project&.decorate
+      render partial: 'awards', locals: {
+        awards: AwardDecorator.decorate_collection(awards),
         project: project
       }
+    end
+    column('medium-12 no-h-pad text-right') do
+      text paginate(awards)
     end
   end
 end
