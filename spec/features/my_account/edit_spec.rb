@@ -21,5 +21,16 @@ describe 'my account' do
     expect(page).to have_content 'Your account details have been updated.'
     expect(page).to have_content 'Tester'
     expect(page).to have_content 'Dev'
+
+    stub_token_symbol
+    project = create(:project, ethereum_contract_address: '0x' + 'a' * 40)
+    award_type = create :award_type, project: project
+    award = create :award, award_type: award_type, account: account
+    first('.menu').click_link 'ACCOUNT'
+    expect(page).to have_content project.title
+    award.update ethereum_transaction_address: '0x' + 'a' * 64
+    expect(award.errors.full_messages).to eq []
+    first('.menu').click_link 'ACCOUNT'
+    expect(page).to have_link award.decorate.ethereum_transaction_address_short
   end
 end

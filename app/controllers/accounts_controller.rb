@@ -8,7 +8,7 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @projects = Project.left_outer_joins(:awards).where.not(awards: { id: nil }).uniq
+    @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).uniq
     @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(15)
   end
 
