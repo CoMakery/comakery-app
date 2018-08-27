@@ -19,7 +19,7 @@ class Account < ApplicationRecord
   has_many :payments
   has_many :channels, through: :projects
   validates :email, presence: true, uniqueness: true
-  attr_accessor :password_required, :name_required
+  attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
   validates :first_name, :last_name, :country, :date_of_birth, presence: true, if: :name_required
 
@@ -27,6 +27,7 @@ class Account < ApplicationRecord
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validate :validate_age, on: :create
+  validates :agreed_to_user_agreement, presence: { message: 'You must agree to the terms of the CoMakery User Agreement to sign up ' }, if: :agreement_required
 
   class << self
     def order_by_award(_project_id)

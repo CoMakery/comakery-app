@@ -17,12 +17,19 @@ class AccountsController < ApplicationController
     @account.email_confirm_token = SecureRandom.hex
     @account.password_required = true
     @account.name_required = true
+    @account.agreement_required = true
+    @account.agreed_to_user_agreement = if params[:account][:agreed_to_user_agreement] == '0'
+      nil
+    else
+      Date.current
+    end
     if @account.save
       session[:account_id] = @account.id
       flash[:notice] = 'Created account successfully. Please confirm your email before continuing.'
       UserMailer.confirm_email(@account).deliver
       redirect_to root_path
     else
+      @account.agreed_to_user_agreement = params[:account][:agreed_to_user_agreement]
       render :new
     end
   end

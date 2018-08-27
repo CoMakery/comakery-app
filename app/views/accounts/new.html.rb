@@ -72,7 +72,16 @@ class Views::Accounts::New < Views::Base
               end
             end
 
-            column('large-12') do
+            column('large-12 agreement') do
+              with_errors(account, :agreed_to_user_agreement) do
+                label do
+                  f.check_box :agreed_to_user_agreement
+                  span do
+                    text 'I agree to the terms of the CoMakery User Agreement'
+                  end
+                end
+              end
+
               f.submit 'CREATE YOUR ACCOUNT', class: buttonish(:medium), style: 'margin: 0'
             end
           end
