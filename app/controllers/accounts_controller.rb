@@ -65,6 +65,8 @@ class AccountsController < ApplicationController
       redirect_to account_url, notice: 'Your account details have been updated.'
     else
       flash[:error] = current_account.errors.full_messages.join(' ')
+      @projects = Project.left_outer_joins(:awards).where.not(awards: { id: nil }).uniq
+      @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(15)
       render :show
     end
   end

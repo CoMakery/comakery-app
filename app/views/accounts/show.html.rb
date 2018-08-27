@@ -109,7 +109,7 @@ class Views::Accounts::Show < Views::Base
         column('medium-12 large-9 no-h-pad') do
           h4(style: 'border: none;') do
             text 'Account Details '
-            a(href: 'javascript:;') do
+            a(href: 'javascript:;', id: 'toggle-edit') do
               i(class: 'fa fa-cog', "data-toggles": '.edit-ethereum-wallet,.view-ethereum-wallet')
             end
           end

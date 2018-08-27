@@ -31,8 +31,6 @@ feature 'my account' do
     expect(page).to have_content 'Swarmbot'
     expect(page).to have_content '1,337'
     expect(page).to have_content 'Mar 25, 2016'
-    expect(page).to have_content 'Contribution'
-    expect(page).to have_content 'Great work'
     expect(page).to have_content auth.account.decorate.name
   end
 
@@ -42,10 +40,10 @@ feature 'my account' do
     first('.menu').click_link 'ACCOUNT'
 
     within('.ethereum_wallet') do
-      click_link 'Edit'
+      find('#toggle-edit').click
       click_link 'Cancel'
 
-      click_link 'Edit'
+      find('#toggle-edit').click
       fill_in 'Ethereum Address', with: 'too short and with spaces'
       click_on 'Save'
     end
@@ -67,7 +65,7 @@ feature 'my account' do
     first('.menu').click_link 'ACCOUNT'
 
     within('.ethereum_wallet') do
-      click_link 'Edit'
+      find('#toggle-edit').click
       fill_in 'Ethereum Address', with: "0x#{'a' * 40}"
       click_on 'Save'
     end

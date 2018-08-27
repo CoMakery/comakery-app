@@ -84,7 +84,7 @@ class ProjectDecorator < Draper::Decorator
 
   def total_awarded_pretty
     if decimal_places.to_i.zero?
-      number_with_precision(total_awarded)
+      number_with_precision(total_awarded, precision: 0, delimiter: ',')
     else
       number_to_currency(total_awarded, precision: project.decimal_places, unit: '')
     end

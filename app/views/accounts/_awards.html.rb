@@ -23,7 +23,7 @@ class Views::Accounts::Awards < Views::Base
               text award.total_amount_pretty
             end
             td(class: 'small-2') do
-              text award.created_at.strftime('%b %d, %Y').gsub(' ', '&nbsp;')
+              text award.created_at.strftime('%b %d, %Y')
             end
             if project.ethereum_contract_address?
               td(class: 'small-4') do
