@@ -58,7 +58,7 @@ class BuildAwardRecords
   end
 
   def find_or_create_account
-    account = Account.find_by email: context.uid
+    account = Account.where("lower(email)=?", context.uid.downcase).first
     account, errors = Account.find_or_create_for_authentication(context.uid, context.channel) unless account
     return unless account
     context.fail!(message: errors) if errors.present?
