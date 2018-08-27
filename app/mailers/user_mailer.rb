@@ -1,7 +1,7 @@
 class UserMailer < ApplicationMailer
   def confirm_email(account)
     @url = confirm_email_url(token: account.email_confirm_token)
-    mail from: 'confirm@comakery.com', to: account.email, subject: "Let's Make It Official. Confirm Your Email w/ CoMakery"
+    mail to: account.email, subject: "Let's Make It Official. Confirm Your Email w/ CoMakery"
   end
 
   def confirm_authentication(authentication)
