@@ -96,6 +96,7 @@ describe SessionsController do
   describe '#sign_in' do
     let!(:account) { create(:account, email: 'user@example.com', password: '12345678') }
     let!(:account1) { create(:account, email: 'user1@example.com', password: '12345678', email_confirm_token: '1234') }
+    let!(:account2) { create(:account, email: 'user2@example.com', password: nil) }
 
     it 'prevent login with wrong password' do
       post :sign_in, params: { email: 'user@example.com', password: 'invalid' }
@@ -107,6 +108,12 @@ describe SessionsController do
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice]).to eq 'Successful sign in'
       expect(response).to redirect_to my_project_path
+    end
+
+    it 'catch for error for account without password' do
+      post :sign_in, params: { email: 'user2@example.com', password: '12345678' }
+      expect(flash[:error]).to eq 'Invalid email or password'
+      expect(response).to redirect_to new_session_path
     end
 
     it 'notice to redeem award' do
