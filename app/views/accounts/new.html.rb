@@ -77,7 +77,8 @@ class Views::Accounts::New < Views::Base
                 label do
                   f.check_box :agreed_to_user_agreement
                   span do
-                    text 'I agree to the terms of the CoMakery User Agreement'
+                    text 'I agree to the terms of the '
+                    link_to 'CoMakery User Agreement', '/user-agreement'
                   end
                 end
               end
