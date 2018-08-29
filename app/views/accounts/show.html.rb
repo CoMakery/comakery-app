@@ -178,12 +178,12 @@ class Views::Accounts::Show < Views::Base
 
         column('medium-12 large-3 text-right') do
           row do
-            column('small-12 no-h-pad'){
+            column('small-12 no-h-pad') do
               link_to download_data_accounts_path(format: :zip) do
                 text 'Download My Data '
                 i(class: 'fa fa-download')
               end
-            }
+            end
             if current_account.image.present?
               image_tag attachment_url(current_account, :image, :fill, 190, 190), style: 'margin-top: 10px;'
             end
