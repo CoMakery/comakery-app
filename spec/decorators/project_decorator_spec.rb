@@ -273,6 +273,15 @@ describe ProjectDecorator do
     end
   end
 
+  describe '#total_awarded_to_user' do
+    specify do
+      account = create(:account)
+      create(:award, award_type: award_type, account: account)
+      expect(project.total_awarded_to_user(account))
+        .to eq('1,337')
+    end
+  end
+
   describe '#total_awards_redeemed' do
     specify do
       expect(project)
