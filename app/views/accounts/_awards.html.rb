@@ -14,7 +14,7 @@ class Views::Accounts::Awards < Views::Base
         awards.each do |award|
           tr(class: 'award-row') do
             td(class: 'small-3') do
-              link_to project.title, project_awards_path(project, mine: true)
+              link_to project.title, project_awards_path(project.show_id, mine: true)
             end
             td(class: 'small-1') do
               text project.token_symbol

@@ -213,13 +213,13 @@ class Views::Accounts::Show < Views::Base
             project = project.decorate
             tr(class: 'award-row') do
               td(class: 'small-4') do
-                link_to project.title, project_awards_path(project, mine: true)
+                link_to project.title, project_awards_path(project.show_id, mine: true)
               end
               td(class: 'small-1') do
                 text project.token_symbol || 'pending'
               end
               td(class: 'small-2') do
-                text project.total_awarded_pretty
+                text project.total_awarded_to_user(current_account)
               end
               td(class: 'small-5') do
                 if project.ethereum_contract_address
