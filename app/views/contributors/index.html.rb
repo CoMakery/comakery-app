@@ -29,7 +29,7 @@ class Views::Contributors::Index < Views::Projects::Base
             table(class: 'table-scroll', style: 'width: 100%') do
               tr(class: 'header-row') do
                 th 'Contributors'
-                th { text "Lifetime #{project.payment_description} Awarded" }
+                th { text 'Total Tokens Awarded' }
                 th { text "Unpaid #{project.payment_description}" } if project.revenue_share?
                 th { text 'Unpaid Revenue Share Balance' } if project.revenue_share?
                 th { text 'Lifetime Paid' } if project.revenue_share?
