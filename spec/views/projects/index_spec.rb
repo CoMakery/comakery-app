@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'projects/index.html.rb' do
   before do
     project = create(:project, description: 'markdown _rocks_ **hard**: www.auto.link')
-    assign :projects, Project.with_last_activity_at.decorate
+    assign :projects, Project.with_last_activity_at.page(1).per(9)
     assign :project_contributors, project => []
     allow(view).to receive(:current_account).and_return(nil)
     allow(view).to receive(:policy).and_return(double('project policy', new?: false))

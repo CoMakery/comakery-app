@@ -38,8 +38,7 @@ describe 'landing page', :js do
     within('h2') { expect(page.text).to eq('Projects') }
     expect(page).to have_content 'New Project'
 
-    expect(page.all('.project').size).to eq(22)
-    expect(page).to have_content 'Public Project'
+    expect(page.all('.project').size).to eq(9)
   end
 
   it 'when logged out shows featured projects first' do
@@ -65,7 +64,7 @@ describe 'landing page', :js do
 
     within('h2') { expect(page.text).to eq('Projects') }
 
-    expect(page.all('.project').size).to eq(10)
+    expect(page.all('.project').size).to eq(9)
     expect(page).to have_content 'Featured Project'
     expect(page).to have_content 'Public Project'
     expect(page).not_to have_content 'Private Project'
