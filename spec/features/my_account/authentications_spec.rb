@@ -50,8 +50,7 @@ feature 'my account' do
       click_on 'Save'
     end
 
-    expect(page).to have_content "Ethereum wallet should start with '0x',
-      followed by a 40 character ethereum address"
+    expect(page).to have_content "should start with '0x', followed by a 40 character ethereum address"
 
     within('.ethereum_wallet') do
       fill_in 'Ethereum Address', with: "0x#{'a' * 40}"

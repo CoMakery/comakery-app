@@ -2,21 +2,21 @@ class Views::Projects::AwardSend < Views::Base
   needs :project, :award, :awardable_types, :can_award
 
   def content
-    div(id: 'award-send') {
-      row(class: 'awarded-info-header') {
+    div(id: 'award-send') do
+      row(class: 'awarded-info-header') do
         if can_award
           h3 "Award #{project.payment_description}"
         else
           h3 "Earn #{project.payment_description}"
         end
-      }
+      end
       br
       form_for [project, award] do |f|
-        div(class: 'award-types') {
+        div(class: 'award-types') do
           if can_award
-            row {
-              column('small-12') {
-                label {
+            row do
+              column('small-12') do
+                label do
                   text 'Communication Channel'
                   project_channels = [Channel.new(name: 'Email')]
                   project_channels += project.channels if project.channels.any?
@@ -24,42 +24,42 @@ class Views::Projects::AwardSend < Views::Base
                     options_from_collection_for_select(project_channels, :id, :name_with_provider, award.channel_id)
                   end
                   f.select :channel_id, options, {}, class: 'fetch-channel-users'
-                }
-              }
-            }
+                end
+              end
+            end
 
-            row(class: 'award-uid') {
-              column('small-12') {
+            row(class: 'award-uid') do
+              column('small-12') do
                 if award.channel && award.channel.members(current_account).any?
-                  label(class: 'uid-select') {
+                  label(class: 'uid-select') do
                     options = capture do
                       options_for_select(award.channel.members(current_account), award.uid)
                     end
                     text 'User'
                     f.select :uid, options, include_blank: true, class: 'member-select'
-                  }
+                  end
 
-                  label(class: 'uid-email hide') {
+                  label(class: 'uid-email hide') do
                     text 'Email Address'
                     f.text_field :uid, class: 'award-email', value: award.email, name: nil
-                  }
+                  end
                 else
-                  label(class: 'uid-select hide') {
+                  label(class: 'uid-select hide') do
                     text 'User'
                     f.select :uid, []
-                  }
+                  end
 
-                  label(class: 'uid-email') {
+                  label(class: 'uid-email') do
                     text 'Email Address'
                     f.text_field :uid, class: 'award-email', value: award.email
-                  }
+                  end
                 end
-              }
-            }
+              end
+            end
 
-            row {
-              column('small-12') {
-                label {
+            row do
+              column('small-12') do
+                label do
                   text 'Award Type'
                   options = []
                   if awardable_types.any?
@@ -68,64 +68,77 @@ class Views::Projects::AwardSend < Views::Base
                     end
                   end
                   f.select :award_type_id, options, {}
-                }
-              }
-            }
+                end
+              end
+            end
 
-            row {
-              column('small-3') {
-                label {
+            row do
+              column('small-3') do
+                label do
                   text 'Quantity'
                   f.text_field(:quantity, type: :text, default: 1, class: 'financial')
-                }
-              }
+                end
+              end
 
-              row {
-                column('small-12') {
-                  with_errors(project, :description) {
-                    label {
+              row do
+                column('small-12') do
+                  with_errors(project, :description) do
+                    label do
                       text 'Description'
                       f.text_area(:description)
                       link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text')
-                    }
-                  }
-                }
-              }
-              row {
-                column('small-12') {
+                    end
+                  end
+                end
+              end
+              row do
+                column('small-12') do
                   f.submit('Send Award', class: buttonish)
-                }
-              }
-            }
+                end
+              end
+            end
           else
             project.award_types.order('amount asc').decorate.each do |award_type|
-              row(class: 'award-type-row') {
+              row(class: 'award-type-row') do
                 if award_type.active?
-                  column('small-12') {
-                    with_errors(project, :account_id) {
-                      label {
-                        row {
-                          column('small-12') {
-                            row {
+                  column('small-12') do
+                    with_errors(project, :account_id) do
+                      label do
+                        row do
+                          column('small-12') do
+                            row do
                               span(award_type.name)
-                              span(class: ' financial') {
+                              span(class: ' financial') do
                                 text " (#{award_type.amount_pretty})"
-                              }
+                              end
                               text ' (Community Awardable)' if award_type.community_awardable?
                               br
                               span(class: 'help-text') { text raw(award_type.description_markdown) }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
+                            end
+                          end
+                        end
+                      end
+                    end
+                  end
                 end
-              }
+              end
             end
           end
-        }
+        end
       end
-    }
+    end
+    last_award_id = session.delete(:last_award_id)
+    if (last_award = Award.find_by(id: last_award_id)) && current_account.decorate.can_send_awards?(last_award.project) && !last_award.ethereum_transaction_address?
+      render 'sessions/metamask_modal'
+      javascript_tag(transfer_tokens_script(last_award))
+    end
+  end
+
+  def transfer_tokens_script(last_award)
+    %(
+      $(function() {
+        transferTokens(JSON.parse('#{last_award.decorate.json_for_sending_awards}'));
+      });
+    )
   end
 end

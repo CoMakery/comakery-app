@@ -24,13 +24,14 @@ describe GetSlackChannels do
 
   context 'on failed api call' do
     before do
-      stub_request(:post, 'https://slack.com/api/channels.list').to_return(body: { ok: false }.to_json)
+      stub_request(:post, 'https://slack.com/api/channels.list').to_return(body: { ok: false, channels: [] }.to_json)
     end
-
-    it 'fails the interactor' do
-      result = described_class.call(authentication_team: authentication.authentication_teams.last)
-      expect(result).not_to be_success
-      expect(result.message).to match(/Slack API error - Slack::Web::Api::Error/)
+    describe '#call' do
+      it 'fails the interactor' do
+        result = described_class.call(authentication_team: authentication.authentication_teams.last)
+        expect(result).not_to be_success
+        expect(result.message).to match(/Slack API error/)
+      end
     end
   end
 end

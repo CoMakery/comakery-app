@@ -4,7 +4,7 @@ class AccountsController < ApplicationController
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm confirm_authentication show download_data]
 
   def new
-    @account = Account.new
+    @account = Account.new(email: params[:account_email])
   end
 
   def create
@@ -28,10 +28,15 @@ class AccountsController < ApplicationController
       account.confirm!
       session[:account_id] = account.id
       flash[:notice] = 'Success! Your email is confirmed.'
+      if session[:redeem]
+        flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
+        session[:redeem] = nil
+      end
+      redirect_to my_project_path
     else
       flash[:error] = 'Invalid token'
+      redirect_to root_path
     end
-    redirect_to root_path
   end
 
   def confirm_authentication

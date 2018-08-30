@@ -6,6 +6,7 @@ class UserMailer < ApplicationMailer
 
   def confirm_authentication(authentication)
     @authentication = authentication
+    @provider = @authentication.provider
     @url = confirm_authentication_url(token: authentication.confirm_token)
     mail to: authentication.account.email, subject: 'Confirm your account email'
   end

@@ -1,8 +1,8 @@
 class Views::Layouts::Application < Views::Base
   def content
     doctype!
-    html(lang: 'en') {
-      head {
+    html(lang: 'en') do
+      head do
         render partial: 'layouts/google_tag_manager.html'
         render partial: 'shared/unbounce.html'
         meta :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type'
@@ -20,8 +20,8 @@ class Views::Layouts::Application < Views::Base
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat:400,700'
-        stylesheet_link_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css'
-        javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js'
+        stylesheet_link_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css'
+        javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js'
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
 
@@ -52,73 +52,75 @@ class Views::Layouts::Application < Views::Base
         favicon_link_tag 'favicon/favicon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png'
         favicon_link_tag 'favicon/manifest.json', rel: 'manifest', type: 'application/json'
         csrf_meta_tags
-      }
+      end
 
-      body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") {
+      body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") do
         render partial: 'layouts/google_tag_no_script.html'
-        div(class: 'contain-to-grid top-bar-container show-for-medium') {
-          link_to root_path do
-            image_tag 'comakery.png', class: 'logo'
+        div(class: 'contain-to-grid top-bar-container show-for-medium') do
+          div(class: 'small-centered columns no-h-pad', style: 'max-width: 1535px') do
+            link_to root_path do
+              image_tag 'comakery.png', class: 'logo'
+            end
+            render partial: 'layouts/navigation'
           end
-          render partial: 'layouts/navigation'
-        }
+        end
 
-        div(class: 'contain-to-grid top-bar-container hide-for-medium') {
+        div(class: 'contain-to-grid top-bar-container hide-for-medium') do
           link_to root_path do
             image_tag 'comakery.png', style: 'height: 18px'
           end
           render partial: 'layouts/navigation'
-        }
+        end
 
-        div(class: 'app-container row') {
-          div(class: 'large-10 medium-11 small-12 small-centered columns') {
+        div(class: 'app-container row') do
+          div(class: 'large-10 medium-11 small-12 small-centered columns') do
             flash.each do |name, msg|
-              div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') {
-                button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') {
+              div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
+                button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
                   span('aria-hidden' => true) { text 'x' }
-                }
-                span(id: "flash-msg-#{name}") {
+                end
+                span(id: "flash-msg-#{name}") do
                   text ActiveSupport::SafeBuffer.new(msg)
-                }
-              }
+                end
+              end
             end
-          }
+          end
 
           content_for?(:pre_body) ? yield(:pre_body) : ''
 
-          div(class: 'main') {
-            div(class: 'large-10 medium-11 small-12 small-centered columns') {
+          div(class: 'main') do
+            div(class: 'large-10 medium-11 small-12 small-centered columns no-h-pad', style: 'max-width: 1535px;') do
               content_for?(:body) ? yield(:body) : yield
-            }
-          }
-        }
+            end
+          end
+        end
 
-        row(class: 'footer') {
-          div(class: 'large-10 medium-11 small-12 small-centered columns') {
-            column('small-12') {
-              column('small-3') {
+        row(class: 'footer') do
+          div(class: 'large-12 small-centered columns', style: 'max-width: 1044px;') do
+            column('small-12') do
+              column('small-3') do
                 image_tag 'Logo_Gradient.png', size: '100x100'
-              }
-              column('small-3') {
-                strong {
+              end
+              column('small-3') do
+                strong do
                   text 'ABOUT COMAKERY'
                   br
                   link_to 'Home', root_path
                   br
                   link_to 'Contact Us', 'mailto:support@comakery.com'
-                }
-              }
-              column('small-3') {
-                strong {
+                end
+              end
+              column('small-3') do
+                strong do
                   text 'JOIN'
                   br
                   link_to 'Contributors', new_account_path
                   br
                   link_to 'Foundations', new_account_path
-                }
-              }
-              column('small-3') {
-                strong {
+                end
+              end
+              column('small-3') do
+                strong do
                   text 'LEGAL'
                   br
                   link_to 'User Agreement', user_agreement_path
@@ -128,11 +130,11 @@ class Views::Layouts::Application < Views::Base
                   link_to 'E-Sign Disclosure', e_sign_disclosure_path
                   br
                   link_to 'Privacy Policy', '/privacy-policy'
-                }
-              }
-            }
-          }
-        }
+                end
+              end
+            end
+          end
+        end
         javascript_tag("
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -144,17 +146,17 @@ class Views::Layouts::Application < Views::Base
         ")
 
         if content_for?(:footer)
-          footer(class: 'fat-footer') {
+          footer(class: 'fat-footer') do
             yield(:footer)
-          }
+          end
         end
 
         if content_for?(:js)
-          script {
+          script do
             yield(:js)
-          }
+          end
         end
-      }
-    }
+      end
+    end
   end
 end

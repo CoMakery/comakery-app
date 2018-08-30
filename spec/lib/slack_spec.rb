@@ -45,7 +45,7 @@ describe Comakery::Slack do
   describe '#award_notifications_message' do
     describe 'when the issuer sends to someone else' do
       it 'is from issuer to recipient' do
-        expect(message).to match /@jim jim sent @newt newt a 2674 token Contribution/
+        expect(message).to match /@jim jim sent @newt newt a 2674.0 token Contribution/
       end
     end
 

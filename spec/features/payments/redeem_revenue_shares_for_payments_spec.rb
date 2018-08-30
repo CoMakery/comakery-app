@@ -317,7 +317,7 @@ describe 'when redeeming revenue shares for payments' do
     expect(page).not_to have_link 'Payments'
 
     visit project_payments_path(project)
-    expect(page).to have_current_path(mine_project_path)
+    expect(page).to have_current_path(my_project_path)
   end
 
   it 'no payments page displayed when 0% royalty percentage' do
@@ -329,7 +329,7 @@ describe 'when redeeming revenue shares for payments' do
     expect(page).not_to have_link 'Payments'
 
     visit project_payments_path(project)
-    expect(page).to have_current_path(mine_project_path)
+    expect(page).to have_current_path(my_project_path)
   end
 
   describe 'non-members' do

@@ -3,14 +3,6 @@ class Authentication < ApplicationRecord
   has_many :authentication_teams, dependent: :destroy
   validates :account, :provider, :uid, presence: true
 
-  # TODO: update after refactor
-  def slack_team_ethereum_enabled?
-    # allow_ethereum = Rails.application.config.allow_ethereum
-    # allowed_domains = allow_ethereum.to_s.split(',').compact
-    # allowed_domains.include?(slack_team_domain)
-    true
-  end
-
   def self.find_or_create_by_omniauth(auth_hash)
     authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
     if authentication

@@ -22,6 +22,7 @@ class AwardsController < ApplicationController
         award.send_award_notifications
         award.send_confirm_email
         generate_message(award)
+        session[:last_award_id] = award.id if award.account && award.account.ethereum_wallet?
         redirect_to project_path(award.project)
       else
         render_back(award.errors.full_messages.first)
@@ -42,9 +43,9 @@ class AwardsController < ApplicationController
         redirect_to root_path
       end
     else
-      session[:award_token] = params[:token]
-      flash[:notice] = 'Log in to claim your award!'
-      redirect_to new_session_path
+      session[:redeem] = true
+      flash[:notice] = "Please #{view_context.link_to 'log in', new_session_path} or #{view_context.link_to 'signup', new_account_path} before receiving your award"
+      redirect_to new_account_path
     end
   end
 
@@ -84,7 +85,7 @@ class AwardsController < ApplicationController
 
   def confirm_message
     if current_account.ethereum_wallet.present?
-      "Congratulations, you just claimed your award! Your Ethereum address is #{current_account.ethereum_wallet} you can change your Ethereum address on your account page."
+      "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}."
     else
       "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
     end

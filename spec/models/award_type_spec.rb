@@ -106,13 +106,13 @@ describe AwardType do
 
     specify { expect(award.unit_amount).to eq(1) }
 
-    specify { expect(award.total_amount).to eq(1) }
+    specify { expect(award.total_amount).to eq(0.14e1) }
 
     specify { expect(award).to be_persisted }
 
     it 'rounds up when >= x.5' do
       roundup_award = award_type.awards.create_with_quantity(1.5, account: account, issuer: account)
-      expect(roundup_award.total_amount).to eq(2)
+      expect(roundup_award.total_amount).to eq(0.15e1)
     end
   end
 

@@ -65,6 +65,12 @@ describe ProjectsController do
       other_member_project.channels.create(team: team, channel_id: 'general')
     end
 
+    it 'redirect to account page if account info is not enough' do
+      account.update country: nil
+      get :landing
+      expect(response).to redirect_to(account_path)
+    end
+
     it 'returns your private projects, and public projects that *do not* belong to you' do
       get :landing
 

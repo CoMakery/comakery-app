@@ -26,12 +26,13 @@ class Payment < ApplicationRecord
 
   private
 
-  # rubocop:disable Metrics/CyclomaticComplexity
+  def new_amount
+    quantity_redeemed - (quantity_redeemed_was || 0)
+  end
+
   def payee_has_the_awards_they_are_redeeming
     return unless account.present? && project.present? && quantity_redeemed.present?
-    new_amount_redeemed = quantity_redeemed_was.present? ? (quantity_redeemed - quantity_redeemed_was) : quantity_redeemed
-
-    if (account.total_awards_paid(project) + new_amount_redeemed) > account.total_awards_earned(project)
+    if (account.total_awards_paid(project) + new_amount) > account.total_awards_earned(project)
       errors.add(:quantity_redeemed, "cannot be greater than the payee's total awards remaining balance")
     end
   end

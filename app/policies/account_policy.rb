@@ -19,7 +19,7 @@ class AccountPolicy < ApplicationPolicy
   alias create? new?
 
   def edit?
-    user == record
+    account == record
   end
   alias update? edit?
   alias show? edit?

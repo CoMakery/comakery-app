@@ -11,6 +11,6 @@ class AwardTypeDecorator < Draper::Decorator
   end
 
   def name_with_amount
-    "#{amount_pretty}  #{name}"
+    "#{amount_pretty} #{name}"
   end
 end

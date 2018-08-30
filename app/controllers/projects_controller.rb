@@ -80,8 +80,6 @@ class ProjectsController < ApplicationController
       render :show
     elsif @project&.can_be_access?(current_account)
       redirect_to project_path(@project)
-    else
-      redirect_to root_path
     end
   end
 
@@ -136,6 +134,7 @@ class ProjectsController < ApplicationController
       :ethereum_network,
       :ethereum_contract_address,
       :token_symbol,
+      :decimal_places,
       award_types_attributes: %i[
         _destroy
         amount
