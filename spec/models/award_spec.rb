@@ -198,7 +198,7 @@ describe Award do
 
     it 'send send_confirm_email' do
       award.update email: 'reciver@test.st'
-      expect { award.send_confirm_email }.to change { ActionMailer::Base.deliveries.count }.by(0)
+      expect { award.send_confirm_email }.to change { ActionMailer::Base.deliveries.count }.by(1)
       award.update confirm_token: '1234'
       expect { award.send_confirm_email }.to change { ActionMailer::Base.deliveries.count }.by(1)
     end
