@@ -12,7 +12,8 @@ class Views::Projects::Index < Views::Projects::Base
       end
     end
 
-    projects_block(projects, project_contributors)
+    projects_block(projects.decorate, project_contributors)
+    text paginate(projects)
 
     a('Browse All', href: projects_path) if params[:query]
   end
