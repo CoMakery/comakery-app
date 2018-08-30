@@ -48,7 +48,13 @@ class Award < ApplicationRecord
   end
 
   def send_confirm_email
-    UserMailer.send_award_notifications(self).deliver_now unless discord? || confirmed?
+    unless channel
+      if confirmed?
+        UserMailer.incoming_award_notifications(self).deliver_now
+      else
+        UserMailer.send_award_notifications(self).deliver_now
+      end
+    end
   end
 
   def discord_client

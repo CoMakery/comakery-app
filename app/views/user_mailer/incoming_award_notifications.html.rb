@@ -1,4 +1,4 @@
-class Views::UserMailer::SendAwardNotifications < Views::Base
+class Views::UserMailer::IncomingAwardNotifications < Views::Base
   needs :url, :owner, :award
   def content
     row do
@@ -7,9 +7,9 @@ class Views::UserMailer::SendAwardNotifications < Views::Base
       end
       p do
         span(style: 'font-weight: bold') do
-          text 'Now all you have to do is click '
+          text 'Click '
           link_to 'here', url
-          text ' to receive your award.'
+          text ' to see your account balance.'
         end
       end
       p do
