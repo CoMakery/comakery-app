@@ -4,7 +4,7 @@ class ContributorsController < ApplicationController
 
   def index
     authorize @project, :show_contributions?
-    @contributors = @project.contributors_by_award_amount.page(params[:page])
+    @contributors = @project.contributors_by_amount.page(params[:page])
     @award_data = GetContributorData.call(project: @project).award_data
   end
 end

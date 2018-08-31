@@ -7,7 +7,7 @@ class Views::Contributors::Index < Views::Projects::Base
       full_row do
         if award_data[:contributions_summary_pie_chart].present?
           column('large-4 medium-12 summary float-left') do
-            h3 "Lifetime #{project.payment_description} Awarded To Contributors"
+            h3 'Total Tokens Awarded To Contributors'
 
               p do
                 div(id: 'award-percentages', class: 'royalty-pie') {}
@@ -57,7 +57,7 @@ class Views::Contributors::Index < Views::Projects::Base
                   end
                   td(class: 'awards-earned financial') do
                     span(class: 'margin-small') do
-                      text contributor.total_awards_earned_pretty(project)
+                      text project.format_with_decimal_places(contributor.total)
                     end
                   end
                   if project.revenue_share?

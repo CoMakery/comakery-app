@@ -15,7 +15,7 @@ class GetContributorData
       award = award.decorate
       a_hash[award.account_id] ||= { net_amount: 0 }
       a_hash[award.account_id][:name] ||= award.recipient_display_name
-      a_hash[award.account_id][:net_amount] += award.total_amount
+      a_hash[award.account_id][:net_amount] += award.amount_to_send
     end.values
   end
 
