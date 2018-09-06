@@ -13,7 +13,7 @@ class Authentication < ApplicationRecord
 
       authentication = acc.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'], confirm_token: SecureRandom.hex, oauth_response: auth_hash)
     end
-    acc.update agreed_to_user_agreement: Date.current if acc&.agreed_to_user_agreement.blank?
+    acc&.update agreed_to_user_agreement: Date.current if acc&.agreed_to_user_agreement.blank?
     authentication
   end
 
