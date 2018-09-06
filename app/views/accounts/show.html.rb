@@ -241,10 +241,8 @@ class Views::Accounts::Show < Views::Base
         text 'Awards'
       end
 
-      project = awards.first&.project&.decorate
       render partial: 'awards', locals: {
-        awards: AwardDecorator.decorate_collection(awards),
-        project: project
+        awards: AwardDecorator.decorate_collection(awards)
       }
     end
     column('medium-12 no-h-pad text-right') do

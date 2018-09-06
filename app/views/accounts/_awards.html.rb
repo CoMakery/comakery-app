@@ -1,5 +1,5 @@
 class Views::Accounts::Awards < Views::Base
-  needs :project, :awards, :current_account
+  needs :awards, :current_account
 
   def content
     div(class: 'table-scroll table-box', style: 'margin-right: 0') do
@@ -12,6 +12,7 @@ class Views::Accounts::Awards < Views::Base
           th(class: 'small-3') { text 'Blockchain Transaction' }
         end
         awards.each do |award|
+          project = award.project.decorate
           tr(class: 'award-row') do
             td(class: 'small-3') do
               link_to project.title, project_awards_path(project.show_id, mine: true)
@@ -25,13 +26,11 @@ class Views::Accounts::Awards < Views::Base
             td(class: 'small-2') do
               text award.created_at.strftime('%b %d, %Y')
             end
-            if project.ethereum_contract_address?
-              td(class: 'small-4') do
-                if award.ethereum_transaction_explorer_url
-                  link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
-                else
-                  text 'pending'
-                end
+            td(class: 'small-4') do
+              if award.ethereum_transaction_explorer_url
+                link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
+              else
+                text 'pending'
               end
             end
           end
