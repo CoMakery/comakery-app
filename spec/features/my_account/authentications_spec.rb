@@ -25,8 +25,7 @@ feature 'my account' do
     expect(page).not_to have_link 'ACCOUNT'
     login(auth.account)
 
-    visit root_path
-    first('.menu').click_link 'ACCOUNT'
+    visit account_path(history: true)
 
     expect(page).to have_content 'Swarmbot'
     expect(page).to have_content '1,337'

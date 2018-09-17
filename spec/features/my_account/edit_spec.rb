@@ -30,7 +30,7 @@ describe 'my account' do
     expect(page).to have_content project.title
     award.update ethereum_transaction_address: '0x' + 'a' * 64
     expect(award.errors.full_messages).to eq []
-    first('.menu').click_link 'ACCOUNT'
+    visit account_path(history: true)
     expect(page).to have_link award.decorate.ethereum_transaction_address_short
   end
 end

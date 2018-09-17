@@ -8,8 +8,8 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).uniq
-    @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(15)
+    @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:page]).per(20)
+    @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(20)
   end
 
   def create
@@ -72,7 +72,7 @@ class AccountsController < ApplicationController
       redirect_to account_url, notice: 'Your account details have been updated.'
     else
       flash[:error] = current_account.errors.full_messages.join(' ')
-      @projects = Project.left_outer_joins(:awards).where.not(awards: { id: nil }).uniq
+      @projects = Project.left_outer_joins(:awards).where.not(awards: { id: nil }).group('projects.id').page(params[:page]).per(20)
       @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(15)
       render :show
     end

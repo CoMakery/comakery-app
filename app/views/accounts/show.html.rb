@@ -191,14 +191,33 @@ class Views::Accounts::Show < Views::Base
         end
       end
     end
-    award_summary
-    awards_table
+    column('medium-12 no-h-pad') do
+      div(class: 'small-1', style: 'float: left') do
+        label do
+          checked = params[:history] == 'true' ? false : true
+          radio_button_tag 'award', url_for, checked, class: 'toggle-radio'
+          text 'Summary'
+        end
+      end
+      div(class: 'small-1', style: 'float: left') do
+        label do
+          checked = params[:history] == 'true' ? true : false
+          radio_button_tag 'award', url_for(history: true), checked, class: 'toggle-radio'
+          text 'History'
+        end
+      end
+    end
+    if params[:history]
+      awards_table
+    else
+      award_summary
+    end
   end
 
   def award_summary
     column('medium-12 no-h-pad') do
       h4(style: 'border: none;') do
-        text 'Award Summary'
+        text 'Awards'
       end
       div(class: 'table-scroll table-box', style: 'margin-right: 0; min-width: 100%') do
         table(class: 'award-rows', style: 'min-width: 100%') do
@@ -232,6 +251,9 @@ class Views::Accounts::Show < Views::Base
           end
         end
       end
+    end
+    column('medium-12 no-h-pad text-right') do
+      text paginate(projects)
     end
   end
 
