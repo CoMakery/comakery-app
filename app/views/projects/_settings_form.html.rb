@@ -106,12 +106,16 @@ module Views
             end
             row do
               column('large-6 small-12') do
+                selected = f.object.ethereum_network
+                selected = 'main' if project.completed_awards.blank? && f.object.ethereum_network.blank?
                 options = capture do
-                  options_for_select(ethereum_network_options, selected: f.object.ethereum_network.presence || 'main')
+                  options_for_select(ethereum_network_options, selected: selected)
                 end
-                label do
-                  text 'Ethereum Network'
-                  f.select :ethereum_network, options, include_blank: true
+                with_errors(project, :ethereum_network) do
+                  label do
+                    text 'Ethereum Network'
+                    f.select :ethereum_network, options, { include_blank: true }, disabled: project.completed_awards.any?
+                  end
                 end
 
                 with_errors(project, :ethereum_contract_address) do

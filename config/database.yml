@@ -28,7 +28,8 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV["DATABASE"] || Rails.application.config.project_slug + '_development'%>
+  # database: <%= ENV["DATABASE"] || Rails.application.config.project_slug + '_development'%>
+  database: comakery_demo
   username: <%= ENV["DB_USERNAME"] || 'postgres'%>
   password: <%= ENV["DB_PASSWORD"]%>
   # The specified database role being used to connect to postgres.
