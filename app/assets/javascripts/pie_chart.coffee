@@ -37,7 +37,7 @@ window.pieChart = (selector, data)->
         "pieDistance": 14
       },
       "inner": {
-        "format": "value"
+        "format": "percentage"
       },
       "mainLabel": {
         "fontSize": 12,
