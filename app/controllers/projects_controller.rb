@@ -109,7 +109,6 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params[:project][:ethereum_network] = nil if params[:project][:ethereum_network].blank?
     result = params.require(:project).permit(
       :revenue_sharing_end_date,
       :contributor_agreement_url,
