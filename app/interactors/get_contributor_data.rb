@@ -19,13 +19,15 @@ class GetContributorData
     end.values
   end
 
-  def contributions_summary_pie_chart(awards, fully_shown = 12)
+  def contributions_summary_pie_chart(awards)
     contributions = contributions_data(awards)
-    contributions = contributions.sort_by { |c| -c[:net_amount] }
-    summary = contributions[0...fully_shown]
-    if contributions.size > fully_shown
+    total = contributions.sum { |award| award[:net_amount] }
+    summary = contributions.reject { |c| c[:net_amount] < total.to_f / 100 }
+    others = contributions.reject { |c| c[:net_amount] >= total.to_f / 100 }
+
+    if others.any?
       other = { name: 'Other' }
-      other[:net_amount] = contributions[fully_shown..-1].sum { |award| award[:net_amount] }
+      other[:net_amount] = others.sum { |award| award[:net_amount] }
       summary << other
     end
     summary
