@@ -176,7 +176,20 @@ class Views::Accounts::Show < Views::Base
           end
         end
 
-        column('medium-12 large-3 text-right') do
+        column('show-for-large medium-12 large-3 text-right') do
+          row do
+            column('small-12 no-h-pad') do
+              link_to download_data_accounts_path(format: :zip) do
+                text 'Download My Data '
+                i(class: 'fa fa-download')
+              end
+            end
+            if current_account.image.present?
+              image_tag attachment_url(current_account, :image, :fill, 190, 190), style: 'margin-top: 10px;'
+            end
+          end
+        end
+        column('hide-for-large medium-12', style: 'margin-bottom:20px') do
           row do
             column('small-12 no-h-pad') do
               link_to download_data_accounts_path(format: :zip) do
@@ -192,14 +205,14 @@ class Views::Accounts::Show < Views::Base
       end
     end
     column('medium-12 no-h-pad') do
-      div(class: 'small-1', style: 'float: left') do
+      div(style: 'float: left; width: 90px') do
         label do
           checked = params[:history] == 'true' ? false : true
           radio_button_tag 'award', url_for, checked, class: 'toggle-radio'
           text 'Summary'
         end
       end
-      div(class: 'small-1', style: 'float: left') do
+      div(style: 'float: left; width: 90px') do
         label do
           checked = params[:history] == 'true' ? true : false
           radio_button_tag 'award', url_for(history: true), checked, class: 'toggle-radio'
