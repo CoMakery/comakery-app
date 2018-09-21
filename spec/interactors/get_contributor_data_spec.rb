@@ -21,10 +21,10 @@ describe GetContributorData do
 
   describe '#contributions_summary_pie_chart' do
     it "gathers extra entries into 'other'" do
-      expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 10, total_amount: 10, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 33, account: create(:account, first_name: 'b', last_name: 'b')), create(:award, unit_amount: 20, total_amount: 20, account: create(:account, first_name: 'c', last_name: 'c'))], 1)).to eq([{ net_amount: 33, name: 'b b' }, { net_amount: 30, name: 'Other' }])
+      expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 1, total_amount: 1, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 330, account: create(:account, first_name: 'b', last_name: 'b')), create(:award, unit_amount: 200, total_amount: 200, account: create(:account, first_name: 'c', last_name: 'c'))])).to eq([{ name: 'b b', net_amount: 33 }, { name: 'c c', net_amount: 200 }, { name: 'Other', net_amount: 1 }])
     end
     it 'gathers shows all entries if less than threshold' do
-      expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 10, total_amount: 10, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 33, account: create(:account, first_name: 'b', last_name: 'b')), create(:award, unit_amount: 20, total_amount: 20, account: create(:account, first_name: 'c', last_name: 'c'))], 3)).to eq([{ net_amount: 33, name: 'b b' }, { net_amount: 20, name: 'c c' }, { net_amount: 10, name: 'a a' }])
+      expect(described_class.new.contributions_summary_pie_chart([create(:award, unit_amount: 10, total_amount: 10, account: create(:account, first_name: 'a', last_name: 'a')), create(:award, unit_amount: 33, total_amount: 33, account: create(:account, first_name: 'b', last_name: 'b')), create(:award, unit_amount: 20, total_amount: 20, account: create(:account, first_name: 'c', last_name: 'c'))])).to eq([{ name: 'a a', net_amount: 10 }, { name: 'b b', net_amount: 33 }, { name: 'c c', net_amount: 20 }])
     end
   end
 end
