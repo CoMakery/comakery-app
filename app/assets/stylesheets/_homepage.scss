@@ -73,7 +73,7 @@
   .intro .intro-content {
       margin-top: 9.5rem;
   }
-}  
+}
 
 .how-it-works {
   background: #52008D;
@@ -112,4 +112,49 @@
   h1 {
     text-transform: lowercase;
   }
+}
+
+.projects-title{
+  font-family: "MontserratBold";
+  font-size: 24px;
+}
+
+.past-project-title{
+  font-family: "MontserratLight";
+  font-size: 22px;
+}
+
+.past-project-meta{
+  font-family: "MontserratRegular";
+  font-style: italic;
+  font-size: 12px;
+  color: #fb40e5;
+}
+
+.past-project-content{
+  font-family: "RobotoRegular";
+  font-size: 12px;
+  margin-top: 20px;
+}
+
+.summary-count{
+  font-family: "MontserratBold";
+  font-size: 24px;
+  color: #fb40e5;
+}
+
+hr.stat{
+  width: 80px;
+  color: #0089f4;
+  background-color: #0089f4;
+  height: 2px;
+}
+.summary-label{
+  font-family: "MontserratLight";
+  font-size: 24px;
+  font-style: italic;;
+}
+
+.app-container.home{
+  padding-bottom: 110px
 }

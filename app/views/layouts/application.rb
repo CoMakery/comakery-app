@@ -72,7 +72,7 @@ class Views::Layouts::Application < Views::Base
           render partial: 'layouts/navigation'
         end
 
-        div(class: 'app-container row') do
+        div(class: "app-container row#{' home' if current_account && action_name == 'landing'}") do
           div(class: 'large-10 medium-11 small-12 small-centered columns') do
             flash.each do |name, msg|
               div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
