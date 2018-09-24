@@ -3,6 +3,8 @@ class PagesController < ApplicationController
   skip_after_action :verify_authorized
 
   def landing
-    redirect_to my_project_path if current_account
+    render :home if current_account
   end
+
+  def home; end
 end
