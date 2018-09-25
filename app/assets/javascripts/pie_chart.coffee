@@ -44,7 +44,7 @@ window.pieChart = (selector, data)->
       },
       "percentage": {
         "color": "#e1e1e1",
-        "decimalPlaces": 0
+        "decimalPlaces": 2
       },
       "value": {
         "color": "#e1e1e1",
@@ -60,7 +60,7 @@ window.pieChart = (selector, data)->
     "tooltips": {
       "enabled": true,
       "type": "placeholder",
-      "string": "{label}: {value}, {percentage}%"
+      "string": "{label}: {percentage}%"
     },
     "effects": {
       "pullOutSegmentOnClick": {

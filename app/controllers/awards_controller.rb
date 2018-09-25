@@ -25,7 +25,7 @@ class AwardsController < ApplicationController
         generate_message(award)
         session[:last_award_id] = award.id if account&.ethereum_wallet?
         account&.update new_award_notice: true
-        redirect_to project_path(award.project)
+        redirect_to project_overview_path(award.project)
       else
         render_back(award.errors.full_messages.first)
       end
@@ -39,7 +39,7 @@ class AwardsController < ApplicationController
       award = Award.find_by confirm_token: params[:token]
       if award
         flash[:notice] = confirm_message if award.confirm!(current_account)
-        redirect_to project_path(award.project)
+        redirect_to project_overview_path(award.project)
       else
         flash[:error] = 'Invalid award token!'
         redirect_to root_path
@@ -91,5 +91,9 @@ class AwardsController < ApplicationController
     else
       "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
     end
+  end
+
+  def project_overview_path(project)
+    project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
   end
 end
