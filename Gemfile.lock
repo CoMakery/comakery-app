@@ -439,7 +439,7 @@ GEM
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
     ruby_http_client (3.3.0)
-    rubyzip (1.2.1)
+    rubyzip (1.2.2)
     safe_yaml (1.0.4)
     sass (3.4.25)
     sass-rails (5.0.7)
@@ -591,7 +591,7 @@ DEPENDENCIES
   rspec-rails
   rubocop (~> 0.49.1)
   rubocop-rspec (~> 1.15.0)
-  rubyzip
+  rubyzip (~> 1.2.2)
   sass-rails
   sdoc
   selenium-webdriver
