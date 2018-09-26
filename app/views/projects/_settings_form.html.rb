@@ -106,18 +106,22 @@ module Views
             end
             row do
               column('large-6 small-12') do
+                selected = f.object.ethereum_network
+                selected = 'main' if project.completed_awards.blank? && f.object.ethereum_network.blank?
                 options = capture do
-                  options_for_select(ethereum_network_options, selected: f.object.ethereum_network.presence || 'main')
+                  options_for_select(ethereum_network_options, selected: selected)
                 end
-                label do
-                  text 'Ethereum Network'
-                  f.select :ethereum_network, options, include_blank: true
+                with_errors(project, :ethereum_network) do
+                  label do
+                    text 'Ethereum Network'
+                    f.select :ethereum_network, options, { include_blank: true }, disabled: project.completed_awards.any?
+                  end
                 end
 
                 with_errors(project, :ethereum_contract_address) do
                   label do
                     text 'Ethereum Contract Address'
-                    f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
+                    f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', disabled: project.completed_awards.any?
                   end
                 end
 
@@ -169,7 +173,7 @@ module Views
                 with_errors(project, :decimal_places) do
                   label do
                     text 'Decimal Places'
-                    f.text_field :decimal_places
+                    f.text_field :decimal_places, disabled: project.completed_awards.any?
                   end
                 end
 

@@ -137,7 +137,11 @@ class Views::Projects::AwardSend < Views::Base
   def transfer_tokens_script(last_award)
     %(
       $(function() {
-        transferTokens(JSON.parse('#{last_award.decorate.json_for_sending_awards}'));
+        var currentState = history.state;
+        if(!currentState || !currentState['award']) {
+          history.pushState({ award: '#{last_award.id}' }, 'transfer_tokens_award-#{last_award.id}');
+          transferTokens(JSON.parse('#{last_award.decorate.json_for_sending_awards}'));
+        }
       });
     )
   end

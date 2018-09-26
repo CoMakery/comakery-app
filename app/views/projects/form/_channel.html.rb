@@ -46,12 +46,18 @@ class Views::Projects::Form::Channel < Views::Base
           end
         end
       end
-      row(class: 'add-channel') do
-        column do
-          p { a('+ add channel', href: '#', 'data-duplicate': '.channel-template') }
+      if providers.present?
+        row(class: 'add-channel') do
+          column do
+            p { a('+ add channel', href: '#', 'data-duplicate': '.channel-template') }
+          end
+        end
+        render_cancel_and_save_buttons(f)
+      else
+        span(class: 'text-warning') do
+          text 'Start adding channels by signing into Slack / Discord'
         end
       end
-      render_cancel_and_save_buttons(f)
     end
   end
 

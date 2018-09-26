@@ -151,7 +151,13 @@ $ ->
     $(".copy-source").select()
     document.execCommand('Copy')
 
+  $('.fake-link').click ->
+    window.location.href = $(@).data("href")
+
   $('input[name=mine]').click (e) ->
+    window.location.href = $(@).val()
+
+  $('.toggle-radio').click (e) ->
     window.location.href = $(@).val()
 
   $('#project_payment_type').change (e)->

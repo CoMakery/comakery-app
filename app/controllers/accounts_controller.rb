@@ -7,17 +7,29 @@ class AccountsController < ApplicationController
     @account = Account.new(email: params[:account_email])
   end
 
+  def show
+    @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:page]).per(20)
+    @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(20)
+  end
+
   def create
     @account = Account.new account_params
     @account.email_confirm_token = SecureRandom.hex
     @account.password_required = true
     @account.name_required = true
+    @account.agreement_required = true
+    @account.agreed_to_user_agreement = if params[:account][:agreed_to_user_agreement] == '0'
+      nil
+    else
+      Date.current
+    end
     if @account.save
       session[:account_id] = @account.id
       flash[:notice] = 'Created account successfully. Please confirm your email before continuing.'
       UserMailer.confirm_email(@account).deliver
       redirect_to root_path
     else
+      @account.agreed_to_user_agreement = params[:account][:agreed_to_user_agreement]
       render :new
     end
   end
@@ -60,6 +72,8 @@ class AccountsController < ApplicationController
       redirect_to account_url, notice: 'Your account details have been updated.'
     else
       flash[:error] = current_account.errors.full_messages.join(' ')
+      @projects = Project.left_outer_joins(:awards).where.not(awards: { id: nil }).group('projects.id').page(params[:page]).per(20)
+      @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(15)
       render :show
     end
   end

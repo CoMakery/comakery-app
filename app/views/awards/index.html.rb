@@ -12,14 +12,14 @@ class Views::Awards::Index < Views::Base
         div(class: 'small-1', style: 'float: left') do
           label do
             checked = params[:mine] == 'true' ? false : true
-            radio_button_tag 'mine', url_for, checked
+            radio_button_tag 'mine', url_for, checked, class: 'toggle-radio'
             text 'all'
           end
         end
         div(class: 'small-1', style: 'float: left') do
           label do
             checked = params[:mine] == 'true' ? true : false
-            radio_button_tag 'mine', url_for(mine: true), checked
+            radio_button_tag 'mine', url_for(mine: true), checked, class: 'toggle-radio'
             text 'mine'
           end
         end

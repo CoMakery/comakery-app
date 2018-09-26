@@ -3,8 +3,6 @@ require 'rails_helper'
 describe AccountsController do
   let(:authentication) { create(:sb_authentication) }
   let(:account) { authentication.account }
-  let(:award1) { create(:award, account: account) }
-  let(:award2) { create(:award, account: account) }
 
   describe '#update' do
     before { login(account) }
@@ -161,6 +159,22 @@ describe AccountsController do
 
     it 'download_data' do
       get :download_data, params: { format: 'zip' }
+    end
+  end
+
+  describe '#show' do
+    before do
+      stub_token_symbol
+      project = create(:project, ethereum_contract_address: '0x' + 'a' * 40)
+      award_type = create :award_type, project: project
+      create :award, award_type: award_type, account: account
+      login account
+    end
+
+    it 'show account information' do
+      get :show
+      expect(assigns[:projects][0]).to eq Project.last
+      expect(assigns[:awards].count).to eq 1
     end
   end
 end
