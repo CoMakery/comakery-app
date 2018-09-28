@@ -23,7 +23,7 @@ describe 'landing page', :js do
     7.times { |i| create(:project, account, title: "Private Project #{i}", visibility: 'member') }
     7.times { |i| create(:project, account, title: "Archived Project #{i}", visibility: 'archived') }
 
-    visit root_path
+    visit my_project_path
 
     expect(page).to have_content 'gleenn'
 
