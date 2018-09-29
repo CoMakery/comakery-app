@@ -8,11 +8,8 @@ body.projects-edit {
   .vertical.menu li {
     padding: 0 0;
     a { color: grey; }
-    a.active-menu {
-      background-color: whitesmoke;
-      &:visited, &:link {
-        background-color: whitesmoke;
-      }
+    a.active {
+      color: #1585cf;
     }
   }
   @media only screen and (max-width: 1024px) {

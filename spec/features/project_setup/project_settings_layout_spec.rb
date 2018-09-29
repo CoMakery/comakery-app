@@ -5,7 +5,7 @@ describe 'project settings layout:', js: true do
   let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false) }
 
   before do
-    Capybara.page.current_window.resize_to(1200, 1000) # (width, height)
+    Capybara.page.current_window.resize_to(1500, 2000) # (width, height)
     login(account)
     visit edit_project_path(project)
   end

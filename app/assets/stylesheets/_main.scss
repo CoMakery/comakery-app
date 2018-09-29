@@ -514,3 +514,14 @@ h1, h2, h3, h4, h5, h6{
 .text-warning{
   color: #ffae00;
 }
+
+.switch-target{
+  display: none;
+}
+
+.no-switcher .switch-target{
+  display: block;
+}
+.switch-target.active{
+  display: block;
+}
