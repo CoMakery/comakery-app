@@ -97,13 +97,6 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'Project Tracker', with: 'http://github.com/here/is/my/tracker'
     fill_in 'Video', with: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'
 
-    award_type_inputs = get_award_type_rows
-    expect(award_type_inputs.size).to eq(4)
-
-    award_type_inputs[0].all('a[data-mark-and-hide]')[0].click
-    award_type_inputs = get_award_type_rows
-    expect(award_type_inputs.size).to eq(3)
-
     # youtube player throws js errors, ignore them:
     ignore_js_errors { click_on 'Save', class: 'last_submit' }
     ignore_js_errors { expect(page).to have_content 'Project updated' }
@@ -116,7 +109,7 @@ describe 'viewing projects, creating and editing', :js do
     expect(page).to have_link 'Project Tasks'
     expect(page.all('.project-video iframe').size).to eq(1)
 
-    expect(page.all('select#award_award_type_id option').count).to eq(3)
+    expect(page.all('select#award_award_type_id option').count).to eq(4)
 
     visit('/projects')
 
@@ -141,66 +134,5 @@ describe 'viewing projects, creating and editing', :js do
     click_link 'Public Project'
 
     expect(page).not_to have_content 'Edit'
-  end
-
-  describe 'removing award types on projects where there have been awards sent already' do
-    let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false) }
-    before { login(account) }
-
-    let!(:channel) { create :channel, project: project, team: team, name: 'a channel' }
-    let!(:award_type) { create(:award_type, project: project, name: "Big ol' award", amount: 40000, community_awardable: false) }
-
-    context 'without awards' do
-      it 'can update any attribute' do
-        visit edit_project_path(project)
-        award_type_amount_input = page.find("input[name*='[amount]']")
-
-        expect(page.all('a[data-mark-and-hide]').size).to eq(2)
-        expect(award_type_amount_input[:value]).to eq('40000')
-        expect(award_type_amount_input[:readonly]).to be_falsey
-
-        award_type_amount_input.set('50000')
-        page.find("input[name*='[title]']").set('fancy title')
-        page.find("input[name*='[community_awardable]']").set(true)
-
-        click_on 'Save', class: 'last_submit'
-
-        visit edit_project_path(project)
-        award_type_amount_input = page.find("input[name*='[amount]']")
-
-        expect(award_type_amount_input[:value]).to eq('50000')
-        expect(award_type_amount_input[:readonly]).to be_falsey
-        expect(page.find("input[name*='[title]']")[:value]).to eq('fancy title')
-        expect(page.find("input[name*='[community_awardable]']")).to be_truthy
-      end
-    end
-
-    context 'with awards' do
-      let!(:award) { create(:award, award_type: award_type, account: same_team_account) }
-
-      it 'prevents destroying the award types' do
-        visit edit_project_path(project)
-        award_type_amount_input = page.find("input[name*='[amount]']")
-
-        expect(page.all('a[data-mark-and-hide]').size).to eq(1)
-        expect(page).to have_content '(1 award sent)'
-        expect(award_type_amount_input[:value]).to eq('40000')
-        expect(award_type_amount_input[:readonly]).to eq('readonly')
-      end
-
-      it "allows modifying the award type's name and community awardable but NOT amount" do
-        visit edit_project_path(project)
-
-        page.find("input[name*='[title]']").set('fancy title')
-        page.find("input[name*='[community_awardable]']").set(true)
-
-        click_on 'Save', class: 'last_submit'
-
-        visit edit_project_path(project)
-
-        expect(page.find("input[name*='[title]']")[:value]).to eq('fancy title')
-        expect(page.find("input[name*='[community_awardable]']")[:value]).to be_truthy
-      end
-    end
   end
 end

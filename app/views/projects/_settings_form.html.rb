@@ -5,7 +5,7 @@ module Views
 
       def content
         form_for project do |f|
-          div(class: 'content-box', 'data-id': 'general-info') do
+          div(class: 'content-box switch-target active', 'data-id': 'general-info', id: 'general') do
             div(class: 'legal-box-header') { h3 'General Info' }
             row do
               column('large-6 small-12') do
@@ -66,7 +66,7 @@ module Views
 
           render partial: '/projects/form/channel', locals: { f: f, providers: providers }
 
-          div(class: 'content-box', 'data-id': 'contribution-terms') do
+          div(class: 'content-box switch-target', id: 'contribution', 'data-id': 'contribution-terms') do
             full_row do
               div(class: 'legal-box-header') do
                 h3 'Contribution Terms'
@@ -210,7 +210,7 @@ module Views
             end
             render_cancel_and_save_buttons(f)
           end
-          div(class: 'content-box', 'data-id': 'awards-offered') do
+          div(class: 'content-box switch-target', id: 'award', 'data-id': 'awards-offered') do
             div(class: 'award-types') do
               div(class: 'legal-box-header') { h3 'Awards Offered' }
               row do
@@ -277,7 +277,7 @@ module Views
       end
 
       def visibility_block(f, visibility_options)
-        div(class: 'content-box', 'data-id': 'visibility') do
+        div(class: 'content-box switch-target', id: 'visibility', 'data-id': 'visibility') do
           div(class: 'award-types') do
             div(class: 'legal-box-header') { h3 'Visibility' }
             row do
