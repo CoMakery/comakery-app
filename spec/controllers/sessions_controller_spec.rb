@@ -132,12 +132,11 @@ describe SessionsController do
     end
 
     it 'notice new award' do
-      account.update new_award_notice: true, ethereum_wallet: '0x' + 'a'*40
+      account.update new_award_notice: true, ethereum_wallet: '0x' + 'a' * 40
       create(:award, account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Ethereum address is')).to eq true
       expect(response).to redirect_to my_project_path
     end
-
   end
 end
