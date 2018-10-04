@@ -53,21 +53,7 @@ describe TopContributors do
             total contribution/recency, excluding accounts without awards" do
         expect(described_class.call(projects: [sb_project])
             .contributors[sb_project].map { |a| a.decorate.name })
-          .to eq([account3.decorate.name, account1.decorate.name, account2.decorate.name, account5.decorate.name, account4.decorate.name])
-      end
-
-      it 'can return a specified number of top contributors' do
-        expect(described_class.call(projects: [sb_project], n: 3)
-            .contributors[sb_project]
-            .map { |a| a.decorate.name })
-          .to eq([account3.decorate.name, account1.decorate.name, account2.decorate.name])
-      end
-
-      it %( can return a specified number of top contributors) do
-        expect(described_class.call(projects: [sb_project], n: 3)
-            .contributors[sb_project]
-            .map { |account| [account.decorate.name, account.total_awarded.to_i, account.last_awarded_at] })
-          .to eq([[account3.decorate.name, 2000, 4.days.ago], [account1.decorate.name, 2000, 5.days.ago], [account2.decorate.name, 1000, 1.day.ago]])
+          .to eq([account1.decorate.name, account3.decorate.name, account2.decorate.name, account4.decorate.name, account5.decorate.name])
       end
     end
 
@@ -78,10 +64,10 @@ describe TopContributors do
 
       it %(returns the most awarded contributors, ordered by total contribution/recency,
             excluding accounts without awards) do
-        expect(described_class.call(projects: [sb_project], n: 3)
+        expect(described_class.call(projects: [sb_project])
             .contributors[sb_project]
-            .map { |account| [account.decorate.name, account.total_awarded.to_i, account.last_awarded_at] })
-          .to eq([[account3.decorate.name, 2000, 4.days.ago], [account1.decorate.name, 2000, 5.days.ago], [account2.decorate.name, 1500, 1.day.ago]])
+            .map { |account| [account.decorate.name, account.total_awarded.to_i] })
+          .to eq([[account1.decorate.name, 2000], [account3.decorate.name, 2000], [account2.decorate.name, 1500], [account4.decorate.name, 10], [account5.decorate.name, 10]])
       end
     end
   end

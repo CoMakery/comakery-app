@@ -88,17 +88,13 @@ class Project < ApplicationRecord
   end
 
   def top_contributors
-    contributors_by_amount.limit(5)
-  end
-
-  def contributors_by_amount
-    Account.select('accounts.*, sum(a1.total_amount) as total').joins("
+    Account.select('accounts.*, sum(a1.total_amount) as total_awarded, max(a1.created_at) as last_awarded_at').joins("
       left join awards a1 on a1.account_id=accounts.id
       left join award_types on a1.award_type_id=award_types.id
       left join projects on award_types.project_id=projects.id")
            .where("projects.id=#{id}")
            .group('accounts.id')
-           .order('total desc')
+           .order('total_awarded desc, last_awarded_at').first(5)
   end
 
   def create_ethereum_awards!
