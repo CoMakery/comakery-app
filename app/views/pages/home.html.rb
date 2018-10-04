@@ -12,27 +12,26 @@ class Views::Pages::Home < Views::Base
 
   def header
     div(class: 'landing-header') do
-      image_tag 'Labyrinth-White-Small.png', size: '52x52', class: 'show-for-medium header-icon'
       div(class: 'show-for-large') do
-        h1(style: 'margin-top: 90px;') { text 'BEGIN YOUR BLOCKCHAIN BUILD' }
-        h2(style: 'margin-bottom: 8%') { text 'FILL OUT THE FORM BELOW TO GET STARTED' }
+        h1(style: 'margin-top: 160px;') { text 'BEGIN YOUR BLOCKCHAIN JOURNEY' }
+        h2(style: 'margin-bottom: 8%') { text 'FILL OUT THE SHORT FORM BELOW TO GET STARTED' }
       end
       div(class: 'show-for-medium-only') do
-        h1(style: 'margin-top: 4%; font-size: 20px') { text 'BEGIN YOUR BLOCKCHAIN BUILD' }
-        h2(style: 'margin-bottom: 5%;font-size: 16px;') { text 'FILL OUT THE FORM BELOW TO GET STARTED' }
+        h1(style: 'margin-top: 90px; font-size: 20px') { text 'BEGIN YOUR BLOCKCHAIN JOURNEY' }
+        h2(style: 'margin-bottom: 5%;font-size: 16px;') { text 'FILL OUT THE SHORT FORM BELOW TO GET STARTED' }
       end
       div(class: 'hide-for-medium') do
-        h1(style: 'margin-top: 20px; font-size: 14px') { text 'BEGIN YOUR BLOCKCHAIN BUILD' }
-        h2(style: 'margin-top: 10px; font-size: 10px; margin-bottom: 15px') { text 'FILL OUT THE FORM BELOW TO GET STARTED' }
+        h1(style: 'margin-top: 70px; font-size: 14px') { text 'BEGIN YOUR BLOCKCHAIN JOURNEY' }
+        h2(style: 'margin-top: 10px; font-size: 10px; margin-bottom: 15px') { text 'FILL OUT THE SHORT FORM BELOW TO GET STARTED' }
       end
     end
     div(class: 'large-centered columns no-h-pad', style: 'max-width: 1535px') do
-      image_tag 'Header-Background.jpg', class: 'header-bg'
+      image_tag 'home/header1.jpg', class: 'header-bg'
     end
   end
 
   def past_projects
-    div(class: 'small-12 columns', style: 'background-color: #eee; padding: 20px') do
+    div(class: 'small-12 columns', style: 'background-color: #f9f9f9; padding: 20px') do
       div(class: 'small-12 text-center projects-title') do
         text 'PAST PROJECTS'
       end
@@ -42,26 +41,27 @@ class Views::Pages::Home < Views::Base
         end
         div(class: 'small-6 columns') do
           div(class: 'past-project-title') do
-            text 'COINSPACE'
-          end
-          div(class: 'past-project-meta') do
-            text '+60 CONTRIBUTORS - 1,157 TOKENS AWARDED'
-          end
-          div(class: 'past-project-content') do
-            text 'Coinspace is a revolution in community and ownership. We are a community focused on making everyone the founder of their own space. You determine how Coinspace is run, all participation is rewarded and all financials are public. We meet, we vote, we do.'
-          end
-        end
-      end
-      div(class: 'small-12 columns', style: 'margin-top:30px; padding-bottom: 25px;') do
-        div(class: 'small-6 columns') do
-          div(class: 'past-project-title') do
-            text 'VEVUE FOUNDATION'
+            text 'Vevue Foundation'
           end
           div(class: 'past-project-meta') do
             text '+255 CONTRIBUTORS - 157,372 TOKENS AWARDED'
           end
           div(class: 'past-project-content') do
             text "Vevue is a simple way for anyone to earn Vevue Tokens in exchange for answering Vevue Requests (custom-created videos). Earn tokens for answering Vevue Requests pinned nearby; create your own media utilizing the blockchain. Show us who's at the party or how busy it is at your favorite restaurant."
+          end
+        end
+      end
+
+      div(class: 'small-12 columns', style: 'margin-top:30px; padding-bottom: 25px;') do
+        div(class: 'small-6 columns') do
+          div(class: 'past-project-title') do
+            text 'Coinspace'
+          end
+          div(class: 'past-project-meta') do
+            text '+60 CONTRIBUTORS - 1,157 TOKENS AWARDED'
+          end
+          div(class: 'past-project-content') do
+            text 'Coinspace is a revolution in community and ownership. We are a community focused on making everyone the founder of their own space. You determine how Coinspace is run, all participation is rewarded and all financials are public. We meet, we vote, we do.'
           end
         end
         div(class: 'small-6 columns', style: 'margin-top: 7px;') do
@@ -75,7 +75,7 @@ class Views::Pages::Home < Views::Base
     div(class: 'small-12 columns', style: 'padding: 50px 0;') do
       div(class: 'small-4 columns text-center') do
         div(class: 'summary-count') do
-          text '+1,000'
+          text '1,000+'
         end
         hr(class: 'stat')
         div(class: 'summary-label') do
@@ -84,7 +84,7 @@ class Views::Pages::Home < Views::Base
       end
       div(class: 'small-4 columns text-center') do
         div(class: 'summary-count') do
-          text '+50'
+          text '50+'
         end
         hr(class: 'stat')
         div(class: 'summary-label') do
@@ -93,7 +93,7 @@ class Views::Pages::Home < Views::Base
       end
       div(class: 'small-4 columns text-center') do
         div(class: 'summary-count') do
-          text '+10,000,000'
+          text '10,000,000+'
         end
         hr(class: 'stat')
         div(class: 'summary-label') do
