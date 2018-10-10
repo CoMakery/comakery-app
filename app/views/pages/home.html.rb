@@ -2,7 +2,7 @@ class Views::Pages::Home < Views::Base
   def content
     content_for :pre_body do
       header
-      div(style: 'margin-top: 20px') do
+      div(style: 'margin-top: 20px; min-height: 570px') do
         render partial: 'form'
       end
       past_projects
@@ -31,12 +31,15 @@ class Views::Pages::Home < Views::Base
   end
 
   def past_projects
-    div(class: 'small-12 columns', style: 'background-color: #f9f9f9; padding: 20px') do
+    div(class: 'small-12 columns', style: 'background-color: #f9f9f9; padding: 20px;') do
       div(class: 'small-12 text-center projects-title') do
         text 'PAST PROJECTS'
       end
       div(class: 'small-12 columns', style: 'margin-top:30px') do
-        div(class: 'small-6 columns', style: 'margin-top: 7px;') do
+        div(class: 'small-6 columns hide-for-large', style: 'margin-top: 7px;') do
+          image_tag 'home/vevue1.jpg', stlye: 'width: 100%'
+        end
+        div(class: 'small-6 columns show-for-large', style: 'margin-top: 7px;') do
           image_tag 'home/vevue.jpg', stlye: 'width: 100%'
         end
         div(class: 'small-6 columns') do
@@ -64,7 +67,10 @@ class Views::Pages::Home < Views::Base
             text 'Coinspace is a revolution in community and ownership. We are a community focused on making everyone the founder of their own space. You determine how Coinspace is run, all participation is rewarded and all financials are public. We meet, we vote, we do.'
           end
         end
-        div(class: 'small-6 columns', style: 'margin-top: 7px;') do
+        div(class: 'small-6 columns hide-for-large', style: 'margin-top: 7px;') do
+          image_tag 'home/coinspace1.jpg', stlye: 'width: 100%'
+        end
+        div(class: 'small-6 columns show-for-large', style: 'margin-top: 7px;') do
           image_tag 'home/coinspace.jpg', stlye: 'width: 100%'
         end
       end

@@ -159,3 +159,14 @@ hr.stat{
 .app-container.home{
   padding-bottom: 110px
 }
+
+@media (max-width: 850px){
+  .summary-count, .summary-label{
+    font-size: 18px;
+  }
+}
+@media (max-width: 650px){
+  .summary-count, .summary-label{
+    font-size: 13px;
+  }
+}
