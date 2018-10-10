@@ -19,11 +19,13 @@ class AwardsController < ApplicationController
       award = result.award
       authorize award
       if award.save
+        account = award.account
         award.send_award_notifications
         award.send_confirm_email
         generate_message(award)
-        session[:last_award_id] = award.id if award.account && award.account.ethereum_wallet?
-        redirect_to project_path(award.project)
+        session[:last_award_id] = award.id if account&.ethereum_wallet?
+        account&.update new_award_notice: true
+        redirect_to project_overview_path(award.project)
       else
         render_back(award.errors.full_messages.first)
       end
@@ -37,7 +39,7 @@ class AwardsController < ApplicationController
       award = Award.find_by confirm_token: params[:token]
       if award
         flash[:notice] = confirm_message if award.confirm!(current_account)
-        redirect_to project_path(award.project)
+        redirect_to project_overview_path(award.project)
       else
         flash[:error] = 'Invalid award token!'
         redirect_to root_path
@@ -85,9 +87,13 @@ class AwardsController < ApplicationController
 
   def confirm_message
     if current_account.ethereum_wallet.present?
-      "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}."
+      "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
     else
       "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
     end
+  end
+
+  def project_overview_path(project)
+    project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
   end
 end

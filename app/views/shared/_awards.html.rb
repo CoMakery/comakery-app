@@ -2,7 +2,7 @@ class Views::Shared::Awards < Views::Base
   needs :project, :awards, :show_recipient, :current_account
 
   def content
-    div(class: 'table-scroll table-box') do
+    div(class: 'table-scroll table-box', style: 'margin-right: 0') do
       table(class: 'award-rows') do
         tr(class: 'header-row') do
           th(class: 'small-1') { text 'Type' }

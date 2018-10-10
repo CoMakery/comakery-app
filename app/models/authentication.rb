@@ -7,10 +7,13 @@ class Authentication < ApplicationRecord
     authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
     if authentication
       authentication.update_info auth_hash if authentication.confirmed?
+      acc = authentication.account
     elsif auth_hash['info']
-      account = Account.find_or_create_by email: auth_hash['info']['email']
-      authentication = account.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'], confirm_token: SecureRandom.hex, oauth_response: auth_hash)
+      acc = Account.find_or_create_by email: auth_hash['info']['email']
+
+      authentication = acc.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'], confirm_token: SecureRandom.hex, oauth_response: auth_hash)
     end
+    acc&.update agreed_to_user_agreement: Date.current if acc&.agreed_to_user_agreement.blank?
     authentication
   end
 

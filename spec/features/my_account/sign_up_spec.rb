@@ -12,6 +12,7 @@ describe 'my account' do
     fill_in 'Last Name', with: 'Dev'
     fill_in 'Date of Birth', with: '01/01/2000'
     fill_in 'Password', with: '12345678'
+    page.check('account_agreed_to_user_agreement')
     click_on 'CREATE YOUR ACCOUNT'
     expect(page).to have_content('Created account successfully. Please confirm your email before continuing.')
     expect(Account.first&.decorate&.name).to eq 'Tester Dev'

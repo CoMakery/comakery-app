@@ -9,6 +9,7 @@ class Project < ApplicationRecord
   belongs_to :account
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
+  has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards
   has_many :channels, -> { order :created_at }, inverse_of: :project, dependent: :destroy
   has_many :payments, dependent: :destroy do
     def new_with_quantity(quantity_redeemed:, account:)
@@ -66,8 +67,9 @@ class Project < ApplicationRecord
 
   validate :maximum_tokens_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
-  validates :ethereum_contract_address, ethereum_address: { type: :account, immutable: true } # see EthereumAddressable
+  validates :ethereum_contract_address, ethereum_address: { type: :account } # see EthereumAddressable
   validate :denomination_changeable
+  validate :contract_address_changeable, if: -> { completed_awards.present? }
 
   before_save :set_transitioned_to_ethereum_enabled
 
@@ -191,9 +193,8 @@ class Project < ApplicationRecord
   end
 
   def can_be_access?(check_account)
-    return true if account == check_account
     return true if public? && !require_confidentiality?
-    check_account && check_account.same_team_project?(self)
+    check_account && check_account.same_team_or_owned_project?(self)
   end
 
   def show_revenue_info?(account)
@@ -313,6 +314,12 @@ class Project < ApplicationRecord
   def denomination_changeable
     errors.add(:denomination, 'cannot be changed because the license terms are finalized') if license_finalized_was
     errors.add(:denomination, 'cannot be changed because revenue has been recorded') if revenues.any? && denomination_changed?
+  end
+
+  def contract_address_changeable
+    errors.add(:ethereum_network, 'cannot be changed if has completed transactions') if ethereum_network_changed?
+    errors.add(:ethereum_contract_address, 'cannot be changed if has completed transactions') if ethereum_contract_address_changed?
+    errors.add(:decimal_places, 'cannot be changed if has completed transactions') if decimal_places_changed?
   end
 
   def currency_precision
