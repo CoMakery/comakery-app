@@ -110,10 +110,11 @@ $ ->
     loginWithMetaMask.handleClick()
 
   $(document).on 'click', '.switcher', ->
-    $('.switch-target').fadeOut(500)
-    $($(@).data('target')).fadeIn(500)
+    $('.switch-target').hide();
+    $($(@).data('target')).fadeIn(1000)
     $('.switcher').removeClass('active')
     $(@).addClass('active')
+    $('input#current_section').val($(@).data('target'))
 
   $('.copiable').click ->
     $(".copy-source").select()
