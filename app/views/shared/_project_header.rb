@@ -69,7 +69,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
               target: '_blank', class: 'text-link'
           end
 
-          li_if(current_account && project.account == current_account, class: ('active' if controller_name == 'projects' && params[:action] == 'edit')) do
+          li_if(current_account && project.account == current_account, class: ('active' if controller_name == 'projects' && (params[:action] == 'edit' || params[:action] == 'update'))) do
             a(class: 'edit', href: edit_project_path(project)) do
               i(class: 'fa fa-pencil') {}
               text 'Settings'

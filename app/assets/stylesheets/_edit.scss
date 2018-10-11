@@ -4,7 +4,8 @@ body.projects-edit, body.projects-new, body.projects-create  {
   // }
 }
 
-body.projects-edit {
+body.projects-edit,
+body.projects-update {
   .vertical.menu li {
     padding: 0 0;
     a { color: grey; }

@@ -89,6 +89,7 @@ class ProjectsController < ApplicationController
     @project.long_id ||= SecureRandom.hex(20)
     authorize @project
     assign_slack_channels
+    @current_section = '#general'
   end
 
   def update
@@ -97,13 +98,13 @@ class ProjectsController < ApplicationController
     authorize @project
     if @project.update project_params
       flash[:notice] = 'Project updated'
-      respond_with @project, location: project_detail_path
     else
-      @project = @project.decorate
       flash[:error] = 'Project update failed, please correct the errors below'
-      assign_slack_channels
-      render :edit
     end
+    @project = @project.decorate
+    assign_slack_channels
+    @current_section = params[:current_section]
+    render :edit
   end
 
   private

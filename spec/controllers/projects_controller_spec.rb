@@ -296,7 +296,7 @@ describe ProjectsController do
                 ]
               }
             }
-            expect(response.status).to eq(302)
+            expect(response.status).to eq(200)
           end.to change { Project.count }.by(0)
         end.to change { AwardType.count }.by(0) # +1 and -1
 
@@ -404,7 +404,7 @@ describe ProjectsController do
                 ]
               }
             }
-            expect(response.status).to eq(302)
+            expect(response.status).to eq(200)
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
 

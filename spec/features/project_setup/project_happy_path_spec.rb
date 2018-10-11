@@ -105,11 +105,8 @@ describe 'viewing projects, creating and editing', :js do
     expect(EthereumTokenIssueJob.jobs.length).to eq(0)
 
     expect(page).to have_content 'This is an edited project'
-    expect(page).to have_content 'This is an edited project description which is very informative'
-    expect(page).to have_link 'Project Tasks'
-    expect(page.all('.project-video iframe').size).to eq(1)
 
-    expect(page.all('select#award_award_type_id option').count).to eq(4)
+    expect(page).to have_link 'Project Tasks'
 
     visit('/projects')
 
