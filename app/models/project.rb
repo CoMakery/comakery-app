@@ -92,7 +92,7 @@ class Project < ApplicationRecord
       left join awards a1 on a1.account_id=accounts.id
       left join award_types on a1.award_type_id=award_types.id
       left join projects on award_types.project_id=projects.id")
-           .where("projects.id=#{id}")
+           .where('projects.id=?', id)
            .group('accounts.id')
            .order('total_awarded desc, last_awarded_at').first(5)
   end

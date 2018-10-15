@@ -25,7 +25,7 @@ class ProjectsController < ApplicationController
     if params[:query].present?
       @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
     end
-    @projects = @projects.order(updated_at: :desc).page(params[:page]).per(9)
+    @projects = @projects.order(updated_at: :desc).includes(:account).page(params[:page]).per(9)
     @project_contributors = TopContributors.call(projects: @projects).contributors
   end
 
