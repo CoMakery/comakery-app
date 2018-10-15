@@ -93,6 +93,9 @@ GEM
     bindex (0.5.0)
     brakeman (4.3.1)
     builder (3.2.3)
+    bullet (5.7.6)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11.0)
     byebug (10.0.2)
     callsite (0.0.11)
     capybara (3.6.0)
@@ -510,6 +513,7 @@ GEM
     unf_ext (0.0.7.5)
     unicode-display_width (1.4.0)
     unicode_utils (1.4.0)
+    uniform_notifier (1.11.0)
     web-console (3.6.2)
       actionview (>= 5.0)
       activemodel (>= 5.0)
@@ -538,6 +542,7 @@ DEPENDENCIES
   bcrypt
   better_errors
   brakeman
+  bullet
   capybara
   citizen-scripts!
   coffee-rails

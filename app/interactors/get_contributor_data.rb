@@ -2,7 +2,7 @@ class GetContributorData
   include Interactor
   def call
     project = context.project
-    awards = project.awards.includes(:account, :award_type)
+    awards = project.awards.includes(:account, :award_type, :project)
     awards_array = awards.dup.to_a
 
     context.award_data = {
