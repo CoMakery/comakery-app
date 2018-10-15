@@ -4,6 +4,8 @@ feature 'my account' do
   let!(:team) { create :team }
   let!(:project) { create(:sb_project, ethereum_enabled: true) }
   let!(:account) { create :account, nickname: 'jason' }
+  let(:account_nickname) { account.decorate.name }
+
   let!(:auth) { create(:sb_authentication, account: account) }
   let!(:issuer) { create(:sb_authentication) }
   let!(:award_type) { create(:award_type, project: project, amount: 1337) }
@@ -22,7 +24,7 @@ feature 'my account' do
 
   scenario 'viewing' do
     visit root_path
-    expect(page).not_to have_link 'ACCOUNT'
+    expect(page).not_to have_link account_nickname
     login(auth.account)
 
     visit account_path(history: true)
@@ -30,13 +32,13 @@ feature 'my account' do
     expect(page).to have_content 'Swarmbot'
     expect(page).to have_content '1,337'
     expect(page).to have_content 'Mar 25, 2016'
-    expect(page).to have_content auth.account.decorate.name
+    expect(page).to have_content account_nickname
   end
 
   scenario 'editing, and adding an ethereum address' do
     login(auth.account)
     visit root_path
-    first('.menu').click_link 'ACCOUNT'
+    first('.menu').click_link account.decorate.name
 
     within('.ethereum_wallet') do
       find('#toggle-edit').click
@@ -61,7 +63,7 @@ feature 'my account' do
   scenario 'adding an ethereum address sends ethereum tokens, for awards' do
     login(auth.account)
     visit root_path
-    first('.menu').click_link 'ACCOUNT'
+    first('.menu').click_link account_nickname
 
     within('.ethereum_wallet') do
       find('#toggle-edit').click
@@ -78,7 +80,7 @@ feature 'my account' do
     login(account)
     visit root_path
     expect(page).to have_css("img[src*='avatar.png']")
-    first('.menu').click_link 'ACCOUNT'
+    first('.menu').click_link account_nickname
     expect(page).to have_css("img[src*='avatar.png']")
   end
 

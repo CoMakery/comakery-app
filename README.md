@@ -61,14 +61,30 @@ More thorough (integrates views): `bin/rspect`
 
 To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
 
-## Deploying to heroku
+## Deploying to heroku staging
 
 Once your heroku user has access to the applications, you can run any of:
 
 ```
 citizen deploy staging master comakery
+```
+
+## Deploying to heroku production
+
+Show the down for mmaintainence page, backup the production db and confirm.
+
+```
+heroku maintenance:on
+heroku pg:backups:capture HEROKU_POSTGRESQL_BROWN --app comakery-production
+heroku pg:backups --app comakery-production
+```
+
+After you have your backup captured, deploy to production:
+```
 citizen deploy production master comakery
 ```
+
+The deploy also runs `rake db:migrate` and `heroku maintenance:off --app comakery-poduction`
 
 **TODO:** Fix bin/deploy which calls citizen. It should take more intuitive arguments and give better instructions.
 ```
