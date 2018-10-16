@@ -149,6 +149,10 @@ class Account < ApplicationRecord
     email_confirm_token.nil?
   end
 
+  def finished_contributor_form?
+    contributor_form == true
+  end
+
   def valid_and_underage?
     self.name_required = true
     valid? && age < 18
