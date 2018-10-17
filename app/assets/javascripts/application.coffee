@@ -109,6 +109,12 @@ $ ->
   $(document).on 'click', '.signin-with-metamask', ->
     loginWithMetaMask.handleClick()
 
+  $('tr.award-row')
+    .on 'mouseover', (e) ->
+      $(@).find('.overlay').show()
+    .on 'mouseout', (e) ->
+      $(@).find('.overlay').hide()
+
   $(document).on 'click', '.switcher', ->
     $('.switch-target').hide();
     $($(@).data('target')).fadeIn(1000)

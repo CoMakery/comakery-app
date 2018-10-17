@@ -49,7 +49,7 @@ class Views::Contributors::Index < Views::Projects::Base
                         contributor.award_by_project(project).each do |award|
                           tr do
                             td { text award[:name] }
-                            td { text number_with_delimiter(award[:total], seperator: ',') }
+                            td { text project.format_with_decimal_places(award[:total]) }
                           end
                         end
                       end
