@@ -2,11 +2,7 @@ class Views::Pages::Featured < Views::Base
   def content
     content_for :pre_body do
       header
-      div(style: 'margin-top: 20px; min-height: 570px') do
-        render partial: 'form'
-      end
-      past_projects
-      summary
+      featured_projects
     end
   end
 
@@ -30,82 +26,33 @@ class Views::Pages::Featured < Views::Base
     end
   end
 
-  def past_projects
-    div(class: 'small-12 columns', style: 'background-color: #f9f9f9; padding: 20px;') do
+  def featured_projects
+    div(class: 'small-12 columns', style: 'background-color: #f9f9f9; padding: 40px;') do
       div(class: 'small-12 text-center projects-title') do
-        text 'PAST PROJECTS'
+        text 'CoMakery Hosts Projects That We Believe In'
       end
       div(class: 'small-12 columns', style: 'margin-top:30px') do
-        div(class: 'small-6 columns hide-for-large', style: 'margin-top: 7px;') do
-          image_tag 'home/vevue1.jpg', stlye: 'width: 100%'
-        end
-        div(class: 'small-6 columns show-for-large', style: 'margin-top: 7px;') do
-          image_tag 'home/vevue.jpg', stlye: 'width: 100%'
-        end
-        div(class: 'small-6 columns') do
+        div(class: 'small-8 columns') do
           div(class: 'past-project-title') do
-            text 'Vevue Foundation'
+            text 'HOLOCHAIN PROTOCAL (HOT)'
           end
           div(class: 'past-project-meta') do
-            text '+255 CONTRIBUTORS - 157,372 TOKENS AWARDED'
+            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
           end
           div(class: 'past-project-content') do
-            text "Vevue is a simple way for anyone to earn Vevue Tokens in exchange for answering Vevue Requests (custom-created videos). Earn tokens for answering Vevue Requests pinned nearby; create your own media utilizing the blockchain. Show us who's at the party or how busy it is at your favorite restaurant."
+            div(class: '') do
+              text 'Why Holochain?'
+            end
+            text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
           end
+          div(class)
         end
-      end
+        div(class: 'small-4 columns') do
+          image_tag 'home/featured/holochain.jpg', stlye: 'width: 100%'
+        end
 
-      div(class: 'small-12 columns', style: 'margin-top:30px; padding-bottom: 25px;') do
-        div(class: 'small-6 columns') do
-          div(class: 'past-project-title') do
-            text 'Coinspace'
-          end
-          div(class: 'past-project-meta') do
-            text '+60 CONTRIBUTORS - 1,157 TOKENS AWARDED'
-          end
-          div(class: 'past-project-content') do
-            text 'Coinspace is a revolution in community and ownership. We are a community focused on making everyone the founder of their own space. You determine how Coinspace is run, all participation is rewarded and all financials are public. We meet, we vote, we do.'
-          end
-        end
-        div(class: 'small-6 columns hide-for-large', style: 'margin-top: 7px;') do
-          image_tag 'home/coinspace1.jpg', stlye: 'width: 100%'
-        end
-        div(class: 'small-6 columns show-for-large', style: 'margin-top: 7px;') do
-          image_tag 'home/coinspace.jpg', stlye: 'width: 100%'
-        end
       end
     end
   end
 
-  def summary
-    div(class: 'small-12 columns', style: 'padding: 50px 0;') do
-      div(class: 'small-4 columns text-center') do
-        div(class: 'summary-count') do
-          text '1,000+'
-        end
-        hr(class: 'stat')
-        div(class: 'summary-label') do
-          text 'CONTRIBUTORS'
-        end
-      end
-      div(class: 'small-4 columns text-center') do
-        div(class: 'summary-count') do
-          text '50+'
-        end
-        hr(class: 'stat')
-        div(class: 'summary-label') do
-          text 'PROJECTS'
-        end
-      end
-      div(class: 'small-4 columns text-center') do
-        div(class: 'summary-count') do
-          text '10,000,000+'
-        end
-        hr(class: 'stat')
-        div(class: 'summary-label') do
-          text 'TOKENS AWARDED'
-        end
-      end
-    end
-  end
 end
