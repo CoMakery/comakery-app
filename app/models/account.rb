@@ -32,6 +32,7 @@ class Account < ApplicationRecord
   class << self
     def order_by_award(project)
       award_types = project.award_types.map(&:id).join(',')
+      return Account.none if award_types.blank?
       select("accounts.*, (select sum(total_amount) from awards where awards.account_id = accounts.id and awards.award_type_id in(#{award_types})) as total").distinct.order('total desc')
     end
 
