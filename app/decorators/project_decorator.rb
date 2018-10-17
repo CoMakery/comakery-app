@@ -162,7 +162,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def contributors_by_award_amount
-    contributors_distinct.order_by_award(id)
+    contributors_distinct.order_by_award(project)
   end
 
   def tokens_awarded_with_symbol
