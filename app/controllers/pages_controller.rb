@@ -14,5 +14,7 @@ class PagesController < ApplicationController
 
   def home; end
 
-  def featured; end
+  def featured
+    current_account.update contributor_form: true unless current_account.finished_contributor_form?
+  end
 end
