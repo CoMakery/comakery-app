@@ -13,6 +13,12 @@
 }
 
 @font-face {
+  font-family: 'MontserratSemiBold';
+  font-weight: normal;
+  src: asset-url('Montserrat/Montserrat-SemiBold.ttf')  format('truetype')
+}
+
+@font-face {
   font-family: 'MontserratLight';
   font-weight: normal;
   src: asset-url('Montserrat/Montserrat-Light.ttf')  format('truetype')

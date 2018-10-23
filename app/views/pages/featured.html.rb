@@ -27,30 +27,233 @@ class Views::Pages::Featured < Views::Base
   end
 
   def featured_projects
-    div(class: 'small-12 columns', style: 'background-color: #f9f9f9; padding: 40px;') do
+    div(class: 'small-12 columns no-h-pad', style: 'background-color: #f9f9f9; padding: 40px;') do
       div(class: 'small-12 text-center projects-title') do
         text 'CoMakery Hosts Projects That We Believe In'
       end
-      div(class: 'small-12 columns', style: 'margin-top:30px') do
+      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px') do
         div(class: 'small-8 columns') do
-          div(class: 'past-project-title') do
+          div(class: 'protocol-title') do
             text 'HOLOCHAIN PROTOCAL (HOT)'
           end
-          div(class: 'past-project-meta') do
+          div(class: 'protocol-meta') do
             text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
           end
           div(class: 'past-project-content') do
-            div(class: '') do
+            div(class: 'protocol-sub-title') do
               text 'Why Holochain?'
             end
-            text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+            div(class: 'protocol-desc') do
+              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+            end
           end
-          div(class)
+          div(style: 'margin-top: 20px') do
+            text 'Projects to Make an Impact On:'
+            2.times do
+              display_project('/assets/home/featured/holochain.jpg')
+            end
+          end
         end
         div(class: 'small-4 columns') do
           image_tag 'home/featured/holochain.jpg', stlye: 'width: 100%'
         end
 
+      end
+
+      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgba(0, 137, 244, 0.02);') do
+        div(class: 'small-4 columns no-h-pad') do
+          image_tag 'home/featured/cardano.jpg', stlye: 'width: 100%'
+        end
+
+        div(class: 'small-8 columns') do
+          div(class: 'protocol-title') do
+            text 'CARDANO PROTOCOL (ADA)'
+          end
+          div(class: 'protocol-meta') do
+            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+          end
+          div(class: 'past-project-content') do
+            div(class: 'protocol-sub-title') do
+              text 'Why Cardano?'
+            end
+            div(class: 'protocol-desc') do
+              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+            end
+          end
+          div(style: 'margin-top: 20px') do
+            text 'Projects to Make an Impact On:'
+            2.times do
+              display_project('/assets/home/featured/cardano.jpg')
+            end
+          end
+        end
+      end
+
+      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px') do
+        div(class: 'small-8 columns') do
+          div(class: 'protocol-title') do
+            text 'ETHEREUM PROTOCOL (ETH)'
+          end
+          div(class: 'protocol-meta') do
+            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+          end
+          div(class: 'past-project-content') do
+            div(class: 'protocol-sub-title') do
+              text 'Why Ethereum?'
+            end
+            div(class: 'protocol-desc') do
+              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+            end
+          end
+          div(style: 'margin-top: 20px') do
+            text 'Projects to Make an Impact On:'
+            2.times do
+              display_project('/assets/home/featured/ethereum.jpg')
+            end
+          end
+        end
+        div(class: 'small-4 columns') do
+          image_tag 'home/featured/ethereum.jpg', stlye: 'width: 100%'
+        end
+
+      end
+
+      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgba(0, 137, 244, 0.02);') do
+        div(class: 'small-4 columns no-h-pad') do
+          image_tag 'home/featured/vevue.jpg', stlye: 'width: 100%'
+        end
+
+        div(class: 'small-8 columns') do
+          div(class: 'protocol-title') do
+            text 'VEVUE PROTOCOL (VUE)'
+          end
+          div(class: 'protocol-meta') do
+            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+          end
+          div(class: 'past-project-content') do
+            div(class: 'protocol-sub-title') do
+              text 'Why VEVUE?'
+            end
+            div(class: 'protocol-desc') do
+              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+            end
+          end
+          div(style: 'margin-top: 20px') do
+            text 'Projects to Make an Impact On:'
+            2.times do
+              display_project('/assets/home/featured/vevue.jpg')
+            end
+          end
+        end
+      end
+
+      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px') do
+        div(class: 'small-8 columns') do
+          div(class: 'protocol-title') do
+            text 'PROPS by YouNow (PROPS)'
+          end
+          div(class: 'protocol-meta') do
+            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+          end
+          div(class: 'past-project-content') do
+            div(class: 'protocol-sub-title') do
+              text 'Why PROPS?'
+            end
+            div(class: 'protocol-desc') do
+              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+            end
+          end
+          div(style: 'margin-top: 20px') do
+            text 'Projects to Make an Impact On:'
+            2.times do
+              display_project('/assets/home/featured/props.jpg')
+            end
+          end
+        end
+        div(class: 'small-4 columns') do
+          image_tag 'home/featured/props.jpg', stlye: 'width: 100%'
+        end
+
+      end
+
+      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgba(0, 137, 244, 0.02);') do
+        div(class: 'small-4 columns no-h-pad') do
+          image_tag 'home/featured/glass.jpg', stlye: 'width: 100%'
+        end
+
+        div(class: 'small-8 columns') do
+          div(class: 'protocol-title') do
+            text 'SHARESPOST GLASS NETWORK (GLASS)'
+          end
+          div(class: 'protocol-meta') do
+            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+          end
+          div(class: 'past-project-content') do
+            div(class: 'protocol-sub-title') do
+              text 'Why GLASS?'
+            end
+            div(class: 'protocol-desc') do
+              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+            end
+          end
+          div(style: 'margin-top: 20px') do
+            text 'Projects to Make an Impact On:'
+            2.times do
+              display_project('/assets/home/featured/glass.jpg')
+            end
+          end
+        end
+      end
+
+      summary
+    end
+  end
+
+  def display_project(bg_image)
+    div(class: 'small-12 columns no-h-pad', style: 'margin-top:10px') do
+      div(class: 'small-6 columns project-row', style: "background-image: url('#{bg_image}')") do
+        div(class: 'protocol-project-name') do
+          text 'Decentralized Exchange App'
+        end
+        div(class: 'project-descriptive') do
+          text 'for everyone'
+        end
+      end
+      div(class: 'small-6 columns text-right') do
+        image_tag '/assets/home/featured/lock.png', size: '18x18', style: 'margin-right: 10px'
+        link_to "I'M INTERESTED!", "javascript:;", class: 'button'
+      end
+    end
+  end
+
+  def summary
+    div(class: 'small-12 columns', style: 'padding: 50px 0;') do
+      div(class: 'small-4 columns text-center') do
+        div(class: 'summary-count') do
+          text '1,000+'
+        end
+        hr(class: 'stat')
+        div(class: 'summary-label') do
+          text 'CONTRIBUTORS'
+        end
+      end
+      div(class: 'small-4 columns text-center') do
+        div(class: 'summary-count') do
+          text '50+'
+        end
+        hr(class: 'stat')
+        div(class: 'summary-label') do
+          text 'PROJECTS'
+        end
+      end
+      div(class: 'small-4 columns text-center') do
+        div(class: 'summary-count') do
+          text '10,000,000+'
+        end
+        hr(class: 'stat')
+        div(class: 'summary-label') do
+          text 'TOKENS AWARDED'
+        end
       end
     end
   end

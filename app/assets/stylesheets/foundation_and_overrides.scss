@@ -245,3 +245,41 @@ html, body{
   padding-bottom: 40px;
   margin-top: 10px
 }
+
+.protocol-title{
+  font-family: MontserratSemiBold;
+  font-size: 18px;
+  margin-top: 40px;
+}
+
+.protocol-meta{
+  font-family: MontserratLight;
+}
+
+.protocol-sub-title{
+  font-family: Roboto;
+  color: #4b40e5;
+}
+
+.protocol-desc{
+  font-family: Roboto;
+  color: #3a3a3a;
+}
+
+.project-row{
+  background-repeat: no-repeat;
+  background-size: 100px 70px;
+  background-position: -10px;
+  padding-left: 100px;
+}
+
+.project-thumb{
+  float: left;
+  width: 100px;
+  height: 50px;
+  overflow: hidden;
+}
+
+.protocol-project-name{
+  margin-top: 0px;
+}
