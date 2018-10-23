@@ -44,7 +44,7 @@ class Views::Pages::Featured < Views::Base
               text 'Why Holochain?'
             end
             div(class: 'protocol-desc') do
-              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
             end
           end
           div(style: 'margin-top: 20px') do
@@ -57,7 +57,6 @@ class Views::Pages::Featured < Views::Base
         div(class: 'small-4 columns') do
           image_tag 'home/featured/holochain.jpg', stlye: 'width: 100%'
         end
-
       end
 
       div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgba(0, 137, 244, 0.02);') do
@@ -77,7 +76,7 @@ class Views::Pages::Featured < Views::Base
               text 'Why Cardano?'
             end
             div(class: 'protocol-desc') do
-              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
             end
           end
           div(style: 'margin-top: 20px') do
@@ -102,7 +101,7 @@ class Views::Pages::Featured < Views::Base
               text 'Why Ethereum?'
             end
             div(class: 'protocol-desc') do
-              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
             end
           end
           div(style: 'margin-top: 20px') do
@@ -115,7 +114,6 @@ class Views::Pages::Featured < Views::Base
         div(class: 'small-4 columns') do
           image_tag 'home/featured/ethereum.jpg', stlye: 'width: 100%'
         end
-
       end
 
       div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgba(0, 137, 244, 0.02);') do
@@ -135,7 +133,7 @@ class Views::Pages::Featured < Views::Base
               text 'Why VEVUE?'
             end
             div(class: 'protocol-desc') do
-              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
             end
           end
           div(style: 'margin-top: 20px') do
@@ -160,7 +158,7 @@ class Views::Pages::Featured < Views::Base
               text 'Why PROPS?'
             end
             div(class: 'protocol-desc') do
-              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
             end
           end
           div(style: 'margin-top: 20px') do
@@ -173,7 +171,6 @@ class Views::Pages::Featured < Views::Base
         div(class: 'small-4 columns') do
           image_tag 'home/featured/props.jpg', stlye: 'width: 100%'
         end
-
       end
 
       div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgba(0, 137, 244, 0.02);') do
@@ -193,7 +190,7 @@ class Views::Pages::Featured < Views::Base
               text 'Why GLASS?'
             end
             div(class: 'protocol-desc') do
-              text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque."
+              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
             end
           end
           div(style: 'margin-top: 20px') do
@@ -221,7 +218,7 @@ class Views::Pages::Featured < Views::Base
       end
       div(class: 'small-6 columns text-right') do
         image_tag '/assets/home/featured/lock.png', size: '18x18', style: 'margin-right: 10px'
-        link_to "I'M INTERESTED!", "javascript:;", class: 'button'
+        link_to "I'M INTERESTED!", 'javascript:;', class: 'button'
       end
     end
   end
@@ -257,5 +254,4 @@ class Views::Pages::Featured < Views::Base
       end
     end
   end
-
 end
