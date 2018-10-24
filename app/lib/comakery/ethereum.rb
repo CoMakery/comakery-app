@@ -62,13 +62,13 @@ class Comakery::Ethereum
       dec_elem = doc.css('.fa-angle-right')[3]&.next
       begin
         symbol = sym_elem.text.strip
-        symbol = symbol.gsub('symbol = ', '')
+        symbol = symbol.gsub(/[S|s]ymbol = /, '')
       rescue
         ''
       end
       begin
         decimals = dec_elem.text.strip
-        decimals = decimals.gsub('decimals = ', '')
+        decimals = decimals.gsub(/[D|d]ecimals = /, '')
       rescue
         '0'
       end
