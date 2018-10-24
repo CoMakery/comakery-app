@@ -55,7 +55,7 @@ class SessionsController < ApplicationController
     if token
       session[:redeem] = nil
       flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
-      my_project_path
+      root_path
     elsif @path
       @path
     else
@@ -67,7 +67,7 @@ class SessionsController < ApplicationController
           current_account.update new_award_notice: false
         end
       end
-      my_project_path
+      root_path
     end
   end
 end
