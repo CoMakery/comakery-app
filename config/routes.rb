@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
   get '/logout', to: "sessions#destroy"
 
+  get '/pages/test_tokens' => "pages#test_tokens"
+
   root 'pages#landing'
   get '/featured' => "pages#featured"
 
