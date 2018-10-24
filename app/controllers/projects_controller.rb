@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  skip_before_action :require_login, except: :new
+  skip_before_action :require_login, except: [:new, :edit, :create, :update]
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
