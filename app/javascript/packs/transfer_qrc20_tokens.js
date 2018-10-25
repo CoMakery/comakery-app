@@ -2,9 +2,18 @@ window.postMessage({ message: { type: 'CONNECT_QRYPTO' }}, '*')
 
 const { Qweb3 } = require('qweb3');
 
-transferQrc20Tokens = async function(recipientAddress) {
-  if(recipientAddress == '') {
-    alert('Please enter recipient address')
+getDecimals = async function(contract) {
+  const rs = await contract.call('decimals', {
+    methodArgs: [],
+    senderAddress: window.qrypto.account.address,
+  });
+  return rs['executionResult']['formattedOutput'][0].toNumber()
+}
+
+transferQrc20Tokens = async function(contractAddress, recipientAddress, amount) {
+  amount = parseInt(amount, 10)
+  if(recipientAddress == '' || contractAddress == '' || amount <= 0) {
+    alert('Please enter all fields')
     return;
   }
   if(!window.qrypto.account.loggedIn) {
@@ -12,12 +21,13 @@ transferQrc20Tokens = async function(recipientAddress) {
     return;
   }
   const qweb3 = new Qweb3(window.qrypto.rpcProvider);
-  const contractAddress = '6797155d96718b58ddde3ba02c5173b6ee4e8581';
 
   const contract = qweb3.Contract(contractAddress, qrc20TokenABI);
-
+  const decimals = await getDecimals(contract)
+  console.log(decimals)
+  console.log(amount * 10 ** decimals)
   const rs = await contract.send('transfer', {
-    methodArgs: [recipientAddress, 5 * 10**8],
+    methodArgs: [recipientAddress, amount * 10 ** decimals],
     gasLimit: 1000000,
     senderAddress: window.qrypto.account.address,
   });

@@ -1,12 +1,19 @@
-<h3>Transfer 5 BIG8</h3>
-Contract address: <%= link_to '6797155d96718b58ddde3ba02c5173b6ee4e8581', 'https://testnet.qtum.org/token/6797155d96718b58ddde3ba02c5173b6ee4e8581', target: '_blank' %>
-<br>
-<br>
+<h3>Transfer QRC20 Token</h3>
+
 <%= form_for '' do |f| %>
+  <label>Contract address: </label>
+  <%= f.text_field :contract, placeholder: '6797155d96718b58ddde3ba02c5173b6ee4e8581' %>
+  (sample contract: <%= link_to '6797155d96718b58ddde3ba02c5173b6ee4e8581', 'https://testnet.qtum.org/token/6797155d96718b58ddde3ba02c5173b6ee4e8581', target: '_blank' %>)
+  <br>
+  <br>
   <label>Recipient address: </label>
   <%= f.text_field :address, placeholder: 'qPzFNfZqhcAz6hKoBBDna7iZnLHrxFJW6D' %>
+  <br>
+  <label>Amount: </label>
+  <%= f.text_field :amount, value: 10 %>
+  <br>
 
-  <%= button_tag :Transfer, type: 'button', class: 'cc-btn cc-dismiss', onclick: "transferQrc20Tokens($('#address').val());" %>
+  <%= button_tag :Transfer, type: 'button', class: 'cc-btn cc-dismiss', onclick: "transferQrc20Tokens($('#contract').val(), $('#address').val(), $('#amount').val());" %>
 <% end %>
 
 <div id='result'></div>
