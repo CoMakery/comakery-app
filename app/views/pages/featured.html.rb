@@ -218,7 +218,7 @@ class Views::Pages::Featured < Views::Base
       end
       div(class: 'small-6 columns text-right') do
         image_tag 'home/featured/lock.png', size: '18x18', style: 'margin-right: 10px'
-        link_to "I'M INTERESTED!", add_interest_path(project: 'Decentralized Exchange App', protocol_interest: 'protocol'), class: 'button', remote: true
+        link_to "I'M INTERESTED!", add_interest_path(project: 'Decentralized Exchange App', protocol_interest: protocol), class: 'button', remote: true
       end
     end
   end
