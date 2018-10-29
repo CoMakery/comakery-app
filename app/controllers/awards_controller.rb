@@ -1,5 +1,5 @@
 class AwardsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: :update_transaction_address
+  skip_before_action :verify_authenticity_token, only: %i[update_transaction_address preview]
 
   before_action :assign_project, only: %i[create index update_transaction_address]
   skip_before_action :require_login, only: %i[index confirm]
@@ -49,6 +49,21 @@ class AwardsController < ApplicationController
       flash[:notice] = "Please #{view_context.link_to 'log in', new_session_path} or #{view_context.link_to 'signup', new_account_path} before receiving your award"
       redirect_to new_account_path
     end
+  end
+
+  def preview
+    uid = params[:uid]
+    channel_id = params[:channel_id]
+    quantity = params[:quantity]&.delete(',')
+    award_type = AwardType.find_by(id: params[:award_type_id])
+    if award_type && quantity
+      @total_amount = award_type.amount * BigDecimal(quantity)
+      if channel_id.blank? && (account = Account.where('lower(email)=?', uid.downcase).first)
+        @recipient_address = account.ethereum_wallet
+      end
+      @unit = Project.find_by(id: params[:project_id])&.token_symbol
+    end
+    render layout: false
   end
 
   def update_transaction_address

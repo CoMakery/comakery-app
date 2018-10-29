@@ -93,6 +93,7 @@ class Views::Projects::AwardSend < Views::Base
               end
               row do
                 column('small-12') do
+                  div(class: 'preview_award_div')
                   f.submit('Send Award', class: buttonish)
                 end
               end
@@ -132,6 +133,10 @@ class Views::Projects::AwardSend < Views::Base
       render 'sessions/metamask_modal'
       javascript_tag(transfer_tokens_script(last_award))
     end
+
+    content_for :js do
+      preview_award_script
+    end
   end
 
   def transfer_tokens_script(last_award)
@@ -144,5 +149,21 @@ class Views::Projects::AwardSend < Views::Base
         }
       });
     )
+  end
+
+  def preview_award_script
+    text(<<-JAVASCRIPT.html_safe)
+      $(function() {
+        $('body').on('change', "[name='award[uid]'], [name='award[award_type_id]'], [name='award[quantity]']", function() {
+          var uid = $(".uid-email [name='award[uid]']").val();
+          var quantity = $("[name='award[quantity]']").val();
+          var award_type_id = $("[name='award[award_type_id]']").val();
+          $('.preview_award_div').html('Loading...');
+          if(uid && uid.indexOf('@') > 0 && quantity && award_type_id) {
+            $.get('#{preview_project_awards_path(project_id: project.id)}', {uid: uid, quantity: quantity, award_type_id: award_type_id})
+          }
+        })
+      });
+    JAVASCRIPT
   end
 end

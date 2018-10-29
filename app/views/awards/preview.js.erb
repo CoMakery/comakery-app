@@ -1,0 +1,3 @@
+<% text = "<b>#{@total_amount} #{@unit}</b>" if @total_amount %>
+<% text = "#{text} total to #{@recipient_address}" if @recipient_address && text.present? %>
+$('.preview_award_div').html('<%= j text.html_safe %>')
