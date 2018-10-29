@@ -50,7 +50,7 @@ class Views::Pages::Featured < Views::Base
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
             2.times do
-              display_project('assets/home/featured/holochain.jpg', 'HOLOCHAIN PROTOCAL (HOT)')
+              display_project('assets/home/featured/holochain.jpg', 'Holo', 'Exchange')
             end
           end
         end
@@ -82,7 +82,7 @@ class Views::Pages::Featured < Views::Base
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
             2.times do
-              display_project('assets/home/featured/cardano.jpg', 'CARDANO PROTOCOL (ADA)')
+              display_project('assets/home/featured/cardano.jpg', 'Cardano', 'Exchange')
             end
           end
         end
@@ -107,7 +107,7 @@ class Views::Pages::Featured < Views::Base
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
             2.times do
-              display_project('assets/home/featured/ethereum.jpg', 'ETHEREUM PROTOCOL (ETH)')
+              display_project('assets/home/featured/ethereum.jpg', 'Ethereum', 'Exchange')
             end
           end
         end
@@ -139,7 +139,7 @@ class Views::Pages::Featured < Views::Base
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
             2.times do
-              display_project('assets/home/featured/vevue.jpg', 'VEVUE PROTOCOL (VUE)')
+              display_project('assets/home/featured/vevue.jpg', 'Vevue', 'Exchange')
             end
           end
         end
@@ -164,7 +164,7 @@ class Views::Pages::Featured < Views::Base
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
             2.times do
-              display_project('assets/home/featured/props.jpg', 'PROPS by YouNow (PROPS)')
+              display_project('assets/home/featured/props.jpg', 'Props', 'Exchange')
             end
           end
         end
@@ -196,7 +196,7 @@ class Views::Pages::Featured < Views::Base
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
             2.times do
-              display_project('assets/home/featured/glass.jpg', 'SHARESPOST GLASS NETWORK (GLASS)')
+              display_project('assets/home/featured/glass.jpg', 'Glass', 'Exchange')
             end
           end
         end
@@ -206,7 +206,7 @@ class Views::Pages::Featured < Views::Base
     end
   end
 
-  def display_project(bg_image, protocol)
+  def display_project(bg_image, protocol, project)
     div(class: 'small-12 columns no-h-pad', style: 'margin-top:10px') do
       div(class: 'small-6 columns project-row', style: "background-image: url('#{bg_image}')") do
         div(class: 'protocol-project-name') do
@@ -218,7 +218,7 @@ class Views::Pages::Featured < Views::Base
       end
       div(class: 'small-6 columns text-right') do
         image_tag 'home/featured/lock.png', size: '18x18', style: 'margin-right: 10px'
-        link_to "I'M INTERESTED!", add_interest_path(project: 'Decentralized Exchange App', protocol_interest: protocol), class: 'button', remote: true
+        link_to "I'M INTERESTED!", add_interest_path(project: project, protocol_interest: protocol), class: 'button', remote: true
       end
     end
   end

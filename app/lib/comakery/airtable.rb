@@ -2,7 +2,7 @@ require 'rest-client'
 class Comakery::Airtable
   def initialize
     @token = "Bearer #{ENV['AIRTABLE_API']}"
-    @url = 'https://api.airtable.com/v0/appnG7FbWtdxxDGXd/Table%204'
+    @url = "https://api.airtable.com/v0/#{ENV['AIRTABLE_APP']}/SIGN%20UPS"
   end
 
   def list
