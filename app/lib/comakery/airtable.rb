@@ -6,7 +6,7 @@ class Comakery::Airtable
   end
 
   def list
-    @url += "?maxRecords=10&view=Grid%20view"
+    @url += '?maxRecords=10&view=Grid%20view'
     result
   end
 

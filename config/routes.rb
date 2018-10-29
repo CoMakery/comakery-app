@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
   root 'pages#landing'
   get '/featured' => "pages#featured"
+  get '/add-interest' => "pages#add_interest", as: :add_interest
 
   get '/user-agreement' => "pages#user_agreement"
   get '/e-sign-disclosure' => "pages#e_sign_disclosure"

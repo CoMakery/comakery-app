@@ -17,4 +17,12 @@ class PagesController < ApplicationController
   def featured
     current_account.update contributor_form: true unless current_account.finished_contributor_form?
   end
+
+  def add_interest
+    @interest = current_user.interests.new
+    @interest.project = params[:project]
+    @interest.protocol = params[:protocol_interest]
+    @interest.save
+    respond_to :js
+  end
 end

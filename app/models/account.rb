@@ -18,6 +18,7 @@ class Account < ApplicationRecord
   has_many :projects
   has_many :payments
   has_many :channels, through: :projects
+  has_many :interests, dependent: :destroy
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
