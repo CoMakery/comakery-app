@@ -94,7 +94,10 @@ class Views::Projects::AwardSend < Views::Base
               row do
                 column('small-12') do
                   div(class: 'preview_award_div')
-                  f.submit('Send Award', class: buttonish)
+
+                  link_to 'javascript:void(0)', class: 'button radius small metamask-transfer-btn button_submit', data: { disable_with: 'Send Award' } do
+                    span 'Send Award'
+                  end
                 end
               end
             end
@@ -136,6 +139,7 @@ class Views::Projects::AwardSend < Views::Base
 
     content_for :js do
       preview_award_script
+      handle_sending_award_form
     end
   end
 
@@ -151,11 +155,28 @@ class Views::Projects::AwardSend < Views::Base
     )
   end
 
-  def preview_award_script
+  def handle_sending_award_form
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
+        $('body').on('click', "a.button_submit", function() {
+          $(this).removeClass('submit');
+          $(this).closest('form').submit();
+        });
+      })
+    JAVASCRIPT
+  end
+
+  def preview_award_script
+    text(<<-JAVASCRIPT.html_safe)
+      function resetSendingAwardButtonSection() {
+        $('.preview_award_div').html('Loading...');
+        $('a.button_submit').removeClass('submit');
+        $('a.button_submit img').remove();
+      }
+
+      $(function() {
         $('body').on('change', "[name='award[channel_id]']", function() {
-          $('.preview_award_div').html('Loading...');
+          resetSendingAwardButtonSection()
         })
 
         $('body').on('change', "[name='award[uid]'], [name='award[award_type_id]'], [name='award[quantity]']", function() {
@@ -168,7 +189,7 @@ class Views::Projects::AwardSend < Views::Base
           }
           var quantity = $("[name='award[quantity]']").val();
           var award_type_id = $("[name='award[award_type_id]']").val();
-          $('.preview_award_div').html('Loading...');
+          resetSendingAwardButtonSection();
           if(uid && uid != '' && quantity && award_type_id) {
             $.get('#{preview_project_awards_path(project_id: project.id, format: :js)}', {uid: uid, quantity: quantity, award_type_id: award_type_id, channel_id: channel_id})
           }

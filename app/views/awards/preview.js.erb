@@ -1,3 +1,12 @@
 <% text = "<b>#{@total_amount} #{@unit}</b>" if @total_amount %>
 <% text = "#{text} total to #{@recipient_address}" if @recipient_address && text.present? %>
 $('.preview_award_div').html('<%= j text.html_safe %>')
+<% if @recipient_address %>
+  <% image = image_tag 'metamask2.png' %>
+  $('a.button_submit').addClass('submit');
+  if($('a.button_submit img').length > 0) {
+    $('a.button_submit img').replaceWith('<%= j image.html_safe %>')
+  } else {
+    $('a.button_submit').append('<%= j image.html_safe %>')
+  }
+<% end %>
