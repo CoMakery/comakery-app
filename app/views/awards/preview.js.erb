@@ -1,5 +1,5 @@
 <% text = "<b>#{@total_amount} #{@unit}</b>" if @total_amount %>
-<% text = "#{text} total to #{@recipient_address}" if @recipient_address && text.present? %>
+<% text = "#{text} total to #{link_to @recipient_address, UtilitiesService.get_wallet_url(@network, @recipient_address), target: '_blank'}" if @recipient_address && text.present? %>
 $('.preview_award_div').html('<%= j text.html_safe %>')
 <% if @recipient_address %>
   <% image = image_tag 'metamask2.png' %>
