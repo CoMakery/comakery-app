@@ -24,6 +24,9 @@
 
 $ ->
   $(document).foundation()
+  $(document).on "click", ".disabled", (e)->
+    e.preventDefault()
+
   $('.datepicker').datepicker({
     dateFormat: 'mm/dd/yy',
     defaultDate: '01/01/2000',
