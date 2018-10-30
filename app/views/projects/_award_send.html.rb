@@ -154,13 +154,23 @@ class Views::Projects::AwardSend < Views::Base
   def preview_award_script
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
+        $('body').on('change', "[name='award[channel_id]']", function() {
+          $('.preview_award_div').html('Loading...');
+        })
+
         $('body').on('change', "[name='award[uid]'], [name='award[award_type_id]'], [name='award[quantity]']", function() {
-          var uid = $(".uid-email [name='award[uid]']").val();
+          var uid;
+          var channel_id = $("[name='award[channel_id]']").val();
+          if(channel_id && channel_id != '') {
+            uid = $(".uid-select [name='award[uid]']").val();
+          } else {
+            uid = $(".uid-email [name='award[uid]']").val();
+          }
           var quantity = $("[name='award[quantity]']").val();
           var award_type_id = $("[name='award[award_type_id]']").val();
           $('.preview_award_div').html('Loading...');
-          if(uid && uid.indexOf('@') > 0 && quantity && award_type_id) {
-            $.get('#{preview_project_awards_path(project_id: project.id)}', {uid: uid, quantity: quantity, award_type_id: award_type_id})
+          if(uid && uid != '' && quantity && award_type_id) {
+            $.get('#{preview_project_awards_path(project_id: project.id, format: :js)}', {uid: uid, quantity: quantity, award_type_id: award_type_id, channel_id: channel_id})
           }
         })
       });

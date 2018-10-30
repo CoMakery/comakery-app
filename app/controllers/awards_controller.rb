@@ -58,9 +58,13 @@ class AwardsController < ApplicationController
     award_type = AwardType.find_by(id: params[:award_type_id])
     if award_type && quantity
       @total_amount = award_type.amount * BigDecimal(quantity)
-      if channel_id.blank? && (account = Account.where('lower(email)=?', uid.downcase).first)
-        @recipient_address = account.ethereum_wallet
+      if channel_id.blank?
+        account = Account.where('lower(email)=?', uid.downcase).first
+      else
+        channel = Channel.find_by id: channel_id
+        account = Account.find_or_create_for_authentication(uid, channel).first
       end
+      @recipient_address = account&.ethereum_wallet
       @unit = Project.find_by(id: params[:project_id])&.token_symbol
     end
     render layout: false
