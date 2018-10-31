@@ -96,7 +96,7 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    result = params.require(:account).permit(:email, :ethereum_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
+    result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
     result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y') if result[:date_of_birth].present?
     result
   end

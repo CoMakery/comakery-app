@@ -3,6 +3,7 @@ class Account < ApplicationRecord
   has_secure_password validations: false
   attachment :image
   include EthereumAddressable
+  include QtumAddressable
 
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :authentication_teams, dependent: :destroy
@@ -26,6 +27,7 @@ class Account < ApplicationRecord
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
+  validates :qtum_wallet, qtum_address: true # see QtumAddressable
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validate :validate_age, on: :create
   validates :agreed_to_user_agreement, presence: { message: 'You must agree to the terms of the CoMakery User Agreement to sign up ' }, if: :agreement_required
