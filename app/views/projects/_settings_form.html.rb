@@ -309,6 +309,9 @@ module Views
             end
           end
         end
+        content_for :js do
+          contract_address_on_change
+        end
       end
 
       def percentage_div(form, field_name, **opts)
@@ -333,6 +336,23 @@ module Views
           link_to 'Cancel', project, class: 'button cancel'
           form.submit 'Save', class: buttonish(:expand)
         end
+      end
+
+      def contract_address_on_change
+        text(<<-JAVASCRIPT.html_safe)
+          $(function() {
+            $('body').on('change', "[name='project[ethereum_contract_address]']", function() {
+              var network = $("[name='project[ethereum_network]']").val();
+              var symbol = $("[name='project[token_symbol]']").val();
+              var decimals = $("[name='project[decimal_places]']").val()
+              if(network && network != '' && $(this).val() != '' && symbol == '' && decimals =='') {
+                var rs = getSymbolsAndDecimals(network, $(this).val())
+                $("[name='project[token_symbol]']").val(rs[0]);
+                $("[name='project[decimal_places]']").val(rs[1])
+              }
+            });
+          })
+        JAVASCRIPT
       end
 
       def visible_class(section)
