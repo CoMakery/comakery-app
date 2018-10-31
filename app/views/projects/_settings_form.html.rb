@@ -25,6 +25,14 @@ module Views
                   link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text float-right')
                 end
 
+                with_errors(project, :legal_project_owner) do
+                  label(class: 'legal-project-owner') do
+                    required_label_text "Project Owner's Legal Name "
+                    question_tooltip 'The name of the company, association, legal entity, or individual that owns the project and administers awards.'
+                    f.text_field :legal_project_owner, disabled: project.license_finalized?
+                  end
+                end
+
                 with_errors(project, :denomination) do
                   label do
                     text 'Display Currency'
@@ -76,14 +84,6 @@ module Views
             end
             row do
               column('large-6 small-12') do
-                with_errors(project, :legal_project_owner) do
-                  label do
-                    required_label_text "Project Owner's Legal Name "
-                    question_tooltip 'The name of the company, association, legal entity, or individual that owns the project and administers awards.'
-                    f.text_field :legal_project_owner, disabled: project.license_finalized?
-                  end
-                end
-
                 with_errors(project, :exclusive_contributions) do
                   label do
                     f.check_box :exclusive_contributions, disabled: project.license_finalized?
