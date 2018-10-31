@@ -77,12 +77,12 @@ module Views
 
           div(class: "content-box switch-target#{visible_class('#contribution')}", id: 'contribution', 'data-id': 'contribution-terms') do
             full_row do
-              div(class: 'legal-box-header') do
+              div(class: 'hide legal-box-header') do
                 h3 'Contribution Terms'
                 i(class: 'fa fa-lock') if project.license_finalized?
               end
             end
-            row do
+            row(class: 'hide') do
               column('large-6 small-12') do
                 with_errors(project, :exclusive_contributions) do
                   label do
@@ -103,7 +103,7 @@ module Views
             end
             br
             full_row do
-              div(class: 'legal-box-header') { h4 'Contributor Awards' }
+              div(class: 'legal-box-header') { h4 'Blockchain Settings' }
             end
             row do
               column('large-6 small-12') do
