@@ -114,21 +114,21 @@ module Views
                 end
                 with_errors(project, :ethereum_network) do
                   label do
-                    text 'Ethereum Network'
+                    text 'Network'
                     f.select :ethereum_network, options, { include_blank: true }, disabled: project.completed_awards.any?
                   end
                 end
 
                 with_errors(project, :ethereum_contract_address) do
                   label do
-                    text 'Ethereum Contract Address'
+                    text 'Contract Address'
                     f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', disabled: project.completed_awards.any?
                   end
                 end
 
                 with_errors(project, :maximum_tokens) do
                   label do
-                    required_label_text 'Total Token Budget'
+                    required_label_text 'Token Budget'
                     f.text_field :maximum_tokens, type: 'number', disabled: project.license_finalized? || project.ethereum_enabled?
                   end
                 end
