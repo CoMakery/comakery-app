@@ -129,6 +129,10 @@ $ ->
     $(".copy-source").select()
     document.execCommand('Copy')
 
+  $('.copiable2').click ->
+    $(".copy-source2").select()
+    document.execCommand('Copy')
+
   $('.fake-link').click ->
     window.location.href = $(@).data("href")
 
