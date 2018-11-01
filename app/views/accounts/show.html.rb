@@ -78,6 +78,17 @@ class Views::Accounts::Show < Views::Base
             end
 
             column('small-3') do
+              label(for: :account_qtum_wallet) do
+                text 'Qtum Address'
+              end
+            end
+            column('small-9') do
+              with_errors(current_account, :qtum_wallet) do
+                f.text_field :qtum_wallet
+              end
+            end
+
+            column('small-3') do
               label(for: :account_ethereum_wallet) do
                 text 'Ethereum Address'
               end
@@ -161,6 +172,21 @@ class Views::Accounts::Show < Views::Base
               text current_account.country
             end
           end
+
+          row do
+            column('medium-3', style: 'margin-top: 8px;') do
+              text 'Qtum Address'
+            end
+            column('medium-9') do
+              if current_account.qtum_wallet.present?
+                text_field_tag :qtum_wallet, current_account.qtum_wallet, class: 'fake-link copy-source2', style: 'border: none; box-shadow: unset; padding: 2px 0; margin-bottom: 0; display: unset; width: 390px; cursor: pointer; background-color: unset;', readonly: true, data: { href: current_account.decorate.etherscan_address }
+                a(class: 'copiable2', style: 'padding: 3px; border: 1px solid #ccc; margin-top: -3px;') do
+                  image_tag 'Octicons-clippy.png', size: '20x20'
+                end
+              end
+            end
+          end
+
           row do
             column('medium-3', style: 'margin-top: 8px;') do
               text 'Ethereum Address'

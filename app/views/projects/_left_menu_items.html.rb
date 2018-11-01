@@ -14,7 +14,7 @@ class Views::Projects::LeftMenuItems < Views::Base
       end
       li do
         a(href: 'javascript:;', class: "switcher#{' active' if current_section == '#contribution'}", data: { target: '#contribution' }) do
-          text 'Contribution Terms'
+          text 'Blockchain Settings'
         end
       end
       li do

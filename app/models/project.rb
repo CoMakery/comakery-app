@@ -301,7 +301,7 @@ class Project < ApplicationRecord
 
   def maximum_tokens_unchanged
     if maximum_tokens_was > 0 && maximum_tokens_was != maximum_tokens
-      errors[:maximum_tokens] << "can't be changed"
+      errors[:maximum_tokens] << "can't be changed" if license_finalized? || ethereum_enabled?
     end
   end
 

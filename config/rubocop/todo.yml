@@ -251,6 +251,7 @@ Rails/OutputSafety:
     - 'app/views/licenses/index.html.rb'
     - 'app/views/projects/_award_send.html.rb'
     - 'app/views/projects/_description.html.rb'
+    - 'app/views/projects/_settings_form.html.rb'
     - 'app/views/shared/_awards.html.rb'
     - 'app/views/shared/email_footer.rb'
 
