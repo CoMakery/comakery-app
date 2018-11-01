@@ -25,6 +25,14 @@ module Views
                   link_to('Styling with Markdown is Supported', 'https://guides.github.com/features/mastering-markdown/', class: 'help-text float-right')
                 end
 
+                with_errors(project, :legal_project_owner) do
+                  label(class: 'legal-project-owner') do
+                    required_label_text "Project Owner's Legal Name "
+                    question_tooltip 'The name of the company, association, legal entity, or individual that owns the project and administers awards.'
+                    f.text_field :legal_project_owner, disabled: project.license_finalized?
+                  end
+                end
+
                 with_errors(project, :denomination) do
                   label do
                     text 'Display Currency'
@@ -69,21 +77,13 @@ module Views
 
           div(class: "content-box switch-target#{visible_class('#contribution')}", id: 'contribution', 'data-id': 'contribution-terms') do
             full_row do
-              div(class: 'legal-box-header') do
+              div(class: 'hide legal-box-header') do
                 h3 'Contribution Terms'
                 i(class: 'fa fa-lock') if project.license_finalized?
               end
             end
-            row do
+            row(class: 'hide') do
               column('large-6 small-12') do
-                with_errors(project, :legal_project_owner) do
-                  label do
-                    required_label_text "Project Owner's Legal Name "
-                    question_tooltip 'The name of the company, association, legal entity, or individual that owns the project and administers awards.'
-                    f.text_field :legal_project_owner, disabled: project.license_finalized?
-                  end
-                end
-
                 with_errors(project, :exclusive_contributions) do
                   label do
                     f.check_box :exclusive_contributions, disabled: project.license_finalized?
@@ -103,7 +103,7 @@ module Views
             end
             br
             full_row do
-              div(class: 'legal-box-header') { h4 'Contributor Awards' }
+              div(class: 'legal-box-header') { h4 'Blockchain Settings' }
             end
             row do
               column('large-6 small-12') do
@@ -114,21 +114,21 @@ module Views
                 end
                 with_errors(project, :ethereum_network) do
                   label do
-                    text 'Ethereum Network'
+                    text 'Network'
                     f.select :ethereum_network, options, { include_blank: true }, disabled: project.completed_awards.any?
                   end
                 end
 
                 with_errors(project, :ethereum_contract_address) do
                   label do
-                    text 'Ethereum Contract Address'
+                    text 'Contract Address'
                     f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', disabled: project.completed_awards.any?
                   end
                 end
 
                 with_errors(project, :maximum_tokens) do
                   label do
-                    required_label_text 'Total Token Budget'
+                    required_label_text 'Token Budget'
                     f.text_field :maximum_tokens, type: 'number', disabled: project.license_finalized? || project.ethereum_enabled?
                   end
                 end
@@ -309,6 +309,9 @@ module Views
             end
           end
         end
+        content_for :js do
+          contract_address_on_change
+        end
       end
 
       def percentage_div(form, field_name, **opts)
@@ -333,6 +336,23 @@ module Views
           link_to 'Cancel', project, class: 'button cancel'
           form.submit 'Save', class: buttonish(:expand)
         end
+      end
+
+      def contract_address_on_change
+        text(<<-JAVASCRIPT.html_safe)
+          $(function() {
+            $('body').on('change', "[name='project[ethereum_contract_address]']", function() {
+              var network = $("[name='project[ethereum_network]']").val();
+              var symbol = $("[name='project[token_symbol]']").val();
+              var decimals = $("[name='project[decimal_places]']").val()
+              if(network && network != '' && $(this).val() != '' && symbol == '' && decimals =='') {
+                var rs = getSymbolsAndDecimals(network, $(this).val())
+                $("[name='project[token_symbol]']").val(rs[0]);
+                $("[name='project[decimal_places]']").val(rs[1])
+              }
+            });
+          })
+        JAVASCRIPT
       end
 
       def visible_class(section)

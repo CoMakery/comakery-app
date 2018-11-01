@@ -52,17 +52,17 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'project_maximum_tokens', with: '210000'
     fill_in 'Description', with: 'This is a project'
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
-    check 'Contributions are exclusive'
-    check 'Require project and business confidentiality'
+    # check 'Contributions are exclusive'
+    # check 'Require project and business confidentiality'
 
     click_on 'Save', class: 'last_submit'
     expect(page).to have_content 'Project created'
 
     within '.project-terms' do
       expect(page).to have_content 'Mindful Inc'
-      expect(page).to have_content 'Contributions: are exclusive'
-      expect(page).to have_content 'Business Confidentiality: is required'
-      expect(page).to have_content 'Project Confidentiality: is required'
+      expect(page).not_to have_content 'Contributions: are exclusive'
+      expect(page).not_to have_content 'Business Confidentiality: is required'
+      expect(page).not_to have_content 'Project Confidentiality: is required'
     end
   end
 
@@ -135,8 +135,8 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'project_maximum_tokens', with: '100000'
     fill_in 'Description', with: 'This is a project'
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
-    check 'Contributions are exclusive'
-    check 'Require project and business confidentiality'
+    # check 'Contributions are exclusive'
+    # check 'Require project and business confidentiality'
 
     click_on 'Save', class: 'last_submit'
     expect(page).to have_content 'Project created'
@@ -166,28 +166,28 @@ describe 'viewing projects, creating and editing', :js do
   end
 
   def expect_denomination_usd
-    click_link 'Contribution Terms'
+    click_link 'Blockchain Settings'
     page.assert_selector('span.denomination', text: '$', minimum: 4)
     page.assert_selector('span.denomination', text: '฿', count: 0)
     page.assert_selector('span.denomination', text: 'Project Tokens', count: 0)
   end
 
   def expect_denomination_btc
-    click_link 'Contribution Terms'
+    click_link 'Blockchain Settings'
     page.assert_selector('span.denomination', text: '$', count: 0)
     page.assert_selector('span.denomination', text: '฿', minimum: 4)
     page.assert_selector('span.denomination', text: 'Ξ', count: 0)
   end
 
   def expect_denomination_eth
-    click_link 'Contribution Terms'
+    click_link 'Blockchain Settings'
     page.assert_selector('span.denomination', text: '$', count: 0)
     page.assert_selector('span.denomination', text: '฿', count: 0)
     page.assert_selector('span.denomination', text: 'Ξ', minimum: 1)
   end
 
   def expect_denomination_hidden
-    click_link 'Contribution Terms'
+    click_link 'Blockchain Settings'
     page.assert_selector('span.denomination', text: '$', count: 0)
     page.assert_selector('span.denomination', text: '฿', count: 0)
     page.assert_selector('span.denomination', text: 'Ξ', count: 0)

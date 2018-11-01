@@ -1,6 +1,8 @@
 class Interest < ApplicationRecord
   belongs_to :account
-  after_save :add_airtable
+  after_create :add_airtable
+  validates :project, :protocol, presence: true
+  validates :project, uniqueness: {scope: [:account_id, :protocol]}
 
   def add_airtable
     airtable = Comakery::Airtable.new

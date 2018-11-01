@@ -46,8 +46,8 @@ describe 'project settings layout:', js: true do
     click_on_left_menu('Awards Offered', 'awards-offered')
   end
 
-  it 'click on \'Contribution Terms\' menu item' do
-    click_on_left_menu('Contribution Terms', 'contribution-terms')
+  it 'click on \'Blockchain Settings\' menu item' do
+    click_on_left_menu('Blockchain Settings', 'contribution-terms')
   end
 end
 

@@ -267,19 +267,17 @@ html, body{
 }
 
 .project-row{
-  background-repeat: no-repeat;
-  background-size: 100px 70px;
-  background-position: -10px;
-  padding-left: 100px;
+
 }
 
 .project-thumb{
   float: left;
   width: 100px;
-  height: 50px;
+  height: 53px;
   overflow: hidden;
+  margin-right: 10px;
 }
 
 .protocol-project-name{
-  margin-top: 0px;
+  margin-top: 8px;
 }

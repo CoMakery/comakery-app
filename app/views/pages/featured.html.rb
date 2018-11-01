@@ -37,21 +37,21 @@ class Views::Pages::Featured < Views::Base
             text 'HOLOCHAIN PROTOCAL (HOT)'
           end
           div(class: 'protocol-meta') do
-            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            text 'Think outside the blocks - scalable distributed computing'
           end
           div(class: 'past-project-content') do
             div(class: 'protocol-sub-title') do
               text 'Why Holochain?'
             end
             div(class: 'protocol-desc') do
-              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
+              text 'Holochain enables a distributed web with user autonomy built directly into its architecture and protocols. Data is about remembering our lived and shared experiences. Distributing the storage and processing of that data can change how we coordinate and interact. With digital integration under user control, Holochain liberates our online lives from corporate control.'
             end
           end
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
-            2.times do
-              display_project('assets/home/featured/holochain.jpg', 'Holo', 'Exchange')
-            end
+            display_project('home/featured/logos/holochain.jpg', 'Holo', 'Market Research')
+            display_project('home/featured/logos/holochain.jpg', 'Holo', 'Wallet Integrations')
+            display_project('home/featured/logos/holochain.jpg', 'Holo', 'Decentralized Exchange Integrations')
           end
         end
         div(class: 'small-4 columns') do
@@ -69,21 +69,21 @@ class Views::Pages::Featured < Views::Base
             text 'CARDANO PROTOCOL (ADA)'
           end
           div(class: 'protocol-meta') do
-            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            text 'A decentralised public blockchain and cryptocurrency project'
           end
           div(class: 'past-project-content') do
             div(class: 'protocol-sub-title') do
               text 'Why Cardano?'
             end
             div(class: 'protocol-desc') do
-              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
+              text 'Cardano is a technological platform that will be capable of running financial applications currently used every day by individuals, organisations and governments all around the world. The platform is being constructed in layers, which gives the system the flexibility to be more easily maintained.'
             end
           end
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
-            2.times do
-              display_project('assets/home/featured/cardano.jpg', 'Cardano', 'Exchange')
-            end
+            display_project('home/featured/logos/cardano.jpg','Cardano','dApp Developer Tools')
+            display_project('home/featured/logos/cardano.jpg','Cardano', 'Educational Materials')
+            display_project('home/featured/logos/cardano.jpg','Cardano', 'Security Audits')
           end
         end
       end
@@ -94,21 +94,21 @@ class Views::Pages::Featured < Views::Base
             text 'ETHEREUM PROTOCOL (ETH)'
           end
           div(class: 'protocol-meta') do
-            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            text 'A decentralized platform that runs smart contracts'
           end
           div(class: 'past-project-content') do
             div(class: 'protocol-sub-title') do
               text 'Why Ethereum?'
             end
             div(class: 'protocol-desc') do
-              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
+              text 'Ethereum enables developers to create markets, store registries of debts or promises, move funds in accordance with instructions given long in the past (like a will or a futures contract) and many other things that have not been invented yet, all without a middleman or counterparty risk.'
             end
           end
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
-            2.times do
-              display_project('assets/home/featured/ethereum.jpg', 'Ethereum', 'Exchange')
-            end
+            display_project('home/featured/logos/ethereum.jpg', 'Ethereum', 'dApp Developer Tools')
+            display_project('home/featured/logos/ethereum.jpg', 'Ethereum', 'Educational Materials')
+            display_project('home/featured/logos/ethereum.jpg', 'Ethereum', 'Security Audits')
           end
         end
         div(class: 'small-4 columns') do
@@ -126,21 +126,21 @@ class Views::Pages::Featured < Views::Base
             text 'VEVUE PROTOCOL (VUE)'
           end
           div(class: 'protocol-meta') do
-            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            text 'Specially designed to reward content creators'
           end
           div(class: 'past-project-content') do
             div(class: 'protocol-sub-title') do
               text 'Why VEVUE?'
             end
             div(class: 'protocol-desc') do
-              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
+              text 'Vevue believes in empowering creativity. Using the power of the blockchain, they are revolutionizing the way people interact with, distribute, watch, and appreciate video content. This means copyright protection, global accessibility and expediency for all.'
             end
           end
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
-            2.times do
-              display_project('assets/home/featured/vevue.jpg', 'Vevue', 'Exchange')
-            end
+            display_project('home/featured/logos/vevue.jpg', 'Vevue', 'Promotion')
+            display_project('home/featured/logos/vevue.jpg', 'Vevue', 'Security Audits')
+            display_project('home/featured/logos/vevue.jpg', 'Vevue', 'Wallet Integrations')
           end
         end
       end
@@ -151,21 +151,21 @@ class Views::Pages::Featured < Views::Base
             text 'PROPS by YouNow (PROPS)'
           end
           div(class: 'protocol-meta') do
-            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            text 'A Decentralized Network of Video Applications'
           end
           div(class: 'past-project-content') do
             div(class: 'protocol-sub-title') do
               text 'Why PROPS?'
             end
             div(class: 'protocol-desc') do
-              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
+              text 'PROPS is a decentralized ecosystem for digital video. Their motivation is to create a video application ecosystem built to empower users and to deliver on the internet’s original promise. The PROPS ecosystem will fairly reward developers, content creators, and consumers for their contribution to the growth of digital media networks.'
             end
           end
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
-            2.times do
-              display_project('assets/home/featured/props.jpg', 'Props', 'Exchange')
-            end
+            display_project('home/featured/logos/props.jpg', 'Props', 'Decentralized Exchange Integrations')
+            display_project('home/featured/logos/props.jpg', 'Props', 'dApp Developer Tools')
+            display_project('home/featured/logos/props.jpg', 'Props', 'Educational Materials')
           end
         end
         div(class: 'small-4 columns') do
@@ -183,21 +183,21 @@ class Views::Pages::Featured < Views::Base
             text 'SHARESPOST GLASS NETWORK (GLASS)'
           end
           div(class: 'protocol-meta') do
-            text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+            text 'A decentralized network of crypto trading platforms'
           end
           div(class: 'past-project-content') do
             div(class: 'protocol-sub-title') do
               text 'Why GLASS?'
             end
             div(class: 'protocol-desc') do
-              text 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum cursus eget velit ac pharetra. Phasellus nec aliquam velit. Donec pretium mauris urna, non dignissim felis dictum sed. Nam tempus mattis augue, at tempus tellus laoreet sed. Maecenas quis odio vitae nunc elementum tristique quis vitae neque.'
+              text 'The Glass network will pool liquidity and enable compliant settlement of cross-border digital securities transactions. The network will route digital securities transactions from exchanges to licensed broker dealers in jurisdictions where their clients are resident for settlement.'
             end
           end
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
-            2.times do
-              display_project('assets/home/featured/glass.jpg', 'Glass', 'Exchange')
-            end
+            display_project('home/featured/logos/glass.jpg', 'Glass', 'Wallet Integrations')
+            display_project('home/featured/logos/glass.jpg', 'Glass', 'Community Moderation')
+            display_project('home/featured/logos/glass.jpg', 'Glass', 'Promotion')
           end
         end
       end
@@ -208,9 +208,12 @@ class Views::Pages::Featured < Views::Base
 
   def display_project(bg_image, protocol, project)
     div(class: 'small-12 columns no-h-pad', style: 'margin-top:10px') do
-      div(class: 'small-6 columns project-row', style: "background-image: url('#{bg_image}')") do
+      div(class: 'small-6 columns project-row no-h-pad') do
+        div(class: 'project-thumb') do
+          image_tag bg_image, size: '100x53'
+        end
         div(class: 'protocol-project-name') do
-          text 'Decentralized Exchange App'
+          text project
         end
         div(class: 'project-descriptive') do
           text 'for everyone'
@@ -218,7 +221,12 @@ class Views::Pages::Featured < Views::Base
       end
       div(class: 'small-6 columns text-right') do
         image_tag 'home/featured/lock.png', size: '18x18', style: 'margin-right: 10px'
-        link_to "I'M INTERESTED!", add_interest_path(project: project, protocol_interest: protocol), class: 'button', remote: true
+        if current_account.interested?(protocol, project)
+          link_to "INTEREST, NOTED!", 'javascript:;', class: 'button disabled'
+        else
+          link_to "I'M INTERESTED!", "javascript:;", data: {protocol: protocol, project: project},class: "button interest", style: "width: 151px"
+          link_to "INTEREST, NOTED!", 'javascript:;', class: "button interest-done disabled", style: 'display: none'
+        end
       end
     end
   end

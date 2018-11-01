@@ -24,6 +24,9 @@
 
 $ ->
   $(document).foundation()
+  $(document).on "click", ".disabled", (e)->
+    e.preventDefault()
+
   $('.datepicker').datepicker({
     dateFormat: 'mm/dd/yy',
     defaultDate: '01/01/2000',
@@ -124,6 +127,10 @@ $ ->
 
   $('.copiable').click ->
     $(".copy-source").select()
+    document.execCommand('Copy')
+
+  $('.copiable2').click ->
+    $(".copy-source2").select()
     document.execCommand('Copy')
 
   $('.fake-link').click ->

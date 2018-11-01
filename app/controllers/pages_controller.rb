@@ -21,8 +21,10 @@ class PagesController < ApplicationController
   def add_interest
     @interest = current_user.interests.new
     @interest.project = params[:project]
-    @interest.protocol = params[:protocol_interest]
+    @interest.protocol = params[:protocol]
     @interest.save
-    respond_to :js
+    respond_to do |format|
+      format.json {render json: @interest.to_json  }
+    end
   end
 end

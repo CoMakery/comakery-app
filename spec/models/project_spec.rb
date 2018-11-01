@@ -160,11 +160,11 @@ describe Project do
     end
 
     describe 'maximum_tokens' do
-      it 'prevents modification if the record has been saved' do
+      it 'can modify if the record has been saved' do
         project = create(:project)
         project.maximum_tokens += 10
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages).to be_include("Maximum tokens can't be changed")
+        expect(project).to be_valid
+        # expect(project.errors.full_messages).to be_include("Maximum tokens can't be changed")
       end
     end
 
