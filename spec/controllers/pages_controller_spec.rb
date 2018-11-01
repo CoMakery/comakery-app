@@ -22,6 +22,25 @@ RSpec.describe PagesController, type: :controller do
     expect(response).to render_template('pages/user_agreement')
   end
 
+  it 'access landing page' do
+    get :landing
+    expect(response).to render_template('pages/landing')
+  end
+
+  it 'access home page' do
+    account = create :account
+    login account
+    get :landing
+    expect(response).to render_template 'pages/home'
+  end
+
+  it 'access featured page' do
+    account = create :account, contributor_form: true
+    login account
+    get :landing
+    expect(response).to render_template 'pages/featured'
+  end
+
   it 'basic auth' do
     ENV.stub(:key?) { 'test:test' }
     ENV.stub(:fetch) { 'test:test' }
