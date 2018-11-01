@@ -1,5 +1,11 @@
 class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
+  PAYMENT_TYPES = {
+    project_token: 'ERC20',
+    project_eth: 'ETH',
+    project_token_qrc20: 'QRC20',
+    project_qtum: 'QTUM'
+  }
 
   include EthereumAddressable
 
@@ -38,8 +44,12 @@ class Project < ApplicationRecord
 
   enum payment_type: {
     revenue_share: 0,
-    project_token: 1
+    project_token: 1,
+    project_eth: 2,
+    project_token_qrc20: 3,
+    project_qtum: 4
   }
+
   enum denomination: {
     USD: 0,
     BTC: 1,
@@ -56,7 +66,7 @@ class Project < ApplicationRecord
   validates :description, :account, :title, :legal_project_owner,
     :denomination, presence: true
 
-  validates :royalty_percentage, :maximum_royalties_per_month, presence: { unless: :project_token? }
+  validates :royalty_percentage, :maximum_royalties_per_month, presence: { if: :revenue_share? }
 
   validates :maximum_tokens, numericality: { greater_than: 0 }
   validates :royalty_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_nil: true }
@@ -99,6 +109,10 @@ class Project < ApplicationRecord
 
   def create_ethereum_awards!
     CreateEthereumAwards.call(awards: awards)
+  end
+
+  def payment_type_token?
+    project_token? || project_token_qrc20?
   end
 
   def total_revenue

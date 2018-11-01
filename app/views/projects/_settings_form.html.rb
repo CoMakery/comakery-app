@@ -107,6 +107,17 @@ module Views
             end
             row do
               column('large-6 small-12') do
+                selected = f.object.payment_type
+                options = capture do
+                  options_for_select(payment_type_options, selected: selected)
+                end
+                with_errors(project, :payment_type) do
+                  label do
+                    text 'Payment Type'
+                    f.select :payment_type, options, { include_blank: true }, disabled: project.completed_awards.any?
+                  end
+                end
+
                 selected = f.object.ethereum_network
                 selected = 'main' if project.completed_awards.blank? && f.object.ethereum_network.blank?
                 options = capture do
@@ -119,16 +130,32 @@ module Views
                   end
                 end
 
-                with_errors(project, :ethereum_contract_address) do
-                  label do
-                    text 'Contract Address'
-                    f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', disabled: project.completed_awards.any?
+                div(class: "#{'hide' unless project.payment_type_token?}") do
+                  with_errors(project, :ethereum_contract_address) do
+                    label do
+                      text 'Contract Address'
+                      f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', disabled: project.completed_awards.any?
+                    end
+                  end
+
+                  with_errors(project, :token_symbol) do
+                    label do
+                      text 'Symbol'
+                      f.text_field :token_symbol
+                    end
+                  end
+
+                  with_errors(project, :decimal_places) do
+                    label do
+                      text 'Decimal Places'
+                      f.text_field :decimal_places, disabled: project.completed_awards.any?
+                    end
                   end
                 end
 
                 with_errors(project, :maximum_tokens) do
                   label do
-                    required_label_text 'Token Budget'
+                    required_label_text 'Budget'
                     f.text_field :maximum_tokens, type: 'number', disabled: project.license_finalized? || project.ethereum_enabled?
                   end
                 end
@@ -141,7 +168,7 @@ module Views
                       disabled: project.license_finalized?
                   end
                 end
-                div(class: "revenue-sharing-terms #{'hide' if project.project_token?}") do
+                div(class: "revenue-sharing-terms #{'hide' unless project.revenue_share?}") do
                   with_errors(project, :royalty_percentage) do
                     label do
                       required_label_text 'Revenue Shared With Contributors'
@@ -164,20 +191,6 @@ module Views
                   end
                 end
 
-                with_errors(project, :token_symbol) do
-                  label do
-                    text 'Token Symbol'
-                    f.text_field :token_symbol
-                  end
-                end
-
-                with_errors(project, :decimal_places) do
-                  label do
-                    text 'Decimal Places'
-                    f.text_field :decimal_places, disabled: project.completed_awards.any?
-                  end
-                end
-
                 # # Uncomment this after legal review  of licenses, disclaimers, etc.
                 # with_errors(project, :license_finalized) {
                 #   label {
@@ -190,7 +203,7 @@ module Views
 
               column('large-6 small-12') do
                 br
-                div(class: "revenue-sharing-terms #{'hide' if project.project_token?}") do
+                div(class: "revenue-sharing-terms #{'hide' unless project.revenue_share?}") do
                   h5 'Example'
                   table(class: 'royalty-calc') do
                     thead do
@@ -329,6 +342,10 @@ module Views
 
       def ethereum_network_options
         Project.ethereum_networks.invert
+      end
+
+      def payment_type_options
+        Project::PAYMENT_TYPES.invert
       end
 
       def render_cancel_and_save_buttons(form)
