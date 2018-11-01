@@ -95,9 +95,7 @@ class Views::Projects::AwardSend < Views::Base
                 column('small-12') do
                   div(class: 'preview_award_div')
 
-                  link_to 'javascript:void(0)', class: 'button radius small metamask-transfer-btn button_submit', data: { disable_with: 'Send Award' } do
-                    span 'Send Award'
-                  end
+                  button 'Send Award', class: 'button radius small metamask-transfer-btn button_submit', data: { disable_with: 'Send Award' }
                 end
               end
             end
@@ -139,7 +137,6 @@ class Views::Projects::AwardSend < Views::Base
 
     content_for :js do
       preview_award_script
-      handle_sending_award_form
     end
   end
 
@@ -155,23 +152,12 @@ class Views::Projects::AwardSend < Views::Base
     )
   end
 
-  def handle_sending_award_form
-    text(<<-JAVASCRIPT.html_safe)
-      $(function() {
-        $('body').on('click', "a.button_submit", function() {
-          $(this).removeClass('submit');
-          $(this).closest('form').submit();
-        });
-      })
-    JAVASCRIPT
-  end
-
   def preview_award_script
     text(<<-JAVASCRIPT.html_safe)
       function resetSendingAwardButtonSection() {
         $('.preview_award_div').html('Loading...');
-        $('a.button_submit').removeClass('submit');
-        $('a.button_submit img').remove();
+        $('button.button_submit').removeClass('submit');
+        $('button.button_submit img').remove();
       }
 
       $(function() {
