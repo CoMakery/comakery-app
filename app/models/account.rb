@@ -152,6 +152,10 @@ class Account < ApplicationRecord
     email_confirm_token.nil?
   end
 
+  def interested?(protocol,project)
+    interests.find_by protocol: protocol, project: project
+  end
+
   def finished_contributor_form?
     contributor_form == true
   end
