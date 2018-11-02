@@ -8,8 +8,27 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:page]).per(20)
-    @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(20)
+    @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id')
+    @awards = current_account.awards.order(created_at: :desc)
+    @projects_count = @projects.length
+    @awards_count = @awards.length
+
+    @projects = @projects.page(params[:project_page]).per(20).map { |project| project_decorate(project) }
+    @awards = @awards.page(params[:award_page]).per(20).map do |award|
+      award.as_json(only: %i[id]).merge(
+        total_amount_pretty: award.decorate.total_amount_pretty,
+        created_at: award.created_at.strftime('%b %d, %Y'),
+        ethereum_transaction_explorer_url: award.decorate.ethereum_transaction_explorer_url,
+        ethereum_transaction_address_short: award.decorate.ethereum_transaction_address_short,
+        project: project_decorate(award.project)
+      )
+    end
+    respond_to do |format|
+      format.html
+      format.json do
+        render json: { awards: @awards, projects: @projects }
+      end
+    end
   end
 
   def create
@@ -67,14 +86,25 @@ class AccountsController < ApplicationController
     @current_account = current_account
     old_age = @current_account.age || 18
     authorize @current_account
-    if @current_account.update(account_params.merge(name_required: true))
-      check_date(old_age) if old_age < 18
-      redirect_to account_url, notice: 'Your account details have been updated.'
-    else
-      flash[:error] = current_account.errors.full_messages.join(' ')
-      @projects = Project.left_outer_joins(:awards).where.not(awards: { id: nil }).group('projects.id').page(params[:page]).per(20)
-      @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(15)
-      render :show
+    respond_to do |format|
+      if @current_account.update(account_params.merge(name_required: true))
+        check_date(old_age) if old_age < 18
+        format.html { redirect_to account_url, notice: 'Your account details have been updated.' }
+        format.json { render json: { message: 'Your account details have been updated.' }, status: :ok }
+      else
+        error_msg = current_account.errors.full_messages.join(' ')
+        format.html do
+          flash[:error] = error_msg
+          @projects = Project.left_outer_joins(:awards).where.not(awards: { id: nil }).group('projects.id').page(params[:page]).per(20)
+          @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(20)
+          render :show
+        end
+        format.json do
+          errors = current_account.errors.messages
+          errors.each { |key, value| errors[key] = value.to_sentence }
+          render json: { message: error_msg, errors: errors }, status: :unprocessable_entity
+        end
+      end
     end
   end
 
@@ -105,5 +135,13 @@ class AccountsController < ApplicationController
     if @current_account.age >= 18
       UserMailer.underage_alert(@current_account, old_age).deliver_now
     end
+  end
+
+  def project_decorate(project)
+    project.as_json(only: %i[id title token_symbol ethereum_contract_address]).merge(
+      awards_path: project_awards_path(project.show_id, mine: true),
+      total_awarded: project.decorate.total_awarded_to_user(current_account),
+      ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url
+    )
   end
 end

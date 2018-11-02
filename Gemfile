@@ -33,6 +33,7 @@ gem 'pundit'
 gem 'rails', '~>5.1.4'
 gem 'rails-html-sanitizer', '~> 1.0.4'
 gem 'rails_12factor', group: :production
+gem 'react-rails'
 gem 'redcarpet'
 gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile.git' # remove git path when version > refile gem > 0.6.2 is released (0.6.2 requires old conflicting rack)
 gem 'refile-mini_magick'

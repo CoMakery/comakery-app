@@ -1,0 +1,35 @@
+.full-width {
+	min-width: 100% !important;
+}
+
+.fake-link--input {
+	border: none !important;
+	box-shadow: unset !important;
+	display: unset;
+	width: 390px;
+	cursor: pointer !important;
+	background-color: unset !important;
+	padding: 2px 0;
+}
+
+.copiable--link {
+	padding: 3px;
+	border: 1px solid #ccc;
+	margin-top: -3px;
+}
+
+.react-pagination {
+	li {
+		display: inline-block;
+		padding: 4px;
+		a {
+			outline: none;
+		}
+		&.active a {
+			color: black !important;
+		}
+		&.disabled a {
+			color: grey !important;
+		}
+	}
+}
