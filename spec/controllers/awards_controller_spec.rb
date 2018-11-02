@@ -251,4 +251,21 @@ describe AwardsController do
       expect(award.reload.ethereum_transaction_address).to be_nil
     end
   end
+
+  describe '#preview' do
+    it 'when channel_id is blank' do
+      award_type = create(:award_type)
+      create(:account, email: 'test2@comakery.com', ethereum_wallet: '0xaBe4449277c893B3e881c29B17FC737ff527Fa47')
+      login issuer.account
+      get :preview, format: 'js', params: { project_id: project.to_param, uid: 'test2@comakery.com', quantity: 1, award_type_id: award_type.id }
+      expect(assigns(:recipient_address)).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa47')
+    end
+
+    it 'when channel_id is present' do
+      award_type = create(:award_type)
+      login issuer.account
+      get :preview, format: 'js', params: { project_id: project.to_param, uid: 'U99M9QYFQ2', quantity: 1, award_type_id: award_type.id, channel_id: 'channel_id' }
+      expect(assigns(:recipient_address)).to be_nil
+    end
+  end
 end
