@@ -38,12 +38,4 @@ class Views::Accounts::Awards < Views::Base
       end
     end
   end
-
-  def display_status(award)
-    if award.confirmed?
-      i(class: 'fa fa-check-square')
-    else
-      show_recipient ? text('Emailed') : link_to('confirm', confirm_award_path(award.confirm_token))
-    end
-  end
 end

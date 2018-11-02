@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  skip_before_action :require_login
+  skip_before_action :require_login, except: %i[featured home]
   skip_after_action :verify_authorized
 
   def landing
@@ -24,7 +24,7 @@ class PagesController < ApplicationController
     @interest.protocol = params[:protocol]
     @interest.save
     respond_to do |format|
-      format.json {render json: @interest.to_json  }
+      format.json { render json: @interest.to_json }
     end
   end
 end

@@ -63,6 +63,15 @@ class Mom
     Project.new(defaults.merge(attrs))
   end
 
+  def interest(account = create(:account), **attrs)
+    defaults = {
+      protocol: 'Vevue',
+      project: 'Wallet Intergrations',
+      account: account
+    }
+    Interest.new(defaults.merge(attrs))
+  end
+
   def channel(**attrs)
     defaults = {
       team: create(:team),
