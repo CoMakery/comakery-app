@@ -81,9 +81,9 @@ class Views::Pages::Featured < Views::Base
           end
           div(style: 'margin-top: 20px') do
             text 'Projects to Make an Impact On:'
-            display_project('home/featured/logos/cardano.jpg','Cardano','dApp Developer Tools')
-            display_project('home/featured/logos/cardano.jpg','Cardano', 'Educational Materials')
-            display_project('home/featured/logos/cardano.jpg','Cardano', 'Security Audits')
+            display_project('home/featured/logos/cardano.jpg', 'Cardano', 'dApp Developer Tools')
+            display_project('home/featured/logos/cardano.jpg', 'Cardano', 'Educational Materials')
+            display_project('home/featured/logos/cardano.jpg', 'Cardano', 'Security Audits')
           end
         end
       end
@@ -222,10 +222,10 @@ class Views::Pages::Featured < Views::Base
       div(class: 'small-6 columns text-right') do
         image_tag 'home/featured/lock.png', size: '18x18', style: 'margin-right: 10px'
         if current_account.interested?(protocol, project)
-          link_to "INTEREST, NOTED!", 'javascript:;', class: 'button disabled'
+          link_to 'INTEREST, NOTED!', 'javascript:;', class: 'button disabled'
         else
-          link_to "I'M INTERESTED!", "javascript:;", data: {protocol: protocol, project: project},class: "button interest", style: "width: 151px"
-          link_to "INTEREST, NOTED!", 'javascript:;', class: "button interest-done disabled", style: 'display: none'
+          link_to "I'M INTERESTED!", 'javascript:;', data: { protocol: protocol, project: project }, class: 'button interest', style: 'width: 151px'
+          link_to 'INTEREST, NOTED!', 'javascript:;', class: 'button interest-done disabled', style: 'display: none'
         end
       end
     end

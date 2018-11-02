@@ -32,4 +32,11 @@ describe 'logging in and out' do
 
     expect(page).to have_content 'SIGN IN'
   end
+
+  specify do
+    account.update contributor_form: true
+    page.set_rack_session(account_id: account.id)
+    visit root_path
+    expect(page).to have_content 'FIND THE PROJECTS THAT SPEAK TO YOU'
+  end
 end
