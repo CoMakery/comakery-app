@@ -5,7 +5,7 @@ class Project < ApplicationRecord
     project_eth: 'ETH',
     project_token_qrc20: 'QRC20',
     project_qtum: 'QTUM'
-  }
+  }.freeze
 
   include EthereumAddressable
 

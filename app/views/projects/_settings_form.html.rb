@@ -130,7 +130,7 @@ module Views
                   end
                 end
 
-                div(class: "#{'hide' unless project.payment_type_token?}") do
+                div(class: "contract-info-div #{'hide' unless project.payment_type_token?}") do
                   with_errors(project, :ethereum_contract_address) do
                     label do
                       text 'Contract Address'

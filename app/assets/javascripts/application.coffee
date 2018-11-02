@@ -162,10 +162,13 @@ awardPaymentType = () ->
       $('.revenue-sharing-terms').addClass('hide')
       $('.project-token-terms').removeClass('hide')
       $('span.award-type').html('Project Tokens')
+      $('.contract-info-div').removeClass('hide')
     when 'revenue_share'
       $('.revenue-sharing-terms').removeClass('hide')
       $('.project-token-terms').addClass('hide')
       $('span.award-type').html('Revenue Shares')
+    else
+      $('.contract-info-div').addClass('hide')
 
 royaltyCalc = () ->
   return unless $('#project_denomination option:selected').html()
