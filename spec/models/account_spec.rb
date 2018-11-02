@@ -25,6 +25,20 @@ describe Account do
       expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'a' * 40}") }).to be_valid
       expect(account.tap { |a| a.update(ethereum_wallet: "0x#{'A' * 40}") }).to be_valid
     end
+
+    it 'requires #qtum_wallet to be a valid qtum address' do
+      expect(account.qtum_wallet).to be_blank
+      expect(account).to be_valid
+
+      expect(account.tap { |a| a.update(qtum_wallet: 'foo') }.errors.full_messages).to eq(["Qtum wallet should start with 'Q', followed by 33 characters"])
+      expect(account.tap { |a| a.update(qtum_wallet: '0x') }.errors.full_messages).to eq(["Qtum wallet should start with 'Q', followed by 33 characters"])
+      expect(account.tap { |a| a.update(qtum_wallet: "Q#{'a' * 32}") }.errors.full_messages).to eq(["Qtum wallet should start with 'Q', followed by 33 characters"])
+      expect(account.tap { |a| a.update(qtum_wallet: "Q#{'a' * 34}") }.errors.full_messages).to eq(["Qtum wallet should start with 'Q', followed by 33 characters"])
+      expect(account.tap { |a| a.update(qtum_wallet: "0x#{'g' * 32}") }.errors.full_messages).to eq(["Qtum wallet should start with 'Q', followed by 33 characters"])
+
+      expect(account.tap { |a| a.update(qtum_wallet: "q#{'a' * 33}") }).to be_valid
+      expect(account.tap { |a| a.update(qtum_wallet: "Q#{'m' * 33}") }).to be_valid
+    end
   end
 
   it 'enforces unique emails, case-insensitively' do
