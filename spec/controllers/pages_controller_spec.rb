@@ -41,6 +41,23 @@ RSpec.describe PagesController, type: :controller do
     expect(response).to render_template 'pages/featured'
   end
 
+  it 'access featured page - set contributor form' do
+    account = create :account
+    login account
+    get :featured
+    expect(account.reload.finished_contributor_form?).to be_truthy
+  end
+
+  it 'create interest' do
+    account = create :account
+    login account
+    stub_airtable
+    post :add_interest, params: { project: 'Promotion', protocol: 'Vevue', format: :json }
+    interest = assigns['interest']
+    expect(interest.project).to eq 'Promotion'
+    expect(interest.protocol).to eq 'Vevue'
+  end
+
   it 'basic auth' do
     ENV.stub(:key?) { 'test:test' }
     ENV.stub(:fetch) { 'test:test' }

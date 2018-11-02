@@ -39,6 +39,7 @@ describe 'viewing projects, creating and editing', :js do
 
     fill_in 'Description', with: 'This is a project description which is very informative'
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
+    fill_in 'Video', with: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'
 
     attach_file 'Project Image', Rails.root.join('spec', 'fixtures', 'helmet_cat.png')
 

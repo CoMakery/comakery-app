@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   skip_before_action :require_login, except: %i[featured home]
-  skip_after_action :verify_authorized, except: %i[featured home]
+  skip_after_action :verify_authorized
 
   def landing
     if current_account
