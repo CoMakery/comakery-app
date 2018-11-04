@@ -227,7 +227,7 @@ class Views::Pages::Landing < Views::Base
   end
 
   def howitwork
-    div(class: 'small-12 small-centered columns', style: 'max-width: 1044px;') do
+    div(class: 'small-12 small-centered columns', style: 'max-width: 1044px; margin-left: auto; margin-right: auto') do
       column('medium-12', style: 'text-align: center; margin-top: 30px;margin-bottom: 40px;') do
         image_tag 'howitwork/H1-text.png', class: 'hiw-header'
       end
