@@ -102,6 +102,7 @@ class Mom
     }.merge(attrs)
 
     params[:award_type] ||= create(:award_type, amount: params[:unit_amount])
+    params[:account] ||= create(:account)
 
     params[:unit_amount] = params[:award_type].amount
     params[:total_amount] = params[:award_type].amount * params[:quantity]
