@@ -1,11 +1,5 @@
 class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
-  PAYMENT_TYPES = {
-    project_token: 'ERC20',
-    project_eth: 'ETH',
-    project_token_qrc20: 'QRC20',
-    project_qtum: 'QTUM'
-  }.freeze
 
   include EthereumAddressable
 
@@ -46,6 +40,12 @@ class Project < ApplicationRecord
     revenue_share: 0,
     project_token: 1
   }
+  enum coin_type: {
+    erc20: 'ERC20',
+    eth: 'ETH',
+    qrc20: 'QRC20',
+    qtum: 'QTUM'
+  }, _prefix: :coin_type
 
   enum denomination: {
     USD: 0,
@@ -79,6 +79,7 @@ class Project < ApplicationRecord
   validate :contract_address_changeable, if: -> { completed_awards.present? }
 
   before_save :set_transitioned_to_ethereum_enabled
+  after_initialize :default_coin_type
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -108,9 +109,8 @@ class Project < ApplicationRecord
     CreateEthereumAwards.call(awards: awards)
   end
 
-  def payment_type_token?
-    # project_token? || project_token_qrc20?
-    true
+  def coin_type_token?
+    coin_type_erc20? || coin_type_qrc20?
   end
 
   def total_revenue
@@ -261,6 +261,10 @@ class Project < ApplicationRecord
   before_save :enable_ethereum
 
   private
+
+  def default_coin_type
+    self.coin_type ||= :erc20 if project_token?
+  end
 
   def populate_token_symbol
     if populate_token?

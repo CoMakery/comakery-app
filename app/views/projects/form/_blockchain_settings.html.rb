@@ -4,6 +4,17 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
   def content
     row do
       column('large-6 small-12') do
+        selected = f.object.coin_type
+        options = capture do
+          options_for_select(coin_type_options, selected: selected)
+        end
+        with_errors(project, :coin_type) do
+          label do
+            text 'Payment Type'
+            f.select :coin_type, options, { include_blank: true }, disabled: project.completed_awards.any?
+          end
+        end
+
         selected = f.object.ethereum_network
         selected = 'main' if project.completed_awards.blank? && f.object.ethereum_network.blank?
         options = capture do
@@ -15,7 +26,7 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
             f.select :ethereum_network, options, { include_blank: true }, disabled: project.completed_awards.any?
           end
         end
-        css_class = "contract-info-div #{'hide' unless project.payment_type_token?}"
+        css_class = "contract-info-div #{'hide' unless project.coin_type_token?}"
         div(class: css_class) do
           with_errors(project, :ethereum_contract_address) do
             label do
@@ -119,8 +130,8 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
     end
   end
 
-  def payment_type_options
-    Project::PAYMENT_TYPES.invert
+  def coin_type_options
+    Project.coin_types.invert
   end
 
   def ethereum_network_options

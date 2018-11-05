@@ -121,6 +121,7 @@ class ProjectsController < ApplicationController
       :tracker,
       :video_url,
       :payment_type,
+      :coin_type,
       :exclusive_contributions,
       :legal_project_owner,
       :minimum_payment,
