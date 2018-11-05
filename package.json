@@ -1,18 +1,16 @@
 {
-  "scripts": {
-    "lint": "yarn lint:ci --fix",
-    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript"
-  },
   "dependencies": {
     "@rails/webpacker": "^3.0.2",
     "babel-preset-react": "^6.24.1",
     "coffeescript": "1.12.7",
+    "jest": "^23.6.0",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
+    "babel-jest": "^23.6.0",
     "eslint": "^4.7.1",
     "eslint-config-comakery": "^0.0.4",
     "eslint-config-react-app": "^0.6.2",
@@ -21,6 +19,22 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
+    "regenerator-runtime": "^0.12.1",
     "webpack-dev-server": "^2.9.4"
+  },
+  "scripts": {
+    "lint": "yarn lint:ci --fix",
+    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript",
+    "test": "jest"
+  },
+  "jest": {
+    "roots": [
+      "app/javascript/packs",
+      "spec/javascript"
+    ],
+    "moduleDirectories": [
+      "app/javascript/packs",
+      "node_modules"
+    ]
   }
 }

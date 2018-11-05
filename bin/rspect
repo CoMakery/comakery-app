@@ -3,3 +3,4 @@ set -e
 
 bin/spring stop
 QUIET_TESTS=true THOROUGH=true bin/rspec $*
+yarn test
