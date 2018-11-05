@@ -22,7 +22,7 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
         end
         with_errors(project, :ethereum_network) do
           label do
-            text 'Network'
+            text 'Blockchain Network'
             f.select :ethereum_network, options, { include_blank: true }, disabled: project.completed_awards.any?
           end
         end
@@ -119,6 +119,10 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
         end
       end
     end
+    content_for :js do
+      contract_address_on_change
+      coin_type_on_change
+    end
   end
 
   def percentage_div(form, field_name, **opts)
@@ -136,5 +140,39 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
 
   def ethereum_network_options
     Project.ethereum_networks.invert
+  end
+
+  def contract_address_on_change
+    text(<<-JAVASCRIPT.html_safe)
+      $(function() {
+        $('body').on('change', "[name='project[ethereum_contract_address]']", function() {
+          var network = $("[name='project[ethereum_network]']").val();
+          var symbol = $("[name='project[token_symbol]']").val();
+          var decimals = $("[name='project[decimal_places]']").val()
+          if(network && network != '' && $(this).val() != '' && symbol == '' && decimals =='') {
+            var rs = getSymbolsAndDecimals(network, $(this).val())
+            $("[name='project[token_symbol]']").val(rs[0]);
+            $("[name='project[decimal_places]']").val(rs[1])
+          }
+        });
+      })
+    JAVASCRIPT
+  end
+
+  def coin_type_on_change
+    text(<<-JAVASCRIPT.html_safe)
+      $(function() {
+        $('body').on('change', "[name='project[coin_type]']", function() {
+          switch($('#project_coin_type option:selected').val()) {
+          case 'erc20':
+          case 'qrc20':
+            $('.contract-info-div').removeClass('hide')
+            break;
+          default:
+            $('.contract-info-div').addClass('hide')
+          }
+        });
+      })
+    JAVASCRIPT
   end
 end
