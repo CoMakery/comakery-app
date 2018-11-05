@@ -24,7 +24,7 @@ Prerequisites:
 
 - PostgreSQL
 - Redis (if you want to run delayed jobs)
-- Phantomjs binary in PATH (for testing)
+- Phantomjs binary in PATH (build from official Ubuntu repo will crash on `attach_file`, more info [here](https://github.com/teampoltergeist/poltergeist))
 - Bundler
 - Yarn
 

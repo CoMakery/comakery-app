@@ -27,6 +27,10 @@ RSpec.configure do |config|
 
   config.before do
   end
+  
+  config.after :each do |example|
+    page.driver.restart if defined?(page.driver.restart)
+  end
 
   #   # Many RSpec users commonly either run the entire suite or an individual
   #   # file, and it's useful to allow more verbose output when running an
