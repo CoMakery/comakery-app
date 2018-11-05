@@ -262,10 +262,22 @@ describe AwardsController do
     end
 
     it 'when channel_id is present' do
-      award_type = create(:award_type)
+      stub_request(:post, 'https://slack.com/api/users.info').to_return(body: {
+        ok: true,
+        "user": {
+          "id": 'U99M9QYFQ',
+          "team_id": 'team id',
+          "name": 'bobjohnson',
+          "profile": {
+            email: 'bobjohnson@example.com'
+          }
+        }
+      }.to_json)
+      create(:account, email: 'bobjohnson@example.com', ethereum_wallet: '0xaBe4449277c893B3e881c29B17FC737ff527Fa48')
+      award_type = create(:award_type, project: project)
       login issuer.account
-      get :preview, format: 'js', params: { project_id: project.to_param, uid: 'U99M9QYFQ2', quantity: 1, award_type_id: award_type.id, channel_id: 'channel_id' }
-      expect(assigns(:recipient_address)).to be_nil
+      get :preview, format: 'js', params: { project_id: project.to_param, uid: 'receiver id', quantity: 1, award_type_id: award_type.id, channel_id: project.channels.first.id }
+      expect(assigns(:recipient_address)).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa48')
     end
   end
 end

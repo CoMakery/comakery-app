@@ -1,14 +1,15 @@
-window.transferTokens = (award) -> # award in JSON
-  contractAddress = award.project.ethereum_contract_address
+window.transferEthers = (award) -> # award in JSON
   toAddress = award.account.ethereum_wallet
   amount = award.amount_to_send
 
-  if contractAddress && toAddress && amount
-    contract = web3.eth.contract(abi) # see abi in abi.js
-    contractIns = contract.at(contractAddress)
-    contractIns.balanceOf web3.eth.coinbase, (err, result) ->
+  if toAddress && amount
+    web3.eth.getBalance web3.eth.coinbase, (err, result) ->
       if result && parseFloat(web3.fromWei(result.toNumber(), 'wei')) >= parseFloat(amount)
-        contractIns.transfer toAddress, web3.toWei(amount, 'wei'), (err, tx) ->
+        web3.eth.sendTransaction {
+          from: web3.eth.coinbase
+          to: toAddress
+          value: web3.toWei(amount, 'wei')
+        }, (err, tx) ->
           console.log err if err
           if tx
             console.log 'transaction address: ' + tx

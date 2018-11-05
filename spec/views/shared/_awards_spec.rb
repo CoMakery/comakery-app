@@ -64,6 +64,7 @@ describe 'shared/_awards.html.rb' do
       before do
         project.ethereum_enabled = false
         project.ethereum_contract_address = nil
+        project.coin_type = nil
       end
       it 'the column header is hidden' do
         render

@@ -146,7 +146,7 @@ class Views::Projects::AwardSend < Views::Base
         var currentState = history.state;
         if(!currentState || !currentState['award']) {
           history.pushState({ award: '#{last_award.id}' }, 'transfer_tokens_award-#{last_award.id}');
-          transferTokens(JSON.parse('#{last_award.decorate.json_for_sending_awards}'));
+          transferAward(JSON.parse('#{last_award.decorate.json_for_sending_awards}'));
         }
       });
     )
