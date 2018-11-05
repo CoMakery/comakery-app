@@ -67,6 +67,7 @@ class AwardsController < ApplicationController
       @recipient_address = account&.ethereum_wallet
       project  = Project.find_by(id: params[:project_id])
       @unit    = project&.token_symbol
+      @unit  ||= Project.coin_types[project&.coin_type]
       @network = project&.ethereum_network
     end
     render layout: false
