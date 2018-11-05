@@ -27,8 +27,8 @@ RSpec.configure do |config|
 
   config.before do
   end
-  
-  config.after :each do |example|
+
+  config.after :each do |_example|
     page.driver.restart if defined?(page.driver.restart)
   end
 
