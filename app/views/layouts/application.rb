@@ -25,9 +25,9 @@ class Views::Layouts::Application < Views::Base
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
 
-        # javascript_pack_tag 'hello_react'  # NOTE this fails in fortitude
-        # javascript_include_tag Webpacker.manifest.lookup!('hello_react.js')  # this succeeds
-
+        # javascript_pack_tag 'application' # NOTE this fails in fortitude
+        javascript_include_tag Webpacker.manifest.lookup!('application.js')
+        
         javascript_include_tag 'jquery.visible' if Rails.env.test?
 
         if ENV['AIRBRAKE_API_KEY'].present? && ENV['AIRBRAKE_PROJECT_ID'].present?
