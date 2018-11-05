@@ -6,6 +6,10 @@ Capybara.register_driver :poltergeist_debug do |app|
   Capybara::Poltergeist::Driver.new(app, inspector: true)
 end
 
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, js_errors: false)
+end
+
 # Poltergeist every-day debugging: save_screenshot('screen.png', :selector => '#id')
 
 Capybara.javascript_driver = :poltergeist

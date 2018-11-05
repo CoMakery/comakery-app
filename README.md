@@ -24,6 +24,7 @@ Prerequisites:
 
 - PostgreSQL
 - Redis (if you want to run delayed jobs)
+- Phantomjs binary in PATH (for testing)
 - Bundler
 - Yarn
 
