@@ -4,17 +4,6 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
   def content
     row do
       column('large-6 small-12') do
-        selected = f.object.payment_type
-        options = capture do
-          options_for_select(payment_type_options, selected: selected)
-        end
-        with_errors(project, :payment_type) do
-          label do
-            text 'Payment Type'
-            f.select :payment_type, options, { include_blank: true }, disabled: project.completed_awards.any?
-          end
-        end
-
         selected = f.object.ethereum_network
         selected = 'main' if project.completed_awards.blank? && f.object.ethereum_network.blank?
         options = capture do

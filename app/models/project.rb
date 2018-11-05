@@ -44,10 +44,7 @@ class Project < ApplicationRecord
 
   enum payment_type: {
     revenue_share: 0,
-    project_token: 1,
-    project_eth: 2,
-    project_token_qrc20: 3,
-    project_qtum: 4
+    project_token: 1
   }
 
   enum denomination: {
@@ -112,7 +109,8 @@ class Project < ApplicationRecord
   end
 
   def payment_type_token?
-    project_token? || project_token_qrc20?
+    # project_token? || project_token_qrc20?
+    true
   end
 
   def total_revenue
