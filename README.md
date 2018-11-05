@@ -62,6 +62,8 @@ A bit faster: `bin/rspec`
 
 More thorough (integrates views): `bin/rspect`
 
+JS tests via Jest: `yarn test`
+
 ## Pushing code to Github
 
 To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
