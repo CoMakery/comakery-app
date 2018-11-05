@@ -23,7 +23,9 @@ eg staging and production.
 Prerequisites:
 
 - PostgreSQL
-- Redis if you want to run delayed jobs
+- Redis (if you want to run delayed jobs)
+- Bundler
+- Yarn
 
 Set up .env:
 
@@ -35,8 +37,11 @@ heroku config -a <YOUR_HEROKU_APP> -s | egrep '^(SLACK_|ETHEREUM_|ETHERCAMP_)' |
 Basics :
 
 ```sh
-bundle
-rake db:create:all db:schema:load
+source .env
+bundle install
+yarn install
+rails db:create:all
+rails db:schema:load
 ```
 
 Run server:

@@ -26,13 +26,13 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  config.action_controller.asset_host = "http://#{ENV.fetch('LOCALHOST_AKA', 'localhost')}:3000"
+  config.action_controller.asset_host = ENV['ASSET_HOST'] || "http://#{ENV['LOCALHOST_AKA'] || "localhost"}:#{ENV['PORT'] || 3000}"
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
-  config.action_mailer.default_url_options = { host: "#{ENV.fetch('LOCALHOST_AKA', 'localhost')}:3000" }
+  config.action_mailer.default_url_options = { host: ENV['MAILER_HOST'] || "#{ENV['LOCALHOST_AKA'] || "localhost"}:#{ENV['PORT'] || 3000}" }
   config.action_mailer.asset_host = config.action_controller.asset_host
   config.action_mailer.perform_caching = false
 
