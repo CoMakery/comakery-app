@@ -58,7 +58,7 @@ class Views::Pages::Featured < Views::Base
             end
           end
           div(class: 'small-4 columns') do
-            image_tag 'home/featured/holochain.jpg', stlye: 'width: 100%'
+            image_tag 'home/featured/holochain.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
           end
         end
       end
@@ -66,7 +66,7 @@ class Views::Pages::Featured < Views::Base
       div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgb(240,255,255);') do
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-4 columns no-h-pad') do
-            image_tag 'home/featured/cardano.jpg', stlye: 'width: 100%'
+            image_tag 'home/featured/cardano.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
           end
 
           div(class: 'small-8 columns') do
@@ -119,7 +119,7 @@ class Views::Pages::Featured < Views::Base
             end
           end
           div(class: 'small-4 columns') do
-            image_tag 'home/featured/ethereum.jpg', stlye: 'width: 100%'
+            image_tag 'home/featured/ethereum.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
           end
         end
       end
@@ -127,7 +127,7 @@ class Views::Pages::Featured < Views::Base
       div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgb(240,255,255);') do
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-4 columns no-h-pad') do
-            image_tag 'home/featured/vevue.jpg', stlye: 'width: 100%'
+            image_tag 'home/featured/vevue.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
           end
 
           div(class: 'small-8 columns') do
@@ -180,7 +180,7 @@ class Views::Pages::Featured < Views::Base
             end
           end
           div(class: 'small-4 columns') do
-            image_tag 'home/featured/props.jpg', stlye: 'width: 100%'
+            image_tag 'home/featured/props.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
           end
         end
       end
@@ -188,7 +188,7 @@ class Views::Pages::Featured < Views::Base
       div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgb(240,255,255);') do
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-4 columns no-h-pad') do
-            image_tag 'home/featured/glass.jpg', stlye: 'width: 100%'
+            image_tag 'home/featured/glass.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
           end
 
           div(class: 'small-8 columns') do
@@ -228,9 +228,6 @@ class Views::Pages::Featured < Views::Base
         end
         div(class: 'protocol-project-name') do
           text project
-        end
-        div(class: 'project-descriptive') do
-          text 'for everyone'
         end
       end
       div(class: 'small-6 columns text-right') do
