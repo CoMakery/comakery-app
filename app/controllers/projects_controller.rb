@@ -134,6 +134,8 @@ class ProjectsController < ApplicationController
       :visibility,
       :ethereum_network,
       :ethereum_contract_address,
+      :blockchain_network,
+      :contract_address,
       :token_symbol,
       :decimal_places,
       award_types_attributes: %i[

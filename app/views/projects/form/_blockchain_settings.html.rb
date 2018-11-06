@@ -16,7 +16,7 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
         end
 
         selected = f.object.ethereum_network
-        selected = 'main' if project.completed_awards.blank? && f.object.ethereum_network.blank?
+        selected = 'main' if project.completed_awards.blank? && f.object.ethereum_network.blank? && project.coin_type_on_ethereum?
         options = capture do
           options_for_select(ethereum_network_options, selected: selected)
         end
@@ -26,12 +26,31 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
             f.select :ethereum_network, options, { include_blank: true }, disabled: project.completed_awards.any?
           end
         end
+
+        selected = f.object.blockchain_network
+        options = capture do
+          options_for_select(blockchain_network_options, selected: selected)
+        end
+        with_errors(project, :blockchain_network) do
+          label do
+            text 'Blockchain Network (QTUM)'
+            f.select :blockchain_network, options, { include_blank: true }, disabled: project.completed_awards.any?
+          end
+        end
+
         css_class = "contract-info-div #{'hide' unless project.coin_type_token?}"
         div(class: css_class) do
           with_errors(project, :ethereum_contract_address) do
             label do
               text 'Contract Address'
               f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', disabled: project.completed_awards.any?
+            end
+          end
+
+          with_errors(project, :contract_address) do
+            label do
+              text 'Contract Address'
+              f.text_field :contract_address, placeholder: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc', disabled: project.completed_awards.any?
             end
           end
 
@@ -140,6 +159,10 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
 
   def ethereum_network_options
     Project.ethereum_networks.invert
+  end
+
+  def blockchain_network_options
+    Project.blockchain_networks.invert
   end
 
   def contract_address_on_change
