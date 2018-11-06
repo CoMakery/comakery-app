@@ -68,7 +68,7 @@ describe TopContributors do
             .contributors[sb_project]
             .map { |account| [account.decorate.name, account.total_awarded.to_i] })
           .to eq([[account3.decorate.name, 2000], [account1.decorate.name, 2000], [account2.decorate.name, 1500], [account5.decorate.name, 10],
-          [account4.decorate.name, 10]])
+                  [account4.decorate.name, 10]])
       end
     end
   end

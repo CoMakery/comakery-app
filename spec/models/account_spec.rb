@@ -238,7 +238,7 @@ describe Account do
     end
   end
 
-  describe '#accessable_projects' do
+  describe 'my projects' do
     let!(:team) { create :team }
     let!(:authentication) { create :authentication, account: account }
     let!(:account1) { create :account }
@@ -248,28 +248,42 @@ describe Account do
     let!(:project3) { create :project, account: account, visibility: 'archived', title: 'archived project' }
     let!(:project4) { create :project, account: account, visibility: 'public_unlisted', title: 'unlisted project' }
     let!(:project5) { create :project, account: account1, visibility: 'member', title: 'member project' }
-    let!(:project6) { create :project, visibility: 'member', title: 'other team private project' }
-    let!(:project7) { create :project, visibility: 'public_listed', title: 'other team public project' }
-    let!(:project8) { create :project, visibility: 'member', title: 'award project' }
-    let!(:award_type) { create :award_type, project: project8 }
-    let!(:award) { create :award, award_type: award_type, account: account }
+    let!(:project6) { create :project, visibility: 'member', title: 'other team project' }
+    let!(:project7) { create :project, visibility: 'member', title: 'award project' }
+    let!(:award_type) { create :award_type, project: project7 }
 
     before do
       team.build_authentication_team authentication
       team.build_authentication_team authentication1
-      project1.channels.create(team: team, channel_id: 'general')
-      project2.channels.create(team: team, channel_id: 'general')
-      project3.channels.create(team: team, channel_id: 'general')
-      project4.channels.create(team: team, channel_id: 'general')
+    end
+
+    it 'accessable prọjects include my own project' do
+      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project']
+    end
+
+    it 'accessable prọjects include other public project' do
+      project6.public_listed!
+      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'other team project']
+    end
+
+    it 'accessable prọjects include team member project' do
       project5.channels.create(team: team, channel_id: 'general')
+      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'member project']
     end
 
-    it 'show my accessable projects' do
-      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'member project', 'other team public project', 'award project']
+    it 'accessable prọjects include awarded project' do
+      create :award, award_type: award_type, account: account
+      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'award project']
     end
 
-    it 'other member projects including award projects' do
-      expect(account.other_member_projects.map(&:title)).to match_array ['member project', 'award project']
+    it '#other_member_projects' do
+      project5.channels.create(team: team, channel_id: 'general')
+      expect(account.other_member_projects.map(&:title)).to match_array ['member project']
+    end
+
+    it '#other_member_projects including award projects' do
+      create :award, award_type: award_type, account: account
+      expect(account.other_member_projects.map(&:title)).to match_array ['award project']
     end
   end
 

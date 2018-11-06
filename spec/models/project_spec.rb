@@ -961,12 +961,12 @@ describe Project do
   end
 
   describe '#top_contributors' do
-    let!(:account){create :account}
-    let!(:account1){create :account}
-    let!(:project){create :project}
-    let!(:award_type){create :award_type, amount: 10,project: project}
-    let!(:award_type1){create :award_type, amount: 20, project: project}
-    let!(:other_award_type){create :award_type, amount: 15}
+    let!(:account) { create :account }
+    let!(:account1) { create :account }
+    let!(:project) { create :project }
+    let!(:award_type) { create :award_type, amount: 10, project: project }
+    let!(:award_type1) { create :award_type, amount: 20, project: project }
+    let!(:other_award_type) { create :award_type, amount: 15 }
 
     before do
       create :award, award_type: award_type, account: account
