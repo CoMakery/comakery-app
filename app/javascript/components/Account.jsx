@@ -57,7 +57,12 @@ export default class Account extends React.Component {
 			type: 'PATCH',
 
 			success: response => {
-				this.setState({ message: response.message, messageType: 'notice', showMessage: true });
+				this.setState({
+					message: response.message,
+					messageType: 'notice',
+					showMessage: true,
+					accountData: response.current_acccount,
+				});
 			},
 
 			error: (xhr, status, err) => {

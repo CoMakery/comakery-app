@@ -173,7 +173,7 @@ describe AccountsController do
 
     it 'show account information' do
       get :show
-      expect(assigns[:projects][0]).to eq Project.last
+      expect(assigns[:projects][0]['id']).to eq Project.last.id
       expect(assigns[:awards].count).to eq 1
     end
   end

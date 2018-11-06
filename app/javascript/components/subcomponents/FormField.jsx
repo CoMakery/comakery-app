@@ -34,7 +34,7 @@ export default class FormField extends React.Component {
 FormField.propTypes = {
 	fieldLabel: PropTypes.string.isRequired,
 	fieldName: PropTypes.string.isRequired,
-	fieldValue: PropTypes.string.isRequired,
+	fieldValue: PropTypes.string,
 	handleChange: PropTypes.func.isRequired,
 	error: PropTypes.string,
 };

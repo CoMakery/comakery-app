@@ -1,6 +1,6 @@
 require 'rails_helper'
 require 'refile/file_double'
-feature 'my account' do
+feature 'my account', js: true do
   let!(:team) { create :team }
   let!(:project) { create(:sb_project, ethereum_enabled: true) }
   let!(:account) { create :account, nickname: 'jason' }
@@ -27,7 +27,10 @@ feature 'my account' do
     expect(page).not_to have_link account_nickname
     login(auth.account)
 
-    visit account_path(history: true)
+    # visit account_path(history: true)
+    # Now we dont have refresh -> instead we should click radio button on React component
+    visit account_path
+    choose 'History'
 
     expect(page).to have_content 'Swarmbot'
     expect(page).to have_content '1,337'
@@ -40,24 +43,14 @@ feature 'my account' do
     visit root_path
     first('.menu').click_link account.decorate.name
 
-    within('.ethereum_wallet') do
-      find('#toggle-edit').click
-      click_link 'Cancel'
-
-      find('#toggle-edit').click
-      fill_in 'Ethereum Address', with: 'too short and with spaces'
-      click_on 'Save'
+    within('.view-ethereum-wallet') do
+      first(:link).click
     end
+
+    fill_in 'ethereum_wallet', with: 'too short and with spaces'
+    click_on 'Save'
 
     expect(page).to have_content "should start with '0x', followed by a 40 character ethereum address"
-
-    within('.ethereum_wallet') do
-      fill_in 'Ethereum Address', with: "0x#{'a' * 40}"
-      click_on 'Save'
-    end
-
-    expect(page).to have_content 'Your account details have been updated.'
-    expect(page.find('#ethereum_wallet').value).to eq "0x#{'a' * 40}"
   end
 
   scenario 'adding an ethereum address sends ethereum tokens, for awards' do
@@ -65,11 +58,15 @@ feature 'my account' do
     visit root_path
     first('.menu').click_link account_nickname
 
-    within('.ethereum_wallet') do
-      find('#toggle-edit').click
-      fill_in 'Ethereum Address', with: "0x#{'a' * 40}"
-      click_on 'Save'
+    within('.view-ethereum-wallet') do
+      first(:link).click
     end
+
+    fill_in 'ethereum_wallet', with: "0x#{'a' * 40}"
+    click_on 'Save'
+
+    expect(page).to have_content 'Your account details have been updated.'
+    expect(page.find_field('ethereum_wallet').value).to eq "0x#{'a' * 40}"
 
     expect(EthereumTokenIssueJob.jobs.length).to eq(0)
   end

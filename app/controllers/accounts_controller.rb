@@ -8,13 +8,13 @@ class AccountsController < ApplicationController
   end
 
   def show
-    @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id')
-    @awards = current_account.awards.order(created_at: :desc)
-    @projects_count = @projects.length
-    @awards_count = @awards.length
+    @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:project_page]).per(20)
+    @awards = current_account.awards.order(created_at: :desc).page(params[:award_page]).per(20)
+    @projects_count = @projects.total_count
+    @awards_count = @awards.total_count
 
-    @projects = @projects.page(params[:project_page]).per(20).map { |project| project_decorate(project) }
-    @awards = @awards.page(params[:award_page]).per(20).map do |award|
+    @projects = @projects.map { |project| project_decorate(project) }
+    @awards = @awards.map do |award|
       award.as_json(only: %i[id]).merge(
         total_amount_pretty: award.decorate.total_amount_pretty,
         created_at: award.created_at.strftime('%b %d, %Y'),
@@ -90,7 +90,12 @@ class AccountsController < ApplicationController
       if @current_account.update(account_params.merge(name_required: true))
         check_date(old_age) if old_age < 18
         format.html { redirect_to account_url, notice: 'Your account details have been updated.' }
-        format.json { render json: { message: 'Your account details have been updated.' }, status: :ok }
+        format.json do
+          render json: {
+            message: 'Your account details have been updated.',
+            current_acccount: account_decorate(current_account)
+          }, status: :ok
+        end
       else
         error_msg = current_account.errors.full_messages.join(' ')
         format.html do
@@ -142,6 +147,13 @@ class AccountsController < ApplicationController
       awards_path: project_awards_path(project.show_id, mine: true),
       total_awarded: project.decorate.total_awarded_to_user(current_account),
       ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url
+    )
+  end
+
+  def account_decorate(account)
+    account.as_json(only: %i[email first_name last_name nickname date_of_birth country ethereum_wallet]).merge(
+      etherscan_address: account.decorate.etherscan_address,
+      image_url: account.image.present? ? attachment_url(account, :image, :fill, 190, 190) : nil
     )
   end
 end
