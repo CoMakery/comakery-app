@@ -201,17 +201,17 @@ describe Project do
 
       it 'valid qtum contract address' do
         expect(build(:project, coin_type: 'qrc20', contract_address: nil)).to be_valid
-        expect(project.tap{|o| o.contract_address = "#{'a' * 40}"}).to be_valid
-        expect(project.tap{|o| o.contract_address = "#{'A' * 40}"}).to be_valid
+        expect(project.tap { |o| o.contract_address = ('a' * 40).to_s }).to be_valid
+        expect(project.tap { |o| o.contract_address = ('A' * 40).to_s }).to be_valid
       end
 
       it 'invalid qtum contract address' do
         expected_error_message = "Contract address should have 40 characters, should not start with '0x'"
-        expect(project.tap{|o| o.contract_address = 'foo'}.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(project.tap{|o| o.contract_address = '0x'}.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(project.tap{|o| o.contract_address = "0x#{'a' * 38}"}.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(project.tap{|o| o.contract_address = "#{'a' * 39}"}.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(project.tap{|o| o.contract_address = "#{'f' * 41}"}.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(project.tap { |o| o.contract_address = 'foo' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(project.tap { |o| o.contract_address = '0x' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(project.tap { |o| o.contract_address = "0x#{'a' * 38}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(project.tap { |o| o.contract_address = ('a' * 39).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(project.tap { |o| o.contract_address = ('f' * 41).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
       end
     end
 

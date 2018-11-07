@@ -2,7 +2,7 @@
 <% text = "#{text} total to #{link_to @recipient_address, UtilitiesService.get_wallet_url(@network, @recipient_address), target: '_blank'}" if @recipient_address && text.present? %>
 $('.preview_award_div').html('<%= j text.html_safe %>')
 <% if @recipient_address %>
-  <% image = image_tag 'metamask2.png' %>
+  <% image = image_tag @wallet_logo %>
   $('button.button_submit').addClass('submit');
   if($('button.button_submit img').length > 0) {
     $('button.button_submit img').replaceWith('<%= j image.html_safe %>')

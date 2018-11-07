@@ -58,17 +58,9 @@ class AwardsController < ApplicationController
     award_type = AwardType.find_by(id: params[:award_type_id])
     if award_type && quantity && uid
       @total_amount = award_type.amount * BigDecimal(quantity)
-      if channel_id.blank?
-        account = Account.where('lower(email)=?', uid.downcase).first
-      else
-        channel = Channel.find_by id: channel_id
-        account = Account.find_or_create_for_authentication(uid, channel).first
-      end
-      @recipient_address = account&.ethereum_wallet
-      project  = Project.find_by(id: params[:project_id])
-      @unit    = project&.token_symbol
-      @unit  ||= Project.coin_types[project&.coin_type]
-      @network = project&.ethereum_network
+      account = find_account_from(uid, channel_id)
+      project = Project.find_by(id: params[:project_id])
+      preview_data(project, account)
     end
     render layout: false
   end
@@ -117,5 +109,28 @@ class AwardsController < ApplicationController
 
   def project_overview_path(project)
     project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
+  end
+
+  def find_account_from(uid, channel_id)
+    if channel_id.blank?
+      Account.where('lower(email)=?', uid.downcase).first
+    else
+      channel = Channel.find_by id: channel_id
+      Account.find_or_create_for_authentication(uid, channel).first
+    end
+  end
+
+  def preview_data(project, account)
+    if project.coin_type_on_ethereum?
+      @network = project.ethereum_network.presence || 'main'
+      @wallet_logo = 'metamask2.png'
+      @recipient_address = account&.ethereum_wallet
+    elsif project.coin_type_on_qtum?
+      @network = project.blockchain_network
+      @wallet_logo = 'qrypto.png'
+      @recipient_address = account&.qtum_wallet
+    end
+    @unit   = project.token_symbol
+    @unit ||= Project.coin_types[project.coin_type]
   end
 end

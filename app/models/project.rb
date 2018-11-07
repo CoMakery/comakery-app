@@ -45,7 +45,7 @@ class Project < ApplicationRecord
     erc20: 'ERC20',
     eth: 'ETH',
     qrc20: 'QRC20',
-    # qtum: 'QTUM'
+    qtum: 'QTUM'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -125,6 +125,10 @@ class Project < ApplicationRecord
 
   def coin_type_on_ethereum?
     coin_type_erc20? || coin_type_eth?
+  end
+
+  def coin_type_on_qtum?
+    coin_type_qrc20? || coin_type_qtum?
   end
 
   def total_revenue
@@ -357,7 +361,7 @@ class Project < ApplicationRecord
   end
 
   def check_contract_address_exist_on_blockchain_network
-    if (contract_address_changed? || blockchain_network_changed?) && token_symbol.blank?
+    if (contract_address_changed? || blockchain_network_changed?) && token_symbol.blank? && contract_address?
       errors[:contract_address] << 'should exist on the qtum network'
     end
   end
