@@ -31,8 +31,6 @@ describe 'my account' do
     click_on 'Save'
 
     expect(page).to have_content 'Your account details have been updated.'
-    # we're on react component so we should click cancel to check the info is being updated
-    click_on 'Cancel'
     expect(page).to have_content 'Tester'
     expect(page).to have_content 'Dev'
 
