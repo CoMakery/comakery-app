@@ -19,85 +19,87 @@ class ContributorsSummaryPieChart extends React.Component {
   }
 
   createPieChart() {
-    this.pieChart = new D3Pie('#award-percentages', {
-      'misc': {
-        'colors': {
-          'background': null,
-          'segments'  : [
-            '#7B00D7',
-            '#E5004F',
-            '#0884FF',
-            '#73C30E',
-            '#D5E301',
-            '#F6A504',
-            '#C500FF',
-            '#00C3EB',
-            '#F85900',
-            '#b00000',
-            '#e4e400',
-            '#baba00',
-            '#878700',
-            '#00b000',
-            '#008700',
-            '#00ffff',
-            '#00b0b0',
-            '#008787',
-            '#b0b0ff',
-            '#8484ff',
-            '#4949ff',
-            '#0000ff',
-            '#ff00ff',
-            '#b000b0'
-          ],
-          'segmentStroke': '#ffffff'
-        }
-      },
-      'size': {
-        'canvasHeight'  : 300,
-        'canvasWidth'   : 450,
-        'pieOuterRadius': '80%'
-      },
-      'labels': {
-        'outer': {
-          'pieDistance': 14
+    if (this.props.chartData.length) {
+      this.pieChart = new D3Pie('#award-percentages', {
+        'misc': {
+          'colors': {
+            'background': null,
+            'segments'  : [
+              '#7B00D7',
+              '#E5004F',
+              '#0884FF',
+              '#73C30E',
+              '#D5E301',
+              '#F6A504',
+              '#C500FF',
+              '#00C3EB',
+              '#F85900',
+              '#b00000',
+              '#e4e400',
+              '#baba00',
+              '#878700',
+              '#00b000',
+              '#008700',
+              '#00ffff',
+              '#00b0b0',
+              '#008787',
+              '#b0b0ff',
+              '#8484ff',
+              '#4949ff',
+              '#0000ff',
+              '#ff00ff',
+              '#b000b0'
+            ],
+            'segmentStroke': '#ffffff'
+          }
         },
-        'inner': {
-          'format': 'percentage'
+        'size': {
+          'canvasHeight'  : 300,
+          'canvasWidth'   : 450,
+          'pieOuterRadius': '80%'
         },
-        'mainLabel': {
-          'fontSize': 12,
+        'labels': {
+          'outer': {
+            'pieDistance': 14
+          },
+          'inner': {
+            'format': 'percentage'
+          },
+          'mainLabel': {
+            'fontSize': 12,
+          },
+          'percentage': {
+            'color'        : '#e1e1e1',
+            'decimalPlaces': 2
+          },
+          'value': {
+            'color': '#e1e1e1',
+          },
+          'lines': {
+            'enabled': true,
+            'color'  : '#cccccc'
+          },
+          'truncation': {
+            'enabled': true
+          }
         },
-        'percentage': {
-          'color'        : '#e1e1e1',
-          'decimalPlaces': 2
-        },
-        'value': {
-          'color': '#e1e1e1',
-        },
-        'lines': {
+        'tooltips': {
           'enabled': true,
-          'color'  : '#cccccc'
+          'type'   : 'placeholder',
+          'string' : '{label}: {percentage}%'
         },
-        'truncation': {
-          'enabled': true
+        'effects': {
+          'pullOutSegmentOnClick': {
+            'effect': 'linear',
+            'speed' : 400,
+            'size'  : 10
+          }
+        },
+        'data': {
+          'content': this.props.chartData
         }
-      },
-      'tooltips': {
-        'enabled': true,
-        'type'   : 'placeholder',
-        'string' : '{label}: {percentage}%'
-      },
-      'effects': {
-        'pullOutSegmentOnClick': {
-          'effect': 'linear',
-          'speed' : 400,
-          'size'  : 10
-        }
-      },
-      'data': {
-        'content': this.props.chartData
-      }
-    })
+      })
+    }
   }
 
   destroyPieChart() {
@@ -120,6 +122,6 @@ ContributorsSummaryPieChart.propTypes = {
   chartData: PropTypes.array.isRequired
 }
 ContributorsSummaryPieChart.defaultProps = {
-  chartData: [{ value: 0, label: '' }]
+  chartData: []
 }
 export default ContributorsSummaryPieChart
