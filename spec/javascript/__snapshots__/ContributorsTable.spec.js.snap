@@ -230,7 +230,9 @@ exports[`Contributors Table renders component correctly without revenue share 1`
         >
           <span
             className="margin-small"
-          />
+          >
+            0
+          </span>
         </td>
       </tr>
       <tr
@@ -292,7 +294,9 @@ exports[`Contributors Table renders component correctly without revenue share 1`
         >
           <span
             className="margin-small"
-          />
+          >
+            0
+          </span>
         </td>
       </tr>
     </tbody>
