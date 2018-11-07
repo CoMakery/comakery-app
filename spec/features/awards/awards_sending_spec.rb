@@ -88,8 +88,8 @@ describe 'awarding users' do
         click_link 'Contributors'
       end
       # We can't test the contributors page without PhantomJS and
-      # when switching to PhantomJS the example fails due to in input
-      # set award_uid while sending award.
+      # when switching to PhantomJS the example fails due to inability
+      # to set value of award_uid while sending award.
       #
       # within('.contributors') do
       #   expect(page.find('.contributor')).to have_content 'bobjohnson'
