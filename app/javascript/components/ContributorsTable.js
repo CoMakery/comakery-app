@@ -1,12 +1,12 @@
-import React from "react"
-import PropTypes from "prop-types"
+import React from 'react'
+import PropTypes from 'prop-types'
 
 class ContributorsTable extends React.Component {
-  render () {
+  render() {
     return (
       <React.Fragment>
         <div className="table-scroll table-box contributors">
-          <table className="table-scroll" style={{width: "100%"}}>
+          <table className="table-scroll" style={{width: '100%'}}>
             <tbody>
               <tr className="header-row">
                 <th>
@@ -15,7 +15,7 @@ class ContributorsTable extends React.Component {
                 <th>
                   Total Tokens Awarded
                 </th>
-      
+
                 {this.props.revenueShare &&
                   <th>
                     Unpaid Revenue Shares
@@ -32,22 +32,22 @@ class ContributorsTable extends React.Component {
                   </th>
                 }
               </tr>
-      
-              {this.props.tableData.map( (t) =>
+
+              {this.props.tableData.map((t) =>
                 <tr className="award-row" key={t.name}>
                   <td className="contributor">
-                    <img src={t.imageUrl} className="icon avatar-img"/>
+                    <img src={t.imageUrl} className="icon avatar-img" />
                     <div className="margin-small margin-collapse inline-block">
                       {t.name}
-                      <table className="table-scroll table-box overlay" style={{display: "none"}}>
+                      <table className="table-scroll table-box overlay" style={{display: 'none'}}>
                         <tbody>
                           <tr>
-                            <th style={{paddingBottom: "20px"}}>
+                            <th style={{paddingBottom: '20px'}}>
                               Contribution Summary
                             </th>
                           </tr>
-          
-                          {t.awards.map( (a) =>
+
+                          {t.awards.map((a) =>
                             <tr key={a.name}>
                               <td>
                                 {a.name}
@@ -61,24 +61,24 @@ class ContributorsTable extends React.Component {
                       </table>
                     </div>
                   </td>
-                  
+
                   <td className="awards-earned financial">
                     <span className="margin-small">{t.total}</span>
                   </td>
-                          
-                  {this.props.revenueShare &&          
+
+                  {this.props.revenueShare &&
                     <td className="award-holdings financial">
                       <span className="margin-small">{t.remaining}</span>
                     </td>
                   }
-                    
-                  {this.props.revenueShare && 
+
+                  {this.props.revenueShare &&
                     <td className="holdings-value financial">
                       <span className="margin-small">{t.unpaid}</span>
                     </td>
                   }
-                  
-                  {this.props.revenueShare &&  
+
+                  {this.props.revenueShare &&
                     <td className="paid hidden financial">
                       <span className="margin-small">{t.paid}</span>
                     </td>
@@ -88,18 +88,18 @@ class ContributorsTable extends React.Component {
             </tbody>
           </table>
         </div>
-              
+
       </React.Fragment>
-    );
+    )
   }
 }
 
 ContributorsTable.propTypes = {
-  tableData: PropTypes.array.isRequired,
+  tableData   : PropTypes.array.isRequired,
   revenueShare: PropTypes.bool.isRequired
 }
 ContributorsTable.defaultProps = {
-  tableData: [],
+  tableData   : [],
   revenueShare: false
 }
 export default ContributorsTable

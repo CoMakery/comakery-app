@@ -120,6 +120,6 @@ ContributorsSummaryPieChart.propTypes = {
   chartData: PropTypes.array.isRequired
 }
 ContributorsSummaryPieChart.defaultProps = {
-  chartData: []
+  chartData: [{ value: 0, label: '' }]
 }
 export default ContributorsSummaryPieChart

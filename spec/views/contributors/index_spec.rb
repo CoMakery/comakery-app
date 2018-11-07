@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'contributors/index.html.rb' do
+describe 'contributors/index.html.erb', js: true do
   let!(:owner) { create(:account) }
   let(:authentication) { create :authentication }
   let(:project) { create(:project, description: 'markdown _rocks_: www.auto.link').decorate }
