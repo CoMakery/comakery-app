@@ -87,13 +87,16 @@ describe 'awarding users' do
       within('.project-nav') do
         click_link 'Contributors'
       end
-      # We can't test the contributors page without PhantomJS and
+      # We can't test the contributors table without PhantomJS and
       # when switching to PhantomJS the example fails due to inability
       # to set value of award_uid while sending award.
-      within('.contributors') do
-        expect(page.find('.contributor')).not_to have_content 'bobjohnson'
-        expect(page.find('.award-holdings')).not_to have_content '1,579'
-      end
+      #
+      # within('.contributors') do
+      #   expect(page.find('.contributor')).to have_content 'bobjohnson'
+      #   expect(page.find('.award-holdings')).to have_content '1,579'
+      # end
+      expect(page).to have_content 'bobjohnson'
+      expect(page).to have_content '1,579'
     end
   end
 
