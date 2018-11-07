@@ -999,7 +999,7 @@ describe Project do
       expect(project.top_contributors.map(&:id)).to eq [account1.id, account.id]
     end
     it 'sort by newest if have same total_amount' do
-      create :award, award_type: award_type, account: account
+      create :award, award_type: award_type, account: account, created_at: Time.zone.now + 2.seconds
       expect(project.top_contributors.map(&:id)).to eq [account.id, account1.id]
     end
     it 'Only return 5 top countributors' do
