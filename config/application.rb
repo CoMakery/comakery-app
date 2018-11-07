@@ -55,5 +55,7 @@ module Comakery
     config.generators do |g|
       g.test_framework :rspec
     end
+    
+    config.react.camelize_props = true
   end
 end

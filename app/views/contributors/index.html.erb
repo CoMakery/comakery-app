@@ -1,0 +1,36 @@
+<%= render partial: 'shared/project_header' %>
+
+<div class="columns small-12">
+  <div class="row">
+    <div class="columns small-12">
+      <%= react_component 'ContributorsSummaryPieChart', chart_data: @chart_data %>
+      <%= render partial: 'shared/table/unpaid_revenue_shares' %>
+      <%= render partial: 'shared/table/unpaid_pool' %>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="columns small-12">
+      <div class="callout clearfix">
+      </div>
+    </div>
+  </div>
+  
+  <% if @contributors.present? %>
+    <div class="row">
+      <div class="columns small-12">
+        <%= react_component 'ContributorsTable', table_data: @table_data, revenue_share: @revenue_share %>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="columns small-12">
+        <div class="callout clearfix">
+          <div class="pagination float-right">
+            <%= paginate @contributors %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

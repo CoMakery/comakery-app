@@ -30,7 +30,25 @@ describe ContributorsController do
 
       expect(response.status).to eq(200)
       expect(assigns[:project]).to eq(project)
+      expect(assigns[:revenue_share]).to eq(project.revenue_share?)
       expect(assigns[:award_data][:contributions_summary_pie_chart]).to match_array([{ net_amount: 1337, name: 'John Doe' }])
+      expect(assigns[:chart_data]).to match_array([{ value: 1337, label: 'John Doe' }])
+      expect(assigns[:table_data]).to match_array([
+                                                    {
+                                                      image_url: 'http://test.host/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg',
+                                                      name: 'John Doe',
+                                                      awards: [
+                                                        {
+                                                          name: 'Contribution',
+                                                          total: '1,337'
+                                                        }
+                                                      ],
+                                                      total: '1,337',
+                                                      remaining: nil,
+                                                      unpaid: nil,
+                                                      paid: nil
+                                                    }
+                                                  ])
     end
   end
 end

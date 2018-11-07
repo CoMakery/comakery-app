@@ -7,7 +7,10 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %>
 // to the appropriate layout file
 
+import 'babel-polyfill'
+
 // Support component names relative to this directory:
 let componentRequireContext = require.context('components', true)
 let ReactRailsUJS = require('react_ujs')
 ReactRailsUJS.useContext(componentRequireContext)
+
