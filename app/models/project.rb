@@ -89,7 +89,6 @@ class Project < ApplicationRecord
   before_validation :check_coin_type
   before_save :set_transitioned_to_ethereum_enabled
   before_save :enable_ethereum
-  after_initialize :default_coin_type
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -277,10 +276,6 @@ class Project < ApplicationRecord
 
   private
 
-  def default_coin_type
-    self.coin_type ||= :erc20 if project_token?
-  end
-
   def check_coin_type
     if coin_type_on_ethereum?
       self.blockchain_network = nil
@@ -291,7 +286,7 @@ class Project < ApplicationRecord
       self.contract_address = nil
     elsif coin_type_qrc20?
       self.ethereum_contract_address = nil
-    else
+    elsif coin_type?
       self.contract_address = nil
       self.ethereum_contract_address = nil
       self.token_symbol   = nil
