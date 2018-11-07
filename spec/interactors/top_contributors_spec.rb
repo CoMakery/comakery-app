@@ -53,7 +53,7 @@ describe TopContributors do
             total contribution/recency, excluding accounts without awards" do
         expect(described_class.call(projects: [sb_project])
             .contributors[sb_project].map { |a| a.decorate.name })
-          .to eq([account1.decorate.name, account3.decorate.name, account2.decorate.name, account4.decorate.name, account5.decorate.name])
+          .to eq([account3.decorate.name, account1.decorate.name, account2.decorate.name, account5.decorate.name, account4.decorate.name])
       end
     end
 
@@ -67,7 +67,8 @@ describe TopContributors do
         expect(described_class.call(projects: [sb_project])
             .contributors[sb_project]
             .map { |account| [account.decorate.name, account.total_awarded.to_i] })
-          .to eq([[account1.decorate.name, 2000], [account3.decorate.name, 2000], [account2.decorate.name, 1500], [account4.decorate.name, 10], [account5.decorate.name, 10]])
+          .to eq([[account3.decorate.name, 2000], [account1.decorate.name, 2000], [account2.decorate.name, 1500], [account5.decorate.name, 10],
+                  [account4.decorate.name, 10]])
       end
     end
   end

@@ -112,7 +112,7 @@ class Project < ApplicationRecord
       left join projects on award_types.project_id=projects.id")
            .where('projects.id=?', id)
            .group('accounts.id')
-           .order('total_awarded desc, last_awarded_at').first(5)
+           .order('total_awarded desc, last_awarded_at desc').first(5)
   end
 
   def create_ethereum_awards!
