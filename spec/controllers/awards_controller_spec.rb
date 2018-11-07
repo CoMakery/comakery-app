@@ -10,7 +10,7 @@ describe AwardsController do
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
-  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000) }
+  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'erc20') }
 
   before do
     stub_discord_channels
@@ -253,12 +253,17 @@ describe AwardsController do
   end
 
   describe '#preview' do
+    let(:project1) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'erc20') }
+    let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'qrc20') }
+
     it 'when channel_id is blank' do
       award_type = create(:award_type)
-      create(:account, email: 'test2@comakery.com', ethereum_wallet: '0xaBe4449277c893B3e881c29B17FC737ff527Fa47')
+      create(:account, email: 'test2@comakery.com', ethereum_wallet: '0xaBe4449277c893B3e881c29B17FC737ff527Fa47', qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
       login issuer.account
-      get :preview, format: 'js', params: { project_id: project.to_param, uid: 'test2@comakery.com', quantity: 1, award_type_id: award_type.id }
+      get :preview, format: 'js', params: { project_id: project1.to_param, uid: 'test2@comakery.com', quantity: 1, award_type_id: award_type.id }
       expect(assigns(:recipient_address)).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa47')
+      get :preview, format: 'js', params: { project_id: project2.to_param, uid: 'test2@comakery.com', quantity: 1, award_type_id: award_type.id }
+      expect(assigns(:recipient_address)).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
     end
 
     it 'when channel_id is present' do

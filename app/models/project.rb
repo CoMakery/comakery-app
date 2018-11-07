@@ -277,11 +277,7 @@ class Project < ApplicationRecord
   private
 
   def check_coin_type
-    if coin_type_on_ethereum?
-      self.blockchain_network = nil
-    else
-      self.ethereum_network = nil
-    end
+    check_coin_type_blockchain_network
     if coin_type_erc20?
       self.contract_address = nil
     elsif coin_type_qrc20?
@@ -291,6 +287,14 @@ class Project < ApplicationRecord
       self.ethereum_contract_address = nil
       self.token_symbol   = nil
       self.decimal_places = nil
+    end
+  end
+
+  def check_coin_type_blockchain_network
+    if coin_type_on_ethereum?
+      self.blockchain_network = nil
+    elsif coin_type_on_qtum?
+      self.ethereum_network = nil
     end
   end
 
