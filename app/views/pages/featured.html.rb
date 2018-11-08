@@ -5,6 +5,7 @@ class Views::Pages::Featured < Views::Base
         header
       end
       featured_projects
+      summary
     end
   end
 
@@ -15,7 +16,7 @@ class Views::Pages::Featured < Views::Base
         h2(style: 'margin-bottom: 8%') { text 'BUILD YOUR REPUTATION, APPLY TO PROJECTS & JOIN A GREAT TEAM' }
       end
       div(class: 'show-for-medium-only') do
-        h1(style: 'margin-top: 90px; font-size: 20px') { text 'FIND THE PROJECTS THAT SPEAK TO YOU' }
+        h1(style: 'margin-top: 110px; font-size: 20px') { text 'FIND THE PROJECTS THAT SPEAK TO YOU' }
         h2(style: 'margin-bottom: 5%;font-size: 16px;') { text 'BUILD YOUR REPUTATION, APPLY TO PROJECTS & JOIN A GREAT TEAM' }
       end
       div(class: 'hide-for-medium') do
@@ -29,7 +30,7 @@ class Views::Pages::Featured < Views::Base
   end
 
   def featured_projects
-    div(class: 'small-12 columns no-h-pad', style: 'background-color: #f9f9f9; padding: 40px;') do
+    div(class: 'small-12 columns no-h-pad', style: 'padding: 40px;') do
       div(class: 'small-12 text-center projects-title') do
         text 'CoMakery Hosts Projects That We Believe In'
       end
@@ -63,13 +64,13 @@ class Views::Pages::Featured < Views::Base
         end
       end
 
-      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgb(240,255,255);') do
+      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; ') do
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-4 columns no-h-pad') do
             image_tag 'home/featured/cardano.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
           end
 
-          div(class: 'small-8 columns') do
+          div(class: 'small-8 columns', style: 'padding-left: 50px') do
             div(class: 'protocol-title') do
               text 'CARDANO PROTOCOL (ADA)'
             end
@@ -124,13 +125,13 @@ class Views::Pages::Featured < Views::Base
         end
       end
 
-      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgb(240,255,255);') do
+      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; ') do
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-4 columns no-h-pad') do
             image_tag 'home/featured/vevue.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
           end
 
-          div(class: 'small-8 columns') do
+          div(class: 'small-8 columns', style: 'padding-left: 50px') do
             div(class: 'protocol-title') do
               text 'VEVUE PROTOCOL (VUE)'
             end
@@ -185,13 +186,13 @@ class Views::Pages::Featured < Views::Base
         end
       end
 
-      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; background-color: rgb(240,255,255);') do
+      div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; ') do
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-4 columns no-h-pad') do
             image_tag 'home/featured/glass.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
           end
 
-          div(class: 'small-8 columns') do
+          div(class: 'small-8 columns', style: 'padding-left: 50px') do
             div(class: 'protocol-title') do
               text 'SHARESPOST GLASS NETWORK (GLASS)'
             end
@@ -215,8 +216,6 @@ class Views::Pages::Featured < Views::Base
           end
         end
       end
-
-      summary
     end
   end
 
@@ -243,32 +242,34 @@ class Views::Pages::Featured < Views::Base
   end
 
   def summary
-    div(class: 'small-12 columns', style: 'padding: 50px 0;') do
-      div(class: 'small-4 columns text-center') do
-        div(class: 'summary-count') do
-          text '1,000+'
+    div(class: 'small-12 columns', style: 'padding: 50px 0; background-color: #f9f9f9;') do
+      div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
+        div(class: 'small-4 columns text-center') do
+          div(class: 'summary-count') do
+            text '1,000+'
+          end
+          hr(class: 'stat')
+          div(class: 'summary-label') do
+            text 'CONTRIBUTORS'
+          end
         end
-        hr(class: 'stat')
-        div(class: 'summary-label') do
-          text 'CONTRIBUTORS'
+        div(class: 'small-4 columns text-center') do
+          div(class: 'summary-count') do
+            text '50+'
+          end
+          hr(class: 'stat')
+          div(class: 'summary-label') do
+            text 'PROJECTS'
+          end
         end
-      end
-      div(class: 'small-4 columns text-center') do
-        div(class: 'summary-count') do
-          text '50+'
-        end
-        hr(class: 'stat')
-        div(class: 'summary-label') do
-          text 'PROJECTS'
-        end
-      end
-      div(class: 'small-4 columns text-center') do
-        div(class: 'summary-count') do
-          text '10,000,000+'
-        end
-        hr(class: 'stat')
-        div(class: 'summary-label') do
-          text 'TOKENS AWARDED'
+        div(class: 'small-4 columns text-center') do
+          div(class: 'summary-count') do
+            text '10,000,000+'
+          end
+          hr(class: 'stat')
+          div(class: 'summary-label') do
+            text 'TOKENS AWARDED'
+          end
         end
       end
     end
