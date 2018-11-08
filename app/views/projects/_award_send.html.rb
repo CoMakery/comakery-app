@@ -133,6 +133,7 @@ class Views::Projects::AwardSend < Views::Base
     if (last_award = Award.find_by(id: last_award_id)) && current_account.decorate.can_send_awards?(last_award.project) && !last_award.ethereum_transaction_address?
       render 'sessions/metamask_modal'
       javascript_tag(transfer_tokens_script(last_award))
+      javascript_include_tag Webpacker.manifest.lookup!('qtum_script.js')
     end
 
     content_for :js do

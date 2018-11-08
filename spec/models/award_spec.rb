@@ -51,7 +51,9 @@ describe Award do
     end
 
     describe '#ethereum_transaction_address' do
-      let(:award) { create(:award) }
+      let(:project) { create(:project, coin_type: 'erc20') }
+      let(:award_type) { create(:award_type, project: project) }
+      let(:award) { create(:award, award_type: award_type) }
       let(:address) { '0x' + 'a' * 64 }
 
       it 'validates with a valid ethereum transaction address' do
@@ -62,11 +64,11 @@ describe Award do
 
       it 'does not validate with an invalid ethereum transaction address' do
         expected_error_message = "Ethereum transaction address should start with '0x', followed by a 64 character ethereum address"
-        expect(build(:award, ethereum_transaction_address: 'foo').tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(build(:award, ethereum_transaction_address: '0x').tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(build(:award, ethereum_transaction_address: "0x#{'a' * 63}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(build(:award, ethereum_transaction_address: "0x#{'a' * 65}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(build(:award, ethereum_transaction_address: "0x#{'g' * 64}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(award.tap { |o| o.ethereum_transaction_address = 'foo' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(award.tap { |o| o.ethereum_transaction_address = '0x' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(award.tap { |o| o.ethereum_transaction_address = "0x#{'a' * 63}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(award.tap { |o| o.ethereum_transaction_address = "0x#{'a' * 65}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(award.tap { |o| o.ethereum_transaction_address = "0x#{'g' * 64}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
       end
 
       it { expect(award.ethereum_transaction_address).to eq(nil) }
@@ -118,9 +120,9 @@ describe Award do
     end
 
     describe 'with project awards' do
-      let!(:project1) { create :project }
+      let!(:project1) { create :project, coin_type: 'erc20' }
       let!(:project1_award_type) { (create :award_type, project: project1, amount: 3) }
-      let(:project2) { create :project }
+      let(:project2) { create :project, coin_type: 'erc20' }
       let!(:project2_award_type) { (create :award_type, project: project2, amount: 5) }
       let(:account) { create :account }
 
@@ -150,7 +152,7 @@ describe Award do
     let!(:authentication) { create :authentication, account: account }
     let!(:account1) { create :account }
     let!(:authentication1) { create :authentication, account: account1, provider: 'discord' }
-    let!(:project) { create :project, account: account }
+    let!(:project) { create :project, account: account, coin_type: 'erc20' }
     let!(:award_type) { (create :award_type, project: project, amount: 3) }
     let!(:award) { create :award, award_type: award_type, issuer: account, account: account }
     let!(:award1) { create :award, award_type: award_type, issuer: account, account: account1 }
@@ -217,7 +219,7 @@ describe Award do
     let!(:account) { create :account }
     let!(:authentication) { create :authentication, account: account }
     let!(:discord_team) { create :team, provider: 'discord' }
-    let!(:project) { create :project, account: account }
+    let!(:project) { create :project, account: account, coin_type: 'erc20' }
     let!(:award_type) { create :award_type, project: project }
     let!(:channel) { create :channel, team: team, project: project, channel_id: 'channel_id', name: 'channel_id' }
     let!(:account1) { create :account }

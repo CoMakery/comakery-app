@@ -69,7 +69,8 @@ class Views::Shared::Awards < Views::Base
                 elsif current_account.decorate.can_send_awards?(project)
                   link_to 'javascript:void(0)', class: 'metamask-transfer-btn transfer-tokens-btn', 'data-id': award.id, 'data-info': award.json_for_sending_awards do
                     span 'Send'
-                    image_tag 'metamask2.png'
+                    wallet_logo = project.coin_type_on_ethereum? ? 'metamask2.png' : 'qrypto.png'
+                    image_tag wallet_logo
                   end
                 else
                   text '(pending)'
