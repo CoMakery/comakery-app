@@ -971,6 +971,16 @@ describe Project do
     expect project.token_symbol = 'FCBB'
   end
 
+  it 'check_coin_type' do
+    stub_token_symbol
+    project = create :project, token_symbol: nil, ethereum_contract_address: '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d', contract_address: 'a8112e56eb96bd3da7741cfea0e3cbd841fc009a', coin_type: 'eth'
+
+    expect(project.contract_address).to be_nil
+    expect(project.ethereum_contract_address).to be_nil
+    expect(project.token_symbol).to be_nil
+    expect(project.decimal_places).to be_nil
+  end
+
   it 'can manual input token_symbol' do
     contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
     # stub_token_symbol(contract_address, 'FCBB')
