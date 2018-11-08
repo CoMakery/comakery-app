@@ -10,14 +10,18 @@ class AwardDecorator < Draper::Decorator
 
   def ethereum_transaction_explorer_url
     if object.ethereum_transaction_address
-      site = object.project&.ethereum_network? ? "#{object.project.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
-      site = 'etherscan.io' if site == 'main.etherscan.io'
-      "https://#{site}/tx/#{object.ethereum_transaction_address}"
+      if (network = object.project.blockchain_network).present?
+        UtilitiesService.get_transaction_url(network, object.ethereum_transaction_address)
+      else
+        site = object.project&.ethereum_network? ? "#{object.project.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
+        site = 'etherscan.io' if site == 'main.etherscan.io'
+        "https://#{site}/tx/#{object.ethereum_transaction_address}"
+      end
     end
   end
 
   def json_for_sending_awards
-    to_json(only: %i[id total_amount], methods: %i[issuer_address amount_to_send], include: { account: { only: %i[id ethereum_wallet] }, project: { only: %i[id ethereum_contract_address coin_type] } })
+    to_json(only: %i[id total_amount], methods: %i[issuer_address amount_to_send], include: { account: { only: %i[id ethereum_wallet qtum_wallet] }, project: { only: %i[id contract_address ethereum_contract_address coin_type] } })
   end
 
   def unit_amount_pretty
