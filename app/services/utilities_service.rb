@@ -15,4 +15,13 @@ class UtilitiesService
       end
     end
   end
+
+  def self.get_transaction_url(network, tx)
+    case network
+    when 'qtum_mainnet'
+      "https://explorer.qtum.org/tx/#{tx}"
+    when 'qtum_testnet'
+      "https://testnet.qtum.org/tx/#{tx}"
+    end
+  end
 end
