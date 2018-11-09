@@ -972,13 +972,13 @@ describe Project do
   end
 
   it 'check_coin_type' do
-    stub_token_symbol
-    project = create :project, token_symbol: nil, ethereum_contract_address: '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d', contract_address: 'a8112e56eb96bd3da7741cfea0e3cbd841fc009a', coin_type: 'eth'
-
+    project = create :project, token_symbol: 'FCBB', decimal_places: 8, ethereum_contract_address: '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d', contract_address: 'a8112e56eb96bd3da7741cfea0e3cbd841fc009a', blockchain_network: 'qtum_testnet', coin_type: 'eth'
+    expect(project).to be_valid
     expect(project.contract_address).to be_nil
     expect(project.ethereum_contract_address).to be_nil
     expect(project.token_symbol).to be_nil
     expect(project.decimal_places).to be_nil
+    expect(project.blockchain_network).to be_nil
   end
 
   it 'can manual input token_symbol' do
