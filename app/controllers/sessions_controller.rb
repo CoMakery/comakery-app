@@ -27,7 +27,6 @@ class SessionsController < ApplicationController
     begin
       if @account && @account.authenticate(params[:password])
         session[:account_id] = @account.id
-        flash[:notice] = 'Successful sign in'
         redirect_to redirect_path
       else
         flash[:error] = 'Invalid email or password'
