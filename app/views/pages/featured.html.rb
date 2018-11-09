@@ -59,7 +59,7 @@ class Views::Pages::Featured < Views::Base
             end
           end
           div(class: 'small-4 columns') do
-            image_tag 'home/featured/holochain.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
+            image_tag 'home/featured/holochain.jpg', style: 'width: 100%;filter: drop-shadow(0 2mm 2mm rgb(63, 68, 68));'
           end
         end
       end
@@ -67,7 +67,7 @@ class Views::Pages::Featured < Views::Base
       div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; ') do
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-4 columns no-h-pad') do
-            image_tag 'home/featured/cardano.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
+            image_tag 'home/featured/cardano.jpg', style: 'width: 100%;filter: drop-shadow(0 2mm 2mm rgb(63, 68, 68));'
           end
 
           div(class: 'small-8 columns', style: 'padding-left: 50px') do
@@ -120,7 +120,7 @@ class Views::Pages::Featured < Views::Base
             end
           end
           div(class: 'small-4 columns') do
-            image_tag 'home/featured/ethereum.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
+            image_tag 'home/featured/ethereum.jpg', style: 'width: 100%;filter: drop-shadow(0 2mm 2mm rgb(63, 68, 68));'
           end
         end
       end
@@ -128,7 +128,7 @@ class Views::Pages::Featured < Views::Base
       div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; ') do
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-4 columns no-h-pad') do
-            image_tag 'home/featured/vevue.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
+            image_tag 'home/featured/vevue.jpg', style: 'width: 100%;filter: drop-shadow(0 2mm 2mm rgb(63, 68, 68));'
           end
 
           div(class: 'small-8 columns', style: 'padding-left: 50px') do
@@ -181,7 +181,7 @@ class Views::Pages::Featured < Views::Base
             end
           end
           div(class: 'small-4 columns') do
-            image_tag 'home/featured/props.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
+            image_tag 'home/featured/props.jpg', style: 'width: 100%;filter: drop-shadow(0 2mm 2mm rgb(63, 68, 68));'
           end
         end
       end
@@ -189,7 +189,7 @@ class Views::Pages::Featured < Views::Base
       div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px; ') do
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-4 columns no-h-pad') do
-            image_tag 'home/featured/glass.jpg', style: 'width: 100%;box-shadow: 10px 10px 5px #bbb;'
+            image_tag 'home/featured/glass.jpg', style: 'width: 100%;filter: drop-shadow(0 2mm 2mm rgb(63, 68, 68));'
           end
 
           div(class: 'small-8 columns', style: 'padding-left: 50px') do
