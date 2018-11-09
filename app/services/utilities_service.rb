@@ -24,4 +24,15 @@ class UtilitiesService
       "https://testnet.qtum.org/tx/#{tx}"
     end
   end
+
+  def self.get_contract_url(network, contract_address)
+    url = case network
+          when 'qtum_mainnet'
+            "https://explorer.qtum.org/token/#{contract_address}"
+          when 'qtum_testnet'
+            "https://testnet.qtum.org/token/#{contract_address}"
+    end
+    url = nil if contract_address.blank?
+    url
+  end
 end

@@ -3,6 +3,7 @@ require 'rails_helper'
 describe UtilitiesService do
   let(:wallet) { '0xaBe4449277c893B3e881c29B17FC737ff527Fa47' }
   let(:tx) { 'f5d3c28df8c2e983360756f8072718ef67593491d4d0cc73289b1e72070c3edc' }
+  let(:contract) { '6797155d96718b58ddde3ba02c5173b6ee4e8581' }
 
   context '.get_wallet_url' do
     it 'without network' do
@@ -77,6 +78,24 @@ describe UtilitiesService do
       result = described_class.get_transaction_url(network, tx)
 
       expect(result).to eq "https://testnet.qtum.org/tx/#{tx}"
+    end
+  end
+
+  context '.get_contract_url' do
+    it 'contract on qtum mainnet' do
+      network = 'qtum_mainnet'
+
+      result = described_class.get_contract_url(network, contract)
+
+      expect(result).to eq "https://explorer.qtum.org/token/#{contract}"
+    end
+
+    it 'contract on qtum testnet' do
+      network = 'qtum_testnet'
+
+      result = described_class.get_contract_url(network, contract)
+
+      expect(result).to eq "https://testnet.qtum.org/token/#{contract}"
     end
   end
 end
