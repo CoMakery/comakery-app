@@ -55,7 +55,7 @@ describe 'awarding users' do
     travel_back
   end
 
-  describe "when a user doesn't have an account for yet" do
+  describe "when a user doesn't have an account for yet", js: true do
     it 'populates the dropdown to select the awardee and creates the account/auth for the user' do
       expect_any_instance_of(Award).to receive(:send_award_notifications)
       project.revenue_share!
@@ -64,9 +64,13 @@ describe 'awarding users' do
 
       visit project_path(project)
 
-      fill_in :award_quantity, with: '1.579'
+      # PhantomJS sets the value below as '1.57'
+      # fill_in :award_quantity, with: '1.579'
+      execute_script("$('#award_quantity').val('1.579');")
+
       select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
-      fill_in 'Email Address', with: 'U99M9QYFQ'
+      wait_for_ajax
+      select '@bobjohnson', from: 'User'
 
       click_button 'Send'
 
@@ -87,16 +91,10 @@ describe 'awarding users' do
       within('.project-nav') do
         click_link 'Contributors'
       end
-      # We can't test the contributors table without PhantomJS and
-      # when switching to PhantomJS the example fails due to inability
-      # to set value of award_uid while sending award.
-      #
-      # within('.contributors') do
-      #   expect(page.find('.contributor')).to have_content 'bobjohnson'
-      #   expect(page.find('.award-holdings')).to have_content '1,579'
-      # end
-      expect(page).to have_content 'bobjohnson'
-      expect(page).to have_content '1,579'
+      within('.contributors') do
+        expect(page.find('.contributor')).to have_content 'bobjohnson'
+        expect(page.find('.award-holdings')).to have_content '1,579'
+      end
     end
   end
 
