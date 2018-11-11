@@ -24,6 +24,8 @@ Prerequisites:
 
 - PostgreSQL
 - Redis if you want to run delayed jobs
+- Node
+- Yarn
 
 Set up .env:
 
@@ -32,11 +34,21 @@ cp .env.dev .env
 heroku config -a <YOUR_HEROKU_APP> -s | egrep '^(SLACK_|ETHEREUM_|ETHERCAMP_)' | sort >> .env
 ```
 
+DB setup:
+
+Create superuser in PostgreSQL:
+
+```sh
+sudo su postgres
+createuser -s -e -l -P <username>
+```
+
 Basics :
 
 ```sh
 bundle
 rake db:create:all db:schema:load
+yarn
 ```
 
 Run server:

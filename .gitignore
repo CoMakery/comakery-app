@@ -29,6 +29,7 @@
 .DS_Store
 .idea
 .ruby-gemset
+.nvmrc
 .vagrant
 /.tags
 /.tags[0-9]*
