@@ -23,7 +23,7 @@ class AwardsController < ApplicationController
         award.send_award_notifications
         award.send_confirm_email
         generate_message(award)
-        session[:last_award_id] = award.id if account&.ethereum_wallet?
+        session[:last_award_id] = award.id if account&.ethereum_wallet? || account&.qtum_wallet?
         account&.update new_award_notice: true
         redirect_to project_overview_path(award.project)
       else

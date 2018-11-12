@@ -131,9 +131,9 @@ class Views::Projects::AwardSend < Views::Base
     end
     last_award_id = session.delete(:last_award_id)
     if (last_award = Award.find_by(id: last_award_id)) && current_account.decorate.can_send_awards?(last_award.project) && !last_award.ethereum_transaction_address?
+      javascript_include_tag Webpacker.manifest.lookup!('qtum_script.js')
       render 'sessions/metamask_modal'
       javascript_tag(transfer_tokens_script(last_award))
-      javascript_include_tag Webpacker.manifest.lookup!('qtum_script.js')
     end
 
     content_for :js do
@@ -147,7 +147,7 @@ class Views::Projects::AwardSend < Views::Base
         var currentState = history.state;
         if(!currentState || !currentState['award']) {
           history.pushState({ award: '#{last_award.id}' }, 'transfer_tokens_award-#{last_award.id}');
-          transferAward(JSON.parse('#{last_award.decorate.json_for_sending_awards}'));
+          setTimeout(function() { transferAward(JSON.parse('#{last_award.decorate.json_for_sending_awards}')); }, 1900);
         }
       });
     )
