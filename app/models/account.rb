@@ -130,7 +130,8 @@ class Account < ApplicationRecord
   end
 
   def accessable_projects
-    my_project_or_public | other_member_projects
+    ids = (my_project_or_public | other_member_projects).map(&:id)
+    Project.where(id: ids)
   end
 
   def confirmed?

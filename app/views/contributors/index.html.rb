@@ -57,7 +57,7 @@ class Views::Contributors::Index < Views::Projects::Base
                   end
                   td(class: 'awards-earned financial') do
                     span(class: 'margin-small') do
-                      text project.format_with_decimal_places(contributor.total)
+                      text project.format_with_decimal_places(contributor.total_awarded)
                     end
                   end
                   if project.revenue_share?
