@@ -10,7 +10,7 @@ describe 'shared/_awards.html.rb' do
   let!(:recipient2_auth) { create(:authentication, account: recipient2) }
   let!(:project) do
     stub_token_symbol
-    create(:project, ethereum_enabled: true, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'erc20')
+    create(:project, account: issuer, ethereum_enabled: true, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'erc20')
   end
   let!(:award_type) { create(:award_type, project: project) }
   let!(:award1) { create(:award, award_type: award_type, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
@@ -85,8 +85,24 @@ describe 'shared/_awards.html.rb' do
       end
 
       describe 'with no award ethereum transaction address' do
+        describe 'when issuer could send award' do
+          before do
+            recipient1.ethereum_wallet = '0x123'
+            project.ethereum_contract_address = '0x' + 'a' * 40
+            project.coin_type = 'erc20'
+            assign :current_account, issuer
+          end
+          it 'display Metamask icon on Send button' do
+            render
+            expect(rendered).to have_css 'img[alt=Metamask2]'
+          end
+        end
+
         describe 'when recipient ethereum address is present' do
-          before { recipient1.ethereum_wallet = '0x123' }
+          before do
+            recipient1.ethereum_wallet = '0x123'
+            project.account = nil
+          end
           it 'says "pending"' do
             render
             expect(rendered).to have_css '.blockchain-address', text: 'pending'
