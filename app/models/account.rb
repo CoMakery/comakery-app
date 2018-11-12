@@ -33,12 +33,6 @@ class Account < ApplicationRecord
   validates :agreed_to_user_agreement, presence: { message: 'You must agree to the terms of the CoMakery User Agreement to sign up ' }, if: :agreement_required
 
   class << self
-    def order_by_award(project)
-      award_types = project.award_types.map(&:id).join(',')
-      return Account.none if award_types.blank?
-      select("accounts.*, (select sum(total_amount) from awards where awards.account_id = accounts.id and awards.award_type_id in(#{award_types})) as total").distinct.order('total desc')
-    end
-
     def find_or_create_for_authentication(uid, channel)
       authentication = Authentication.find_by(uid: uid)
       if authentication
