@@ -59,6 +59,8 @@ describe 'preview award', js: true do
       sleep 2
       expect(page.find('.preview_award_div')).to have_content '1000.0 BIG total to qHn7L75EdErRwrDcAxD3fgiCnb6pMDg6iR'
       expect(page.find('.button_submit img')[:alt]).to have_content 'Qrypto'
+      click_button 'Send'
+      expect(page).to have_content 'Successfully sent award to bobjohnson'
     end
 
     it 'recipient has not an ethereum account' do

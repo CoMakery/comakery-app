@@ -13,27 +13,48 @@ describe AwardDecorator do
   end
 
   describe '#issuer_display_name' do
-    let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-    let!(:project) { create :project, account: issuer }
-    let!(:award_type) { create :award_type, project: project }
-    let!(:award) { create :award, award_type: award_type, issuer: issuer }
+    context 'on ethereum network' do
+      let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
+      let!(:project) { create :project, account: issuer, coin_type: 'erc20' }
+      let!(:award_type) { create :award_type, project: project }
+      let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
-    it 'returns the user name' do
-      expect(award.decorate.issuer_display_name).to eq('johnny johnny')
+      it 'returns the user name' do
+        expect(award.decorate.issuer_display_name).to eq('johnny johnny')
+      end
+
+      it 'issuer_user_name' do
+        expect(award.decorate.issuer_user_name).to eq 'johnny johnny'
+      end
+
+      it 'issuer_address' do
+        expect(award.decorate.issuer_address).to eq '0xD8655aFe58B540D8372faaFe48441AeEc3bec453'
+      end
     end
 
-    it 'issuer_user_name' do
-      expect(award.decorate.issuer_user_name).to eq 'johnny johnny'
-    end
+    context 'on qtum network' do
+      let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', qtum_wallet: 'qSf61RfH28cins3EyiL3BQrGmbqaJUHDfM' }
+      let!(:project) { create :project, account: issuer, coin_type: 'qrc20' }
+      let!(:award_type) { create :award_type, project: project }
+      let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
-    it 'issuer_address' do
-      expect(award.decorate.issuer_address).to eq '0xD8655aFe58B540D8372faaFe48441AeEc3bec453'
+      it 'returns the user name' do
+        expect(award.decorate.issuer_display_name).to eq('johnny johnny')
+      end
+
+      it 'issuer_user_name' do
+        expect(award.decorate.issuer_user_name).to eq 'johnny johnny'
+      end
+
+      it 'issuer_address' do
+        expect(award.decorate.issuer_address).to eq 'qSf61RfH28cins3EyiL3BQrGmbqaJUHDfM'
+      end
     end
   end
 
   context 'recipient names' do
     let!(:recipient) { create(:account, first_name: 'Betty', last_name: 'Ross', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project }
+    let!(:project) { create :project, coin_type: 'erc20' }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, account: recipient, award_type: award_type }
 

@@ -49,11 +49,11 @@ class AwardDecorator < Draper::Decorator
   end
 
   def recipient_address
-    account&.ethereum_wallet
+    object.project.coin_type_on_ethereum? ? account&.ethereum_wallet : account&.qtum_wallet
   end
 
   def issuer_address
-    issuer&.ethereum_wallet
+    object.project.coin_type_on_ethereum? ? issuer&.ethereum_wallet : issuer&.qtum_wallet
   end
 
   def issuer_display_name
