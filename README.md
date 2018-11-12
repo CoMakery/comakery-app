@@ -63,11 +63,29 @@ or if you want to run with delayed jobs:
 bin/server
 ```
 
+Run webpack-dev-server:
+
+```sh
+bin/webpack-dev-server
+```
+
 ## Running tests
 
 A bit faster: `bin/rspec`
 
 More thorough (integrates views): `bin/rspect`
+
+JS tests:
+
+```sh
+yarn test
+```
+
+or if you want to watch for file changes
+
+```sh
+yarn test-watch
+```
 
 ## Pushing code to Github
 

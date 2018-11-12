@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HelloWorld hasn't changed 1`] = `
+<div>
+  Hello 
+  Hey there
+  !
+</div>
+`;
