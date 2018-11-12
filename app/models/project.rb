@@ -87,15 +87,11 @@ class Project < ApplicationRecord
       .order('max(awards.created_at) desc nulls last, projects.created_at desc nulls last')
   end
 
-  def top_contributors(limit=5)
-    results = Account.select('accounts.*, sum(a1.total_amount) as total_awarded, max(a1.created_at) as last_awarded_at').joins("
-      left join awards a1 on a1.account_id=accounts.id
-      left join award_types on a1.award_type_id=award_types.id
-      left join projects on award_types.project_id=projects.id")
-           .where('projects.id=?', id)
-           .group('accounts.id')
-           .order('total_awarded desc, last_awarded_at desc')
-    results = results.first(limit) if limit!=0
+  def top_contributors(limit = 5)
+    results = contributors_distinct.select('accounts.*, sum(awards.total_amount) as total_awarded, max(awards.created_at) as last_awarded_at')
+                                   .group('accounts.id')
+                                   .order('total_awarded desc, last_awarded_at desc')
+    results = results.first(limit) if limit != 0
     results
   end
 
