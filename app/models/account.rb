@@ -127,27 +127,16 @@ class Account < ApplicationRecord
   end
 
   def other_member_projects
-    Project.joins("
-      left join award_types at1 on at1.project_id=projects.id
-      left join awards a1 on a1.award_type_id=at1.id
-      left join channels on channels.project_id=projects.id
-      left join teams on teams.id=channels.team_id
-      left join authentication_teams on authentication_teams.team_id=teams.id")
-           .where("((authentication_teams.account_id=#{id} and channels.id is not null) or a1.account_id=#{id}) and projects.account_id <> #{id}").distinct
+    ids = (team_projects | award_projects).map(&:id)
+    Project.where(id: ids)
+  end
+
+  def my_project_or_public
+    projects.or(Project.where(visibility: 1))
   end
 
   def accessable_projects
-    Project.joins("
-      left join award_types on award_types.project_id=projects.id
-      left join (select account_id,
-                        award_type_id
-                 from awards
-                 where account_id = #{id}) as awards
-                                       on awards.award_type_id=award_types.id
-      left join channels on channels.project_id=projects.id
-      left join teams on teams.id=channels.team_id
-      left join authentication_teams on authentication_teams.team_id=teams.id")
-           .where("(authentication_teams.account_id=#{id} and channels.id is not null) or projects.visibility=1 or awards.account_id=#{id} or projects.account_id=#{id}").distinct
+    my_project_or_public | other_member_projects
   end
 
   def confirmed?
