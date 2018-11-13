@@ -81,7 +81,7 @@ class Project < ApplicationRecord
   scope :publics, -> { where 'projects.visibility in(1,3)' }
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
-      .joins(:awards)
+      .left_outer_joins(:awards)
       .group('projects.id')
       .order('max(awards.created_at) desc nulls last, projects.created_at desc nulls last')
   end
