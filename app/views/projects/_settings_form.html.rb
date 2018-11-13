@@ -172,8 +172,6 @@ module Views
             f.submit 'Save', class: buttonish(:expand, :last_submit)
           end
         end
-        render 'sessions/metamask_modal'
-        javascript_include_tag Webpacker.manifest.lookup!('qtum_script.js')
       end
 
       def visibility_block(f, visibility_options)

@@ -4,29 +4,6 @@ window.postMessage({ message: { type: 'CONNECT_QRYPTO' }}, '*')
 
 const { Qweb3 } = require('qweb3')
 
-getQtumSymbolsAndDecimals = async function(network, contractAddress) {
-  if (!window.qrypto.account.loggedIn) {
-    alertMsg($('#metamaskModal1'), 'Not logged in. Please log in to Qrypto first')
-    return
-  }
-  if (network !== 'qtum_' + window.qrypto.account.network.toLowerCase()) {
-    alertMsg($('#metamaskModal1'), 'Please select ' + network.split('_').join(' '))
-    return
-  }
-  const qweb3 = new Qweb3(window.qrypto.rpcProvider)
-  const contract = qweb3.Contract(contractAddress, qrc20TokenABI)
-  let rs = await contract.call('symbol', {
-    methodArgs: []
-  })
-  const symbol = rs.executionResult.formattedOutput[0]
-
-  rs = await contract.call('decimals', {
-    methodArgs: []
-  })
-  const decimals = rs.executionResult.formattedOutput[0].toNumber()
-  return [symbol, decimals]
-}
-
 getQtumBalance = async function(contract, owner) {
   const rs = await contract.call('balanceOf', {
     methodArgs: [owner]
