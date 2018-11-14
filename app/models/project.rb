@@ -370,9 +370,15 @@ class Project < ApplicationRecord
   end
 
   def contract_address_changeable
+    ethereum_contract_address_changeable
+    errors.add(:blockchain_network, 'cannot be changed if has completed transactions') if blockchain_network_changed?
+    errors.add(:contract_address, 'cannot be changed if has completed transactions') if contract_address_changed?
+    errors.add(:decimal_places, 'cannot be changed if has completed transactions') if decimal_places_changed?
+  end
+
+  def ethereum_contract_address_changeable
     errors.add(:ethereum_network, 'cannot be changed if has completed transactions') if ethereum_network_changed?
     errors.add(:ethereum_contract_address, 'cannot be changed if has completed transactions') if ethereum_contract_address_changed?
-    errors.add(:decimal_places, 'cannot be changed if has completed transactions') if decimal_places_changed?
   end
 
   def currency_precision
