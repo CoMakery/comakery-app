@@ -144,6 +144,46 @@ describe Project do
       end
     end
 
+    describe 'coin_type' do
+      let(:attrs) { { token_symbol: 'CBB', decimal_places: 8, ethereum_network: 'ropsten', ethereum_contract_address: '0x' + 'a' * 40, contract_address: 'a' * 40, blockchain_network: 'qtum_testnet' } }
+
+      it 'eq erc20' do
+        project4 = create :project, attrs.merge(coin_type: 'erc20')
+        expect(project4).to be_valid
+        expect(project4.reload.coin_type).to eq 'erc20'
+        expect(project4.blockchain_network).to be_nil
+        expect(project4.contract_address).to be_nil
+        expect(project4.ethereum_network).to eq 'ropsten'
+        expect(project4.ethereum_contract_address).to eq '0x' + 'a' * 40
+        expect(project4.token_symbol).to eq 'CBB'
+        expect(project4.decimal_places).to eq 8
+      end
+
+      it 'eq eth' do
+        project4 = create :project, attrs.merge(coin_type: 'eth')
+        expect(project4).to be_valid
+        expect(project4.reload.coin_type).to eq 'eth'
+        expect(project4.blockchain_network).to be_nil
+        expect(project4.contract_address).to be_nil
+        expect(project4.ethereum_network).to eq 'ropsten'
+        expect(project4.ethereum_contract_address).to be_nil
+        expect(project4.token_symbol).to be_nil
+        expect(project4.decimal_places).to be_nil
+      end
+
+      it 'eq qrc20' do
+        project4 = create :project, attrs.merge(coin_type: 'qrc20')
+        expect(project4).to be_valid
+        expect(project4.reload.coin_type).to eq 'qrc20'
+        expect(project4.blockchain_network).to eq 'qtum_testnet'
+        expect(project4.contract_address).to eq 'a' * 40
+        expect(project4.ethereum_network).to be_nil
+        expect(project4.ethereum_contract_address).to be_nil
+        expect(project4.token_symbol).to eq 'CBB'
+        expect(project4.decimal_places).to eq 8
+      end
+    end
+
     describe 'payment_type' do
       let(:project) { create(:project, payment_type: 'revenue_share') }
       let(:order) { %i[revenue_share project_token] }
