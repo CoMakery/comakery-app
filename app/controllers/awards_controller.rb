@@ -38,7 +38,7 @@ class AwardsController < ApplicationController
     if current_account
       award = Award.find_by confirm_token: params[:token]
       if award
-        flash[:notice] = confirm_message if award.confirm!(current_account)
+        flash[:notice] = confirm_message(award.project) if award.confirm!(current_account)
         redirect_to project_overview_path(award.project)
       else
         flash[:error] = 'Invalid award token!'
@@ -99,11 +99,19 @@ class AwardsController < ApplicationController
     render template: 'projects/show'
   end
 
-  def confirm_message
-    if current_account.ethereum_wallet.present?
-      "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
-    else
-      "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+  def confirm_message(project)
+    if project.coin_type_on_ethereum?
+      if current_account.ethereum_wallet.present?
+        "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
+      else
+        "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+      end
+    elsif project.coin_type_on_qtum?
+      if current_account.qtum_wallet.present?
+        "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your QRC20 tokens."
+      else
+        "Congratulations, you just claimed your award! Be sure to enter your Qtum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+      end
     end
   end
 
