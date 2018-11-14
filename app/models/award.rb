@@ -32,7 +32,7 @@ class Award < ApplicationRecord
   end
 
   def ethereum_issue_ready?
-    project.ethereum_enabled &&
+    project.ethereum_enabled && project.coin_type_on_ethereum? &&
       account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end
