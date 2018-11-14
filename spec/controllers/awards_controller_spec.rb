@@ -230,6 +230,21 @@ describe AwardsController do
       expect(award.reload.account_id).to eq receiver.account_id
       expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress')).to be_truthy
     end
+
+    context 'on Qtum network' do
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'qrc20') }
+      let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
+
+      it 'add award to account. notice about update qtum wallet address' do
+        account = receiver.account
+        account.update ethereum_wallet: '0x' + 'a' * 40, qtum_wallet: nil
+        login receiver.account
+        get :confirm, params: { token: 61234 }
+        expect(response).to redirect_to(project_path(award2.project))
+        expect(award2.reload.account_id).to eq receiver.account_id
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Qtum Adress')).to be_truthy
+      end
+    end
   end
 
   describe '#update_transaction_address' do
