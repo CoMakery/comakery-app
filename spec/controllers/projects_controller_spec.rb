@@ -60,35 +60,33 @@ describe ProjectsController do
     let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project') }
     let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project') }
 
-    before do
-      expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
-      other_member_project.channels.create(team: team, channel_id: 'general')
+    describe '#login' do
+      before do
+        expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
+        other_member_project.channels.create(team: team, channel_id: 'general')
+      end
+
+      it 'redirect to account page if account info is not enough' do
+        account.update country: nil
+        get :landing
+        expect(response).to redirect_to(account_path)
+      end
+
+      it 'returns your private projects, and public projects that *do not* belong to you' do
+        get :landing
+
+        expect(response.status).to eq(200)
+        expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'unlisted project', 'member project'])
+        expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
+        expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
+      end
     end
-
-    it 'redirect to account page if account info is not enough' do
-      account.update country: nil
-      get :landing
-      expect(response).to redirect_to(account_path)
-    end
-
-    it 'returns your private projects, and public projects that *do not* belong to you' do
-      get :landing
-
-      expect(response.status).to eq(200)
-      expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'unlisted project', 'member project'])
-      expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
-      expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
-    end
-
-    it 'renders nicely even if you are not logged in' do
+  describe 'logged out'
+    it 'redirect to home page if you are not logged in' do
       logout
-
       get :landing
-
-      expect(response.status).to eq(200)
-      expect(assigns[:archived_projects].map(&:title)).to eq([])
-      expect(assigns[:team_projects].map(&:title)).to eq []
-      expect(assigns[:my_projects].map(&:title)).to match_array(['public project'])
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to(root_url)
     end
   end
 
