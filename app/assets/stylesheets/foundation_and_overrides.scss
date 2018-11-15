@@ -238,6 +238,11 @@ html, body{
   }
 }
 
+@media(min-width: 1170px){
+  .pages-landing .home h1{
+    margin-top: 220px !important;
+  }
+}
 .blue-box{
   border: 2px solid #5037f7;
   border-top: none;
@@ -258,7 +263,7 @@ html, body{
 
 .protocol-sub-title{
   font-family: Roboto;
-  color: #4b40e5;
+  color: #fb40e5;
 }
 
 .protocol-desc{

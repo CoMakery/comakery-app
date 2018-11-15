@@ -189,12 +189,13 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
   def ethereum_contract_address_on_change
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
-        $('body').on('change', "[name='project[ethereum_contract_address]']", function() {
+        $('body').on('change', "[name='project[ethereum_contract_address]'], [name='project[ethereum_network]']", function() {
           var network = $("[name='project[ethereum_network]']").val();
+          var contract = $("[name='project[ethereum_contract_address]']").val();
           var symbol = $("[name='project[token_symbol]']").val();
           var decimals = $("[name='project[decimal_places]']").val()
-          if(network && network != '' && $(this).val() != '' && symbol == '' && decimals =='') {
-            var rs = getSymbolsAndDecimals(network, $(this).val())
+          if(network && network != '' && contract != '' && symbol == '' && decimals =='') {
+            var rs = getSymbolsAndDecimals(network, contract)
             $("[name='project[token_symbol]']").val(rs[0]);
             $("[name='project[decimal_places]']").val(rs[1])
           }

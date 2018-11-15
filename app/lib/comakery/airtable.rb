@@ -2,7 +2,8 @@ require 'rest-client'
 class Comakery::Airtable
   def initialize
     @token = "Bearer #{ENV['AIRTABLE_API']}"
-    @url = "https://api.airtable.com/v0/#{ENV['AIRTABLE_APP']}/SIGN%20UPS"
+    table_name = ENV['AIRTABLE_TABLE_NAME']&.gsub(' ', '%20')
+    @url = "https://api.airtable.com/v0/#{ENV['AIRTABLE_APP']}/#{table_name}"
   end
 
   def add_record(params)

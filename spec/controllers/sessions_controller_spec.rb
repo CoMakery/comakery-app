@@ -107,7 +107,6 @@ describe SessionsController do
 
     it 'allow valid user to login' do
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(flash[:notice]).to eq 'Successful sign in'
       expect(response).to redirect_to root_path
     end
 
