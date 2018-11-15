@@ -32,13 +32,13 @@ class Views::Pages::Featured < Views::Base
   def featured_projects
     div(class: 'small-12 columns no-h-pad', style: 'padding: 40px;') do
       div(class: 'small-12 text-center projects-title') do
-        text 'CoMakery Hosts Projects That We Believe In'
+        text 'CoMakery Hosts Blockchain Projects That We Believe In'
       end
       div(class: 'small-12 columns no-h-pad', style: 'margin-top:30px') do
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-8 columns') do
             div(class: 'protocol-title') do
-              text 'HOLOCHAIN PROTOCAL (HOT)'
+              text 'HOLOCHAIN (HOT)'
             end
             div(class: 'protocol-meta') do
               text 'Think outside the blocks - scalable distributed computing'
@@ -72,7 +72,7 @@ class Views::Pages::Featured < Views::Base
 
           div(class: 'small-8 columns', style: 'padding-left: 50px') do
             div(class: 'protocol-title') do
-              text 'CARDANO PROTOCOL (ADA)'
+              text 'CARDANO (ADA)'
             end
             div(class: 'protocol-meta') do
               text 'A decentralised public blockchain and cryptocurrency project'
@@ -99,7 +99,7 @@ class Views::Pages::Featured < Views::Base
         div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
           div(class: 'small-8 columns') do
             div(class: 'protocol-title') do
-              text 'ETHEREUM PROTOCOL (ETH)'
+              text 'ETHEREUM (ETH)'
             end
             div(class: 'protocol-meta') do
               text 'A decentralized platform that runs smart contracts'
@@ -133,7 +133,7 @@ class Views::Pages::Featured < Views::Base
 
           div(class: 'small-8 columns', style: 'padding-left: 50px') do
             div(class: 'protocol-title') do
-              text 'VEVUE PROTOCOL (VUE)'
+              text 'VEVUE (VUE)'
             end
             div(class: 'protocol-meta') do
               text 'Specially designed to reward content creators'
