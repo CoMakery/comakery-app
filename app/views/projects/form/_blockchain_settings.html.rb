@@ -169,12 +169,13 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
   def contract_address_on_change
     text(<<-JAVASCRIPT.html_safe)
       $(function() {
-        $('body').on('change', "[name='project[contract_address]']", function() {
+        $('body').on('change', "[name='project[contract_address]'], [name='project[blockchain_network]']", function() {
           var network = $("[name='project[blockchain_network]']").val();
+          var contract = $("[name='project[contract_address]']").val();
           var symbol = $("[name='project[token_symbol]']").val();
           var decimals = $("[name='project[decimal_places]']").val()
-          if(network && network != '' && $(this).val() != '' && symbol == '' && decimals =='') {
-            getQtumSymbolsAndDecimals(network, $(this).val()).then(function(rs) {
+          if(network && network != '' && contract != '' && symbol == '' && decimals =='') {
+            getQtumSymbolsAndDecimals(network, contract).then(function(rs) {
               if(rs) {
                 $("[name='project[token_symbol]']").val(rs[0]);
                 $("[name='project[decimal_places]']").val(rs[1])
