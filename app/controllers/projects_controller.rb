@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  skip_before_action :require_login, except: %i[new edit create update]
+  skip_before_action :require_login, except: %i[new edit create update landing]
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
@@ -9,10 +9,6 @@ class ProjectsController < ApplicationController
       @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
       @team_projects = current_account.other_member_projects.with_last_activity_at.limit(6).decorate
-    else
-      @archived_projects = []
-      @team_projects = []
-      @my_projects = policy_scope(Project).public_listed.featured.with_last_activity_at.limit(6).decorate
     end
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
