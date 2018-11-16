@@ -238,6 +238,9 @@ describe Project do
 
     describe '#contract_address' do
       let(:project) { create(:project, coin_type: 'qrc20') }
+      let(:award_type) { create(:award_type, project: project) }
+      let(:award) { create(:award, award_type: award_type) }
+      let(:address) { 'b' * 40 }
 
       it 'valid qtum contract address' do
         expect(build(:project, coin_type: 'qrc20', contract_address: nil)).to be_valid
@@ -252,6 +255,26 @@ describe Project do
         expect(project.tap { |o| o.contract_address = "0x#{'a' * 38}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
         expect(project.tap { |o| o.contract_address = ('a' * 39).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
         expect(project.tap { |o| o.contract_address = ('f' * 41).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+      end
+
+      it { expect(project.contract_address).to eq(nil) }
+
+      it 'can be set' do
+        project.contract_address = address
+        project.save!
+        project.reload
+        expect(project.contract_address).to eq(address)
+      end
+
+      it 'once has finished transaction cannot be set to another value' do
+        project.contract_address = address
+        project.save!
+        award.update ethereum_transaction_address: 'a' * 64
+        project.reload
+        project.contract_address = 'c' * 40
+        expect(project).not_to be_valid
+        expect(project.errors.full_messages.to_sentence).to match \
+          /cannot be changed if has completed transactions/
       end
     end
 
