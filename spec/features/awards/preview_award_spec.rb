@@ -33,7 +33,7 @@ describe 'preview award', js: true do
     end
 
     it 'recipient has not an ethereum account' do
-      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com')
+      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', qtum_wallet: 'qHn7L75EdErRwrDcAxD3fgiCnb6pMDg6iR')
 
       fill_in 'Email Address', with: 'bobjohnson@example.com'
       page.find('body').click
@@ -51,7 +51,7 @@ describe 'preview award', js: true do
       visit project_path(project)
     end
 
-    it 'recipient has an qtum account' do
+    it 'recipient has a qtum account' do
       create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', qtum_wallet: 'qHn7L75EdErRwrDcAxD3fgiCnb6pMDg6iR')
 
       fill_in 'Email Address', with: 'bobjohnson@example.com'
@@ -63,8 +63,8 @@ describe 'preview award', js: true do
       expect(page).to have_content 'Successfully sent award to bobjohnson'
     end
 
-    it 'recipient has not an ethereum account' do
-      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com')
+    it 'recipient has not a qtum account' do
+      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
 
       fill_in 'Email Address', with: 'bobjohnson@example.com'
       page.find('body').click
