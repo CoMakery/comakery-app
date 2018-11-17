@@ -56,7 +56,7 @@ class ProjectsController < ApplicationController
       flash[:notice] = 'Project created'
       redirect_to project_detail_path
     else
-      flash[:error] = 'Project saving failed, please correct the errors below'
+      @error = 'Project saving failed, please correct the errors below'
       assign_slack_channels
       render :new
     end
@@ -93,9 +93,9 @@ class ProjectsController < ApplicationController
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
     if @project.update project_params
-      flash[:notice] = 'Project updated'
+      @notice = 'Project updated'
     else
-      flash[:error] = 'Project update failed, please correct the errors below'
+      @error = 'Project update failed, please correct the errors below'
     end
     @project = @project.decorate
     assign_slack_channels

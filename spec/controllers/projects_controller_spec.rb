@@ -197,7 +197,7 @@ describe ProjectsController do
         end.not_to change { Project.count }
       end.not_to change { AwardType.count }
 
-      expect(flash[:error]).to eq('Project saving failed, please correct the errors below')
+      expect(assigns[:error]).to eq('Project saving failed, please correct the errors below')
       project = assigns[:project]
 
       expect(project.description).to eq('Project description here')
@@ -298,7 +298,7 @@ describe ProjectsController do
           end.to change { Project.count }.by(0)
         end.to change { AwardType.count }.by(0) # +1 and -1
 
-        expect(flash[:notice]).to eq('Project updated')
+        expect(assigns[:notice]).to eq('Project updated')
         cat_project.reload
         expect(cat_project.title).to eq('updated Project title here')
         expect(cat_project.description).to eq('updated Project description here')
@@ -344,7 +344,7 @@ describe ProjectsController do
           end.not_to change { AwardType.count }
 
           project = assigns[:project]
-          expect(flash[:error]).to eq('Project update failed, please correct the errors below')
+          expect(assigns[:error]).to eq('Project update failed, please correct the errors below')
           expect(project.title).to eq('')
           expect(project.description).to eq('updated Project description here')
           expect(project.tracker).to eq('http://github.com/here/is/my/tracker/updated')
@@ -383,7 +383,7 @@ describe ProjectsController do
               }
             }
             expect(response.status).to eq(200)
-            expect(flash[:error]).to eq('Project update failed, please correct the errors below')
+            expect(assigns[:error]).to eq('Project update failed, please correct the errors below')
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
       end
@@ -406,7 +406,7 @@ describe ProjectsController do
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
 
-        expect(flash[:notice]).to eq('Project updated')
+        expect(assigns[:notice]).to eq('Project updated')
         award_type.reload
         expect(award_type.name).to eq('Bigger Award')
         expect(award_type).to be_community_awardable

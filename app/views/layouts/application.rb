@@ -73,21 +73,8 @@ class Views::Layouts::Application < Views::Base
         end
 
         div(class: "app-container row#{' home' if current_account && action_name == 'landing'}") do
-          div(class: 'large-10 medium-11 small-12 small-centered columns') do
-            flash.each do |name, msg|
-              div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
-                button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
-                  span('aria-hidden' => true) { text 'x' }
-                end
-                span(id: "flash-msg-#{name}") do
-                  text ActiveSupport::SafeBuffer.new(msg)
-                end
-              end
-            end
-          end
-
+          message
           content_for?(:pre_body) ? yield(:pre_body) : ''
-
           div(class: 'main') do
             div(class: 'large-10 medium-11 small-12 small-centered columns no-h-pad', style: 'max-width: 1535px;') do
               content_for?(:body) ? yield(:body) : yield
@@ -154,6 +141,41 @@ class Views::Layouts::Application < Views::Base
         if content_for?(:js)
           script do
             yield(:js)
+          end
+        end
+      end
+    end
+  end
+
+  def message
+    div(class: 'large-10 medium-11 small-12 small-centered columns') do
+      if error
+        div('aria-labelledby' => 'flash-msg-error', 'aria-role' => 'dialog', class: ['callout', 'flash-msg', 'error'], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
+          button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
+            span('aria-hidden' => true) { text 'x' }
+          end
+          span(id: 'flash-msg-error') do
+            text ActiveSupport::SafeBuffer.new(error)
+          end
+        end
+      elsif notice
+        div('aria-labelledby' => 'flash-msg-notice', 'aria-role' => 'dialog', class: ['callout', 'flash-msg', 'notice'], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
+          button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
+            span('aria-hidden' => true) { text 'x' }
+          end
+          span(id: 'flash-msg-error') do
+            text ActiveSupport::SafeBuffer.new(notice)
+          end
+        end
+      else
+        flash.each do |name, msg|
+          div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
+            button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
+              span('aria-hidden' => true) { text 'x' }
+            end
+            span(id: "flash-msg-#{name}") do
+              text ActiveSupport::SafeBuffer.new(msg)
+            end
           end
         end
       end
