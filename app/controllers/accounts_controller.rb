@@ -44,11 +44,10 @@ class AccountsController < ApplicationController
         flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
         session[:redeem] = nil
       end
-      redirect_to my_project_path
     else
       flash[:error] = 'Invalid token'
-      redirect_to root_path
     end
+    redirect_to root_path
   end
 
   def confirm_authentication
@@ -96,7 +95,7 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    result = params.require(:account).permit(:email, :ethereum_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
+    result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
     result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y') if result[:date_of_birth].present?
     result
   end

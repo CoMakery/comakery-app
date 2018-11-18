@@ -160,11 +160,11 @@ describe Project do
     end
 
     describe 'maximum_tokens' do
-      it 'prevents modification if the record has been saved' do
+      it 'can modify if the record has been saved' do
         project = create(:project)
         project.maximum_tokens += 10
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages).to be_include("Maximum tokens can't be changed")
+        expect(project).to be_valid
+        # expect(project.errors.full_messages).to be_include("Maximum tokens can't be changed")
       end
     end
 
@@ -958,5 +958,36 @@ describe Project do
     stub_token_symbol
     project = create :project, token_symbol: 'AAA', ethereum_contract_address: contract_address
     expect project.token_symbol = 'AAA'
+  end
+
+  describe '#top_contributors' do
+    let!(:account) { create :account }
+    let!(:account1) { create :account }
+    let!(:project) { create :project }
+    let!(:award_type) { create :award_type, amount: 10, project: project }
+    let!(:award_type1) { create :award_type, amount: 20, project: project }
+    let!(:other_award_type) { create :award_type, amount: 15 }
+
+    before do
+      create :award, award_type: award_type, account: account
+      create :award, award_type: award_type1, account: account1
+    end
+    it 'return project contributors sort by total amount' do
+      expect(project.top_contributors.map(&:id)).to eq [account1.id, account.id]
+    end
+    it 'does not count other project award' do
+      create :award, award_type: other_award_type, account: account
+      expect(project.top_contributors.map(&:id)).to eq [account1.id, account.id]
+    end
+    it 'sort by newest if have same total_amount' do
+      create :award, award_type: award_type, account: account, created_at: Time.zone.now + 2.seconds
+      expect(project.top_contributors.map(&:id)).to eq [account.id, account1.id]
+    end
+    it 'Only return 5 top countributors' do
+      10.times do
+        create :award, award_type: award_type
+      end
+      expect(project.top_contributors.count).to eq 5
+    end
   end
 end

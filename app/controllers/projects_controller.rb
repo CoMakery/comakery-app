@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  skip_before_action :require_login, except: :new
+  skip_before_action :require_login, except: %i[new edit create update landing]
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
@@ -9,10 +9,6 @@ class ProjectsController < ApplicationController
       @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
       @team_projects = current_account.other_member_projects.with_last_activity_at.limit(6).decorate
-    else
-      @archived_projects = []
-      @team_projects = []
-      @my_projects = policy_scope(Project).public_listed.featured.with_last_activity_at.limit(6).decorate
     end
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
@@ -60,7 +56,7 @@ class ProjectsController < ApplicationController
       flash[:notice] = 'Project created'
       redirect_to project_detail_path
     else
-      flash[:error] = 'Project saving failed, please correct the errors below'
+      @error = 'Project saving failed, please correct the errors below'
       assign_slack_channels
       render :new
     end
@@ -89,6 +85,7 @@ class ProjectsController < ApplicationController
     @project.long_id ||= SecureRandom.hex(20)
     authorize @project
     assign_slack_channels
+    @current_section = '#general'
   end
 
   def update
@@ -96,14 +93,14 @@ class ProjectsController < ApplicationController
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
     if @project.update project_params
-      flash[:notice] = 'Project updated'
-      respond_with @project, location: project_detail_path
+      @notice = 'Project updated'
     else
-      @project = @project.decorate
-      flash[:error] = 'Project update failed, please correct the errors below'
-      assign_slack_channels
-      render :edit
+      @error = 'Project update failed, please correct the errors below'
     end
+    @project = @project.decorate
+    assign_slack_channels
+    @current_section = params[:current_section]
+    render :edit
   end
 
   private

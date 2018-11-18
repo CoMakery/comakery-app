@@ -434,4 +434,9 @@ describe ProjectDecorator do
   it 'maximum_tokens_pretty' do
     expect(project.maximum_tokens_pretty).to eq '10,000,000'
   end
+
+  it 'format_with_decimal_places' do
+    project.update decimal_places: 3
+    expect(project.format_with_decimal_places(10)).to eq '10.000'
+  end
 end

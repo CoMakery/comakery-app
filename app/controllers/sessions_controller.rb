@@ -27,7 +27,6 @@ class SessionsController < ApplicationController
     begin
       if @account && @account.authenticate(params[:password])
         session[:account_id] = @account.id
-        flash[:notice] = 'Successful sign in'
         redirect_to redirect_path
       else
         flash[:error] = 'Invalid email or password'
@@ -55,7 +54,7 @@ class SessionsController < ApplicationController
     if token
       session[:redeem] = nil
       flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
-      my_project_path
+      root_path
     elsif @path
       @path
     else
@@ -67,7 +66,7 @@ class SessionsController < ApplicationController
           current_account.update new_award_notice: false
         end
       end
-      my_project_path
+      root_path
     end
   end
 end

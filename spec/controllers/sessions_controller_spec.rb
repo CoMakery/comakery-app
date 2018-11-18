@@ -52,7 +52,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq true
         expect(session[:account_id]).to eq account.id
         assert_response :redirect
-        assert_redirected_to my_project_path
+        assert_redirected_to root_path
       end
 
       it 'create new un-confirmed authentication' do
@@ -106,8 +106,7 @@ describe SessionsController do
 
     it 'allow valid user to login' do
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(flash[:notice]).to eq 'Successful sign in'
-      expect(response).to redirect_to my_project_path
+      expect(response).to redirect_to root_path
     end
 
     it 'catch for error for account without password' do
@@ -120,7 +119,23 @@ describe SessionsController do
       session[:redeem] = true
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice]).to eq 'Please click the link in your email to claim your contributor token award!'
-      expect(response).to redirect_to my_project_path
+      expect(response).to redirect_to root_path
+    end
+
+    it 'notice to update ethereum_wallet' do
+      account.update new_award_notice: true
+      create(:award, account: account)
+      post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+      expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your <a href="/account">account page</a> to receive your tokens.'
+      expect(response).to redirect_to root_path
+    end
+
+    it 'notice new award' do
+      account.update new_award_notice: true, ethereum_wallet: '0x' + 'a' * 40
+      create(:award, account: account)
+      post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+      expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Ethereum address is')).to eq true
+      expect(response).to redirect_to root_path
     end
   end
 end

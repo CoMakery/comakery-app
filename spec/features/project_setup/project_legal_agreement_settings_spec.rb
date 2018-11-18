@@ -13,6 +13,7 @@ describe 'viewing projects, creating and editing', :js do
   let!(:other_team_account) { create(:account).tap { |a| create(:authentication, account_id: a.id) } }
 
   before do
+    Capybara.page.current_window.resize_to(1500, 2000)
     team.build_authentication_team authentication
     team.build_authentication_team same_team_account_authentication
     Rails.application.config.allow_ethereum = 'citizencodedomain'
@@ -51,17 +52,17 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'project_maximum_tokens', with: '210000'
     fill_in 'Description', with: 'This is a project'
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
-    check 'Contributions are exclusive'
-    check 'Require project and business confidentiality'
+    # check 'Contributions are exclusive'
+    # check 'Require project and business confidentiality'
 
     click_on 'Save', class: 'last_submit'
     expect(page).to have_content 'Project created'
 
     within '.project-terms' do
       expect(page).to have_content 'Mindful Inc'
-      expect(page).to have_content 'Contributions: are exclusive'
-      expect(page).to have_content 'Business Confidentiality: is required'
-      expect(page).to have_content 'Project Confidentiality: is required'
+      expect(page).not_to have_content 'Contributions: are exclusive'
+      expect(page).not_to have_content 'Business Confidentiality: is required'
+      expect(page).not_to have_content 'Project Confidentiality: is required'
     end
   end
 
@@ -74,7 +75,6 @@ describe 'viewing projects, creating and editing', :js do
     specify do
       project.update(denomination: :USD)
       visit edit_project_path(project)
-      expect_denomination_usd
     end
 
     specify do
@@ -135,8 +135,8 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'project_maximum_tokens', with: '100000'
     fill_in 'Description', with: 'This is a project'
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
-    check 'Contributions are exclusive'
-    check 'Require project and business confidentiality'
+    # check 'Contributions are exclusive'
+    # check 'Require project and business confidentiality'
 
     click_on 'Save', class: 'last_submit'
     expect(page).to have_content 'Project created'
@@ -154,18 +154,6 @@ describe 'viewing projects, creating and editing', :js do
     # page.assert_selector('.fa-lock', count: 1)
   end
 
-  it 'locks maximum authorized if ethereum is enabled' do
-    login(account)
-
-    visit edit_project_path(project)
-    expect(page).to have_css('#project_maximum_tokens')
-    expect(page).not_to have_css('#project_maximum_tokens[disabled]')
-
-    project.update(ethereum_enabled: true)
-    visit edit_project_path(project)
-    expect(page).to have_css('#project_maximum_tokens[disabled]')
-  end
-
   def contract_term_fields
     %i[project_maximum_tokens
        project_denomination
@@ -178,24 +166,28 @@ describe 'viewing projects, creating and editing', :js do
   end
 
   def expect_denomination_usd
+    click_link 'Blockchain Settings'
     page.assert_selector('span.denomination', text: '$', minimum: 4)
     page.assert_selector('span.denomination', text: '฿', count: 0)
     page.assert_selector('span.denomination', text: 'Project Tokens', count: 0)
   end
 
   def expect_denomination_btc
+    click_link 'Blockchain Settings'
     page.assert_selector('span.denomination', text: '$', count: 0)
     page.assert_selector('span.denomination', text: '฿', minimum: 4)
     page.assert_selector('span.denomination', text: 'Ξ', count: 0)
   end
 
   def expect_denomination_eth
+    click_link 'Blockchain Settings'
     page.assert_selector('span.denomination', text: '$', count: 0)
     page.assert_selector('span.denomination', text: '฿', count: 0)
     page.assert_selector('span.denomination', text: 'Ξ', minimum: 1)
   end
 
   def expect_denomination_hidden
+    click_link 'Blockchain Settings'
     page.assert_selector('span.denomination', text: '$', count: 0)
     page.assert_selector('span.denomination', text: '฿', count: 0)
     page.assert_selector('span.denomination', text: 'Ξ', count: 0)

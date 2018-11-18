@@ -5,27 +5,27 @@ describe 'project settings layout:', js: true do
   let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false) }
 
   before do
-    Capybara.page.current_window.resize_to(1200, 1000) # (width, height)
+    Capybara.page.current_window.resize_to(1500, 2000) # (width, height)
     login(account)
     visit edit_project_path(project)
   end
 
   it 'width of window == 1024' do
     Capybara.page.current_window.resize_to(1024, 2000)
-    expect(page).to have_no_link('General Info')
-    expect(page).to have_no_link('Communication Channels')
-    expect(page).to have_no_link('Contribution Terms')
-    expect(page).to have_no_link('Awards Offered')
-    expect(page).to have_no_link('Visibility')
+    expect(page).to have_link('General Info')
+    expect(page).to have_link('Communication Channels')
+    expect(page).to have_link('Blockchain Settings')
+    expect(page).to have_link('Awards Offered')
+    expect(page).to have_link('Visibility')
   end
 
   it 'width of window < 1024' do
     Capybara.page.current_window.resize_to(100, 2000)
-    expect(page).to have_no_link('General Info')
-    expect(page).to have_no_link('Communication Channels')
-    expect(page).to have_no_link('Contribution Terms')
-    expect(page).to have_no_link('Awards Offered')
-    expect(page).to have_no_link('Visibility')
+    expect(page).to have_link('General Info')
+    expect(page).to have_link('Communication Channels')
+    expect(page).to have_link('Blockchain Settings')
+    expect(page).to have_link('Awards Offered')
+    expect(page).to have_link('Visibility')
   end
 
   it 'click on \'Visibility\' menu item' do
@@ -46,8 +46,8 @@ describe 'project settings layout:', js: true do
     click_on_left_menu('Awards Offered', 'awards-offered')
   end
 
-  it 'click on \'Contribution Terms\' menu item' do
-    click_on_left_menu('Contribution Terms', 'contribution-terms')
+  it 'click on \'Blockchain Settings\' menu item' do
+    click_on_left_menu('Blockchain Settings', 'contribution-terms')
   end
 end
 

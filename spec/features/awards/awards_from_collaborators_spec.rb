@@ -13,7 +13,7 @@ describe 'Collaborator projects' do
 
     login(owner)
 
-    visit root_path
+    visit my_project_path
 
     click_link 'New Project'
 

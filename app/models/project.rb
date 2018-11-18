@@ -94,7 +94,7 @@ class Project < ApplicationRecord
       left join projects on award_types.project_id=projects.id")
            .where('projects.id=?', id)
            .group('accounts.id')
-           .order('total_awarded desc, last_awarded_at').first(5)
+           .order('total_awarded desc, last_awarded_at desc').first(5)
   end
 
   def create_ethereum_awards!
@@ -301,7 +301,7 @@ class Project < ApplicationRecord
 
   def maximum_tokens_unchanged
     if maximum_tokens_was > 0 && maximum_tokens_was != maximum_tokens
-      errors[:maximum_tokens] << "can't be changed"
+      errors[:maximum_tokens] << "can't be changed" if license_finalized? || ethereum_enabled?
     end
   end
 
