@@ -1,4 +1,8 @@
 {
+  "engines": {
+    "npm": "6.x",
+    "node": "10.13.0"
+  },
   "scripts": {
     "lint": "yarn lint:ci --fix",
     "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript"
