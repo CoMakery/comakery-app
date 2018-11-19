@@ -4,11 +4,13 @@ alertMsg = (modal, msg) ->
 
 window.transferTokens = (award) -> # award in JSON
   if !window.web3
+    $('.flash-msg').remove()
     alertMsg $('#metamaskModal1'), 'Please unlock your MetaMask Accounts'
     return
   if !web3
     web3 = new Web3(window.web3.currentProvider)
   if !web3.eth.coinbase
+    $('.flash-msg').remove()
     alertMsg $('#metamaskModal1'), 'Please unlock your MetaMask Accounts'
     return
 
