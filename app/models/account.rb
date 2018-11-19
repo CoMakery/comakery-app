@@ -3,6 +3,7 @@ class Account < ApplicationRecord
   has_secure_password validations: false
   attachment :image
   include EthereumAddressable
+  include QtumAddressable
 
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :authentication_teams, dependent: :destroy
@@ -18,6 +19,7 @@ class Account < ApplicationRecord
   has_many :projects
   has_many :payments
   has_many :channels, through: :projects
+  has_many :interests, dependent: :destroy
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
@@ -25,7 +27,8 @@ class Account < ApplicationRecord
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
+  validates :qtum_wallet, qtum_address: true # see QtumAddressable
+  validates :email, format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }, allow_nil: true
   validate :validate_age, on: :create
   validates :agreed_to_user_agreement, presence: { message: 'You must agree to the terms of the CoMakery User Agreement to sign up ' }, if: :agreement_required
 
@@ -149,6 +152,14 @@ class Account < ApplicationRecord
 
   def confirmed?
     email_confirm_token.nil?
+  end
+
+  def interested?(protocol, project)
+    interests.find_by protocol: protocol, project: project
+  end
+
+  def finished_contributor_form?
+    contributor_form == true
   end
 
   def valid_and_underage?

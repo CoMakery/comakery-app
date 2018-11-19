@@ -93,7 +93,9 @@ class Views::Projects::AwardSend < Views::Base
               end
               row do
                 column('small-12') do
-                  f.submit('Send Award', class: buttonish)
+                  div(class: 'preview_award_div')
+
+                  button 'Send Award', class: 'button radius small metamask-transfer-btn button_submit', data: { disable_with: 'Send Award' }
                 end
               end
             end
@@ -129,8 +131,13 @@ class Views::Projects::AwardSend < Views::Base
     end
     last_award_id = session.delete(:last_award_id)
     if (last_award = Award.find_by(id: last_award_id)) && current_account.decorate.can_send_awards?(last_award.project) && !last_award.ethereum_transaction_address?
+      javascript_include_tag Webpacker.manifest.lookup!('qtum_script.js')
       render 'sessions/metamask_modal'
       javascript_tag(transfer_tokens_script(last_award))
+    end
+
+    content_for :js do
+      preview_award_script
     end
   end
 
@@ -140,9 +147,41 @@ class Views::Projects::AwardSend < Views::Base
         var currentState = history.state;
         if(!currentState || !currentState['award']) {
           history.pushState({ award: '#{last_award.id}' }, 'transfer_tokens_award-#{last_award.id}');
-          transferTokens(JSON.parse('#{last_award.decorate.json_for_sending_awards}'));
+          setTimeout(function() { transferAward(JSON.parse('#{last_award.decorate.json_for_sending_awards}')); }, 1900);
         }
       });
     )
+  end
+
+  def preview_award_script
+    text(<<-JAVASCRIPT.html_safe)
+      function resetSendingAwardButtonSection() {
+        $('.preview_award_div').html('Loading...');
+        $('button.button_submit').removeClass('submit');
+        $('button.button_submit img').remove();
+      }
+
+      $(function() {
+        $('body').on('change', "[name='award[channel_id]']", function() {
+          resetSendingAwardButtonSection()
+        })
+
+        $('body').on('change', "[name='award[uid]'], [name='award[award_type_id]'], [name='award[quantity]']", function() {
+          var uid;
+          var channel_id = $("[name='award[channel_id]']").val();
+          if(channel_id && channel_id != '') {
+            uid = $(".uid-select [name='award[uid]']").val();
+          } else {
+            uid = $(".uid-email [name='award[uid]']").val();
+          }
+          var quantity = $("[name='award[quantity]']").val();
+          var award_type_id = $("[name='award[award_type_id]']").val();
+          resetSendingAwardButtonSection();
+          if(uid && uid != '' && quantity && award_type_id) {
+            $.get('#{preview_project_awards_path(project_id: project.id, format: :js)}', {uid: uid, quantity: quantity, award_type_id: award_type_id, channel_id: channel_id})
+          }
+        })
+      });
+    JAVASCRIPT
   end
 end

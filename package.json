@@ -1,7 +1,17 @@
 {
+  "engines": {
+    "npm": "6.x",
+    "node": "10.13.0"
+  },
+  "scripts": {
+    "lint": "yarn lint:ci --fix",
+    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript"
+  },
   "dependencies": {
-    "@rails/webpacker": "^3.0.2",
+    "@rails/webpacker": "^3.5.5",
+    "babel-preset-react": "^6.24.1",
     "coffeescript": "1.12.7",
+    "qweb3": "^1.2.2",
     "d3": "^5.7.0",
     "d3pie": "^0.1.9",
     "prop-types": "^15.6.2",
