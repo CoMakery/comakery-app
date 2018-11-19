@@ -282,6 +282,8 @@ class Views::Accounts::Show < Views::Base
               td(class: 'small-5') do
                 if project.ethereum_contract_address
                   link_to project.ethereum_contract_address, project.ethereum_contract_explorer_url
+                elsif project.contract_address?
+                  link_to project.contract_address, project.ethereum_contract_explorer_url
                 else
                   text 'pending'
                 end

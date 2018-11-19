@@ -65,7 +65,9 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           end
 
           li_if(project.ethereum_contract_explorer_url) do
-            link_to 'Ξthereum Token', project.ethereum_contract_explorer_url,
+            a_text = 'Ξthereum Token'
+            a_text = 'Qtum Token' if project.coin_type_on_qtum?
+            link_to a_text, project.ethereum_contract_explorer_url,
               target: '_blank', class: 'text-link'
           end
 

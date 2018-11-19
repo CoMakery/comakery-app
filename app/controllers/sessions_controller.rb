@@ -59,14 +59,28 @@ class SessionsController < ApplicationController
       @path
     else
       if current_account.new_award_notice
-        if current_account.ethereum_wallet.blank?
-          flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-        else
-          flash[:notice] = "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
-          current_account.update new_award_notice: false
-        end
+        process_new_award_notice(current_account)
       end
       root_path
+    end
+  end
+
+  def process_new_award_notice(current_account)
+    project = current_account.awards.last&.project
+    if project&.coin_type_on_ethereum?
+      if current_account.ethereum_wallet.blank?
+        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+      else
+        flash[:notice] = "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
+        current_account.update new_award_notice: false
+      end
+    elsif project&.coin_type_on_qtum?
+      if current_account.qtum_wallet.blank?
+        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Qtum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+      else
+        flash[:notice] = "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your QRC20 tokens."
+        current_account.update new_award_notice: false
+      end
     end
   end
 end

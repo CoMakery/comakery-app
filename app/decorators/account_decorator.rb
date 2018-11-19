@@ -15,8 +15,12 @@ class AccountDecorator < Draper::Decorator
     "https://etherscan.io/address/#{ethereum_wallet}"
   end
 
+  def qtum_wallet_url
+    UtilitiesService.get_wallet_url('qtum_mainnet', qtum_wallet)
+  end
+
   def can_send_awards?(project)
-    project&.account == self && project&.ethereum_contract_address?
+    project&.account == self && (project&.ethereum_contract_address? || project.coin_type_eth? || project&.contract_address?)
   end
 
   def total_awards_earned_pretty(project)
