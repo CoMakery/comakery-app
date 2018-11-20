@@ -39,6 +39,16 @@ class Account < ApplicationRecord
       select("accounts.*, (select sum(total_amount) from awards where awards.account_id = accounts.id and awards.award_type_id in(#{award_types})) as total").distinct.order('total desc')
     end
 
+    def find_from_uid_channel(uid, channel)
+      authentication = Authentication.find_by(uid: uid)
+      if authentication
+        account = authentication.account
+      elsif channel
+        account = find_by(email: fetch_email(uid, channel))
+      end
+      account
+    end
+
     def find_or_create_for_authentication(uid, channel)
       authentication = Authentication.find_by(uid: uid)
       if authentication
