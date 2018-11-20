@@ -7,7 +7,7 @@ export default class Alert extends React.Component {
       <div className={`large-10 medium-11 small-12 small-centered columns ${this.props.isVisible ? '' : 'hide'}`}>
         <div className={`callout flash-msg ${this.props.messageType}`} style={{ paddingRight: 30 }}>
           <button className="close-button float-right" onClick={this.props.toggleVisible}>
-            <span>x</span>
+            <span>&times;</span>
           </button>
           <span>
             {this.props.message}

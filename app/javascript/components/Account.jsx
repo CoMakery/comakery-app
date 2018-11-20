@@ -45,6 +45,7 @@ export default class Account extends React.Component {
     formData.append('account[nickname]', this.state.nickname)
     formData.append('account[date_of_birth]', this.dateInput.current.value)
     formData.append('account[country]', this.state.country)
+    formData.append('account[qtum_wallet]', this.state.qtum_wallet)
     formData.append('account[ethereum_wallet]', this.state.ethereum_wallet)
     formData.append('account[image]', this.fileInput.current.files[0])
 
@@ -63,6 +64,7 @@ export default class Account extends React.Component {
           showMessage: true,
           isEdit     : false,
           accountData: response.current_acccount,
+          errors     : {}
         })
       },
 
@@ -174,6 +176,8 @@ export default class Account extends React.Component {
                   {this.state.errors.country}
                 </small>}
               </div>
+              <FormField fieldLabel="Qtum Address" fieldName="qtum_wallet" fieldValue={this.state.qtum_wallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.qtum_wallet} />
+
               <FormField fieldLabel="Ethereum Address" fieldName="ethereum_wallet" fieldValue={this.state.ethereum_wallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.ethereum_wallet} />
               <div className="columns small-3">
                 <label>Image</label>
