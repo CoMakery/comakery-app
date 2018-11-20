@@ -28,6 +28,7 @@ describe 'my account' do
     fill_in 'first_name', with: 'Tester'
     fill_in 'last_name', with: 'Dev'
     fill_in 'ethereum_wallet', with: "0x#{'a' * 40}"
+    fill_in 'qtum_wallet', with: "Q#{'a' * 33}"
     click_on 'Save'
 
     expect(page).to have_content 'Your account details have been updated.'

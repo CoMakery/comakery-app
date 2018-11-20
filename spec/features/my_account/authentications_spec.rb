@@ -53,6 +53,21 @@ feature 'my account', js: true do
     expect(page).to have_content "should start with '0x', followed by a 40 character ethereum address"
   end
 
+  scenario 'editing, and adding an qtum address' do
+    login(auth.account)
+    visit root_path
+    first('.menu').click_link account.decorate.name
+
+    within('.view-ethereum-wallet') do
+      first(:link).click
+    end
+
+    fill_in 'qtum_wallet', with: 'too short and with spaces'
+    click_on 'Save'
+
+    expect(page).to have_content "should start with 'Q', followed by 33 characters"
+  end
+
   scenario 'adding an ethereum address sends ethereum tokens, for awards' do
     login(auth.account)
     visit root_path
@@ -63,6 +78,7 @@ feature 'my account', js: true do
     end
 
     fill_in 'ethereum_wallet', with: "0x#{'a' * 40}"
+    fill_in 'qtum_wallet', with: "Q#{'a' * 33}"
     click_on 'Save'
 
     expect(page).to have_content 'Your account details have been updated.'
