@@ -78,6 +78,10 @@ module SlackStubs
     RestClient.stub(:post) { '{"id": "123", "name": "Comakery"}' }
   end
 
+  def stub_airtable
+    RestClient.stub(:post) { '{"success": "true"}' }
+  end
+
   # rubocop:disable RSpec/MessageSpies
   # rubocop:disable RSpec/AnyInstance
   def stub_token_symbol

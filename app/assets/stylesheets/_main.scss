@@ -564,3 +564,14 @@ h6 {
 .m-t-10 {
 	margin-top: 10px;
 }
+
+.switch-target{
+  display: none;
+}
+
+.no-switcher .switch-target{
+  display: block;
+}
+.switch-target.active{
+  display: block;
+}

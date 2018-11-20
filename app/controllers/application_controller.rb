@@ -77,7 +77,15 @@ class ApplicationController < ActionController::Base
     @current_account ||= Account.find_by(id: session[:account_id])
   end
 
-  helper_method :current_account
+  def error
+    @error ||= nil
+  end
+
+  def notice
+    @notice ||= nil
+  end
+
+  helper_method :current_account, :error, :notice
   alias current_user current_account
   helper_method :current_user
 

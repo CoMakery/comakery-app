@@ -23,7 +23,7 @@ describe 'landing page', :js do
     7.times { |i| create(:project, account, title: "Private Project #{i}", visibility: 'member') }
     7.times { |i| create(:project, account, title: "Archived Project #{i}", visibility: 'archived') }
 
-    visit root_path
+    visit my_project_path
 
     expect(page).to have_content 'gleenn'
 
@@ -41,7 +41,7 @@ describe 'landing page', :js do
     expect(page.all('.project').size).to eq(9)
   end
 
-  it 'when logged out shows featured projects first' do
+  it 'when logged out redirect to home page' do
     (1..3).each { |i| create(:project, account: swarmbot_account, title: "Featured Project #{i}", visibility: 'public_listed', featured: i) }
     (1..7).each { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", visibility: 'public_listed') }
 
@@ -49,24 +49,7 @@ describe 'landing page', :js do
 
     visit my_project_path
 
-    expect(page.all('.project').size).to eq(6)
-    within('.main') do
-      expect(page).to have_text 'Featured Project 1'
-      expect(page).to have_text 'Featured Project 2'
-      expect(page).to have_text 'Featured Project 3'
-      expect(page).to have_text 'Public Project 5'
-      expect(page).to have_text 'Public Project 6'
-      expect(page).to have_text 'Public Project 7'
-
-      expect(page).not_to have_text 'Public Project 4' # not featured and less active doesn't appear
-    end
-    click_link 'Browse All'
-
-    within('h2') { expect(page.text).to eq('Projects') }
-
-    expect(page.all('.project').size).to eq(9)
-    expect(page).to have_content 'Featured Project'
-    expect(page).to have_content 'Public Project'
-    expect(page).not_to have_content 'Private Project'
+    expect(page.all('.project').size).to eq(0)
+    expect(page).to have_content 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
   end
 end

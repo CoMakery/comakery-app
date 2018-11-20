@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   get '/logout', to: "sessions#destroy"
 
   root 'pages#landing'
+  get '/featured' => "pages#featured"
+  post '/add-interest' => "pages#add_interest", as: :add_interest
 
   get '/user-agreement' => "pages#user_agreement"
   get '/e-sign-disclosure' => "pages#e_sign_disclosure"
@@ -41,6 +43,7 @@ Rails.application.routes.draw do
   get '/projects/mine' => "projects#landing", as: :my_project
   resources :projects do
     resources :awards, only: [:index, :create] do
+      get  :preview, on: :collection
       post :update_transaction_address, on: :member
     end
     resources :contributors, only: [:index]

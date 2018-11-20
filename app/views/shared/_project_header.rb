@@ -65,11 +65,13 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           end
 
           li_if(project.ethereum_contract_explorer_url) do
-            link_to 'Ξthereum Token', project.ethereum_contract_explorer_url,
+            a_text = 'Ξthereum Token'
+            a_text = 'Qtum Token' if project.coin_type_on_qtum?
+            link_to a_text, project.ethereum_contract_explorer_url,
               target: '_blank', class: 'text-link'
           end
 
-          li_if(current_account && project.account == current_account, class: ('active' if controller_name == 'projects' && params[:action] == 'edit')) do
+          li_if(current_account && project.account == current_account, class: ('active' if controller_name == 'projects' && (params[:action] == 'edit' || params[:action] == 'update'))) do
             a(class: 'edit', href: edit_project_path(project)) do
               i(class: 'fa fa-pencil') {}
               text 'Settings'

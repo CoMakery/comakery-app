@@ -1,17 +1,4 @@
-alertMsg = (modal, msg) ->
-  modal.find('.alert-msg').text(msg)
-  modal.foundation('open')
-
 window.transferTokens = (award) -> # award in JSON
-  if !window.web3
-    alertMsg $('#metamaskModal1'), 'Please unlock your MetaMask Accounts'
-    return
-  if !web3
-    web3 = new Web3(window.web3.currentProvider)
-  if !web3.eth.coinbase
-    alertMsg $('#metamaskModal1'), 'Please unlock your MetaMask Accounts'
-    return
-
   contractAddress = award.project.ethereum_contract_address
   toAddress = award.account.ethereum_wallet
   amount = award.amount_to_send
@@ -29,8 +16,3 @@ window.transferTokens = (award) -> # award in JSON
             $.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', tx: tx)
       else
         alertMsg $('#metamaskModal1'), "You don't have sufficient Tokens to send"
-
-$ ->
-  $(document).on 'click', '.transfer-tokens-btn', ->
-    award = JSON.parse $(this).attr('data-info')
-    transferTokens award

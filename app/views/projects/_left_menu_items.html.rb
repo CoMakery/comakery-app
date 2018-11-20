@@ -1,29 +1,30 @@
 class Views::Projects::LeftMenuItems < Views::Base
+  needs :current_section
   def content
-    ul(class: 'vertical menu scrollingBox') do
+    ul(class: 'vertical menu', id: 'left-menu') do
       li do
-        a(href: '#general-info') do
-          span 'General Info'
+        a(href: 'javascript:;', class: "switcher#{' active' if current_section == '#general'}", data: { target: '#general' }) do
+          text 'General Info'
         end
       end
       li do
-        a(href: '#communication-channels') do
-          span 'Communication Channels'
+        a(href: 'javascript:;', class: "switcher#{' active' if current_section == '#channel'}", data: { target: '#channel' }) do
+          text 'Communication Channels'
         end
       end
       li do
-        a(href: '#contribution-terms') do
-          span 'Contribution Terms'
+        a(href: 'javascript:;', class: "switcher#{' active' if current_section == '#contribution'}", data: { target: '#contribution' }) do
+          text 'Blockchain Settings'
         end
       end
       li do
-        a(href: '#awards-offered') do
-          span 'Awards Offered'
+        a(href: 'javascript:;', class: "switcher#{' active' if current_section == '#award'}", data: { target: '#award' }) do
+          text 'Awards Offered'
         end
       end
       li do
-        a(href: '#visibility') do
-          span 'Visibility'
+        a(href: 'javascript:;', class: "switcher#{' active' if current_section == '#visibility'}", data: { target: '#visibility' }) do
+          text 'Visibility'
         end
       end
     end

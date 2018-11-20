@@ -45,7 +45,7 @@ jobs:
         command: rm -f CoMakery/comakery-app/.rvmrc; echo 2.4.4 > CoMakery/comakery-app/.ruby-version; rvm use 2.4.4 --default
     - run:
         working_directory: ~/CoMakery/comakery-app
-        command: nvm install 8 && nvm alias default 8
+        command: nvm install 10 && nvm alias default 10
     - run:
         working_directory: ~/CoMakery/comakery-app
         command: 'echo ''America/Los_Angeles'' | sudo tee -a /etc/timezone; sudo dpkg-reconfigure

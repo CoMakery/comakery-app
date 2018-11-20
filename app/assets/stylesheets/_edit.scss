@@ -1,22 +1,26 @@
+@media only screen and (max-width: 1024px) {
+  #left-menu li {
+    float: left;
+    padding-right: 20px;
+  }
+}
 body.projects-edit, body.projects-new, body.projects-create  {
   // .top-bar, .main > .columns {
   //   max-width: 57em;
   // }
 }
 
-body.projects-edit {
+body.projects-edit,
+body.projects-update {
   .vertical.menu li {
     padding: 0 0;
     a { color: grey; }
-    a.active-menu {
-      background-color: whitesmoke;
-      &:visited, &:link {
-        background-color: whitesmoke;
-      }
+    a.active {
+      color: #1585cf;
     }
   }
   @media only screen and (max-width: 1024px) {
-    .vertical.menu { display: none; }
+    // .vertical.menu { display: none; }
   }
 }
 
@@ -78,5 +82,9 @@ form.edit_project, form.new_project {
       font-size: 30px;
       float: right;
     }
+  }
+
+  label.legal-project-owner {
+    margin-top: 27px;
   }
 }

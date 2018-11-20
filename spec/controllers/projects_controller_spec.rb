@@ -60,35 +60,33 @@ describe ProjectsController do
     let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project') }
     let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project') }
 
-    before do
-      expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
-      other_member_project.channels.create(team: team, channel_id: 'general')
+    describe '#login' do
+      before do
+        expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
+        other_member_project.channels.create(team: team, channel_id: 'general')
+      end
+
+      it 'redirect to account page if account info is not enough' do
+        account.update country: nil
+        get :landing
+        expect(response).to redirect_to(account_path)
+      end
+
+      it 'returns your private projects, and public projects that *do not* belong to you' do
+        get :landing
+
+        expect(response.status).to eq(200)
+        expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'unlisted project', 'member project'])
+        expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
+        expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
+      end
     end
-
-    it 'redirect to account page if account info is not enough' do
-      account.update country: nil
-      get :landing
-      expect(response).to redirect_to(account_path)
-    end
-
-    it 'returns your private projects, and public projects that *do not* belong to you' do
-      get :landing
-
-      expect(response.status).to eq(200)
-      expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'unlisted project', 'member project'])
-      expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
-      expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
-    end
-
-    it 'renders nicely even if you are not logged in' do
+  describe 'logged out'
+    it 'redirect to home page if you are not logged in' do
       logout
-
       get :landing
-
-      expect(response.status).to eq(200)
-      expect(assigns[:archived_projects].map(&:title)).to eq([])
-      expect(assigns[:team_projects].map(&:title)).to eq []
-      expect(assigns[:my_projects].map(&:title)).to match_array(['public project'])
+      expect(response.status).to eq(302)
+      expect(response).to redirect_to(root_url)
     end
   end
 
@@ -199,7 +197,7 @@ describe ProjectsController do
         end.not_to change { Project.count }
       end.not_to change { AwardType.count }
 
-      expect(flash[:error]).to eq('Project saving failed, please correct the errors below')
+      expect(assigns[:error]).to eq('Project saving failed, please correct the errors below')
       project = assigns[:project]
 
       expect(project.description).to eq('Project description here')
@@ -296,11 +294,11 @@ describe ProjectsController do
                 ]
               }
             }
-            expect(response.status).to eq(302)
+            expect(response.status).to eq(200)
           end.to change { Project.count }.by(0)
         end.to change { AwardType.count }.by(0) # +1 and -1
 
-        expect(flash[:notice]).to eq('Project updated')
+        expect(assigns[:notice]).to eq('Project updated')
         cat_project.reload
         expect(cat_project.title).to eq('updated Project title here')
         expect(cat_project.description).to eq('updated Project description here')
@@ -346,7 +344,7 @@ describe ProjectsController do
           end.not_to change { AwardType.count }
 
           project = assigns[:project]
-          expect(flash[:error]).to eq('Project update failed, please correct the errors below')
+          expect(assigns[:error]).to eq('Project update failed, please correct the errors below')
           expect(project.title).to eq('')
           expect(project.description).to eq('updated Project description here')
           expect(project.tracker).to eq('http://github.com/here/is/my/tracker/updated')
@@ -385,7 +383,7 @@ describe ProjectsController do
               }
             }
             expect(response.status).to eq(200)
-            expect(flash[:error]).to eq('Project update failed, please correct the errors below')
+            expect(assigns[:error]).to eq('Project update failed, please correct the errors below')
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
       end
@@ -404,11 +402,11 @@ describe ProjectsController do
                 ]
               }
             }
-            expect(response.status).to eq(302)
+            expect(response.status).to eq(200)
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
 
-        expect(flash[:notice]).to eq('Project updated')
+        expect(assigns[:notice]).to eq('Project updated')
         award_type.reload
         expect(award_type.name).to eq('Bigger Award')
         expect(award_type).to be_community_awardable

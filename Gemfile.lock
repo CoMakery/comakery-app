@@ -249,7 +249,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    loofah (2.2.2)
+    loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.13)
@@ -282,7 +282,7 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     nio4r (2.3.1)
-    nokogiri (1.8.4)
+    nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     nokogiri-happymapper (0.6.0)
       nokogiri (~> 1.5)
@@ -340,7 +340,7 @@ GEM
     puma (3.12.0)
     pundit (2.0.0)
       activesupport (>= 3.0.0)
-    rack (2.0.5)
+    rack (2.0.6)
     rack-contrib (2.0.1)
       rack (~> 2.0)
     rack-protection (2.0.3)
@@ -572,6 +572,7 @@ DEPENDENCIES
   jquery-ui-rails
   kaminari
   letter_opener
+  loofah (>= 2.2.3)
   meta_request
   modernizr-rails
   momentjs-rails
@@ -589,6 +590,7 @@ DEPENDENCIES
   pry-rails
   puma
   pundit
+  rack (>= 2.0.6)
   rack_session_access
   rails (~> 5.1.4)
   rails-controller-testing

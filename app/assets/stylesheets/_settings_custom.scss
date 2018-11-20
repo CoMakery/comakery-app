@@ -11,6 +11,30 @@
   font-weight: normal;
   src: asset-url('Montserrat/Montserrat-Bold.ttf')  format('truetype')
 }
+
+@font-face {
+  font-family: 'MontserratSemiBold';
+  font-weight: normal;
+  src: asset-url('Montserrat/Montserrat-SemiBold.ttf')  format('truetype')
+}
+
+@font-face {
+  font-family: 'MontserratLight';
+  font-weight: normal;
+  src: asset-url('Montserrat/Montserrat-Light.ttf')  format('truetype')
+}
+
+@font-face {
+  font-family: 'MontserratItalic';
+  font-weight: normal;
+  src: asset-url('Montserrat/Montserrat-Italic.ttf')  format('truetype')
+}
+
+@font-face {
+  font-family: 'MontserratRegular';
+  font-weight: normal;
+  src: asset-url('Montserrat/Montserrat-Regular.ttf')  format('truetype')
+}
 // Colors
 
 $primary-color: #0066FF;
