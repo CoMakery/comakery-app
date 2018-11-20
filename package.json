@@ -1,7 +1,7 @@
 {
   "engines": {
     "npm": "6.x",
-    "node": "11.2.0"
+    "node": "10.13.0"
   },
   "scripts": {
     "lint": "yarn lint:ci --fix",
