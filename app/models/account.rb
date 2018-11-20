@@ -64,7 +64,8 @@ class Account < ApplicationRecord
     end
 
     def slack_info(uid, channel)
-      @slack_info ||= Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
+      @slack_info = Comakery::Slack.new(channel.authentication.token).get_user_info(uid) if uid != @slack_info&.user&.id
+      @slack_info
     end
 
     def discord_info(uid)
