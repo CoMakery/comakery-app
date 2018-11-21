@@ -99,8 +99,9 @@ class AccountsController < ApplicationController
         error_msg = current_account.errors.full_messages.join(', ')
         format.html do
           flash[:error] = error_msg
-          @projects = Project.left_outer_joins(:awards).where.not(awards: { id: nil }).group('projects.id').page(params[:page]).per(20)
-          @awards = current_account.awards.order(created_at: :desc).page(params[:page]).per(20)
+          # Legacy code caused issue
+          @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:project_page]).per(20)
+          @awards = current_account.awards.order(created_at: :desc).page(params[:award_page]).per(20)
           render :show
         end
         format.json do
