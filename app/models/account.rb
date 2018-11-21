@@ -199,7 +199,7 @@ class Account < ApplicationRecord
   def to_csv
     Comakery::CSV.generate_multiplatform do |csv|
       csv << ['First Name', 'Last Name', 'Email', 'Nickname', 'Date of Birth', 'Age', 'Country']
-      csv << [first_name, last_name, email, nickname, date_of_birth, age]
+      csv << [first_name, last_name, email, nickname, date_of_birth, age, country]
     end
   end
 
