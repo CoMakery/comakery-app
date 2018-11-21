@@ -35,7 +35,6 @@ class Comakery::Slack
 
   def get_users
     @client.users_list
-  rescue Faraday::ConnectionFailed => e
   end
 
   def get_user_info(slack_user_id)
