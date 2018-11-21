@@ -185,15 +185,15 @@ class Account < ApplicationRecord
     calculate_age
   end
 
-  def to_csv(options = {})
-    CSV.generate(options) do |csv|
+  def to_csv
+    Comakery::CSV.generate_multiplatform do |csv|
       csv << ['First Name', 'Last Name', 'Email', 'Nickname', 'Date of Birth', 'Age', 'Country']
       csv << [first_name, last_name, email, nickname, date_of_birth, age]
     end
   end
 
-  def awards_csv(options = {})
-    CSV.generate(options) do |csv|
+  def awards_csv
+    Comakery::CSV.generate_multiplatform do |csv|
       csv << ['Project', 'Award Type', 'Total Amount', 'Issuer', 'Date']
       awards.order(:created_at).decorate.each do |award|
         csv << [award.project.title, award.award_type.name, award.total_amount_pretty, award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]
