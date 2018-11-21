@@ -8,7 +8,8 @@ describe Project do
                 'Maximum tokens must be greater than 0',
                 "Account can't be blank",
                 "Title can't be blank",
-                "Legal project owner can't be blank"].sort)
+                "Legal project owner can't be blank",
+                "Long can't be blank"].sort)
     end
 
     it 'rails error if not found Ethereum address' do
@@ -388,7 +389,9 @@ describe Project do
                                           { 'name' => 'Small award', 'amount' => '1000' },
                                           { 'name' => '', 'amount' => '1000' },
                                           { 'name' => 'Award', 'amount' => '' }
-                                        ])
+                                        ],
+                                        long_id: SecureRandom.hex(20)
+                                        )
 
       expect(project.award_types.count).to eq(1)
       expect(project.award_types.first.name).to eq('Small award')

@@ -64,8 +64,8 @@ class Project < ApplicationRecord
     qtum_testnet: 'Test QTUM Network'
   }
 
-  validates :description, :account, :title, :legal_project_owner,
-    :denomination, presence: true
+  validates :description, :account, :title, :legal_project_owner, :denomination, :long_id, presence: true
+  validates :long_id, uniqueness: true
 
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { if: :revenue_share? }
 

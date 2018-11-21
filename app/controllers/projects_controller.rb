@@ -55,6 +55,9 @@ class ProjectsController < ApplicationController
     if @project.save
       flash[:notice] = 'Project created'
       redirect_to project_detail_path
+    elsif @project.errors&.details&.dig(:long_id)&.any? { |e| e[:error] == :taken }
+      flash[:error] = 'Project already created'
+      redirect_to projects_path
     else
       @error = 'Project saving failed, please correct the errors below'
       assign_slack_channels
