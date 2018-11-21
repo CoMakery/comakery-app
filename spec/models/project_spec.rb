@@ -390,8 +390,7 @@ describe Project do
                                           { 'name' => '', 'amount' => '1000' },
                                           { 'name' => 'Award', 'amount' => '' }
                                         ],
-                                        long_id: SecureRandom.hex(20)
-                                        )
+                                        long_id: SecureRandom.hex(20))
 
       expect(project.award_types.count).to eq(1)
       expect(project.award_types.first.name).to eq('Small award')
