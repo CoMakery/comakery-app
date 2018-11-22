@@ -174,11 +174,15 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
           var contract = $("[name='project[contract_address]']").val();
           var symbol = $("[name='project[token_symbol]']").val();
           var decimals = $("[name='project[decimal_places]']").val()
-          if(network && network != '' && contract != '' && symbol == '' && decimals =='') {
+          if(network && network != '' && contract != '' && (!symbol || symbol == '' || !decimals || decimals == '')) {
             getQtumSymbolsAndDecimals(network, contract).then(function(rs) {
               if(rs) {
-                $("[name='project[token_symbol]']").val(rs[0]);
-                $("[name='project[decimal_places]']").val(rs[1])
+                if (!symbol || symbol == '') {
+                  $("[name='project[token_symbol]']").val(rs[0]);
+                }
+                if (!decimals || decimals == '') {
+                  $("[name='project[decimal_places]']").val(rs[1])
+                }
               }
             })
           }
@@ -195,10 +199,14 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
           var contract = $("[name='project[ethereum_contract_address]']").val();
           var symbol = $("[name='project[token_symbol]']").val();
           var decimals = $("[name='project[decimal_places]']").val()
-          if(network && network != '' && contract != '' && symbol == '' && decimals =='') {
+          if(network && network != '' && contract != '' && (!symbol || symbol == '' || !decimals || decimals == '')) {
             var rs = getSymbolsAndDecimals(network, contract)
-            $("[name='project[token_symbol]']").val(rs[0]);
-            $("[name='project[decimal_places]']").val(rs[1])
+            if (!symbol || symbol == '') {
+              $("[name='project[token_symbol]']").val(rs[0]);
+            }
+            if (!decimals || decimals == '') {
+              $("[name='project[decimal_places]']").val(rs[1])
+            }
           }
         });
       })

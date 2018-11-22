@@ -5,7 +5,7 @@ class Views::Pages::Home < Views::Base
         header
       end
       div(style: 'margin-top: 20px; min-height: 570px') do
-        render partial: 'form'
+        render partial: 'form', locals: { email: current_account.email, first_name: current_account.first_name, last_name: current_account.last_name }
       end
       past_projects
       div(style: 'max-width: 1235px; margin-left: auto; margin-right: auto') do
