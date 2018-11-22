@@ -14,5 +14,8 @@ window.transferTokens = (award) -> # award in JSON
             console.log 'transaction address: ' + tx
             # update_transaction_address_project_award_path
             $.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', tx: tx)
+            if $('body.projects-show').length > 0
+              $('.flash-msg').html('Successfully sent award to ' + award.recipient_display_name)
+
       else
         alertMsg $('#metamaskModal1'), "You don't have sufficient Tokens to send"

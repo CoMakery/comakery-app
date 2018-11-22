@@ -19,6 +19,9 @@ transferQrc20Tokens = async function(award) { // award in JSON
     return
   }
   if (!window.qrypto.account.loggedIn) {
+    if ($('body.projects-show').length > 0) {
+      $('.flash-msg').html('The tokens have been awarded but not transferred because you are not logged in to the Qrypto wallet browser extension. You can transfer tokens on the blockchain with Qrypto on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
+    }
     alertMsg($('#metamaskModal1'), 'Not logged in. Please log in to Qrypto first')
     return
   }
