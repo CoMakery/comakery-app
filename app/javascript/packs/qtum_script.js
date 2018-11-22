@@ -36,6 +36,7 @@ transferQrc20Tokens = async function(award) { // award in JSON
   }
   const rs = await contract.send('transfer', {
     methodArgs   : [recipientAddress, amount],
+    gasPrice     : 0.00000040,
     gasLimit     : 1000000,
     senderAddress: window.qrypto.account.address,
   })
