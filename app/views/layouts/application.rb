@@ -179,6 +179,7 @@ class Views::Layouts::Application < Views::Base
           end
         end
       end
+      flash.clear
     end
   end
 end

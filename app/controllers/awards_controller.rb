@@ -124,7 +124,7 @@ class AwardsController < ApplicationController
       Account.where('lower(email)=?', uid.downcase).first
     else
       channel = Channel.find_by id: channel_id
-      Account.find_or_create_for_authentication(uid, channel).first
+      Account.find_from_uid_channel(uid, channel)
     end
   end
 
