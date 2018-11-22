@@ -1,6 +1,6 @@
 window.transferEthers = (award) -> # award in JSON
   toAddress = award.account.ethereum_wallet
-  amount = award.amount_to_send
+  amount = award.total_amount
 
   if toAddress && amount
     web3.eth.getBalance web3.eth.coinbase, (err, result) ->
@@ -8,7 +8,7 @@ window.transferEthers = (award) -> # award in JSON
         web3.eth.sendTransaction {
           from: web3.eth.coinbase
           to: toAddress
-          value: web3.toWei(amount, 'wei')
+          value: web3.toWei(amount, 'ether')
         }, (err, tx) ->
           console.log err if err
           if tx
