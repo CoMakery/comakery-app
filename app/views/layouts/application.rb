@@ -17,7 +17,6 @@ class Views::Layouts::Application < Views::Base
 
         title content_for?(:title) ? capture { yield(:title) } : I18n.t('project_name')
 
-
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat:400,700'
