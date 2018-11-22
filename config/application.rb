@@ -34,8 +34,8 @@ module Comakery
     config.autoload_paths << Rails.root.join("app", "lib")
     config.autoload_paths << Rails.root.join("app", "interactors")
 
-    routes.default_url_options[:host] = ENV['APP_HOST'] || "localhost:#{ENV['PORT'] || 3000}"
-    routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'] || 'https://'
+    routes.default_url_options[:host] = ENV['APP_HOST'].presence || "localhost:#{ENV['PORT'].presence || 3000}"
+    routes.default_url_options[:protocol] = ENV['APP_PROTOCOL'].presence || 'https://'
 
     config.assets.paths << Rails.root.join("app", "assets", "fonts")
     cloudfront_host = ENV['CLOUDFRONT_HOST']
@@ -55,5 +55,7 @@ module Comakery
     config.generators do |g|
       g.test_framework :rspec
     end
+    
+    config.react.camelize_props = true
   end
 end

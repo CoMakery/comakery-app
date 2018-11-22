@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'contributors' do
+describe 'contributors', type: :feature, js: true do
   let!(:team) { create :team }
   let!(:project) { create(:project, title: 'Project that needs awards', payment_type: 'revenue_share', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40) }
   let!(:small_award_type) { create(:award_type, project: project, name: 'Small', amount: 10) }
@@ -28,6 +28,7 @@ describe 'contributors' do
       login(account)
 
       visit project_contributors_path(project)
+
       within(first('.award-row')) do
         expect(page.find('.award-holdings')).to have_content '5'
         expect(page.find('.awards-earned')).to have_content '10'
