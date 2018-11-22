@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import * as d3 from 'd3'
 import D3Pie from 'd3pie'
 
 class ContributorsSummaryPieChart extends React.Component {
@@ -103,7 +102,9 @@ class ContributorsSummaryPieChart extends React.Component {
   }
 
   destroyPieChart() {
-    this.pieChart.destroy()
+    if (this.pieChart) {
+      this.pieChart.destroy()
+    }
   }
 
   render() {

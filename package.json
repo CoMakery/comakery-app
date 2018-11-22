@@ -5,16 +5,16 @@
   },
   "scripts": {
     "lint": "yarn lint:ci --fix",
-    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript"
+    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript",
+    "test": "jest"
   },
   "dependencies": {
     "@rails/webpacker": "^3.5.5",
     "babel-preset-react": "^6.24.1",
     "coffeescript": "1.12.7",
-    "qweb3": "^1.2.2",
-    "d3": "^5.7.0",
     "d3pie": "^0.1.9",
     "prop-types": "^15.6.2",
+    "qweb3": "^1.2.2",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
@@ -41,11 +41,6 @@
     "react-test-renderer": "^16.6.0",
     "regenerator-runtime": "^0.12.1",
     "webpack-dev-server": "^2.9.4"
-  },
-  "scripts": {
-    "lint": "yarn lint:ci --fix",
-    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript",
-    "test": "jest"
   },
   "jest": {
     "roots": [
