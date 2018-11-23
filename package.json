@@ -5,19 +5,28 @@
   },
   "scripts": {
     "lint": "yarn lint:ci --fix",
-    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript"
+    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript",
+    "test": "jest"
   },
   "dependencies": {
     "@rails/webpacker": "^3.5.5",
     "babel-preset-react": "^6.24.1",
     "coffeescript": "1.12.7",
-    "prop-types": "^15.6.0",
+    "d3pie": "^0.1.9",
+    "prop-types": "^15.6.2",
     "qweb3": "^1.2.2",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "react-paginate": "^5.2.4",
+    "react_ujs": "^2.4.4"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
+    "babel-jest": "^23.6.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.6.0",
     "eslint": "^4.7.1",
     "eslint-config-comakery": "^0.0.4",
     "eslint-config-react-app": "^0.6.2",
@@ -26,6 +35,25 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^23.6.0",
+    "jest-enzyme": "^7.0.1",
+    "react-test-renderer": "^16.6.0",
+    "regenerator-runtime": "^0.12.1",
     "webpack-dev-server": "^2.9.4"
+  },
+  "jest": {
+    "roots": [
+      "app/javascript",
+      "spec/javascript"
+    ],
+    "moduleDirectories": [
+      "app/javascript",
+      "node_modules"
+    ],
+    "globals": {
+      "window": {}
+    },
+    "setupTestFrameworkScriptFile": "./spec/javascript/setup.js"
   }
 }

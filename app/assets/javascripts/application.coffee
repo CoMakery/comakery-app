@@ -193,3 +193,13 @@ floatingLeftMenuItems = () ->
         'width': $('.scrollingBox').closest('div').width() + 30
     else
       $('.scrollingBox').css 'position': 'static'
+
+window.setupDatePicker = () ->
+  $('.datepicker').datepicker({
+    dateFormat: 'mm/dd/yy',
+    defaultDate: '01/01/2000',
+    changeYear: true,
+    yearRange: '1950:2010'
+  })
+  if $('.datepicker').val()
+    $('.datepicker').datepicker("setDate",new Date($('.datepicker').val()))

@@ -55,7 +55,7 @@ describe 'awarding users' do
     travel_back
   end
 
-  describe "when a user doesn't have an account for yet" do
+  describe "when a user doesn't have an account for yet", js: true do
     it 'populates the dropdown to select the awardee and creates the account/auth for the user' do
       expect_any_instance_of(Award).to receive(:send_award_notifications)
       project.revenue_share!
@@ -64,9 +64,13 @@ describe 'awarding users' do
 
       visit project_path(project)
 
-      fill_in :award_quantity, with: '1.579'
+      # PhantomJS sets the value below as '1.57'
+      # fill_in :award_quantity, with: '1.579'
+      execute_script("$('#award_quantity').val('1.579');")
+
       select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
-      fill_in 'Email Address', with: 'U99M9QYFQ'
+      wait_for_ajax
+      select '@bobjohnson', from: 'User'
 
       click_button 'Send'
 
@@ -77,6 +81,7 @@ describe 'awarding users' do
       award = Award.last
       expect(AwardMessage.call(award: award).notifications_message).to match '@Michael Jackson sent @bobjohnson a 1579.0 token Small'
       bobjohnsons_auth.account.confirm!
+
       login(bobjohnsons_auth.account)
 
       visit project_awards_path(project)
