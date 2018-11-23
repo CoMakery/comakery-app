@@ -89,4 +89,10 @@ module SlackStubs
     allow_any_instance_of(NilClass).to receive(:next) { 'symbol = FCBB' }
     allow_any_instance_of(String).to receive(:text) { 'symbol = FCBB' }
   end
+
+  def stub_blank_token_symbol
+    expect(Comakery::Ethereum).to receive(:open).and_return(File.new(Rails.root.join('spec', 'fixtures', 'blank_token.html')))
+    allow_any_instance_of(NilClass).to receive(:next) { 'symbol =' }
+    allow_any_instance_of(String).to receive(:text) { 'symbol =' }
+  end
 end

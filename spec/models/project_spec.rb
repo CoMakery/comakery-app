@@ -210,6 +210,11 @@ describe Project do
         expect(build(:project, ethereum_contract_address: "0x#{'A' * 40}")).to be_valid
       end
 
+      it 'validate' do
+        stub_blank_token_symbol
+        expect(build(:project, token_symbol: nil, ethereum_contract_address: "0x#{'a' * 40}")).to be_invalid
+      end
+
       it 'does not validate with an invalid ethereum address' do
         expected_error_message = "Ethereum contract address should start with '0x', followed by a 40 character ethereum address"
         stub_token_symbol
