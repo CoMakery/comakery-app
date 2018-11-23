@@ -19,7 +19,7 @@ window.transferEthers = (award) -> # award in JSON
               $('.flash-msg').html('Successfully sent award to ' + award.recipient_display_name)
           else if err
             console.log err
-            alertMsg($('#metamaskModal1'), 'Errors raised, please click on REJECT button. Then again transfer ethers on the blockchain with MetaMask on the awards page; and on MetaMask popup you make sure gas fee greater than or equal to 1 gwei before clicking on CONFIRM button')
+            alertMsg($('#metamaskModal1'), 'Errors occurred, please click on REJECT button. Please transfer ethers on the blockchain with MetaMask on the awards page. Please make sure that gas fee is greater than 0 before clicking on CONFIRM button on MetaMask popup')
 
       else
         alertMsg $('#metamaskModal1'), "You don't have sufficient Tokens to send"
