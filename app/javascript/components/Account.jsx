@@ -24,7 +24,17 @@ export default class Account extends React.Component {
       errors     : {}, // error hash for account form
     } // edit-ethereum or view-ethereum // summary or history view // start from 0 -> rails side starts from 1
     this.fileInput = React.createRef() // file upload
-    this.dateInput = React.createRef() // date_of_birth
+    this.dateInput = React.createRef() // dateOfBirth
+    this.mounted = false
+  }
+
+  componentDidMount() {
+    this.mounted = true
+    window.setupDatePicker()
+  }
+
+  componentWillMount() {
+    this.mounted = false
   }
 
   handleChangeEditMode = e => {
@@ -40,13 +50,13 @@ export default class Account extends React.Component {
     e.preventDefault()
     let formData = new FormData()
     formData.append('account[email]', this.state.email)
-    formData.append('account[first_name]', this.state.first_name)
-    formData.append('account[last_name]', this.state.last_name)
+    formData.append('account[first_name]', this.state.firstName)
+    formData.append('account[last_name]', this.state.lastName)
     formData.append('account[nickname]', this.state.nickname)
     formData.append('account[date_of_birth]', this.dateInput.current.value)
     formData.append('account[country]', this.state.country)
-    formData.append('account[qtum_wallet]', this.state.qtum_wallet)
-    formData.append('account[ethereum_wallet]', this.state.ethereum_wallet)
+    formData.append('account[qtum_wallet]', this.state.qtumWallet)
+    formData.append('account[ethereum_wallet]', this.state.ethereumWallet)
     formData.append('account[image]', this.fileInput.current.files[0])
 
     $.ajax({
@@ -63,7 +73,7 @@ export default class Account extends React.Component {
           messageType: 'notice',
           showMessage: true,
           isEdit     : false,
-          accountData: response.current_acccount,
+          accountData: response.currentAccount,
           errors     : {}
         })
       },
@@ -91,11 +101,11 @@ export default class Account extends React.Component {
   };
 
   handleChangeAwardPage = value => {
-    this.setState({ awardPage: value }, () => this.loadDataFromServer())
+    this.mounted && this.setState({ awardPage: value }, () => this.loadDataFromServer())
   };
 
   handleChangeProjectPage = value => {
-    this.setState({ projectPage: value }, () => this.loadDataFromServer())
+    this.mounted && this.setState({ projectPage: value }, () => this.loadDataFromServer())
   };
 
   loadDataFromServer() {
@@ -127,8 +137,8 @@ export default class Account extends React.Component {
             <i className="fa fa-download" />
           </a>
         </div>
-        {this.state.accountData.image_url &&
-        <img src={this.state.accountData.image_url} style={{ marginTop: 10 }} />}
+        {this.state.accountData.imageUrl &&
+        <img src={this.state.accountData.imageUrl} style={{ marginTop: 10 }} />}
       </div>
     )
 
@@ -148,16 +158,16 @@ export default class Account extends React.Component {
           <div className="row">
             <form onSubmit={this.handleUpdateAccountInfo}>
               <FormField fieldLabel="Email" fieldName="email" fieldValue={this.state.email} handleChange={this.handleChangeAccountFormData} error={this.state.errors.email} />
-              <FormField fieldLabel="First Name" fieldName="first_name" fieldValue={this.state.first_name} handleChange={this.handleChangeAccountFormData} error={this.state.errors.first_name} />
-              <FormField fieldLabel="Last Name" fieldName="last_name" fieldValue={this.state.last_name} handleChange={this.handleChangeAccountFormData} error={this.state.errors.last_name} />
+              <FormField fieldLabel="First Name" fieldName="firstName" fieldValue={this.state.firstName} handleChange={this.handleChangeAccountFormData} error={this.state.errors.firstName} />
+              <FormField fieldLabel="Last Name" fieldName="lastName" fieldValue={this.state.lastName} handleChange={this.handleChangeAccountFormData} error={this.state.errors.lastName} />
               <FormField fieldLabel="Nickname" fieldName="nickname" fieldValue={this.state.nickname} handleChange={this.handleChangeAccountFormData} error={this.state.errors.nickname} />
               <div className="columns small-3">
                 <label>Date of Birth</label>
               </div>
-              <div className={`columns small-9 ${this.state.errors.date_of_birth ? 'error' : ''}`}>
-                <input type="text" className="datepicker" placeholder="mm/dd/yyyy" name="date_of_birth" defaultValue={this.state.date_of_birth || ''} ref={this.dateInput} />
-                {this.state.errors.date_of_birth && <small className="error">
-                  {this.state.errors.date_of_birth}
+              <div className={`columns small-9 ${this.state.errors.dateOfBirth ? 'error' : ''}`}>
+                <input type="text" className="datepicker" placeholder="mm/dd/yyyy" name="dateOfBirth" defaultValue={this.state.dateOfBirth || ''} ref={this.dateInput} />
+                {this.state.errors.dateOfBirth && <small className="error">
+                  {this.state.errors.dateOfBirth}
                 </small>}
               </div>
               <div className="columns small-3">
@@ -176,9 +186,9 @@ export default class Account extends React.Component {
                   {this.state.errors.country}
                 </small>}
               </div>
-              <FormField fieldLabel="Qtum Address" fieldName="qtum_wallet" fieldValue={this.state.qtum_wallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.qtum_wallet} />
+              <FormField fieldLabel="Qtum Address" fieldName="qtumWallet" fieldValue={this.state.qtumWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.qtumWallet} />
 
-              <FormField fieldLabel="Ethereum Address" fieldName="ethereum_wallet" fieldValue={this.state.ethereum_wallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.ethereum_wallet} />
+              <FormField fieldLabel="Ethereum Address" fieldName="ethereumWallet" fieldValue={this.state.ethereumWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.ethereumWallet} />
               <div className="columns small-3">
                 <label>Image</label>
               </div>
@@ -200,18 +210,18 @@ export default class Account extends React.Component {
               </a>
             </h4>
             <DataField fieldName="Email" fieldValue={this.state.accountData.email} />
-            <DataField fieldName="First Name" fieldValue={this.state.accountData.first_name} />
-            <DataField fieldName="Last Name" fieldValue={this.state.accountData.last_name} />
+            <DataField fieldName="First Name" fieldValue={this.state.accountData.firstName} />
+            <DataField fieldName="Last Name" fieldValue={this.state.accountData.lastName} />
             <DataField fieldName="Nickname" fieldValue={this.state.accountData.nickname} />
-            <DataField fieldName="Date of Birth" fieldValue={this.state.accountData.date_of_birth} />
+            <DataField fieldName="Date of Birth" fieldValue={this.state.accountData.dateOfBirth} />
             <DataField fieldName="Country" fieldValue={this.state.accountData.country} />
             <div className="row">
               <div className="columns medium-3" style={{ marginTop: 8 }}>
                 Ethereum Address
               </div>
               <div className="columns medium-9">
-                {this.state.accountData.ethereum_wallet && <React.Fragment>
-                  <input type="text" value={this.state.accountData.ethereum_wallet} readOnly className="fake-link copy-source fake-link--input" data-href={this.state.accountData.etherscan_address} />
+                {this.state.accountData.ethereumWallet && <React.Fragment>
+                  <input type="text" value={this.state.accountData.ethereumWallet} readOnly className="fake-link copy-source fake-link--input" data-href={this.state.accountData.etherscan_address} />
                   <a className="copiable copiable--link">
                     <img src={this.props.clippyIcon} width={20} height={20} />
                   </a>

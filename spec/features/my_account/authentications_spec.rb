@@ -47,7 +47,7 @@ feature 'my account', js: true do
       first(:link).click
     end
 
-    fill_in 'ethereum_wallet', with: 'too short and with spaces'
+    fill_in 'ethereumWallet', with: 'too short and with spaces'
     click_on 'Save'
 
     expect(page).to have_content "should start with '0x', followed by a 40 character ethereum address"
@@ -62,7 +62,7 @@ feature 'my account', js: true do
       first(:link).click
     end
 
-    fill_in 'qtum_wallet', with: 'too short and with spaces'
+    fill_in 'qtumWallet', with: 'too short and with spaces'
     click_on 'Save'
 
     expect(page).to have_content "should start with 'Q', followed by 33 characters"
@@ -77,8 +77,8 @@ feature 'my account', js: true do
       first(:link).click
     end
 
-    fill_in 'ethereum_wallet', with: "0x#{'a' * 40}"
-    fill_in 'qtum_wallet', with: "Q#{'a' * 33}"
+    fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
+    fill_in 'qtumWallet', with: "Q#{'a' * 33}"
     click_on 'Save'
 
     expect(page).to have_content 'Your account details have been updated.'

@@ -21,23 +21,23 @@ export default class HistoryTable extends React.Component {
                 {this.props.awards.map(award =>
                   <tr className="award-row" key={award.id}>
                     <td className="small-3">
-                      <a href={award.project.awards_path}>
+                      <a href={award.project.awardsPath}>
                         {award.project.title}
                       </a>
                     </td>
                     <td className="small-1">
-                      {award.token_symbol || 'pending'}
+                      {award.tokenSymbol || 'pending'}
                     </td>
                     <td className="small-2">
-                      {award.total_amount_pretty}
+                      {award.totalAmountPretty}
                     </td>
                     <td className="small-2">
-                      {award.created_at}
+                      {award.createdAt}
                     </td>
                     <td className="small-4">
-                      {award.ethereum_transaction_explorer_url
-                        ? <a href={award.ethereum_transaction_explorer_url} target="_blank">
-                          {award.ethereum_transaction_address_short}
+                      {award.ethereumTransactionExplorerUrl
+                        ? <a href={award.ethereumTransactionExplorerUrl} target="_blank">
+                          {award.ethereumTransactionAddressShort}
                         </a>
                         : 'pending'}
                     </td>

@@ -57,5 +57,6 @@ module Comakery
     end
     
     config.react.camelize_props = true
+    config.middleware.use OliveBranch::Middleware, inflection: 'camel'
   end
 end

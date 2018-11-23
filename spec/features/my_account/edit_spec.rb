@@ -15,9 +15,9 @@ describe 'my account' do
   end
 
   scenario 'edit account information failed', js: true do
-    fill_in 'first_name', with: ''
-    fill_in 'last_name', with: ''
-    fill_in 'ethereum_wallet', with: "0x#{'a' * 40}"
+    fill_in 'firstName', with: ''
+    fill_in 'lastName', with: ''
+    fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
     click_on 'Save'
 
     expect(page).to have_content("First name can't be blank")
@@ -25,10 +25,10 @@ describe 'my account' do
   end
 
   scenario 'edit account information success', js: true do
-    fill_in 'first_name', with: 'Tester'
-    fill_in 'last_name', with: 'Dev'
-    fill_in 'ethereum_wallet', with: "0x#{'a' * 40}"
-    fill_in 'qtum_wallet', with: "Q#{'a' * 33}"
+    fill_in 'firstName', with: 'Tester'
+    fill_in 'lastName', with: 'Dev'
+    fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
+    fill_in 'qtumWallet', with: "Q#{'a' * 33}"
     click_on 'Save'
 
     expect(page).to have_content 'Your account details have been updated.'

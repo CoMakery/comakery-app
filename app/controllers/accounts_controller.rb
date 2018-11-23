@@ -92,7 +92,7 @@ class AccountsController < ApplicationController
         format.json do
           render json: {
             message: 'Your account details have been updated.',
-            current_acccount: account_decorate(current_account)
+            current_account: account_decorate(current_account)
           }, status: :ok
         end
       else

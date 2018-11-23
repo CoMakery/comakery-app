@@ -20,20 +20,20 @@ export default class SummaryTable extends React.Component {
                 {this.props.projects.map(project =>
                   <tr className="award-row" key={project.id}>
                     <td className="small-4">
-                      <a href={project.awards_path}>
+                      <a href={project.awardsPath}>
                         {project.title}
                       </a>
                     </td>
                     <td className="small-1">
-                      {project.token_symbol || 'pending'}
+                      {project.tokenSymbol || 'pending'}
                     </td>
                     <td className="small-2">
-                      {project.total_awarded}
+                      {project.totalAwarded}
                     </td>
                     <td className="small-5">
-                      {project.ethereum_contract_address
-                        ? <a href={project.ethereum_contract_explorer_url}>
-                          {project.ethereum_contract_address}
+                      {project.ethereumContractAddress
+                        ? <a href={project.ethereumContractExplorerUrl}>
+                          {project.ethereumContractAddress}
                         </a>
                         : 'pending'}
                     </td>
