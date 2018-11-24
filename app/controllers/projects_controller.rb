@@ -117,6 +117,7 @@ class ProjectsController < ApplicationController
       :tracker,
       :video_url,
       :payment_type,
+      :coin_type,
       :exclusive_contributions,
       :legal_project_owner,
       :minimum_payment,
@@ -129,6 +130,8 @@ class ProjectsController < ApplicationController
       :visibility,
       :ethereum_network,
       :ethereum_contract_address,
+      :blockchain_network,
+      :contract_address,
       :token_symbol,
       :decimal_places,
       award_types_attributes: %i[

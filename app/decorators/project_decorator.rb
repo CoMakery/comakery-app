@@ -25,6 +25,8 @@ class ProjectDecorator < Draper::Decorator
       site = ethereum_network? ? "#{ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
       site = 'etherscan.io' if site == 'main.etherscan.io'
       "https://#{site}/token/#{project.ethereum_contract_address}"
+    elsif coin_type_on_qtum?
+      UtilitiesService.get_contract_url(project.blockchain_network, project.contract_address)
     end
   end
 

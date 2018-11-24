@@ -27,7 +27,7 @@ class UserMailer < ApplicationMailer
 
   def reset_password(account)
     @url = edit_password_reset_url(account.reset_password_token)
-    mail to: account.email, subject: "'Confirm your account email'"
+    mail to: account.email, subject: 'Reset your password'
   end
 
   def underage_alert(account, old_age)

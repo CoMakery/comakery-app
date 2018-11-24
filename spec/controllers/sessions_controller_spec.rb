@@ -97,6 +97,7 @@ describe SessionsController do
     let!(:account) { create(:account, email: 'user@example.com', password: '12345678') }
     let!(:account1) { create(:account, email: 'user1@example.com', password: '12345678', email_confirm_token: '1234') }
     let!(:account2) { create(:account, email: 'user2@example.com', password: nil) }
+    let(:project) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, coin_type: 'erc20') }
 
     it 'prevent login with wrong password' do
       post :sign_in, params: { email: 'user@example.com', password: 'invalid' }
@@ -124,7 +125,7 @@ describe SessionsController do
 
     it 'notice to update ethereum_wallet' do
       account.update new_award_notice: true
-      create(:award, account: account)
+      create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your <a href="/account">account page</a> to receive your tokens.'
       expect(response).to redirect_to root_path
@@ -132,10 +133,30 @@ describe SessionsController do
 
     it 'notice new award' do
       account.update new_award_notice: true, ethereum_wallet: '0x' + 'a' * 40
-      create(:award, account: account)
+      create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Ethereum address is')).to eq true
       expect(response).to redirect_to root_path
+    end
+
+    context 'on Qtum network' do
+      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, coin_type: 'qrc20') }
+
+      it 'notice to update qtm_wallet' do
+        account.update new_award_notice: true
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Qtum Address on your <a href="/account">account page</a> to receive your tokens.'
+        expect(response).to redirect_to root_path
+      end
+
+      it 'notice new award' do
+        account.update new_award_notice: true, qtum_wallet: 'Q' + 'a' * 33
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Qtum address is')).to eq true
+        expect(response).to redirect_to root_path
+      end
     end
   end
 end

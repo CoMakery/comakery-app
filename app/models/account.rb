@@ -28,7 +28,7 @@ class Account < ApplicationRecord
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
   validates :qtum_wallet, qtum_address: true # see QtumAddressable
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
+  validates :email, format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }, allow_nil: true
   validate :validate_age, on: :create
   validates :agreed_to_user_agreement, presence: { message: 'You must agree to the terms of the CoMakery User Agreement to sign up ' }, if: :agreement_required
 
@@ -37,6 +37,16 @@ class Account < ApplicationRecord
       award_types = project.award_types.map(&:id).join(',')
       return Account.none if award_types.blank?
       select("accounts.*, (select sum(total_amount) from awards where awards.account_id = accounts.id and awards.award_type_id in(#{award_types})) as total").distinct.order('total desc')
+    end
+
+    def find_from_uid_channel(uid, channel)
+      authentication = Authentication.find_by(uid: uid)
+      if authentication
+        account = authentication.account
+      elsif channel
+        account = find_by(email: fetch_email(uid, channel))
+      end
+      account
     end
 
     def find_or_create_for_authentication(uid, channel)
@@ -64,7 +74,8 @@ class Account < ApplicationRecord
     end
 
     def slack_info(uid, channel)
-      @slack_info ||= Comakery::Slack.new(channel.authentication.token).get_user_info(uid)
+      @slack_info = Comakery::Slack.new(channel.authentication.token).get_user_info(uid) if uid != @slack_info&.user&.id
+      @slack_info
     end
 
     def discord_info(uid)
@@ -185,15 +196,15 @@ class Account < ApplicationRecord
     calculate_age
   end
 
-  def to_csv(options = {})
-    CSV.generate(options) do |csv|
+  def to_csv
+    Comakery::CSV.generate_multiplatform do |csv|
       csv << ['First Name', 'Last Name', 'Email', 'Nickname', 'Date of Birth', 'Age', 'Country']
-      csv << [first_name, last_name, email, nickname, date_of_birth, age]
+      csv << [first_name, last_name, email, nickname, date_of_birth, age, country]
     end
   end
 
-  def awards_csv(options = {})
-    CSV.generate(options) do |csv|
+  def awards_csv
+    Comakery::CSV.generate_multiplatform do |csv|
       csv << ['Project', 'Award Type', 'Total Amount', 'Issuer', 'Date']
       awards.order(:created_at).decorate.each do |award|
         csv << [award.project.title, award.award_type.name, award.total_amount_pretty, award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]

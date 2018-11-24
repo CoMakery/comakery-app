@@ -23,7 +23,10 @@ eg staging and production.
 Prerequisites:
 
 - PostgreSQL
-- Redis if you want to run delayed jobs
+- Redis (if you want to run delayed jobs)
+- Phantomjs binary in PATH (build from official Ubuntu repo will crash on `attach_file`, more info [here](https://github.com/teampoltergeist/poltergeist))
+- Bundler
+- Yarn
 
 Set up .env:
 
@@ -35,8 +38,11 @@ heroku config -a <YOUR_HEROKU_APP> -s | egrep '^(SLACK_|ETHEREUM_|ETHERCAMP_)' |
 Basics :
 
 ```sh
-bundle
-rake db:create:all db:schema:load
+source .env
+bundle install
+yarn install
+rails db:create:all
+rails db:schema:load
 ```
 
 Run server:
@@ -50,12 +56,25 @@ or if you want to run with delayed jobs:
 ```sh
 bin/server
 ```
+## React on Rails
+
+* Webpacker
+For development, run `bin/webpack-dev-server` command in a terminal separate from `bundle exec rails s` so that the changes made inside react components are updated real time.
+However for production, we will use precompiled react code so we don't need to run webpack-dev-server for production mode.
+And Webpacker hooks up a new webpacker:compile task to assets:precompile, which gets run whenever you run assets:precompile.
+So after running assets precompile, all react components will be working on production mode.
+
+* React_Rails
+All react components should be inside app/javascript/components. And you can just use `react_component` helper to render react component and that's all - <%= react_component "Account" %>.
+https://github.com/reactjs/react-rails
 
 ## Running tests
 
 A bit faster: `bin/rspec`
 
 More thorough (integrates views): `bin/rspect`
+
+JS tests via Jest: `yarn test`
 
 ## Pushing code to Github
 

@@ -19,7 +19,7 @@ const config = {
     'window'     : false,
   },
   rules: {
-    'complexity'                 : [ERR, { 'max': 4 }],
+    'complexity'                 : [ERR, { 'max': 20 }],
     'jsx-quotes'                 : [ERR, 'prefer-double'],
     'key-spacing'                : [ERR, {'align': 'colon'}],
     'no-debugger'                : OFF,

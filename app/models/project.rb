@@ -2,6 +2,7 @@ class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
 
   include EthereumAddressable
+  include QtumContractAddressable
 
   nilify_blanks
   attachment :image
@@ -40,6 +41,12 @@ class Project < ApplicationRecord
     revenue_share: 0,
     project_token: 1
   }
+  enum coin_type: {
+    erc20: 'ERC20',
+    eth: 'ETH',
+    qrc20: 'QRC20'
+  }, _prefix: :coin_type
+
   enum denomination: {
     USD: 0,
     BTC: 1,
@@ -52,11 +59,15 @@ class Project < ApplicationRecord
     kovan:   'Kovan Test Network',
     rinkeby: 'Rinkeby Test Network'
   }
+  enum blockchain_network: {
+    qtum_mainnet: 'Main QTUM Network',
+    qtum_testnet: 'Test QTUM Network'
+  }
 
   validates :description, :account, :title, :legal_project_owner,
     :denomination, presence: true
 
-  validates :royalty_percentage, :maximum_royalties_per_month, presence: { unless: :project_token? }
+  validates :royalty_percentage, :maximum_royalties_per_month, presence: { if: :revenue_share? }
 
   validates :maximum_tokens, numericality: { greater_than: 0 }
   validates :royalty_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_nil: true }
@@ -67,11 +78,16 @@ class Project < ApplicationRecord
 
   validate :maximum_tokens_unchanged, if: -> { !new_record? }
   validate :valid_ethereum_enabled
+  validate :check_contract_address_exist_on_blockchain_network
+  validates :contract_address, qtum_contract_address: true # see QtumContractAddressable
   validates :ethereum_contract_address, ethereum_address: { type: :account } # see EthereumAddressable
   validate :denomination_changeable
   validate :contract_address_changeable, if: -> { completed_awards.present? }
 
+  before_validation :populate_token_symbol
+  before_validation :check_coin_type
   before_save :set_transitioned_to_ethereum_enabled
+  before_save :enable_ethereum
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -99,6 +115,18 @@ class Project < ApplicationRecord
 
   def create_ethereum_awards!
     CreateEthereumAwards.call(awards: awards)
+  end
+
+  def coin_type_token?
+    coin_type_erc20? || coin_type_qrc20?
+  end
+
+  def coin_type_on_ethereum?
+    coin_type_erc20? || coin_type_eth?
+  end
+
+  def coin_type_on_qtum?
+    coin_type_qrc20?
   end
 
   def total_revenue
@@ -245,10 +273,29 @@ class Project < ApplicationRecord
     ethereum_contract_address.present? && project_token? && (token_symbol.blank? || decimal_places.blank?)
   end
 
-  before_validation :populate_token_symbol
-  before_save :enable_ethereum
-
   private
+
+  def check_coin_type
+    check_coin_type_blockchain_network
+    if coin_type_erc20?
+      self.contract_address = nil
+    elsif coin_type_qrc20?
+      self.ethereum_contract_address = nil
+    elsif coin_type?
+      self.contract_address = nil
+      self.ethereum_contract_address = nil
+      self.token_symbol   = nil
+      self.decimal_places = nil
+    end
+  end
+
+  def check_coin_type_blockchain_network
+    if coin_type_on_ethereum?
+      self.blockchain_network = nil
+    elsif coin_type_on_qtum?
+      self.ethereum_network = nil
+    end
+  end
 
   def populate_token_symbol
     if populate_token?
@@ -260,7 +307,7 @@ class Project < ApplicationRecord
   end
 
   def enable_ethereum
-    self.ethereum_enabled = ethereum_contract_address.present? unless ethereum_enabled
+    self.ethereum_enabled = ethereum_contract_address.present? || contract_address? unless ethereum_enabled
   end
 
   def valid_tracker_url
@@ -311,15 +358,27 @@ class Project < ApplicationRecord
     end
   end
 
+  def check_contract_address_exist_on_blockchain_network
+    if (contract_address_changed? || blockchain_network_changed?) && token_symbol.blank? && contract_address?
+      errors[:contract_address] << 'should exist on the qtum network'
+    end
+  end
+
   def denomination_changeable
     errors.add(:denomination, 'cannot be changed because the license terms are finalized') if license_finalized_was
     errors.add(:denomination, 'cannot be changed because revenue has been recorded') if revenues.any? && denomination_changed?
   end
 
   def contract_address_changeable
+    ethereum_contract_address_changeable
+    errors.add(:blockchain_network, 'cannot be changed if has completed transactions') if blockchain_network_changed?
+    errors.add(:contract_address, 'cannot be changed if has completed transactions') if contract_address_changed?
+    errors.add(:decimal_places, 'cannot be changed if has completed transactions') if decimal_places_changed?
+  end
+
+  def ethereum_contract_address_changeable
     errors.add(:ethereum_network, 'cannot be changed if has completed transactions') if ethereum_network_changed?
     errors.add(:ethereum_contract_address, 'cannot be changed if has completed transactions') if ethereum_contract_address_changed?
-    errors.add(:decimal_places, 'cannot be changed if has completed transactions') if decimal_places_changed?
   end
 
   def currency_precision

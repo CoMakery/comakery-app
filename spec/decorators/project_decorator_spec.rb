@@ -109,6 +109,19 @@ describe ProjectDecorator do
     end
   end
 
+  describe 'with contract_address' do
+    let(:project) do
+      build(:project,
+        coin_type: 'qrc20', blockchain_network: 'qtum_testnet',
+        contract_address: 'a234567890b234567890a234567890b234567890').decorate
+    end
+
+    specify do
+      expect(project.ethereum_contract_explorer_url)
+        .to include(UtilitiesService.get_contract_url(project.blockchain_network, project.contract_address))
+    end
+  end
+
   describe '#status_description' do
     specify do
       project.update license_finalized: true

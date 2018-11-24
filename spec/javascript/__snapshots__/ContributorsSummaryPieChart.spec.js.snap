@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Contributors Summary Pie Chart renders component correctly 1`] = `
+<div
+  className="columns large-4 medium-12 summary float-left"
+>
+  <h3>
+    Total Tokens Awarded To Contributors
+  </h3>
+  <div
+    className="royalty-pie"
+    id="award-percentages"
+  />
+</div>
+`;
