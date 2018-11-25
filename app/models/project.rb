@@ -248,7 +248,7 @@ class Project < ApplicationRecord
 
   def awards_for_chart
     result = []
-    recents = awards.where('awards.created_at > ?', 150.days.ago).order(:created_at)
+    recents = awards.limit(1000).order('id desc')
     date_groups = recents.group_by { |a| a.created_at.strftime('%Y-%m-%d') }
     contributors = {}
     recents.map(&:account).uniq.each do |a|
