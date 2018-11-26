@@ -9,7 +9,7 @@ describe Project do
                 "Account can't be blank",
                 "Title can't be blank",
                 "Legal project owner can't be blank",
-                "Long can't be blank"].sort)
+                "Long identifier can't be blank"].sort)
     end
 
     it 'rails error if not found Ethereum address' do

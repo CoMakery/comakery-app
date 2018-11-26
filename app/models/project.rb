@@ -64,8 +64,9 @@ class Project < ApplicationRecord
     qtum_testnet: 'Test QTUM Network'
   }
 
-  validates :description, :account, :title, :legal_project_owner, :denomination, :long_id, presence: true
-  validates :long_id, uniqueness: true
+  validates :description, :account, :title, :legal_project_owner, :denomination, presence: true
+  validates :long_id, presence: { message: "identifier can't be blank" }
+  validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
 
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { if: :revenue_share? }
 
