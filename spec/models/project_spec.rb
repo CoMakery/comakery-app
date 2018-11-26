@@ -1082,4 +1082,24 @@ describe Project do
       expect(project.top_contributors.count).to eq 5
     end
   end
+
+  describe '#awards_for_chart' do
+    let!(:account) { create :account }
+    let!(:project) { create :project }
+    let!(:award_type) { create :award_type, amount: 10, project: project }
+
+    before do
+      8.times { create :award, award_type: award_type, account: account, created_at: 2.days.ago }
+      1.times { create :award, award_type: award_type, account: account, created_at: 3.days.ago }
+      3.times { create :award, award_type: award_type, account: account, created_at: 4.days.ago }
+    end
+
+    it 'limit number of days by requested number of latest awards' do
+      expect(project.awards_for_chart(max: 10).size).to eq 2
+    end
+    it 'skip oldest (likely incomplete) day when number of days gets limited' do
+      expect(project.awards_for_chart(max: 10).any? { |i| i[:date] == 3.days.ago.strftime('%Y-%m-%d') }).to be_truthy
+      expect(project.awards_for_chart(max: 10).any? { |i| i[:date] == 4.days.ago.strftime('%Y-%m-%d') }).to be_falsey
+    end
+  end
 end

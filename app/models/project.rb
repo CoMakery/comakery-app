@@ -246,10 +246,13 @@ class Project < ApplicationRecord
     10**decimal_places.to_i
   end
 
-  def awards_for_chart
+  def awards_for_chart(max: 1000)
     result = []
-    recents = awards.limit(1000).order('id desc')
+    recents = awards.limit(max).order('id desc')
     date_groups = recents.group_by { |a| a.created_at.strftime('%Y-%m-%d') }
+    if awards.count > max
+      date_groups.delete(recents.first.created_at.strftime('%Y-%m-%d'))
+    end
     contributors = {}
     recents.map(&:account).uniq.each do |a|
       name = a&.decorate&.name || 'Others'
