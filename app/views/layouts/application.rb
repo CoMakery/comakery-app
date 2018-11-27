@@ -148,7 +148,7 @@ class Views::Layouts::Application < Views::Base
   end
 
   def message
-    div(class: 'large-10 medium-11 small-12 small-centered columns') do
+    div(class: 'large-12 medium-12 small-12 small-centered') do
       if error
         div('aria-labelledby' => 'flash-msg-error', 'aria-role' => 'dialog', class: ['callout', 'flash-msg', 'error'], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
           button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
