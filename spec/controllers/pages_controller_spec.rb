@@ -48,6 +48,15 @@ RSpec.describe PagesController, type: :controller do
     expect(account.reload.finished_contributor_form?).to be_truthy
   end
 
+  it 'access featured page - disable interested button' do
+    account = create :account
+    stub_airtable
+    account.interests.create(project: 'Market Research', protocol: 'Holo')
+    login account
+    get :featured
+    expect(account.reload.finished_contributor_form?).to be_truthy
+  end
+
   it 'create interest' do
     ENV['AIRTABLE_TABLE_NAME'] = '123qwer'
     account = create :account
