@@ -25,7 +25,8 @@ loginWithMetaMask.handleClick = async function() {
   fetch('/api/accounts/find_by_public_address?public_address=' + publicAddress).then(function(response) {
     return response.json();
   }).then(function(data) {
-    if (data.public_address) {
+    if (data.publicAddress) {
+      console.log(data);
       return data;
     } else {
       return loginWithMetaMask.handleSignup(publicAddress, web3.version.network);
