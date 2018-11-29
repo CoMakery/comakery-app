@@ -2,13 +2,27 @@
 
 ## Project Vision
 
-CoMakery creates Project Tokens and notifies your team via Slack.
-It helps you to distribute profit and tracks your fair share of projects you work on.
+CoMakery helps coordinate blockchain missions, projects and token awards.
 
 ## Current Implementation Status
 
-This project is in open beta.
-It is being actively developed by CoMakery.
+This project is in open beta. It is being actively developed by CoMakery.
+
+## Starting Schema
+![starting schema](doc/diagrams/schema-start.png)
+
+## Future Schema
+
+**Summary of changes**
+
+* Add MISSIONS table
+* Add TOKENS table
+* Migrate token values currently stored in PROJECTS to TOKENS
+* AWARD_TYPES renamed to BATCHES and new fields added
+* AWARDS renamed to TASKS and new fields added
+* New tables TASK_SKILLS, SKILLS, and ACCEPTANCE_REQUIREMENTS added
+
+![new schema](doc/diagrams/schema-with-batches.png)
 
 ## Configuration
 
