@@ -6,7 +6,7 @@ jobs:
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
-      NODE_VER: 10.13
+      NODE_VER: 10.13.0
       YARN_VER: 1.12.3
       SCHM_VER: 20160227015851
       ARCH: x64
