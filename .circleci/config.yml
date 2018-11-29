@@ -13,8 +13,8 @@ jobs:
     docker:
       - image: circleci/ruby:2.4.4-stretch-browsers-legacy
     steps:
-      - run: curl -O "https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo tar -xJf "node-v$NODE_VER-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner && rm "node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
-      - run: curl -O "https://yarnpkg.com/downloads/$YARN_VER/yarn-v$YARN_VER.tar.gz" && sudo mkdir -p /opt && sudo tar -xzf yarn-v$YARN_VER.tar.gz -C /opt/ && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarn /usr/local/bin/yarn && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarnpkg /usr/local/bin/yarnpkg && rm yarn-v$YARN_VER.tar.gz
+      - run: wget "https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo tar -xJf "node-v$NODE_VER-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner && rm "node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
+      - run: wget "https://yarnpkg.com/downloads/$YARN_VER/yarn-v$YARN_VER.tar.gz" && sudo mkdir -p /opt && sudo tar -xzf yarn-v$YARN_VER.tar.gz -C /opt/ && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarn /usr/local/bin/yarn && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarnpkg /usr/local/bin/yarnpkg && rm yarn-v$YARN_VER.tar.gz
       - checkout
 
       - type: cache-restore
