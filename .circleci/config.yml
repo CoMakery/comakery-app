@@ -2,24 +2,19 @@ version: 2
 jobs:
   build:
     parallelism: 1
-    shell: /bin/bash --login
     working_directory: ~/CoMakery/comakery-app
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
-      RUBY_VER: 2.4.4
       NODE_VER: 10.13
       YARN_VER: 1.12.3
       SCHM_VER: 20160227015851
+      ARCH: x64
     docker:
-      - image: circleci/build-image:ubuntu-14.04-XXL-upstart-1189-5614f37
-        command: /sbin/init
-    steps:
-      - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
-      - run: rvm use $RUBY_VER --default
-      - run: nvm install $NODE_VER && nvm alias default $NODE_VER
-      - run: 'echo ''America/Los_Angeles'' | sudo tee -a /etc/timezone; sudo dpkg-reconfigure -f noninteractive tzdata; sudo service mysql restart; sudo service postgresql restart;'
-    
+      - image: circleci/2.4.4-stretch-browsers-legacy
+    steps:    
+      - run: curl "https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo tar -xJf "node-v$NODE_VER-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner && rm "node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
+      - run: curl "https://yarnpkg.com/downloads/$YARN_VER/yarn-v$YARN_VER.tar.gz" && sudo mkdir -p /opt && sudo tar -xzf yarn-v$YARN_VER.tar.gz -C /opt/ && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarn /usr/local/bin/yarn && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarnpkg /usr/local/bin/yarnpkg && rm yarn-v$YARN_VER.tar.gz
       - checkout
 
       - type: cache-restore
@@ -29,7 +24,6 @@ jobs:
 
       - run: gem update
       - run: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
-      - run: npm i -g yarn@$YARN_VER
       - run: bin/yarn install
 
       - type: cache-save
