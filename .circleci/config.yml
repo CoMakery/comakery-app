@@ -11,8 +11,8 @@ jobs:
       SCHM_VER: 20160227015851
       ARCH: x64
     docker:
-      - image: circleci/2.4.4-stretch-browsers-legacy
-    steps:    
+      - image: circleci/ruby:2.4.4-stretch-browsers-legacy
+    steps:
       - run: curl "https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo tar -xJf "node-v$NODE_VER-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner && rm "node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
       - run: curl "https://yarnpkg.com/downloads/$YARN_VER/yarn-v$YARN_VER.tar.gz" && sudo mkdir -p /opt && sudo tar -xzf yarn-v$YARN_VER.tar.gz -C /opt/ && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarn /usr/local/bin/yarn && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarnpkg /usr/local/bin/yarnpkg && rm yarn-v$YARN_VER.tar.gz
       - checkout
