@@ -80,6 +80,10 @@ JS tests via Jest: `yarn test`
 
 To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
 
+## Deploying demo and staging to Heroku with app.json
+- [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
+- Update API keys and secrets in app's env variables inside Heroku Dashboard
+
 ## Deploying to heroku staging
 
 Once your heroku user has access to the applications, you can run any of:
