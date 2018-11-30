@@ -1,6 +1,7 @@
 require 'zip'
 class AccountsController < ApplicationController
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
+  skip_before_action :require_email_confirmation, only: %i[show update download_data]
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm confirm_authentication show download_data]
 
   def new
@@ -44,7 +45,6 @@ class AccountsController < ApplicationController
     end
     if @account.save
       session[:account_id] = @account.id
-      flash[:notice] = 'Created account successfully. Please confirm your email before continuing.'
       UserMailer.confirm_email(@account).deliver
       redirect_to root_path
     else
