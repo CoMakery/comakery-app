@@ -2,6 +2,7 @@
 
 ```plantuml
 @startuml
+title Simplified Current Schema
 hide circle
 hide methods
 hide attributes
@@ -51,6 +52,7 @@ TEAMS -left-{ CHANNELS
 
 ```plantuml
 @startuml
+title Schema With Batches
 !define table(x) class x << (T,#FFAAAA) >>
 hide circle
 hide methods
@@ -91,9 +93,10 @@ package Authentication <<rectangle>> #lightgray {
 }
 
 package Projects <<rectangle>> {
-  class PROJECTS
-  class "BATCHES\rrenamed from AWARD_TYPES" as BATCHES #lightyellow {
+  class PROJECTS #lightyellow {
     + type - enum : research, development, graphic_design, software_design, promotion, other
+  }
+  class "BATCHES\rrenamed from AWARD_TYPES" as BATCHES #lightyellow {
     + goal
     + description
     + token_id
@@ -138,10 +141,9 @@ package Projects <<rectangle>> {
   }
 }
 
-MISSIONS }- TOKENS
-MISSIONS -{ PROJECTS
+MISSIONS -down-{ PROJECTS
 TOKENS -{ TASKS
-TOKENS --{ PROJECTS
+TOKENS -{ BATCHES
 PROJECTS -{ CHANNELS
 PROJECTS -down-{ BATCHES
 BATCHES --{ TASKS
