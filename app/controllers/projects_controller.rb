@@ -8,7 +8,7 @@ class ProjectsController < ApplicationController
       check_account_info
       @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
-      @team_projects = current_account.other_member_projects.with_last_activity_at.limit(6).decorate
+      @team_projects = current_account.other_member_projects.unarchived.with_last_activity_at.limit(6).decorate
     end
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
@@ -22,6 +22,7 @@ class ProjectsController < ApplicationController
       @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
     end
     @projects = @projects.order(updated_at: :desc).includes(:account).page(params[:page]).per(9)
+
     @project_contributors = TopContributors.call(projects: @projects).contributors
   end
 
@@ -55,6 +56,9 @@ class ProjectsController < ApplicationController
     if @project.save
       flash[:notice] = 'Project created'
       redirect_to project_detail_path
+    elsif @project.errors&.details&.dig(:long_id)&.any? { |e| e[:error] == :taken }
+      flash[:error] = 'Project already created'
+      redirect_to projects_path
     else
       @error = 'Project saving failed, please correct the errors below'
       assign_slack_channels

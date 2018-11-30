@@ -24,13 +24,13 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show?
-    project.public? || team_member?
+    project.public? || (team_member? && project.unarchived?) || edit?
   end
 
   alias index? show?
 
   def edit?
-    account.present? && project.account == account
+    account.present? && project_owner?
   end
 
   alias update? edit?
@@ -43,6 +43,10 @@ class ProjectPolicy < ApplicationPolicy
 
   def show_revenue_info?
     project.show_revenue_info?(account)
+  end
+
+  def project_owner?
+    account&.owned_project?(project)
   end
 
   def team_member?

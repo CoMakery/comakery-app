@@ -178,12 +178,16 @@ class Account < ApplicationRecord
     valid? && age < 18
   end
 
+  def owned_project?(project)
+    project.account_id == id
+  end
+
   def same_team_project?(project)
     team_projects.include?(project)
   end
 
   def same_team_or_owned_project?(project)
-    project.account_id == id || team_projects.include?(project) || award_projects.include?(project)
+    owned_project?(project) || same_team_project?(project) || award_projects.include?(project)
   end
 
   def send_reset_password_request

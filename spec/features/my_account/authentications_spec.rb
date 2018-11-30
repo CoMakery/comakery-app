@@ -82,7 +82,8 @@ feature 'my account', js: true do
     click_on 'Save'
 
     expect(page).to have_content 'Your account details have been updated.'
-    expect(page.find('.fake-link.copy-source').value).to eq "0x#{'a' * 40}"
+    expect(page.find('.fake-link.copy-source').value).to eq "Q#{'a' * 33}"
+    expect(page.find('.fake-link.copy-source2').value).to eq "0x#{'a' * 40}"
 
     expect(EthereumTokenIssueJob.jobs.length).to eq(0)
   end
