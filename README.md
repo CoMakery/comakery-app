@@ -9,7 +9,7 @@ CoMakery helps coordinate blockchain missions, projects and token awards.
 This project is in open beta. It is being actively developed by CoMakery.
 
 ## Starting Schema
-![starting schema](doc/diagrams/schema-start.png)
+![starting schema](doc/diagrams/simplified-current-schema.png)
 
 ## Future Schema
 
