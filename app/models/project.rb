@@ -64,8 +64,9 @@ class Project < ApplicationRecord
     qtum_testnet: 'Test QTUM Network'
   }
 
-  validates :description, :account, :title, :legal_project_owner,
-    :denomination, presence: true
+  validates :description, :account, :title, :legal_project_owner, :denomination, presence: true
+  validates :long_id, presence: { message: "identifier can't be blank" }
+  validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
 
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { if: :revenue_share? }
 
@@ -250,10 +251,13 @@ class Project < ApplicationRecord
     10**decimal_places.to_i
   end
 
-  def awards_for_chart
+  def awards_for_chart(max: 1000)
     result = []
-    recents = awards.where('awards.created_at > ?', 150.days.ago).order(:created_at)
+    recents = awards.limit(max).order('id desc')
     date_groups = recents.group_by { |a| a.created_at.strftime('%Y-%m-%d') }
+    if awards.count > max
+      date_groups.delete(recents.first.created_at.strftime('%Y-%m-%d'))
+    end
     contributors = {}
     recents.map(&:account).uniq.each do |a|
       name = a&.decorate&.name || 'Others'
