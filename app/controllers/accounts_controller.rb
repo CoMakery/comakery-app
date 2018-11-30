@@ -154,7 +154,7 @@ class AccountsController < ApplicationController
     account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet]).merge(
       etherscan_address: account.decorate.etherscan_address,
       qtum_address: account.decorate.qtum_wallet_url,
-      image_url: account.image.present? ? attachment_url(account, :image, :fill, 190, 190) : nil
+      image_url: account.image.present? ? Refile.attachment_url(account, :image, :fill, 190, 190) : nil
     )
   end
 end
