@@ -52,7 +52,6 @@
     }
   ],
   "env": {
-    "ACTION_MAILER_HOST": "staging.comakery.com",
     "AIRBRAKE_API_KEY": "UPDATE_ME",
     "AIRBRAKE_PROJECT_ID": "UPDATE_ME",
     "AIRTABLE_API": "UPDATE_ME",
