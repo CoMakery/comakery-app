@@ -79,8 +79,8 @@
       "description": "SECRET_KEY_BASE",
       "generator": "secret"
     },
-    "SIDEKIQ_PASSWORD": "lipstick-alkali-wield-taurus-narcoses-guild-knoll-pentagon-around-glimmer",
-    "SIDEKIQ_USERNAME": "admin",
+    "SIDEKIQ_PASSWORD": "UPDATE_ME",
+    "SIDEKIQ_USERNAME": "UPDATE_ME",
     "SLACK_API_KEY": "UPDATE_ME",
     "SLACK_API_SECRET": "UPDATE_ME",
     "NODE_MODULES_CACHE": "false"
@@ -150,8 +150,8 @@
           "description": "SECRET_KEY_BASE",
           "generator": "secret"
         },
-        "SIDEKIQ_PASSWORD": "lipstick-alkali-wield-taurus-narcoses-guild-knoll-pentagon-around-glimmer",
-        "SIDEKIQ_USERNAME": "admin",
+        "SIDEKIQ_PASSWORD": "UPDATE_ME",
+        "SIDEKIQ_USERNAME": "UPDATE_ME",
         "SLACK_API_KEY": "UPDATE_ME",
         "SLACK_API_SECRET": "UPDATE_ME",
         "NODE_MODULES_CACHE": "false"
