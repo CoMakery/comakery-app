@@ -87,6 +87,7 @@ To run your tests and git push your branch *only if tests pass*, run `bin/shipit
 - Setup DNS and install following addons in case of production or staging environment:
   - https://elements.heroku.com/addons/ssl
   - https://elements.heroku.com/addons/expeditedssl
+- Update Cloudfront and Airbrake settings
 
 ## Deploying to heroku staging
 
