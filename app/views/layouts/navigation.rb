@@ -23,6 +23,9 @@ class Views::Layouts::Navigation < Views::Base
         li do
           link_to 'MISSIONS', root_path
         end
+        li do
+          link_to 'TOKENS', root_path
+        end
       end
       li do
         link_to 'MY PROJECTS', my_project_path
