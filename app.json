@@ -29,23 +29,23 @@
   },
   "addons": [
     {
-      "plan": "expeditedssl:single-cert"
-    },
-    {
       "plan": "fixie:tricycle"
     },
     {
-      "plan": "heroku-postgresql:hobby-basic",
+      "plan": "heroku-postgresql:hobby-dev",
       "as": "DATABASE"
     },
     {
-      "plan": "redistogo:micro"
+      "plan": "redistogo:nano"
     },
     {
       "plan": "scheduler:standard"
     },
     {
       "plan": "sendgrid:starter"
+    },
+    {
+      "plan": "expeditedssl:single-cert"
     },
     {
       "plan": "ssl:endpoint"
@@ -84,78 +84,5 @@
     "SLACK_API_KEY": "UPDATE_ME",
     "SLACK_API_SECRET": "UPDATE_ME",
     "NODE_MODULES_CACHE": "false"
-  },
-  "environments": {
-    "staging": {
-      "name": "Comakery Staging",
-      "website": "http://staging.comakery.com/"
-    },
-    "demo": {
-      "name": "Comakery Demo",
-      "website": "http://demo.comakery.com/",
-      "repository": "https://github.com/CoMakery/comakery-app/tree/acceptance",
-      "formation": {
-        "web": {
-          "quantity": 1,
-          "size": "hobby"
-        },
-        "worker": {
-          "quantity": 1,
-          "size": "hobby"
-        }
-      },
-      "addons": [
-        {
-          "plan": "expeditedssl:single-cert"
-        },
-        {
-          "plan": "heroku-postgresql:standard-0",
-          "as": "DATABASE"
-        },
-        {
-          "plan": "redistogo:nano"
-        },
-        {
-          "plan": "sendgrid:starter"
-        },
-        {
-          "plan": "ssl:endpoint"
-        }
-      ],
-      "env": {
-        "AIRBRAKE_API_KEY": "UPDATE_ME",
-        "AIRBRAKE_PROJECT_ID": "UPDATE_ME",
-        "AIRTABLE_API": "UPDATE_ME",
-        "AIRTABLE_APP": "UPDATE_ME",
-        "AIRTABLE_SIGNUPS_TABLE_ID": "UPDATE_ME",
-        "ALLOW_ETHEREUM": "alliancesv,bdigicat,citizencode,coinspace,comakery,comakery-inc,cyclogenesis,dccbi,enlightenedstructures,gratzi,hylo,regenerative,swarmbot-7,vevue",
-        "APP_HOST": "demo.comakery.com",
-        "APP_NAME": "demo",
-        "AWS_API_KEY": "UPDATE_ME",
-        "AWS_API_SECRET": "UPDATE_ME",
-        "BASIC_AUTH": "comakery:now",
-        "BETA_SLACK_INSTANCE_WHITELIST": "alliancesv,bdigicat,citizencode,coinspace,comakery,comakery-inc,cyclogenesis,dccbi,enlightenedstructures,gratzi,hylo,regenerative,swarmbot-7,vevue",
-        "CLOUDFRONT_HOST": "d2okr77ik79b6e.cloudfront.net",
-        "DISCORD_BOT_TOKEN": "UPDATE_ME",
-        "DISCORD_CLIENT_ID": "UPDATE_ME",
-        "DISCORD_CLIENT_SECRET": "UPDATE_ME",
-        "ETHERCAMP_SUBDOMAIN": "morden",
-        "ETHEREUM_BRIDGE": "https://eth.comakery.com",
-        "ETHEREUM_BRIDGE_API_KEY": "UPDATE_ME",
-        "ETHEREUM_EXPLORER_SITE": "ropsten.etherscan.io",
-        "REDIS_PROVIDER": "REDISTOGO_URL",
-        "REFILE_S3_BUCKET": "comakery-demo-refile",
-        "REFILE_S3_REGION": "us-east-1",
-        "SECRET_KEY_BASE": {
-          "description": "SECRET_KEY_BASE",
-          "generator": "secret"
-        },
-        "SIDEKIQ_PASSWORD": "UPDATE_ME",
-        "SIDEKIQ_USERNAME": "UPDATE_ME",
-        "SLACK_API_KEY": "UPDATE_ME",
-        "SLACK_API_SECRET": "UPDATE_ME",
-        "NODE_MODULES_CACHE": "false"
-      }
-    }
   }
 }

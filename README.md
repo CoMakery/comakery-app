@@ -80,9 +80,13 @@ JS tests via Jest: `yarn test`
 
 To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
 
-## Deploying demo and staging to Heroku with app.json
+## Deploying to Heroku with app.json
 - [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
-- Update API keys and secrets in app's env variables inside Heroku Dashboard
+- During setup update API keys and secrets according to environment
+- After deployment manually update formation and addons plans according to environment
+- Setup DNS and install following addons in case of production or staging environment:
+  - https://elements.heroku.com/addons/ssl
+  - https://elements.heroku.com/addons/expeditedssl
 
 ## Deploying to heroku staging
 
