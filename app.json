@@ -20,11 +20,11 @@
   "formation": {
     "web": {
       "quantity": 1,
-      "size": "Standard-1X"
+      "size": "free"
     },
     "worker": {
       "quantity": 1,
-      "size": "Standard-1X"
+      "size": "free"
     }
   },
   "addons": [
@@ -43,12 +43,6 @@
     },
     {
       "plan": "sendgrid:starter"
-    },
-    {
-      "plan": "expeditedssl:single-cert"
-    },
-    {
-      "plan": "ssl:endpoint"
     }
   ],
   "env": {
