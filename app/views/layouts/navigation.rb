@@ -20,12 +20,8 @@ class Views::Layouts::Navigation < Views::Base
         end
       end
       if current_account.comakery_admin?
-        li do
-          link_to 'MISSIONS', root_path
-        end
-        li do
-          link_to 'TOKENS', root_path
-        end
+        li { link_to 'MISSIONS', root_path }
+        li { link_to 'TOKENS', root_path }
       end
       li do
         link_to 'MY PROJECTS', my_project_path
