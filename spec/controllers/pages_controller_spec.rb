@@ -49,7 +49,6 @@ RSpec.describe PagesController, type: :controller do
   end
 
   it 'create interest' do
-    ENV['AIRTABLE_SIGNUPS_TABLE_ID'] = '123qwer'
     account = create :account
     login account
     stub_airtable
