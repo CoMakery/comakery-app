@@ -38,7 +38,7 @@ RSpec.describe PagesController, type: :controller do
     account = create :account, contributor_form: true
     login account
     get :landing
-    expect(response).to render_template 'pages/featured'
+    expect(response).to redirect_to action: :featured
   end
 
   it 'access featured page - set contributor form' do

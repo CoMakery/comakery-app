@@ -1,6 +1,7 @@
 require 'zip'
 class AccountsController < ApplicationController
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
+  skip_before_action :require_email_confirmation, only: %i[show update download_data]
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm confirm_authentication show download_data]
 
   def new
@@ -44,7 +45,6 @@ class AccountsController < ApplicationController
     end
     if @account.save
       session[:account_id] = @account.id
-      flash[:notice] = 'Created account successfully. Please confirm your email before continuing.'
       UserMailer.confirm_email(@account).deliver
       redirect_to root_path
     else
@@ -153,7 +153,8 @@ class AccountsController < ApplicationController
   def account_decorate(account)
     account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet]).merge(
       etherscan_address: account.decorate.etherscan_address,
-      image_url: account.image.present? ? attachment_url(account, :image, :fill, 190, 190) : nil
+      qtum_address: account.decorate.qtum_wallet_url,
+      image_url: account.image.present? ? Refile.attachment_url(account, :image, :fill, 190, 190) : nil
     )
   end
 end

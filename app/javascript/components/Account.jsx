@@ -30,7 +30,7 @@ export default class Account extends React.Component {
 
   componentDidMount() {
     this.mounted = true
-    window.setupDatePicker()
+    window.initializeAccountPage()
   }
 
   componentWillMount() {
@@ -57,7 +57,9 @@ export default class Account extends React.Component {
     formData.append('account[country]', this.state.country)
     formData.append('account[qtum_wallet]', this.state.qtumWallet)
     formData.append('account[ethereum_wallet]', this.state.ethereumWallet)
-    formData.append('account[image]', this.fileInput.current.files[0])
+    if (this.fileInput.current.files[0]) {
+      formData.append('account[image]', this.fileInput.current.files[0])
+    }
 
     $.ajax({
       url        : '/account',
@@ -217,12 +219,26 @@ export default class Account extends React.Component {
             <DataField fieldName="Country" fieldValue={this.state.accountData.country} />
             <div className="row">
               <div className="columns medium-3" style={{ marginTop: 8 }}>
+                Qtum Address
+              </div>
+              <div className="columns medium-9">
+                {this.state.accountData.qtumWallet && <React.Fragment>
+                  <input type="text" value={this.state.accountData.qtumWallet} readOnly className="fake-link copy-source fake-link--input" data-href={this.state.accountData.qtumAddress} />
+                  <a className="copiable copiable--link">
+                    <img src={this.props.clippyIcon} width={20} height={20} />
+                  </a>
+                </React.Fragment>}
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="columns medium-3" style={{ marginTop: 8 }}>
                 Ethereum Address
               </div>
               <div className="columns medium-9">
                 {this.state.accountData.ethereumWallet && <React.Fragment>
-                  <input type="text" value={this.state.accountData.ethereumWallet} readOnly className="fake-link copy-source fake-link--input" data-href={this.state.accountData.etherscan_address} />
-                  <a className="copiable copiable--link">
+                  <input type="text" value={this.state.accountData.ethereumWallet} readOnly className="fake-link copy-source2 fake-link--input" data-href={this.state.accountData.etherscanAddress} />
+                  <a className="copiable2 copiable--link">
                     <img src={this.props.clippyIcon} width={20} height={20} />
                   </a>
                 </React.Fragment>}

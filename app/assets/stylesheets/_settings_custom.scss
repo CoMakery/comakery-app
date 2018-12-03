@@ -88,3 +88,13 @@ $topbar-link-dropdown-padding: ($topbar-height / 3);
 
 $button-background: $skyblue;
 $button-radius: $global-radius;
+
+// Media Breakpoints
+
+$breakpoints: (
+ small: 0,
+ medium: 700px,
+ large: 1070px,
+ xlarge: 1200px,
+ xxlarge: 1440px,
+);

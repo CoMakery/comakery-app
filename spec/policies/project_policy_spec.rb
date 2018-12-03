@@ -9,6 +9,7 @@ describe ProjectPolicy do
   let!(:my_public_project) { create(:project, title: 'public mine', account: project_account, visibility: 'public_listed') }
   let!(:my_private_project) { create(:project, title: 'private mine', account: project_account, public: false, require_confidentiality: false) }
   let!(:my_public_project_business_confidential) { create(:project, title: 'private mine business confidential', account: project_account, visibility: 'public_listed', require_confidentiality: true) }
+  let!(:my_archived_project) { create(:project, title: 'archived mine', account: project_account, visibility: 'archived') }
 
   let!(:channel) { create :channel, team: team1, project: my_public_project, name: 'channel', channel_id: 'channel' }
   let!(:other_channel) { create :channel, team: team1, project: my_private_project, name: 'other_channel', channel_id: 'other_channel' }
@@ -18,6 +19,7 @@ describe ProjectPolicy do
   let!(:other_team_member_auth) { create(:authentication, account: other_team_member) }
   let!(:others_public_project) { create(:project, title: 'public someone elses', account: other_team_member, visibility: 'public_listed') }
   let!(:others_private_project) { create(:project, title: 'private someone elses', account: other_team_member, public: false) }
+  let!(:others_archived_project) { create(:project, title: 'archived someone elses', account: other_team_member, visibility: 'archived') }
 
   let!(:different_team_account) { create(:account).tap { |a| create(:authentication, account: a) } }
 
@@ -31,7 +33,8 @@ describe ProjectPolicy do
       it "returns all public projects and projects that belong to the current user's team" do
         projects = ProjectPolicy::Scope.new(project_account, Project).resolve
 
-        expect(projects.map(&:title).sort).to match_array([my_private_project,
+        expect(projects.map(&:title).sort).to match_array([my_archived_project,
+                                                           my_private_project,
                                                            my_public_project,
                                                            my_public_project_business_confidential,
                                                            others_public_project].map(&:title).sort)
@@ -126,15 +129,19 @@ describe ProjectPolicy do
     it 'returns true if the project is public or the account belongs to the project' do
       expect(described_class.new(nil, my_public_project).index?).to be true
       expect(described_class.new(nil, my_private_project).index?).to be_falsey
+      expect(described_class.new(nil, my_archived_project).index?).to be_falsey
 
       expect(described_class.new(project_account, my_public_project).index?).to be true
       expect(described_class.new(project_account, my_private_project).index?).to be true
+      expect(described_class.new(project_account, my_archived_project).index?).to be true
 
       expect(described_class.new(other_team_member, my_public_project).index?).to be true
       expect(described_class.new(other_team_member, my_private_project).index?).to be true
+      expect(described_class.new(other_team_member, my_archived_project).index?).to be_falsey
 
       expect(described_class.new(different_team_account, my_public_project).index?).to be true
       expect(described_class.new(different_team_account, my_private_project).index?).to be_falsey
+      expect(described_class.new(different_team_account, my_archived_project).index?).to be_falsey
     end
   end
 
@@ -142,10 +149,13 @@ describe ProjectPolicy do
     it 'allows viewing of projects that are public or are owned by the current account' do
       expect(described_class.new(nil, my_public_project).show?).to be true
       expect(described_class.new(nil, others_private_project).show?).to be_falsey
+      expect(described_class.new(nil, others_archived_project).show?).to be_falsey
 
       expect(described_class.new(project_account, my_public_project).show?).to be true
       expect(described_class.new(project_account, my_private_project).show?).to be true
+      expect(described_class.new(project_account, my_archived_project).show?).to be true
       expect(described_class.new(project_account, others_private_project).show?).to be false
+      expect(described_class.new(project_account, others_archived_project).show?).to be false
 
       expect(described_class.new(other_team_member, others_public_project).show?).to be true
       expect(described_class.new(other_team_member, my_private_project).show?).to be true
@@ -160,18 +170,23 @@ describe ProjectPolicy do
       %i[edit? update?].each do |action|
         expect(described_class.new(nil, my_public_project).send(action)).to be_falsey
         expect(described_class.new(nil, others_private_project).send(action)).to be_falsey
+        expect(described_class.new(nil, my_archived_project).send(action)).to be_falsey
 
         expect(described_class.new(project_account, my_public_project).send(action)).to be true
         expect(described_class.new(project_account, my_private_project).send(action)).to be true
+        expect(described_class.new(project_account, my_archived_project).send(action)).to be true
 
         expect(described_class.new(project_account, others_public_project).send(action)).to be_falsey
         expect(described_class.new(project_account, others_private_project).send(action)).to be_falsey
+        expect(described_class.new(project_account, others_archived_project).send(action)).to be_falsey
 
         expect(described_class.new(other_team_member, my_public_project).send(action)).to be_falsey
         expect(described_class.new(other_team_member, my_private_project).send(action)).to be_falsey
+        expect(described_class.new(other_team_member, my_archived_project).send(action)).to be_falsey
 
         expect(described_class.new(different_team_account, my_public_project).send(action)).to be_falsey
         expect(described_class.new(different_team_account, my_private_project).send(action)).to be_falsey
+        expect(described_class.new(different_team_account, my_archived_project).send(action)).to be_falsey
       end
     end
   end

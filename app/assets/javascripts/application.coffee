@@ -194,7 +194,7 @@ floatingLeftMenuItems = () ->
     else
       $('.scrollingBox').css 'position': 'static'
 
-window.setupDatePicker = () ->
+window.initializeAccountPage = () ->
   $('.datepicker').datepicker({
     dateFormat: 'mm/dd/yy',
     defaultDate: '01/01/2000',
@@ -203,3 +203,11 @@ window.setupDatePicker = () ->
   })
   if $('.datepicker').val()
     $('.datepicker').datepicker("setDate",new Date($('.datepicker').val()))
+  $('.copiable').click ->
+    $(".copy-source").select()
+    document.execCommand('Copy')
+  $('.copiable2').click ->
+    $(".copy-source2").select()
+    document.execCommand('Copy')
+  $('.fake-link').click ->
+    window.location.href = $(@).data("href")

@@ -1,7 +1,7 @@
 window.loginWithMetaMask = window.loginWithMetaMask || {}
 
 loginWithMetaMask.handleAuthenticate = (ref) ->
-  publicAddress = ref.public_address
+  publicAddress = ref.publicAddress
   nonce = ref.nonce
   fetch('/api/accounts/auth',
     credentials: 'same-origin'
