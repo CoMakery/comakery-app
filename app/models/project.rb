@@ -44,7 +44,8 @@ class Project < ApplicationRecord
   enum coin_type: {
     erc20: 'ERC20',
     eth: 'ETH',
-    qrc20: 'QRC20'
+    qrc20: 'QRC20',
+    qtum:  'QTUM'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -127,7 +128,7 @@ class Project < ApplicationRecord
   end
 
   def coin_type_on_qtum?
-    coin_type_qrc20?
+    coin_type_qrc20? || coin_type_qtum?
   end
 
   def total_revenue
