@@ -57,7 +57,9 @@ export default class Account extends React.Component {
     formData.append('account[country]', this.state.country)
     formData.append('account[qtum_wallet]', this.state.qtumWallet)
     formData.append('account[ethereum_wallet]', this.state.ethereumWallet)
-    formData.append('account[image]', this.fileInput.current.files[0])
+    if (this.fileInput.current.files[0]) {
+      formData.append('account[image]', this.fileInput.current.files[0])
+    }
 
     $.ajax({
       url        : '/account',
