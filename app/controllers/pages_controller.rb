@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   skip_before_action :require_login, except: %i[featured home]
-  skip_before_action :require_email_confirmation, only: %i[featured home landing]
+  skip_before_action :require_email_confirmation, only: %i[featured home landing add_interest]
   skip_after_action :verify_authorized
 
   def landing

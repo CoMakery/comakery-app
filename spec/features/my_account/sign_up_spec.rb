@@ -1,7 +1,8 @@
 require 'rails_helper'
 
-describe 'my account' do
-  let!(:unconfirmed_account) { create :account, nickname: 'jason', email_confirm_token: 'test' }
+describe 'my account', js: true do
+  let!(:unconfirmed_account) { create :account, nickname: 'jason', email_confirm_token: '0' }
+  let!(:to_be_confirmed_account) { create :account, nickname: 'jason', email_confirm_token: '1' }
   let!(:confirmed_account) { create :account, nickname: 'jason', email_confirm_token: nil }
 
   scenario 'user gets redirected to survey page after signup' do
@@ -28,6 +29,11 @@ describe 'my account' do
     visit '/featured'
     expect(status_code).to eq(200)
     expect(page).to have_content('Please confirm your email before continuing.')
+    stub_airtable
+    click_on "I'M INTERESTED!", match: :first
+    wait_for_ajax
+    expect(unconfirmed_account.interests.count).to be > 0
+    expect(page).to have_content('INTEREST, NOTED!')
   end
 
   scenario 'account page is available after signup' do
@@ -49,6 +55,13 @@ describe 'my account' do
     visit '/projects/mine'
     expect(status_code).to eq(200)
     expect(page).to have_content('Please confirm your email before continuing.')
+  end
+
+  scenario 'account gets confirmed after visiting confirmation link' do
+    visit "/accounts/confirm/#{to_be_confirmed_account.email_confirm_token}"
+    expect(status_code).to eq(200)
+    expect(page).to have_content('Success! Your email is confirmed.')
+    expect(page).to have_content('SIGN OUT')
   end
 
   scenario 'projects page is available after email confirmation' do
