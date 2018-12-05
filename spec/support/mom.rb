@@ -62,7 +62,7 @@ class Mom
     }
     Project.new(defaults.merge(attrs))
   end
-  
+
   def token(**attrs)
     defaults = {
       name: 'Uber for Cats',

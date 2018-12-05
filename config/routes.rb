@@ -1,6 +1,9 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  
+  resources :tokens, only: [:index, :new, :create, :show, :edit, :update]
+
   resource :account, only: [:update]
   resources :accounts, only: [:new, :create, :show] do
     collection do

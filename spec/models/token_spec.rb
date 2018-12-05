@@ -15,7 +15,7 @@ describe Token do
       it 'default' do
         expect(described_class.new.denomination).to eq('USD')
       end
-      
+
       specify do
         token.USD!
         expect(token.denomination).to eq('USD')
@@ -151,7 +151,7 @@ describe Token do
       # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
       # it 'once has tasks associated cannot be set to another value' do
       #   create :task, token: token
-      
+
       # token.contract_address = address
       # token.save!
       # token.reload
@@ -197,11 +197,11 @@ describe Token do
         token.reload
         expect(token.ethereum_contract_address).to eq(address)
       end
-      
+
       # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
       # it 'once has tasks associated cannot be set to another value' do
       #   create :task, token: token
-      
+
       # stub_token_symbol
       # token.ethereum_contract_address = address
       # token.save!
@@ -213,7 +213,6 @@ describe Token do
       #   /cannot be changed if has associated tasks/
       # end
     end
-
   end
 
   it 'enum of denominations should contain the platform wide currencies' do
@@ -271,5 +270,4 @@ describe Token do
     token = create :token, symbol: 'AAA', ethereum_contract_address: contract_address
     expect token.symbol = 'AAA'
   end
-
 end
