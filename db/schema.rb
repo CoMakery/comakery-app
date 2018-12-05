@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20181202023927) do
     t.boolean "new_award_notice", default: false
     t.boolean "contributor_form", default: false
     t.string "qtum_wallet"
+    t.boolean "comakery_admin", default: false
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
     t.index ["public_address"], name: "index_accounts_on_public_address"

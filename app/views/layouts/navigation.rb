@@ -19,6 +19,10 @@ class Views::Layouts::Navigation < Views::Base
           link_to current_account.decorate.name, account_path
         end
       end
+      if current_account.comakery_admin?
+        li { link_to 'MISSIONS', root_path }
+        li { link_to 'TOKENS', root_path }
+      end
       li do
         link_to 'MY PROJECTS', my_project_path
       end

@@ -1,7 +1,7 @@
 require 'zip'
 class AccountsController < ApplicationController
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
-  skip_before_action :require_email_confirmation, only: %i[show update download_data]
+  skip_before_action :require_email_confirmation, only: %i[new create show update download_data confirm confirm_authentication]
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm confirm_authentication show download_data]
 
   def new
