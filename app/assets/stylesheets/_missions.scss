@@ -1,0 +1,203 @@
+// Place all the styles related to the missions controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'style_guide';
+
+.missions-new, .missions-edit {
+  form {
+    margin: 0;
+  }
+
+  .main {
+    padding: 25px 0px 0px;
+    background-color: #f6f6f6;
+  }
+
+  .mission-header {
+    font-family: Montserrat;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: var(--dark-indigo);
+
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(58, 58, 58, 0.2);
+  }
+
+  .mission-container {
+    width: 100%;
+    padding: 0 1rem;
+
+    @media screen and (min-width: 850px) {
+      padding: 0 150px;
+    }
+
+    small.error {
+      color: #DB0877;
+      display: block;
+      margin-top: -28px;
+      margin-bottom: 24px;
+    }
+  }
+
+  .mission-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+
+    &__title {
+      font-size: 12px;
+      font-weight: bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: var(--black);
+      text-transform: uppercase;
+    }
+    &__required {
+      opacity: 0.5;
+      font-family: Montserrat;
+      font-size: 12px;
+      font-weight: normal;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      color: var(--greyish-brown);
+      text-transform: capitalize;
+      margin-left: 5px;
+    }
+    &__length {
+      opacity: 0.3;
+      font-family: Montserrat;
+      font-size: 10px;
+      font-weight: bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: right;
+      color: var(--greyish-brown);
+    }
+  }
+
+  .mission-input {
+    height: 35px;
+    padding: 8px 15px;
+    margin-bottom: 28px;
+    box-sizing: border-box;
+    box-shadow: inset 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+
+    font-family: Montserrat;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+
+    &--multi {
+      height: 115px;
+      resize: none;
+    }
+
+    &--file {
+      display: inline-block;
+      height: 27px;
+      width: auto;
+      padding: 6px 9px;
+      margin-bottom: 0px;
+      box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+      font-size: 12px;
+      color: var(--primary-blue);
+      background-color: #ffffff;
+      text-transform: uppercase;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.5;
+        transition: 0.5s;
+      }
+    }
+  }
+
+  .mission-image-container {
+    display: flex;
+    justify-content: space-between;
+
+    &__half {
+      flex: 1;
+      img {
+        display: block;
+        background-color: rgba(0, 137, 244, 0.1);
+        border: 1px dashed rgb(0, 137, 244);
+        height: 100px;
+        margin-bottom: 10px;
+      }
+
+      .mission-choose-file {
+        width: 100%;
+        display: flex;
+        align-items: baseline;
+      }
+
+      .img-resolution {
+        margin-left: 8px;
+        margin-bottom: 28px;
+        display: inline-block;
+        font-family: Montserrat;
+        font-size: 12px;
+        padding-top: 6px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: var(--greyish-brown);
+      }
+    }
+  }
+
+  .mission-footer {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 80px;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 0 1rem;
+
+    @media screen and (min-width: 850px) {
+      padding: 0 150px;
+    }
+
+    &__save {
+      margin-left: auto;
+      text-transform: uppercase;
+      width: 90px;
+      height: 30px;
+      border: 1px solid white;
+      border-radius: 0;
+      font-family: Montserrat;
+      font-size: 14px;
+      font-weight: 500;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-align: center;
+      color: #ffffff;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.5;
+        transition: 0.5s;
+      }
+    }
+  } 
+}

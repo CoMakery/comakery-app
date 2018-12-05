@@ -69,6 +69,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :missions
+
   namespace :api, defaults: { format: :json } do
     resources :accounts, only: [:create] do
       collection do

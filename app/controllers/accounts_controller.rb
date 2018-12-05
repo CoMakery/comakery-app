@@ -106,6 +106,7 @@ class AccountsController < ApplicationController
         end
         format.json do
           errors = current_account.errors.messages
+          puts errors
           errors.each { |key, value| errors[key] = value.to_sentence }
           render json: { message: error_msg, errors: errors }, status: :unprocessable_entity
         end
