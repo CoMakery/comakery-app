@@ -1,3 +1,5 @@
+/* eslint-disable default-case */
+
 import axios from 'axios'
 import config from '../config'
 
@@ -21,7 +23,7 @@ const _get = async url => {
   return (await axios.get(apiPrefix + url)).data
 }
 
-const _post = async (url, data) => {
+const _post = async(url, data) => {
   return (await axios.post(apiPrefix + url, data)).data
 }
 
@@ -45,14 +47,14 @@ export default {
   async getUtxoList(address) {
     return (await _get(`/addr/${address}/utxo`)).map(item => {
       return {
-        address: item.address,
-        txid: item.txid,
+        address      : item.address,
+        txid         : item.txid,
         confirmations: item.confirmations,
-        isStake: item.isStake,
-        amount: item.amount,
-        value: item.satoshis,
-        hash: item.txid,
-        pos: item.vout
+        isStake      : item.isStake,
+        amount       : item.amount,
+        value        : item.satoshis,
+        hash         : item.txid,
+        pos          : item.vout
       }
     })
   },
@@ -74,6 +76,6 @@ export default {
   },
 
   async callContract(address, encodedData) {
-    return (await _get(`/contracts/${address}/hash/${encodedData}/call`))['executionResult']['output']
+    return (await _get(`/contracts/${address}/hash/${encodedData}/call`)).executionResult.output
   }
 }

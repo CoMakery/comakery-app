@@ -12,7 +12,7 @@ const BigNumber = require('bignumber.js')
 
 // network: 'mainnet' or 'testnet'
 sendQtums = async function(network, to, amount) {
-  const coinName = network == 'mainnet' ? 'Bitcoin' : 'testnet'
+  const coinName = network === 'mainnet' ? 'Bitcoin' : 'testnet'
   const fee = 0.001582
   const rawTxFetchFunc = server.currentNode().fetchRawTx
   const fromAddress = await getQtumAddressFromFirstPublicKey(network)
@@ -61,7 +61,7 @@ sendQtums = async function(network, to, amount) {
   const signed = await TrezorConnect.qtumSignTransaction({inputs: inputs, outputs: outputs, coin: coinName, push: false, prevTxHex: prevTxHex})
 
   const serializedTx = signed.payload.serializedTx
-  if(serializedTx) {
+  if (serializedTx) {
     const txId = await server.currentNode().sendRawTx(serializedTx)
     console.log('txId =' + txId)
     return txId
