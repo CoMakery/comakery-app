@@ -1,7 +1,6 @@
 /* eslint-disable no-alert, no-undef, complexity, standard/object-curly-even-spacing, default-case */
 
-window.__TREZOR_CONNECT_SRC = 'http://localhost:8088/'
-// window.__TREZOR_CONNECT_SRC = 'http://trezor-connect-demo2.herokuapp.com/'
+window.__TREZOR_CONNECT_SRC = 'http://trezor-connect-demo2.herokuapp.com/'
 
 const constants = require('networks/qtum/constants')
 const server = require('networks/qtum/server').default
@@ -17,6 +16,7 @@ sendQtums = async function(network, to, amount) {
   const rawTxFetchFunc = server.currentNode().fetchRawTx
   const fromAddress = await getQtumAddressFromFirstPublicKey(network)
   const toAddressInBtc = convertQtumAddressToBitcoinType(to, network)
+  console.log('fromAddress = ' + fromAddress)
   console.log(toAddressInBtc)
   const utxoList = await server.currentNode().getUtxoList(fromAddress)
   console.log('utxoList ----------------')

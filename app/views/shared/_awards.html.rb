@@ -69,7 +69,6 @@ class Views::Shared::Awards < Views::Base
                 elsif current_account.decorate.can_send_awards?(project)
                   link_to 'javascript:void(0)', class: 'metamask-transfer-btn transfer-tokens-btn', 'data-id': award.id, 'data-info': award.json_for_sending_awards do
                     span 'Send'
-                    wallet_logo = project.coin_type_on_ethereum? ? 'metamask2.png' : 'qrypto.png'
                     image_tag wallet_logo
                   end
                 else
@@ -91,6 +90,14 @@ class Views::Shared::Awards < Views::Base
       i(class: 'fa fa-check-square')
     else
       show_recipient ? text('Emailed') : link_to('confirm', confirm_award_path(award.confirm_token))
+    end
+  end
+
+  def wallet_logo
+    if project.coin_type_on_ethereum?
+      'metamask2.png'
+    elsif project.coin_type_on_qtum?
+      project.coin_type_qtum? ? 'trezor.png' : 'qrypto.png'
     end
   end
 end
