@@ -3,7 +3,7 @@
 window.__TREZOR_CONNECT_SRC = 'http://trezor-connect-demo2.herokuapp.com/'
 
 const constants = require('networks/qtum/constants')
-const server = require('networks/qtum/server').default
+const config = require('networks/qtum/config').default
 const bitcoinJsLib = require('bitcoinjs-lib')
 const qtumJsLib = require('qtumjs-lib')
 const qtumcore = require('qtumcore-lib')
@@ -12,14 +12,18 @@ const BigNumber = require('bignumber.js')
 // network: 'mainnet' or 'testnet'
 sendQtums = async function(network, to, amount) {
   const coinName = network === 'mainnet' ? 'Bitcoin' : 'testnet'
+
+  config.set('network', network)
+  const server = require('networks/qtum/server').default
   const fee = 0.001582
   const rawTxFetchFunc = server.currentNode().fetchRawTx
   const fromAddress = await getQtumAddressFromFirstPublicKey(network)
   const toAddressInBtc = convertQtumAddressToBitcoinType(to, network)
   console.log('fromAddress = ' + fromAddress)
-  console.log(toAddressInBtc)
+  console.log('recipient address in Qtum = ' + to)
+  console.log('recipient address in Bitcoin type = ' + toAddressInBtc)
   const utxoList = await server.currentNode().getUtxoList(fromAddress)
-  console.log('utxoList ----------------')
+  console.log('utxoList .........')
   console.log(utxoList)
   const amountSat = new BigNumber(amount).times(1e8)
   const feeSat = new BigNumber(fee).times(1e8)
