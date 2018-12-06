@@ -1,7 +1,10 @@
 class TokensController < ApplicationController
-  before_action :assign_current_account
   before_action :redirect_unless_admin
   before_action :set_token, only: %i[show edit update]
+  before_action :set_coin_types, only: %i[new show edit]
+  before_action :set_ethereum_networks, only: %i[new show edit]
+  before_action :set_blockchain_networks, only: %i[new show edit]
+  before_action :set_generic_props, only: %i[new show edit]
 
   def index
     @tokens = policy_scope(Token)
@@ -12,8 +15,9 @@ class TokensController < ApplicationController
   def new
     @token = Token.create
     authorize @token
-
-    render component: 'TokenNew', props: { token: @token }
+    
+    @props[:token] = @token.serializable_hash
+    render component: 'TokenForm', props: @props, prerender: false
   end
 
   def create
@@ -32,13 +36,15 @@ class TokensController < ApplicationController
   def show
     authorize @token
 
-    render component: 'TokenShow', props: { token: @token }
+    @props[:form_action] = 'PATCH'
+    render component: 'TokenForm', props: @props
   end
 
   def edit
     authorize @token
 
-    render component: 'TokenEdit', props: { token: @token }
+    @props[:form_action] = 'PATCH'
+    render component: 'TokenForm', props: @props
   end
 
   def update
@@ -55,16 +61,37 @@ class TokensController < ApplicationController
 
   private
 
-  def assign_current_account
-    @current_account_deco = current_account&.decorate
-  end
-
   def redirect_unless_admin
     redirect_to root_path unless current_account.comakery_admin?
   end
 
   def set_token
     @token = Token.find(params[:id]).decorate
+  end
+  
+  def set_coin_types
+    @coin_types = Token.coin_types.invert
+  end
+  
+  def set_ethereum_networks
+    @ethereum_networks = Token.ethereum_networks.invert
+  end
+  
+  def set_blockchain_networks
+    @blockchain_networks = Token.blockchain_networks.invert
+  end
+
+  def set_generic_props
+    @props = {
+      token: @token.serializable_hash,
+      coin_types: @coin_types,
+      ethereum_networks: @ethereum_networks,
+      blockchain_networks: @blockchain_networks,
+      form_url: tokens_path,
+      form_action: 'POST',
+      url_on_success: tokens_path,
+      csrf_token: form_authenticity_token
+    }
   end
 
   def token_params
