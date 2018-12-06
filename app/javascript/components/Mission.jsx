@@ -82,7 +82,12 @@ export default class Mission extends React.Component {
       type       : this.props.id ? 'PATCH' : 'POST',
 
       success: response => {
-        console.log('success')
+        this.setState({
+          message    : response.message,
+          messageType: 'notice',
+          showMessage: true
+        })
+        window.location.href = '/missions'
       },
 
       error: (xhr) => {
@@ -93,14 +98,11 @@ export default class Mission extends React.Component {
           showMessage: true,
           errors     : response.errors,
         })
-        console.log('error')
-        console.log(xhr.responseJSON)
       },
     })
   }
 
   render() {
-    console.log(this.state)
     const {id, name, subtitle, description, logoPreview, imagePreview, message, messageType, showMessage, errors} = this.state
     return <React.Fragment>
       <Alert message={message} messageType={messageType} isVisible={showMessage} toggleVisible={() => {
