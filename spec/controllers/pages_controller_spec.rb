@@ -63,7 +63,7 @@ RSpec.describe PagesController, type: :controller do
     ENV['APP_NAME'] = 'staging'
     get :landing
     ENV['APP_NAME'] = ''
-    expect(assigns[:paperform_id]).to eq('staging-homepage')
+    expect(assigns[:paperform_id]).to eq('0f2g0j1q')
   end
 
   it 'access featured page - set contributor form' do

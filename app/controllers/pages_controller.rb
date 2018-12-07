@@ -12,7 +12,7 @@ class PagesController < ApplicationController
                         when 'demo'
                           'demo-homepage'
                         when 'staging'
-                          'staging-homepage'
+                          '0f2g0j1q'
                         else
                           'homepage'
         end
