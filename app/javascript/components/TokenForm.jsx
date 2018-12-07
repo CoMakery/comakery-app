@@ -85,17 +85,19 @@ class TokenForm extends React.Component {
             />
           </label>
 
-          <label>
-            token symbol
-            <input
-              required
-              type="text"
-              name="token[symbol]"
-              value={this.state['token[symbol]']}
-              onChange={this.handleFieldChange}
-              placeholder="BTC"
-            />
-          </label>
+          {this.state['token[coin_type]'].match(/qrc20|erc20/) &&
+            <label>
+              token symbol
+              <input
+                required
+                type="text"
+                name="token[symbol]"
+                value={this.state['token[symbol]']}
+                onChange={this.handleFieldChange}
+                placeholder="BTC"
+              />
+            </label>
+          }
 
           {this.state['token[coin_type]'] === 'qrc20' &&
             <label>
