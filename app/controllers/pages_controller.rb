@@ -8,7 +8,14 @@ class PagesController < ApplicationController
       if current_account.finished_contributor_form?
         redirect_to action: :featured
       else
-        @paperform_id = (ENV['APP_NAME'] == 'demo' ? 'demo-homepage' : 'homepage')
+        @paperform_id = case ENV['APP_NAME']
+                        when 'demo'
+                          'demo-homepage'
+                        when 'staging'
+                          'staging-homepage'
+                        else
+                          'homepage'
+        end
         render :home
       end
     end
