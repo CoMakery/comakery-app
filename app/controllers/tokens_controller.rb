@@ -83,7 +83,7 @@ class TokensController < ApplicationController
 
   def set_generic_props
     @props = {
-      token: @token.serializable_hash,
+      token: @token&.serializable_hash,
       coin_types: @coin_types,
       ethereum_networks: @ethereum_networks,
       blockchain_networks: @blockchain_networks,
