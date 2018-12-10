@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
-// import FormData from 'formdata-polyfill'
 
 class TokenForm extends React.Component {
   constructor(props) {
@@ -12,8 +11,6 @@ class TokenForm extends React.Component {
     this.noEmptyFields = this.noEmptyFields.bind(this)
     this.fetchSymbolAndDecimals = this.fetchSymbolAndDecimals.bind(this)
     this.state = {
-      symbolEditable                    : true,
-      decimalPlacesEditable             : true,
       contractAddressEditable           : true,
       ethereumContractAddressEditable   : true,
       paymentTypeChoosable              : true,
@@ -28,7 +25,7 @@ class TokenForm extends React.Component {
       'token[symbol]'                   : this.props.token.symbol || '',
       'token[contract_address]'         : this.props.token.contractAddress || '',
       'token[ethereum_contract_address]': this.props.token.ethereumContractAddress || '',
-      'token[decimal_places]'           : this.props.token.decimalPlaces || '',
+      'token[decimal_places]'           : (!this.props.token.decimalPlaces && this.props.token.decimalPlaces !== 0 ? '' : this.props.token.decimalPlaces),
       'token[blockchain_network]'       : this.props.token.blockchainNetwork || Object.values(this.props.blockchainNetworks)[0],
       'token[ethereum_network]'         : this.props.token.ethereumNetwork || Object.values(this.props.ethereumNetworks)[0]
     }
@@ -81,8 +78,6 @@ class TokenForm extends React.Component {
           'token[decimal_places]'           : '',
           'token[contract_address]'         : '',
           'token[ethereum_contract_address]': '',
-          symbolEditable                    : true,
-          decimalPlacesEditable             : true,
           contractAddressEditable           : true,
           ethereumContractAddressEditable   : true
         })
@@ -114,9 +109,7 @@ class TokenForm extends React.Component {
       blockchainNetworkChoosable     : false,
       ethereumNetworkChoosable       : false,
       contractAddressEditable        : false,
-      ethereumContractAddressEditable: false,
-      symbolEditable                 : false,
-      decimalPlacesEditable          : false
+      ethereumContractAddressEditable: false
     })
 
     fetchPolyfill('/tokens/fetch_contract_details', {
@@ -137,9 +130,7 @@ class TokenForm extends React.Component {
           blockchainNetworkChoosable     : true,
           ethereumNetworkChoosable       : true,
           contractAddressEditable        : true,
-          ethereumContractAddressEditable: true,
-          symbolEditable                 : true,
-          decimalPlacesEditable          : true
+          ethereumContractAddressEditable: true
         })
         throw Error(response.text())
       }
@@ -153,9 +144,7 @@ class TokenForm extends React.Component {
           blockchainNetworkChoosable     : true,
           ethereumNetworkChoosable       : true,
           contractAddressEditable        : true,
-          ethereumContractAddressEditable: true,
-          symbolEditable                 : true,
-          decimalPlacesEditable          : true
+          ethereumContractAddressEditable: true
         })
       } else {
         this.setState({
@@ -165,9 +154,7 @@ class TokenForm extends React.Component {
           blockchainNetworkChoosable     : true,
           ethereumNetworkChoosable       : true,
           contractAddressEditable        : true,
-          ethereumContractAddressEditable: true,
-          symbolEditable                 : false,
-          decimalPlacesEditable          : false
+          ethereumContractAddressEditable: true
         })
       }
     })
@@ -189,7 +176,7 @@ class TokenForm extends React.Component {
     } else {
       this.setState({
         displayValidationErrors: true,
-        submitClickable: true
+        submitClickable        : true
       })
       return
     }
@@ -207,7 +194,7 @@ class TokenForm extends React.Component {
       } else {
         response.json().then(data => {
           this.setState({
-            serverErrors: data.errors,
+            serverErrors   : data.errors,
             submitClickable: true
           })
         })
@@ -286,12 +273,11 @@ class TokenForm extends React.Component {
               }
               <input
                 required
-                type="number"
-                min="0"
-                max="100"
+                type="text"
                 name="token[decimal_places]"
                 value={this.state['token[decimal_places]']}
                 onChange={this.handleFieldChange}
+                pattern="\d{1-2}"
                 placeholder="..."
                 readOnly
               />
@@ -397,9 +383,16 @@ class TokenForm extends React.Component {
               name="token[logo_image]"
               onChange={this.handleLogoChange}
             />
-            <img
-              src={this.state.logoLocalUrl}
-            />
+            {!this.state.logoLocalUrl &&
+              <img
+                src={this.props.token.logoUrl}
+              />
+            }
+            {this.state.logoLocalUrl &&
+              <img
+                src={this.state.logoLocalUrl}
+              />
+            }
           </label>
 
           <input

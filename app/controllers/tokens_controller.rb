@@ -7,7 +7,13 @@ class TokensController < ApplicationController
   before_action :set_generic_props, only: %i[new show edit]
 
   def index
-    @tokens = policy_scope(Token)
+    @tokens = policy_scope(Token).map do |t|
+      t.serializable_hash.merge(
+        {
+          logo_url: Refile.attachment_url(t, :logo_image, :fill, 250, 250)
+        }
+      )
+    end
 
     render component: 'TokenIndex', props: { tokens: @tokens }
   end
@@ -98,7 +104,11 @@ class TokensController < ApplicationController
 
   def set_generic_props
     @props = {
-      token: @token&.serializable_hash,
+      token: @token&.serializable_hash.merge(
+        {
+          logo_url: Refile.attachment_url(@token, :logo_image, :fill, 250, 250)
+        }
+      ),
       coin_types: @coin_types,
       ethereum_networks: @ethereum_networks,
       blockchain_networks: @blockchain_networks,
