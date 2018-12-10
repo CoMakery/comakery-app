@@ -2,6 +2,27 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 class TokenIndex extends React.Component {
+  constructor(props) {
+    super(props)
+    this.handleListClick = this.handleListClick.bind(this)
+    this.state = {
+      selectedToken: null
+    }
+  }
+
+  componentDidUpdate() {
+    console.log(this.state)
+  }
+
+  handleListClick(event) {
+    console.log(event.target.id)
+    this.setState({
+      selectedToken: this.props.tokens.find((t) =>
+        t.id == event.target.id
+      )
+    })
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -18,50 +39,61 @@ class TokenIndex extends React.Component {
         <p>
           please select a token:
         </p>
+
         {this.props.tokens.map((t) =>
-          <div key={t.id}>
+          <input
+            type="button"
+            key={t.id}
+            id={t.id}
+            value={`${t.name} (${t.symbol})`}
+            onClick={this.handleListClick}
+          />
+        )}
+
+        {this.state.selectedToken &&
+          <div>
             <div>
               <img
-                src={t.logoUrl}
+                src={this.state.selectedToken.logoUrl}
               />
             </div>
             <div>
               token name:
-              {t.name}
+              {this.state.selectedToken.name}
             </div>
             <div>
               payment type:
-              {t.coinType}
+              {this.state.selectedToken.coinType}
             </div>
             <div>
               token symbol:
-              {t.symbol}
+              {this.state.selectedToken.symbol}
             </div>
             <div>
               contract address:
-              {t.contractAddress}
+              {this.state.selectedToken.contractAddress}
             </div>
             <div>
               contract address:
-              {t.ethereumContractAddress}
+              {this.state.selectedToken.ethereumContractAddress}
             </div>
             <div>
               blockchain network:
-              {t.blockchainNetwork}
+              {this.state.selectedToken.blockchainNetwork}
             </div>
             <div>
               blockchain network:
-              {t.ethereumNetwork}
+              {this.state.selectedToken.ethereumNetwork}
             </div>
             <div>
               <a
-                href={`/tokens/${t.id}`}
+                href={`/tokens/${this.state.selectedToken.id}`}
               >
                 edit token
               </a>
             </div>
           </div>
-        )}
+        }
       </React.Fragment>
     )
   }

@@ -31,7 +31,7 @@ class TokensController < ApplicationController
     authorize @token
 
     if @token.save
-      render json: { message: 'Token created' }, status: :created
+      render json: { message: 'Token created' }, status: :ok
     else
       errors  = @token.errors.messages.map { |k, v| ["token[#{k}]", v.to_sentence] }.to_h
       message = @token.errors.full_messages.join(', ')
@@ -43,6 +43,7 @@ class TokensController < ApplicationController
     authorize @token
 
     @props[:form_action] = 'PATCH'
+    @props[:form_url]    = token_path(@token)
     render component: 'TokenForm', props: @props
   end
 
@@ -50,6 +51,7 @@ class TokensController < ApplicationController
     authorize @token
 
     @props[:form_action] = 'PATCH'
+    @props[:form_url]    = token_path(@token)
     render component: 'TokenForm', props: @props
   end
 
@@ -104,9 +106,9 @@ class TokensController < ApplicationController
 
   def set_generic_props
     @props = {
-      token: @token&.serializable_hash.merge(
+      token: @token&.serializable_hash&.merge(
         {
-          logo_url: Refile.attachment_url(@token, :logo_image, :fill, 250, 250)
+          logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 250, 250) : nil
         }
       ),
       coin_types: @coin_types,

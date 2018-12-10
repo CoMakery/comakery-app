@@ -36,11 +36,16 @@ class TokenForm extends React.Component {
   }
 
   noEmptyFields(formData) {
+    if (!this.props.token.logoUrl && !this.state.logoLocalUrl) {
+      return false
+    }
+
     for (let v of formData.values()) {
       if (v == null) {
         return false
       }
     }
+
     return true
   }
 
@@ -189,7 +194,7 @@ class TokenForm extends React.Component {
         'X-Key-Inflection': 'snake'
       }
     }).then(response => {
-      if (response.status === 201) {
+      if (response.status === 200) {
         window.location = this.props.urlOnSuccess
       } else {
         response.json().then(data => {
@@ -378,7 +383,6 @@ class TokenForm extends React.Component {
               </span>
             }
             <input
-              required
               type="file"
               name="token[logo_image]"
               onChange={this.handleLogoChange}
