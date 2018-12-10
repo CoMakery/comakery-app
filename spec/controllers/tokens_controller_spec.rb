@@ -95,6 +95,46 @@ describe TokensController do
     end
   end
 
+  describe '#fetch_contract_details' do
+    context 'when not logged in' do
+      it 'redirects to root' do
+        session[:account_id] = nil
+        post :fetch_contract_details
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
+    context 'when logged in without admin flag' do
+      it 'redirects to root' do
+        login(account)
+        post :fetch_contract_details
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
+    context 'when logged in with admin flag' do
+      it 'returns correct symbol and decimals for QRC20 contract' do
+        stub_qtum_fetch
+        post :fetch_contract_details, params: { address: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc', network: 'qtum_testnet'}
+        expect(response.status).to eq(200)
+        expect(response.content_type).to eq('application/json')
+        expect(assigns[:symbol]).to eq('BIG')
+        expect(assigns[:symbol]).not_to eq(nil)
+      end
+
+      it 'returns correct symbol and decimals for ERC20 contract' do
+        stub_web3_fetch
+        post :fetch_contract_details, params: { address: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2', network: 'main'}
+        expect(response.status).to eq(200)
+        expect(response.content_type).to eq('application/json')
+        expect(assigns[:symbol]).to eq('HOT')
+        expect(assigns[:symbol]).not_to eq(nil)
+      end
+    end
+  end
+
   context 'with a token' do
     let!(:cat_token) { create(:token, name: 'Cats') }
     let!(:dog_token) { create(:token, name: 'Dogs') }

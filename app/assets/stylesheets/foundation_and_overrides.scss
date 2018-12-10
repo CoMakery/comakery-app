@@ -286,3 +286,7 @@ html, body{
 .protocol-project-name{
   margin-top: 10px;
 }
+
+.displayValidationErrors input:invalid {
+  border-color: red;
+}

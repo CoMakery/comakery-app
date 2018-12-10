@@ -15,7 +15,7 @@ class TokensController < ApplicationController
   def new
     @token = Token.create
     authorize @token
-    
+
     @props[:token] = @token.serializable_hash
     render component: 'TokenForm', props: @props, prerender: false
   end
@@ -27,7 +27,7 @@ class TokensController < ApplicationController
     if @token.save
       render json: { message: 'Token created' }, status: :created
     else
-      errors  = @token.errors.messages.map { |k, v| [k, v.to_sentence] }.to_s
+      errors  = @token.errors.messages.map { |k, v| ["token[#{k}]", v.to_sentence] }.to_h
       message = @token.errors.full_messages.join(', ')
       render json: { message: message, errors: errors }, status: :unprocessable_entity
     end
@@ -59,6 +59,21 @@ class TokensController < ApplicationController
     end
   end
 
+  def fetch_contract_details
+    authorize Token.create
+
+    case params[:address]
+    when /^0x[a-fA-F0-9]{40}$/
+      web3 = Comakery::Web3.new(params[:network])
+      @symbol, @decimals = web3.fetch_symbol_and_decimals(params[:address])
+    when /^[a-fA-F0-9]{40}$/
+      qtum = Comakery::Qtum.new(params[:network])
+      @symbol, @decimals = qtum.fetch_symbol_and_decimals(params[:address])
+    end
+
+    render json: { symbol: @symbol, decimals: @decimals }, status: :ok
+  end
+
   private
 
   def redirect_unless_admin
@@ -68,15 +83,15 @@ class TokensController < ApplicationController
   def set_token
     @token = Token.find(params[:id]).decorate
   end
-  
+
   def set_coin_types
     @coin_types = Token.coin_types.invert
   end
-  
+
   def set_ethereum_networks
     @ethereum_networks = Token.ethereum_networks.invert
   end
-  
+
   def set_blockchain_networks
     @blockchain_networks = Token.blockchain_networks.invert
   end

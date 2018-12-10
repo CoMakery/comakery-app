@@ -3622,6 +3622,11 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
+formdata-polyfill@^3.0.13:
+  version "3.0.13"
+  resolved "https://registry.yarnpkg.com/formdata-polyfill/-/formdata-polyfill-3.0.13.tgz#991321c83b7a760aaf3788f1b7bbbf77e85b09bb"
+  integrity sha512-aYrFSz9wxtBc9E1yCfD5IFhTK9FDZVRM53kUQn1W6Et5+R9c4tpa5Mg9hQIBIc2er3fLx0ElbKujipu+2551vQ==
+
 forwarded@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"

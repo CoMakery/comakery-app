@@ -54,6 +54,7 @@ gem 'sprockets', '~>3.7.2'
 gem 'uglifier'
 gem 'underscore-rails'
 gem 'webpacker'
+gem 'web3-eth'
 
 group(:scripts) do
   gem 'easy_shell'

@@ -13,6 +13,7 @@
     "babel-preset-react": "^6.24.1",
     "coffeescript": "1.12.7",
     "d3pie": "^0.1.9",
+    "formdata-polyfill": "^3.0.13",
     "prop-types": "^15.6.2",
     "qweb3": "^1.2.2",
     "react": "^16.6.0",

@@ -6,7 +6,7 @@ describe TokenPolicy do
   let!(:token3) { create :token, name: '3' }
   let!(:account) { create :account }
   let!(:admin_account) { create :account, comakery_admin: true }
-  
+
   describe TokenPolicy::Scope do
     describe '#resolve' do
       it "returns all tokens with admin flag" do
@@ -20,9 +20,9 @@ describe TokenPolicy do
     end
   end
 
-  describe '#new? and #create? and #index? and #show? and #edit? and #update?' do
+  describe '#new? and #create? and #index? and #show? and #edit? and #update? and #fetch_contract_details?' do
     it 'allow any action to proceed only with admin flag' do
-      %i[new? create? index? show? edit? update?].each do |action|
+      %i[new? create? index? show? edit? update? fetch_contract_details?].each do |action|
         expect(described_class.new(nil, token).send(action)).to be_falsey
         expect(described_class.new(account, token).send(action)).to be_falsey
         expect(described_class.new(admin_account, token).send(action)).to be true

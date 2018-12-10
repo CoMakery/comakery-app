@@ -5,7 +5,7 @@ class TokenPolicy < ApplicationPolicy
     @account = account
     @project = project
   end
-  
+
   class Scope
     attr_reader :account, :scope
 
@@ -32,4 +32,5 @@ class TokenPolicy < ApplicationPolicy
   alias show? new?
   alias edit? new?
   alias update? new?
+  alias fetch_contract_details? new?
 end
