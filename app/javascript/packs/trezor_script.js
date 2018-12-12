@@ -1,7 +1,5 @@
 /* eslint-disable no-alert, no-undef, complexity, standard/object-curly-even-spacing, default-case */
 
-window.__TREZOR_CONNECT_SRC = 'http://trezor-connect-demo2.herokuapp.com/'
-
 const constants = require('networks/qtum/constants')
 const config = require('networks/qtum/config').default
 const bitcoinJsLib = require('bitcoinjs-lib')
@@ -22,6 +20,11 @@ sendQtums = async function(network, to, amount) {
   console.log('fromAddress = ' + fromAddress)
   console.log('recipient address in Qtum = ' + to)
   console.log('recipient address in Bitcoin type = ' + toAddressInBtc)
+  const account = await server.currentNode().getInfo(fromAddress)
+  if (amount >= account.balance) {
+    alertMsg($('#metamaskModal1'), "You don't have sufficient Tokens to send")
+    return
+  }
   const utxoList = await server.currentNode().getUtxoList(fromAddress)
   console.log('utxoList .........')
   console.log(utxoList)
