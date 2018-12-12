@@ -49,12 +49,21 @@ RSpec.describe PagesController, type: :controller do
   end
 
   it 'sets paperform id correctly in demo environment' do
-    ENV['APP_NAME'] = 'demo'
     account = create :account
     login account
+    ENV['APP_NAME'] = 'demo'
     get :landing
-    expect(assigns[:paperform_id]).to eq('demo-homepage')
     ENV['APP_NAME'] = ''
+    expect(assigns[:paperform_id]).to eq('demo-homepage')
+  end
+
+  it 'sets paperform id correctly in staging environment' do
+    account = create :account
+    login account
+    ENV['APP_NAME'] = 'staging'
+    get :landing
+    ENV['APP_NAME'] = ''
+    expect(assigns[:paperform_id]).to eq('0f2g0j1q')
   end
 
   it 'access featured page - set contributor form' do
