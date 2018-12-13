@@ -34,4 +34,8 @@ class PagesController < ApplicationController
       format.json { render json: @interest.to_json }
     end
   end
+
+  def styleguide
+    render component: 'styleguide/Index'
+  end
 end

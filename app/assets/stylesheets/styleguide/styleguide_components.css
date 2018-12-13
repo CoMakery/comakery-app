@@ -1,0 +1,33 @@
+.button {
+  width: 90px;
+  height: 30px;
+  padding: 0;
+  color: white;
+  background-color: var(--primary-blue);
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.button:hover, .button:focus {
+  background-color: var(--dark-indigo);
+}
+
+.button__border {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  overflow: hidden;
+  border: none;
+  outline: none;
+  outline: 1px solid white;
+  outline-offset: -1px;
+}
+
+.button__primary__disabled {
+  opacity: 0.3;
+}
+
+.button__primary__enabled {
+}

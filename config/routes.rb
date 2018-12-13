@@ -1,6 +1,9 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+
+  get '/styleguide' => "pages#styleguide"
+
   resource :account, only: [:update]
   resources :accounts, only: [:new, :create, :show] do
     collection do

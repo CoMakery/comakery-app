@@ -11,8 +11,10 @@
   "dependencies": {
     "@rails/webpacker": "^3.5.5",
     "babel-preset-react": "^6.24.1",
+    "classnames": "^2.2.6",
     "coffeescript": "1.12.7",
     "d3pie": "^0.1.9",
+    "enzyme-to-json": "^3.3.5",
     "prop-types": "^15.6.2",
     "qweb3": "^1.2.2",
     "react": "^16.6.0",
@@ -54,6 +56,9 @@
     "globals": {
       "window": {}
     },
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "setupTestFrameworkScriptFile": "./spec/javascript/setup.js"
   }
 }
