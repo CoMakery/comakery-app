@@ -79,4 +79,11 @@ RSpec.describe PagesController, type: :controller do
     ENV.stub(:fetch) { 'test:test' }
     get :landing
   end
+
+  it 'shows styleguide page' do
+    account = create :account
+    login account
+    get :styleguide
+    expect(response.status).to eq(200)
+  end
 end

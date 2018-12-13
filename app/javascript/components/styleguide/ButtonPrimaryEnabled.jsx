@@ -1,10 +1,10 @@
-import React from "react"
-import PropTypes from "prop-types"
-import classNames from "classnames"
-import Button from "./Button"
+import React from 'react'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import Button from './Button'
 
 class ButtonPrimaryEnabled extends React.Component {
-  render () {
+  render() {
     const {className, ...other} = this.props
 
     const classnames = classNames(
@@ -14,7 +14,7 @@ class ButtonPrimaryEnabled extends React.Component {
 
     return (
       <React.Fragment>
-        <Button className={classnames} {...other}/>
+        <Button className={classnames} {...other} />
       </React.Fragment>
     )
   }

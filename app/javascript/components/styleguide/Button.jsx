@@ -1,9 +1,9 @@
-import React from "react"
-import PropTypes from "prop-types"
-import classNames from "classnames"
+import React from 'react'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 class Button extends React.Component {
-  render () {
+  render() {
     const {className, type, value, disabled, ...other} = this.props
 
     const classnames = classNames(
@@ -25,14 +25,14 @@ class Button extends React.Component {
 
 Button.propTypes = {
   className: PropTypes.string,
-  type: PropTypes.string,
-  value: PropTypes.string,
-  disabled: PropTypes.bool
+  type     : PropTypes.string,
+  value    : PropTypes.string,
+  disabled : PropTypes.bool
 }
 Button.defaultProps = {
   className: '',
-  type: 'button',
-  value: 'publish',
-  disabled: false
+  type     : 'button',
+  value    : 'publish',
+  disabled : false
 }
 export default Button
