@@ -9,7 +9,8 @@ const BigNumber = require('bignumber.js')
 
 // network: 'mainnet' or 'testnet'
 sendQtums = async function(network, to, amount) {
-  const addressN = [2147483692, 2147483649, 2147483648, 0, 0]
+  const coinType = network === 'mainnet' ? 2147483736 : 2147483649
+  const addressN = [2147483692, coinType, 2147483648, 0, 0]
   const coinName = network === 'mainnet' ? 'Bitcoin' : 'testnet'
 
   config.set('network', network)
