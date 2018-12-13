@@ -25,8 +25,8 @@ class Views::Layouts::Application < Views::Base
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
 
-        # javascript_pack_tag 'hello_react'  # NOTE this fails in fortitude
-        # javascript_include_tag Webpacker.manifest.lookup!('hello_react.js')  # this succeeds
+        # javascript_pack_tag 'application' # NOTE this fails in fortitude
+        javascript_include_tag Webpacker.manifest.lookup!('application.js')
 
         javascript_include_tag 'jquery.visible' if Rails.env.test?
 
@@ -148,7 +148,7 @@ class Views::Layouts::Application < Views::Base
   end
 
   def message
-    div(class: 'large-10 medium-11 small-12 small-centered columns') do
+    div(class: 'large-12 medium-12 small-12 small-centered') do
       if error
         div('aria-labelledby' => 'flash-msg-error', 'aria-role' => 'dialog', class: ['callout', 'flash-msg', 'error'], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
           button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
@@ -179,6 +179,7 @@ class Views::Layouts::Application < Views::Base
           end
         end
       end
+      flash.clear
     end
   end
 end

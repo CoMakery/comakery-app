@@ -1,12 +1,21 @@
 class PagesController < ApplicationController
   skip_before_action :require_login, except: %i[featured home]
+  skip_before_action :require_email_confirmation, only: %i[featured home landing add_interest]
   skip_after_action :verify_authorized
 
   def landing
     if current_account
       if current_account.finished_contributor_form?
-        render :featured
+        redirect_to action: :featured
       else
+        @paperform_id = case ENV['APP_NAME']
+                        when 'demo'
+                          'demo-homepage'
+                        when 'staging'
+                          '0f2g0j1q'
+                        else
+                          'homepage'
+        end
         render :home
       end
     end
@@ -15,7 +24,12 @@ class PagesController < ApplicationController
   def home; end
 
   def featured
-    current_account.update contributor_form: true unless current_account.finished_contributor_form?
+    unless current_account.finished_contributor_form?
+      current_account.update(contributor_form: true)
+    end
+    unless current_account.confirmed?
+      flash[:alert] = 'Please confirm your email before continuing.'
+    end
   end
 
   def add_interest

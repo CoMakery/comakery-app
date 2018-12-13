@@ -147,7 +147,7 @@ describe 'when recording revenue' do
     end
   end
 
-  it 'updates the contributors page' do
+  it 'updates the contributors page', js: true do
     project.update(royalty_percentage: 10)
     award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
     award_type.awards.create_with_quantity(5, issuer: owner, account: other_account)

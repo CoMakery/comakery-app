@@ -1,5 +1,5 @@
 class AwardsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: :update_transaction_address
+  skip_before_action :verify_authenticity_token, only: %i[update_transaction_address preview]
 
   before_action :assign_project, only: %i[create index update_transaction_address]
   skip_before_action :require_login, only: %i[index confirm]
@@ -23,7 +23,7 @@ class AwardsController < ApplicationController
         award.send_award_notifications
         award.send_confirm_email
         generate_message(award)
-        session[:last_award_id] = award.id if account&.ethereum_wallet?
+        session[:last_award_id] = award.id if account&.ethereum_wallet? || account&.qtum_wallet?
         account&.update new_award_notice: true
         redirect_to project_overview_path(award.project)
       else
@@ -38,7 +38,7 @@ class AwardsController < ApplicationController
     if current_account
       award = Award.find_by confirm_token: params[:token]
       if award
-        flash[:notice] = confirm_message if award.confirm!(current_account)
+        flash[:notice] = confirm_message(award.project) if award.confirm!(current_account)
         redirect_to project_overview_path(award.project)
       else
         flash[:error] = 'Invalid award token!'
@@ -49,6 +49,20 @@ class AwardsController < ApplicationController
       flash[:notice] = "Please #{view_context.link_to 'log in', new_session_path} or #{view_context.link_to 'signup', new_account_path} before receiving your award"
       redirect_to new_account_path
     end
+  end
+
+  def preview
+    uid = params[:uid]
+    channel_id = params[:channel_id]
+    quantity = params[:quantity]&.delete(',')
+    award_type = AwardType.find_by(id: params[:award_type_id])
+    if award_type && quantity && uid
+      @total_amount = award_type.amount * BigDecimal(quantity)
+      account = find_account_from(uid, channel_id)
+      project = Project.find_by(id: params[:project_id])
+      preview_data(project, account)
+    end
+    render layout: false
   end
 
   def update_transaction_address
@@ -85,15 +99,46 @@ class AwardsController < ApplicationController
     render template: 'projects/show'
   end
 
-  def confirm_message
-    if current_account.ethereum_wallet.present?
-      "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
-    else
-      "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+  def confirm_message(project)
+    if project.coin_type_on_ethereum?
+      if current_account.ethereum_wallet.present?
+        "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
+      else
+        "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+      end
+    elsif project.coin_type_on_qtum?
+      if current_account.qtum_wallet.present?
+        "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your QRC20 tokens."
+      else
+        "Congratulations, you just claimed your award! Be sure to enter your Qtum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+      end
     end
   end
 
   def project_overview_path(project)
     project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
+  end
+
+  def find_account_from(uid, channel_id)
+    if channel_id.blank?
+      Account.where('lower(email)=?', uid.downcase).first
+    else
+      channel = Channel.find_by id: channel_id
+      Account.find_from_uid_channel(uid, channel)
+    end
+  end
+
+  def preview_data(project, account)
+    if project.coin_type_on_ethereum?
+      @network = project.ethereum_network.presence || 'main'
+      @wallet_logo = 'metamask2.png'
+      @recipient_address = account&.ethereum_wallet
+    elsif project.coin_type_on_qtum?
+      @network = project.blockchain_network
+      @wallet_logo = 'qrypto.png'
+      @recipient_address = account&.qtum_wallet
+    end
+    @unit   = project.token_symbol
+    @unit ||= Project.coin_types[project.coin_type]
   end
 end

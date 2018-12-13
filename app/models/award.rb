@@ -2,6 +2,7 @@ class Award < ApplicationRecord
   paginates_per 50
 
   include EthereumAddressable
+  include QtumTransactionAddressable
 
   belongs_to :account, optional: true
   belongs_to :authentication, optional: true
@@ -14,7 +15,8 @@ class Award < ApplicationRecord
   validates :proof_id, :award_type, :unit_amount, :total_amount, :quantity, presence: true
   validates :quantity, :total_amount, :unit_amount, numericality: { greater_than: 0 }
 
-  validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true } # see EthereumAddressable
+  validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&.coin_type_on_ethereum? } # see EthereumAddressable
+  validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
 
   before_validation :ensure_proof_id_exists
@@ -30,7 +32,7 @@ class Award < ApplicationRecord
   end
 
   def ethereum_issue_ready?
-    project.ethereum_enabled &&
+    project.ethereum_enabled && project.coin_type_on_ethereum? &&
       account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end

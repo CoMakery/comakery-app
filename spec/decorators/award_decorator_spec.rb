@@ -13,27 +13,48 @@ describe AwardDecorator do
   end
 
   describe '#issuer_display_name' do
-    let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-    let!(:project) { create :project, account: issuer }
-    let!(:award_type) { create :award_type, project: project }
-    let!(:award) { create :award, award_type: award_type, issuer: issuer }
+    context 'on ethereum network' do
+      let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
+      let!(:project) { create :project, account: issuer, coin_type: 'erc20' }
+      let!(:award_type) { create :award_type, project: project }
+      let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
-    it 'returns the user name' do
-      expect(award.decorate.issuer_display_name).to eq('johnny johnny')
+      it 'returns the user name' do
+        expect(award.decorate.issuer_display_name).to eq('johnny johnny')
+      end
+
+      it 'issuer_user_name' do
+        expect(award.decorate.issuer_user_name).to eq 'johnny johnny'
+      end
+
+      it 'issuer_address' do
+        expect(award.decorate.issuer_address).to eq '0xD8655aFe58B540D8372faaFe48441AeEc3bec453'
+      end
     end
 
-    it 'issuer_user_name' do
-      expect(award.decorate.issuer_user_name).to eq 'johnny johnny'
-    end
+    context 'on qtum network' do
+      let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', qtum_wallet: 'qSf61RfH28cins3EyiL3BQrGmbqaJUHDfM' }
+      let!(:project) { create :project, account: issuer, coin_type: 'qrc20' }
+      let!(:award_type) { create :award_type, project: project }
+      let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
-    it 'issuer_address' do
-      expect(award.decorate.issuer_address).to eq '0xD8655aFe58B540D8372faaFe48441AeEc3bec453'
+      it 'returns the user name' do
+        expect(award.decorate.issuer_display_name).to eq('johnny johnny')
+      end
+
+      it 'issuer_user_name' do
+        expect(award.decorate.issuer_user_name).to eq 'johnny johnny'
+      end
+
+      it 'issuer_address' do
+        expect(award.decorate.issuer_address).to eq 'qSf61RfH28cins3EyiL3BQrGmbqaJUHDfM'
+      end
     end
   end
 
   context 'recipient names' do
     let!(:recipient) { create(:account, first_name: 'Betty', last_name: 'Ross', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project }
+    let!(:project) { create :project, coin_type: 'erc20' }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, account: recipient, award_type: award_type }
 
@@ -55,15 +76,16 @@ describe AwardDecorator do
   end
 
   context 'json_for_sending_awards' do
-    let!(:recipient) { create :account, id: 529, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec488' }
+    let!(:recipient) { create :account, id: 529, first_name: 'Account', last_name: 'ABC', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec488' }
     let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-    let!(:project) { create :project, id: 512, account: issuer }
+    let!(:project) { create :project, id: 512, account: issuer, coin_type: 'erc20' }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, id: 521, award_type: award_type, issuer: issuer, account: recipient }
 
     it 'valid' do
       award.project.ethereum_contract_address = '0x8023214bf21b1467be550d9b889eca672355c005'
-      expected = %({"id":521,"total_amount":"1337.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":1337,"account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488"},"project":{"id":512,"ethereum_contract_address":"0x8023214bf21b1467be550d9b889eca672355c005"}})
+      expected = %({"id":521,"total_amount":"1337.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":1337,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null},"project":{"id":512,"ethereum_contract_address":"0x8023214bf21b1467be550d9b889eca672355c005","coin_type":"erc20","contract_address":null}})
+
       expect(award.decorate.json_for_sending_awards).to eq(expected)
     end
 

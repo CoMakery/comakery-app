@@ -177,7 +177,7 @@ describe ProjectsController do
       expect(project.account_id).to eq(account.id)
     end
 
-    it 'when valid, re-renders with errors' do
+    it 'when invalid, re-renders with errors' do
       expect do
         expect do
           post :create, params: {
@@ -207,6 +207,64 @@ describe ProjectsController do
       expect(project.award_types.first.community_awardable).to eq(true)
       expect(project.account_id).to eq(account.id)
       expect(project.award_types.size).to eq(3) # 2 + 1 template
+    end
+
+    it 'when duplicated, redirects with error' do
+      expect do
+        expect do
+          post :create, params: {
+            long_id: '0',
+            project: {
+              title: 'Project title here',
+              description: 'Project description here',
+              image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              tracker: 'http://github.com/here/is/my/tracker',
+              contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
+              video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
+              slack_channel: 'slack_channel',
+              maximum_tokens: '150',
+              legal_project_owner: 'legal project owner',
+              payment_type: 'project_token',
+              award_types_attributes: [
+                { name: 'Community Award', amount: 10, community_awardable: true },
+                { name: 'Small Award', amount: 1000 },
+                { name: 'Big Award', amount: 2000 },
+                { name: '', amount: '' }
+              ]
+            }
+          }
+          expect(response.status).to eq(302)
+        end.to change { Project.count }.by(1)
+      end.to change { AwardType.count }.by(3)
+
+      expect do
+        expect do
+          post :create, params: {
+            long_id: '0',
+            project: {
+              title: 'Project title here',
+              description: 'Project description here',
+              image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              tracker: 'http://github.com/here/is/my/tracker',
+              contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
+              video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
+              slack_channel: 'slack_channel',
+              maximum_tokens: '150',
+              legal_project_owner: 'legal project owner',
+              payment_type: 'project_token',
+              award_types_attributes: [
+                { name: 'Community Award', amount: 10, community_awardable: true },
+                { name: 'Small Award', amount: 1000 },
+                { name: 'Big Award', amount: 2000 },
+                { name: '', amount: '' }
+              ]
+            }
+          }
+          expect(response.status).to eq(302)
+        end.not_to change { Project.count }
+      end.not_to change { AwardType.count }
+
+      expect(flash[:error]).to eq('Project already created')
     end
   end
 

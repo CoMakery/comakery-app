@@ -38,7 +38,32 @@ RSpec.describe PagesController, type: :controller do
     account = create :account, contributor_form: true
     login account
     get :landing
-    expect(response).to render_template 'pages/featured'
+    expect(response).to redirect_to action: :featured
+  end
+
+  it 'sets paperform id correctly in default environment' do
+    account = create :account
+    login account
+    get :landing
+    expect(assigns[:paperform_id]).to eq('homepage')
+  end
+
+  it 'sets paperform id correctly in demo environment' do
+    account = create :account
+    login account
+    ENV['APP_NAME'] = 'demo'
+    get :landing
+    ENV['APP_NAME'] = ''
+    expect(assigns[:paperform_id]).to eq('demo-homepage')
+  end
+
+  it 'sets paperform id correctly in staging environment' do
+    account = create :account
+    login account
+    ENV['APP_NAME'] = 'staging'
+    get :landing
+    ENV['APP_NAME'] = ''
+    expect(assigns[:paperform_id]).to eq('0f2g0j1q')
   end
 
   it 'access featured page - set contributor form' do
@@ -58,7 +83,6 @@ RSpec.describe PagesController, type: :controller do
   end
 
   it 'create interest' do
-    ENV['AIRTABLE_TABLE_NAME'] = '123qwer'
     account = create :account
     login account
     stub_airtable

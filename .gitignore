@@ -36,4 +36,5 @@ junk.rb
 junk.txt
 /public/packs
 /public/packs-test
+/public/assets
 /node_modules

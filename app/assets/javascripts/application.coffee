@@ -193,3 +193,21 @@ floatingLeftMenuItems = () ->
         'width': $('.scrollingBox').closest('div').width() + 30
     else
       $('.scrollingBox').css 'position': 'static'
+
+window.initializeAccountPage = () ->
+  $('.datepicker').datepicker({
+    dateFormat: 'mm/dd/yy',
+    defaultDate: '01/01/2000',
+    changeYear: true,
+    yearRange: '1950:2010'
+  })
+  if $('.datepicker').val()
+    $('.datepicker').datepicker("setDate",new Date($('.datepicker').val()))
+  $('.copiable').click ->
+    $(".copy-source").select()
+    document.execCommand('Copy')
+  $('.copiable2').click ->
+    $(".copy-source2").select()
+    document.execCommand('Copy')
+  $('.fake-link').click ->
+    window.location.href = $(@).data("href")

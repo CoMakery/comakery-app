@@ -296,6 +296,11 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
+    oj (3.7.1)
+    olive_branch (2.1.4)
+      multi_json
+      oj
+      rails (>= 4.0)
     omniauth (1.8.1)
       hashie (>= 3.4.6, < 3.6.0)
       rack (>= 1.6.2, < 3)
@@ -391,6 +396,12 @@ GEM
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     rdoc (6.0.4)
+    react-rails (2.4.7)
+      babel-transpiler (>= 0.7.0)
+      connection_pool
+      execjs
+      railties (>= 3.2)
+      tilt
     redcarpet (3.4.0)
     redis (4.0.2)
     ref (2.0.0)
@@ -572,6 +583,7 @@ DEPENDENCIES
   momentjs-rails
   nilify_blanks
   nokogiri
+  olive_branch
   omniauth
   omniauth-discord!
   omniauth-slack
@@ -590,6 +602,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-html-sanitizer (~> 1.0.4)
   rails_12factor
+  react-rails
   redcarpet
   refile!
   refile-mini_magick
@@ -622,4 +635,4 @@ RUBY VERSION
    ruby 2.4.4p296
 
 BUNDLED WITH
-   1.16.2
+   1.16.3

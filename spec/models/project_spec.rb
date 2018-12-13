@@ -8,7 +8,8 @@ describe Project do
                 'Maximum tokens must be greater than 0',
                 "Account can't be blank",
                 "Title can't be blank",
-                "Legal project owner can't be blank"].sort)
+                "Legal project owner can't be blank",
+                "Long identifier can't be blank"].sort)
     end
 
     it 'rails error if not found Ethereum address' do
@@ -144,6 +145,46 @@ describe Project do
       end
     end
 
+    describe 'coin_type' do
+      let(:attrs) { { token_symbol: 'CBB', decimal_places: 8, ethereum_network: 'ropsten', ethereum_contract_address: '0x' + 'a' * 40, contract_address: 'a' * 40, blockchain_network: 'qtum_testnet' } }
+
+      it 'eq erc20' do
+        project4 = create :project, attrs.merge(coin_type: 'erc20')
+        expect(project4).to be_valid
+        expect(project4.reload.coin_type).to eq 'erc20'
+        expect(project4.blockchain_network).to be_nil
+        expect(project4.contract_address).to be_nil
+        expect(project4.ethereum_network).to eq 'ropsten'
+        expect(project4.ethereum_contract_address).to eq '0x' + 'a' * 40
+        expect(project4.token_symbol).to eq 'CBB'
+        expect(project4.decimal_places).to eq 8
+      end
+
+      it 'eq eth' do
+        project4 = create :project, attrs.merge(coin_type: 'eth')
+        expect(project4).to be_valid
+        expect(project4.reload.coin_type).to eq 'eth'
+        expect(project4.blockchain_network).to be_nil
+        expect(project4.contract_address).to be_nil
+        expect(project4.ethereum_network).to eq 'ropsten'
+        expect(project4.ethereum_contract_address).to be_nil
+        expect(project4.token_symbol).to be_nil
+        expect(project4.decimal_places).to be_nil
+      end
+
+      it 'eq qrc20' do
+        project4 = create :project, attrs.merge(coin_type: 'qrc20')
+        expect(project4).to be_valid
+        expect(project4.reload.coin_type).to eq 'qrc20'
+        expect(project4.blockchain_network).to eq 'qtum_testnet'
+        expect(project4.contract_address).to eq 'a' * 40
+        expect(project4.ethereum_network).to be_nil
+        expect(project4.ethereum_contract_address).to be_nil
+        expect(project4.token_symbol).to eq 'CBB'
+        expect(project4.decimal_places).to eq 8
+      end
+    end
+
     describe 'payment_type' do
       let(:project) { create(:project, payment_type: 'revenue_share') }
       let(:order) { %i[revenue_share project_token] }
@@ -193,6 +234,48 @@ describe Project do
         project.ethereum_enabled = false
         expect(project.tap(&:valid?).errors.full_messages.first)
           .to eq('Ethereum enabled cannot be set to false after it has been set to true')
+      end
+    end
+
+    describe '#contract_address' do
+      let(:project) { create(:project, coin_type: 'qrc20') }
+      let(:award_type) { create(:award_type, project: project) }
+      let(:award) { create(:award, award_type: award_type) }
+      let(:address) { 'b' * 40 }
+
+      it 'valid qtum contract address' do
+        expect(build(:project, coin_type: 'qrc20', contract_address: nil)).to be_valid
+        expect(project.tap { |o| o.contract_address = ('a' * 40).to_s }).to be_valid
+        expect(project.tap { |o| o.contract_address = ('A' * 40).to_s }).to be_valid
+      end
+
+      it 'invalid qtum contract address' do
+        expected_error_message = "Contract address should have 40 characters, should not start with '0x'"
+        expect(project.tap { |o| o.contract_address = 'foo' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(project.tap { |o| o.contract_address = '0x' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(project.tap { |o| o.contract_address = "0x#{'a' * 38}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(project.tap { |o| o.contract_address = ('a' * 39).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+        expect(project.tap { |o| o.contract_address = ('f' * 41).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
+      end
+
+      it { expect(project.contract_address).to eq(nil) }
+
+      it 'can be set' do
+        project.contract_address = address
+        project.save!
+        project.reload
+        expect(project.contract_address).to eq(address)
+      end
+
+      it 'once has finished transaction cannot be set to another value' do
+        project.contract_address = address
+        project.save!
+        award.update ethereum_transaction_address: 'a' * 64
+        project.reload
+        project.contract_address = 'c' * 40
+        expect(project).not_to be_valid
+        expect(project.errors.full_messages.to_sentence).to match \
+          /cannot be changed if has completed transactions/
       end
     end
 
@@ -311,7 +394,8 @@ describe Project do
                                           { 'name' => 'Small award', 'amount' => '1000' },
                                           { 'name' => '', 'amount' => '1000' },
                                           { 'name' => 'Award', 'amount' => '' }
-                                        ])
+                                        ],
+                                        long_id: SecureRandom.hex(20))
 
       expect(project.award_types.count).to eq(1)
       expect(project.award_types.first.name).to eq('Small award')
@@ -957,6 +1041,16 @@ describe Project do
     expect project.token_symbol = 'FCBB'
   end
 
+  it 'check_coin_type' do
+    project = create :project, token_symbol: 'FCBB', decimal_places: 8, ethereum_contract_address: '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d', contract_address: 'a8112e56eb96bd3da7741cfea0e3cbd841fc009a', blockchain_network: 'qtum_testnet', coin_type: 'eth'
+    expect(project).to be_valid
+    expect(project.contract_address).to be_nil
+    expect(project.ethereum_contract_address).to be_nil
+    expect(project.token_symbol).to be_nil
+    expect(project.decimal_places).to be_nil
+    expect(project.blockchain_network).to be_nil
+  end
+
   it 'can manual input token_symbol' do
     contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
     # stub_token_symbol(contract_address, 'FCBB')
@@ -993,6 +1087,26 @@ describe Project do
         create :award, award_type: award_type
       end
       expect(project.top_contributors.count).to eq 5
+    end
+  end
+
+  describe '#awards_for_chart' do
+    let!(:account) { create :account }
+    let!(:project) { create :project }
+    let!(:award_type) { create :award_type, amount: 10, project: project }
+
+    before do
+      8.times { create :award, award_type: award_type, account: account, created_at: 2.days.ago }
+      1.times { create :award, award_type: award_type, account: account, created_at: 3.days.ago }
+      3.times { create :award, award_type: award_type, account: account, created_at: 4.days.ago }
+    end
+
+    it 'limit number of days by requested number of latest awards' do
+      expect(project.awards_for_chart(max: 10).size).to eq 2
+    end
+    it 'skip oldest (likely incomplete) day when number of days gets limited' do
+      expect(project.awards_for_chart(max: 10).any? { |i| i[:date] == 3.days.ago.strftime('%Y-%m-%d') }).to be_truthy
+      expect(project.awards_for_chart(max: 10).any? { |i| i[:date] == 4.days.ago.strftime('%Y-%m-%d') }).to be_falsey
     end
   end
 end

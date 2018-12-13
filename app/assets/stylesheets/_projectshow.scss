@@ -1,7 +1,4 @@
 .projects-show {
-  .callout.flash-msg {
-    margin-top: 20px;
-  }
   #award-percentages svg {
     overflow: overlay;
   }
@@ -124,4 +121,8 @@ form {
 .read-more{
   margin-top: 10px;
   display: none;
+}
+
+button.submit {
+  padding: 7px;
 }

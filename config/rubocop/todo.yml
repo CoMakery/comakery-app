@@ -252,6 +252,7 @@ Rails/OutputSafety:
     - 'app/views/projects/_award_send.html.rb'
     - 'app/views/projects/_description.html.rb'
     - 'app/views/projects/_settings_form.html.rb'
+    - 'app/views/projects/form/_blockchain_settings.html.rb'
     - 'app/views/shared/_awards.html.rb'
     - 'app/views/shared/email_footer.rb'
 
@@ -266,6 +267,7 @@ Rails/SkipsModelValidations:
     - 'spec/features/revenues/project_owner_can_record_revenues_spec.rb'
     - 'spec/jobs/ethereum_token_issue_job_spec.rb'
     - 'spec/lib/metrics_spec.rb'
+    - 'lib/tasks/migration/project_coin_types.rake'
 
 # Offense count: 4
 # Configuration parameters: EnforcedStyle, SupportedStyles.

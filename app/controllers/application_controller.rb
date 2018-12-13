@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 
   # require account logins for all pages by default
   # (public pages use skip_before_action :require_login)
-  before_action :require_login, :check_age
+  before_action :require_login, :require_email_confirmation, :check_age
   before_action :basic_auth
 
   def basic_auth
@@ -54,9 +54,11 @@ class ApplicationController < ActionController::Base
   end
 
   def require_login
-    if session[:account_id].blank?
-      not_authenticated
-    elsif !current_account.confirmed? && !current_account.valid_and_underage?
+    not_authenticated if session[:account_id].blank?
+  end
+
+  def require_email_confirmation
+    if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
       not_authenticated('Please confirm your email before continuing.')
     end
   end
