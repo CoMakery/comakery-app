@@ -9,6 +9,7 @@ const BigNumber = require('bignumber.js')
 
 // network: 'mainnet' or 'testnet'
 sendQtums = async function(network, to, amount) {
+  const addressN = [2147483692, 2147483649, 2147483648, 0, 0]
   const coinName = network === 'mainnet' ? 'Bitcoin' : 'testnet'
 
   config.set('network', network)
@@ -33,7 +34,8 @@ sendQtums = async function(network, to, amount) {
   const selectUtxo = qtumJsLib.utils.selectTxs(utxoList, amount, fee)
   const rawTxCache = {}
   console.log(selectUtxo)
-  let firstItem = selectUtxo[0]
+  let inputs = []
+  let prevTxHexList = []
   let totalSelectSat = new BigNumber(0)
   for (let i = 0; i < selectUtxo.length; i++) {
     const item = selectUtxo[i]
@@ -41,22 +43,18 @@ sendQtums = async function(network, to, amount) {
     if (!rawTxCache[item.hash]) {
       rawTxCache[item.hash] = await rawTxFetchFunc(item.hash)
     }
+    prevTxHexList.push(rawTxCache[item.hash])
     totalSelectSat = totalSelectSat.plus(item.value)
+    inputs.push({
+      address_n : addressN,
+      prev_index: item.pos,
+      prev_hash : item.hash
+    })
   }
-  const prevTxPos = firstItem.pos
-  const prevTxHash = firstItem.hash
-  const prevTxHex = rawTxCache[prevTxHash]
   const changeSat = totalSelectSat.minus(amountSat).minus(feeSat)
-  const inputs = [
-    {
-      address_n : [2147483692, 2147483649, 2147483648, 0, 0],
-      prev_index: prevTxPos,
-      prev_hash : prevTxHash
-    }
-  ]
   const outputs = [
     {
-      address_n  : [2147483692, 2147483649, 2147483648, 0, 0],
+      address_n  : addressN,
       amount     : changeSat.toString(),
       script_type: 'PAYTOADDRESS'
     }, {
@@ -65,7 +63,7 @@ sendQtums = async function(network, to, amount) {
       script_type: 'PAYTOADDRESS'
     }
   ]
-  const signed = await TrezorConnect.qtumSignTransaction({inputs: inputs, outputs: outputs, coin: coinName, push: false, prevTxHex: prevTxHex})
+  const signed = await TrezorConnect.qtumSignTransaction({inputs: inputs, outputs: outputs, coin: coinName, push: false, prevTxHexList: prevTxHexList})
 
   const serializedTx = signed.payload.serializedTx
   if (serializedTx) {
