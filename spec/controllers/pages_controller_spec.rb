@@ -80,10 +80,8 @@ RSpec.describe PagesController, type: :controller do
     get :landing
   end
 
-  it 'shows styleguide page' do
-    account = create :account
-    login account
+  it 'redirects from styleguide page' do
     get :styleguide
-    expect(response.status).to eq(200)
+    expect(response.status).to eq(302)
   end
 end

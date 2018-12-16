@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "yarn lint:ci --fix",
     "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript",
+    "stylelint": "stylelint 'app/assets/stylesheets/**/*.css' --fix",
     "test": "jest"
   },
   "dependencies": {
@@ -20,7 +21,9 @@
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
-    "react_ujs": "^2.4.4"
+    "react_ujs": "^2.4.4",
+    "stylelint": "^9.9.0",
+    "stylelint-config-recommended": "^2.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
@@ -43,6 +46,9 @@
     "react-test-renderer": "^16.6.0",
     "regenerator-runtime": "^0.12.1",
     "webpack-dev-server": "^2.9.4"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-recommended"
   },
   "jest": {
     "roots": [

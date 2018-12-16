@@ -36,6 +36,10 @@ class PagesController < ApplicationController
   end
 
   def styleguide
-    render component: 'styleguide/Index'
+    if Rails.env == 'development'
+      render component: 'styleguide/Index'
+    else
+      redirect_to :root
+    end
   end
 end
