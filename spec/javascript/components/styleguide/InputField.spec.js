@@ -52,11 +52,8 @@ describe('InputField', () => {
     it('renders correctly with type=file', () => {
       const wrapper = shallow(<InputField type='file' />)
 
-      expect(wrapper.find('.input-field--content__file').props().required).not.toBe()
       expect(wrapper.find('.input-field--content__file').props().type).toBe('file')
       expect(wrapper.find('.input-field--content__file').props().name).toBe('field')
-      expect(wrapper.find('.input-field--content__file').props().value).toBe('')
-      expect(wrapper.find('.input-field--content__file--preview').props().src).toBe('')
     })
 
     it('renders correctly with type=file and imgPreviewUrl', () => {
