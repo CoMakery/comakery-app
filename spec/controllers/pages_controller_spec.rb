@@ -84,4 +84,12 @@ RSpec.describe PagesController, type: :controller do
     get :styleguide
     expect(response.status).to eq(302)
   end
+
+  it 'returns styleguide page in dev env' do
+    env_backup = Rails.env
+    Rails.env  = 'development'
+    get :styleguide
+    Rails.env = env_backup
+    expect(response.status).to eq(200)
+  end
 end
