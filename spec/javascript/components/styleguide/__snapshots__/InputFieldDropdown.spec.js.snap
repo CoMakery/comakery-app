@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InputFieldDropdown renders correctly without props 1`] = `
+<Fragment>
+  <InputField
+    checkboxText=""
+    checked={false}
+    className="input-field__dropdown"
+    disabled={false}
+    errorText=""
+    eventHandler={[Function]}
+    imgPreviewUrl=""
+    name="field"
+    pattern=".*"
+    placeholder="Please enter value"
+    readOnly={false}
+    required={false}
+    selectEntries={Array []}
+    symbolLimit={0}
+    title="title"
+    type="select"
+    value=""
+  />
+</Fragment>
+`;
