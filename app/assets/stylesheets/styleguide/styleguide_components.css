@@ -4,6 +4,11 @@
   padding: 1rem;
 }
 
+.styleguide-index--icon {
+  display: block;
+  margin: 20px 0;
+}
+
 .button {
   height: 30px;
   padding: 6px 12px;

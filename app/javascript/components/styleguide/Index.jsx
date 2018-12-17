@@ -13,6 +13,7 @@ import InputFieldDropdown from './InputFieldDropdown'
 import InputFieldDropdownHalfed from './InputFieldDropdownHalfed'
 import Checkbox from './Checkbox'
 import InputFieldUploadFile from './InputFieldUploadFile'
+import Icon from './Icon'
 
 class Index extends React.Component {
   constructor(props) {
@@ -46,6 +47,7 @@ class Index extends React.Component {
           <div className="Header-Style">
             Pages#styleguide
           </div>
+
           <InputField
             name="input[text1]"
             value={this.state['input[text1]']}
@@ -112,6 +114,64 @@ class Index extends React.Component {
             checkboxText="Name of the skill"
           />
           <InputFieldUploadFile title="Upload diagram screenshot" />
+
+          <Icon />
+          <Icon width={100} height={100} className="styleguide-index--icon" />
+          {[
+            'Atoms---Icons-System--Search-2.png',
+            'Atoms---Icons-System-World.png',
+            'Atoms---Decoration---Dot.png',
+            'ICON-BATCH-GRAY-2.png',
+            'ICON-TOKENS-BTC.png',
+            'Atoms---Icons-System-Instagram-2.png',
+            'Atoms---Icons-System-Camera.png',
+            'ICON-BATCH-PURPLE.png',
+            'CHARACTERS-COUNTER-VISIBLE.png',
+            'ICON-BATCH-PURPLE-3.png',
+            'ICON-DROP_DOWN-PURPLE.png',
+            'ICON-PHASE.png',
+            'ICON-TOKENS-COINS.png',
+            'Atoms---Icons-System-apple.png',
+            'ICON-CLOSE.png',
+            'Atoms---Icons-lined-arrow-right.png',
+            'Atoms---Icons---System---Phone.png',
+            'ICON-CLOSE-Copy.png',
+            'Atoms---Icons-System-android2.png',
+            'Atoms---Icons-System-Lock.png',
+            'Atoms---Icons-System-Heart.png',
+            'Atoms---Icon-System-Arrow---.png',
+            'ICON-BATCH-GRAY.png',
+            'ICON-LOCKED.png',
+            'ICON-TASK.png',
+            'Atoms---Icons-System-Facebook-2.png',
+            'ICON-DROP_DOWN.png',
+            'Atoms---Icons-System-Free-Shipping.png',
+            'ICON-MISSION.png',
+            'ICON-BATCH-PURPLE-2.png',
+            'ICON-THREE_DOTS.png',
+            'Atoms---Icons-System-windows.png',
+            'Atoms---Icons-System-Twitter-2.png',
+            'ICON-DONE.png',
+            'Atoms---Icons-System-Play.png',
+            'ICON-TASKS.png',
+            'Atoms---Icons---System---Arrow.png',
+            'Atoms---Icons-System-Home.png',
+            'ICON-BACK.png',
+            'Atoms---icons---System---chat.png',
+            'ICON-BATCH.png',
+            'ICON-EDIT.png',
+            'ICON-BATCH-2.png',
+            'Atoms---Icons-System-arrow.png',
+            'Atoms---Icons-lined-arrow-right-2.png',
+            'CHARACTERS-COUNTER-HIDDEN.png',
+            'Atoms---Icon-System-Arrow----2.png',
+            'ICON-DROP_DOWN-Copy.png',
+            'ICON-TRASH.png',
+            'Atoms---Icons-System--Search.png'
+          ].map(i =>
+            <Icon key={i} name={i} className="styleguide-index--icon" />
+          )}
+
           <Button />
           <ButtonBorder />
           <ButtonPrimaryDisabled />
