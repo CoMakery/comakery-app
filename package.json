@@ -6,11 +6,13 @@
   "scripts": {
     "lint": "yarn lint:ci --fix",
     "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript",
+    "stylelint": "stylelint 'app/assets/stylesheets/**/*.css' --fix",
     "test": "jest"
   },
   "dependencies": {
     "@rails/webpacker": "^3.5.5",
     "babel-preset-react": "^6.24.1",
+    "classnames": "^2.2.6",
     "coffeescript": "1.12.7",
     "d3pie": "^0.1.9",
     "formdata-polyfill": "^3.0.13",
@@ -29,6 +31,7 @@
     "babel-preset-react": "^6.24.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
+    "enzyme-to-json": "^3.3.5",
     "eslint": "^4.7.1",
     "eslint-config-comakery": "^0.0.4",
     "eslint-config-react-app": "^0.6.2",
@@ -38,11 +41,17 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "eslint-plugin-standard": "^4.0.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^23.6.0",
     "jest-enzyme": "^7.0.1",
     "react-test-renderer": "^16.6.0",
     "regenerator-runtime": "^0.12.1",
+    "stylelint": "^9.9.0",
+    "stylelint-config-recommended": "^2.1.0",
     "webpack-dev-server": "^2.9.4"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-recommended"
   },
   "jest": {
     "roots": [
@@ -55,6 +64,12 @@
     ],
     "globals": {
       "window": {}
+    },
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "moduleNameMapper": {
+      ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
     },
     "setupTestFrameworkScriptFile": "./spec/javascript/setup.js"
   }

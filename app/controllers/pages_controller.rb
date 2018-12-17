@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   skip_before_action :require_login, except: %i[featured home]
-  skip_before_action :require_email_confirmation, only: %i[featured home landing]
+  skip_before_action :require_email_confirmation, only: %i[featured home landing add_interest]
   skip_after_action :verify_authorized
 
   def landing
@@ -8,6 +8,7 @@ class PagesController < ApplicationController
       if current_account.finished_contributor_form?
         redirect_to action: :featured
       else
+        @paperform_id = (ENV['APP_NAME'] == 'demo' ? 'demo-homepage' : 'homepage')
         render :home
       end
     end
@@ -32,5 +33,10 @@ class PagesController < ApplicationController
     respond_to do |format|
       format.json { render json: @interest.to_json }
     end
+  end
+
+  def styleguide
+    return redirect_to :root unless Rails.env == 'development'
+    render component: 'styleguide/Index'
   end
 end

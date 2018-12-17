@@ -79,6 +79,7 @@ module SlackStubs
   end
 
   def stub_airtable
+    ENV['AIRTABLE_SIGNUPS_TABLE_ID'] = '123qwer'
     RestClient.stub(:post) { '{"success": "true"}' }
   end
 

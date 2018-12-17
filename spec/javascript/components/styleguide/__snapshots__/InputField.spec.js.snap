@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InputField renders correctly without props 1`] = `
+<Fragment>
+  <div
+    className="input-field"
+  >
+    <div
+      className="input-field--title"
+    >
+      <span
+        className="input-field--title--title"
+      >
+        title
+      </span>
+      <span
+        className="input-field--title--required"
+      >
+        optional
+      </span>
+      <span
+        className="input-field--title--counter"
+      >
+        0
+        /
+        100
+      </span>
+    </div>
+    <div
+      className="input-field--content"
+    >
+      <input
+        className="input-field--content__text"
+        name="field"
+        onChange={[Function]}
+        pattern=".*"
+        placeholder="Please enter value"
+        readOnly={false}
+        required={false}
+        type="text"
+        value=""
+      />
+    </div>
+  </div>
+</Fragment>
+`;
