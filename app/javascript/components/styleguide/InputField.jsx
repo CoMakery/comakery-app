@@ -58,7 +58,7 @@ class InputField extends React.Component {
       eventHandler,
       ...other
     } = this.props
-    
+
     let d = eventHandler
 
     let classnames = classNames(
