@@ -298,6 +298,7 @@
 .input-field--content__file--preview {
   max-width: 40px;
   max-height: 40px;
+  border: 1px dashed var(--primary-blue);
 }
 
 .input-field--content__file--name {
