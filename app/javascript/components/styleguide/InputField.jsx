@@ -125,7 +125,7 @@ class InputField extends React.Component {
                   </div>
                 }
                 <input className="input-field--content__file"
-                  required={required}
+                  required={imgPreviewUrl ? false : required}
                   type={type}
                   name={name}
                   onChange={this.handleFileChange}
