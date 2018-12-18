@@ -220,6 +220,7 @@
   background-origin: content-box;
   background-repeat: no-repeat;
   cursor: pointer;
+  text-transform: capitalize;
 }
 
 .input-field--content__select:focus {
@@ -291,6 +292,7 @@
   padding: 7px 8px 5px 10px;
   outline: none;
   cursor: pointer;
+  text-transform: uppercase;
 }
 
 .input-field--content__file--preview {
