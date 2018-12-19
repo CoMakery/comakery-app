@@ -1,25 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
+import InputFieldDropdownHalfed from './styleguide/InputFieldDropdownHalfed'
+import InputFieldHalfed from './styleguide/InputFieldHalfed'
+import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
+import Button from './styleguide/Button'
 
 class TokenForm extends React.Component {
   constructor(props) {
     super(props)
+
+    this.errorAdd = this.errorAdd.bind(this)
+    this.errorRemove = this.errorRemove.bind(this)
+    this.disable = this.disable.bind(this)
+    this.enable = this.enable.bind(this)
+    this.disableContractFields = this.disableContractFields.bind(this)
+    this.enableContractFields = this.enableContractFields.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.handleLogoChange = this.handleLogoChange.bind(this)
-    this.noEmptyFields = this.noEmptyFields.bind(this)
     this.fetchSymbolAndDecimals = this.fetchSymbolAndDecimals.bind(this)
+
     this.state = {
-      contractAddressEditable           : true,
-      ethereumContractAddressEditable   : true,
-      paymentTypeChoosable              : true,
-      blockchainNetworkChoosable        : true,
-      ethereumNetworkChoosable          : true,
-      submitClickable                   : true,
       logoLocalUrl                      : null,
-      displayValidationErrors           : false,
-      serverErrors                      : {},
+      errors                            : {},
+      disabled                          : {},
       'token[coin_type]'                : this.props.token.coinType || Object.values(this.props.coinTypes)[0],
       'token[name]'                     : this.props.token.name || '',
       'token[symbol]'                   : this.props.token.symbol || '',
@@ -35,25 +40,64 @@ class TokenForm extends React.Component {
     console.log(this.state)
   }
 
-  noEmptyFields(formData) {
-    if (!this.props.token.logoUrl && !this.state.logoLocalUrl) {
-      return false
-    }
+  errorAdd(n, e) {
+    this.setState({
+      errors: Object.assign({}, this.state.errors, {[n]: e})
+    })
+  }
 
-    for (let v of formData.values()) {
-      if (v == null) {
-        return false
-      }
-    }
+  errorRemove(n) {
+    let e = this.state.errors
+    delete e[n]
+    this.setState({
+      errors: e
+    })
+  }
 
-    return true
+  disable(a) {
+    let d = this.state.disabled
+    a.forEach(n => d = Object.assign({}, d, {[n]: true}))
+    this.setState({
+      disabled: d
+    })
+  }
+
+  enable(a) {
+    let d = this.state.disabled
+    a.forEach(n => delete d[n])
+    this.setState({
+      disabled: d
+    })
+  }
+
+  disableContractFields() {
+    this.disable([
+      'token[coin_type]',
+      'token[blockchain_network]',
+      'token[ethereum_network]',
+      'token[contract_address]',
+      'token[ethereum_contract_address]'
+    ])
+  }
+
+  enableContractFields() {
+    this.enable([
+      'token[coin_type]',
+      'token[blockchain_network]',
+      'token[ethereum_network]',
+      'token[contract_address]',
+      'token[ethereum_contract_address]'
+    ])
   }
 
   handleFieldChange(event) {
     this.setState({ [event.target.name]: event.target.value })
 
     if (!event.target.checkValidity()) {
+      this.errorAdd(event.target.name, 'invalid value')
       return
+    } else {
+      this.errorRemove(event.target.name)
     }
 
     if (event.target.value === '') {
@@ -82,10 +126,9 @@ class TokenForm extends React.Component {
           'token[symbol]'                   : '',
           'token[decimal_places]'           : '',
           'token[contract_address]'         : '',
-          'token[ethereum_contract_address]': '',
-          contractAddressEditable           : true,
-          ethereumContractAddressEditable   : true
+          'token[ethereum_contract_address]': ''
         })
+        this.enableContractFields()
         break
 
       default:
@@ -108,14 +151,10 @@ class TokenForm extends React.Component {
     }
 
     this.setState({
-      'token[symbol]'                : '',
-      'token[decimal_places]'        : '',
-      paymentTypeChoosable           : false,
-      blockchainNetworkChoosable     : false,
-      ethereumNetworkChoosable       : false,
-      contractAddressEditable        : false,
-      ethereumContractAddressEditable: false
+      'token[symbol]'        : '',
+      'token[decimal_places]': ''
     })
+    this.disableContractFields()
 
     fetchPolyfill('/tokens/fetch_contract_details', {
       credentials: 'same-origin',
@@ -127,64 +166,35 @@ class TokenForm extends React.Component {
       }
     }).then(response => {
       if (response.status === 200) {
-        console.log(response)
         return response.json()
       } else {
-        this.setState({
-          paymentTypeChoosable           : true,
-          blockchainNetworkChoosable     : true,
-          ethereumNetworkChoosable       : true,
-          contractAddressEditable        : true,
-          ethereumContractAddressEditable: true
-        })
+        this.enableContractFields()
         throw Error(response.text())
       }
     }).then(data => {
-      console.log(data)
       let symbol = data.symbol
       let decimals = data.decimals
-      if (symbol == null || decimals == null) {
+      if (symbol && decimals) {
         this.setState({
-          paymentTypeChoosable           : true,
-          blockchainNetworkChoosable     : true,
-          ethereumNetworkChoosable       : true,
-          contractAddressEditable        : true,
-          ethereumContractAddressEditable: true
-        })
-      } else {
-        this.setState({
-          'token[symbol]'                : symbol,
-          'token[decimal_places]'        : decimals,
-          paymentTypeChoosable           : true,
-          blockchainNetworkChoosable     : true,
-          ethereumNetworkChoosable       : true,
-          contractAddressEditable        : true,
-          ethereumContractAddressEditable: true
+          'token[symbol]'        : symbol,
+          'token[decimal_places]': decimals.toString()
         })
       }
+      this.enableContractFields()
     })
   }
 
   handleSubmit(event) {
     event.preventDefault()
 
-    this.setState({
-      submitClickable: false
-    })
+    this.disable(['token[submit]'])
 
-    const formData = new FormData(event.target)
-
-    if (event.target.checkValidity() && this.noEmptyFields(formData)) {
-      this.setState({
-        displayValidationErrors: false
-      })
-    } else {
-      this.setState({
-        displayValidationErrors: true,
-        submitClickable        : true
-      })
+    if (!event.target.checkValidity()) {
+      this.enable(['token[submit]'])
       return
     }
+
+    const formData = new FormData(event.target)
 
     fetchPolyfill(this.props.formUrl, {
       credentials: 'same-origin',
@@ -199,9 +209,9 @@ class TokenForm extends React.Component {
       } else {
         response.json().then(data => {
           this.setState({
-            serverErrors   : data.errors,
-            submitClickable: true
+            errors: data.errors
           })
+          this.enable(['token[submit]'])
         })
       }
     })
@@ -210,194 +220,123 @@ class TokenForm extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <form onSubmit={this.handleSubmit} noValidate className={this.state.displayValidationErrors ? 'displayValidationErrors' : ''}>
-          <label>
-            payment type
-            {this.state.serverErrors['token[coin_type]'] &&
-              <span>
-                {this.state.serverErrors['token[coin_type]']}
-              </span>
-            }
-            <select
-              required
-              name="token[coin_type]"
-              value={this.state['token[coin_type]']}
-              onChange={this.handleFieldChange}
-              disabled={!this.state.paymentTypeChoosable}
-            >
-              {Object.entries(this.props.coinTypes).map(([k, v]) =>
-                <option key={v} value={v}>{k}</option>
-              )}
-            </select>
-          </label>
+        <form onSubmit={this.handleSubmit}>
 
-          <label>
-            token name
-            {this.state.serverErrors['token[name]'] &&
-              <span>
-                {this.state.serverErrors['token[name]']}
-              </span>
-            }
-            <input
-              required
-              type="text"
-              name="token[name]"
-              value={this.state['token[name]']}
-              onChange={this.handleFieldChange}
-              placeholder="Bitcoin"
-            />
-          </label>
+          <InputFieldDropdownHalfed
+            title="payment type"
+            required
+            name="token[coin_type]"
+            value={this.state['token[coin_type]']}
+            errorText={this.state.errors['token[coin_type]']}
+            disabled={this.state.disabled['token[coin_type]']}
+            eventHandler={this.handleFieldChange}
+            selectEntries={Object.entries(this.props.coinTypes)}
+            symbolLimit={0}
+          />
+
+          <InputFieldHalfed
+            title="token name"
+            required
+            name="token[name]"
+            value={this.state['token[name]']}
+            errorText={this.state.errors['token[name]']}
+            placeholder="Bitcoin"
+            eventHandler={this.handleFieldChange}
+            symbolLimit={0}
+          />
 
           {this.state['token[coin_type]'].match(/qrc20|erc20/) &&
-            <label>
-              token symbol
-              {this.state.serverErrors['token[symbol]'] &&
-                <span>
-                  {this.state.serverErrors['token[symbol]']}
-                </span>
-              }
-              <input
-                required
-                type="text"
-                name="token[symbol]"
-                value={this.state['token[symbol]']}
-                onChange={this.handleFieldChange}
-                placeholder="..."
-                readOnly
-              />
-            </label>
+            <InputFieldHalfed
+              title="token symbol"
+              required
+              name="token[symbol]"
+              value={this.state['token[symbol]']}
+              errorText={this.state.errors['token[symbol]']}
+              placeholder="..."
+              readOnly
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
           }
 
           {this.state['token[coin_type]'].match(/qrc20|erc20/) &&
-            <label>
-              decimal places
-              {this.state.serverErrors['token[decimal_places]'] &&
-                <span>
-                  {this.state.serverErrors['token[decimal_places]']}
-                </span>
-              }
-              <input
-                required
-                type="text"
-                name="token[decimal_places]"
-                value={this.state['token[decimal_places]']}
-                onChange={this.handleFieldChange}
-                pattern="\d{1-2}"
-                placeholder="..."
-                readOnly
-              />
-            </label>
+            <InputFieldHalfed
+              title="decimal places"
+              required
+              name="token[decimal_places]"
+              value={this.state['token[decimal_places]']}
+              errorText={this.state.errors['token[decimal_places]']}
+              placeholder="..."
+              pattern="\d{1-2}"
+              readOnly
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
           }
 
           {this.state['token[coin_type]'] === 'qrc20' &&
-            <label>
-              contract address
-              {this.state.serverErrors['token[contract_address]'] &&
-                <span>
-                  {this.state.serverErrors['token[contract_address]']}
-                </span>
-              }
-              <input
-                required
-                type="text"
-                name="token[contract_address]"
-                value={this.state['token[contract_address]']}
-                onChange={this.handleFieldChange}
-                pattern="[a-fA-F0-9]{40}"
-                placeholder="2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc"
-                readOnly={!this.state.contractAddressEditable}
-              />
-            </label>
+            <InputFieldHalfed
+              title="contract address"
+              required
+              name="token[contract_address]"
+              value={this.state['token[contract_address]']}
+              errorText={this.state.errors['token[contract_address]']}
+              readOnly={this.state.disabled['token[contract_address]']}
+              placeholder="2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc"
+              pattern="[a-fA-F0-9]{40}"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
           }
 
           {this.state['token[coin_type]'] === 'erc20' &&
-            <label>
-              contract address
-              {this.state.serverErrors['token[ethereum_contract_address]'] &&
-                <span>
-                  {this.state.serverErrors['token[ethereum_contract_address]']}
-                </span>
-              }
-              <input
-                required
-                type="text"
-                name="token[ethereum_contract_address]"
-                value={this.state['token[ethereum_contract_address]']}
-                onChange={this.handleFieldChange}
-                pattern="0x[a-fA-F0-9]{40}"
-                placeholder="0x6c6ee5e31d828de241282b9606c8e98ea48526e2"
-                readOnly={!this.state.ethereumContractAddressEditable}
-              />
-            </label>
+            <InputFieldHalfed
+              title="contract address"
+              required
+              name="token[ethereum_contract_address]"
+              value={this.state['token[ethereum_contract_address]']}
+              errorText={this.state.errors['token[ethereum_contract_address]']}
+              readOnly={this.state.disabled['token[ethereum_contract_address]']}
+              placeholder="0x6c6ee5e31d828de241282b9606c8e98ea48526e2"
+              pattern="0x[a-fA-F0-9]{40}"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
           }
 
           {this.state['token[coin_type]'] === 'qrc20' &&
-            <label>
-              blockchain network
-              {this.state.serverErrors['token[blockchain_network]'] &&
-                <span>
-                  {this.state.serverErrors['token[blockchain_network]']}
-                </span>
-              }
-              <select
-                required
-                name="token[blockchain_network]"
-                value={this.state['token[blockchain_network]']}
-                onChange={this.handleFieldChange}
-                disabled={!this.state.blockchainNetworkChoosable}
-              >
-                {Object.entries(this.props.blockchainNetworks).map(([k, v]) =>
-                  <option key={v} value={v}>{k}</option>
-                )}
-              </select>
-            </label>
+            <InputFieldDropdownHalfed
+              title="blockchain network"
+              required
+              name="token[blockchain_network]"
+              value={this.state['token[blockchain_network]']}
+              errorText={this.state.errors['token[blockchain_network]']}
+              disabled={this.state.disabled['token[blockchain_network]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.props.blockchainNetworks)}
+            />
           }
 
           {this.state['token[coin_type]'].match(/eth|erc20/) &&
-            <label>
-              blockchain network
-              {this.state.serverErrors['token[ethereum_network]'] &&
-                <span>
-                  {this.state.serverErrors['token[ethereum_network]']}
-                </span>
-              }
-              <select
-                required
-                name="token[ethereum_network]"
-                value={this.state['token[ethereum_network]']}
-                onChange={this.handleFieldChange}
-                disabled={!this.state.ethereumNetworkChoosable}
-              >
-                {Object.entries(this.props.ethereumNetworks).map(([k, v]) =>
-                  <option key={v} value={v}>{k}</option>
-                )}
-              </select>
-            </label>
+            <InputFieldDropdownHalfed
+              title="blockchain network"
+              required
+              name="token[ethereum_network]"
+              value={this.state['token[ethereum_network]']}
+              errorText={this.state.errors['token[ethereum_network]']}
+              disabled={this.state.disabled['token[ethereum_network]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.props.ethereumNetworks)}
+            />
           }
 
-          <label>
-            token logo
-            {this.state.serverErrors['token[logo_image]'] &&
-              <span>
-                {this.state.serverErrors['token[logo_image]']}
-              </span>
-            }
-            <input
-              type="file"
-              name="token[logo_image]"
-              onChange={this.handleLogoChange}
-            />
-            {!this.state.logoLocalUrl &&
-              <img
-                src={this.props.token.logoUrl}
-              />
-            }
-            {this.state.logoLocalUrl &&
-              <img
-                src={this.state.logoLocalUrl}
-              />
-            }
-          </label>
+          <InputFieldUploadFile
+            title="token logo"
+            required
+            name="token[logo_image]"
+            errorText={this.state.errors['token[logo_image]']}
+            imgPreviewUrl={this.props.token.logoUrl}
+          />
 
           <input
             type="hidden"
@@ -406,10 +345,10 @@ class TokenForm extends React.Component {
             readOnly
           />
 
-          <input
+          <Button
             type="submit"
             value="save"
-            disabled={!this.state.submitClickable}
+            disabled={this.state.disabled.submit}
           />
         </form>
       </React.Fragment>

@@ -18,7 +18,7 @@ class TokenIndex extends React.Component {
     console.log(event.target.id)
     this.setState({
       selectedToken: this.props.tokens.find((t) =>
-        t.id == event.target.id
+        t.id === event.target.id
       )
     })
   }
