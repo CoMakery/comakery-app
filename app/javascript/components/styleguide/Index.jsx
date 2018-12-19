@@ -1,9 +1,7 @@
 import React from 'react'
-import Button from './Button'
 import ButtonBorder from './ButtonBorder'
 import ButtonPrimaryDisabled from './ButtonPrimaryDisabled'
 import ButtonPrimaryEnabled from './ButtonPrimaryEnabled'
-import InputField from './InputField'
 import InputFieldDescription from './InputFieldDescription'
 import InputFieldDescriptionMiddle from './InputFieldDescriptionMiddle'
 import InputFieldHalfed from './InputFieldHalfed'
@@ -14,6 +12,8 @@ import InputFieldDropdownHalfed from './InputFieldDropdownHalfed'
 import Checkbox from './Checkbox'
 import InputFieldUploadFile from './InputFieldUploadFile'
 import Icon from './Icon'
+import MessageError from './MessageError'
+import MessageWarning from './MessageWarning'
 
 class Index extends React.Component {
   constructor(props) {
@@ -48,12 +48,22 @@ class Index extends React.Component {
             Pages#styleguide
           </div>
 
-          <InputField
+          <MessageError
+            text="Please confirm your  email address to continue"
+            className="styleguide-index--message"
+          />
+          <MessageWarning
+            text="Please confirm your  email address to continue"
+            className="styleguide-index--message"
+          />
+
+          <InputFieldWhiteDark
             name="input[text1]"
             value={this.state['input[text1]']}
             eventHandler={this.handleInputChange}
+            symbolLimit={0}
           />
-          <InputField
+          <InputFieldWhiteDark
             name="input[text2]"
             value={this.state['input[text2]']}
             eventHandler={this.handleInputChange}
@@ -172,10 +182,9 @@ class Index extends React.Component {
             <Icon key={i} name={i} className="styleguide-index--icon" />
           )}
 
-          <Button />
-          <ButtonBorder />
-          <ButtonPrimaryDisabled />
-          <ButtonPrimaryEnabled />
+          <ButtonBorder className="styleguide-index--button" />
+          <ButtonPrimaryDisabled className="styleguide-index--button" />
+          <ButtonPrimaryEnabled className="styleguide-index--button" />
         </div>
       </React.Fragment>
     )
