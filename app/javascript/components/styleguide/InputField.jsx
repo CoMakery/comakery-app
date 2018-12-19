@@ -59,6 +59,8 @@ class InputField extends React.Component {
       ...other
     } = this.props
 
+    let d = eventHandler
+
     let classnames = classNames(
       'input-field',
       (errorText ? 'input-field__error' : ''),
@@ -123,6 +125,7 @@ class InputField extends React.Component {
                   </div>
                 }
                 <input className="input-field--content__file"
+                  required={imgPreviewUrl ? false : required}
                   type={type}
                   name={name}
                   onChange={this.handleFileChange}
