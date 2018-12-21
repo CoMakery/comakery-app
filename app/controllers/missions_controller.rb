@@ -1,5 +1,4 @@
 class MissionsController < ApplicationController
-  layout 'react'
   before_action :find_mission_by_id, only: %i[edit update destroy]
   skip_after_action :verify_policy_scoped, only: %i[index]
 
@@ -38,10 +37,6 @@ class MissionsController < ApplicationController
       errors.each { |key, value| errors[key] = value.to_sentence }
       render json: { message: @mission.errors.full_messages.join(', '), errors: errors }, status: :unprocessable_entity
     end
-  end
-
-  def destroy
-    authorize @mission
   end
 
   private

@@ -12,6 +12,7 @@ Lint/AmbiguousBlockAssociation:
     - 'spec/controllers/accounts_controller_spec.rb'
     - 'spec/controllers/awards_controller_spec.rb'
     - 'spec/controllers/projects_controller_spec.rb'
+    - 'spec/controllers/missions_controller_spec.rb'
     - 'spec/interactors/build_award_records_spec.rb'
     - 'spec/models/authentication_spec.rb'
 

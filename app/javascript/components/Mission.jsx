@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormLabel } from './subcomponents/FormLabel'
+import InputField from './styleguide/InputField'
+import InputFieldDescription from './styleguide/InputFieldDescription'
 import Alert from './subcomponents/Alert'
 
 export default class Mission extends React.Component {
@@ -114,17 +116,24 @@ export default class Mission extends React.Component {
           <div className="mission-header">{id ? 'Edit Mission' : 'Create a New Mission'}</div>
           <div className="row">
             <div className="columns large-6 medium-12">
-              <FormLabel title="Name" required length={100} currentLength={name.length} />
-              <input className="mission-input" type="text" name="name" placeholder="Unicoin" maxLength="100" value={name} onChange={this.handleChangeFormData} />
-              {errors.name && <small className="error">{errors.name}</small>}
+              <InputField
+                name="name" title="Name" symbolLimit={100} required value={name}
+                placeholder="Unicoin"
+                eventHandler={this.handleChangeFormData}
+                errorText={errors.name} />
 
-              <FormLabel title="Subtitle" required length={140} currentLength={subtitle.length} />
-              <input className="mission-input" type="text" name="subtitle" placeholder="Unicoin is the future of tokenizing fantastical beast networks" maxLength="140" value={subtitle} onChange={this.handleChangeFormData} />
-              {errors.subtitle && <small className="error">{errors.subtitle}</small>}
+              <InputField
+                name="subtitle" title="Subtitle" symbolLimit={140} required value={subtitle}
+                placeholder="Unicoin is the future of tokenizing fantastical beast networks"
+                eventHandler={this.handleChangeFormData}
+                errorText={errors.subtitle} />
 
-              <FormLabel title="Description" required length={250} currentLength={description.length} />
-              <textarea className="mission-input mission-input--multi" type="text" name="description" placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity." maxLength="250" value={description} onChange={this.handleChangeFormData} />
-              {errors.description && <small className="error">{errors.description}</small>}
+              <InputFieldDescription
+                name="description" title="Description" symbolLimit={250} required value={description}
+                placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
+                eventHandler={this.handleChangeFormData}
+                errorText={errors.description}
+              />
 
               <div className="mission-image-container">
                 <div className="mission-image-container__half">
@@ -137,7 +146,7 @@ export default class Mission extends React.Component {
                     </label>
                     <div className="img-resolution">Image should be <br />1200px x 800px</div>
                   </div>
-                  {errors.logo && <small className="error">{errors.logo}</small>}
+                  {errors.logo && <small className="input-field--error">{errors.logo}</small>}
                 </div>
                 <div className="mission-image-container__half">
                   <FormLabel title="Mission Image" required />
@@ -149,7 +158,7 @@ export default class Mission extends React.Component {
                     </label>
                     <div className="img-resolution">Image should be <br />800px x 800px</div>
                   </div>
-                  {errors.image && <small className="error">{errors.image}</small>}
+                  {errors.image && <small className="input-field--error">{errors.image}</small>}
                 </div>
               </div>
             </div>
