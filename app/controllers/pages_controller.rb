@@ -3,6 +3,8 @@ class PagesController < ApplicationController
   skip_before_action :require_email_confirmation, only: %i[featured home landing add_interest]
   skip_after_action :verify_authorized
 
+  layout 'react', only: [:styleguide]
+
   def landing
     if current_account
       if current_account.finished_contributor_form?

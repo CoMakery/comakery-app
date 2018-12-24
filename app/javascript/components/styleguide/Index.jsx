@@ -1,4 +1,5 @@
 import React from 'react'
+import Layout from './../layouts/Layout'
 import ButtonBorder from './ButtonBorder'
 import ButtonPrimaryDisabled from './ButtonPrimaryDisabled'
 import ButtonPrimaryEnabled from './ButtonPrimaryEnabled'
@@ -43,20 +44,15 @@ class Index extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div className="styleguide-index">
-          <div className="Header-Style">
-            Pages#styleguide
-          </div>
-
-          <MessageError
-            text="Please confirm your  email address to continue"
-            className="styleguide-index--message"
-          />
-          <MessageWarning
-            text="Please confirm your  email address to continue"
-            className="styleguide-index--message"
-          />
-
+        <Layout
+          className="styleguide-index"
+          title="layout with sidebar"
+          hasBackButton={false}
+          hasSubFooter
+          sidebar={
+            <div>Responsive Sidebar Placeholder</div>
+          }
+        >
           <InputFieldWhiteDark
             name="input[text1]"
             value={this.state['input[text1]']}
@@ -182,10 +178,19 @@ class Index extends React.Component {
             <Icon key={i} name={i} className="styleguide-index--icon" />
           )}
 
+          <MessageError
+            text="Please confirm your  email address to continue"
+            className="styleguide-index--message"
+          />
+          <MessageWarning
+            text="Please confirm your  email address to continue"
+            className="styleguide-index--message"
+          />
+
           <ButtonBorder className="styleguide-index--button" />
           <ButtonPrimaryDisabled className="styleguide-index--button" />
           <ButtonPrimaryEnabled className="styleguide-index--button" />
-        </div>
+        </Layout>
       </React.Fragment>
     )
   }

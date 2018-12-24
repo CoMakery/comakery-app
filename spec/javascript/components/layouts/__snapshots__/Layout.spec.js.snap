@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layout renders correctly without props 1`] = `
+<Fragment>
+  <div
+    className="layout"
+  >
+    <div
+      className="layout--content"
+    >
+      <div
+        className="layout--content--title"
+      >
+        title
+      </div>
+      <hr
+        className="layout--content--hr"
+      />
+      <div
+        className="layout--content--wrapper"
+      >
+        <div
+          className="layout--content--content"
+        />
+      </div>
+    </div>
+  </div>
+</Fragment>
+`;
