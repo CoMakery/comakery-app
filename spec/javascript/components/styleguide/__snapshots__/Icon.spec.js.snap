@@ -3,7 +3,7 @@
 exports[`Icon renders correctly without props 1`] = `
 <Fragment>
   <img
-    className="icon icon__Atoms---Icons-System-Heart-png"
+    className="icon icon__atomsIconsSystemHeart-svg"
     src={null}
   />
 </Fragment>

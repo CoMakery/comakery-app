@@ -75,6 +75,7 @@ a.header--nav--links--current {
   position: absolute;
   top: 108px;
   left: 20px;
+  cursor: pointer;
 }
 
 .layout--content {
