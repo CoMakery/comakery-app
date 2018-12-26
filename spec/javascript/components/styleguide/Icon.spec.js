@@ -8,7 +8,7 @@ describe('Icon', () => {
 
       expect(wrapper).toMatchSnapshot()
       expect(wrapper.exists('.icon')).toBe(true)
-      expect(wrapper.exists('.icon__Atoms---Icons-System-Heart-png')).toBe(true)
+      expect(wrapper.exists('.icon__atomsIconsSystemHeart-svg')).toBe(true)
     })
 
     it('renders correctly with custom className', () => {
@@ -18,8 +18,8 @@ describe('Icon', () => {
     })
 
     it('renders correctly with custom name', () => {
-      const wrapper = shallow(<Icon name='ICON-DONE.png' />)
+      const wrapper = shallow(<Icon name='iconDone.svg' />)
 
-      expect(wrapper.exists('.icon__ICON-DONE-png')).toBe(true)
+      expect(wrapper.exists('.icon__iconDone-svg')).toBe(true)
     })
 })

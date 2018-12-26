@@ -1,9 +1,8 @@
 import React from 'react'
-import Button from './Button'
+import Layout from './../layouts/Layout'
 import ButtonBorder from './ButtonBorder'
 import ButtonPrimaryDisabled from './ButtonPrimaryDisabled'
 import ButtonPrimaryEnabled from './ButtonPrimaryEnabled'
-import InputField from './InputField'
 import InputFieldDescription from './InputFieldDescription'
 import InputFieldDescriptionMiddle from './InputFieldDescriptionMiddle'
 import InputFieldHalfed from './InputFieldHalfed'
@@ -14,6 +13,8 @@ import InputFieldDropdownHalfed from './InputFieldDropdownHalfed'
 import Checkbox from './Checkbox'
 import InputFieldUploadFile from './InputFieldUploadFile'
 import Icon from './Icon'
+import MessageError from './MessageError'
+import MessageWarning from './MessageWarning'
 
 class Index extends React.Component {
   constructor(props) {
@@ -43,17 +44,22 @@ class Index extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div className="styleguide-index">
-          <div className="Header-Style">
-            Pages#styleguide
-          </div>
-
-          <InputField
+        <Layout
+          className="styleguide-index"
+          title="layout with sidebar"
+          hasBackButton
+          hasSubFooter
+          sidebar={
+            <div>Responsive Sidebar Placeholder</div>
+          }
+        >
+          <InputFieldWhiteDark
             name="input[text1]"
             value={this.state['input[text1]']}
             eventHandler={this.handleInputChange}
+            symbolLimit={0}
           />
-          <InputField
+          <InputFieldWhiteDark
             name="input[text2]"
             value={this.state['input[text2]']}
             eventHandler={this.handleInputChange}
@@ -118,65 +124,73 @@ class Index extends React.Component {
           <Icon />
           <Icon width={100} height={100} className="styleguide-index--icon" />
           {[
-            'Atoms---Icons-System--Search-2.png',
-            'Atoms---Icons-System-World.png',
-            'Atoms---Decoration---Dot.png',
-            'ICON-BATCH-GRAY-2.png',
-            'ICON-TOKENS-BTC.png',
-            'Atoms---Icons-System-Instagram-2.png',
-            'Atoms---Icons-System-Camera.png',
-            'ICON-BATCH-PURPLE.png',
-            'CHARACTERS-COUNTER-VISIBLE.png',
-            'ICON-BATCH-PURPLE-3.png',
-            'ICON-DROP_DOWN-PURPLE.png',
-            'ICON-PHASE.png',
-            'ICON-TOKENS-COINS.png',
-            'Atoms---Icons-System-apple.png',
-            'ICON-CLOSE.png',
-            'Atoms---Icons-lined-arrow-right.png',
-            'Atoms---Icons---System---Phone.png',
-            'ICON-CLOSE-Copy.png',
-            'Atoms---Icons-System-android2.png',
-            'Atoms---Icons-System-Lock.png',
-            'Atoms---Icons-System-Heart.png',
-            'Atoms---Icon-System-Arrow---.png',
-            'ICON-BATCH-GRAY.png',
-            'ICON-LOCKED.png',
-            'ICON-TASK.png',
-            'Atoms---Icons-System-Facebook-2.png',
-            'ICON-DROP_DOWN.png',
-            'Atoms---Icons-System-Free-Shipping.png',
-            'ICON-MISSION.png',
-            'ICON-BATCH-PURPLE-2.png',
-            'ICON-THREE_DOTS.png',
-            'Atoms---Icons-System-windows.png',
-            'Atoms---Icons-System-Twitter-2.png',
-            'ICON-DONE.png',
-            'Atoms---Icons-System-Play.png',
-            'ICON-TASKS.png',
-            'Atoms---Icons---System---Arrow.png',
-            'Atoms---Icons-System-Home.png',
-            'ICON-BACK.png',
-            'Atoms---icons---System---chat.png',
-            'ICON-BATCH.png',
-            'ICON-EDIT.png',
-            'ICON-BATCH-2.png',
-            'Atoms---Icons-System-arrow.png',
-            'Atoms---Icons-lined-arrow-right-2.png',
-            'CHARACTERS-COUNTER-HIDDEN.png',
-            'Atoms---Icon-System-Arrow----2.png',
-            'ICON-DROP_DOWN-Copy.png',
-            'ICON-TRASH.png',
-            'Atoms---Icons-System--Search.png'
+            'atomsIconsSystemTwitter2.svg',
+            'iconBatchGray.png',
+            'atomsIconsSystemSearch.svg',
+            'iconDropDownPurple.svg',
+            'atomsIconsSystemHome.svg',
+            'iconTokensBtc.svg',
+            'iconDropDownCopy.svg',
+            'iconTrash.svg',
+            'atomsIconsSystemAndroid2.svg',
+            'atomsIconsSystemPhone.svg',
+            'atomsIconSystemArrow.svg',
+            'iconMission.svg',
+            'iconThreeDots.svg',
+            'iconTask.svg',
+            'iconClose.svg',
+            'iconBitcoinSmall.svg',
+            'iconCloseCopy.svg',
+            'atomsIconsSystemApple.svg',
+            'atomsIconsSystemHeart.svg',
+            'atomsIconsSystemWorld.svg',
+            'atomsIconsSystemWindows.svg',
+            'atomsIconsLinedArrowRight.svg',
+            'iconBatch@3x.png',
+            'iconBitcoin.svg',
+            'atomsIconsSystemPlay.svg',
+            'iconPhase.svg',
+            'atomsIconsSystemInstagram2.svg',
+            'iconBatchGray@2x.png',
+            'iconLocked.svg',
+            'iconBack.svg',
+            'iconDone.svg',
+            'iconDropDown.svg',
+            'iconBatchPurple.png',
+            'iconBatchGray@3x.png',
+            'iconBatchPurple@2x.png',
+            'iconBatchPurple@3x.png',
+            'iconBatch.png',
+            'iconTasks.svg',
+            'iconBatch@2x.png',
+            'atomsIconsSystemFacebook2.svg',
+            'atomsIconsSystemCamera.svg',
+            'atomsIconsSystemChat.svg',
+            'atomsIconsSystemArrow.svg',
+            'atomsIconsSystemFreeShipping.svg',
+            'iconEdit.svg',
+            'atomsDecorationDot.svg',
+            'iconTokensCoins.svg',
+            'iconCloseDark.svg',
+            'atomsIconsSystemLock.svg',
+            'charactersCounterVisible.svg'
           ].map(i =>
             <Icon key={i} name={i} className="styleguide-index--icon" />
           )}
 
-          <Button />
-          <ButtonBorder />
-          <ButtonPrimaryDisabled />
-          <ButtonPrimaryEnabled />
-        </div>
+          <MessageError
+            text="Please confirm your  email address to continue"
+            className="styleguide-index--message"
+          />
+          <MessageWarning
+            text="Please confirm your  email address to continue"
+            className="styleguide-index--message"
+          />
+
+          <ButtonBorder className="styleguide-index--button" />
+          <ButtonPrimaryDisabled className="styleguide-index--button" />
+          <ButtonPrimaryEnabled className="styleguide-index--button" />
+        </Layout>
       </React.Fragment>
     )
   }

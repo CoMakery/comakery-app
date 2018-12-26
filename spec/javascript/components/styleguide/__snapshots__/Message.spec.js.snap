@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Message renders correctly without props 1`] = `
+<Fragment>
+  <div
+    className="message--wrapper--block"
+  >
+    <div
+      className="message--wrapper--inline"
+    >
+      <div
+        className="message"
+      >
+        <span
+          className="message--icon"
+        >
+          <Icon
+            className=""
+            name="atomsIconsSystemChat.svg"
+            width={21}
+          />
+        </span>
+        <span
+          className="message--text__warning"
+        >
+          warning text
+        </span>
+        <span
+          className="message--close-icon"
+          onClick={[Function]}
+        >
+          <Icon
+            className=""
+            name="iconCloseDark.svg"
+            width={24}
+          />
+        </span>
+      </div>
+    </div>
+  </div>
+</Fragment>
+`;
