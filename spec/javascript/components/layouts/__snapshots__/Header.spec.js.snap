@@ -8,7 +8,11 @@ exports[`Header renders correctly without props 1`] = `
     <div
       className="header--logo"
     >
-      Black Logo Placeholder
+      <Icon
+        className=""
+        name="Logo-Header.svg"
+        width="200px"
+      />
     </div>
     <div
       className="header--nav"
