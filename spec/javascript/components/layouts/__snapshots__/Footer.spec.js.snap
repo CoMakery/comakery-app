@@ -8,7 +8,11 @@ exports[`Footer renders correctly without props 1`] = `
     <div
       className="footer--logo"
     >
-      White Logo Placeholder
+      <Icon
+        className=""
+        name="Logo-Footer.svg"
+        width="170px"
+      />
     </div>
     <div
       className="footer--content"

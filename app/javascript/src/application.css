@@ -31,12 +31,13 @@ body {
 
 .header {
   min-height: 90px;
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
   background-color: #ffffff;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .header--logo {
@@ -51,6 +52,7 @@ body {
 
 .header--nav--links a {
   font-size: 12px;
+  font-weight: 500;
   text-decoration: none;
   text-transform: uppercase;
   text-align: center;
@@ -169,6 +171,7 @@ a.header--nav--links--current {
 .footer--content--nav a {
   text-decoration: none;
   font-size: 14px;
+  font-weight: 500;
   opacity: 0.5;
   line-height: 3;
   color: #e8eff7;
@@ -319,6 +322,7 @@ a.header--nav--links--current {
   opacity: 0.5;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
   font-size: 12px;
+  font-weight: 500;
   font-weight: normal;
   color: var(--dark-indigo);
   text-transform: capitalize;
@@ -555,7 +559,7 @@ a.header--nav--links--current {
   line-height: normal;
   letter-spacing: normal;
   background-color: white;
-  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
   min-height: 50px;
   max-width: 100%;
   display: -webkit-box;
@@ -582,7 +586,7 @@ a.header--nav--links--current {
   font-size: 14px;
   font-weight: 500;
   font-style: italic;
-  padding: 18px 9px 14px 6px;
+  padding: 13px 9px 15px 6px;
 }
 
 .message--text__error {
@@ -610,10 +614,6 @@ a.header--nav--links--current {
     padding: 25px 20px 0px 20px;
   }
 
-  .layout--back-button {
-    display: none;
-  }
-
   .layout--subfooter--buttons {
     padding: 26px 20px 24px 15px;
   }
@@ -638,6 +638,10 @@ a.header--nav--links--current {
 }
 
 @media screen and (max-width: 800px) {
+  .layout--back-button {
+    display: none;
+  }
+
   .layout--content--wrapper {
     flex-direction: column;
   }

@@ -16,7 +16,7 @@ exports[`Message renders correctly without props 1`] = `
         >
           <Icon
             className=""
-            name="atomsIconsSystemChat.svg"
+            name="WARNING.svg"
             width={21}
           />
         </span>
@@ -31,7 +31,7 @@ exports[`Message renders correctly without props 1`] = `
         >
           <Icon
             className=""
-            name="iconCloseDark.svg"
+            name="iconCloseCopy.svg"
             width={24}
           />
         </span>
