@@ -15,12 +15,14 @@
     "classnames": "^2.2.6",
     "coffeescript": "1.12.7",
     "d3pie": "^0.1.9",
+    "formdata-polyfill": "^3.0.13",
     "prop-types": "^15.6.2",
     "qweb3": "^1.2.2",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
-    "react_ujs": "^2.4.4"
+    "react_ujs": "^2.4.4",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",

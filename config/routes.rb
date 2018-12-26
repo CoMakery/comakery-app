@@ -2,6 +2,9 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
 
+  resources :tokens, only: [:index, :new, :create, :show, :edit, :update]
+  post 'tokens/fetch_contract_details'
+
   get '/styleguide' => "pages#styleguide"
 
   resource :account, only: [:update]

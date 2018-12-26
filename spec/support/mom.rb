@@ -65,6 +65,14 @@ class Mom
     Project.new(defaults.merge(attrs))
   end
 
+  def token(**attrs)
+    defaults = {
+      name: 'Uber for Cats',
+      symbol: 'FCBB'
+    }
+    Token.new(defaults.merge(attrs))
+  end
+
   def interest(account = create(:account), **attrs)
     defaults = {
       protocol: 'Vevue',

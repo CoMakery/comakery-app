@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20181202023927) do
+=======
+ActiveRecord::Schema.define(version: 20181202232317) do
+>>>>>>> 2594f9e0ec1f04be328b797572c4bf4ed4525543
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,6 +242,25 @@ ActiveRecord::Schema.define(version: 20181202023927) do
     t.string "domain"
     t.string "provider"
     t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tokens", force: :cascade do |t|
+    t.string "name"
+    t.string "coin_type"
+    t.integer "denomination", default: 0, null: false
+    t.boolean "ethereum_enabled", default: false
+    t.string "ethereum_network"
+    t.string "blockchain_network"
+    t.string "contract_address"
+    t.string "ethereum_contract_address"
+    t.string "symbol"
+    t.integer "decimal_places"
+    t.string "logo_image_id"
+    t.string "logo_image_filename"
+    t.string "logo_image_content_size"
+    t.string "logo_image_content_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

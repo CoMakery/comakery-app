@@ -90,4 +90,20 @@ module SlackStubs
     allow_any_instance_of(NilClass).to receive(:next) { 'symbol = FCBB' }
     allow_any_instance_of(String).to receive(:text) { 'symbol = FCBB' }
   end
+
+  def stub_web3_fetch
+    stub_request(:post, "https://mainnet.infura.io/").to_return(
+      status: 200,
+      body: '{"jsonrpc":"2.0","id":"2197121","result":"0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000003484f540000000000000000000000000000000000000000000000000000000000"}',
+      headers: {}
+    )
+  end
+
+  def stub_qtum_fetch
+    stub_request(:get, "https://testnet.qtum.info/api/contract/2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc").to_return(
+      status: 200,
+      body: '{"qrc20":{"symbol":"BIG", "decimals":"0"}}',
+      headers: {}
+    )
+  end
 end
