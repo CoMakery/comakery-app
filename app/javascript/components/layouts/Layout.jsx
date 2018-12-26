@@ -32,7 +32,7 @@ class Layout extends React.Component {
         <div className={classnames} {...other}>
           { hasBackButton &&
             <div className="layout--back-button">
-              <Icon name="ICON-CLOSE.png" onClick={typeof window === 'undefined' ? null : window.history.back()} />
+              <Icon name="iconCloseCopy.svg" onClick={typeof window === 'undefined' ? null : window.history.back()} />
             </div>
           }
 

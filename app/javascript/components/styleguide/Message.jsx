@@ -34,17 +34,17 @@ class Message extends React.Component {
               <div className={classnames} {...other}>
                 <span className="message--icon">
                   { severity === 'warning' &&
-                    <Icon width={21} />
+                    <Icon name="atomsIconsSystemChat.svg" width={21} />
                   }
                   { severity === 'error' &&
-                    <Icon width={21} />
+                    <Icon name="atomsIconsSystemChat.svg" width={21} />
                   }
                 </span>
                 <span className={`message--text__${severity}`}>
                   {text}
                 </span>
                 <span className="message--close-icon" onClick={this.hide} >
-                  <Icon width={21} />
+                  <Icon name="iconCloseDark.svg" width={24} />
                 </span>
               </div>
             </div>

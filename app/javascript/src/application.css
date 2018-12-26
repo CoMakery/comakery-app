@@ -75,6 +75,7 @@ a.header--nav--links--current {
   position: absolute;
   top: 108px;
   left: 20px;
+  cursor: pointer;
 }
 
 .layout--content {
@@ -522,9 +523,22 @@ a.header--nav--links--current {
 }
 
 .input-field--content__file--preview {
+  border: 1px dashed var(--primary-blue);
+}
+
+.input-field--content__file--preview__40x40 {
   max-width: 40px;
   max-height: 40px;
-  border: 1px dashed var(--primary-blue);
+}
+
+.input-field--content__file--preview__100x100 {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.input-field--content__file--preview__150x150 {
+  max-width: 150px;
+  max-height: 150px;
 }
 
 .input-field--content__file--name {

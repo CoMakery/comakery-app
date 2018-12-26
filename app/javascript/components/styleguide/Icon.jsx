@@ -28,6 +28,6 @@ Icon.propTypes = {
 }
 Icon.defaultProps = {
   className: '',
-  name     : 'Atoms---Icons-System-Heart.png'
+  name     : 'atomsIconsSystemHeart.svg'
 }
 export default Icon

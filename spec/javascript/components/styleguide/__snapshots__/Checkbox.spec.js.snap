@@ -9,6 +9,7 @@ exports[`InputFieldUploadFile renders correctly without props 1`] = `
     disabled={false}
     errorText=""
     eventHandler={[Function]}
+    imgPreviewDimensions="40x40"
     imgPreviewUrl=""
     name="field"
     pattern=".*"
