@@ -7,6 +7,10 @@ import ButtonPrimaryDisabled from './../styleguide/ButtonPrimaryDisabled'
 import ButtonPrimaryEnabled from './../styleguide/ButtonPrimaryEnabled'
 
 class Layout extends React.Component {
+  goBack() {
+    typeof window === 'undefined' ? null : window.history.back()
+  }
+
   render() {
     const {
       className,
@@ -32,7 +36,7 @@ class Layout extends React.Component {
         <div className={classnames} {...other}>
           { hasBackButton &&
             <div className="layout--back-button">
-              <Icon name="iconCloseCopy.svg" onClick={typeof window === 'undefined' ? null : window.history.back()} />
+              <Icon name="iconCloseCopy.svg" onClick={this.goBack} />
             </div>
           }
 
