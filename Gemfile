@@ -53,8 +53,8 @@ gem 'slack-ruby-client'
 gem 'sprockets', '~>3.7.2'
 gem 'uglifier'
 gem 'underscore-rails'
-gem 'webpacker'
 gem 'web3-eth'
+gem 'webpacker'
 
 group(:scripts) do
   gem 'easy_shell'

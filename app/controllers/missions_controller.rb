@@ -42,7 +42,7 @@ class MissionsController < ApplicationController
   private
 
   def mission_params
-    params.require(:mission).permit(:name, :subtitle, :description, :logo, :image)
+    params.require(:mission).permit(:name, :subtitle, :description, :logo, :image, :token_id)
   end
 
   def find_mission_by_id

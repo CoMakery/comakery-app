@@ -9,7 +9,7 @@ describe TokenPolicy do
 
   describe TokenPolicy::Scope do
     describe '#resolve' do
-      it "returns all tokens with admin flag" do
+      it 'returns all tokens with admin flag' do
         expect(TokenPolicy::Scope.new(admin_account, Token).resolve.count).to eq 3
       end
 

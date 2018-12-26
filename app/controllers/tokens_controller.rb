@@ -9,9 +9,7 @@ class TokensController < ApplicationController
   def index
     @tokens = policy_scope(Token).map do |t|
       t.serializable_hash.merge(
-        {
-          logo_url: Refile.attachment_url(t, :logo_image, :fill, 250, 250)
-        }
+        logo_url: Refile.attachment_url(t, :logo_image, :fill, 250, 250)
       )
     end
 
