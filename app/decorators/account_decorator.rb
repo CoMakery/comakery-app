@@ -11,6 +11,10 @@ class AccountDecorator < Draper::Decorator
     nickname || name
   end
 
+  def cardano_wallet_url
+    "https://adascan.net/address/#{cardano_wallet}"
+  end
+
   def etherscan_address
     "https://etherscan.io/address/#{ethereum_wallet}"
   end
