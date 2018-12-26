@@ -55,6 +55,7 @@ class InputField extends React.Component {
       readOnly,
       errorText,
       imgPreviewUrl,
+      imgPreviewDimensions,
       eventHandler,
       ...other
     } = this.props
@@ -115,7 +116,13 @@ class InputField extends React.Component {
             { type === 'file' &&
               <React.Fragment>
                 { (this.state.fileLocalUrl || imgPreviewUrl) &&
-                  <img className="input-field--content__file--preview"
+                  <img
+                    className={
+                      classNames(
+                        'input-field--content__file--preview',
+                        `input-field--content__file--preview__${imgPreviewDimensions}`
+                      )
+                    }
                     src={this.state.fileLocalUrl ? this.state.fileLocalUrl : imgPreviewUrl}
                   />
                 }
@@ -185,41 +192,43 @@ class InputField extends React.Component {
 }
 
 InputField.propTypes = {
-  className    : PropTypes.string,
-  title        : PropTypes.string,
-  type         : PropTypes.string,
-  symbolLimit  : PropTypes.number,
-  required     : PropTypes.bool,
-  disabled     : PropTypes.bool,
-  checked      : PropTypes.bool,
-  name         : PropTypes.string,
-  value        : PropTypes.string,
-  selectEntries: PropTypes.array,
-  checkboxText : PropTypes.string,
-  eventHandler : PropTypes.func,
-  placeholder  : PropTypes.string,
-  pattern      : PropTypes.string,
-  readOnly     : PropTypes.bool,
-  errorText    : PropTypes.string,
-  imgPreviewUrl: PropTypes.string
+  className           : PropTypes.string,
+  title               : PropTypes.string,
+  type                : PropTypes.string,
+  symbolLimit         : PropTypes.number,
+  required            : PropTypes.bool,
+  disabled            : PropTypes.bool,
+  checked             : PropTypes.bool,
+  name                : PropTypes.string,
+  value               : PropTypes.string,
+  selectEntries       : PropTypes.array,
+  checkboxText        : PropTypes.string,
+  eventHandler        : PropTypes.func,
+  placeholder         : PropTypes.string,
+  pattern             : PropTypes.string,
+  readOnly            : PropTypes.bool,
+  errorText           : PropTypes.string,
+  imgPreviewUrl       : PropTypes.string,
+  imgPreviewDimensions: PropTypes.string
 }
 InputField.defaultProps = {
-  className    : '',
-  title        : 'title',
-  type         : 'text',
-  symbolLimit  : 100,
-  required     : false,
-  disabled     : false,
-  checked      : false,
-  name         : 'field',
-  value        : '',
-  selectEntries: [],
-  checkboxText : '',
-  eventHandler : () => {},
-  placeholder  : 'Please enter value',
-  pattern      : '.*',
-  readOnly     : false,
-  errorText    : '',
-  imgPreviewUrl: ''
+  className           : '',
+  title               : 'title',
+  type                : 'text',
+  symbolLimit         : 100,
+  required            : false,
+  disabled            : false,
+  checked             : false,
+  name                : 'field',
+  value               : '',
+  selectEntries       : [],
+  checkboxText        : '',
+  eventHandler        : () => {},
+  placeholder         : 'Please enter value',
+  pattern             : '.*',
+  readOnly            : false,
+  errorText           : '',
+  imgPreviewUrl       : '',
+  imgPreviewDimensions: '40x40'
 }
 export default InputField

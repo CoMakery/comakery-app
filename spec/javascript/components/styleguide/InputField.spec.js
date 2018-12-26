@@ -60,6 +60,14 @@ describe('InputField', () => {
       const wrapper = shallow(<InputField type='file' imgPreviewUrl='/test.jpg' />)
 
       expect(wrapper.find('.input-field--content__file--preview').props().src).toBe('/test.jpg')
+      expect(wrapper.exists('.input-field--content__file--preview')).toBe(true)
+      expect(wrapper.exists('.input-field--content__file--preview__40x40')).toBe(true)
+    })
+
+    it('renders correctly with type=file and imgPreviewDimensions', () => {
+      const wrapper = shallow(<InputField type='file' imgPreviewUrl='/test.jpg' imgPreviewDimensions='100x100' />)
+
+      expect(wrapper.exists('.input-field--content__file--preview__100x100')).toBe(true)
     })
 
     it('renders correctly with type=select', () => {
