@@ -35,6 +35,7 @@ class InputField extends React.Component {
       fileLocalUrl : URL.createObjectURL(event.target.files[0]),
       fileLocalName: event.target.files[0].name
     })
+    this.props.eventHandler(event)
   }
 
   render() {
