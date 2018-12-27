@@ -1,4 +1,4 @@
-const TrezorConnect = require('trezor-connect').default
+// const TrezorConnect = require('trezor-connect').default
 
 /*
 * this is a temporary fix untill trezor.io will (hopefully) properly notify about

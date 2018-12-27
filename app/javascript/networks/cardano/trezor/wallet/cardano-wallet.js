@@ -145,7 +145,9 @@ const CardanoWallet = async (options) => {
     const txOutputs = [TxOutput(address, coins, false)]
 
     if (changeAmount > 0) {
-      txOutputs.push(TxOutput(await getChangeAddress(), changeAmount, true))
+      // txOutputs.push(TxOutput(await getChangeAddress(), changeAmount, true))
+      const visibleAddresses = await visibleAddressManager.discoverAddresses()
+      txOutputs.push(TxOutput(visibleAddresses[0], changeAmount, false))
     }
 
     return TxAux(txInputs, txOutputs, {})

@@ -1,3 +1,3 @@
-const ADALITE_CONFIG = JSON.parse(document.body.getAttribute('data-config'))
+const ADALITE_CONFIG = {ADALITE_SERVER_URL:"https://adalite.io", ADALITE_BLOCKCHAIN_EXPLORER_URL:"https://explorer.adalite.io", ADALITE_WALLET_ADDRESS_LIMIT:1, ADALITE_ENABLE_DEBUGGING:false}
 
 module.exports = {ADALITE_CONFIG}
