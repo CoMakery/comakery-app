@@ -1,5 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
+import Icon from './../styleguide/Icon'
 
 class Footer extends React.Component {
   render() {
@@ -14,7 +15,7 @@ class Footer extends React.Component {
       <React.Fragment>
         <div className={classnames} {...other}>
           <div className="footer--logo">
-            White Logo Placeholder
+            <Icon name="Logo-Footer.svg" width="170px" />
           </div>
 
           <div className="footer--content">

@@ -1,6 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
+import Icon from './../styleguide/Icon'
 
 class Header extends React.Component {
   render() {
@@ -15,7 +16,7 @@ class Header extends React.Component {
       <React.Fragment>
         <div className={classnames} {...other}>
           <div className="header--logo">
-            Black Logo Placeholder
+            <Icon name="Logo-Header.svg" width="200px" />
           </div>
 
           <div className="header--nav">

@@ -125,6 +125,7 @@ class Index extends React.Component {
           <Icon width={100} height={100} className="styleguide-index--icon" />
           {[
             'atomsIconsSystemTwitter2.svg',
+            'WARNING.svg',
             'iconBatchGray.png',
             'atomsIconsSystemSearch.svg',
             'iconDropDownPurple.svg',
@@ -140,6 +141,8 @@ class Index extends React.Component {
             'iconTask.svg',
             'iconClose.svg',
             'iconBitcoinSmall.svg',
+            'Logo-Header.svg',
+            'Logo-Footer.svg',
             'iconCloseCopy.svg',
             'atomsIconsSystemApple.svg',
             'atomsIconsSystemHeart.svg',
@@ -173,7 +176,8 @@ class Index extends React.Component {
             'iconTokensCoins.svg',
             'iconCloseDark.svg',
             'atomsIconsSystemLock.svg',
-            'charactersCounterVisible.svg'
+            'charactersCounterVisible.svg',
+            'ALERT.svg'
           ].map(i =>
             <Icon key={i} name={i} className="styleguide-index--icon" />
           )}
