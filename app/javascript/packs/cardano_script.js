@@ -20,7 +20,7 @@ window.cardano = (function() {
     const coins = sendAmountValidator(`${amount}`).coins
     try {
       if (!addressValidator.validationError && !coins.validationError) {
-        alertMsg($('#metamaskModal1'), 'Waiting...');
+        alertMsg($('#metamaskModal1'), 'Waiting...')
         const txHash = await submitTransaction(network, recipientAddress, coins)
         console.log('transaction address: ' + txHash)
         if (txHash) {
