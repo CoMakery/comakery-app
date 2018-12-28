@@ -1,4 +1,5 @@
 class TokensController < ApplicationController
+  layout 'react'
   before_action :redirect_unless_admin
   before_action :set_token, only: %i[show edit update]
   before_action :set_coin_types, only: %i[new show edit]

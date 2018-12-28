@@ -1,5 +1,7 @@
 class MissionsController < ApplicationController
+  layout 'react'
   before_action :find_mission_by_id, only: %i[edit update destroy]
+  before_action :set_generic_props, only: %i[new show edit]
   skip_after_action :verify_policy_scoped, only: %i[index]
 
   def index
@@ -10,6 +12,9 @@ class MissionsController < ApplicationController
   def new
     @mission = Mission.new
     authorize @mission
+
+    @props[:mission] = @mission&.serialize
+    render component: 'Mission', props: @props
   end
 
   def create
@@ -26,6 +31,8 @@ class MissionsController < ApplicationController
 
   def edit
     authorize @mission
+
+    render component: 'Mission', props: @props
   end
 
   def update
@@ -47,5 +54,16 @@ class MissionsController < ApplicationController
 
   def find_mission_by_id
     @mission = Mission.find(params[:id])
+  end
+
+  def set_generic_props
+    @props = {
+      tokens: Token.all.map { |token| [token.name, token.id] },
+      mission: @mission&.serialize,
+      form_url: missions_path,
+      form_action: 'POST',
+      url_on_success: missions_path,
+      csrf_token: form_authenticity_token
+    }
   end
 end

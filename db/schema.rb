@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181224030447) do
+ActiveRecord::Schema.define(version: 20181226162717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,7 +156,8 @@ ActiveRecord::Schema.define(version: 20181224030447) do
     t.string "image_content_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "token_id"
+    t.bigint "token_id"
+    t.index ["token_id"], name: "index_missions_on_token_id"
   end
 
   create_table "payments", id: :serial, force: :cascade do |t|
@@ -215,7 +216,9 @@ ActiveRecord::Schema.define(version: 20181224030447) do
     t.string "coin_type"
     t.string "blockchain_network"
     t.string "contract_address"
+    t.bigint "mission_id"
     t.index ["account_id"], name: "index_projects_on_account_id"
+    t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
   end
 

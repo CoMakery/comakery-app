@@ -275,6 +275,11 @@ a.header--nav--links--current {
   margin: 14px 0px 14px 0px;
 }
 
+.input-field--inline {
+  display: inline-block;
+  vertical-align: top;
+}
+
 .input-field__halfed, .input-field__dropdown--halfed {
   max-width: 273px;
 }
@@ -545,6 +550,11 @@ a.header--nav--links--current {
   max-height: 150px;
 }
 
+.input-field--content__file--preview__150x100 {
+  max-width: 150px;
+  max-height: 100px;
+}
+
 .input-field--content__file--name {
   font-size: 14px;
   color: var(--dark-indigo);
@@ -663,4 +673,8 @@ a.header--nav--links--current {
     padding: 20px;
     text-align: left;
   }
+}
+
+.layout--subfooter--buttons--cancel, .layout--subfooter--buttons--save {
+  margin-right: 10px;
 }
