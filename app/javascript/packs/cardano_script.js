@@ -16,18 +16,20 @@ window.cardano = (function() {
     if (!recipientAddress || recipientAddress === '' || amount <= 0 || !(network === 'mainnet' || network === 'testnet')) {
       return
     }
-    amount = 0.1
     const addressValidator = sendAddressValidator(recipientAddress)
     const coins = sendAmountValidator(`${amount}`).coins
     try {
       if (!addressValidator.validationError && !coins.validationError) {
+        alertMsg($('#metamaskModal1'), 'Waiting...');
         const txHash = await submitTransaction(network, recipientAddress, coins)
         console.log('transaction address: ' + txHash)
         if (txHash) {
           $.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash })
         }
+        $('#metamaskModal1').foundation('close')
       }
     } catch (err) {
+      $('#metamaskModal1').foundation('close')
       if ($('body.projects-show').length > 0) {
         $('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
       }
