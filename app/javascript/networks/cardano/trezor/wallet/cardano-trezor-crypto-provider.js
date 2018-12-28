@@ -128,7 +128,8 @@ const CardanoTrezorCryptoProvider = (ADALITE_CONFIG, walletState) => {
     for (const input of unsignedTx.inputs) {
       inputs.push(await prepareInput(input, addressToAbsPathMapper))
     }
-
+    console.log('inputs =')
+    console.log(inputs)
     const outputs = []
     for (const output of unsignedTx.outputs) {
       const data = await prepareOutput(output, addressToAbsPathMapper)

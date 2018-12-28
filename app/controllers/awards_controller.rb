@@ -23,7 +23,7 @@ class AwardsController < ApplicationController
         award.send_award_notifications
         award.send_confirm_email
         generate_message(award)
-        session[:last_award_id] = award.id if account&.ethereum_wallet? || account&.qtum_wallet?
+        session[:last_award_id] = award.id if account&.decorate&.can_receive_awards?(@project)
         account&.update new_award_notice: true
         redirect_to project_overview_path(award.project)
       else
@@ -107,11 +107,25 @@ class AwardsController < ApplicationController
         "Congratulations, you just claimed your award! Be sure to enter your Ethereum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
       end
     elsif project.coin_type_on_qtum?
-      if current_account.qtum_wallet.present?
-        "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your QRC20 tokens."
-      else
-        "Congratulations, you just claimed your award! Be sure to enter your Qtum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      end
+      confirm_message_for_qtum_award
+    elsif project.coin_type_on_cardano?
+      confirm_message_for_cardano_award
+    end
+  end
+
+  def confirm_message_for_qtum_award
+    if current_account.qtum_wallet.present?
+      "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Qtum tokens."
+    else
+      "Congratulations, you just claimed your award! Be sure to enter your Qtum Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    end
+  end
+
+  def confirm_message_for_cardano_award
+    if current_account.cardano_wallet.present?
+      "Congratulations, you just claimed your award! Your Cardano address is #{view_context.link_to current_account.cardano_wallet, current_account.decorate.cardano_wallet_url} you can change your Cardano address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Cardano tokens."
+    else
+      "Congratulations, you just claimed your award! Be sure to enter your Cardano Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
     end
   end
 

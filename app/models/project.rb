@@ -62,6 +62,7 @@ class Project < ApplicationRecord
   }
   enum blockchain_network: {
     cardano_mainnet: 'Main Cardano Network',
+    cardano_testnet: 'Test Cardano Network',
     qtum_mainnet: 'Main QTUM Network',
     qtum_testnet: 'Test QTUM Network'
   }

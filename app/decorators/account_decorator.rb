@@ -23,8 +23,20 @@ class AccountDecorator < Draper::Decorator
     UtilitiesService.get_wallet_url('qtum_mainnet', qtum_wallet)
   end
 
+  def can_receive_awards?(project)
+    if project.coin_type_on_ethereum?
+      ethereum_wallet?
+    elsif project.coin_type_on_qtum?
+      qtum_wallet?
+    elsif project.coin_type_on_cardano?
+      cardano_wallet?
+    else
+      false
+    end
+  end
+
   def can_send_awards?(project)
-    project&.account == self && (project&.ethereum_contract_address? || project.coin_type_eth? || project&.contract_address?)
+    project&.account == self && (project&.ethereum_contract_address? || project.coin_type_eth? || project&.contract_address? || project.coin_type_ada?)
   end
 
   def total_awards_earned_pretty(project)
