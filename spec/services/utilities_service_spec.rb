@@ -61,6 +61,14 @@ describe UtilitiesService do
 
       expect(result).to eq "https://testnet.qtum.org/address/#{wallet}"
     end
+
+    it 'wallet on cardano mainnet' do
+      network = 'cardano_mainnet'
+
+      result = described_class.get_wallet_url(network, wallet)
+
+      expect(result).to eq "https://cardanoexplorer.com/address/#{wallet}"
+    end
   end
 
   context '.get_transaction_url' do

@@ -72,4 +72,35 @@ describe 'preview award', js: true do
       expect(page.find('.preview_award_div')).to have_content '1000.0 BIG'
     end
   end
+
+  context 'on cardano network' do
+    let!(:project) do
+      create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, contract_address: '2' * 40, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token_symbol: 'BIG', decimal_places: 8, blockchain_network: 'cardano_testnet', coin_type: 'ada')
+    end
+
+    before do
+      visit project_path(project)
+    end
+
+    it 'recipient has a cardano account' do
+      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', cardano_wallet: "A#{'b' * 58}")
+
+      fill_in 'Email Address', with: 'bobjohnson@example.com'
+      page.find('body').click
+      sleep 2
+      expect(page.find('.preview_award_div')).to have_content "1000.0 ADA total to A#{'b' * 58}"
+      expect(page.find('.button_submit img')[:alt]).to have_content 'Trezor'
+      click_button 'Send'
+      expect(page).to have_content 'Successfully sent award to bobjohnson'
+    end
+
+    it 'recipient has not a cardano account' do
+      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
+
+      fill_in 'Email Address', with: 'bobjohnson@example.com'
+      page.find('body').click
+      sleep 2
+      expect(page.find('.preview_award_div')).to have_content '1000.0 ADA'
+    end
+  end
 end
