@@ -1,6 +1,8 @@
 class UtilitiesService
   def self.get_wallet_url(network, wallet)
     case network
+    when 'cardano_mainnet'
+      "https://cardanoexplorer.com/address/#{wallet}"
     when 'qtum_mainnet'
       "https://explorer.qtum.org/address/#{wallet}"
     when 'qtum_testnet'

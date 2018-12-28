@@ -12,7 +12,7 @@ class AccountDecorator < Draper::Decorator
   end
 
   def cardano_wallet_url
-    "https://adascan.net/address/#{cardano_wallet}"
+    UtilitiesService.get_wallet_url('cardano_mainnet', cardano_wallet)
   end
 
   def etherscan_address

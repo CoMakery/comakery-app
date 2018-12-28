@@ -137,6 +137,10 @@ class AwardsController < ApplicationController
       @network = project.blockchain_network
       @wallet_logo = 'qrypto.png'
       @recipient_address = account&.qtum_wallet
+    elsif project.coin_type_on_cardano?
+      @network = project.blockchain_network
+      @wallet_logo = 'trezor.png'
+      @recipient_address = account&.cardano_wallet
     end
     @unit   = project.token_symbol
     @unit ||= Project.coin_types[project.coin_type]
