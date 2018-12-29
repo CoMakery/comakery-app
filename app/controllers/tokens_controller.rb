@@ -6,11 +6,13 @@ class TokensController < ApplicationController
   before_action :set_blockchain_networks, only: %i[new show edit]
   before_action :set_generic_props, only: %i[new show edit]
 
+  layout 'react'
+
   def index
     @tokens = policy_scope(Token).map do |t|
       t.serializable_hash.merge(
         {
-          logo_url: Refile.attachment_url(t, :logo_image, :fill, 250, 250)
+          logo_url: Refile.attachment_url(t, :logo_image, :fill, 54, 54)
         }
       )
     end

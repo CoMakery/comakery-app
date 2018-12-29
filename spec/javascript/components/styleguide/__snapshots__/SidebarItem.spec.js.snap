@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SidebarItem renders correctly without props 1`] = `
+<Fragment>
+  <div
+    className="sidebar-item--wrapper"
+  >
+    <div
+      className="sidebar-item"
+    >
+      <span
+        className="sidebar-item--text"
+      >
+        sidebar item
+      </span>
+    </div>
+  </div>
+</Fragment>
+`;

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SidebarItemBold renders correctly without props 1`] = `
+<Fragment>
+  <SidebarItem
+    className="sidebar-item__bold"
+    iconLeftName=""
+    iconLeftUrl=""
+    iconRightName=""
+    selected={false}
+    text="sidebar item"
+  />
+</Fragment>
+`;
