@@ -83,12 +83,12 @@ describe 'preview award', js: true do
     end
 
     it 'recipient has a cardano account' do
-      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', cardano_wallet: "A#{'b' * 58}")
+      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', cardano_wallet: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp')
 
       fill_in 'Email Address', with: 'bobjohnson@example.com'
       page.find('body').click
       sleep 2
-      expect(page.find('.preview_award_div')).to have_content "1000.0 ADA total to A#{'b' * 58}"
+      expect(page.find('.preview_award_div')).to have_content '1000.0 ADA total to Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
       expect(page.find('.button_submit img')[:alt]).to have_content 'Trezor'
       click_button 'Send'
       expect(page).to have_content 'Successfully sent award to bobjohnson'

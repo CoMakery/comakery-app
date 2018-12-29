@@ -30,7 +30,7 @@ describe 'my account' do
     fill_in 'lastName', with: 'Dev'
     fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
     fill_in 'qtumWallet', with: "Q#{'a' * 33}"
-    fill_in 'cardanoWallet', with: "A#{'b' * 58}"
+    fill_in 'cardanoWallet', with: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
     # click_on 'Save'
     page.find('input[type=submit]').trigger(:click)
 

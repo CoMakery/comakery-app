@@ -34,7 +34,7 @@ describe AwardDecorator do
 
     context 'on qtum network' do
       let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', qtum_wallet: 'qSf61RfH28cins3EyiL3BQrGmbqaJUHDfM' }
-      let!(:project) { create :project, account: issuer, coin_type: 'qrc20' }
+      let!(:project) { create :project, account: issuer, coin_type: 'qrc20', blockchain_network: 'qtum_testnet' }
       let!(:award_type) { create :award_type, project: project }
       let!(:award) { create :award, award_type: award_type, issuer: issuer }
 
@@ -102,6 +102,12 @@ describe AwardDecorator do
   it 'return ethereum_transaction_explorer_url' do
     award = create :award, ethereum_transaction_address: '0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
     expect(award.decorate.ethereum_transaction_explorer_url.include?('/tx/0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb')).to be_truthy
+  end
+
+  it 'return ethereum_transaction_explorer_url for qtum' do
+    award = create :award, ethereum_transaction_address: 'b808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
+    award.project.blockchain_network = 'qtum_testnet'
+    expect(award.decorate.ethereum_transaction_explorer_url.include?('/tx/b808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb')).to be_truthy
   end
 
   it 'display unit_amount_pretty' do
