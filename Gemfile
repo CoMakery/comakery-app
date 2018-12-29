@@ -44,6 +44,7 @@ gem 'refile-s3'
 gem 'responders'
 gem 'rubyzip', '~> 1.2.2'
 gem 'sass-rails'
+gem 'schmooze'
 gem 'sdoc', group: :doc
 gem 'sendgrid-ruby'
 gem 'sidekiq'
