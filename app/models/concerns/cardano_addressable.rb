@@ -7,6 +7,7 @@ module CardanoAddressable
     end
 
     def validate_format(record, attribute, value)
+      load 'app/schmoozers/cardano_address_validator_schmoozer.rb'
       validator = CardanoAddressValidatorSchmoozer.new(__dir__)
 
       unless validator.is_valid_address(value)
