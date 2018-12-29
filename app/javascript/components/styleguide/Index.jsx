@@ -15,11 +15,14 @@ import InputFieldUploadFile from './InputFieldUploadFile'
 import Icon from './Icon'
 import MessageError from './MessageError'
 import MessageWarning from './MessageWarning'
+import SidebarItem from './SidebarItem'
+import SidebarItemBold from './SidebarItemBold'
 
 class Index extends React.Component {
   constructor(props) {
     super(props)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleListClick = this.handleListClick.bind(this)
     this.state = {
       'input[text1]'    : '',
       'input[text2]'    : '',
@@ -31,6 +34,7 @@ class Index extends React.Component {
       'input[select2]'  : 'all',
       'input[checkbox1]': true,
       'input[checkbox2]': false,
+      selectedItem      : null,
       logoLocalUrl      : null
     }
   }
@@ -38,6 +42,12 @@ class Index extends React.Component {
   handleInputChange(event) {
     this.setState({
       [event.target.name]: event.target.type === 'checkbox' ? event.target.checked : event.target.value
+    })
+  }
+
+  handleListClick(i) {
+    this.setState({
+      selectedItem: i
     })
   }
 
@@ -50,7 +60,30 @@ class Index extends React.Component {
           hasBackButton
           hasSubFooter
           sidebar={
-            <div>Responsive Sidebar Placeholder</div>
+            <div className="styleguide-index--sidebar">
+              <SidebarItemBold
+                className="styleguide-index--sidebar--item__bold"
+                iconLeftName="iconBatch.png"
+                text="Sidebar Item Bold"
+              />
+
+              <hr />
+
+              <div className="styleguide-index--sidebar--info">
+                Please select an item:
+              </div>
+
+              {[1, 2, 3].map((i) =>
+                <SidebarItem
+                  className="token-index--sidebar--item"
+                  key={i}
+                  iconLeftName="iconTokensBtc.svg"
+                  text={`${i}`}
+                  selected={this.state.selectedItem === i}
+                  onClick={(_) => this.handleListClick(i)}
+                />
+              )}
+            </div>
           }
         >
           <InputFieldWhiteDark

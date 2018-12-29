@@ -723,18 +723,21 @@ a.header--nav--links--current {
   text-decoration: underline;
 }
 
-.token-index--sidebar--info {
+.token-index--sidebar--info,
+.styleguide-index--sidebar--info {
   font-size: 12px;
   color: var(--greyish-brown);
   font-weight: 500;
   margin: 15px 15px 15px 0px;
 }
 
-.token-index--sidebar--item {
+.token-index--sidebar--item,
+.styleguide-index--sidebar--item {
   margin: 5px 15px 5px 0px;
 }
 
-.token-index--sidebar--item__bold {
+.token-index--sidebar--item__bold,
+.styleguide-index--sidebar--item__bold {
   margin: 14px 14px 4px 0;
 }
 
