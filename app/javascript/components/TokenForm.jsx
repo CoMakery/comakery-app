@@ -6,6 +6,7 @@ import InputFieldDropdownHalfed from './styleguide/InputFieldDropdownHalfed'
 import InputFieldHalfed from './styleguide/InputFieldHalfed'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import Button from './styleguide/Button'
+import ButtonBorder from './styleguide/ButtonBorder'
 import Message from './styleguide/Message'
 
 class TokenForm extends React.Component {
@@ -26,8 +27,12 @@ class TokenForm extends React.Component {
     this.state = {
       logoLocalUrl                      : null,
       errorMessage                      : null,
+      infoMessage                       : null,
       errors                            : {},
       disabled                          : {},
+      formAction                        : this.props.formAction,
+      formUrl                           : this.props.formUrl,
+      closeOnSuccess                    : false,
       'token[coin_type]'                : this.props.token.coinType || Object.values(this.props.coinTypes)[0],
       'token[name]'                     : this.props.token.name || '',
       'token[symbol]'                   : this.props.token.symbol || '',
@@ -189,35 +194,61 @@ class TokenForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault()
 
-    this.disable(['token[submit]'])
+    this.disable(['token[submit]', 'token[submit_and_close]'])
 
     if (!event.target.checkValidity()) {
-      this.enable(['token[submit]'])
+      this.enable(['token[submit]', 'token[submit_and_close]'])
       return
     }
 
     const formData = new FormData(event.target)
 
-    fetchPolyfill(this.props.formUrl, {
+    fetchPolyfill(this.state.formUrl, {
       credentials: 'same-origin',
-      method     : this.props.formAction,
+      method     : this.state.formAction,
       body       : formData,
       headers    : {
         'X-Key-Inflection': 'snake'
       }
     }).then(response => {
       if (response.status === 200) {
-        window.location = this.props.urlOnSuccess
+        if (this.state.closeOnSuccess) {
+          window.location = this.props.urlOnSuccess
+        } else {
+          if (this.state.formAction === 'POST') {
+            response.json().then(data => {
+              this.setState({
+                formAction : 'PUT',
+                formUrl    : `/tokens/${data.id}`,
+                infoMessage: 'Token Created'
+              })
+              history.replaceState(
+                {},
+                document.title,
+                `${window.location.origin}/tokens/${data.id}`
+              )
+            })
+          } else {
+            this.setState({
+              infoMessage: 'Token Updated'
+            })
+          }
+          this.enable(['token[submit]', 'token[submit_and_close]'])
+        }
       } else {
         response.json().then(data => {
           this.setState({
             errors      : data.errors,
             errorMessage: data.message
           })
-          this.enable(['token[submit]'])
+          this.enable(['token[submit]', 'token[submit_and_close]'])
         })
       }
     })
+  }
+
+  goBack() {
+    window.location = '/tokens'
   }
 
   render() {
@@ -225,17 +256,44 @@ class TokenForm extends React.Component {
       <React.Fragment>
         <Layout
           className="token-form"
-          title="Create a New Token"
+          title={this.state.formAction === 'POST' ? 'Create a New Token' : 'Edit Token'}
           hasBackButton
-          hasSubFooter
+          subfooter={
+            <React.Fragment>
+              <ButtonBorder
+                value="cancel"
+                onClick={this.goBack}
+              />
+              <ButtonBorder
+                value={this.state.formAction === 'POST' ? 'create' : 'save'}
+                type="submit"
+                form="token-form--form"
+                disabled={this.state.disabled['token[submit]']}
+                onClick={() => this.setState({closeOnSuccess: false})}
+              />
+              <Button
+                value={this.state.formAction === 'POST' ? 'create & close' : 'save & close'}
+                type="submit"
+                form="token-form--form"
+                disabled={this.state.disabled['token[submit_and_close]']}
+                onClick={() => this.setState({closeOnSuccess: true})}
+              />
+            </React.Fragment>
+          }
         >
           { this.state.errorMessage &&
-            <div className="token-form--error">
+            <div className="token-form--message">
               <Message severity="error" text={this.state.errorMessage} />
             </div>
           }
-          <form className="token-form--form" onSubmit={this.handleSubmit}>
 
+          { this.state.infoMessage &&
+            <div className="token-form--message">
+              <Message severity="warning" text={this.state.infoMessage} />
+            </div>
+          }
+
+          <form className="token-form--form" id="token-form--form" onSubmit={this.handleSubmit}>
             <InputFieldDropdownHalfed
               title="payment type"
               required
@@ -260,33 +318,33 @@ class TokenForm extends React.Component {
             />
 
             {this.state['token[coin_type]'] === 'qrc20' &&
-            <InputFieldHalfed
-              title="contract address"
-              required
-              name="token[contract_address]"
-              value={this.state['token[contract_address]']}
-              errorText={this.state.errors['token[contract_address]']}
-              readOnly={this.state.disabled['token[contract_address]']}
-              placeholder="2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc"
-              pattern="[a-fA-F0-9]{40}"
-              eventHandler={this.handleFieldChange}
-              symbolLimit={0}
-            />
+              <InputFieldHalfed
+                title="contract address"
+                required
+                name="token[contract_address]"
+                value={this.state['token[contract_address]']}
+                errorText={this.state.errors['token[contract_address]']}
+                readOnly={this.state.disabled['token[contract_address]']}
+                placeholder="2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc"
+                pattern="[a-fA-F0-9]{40}"
+                eventHandler={this.handleFieldChange}
+                symbolLimit={0}
+              />
             }
 
             {this.state['token[coin_type]'] === 'erc20' &&
-            <InputFieldHalfed
-              title="contract address"
-              required
-              name="token[ethereum_contract_address]"
-              value={this.state['token[ethereum_contract_address]']}
-              errorText={this.state.errors['token[ethereum_contract_address]']}
-              readOnly={this.state.disabled['token[ethereum_contract_address]']}
-              placeholder="0x6c6ee5e31d828de241282b9606c8e98ea48526e2"
-              pattern="0x[a-fA-F0-9]{40}"
-              eventHandler={this.handleFieldChange}
-              symbolLimit={0}
-            />
+              <InputFieldHalfed
+                title="contract address"
+                required
+                name="token[ethereum_contract_address]"
+                value={this.state['token[ethereum_contract_address]']}
+                errorText={this.state.errors['token[ethereum_contract_address]']}
+                readOnly={this.state.disabled['token[ethereum_contract_address]']}
+                placeholder="0x6c6ee5e31d828de241282b9606c8e98ea48526e2"
+                pattern="0x[a-fA-F0-9]{40}"
+                eventHandler={this.handleFieldChange}
+                symbolLimit={0}
+              />
             }
 
             {this.state['token[coin_type]'].match(/qrc20|erc20/) &&
@@ -357,12 +415,6 @@ class TokenForm extends React.Component {
               name="authenticity_token"
               value={this.props.csrfToken}
               readOnly
-            />
-
-            <Button
-              type="submit"
-              value="save"
-              disabled={this.state.disabled.submit}
             />
           </form>
         </Layout>

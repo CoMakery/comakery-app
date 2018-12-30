@@ -30,7 +30,8 @@ class TokenIndex extends React.Component {
               <div className="token-index--sidebar">
                 <SidebarItemBold
                   className="token-index--sidebar--item__bold"
-                  iconLeftName="iconBatch.png"
+                  iconLeftName="MARK-WHITE.svg"
+                  iconRightName="PLUS.svg"
                   text="Create a Token"
                   onClick={(_) => window.location = '/tokens/new'}
                 />
@@ -46,6 +47,7 @@ class TokenIndex extends React.Component {
                     className="token-index--sidebar--item"
                     key={t.id}
                     iconLeftUrl={t.logoUrl}
+                    iconRightName="REARRANGE.svg"
                     text={`${t.name} (${t.symbol})`}
                     selected={this.state.selectedToken === t}
                     onClick={(_) => this.handleListClick(t)}

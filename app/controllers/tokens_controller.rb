@@ -33,7 +33,7 @@ class TokensController < ApplicationController
     authorize @token
 
     if @token.save
-      render json: { message: 'Token created' }, status: :ok
+      render json: { id: @token.id }, status: :ok
     else
       errors  = @token.errors.messages.map { |k, v| ["token[#{k}]", v.to_sentence] }.to_h
       message = @token.errors.full_messages.join(', ')

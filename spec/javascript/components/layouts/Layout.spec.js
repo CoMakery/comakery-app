@@ -49,38 +49,4 @@ describe('Layout', () => {
 
       expect(wrapper.exists('.layout--back-button')).toBe(true)
     })
-
-    it('renders correctly with subfooter', () => {
-      const wrapper = shallow(<Layout hasSubFooter />)
-
-      expect(wrapper.exists('.layout--subfooter')).toBe(true)
-    })
-
-    it('passes event to cancelButtonHandler', (done) => {
-      function handler(event) {
-        done()
-      }
-
-      const wrapper = shallow(<Layout hasSubFooter cancelButtonHandler={handler} />)
-      wrapper.find('.layout--subfooter--buttons--cancel').simulate('click')
-    })
-
-    it('passes event to saveButtonHandler', (done) => {
-      function handler(event) {
-        done()
-      }
-
-      const wrapper = shallow(<Layout hasSubFooter saveButtonHandler={handler} />)
-      wrapper.find('.layout--subfooter--buttons--save').simulate('click')
-    })
-
-    it('passes event to saveAndCloseButtonHandler', (done) => {
-      function handler(event) {
-        done()
-      }
-
-      const wrapper = shallow(<Layout hasSubFooter saveAndCloseButtonEnabled saveAndCloseButtonHandler={handler} />)
-      wrapper.find('.layout--subfooter--buttons--save-and-close').simulate('click')
-    })
-
 })

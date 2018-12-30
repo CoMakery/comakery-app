@@ -2,9 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import Icon from './../styleguide/Icon'
-import ButtonBorder from './../styleguide/ButtonBorder'
-import ButtonPrimaryDisabled from './../styleguide/ButtonPrimaryDisabled'
-import ButtonPrimaryEnabled from './../styleguide/ButtonPrimaryEnabled'
 
 class Layout extends React.Component {
   goBack() {
@@ -16,11 +13,7 @@ class Layout extends React.Component {
       className,
       title,
       hasBackButton,
-      hasSubFooter,
-      saveAndCloseButtonEnabled,
-      cancelButtonHandler,
-      saveButtonHandler,
-      saveAndCloseButtonHandler,
+      subfooter,
       sidebar,
       children,
       ...other
@@ -60,17 +53,10 @@ class Layout extends React.Component {
             </div>
           </div>
 
-          { hasSubFooter &&
+          { subfooter &&
             <div className="layout--subfooter">
               <div className="layout--subfooter--buttons">
-                <ButtonBorder className="layout--subfooter--buttons--cancel" value="cancel" onClick={cancelButtonHandler} />
-                <ButtonBorder className="layout--subfooter--buttons--save" value="save" onClick={saveButtonHandler} />
-                { !saveAndCloseButtonEnabled &&
-                  <ButtonPrimaryDisabled value="save & close" />
-                }
-                { saveAndCloseButtonEnabled &&
-                  <ButtonPrimaryEnabled className="layout--subfooter--buttons--save-and-close" value="save & close" onClick={saveAndCloseButtonHandler} />
-                }
+                {subfooter}
               </div>
             </div>
           }
@@ -81,25 +67,17 @@ class Layout extends React.Component {
 }
 
 Layout.propTypes = {
-  className                : PropTypes.string,
-  title                    : PropTypes.string,
-  hasBackButton            : PropTypes.bool,
-  hasSubFooter             : PropTypes.bool,
-  saveAndCloseButtonEnabled: PropTypes.bool,
-  cancelButtonHandler      : PropTypes.func,
-  saveButtonHandler        : PropTypes.func,
-  saveAndCloseButtonHandler: PropTypes.func,
-  sidebar                  : PropTypes.object
+  className    : PropTypes.string,
+  title        : PropTypes.string,
+  hasBackButton: PropTypes.bool,
+  subfooter    : PropTypes.object,
+  sidebar      : PropTypes.object
 }
 Layout.defaultProps = {
-  className                : '',
-  title                    : 'title',
-  hasBackButton            : false,
-  hasSubFooter             : false,
-  saveAndCloseButtonEnabled: false,
-  cancelButtonHandler      : () => {},
-  saveButtonHandler        : () => {},
-  saveAndCloseButtonHandler: () => {},
-  sidebar                  : null
+  className    : '',
+  title        : 'title',
+  hasBackButton: false,
+  subfooter    : null,
+  sidebar      : null
 }
 export default Layout

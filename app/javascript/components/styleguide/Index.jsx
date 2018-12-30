@@ -63,7 +63,8 @@ class Index extends React.Component {
             <div className="styleguide-index--sidebar">
               <SidebarItemBold
                 className="styleguide-index--sidebar--item__bold"
-                iconLeftName="iconBatch.png"
+                iconRightName="PLUS.svg"
+                iconLeftName="MARK-WHITE.svg"
                 text="Sidebar Item Bold"
               />
 
@@ -78,6 +79,7 @@ class Index extends React.Component {
                   className="token-index--sidebar--item"
                   key={i}
                   iconLeftName="iconTokensBtc.svg"
+                  iconRightName="REARRANGE.svg"
                   text={`${i}`}
                   selected={this.state.selectedItem === i}
                   onClick={(_) => this.handleListClick(i)}
@@ -210,7 +212,9 @@ class Index extends React.Component {
             'iconCloseDark.svg',
             'atomsIconsSystemLock.svg',
             'charactersCounterVisible.svg',
-            'ALERT.svg'
+            'ALERT.svg',
+            'PLUS.svg',
+            'REARRANGE.svg'
           ].map(i =>
             <Icon key={i} name={i} className="styleguide-index--icon" />
           )}
