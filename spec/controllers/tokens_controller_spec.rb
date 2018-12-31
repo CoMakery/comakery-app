@@ -65,7 +65,7 @@ describe TokensController do
               symbol: 'CAT'
             }
           }
-          expect(response).to have_http_status(:created)
+          expect(response).to have_http_status(:ok)
           expect(response.content_type).to eq('application/json')
         end.to change { Token.count }.by(1)
 
@@ -164,7 +164,7 @@ describe TokensController do
         it 'returns correct react component' do
           get :index
           expect(response.status).to eq(200)
-          expect(assigns[:tokens].map(&:name)).to eq(%w[Cats Dogs Yaks Foxes])
+          expect(assigns[:tokens].map{|x| x['name']}).to eq(%w[Cats Dogs Yaks Foxes])
         end
       end
     end
