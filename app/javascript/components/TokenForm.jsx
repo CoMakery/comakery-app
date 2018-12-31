@@ -181,7 +181,7 @@ class TokenForm extends React.Component {
     }).then(data => {
       let symbol = data.symbol
       let decimals = data.decimals
-      if (symbol && decimals) {
+      if (symbol || decimals) {
         this.setState({
           'token[symbol]'        : symbol,
           'token[decimal_places]': decimals.toString()
