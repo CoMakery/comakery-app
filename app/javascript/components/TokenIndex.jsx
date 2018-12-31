@@ -38,21 +38,25 @@ class TokenIndex extends React.Component {
 
                 <hr />
 
-                <div className="token-index--sidebar--info">
-                  Please select token:
-                </div>
+                { this.props.tokens.length > 0 &&
+                  <React.Fragment>
+                    <div className="token-index--sidebar--info">
+                      Please select token:
+                    </div>
 
-                {this.props.tokens.map((t) =>
-                  <SidebarItem
-                    className="token-index--sidebar--item"
-                    key={t.id}
-                    iconLeftUrl={t.logoUrl}
-                    iconRightName="REARRANGE.svg"
-                    text={`${t.name} (${t.symbol})`}
-                    selected={this.state.selectedToken === t}
-                    onClick={(_) => this.handleListClick(t)}
-                  />
-                )}
+                    {this.props.tokens.map((t) =>
+                      <SidebarItem
+                        className="token-index--sidebar--item"
+                        key={t.id}
+                        iconLeftUrl={t.logoUrl}
+                        iconRightName="REARRANGE.svg"
+                        text={`${t.name} (${t.symbol})`}
+                        selected={this.state.selectedToken === t}
+                        onClick={(_) => this.handleListClick(t)}
+                      />
+                    )}
+                  </React.Fragment>
+                }
               </div>
             </React.Fragment>
           }

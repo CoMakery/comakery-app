@@ -9,7 +9,9 @@ const unusedVars = [
 const config = {
   env: {
     browser: true,
-    jquery : true
+    jquery : true,
+    es6    : true,
+    jest   : true
   },
   extends: 'comakery',
   globals: {

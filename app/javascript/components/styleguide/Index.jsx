@@ -1,5 +1,6 @@
 import React from 'react'
 import Layout from './../layouts/Layout'
+import Button from './Button'
 import ButtonBorder from './ButtonBorder'
 import ButtonPrimaryDisabled from './ButtonPrimaryDisabled'
 import ButtonPrimaryEnabled from './ButtonPrimaryEnabled'
@@ -58,7 +59,6 @@ class Index extends React.Component {
           className="styleguide-index"
           title="layout with sidebar"
           hasBackButton
-          hasSubFooter
           sidebar={
             <div className="styleguide-index--sidebar">
               <SidebarItemBold
@@ -86,6 +86,22 @@ class Index extends React.Component {
                 />
               )}
             </div>
+          }
+          subfooter={
+            <React.Fragment>
+              <ButtonBorder
+                value="cancel"
+                onClick={null}
+              />
+              <ButtonBorder
+                value="save"
+                onClick={null}
+              />
+              <Button
+                value="save & close"
+                onClick={null}
+              />
+            </React.Fragment>
           }
         >
           <InputFieldWhiteDark
@@ -214,7 +230,8 @@ class Index extends React.Component {
             'charactersCounterVisible.svg',
             'ALERT.svg',
             'PLUS.svg',
-            'REARRANGE.svg'
+            'REARRANGE.svg',
+            'MARK-WHITE.svg'
           ].map(i =>
             <Icon key={i} name={i} className="styleguide-index--icon" />
           )}

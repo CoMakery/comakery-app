@@ -38,7 +38,7 @@ class TokenForm extends React.Component {
       'token[symbol]'                   : this.props.token.symbol || '',
       'token[contract_address]'         : this.props.token.contractAddress || '',
       'token[ethereum_contract_address]': this.props.token.ethereumContractAddress || '',
-      'token[decimal_places]'           : (!this.props.token.decimalPlaces && this.props.token.decimalPlaces !== 0 ? '' : this.props.token.decimalPlaces),
+      'token[decimal_places]'           : (!this.props.token.decimalPlaces && this.props.token.decimalPlaces !== 0 ? '' : this.props.token.decimalPlaces.toString()),
       'token[blockchain_network]'       : this.props.token.blockchainNetwork || Object.values(this.props.blockchainNetworks)[0],
       'token[ethereum_network]'         : this.props.token.ethereumNetwork || Object.values(this.props.ethereumNetworks)[0]
     }
@@ -434,13 +434,13 @@ TokenForm.propTypes = {
   csrfToken         : PropTypes.string.isRequired
 }
 TokenForm.defaultProps = {
-  token             : {},
-  coinTypes         : {},
-  ethereumNetworks  : {},
-  blockchainNetworks: {},
-  formUrl           : '',
-  formAction        : '',
-  urlOnSuccess      : '',
-  csrfToken         : ''
+  token             : {'default': '_'},
+  coinTypes         : {'default': '_'},
+  ethereumNetworks  : {'default': '_'},
+  blockchainNetworks: {'default': '_'},
+  formUrl           : '/',
+  formAction        : 'POST',
+  urlOnSuccess      : '/',
+  csrfToken         : '00'
 }
 export default TokenForm
