@@ -164,7 +164,7 @@ describe TokensController do
         it 'returns correct react component' do
           get :index
           expect(response.status).to eq(200)
-          expect(assigns[:tokens].map{|x| x['name']}).to eq(%w[Cats Dogs Yaks Foxes])
+          expect(assigns[:tokens].map { |x| x['name'] }).to eq(%w[Cats Dogs Yaks Foxes])
         end
       end
     end
