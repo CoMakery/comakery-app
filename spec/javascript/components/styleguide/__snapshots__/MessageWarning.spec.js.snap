@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MessageWarning renders correctly without props 1`] = `
+<Fragment>
+  <Message
+    className="message__warning"
+    severity="warning"
+    text="warning text"
+  />
+</Fragment>
+`;

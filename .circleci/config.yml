@@ -32,15 +32,16 @@ jobs:
         key: comakery-yarn-{{ checksum "yarn.lock" }}
         paths:
           - node_modules
-          
+
       - run: yarn test
+      - run: yarn stylelint
 
       - run: bundle exec rake db:create db:migrate
       - run: bundle exec rake db:migrate VERSION=20160227015851
       - run: git checkout db/schema.rb
       - run: bundle exec rake db:reset
       - run: bundle exec citizen checks
-      
+
       - type: store_test_results
         path: /tmp/circleci-test-results
       - type: store_artifacts

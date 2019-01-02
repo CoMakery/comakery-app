@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InputFieldWhiteDark renders correctly without props 1`] = `
+<Fragment>
+  <InputField
+    checkboxText=""
+    checked={false}
+    className="input-field__white__dark"
+    disabled={false}
+    errorText=""
+    eventHandler={[Function]}
+    imgPreviewDimensions="40x40"
+    imgPreviewUrl=""
+    name="field"
+    pattern=".*"
+    placeholder="Please enter value"
+    readOnly={false}
+    required={false}
+    selectEntries={Array []}
+    symbolLimit={100}
+    title="title"
+    type="text"
+    value=""
+  />
+</Fragment>
+`;

@@ -64,6 +64,8 @@ RSpec/ExampleLength:
 RSpec/LetSetup:
   Enabled: false
 
+RSpec/NestedGroups:
+  Max: 4
 
 Style/Documentation:
   Enabled: false

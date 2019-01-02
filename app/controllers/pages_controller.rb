@@ -3,6 +3,8 @@ class PagesController < ApplicationController
   skip_before_action :require_email_confirmation, only: %i[featured home landing add_interest]
   skip_after_action :verify_authorized
 
+  layout 'react', only: [:styleguide]
+
   def landing
     if current_account
       if current_account.finished_contributor_form?
@@ -40,5 +42,10 @@ class PagesController < ApplicationController
     respond_to do |format|
       format.json { render json: @interest.to_json }
     end
+  end
+
+  def styleguide
+    return redirect_to :root unless Rails.env == 'development'
+    render component: 'styleguide/Index'
   end
 end
