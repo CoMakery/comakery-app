@@ -227,6 +227,7 @@ Rails/FilePath:
     - 'spec/lib/slack_spec.rb'
     - 'spec/mailers/previews/accounts_mailer_preview.rb'
     - 'spec/rails_helper.rb'
+    - 'app/schmoozers/cardano_address_validator_schmoozer.rb'
 
 # Offense count: 15
 # Configuration parameters: Include.

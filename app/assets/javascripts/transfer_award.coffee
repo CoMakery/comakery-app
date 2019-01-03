@@ -5,11 +5,16 @@ window.alertMsg = (modal, msg) ->
 window.transferAwardOnQtum = (award) -> # award in JSON
   transferQrc20Tokens award
 
+transferAwardOnCardano = (award) -> # award in JSON
+  transferAdaCoins award
+
 window.transferAward = (award) -> # award in JSON
   if award.project.coin_type == 'erc20' || award.project.coin_type == 'eth'
     transferAwardOnEthereum award
   else if award.project.coin_type == 'qrc20'
     transferAwardOnQtum award
+  else if award.project.coin_type == 'ada'
+    transferAwardOnCardano award
 
 $ ->
   $(document).on 'click', '.transfer-tokens-btn', ->

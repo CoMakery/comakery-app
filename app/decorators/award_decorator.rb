@@ -21,7 +21,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def json_for_sending_awards
-    to_json(only: %i[id total_amount], methods: %i[issuer_address amount_to_send recipient_display_name], include: { account: { only: %i[id ethereum_wallet qtum_wallet] }, project: { only: %i[id contract_address ethereum_contract_address coin_type] } })
+    to_json(only: %i[id total_amount], methods: %i[issuer_address amount_to_send recipient_display_name], include: { account: { only: %i[id ethereum_wallet qtum_wallet cardano_wallet] }, project: { only: %i[id contract_address ethereum_contract_address coin_type ethereum_network blockchain_network] } })
   end
 
   def unit_amount_pretty
@@ -49,11 +49,23 @@ class AwardDecorator < Draper::Decorator
   end
 
   def recipient_address
-    object.project.coin_type_on_ethereum? ? account&.ethereum_wallet : account&.qtum_wallet
+    if object.project.coin_type_on_ethereum?
+      account&.ethereum_wallet
+    elsif object.project.coin_type_on_qtum?
+      account&.qtum_wallet
+    elsif object.project.coin_type_on_cardano?
+      account&.cardano_wallet
+    end
   end
 
   def issuer_address
-    object.project.coin_type_on_ethereum? ? issuer&.ethereum_wallet : issuer&.qtum_wallet
+    if object.project.coin_type_on_ethereum?
+      issuer&.ethereum_wallet
+    elsif object.project.coin_type_on_qtum?
+      issuer&.qtum_wallet
+    elsif object.project.coin_type_on_cardano?
+      issuer&.cardano_wallet
+    end
   end
 
   def issuer_display_name

@@ -49,7 +49,8 @@ feature 'my account', js: true do
     end
 
     fill_in 'ethereumWallet', with: 'too short and with spaces'
-    click_on 'Save'
+    # click_on 'Save'
+    page.find('input[type=submit]').trigger(:click)
 
     expect(page).to have_content "should start with '0x', followed by a 40 character ethereum address"
   end
@@ -64,7 +65,8 @@ feature 'my account', js: true do
     end
 
     fill_in 'qtumWallet', with: 'too short and with spaces'
-    click_on 'Save'
+    # click_on 'Save'
+    page.find('input[type=submit]').trigger(:click)
 
     expect(page).to have_content "should start with 'Q', followed by 33 characters"
   end
@@ -80,11 +82,14 @@ feature 'my account', js: true do
 
     fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
     fill_in 'qtumWallet', with: "Q#{'a' * 33}"
-    click_on 'Save'
+    fill_in 'cardanoWallet', with: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
+    # click_on 'Save'
+    page.find('input[type=submit]').trigger(:click)
 
     expect(page).to have_content 'Your account details have been updated.'
     expect(page.find('.fake-link.copy-source').value).to eq "Q#{'a' * 33}"
     expect(page.find('.fake-link.copy-source2').value).to eq "0x#{'a' * 40}"
+    expect(page.find('.fake-link.copy-source3').value).to eq 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
 
     expect(EthereumTokenIssueJob.jobs.length).to eq(0)
   end

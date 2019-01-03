@@ -235,6 +235,16 @@ describe AwardsController do
       let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'qrc20') }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
+      it 'add award to account' do
+        account = receiver.account
+        account.update ethereum_wallet: '0x' + 'a' * 40, qtum_wallet: 'q' + 'a' * 33
+        login receiver.account
+        get :confirm, params: { token: 61234 }
+        expect(response).to redirect_to(project_path(award2.project))
+        expect(award2.reload.account_id).to eq receiver.account_id
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Qtum address is')).to be_truthy
+      end
+
       it 'add award to account. notice about update qtum wallet address' do
         account = receiver.account
         account.update ethereum_wallet: '0x' + 'a' * 40, qtum_wallet: nil
@@ -243,6 +253,32 @@ describe AwardsController do
         expect(response).to redirect_to(project_path(award2.project))
         expect(award2.reload.account_id).to eq receiver.account_id
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Qtum Adress')).to be_truthy
+      end
+    end
+
+    context 'on Cardano network' do
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'ada') }
+      let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
+
+      it 'add award to account' do
+        account = receiver.account
+        account.update ethereum_wallet: '0x' + 'a' * 40, cardano_wallet: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
+        login receiver.account
+        get :confirm, params: { token: 61234 }
+        expect(response).to redirect_to(project_path(award2.project))
+        expect(award2.reload.account_id).to eq receiver.account_id
+
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Cardano address is')).to be_truthy
+      end
+
+      it 'add award to account. notice about update Cardano wallet address' do
+        account = receiver.account
+        account.update ethereum_wallet: '0x' + 'a' * 40, cardano_wallet: nil
+        login receiver.account
+        get :confirm, params: { token: 61234 }
+        expect(response).to redirect_to(project_path(award2.project))
+        expect(award2.reload.account_id).to eq receiver.account_id
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Cardano Adress')).to be_truthy
       end
     end
   end
