@@ -69,7 +69,6 @@ class Views::Shared::Awards < Views::Base
                 elsif current_account.decorate.can_send_awards?(project)
                   link_to 'javascript:void(0)', class: 'metamask-transfer-btn transfer-tokens-btn', 'data-id': award.id, 'data-info': award.json_for_sending_awards do
                     span 'Send'
-                    wallet_logo = project.coin_type_on_ethereum? ? 'metamask2.png' : 'qrypto.png'
                     image_tag wallet_logo
                   end
                 else
@@ -83,6 +82,16 @@ class Views::Shared::Awards < Views::Base
           end
         end
       end
+    end
+  end
+
+  def wallet_logo
+    if project.coin_type_on_ethereum?
+      'metamask2.png'
+    elsif project.coin_type_qrc20?
+      'qrypto.png'
+    elsif project.coin_type_ada?
+      'trezor.png'
     end
   end
 

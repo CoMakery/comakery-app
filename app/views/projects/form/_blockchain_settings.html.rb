@@ -237,6 +237,11 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
             $(".blockchain-network-lbl").addClass('hide')
             $(".ethereum-network-lbl").removeClass('hide')
             break;
+          case 'ada':
+            $('.contract-info-div').addClass('hide')
+            $(".blockchain-network-lbl").removeClass('hide')
+            $(".ethereum-network-lbl").addClass('hide')
+            break;
           }
         });
       })

@@ -1,23 +1,31 @@
 class UtilitiesService
+  def self.get_ethereum_wallet_url(network, wallet)
+    if network == 'main'
+      "https://etherscan.io/address/#{wallet}"
+    elsif %w[ropsten kovan rinkeby].include?(network)
+      "https://#{network}.etherscan.io/address/#{wallet}"
+    else
+      'javascript:void(0);'
+    end
+  end
+
   def self.get_wallet_url(network, wallet)
     case network
+    when 'cardano_mainnet'
+      "https://cardanoexplorer.com/address/#{wallet}"
     when 'qtum_mainnet'
       "https://explorer.qtum.org/address/#{wallet}"
     when 'qtum_testnet'
       "https://testnet.qtum.org/address/#{wallet}"
     else
-      if network == 'main'
-        "https://etherscan.io/address/#{wallet}"
-      elsif network.present?
-        "https://#{network}.etherscan.io/address/#{wallet}"
-      else
-        'javascript:void(0);'
-      end
+      get_ethereum_wallet_url(network, wallet)
     end
   end
 
   def self.get_transaction_url(network, tx)
     case network
+    when 'cardano_mainnet'
+      "https://cardanoexplorer.com/tx/#{tx}"
     when 'qtum_mainnet'
       "https://explorer.qtum.org/tx/#{tx}"
     when 'qtum_testnet'

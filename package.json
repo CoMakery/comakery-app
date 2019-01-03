@@ -14,6 +14,8 @@
     "@rails/webpacker": "^3.5.5",
     "babel-preset-react": "^6.24.1",
     "classnames": "^2.2.6",
+    "borc": "^2.0.4",
+    "cardano-crypto.js": "^5.0.0",
     "coffeescript": "1.12.7",
     "d3pie": "^0.1.9",
     "formdata-polyfill": "^3.0.13",
