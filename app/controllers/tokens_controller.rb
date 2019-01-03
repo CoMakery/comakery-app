@@ -1,5 +1,4 @@
 class TokensController < ApplicationController
-  layout 'react'
   before_action :redirect_unless_admin
   before_action :set_token, only: %i[show edit update]
   before_action :set_coin_types, only: %i[new show edit]
@@ -7,10 +6,12 @@ class TokensController < ApplicationController
   before_action :set_blockchain_networks, only: %i[new show edit]
   before_action :set_generic_props, only: %i[new show edit]
 
+  layout 'react'
+
   def index
     @tokens = policy_scope(Token).map do |t|
       t.serializable_hash.merge(
-        logo_url: Refile.attachment_url(t, :logo_image, :fill, 250, 250)
+        logo_url: Refile.attachment_url(t, :logo_image, :fill, 54, 54)
       )
     end
 
@@ -30,7 +31,7 @@ class TokensController < ApplicationController
     authorize @token
 
     if @token.save
-      render json: { message: 'Token created' }, status: :ok
+      render json: { id: @token.id }, status: :ok
     else
       errors  = @token.errors.messages.map { |k, v| ["token[#{k}]", v.to_sentence] }.to_h
       message = @token.errors.full_messages.join(', ')

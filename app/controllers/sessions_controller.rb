@@ -76,12 +76,27 @@ class SessionsController < ApplicationController
         current_account.update new_award_notice: false
       end
     elsif project&.coin_type_on_qtum?
-      if current_account.qtum_wallet.blank?
-        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Qtum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      else
-        flash[:notice] = "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your QRC20 tokens."
-        current_account.update new_award_notice: false
-      end
+      process_new_qtum_award_notice(current_account)
+    elsif project&.coin_type_on_cardano?
+      process_new_cardano_award_notice(current_account)
+    end
+  end
+
+  def process_new_qtum_award_notice(current_account)
+    if current_account.qtum_wallet.blank?
+      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Qtum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    else
+      flash[:notice] = "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Qtum tokens."
+      current_account.update new_award_notice: false
+    end
+  end
+
+  def process_new_cardano_award_notice(current_account)
+    if current_account.cardano_wallet.blank?
+      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Cardano Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    else
+      flash[:notice] = "Congratulations, you just claimed your award! Your Cardano address is #{view_context.link_to current_account.cardano_wallet, current_account.decorate.cardano_wallet_url} you can change your Cardano address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Cardano tokens."
+      current_account.update new_award_notice: false
     end
   end
 end

@@ -48,7 +48,7 @@ class Header extends React.Component {
                       Missions
                     </a>
 
-                    <a href="/">
+                    <a href="/tokens" className={currentPath.match(/tokens/) ? 'header--nav--links--current' : null}>
                       Tokens
                     </a>
                   </React.Fragment>

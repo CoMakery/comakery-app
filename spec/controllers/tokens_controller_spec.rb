@@ -65,7 +65,7 @@ describe TokensController do
               symbol: 'CAT'
             }
           }
-          expect(response).to have_http_status(:created)
+          expect(response).to have_http_status(:ok)
           expect(response.content_type).to eq('application/json')
         end.to change { Token.count }.by(1)
 
@@ -85,7 +85,7 @@ describe TokensController do
           }
           expect(response).to have_http_status(:unprocessable_entity)
           expect(response.content_type).to eq('application/json')
-        end.not_to change { Token.count }
+        end.not_to(change { Token.count })
 
         token = assigns[:token]
         expect(token.errors.full_messages.join(', ')).to eq("Name can't be blank")
@@ -164,7 +164,7 @@ describe TokensController do
         it 'returns correct react component' do
           get :index
           expect(response.status).to eq(200)
-          expect(assigns[:tokens].map(&:name)).to eq(%w[Cats Dogs Yaks Foxes])
+          expect(assigns[:tokens].map { |x| x['name'] }).to eq(%w[Cats Dogs Yaks Foxes])
         end
       end
     end
@@ -255,7 +255,7 @@ describe TokensController do
             }
             expect(response).to have_http_status(:ok)
             expect(response.content_type).to eq('application/json')
-          end.not_to change { Token.count }
+          end.not_to(change { Token.count })
 
           cat_token.reload
           expect(cat_token.name).to eq('Cat Token Updated')
@@ -271,7 +271,7 @@ describe TokensController do
             }
             expect(response).to have_http_status(:unprocessable_entity)
             expect(response.content_type).to eq('application/json')
-          end.not_to change { Token.count }
+          end.not_to(change { Token.count })
 
           cat_token.reload
           expect(cat_token.name).to eq('Cats')

@@ -1,11 +1,12 @@
 {
   "engines": {
     "npm": "6.x",
-    "node": "10.13.0"
+    "node": "10.13.0",
+    "yarn": "1.12.3"
   },
   "scripts": {
     "lint": "yarn lint:ci --fix",
-    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript",
+    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript spec/javascript",
     "stylelint": "stylelint 'app/javascript/**/*.css' --fix",
     "test": "jest"
   },
@@ -13,6 +14,8 @@
     "@rails/webpacker": "^3.5.5",
     "babel-preset-react": "^6.24.1",
     "classnames": "^2.2.6",
+    "borc": "^2.0.4",
+    "cardano-crypto.js": "^5.0.0",
     "coffeescript": "1.12.7",
     "d3pie": "^0.1.9",
     "formdata-polyfill": "^3.0.13",
@@ -45,6 +48,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^23.6.0",
     "jest-enzyme": "^7.0.1",
+    "jest-fetch-mock": "^2.1.0",
     "react-test-renderer": "^16.6.0",
     "regenerator-runtime": "^0.12.1",
     "stylelint": "^9.9.0",
@@ -70,8 +74,13 @@
       "enzyme-to-json/serializer"
     ],
     "moduleNameMapper": {
-      ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
+      ".+\\.(css|styl|less|sass|scss)$": "identity-obj-proxy",
+      ".+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/spec/javascript/mockAssets.js"
     },
-    "setupTestFrameworkScriptFile": "./spec/javascript/setup.js"
+    "setupTestFrameworkScriptFile": "./spec/javascript/setupFramework.js",
+    "automock": false,
+    "setupFiles": [
+      "./spec/javascript/setupJest.js"
+    ]
   }
 }

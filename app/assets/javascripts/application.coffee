@@ -11,7 +11,6 @@
 # about supported directives.
 #
 # = require jquery
-# = require jquery_ujs
 # = require jquery-ui
 # = require d3
 # = require d3pie
@@ -208,6 +207,9 @@ window.initializeAccountPage = () ->
     document.execCommand('Copy')
   $('.copiable2').click ->
     $(".copy-source2").select()
+    document.execCommand('Copy')
+  $('.copiable3').click ->
+    $(".copy-source3").select()
     document.execCommand('Copy')
   $('.fake-link').click ->
     window.location.href = $(@).data("href")

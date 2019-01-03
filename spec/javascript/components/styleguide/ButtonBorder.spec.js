@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow, mount, render } from 'enzyme'
+import { shallow } from 'enzyme'
 import ButtonBorder from 'components/styleguide/ButtonBorder'
 
 describe('ButtonBorder', () => {

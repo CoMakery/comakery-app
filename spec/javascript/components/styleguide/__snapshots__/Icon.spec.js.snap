@@ -4,7 +4,7 @@ exports[`Icon renders correctly without props 1`] = `
 <Fragment>
   <img
     className="icon icon__atomsIconsSystemHeart-svg"
-    src={null}
+    src="test-file-stub"
   />
 </Fragment>
 `;

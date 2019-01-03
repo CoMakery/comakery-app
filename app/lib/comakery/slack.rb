@@ -35,12 +35,6 @@ class Comakery::Slack
 
   def get_users
     @client.users_list
-  rescue Faraday::ConnectionFailed => e
-    if Rails.env.development?
-      { members: [] }
-    else
-      raise e
-    end
   end
 
   def get_user_info(slack_user_id)

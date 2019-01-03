@@ -18,7 +18,8 @@ describe 'my account' do
     fill_in 'firstName', with: ''
     fill_in 'lastName', with: ''
     fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
-    click_on 'Save'
+    # click_on 'Save'
+    page.find('input[type=submit]').trigger(:click)
 
     expect(page).to have_content("First name can't be blank")
     expect(page).to have_content("Last name can't be blank")
@@ -29,7 +30,9 @@ describe 'my account' do
     fill_in 'lastName', with: 'Dev'
     fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
     fill_in 'qtumWallet', with: "Q#{'a' * 33}"
-    click_on 'Save'
+    fill_in 'cardanoWallet', with: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
+    # click_on 'Save'
+    page.find('input[type=submit]').trigger(:click)
 
     expect(page).to have_content 'Your account details have been updated.'
     expect(page).to have_content 'Tester'

@@ -1,0 +1,82 @@
+{
+  "name": "Comakery",
+  "description": "CoMakery creates Project Tokens and notifies your team via Slack.",
+  "website": "http://www.comakery.com/",
+  "repository": "https://github.com/CoMakery/comakery-app/",
+  "logo": "https://avatars0.githubusercontent.com/u/17172662",
+  "success_url": "/",
+  "scripts": {
+    "postdeploy": "bundle exec rails db:migrate"
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "heroku/ruby"
+    }
+  ],
+  "stack": "heroku-18",
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    },
+    "worker": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "addons": [
+    {
+      "plan": "fixie:tricycle"
+    },
+    {
+      "plan": "heroku-postgresql:hobby-dev",
+      "as": "DATABASE"
+    },
+    {
+      "plan": "redistogo:nano"
+    },
+    {
+      "plan": "scheduler:standard"
+    },
+    {
+      "plan": "sendgrid:starter"
+    }
+  ],
+  "env": {
+    "AIRBRAKE_API_KEY": "UPDATE_ME",
+    "AIRBRAKE_PROJECT_ID": "UPDATE_ME",
+    "AIRTABLE_API": "UPDATE_ME",
+    "AIRTABLE_APP": "UPDATE_ME",
+    "AIRTABLE_SIGNUPS_TABLE_ID": "UPDATE_ME",
+    "ALLOW_ETHEREUM": "citizencode,comakery,comakery-inc,enlightenedstructures",
+    "APP_HOST": "staging.comakery.com",
+    "APP_NAME": "staging",
+    "AWS_API_KEY": "UPDATE_ME",
+    "AWS_API_SECRET": "UPDATE_ME",
+    "BASIC_AUTH": "comakery:now",
+    "CLOUDFRONT_HOST": "dbqcjfphwazuc.cloudfront.net",
+    "DISCORD_BOT_TOKEN": "UPDATE_ME",
+    "DISCORD_CLIENT_ID": "UPDATE_ME",
+    "DISCORD_CLIENT_SECRET": "UPDATE_ME",
+    "ETHERCAMP_SUBDOMAIN": "live",
+    "ETHEREUM_BRIDGE": "https://eth.comakery.com",
+    "ETHEREUM_BRIDGE_API_KEY": "UPDATE_ME",
+    "ETHEREUM_EXPLORER_SITE": "ropsten.etherscan.io",
+    "git_ref": "07e9e34ceba36d2276198ddda248b257245e2ed7",
+    "REDIS_PROVIDER": "REDISTOGO_URL",
+    "REFILE_S3_BUCKET": "comakery-staging-refile",
+    "REFILE_S3_REGION": "us-east-1",
+    "SECRET_KEY_BASE": {
+      "description": "SECRET_KEY_BASE",
+      "generator": "secret"
+    },
+    "SIDEKIQ_PASSWORD": "UPDATE_ME",
+    "SIDEKIQ_USERNAME": "UPDATE_ME",
+    "SLACK_API_KEY": "UPDATE_ME",
+    "SLACK_API_SECRET": "UPDATE_ME",
+    "NODE_MODULES_CACHE": "false"
+  }
+}
