@@ -25,7 +25,6 @@ class Views::Layouts::Application < Views::Base
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
 
-        # javascript_pack_tag 'application' # NOTE this fails in fortitude
         javascript_include_tag Webpacker.manifest.lookup!('application.js')
 
         javascript_include_tag 'jquery.visible' if Rails.env.test?
@@ -56,21 +55,16 @@ class Views::Layouts::Application < Views::Base
 
       body(class: "#{controller_name}-#{action_name} #{current_account&.slack_auth ? '' : 'signed-out'}") do
         render partial: 'layouts/google_tag_no_script.html'
-        div(class: 'contain-to-grid top-bar-container show-for-medium') do
-          div(class: 'small-centered columns no-h-pad', style: 'max-width: 1535px') do
-            link_to root_path do
-              image_tag 'comakery.png', class: 'logo'
-            end
-            render partial: 'layouts/navigation'
-          end
-        end
 
-        div(class: 'contain-to-grid top-bar-container hide-for-medium') do
-          link_to root_path do
-            image_tag 'comakery.png', style: 'height: 18px'
-          end
-          render partial: 'layouts/navigation'
-        end
+        text react_component(
+          'layouts/Header',
+          {
+            is_admin: current_account&.comakery_admin?,
+            is_logged_in: (current_account ? true : false),
+            current_path: request.fullpath
+          },
+          prerender: true
+        )
 
         div(class: "app-container row#{' home' if current_account && action_name == 'landing'}") do
           message
@@ -82,46 +76,12 @@ class Views::Layouts::Application < Views::Base
           end
         end
 
-        row(class: 'footer') do
-          div(class: 'large-12 small-centered columns', style: 'max-width: 1044px;') do
-            column('small-12') do
-              column('small-3') do
-                image_tag 'Logo_Gradient.png', size: '100x100'
-              end
-              column('small-3') do
-                strong do
-                  text 'ABOUT COMAKERY'
-                  br
-                  link_to 'Home', root_path
-                  br
-                  link_to 'Contact Us', 'mailto:support@comakery.com'
-                end
-              end
-              column('small-3') do
-                strong do
-                  text 'JOIN'
-                  br
-                  link_to 'Contributors', new_account_path
-                  br
-                  link_to 'Foundations', new_account_path
-                end
-              end
-              column('small-3') do
-                strong do
-                  text 'LEGAL'
-                  br
-                  link_to 'User Agreement', user_agreement_path
-                  br
-                  link_to 'Prohibited Use', prohibited_use_path
-                  br
-                  link_to 'E-Sign Disclosure', e_sign_disclosure_path
-                  br
-                  link_to 'Privacy Policy', '/privacy-policy'
-                end
-              end
-            end
-          end
-        end
+        text react_component(
+          'layouts/Footer',
+          {},
+          prerender: true
+        )
+
         javascript_tag("
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-describe 'my account' do
+describe 'my account', js: true do
   let!(:account) { create :account, email: 'test@test.st' }
 
   before do
     login account
     visit root_path
-    first('.menu').click_link account.decorate.name
+    first('.header--nav--links').click_link 'My Account'
     expect(page).to have_content 'Account Details'
 
     within('.view-ethereum-wallet') do

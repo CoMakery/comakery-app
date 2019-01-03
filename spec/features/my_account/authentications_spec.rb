@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'refile/file_double'
+
 feature 'my account', js: true do
   let!(:team) { create :team }
   let!(:project) { create(:sb_project, ethereum_enabled: true) }
@@ -41,7 +42,7 @@ feature 'my account', js: true do
   scenario 'editing, and adding an ethereum address' do
     login(auth.account)
     visit root_path
-    first('.menu').click_link account.decorate.name
+    first('.header--nav--links').click_link 'My Account'
 
     within('.view-ethereum-wallet') do
       first(:link).click
@@ -56,7 +57,7 @@ feature 'my account', js: true do
   scenario 'editing, and adding an qtum address' do
     login(auth.account)
     visit root_path
-    first('.menu').click_link account.decorate.name
+    first('.header--nav--links').click_link 'My Account'
 
     within('.view-ethereum-wallet') do
       first(:link).click
@@ -71,7 +72,7 @@ feature 'my account', js: true do
   scenario 'adding an ethereum address sends ethereum tokens, for awards' do
     login(auth.account)
     visit root_path
-    first('.menu').click_link account_nickname
+    first('.header--nav--links').click_link 'My Account'
 
     within('.view-ethereum-wallet') do
       first(:link).click
@@ -93,14 +94,14 @@ feature 'my account', js: true do
     account.save
     login(account)
     visit root_path
-    expect(page).to have_css("img[src*='avatar.png']")
-    first('.menu').click_link account_nickname
+    first('.header--nav--links').click_link 'My Account'
     expect(page).to have_css("img[src*='avatar.png']")
   end
 
   scenario 'show account name' do
     login(account)
     visit root_path
+    first('.header--nav--links').click_link 'My Account'
     expect(page).to have_content('jason')
   end
 end
