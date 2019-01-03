@@ -3,7 +3,7 @@ require 'capybara/poltergeist'
 
 # Driver for remote debugging
 Capybara.register_driver :poltergeist_debug do |app|
-  Capybara::Poltergeist::Driver.new(app, inspector: true)
+  Capybara::Poltergeist::Driver.new(app, inspector: true, window_size: [1600, 1200])
 end
 
 # Capybara.register_driver :poltergeist do |app|
