@@ -45,6 +45,10 @@ body {
   top: 1rem;
 }
 
+.pagination {
+  padding: 10px 0px;
+}
+
 .header {
   min-height: 90px;
   box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
