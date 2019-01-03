@@ -18,7 +18,7 @@ describe 'my account', js: true do
     page.check('account_agreed_to_user_agreement')
     click_on 'CREATE YOUR ACCOUNT'
     expect(Account.last&.decorate&.name).to eq 'Tester Dev'
-    expect(page).to have_content('Sign out')
+    expect(page).to have_content(/Sign out/i)
     expect(page).to have_content('FILL OUT THE SHORT FORM BELOW TO GET STARTED')
     expect(page).not_to have_content('Please confirm your email before continuing.')
   end
@@ -60,7 +60,7 @@ describe 'my account', js: true do
     visit "/accounts/confirm/#{to_be_confirmed_account.email_confirm_token}"
     expect(status_code).to eq(200)
     expect(page).to have_content('Success! Your email is confirmed.')
-    expect(page).to have_content('Sign out')
+    expect(page).to have_content(/Sign out/i)
   end
 
   scenario 'projects page is available after email confirmation' do

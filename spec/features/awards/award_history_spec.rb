@@ -83,7 +83,7 @@ describe 'viewing projects, creating and editing', :js do
           expect(page).to have_content '1 2 3 4 5 … Next › Last »'
 
           within(page.all('.pagination').first) do
-            click_link 'Last'
+            find('a', text: 'Last').trigger('click')
           end
           expect(page.all('table.award-rows tr.award-row').size).to eq(5)
           expect(page).to have_content '« First ‹ Prev … 3 4 5 6 7'
