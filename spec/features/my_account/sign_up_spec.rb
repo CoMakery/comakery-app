@@ -27,6 +27,7 @@ describe 'my account', js: true do
   scenario 'featured page is available after signup' do
     login(unconfirmed_account)
     visit '/featured'
+    expect(page.current_url).to have_content '/featured'
     expect(page).to have_content('Please confirm your email before continuing.')
     stub_airtable
     click_on "I'M INTERESTED!", match: :first
@@ -38,18 +39,21 @@ describe 'my account', js: true do
   scenario 'account page is available after signup' do
     login(unconfirmed_account)
     visit '/account'
+    expect(page.current_url).to have_content '/account'
     expect(page).not_to have_content('Please confirm your email before continuing.')
   end
 
   scenario 'projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects'
+    expect(page.current_url).to have_content /\/$/
     expect(page).to have_content('Please confirm your email before continuing.')
   end
 
   scenario 'my projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects/mine'
+    expect(page.current_url).to have_content /\/$/
     expect(page).to have_content('Please confirm your email before continuing.')
   end
 
@@ -62,12 +66,14 @@ describe 'my account', js: true do
   scenario 'projects page is available after email confirmation' do
     login(confirmed_account)
     visit '/projects'
+    expect(page.current_url).to have_content '/projects'
     expect(page).not_to have_content('Please confirm your email before continuing.')
   end
 
   scenario 'my projects page is available after email confirmation' do
     login(confirmed_account)
     visit '/projects/mine'
+    expect(page.current_url).to have_content '/projects/mine'
     expect(page).not_to have_content('Please confirm your email before continuing.')
   end
 end
