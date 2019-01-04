@@ -2,12 +2,9 @@ require 'rails_helper'
 
 describe 'tokens features', js: true do
   let!(:admin_account) { create :account, comakery_admin: true }
-<<<<<<< HEAD
-=======
   let!(:cat_token) { create(:token, name: 'ERC') }
   let!(:dog_token) { create(:token, name: 'QRC') }
   let!(:yak_token) { create(:token, name: 'ETH') }
->>>>>>> 90996aa9e0f06f1e6b5468fd279ee52e2e4d208e
 
   before do
     login(admin_account)
@@ -97,15 +94,6 @@ describe 'tokens features', js: true do
     expect(Token.last.decimal_places).to eq 0
   end
 
-<<<<<<< HEAD
-  scenario 'admin views list of tokens' do
-  end
-
-  scenario 'admin views token details' do
-  end
-
-  scenario 'admin edits token details' do
-=======
   scenario 'admin cancels creation of token' do
     visit '/tokens'
     first('.sidebar-item__bold').click
@@ -156,6 +144,5 @@ describe 'tokens features', js: true do
     expect(Token.last.coin_type).to eq 'eth'
     expect(Token.last.ethereum_network).to eq 'main'
     expect(Token.last.name).to eq 'ETH edited'
->>>>>>> 90996aa9e0f06f1e6b5468fd279ee52e2e4d208e
   end
 end

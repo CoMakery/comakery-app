@@ -149,7 +149,6 @@ class InputField extends React.Component {
                 onChange={this.handleChange}
                 disabled={disabled}
               >
-                <option>Please Select ...</option>
                 {selectEntries.map(([k, v]) =>
                   <option key={v} value={v}>{k}</option>
                 )}

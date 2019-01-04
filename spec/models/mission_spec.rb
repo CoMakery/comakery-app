@@ -9,7 +9,8 @@ describe Mission do
                                   "Image can't be blank",
                                   "Logo can't be blank",
                                   "Name can't be blank",
-                                  "Subtitle can't be blank"
+                                  "Subtitle can't be blank",
+                                  "Token is invalid"
                                 ])
     end
 
@@ -18,6 +19,7 @@ describe Mission do
       expect(errors).to include('Name is too long (maximum is 100 characters)')
       expect(errors).to include('Subtitle is too long (maximum is 140 characters)')
       expect(errors).to include('Description is too long (maximum is 250 characters)')
+      expect(errors).to include('Token is invalid')
     end
   end
 end

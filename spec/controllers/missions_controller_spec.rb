@@ -2,34 +2,40 @@ require 'rails_helper'
 require 'refile/file_double'
 
 describe MissionsController do
-  let(:account) { create(:account, comakery_admin: true) }
-  let(:mission) { create(:mission) }
+  let!(:token) { create :token }
+  let!(:mission) { create :mission, token_id: token.id }
+  let!(:admin_account) { create :account, comakery_admin: true }
+  let!(:account) { create :account }
 
-  before { login(account) }
-
-  describe '#index' do
-    render_views
-    it 'renders mission index page' do
-      get :index
-      expect(response.status).to eq 200
-      expect(response).to render_template('missions/index')
-    end
+  before do
+    login(admin_account)
   end
 
   describe '#new' do
-    render_views
-    it 'redirect to new mission page' do
-      get :new
-      expect(response.status).to eq 200
-      expect(response).to render_template('missions/new')
+    context 'when not logged in' do
+      it 'redirects to root' do
+        session[:account_id] = nil
+        get :new
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(root_url)
+      end
     end
-  end
 
-  describe '#edit' do
-    render_views
-    it 'redirect to edit mission page' do
-      get :edit, params: { id: mission }
-      expect(response.status).to eq 200
+    context 'when logged in without admin flag' do
+      it 'redirects to root' do
+        login(account)
+        get :new
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
+    context 'when logged in with admin flag' do
+      it 'returns correct react component' do
+        get :new
+        expect(response.status).to eq(200)
+        expect(assigns[:mission]).to be_a_new_record
+      end
     end
   end
 
@@ -41,6 +47,7 @@ describe MissionsController do
             name: 'test2',
             subtitle: 'test2',
             description: 'test2',
+            token_id: token.id,
             image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
             logo: fixture_file_upload('helmet_cat.png', 'image/png', :binary)
           }
@@ -55,6 +62,7 @@ describe MissionsController do
           mission: {
             subtitle: 'test2',
             description: 'test2',
+            token_id: token.id,
             logo: fixture_file_upload('helmet_cat.png', 'image/png', :binary)
           }
         }

@@ -44,7 +44,7 @@ class Header extends React.Component {
 
                 { isAdmin &&
                   <React.Fragment>
-                    <a href="/">
+                    <a href="/missions" className={currentPath.match(/missions/) ? 'header--nav--links--current' : null}>
                       Missions
                     </a>
 

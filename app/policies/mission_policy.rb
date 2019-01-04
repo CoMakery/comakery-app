@@ -6,6 +6,23 @@ class MissionPolicy < ApplicationPolicy
     @mission = mission
   end
 
+  class Scope
+    attr_reader :account, :scope
+
+    def initialize(account, scope)
+      @account = account
+      @scope = scope
+    end
+
+    def resolve
+      if account&.comakery_admin?
+        scope.all
+      else
+        scope.none
+      end
+    end
+  end
+
   def new?
     @account.comakery_admin?
   end

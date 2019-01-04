@@ -2,11 +2,16 @@ class MissionsController < ApplicationController
   layout 'react'
   before_action :find_mission_by_id, only: %i[edit update destroy]
   before_action :set_generic_props, only: %i[new show edit]
-  skip_after_action :verify_policy_scoped, only: %i[index]
 
   def index
-    @missions = Mission.all.map { |mission| mission.as_json(only: %i[id name subtitle description]).merge(image_preview: Refile.attachment_url(mission, :image, :fill, 230, 230)) }
-    authorize Mission.new
+    @missions = policy_scope(Mission).map do |m|
+      m.serialize.merge(
+        token_name: m.token&.name,
+        token_symbol: m.token&.symbol
+      )
+    end
+
+    render component: 'MissionIndex', props: { missions: @missions }
   end
 
   def new
@@ -14,14 +19,14 @@ class MissionsController < ApplicationController
     authorize @mission
 
     @props[:mission] = @mission&.serialize
-    render component: 'Mission', props: @props
+    render component: 'MissionForm', props: @props
   end
 
   def create
     @mission = Mission.new(mission_params)
     authorize @mission
     if @mission.save
-      render json: { message: 'Successfully created.' }, status: :ok
+      render json: { id: @mission.id, message: 'Successfully created.' }, status: :ok
     else
       errors = @mission.errors.as_json
       errors.each { |key, value| errors[key] = value.to_sentence }
@@ -32,7 +37,9 @@ class MissionsController < ApplicationController
   def edit
     authorize @mission
 
-    render component: 'Mission', props: @props
+    @props[:form_url] = mission_path(@mission)
+    @props[:form_action] = 'PATCH'
+    render component: 'MissionForm', props: @props
   end
 
   def update
@@ -58,7 +65,7 @@ class MissionsController < ApplicationController
 
   def set_generic_props
     @props = {
-      tokens: Token.all.map { |token| [token.name, token.id] },
+      tokens: Token.all.map { |token| [token.name, token.id.to_s] },
       mission: @mission&.serialize,
       form_url: missions_path,
       form_action: 'POST',

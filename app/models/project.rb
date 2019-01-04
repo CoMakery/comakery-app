@@ -1,4 +1,4 @@
-class Project < ApplicationRecord
+class Project < ApplicationRecord # rubocop:disable Metrics/ClassLength
   ROYALTY_PERCENTAGE_PRECISION = 13
 
   include EthereumAddressable

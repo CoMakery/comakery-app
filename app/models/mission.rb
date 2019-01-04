@@ -12,9 +12,9 @@ class Mission < ApplicationRecord
   validate :validate_token_id
 
   def serialize
-    self.as_json(only: %i[id name token_id subtitle description]).merge(
-      logo_preview: self.logo.present? ? Refile.attachment_url(self, :logo, :fill, 150, 100) : nil,
-      image_preview: self.image.present? ? Refile.attachment_url(self, :image, :fill, 100, 100) : nil
+    as_json(only: %i[id name token_id subtitle description]).merge(
+      logo_preview: logo.present? ? Refile.attachment_url(self, :logo, :fill, 150, 100) : nil,
+      image_preview: image.present? ? Refile.attachment_url(self, :image, :fill, 100, 100) : nil
     )
   end
 
