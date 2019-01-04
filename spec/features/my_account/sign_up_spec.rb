@@ -46,20 +46,20 @@ describe 'my account', js: true do
   scenario 'projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects'
-    expect(page.current_url).to have_content /\/$/
+    expect(page.current_url).to have_content %r{\/$}
     expect(page).to have_content('Please confirm your email before continuing.')
   end
 
   scenario 'my projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects/mine'
-    expect(page.current_url).to have_content /\/$/
+    expect(page.current_url).to have_content %r{\/$}
     expect(page).to have_content('Please confirm your email before continuing.')
   end
 
   scenario 'account gets confirmed after visiting confirmation link' do
     visit "/accounts/confirm/#{to_be_confirmed_account.email_confirm_token}"
-    expect(page.current_url).to have_content /\/$/
+    expect(page.current_url).to have_content %r{\/$}
     expect(page).to have_content('Success! Your email is confirmed.')
     expect(page).to have_content(/Sign out/i)
   end

@@ -87,6 +87,8 @@ end
 
 group(:test) do
   gem 'capybara'
+  gem 'capybara-screenshot', '~> 1.0'
+  gem 'chromedriver-helper', '~> 2.1'
   gem 'database_cleaner'
   gem 'guard-rspec', require: false
   gem 'rack_session_access'
@@ -95,6 +97,4 @@ group(:test) do
   gem 'selenium-webdriver'
   gem 'simplecov', require: false
   gem 'webmock'
-  gem 'chromedriver-helper', '~> 2.1'
-  gem 'capybara-screenshot', '~> 1.0'
 end
