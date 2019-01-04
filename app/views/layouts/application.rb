@@ -78,7 +78,9 @@ class Views::Layouts::Application < Views::Base
 
         text react_component(
           'layouts/Footer',
-          {},
+          {
+            is_logged_in: (current_account ? true : false)
+          },
           prerender: true
         )
 

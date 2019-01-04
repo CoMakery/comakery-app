@@ -82,6 +82,12 @@ describe SessionsController do
         expect(session[:account_id]).to be_nil
       end
     end
+
+    it 'redirects to root_path if user already signed in' do
+      login(account)
+      get :create
+      expect(response).to redirect_to root_path
+    end
   end
 
   describe '#oauth_failure' do
@@ -136,6 +142,12 @@ describe SessionsController do
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Ethereum address is')).to eq true
+      expect(response).to redirect_to root_path
+    end
+
+    it 'redirects to root_path if user already signed in' do
+      login(account)
+      post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(response).to redirect_to root_path
     end
 
