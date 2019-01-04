@@ -59,6 +59,7 @@ describe 'my account', js: true do
 
   scenario 'account gets confirmed after visiting confirmation link' do
     visit "/accounts/confirm/#{to_be_confirmed_account.email_confirm_token}"
+    expect(page.current_url).to have_content /\/$/
     expect(page).to have_content('Success! Your email is confirmed.')
     expect(page).to have_content(/Sign out/i)
   end
