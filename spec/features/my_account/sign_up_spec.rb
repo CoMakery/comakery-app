@@ -14,6 +14,7 @@ describe 'my account', js: true do
     fill_in 'First Name', with: 'Tester'
     fill_in 'Last Name', with: 'Dev'
     fill_in 'Date of Birth', with: '01/01/2000'
+    click_on 'CREATE YOUR ACCOUNT'
     fill_in 'Password', with: '12345678'
     page.check('account_agreed_to_user_agreement')
     click_on 'CREATE YOUR ACCOUNT'
@@ -26,7 +27,6 @@ describe 'my account', js: true do
   scenario 'featured page is available after signup' do
     login(unconfirmed_account)
     visit '/featured'
-    expect(status_code).to eq(200)
     expect(page).to have_content('Please confirm your email before continuing.')
     stub_airtable
     click_on "I'M INTERESTED!", match: :first
@@ -38,27 +38,23 @@ describe 'my account', js: true do
   scenario 'account page is available after signup' do
     login(unconfirmed_account)
     visit '/account'
-    expect(status_code).to eq(200)
     expect(page).not_to have_content('Please confirm your email before continuing.')
   end
 
   scenario 'projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects'
-    expect(status_code).to eq(200)
     expect(page).to have_content('Please confirm your email before continuing.')
   end
 
   scenario 'my projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects/mine'
-    expect(status_code).to eq(200)
     expect(page).to have_content('Please confirm your email before continuing.')
   end
 
   scenario 'account gets confirmed after visiting confirmation link' do
     visit "/accounts/confirm/#{to_be_confirmed_account.email_confirm_token}"
-    expect(status_code).to eq(200)
     expect(page).to have_content('Success! Your email is confirmed.')
     expect(page).to have_content(/Sign out/i)
   end
@@ -66,14 +62,12 @@ describe 'my account', js: true do
   scenario 'projects page is available after email confirmation' do
     login(confirmed_account)
     visit '/projects'
-    expect(status_code).to eq(200)
     expect(page).not_to have_content('Please confirm your email before continuing.')
   end
 
   scenario 'my projects page is available after email confirmation' do
     login(confirmed_account)
     visit '/projects/mine'
-    expect(status_code).to eq(200)
     expect(page).not_to have_content('Please confirm your email before continuing.')
   end
 end

@@ -15,11 +15,10 @@ describe 'my account', js: true do
   end
 
   scenario 'edit account information failed', js: true do
-    fill_in 'firstName', with: ''
-    fill_in 'lastName', with: ''
-    fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
-    # click_on 'Save'
-    page.find('input[type=submit]').trigger(:click)
+    fill_in 'firstName', with: '', fill_options: { clear: :backspace }
+    fill_in 'lastName', with: '', fill_options: { clear: :backspace }
+    fill_in 'ethereumWallet', with: "0x#{'a' * 40}", fill_options: { clear: :backspace }
+    find('input[type=submit]').click
 
     expect(page).to have_content("First name can't be blank")
     expect(page).to have_content("Last name can't be blank")
@@ -31,8 +30,7 @@ describe 'my account', js: true do
     fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
     fill_in 'qtumWallet', with: "Q#{'a' * 33}"
     fill_in 'cardanoWallet', with: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
-    # click_on 'Save'
-    page.find('input[type=submit]').trigger(:click)
+    find('input[type=submit]').click
 
     expect(page).to have_content 'Your account details have been updated.'
     expect(page).to have_content 'Tester'

@@ -4,7 +4,7 @@ jobs:
     parallelism: 1
     working_directory: ~/CoMakery/comakery-app
     docker:
-      - image: circleci/ruby:2.4.4-stretch-browsers-legacy
+      - image: circleci/ruby:2.4.4-stretch-browsers
         environment:
           NODE_VER: 10.13.0
           YARN_VER: 1.12.3
@@ -22,6 +22,7 @@ jobs:
 
       - run: sudo gem update --system --no-ri --no-rdoc
       - run: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+      - run: chromedriver-update
       - run: bin/yarn install
 
       - type: cache-save
@@ -42,11 +43,7 @@ jobs:
       - run: bundle exec rake db:reset
       - run: bundle exec citizen checks
 
-      - type: store_test_results
-        path: /tmp/circleci-test-results
       - type: store_artifacts
-        path: /tmp/circleci-test-results
-      - type: store_artifacts
-        path: /tmp/circleci-artifacts
+        path: ./tmp/capybara
       - type: store_artifacts
         path: coverage

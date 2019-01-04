@@ -89,12 +89,12 @@ group(:test) do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'guard-rspec', require: false
-  gem 'phantomjs', require: 'phantomjs/poltergeist'
-  gem 'poltergeist'
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'simplecov', require: false
   gem 'webmock'
+  gem 'chromedriver-helper', '~> 2.1'
+  gem 'capybara-screenshot', '~> 1.0'
 end
