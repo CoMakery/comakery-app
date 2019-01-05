@@ -12,6 +12,9 @@ describe('Footer', () => {
     expect(wrapper.exists('.footer--content')).toBe(true)
     expect(wrapper.exists('.footer--content--text')).toBe(true)
     expect(wrapper.exists('.footer--content--nav')).toBe(true)
+    expect(wrapper.exists('.footer--content--nav--about')).toBe(true)
+    expect(wrapper.exists('.footer--content--nav--join')).toBe(true)
+    expect(wrapper.exists('.footer--content--nav--legal')).toBe(true)
     expect(wrapper.exists('.footer--copyright')).toBe(true)
   })
 
@@ -19,5 +22,11 @@ describe('Footer', () => {
     const wrapper = shallow(<Footer className="__test" />)
 
     expect(wrapper.exists('.footer.__test')).toBe(true)
+  })
+
+  it('renders correctly with loggedIn flag', () => {
+    const wrapper = shallow(<Footer isLoggedIn />)
+
+    expect(wrapper.exists('.footer--content--nav--join')).toBe(false)
   })
 })

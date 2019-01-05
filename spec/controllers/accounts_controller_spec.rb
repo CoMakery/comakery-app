@@ -49,6 +49,12 @@ describe AccountsController do
       get :new
       expect(response.status).to eq 200
     end
+
+    it 'redirects to root_path if user already signed in' do
+      login(account)
+      get :new
+      expect(response).to redirect_to root_path
+    end
   end
 
   describe '#create' do
@@ -112,6 +118,17 @@ describe AccountsController do
       end.not_to change { Account.count }
       new_account = assigns[:account]
       expect(new_account.errors.full_messages.first).to eq 'Email has already been taken'
+    end
+
+    it 'redirects to root_path if user already signed in' do
+      login(account)
+      post :create, params: {
+        account: {
+          email: 'user@test.st',
+          password: '1'
+        }
+      }
+      expect(response).to redirect_to root_path
     end
   end
 

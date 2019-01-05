@@ -1,10 +1,11 @@
 import React from 'react'
 import classNames from 'classnames'
+import PropTypes from 'prop-types'
 import Icon from './../styleguide/Icon'
 
 class Footer extends React.Component {
   render() {
-    const {className, ...other} = this.props
+    const {className, isLoggedIn, ...other} = this.props
 
     const classnames = classNames(
       'footer',
@@ -36,17 +37,19 @@ class Footer extends React.Component {
                 </a>
               </div>
 
-              <div className="footer--content--nav--join">
-                <div className="footer--content--nav--join--header">
-                  Join
+              { !isLoggedIn &&
+                <div className="footer--content--nav--join">
+                  <div className="footer--content--nav--join--header">
+                    Join
+                  </div>
+                  <a href="/accounts/new">
+                    Contributors
+                  </a>
+                  <a href="/accounts/new">
+                    Foundations
+                  </a>
                 </div>
-                <a href="/accounts/new">
-                  Contributors
-                </a>
-                <a href="/accounts/new">
-                  Foundations
-                </a>
-              </div>
+              }
 
               <div className="footer--content--nav--legal">
                 <div className="footer--content--nav--legal--header">
@@ -76,5 +79,10 @@ class Footer extends React.Component {
     )
   }
 }
-
+Footer.propTypes = {
+  isLoggedIn: PropTypes.bool
+}
+Footer.defaultProps = {
+  isLoggedIn: false
+}
 export default Footer

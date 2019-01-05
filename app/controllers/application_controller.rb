@@ -63,6 +63,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def redirect_if_signed_in
+    return redirect_to root_path if current_account
+  end
+
   def check_age
     redirect_to account_path, alert: 'Sorry, you must be 18 years or older to use this website' if current_account && current_account.valid_and_underage? && controller_name != 'accounts'
   end
