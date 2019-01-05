@@ -63,12 +63,24 @@
   <body>
     <%= render partial: 'layouts/google_tag_no_script.html' %>
 
-    <%= react_component 'layouts/Header',
+    <%= react_component(
+      'layouts/Header',
+      {
         is_admin: current_account&.comakery_admin?,
         is_logged_in: (current_account ? true : false),
         current_path: request.fullpath
-    %>
+      },
+      {
+        prerender: true
+      }
+    )%>
     <%= yield %>
-    <%= react_component 'layouts/Footer' %>
+    <%= react_component(
+      'layouts/Footer',
+      {},
+      {
+        prerender: true
+      }
+    )%>
   </body>
 </html>

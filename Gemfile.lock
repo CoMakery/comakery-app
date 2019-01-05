@@ -70,6 +70,8 @@ GEM
     airbrake (7.3.5)
       airbrake-ruby (~> 2.10)
     airbrake-ruby (2.11.0)
+    archive-zip (0.11.0)
+      io-like (~> 0.3.0)
     arel (8.0.0)
     ast (2.4.0)
     awesome_print (1.8.0)
@@ -105,8 +107,14 @@ GEM
       rack (>= 1.6.0)
       rack-test (>= 0.6.3)
       xpath (~> 3.1)
+    capybara-screenshot (1.0.22)
+      capybara (>= 1.0, < 4)
+      launchy
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
+    chromedriver-helper (2.1.0)
+      archive-zip (~> 0.10)
+      nokogiri (~> 1.8)
     chunky_png (1.3.10)
     cliver (0.3.2)
     coderay (1.1.2)
@@ -217,6 +225,7 @@ GEM
       concurrent-ruby (~> 1.0)
     i18n_data (0.8.0)
     interactor (3.1.1)
+    io-like (0.3.0)
     jira-ruby (1.5.0)
       activesupport
       multipart-post
@@ -561,6 +570,8 @@ DEPENDENCIES
   brakeman
   bullet
   capybara
+  capybara-screenshot (~> 1.0)
+  chromedriver-helper (~> 2.1)
   citizen-scripts!
   coffee-rails
   compass-rails

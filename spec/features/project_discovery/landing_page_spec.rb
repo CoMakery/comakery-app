@@ -25,8 +25,6 @@ describe 'landing page', :js do
 
     visit my_project_path
 
-    expect(page).to have_content 'gleenn'
-
     expect(page).to have_content 'mine'
     expect(page).to have_content 'mine'
     expect(page).to have_content /new project/i

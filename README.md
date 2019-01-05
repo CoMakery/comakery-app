@@ -41,6 +41,7 @@ Prerequisites:
 - Phantomjs binary in PATH (build from official Ubuntu repo will crash on `attach_file`, more info [here](https://github.com/teampoltergeist/poltergeist))
 - Bundler
 - Yarn
+- Chrome browser
 
 Set up .env:
 
@@ -55,6 +56,7 @@ Basics :
 source .env
 bundle install
 yarn install
+chromedriver-update
 rails db:create:all
 rails db:schema:load
 ```
