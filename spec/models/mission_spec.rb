@@ -10,7 +10,7 @@ describe Mission do
                                   "Logo can't be blank",
                                   "Name can't be blank",
                                   "Subtitle can't be blank",
-                                  "Token is invalid"
+                                  'Token is invalid'
                                 ])
     end
 

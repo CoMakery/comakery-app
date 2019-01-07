@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181226162717) do
+ActiveRecord::Schema.define(version: 20190107124734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -158,6 +158,8 @@ ActiveRecord::Schema.define(version: 20181226162717) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "token_id"
+    t.integer "status", default: 0
+    t.integer "display_order"
     t.index ["token_id"], name: "index_missions_on_token_id"
   end
 
@@ -218,6 +220,7 @@ ActiveRecord::Schema.define(version: 20181226162717) do
     t.string "blockchain_network"
     t.string "contract_address"
     t.bigint "mission_id"
+    t.integer "status", default: 0
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"

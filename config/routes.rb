@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     resources :payments, only: [:index, :create, :update]
     collection do
       get :landing
+      patch :update_status
     end
   end
 

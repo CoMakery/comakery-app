@@ -1,17 +1,18 @@
 class MissionsController < ApplicationController
   layout 'react'
-  before_action :find_mission_by_id, only: %i[edit update destroy]
+  before_action :find_mission_by_id, only: %i[edit update update_status destroy]
   before_action :set_generic_props, only: %i[new show edit]
 
   def index
     @missions = policy_scope(Mission).map do |m|
       m.serialize.merge(
         token_name: m.token&.name,
-        token_symbol: m.token&.symbol
+        token_symbol: m.token&.symbol,
+        projects: m.projects.as_json(only: %i[id title status])
       )
     end
 
-    render component: 'MissionIndex', props: { missions: @missions }
+    render component: 'MissionIndex', props: { csrf_token: form_authenticity_token, missions: @missions }
   end
 
   def new
@@ -56,7 +57,7 @@ class MissionsController < ApplicationController
   private
 
   def mission_params
-    params.require(:mission).permit(:name, :subtitle, :description, :logo, :image, :token_id)
+    params.require(:mission).permit(:name, :subtitle, :description, :logo, :image, :token_id, :status)
   end
 
   def find_mission_by_id

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe MissionPolicy do
   subject(:policy) { described_class.new(account, nil) }
+
   let!(:token) { create :token }
   let!(:mission) { create :mission, token_id: token.id }
   let!(:mission2) { create :mission, name: '2', token_id: token.id }

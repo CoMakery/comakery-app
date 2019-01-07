@@ -67,6 +67,7 @@ class Project < ApplicationRecord # rubocop:disable Metrics/ClassLength
     qtum_mainnet: 'Main QTUM Network',
     qtum_testnet: 'Test QTUM Network'
   }
+  enum status: %i[active passive]
 
   validates :description, :account, :title, :legal_project_owner, :denomination, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }

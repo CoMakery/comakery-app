@@ -18,7 +18,7 @@ class Message extends React.Component {
     })
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     this.setState({ hidden: false })
   }
 
