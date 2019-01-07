@@ -19,7 +19,6 @@ exports[`TokenIndex renders correctly without props 1`] = `
             onClick={[Function]}
             text="Create a Token"
           />
-          <hr />
         </div>
       </React.Fragment>
     }
@@ -107,7 +106,6 @@ exports[`TokenIndex renders correctly without props 1`] = `
                   </div>
                 </SidebarItem>
               </SidebarItemBold>
-              <hr />
             </div>
           </div>
           <div

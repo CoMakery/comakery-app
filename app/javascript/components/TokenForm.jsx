@@ -248,7 +248,7 @@ class TokenForm extends React.Component {
   }
 
   goBack() {
-    window.location = '/tokens'
+    typeof window === 'undefined' ? null : window.location = '/tokens'
   }
 
   render() {
