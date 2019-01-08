@@ -45,7 +45,8 @@ class Project < ApplicationRecord
     erc20: 'ERC20',
     eth: 'ETH',
     qrc20: 'QRC20',
-    ada: 'ADA'
+    ada: 'ADA',
+    btc: 'BTC'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -61,6 +62,8 @@ class Project < ApplicationRecord
     rinkeby: 'Rinkeby Test Network'
   }
   enum blockchain_network: {
+    bitcoin_mainnet: 'Main Bitcoin Network',
+    bitcoin_testnet: 'Test Bitcoin Network',
     cardano_mainnet: 'Main Cardano Network',
     cardano_testnet: 'Test Cardano Network',
     qtum_mainnet: 'Main QTUM Network',
@@ -135,6 +138,10 @@ class Project < ApplicationRecord
 
   def coin_type_on_cardano?
     coin_type_ada?
+  end
+
+  def coin_type_on_bitcoin?
+    coin_type_btc?
   end
 
   def total_revenue

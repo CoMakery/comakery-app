@@ -224,6 +224,9 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
         case 'ada':
           prefix = 'cardano_'
           break;
+        case 'btc':
+          prefix = 'bitcoin_'
+          break;
         }
         if(prefix != '') {
           $("[name='project[blockchain_network]']").children('option:not(:first)').remove()
@@ -260,7 +263,7 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
             $(".blockchain-network-lbl").addClass('hide')
             $(".ethereum-network-lbl").removeClass('hide')
             break;
-          case 'ada':
+          case 'ada', 'btc':
             $('.contract-info-div').addClass('hide')
             $(".blockchain-network-lbl").removeClass('hide')
             $(".ethereum-network-lbl").addClass('hide')

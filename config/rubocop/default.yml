@@ -24,6 +24,7 @@ AllCops:
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/views/**/*'
+    - 'app/services/utilities_service.rb'
   Max: 5
 
 Layout/AlignParameters:
