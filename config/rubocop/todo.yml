@@ -89,6 +89,8 @@ Metrics/AbcSize:
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
   Max: 325
+  Exclude:
+    - 'app/models/project.rb'
 
 Metrics/CyclomaticComplexity:
   Max: 13

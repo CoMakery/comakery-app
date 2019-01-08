@@ -11,6 +11,10 @@ class AccountDecorator < Draper::Decorator
     nickname || name
   end
 
+  def bitcoin_wallet_url
+    UtilitiesService.get_wallet_url('bitcoin_mainnet', bitcoin_wallet)
+  end
+
   def cardano_wallet_url
     UtilitiesService.get_wallet_url('cardano_mainnet', cardano_wallet)
   end

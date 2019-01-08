@@ -11,6 +11,10 @@ class UtilitiesService
 
   def self.get_wallet_url(network, wallet)
     case network
+    when 'bitcoin_mainnet'
+      "https://insight.bitpay.com/address/#{wallet}"
+    when 'bitcoin_testnet'
+      "https://test-insight.bitpay.com/address/#{wallet}"
     when 'cardano_mainnet'
       "https://cardanoexplorer.com/address/#{wallet}"
     when 'qtum_mainnet'
