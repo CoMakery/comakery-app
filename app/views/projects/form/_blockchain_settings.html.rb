@@ -34,7 +34,7 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
         with_errors(project, :blockchain_network) do
           label(class: "blockchain-network-lbl #{'hide' if project.coin_type_on_ethereum?}") do
             text 'Blockchain Network'
-            f.select :blockchain_network, options, { include_blank: true }, disabled: project.completed_awards.any?
+            f.select :blockchain_network, options, { include_blank: true }, disabled: project.completed_awards.any?, 'data-info': Project.blockchain_networks.to_json
           end
         end
 
@@ -215,9 +215,32 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
 
   def coin_type_on_change
     text(<<-JAVASCRIPT.html_safe)
+      function customBlockchainNetwork(coinType) {
+        var prefix = ''
+        switch(coinType) {
+        case 'qrc20':
+          prefix = 'qtum_'
+          break;
+        case 'ada':
+          prefix = 'cardano_'
+          break;
+        }
+        if(prefix != '') {
+          $("[name='project[blockchain_network]']").children('option:not(:first)').remove()
+          var data = JSON.parse($("[name='project[blockchain_network]']").attr('data-info'))
+          $.each(data, (k,v) => {
+            if(k.startsWith(prefix)) {
+              $("[name='project[blockchain_network]']").append(new Option(v, k))
+            }
+          })
+        }
+      }
+
       $(function() {
         $('body').on('change', "[name='project[coin_type]']", function() {
-          switch($('#project_coin_type option:selected').val()) {
+          var coinType = $('#project_coin_type option:selected').val()
+          customBlockchainNetwork(coinType)
+          switch(coinType) {
           case 'erc20':
             $('.contract-info-div').removeClass('hide')
             $(".blockchain-network-lbl").addClass('hide')
