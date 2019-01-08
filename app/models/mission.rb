@@ -1,5 +1,5 @@
 class Mission < ApplicationRecord
-  default_scope { order(created_at: :asc) }
+  default_scope { order(display_order: :asc) }
 
   attachment :logo
   attachment :image
@@ -16,7 +16,7 @@ class Mission < ApplicationRecord
   validate :validate_token_id
 
   def serialize
-    as_json(only: %i[id name token_id subtitle description status]).merge(
+    as_json(only: %i[id name token_id subtitle description status display_order]).merge(
       logo_preview: logo.present? ? Refile.attachment_url(self, :logo, :fill, 150, 100) : nil,
       image_preview: image.present? ? Refile.attachment_url(self, :image, :fill, 100, 100) : nil
     )
@@ -25,8 +25,8 @@ class Mission < ApplicationRecord
   private
 
   def assign_display_order
-    self.display_order = self.id
-    self.save
+    self.display_order = id
+    save
   end
 
   def validate_token_id

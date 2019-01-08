@@ -76,7 +76,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :missions
+  resources :missions do
+    collection do
+      post :rearrange
+    end
+  end
 
   namespace :api, defaults: { format: :json } do
     resources :accounts, only: [:create] do

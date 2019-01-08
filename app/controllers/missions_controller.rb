@@ -2,16 +2,9 @@ class MissionsController < ApplicationController
   layout 'react'
   before_action :find_mission_by_id, only: %i[edit update update_status destroy]
   before_action :set_generic_props, only: %i[new show edit]
+  before_action :set_missions_prop, only: %i[index]
 
   def index
-    @missions = policy_scope(Mission).map do |m|
-      m.serialize.merge(
-        token_name: m.token&.name,
-        token_symbol: m.token&.symbol,
-        projects: m.projects.as_json(only: %i[id title status])
-      )
-    end
-
     render component: 'MissionIndex', props: { csrf_token: form_authenticity_token, missions: @missions }
   end
 
@@ -54,6 +47,28 @@ class MissionsController < ApplicationController
     end
   end
 
+  def rearrange
+    authorize Mission.new
+    # rearrange feature
+    mission_ids = params[:mission_ids]
+    display_orders = params[:display_orders]
+    direction = params[:direction].to_i
+    length = mission_ids.length
+
+    (0..length - 1).each do |index|
+      mission = Mission.find(mission_ids[index])
+      mission.display_order = display_orders[(index + direction + length) % length]
+      if !mission.save
+        errors = mission.errors.as_json
+        errors.each { |key, value| errors[key] = value.to_sentence }
+        render json: { message: mission.errors.full_messages.join(', '), errors: errors }, status: :unprocessable_entity
+      end
+    end
+
+    set_missions_prop
+    render json: { missions: @missions, message: 'Successfully updated.' }, status: :ok
+  end
+
   private
 
   def mission_params
@@ -73,5 +88,15 @@ class MissionsController < ApplicationController
       url_on_success: missions_path,
       csrf_token: form_authenticity_token
     }
+  end
+
+  def set_missions_prop
+    @missions = policy_scope(Mission).map do |m|
+      m.serialize.merge(
+        token_name: m.token&.name,
+        token_symbol: m.token&.symbol,
+        projects: m.projects.as_json(only: %i[id title status])
+      )
+    end
   end
 end

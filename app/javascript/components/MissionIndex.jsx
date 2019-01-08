@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import Layout from './layouts/Layout'
 import SidebarItem from './styleguide/SidebarItem'
 import SidebarItemBold from './styleguide/SidebarItemBold'
@@ -13,16 +14,62 @@ export default class MissionIndex extends React.Component {
     this.handleListClick = this.handleListClick.bind(this)
     this.updateMissionStatus = this.updateMissionStatus.bind(this)
     this.updateProjectStatus = this.updateProjectStatus.bind(this)
+    this.onDragEnd = this.onDragEnd.bind(this)
     this.state = {
-      selectedMissionIndex: null,
-      missions            : props.missions
+      selectedMissionId: null,
+      missions         : props.missions
     }
   }
 
-  handleListClick(index) {
-    console.log(index, this.state.missions)
+  onDragEnd(result) {
+    // dropped outside the list
+    if (!result.destination) {
+      return
+    }
+    // same position
+    if (result.source.index === result.destination.index) {
+      return
+    }
+    // slice array
+    const direction = result.source.index < result.destination.index ? -1 : 1
+    const [startIndex, endIndex] = [Math.min(result.source.index, result.destination.index), Math.max(result.source.index, result.destination.index)]
+    const subarray = this.state.missions.slice(startIndex, endIndex + 1)
+    // need to update db
+
+    fetchPolyfill(`/missions/rearrange`, {
+      credentials: 'same-origin',
+      headers    : {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body  : JSON.stringify({
+        mission_ids         : subarray.map(mission => mission.id),
+        display_orders      : subarray.map(mission => mission.displayOrder),
+        direction           : direction,
+        'authenticity_token': this.props.csrfToken
+      })
+    }).then(response => {
+      if (response.status === 200) {
+        // need to update frontend
+        response.json().then(data => {
+          this.setState({
+            missions: data.missions
+          })
+        })
+      } else {
+        response.json().then(data => {
+          this.setState({
+            errors      : data.errors,
+            errorMessage: data.message
+          })
+        })
+      }
+    })
+  }
+
+  handleListClick(missionId) {
     this.setState({
-      selectedMissionIndex: index
+      selectedMissionId: missionId
     })
   }
 
@@ -42,7 +89,7 @@ export default class MissionIndex extends React.Component {
       })
     }).then(response => {
       if (response.status === 200) {
-        let newMissions = this.state.missions
+        let newMissions = Array.from(this.state.missions)
         newMissions[index].status = status
         this.setState({
           missions: newMissions
@@ -59,7 +106,11 @@ export default class MissionIndex extends React.Component {
   }
 
   updateProjectStatus(index) {
-    const { missions, selectedMissionIndex } = this.state
+    const { missions, selectedMissionId } = this.state
+    if (selectedMissionId === null) {
+      return // if no mission is selected
+    }
+    const selectedMissionIndex = missions.findIndex(mission => mission.id === selectedMissionId) // find index of the selected mission
     const project = missions[selectedMissionIndex].projects[index]
     const status = project.status === 'active' ? 'passive' : 'active'
 
@@ -76,7 +127,7 @@ export default class MissionIndex extends React.Component {
       })
     }).then(response => {
       if (response.status === 200) {
-        let newMissions = missions
+        let newMissions = Array.from(missions)
         newMissions[selectedMissionIndex].projects[index].status = status
         this.setState({
           missions: newMissions
@@ -93,7 +144,10 @@ export default class MissionIndex extends React.Component {
   }
 
   render() {
-    const { selectedMissionIndex, missions } = this.state
+    const { selectedMissionId, missions } = this.state
+    const selectedMission = selectedMissionId !== null
+      ? missions.find(mission => mission.id === selectedMissionId) : null
+
     return (
       <React.Fragment>
         <Layout
@@ -119,37 +173,58 @@ export default class MissionIndex extends React.Component {
                       Please select or rearrange missions you want to display on landing page:
                     </div>
 
-                    {missions.map((t, index) =>
-                      <SidebarItem
-                        className="mission-index--sidebar--item"
-                        key={t.id}
-                        iconRightName="REARRANGE.svg"
-                        text={t.name}
-                        leftChild={
-                          <React.Fragment>
-                            <InputField
-                              type="checkbox"
-                              className="mission-index--sidebar--item-check"
-                              checked={t.status === 'active'}
-                              eventHandler={() => this.updateMissionStatus(index)}
-                            />
-                          </React.Fragment>
-                        }
-                        selected={selectedMissionIndex === index}
-                        onClick={(_) => this.handleListClick(index)}
-                      />
-                    )}
+                    <DragDropContext onDragEnd={this.onDragEnd}>
+                      <Droppable droppableId="droppable">
+                        {(provided, _) => (
+                          <div
+                            ref={provided.innerRef}
+                          >
+                            {missions.map((mission, index) => (
+                              <Draggable key={mission.id} draggableId={mission.id} index={index}>
+                                {(provided, _) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                  >
+                                    <SidebarItem
+                                      className="mission-index--sidebar--item"
+                                      key={mission.id}
+                                      iconRightName="REARRANGE.svg"
+                                      text={mission.name}
+                                      leftChild={
+                                        <React.Fragment>
+                                          <InputField
+                                            type="checkbox"
+                                            className="mission-index--sidebar--item-check"
+                                            checked={mission.status === 'active'}
+                                            eventHandler={() => this.updateMissionStatus(index)}
+                                          />
+                                        </React.Fragment>
+                                      }
+                                      selected={selectedMissionId === mission.id}
+                                      onClick={(_) => this.handleListClick(mission.id)}
+                                    />
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
                   </React.Fragment>
                 }
               </div>
             </React.Fragment>
           }
         >
-          {selectedMissionIndex !== null &&
+          {selectedMission !== null &&
             <div className="mission-index--view">
               <div className="mission-index--view--logo">
                 <img
-                  src={missions[selectedMissionIndex].imagePreview}
+                  src={selectedMission.imagePreview}
                 />
               </div>
 
@@ -159,7 +234,7 @@ export default class MissionIndex extends React.Component {
                     name
                   </div>
                   <div className="mission-index--view--info--item--value">
-                    {missions[selectedMissionIndex].name}
+                    {selectedMission.name}
                   </div>
                 </div>
 
@@ -168,8 +243,8 @@ export default class MissionIndex extends React.Component {
                     token
                   </div>
                   <div className="mission-index--view--info--item--value">
-                    {missions[selectedMissionIndex].tokenName}
-                    {missions[selectedMissionIndex].tokenSymbol && ` (${missions[selectedMissionIndex].tokenSymbol})`}
+                    {selectedMission.tokenName}
+                    {selectedMission.tokenSymbol && ` (${selectedMission.tokenSymbol})`}
                   </div>
                 </div>
 
@@ -178,7 +253,7 @@ export default class MissionIndex extends React.Component {
                     subtitle
                   </div>
                   <div className="mission-index--view--info--item--value">
-                    {missions[selectedMissionIndex].subtitle}
+                    {selectedMission.subtitle}
                   </div>
                 </div>
 
@@ -187,7 +262,7 @@ export default class MissionIndex extends React.Component {
                     description
                   </div>
                   <div className="mission-index--view--info--item--value">
-                    {missions[selectedMissionIndex].description}
+                    {selectedMission.description}
                   </div>
                 </div>
               </div>
@@ -195,7 +270,7 @@ export default class MissionIndex extends React.Component {
               <div className="mission-index--view--link">
                 <span>Please select projects you want to display within selected mission:</span>
                 <a
-                  href={`/missions/${missions[selectedMissionIndex].id}/edit`}
+                  href={`/missions/${selectedMission.id}/edit`}
                 >
                   edit mission
                 </a>
@@ -203,9 +278,9 @@ export default class MissionIndex extends React.Component {
             </div>
           }
 
-          {selectedMissionIndex !== null && missions[selectedMissionIndex].projects.length > 0 &&
+          {selectedMission !== null && selectedMission.projects.length > 0 &&
             <div className="mission-index--projects">
-              {missions[selectedMissionIndex].projects.map((p, index) =>
+              {selectedMission.projects.map((p, index) =>
                 <div key={p.id} className="mission-index--project-single">
                   <div className="mission-index--project-single--left">
                     <InputField

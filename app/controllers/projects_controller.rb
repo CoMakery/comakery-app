@@ -113,7 +113,7 @@ class ProjectsController < ApplicationController
     if @project.update(status: params[:status])
       render json: { message: 'Successfully updated.' }, status: :ok
     else
-      errors = @mission.errors.as_json
+      errors = @project.errors.as_json
       errors.each { |key, value| errors[key] = value.to_sentence }
       render json: { message: @project.errors.full_messages.join(', '), errors: errors }, status: :unprocessable_entity
     end

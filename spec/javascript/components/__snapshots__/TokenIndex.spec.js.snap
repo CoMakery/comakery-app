@@ -5,6 +5,7 @@ exports[`TokenIndex renders correctly without props 1`] = `
   tokens={Array []}
 >
   <Layout
+    category=""
     className="token-index"
     hasBackButton={false}
     sidebar={

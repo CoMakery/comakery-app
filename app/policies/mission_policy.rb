@@ -32,4 +32,5 @@ class MissionPolicy < ApplicationPolicy
   alias edit? new?
   alias update? new?
   alias destroy? new?
+  alias rearrange? new?
 end
