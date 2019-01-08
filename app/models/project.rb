@@ -4,8 +4,6 @@ class Project < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include EthereumAddressable
   include QtumContractAddressable
 
-  default_scope { order(created_at: :asc) }
-
   nilify_blanks
   attachment :image
 
