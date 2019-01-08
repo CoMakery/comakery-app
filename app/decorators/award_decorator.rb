@@ -55,6 +55,8 @@ class AwardDecorator < Draper::Decorator
       account&.qtum_wallet
     elsif object.project.coin_type_on_cardano?
       account&.cardano_wallet
+    elsif object.project.coin_type_on_bitcoin?
+      account&.bitcoin_wallet
     end
   end
 

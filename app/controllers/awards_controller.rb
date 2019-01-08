@@ -146,16 +146,16 @@ class AwardsController < ApplicationController
     if project.coin_type_on_ethereum?
       @network = project.ethereum_network.presence || 'main'
       @wallet_logo = 'metamask2.png'
-      @recipient_address = account&.ethereum_wallet
+      # @recipient_address = account&.ethereum_wallet
     elsif project.coin_type_on_qtum?
       @network = project.blockchain_network
       @wallet_logo = 'qrypto.png'
-      @recipient_address = account&.qtum_wallet
-    elsif project.coin_type_on_cardano?
+    else
       @network = project.blockchain_network
       @wallet_logo = 'trezor.png'
-      @recipient_address = account&.cardano_wallet
     end
+    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    @recipient_address = account&.send("#{blockchain_name}_wallet")
     @unit   = project.token_symbol
     @unit ||= Project.coin_types[project.coin_type]
   end

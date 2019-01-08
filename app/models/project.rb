@@ -1,5 +1,12 @@
 class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
+  BLOCKCHAIN_NAMES = {
+    erc20: 'ethereum',
+    eth: 'ethereum',
+    qrc20: 'qtum',
+    ada: 'cardano',
+    btc: 'bitcoin'
+  }.freeze
 
   include EthereumAddressable
   include QtumContractAddressable
