@@ -110,12 +110,12 @@ class ProjectsController < ApplicationController
   def update_status
     @project = Project.find(params[:project_id])
     authorize @project
-    if @project.update(status: params[:status])
+
+    begin
+      @project.update(status: params[:status])
       render json: { message: 'Successfully updated.' }, status: :ok
-    else
-      errors = @project.errors.as_json
-      errors.each { |key, value| errors[key] = value.to_sentence }
-      render json: { message: @project.errors.full_messages.join(', '), errors: errors }, status: :unprocessable_entity
+    rescue ArgumentError
+      render json: { message: 'Invalid Status' }, status: :unprocessable_entity
     end
   end
 

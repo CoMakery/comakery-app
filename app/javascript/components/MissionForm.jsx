@@ -19,6 +19,8 @@ export default class MissionForm extends React.Component {
     this.errorRemove = this.errorRemove.bind(this)
     this.disable = this.disable.bind(this)
     this.enable = this.enable.bind(this)
+    this.handleChangeFormData = this.handleChangeFormData.bind(this)
+    this.handleSaveMission = this.handleSaveMission.bind(this)
 
     let token = props.mission.tokenId
     if (props.tokens.length > 0) {
@@ -53,7 +55,7 @@ export default class MissionForm extends React.Component {
     this.mounted = false
   }
 
-  handleChangeFormData = e => {
+  handleChangeFormData(e) {
     const target = e.target
     let value
     switch (target.type) {
@@ -77,9 +79,9 @@ export default class MissionForm extends React.Component {
     } else {
       this.errorRemove(e.target.name)
     }
-  };
+  }
 
-  handleSaveMission = e => {
+  handleSaveMission(e) {
     e.preventDefault()
 
     this.disable(['submit', 'submit_and_close'])
@@ -182,8 +184,8 @@ export default class MissionForm extends React.Component {
 
     return <React.Fragment>
       <Layout
-        className="styleguide-index"
-        title={!this.state.formAction === 'POST' ? 'Create a New Mission' : 'Edit Mission'}
+        className="mission-form"
+        title={this.state.formAction === 'POST' ? 'Create a New Mission' : 'Edit Mission'}
         hasBackButton
         subfooter={
           <React.Fragment>

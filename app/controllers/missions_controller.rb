@@ -58,11 +58,7 @@ class MissionsController < ApplicationController
     (0..length - 1).each do |index|
       mission = Mission.find(mission_ids[index])
       mission.display_order = display_orders[(index + direction + length) % length]
-      if !mission.save
-        errors = mission.errors.as_json
-        errors.each { |key, value| errors[key] = value.to_sentence }
-        render json: { message: mission.errors.full_messages.join(', '), errors: errors }, status: :unprocessable_entity
-      end
+      mission.save
     end
 
     set_missions_prop
