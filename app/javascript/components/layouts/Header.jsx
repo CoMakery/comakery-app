@@ -58,7 +58,7 @@ class Header extends React.Component {
                   My Projects
                 </a>
 
-                <a href="/">
+                <a href="/" style={{'display': 'none'}}>
                   My Tasks
                 </a>
 
