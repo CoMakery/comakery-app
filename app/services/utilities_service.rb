@@ -12,13 +12,13 @@ class UtilitiesService
   def self.get_wallet_url(network, wallet)
     case network
     when 'bitcoin_mainnet'
-      "https://insight.bitpay.com/address/#{wallet}"
+      "https://live.blockcypher.com/btc/address/#{wallet}"
     when 'bitcoin_testnet'
-      "https://test-insight.bitpay.com/address/#{wallet}"
+      "https://live.blockcypher.com/btc-testnet/address/#{wallet}"
     when 'cardano_mainnet'
       "https://cardanoexplorer.com/address/#{wallet}"
     when 'cardano_testnet'
-      "http://cardano-explorer.cardano-testnet.iohkdev.io/address/#{wallet}"
+      "https://cardano-explorer.cardano-testnet.iohkdev.io/address/#{wallet}"
     when 'qtum_mainnet'
       "https://explorer.qtum.org/address/#{wallet}"
     when 'qtum_testnet'
@@ -31,9 +31,9 @@ class UtilitiesService
   def self.get_transaction_url(network, tx)
     case network
     when 'bitcoin_mainnet'
-      "https://insight.bitpay.com/tx/#{tx}"
+      "https://live.blockcypher.com/btc/tx/#{tx}"
     when 'bitcoin_testnet'
-      "https://test-insight.bitpay.com/tx/#{tx}"
+      "https://live.blockcypher.com/btc-testnet/tx/#{tx}"
     when 'cardano_mainnet'
       "https://cardanoexplorer.com/tx/#{tx}"
     when 'qtum_mainnet'

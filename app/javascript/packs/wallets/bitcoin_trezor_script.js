@@ -1,0 +1,119 @@
+/* eslint-disable no-alert, no-undef, complexity, standard/object-curly-even-spacing, default-case */
+
+window.bitcoinTrezor = (function() {
+  const BigNumber = require('bignumber.js')
+  const insight = require('networks/bitcoin/nodes/insight').default
+  const utils = require('networks/bitcoin/helpers/utils')
+  const caValidator = require('crypto-address-validator')
+
+  transferBtcCoins = async function(award) { // award in JSON
+    const network = award.project.blockchain_network.replace('bitcoin_', '')
+    const recipientAddress = award.account.bitcoin_wallet
+    let amount = parseFloat(award.total_amount)
+    if (!recipientAddress || recipientAddress === '' || amount <= 0 || !(network === 'mainnet' || network === 'testnet')) {
+      return
+    }
+    const networkType = network === 'mainnet' ? 'prod' : 'testnet'
+    const addressValid = caValidator.validate(recipientAddress, 'BTC', networkType)
+    try {
+      if (addressValid) {
+        alertMsg($('#metamaskModal1'), 'Waiting...')
+        const txHash = await submitTransaction(network, recipientAddress, amount)
+        console.log('transaction address: ' + txHash)
+        if (txHash) {
+          $.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash })
+        }
+        $('#metamaskModal1').foundation('close')
+      }
+    } catch (err) {
+      console.log(err)
+      alertMsg($('#metamaskModal1'), err.message)
+      if ($('body.projects-show').length > 0) {
+        $('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
+      }
+      return
+    }
+  }
+
+  // amount in BTC
+  // network: 'mainnet' or 'testnet'
+  const submitTransaction = async function(network, to, amount) {
+    const coinType = network === 'mainnet' ? 2147483648 : 2147483649
+    const addressN = [2147483697, coinType, 2147483648, 0, 0]
+    const coinName = network === 'mainnet' ? 'Bitcoin' : 'Testnet'
+    const fee = await utils.getFee()
+    console.log(`fee : ${fee}`)
+
+    const fromAddress = await getFirstBitcoinAddress(network, false)
+    const account = await insight.getInfo(fromAddress, network)
+    console.log(account)
+    if (amount + fee >= account.balance) {
+      throw Error("You don't have sufficient Tokens to send")
+    }
+    const utxoList = await insight.getUtxoList(fromAddress, network)
+    const amountSat = new BigNumber(amount).times(1e8)
+    const feeSat = new BigNumber(fee).times(1e8)
+    const selectUtxo = utils.selectTxs(utxoList, amount, fee)
+    console.log('selectUtxo .........')
+    console.log(selectUtxo)
+    let inputs = []
+    let totalSelectSat = new BigNumber(0)
+    for (let i = 0; i < selectUtxo.length; i++) {
+      const item = selectUtxo[i]
+      console.log('item ............. ' + i)
+      totalSelectSat = totalSelectSat.plus(item.satoshis)
+      inputs.push({
+        address_n  : addressN,
+        prev_index : item.pos,
+        prev_hash  : item.hash,
+        amount     : `${item.satoshis}`,
+        script_type: 'SPENDP2SHWITNESS'
+      })
+    }
+    const changeSat = totalSelectSat.minus(amountSat).minus(feeSat)
+    const outputs = [
+      {
+        address_n  : addressN,
+        amount     : changeSat.toString(),
+        script_type: 'PAYTOP2SHWITNESS'
+      }, {
+        address    : to,
+        amount     : amountSat.toString(),
+        script_type: 'PAYTOADDRESS'
+      }
+    ]
+    console.log('inputs ...........')
+    console.log(inputs)
+    console.log(outputs)
+    const rs = await TrezorConnect.signTransaction({inputs: inputs, outputs: outputs, coin: coinName, push: true})
+    console.log(rs)
+    if (rs.success) {
+      return rs.payload.txid
+    }
+  }
+
+  // network: 'mainnet' or 'testnet'
+  getFirstBitcoinAddress = async function(network, isLegacy) {
+    const purpose = isLegacy ? 44 : 49
+    let path, coinName
+    switch (network) {
+      case 'testnet':
+        path = `m/${purpose}'/1'/0'/0/0`
+        coinName = 'test'
+        break
+      case 'mainnet':
+        path = `m/${purpose}'/0'/0'/0/0`
+        coinName = 'btc'
+        break
+    }
+    const rs = await TrezorConnect.getAddress({
+      path: path,
+      coin: coinName
+    })
+    return rs.payload.address
+  }
+
+  return {
+    transferBtcCoins
+  }
+})()
