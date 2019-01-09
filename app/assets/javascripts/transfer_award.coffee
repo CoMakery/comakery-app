@@ -8,6 +8,9 @@ window.transferAwardOnQtum = (award) -> # award in JSON
 transferAwardOnCardano = (award) -> # award in JSON
   transferAdaCoins award
 
+transferAwardOnBitcoin = (award) -> # award in JSON
+  console.log award
+
 window.transferAward = (award) -> # award in JSON
   if award.project.coin_type == 'erc20' || award.project.coin_type == 'eth'
     transferAwardOnEthereum award
@@ -15,6 +18,8 @@ window.transferAward = (award) -> # award in JSON
     transferAwardOnQtum award
   else if award.project.coin_type == 'ada'
     transferAwardOnCardano award
+  else if award.project.coin_type == 'btc'
+    transferAwardOnBitcoin award
 
 $ ->
   $(document).on 'click', '.transfer-tokens-btn', ->
