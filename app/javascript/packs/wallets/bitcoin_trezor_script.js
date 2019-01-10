@@ -27,7 +27,11 @@ window.bitcoinTrezor = (function() {
       }
     } catch (err) {
       console.log(err)
-      alertMsg($('#metamaskModal1'), err.message)
+      if (err.name === 'ErrorMessage') {
+        alertMsg($('#metamaskModal1'), err.message)
+      } else {
+        $('#metamaskModal1').foundation('close')
+      }
       if ($('body.projects-show').length > 0) {
         $('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
       }
@@ -48,7 +52,9 @@ window.bitcoinTrezor = (function() {
     const account = await insight.getInfo(fromAddress, network)
     console.log(account)
     if (amount + fee >= account.balance) {
-      throw Error("You don't have sufficient Tokens to send")
+      const e = new Error("You don't have sufficient Tokens to send")
+      e.name = 'ErrorMessage'
+      throw e
     }
     const utxoList = await insight.getUtxoList(fromAddress, network)
     const amountSat = new BigNumber(amount).times(1e8)
@@ -82,8 +88,9 @@ window.bitcoinTrezor = (function() {
         script_type: 'PAYTOADDRESS'
       }
     ]
-    console.log('inputs ...........')
+    console.log('inputs :')
     console.log(inputs)
+    console.log('outputs :')
     console.log(outputs)
     const rs = await TrezorConnect.signTransaction({inputs: inputs, outputs: outputs, coin: coinName, push: true})
     console.log(rs)
