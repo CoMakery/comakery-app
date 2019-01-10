@@ -329,7 +329,7 @@ describe Project do
         award.update ethereum_transaction_address: '0x' + 'a' * 64
         project.reload
         project.ethereum_contract_address = '0x' + 'b' * 40
-        stub_token_symbol
+
         expect(project).not_to be_valid
         expect(project.errors.full_messages.to_sentence).to match \
           /cannot be changed if has completed transactions/
@@ -469,7 +469,6 @@ describe Project do
     it 'is false if an existing project with an account is transitioned from ethereum_enabled = false to true' do
       stub_token_symbol
       project = create(:project, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' * 40)
-      stub_token_symbol
       project.update!(ethereum_enabled: true)
       expect(project.transitioned_to_ethereum_enabled?).to eq(false)
     end

@@ -288,7 +288,7 @@ describe AwardsController do
 
       it 'add award to account' do
         account = receiver.account
-        account.update ethereum_wallet: '0x' + 'a' * 40, bitcoin_wallet: 'msb86hf1ssyYkAJ8xqKUjmBEkbW3cWcdps'
+        account.update ethereum_wallet: '0x' + 'a' * 40, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
         login receiver.account
         get :confirm, params: { token: 61234 }
         expect(response).to redirect_to(project_path(award2.project))

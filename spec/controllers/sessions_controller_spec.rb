@@ -203,7 +203,7 @@ describe SessionsController do
       end
 
       it 'notice new award' do
-        account.update new_award_notice: true, bitcoin_wallet: 'msb86hf1ssyYkAJ8xqKUjmBEkbW3cWcdps'
+        account.update new_award_notice: true, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Bitcoin address is')).to eq true
