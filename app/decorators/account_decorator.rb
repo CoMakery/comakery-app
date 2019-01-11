@@ -36,7 +36,7 @@ class AccountDecorator < Draper::Decorator
   end
 
   def can_send_awards?(project)
-    project&.account == self && (project&.ethereum_contract_address? || project.coin_type_eth? || project&.contract_address? || project.coin_type_ada?)
+    project&.account == self && (project&.ethereum_contract_address? || project.coin_type_eth? || project&.contract_address? || project.coin_type_ada? || project.coin_type_qtum?)
   end
 
   def total_awards_earned_pretty(project)
