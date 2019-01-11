@@ -11,6 +11,7 @@ class Layout extends React.Component {
   render() {
     const {
       className,
+      category,
       title,
       hasBackButton,
       subfooter,
@@ -35,6 +36,7 @@ class Layout extends React.Component {
 
           <div className="layout--content">
             <div className="layout--content--title">
+              {category && <span>{category}</span>}
               {title}
             </div>
 
@@ -68,6 +70,7 @@ class Layout extends React.Component {
 
 Layout.propTypes = {
   className    : PropTypes.string,
+  category     : PropTypes.string,
   title        : PropTypes.string,
   hasBackButton: PropTypes.bool,
   subfooter    : PropTypes.object,
@@ -75,6 +78,7 @@ Layout.propTypes = {
 }
 Layout.defaultProps = {
   className    : '',
+  category     : '',
   title        : 'title',
   hasBackButton: false,
   subfooter    : null,

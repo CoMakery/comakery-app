@@ -18,6 +18,10 @@ class Message extends React.Component {
     })
   }
 
+  componentWillReceiveProps() {
+    this.setState({ hidden: false })
+  }
+
   render() {
     const {className, severity, text, ...other} = this.props
 

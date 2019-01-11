@@ -42,6 +42,15 @@ module Views
                       disabled: project.license_finalized? || project.revenues.any?)
                   end
                 end
+
+                with_errors(project, :mission_id) do
+                  label do
+                    text 'Mission Select'
+                    question_tooltip 'Select a mission associated with a project.'
+                    f.select(:mission_id,
+                      Mission.all.collect { |mission| [mission.name, mission.id] }, selected: project.mission_id, include_blank: 'Please select a mission ... ')
+                  end
+                end
               end
 
               column('large-6 small-12') do

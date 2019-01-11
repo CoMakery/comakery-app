@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     resources :payments, only: [:index, :create, :update]
     collection do
       get :landing
+      patch :update_status
     end
   end
 
@@ -72,6 +73,12 @@ Rails.application.routes.draw do
   resources :channels, only: [] do
     member do
       get :users
+    end
+  end
+
+  resources :missions do
+    collection do
+      post :rearrange
     end
   end
 
