@@ -24,6 +24,8 @@ AllCops:
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/views/**/*'
+    - 'app/decorators/account_decorator.rb'
+    - 'app/controllers/awards_controller.rb'
   Max: 5
 
 Layout/AlignParameters:

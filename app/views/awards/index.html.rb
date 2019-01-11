@@ -32,6 +32,7 @@ class Views::Awards::Index < Views::Base
     javascript_include_tag 'https://connect.trezor.io/6/trezor-connect.js' if project.coin_type_on_cardano?
     javascript_include_tag Webpacker.manifest.lookup!('qtum_script.js') if project.coin_type_on_qtum?
     javascript_include_tag Webpacker.manifest.lookup!('cardano_script.js') if project.coin_type_on_cardano?
+    javascript_include_tag Webpacker.manifest.lookup!('wallets/qtum_ledger_script.js') if project.coin_type_qtum?
   end
 
   def pages

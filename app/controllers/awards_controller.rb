@@ -149,7 +149,7 @@ class AwardsController < ApplicationController
       @recipient_address = account&.ethereum_wallet
     elsif project.coin_type_on_qtum?
       @network = project.blockchain_network
-      @wallet_logo = project.coin_type_qrc20? ? 'qrypto.png' : 'trezor.png'
+      @wallet_logo = project.coin_type_qrc20? ? 'qrypto.png' : 'ledger.png'
       @recipient_address = account&.qtum_wallet
     elsif project.coin_type_on_cardano?
       @network = project.blockchain_network

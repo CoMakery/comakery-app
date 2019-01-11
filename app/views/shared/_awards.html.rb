@@ -102,12 +102,4 @@ class Views::Shared::Awards < Views::Base
       show_recipient ? text('Emailed') : link_to('confirm', confirm_award_path(award.confirm_token))
     end
   end
-
-  def wallet_logo
-    if project.coin_type_on_ethereum?
-      'metamask2.png'
-    elsif project.coin_type_on_qtum?
-      project.coin_type_qtum? ? 'trezor.png' : 'qrypto.png'
-    end
-  end
 end
