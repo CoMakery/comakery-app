@@ -1,34 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TokenIndex renders correctly without props 1`] = `
-<TokenIndex
-  tokens={Array []}
+exports[`MissionIndex renders correctly without props 1`] = `
+<MissionIndex
+  csrfToken="00"
+  missions={Array []}
 >
   <Layout
-    category=""
-    className="token-index"
+    category="Missions > "
+    className="mission-index"
     hasBackButton={false}
     sidebar={
       <React.Fragment>
         <div
-          className="token-index--sidebar"
+          className="mission-index--sidebar"
         >
           <SidebarItemBold
-            className="token-index--sidebar--item__bold"
+            className="mission-index--sidebar--item__bold"
             iconLeftName="MARK-WHITE.svg"
             iconRightName="PLUS.svg"
             onClick={[Function]}
-            text="Create a Token"
+            text="Create a Mission"
           />
           <hr />
         </div>
       </React.Fragment>
     }
     subfooter={null}
-    title="Tokens"
+    title="Configure mission’s landing page"
   >
     <div
-      className="layout token-index"
+      className="layout mission-index"
     >
       <div
         className="layout--content"
@@ -36,7 +37,10 @@ exports[`TokenIndex renders correctly without props 1`] = `
         <div
           className="layout--content--title"
         >
-          Tokens
+          <span>
+            Missions &gt; 
+          </span>
+          Configure mission’s landing page
         </div>
         <hr
           className="layout--content--hr"
@@ -48,30 +52,30 @@ exports[`TokenIndex renders correctly without props 1`] = `
             className="layout--content--sidebar"
           >
             <div
-              className="token-index--sidebar"
+              className="mission-index--sidebar"
             >
               <SidebarItemBold
-                className="token-index--sidebar--item__bold"
+                className="mission-index--sidebar--item__bold"
                 iconLeftName="MARK-WHITE.svg"
                 iconRightName="PLUS.svg"
                 onClick={[Function]}
-                text="Create a Token"
+                text="Create a Mission"
               >
                 <SidebarItem
-                  className="sidebar-item__bold token-index--sidebar--item__bold"
+                  className="sidebar-item__bold mission-index--sidebar--item__bold"
                   iconLeftName="MARK-WHITE.svg"
                   iconLeftUrl=""
                   iconRightName="PLUS.svg"
                   onClick={[Function]}
                   selected={false}
-                  text="Create a Token"
+                  text="Create a Mission"
                 >
                   <div
                     className="sidebar-item--wrapper"
                     onClick={[Function]}
                   >
                     <div
-                      className="sidebar-item sidebar-item__bold token-index--sidebar--item__bold"
+                      className="sidebar-item sidebar-item__bold mission-index--sidebar--item__bold"
                     >
                       <span
                         className="sidebar-item--icon-left"
@@ -89,7 +93,7 @@ exports[`TokenIndex renders correctly without props 1`] = `
                       <span
                         className="sidebar-item--text"
                       >
-                        Create a Token
+                        Create a Mission
                       </span>
                       <span
                         className="sidebar-item--icon-right"
@@ -118,5 +122,5 @@ exports[`TokenIndex renders correctly without props 1`] = `
       </div>
     </div>
   </Layout>
-</TokenIndex>
+</MissionIndex>
 `;

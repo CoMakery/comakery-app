@@ -24,6 +24,7 @@
     "qweb3": "^1.2.2",
     "rails-ujs": "^5.2.2",
     "react": "^16.6.0",
+    "react-beautiful-dnd": "^10.0.3",
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
     "react_ujs": "^2.4.4",

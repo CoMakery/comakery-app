@@ -146,6 +146,26 @@ ActiveRecord::Schema.define(version: 20190108094717) do
     t.index ["account_id"], name: "index_interests_on_account_id"
   end
 
+  create_table "missions", force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "subtitle", limit: 140
+    t.text "description"
+    t.string "logo_id"
+    t.string "logo_filename"
+    t.string "logo_content_size"
+    t.string "logo_content_type"
+    t.string "image_id"
+    t.string "image_filename"
+    t.string "image_content_size"
+    t.string "image_content_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "token_id"
+    t.integer "status", default: 0
+    t.integer "display_order"
+    t.index ["token_id"], name: "index_missions_on_token_id"
+  end
+
   create_table "payments", id: :serial, force: :cascade do |t|
     t.integer "project_id"
     t.integer "issuer_id"
@@ -201,7 +221,10 @@ ActiveRecord::Schema.define(version: 20190108094717) do
     t.string "coin_type"
     t.string "blockchain_network"
     t.string "contract_address"
+    t.bigint "mission_id"
+    t.integer "status", default: 0
     t.index ["account_id"], name: "index_projects_on_account_id"
+    t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
     t.index ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public"
   end

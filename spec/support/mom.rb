@@ -1,3 +1,5 @@
+require 'refile/file_double'
+
 class Mom
   def account(**attrs)
     defaults = {
@@ -152,6 +154,17 @@ class Mom
                 currency: currency,
                 project: project,
                 recorded_by: project.account
+  end
+
+  def mission(**attrs)
+    defaults = {
+      name: 'test1',
+      subtitle: 'test1',
+      description: 'test1',
+      image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      logo: Refile::FileDouble.new('dummy_logo', 'logo.png', content_type: 'image/png')
+    }
+    Mission.new(defaults.merge(attrs))
   end
 end
 

@@ -10,6 +10,8 @@
 // Support ES6 syntax
 import 'babel-polyfill'
 
+import '../src/application.js'
+
 import '../src/application.css'
 
 import Rails from 'rails-ujs'

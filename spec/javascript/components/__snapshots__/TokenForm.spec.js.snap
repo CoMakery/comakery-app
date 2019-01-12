@@ -28,6 +28,7 @@ exports[`TokenForm renders correctly without props 1`] = `
   urlOnSuccess="/"
 >
   <Layout
+    category=""
     className="token-form"
     hasBackButton={true}
     sidebar={null}
