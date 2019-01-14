@@ -8,6 +8,7 @@ class SidebarItem extends React.Component {
     const {
       className,
       iconLeftUrl,
+      leftChild,
       iconLeftName,
       iconRightName,
       text,
@@ -36,6 +37,8 @@ class SidebarItem extends React.Component {
               </span>
             }
 
+            { leftChild }
+
             <span className="sidebar-item--text">
               {text}
             </span>
@@ -58,7 +61,8 @@ SidebarItem.propTypes = {
   iconLeftName : PropTypes.string,
   iconRightName: PropTypes.string,
   text         : PropTypes.string,
-  selected     : PropTypes.bool
+  selected     : PropTypes.bool,
+  leftChild    : PropTypes.node
 }
 SidebarItem.defaultProps = {
   className    : '',

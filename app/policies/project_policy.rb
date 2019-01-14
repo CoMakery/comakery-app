@@ -57,5 +57,9 @@ class ProjectPolicy < ApplicationPolicy
     project&.can_be_access?(account)
   end
 
+  def update_status?
+    account.comakery_admin?
+  end
+
   alias send_community_award? team_member?
 end

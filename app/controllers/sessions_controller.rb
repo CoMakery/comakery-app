@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
   skip_before_action :require_email_confirmation, only: %i[destroy]
   skip_after_action :verify_authorized, :verify_policy_scoped
 
-  before_action :redirect_if_signed_in, only: %i[create sign_in]
+  before_action :redirect_if_signed_in, only: %i[create sign_in new]
 
   def oauth_failure
     flash[:error] = "Sorry, logging in failed... please try again, or email us at #{I18n.t('tech_support_email')}"

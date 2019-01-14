@@ -1,4 +1,4 @@
-class Project < ApplicationRecord
+class Project < ApplicationRecord # rubocop:disable Metrics/ClassLength
   ROYALTY_PERCENTAGE_PRECISION = 13
 
   include EthereumAddressable
@@ -8,6 +8,7 @@ class Project < ApplicationRecord
   attachment :image
 
   belongs_to :account
+  belongs_to :mission
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards
@@ -66,6 +67,7 @@ class Project < ApplicationRecord
     qtum_mainnet: 'Main QTUM Network',
     qtum_testnet: 'Test QTUM Network'
   }
+  enum status: %i[active passive]
 
   validates :description, :account, :title, :legal_project_owner, :denomination, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
