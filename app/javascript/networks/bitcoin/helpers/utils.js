@@ -26,7 +26,7 @@ function getFee() {
   return axios.get('https://bitcoinfees.earn.com/api/v1/fees/recommended').then((response) => {
     return (response.data.fastestFee * averageBytes) / 1e8
   }).catch(() => {
-    return 0
+    return 0.0001
   });
 }
 
