@@ -227,7 +227,7 @@ InputField.propTypes = {
   imgPreviewDimensions: PropTypes.string,
   imgRequirements     : PropTypes.string,
   imgVerifier         : PropTypes.func,
-  imgInputRef         : PropTypes.shape({ current: PropTypes.instanceOf(Element) })
+  imgInputRef         : PropTypes.any
 }
 InputField.defaultProps = {
   className           : '',
@@ -249,6 +249,7 @@ InputField.defaultProps = {
   imgPreviewUrl       : '',
   imgPreviewDimensions: '40x40',
   imgRequirements     : '',
-  imgVerifier         : () => {}
+  imgVerifier         : () => {},
+  imgInputRef         : null
 }
 export default InputField

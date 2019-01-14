@@ -83,7 +83,7 @@ class TokenIndex extends React.Component {
                     payment type
                   </div>
                   <div className="token-index--view--info--item--value">
-                    {this.state.selectedToken.coinType.toUpperCase()}
+                    {this.state.selectedToken.coinType ? this.state.selectedToken.coinType.toUpperCase() : null}
                   </div>
                 </div>
 
