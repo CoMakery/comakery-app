@@ -4,6 +4,7 @@ window.bitcoinTrezor = (function() {
   const BigNumber = require('bignumber.js')
   const insight = require('networks/bitcoin/nodes/insight').default
   const utils = require('networks/bitcoin/helpers/utils')
+  const debugLog = require('src/javascripts/debugLog')
   const caValidator = require('crypto-address-validator')
 
   transferBtcCoins = async function(award) { // award in JSON
@@ -19,7 +20,7 @@ window.bitcoinTrezor = (function() {
       if (addressValid) {
         alertMsg($('#metamaskModal1'), 'Waiting...')
         const txHash = await submitTransaction(network, recipientAddress, amount)
-        console.log('transaction address: ' + txHash)
+        debugLog('transaction address: ' + txHash)
         if (txHash) {
           $.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash })
         }
@@ -46,11 +47,11 @@ window.bitcoinTrezor = (function() {
     const addressN = [2147483697, coinType, 2147483648, 0, 0]
     const coinName = network === 'mainnet' ? 'Bitcoin' : 'Testnet'
     const fee = await utils.getFee()
-    console.log(`fee : ${fee}`)
+    debugLog(`fee : ${fee}`)
 
     const fromAddress = await getFirstBitcoinAddress(network, false)
     const account = await insight.getInfo(fromAddress, network)
-    console.log(account)
+    debugLog(account)
     if (amount + fee >= account.balance) {
       const e = new Error("You don't have sufficient Tokens to send")
       e.name = 'ErrorMessage'
@@ -60,13 +61,13 @@ window.bitcoinTrezor = (function() {
     const amountSat = new BigNumber(amount).times(1e8)
     const feeSat = new BigNumber(fee).times(1e8)
     const selectUtxo = utils.selectTxs(utxoList, amount, fee)
-    console.log('selectUtxo .........')
-    console.log(selectUtxo)
+    debugLog('selectUtxo .........')
+    debugLog(selectUtxo)
     let inputs = []
     let totalSelectSat = new BigNumber(0)
     for (let i = 0; i < selectUtxo.length; i++) {
       const item = selectUtxo[i]
-      console.log('item ............. ' + i)
+      debugLog('item ............. ' + i)
       totalSelectSat = totalSelectSat.plus(item.satoshis)
       inputs.push({
         address_n  : addressN,
@@ -88,12 +89,12 @@ window.bitcoinTrezor = (function() {
         script_type: 'PAYTOADDRESS'
       }
     ]
-    console.log('inputs :')
-    console.log(inputs)
-    console.log('outputs :')
-    console.log(outputs)
+    debugLog('inputs :')
+    debugLog(inputs)
+    debugLog('outputs :')
+    debugLog(outputs)
     const rs = await TrezorConnect.signTransaction({inputs: inputs, outputs: outputs, coin: coinName, push: true})
-    console.log(rs)
+    debugLog(rs)
     if (rs.success) {
       return rs.payload.txid
     }
