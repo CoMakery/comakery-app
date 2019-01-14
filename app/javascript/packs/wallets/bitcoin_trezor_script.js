@@ -53,7 +53,9 @@ window.bitcoinTrezor = (function() {
     const account = await insight.getInfo(fromAddress, network)
     debugLog(account)
     if (amount + fee >= account.balance) {
-      const e = new Error("You don't have sufficient Tokens to send")
+      const sub = network === 'mainnet' ? 'btc' : 'btc-testnet'
+      const link = `https://live.blockcypher.com/${sub}/address/${fromAddress}`
+      const e = new Error(`Account <a href='${link}' target='_blank'>${fromAddress}</a> <br> You don't have sufficient Tokens to send`)
       e.name = 'ErrorMessage'
       throw e
     }

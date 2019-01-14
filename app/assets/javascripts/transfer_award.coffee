@@ -1,5 +1,5 @@
 window.alertMsg = (modal, msg) ->
-  modal.find('.alert-msg').text(msg)
+  modal.find('.alert-msg').html(msg)
   modal.foundation('open')
 
 window.transferAwardOnQtum = (award) -> # award in JSON
