@@ -80,7 +80,7 @@ a.header--nav--links--current {
 }
 
 .layout {
-  background-color: #f6f6f6;
+  background-color: white;
 }
 
 .layout--back-button {
@@ -315,6 +315,13 @@ a.header--nav--links--current {
   background-color: var(--primary-blue);
 }
 
+input[type="button"].button:disabled,
+input[type="submit"].button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .button__border {
   background-color: Transparent;
   background-repeat: no-repeat;
@@ -329,6 +336,8 @@ a.header--nav--links--current {
 .button__primary__disabled {
   background-color: var(--primary-blue);
   opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
 }
 
@@ -580,8 +589,10 @@ a.header--nav--links--current {
 }
 
 .input-field--content__file {
-  display: block;
+  display: inline-block;
   color: transparent;
+  width: 85px;
+  margin-right: 6px;
 }
 
 .input-field--content__file::-webkit-file-upload-button {
@@ -597,8 +608,15 @@ a.header--nav--links--current {
   text-transform: uppercase;
 }
 
+.input-field--content__file--requirements {
+  font-size: 12px;
+  color: var(--greyish-brown);
+}
+
 .input-field--content__file--preview {
   border: 1px dashed var(--primary-blue);
+  display: block;
+  margin-bottom: 11px;
 }
 
 .input-field--content__file--preview__40x40 {

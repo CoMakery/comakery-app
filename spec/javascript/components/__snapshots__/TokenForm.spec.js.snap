@@ -33,10 +33,13 @@ exports[`TokenForm renders correctly without props 1`] = `
     sidebar={null}
     subfooter={
       <React.Fragment>
-        <ButtonBorder
+        <Button
           className=""
+          disabled={false}
+          form="token-form--form"
           onClick={[Function]}
-          value="cancel"
+          type="submit"
+          value="create & close"
         />
         <ButtonBorder
           className=""
@@ -45,13 +48,10 @@ exports[`TokenForm renders correctly without props 1`] = `
           type="submit"
           value="create"
         />
-        <Button
+        <ButtonBorder
           className=""
-          disabled={false}
-          form="token-form--form"
           onClick={[Function]}
-          type="submit"
-          value="create & close"
+          value="cancel"
         />
       </React.Fragment>
     }
@@ -122,6 +122,8 @@ exports[`TokenForm renders correctly without props 1`] = `
                   eventHandler={[Function]}
                   imgPreviewDimensions="40x40"
                   imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
                   name="token[coin_type]"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -197,6 +199,8 @@ exports[`TokenForm renders correctly without props 1`] = `
                   eventHandler={[Function]}
                   imgPreviewDimensions="40x40"
                   imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
                   name="token[name]"
                   pattern=".*"
                   placeholder="Bitcoin"
@@ -244,6 +248,19 @@ exports[`TokenForm renders correctly without props 1`] = `
                 </InputField>
               </InputFieldHalfed>
               <InputFieldUploadFile
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="token[logo_image]"
+                      required=""
+                      type="file"
+                    />,
+                  }
+                }
+                imgRequirements="Image should be at least 500px x 500px"
+                imgVerifier={[Function]}
                 name="token[logo_image]"
                 required={true}
                 title="token logo"
@@ -255,8 +272,21 @@ exports[`TokenForm renders correctly without props 1`] = `
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="token[logo_image]"
+                        required=""
+                        type="file"
+                      />,
+                    }
+                  }
                   imgPreviewDimensions="40x40"
                   imgPreviewUrl=""
+                  imgRequirements="Image should be at least 500px x 500px"
+                  imgVerifier={[Function]}
                   name="token[logo_image]"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -289,12 +319,18 @@ exports[`TokenForm renders correctly without props 1`] = `
                       className="input-field--content"
                     >
                       <input
+                        accept="image/*"
                         className="input-field--content__file"
                         name="token[logo_image]"
                         onChange={[Function]}
                         required={true}
                         type="file"
                       />
+                      <span
+                        className="input-field--content__file--requirements"
+                      >
+                        Image should be at least 500px x 500px
+                      </span>
                     </div>
                   </div>
                 </InputField>
@@ -315,27 +351,23 @@ exports[`TokenForm renders correctly without props 1`] = `
         <div
           className="layout--subfooter--buttons"
         >
-          <ButtonBorder
+          <Button
             className=""
+            disabled={false}
+            form="token-form--form"
             onClick={[Function]}
-            value="cancel"
+            type="submit"
+            value="create & close"
           >
-            <Button
-              className="button__border"
+            <input
+              className="button"
               disabled={false}
+              form="token-form--form"
               onClick={[Function]}
-              type="button"
-              value="cancel"
-            >
-              <input
-                className="button button__border"
-                disabled={false}
-                onClick={[Function]}
-                type="button"
-                value="cancel"
-              />
-            </Button>
-          </ButtonBorder>
+              type="submit"
+              value="create & close"
+            />
+          </Button>
           <ButtonBorder
             className=""
             form="token-form--form"
@@ -361,23 +393,27 @@ exports[`TokenForm renders correctly without props 1`] = `
               />
             </Button>
           </ButtonBorder>
-          <Button
+          <ButtonBorder
             className=""
-            disabled={false}
-            form="token-form--form"
             onClick={[Function]}
-            type="submit"
-            value="create & close"
+            value="cancel"
           >
-            <input
-              className="button"
+            <Button
+              className="button__border"
               disabled={false}
-              form="token-form--form"
               onClick={[Function]}
-              type="submit"
-              value="create & close"
-            />
-          </Button>
+              type="button"
+              value="cancel"
+            >
+              <input
+                className="button button__border"
+                disabled={false}
+                onClick={[Function]}
+                type="button"
+                value="cancel"
+              />
+            </Button>
+          </ButtonBorder>
         </div>
       </div>
     </div>

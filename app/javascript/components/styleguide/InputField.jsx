@@ -7,11 +7,16 @@ class InputField extends React.Component {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this.handleFileChange = this.handleFileChange.bind(this)
+    this.passImg = this.passImg.bind(this)
     this.state = {
       fileLocalUrl : null,
       fileLocalName: null,
       symbolCounter: this.props.value.length
     }
+  }
+
+  passImg({target:img}) {
+    this.props.imgVerifier(img)
   }
 
   handleChange(event) {
@@ -57,11 +62,14 @@ class InputField extends React.Component {
       errorText,
       imgPreviewUrl,
       imgPreviewDimensions,
+      imgRequirements,
+      imgVerifier,
+      imgInputRef,
       eventHandler,
       ...other
     } = this.props
 
-    let d = eventHandler
+    let d = eventHandler || imgVerifier
 
     let classnames = classNames(
       'input-field',
@@ -125,6 +133,7 @@ class InputField extends React.Component {
                       )
                     }
                     src={this.state.fileLocalUrl ? this.state.fileLocalUrl : imgPreviewUrl}
+                    onLoad={this.passImg}
                   />
                 }
                 { this.state.fileLocalName &&
@@ -134,10 +143,15 @@ class InputField extends React.Component {
                 }
                 <input className="input-field--content__file"
                   required={imgPreviewUrl ? false : required}
+                  accept="image/*"
                   type={type}
                   name={name}
+                  ref={imgInputRef}
                   onChange={this.handleFileChange}
                 />
+                <span className="input-field--content__file--requirements">
+                  {imgRequirements}
+                </span>
               </React.Fragment>
             }
 
@@ -210,7 +224,10 @@ InputField.propTypes = {
   readOnly            : PropTypes.bool,
   errorText           : PropTypes.string,
   imgPreviewUrl       : PropTypes.string,
-  imgPreviewDimensions: PropTypes.string
+  imgPreviewDimensions: PropTypes.string,
+  imgRequirements     : PropTypes.string,
+  imgVerifier         : PropTypes.func,
+  imgInputRef         : PropTypes.shape({ current: PropTypes.instanceOf(Element) })
 }
 InputField.defaultProps = {
   className           : '',
@@ -230,6 +247,8 @@ InputField.defaultProps = {
   readOnly            : false,
   errorText           : '',
   imgPreviewUrl       : '',
-  imgPreviewDimensions: '40x40'
+  imgPreviewDimensions: '40x40',
+  imgRequirements     : '',
+  imgVerifier         : () => {}
 }
 export default InputField

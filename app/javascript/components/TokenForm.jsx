@@ -21,11 +21,12 @@ class TokenForm extends React.Component {
     this.enableContractFields = this.enableContractFields.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleFieldChange = this.handleFieldChange.bind(this)
-    this.handleLogoChange = this.handleLogoChange.bind(this)
     this.fetchSymbolAndDecimals = this.fetchSymbolAndDecimals.bind(this)
+    this.verifyImgRes = this.verifyImgRes.bind(this)
+
+    this.lofoInputRef = React.createRef()
 
     this.state = {
-      logoLocalUrl                      : null,
       errorMessage                      : null,
       infoMessage                       : null,
       errors                            : {},
@@ -94,6 +95,15 @@ class TokenForm extends React.Component {
     ])
   }
 
+  verifyImgRes(img) {
+    if ((img.naturalWidth < 500) || (img.naturalHeight < 500) || (img.naturalWidth / img.naturalHeight !== 1)) {
+      this.lofoInputRef.current.value = ''
+      this.errorAdd('token[logo_image]', 'invalid resolution')
+    } else {
+      this.errorRemove('token[logo_image]')
+    }
+  }
+
   handleFieldChange(event) {
     this.setState({ [event.target.name]: event.target.value })
 
@@ -138,15 +148,6 @@ class TokenForm extends React.Component {
       default:
         return
     }
-  }
-
-  handleLogoChange(event) {
-    if (this.state.logoLocalUrl != null) {
-      URL.revokeObjectURL(this.state.logoLocalUrl)
-    }
-    this.setState({
-      logoLocalUrl: URL.createObjectURL(event.target.files[0])
-    })
   }
 
   fetchSymbolAndDecimals(address, network) {
@@ -260,9 +261,12 @@ class TokenForm extends React.Component {
           hasBackButton
           subfooter={
             <React.Fragment>
-              <ButtonBorder
-                value="cancel"
-                onClick={this.goBack}
+              <Button
+                value={this.state.formAction === 'POST' ? 'create & close' : 'save & close'}
+                type="submit"
+                form="token-form--form"
+                disabled={this.state.disabled['token[submit_and_close]']}
+                onClick={() => this.setState({closeOnSuccess: true})}
               />
               <ButtonBorder
                 value={this.state.formAction === 'POST' ? 'create' : 'save'}
@@ -271,12 +275,9 @@ class TokenForm extends React.Component {
                 disabled={this.state.disabled['token[submit]']}
                 onClick={() => this.setState({closeOnSuccess: false})}
               />
-              <Button
-                value={this.state.formAction === 'POST' ? 'create & close' : 'save & close'}
-                type="submit"
-                form="token-form--form"
-                disabled={this.state.disabled['token[submit_and_close]']}
-                onClick={() => this.setState({closeOnSuccess: true})}
+              <ButtonBorder
+                value="cancel"
+                onClick={this.goBack}
               />
             </React.Fragment>
           }
@@ -408,6 +409,9 @@ class TokenForm extends React.Component {
               name="token[logo_image]"
               errorText={this.state.errors['token[logo_image]']}
               imgPreviewUrl={this.props.token.logoUrl}
+              imgRequirements="Image should be at least 500px x 500px"
+              imgVerifier={this.verifyImgRes}
+              imgInputRef={this.lofoInputRef}
             />
 
             <input

@@ -56,6 +56,12 @@ describe('InputField', () => {
     expect(wrapper.find('.input-field--content__file').props().name).toBe('field')
   })
 
+  it('renders correctly with type=file and imgRequirements', () => {
+    const wrapper = shallow(<InputField type="file" imgRequirements="test" />)
+
+    expect(wrapper.find('.input-field--content__file--requirements').text()).toBe('test')
+  })
+
   it('renders correctly with type=file and imgPreviewUrl', () => {
     const wrapper = shallow(<InputField type="file" imgPreviewUrl="/test.jpg" />)
 
