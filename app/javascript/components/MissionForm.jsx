@@ -21,6 +21,11 @@ export default class MissionForm extends React.Component {
     this.enable = this.enable.bind(this)
     this.handleChangeFormData = this.handleChangeFormData.bind(this)
     this.handleSaveMission = this.handleSaveMission.bind(this)
+    this.verifyImageRes = this.verifyImageRes.bind(this)
+    this.verifyLogoRes = this.verifyLogoRes.bind(this)
+
+    this.imageInputRef = React.createRef()
+    this.logoInputRef = React.createRef()
 
     let token = props.mission.tokenId
     if (props.tokens.length > 0) {
@@ -145,6 +150,24 @@ export default class MissionForm extends React.Component {
     })
   }
 
+  verifyImageRes(img) {
+    if ((img.naturalWidth !== 1200) || (img.naturalHeight !== 800)) {
+      this.imageInputRef.current.value = ''
+      this.errorAdd('image', 'invalid resolution')
+    } else {
+      this.errorRemove('image')
+    }
+  }
+
+  verifyLogoRes(img) {
+    if ((img.naturalWidth !== 800) || (img.naturalHeight !== 800)) {
+      this.logoInputRef.current.value = ''
+      this.errorAdd('logo', 'invalid resolution')
+    } else {
+      this.errorRemove('logo')
+    }
+  }
+
   errorAdd(n, e) {
     this.setState({
       errors: Object.assign({}, this.state.errors, {[n]: e})
@@ -256,12 +279,18 @@ export default class MissionForm extends React.Component {
             name="logo" title="Mission Logo" required
             imgPreviewDimensions="150x100"
             imgPreviewUrl={logoPreview}
+            imgRequirements="Image should be 800px x 800px"
+            imgVerifier={this.verifyLogoRes}
+            imgInputRef={this.logoInputRef}
             eventHandler={this.handleChangeFormData}
             errorText={errors.logo} />
           <InputFieldUploadFile
             name="image" title="Mission Image" required
             imgPreviewDimensions="100x100"
             imgPreviewUrl={imagePreview}
+            imgRequirements="Image should be 1200px x 800px"
+            imgVerifier={this.verifyImageRes}
+            imgInputRef={this.imageInputRef}
             eventHandler={this.handleChangeFormData}
             errorText={errors.image}
           />

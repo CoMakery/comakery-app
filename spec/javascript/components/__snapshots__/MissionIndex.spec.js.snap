@@ -21,7 +21,6 @@ exports[`MissionIndex renders correctly without props 1`] = `
             onClick={[Function]}
             text="Create a Mission"
           />
-          <hr />
         </div>
       </React.Fragment>
     }
@@ -112,7 +111,6 @@ exports[`MissionIndex renders correctly without props 1`] = `
                   </div>
                 </SidebarItem>
               </SidebarItemBold>
-              <hr />
             </div>
           </div>
           <div

@@ -394,7 +394,20 @@ exports[`MissionForm renders correctly without props 1`] = `
               </InputFieldDescription>
               <InputFieldUploadFile
                 eventHandler={[Function]}
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="logo"
+                      required=""
+                      type="file"
+                    />,
+                  }
+                }
                 imgPreviewDimensions="150x100"
+                imgRequirements="Image should be 800px x 800px"
+                imgVerifier={[Function]}
                 name="logo"
                 required={true}
                 title="Mission Logo"
@@ -406,10 +419,20 @@ exports[`MissionForm renders correctly without props 1`] = `
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
-                  imgInputRef={null}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="logo"
+                        required=""
+                        type="file"
+                      />,
+                    }
+                  }
                   imgPreviewDimensions="150x100"
                   imgPreviewUrl=""
-                  imgRequirements=""
+                  imgRequirements="Image should be 800px x 800px"
                   imgVerifier={[Function]}
                   name="logo"
                   pattern=".*"
@@ -452,14 +475,29 @@ exports[`MissionForm renders correctly without props 1`] = `
                       />
                       <span
                         className="input-field--content__file--requirements"
-                      />
+                      >
+                        Image should be 800px x 800px
+                      </span>
                     </div>
                   </div>
                 </InputField>
               </InputFieldUploadFile>
               <InputFieldUploadFile
                 eventHandler={[Function]}
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="image"
+                      required=""
+                      type="file"
+                    />,
+                  }
+                }
                 imgPreviewDimensions="100x100"
+                imgRequirements="Image should be 1200px x 800px"
+                imgVerifier={[Function]}
                 name="image"
                 required={true}
                 title="Mission Image"
@@ -471,10 +509,20 @@ exports[`MissionForm renders correctly without props 1`] = `
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
-                  imgInputRef={null}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="image"
+                        required=""
+                        type="file"
+                      />,
+                    }
+                  }
                   imgPreviewDimensions="100x100"
                   imgPreviewUrl=""
-                  imgRequirements=""
+                  imgRequirements="Image should be 1200px x 800px"
                   imgVerifier={[Function]}
                   name="image"
                   pattern=".*"
@@ -517,7 +565,9 @@ exports[`MissionForm renders correctly without props 1`] = `
                       />
                       <span
                         className="input-field--content__file--requirements"
-                      />
+                      >
+                        Image should be 1200px x 800px
+                      </span>
                     </div>
                   </div>
                 </InputField>

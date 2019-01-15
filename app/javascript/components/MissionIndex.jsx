@@ -165,10 +165,10 @@ export default class MissionIndex extends React.Component {
                   onClick={(_) => window.location = '/missions/new'}
                 />
 
-                <hr />
-
                 { missions.length > 0 &&
                   <React.Fragment>
+                    <hr />
+
                     <div className="mission-index--sidebar--info">
                       Please select or rearrange missions you want to display on landing page:
                     </div>
