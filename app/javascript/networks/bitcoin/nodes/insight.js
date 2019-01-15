@@ -1,5 +1,3 @@
-/* eslint-disable default-case */
-
 import axios from 'axios'
 
 export default {
@@ -12,6 +10,7 @@ export default {
       case 'mainnet':
         url = 'https://insight.bitpay.com/api'
         break
+      default:
     }
     return url
   },

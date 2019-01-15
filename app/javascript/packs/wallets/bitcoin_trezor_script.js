@@ -1,4 +1,4 @@
-/* eslint-disable no-alert, no-undef, complexity, standard/object-curly-even-spacing, default-case */
+/* eslint-disable no-undef */
 
 window.bitcoinTrezor = (function() {
   const BigNumber = require('bignumber.js')
@@ -7,7 +7,7 @@ window.bitcoinTrezor = (function() {
   const debugLog = require('src/javascripts/debugLog')
   const caValidator = require('crypto-address-validator')
 
-  transferBtcCoins = async function(award) { // award in JSON
+  const transferBtcCoins = async function(award) { // award in JSON
     const network = award.project.blockchain_network.replace('bitcoin_', '')
     const recipientAddress = award.account.bitcoin_wallet
     let amount = parseFloat(award.total_amount)
@@ -103,7 +103,7 @@ window.bitcoinTrezor = (function() {
   }
 
   // network: 'mainnet' or 'testnet'
-  getFirstBitcoinAddress = async function(network, isLegacy) {
+  const getFirstBitcoinAddress = async function(network, isLegacy) {
     const purpose = isLegacy ? 44 : 49
     let path, coinName
     switch (network) {
@@ -115,6 +115,7 @@ window.bitcoinTrezor = (function() {
         path = `m/${purpose}'/0'/0'/0/0`
         coinName = 'btc'
         break
+      default:
     }
     const rs = await TrezorConnect.getAddress({
       path: path,

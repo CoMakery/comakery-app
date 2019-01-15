@@ -8,7 +8,6 @@ const debugLog = function(item) {
     } else {
       msgToLog = item
     }
-    // eslint-disable-next-line no-console
     console.error(msgToLog)
   }
 }
