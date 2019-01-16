@@ -9,7 +9,7 @@ transferAwardOnCardano = (award) -> # award in JSON
   transferAdaCoins award
 
 transferAwardOnBitcoin = (award) -> # award in JSON
-  transferBtcCoins award
+  bitcoinTrezor.transferBtcCoins award
 
 window.transferAward = (award) -> # award in JSON
   if award.project.coin_type == 'erc20' || award.project.coin_type == 'eth'
