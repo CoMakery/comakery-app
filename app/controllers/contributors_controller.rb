@@ -32,5 +32,10 @@ class ContributorsController < ApplicationController
         paid: @revenue_share ? contributor.total_revenue_paid_pretty(@project) : nil
       }
     end
+    # @table_data += @project.awards.reject{ |a| a.account }.map do |award|
+    #   {
+    #
+    #   }
+    # end
   end
 end

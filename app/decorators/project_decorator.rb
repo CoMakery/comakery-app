@@ -165,7 +165,6 @@ class ProjectDecorator < Draper::Decorator
 
   def contributors_by_award_amount
     contributors_distinct.order_by_award(project)
-    project.awards.map{|a| a.account || Account.new(email: a.email)}.order_by_award(project)
   end
 
   def tokens_awarded_with_symbol
