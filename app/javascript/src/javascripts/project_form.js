@@ -1,6 +1,5 @@
-/* eslint-disable no-undef */
-
-customBlockchainNetwork = function(coinType) {
+const customBlockchainNetwork = function(coinType) {
+  const $ = require('jquery')
   let prefix = ''
   switch (coinType) {
     case 'qrc20':
@@ -24,3 +23,6 @@ customBlockchainNetwork = function(coinType) {
     })
   }
 }
+
+module.exports = customBlockchainNetwork
+window.customBlockchainNetwork = customBlockchainNetwork

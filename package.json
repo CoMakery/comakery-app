@@ -20,6 +20,7 @@
     "crypto-address-validator": "^0.1.0",
     "d3pie": "^0.1.9",
     "formdata-polyfill": "^3.0.13",
+    "jquery": "^3.3.1",
     "prop-types": "^15.6.2",
     "qweb3": "^1.2.2",
     "rails-ujs": "^5.2.2",
