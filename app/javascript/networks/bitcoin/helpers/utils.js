@@ -1,5 +1,5 @@
-const BigNumber = require('bignumber.js')
-const axios = require('axios')
+import BigNumber from 'bignumber.js'
+import axios from 'axios'
 
 const selectTxs = function(unspentTransactions, amount, fee) {
   unspentTransactions.sort((a, b) => { return a.satoshis - b.satoshis })
