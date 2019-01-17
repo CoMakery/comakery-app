@@ -8,7 +8,7 @@ const debugLog = function(item) {
     } else {
       msgToLog = item
     }
-    console.error(msgToLog)
+    console.log(msgToLog)
   }
 }
 
