@@ -124,4 +124,4 @@ const getFirstBitcoinAddress = async function(network, isLegacy) {
   return rs.payload.address
 }
 
-module.exports = { transferBtcCoins, getFirstBitcoinAddress }
+module.exports = { transferBtcCoins, getFirstBitcoinAddress, submitTransaction }
