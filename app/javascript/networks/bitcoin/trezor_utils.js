@@ -1,10 +1,11 @@
 /* eslint-disable no-undef */
 
-const BigNumber = require('bignumber.js')
-const insight = require('networks/bitcoin/nodes/insight').default
-const utils = require('networks/bitcoin/helpers/utils')
-const debugLog = require('src/javascripts/debugLog')
-const caValidator = require('crypto-address-validator')
+import utils from 'networks/bitcoin/helpers/utils'
+import insight from 'networks/bitcoin/nodes/insight'
+import debugLog from 'src/javascripts/debugLog'
+import BigNumber from 'bignumber.js'
+import caValidator from 'crypto-address-validator'
+import TrezorConnect from 'trezor-connect'
 
 const transferBtcCoins = async function(award) { // award in JSON
   const network = award.project.blockchain_network.replace('bitcoin_', '')
@@ -123,4 +124,4 @@ const getFirstBitcoinAddress = async function(network, isLegacy) {
   return rs.payload.address
 }
 
-module.exports = { transferBtcCoins }
+module.exports = { transferBtcCoins, getFirstBitcoinAddress }

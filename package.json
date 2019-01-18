@@ -29,6 +29,7 @@
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
     "react_ujs": "^2.4.4",
+    "trezor-connect": "^6.0.3",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
