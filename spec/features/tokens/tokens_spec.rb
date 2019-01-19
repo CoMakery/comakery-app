@@ -20,8 +20,8 @@ describe 'tokens features', js: true do
     fill_in('token[name]', with: 'eth test')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
 
-    click_on 'create'
-    find :css, '.token-form--message', wait: 10
+    click_on 'create & close'
+    find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'eth'
     expect(Token.last.ethereum_network).to eq 'main'
@@ -47,8 +47,8 @@ describe 'tokens features', js: true do
     expect(find_field('token[symbol]').value).to eq 'HOT'
     expect(find_field('token[decimal_places]').value).to eq '32'
 
-    click_on 'create'
-    find :css, '.token-form--message', wait: 10
+    click_on 'create & close'
+    find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'erc20'
     expect(Token.last.ethereum_network).to eq 'main'
@@ -77,8 +77,8 @@ describe 'tokens features', js: true do
     expect(find_field('token[symbol]').value).to eq 'BIG'
     expect(find_field('token[decimal_places]').value).to eq '0'
 
-    click_on 'create'
-    find :css, '.token-form--message', wait: 10
+    click_on 'create & close'
+    find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'qrc20'
     expect(Token.last.blockchain_network).to eq 'qtum_testnet'
@@ -130,8 +130,8 @@ describe 'tokens features', js: true do
     fill_in('token[name]', with: 'ETH edited')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
 
-    click_on 'save'
-    find :css, '.token-form--message', wait: 10
+    click_on 'save & close'
+    find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'eth'
     expect(Token.last.ethereum_network).to eq 'main'
