@@ -25,15 +25,11 @@ class AwardDecorator < Draper::Decorator
   end
 
   def unit_amount_pretty
-    number_with_delimiter(unit_amount)
+    number_with_precision(unit_amount, precision: project.decimal_places)
   end
 
   def total_amount_pretty
-    if project.decimal_places.to_i.zero?
-      number_with_delimiter(total_amount.to_i)
-    else
-      number_to_currency(BigDecimal(amount_to_send) / project.decimal_places_value, precision: project.decimal_places, unit: '')
-    end
+    number_with_precision(total_amount, precision: project.decimal_places)
   end
 
   def part_of_email
