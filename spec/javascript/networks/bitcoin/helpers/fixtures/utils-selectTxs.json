@@ -1,0 +1,78 @@
+[
+  {
+    "description": "select the second unspent transactions",
+    "amount"     : 1.5,
+    "fee"        : 0.000102,
+    "unspentTransactions": [
+      {
+        "address"      : "msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps",
+        "txid"         : "6e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+        "confirmations": 2,
+        "amount"       : 3,
+        "satoshis"     : 300000000,
+        "hash"         : "6e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+        "pos"          : 1
+      },
+      {
+        "address"      : "msb16hf6ssyYkAJ8xqKUjmBEkbW3cWCdps",
+        "txid"         : "1e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+        "confirmations": 3,
+        "amount"       : 2,
+        "satoshis"     : 200000000,
+        "hash"         : "1e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+        "pos"          : 0
+      }
+    ],
+    "result": [{
+      "address"      : "msb16hf6ssyYkAJ8xqKUjmBEkbW3cWCdps",
+      "txid"         : "1e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+      "confirmations": 3,
+      "amount"       : 2,
+      "satoshis"     : 200000000,
+      "hash"         : "1e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+      "pos"          : 0
+    }]
+  },
+  {
+    "description": "select first two of the ascending unspent transactions",
+    "amount"     : 2.5,
+    "fee"        : 0.000102,
+    "unspentTransactions": [
+      {
+        "address"      : "msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps",
+        "txid"         : "6e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+        "confirmations": 2,
+        "amount"       : 3,
+        "satoshis"     : 300000000,
+        "hash"         : "6e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+        "pos"          : 1
+      },
+      {
+        "address"      : "msb16hf6ssyYkAJ8xqKUjmBEkbW3cWCdps",
+        "txid"         : "1e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+        "confirmations": 3,
+        "amount"       : 1.5,
+        "satoshis"     : 150000000,
+        "hash"         : "1e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+        "pos"          : 0
+      }
+    ],
+    "result": [{
+      "address"      : "msb16hf6ssyYkAJ8xqKUjmBEkbW3cWCdps",
+      "txid"         : "1e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+      "confirmations": 3,
+      "amount"       : 1.5,
+      "satoshis"     : 150000000,
+      "hash"         : "1e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+      "pos"          : 0
+    },{
+      "address"      : "msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps",
+      "txid"         : "6e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+      "confirmations": 2,
+      "amount"       : 3,
+      "satoshis"     : 300000000,
+      "hash"         : "6e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+      "pos"          : 1
+    }]
+  }
+]

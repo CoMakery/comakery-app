@@ -17,8 +17,10 @@
     "cardano-crypto.js": "^5.0.0",
     "classnames": "^2.2.6",
     "coffeescript": "1.12.7",
+    "crypto-address-validator": "^0.1.0",
     "d3pie": "^0.1.9",
     "formdata-polyfill": "^3.0.13",
+    "jquery": "^3.3.1",
     "prop-types": "^15.6.2",
     "qweb3": "^1.2.2",
     "rails-ujs": "^5.2.2",
@@ -27,6 +29,7 @@
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
     "react_ujs": "^2.4.4",
+    "trezor-connect": "^6.0.3",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {

@@ -1,0 +1,19 @@
+[
+  {
+    "description": "throw error when the account do not have enough tokens",
+    "amount"     : 5,
+    "fee"        : 0.000102,
+    "unspentTransactions": [
+      {
+        "address"      : "msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps",
+        "txid"         : "6e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+        "confirmations": 2,
+        "amount"       : 3,
+        "satoshis"     : 300000000,
+        "hash"         : "6e49b7de8dd07eab030f53348641bd85f3df9f74d93231c62f36231ce2b0b7de",
+        "pos"          : 1
+      }
+    ],
+    "error": "You do not have enough tokens to send"
+  }
+]

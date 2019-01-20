@@ -52,6 +52,52 @@ describe AwardDecorator do
     end
   end
 
+  describe '#recipient_address' do
+    let!(:recipient) { create(:account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
+    let!(:project) { create :project, payment_type: 'project_token', coin_type: 'eth' }
+    let!(:award_type) { create :award_type, project: project }
+    let!(:award) { create :award, account: recipient, award_type: award_type }
+
+    context 'on ethereum network' do
+      it 'returns the recipient address' do
+        expect(award.decorate.recipient_address).to eq('0xD8655aFe58B540D8372faaFe48441AeEc3bec423')
+      end
+    end
+
+    context 'on bitcoin network' do
+      before do
+        award.account.bitcoin_wallet = 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
+        award.project.coin_type = 'btc'
+      end
+
+      it 'returns the recipient address' do
+        expect(award.decorate.recipient_address).to eq('msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps')
+      end
+    end
+
+    context 'on cardano network' do
+      before do
+        award.account.cardano_wallet = 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
+        award.project.coin_type = 'ada'
+      end
+
+      it 'returns the recipient address' do
+        expect(award.decorate.recipient_address).to eq('Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp')
+      end
+    end
+
+    context 'on qtum network' do
+      before do
+        award.account.qtum_wallet = 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM'
+        award.project.coin_type = 'qrc20'
+      end
+
+      it 'returns the recipient address' do
+        expect(award.decorate.recipient_address).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
+      end
+    end
+  end
+
   context 'recipient names' do
     let!(:recipient) { create(:account, first_name: 'Betty', last_name: 'Ross', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
     let!(:project) { create :project, coin_type: 'erc20' }
@@ -84,7 +130,7 @@ describe AwardDecorator do
 
     it 'valid' do
       award.project.ethereum_contract_address = '0x8023214bf21b1467be550d9b889eca672355c005'
-      expected = %({"id":521,"total_amount":"1337.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":1337,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null},"project":{"id":512,"ethereum_contract_address":"0x8023214bf21b1467be550d9b889eca672355c005","ethereum_network":null,"coin_type":"erc20","blockchain_network":null,"contract_address":null}})
+      expected = %({"id":521,"total_amount":"1337.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":1337,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null},"project":{"id":512,"ethereum_contract_address":"0x8023214bf21b1467be550d9b889eca672355c005","ethereum_network":null,"coin_type":"erc20","blockchain_network":null,"contract_address":null}})
 
       expect(award.decorate.json_for_sending_awards).to eq(expected)
     end
