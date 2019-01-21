@@ -241,7 +241,6 @@ describe Token do
     it 'is false if an existing token with an account is transitioned from ethereum_enabled = false to true' do
       stub_token_symbol
       token = create(:token, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' * 40)
-      stub_token_symbol
       token.update!(ethereum_enabled: true)
       expect(token.transitioned_to_ethereum_enabled?).to eq(false)
     end

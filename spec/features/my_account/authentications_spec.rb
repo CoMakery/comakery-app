@@ -34,7 +34,7 @@ feature 'my account', js: true do
     choose 'History'
 
     expect(page).to have_content 'Swarmbot'
-    expect(page).to have_content '1,337'
+    expect(page).to have_content '1337.0'
     expect(page).to have_content 'Mar 25, 2016'
     expect(page).to have_content account_nickname
   end
@@ -81,6 +81,7 @@ feature 'my account', js: true do
     fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
     fill_in 'qtumWallet', with: "Q#{'a' * 33}"
     fill_in 'cardanoWallet', with: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
+    fill_in 'bitcoinWallet', with: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
     find('input[type=submit]').click
 
     expect(page).to have_content 'Your account details have been updated.'

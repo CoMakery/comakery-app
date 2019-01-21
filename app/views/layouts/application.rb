@@ -19,7 +19,7 @@ class Views::Layouts::Application < Views::Base
 
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'
-        stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat:400,700'
+        stylesheet_link_tag '//fonts.googleapis.com/css?family=Montserrat:400,400i,500,500i,700&amp;subset=cyrillic,cyrillic-ext,latin-ext,vietnamese', defer: true
         stylesheet_link_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css'
         javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js'
         javascript_include_tag :modernizr

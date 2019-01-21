@@ -90,6 +90,8 @@ Metrics/AbcSize:
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
   Max: 325
+  Exclude:
+    - 'app/models/project.rb'
 
 Metrics/CyclomaticComplexity:
   Max: 13
@@ -228,7 +230,7 @@ Rails/FilePath:
     - 'spec/lib/slack_spec.rb'
     - 'spec/mailers/previews/accounts_mailer_preview.rb'
     - 'spec/rails_helper.rb'
-    - 'app/schmoozers/cardano_address_validator_schmoozer.rb'
+    - 'app/schmoozers/*_validator_schmoozer.rb'
 
 # Offense count: 15
 # Configuration parameters: Include.

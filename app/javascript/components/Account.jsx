@@ -55,6 +55,7 @@ export default class Account extends React.Component {
     formData.append('account[nickname]', this.state.nickname)
     formData.append('account[date_of_birth]', this.dateInput.current.value)
     formData.append('account[country]', this.state.country)
+    formData.append('account[bitcoin_wallet]', this.state.bitcoinWallet)
     formData.append('account[cardano_wallet]', this.state.cardanoWallet)
     formData.append('account[qtum_wallet]', this.state.qtumWallet)
     formData.append('account[ethereum_wallet]', this.state.ethereumWallet)
@@ -194,6 +195,9 @@ export default class Account extends React.Component {
               <FormField fieldLabel="Ethereum Address" fieldName="ethereumWallet" fieldValue={this.state.ethereumWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.ethereumWallet} />
 
               <FormField fieldLabel="Cardano Address" fieldName="cardanoWallet" fieldValue={this.state.cardanoWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.cardanoWallet} />
+
+              <FormField fieldLabel="Bitcoin Address" fieldName="bitcoinWallet" fieldValue={this.state.bitcoinWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.bitcoinWallet} />
+
               <div className="columns small-3">
                 <label>Image</label>
               </div>
@@ -261,6 +265,21 @@ export default class Account extends React.Component {
                 </React.Fragment>}
               </div>
             </div>
+
+            <div className="row">
+              <div className="columns medium-3" style={{ marginTop: 8 }}>
+                Bitcoin Address
+              </div>
+              <div className="columns medium-9">
+                {this.state.accountData.bitcoinWallet && <React.Fragment>
+                  <input type="text" value={this.state.accountData.bitcoinWallet} readOnly className="fake-link copy-source4 fake-link--input" data-href={this.state.accountData.bitcoinAddress} />
+                  <a className="copiable4 copiable--link">
+                    <img src={this.props.clippyIcon} width={20} height={20} />
+                  </a>
+                </React.Fragment>}
+              </div>
+            </div>
+
           </div>
           <div className="columns show-for-large medium-12 large-3 text-right">
             {downloadWidget}

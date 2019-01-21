@@ -11,6 +11,10 @@ class AccountDecorator < Draper::Decorator
     nickname || name
   end
 
+  def bitcoin_wallet_url
+    UtilitiesService.get_wallet_url('bitcoin_mainnet', bitcoin_wallet)
+  end
+
   def cardano_wallet_url
     UtilitiesService.get_wallet_url('cardano_mainnet', cardano_wallet)
   end
@@ -30,13 +34,15 @@ class AccountDecorator < Draper::Decorator
       qtum_wallet?
     elsif project.coin_type_on_cardano?
       cardano_wallet?
+    elsif project.coin_type_on_bitcoin?
+      bitcoin_wallet?
     else
       false
     end
   end
 
   def can_send_awards?(project)
-    project&.account == self && (project&.ethereum_contract_address? || project.coin_type_eth? || project&.contract_address? || project.coin_type_ada?)
+    project&.account == self && (project&.ethereum_contract_address? || project&.contract_address? || project.decorate.send_coins?)
   end
 
   def total_awards_earned_pretty(project)

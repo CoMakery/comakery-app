@@ -1,6 +1,5 @@
-/* eslint-disable no-undef */
-
-customBlockchainNetwork = function(coinType) {
+const customBlockchainNetwork = function(coinType) {
+  const $ = require('jquery')
   let prefix = ''
   switch (coinType) {
     case 'qrc20':
@@ -8,6 +7,9 @@ customBlockchainNetwork = function(coinType) {
       break
     case 'ada':
       prefix = 'cardano_'
+      break
+    case 'btc':
+      prefix = 'bitcoin_'
       break
     default:
   }
@@ -21,3 +23,6 @@ customBlockchainNetwork = function(coinType) {
     })
   }
 }
+
+module.exports = customBlockchainNetwork
+window.customBlockchainNetwork = customBlockchainNetwork

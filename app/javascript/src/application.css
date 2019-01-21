@@ -532,8 +532,8 @@ input[type="submit"].button:disabled {
   box-sizing: border-box;
   border-radius: 0;
   font-family: Montserrat, sans-serif;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='32' height='24' viewBox='0 0 32 24'><polygon points='0,0 32,0 16,24' style='fill: rgb%28138, 138, 138%29'></polygon></svg>");
-  background-size: 9px 6px;
+  background-image: url('data:image/svg+xml;utf8,<svg width="27px" height="9px" viewBox="0 0 27 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->    <title>ICON/DROP_DOWN</title>    <desc>Created with Sketch.</desc>    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">        <g id="ICON/DROP_DOWN-Copy" transform="translate(1.000000, 1.000000)" fill-rule="nonzero" stroke="#201662" stroke-width="2">            <polyline id="ICON/DROP_DOWN" points="0.5 1.73194792e-14 12 7 24.5 1.73194792e-14"></polyline>        </g>    </g></svg>');
+  background-size: 16px 10px;
   background-position: right -1rem center;
   background-origin: content-box;
   background-repeat: no-repeat;
