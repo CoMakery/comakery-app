@@ -36,10 +36,10 @@ class TokenIndex extends React.Component {
                   onClick={(_) => window.location = '/tokens/new'}
                 />
 
-                <hr />
-
                 { this.props.tokens.length > 0 &&
                   <React.Fragment>
+                    <hr />
+
                     <div className="token-index--sidebar--info">
                       Please select token:
                     </div>
@@ -49,7 +49,6 @@ class TokenIndex extends React.Component {
                         className="token-index--sidebar--item"
                         key={t.id}
                         iconLeftUrl={t.logoUrl}
-                        iconRightName="REARRANGE.svg"
                         text={`${t.name} (${t.symbol})`}
                         selected={this.state.selectedToken === t}
                         onClick={(_) => this.handleListClick(t)}
@@ -84,7 +83,7 @@ class TokenIndex extends React.Component {
                     payment type
                   </div>
                   <div className="token-index--view--info--item--value">
-                    {this.state.selectedToken.coinType}
+                    {this.state.selectedToken.coinType ? this.state.selectedToken.coinType.toUpperCase() : null}
                   </div>
                 </div>
 
@@ -125,7 +124,17 @@ class TokenIndex extends React.Component {
                       blockchain network
                     </div>
                     <div className="token-index--view--info--item--value">
-                      {this.state.selectedToken.blockchainNetwork}
+                      { (() => {
+                        switch (this.state.selectedToken.blockchainNetwork) {
+                          case 'qtum_mainnet':
+                            return 'Main QTUM Network'
+                          case 'qtum_testnet':
+                            return 'Test QTUM Network'
+                          default:
+                            return this.state.selectedToken.blockchainNetwork
+                        }
+                      })()
+                      }
                     </div>
                   </div>
                 }
@@ -136,7 +145,21 @@ class TokenIndex extends React.Component {
                       blockchain network
                     </div>
                     <div className="token-index--view--info--item--value">
-                      {this.state.selectedToken.ethereumNetwork}
+                      { (() => {
+                        switch (this.state.selectedToken.ethereumNetwork) {
+                          case 'main':
+                            return 'Main Ethereum Network'
+                          case 'ropsten':
+                            return 'Ropsten Test Network'
+                          case 'kovan':
+                            return 'Kovan Test Network'
+                          case 'rinkeby':
+                            return 'Rinkeby Test Network'
+                          default:
+                            return this.state.selectedToken.ethereumNetwork
+                        }
+                      })()
+                      }
                     </div>
                   </div>
                 }
