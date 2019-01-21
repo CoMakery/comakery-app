@@ -90,5 +90,7 @@ RSpec.configure do |config|
     unless ['', 'about:blank', 'data:,'].include? Capybara.current_session.driver.browser.current_url
       execute_script('localStorage.clear();')
     end
+
+    Capybara.reset_sessions!
   end
 end
