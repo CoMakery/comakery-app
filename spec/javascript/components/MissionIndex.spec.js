@@ -10,7 +10,7 @@ describe('MissionIndex', () => {
     expect(wrapper.exists('.mission-index')).toBe(true)
     expect(wrapper.exists('.mission-index--sidebar')).toBe(true)
     expect(wrapper.exists('.mission-index--sidebar SidebarItemBold')).toBe(true)
-    expect(wrapper.find('.mission-index--sidebar SidebarItemBold').props().iconLeftName).toBe('MARK-WHITE.svg')
+    expect(wrapper.find('.mission-index--sidebar SidebarItemBold').props().iconLeftName).toBe('MISSION/WHITE.svg')
     expect(wrapper.find('.mission-index--sidebar SidebarItemBold').props().iconRightName).toBe('PLUS.svg')
     expect(wrapper.exists('.mission-index--sidebar--info')).toBe(false)
     expect(wrapper.exists('.mission-index--view')).toBe(false)

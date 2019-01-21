@@ -16,7 +16,7 @@ exports[`MissionIndex renders correctly without props 1`] = `
         >
           <SidebarItemBold
             className="mission-index--sidebar--item__bold"
-            iconLeftName="MARK-WHITE.svg"
+            iconLeftName="MISSION/WHITE.svg"
             iconRightName="PLUS.svg"
             onClick={[Function]}
             text="Create a Mission"
@@ -55,14 +55,14 @@ exports[`MissionIndex renders correctly without props 1`] = `
             >
               <SidebarItemBold
                 className="mission-index--sidebar--item__bold"
-                iconLeftName="MARK-WHITE.svg"
+                iconLeftName="MISSION/WHITE.svg"
                 iconRightName="PLUS.svg"
                 onClick={[Function]}
                 text="Create a Mission"
               >
                 <SidebarItem
                   className="sidebar-item__bold mission-index--sidebar--item__bold"
-                  iconLeftName="MARK-WHITE.svg"
+                  iconLeftName="MISSION/WHITE.svg"
                   iconLeftUrl=""
                   iconRightName="PLUS.svg"
                   onClick={[Function]}
@@ -81,10 +81,10 @@ exports[`MissionIndex renders correctly without props 1`] = `
                       >
                         <Icon
                           className=""
-                          name="MARK-WHITE.svg"
+                          name="MISSION/WHITE.svg"
                         >
                           <img
-                            className="icon icon__MARK-WHITE-svg"
+                            className="icon icon__MISSION/WHITE-svg"
                             src="test-file-stub"
                           />
                         </Icon>
