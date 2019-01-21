@@ -34,7 +34,7 @@ feature 'my account', js: true do
     choose 'History'
 
     expect(page).to have_content 'Swarmbot'
-    expect(page).to have_content '1337.0'
+    expect(page).to have_content '1,337'
     expect(page).to have_content 'Mar 25, 2016'
     expect(page).to have_content account_nickname
   end
