@@ -21,6 +21,7 @@ describe 'tokens features', js: true do
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
 
     click_on 'create & close'
+    screenshot_and_save_page
     find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'eth'
