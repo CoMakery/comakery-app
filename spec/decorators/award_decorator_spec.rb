@@ -117,7 +117,13 @@ describe AwardDecorator do
 
   it 'display total_amount_pretty' do
     award = create :award, quantity: 2.5
-    expect(award.decorate.total_amount_pretty).to eq '125.0'
+    expect(award.decorate.total_amount_pretty).to eq '125'
+
+    award = create :award, quantity: 25
+    expect(award.decorate.total_amount_pretty).to eq '1,250'
+
+    award.project.update decimal_places: 2
+    expect(award.decorate.total_amount_pretty).to eq '1,250.00'
   end
 
   it 'display part_of_email' do

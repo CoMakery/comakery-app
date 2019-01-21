@@ -25,11 +25,11 @@ class AwardDecorator < Draper::Decorator
   end
 
   def unit_amount_pretty
-    number_with_precision(unit_amount, precision: project.decimal_places)
+    number_with_precision(unit_amount, precision: project.decimal_places.to_i)
   end
 
   def total_amount_pretty
-    number_with_precision(total_amount, precision: project.decimal_places)
+    number_to_currency(total_amount, precision: project.decimal_places.to_i, unit: '')
   end
 
   def part_of_email

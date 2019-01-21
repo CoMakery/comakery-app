@@ -104,7 +104,7 @@ describe 'awarding users' do
     create :award, account: receiver, award_type: small_award_type
     login(account)
     visit project_awards_path(project)
-    expect(page).to have_content '1000.0'
+    expect(page).to have_content '1,000'
     expect(page).to have_content 'Send'
   end
 
@@ -156,7 +156,7 @@ describe 'awarding users' do
 
     expect(page).to have_content 'Project Tokens Awarded'
     expect(page).to have_content 'Feb 29'
-    expect(page).to have_content '1000.0'
+    expect(page).to have_content '1,000'
     expect(page).to have_content '(no account)'
     expect(page).to have_content 'Small'
     expect(page).to have_content 'Super fantastic fabulous programatic work on teh things, A++'
