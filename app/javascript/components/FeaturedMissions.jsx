@@ -70,7 +70,7 @@ export default class FeaturedMissions extends React.Component {
                     <img src={mission.imageUrl} />
                   </div>
                   <div className="gallery-content__title">{mission.name}</div>
-                  <div className="gallery-content__description">{mission.projectsCount}</div>
+                  <div className="gallery-content__description">{mission.projectsCount } projects</div>
                 </div>
               </div>
             )}
