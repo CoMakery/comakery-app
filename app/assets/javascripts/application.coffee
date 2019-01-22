@@ -21,6 +21,9 @@
 # = require cookie_consent
 # = require_tree .
 
+window.foundationCmd = (el, cmd) ->
+  $(el).foundation('close')
+
 $ ->
   $(document).foundation()
   $(document).on "click", ".disabled", (e)->

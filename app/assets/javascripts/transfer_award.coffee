@@ -1,6 +1,6 @@
 window.alertMsg = (modal, msg) ->
-  modal.find('.alert-msg').html(msg)
-  modal.foundation('open')
+  $(modal).find('.alert-msg').html(msg)
+  $(modal).foundation('open')
 
 window.transferAwardOnQtum = (award) -> # award in JSON
   transferQrc20Tokens award
