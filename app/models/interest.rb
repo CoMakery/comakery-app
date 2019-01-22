@@ -1,7 +1,7 @@
 class Interest < ApplicationRecord
   belongs_to :account
   belongs_to :project
-  # after_create :add_airtable
+  after_create :add_airtable
   validates :protocol, presence: true
   validates :project_id, uniqueness: { scope: %i[account_id protocol] }
 
