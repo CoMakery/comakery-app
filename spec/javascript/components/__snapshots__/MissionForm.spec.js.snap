@@ -103,8 +103,11 @@ exports[`MissionForm renders correctly without props 1`] = `
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
+                  imgInputRef={null}
                   imgPreviewDimensions="40x40"
                   imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
                   name="name"
                   pattern=".*"
                   placeholder="Unicoin"
@@ -180,8 +183,11 @@ exports[`MissionForm renders correctly without props 1`] = `
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
+                  imgInputRef={null}
                   imgPreviewDimensions="40x40"
                   imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
                   name="token"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -255,8 +261,11 @@ exports[`MissionForm renders correctly without props 1`] = `
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
+                  imgInputRef={null}
                   imgPreviewDimensions="40x40"
                   imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
                   name="subtitle"
                   pattern=".*"
                   placeholder="Unicoin is the future of tokenizing fantastical beast networks"
@@ -326,8 +335,11 @@ exports[`MissionForm renders correctly without props 1`] = `
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
+                  imgInputRef={null}
                   imgPreviewDimensions="40x40"
                   imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
                   name="description"
                   pattern=".*"
                   placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
@@ -382,7 +394,20 @@ exports[`MissionForm renders correctly without props 1`] = `
               </InputFieldDescription>
               <InputFieldUploadFile
                 eventHandler={[Function]}
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="logo"
+                      required=""
+                      type="file"
+                    />,
+                  }
+                }
                 imgPreviewDimensions="150x100"
+                imgRequirements="Image should be 800px x 800px"
+                imgVerifier={[Function]}
                 name="logo"
                 required={true}
                 title="Mission Logo"
@@ -394,8 +419,21 @@ exports[`MissionForm renders correctly without props 1`] = `
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="logo"
+                        required=""
+                        type="file"
+                      />,
+                    }
+                  }
                   imgPreviewDimensions="150x100"
                   imgPreviewUrl=""
+                  imgRequirements="Image should be 800px x 800px"
+                  imgVerifier={[Function]}
                   name="logo"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -428,19 +466,38 @@ exports[`MissionForm renders correctly without props 1`] = `
                       className="input-field--content"
                     >
                       <input
+                        accept="image/*"
                         className="input-field--content__file"
                         name="logo"
                         onChange={[Function]}
                         required={true}
                         type="file"
                       />
+                      <span
+                        className="input-field--content__file--requirements"
+                      >
+                        Image should be 800px x 800px
+                      </span>
                     </div>
                   </div>
                 </InputField>
               </InputFieldUploadFile>
               <InputFieldUploadFile
                 eventHandler={[Function]}
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="image"
+                      required=""
+                      type="file"
+                    />,
+                  }
+                }
                 imgPreviewDimensions="100x100"
+                imgRequirements="Image should be 1200px x 800px"
+                imgVerifier={[Function]}
                 name="image"
                 required={true}
                 title="Mission Image"
@@ -452,8 +509,21 @@ exports[`MissionForm renders correctly without props 1`] = `
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="image"
+                        required=""
+                        type="file"
+                      />,
+                    }
+                  }
                   imgPreviewDimensions="100x100"
                   imgPreviewUrl=""
+                  imgRequirements="Image should be 1200px x 800px"
+                  imgVerifier={[Function]}
                   name="image"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -486,12 +556,18 @@ exports[`MissionForm renders correctly without props 1`] = `
                       className="input-field--content"
                     >
                       <input
+                        accept="image/*"
                         className="input-field--content__file"
                         name="image"
                         onChange={[Function]}
                         required={true}
                         type="file"
                       />
+                      <span
+                        className="input-field--content__file--requirements"
+                      >
+                        Image should be 1200px x 800px
+                      </span>
                     </div>
                   </div>
                 </InputField>

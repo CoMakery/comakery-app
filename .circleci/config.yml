@@ -36,6 +36,7 @@ jobs:
 
       - run: yarn test
       - run: yarn stylelint
+      - run: bundle exec rake assets:precompile
 
       - run: bundle exec rake db:create db:migrate
       - run: bundle exec rake db:migrate VERSION=20160227015851
@@ -45,5 +46,7 @@ jobs:
 
       - type: store_artifacts
         path: ./tmp/capybara
+      - type: store_artifacts
+        path: ./log/test.log
       - type: store_artifacts
         path: coverage

@@ -38,7 +38,7 @@ class Header extends React.Component {
 
             { isLoggedIn &&
               <div className="header--nav--links">
-                <a href="/" className={currentPath.match(/featured/) ? 'header--nav--links--current' : null}>
+                <a href="/" className={(currentPath === '/' || currentPath === '/featured') ? 'header--nav--links--current' : null}>
                   Home
                 </a>
 

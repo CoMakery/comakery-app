@@ -159,16 +159,16 @@ export default class MissionIndex extends React.Component {
               <div className="mission-index--sidebar">
                 <SidebarItemBold
                   className="mission-index--sidebar--item__bold"
-                  iconLeftName="MARK-WHITE.svg"
+                  iconLeftName="MISSION/WHITE.svg"
                   iconRightName="PLUS.svg"
                   text="Create a Mission"
                   onClick={(_) => window.location = '/missions/new'}
                 />
 
-                <hr />
-
                 { missions.length > 0 &&
                   <React.Fragment>
+                    <hr />
+
                     <div className="mission-index--sidebar--info">
                       Please select or rearrange missions you want to display on landing page:
                     </div>

@@ -171,6 +171,14 @@ class ProjectDecorator < Draper::Decorator
     token_symbol ? "#{token_symbol} Tokens Awarded" : 'Tokens Awarded'
   end
 
+  def use_trezor?
+    coin_type_on_bitcoin? || coin_type_on_cardano?
+  end
+
+  def send_coins?
+    coin_type_eth? || coin_type_ada? || coin_type_btc?
+  end
+
   private
 
   def self.pretty_number(*currency_methods)

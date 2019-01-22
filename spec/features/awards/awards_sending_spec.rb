@@ -104,7 +104,7 @@ describe 'awarding users' do
     create :award, account: receiver, award_type: small_award_type
     login(account)
     visit project_awards_path(project)
-    expect(page).to have_content '1,000.00'
+    expect(page).to have_content '1,000'
     expect(page).to have_content 'Send'
   end
 

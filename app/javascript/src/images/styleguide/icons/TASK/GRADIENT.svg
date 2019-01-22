@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="60px" viewBox="0 0 70 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>ICON/TASK/GRADIENT</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="34.8843663%" y1="34.8608083%" x2="106.986399%" y2="104.479636%" id="linearGradient-1">
+            <stop stop-color="#F143E6" offset="0%"></stop>
+            <stop stop-color="#0089F4" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.9">
+        <g id="ICON/TASK/GRADIENT" transform="translate(-3.000000, -9.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <g transform="translate(3.000000, 9.000000)" id="Polygon-Copy-7">
+                <polygon transform="translate(34.810670, 29.851124) rotate(180.000000) translate(-34.810670, -29.851124) " points="34.5832231 0.143541042 69.3501439 59.5587067 0.271196546 59.2995751"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

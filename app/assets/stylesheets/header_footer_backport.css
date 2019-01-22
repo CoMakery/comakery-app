@@ -15,12 +15,12 @@ body {
 
 .app-container,
 .callout {
-  background-color: #f6f6f6;
+  background-color: white;
 }
 
 .callout.alert,
 .callout.notice {
-  background-color: #f6f6f6;
+  background-color: white;
   margin: 45px 0px 45px 0px;
   font-size: 18px;
   padding: 0.5rem;

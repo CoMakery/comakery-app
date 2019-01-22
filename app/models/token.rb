@@ -3,7 +3,7 @@ class Token < ApplicationRecord
   include QtumContractAddressable
 
   nilify_blanks
-  attachment :logo_image
+  attachment :logo_image, type: :image
 
   # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
   # has_many :batches

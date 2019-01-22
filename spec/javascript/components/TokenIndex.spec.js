@@ -48,11 +48,9 @@ describe('TokenIndex', () => {
     expect(wrapper.find('.token-index--sidebar--info').text()).toBe('Please select token:')
 
     expect(wrapper.exists('SidebarItem[iconLeftUrl="/ERCT.png"]')).toBe(true)
-    expect(wrapper.exists('SidebarItem[iconRightName="REARRANGE.svg"]')).toBe(true)
     expect(wrapper.exists('SidebarItem[text="ERC-TEST (ERCT)"]')).toBe(true)
 
     expect(wrapper.exists('SidebarItem[iconLeftUrl="/QRCT.png"]')).toBe(true)
-    expect(wrapper.exists('SidebarItem[iconRightName="REARRANGE.svg"]')).toBe(true)
     expect(wrapper.exists('SidebarItem[text="QRC-TEST (QRCT)"]')).toBe(true)
   })
 
