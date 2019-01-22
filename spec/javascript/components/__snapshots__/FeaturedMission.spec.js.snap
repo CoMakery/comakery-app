@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FeaturedMission renders correctly without props 1`] = `
+<FeaturedMission
+  csrfToken="00"
+  description=""
+  float="left"
+  imageUrl=""
+  name=""
+  projects={Array []}
+  symbol=""
+>
+  <div
+    className="featured-mission "
+  >
+    <div
+      className="featured-mission__image "
+    >
+      <img
+        src=""
+      />
+    </div>
+    <div
+      className="featured-mission__detail"
+    >
+      <div
+        className="featured-mission__name"
+      >
+         
+      </div>
+      <div
+        className="featured-mission__description"
+      />
+    </div>
+  </div>
+</FeaturedMission>
+`;

@@ -1,0 +1,254 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FeaturedMissions renders correctly without props 1`] = `
+<FeaturedMissions
+  csrfToken="00"
+  moreMissions={Array []}
+  topMissions={Array []}
+>
+  <div
+    className="featured-missions"
+  >
+    <div
+      className="featured-missions__header"
+    >
+      <img
+        className="featured-missions__header__img"
+        src="test-file-stub"
+      />
+      <div
+        className="featured-missions__header__description"
+      >
+        <img
+          className="featured-missions__header__logo"
+          src="test-file-stub"
+        />
+        <div
+          className="featured-missions__header__title"
+        >
+          Find Your Mission. 
+          <br />
+          Prepare For Liftoff.
+        </div>
+        <div
+          className="featured-missions__header__subtitle"
+        >
+          Accelerating Blockchain Adoption
+        </div>
+      </div>
+    </div>
+    <div
+      className="featured-missions__content"
+    >
+      <p
+        className="featured-missions__content__title"
+      >
+        Featured
+        <br />
+        <span
+          className="featured-missions__content__title--big"
+        >
+          missions
+        </span>
+      </p>
+      <p
+        className="featured-missions__content__description"
+      >
+        CoMakery Hosts Blockchain Missions We Believe In
+      </p>
+    </div>
+    <div
+      className="featured-missions__more"
+    >
+      <p
+        className="featured-missions__more__title"
+      >
+        40+
+        <br />
+        <span
+          className="featured-missions__more__title--big"
+        >
+          missions
+        </span>
+      </p>
+      <p
+        className="featured-missions__more__description"
+      >
+        Discover Missions With Cutting Edge Projects
+      </p>
+      <Slider
+        className="featured-missions__gallery"
+        slidesToScroll={1}
+        slidesToShow={4}
+      >
+        <InnerSlider
+          accessibility={true}
+          adaptiveHeight={false}
+          afterChange={null}
+          appendDots={[Function]}
+          arrows={true}
+          autoplay={false}
+          autoplaySpeed={3000}
+          beforeChange={null}
+          centerMode={false}
+          centerPadding="50px"
+          className="featured-missions__gallery"
+          cssEase="ease"
+          customPaging={[Function]}
+          dots={false}
+          dotsClass="slick-dots"
+          draggable={true}
+          easing="linear"
+          edgeFriction={0.35}
+          fade={false}
+          focusOnSelect={false}
+          infinite={true}
+          initialSlide={0}
+          lazyLoad={null}
+          nextArrow={null}
+          onEdge={null}
+          onInit={null}
+          onLazyLoadError={null}
+          onReInit={null}
+          pauseOnDotsHover={false}
+          pauseOnFocus={false}
+          pauseOnHover={true}
+          prevArrow={null}
+          responsive={null}
+          rows={1}
+          rtl={false}
+          slide="div"
+          slidesPerRow={1}
+          slidesToScroll={1}
+          slidesToShow={4}
+          speed={500}
+          swipe={true}
+          swipeEvent={null}
+          swipeToSlide={false}
+          touchMove={true}
+          touchThreshold={5}
+          unslick={true}
+          useCSS={true}
+          useTransform={true}
+          variableWidth={false}
+          vertical={false}
+          waitForAnimate={true}
+        >
+          <div
+            className="slick-slider featured-missions__gallery slick-initialized"
+          >
+            <div
+              className="slick-list"
+            >
+              <Track
+                centerMode={false}
+                centerPadding="50px"
+                cssEase="ease"
+                currentSlide={0}
+                fade={false}
+                focusOnSelect={null}
+                infinite={true}
+                lazyLoad={null}
+                lazyLoadedList={Array []}
+                listHeight={0}
+                onMouseEnter={[Function]}
+                onMouseLeave={[Function]}
+                onMouseOver={[Function]}
+                rtl={false}
+                slideCount={0}
+                slideHeight={0}
+                slideWidth={0}
+                slidesToScroll={1}
+                slidesToShow={4}
+                speed={500}
+                trackStyle={
+                  Object {
+                    "WebkitTransform": "translate3d(0px, 0px, 0px)",
+                    "WebkitTransition": "",
+                    "msTransform": "translateX(0px)",
+                    "opacity": 1,
+                    "transform": "translate3d(0px, 0px, 0px)",
+                    "transition": "",
+                  }
+                }
+                unslick={true}
+                variableWidth={false}
+                vertical={false}
+              >
+                <div
+                  className="slick-track"
+                  onMouseEnter={[Function]}
+                  onMouseLeave={[Function]}
+                  onMouseOver={[Function]}
+                  style={
+                    Object {
+                      "WebkitTransform": "translate3d(0px, 0px, 0px)",
+                      "WebkitTransition": "",
+                      "msTransform": "translateX(0px)",
+                      "opacity": 1,
+                      "transform": "translate3d(0px, 0px, 0px)",
+                      "transition": "",
+                    }
+                  }
+                />
+              </Track>
+            </div>
+          </div>
+        </InnerSlider>
+      </Slider>
+    </div>
+    <div
+      className="featured-missions__footer"
+    >
+      <div
+        className="featured-missions__footer__stat"
+      >
+        <div
+          className="featured-missions__footer__stat__num"
+        >
+          1000+
+        </div>
+        <div
+          className="featured-missions__footer__stat__name"
+        >
+          Contributors
+        </div>
+      </div>
+      <img
+        src="test-file-stub"
+      />
+      <div
+        className="featured-missions__footer__stat"
+      >
+        <div
+          className="featured-missions__footer__stat__num"
+        >
+          500+
+        </div>
+        <div
+          className="featured-missions__footer__stat__name"
+        >
+          PROJECTS
+        </div>
+      </div>
+      <img
+        src="test-file-stub"
+      />
+      <div
+        className="featured-missions__footer__stat"
+      >
+        <div
+          className="featured-missions__footer__stat__num"
+        >
+          1,000,000+
+        </div>
+        <div
+          className="featured-missions__footer__stat__name"
+        >
+          TOKENS AWARDED
+        </div>
+      </div>
+    </div>
+  </div>
+</FeaturedMissions>
+`;

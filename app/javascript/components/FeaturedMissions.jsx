@@ -63,8 +63,8 @@ export default class FeaturedMissions extends React.Component {
           </p>
           <p className="featured-missions__more__description">Discover Missions With Cutting Edge Projects</p>
           <Slider className="featured-missions__gallery" slidesToShow={4} slidesToScroll={1}>
-            { moreMissions.map((mission, index) =>
-              <div>
+            { moreMissions.map((mission) =>
+              <div key={mission.id}>
                 <div className="gallery-content">
                   <div className="gallery-content__image">
                     <img src={mission.imageUrl} />
