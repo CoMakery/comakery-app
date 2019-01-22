@@ -21,6 +21,7 @@ class Account < ApplicationRecord
   has_many :payments
   has_many :channels, through: :projects
   has_many :interests, dependent: :destroy
+  has_many :projects_interested, through: :interests, source: :project
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
@@ -167,8 +168,8 @@ class Account < ApplicationRecord
     email_confirm_token.nil?
   end
 
-  def interested?(protocol, project)
-    interests.find_by protocol: protocol, project: project
+  def interested?(project_id)
+    projects_interested.exists? project_id
   end
 
   def finished_contributor_form?

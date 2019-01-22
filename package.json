@@ -26,7 +26,9 @@
     "react-beautiful-dnd": "^10.0.3",
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
+    "react-slick": "^0.23.2",
     "react_ujs": "^2.4.4",
+    "slick-carousel": "^1.8.1",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
