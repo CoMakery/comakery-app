@@ -49,7 +49,7 @@ class TokenIndex extends React.Component {
                         className="token-index--sidebar--item"
                         key={t.id}
                         iconLeftUrl={t.logoUrl}
-                        text={`${t.name} (${t.symbol})`}
+                        text={t.symbol ? `${t.name} (${t.symbol})` : `${t.name}`}
                         selected={this.state.selectedToken === t}
                         onClick={(_) => this.handleListClick(t)}
                       />
@@ -87,14 +87,16 @@ class TokenIndex extends React.Component {
                   </div>
                 </div>
 
-                <div className="token-index--view--info--item">
-                  <div className="token-index--view--info--item--name">
-                    token symbol
+                { this.state.selectedToken.symbol &&
+                  <div className="token-index--view--info--item">
+                    <div className="token-index--view--info--item--name">
+                      token symbol
+                    </div>
+                    <div className="token-index--view--info--item--value">
+                      {this.state.selectedToken.symbol}
+                    </div>
                   </div>
-                  <div className="token-index--view--info--item--value">
-                    {this.state.selectedToken.symbol}
-                  </div>
-                </div>
+                }
 
                 { this.state.selectedToken.contractAddress &&
                   <div className="token-index--view--info--item">

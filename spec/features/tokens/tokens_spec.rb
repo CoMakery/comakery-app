@@ -17,7 +17,6 @@ describe 'tokens features', js: true do
 
     select('eTH', from: 'token[coin_type]', visible: false)
     select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
-    fill_in('token[name]', with: 'eth test')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
 
     click_on 'create & close'
@@ -25,7 +24,6 @@ describe 'tokens features', js: true do
 
     expect(Token.last.coin_type).to eq 'eth'
     expect(Token.last.ethereum_network).to eq 'main'
-    expect(Token.last.name).to eq 'eth test'
   end
 
   scenario 'admin creates an ERC20 token' do
@@ -127,7 +125,6 @@ describe 'tokens features', js: true do
 
     select('eTH', from: 'token[coin_type]', visible: false)
     select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
-    fill_in('token[name]', with: 'ETH edited')
     attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
 
     click_on 'save & close'
@@ -135,6 +132,5 @@ describe 'tokens features', js: true do
 
     expect(Token.last.coin_type).to eq 'eth'
     expect(Token.last.ethereum_network).to eq 'main'
-    expect(Token.last.name).to eq 'ETH edited'
   end
 end
