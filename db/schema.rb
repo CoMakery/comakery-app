@@ -20,19 +20,19 @@ ActiveRecord::Schema.define(version: 20190110044735) do
     t.string "email"
     t.string "crypted_password"
     t.string "salt"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.string "reset_password_token"
-    t.datetime "reset_password_token_expires_at"
-    t.datetime "reset_password_email_sent_at"
+    t.datetime "reset_password_token_expires_at", precision: 6
+    t.datetime "reset_password_email_sent_at", precision: 6
     t.string "remember_me_token"
-    t.datetime "remember_me_token_expires_at"
+    t.datetime "remember_me_token_expires_at", precision: 6
     t.integer "failed_logins_count", default: 0
-    t.datetime "lock_expires_at"
+    t.datetime "lock_expires_at", precision: 6
     t.string "unlock_token"
-    t.datetime "last_login_at"
-    t.datetime "last_logout_at"
-    t.datetime "last_activity_at"
+    t.datetime "last_login_at", precision: 6
+    t.datetime "last_logout_at", precision: 6
+    t.datetime "last_activity_at", precision: 6
     t.string "last_login_from_ip_address"
     t.string "ethereum_wallet"
     t.string "password_digest"
@@ -57,7 +57,6 @@ ActiveRecord::Schema.define(version: 20190110044735) do
     t.boolean "comakery_admin", default: false
     t.string "cardano_wallet"
     t.string "bitcoin_wallet"
-    t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
     t.index ["public_address"], name: "index_accounts_on_public_address"
@@ -67,8 +66,8 @@ ActiveRecord::Schema.define(version: 20190110044735) do
 
   create_table "authentication_teams", force: :cascade do |t|
     t.integer "authentication_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "account_id"
     t.integer "team_id"
     t.boolean "manager", default: false
@@ -80,8 +79,8 @@ ActiveRecord::Schema.define(version: 20190110044735) do
   create_table "authentications", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.string "provider", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.string "uid", null: false
     t.string "token"
     t.jsonb "oauth_response"
@@ -95,8 +94,8 @@ ActiveRecord::Schema.define(version: 20190110044735) do
     t.integer "project_id", null: false
     t.string "name", null: false
     t.integer "amount", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
     t.boolean "disabled"
@@ -106,8 +105,8 @@ ActiveRecord::Schema.define(version: 20190110044735) do
   create_table "awards", id: :serial, force: :cascade do |t|
     t.integer "issuer_id", null: false
     t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "award_type_id", null: false
     t.integer "account_id"
     t.string "ethereum_transaction_address"
@@ -129,8 +128,8 @@ ActiveRecord::Schema.define(version: 20190110044735) do
     t.integer "project_id"
     t.integer "team_id"
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "channel_id"
     t.index ["project_id"], name: "index_channels_on_project_id"
     t.index ["team_id"], name: "index_channels_on_team_id"
@@ -171,8 +170,8 @@ ActiveRecord::Schema.define(version: 20190110044735) do
     t.integer "issuer_id"
     t.integer "account_id"
     t.decimal "total_value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.decimal "share_value"
     t.integer "quantity_redeemed"
     t.decimal "transaction_fee"
@@ -190,8 +189,8 @@ ActiveRecord::Schema.define(version: 20190110044735) do
     t.string "title", null: false
     t.text "description"
     t.string "tracker"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.boolean "public", default: false, null: false
     t.integer "account_id", null: false
     t.string "image_id"
@@ -209,7 +208,7 @@ ActiveRecord::Schema.define(version: 20190110044735) do
     t.integer "maximum_royalties_per_month"
     t.boolean "license_finalized", default: false, null: false
     t.integer "denomination", default: 0, null: false
-    t.datetime "revenue_sharing_end_date"
+    t.datetime "revenue_sharing_end_date", precision: 6
     t.integer "featured"
     t.string "image_filename"
     t.string "image_content_size"
@@ -235,8 +234,8 @@ ActiveRecord::Schema.define(version: 20190110044735) do
     t.decimal "amount"
     t.text "comment"
     t.text "transaction_reference"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "recorded_by_id"
     t.index ["project_id"], name: "index_revenues_on_project_id"
     t.index ["recorded_by_id"], name: "index_revenues_on_recorded_by_id"
@@ -248,8 +247,8 @@ ActiveRecord::Schema.define(version: 20190110044735) do
     t.string "domain"
     t.string "provider"
     t.string "image"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "tokens", force: :cascade do |t|

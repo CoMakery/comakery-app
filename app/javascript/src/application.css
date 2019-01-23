@@ -985,6 +985,11 @@ input[type="submit"].button:disabled {
   background: white;
 }
 
+.featured-missions__container {
+  width: 100%;
+  max-width: 1440px;
+}
+
 .featured-missions__header {
   display: flex;
   justify-content: space-around;
@@ -1357,4 +1362,19 @@ input[type="submit"].button:disabled {
   text-transform: uppercase;
   text-align: center;
   margin-top: 6px;
+}
+
+.intercom {
+  position: absolute;
+  top: 574px;
+  right: 35px;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-blue);
+  border-radius: 50%;
+  border: 1px solid white;
+  cursor: pointer;
 }

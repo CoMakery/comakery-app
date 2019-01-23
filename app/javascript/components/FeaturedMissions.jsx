@@ -9,6 +9,7 @@ import headerImg from '../src/images/featured/header.png'
 import logo from '../src/images/styleguide/icons/Logo-Footer.svg'
 import developersImg from '../src/images/featured/developers.png'
 import communityManagersImg from '../src/images/featured/community-managers.png'
+import chatImg from '../src/images/featured/chat.svg'
 
 export default class FeaturedMissions extends React.Component {
   constructor(props) {
@@ -24,6 +25,9 @@ export default class FeaturedMissions extends React.Component {
     const { moreMissions } = this.props
     return (
       <div className="featured-missions">
+        <div className="intercom">
+          <img src={chatImg} />
+        </div>
         <div className="featured-missions__header">
           <img className="featured-missions__header__img" src={headerImg} />
           <div className="featured-missions__header__description">
