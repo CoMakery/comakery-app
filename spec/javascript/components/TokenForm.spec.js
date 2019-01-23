@@ -145,8 +145,8 @@ describe('TokenForm', () => {
     ).props().value).toBe('eth')
 
     expect(wrapper.find(
-      'InputFieldHalfed[title="token name"][required][name="token[name]"][placeholder="Bitcoin"]'
-    ).props().value).toBe('ETH-TEST')
+      'InputFieldHalfed[title="token name"][required][name="token[name]"]'
+    ).props().value).toBe('Ether')
 
     expect(wrapper.find(
       'InputFieldUploadFile[title="token logo"][required][name="token[logo_image]"]'
