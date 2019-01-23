@@ -2,7 +2,7 @@ import jQuery from 'jquery'
 import config from 'networks/qtum/config'
 import Wallet from 'networks/qtum/ledger/wallet'
 import debugLog from 'src/javascripts/debugLog'
-import caValidator from 'crypto-address-validator'
+import caValidator from 'wallet-address-validator'
 
 const transferQtumCoins = async function(award) { // award in JSON
   const fee = 0.001582
