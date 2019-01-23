@@ -1336,6 +1336,8 @@ input[type="submit"].button:disabled {
 
 .gallery-content__title {
   width: 263px;
+  box-sizing: border-box;
+  padding: 0 16px;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-weight: bold;
@@ -1345,6 +1347,9 @@ input[type="submit"].button:disabled {
   letter-spacing: normal;
   color: var(--black);
   margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .gallery-content__description {
