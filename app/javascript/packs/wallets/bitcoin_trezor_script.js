@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 window.bitcoinTrezor = (function() {
   const trezorUtils = require('networks/bitcoin/trezor_utils').default
 

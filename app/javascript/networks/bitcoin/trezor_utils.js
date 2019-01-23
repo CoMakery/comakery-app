@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 import jQuery from 'jquery'
 import utils from 'networks/bitcoin/helpers/utils'
 import insight from 'networks/bitcoin/nodes/insight'
@@ -19,7 +17,7 @@ const transferBtcCoins = async function(award) { // award in JSON
   const addressValid = caValidator.validate(recipientAddress, 'BTC', networkType)
   try {
     if (addressValid) {
-      alertMsg(jQuery('#metamaskModal1'), 'Waiting...')
+      window.alertMsg('#metamaskModal1', 'Waiting...')
       const txHash = await submitTransaction(network, recipientAddress, amount)
       debugLog('transaction address: ' + txHash)
       if (txHash) {
@@ -31,7 +29,7 @@ const transferBtcCoins = async function(award) { // award in JSON
   } catch (err) {
     console.log(err)
     if (err.name === 'ErrorMessage') {
-      alertMsg(jQuery('#metamaskModal1'), err.message)
+      window.alertMsg('#metamaskModal1', err.message)
     } else {
       window.foundationCmd('#metamaskModal1', 'close')
     }
