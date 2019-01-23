@@ -1,10 +1,9 @@
-/* eslint-disable no-undef */
-
+import jQuery from 'jquery'
 import utils from 'networks/bitcoin/helpers/utils'
 import insight from 'networks/bitcoin/nodes/insight'
 import debugLog from 'src/javascripts/debugLog'
 import BigNumber from 'bignumber.js'
-import caValidator from 'crypto-address-validator'
+import caValidator from 'wallet-address-validator'
 import TrezorConnect from 'trezor-connect'
 
 const transferBtcCoins = async function(award) { // award in JSON
@@ -18,25 +17,25 @@ const transferBtcCoins = async function(award) { // award in JSON
   const addressValid = caValidator.validate(recipientAddress, 'BTC', networkType)
   try {
     if (addressValid) {
-      alertMsg($('#metamaskModal1'), 'Waiting...')
+      window.alertMsg('#metamaskModal1', 'Waiting...')
       const txHash = await submitTransaction(network, recipientAddress, amount)
       debugLog('transaction address: ' + txHash)
       if (txHash) {
-        $.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash })
+        jQuery.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash })
       }
-      $('#metamaskModal1').foundation('close')
+      window.foundationCmd('#metamaskModal1', 'close')
+      return txHash
     }
   } catch (err) {
     console.log(err)
     if (err.name === 'ErrorMessage') {
-      alertMsg($('#metamaskModal1'), err.message)
+      window.alertMsg('#metamaskModal1', err.message)
     } else {
-      $('#metamaskModal1').foundation('close')
+      window.foundationCmd('#metamaskModal1', 'close')
     }
-    if ($('body.projects-show').length > 0) {
-      $('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
+    if (jQuery('body.projects-show').length > 0) {
+      jQuery('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
     }
-    return
   }
 }
 
@@ -124,4 +123,4 @@ const getFirstBitcoinAddress = async function(network, isLegacy) {
   return rs.payload.address
 }
 
-module.exports = { transferBtcCoins, getFirstBitcoinAddress, submitTransaction }
+export default { transferBtcCoins, getFirstBitcoinAddress, submitTransaction }
