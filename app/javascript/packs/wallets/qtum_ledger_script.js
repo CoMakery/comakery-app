@@ -1,4 +1,6 @@
-/* eslint-disable no-alert, no-undef, complexity, standard/object-curly-even-spacing */
+/* eslint-disable no-undef */
+
+import caValidator from 'crypto-address-validator'
 
 window.qtumLedger = (function() {
   const config = require('networks/qtum/config').default
@@ -12,7 +14,8 @@ window.qtumLedger = (function() {
       return
     }
     try {
-      const addressValid = true
+      const networkType = network === 'mainnet' ? 'prod' : 'testnet'
+      const addressValid = caValidator.validate(recipientAddress, 'QTUM', networkType)
       if (addressValid) {
         alertMsg($('#metamaskModal1'), 'Waiting...')
         const txHash = await submitTransaction(network, recipientAddress, amount)
