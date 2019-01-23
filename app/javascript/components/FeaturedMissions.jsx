@@ -29,19 +29,21 @@ export default class FeaturedMissions extends React.Component {
           <img src={chatImg} />
         </div>
         <div className="featured-missions__header">
-          <img className="featured-missions__header__img" src={headerImg} />
-          <div className="featured-missions__header__description">
-            <img className="featured-missions__header__logo" src={logo} />
-            <div className="featured-missions__header__title">
-              Find Your Mission. <br />
-              Prepare For Liftoff.
+          <div className="featured-missions__header_container">
+            <img className="featured-missions__header__img" src={headerImg} />
+            <div className="featured-missions__header__description">
+              <img className="featured-missions__header__logo" src={logo} />
+              <div className="featured-missions__header__title">
+                Find Your Mission. <br />
+                Prepare For Liftoff.
+              </div>
+              <div className="featured-missions__header__subtitle">Accelerating Blockchain Adoption</div>
             </div>
-            <div className="featured-missions__header__subtitle">Accelerating Blockchain Adoption</div>
           </div>
         </div>
         <div className="featured-missions__content">
           <p className="featured-missions__content__title">
-            Featured<br />
+              Featured<br />
             <span className="featured-missions__content__title--big">missions</span>
           </p>
           <p className="featured-missions__content__description">CoMakery Hosts Blockchain Missions We Believe In</p>
@@ -61,39 +63,46 @@ export default class FeaturedMissions extends React.Component {
           }
         </div>
         <div className="featured-missions__more">
-          <p className="featured-missions__more__title">
-            40+<br />
-            <span className="featured-missions__more__title--big">missions</span>
-          </p>
-          <p className="featured-missions__more__description">Discover Missions With Cutting Edge Projects</p>
-          <Slider className="featured-missions__gallery" slidesToShow={4} slidesToScroll={1}>
-            { moreMissions.map((mission) =>
-              <div key={mission.id}>
-                <div className="gallery-content">
-                  <div className="gallery-content__image">
-                    <img src={mission.imageUrl} />
+          <div className="featured-missions__more_container">
+            <p className="featured-missions__more__title">
+              40+<br />
+              <span className="featured-missions__more__title--big">missions</span>
+            </p>
+            <p className="featured-missions__more__description">Discover Missions With Cutting Edge Projects</p>
+            <Slider className="featured-missions__gallery" slidesToShow={4} slidesToScroll={1}>
+              { moreMissions.map((mission) =>
+                <div key={mission.id}>
+                  <div className="gallery-content">
+                    <div className="gallery-content__image">
+                      <img src={mission.imageUrl} />
+                    </div>
+                    <div className="gallery-content__title">{mission.name}</div>
+                    <div className="gallery-content__description">
+                      {mission.projectsCount === 0 && 'No projects'}
+                      {mission.projectsCount > 0 && `${mission.projectsCount} ${mission.projectsCount === 1 ? 'project' : 'projects'}` }
+                    </div>
                   </div>
-                  <div className="gallery-content__title">{mission.name}</div>
-                  <div className="gallery-content__description">{mission.projectsCount } projects</div>
                 </div>
-              </div>
-            )}
-          </Slider>
+              )}
+            </Slider>
+          </div>
         </div>
         <div className="featured-missions__footer">
-          <div className="featured-missions__footer__stat">
-            <div className="featured-missions__footer__stat__num">1000+</div>
-            <div className="featured-missions__footer__stat__name">Contributors</div>
-          </div>
-          <img src={communityManagersImg} />
-          <div className="featured-missions__footer__stat">
-            <div className="featured-missions__footer__stat__num">500+</div>
-            <div className="featured-missions__footer__stat__name">PROJECTS</div>
-          </div>
-          <img src={developersImg} />
-          <div className="featured-missions__footer__stat">
-            <div className="featured-missions__footer__stat__num">1,000,000+</div>
-            <div className="featured-missions__footer__stat__name">TOKENS AWARDED</div>
+          <div className="featured-missions__footer_container">
+            <div className="featured-missions__footer__stat">
+              <div className="featured-missions__footer__stat__num">1000+</div>
+              <div className="featured-missions__footer__stat__name">Contributors</div>
+            </div>
+            <img src={communityManagersImg} />
+            <div className="featured-missions__footer__stat">
+              <div className="featured-missions__footer__stat__num">500+</div>
+              <div className="featured-missions__footer__stat__name">PROJECTS</div>
+            </div>
+            <img src={developersImg} />
+            <div className="featured-missions__footer__stat">
+              <div className="featured-missions__footer__stat__num">1,000,000+</div>
+              <div className="featured-missions__footer__stat__name">TOKENS AWARDED</div>
+            </div>
           </div>
         </div>
       </div>

@@ -58,6 +58,7 @@ export default class FeaturedMission extends React.Component {
             <div className="featured-mission__project__interest" onClick={() => { this.addInterest(project.id) }}>I’m interested</div>
             }
           </div>)}
+          <div className="featured-mission__create-project">Create New Project</div>
         </div>
       </div>
     )
