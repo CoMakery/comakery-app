@@ -17,7 +17,6 @@
     "cardano-crypto.js": "^5.0.0",
     "classnames": "^2.2.6",
     "coffeescript": "1.12.7",
-    "crypto-address-validator": "^0.1.0",
     "d3pie": "^0.1.9",
     "formdata-polyfill": "^3.0.13",
     "jquery": "^3.3.1",
@@ -30,6 +29,7 @@
     "react-paginate": "^5.2.4",
     "react_ujs": "^2.4.4",
     "trezor-connect": "^6.0.3",
+    "wallet-address-validator": "^0.2.4",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@ import utils from 'networks/bitcoin/helpers/utils'
 import insight from 'networks/bitcoin/nodes/insight'
 import debugLog from 'src/javascripts/debugLog'
 import BigNumber from 'bignumber.js'
-import caValidator from 'crypto-address-validator'
+import caValidator from 'wallet-address-validator'
 import TrezorConnect from 'trezor-connect'
 
 const transferBtcCoins = async function(award) { // award in JSON
