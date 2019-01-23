@@ -26,6 +26,13 @@ describe('customBlockchainNetwork', () => {
     expect($select.find('option:eq(1)').attr('value')).toEqual('qtum_testnet')
   })
 
+  it('with coin type of qtum', () => {
+    customBlockchainNetwork('qtum')
+    expect($select.find('option').length).toEqual(2)
+    expect($select.find('option:eq(0)').attr('value')).toEqual('qtum_mainnet')
+    expect($select.find('option:eq(1)').attr('value')).toEqual('qtum_testnet')
+  })
+
   it('with coin type of ada', () => {
     customBlockchainNetwork('ada')
     expect($select.find('option').length).toEqual(2)
