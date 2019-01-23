@@ -21,19 +21,15 @@ class AwardDecorator < Draper::Decorator
   end
 
   def json_for_sending_awards
-    to_json(only: %i[id total_amount], methods: %i[issuer_address amount_to_send recipient_display_name], include: { account: { only: %i[id ethereum_wallet qtum_wallet cardano_wallet qtum_wallet] }, project: { only: %i[id contract_address ethereum_contract_address coin_type ethereum_network blockchain_network] } })
+    to_json(only: %i[id total_amount], methods: %i[issuer_address amount_to_send recipient_display_name], include: { account: { only: %i[id ethereum_wallet qtum_wallet cardano_wallet qtum_wallet bitcoin_wallet] }, project: { only: %i[id contract_address ethereum_contract_address coin_type ethereum_network blockchain_network] } })
   end
 
   def unit_amount_pretty
-    number_with_delimiter(unit_amount)
+    number_with_precision(unit_amount, precision: project.decimal_places.to_i)
   end
 
   def total_amount_pretty
-    if project.decimal_places.to_i.zero?
-      number_with_delimiter(total_amount.to_i)
-    else
-      number_to_currency(BigDecimal(amount_to_send) / project.decimal_places_value, precision: project.decimal_places, unit: '')
-    end
+    number_to_currency(total_amount, precision: project.decimal_places.to_i, unit: '')
   end
 
   def part_of_email
@@ -55,6 +51,8 @@ class AwardDecorator < Draper::Decorator
       account&.qtum_wallet
     elsif object.project.coin_type_on_cardano?
       account&.cardano_wallet
+    elsif object.project.coin_type_on_bitcoin?
+      account&.bitcoin_wallet
     end
   end
 

@@ -18,12 +18,10 @@ describe 'tokens features', js: true do
     select('eTH', from: 'token[coin_type]', visible: false)
     select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
     fill_in('token[name]', with: 'eth test')
-    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
 
     click_on 'create & close'
-
-    # TODO: we should come up with something better for feature testing react pages than creating a race condition
-    sleep 1
+    find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'eth'
     expect(Token.last.ethereum_network).to eq 'main'
@@ -38,7 +36,7 @@ describe 'tokens features', js: true do
     select('eRC20', from: 'token[coin_type]', visible: false)
     select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
     fill_in('token[name]', with: 'erc20 test')
-    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
 
     stub_web3_fetch
     fill_in('token[ethereum_contract_address]', with: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2')
@@ -50,9 +48,7 @@ describe 'tokens features', js: true do
     expect(find_field('token[decimal_places]').value).to eq '32'
 
     click_on 'create & close'
-
-    # TODO: we should come up with something better for feature testing react pages than creating a race condition
-    sleep 1
+    find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'erc20'
     expect(Token.last.ethereum_network).to eq 'main'
@@ -70,7 +66,7 @@ describe 'tokens features', js: true do
     select('qRC20', from: 'token[coin_type]', visible: false)
     select('test QTUM Network', from: 'token[blockchain_network]', visible: false)
     fill_in('token[name]', with: 'qrc20 test')
-    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
 
     stub_qtum_fetch
     fill_in('token[contract_address]', with: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc')
@@ -82,9 +78,7 @@ describe 'tokens features', js: true do
     expect(find_field('token[decimal_places]').value).to eq '0'
 
     click_on 'create & close'
-
-    # TODO: we should come up with something better for feature testing react pages than creating a race condition
-    sleep 1
+    find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'qrc20'
     expect(Token.last.blockchain_network).to eq 'qtum_testnet'
@@ -134,12 +128,10 @@ describe 'tokens features', js: true do
     select('eTH', from: 'token[coin_type]', visible: false)
     select('main Ethereum Network', from: 'token[ethereum_network]', visible: false)
     fill_in('token[name]', with: 'ETH edited')
-    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', 'helmet_cat.png'))
+    attach_file('token[logo_image]', Rails.root.join('spec', 'fixtures', '600.png'))
 
     click_on 'save & close'
-
-    # TODO: we should come up with something better for feature testing react pages than creating a race condition
-    sleep 1
+    find :css, '.token-index', wait: 10
 
     expect(Token.last.coin_type).to eq 'eth'
     expect(Token.last.ethereum_network).to eq 'main'

@@ -1,5 +1,13 @@
-class Project < ApplicationRecord # rubocop:disable Metrics/ClassLength
+class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
+  BLOCKCHAIN_NAMES = {
+    erc20: 'ethereum',
+    eth: 'ethereum',
+    qrc20: 'qtum',
+    qtum: 'qtum',
+    ada: 'cardano',
+    btc: 'bitcoin'
+  }.freeze
 
   include EthereumAddressable
   include QtumContractAddressable
@@ -47,7 +55,8 @@ class Project < ApplicationRecord # rubocop:disable Metrics/ClassLength
     eth: 'ETH',
     qrc20: 'QRC20',
     qtum:  'QTUM',
-    ada: 'ADA'
+    ada: 'ADA',
+    btc: 'BTC'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -63,6 +72,8 @@ class Project < ApplicationRecord # rubocop:disable Metrics/ClassLength
     rinkeby: 'Rinkeby Test Network'
   }
   enum blockchain_network: {
+    bitcoin_mainnet: 'Main Bitcoin Network',
+    bitcoin_testnet: 'Test Bitcoin Network',
     cardano_mainnet: 'Main Cardano Network',
     cardano_testnet: 'Test Cardano Network',
     qtum_mainnet: 'Main QTUM Network',
@@ -138,6 +149,10 @@ class Project < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def coin_type_on_cardano?
     coin_type_ada?
+  end
+
+  def coin_type_on_bitcoin?
+    coin_type_btc?
   end
 
   def total_revenue

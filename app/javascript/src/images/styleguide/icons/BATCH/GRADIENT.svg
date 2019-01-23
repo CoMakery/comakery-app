@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="61px" height="70px" viewBox="0 0 61 70" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>ICON/BATCH/GRADIENT</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="93.4338931%" y1="67.4001552%" x2="29.468081%" y2="10.924225%" id="linearGradient-1">
+            <stop stop-color="#F143E6" offset="0%"></stop>
+            <stop stop-color="#0089F4" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.9">
+        <g id="ICON/BATCH/GRADIENT" transform="translate(-7.000000, -2.000000)" fill="url(#linearGradient-1)" fill-rule="nonzero">
+            <g transform="translate(7.000000, 2.000000)" id="Group">
+                <g>
+                    <path d="M30.7576005,35.5736744 L30.7576005,69.9806296 L1.22021735,52.777152 L30.7576005,35.5736744 Z M0.918815483,18.114085 L30.1547968,35.1420169 L0.918815483,52.1699488 L0.918815483,18.114085 Z M31.1594697,0.303404125 L60.6968529,17.5068817 L31.1594697,34.7103594 L31.1594697,0.303404125 Z M31.1594697,35.5736744 L60.6968529,52.777152 L31.1594697,69.9806296 L31.1594697,35.5736744 Z M30.7576005,0.303404125 L30.7576005,34.7103594 L1.22021735,17.5068817 L30.7576005,0.303404125 Z M31.7622734,35.1420169 L60.395451,18.4651763 L60.395451,51.8188574 L31.7622734,35.1420169 Z" id="Combined-Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

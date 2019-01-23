@@ -22,11 +22,9 @@ AllCops:
 # Low cyclomatic complexity is the simplest indication of code quality, readability and maintainability.
 # Bypassing this check should trigger a team discussion
 Metrics/CyclomaticComplexity:
+  Max: 5
   Exclude:
     - 'app/views/**/*'
-    - 'app/decorators/account_decorator.rb'
-    - 'app/controllers/awards_controller.rb'
-  Max: 5
 
 Layout/AlignParameters:
   Enabled: true
