@@ -307,16 +307,30 @@ class TokenForm extends React.Component {
               symbolLimit={0}
             />
 
-            <InputFieldHalfed
-              title="token name"
-              required
-              name="token[name]"
-              value={this.state['token[name]']}
-              errorText={this.state.errors['token[name]']}
-              placeholder="Bitcoin"
-              eventHandler={this.handleFieldChange}
-              symbolLimit={0}
-            />
+            {this.state['token[coin_type]'] === 'eth' &&
+              <InputFieldHalfed
+                title="token name"
+                required
+                readOnly
+                name="token[name]"
+                value="Ether"
+                errorText={this.state.errors['token[name]']}
+                symbolLimit={0}
+              />
+            }
+
+            {this.state['token[coin_type]'] !== 'eth' &&
+              <InputFieldHalfed
+                title="token name"
+                required
+                name="token[name]"
+                value={this.state['token[name]']}
+                errorText={this.state.errors['token[name]']}
+                placeholder="Bitcoin"
+                eventHandler={this.handleFieldChange}
+                symbolLimit={0}
+              />
+            }
 
             {this.state['token[coin_type]'] === 'qrc20' &&
               <InputFieldHalfed

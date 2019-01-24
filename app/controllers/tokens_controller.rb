@@ -108,7 +108,7 @@ class TokensController < ApplicationController
     @props = {
       token: @token&.serializable_hash&.merge(
         {
-          logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 250, 250) : nil
+          logo_url: @token&.logo_image&.present? ? Refile.attachment_url(@token, :logo_image, :fill, 500, 500) : nil
         }
       ),
       coin_types: @coin_types,
