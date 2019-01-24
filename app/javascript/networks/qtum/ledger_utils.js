@@ -5,7 +5,7 @@ import debugLog from 'src/javascripts/debugLog'
 import caValidator from 'wallet-address-validator'
 
 const transferQtumCoins = async function(award) { // award in JSON
-  const fee = 0.001582
+  const fee = 0.0015
   const network = award.project.blockchain_network.replace('qtum_', '')
   const recipientAddress = award.account.qtum_wallet
   let amount = parseFloat(award.total_amount)
@@ -28,11 +28,7 @@ const transferQtumCoins = async function(award) { // award in JSON
     }
   } catch (err) {
     console.log(err)
-    if (err.name === 'ErrorMessage') {
-      window.alertMsg('#metamaskModal1', err.message)
-    } else {
-      window.foundationCmd('#metamaskModal1', 'close')
-    }
+    window.alertMsg('#metamaskModal1', err.message)
     if (jQuery('body.projects-show').length > 0) {
       jQuery('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
     }
@@ -64,6 +60,7 @@ const submitTransaction = async function(network, to, amount, fee) {
   Wallet.restoreFromHdNodeByPage(hdNode, 0, 1).forEach((item) => {
     debugLog('item ...........')
     wallet = item.wallet
+    wallet.extend.ledger.path += '/' + item.path
   })
   debugLog(wallet)
   const serializedTx = await wallet.generateTx(to, amount, fee)

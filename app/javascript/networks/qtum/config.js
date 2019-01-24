@@ -20,8 +20,7 @@ export default {
     }
   },
   getNetwork() {
-    // return this.get('network', 'mainnet')
-    return this.get('network', 'testnet')
+    return this.get('network', 'mainnet')
   },
   getMode() {
     return this.get('mode', 'normal')
