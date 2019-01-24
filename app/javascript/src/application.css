@@ -174,6 +174,17 @@ a.header--nav--links--current {
   text-transform: capitalize;
 }
 
+@media screen and (max-width: 650px) {
+  .footer--content--nav {
+    flex-direction: column;
+  }
+  .footer--content--nav--about,
+  .footer--content--nav--join,
+  .footer--content--nav--legal {
+    margin-left: 0;
+  }
+}
+
 .footer--content--nav a {
   text-decoration: none;
   font-size: 14px;
@@ -1203,6 +1214,7 @@ input[type="submit"].button:disabled {
   font-stretch: normal;
   line-height: normal;
   letter-spacing: normal;
+  float: right;
   text-align: right;
   -webkit-background-clip: text;
   background-clip: text;

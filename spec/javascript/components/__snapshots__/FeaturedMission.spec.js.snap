@@ -31,11 +31,12 @@ exports[`FeaturedMission renders correctly without props 1`] = `
       <div
         className="featured-mission__description"
       />
-      <div
+      <a
         className="featured-mission__create-project"
+        href="/projects/new"
       >
         Create New Project
-      </div>
+      </a>
     </div>
   </div>
 </FeaturedMission>
