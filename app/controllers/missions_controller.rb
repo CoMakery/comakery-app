@@ -68,7 +68,7 @@ class MissionsController < ApplicationController
   private
 
   def mission_params
-    params.require(:mission).permit(:name, :subtitle, :description, :logo, :image, :token_id, :status)
+    params.require(:mission).permit(:name, :subtitle, :description, :logo, :image, :status)
   end
 
   def find_mission_by_id
@@ -77,7 +77,6 @@ class MissionsController < ApplicationController
 
   def set_generic_props
     @props = {
-      tokens: Token.all.map { |token| [token.name, token.id.to_s] },
       mission: @mission&.serialize,
       form_url: missions_path,
       form_action: 'POST',
@@ -89,8 +88,6 @@ class MissionsController < ApplicationController
   def set_missions_prop
     @missions = policy_scope(Mission).map do |m|
       m.serialize.merge(
-        token_name: m.token&.name,
-        token_symbol: m.token&.symbol,
         projects: m.projects.as_json(only: %i[id title status])
       )
     end

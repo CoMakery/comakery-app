@@ -6,14 +6,6 @@ exports[`MissionForm renders correctly without props 1`] = `
   formAction="POST"
   formUrl="/"
   mission={Object {}}
-  tokens={
-    Array [
-      Array [
-        "Please select a token ...",
-        null,
-      ],
-    ]
-  }
   urlOnSuccess="/"
 >
   <Layout
@@ -161,90 +153,6 @@ exports[`MissionForm renders correctly without props 1`] = `
                   </div>
                 </InputField>
               </InputFieldWhiteDark>
-              <InputFieldDropdownHalfed
-                eventHandler={[Function]}
-                name="token"
-                required={true}
-                selectEntries={
-                  Array [
-                    Array [
-                      "Please select a token ...",
-                      null,
-                    ],
-                  ]
-                }
-                title="Token"
-                value=""
-              >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__dropdown--halfed"
-                  disabled={false}
-                  errorText=""
-                  eventHandler={[Function]}
-                  imgInputRef={null}
-                  imgPreviewDimensions="40x40"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  name="token"
-                  pattern=".*"
-                  placeholder="Please enter value"
-                  readOnly={false}
-                  required={true}
-                  selectEntries={
-                    Array [
-                      Array [
-                        "Please select a token ...",
-                        null,
-                      ],
-                    ]
-                  }
-                  symbolLimit={0}
-                  title="Token"
-                  type="select"
-                  value=""
-                >
-                  <div
-                    className="input-field input-field__dropdown--halfed"
-                  >
-                    <div
-                      className="input-field--title"
-                    >
-                      <span
-                        className="input-field--title--title"
-                      >
-                        Token
-                      </span>
-                      <span
-                        className="input-field--title--required"
-                      >
-                        required
-                      </span>
-                    </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <select
-                        className="input-field--content__select"
-                        disabled={false}
-                        name="token"
-                        onChange={[Function]}
-                        required={true}
-                        value=""
-                      >
-                        <option
-                          key="null"
-                          value={null}
-                        >
-                          Please select a token ...
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                </InputField>
-              </InputFieldDropdownHalfed>
               <InputFieldWhiteDark
                 eventHandler={[Function]}
                 name="subtitle"

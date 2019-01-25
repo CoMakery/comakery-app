@@ -4,7 +4,6 @@ class Mission < ApplicationRecord
   attachment :logo
   attachment :image
 
-  belongs_to :token
   has_many :projects, inverse_of: :mission
   enum status: %i[active passive]
 
@@ -13,7 +12,6 @@ class Mission < ApplicationRecord
   validates :name, length: { maximum: 100 }
   validates :subtitle, length: { maximum: 140 }
   validates :description, length: { maximum: 250 }
-  validate :validate_token_id
 
   def serialize
     as_json(only: %i[id name token_id subtitle description status display_order]).merge(

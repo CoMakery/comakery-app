@@ -2,9 +2,8 @@ require 'rails_helper'
 require 'refile/file_double'
 
 describe MissionsController do
-  let!(:token) { create :token }
-  let!(:mission1) { create :mission, name: 'test1', token_id: token.id }
-  let!(:mission2) { create :mission, name: 'test1', token_id: token.id }
+  let!(:mission1) { create :mission, name: 'test1' }
+  let!(:mission2) { create :mission, name: 'test2' }
   let!(:admin_account) { create :account, comakery_admin: true }
   let!(:account) { create :account }
 
@@ -104,7 +103,6 @@ describe MissionsController do
             name: 'test2',
             subtitle: 'test2',
             description: 'test2',
-            token_id: token.id,
             image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
             logo: fixture_file_upload('helmet_cat.png', 'image/png', :binary)
           }
@@ -119,7 +117,6 @@ describe MissionsController do
           mission: {
             subtitle: 'test2',
             description: 'test2',
-            token_id: token.id,
             logo: fixture_file_upload('helmet_cat.png', 'image/png', :binary)
           }
         }

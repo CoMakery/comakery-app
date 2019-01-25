@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
-import InputFieldDropdownHalfed from './styleguide/InputFieldDropdownHalfed'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
@@ -27,11 +26,6 @@ export default class MissionForm extends React.Component {
     this.imageInputRef = React.createRef()
     this.logoInputRef = React.createRef()
 
-    let token = props.mission.tokenId
-    if (props.tokens.length > 0) {
-      token = token || props.tokens[0][1]
-    }
-
     this.state = {
       errors        : {}, // error hash for account form
       disabled      : {}, // disabled hash
@@ -41,7 +35,6 @@ export default class MissionForm extends React.Component {
       formUrl       : this.props.formUrl,
       closeOnSuccess: false,
       name          : props.mission.name || '',
-      token         : (token || '').toString(),
       subtitle      : props.mission.subtitle || '',
       description   : props.mission.description || '',
       logoPreview   : props.mission.logoPreview,
@@ -97,9 +90,8 @@ export default class MissionForm extends React.Component {
     }
 
     let formData = new FormData()
-    const {name, token, subtitle, description, logo, image} = this.state
+    const {name, subtitle, description, logo, image} = this.state
     formData.append('mission[name]', name)
-    formData.append('mission[token_id]', token)
     formData.append('mission[subtitle]', subtitle)
     formData.append('mission[description]', description)
     formData.append('authenticity_token', this.props.csrfToken)
@@ -203,7 +195,7 @@ export default class MissionForm extends React.Component {
   }
 
   render() {
-    const {name, subtitle, token, description, logoPreview, imagePreview, errors} = this.state
+    const {name, subtitle, description, logoPreview, imagePreview, errors} = this.state
 
     return <React.Fragment>
       <Layout
@@ -255,13 +247,6 @@ export default class MissionForm extends React.Component {
             eventHandler={this.handleChangeFormData}
             errorText={errors.name} />
 
-          <InputFieldDropdownHalfed
-            name="token" title="Token" required value={token}
-            selectEntries={this.props.tokens}
-            eventHandler={this.handleChangeFormData}
-            errorText={errors.token}
-          />
-
           <InputFieldWhiteDark
             name="subtitle" title="Subtitle" symbolLimit={140} required value={subtitle}
             placeholder="Unicoin is the future of tokenizing fantastical beast networks"
@@ -302,7 +287,6 @@ export default class MissionForm extends React.Component {
 
 MissionForm.propTypes = {
   mission     : PropTypes.shape({}).isRequired,
-  tokens      : PropTypes.array.isRequired,
   formUrl     : PropTypes.string.isRequired,
   formAction  : PropTypes.string.isRequired,
   urlOnSuccess: PropTypes.string.isRequired,
@@ -311,7 +295,6 @@ MissionForm.propTypes = {
 
 MissionForm.defaultProps = {
   mission     : {},
-  tokens      : [['Please select a token ...', null]],
   formUrl     : '/',
   formAction  : 'POST',
   urlOnSuccess: '/',
