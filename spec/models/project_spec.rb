@@ -1058,6 +1058,13 @@ describe Project do
     expect project.token_symbol = 'AAA'
   end
 
+  it 'copies decimal_places from token' do
+    token = create :token, name: 'test', symbol: 'test', decimal_places: 2
+    mission = create :mission, name: 'test', description: 'test', subtitle: 'test', token: token
+    project = create :project, mission: mission
+    expect(project.decimal_places).to eq 2
+  end
+
   describe '#top_contributors' do
     let!(:account) { create :account }
     let!(:account1) { create :account }
