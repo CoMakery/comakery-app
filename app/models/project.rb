@@ -8,18 +8,17 @@ class Project < ApplicationRecord
     btc: 'bitcoin'
   }.freeze
 
-  include EthereumAddressable
-  include QtumContractAddressable
-
   nilify_blanks
   attachment :image
 
   belongs_to :account
   belongs_to :mission
+  belongs_to :token
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards
   has_many :channels, -> { order :created_at }, inverse_of: :project, dependent: :destroy
+
   has_many :payments, dependent: :destroy do
     def new_with_quantity(quantity_redeemed:, account:)
       project = @association.owner
@@ -27,7 +26,7 @@ class Project < ApplicationRecord
       new(total_value: BigDecimal(quantity) * project.revenue_per_share,
           quantity_redeemed: quantity_redeemed,
           share_value: project.revenue_per_share,
-          currency: project.denomination,
+          currency: project.token.denomination,
           account: account)
         .tap(&:truncate_total_value_to_currency_precision)
     end
@@ -49,61 +48,19 @@ class Project < ApplicationRecord
     revenue_share: 0,
     project_token: 1
   }
-  enum coin_type: {
-    erc20: 'ERC20',
-    eth: 'ETH',
-    qrc20: 'QRC20',
-    ada: 'ADA',
-    btc: 'BTC'
-  }, _prefix: :coin_type
-
-  enum denomination: {
-    USD: 0,
-    BTC: 1,
-    ETH: 2
-  }
   enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
-  enum ethereum_network: {
-    main:    'Main Ethereum Network',
-    ropsten: 'Ropsten Test Network',
-    kovan:   'Kovan Test Network',
-    rinkeby: 'Rinkeby Test Network'
-  }
-  enum blockchain_network: {
-    bitcoin_mainnet: 'Main Bitcoin Network',
-    bitcoin_testnet: 'Test Bitcoin Network',
-    cardano_mainnet: 'Main Cardano Network',
-    cardano_testnet: 'Test Cardano Network',
-    qtum_mainnet: 'Main QTUM Network',
-    qtum_testnet: 'Test QTUM Network'
-  }
   enum status: %i[active passive]
 
-  validates :description, :account, :title, :legal_project_owner, :denomination, presence: true
+  validates :description, :account, :title, :legal_project_owner, :token_id, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
   validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
-
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { if: :revenue_share? }
-
   validates :maximum_tokens, numericality: { greater_than: 0 }
   validates :royalty_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_nil: true }
-
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
   validate :valid_video_url, if: -> { video_url.present? }
-
   validate :maximum_tokens_unchanged, if: -> { !new_record? }
-  validate :valid_ethereum_enabled
-  validate :check_contract_address_exist_on_blockchain_network
-  validates :contract_address, qtum_contract_address: true # see QtumContractAddressable
-  validates :ethereum_contract_address, ethereum_address: { type: :account } # see EthereumAddressable
-  validate :denomination_changeable
-  validate :contract_address_changeable, if: -> { completed_awards.present? }
-
-  before_validation :populate_token_symbol
-  before_validation :check_coin_type
-  before_save :set_transitioned_to_ethereum_enabled
-  before_save :enable_ethereum
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -111,6 +68,17 @@ class Project < ApplicationRecord
   scope :visible, -> { where 'projects.visibility not in(2,3,4)' }
   scope :unarchived, -> { where.not visibility: 4 }
   scope :publics, -> { where 'projects.visibility in(1,3)' }
+
+  delegate :coin_type_token?, to: :token
+  delegate :coin_type_on_ethereum?, to: :token
+  delegate :coin_type_on_qtum?, to: :token
+  delegate :coin_type_on_cardano?, to: :token
+  delegate :coin_type_on_bitcoin?, to: :token
+  delegate :transitioned_to_ethereum_enabled?, to: :token
+  delegate :decimal_places_value, to: :token
+  delegate :populate_token?, to: :token
+  delegate :total_awarded, to: :awards
+
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
       .joins('left join award_types on projects.id = award_types.project_id')
@@ -133,26 +101,6 @@ class Project < ApplicationRecord
     CreateEthereumAwards.call(awards: awards)
   end
 
-  def coin_type_token?
-    coin_type_erc20? || coin_type_qrc20?
-  end
-
-  def coin_type_on_ethereum?
-    coin_type_erc20? || coin_type_eth?
-  end
-
-  def coin_type_on_qtum?
-    coin_type_qrc20?
-  end
-
-  def coin_type_on_cardano?
-    coin_type_ada?
-  end
-
-  def coin_type_on_bitcoin?
-    coin_type_btc?
-  end
-
   def total_revenue
     revenues.total_amount
   end
@@ -160,8 +108,6 @@ class Project < ApplicationRecord
   def total_month_awarded
     awards.where('awards.created_at >= ?', Time.zone.today.beginning_of_month).sum(:total_amount)
   end
-
-  delegate :total_awarded, to: :awards
 
   def total_awards_outstanding
     total_awarded - total_awards_redeemed
@@ -173,7 +119,7 @@ class Project < ApplicationRecord
 
   def share_of_revenue_unpaid(awards)
     return BigDecimal(0) if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0 || awards.blank?
-    (BigDecimal(awards) * revenue_per_share).truncate(currency_precision)
+    (BigDecimal(awards) * revenue_per_share).truncate(token.currency_precision)
   end
 
   def total_revenue_shared
@@ -223,10 +169,6 @@ class Project < ApplicationRecord
     youtube_id
   end
 
-  def transitioned_to_ethereum_enabled?
-    !!@transitioned_to_ethereum_enabled
-  end
-
   def share_revenue?
     revenue_share? && (royalty_percentage&.> 0)
   end
@@ -270,10 +212,6 @@ class Project < ApplicationRecord
     total_awarded * 100.0 / maximum_tokens
   end
 
-  def decimal_places_value
-    10**decimal_places.to_i
-  end
-
   def awards_for_chart(max: 1000)
     result = []
     recents = awards.limit(max).order('id desc')
@@ -300,46 +238,7 @@ class Project < ApplicationRecord
     result
   end
 
-  def populate_token?
-    ethereum_contract_address.present? && project_token? && (token_symbol.blank? || decimal_places.blank?)
-  end
-
   private
-
-  def check_coin_type
-    check_coin_type_blockchain_network
-    if coin_type_erc20?
-      self.contract_address = nil
-    elsif coin_type_qrc20?
-      self.ethereum_contract_address = nil
-    elsif coin_type?
-      self.contract_address = nil
-      self.ethereum_contract_address = nil
-      self.token_symbol   = nil
-      self.decimal_places = nil
-    end
-  end
-
-  def check_coin_type_blockchain_network
-    if coin_type_on_ethereum?
-      self.blockchain_network = nil
-    elsif coin_type_on_qtum?
-      self.ethereum_network = nil
-    end
-  end
-
-  def populate_token_symbol
-    if populate_token?
-      symbol, decimals = Comakery::Ethereum.token_symbol(ethereum_contract_address, self)
-      self.token_symbol = symbol if token_symbol.blank?
-      self.decimal_places = decimals if decimal_places.blank?
-      ethereum_contract_address_exist_on_network?(symbol)
-    end
-  end
-
-  def enable_ethereum
-    self.ethereum_enabled = ethereum_contract_address.present? || contract_address? unless ethereum_enabled
-  end
 
   def valid_tracker_url
     validate_url(:tracker)
@@ -356,18 +255,6 @@ class Project < ApplicationRecord
     errors[:video_url] << "must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'" if youtube_id.blank?
   end
 
-  def valid_ethereum_enabled
-    if ethereum_enabled_changed? && ethereum_enabled == false
-      errors[:ethereum_enabled] << 'cannot be set to false after it has been set to true'
-    end
-  end
-
-  def set_transitioned_to_ethereum_enabled
-    @transitioned_to_ethereum_enabled = ethereum_enabled_changed? &&
-                                        ethereum_enabled && ethereum_contract_address.blank?
-    true # don't halt filter
-  end
-
   def validate_url(attribute_name)
     uri = URI.parse(send(attribute_name) || '')
   rescue URI::InvalidURIError
@@ -379,40 +266,7 @@ class Project < ApplicationRecord
 
   def maximum_tokens_unchanged
     if maximum_tokens_was > 0 && maximum_tokens_was != maximum_tokens
-      errors[:maximum_tokens] << "can't be changed" if license_finalized? || ethereum_enabled?
+      errors[:maximum_tokens] << "can't be changed" if license_finalized? || token.ethereum_enabled?
     end
-  end
-
-  def ethereum_contract_address_exist_on_network?(symbol)
-    if (ethereum_contract_address_changed? || ethereum_network_changed?) && symbol.blank?
-      errors[:ethereum_contract_address] << 'should exist on the ethereum network'
-    end
-  end
-
-  def check_contract_address_exist_on_blockchain_network
-    if (contract_address_changed? || blockchain_network_changed?) && token_symbol.blank? && contract_address?
-      errors[:contract_address] << 'should exist on the qtum network'
-    end
-  end
-
-  def denomination_changeable
-    errors.add(:denomination, 'cannot be changed because the license terms are finalized') if license_finalized_was
-    errors.add(:denomination, 'cannot be changed because revenue has been recorded') if revenues.any? && denomination_changed?
-  end
-
-  def contract_address_changeable
-    ethereum_contract_address_changeable
-    errors.add(:blockchain_network, 'cannot be changed if has completed transactions') if blockchain_network_changed?
-    errors.add(:contract_address, 'cannot be changed if has completed transactions') if contract_address_changed?
-    errors.add(:decimal_places, 'cannot be changed if has completed transactions') if decimal_places_changed?
-  end
-
-  def ethereum_contract_address_changeable
-    errors.add(:ethereum_network, 'cannot be changed if has completed transactions') if ethereum_network_changed?
-    errors.add(:ethereum_contract_address, 'cannot be changed if has completed transactions') if ethereum_contract_address_changed?
-  end
-
-  def currency_precision
-    Comakery::Currency::PRECISION[denomination]
   end
 end

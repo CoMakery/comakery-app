@@ -42,11 +42,11 @@ class Mom
   end
 
   def cc_project(account = create(:cc_authentication).account, **attrs)
-    project(account, { title: 'Citizen Code' }.merge(**attrs))
+    project(account, { title: 'Citizen Code', token: create(:token) }.merge(**attrs))
   end
 
   def sb_project(account = create(:account), **attrs)
-    project(account, { title: 'Swarmbot', payment_type: 'project_token' }.merge(**attrs))
+    project(account, { title: 'Swarmbot', payment_type: 'project_token', token: create(:token) }.merge(**attrs))
   end
 
   def project(account = create(:account_with_auth), **attrs)
@@ -60,15 +60,15 @@ class Mom
       legal_project_owner: 'UberCatz Inc',
       long_id: SecureRandom.hex(20),
       maximum_tokens: 10_000_000,
-      token_symbol: 'FCBB'
+      token: create(:token)
     }
     Project.new(defaults.merge(attrs))
   end
 
   def token(**attrs)
     defaults = {
-      name: 'Uber for Cats',
-      symbol: 'FCBB'
+      name: "Token-#{SecureRandom.hex(2)}",
+      symbol: "TKN#{SecureRandom.hex(2)}"
     }
     Token.new(defaults.merge(attrs))
   end

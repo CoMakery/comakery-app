@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190108094717) do
+ActiveRecord::Schema.define(version: 20190125122010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,10 +139,11 @@ ActiveRecord::Schema.define(version: 20190108094717) do
   create_table "interests", force: :cascade do |t|
     t.bigint "account_id"
     t.string "protocol"
-    t.string "project"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "project_id"
     t.index ["account_id"], name: "index_interests_on_account_id"
+    t.index ["project_id"], name: "index_interests_on_project_id"
   end
 
   create_table "missions", force: :cascade do |t|
@@ -198,8 +199,6 @@ ActiveRecord::Schema.define(version: 20190108094717) do
     t.integer "maximum_tokens", default: 0, null: false
     t.text "contributor_agreement_url"
     t.text "video_url"
-    t.string "ethereum_contract_address"
-    t.boolean "ethereum_enabled", default: false
     t.integer "payment_type", default: 1
     t.boolean "exclusive_contributions"
     t.string "legal_project_owner"
@@ -207,7 +206,6 @@ ActiveRecord::Schema.define(version: 20190108094717) do
     t.decimal "royalty_percentage", precision: 16, scale: 13
     t.integer "maximum_royalties_per_month"
     t.boolean "license_finalized", default: false, null: false
-    t.integer "denomination", default: 0, null: false
     t.datetime "revenue_sharing_end_date"
     t.integer "featured"
     t.string "image_filename"
@@ -215,17 +213,22 @@ ActiveRecord::Schema.define(version: 20190108094717) do
     t.string "image_content_type"
     t.string "long_id"
     t.integer "visibility", default: 0
-    t.string "token_symbol"
-    t.string "ethereum_network"
-    t.integer "decimal_places"
-    t.string "coin_type"
-    t.string "blockchain_network"
-    t.string "contract_address"
     t.bigint "mission_id"
     t.integer "status", default: 0
+    t.bigint "token_id"
+    t.integer "decimal_places"
+    t.string "token_symbol"
+    t.string "contract_address"
+    t.string "ethereum_contract_address"
+    t.string "blockchain_network"
+    t.string "ethereum_network"
+    t.boolean "ethereum_enabled"
+    t.integer "denomination"
+    t.string "coin_type"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
+    t.index ["token_id"], name: "index_projects_on_token_id"
   end
 
   create_table "revenues", id: :serial, force: :cascade do |t|
@@ -271,4 +274,5 @@ ActiveRecord::Schema.define(version: 20190108094717) do
   end
 
   add_foreign_key "interests", "accounts"
+  add_foreign_key "projects", "tokens"
 end

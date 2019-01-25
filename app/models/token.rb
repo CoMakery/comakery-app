@@ -5,6 +5,8 @@ class Token < ApplicationRecord
   nilify_blanks
   attachment :logo_image, type: :image
 
+  has_many :projects
+
   # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
   # has_many :batches
   # has_many :tasks, through: :batches, dependent: :destroy
@@ -13,7 +15,9 @@ class Token < ApplicationRecord
   enum coin_type: {
     erc20: 'ERC20',
     eth: 'ETH',
-    qrc20: 'QRC20'
+    qrc20: 'QRC20',
+    ada: 'ADA',
+    btc: 'BTC'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -63,6 +67,14 @@ class Token < ApplicationRecord
     coin_type_qrc20?
   end
 
+  def coin_type_on_cardano?
+    coin_type_ada?
+  end
+
+  def coin_type_on_bitcoin?
+    coin_type_btc?
+  end
+
   def transitioned_to_ethereum_enabled?
     @transitioned_to_ethereum_enabled
   end
@@ -73,6 +85,10 @@ class Token < ApplicationRecord
 
   def populate_token?
     ethereum_contract_address.present? && (symbol.blank? || decimal_places.blank?)
+  end
+
+  def currency_precision
+    Comakery::Currency::PRECISION[denomination]
   end
 
   private
@@ -125,7 +141,7 @@ class Token < ApplicationRecord
   end
 
   def ethereum_contract_address_exist_on_network?(symbol)
-    if (ethereum_contract_address_changed? || ethereum_network_changed?) && symbol.blank?
+    if (ethereum_contract_address_changed? || ethereum_network_changed?) && symbol.blank? && ethereum_contract_address?
       errors[:ethereum_contract_address] << 'should exist on the ethereum network'
     end
   end
@@ -150,9 +166,5 @@ class Token < ApplicationRecord
   def ethereum_contract_address_changeable
     errors.add(:ethereum_network, 'cannot be changed if has associated tasks') if ethereum_network_changed?
     errors.add(:ethereum_contract_address, 'cannot be changed if has associated tasks') if ethereum_contract_address_changed?
-  end
-
-  def currency_precision
-    Comakery::Currency::PRECISION[denomination]
   end
 end

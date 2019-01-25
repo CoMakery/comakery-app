@@ -21,13 +21,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def ethereum_contract_explorer_url
-    if ethereum_contract_address
-      site = ethereum_network? ? "#{ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
-      site = 'etherscan.io' if site == 'main.etherscan.io'
-      "https://#{site}/token/#{project.ethereum_contract_address}"
-    elsif coin_type_on_qtum?
-      UtilitiesService.get_contract_url(project.blockchain_network, project.contract_address)
-    end
+    token.decorate.ethereum_contract_explorer_url
   end
 
   def status_description
@@ -39,7 +33,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def currency_denomination
-    Comakery::Currency::DENOMINATIONS[project.denomination]
+    token.decorate.currency_denomination
   end
 
   def payment_description
@@ -66,14 +60,14 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def total_revenue_pretty
-    precision = Comakery::Currency::PRECISION[denomination]
+    precision = Comakery::Currency::PRECISION[token.denomination]
     "#{currency_denomination}#{number_with_precision(total_revenue.truncate(precision),
       precision: precision,
       delimiter: ',')}"
   end
 
   def total_revenue_shared_pretty
-    precision = Comakery::Currency::PRECISION[denomination]
+    precision = Comakery::Currency::PRECISION[token.denomination]
     "#{currency_denomination}#{number_with_precision(total_revenue_shared.truncate(precision),
       precision: precision,
       delimiter: ',')}"
@@ -94,7 +88,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def format_with_decimal_places(amount)
-    number_to_currency(amount, precision: decimal_places.to_i, unit: '')
+    token.decorate.format_with_decimal_places(amount)
   end
 
   def maximum_tokens_pretty
@@ -110,21 +104,21 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def revenue_per_share_pretty
-    precision = Comakery::Currency::PER_SHARE_PRECISION[denomination]
+    precision = Comakery::Currency::PER_SHARE_PRECISION[token.denomination]
     "#{currency_denomination}#{number_with_precision(revenue_per_share.truncate(precision),
       precision: precision,
       delimiter: ',')}"
   end
 
   def total_revenue_shared_unpaid_pretty
-    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
+    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination]
     "#{currency_denomination}#{number_with_precision(total_revenue_shared_unpaid.truncate(precision),
       precision: precision,
       delimiter: ',')}"
   end
 
   def total_paid_to_contributors_pretty
-    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
+    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination]
     "#{currency_denomination}#{number_with_precision(total_paid_to_contributors.truncate(precision),
       precision: precision,
       delimiter: ',')}"
@@ -135,7 +129,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def minimum_payment
-    project_min_payment = Comakery::Currency::DEFAULT_MIN_PAYMENT[denomination]
+    project_min_payment = Comakery::Currency::DEFAULT_MIN_PAYMENT[token.denomination]
     "#{currency_denomination}#{project_min_payment}"
   end
 
@@ -148,7 +142,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def share_of_revenue_unpaid_pretty(users_project_tokens)
-    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
+    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination]
     "#{currency_denomination}#{number_with_precision(share_of_revenue_unpaid(users_project_tokens).truncate(precision),
       precision: precision,
       delimiter: ',')}"
@@ -164,7 +158,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def tokens_awarded_with_symbol
-    token_symbol ? "#{token_symbol} Tokens Awarded" : 'Tokens Awarded'
+    token.symbol ? "#{token.symbol} Tokens Awarded" : 'Tokens Awarded'
   end
 
   def use_trezor?
