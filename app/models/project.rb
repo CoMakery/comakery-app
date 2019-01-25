@@ -104,6 +104,7 @@ class Project < ApplicationRecord
   before_validation :check_coin_type
   before_save :set_transitioned_to_ethereum_enabled
   before_save :enable_ethereum
+  before_save :fill_decimal_places
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -339,6 +340,10 @@ class Project < ApplicationRecord
 
   def enable_ethereum
     self.ethereum_enabled = ethereum_contract_address.present? || contract_address? unless ethereum_enabled
+  end
+
+  def fill_decimal_places
+    self.decimal_places ||= mission&.token&.decimal_places
   end
 
   def valid_tracker_url
