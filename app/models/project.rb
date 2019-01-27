@@ -343,7 +343,14 @@ class Project < ApplicationRecord
   end
 
   def fill_decimal_places
-    self.decimal_places ||= mission&.token&.decimal_places
+    self.decimal_places ||= case coin_type
+                            when 'eth'
+                              16
+                            when 'ada'
+                              6
+                            when 'btc'
+                              8
+    end
   end
 
   def valid_tracker_url
