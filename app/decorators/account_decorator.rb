@@ -19,6 +19,10 @@ class AccountDecorator < Draper::Decorator
     UtilitiesService.get_wallet_url('cardano_mainnet', cardano_wallet)
   end
 
+  def eos_wallet_url
+    UtilitiesService.get_wallet_url('eos_mainnet', eos_wallet)
+  end
+
   def etherscan_address
     "https://etherscan.io/address/#{ethereum_wallet}"
   end

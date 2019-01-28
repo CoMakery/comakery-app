@@ -38,6 +38,14 @@ class UtilitiesService
     "https://cardano-explorer.cardano-testnet.iohkdev.io/address/#{wallet}"
   end
 
+  def self.get_wallet_url_on_eos_mainnet(wallet)
+    "https://explorer.eosvibes.io/account/#{wallet}"
+  end
+
+  def self.get_wallet_url_on_eos_testnet(wallet)
+    "https://jungle.bloks.io/account/#{wallet}"
+  end
+
   def self.get_wallet_url_on_qtum_mainnet(wallet)
     "https://explorer.qtum.org/address/#{wallet}"
   end
