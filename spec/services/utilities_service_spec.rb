@@ -93,6 +93,22 @@ describe UtilitiesService do
 
       expect(result).to eq "https://live.blockcypher.com/btc-testnet/address/#{wallet}"
     end
+
+    it 'wallet on eos mainnet' do
+      network = 'eos_mainnet'
+
+      result = described_class.get_wallet_url(network, wallet)
+
+      expect(result).to eq "https://explorer.eosvibes.io/account/#{wallet}"
+    end
+
+    it 'wallet on eos testnet' do
+      network = 'eos_testnet'
+
+      result = described_class.get_wallet_url(network, wallet)
+
+      expect(result).to eq "https://jungle.bloks.io/account/#{wallet}"
+    end
   end
 
   context '.get_transaction_url' do

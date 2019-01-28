@@ -96,6 +96,17 @@ describe AwardDecorator do
         expect(award.decorate.recipient_address).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
       end
     end
+
+    context 'on eos network' do
+      before do
+        award.account.eos_wallet = 'aaatestnet11'
+        award.project.coin_type = 'eos'
+      end
+
+      it 'returns the recipient address' do
+        expect(award.decorate.recipient_address).to eq('aaatestnet11')
+      end
+    end
   end
 
   context 'recipient names' do

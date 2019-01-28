@@ -45,15 +45,9 @@ class AwardDecorator < Draper::Decorator
   end
 
   def recipient_address
-    if object.project.coin_type_on_ethereum?
-      account&.ethereum_wallet
-    elsif object.project.coin_type_on_qtum?
-      account&.qtum_wallet
-    elsif object.project.coin_type_on_cardano?
-      account&.cardano_wallet
-    elsif object.project.coin_type_on_bitcoin?
-      account&.bitcoin_wallet
-    end
+    return nil unless project.coin_type?
+    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    account&.send("#{blockchain_name}_wallet")
   end
 
   def issuer_address
