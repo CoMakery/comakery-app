@@ -345,7 +345,7 @@ class Project < ApplicationRecord
   def fill_decimal_places
     self.decimal_places ||= case coin_type
                             when 'eth'
-                              16
+                              18
                             when 'ada'
                               6
                             when 'btc'
