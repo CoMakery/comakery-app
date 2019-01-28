@@ -169,7 +169,7 @@ describe Project do
         expect(project4.ethereum_network).to eq 'ropsten'
         expect(project4.ethereum_contract_address).to be_nil
         expect(project4.token_symbol).to be_nil
-        expect(project4.decimal_places).to be_nil
+        expect(project4.decimal_places).to eq 16
       end
 
       it 'eq qrc20' do
@@ -1058,11 +1058,15 @@ describe Project do
     expect project.token_symbol = 'AAA'
   end
 
-  it 'copies decimal_places from token' do
-    token = create :token, name: 'test', symbol: 'test', decimal_places: 2
-    mission = create :mission, name: 'test', description: 'test', subtitle: 'test', token: token
-    project = create :project, mission: mission
-    expect(project.decimal_places).to eq 2
+  it 'fills decimal_places' do
+    project = create :project, coin_type: 'eth'
+    expect(project.reload.decimal_places).to eq 16
+
+    project = create :project, coin_type: 'ada'
+    expect(project.reload.decimal_places).to eq 6
+
+    project = create :project, coin_type: 'btc'
+    expect(project.reload.decimal_places).to eq 8
   end
 
   describe '#top_contributors' do
