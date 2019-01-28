@@ -241,6 +241,7 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
             break;
           case 'ada':
           case 'btc':
+          case 'eos':
             $('.contract-info-div').addClass('hide')
             $(".blockchain-network-lbl").removeClass('hide')
             $(".ethereum-network-lbl").addClass('hide')
