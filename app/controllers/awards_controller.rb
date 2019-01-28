@@ -164,6 +164,9 @@ class AwardsController < ApplicationController
     elsif project.coin_type_on_qtum?
       @network = project.blockchain_network
       @wallet_logo = 'qrypto.png'
+    elsif project.coin_type_eos?
+      @network = project.blockchain_network
+      @wallet_logo = 'eos.png'
     else
       @network = project.blockchain_network
       @wallet_logo = 'trezor.png'

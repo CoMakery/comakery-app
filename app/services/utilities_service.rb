@@ -11,7 +11,7 @@ class UtilitiesService
 
   def self.get_wallet_url(network, wallet)
     case network
-    when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet'
+    when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet', 'eos_mainnet', 'eos_testnet'
       begin
         UtilitiesService.send("get_wallet_url_on_#{network}", wallet)
       rescue
