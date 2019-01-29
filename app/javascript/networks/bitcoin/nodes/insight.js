@@ -19,10 +19,10 @@ export default {
     const baseApiUrl = this.getInsightBaseUrl(network)
     const rs = (await axios.get(`${baseApiUrl}/address/${address}`)).data
     return {
-      address: rs.address,
-      balance: rs.balance / 1e8,
-      balanceSat: rs.balance,
-      confirmedBalance:  rs.confirmedBalance
+      address         : rs.address,
+      balance         : rs.balance / 1e8,
+      balanceSat      : rs.balance,
+      confirmedBalance: rs.confirmedBalance
     }
   },
 
