@@ -54,7 +54,7 @@ class Header extends React.Component {
                   </React.Fragment>
                 }
 
-                <a href="/projects/mine" className={currentPath.match(/projects\/mine/) ? 'header--nav--links--current' : null} >
+                <a href="/projects/mine" className={currentPath.match(/projects/) ? 'header--nav--links--current' : null} >
                   My Projects
                 </a>
 

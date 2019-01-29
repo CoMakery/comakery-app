@@ -51,7 +51,7 @@ class Project < ApplicationRecord
     revenue_share: 0,
     project_token: 1
   }
-  enum visibility: %i[pending member public_listed member_unlisted public_unlisted archived]
+  enum visibility: %i[member_unlisted member public_listed public_unlisted archived]
   enum status: %i[active passive]
 
   validates :description, :account, :title, :legal_project_owner, :token_id, presence: true
@@ -170,7 +170,7 @@ class Project < ApplicationRecord
       Regexp.last_match(1)
     when /^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/
       Regexp.last_match(5)
-    when /(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)(?:[a-zA-Z0-9_\-]+)?/i
+    when /(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)([a-zA-Z0-9_\-]*)?/i
       Regexp.last_match(1)
     end
   end
@@ -258,7 +258,7 @@ class Project < ApplicationRecord
     validate_url(:video_url)
     return if errors[:video_url].present?
 
-    errors[:video_url] << "must be a link to Youtube or Vimeo video" if video_id.blank?
+    errors[:video_url] << 'must be a link to Youtube or Vimeo video' if video_id.blank?
   end
 
   def validate_url(attribute_name)

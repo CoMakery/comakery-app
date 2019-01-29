@@ -62,12 +62,12 @@ class ProjectsController < ApplicationController
   def create
     @project = current_account.projects.build project_params
     @project.long_id = params[:long_id] || SecureRandom.hex(20)
-    
+
     @project.legal_project_owner = 'TODO'
     @project.maximum_tokens = 1_000_000
     @project.maximum_royalties_per_month = 50_000
     @project.public = false
-    
+
     authorize @project
 
     if @project.save
@@ -141,15 +141,15 @@ class ProjectsController < ApplicationController
   end
 
   def set_tokens
-    @tokens = Token.all.map{ |t| [t.name, t.id] }.to_h
+    @tokens = Token.all.map { |t| [t.name, t.id] }.to_h
   end
 
   def set_missions
-    @missions = Mission.all.map{ |m| [m.name, m.id] }.to_h
+    @missions = Mission.all.map { |m| [m.name, m.id] }.to_h
   end
 
   def set_visibilities
-    @visibilities = Project.visibilities.map{ |k,_| [k.humanize, k] }.to_h
+    @visibilities = Project.visibilities.map { |k, _| [k.humanize, k] }.to_h
   end
 
   def set_generic_props
