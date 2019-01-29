@@ -5,10 +5,10 @@ class Views::Projects::Description < Views::Projects::Base
     div do
       row do
         column('large-6 small-12', style: 'padding-left: 0') do
-          if project.video_url
+          if project.video_url&.match /youtube/
             div(class: 'project-video') do
               div(class: 'flex-video widescreen') do
-                iframe(width: '454', height: '304', src: "//www.youtube.com/embed/#{project.youtube_id}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0", frameborder: '0')
+                iframe(width: '454', height: '304', src: "//www.youtube.com/embed/#{project.video_id}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0", frameborder: '0')
               end
             end
           else

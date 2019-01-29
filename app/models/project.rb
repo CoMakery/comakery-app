@@ -51,7 +51,7 @@ class Project < ApplicationRecord
     revenue_share: 0,
     project_token: 1
   }
-  enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
+  enum visibility: %i[pending member public_listed member_unlisted public_unlisted archived]
   enum status: %i[active passive]
 
   validates :description, :account, :title, :legal_project_owner, :token_id, presence: true
@@ -160,16 +160,19 @@ class Project < ApplicationRecord
   #   account.authentications.find_by(slack_team_id: slack_team_id)&.display_name
   # end
 
-  def youtube_id
+  def video_id
     # taken from http://stackoverflow.com/questions/5909121/converting-a-regular-youtube-link-into-an-embedded-video
     # Regex from http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
-    if video_url[/youtu\.be\/([^\?]*)/]
-      youtube_id = Regexp.last_match(1)
-    else
-      video_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
-      youtube_id = Regexp.last_match(5)
+    # Vimeo regex from https://stackoverflow.com/questions/41208456/javascript-regex-vimeo-id
+
+    case video_url
+    when /youtu\.be\/([^\?]*)/
+      Regexp.last_match(1)
+    when /^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/
+      Regexp.last_match(5)
+    when /(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|)(\d+)(?:[a-zA-Z0-9_\-]+)?/i
+      Regexp.last_match(1)
     end
-    youtube_id
   end
 
   def share_revenue?
@@ -255,7 +258,7 @@ class Project < ApplicationRecord
     validate_url(:video_url)
     return if errors[:video_url].present?
 
-    errors[:video_url] << "must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'" if youtube_id.blank?
+    errors[:video_url] << "must be a link to Youtube or Vimeo video" if video_id.blank?
   end
 
   def validate_url(attribute_name)

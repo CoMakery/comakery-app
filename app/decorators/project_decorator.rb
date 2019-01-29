@@ -158,7 +158,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def tokens_awarded_with_symbol
-    token.symbol ? "#{token.symbol} Tokens Awarded" : 'Tokens Awarded'
+    token&.symbol ? "#{token.symbol} Tokens Awarded" : 'Tokens Awarded'
   end
 
   def use_trezor?
@@ -166,7 +166,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def send_coins?
-    coin_type_eth? || coin_type_ada? || coin_type_btc?
+    token&.coin_type_eth? || token&.coin_type_ada? || token&.coin_type_btc?
   end
 
   private
