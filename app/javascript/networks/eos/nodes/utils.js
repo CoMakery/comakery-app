@@ -16,4 +16,4 @@ const mainNet = ScatterJS.Network.fromJson({
   protocol  : 'https'
 })
 
-export default { mainNet, testNet}
+export default { mainNet, testNet }

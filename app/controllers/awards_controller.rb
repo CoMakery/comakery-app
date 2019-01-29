@@ -100,15 +100,9 @@ class AwardsController < ApplicationController
   end
 
   def confirm_message(project)
-    if project.coin_type_on_ethereum?
-      confirm_message_for_ethereum_award
-    elsif project.coin_type_on_qtum?
-      confirm_message_for_qtum_award
-    elsif project.coin_type_on_cardano?
-      confirm_message_for_cardano_award
-    elsif project.coin_type_on_bitcoin?
-      confirm_message_for_bitcoin_award
-    end
+    return nil unless project.coin_type?
+    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    send("confirm_message_for_#{blockchain_name}_award")
   end
 
   def confirm_message_for_ethereum_award
@@ -140,6 +134,14 @@ class AwardsController < ApplicationController
       "Congratulations, you just claimed your award! Your Bitcoin address is #{view_context.link_to current_account.bitcoin_wallet, current_account.decorate.bitcoin_wallet_url} you can change your Bitcoin address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Bitcoin tokens."
     else
       "Congratulations, you just claimed your award! Be sure to enter your Bitcoin Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    end
+  end
+
+  def confirm_message_for_eos_award
+    if current_account.eos_wallet.present?
+      "Congratulations, you just claimed your award! Your EOS address is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
+    else
+      "Congratulations, you just claimed your award! Be sure to enter your EOS Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
     end
   end
 
