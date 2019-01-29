@@ -97,12 +97,13 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = current_account.projects.includes(:award_types).find(params[:id]).decorate
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
     authorize @project
     assign_slack_channels
-    @current_section = '#general'
+
+    @props[:form_action] = 'PATCH'
+    @props[:form_url]    = project_path(@project)
 
     render component: 'ProjectForm', props: @props, prerender: false
   end
@@ -176,7 +177,8 @@ class ProjectsController < ApplicationController
       :revenue_sharing_end_date,
       :contributor_agreement_url,
       :description,
-      :image,
+      :square_image,
+      :panoramic_image,
       :maximum_tokens,
       :token_id,
       :title,

@@ -105,11 +105,11 @@ describe('ProjectForm', () => {
   it('renders correctly with project', () => {
     const project = {
       'id'               : 2,
-      'mission_id'       : 2,
-      'token_id'         : 2,
+      'missionId'        : 2,
+      'tokenId'          : 2,
       'title'            : 'title',
       'description'      : 'desc',
-      'video_url'        : 'https://youtube.com/',
+      'videoUrl'         : 'https://youtube.com/',
       'visibility'       : 'visibility2',
       'squareImageUrl'   : '/s.png',
       'panoramicImageUrl': '/p.png'

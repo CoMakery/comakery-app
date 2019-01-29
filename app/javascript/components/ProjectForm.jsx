@@ -34,12 +34,12 @@ class ProjectForm extends React.Component {
       formAction            : this.props.formAction,
       formUrl               : this.props.formUrl,
       closeOnSuccess        : false,
-      'project[mission_id]' : this.props.project.mission_id || Object.values(this.props.missions)[0],
-      'project[token_id]'   : this.props.project.token_id || Object.values(this.props.tokens)[0],
+      'project[mission_id]' : this.props.project.missionId || Object.values(this.props.missions)[0],
+      'project[token_id]'   : this.props.project.tokenId || Object.values(this.props.tokens)[0],
       'project[visibility]' : this.props.project.visibility || Object.values(this.props.visibilities)[0],
       'project[title]'      : this.props.project.title || '',
       'project[description]': this.props.project.description || '',
-      'project[video_url]'  : this.props.project.video_url || ''
+      'project[video_url]'  : this.props.project.videoUrl || ''
     }
   }
 
