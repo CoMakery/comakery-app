@@ -11,6 +11,9 @@ transferAwardOnCardano = (award) -> # award in JSON
 transferAwardOnBitcoin = (award) -> # award in JSON
   bitcoinTrezor.transferBtcCoins award
 
+transferAwardOnEos = (award) -> # award in JSON
+  eosScatter.transferEosCoins award
+
 window.transferAward = (award) -> # award in JSON
   if award.project.coin_type == 'erc20' || award.project.coin_type == 'eth'
     transferAwardOnEthereum award
@@ -20,6 +23,8 @@ window.transferAward = (award) -> # award in JSON
     transferAwardOnCardano award
   else if award.project.coin_type == 'btc'
     transferAwardOnBitcoin award
+  else if award.project.coin_type == 'eos'
+    transferAwardOnEos award
 
 $ ->
   $(document).on 'click', '.transfer-tokens-btn', ->

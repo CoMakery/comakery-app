@@ -32,17 +32,9 @@ class AccountDecorator < Draper::Decorator
   end
 
   def can_receive_awards?(project)
-    if project.coin_type_on_ethereum?
-      ethereum_wallet?
-    elsif project.coin_type_on_qtum?
-      qtum_wallet?
-    elsif project.coin_type_on_cardano?
-      cardano_wallet?
-    elsif project.coin_type_on_bitcoin?
-      bitcoin_wallet?
-    else
-      false
-    end
+    return false unless project.coin_type?
+    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    account&.send("#{blockchain_name}_wallet?")
   end
 
   def can_send_awards?(project)

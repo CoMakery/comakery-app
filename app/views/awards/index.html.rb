@@ -33,6 +33,7 @@ class Views::Awards::Index < Views::Base
     javascript_include_tag Webpacker.manifest.lookup!('qtum_script.js') if project.coin_type_on_qtum?
     javascript_include_tag Webpacker.manifest.lookup!('cardano_script.js') if project.coin_type_on_cardano?
     javascript_include_tag Webpacker.manifest.lookup!('wallets/bitcoin_trezor_script.js') if project.coin_type_on_bitcoin?
+    javascript_include_tag Webpacker.manifest.lookup!('wallets/eos_scatter_script.js') if project.coin_type_eos?
   end
 
   def pages
