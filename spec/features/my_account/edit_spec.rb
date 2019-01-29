@@ -31,6 +31,8 @@ describe 'my account', js: true do
     fill_in 'qtumWallet', with: "Q#{'a' * 33}"
     fill_in 'cardanoWallet', with: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
     fill_in 'bitcoinWallet', with: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
+    fill_in 'eosWallet', with: 'aaatestnet11'
+
     find('input[type=submit]').click
 
     expect(page).to have_content 'Your account details have been updated.'

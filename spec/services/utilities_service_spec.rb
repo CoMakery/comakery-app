@@ -136,6 +136,14 @@ describe UtilitiesService do
       expect(result).to eq "https://cardanoexplorer.com/tx/#{tx}"
     end
 
+    it 'transaction on cardano testnet' do
+      network = 'cardano_testnet'
+
+      result = described_class.get_transaction_url(network, tx)
+
+      expect(result).to eq "https://cardano-explorer.cardano-testnet.iohkdev.io/tx/#{tx}"
+    end
+
     it 'transaction on bitcoin mainnet' do
       network = 'bitcoin_mainnet'
 
@@ -150,6 +158,22 @@ describe UtilitiesService do
       result = described_class.get_transaction_url(network, tx)
 
       expect(result).to eq "https://live.blockcypher.com/btc-testnet/tx/#{tx}"
+    end
+
+    it 'transaction on eos mainnet' do
+      network = 'eos_mainnet'
+
+      result = described_class.get_transaction_url(network, tx)
+
+      expect(result).to eq "https://explorer.eosvibes.io/transaction/#{tx}"
+    end
+
+    it 'transaction on eos testnet' do
+      network = 'eos_testnet'
+
+      result = described_class.get_transaction_url(network, tx)
+
+      expect(result).to eq "https://jungle.bloks.io/transaction/#{tx}"
     end
   end
 
