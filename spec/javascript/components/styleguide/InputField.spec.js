@@ -150,6 +150,14 @@ describe('InputField', () => {
     const wrapper = shallow(<InputField required />)
 
     expect(wrapper.find('.input-field--content__text').props().required).toBe(true)
+    expect(wrapper.find('.input-field--title--required').text()).toBe('required')
+  })
+
+  it('renders correctly with recommended flag', () => {
+    const wrapper = shallow(<InputField recommended />)
+
+    expect(wrapper.find('.input-field--content__text').props().required).toBe(false)
+    expect(wrapper.find('.input-field--title--required').text()).toBe('recommended')
   })
 
   it('renders correctly with readOnly flag', () => {

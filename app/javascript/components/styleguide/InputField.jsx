@@ -50,6 +50,7 @@ class InputField extends React.Component {
       type,
       symbolLimit,
       required,
+      recommended,
       disabled,
       checked,
       name,
@@ -83,7 +84,17 @@ class InputField extends React.Component {
           { type !== 'checkbox' &&
             <div className="input-field--title">
               <span className="input-field--title--title">{title}</span>
-              <span className="input-field--title--required">{required ? 'required' : 'optional'}</span>
+              <span className="input-field--title--required">
+                {required &&
+                  'required'
+                }
+                {recommended &&
+                  'recommended'
+                }
+                {!required && !recommended &&
+                  'optional'
+                }
+              </span>
               { symbolLimit > 0 &&
                 <span className="input-field--title--counter">{this.state.symbolCounter}/{symbolLimit}</span>
               }
@@ -212,6 +223,7 @@ InputField.propTypes = {
   type                : PropTypes.string,
   symbolLimit         : PropTypes.number,
   required            : PropTypes.bool,
+  recommended         : PropTypes.bool,
   disabled            : PropTypes.bool,
   checked             : PropTypes.bool,
   name                : PropTypes.string,
@@ -235,6 +247,7 @@ InputField.defaultProps = {
   type                : 'text',
   symbolLimit         : 100,
   required            : false,
+  recommended         : false,
   disabled            : false,
   checked             : false,
   name                : 'field',

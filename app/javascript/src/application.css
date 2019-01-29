@@ -4,6 +4,7 @@
   --primary-pink: #fb40e5;
   --dark-indigo: #201662;
   --black: #3a3a3a;
+  --azure: #0089f4;
   --light-grey-blue: #b0b9be;
   --cool-grey: #98a2aa;
   --greyish-brown: #4a4a4a;
@@ -99,10 +100,27 @@ a.header--nav--links--current {
   font-weight: bold;
   color: var(--dark-indigo);
   text-transform: capitalize;
+  cursor: default;
 }
 
-.layout--content--title span {
+.layout--content--title--category {
   font-weight: normal;
+}
+
+.layout--content--title--nav,
+.layout--content--title--nav__current {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding-right: 40px;
+}
+
+.layout--content--title--nav {
+  color: #9b9b9b;
+}
+
+.layout--content--title--nav__current {
+  color: var(--azure);
 }
 
 .layout--content--wrapper {
@@ -647,6 +665,11 @@ input[type="submit"].button:disabled {
   max-height: 100px;
 }
 
+.input-field--content__file--preview__375x75 {
+  max-width: 375px;
+  max-height: 75px;
+}
+
 .input-field--content__file--name {
   font-size: 14px;
   color: var(--dark-indigo);
@@ -923,6 +946,11 @@ input[type="submit"].button:disabled {
 
   .layout--subfooter--buttons {
     padding: 26px 20px 24px 15px;
+    flex-direction: column;
+  }
+
+  .layout--subfooter--buttons .button {
+    margin-bottom: 15px;
   }
 
   .footer {
@@ -973,10 +1001,13 @@ input[type="submit"].button:disabled {
 }
 
 
-.token-form--message, .mission-form--message {
+.token-form--message,
+.mission-form--message,
+.project-form--message {
   margin: 30px 0px;
 }
 
-.token-form--form {
+.token-form--form.
+.project-form--form {
   margin-bottom: 30px;
 }

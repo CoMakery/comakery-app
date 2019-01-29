@@ -18,6 +18,7 @@ exports[`InputFieldDropdown renders correctly without props 1`] = `
     pattern=".*"
     placeholder="Please enter value"
     readOnly={false}
+    recommended={false}
     required={false}
     selectEntries={Array []}
     symbolLimit={0}

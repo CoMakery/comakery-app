@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190125122010) do
+ActiveRecord::Schema.define(version: 20190125172058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -225,6 +225,14 @@ ActiveRecord::Schema.define(version: 20190125122010) do
     t.boolean "ethereum_enabled"
     t.integer "denomination"
     t.string "coin_type"
+    t.string "square_image_id"
+    t.string "square_image_filename"
+    t.string "square_image_content_size"
+    t.string "square_image_content_type"
+    t.string "panoramic_image_id"
+    t.string "panoramic_image_filename"
+    t.string "panoramic_image_content_size"
+    t.string "panoramic_image_content_type"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"

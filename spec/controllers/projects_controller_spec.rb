@@ -151,6 +151,7 @@ describe ProjectsController do
               maximum_tokens: '150',
               legal_project_owner: 'legal project owner',
               payment_type: 'project_token',
+              token_id: create(:token).id,
               award_types_attributes: [
                 { name: 'Community Award', amount: 10, community_awardable: true },
                 { name: 'Small Award', amount: 1000 },
@@ -187,6 +188,7 @@ describe ProjectsController do
               description: 'Project description here',
               image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
               tracker: 'http://github.com/here/is/my/tracker',
+              token_id: create(:token).id,
               award_types_attributes: [
                 { name: 'Small Award', amount: 1000, community_awardable: true },
                 { name: 'Big Award', amount: 2000 },
@@ -226,6 +228,7 @@ describe ProjectsController do
               maximum_tokens: '150',
               legal_project_owner: 'legal project owner',
               payment_type: 'project_token',
+              token_id: create(:token).id,
               award_types_attributes: [
                 { name: 'Community Award', amount: 10, community_awardable: true },
                 { name: 'Small Award', amount: 1000 },
@@ -253,6 +256,7 @@ describe ProjectsController do
               maximum_tokens: '150',
               legal_project_owner: 'legal project owner',
               payment_type: 'project_token',
+              token_id: create(:token).id,
               award_types_attributes: [
                 { name: 'Community Award', amount: 10, community_awardable: true },
                 { name: 'Small Award', amount: 1000 },
@@ -384,7 +388,6 @@ describe ProjectsController do
           end.to change { Project.count }.by(0)
         end.to change { AwardType.count }.by(0) # +1 and -1
 
-        expect(assigns[:notice]).to eq('Project updated')
         cat_project.reload
         expect(cat_project.title).to eq('updated Project title here')
         expect(cat_project.description).to eq('updated Project description here')
@@ -418,6 +421,7 @@ describe ProjectsController do
                   tracker: 'http://github.com/here/is/my/tracker/updated',
                   legal_project_owner: 'legal project owner',
                   payment_type: 'project_token',
+                  token_id: create(:token).id,
                   award_types_attributes: [
                     { id: small_award_type.to_param, name: 'Small Award', amount: 150, _destroy: 'false' },
                     { id: destroy_me_award_type.to_param, _destroy: '1' },
@@ -463,6 +467,7 @@ describe ProjectsController do
               project: {
                 legal_project_owner: 'legal project owner',
                 payment_type: 'project_token',
+                token_id: create(:token).id,
                 award_types_attributes: [
                   { id: award_type.to_param, name: 'Bigger Award', amount: 500 }
                 ]
@@ -492,7 +497,6 @@ describe ProjectsController do
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
 
-        expect(assigns[:notice]).to eq('Project updated')
         award_type.reload
         expect(award_type.name).to eq('Bigger Award')
         expect(award_type).to be_community_awardable

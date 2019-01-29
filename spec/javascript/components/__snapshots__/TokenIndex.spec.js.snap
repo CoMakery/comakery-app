@@ -8,6 +8,7 @@ exports[`TokenIndex renders correctly without props 1`] = `
     category=""
     className="token-index"
     hasBackButton={false}
+    navTitle={null}
     sidebar={
       <React.Fragment>
         <div

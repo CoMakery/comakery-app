@@ -3,6 +3,14 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
+  before_action :set_project, only: %i[show edit update]
+  before_action :set_tokens, only: %i[new show edit]
+  before_action :set_missions, only: %i[new show edit]
+  before_action :set_visibilities, only: %i[new show edit]
+  before_action :set_generic_props, only: %i[new show edit]
+
+  layout 'react', only: %i[new edit]
+
   def landing
     if current_account
       check_account_info
@@ -37,7 +45,6 @@ class ProjectsController < ApplicationController
     @project.award_types.build(name: 'Graphic design hour', amount: 100)
     @project.award_types.build(name: 'Product management hour', amount: 100)
     @project.award_types.build(name: 'Marketing hour', amount: 100)
-
     @project.award_types.build(name: 'Expert software development hour', amount: 150)
     @project.award_types.build(name: 'Expert graphic design hour', amount: 150)
     @project.award_types.build(name: 'Expert product management hour', amount: 150)
@@ -47,22 +54,28 @@ class ProjectsController < ApplicationController
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
     authorize @project
+
+    @props[:project] = @project.serializable_hash
+    render component: 'ProjectForm', props: @props, prerender: false
   end
 
   def create
     @project = current_account.projects.build project_params
     @project.long_id = params[:long_id] || SecureRandom.hex(20)
+    
+    @project.legal_project_owner = 'TODO'
+    @project.maximum_tokens = 1_000_000
+    @project.maximum_royalties_per_month = 50_000
+    @project.public = false
+    
     authorize @project
+
     if @project.save
-      flash[:notice] = 'Project created'
-      redirect_to project_detail_path
-    elsif @project.errors&.details&.dig(:long_id)&.any? { |e| e[:error] == :taken }
-      flash[:error] = 'Project already created'
-      redirect_to projects_path
+      render json: { id: @project.id }, status: :ok
     else
-      @error = 'Project saving failed, please correct the errors below'
-      assign_slack_channels
-      render :new
+      errors  = @project.errors.messages.map { |k, v| ["project[#{k}]", v.to_sentence] }.to_h
+      message = @project.errors.full_messages.join(', ')
+      render json: { message: message, errors: errors }, status: :unprocessable_entity
     end
   end
 
@@ -90,21 +103,22 @@ class ProjectsController < ApplicationController
     authorize @project
     assign_slack_channels
     @current_section = '#general'
+
+    render component: 'ProjectForm', props: @props, prerender: false
   end
 
   def update
     @project = current_account.projects.includes(:award_types, :channels).find(params[:id])
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
+
     if @project.update project_params
-      @notice = 'Project updated'
+      render json: { message: 'Project updated' }, status: :ok
     else
-      @error = 'Project update failed, please correct the errors below'
+      errors  = @project.errors.messages.map { |k, v| [k, v.to_sentence] }.to_s
+      message = @project.errors.full_messages.join(', ')
+      render json: { message: message, errors: errors }, status: :unprocessable_entity
     end
-    @project = @project.decorate
-    assign_slack_channels
-    @current_section = params[:current_section]
-    render :edit
   end
 
   def update_status
@@ -121,19 +135,54 @@ class ProjectsController < ApplicationController
 
   private
 
+  def set_project
+    @project = Project.find(params[:id]).decorate
+  end
+
+  def set_tokens
+    @tokens = Token.all.map{ |t| [t.name, t.id] }.to_h
+  end
+
+  def set_missions
+    @missions = Mission.all.map{ |m| [m.name, m.id] }.to_h
+  end
+
+  def set_visibilities
+    @visibilities = Project.visibilities.map{ |k,_| [k.humanize, k] }.to_h
+  end
+
+  def set_generic_props
+    @props = {
+      project: @project&.serializable_hash&.merge(
+        {
+          square_image_url: @project&.square_image&.present? ? Refile.attachment_url(@project, :square_image, :fill, 800, 800) : nil,
+          panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
+          mission_id: @project&.mission&.id,
+          token_id: @project&.token&.id
+        }
+      ),
+      tokens: @tokens,
+      missions: @missions,
+      visibilities: @visibilities,
+      form_url: projects_path,
+      form_action: 'POST',
+      url_on_success: projects_path,
+      csrf_token: form_authenticity_token
+    }
+  end
+
   def project_params
     result = params.require(:project).permit(
       :revenue_sharing_end_date,
       :contributor_agreement_url,
       :description,
-      :ethereum_enabled,
       :image,
       :maximum_tokens,
+      :token_id,
       :title,
       :tracker,
       :video_url,
       :payment_type,
-      :coin_type,
       :exclusive_contributions,
       :legal_project_owner,
       :minimum_payment,
@@ -142,15 +191,8 @@ class ProjectsController < ApplicationController
       :royalty_percentage,
       :maximum_royalties_per_month,
       :license_finalized,
-      :denomination,
       :mission_id,
       :visibility,
-      :ethereum_network,
-      :ethereum_contract_address,
-      :blockchain_network,
-      :contract_address,
-      :token_symbol,
-      :decimal_places,
       :status,
       award_types_attributes: %i[
         _destroy

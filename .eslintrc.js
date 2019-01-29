@@ -21,7 +21,7 @@ const config = {
     'window'     : false,
   },
   rules: {
-    'complexity'                 : [ERR, { 'max': 22 }],
+    'complexity'                 : [ERR, { 'max': 25 }],
     'jsx-quotes'                 : [ERR, 'prefer-double'],
     'key-spacing'                : [ERR, {'align': 'colon'}],
     'no-debugger'                : OFF,
