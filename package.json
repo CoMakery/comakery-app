@@ -18,6 +18,7 @@
     "classnames": "^2.2.6",
     "coffeescript": "1.12.7",
     "d3pie": "^0.1.9",
+    "eosjs": "^16.0.9",
     "formdata-polyfill": "^3.0.13",
     "jquery": "^3.3.1",
     "prop-types": "^15.6.2",
@@ -28,6 +29,8 @@
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
     "react_ujs": "^2.4.4",
+    "scatterjs-core": "^2.7.7",
+    "scatterjs-plugin-eosjs": "^1.5.0",
     "trezor-connect": "^6.0.3",
     "wallet-address-validator": "^0.2.4",
     "whatwg-fetch": "^3.0.0"
