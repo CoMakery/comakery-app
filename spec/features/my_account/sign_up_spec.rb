@@ -10,7 +10,7 @@ describe 'my account', js: true do
 
   scenario 'user gets redirected to survey page after signup' do
     visit root_path
-    first('.header--nav--links').click_link 'Sign Up'
+    first('.header--nav--links').click_link 'Register'
     click_on 'CREATE YOUR ACCOUNT'
     expect(page).to have_content("can't be blank", count: 4)
     fill_in 'account[email]', with: 'test@test.st'
