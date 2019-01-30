@@ -18,7 +18,7 @@ describe('Header', () => {
   it('renders correctly with signup path and without loggedIn flag', () => {
     const wrapper = shallow(<Header currentPath="/accounts/new" />)
 
-    expect(wrapper.find('.header--nav--links--current').text()).toBe('Sign Up')
+    expect(wrapper.find('.header--nav--links--current').text()).toBe('Register')
     expect(wrapper.find('.header--nav--links--current').props().href).toBe('/accounts/new')
   })
 
