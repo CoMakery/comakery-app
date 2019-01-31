@@ -6,7 +6,7 @@ window.transferAwardOnQtum = (award) -> # award in JSON
   transferQrc20Tokens award
 
 transferAwardOnCardano = (award) -> # award in JSON
-  transferAdaCoins award
+  cardanoTrezor.transferAdaCoins award
 
 transferAwardOnBitcoin = (award) -> # award in JSON
   bitcoinTrezor.transferBtcCoins award
