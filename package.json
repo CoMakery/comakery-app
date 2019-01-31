@@ -58,7 +58,7 @@
     "regenerator-runtime": "^0.12.1",
     "stylelint": "^9.9.0",
     "stylelint-config-recommended": "^2.1.0",
-    "webpack-dev-server": "^2.9.4"
+    "webpack-dev-server": ">=3.1.11"
   },
   "stylelint": {
     "extends": "stylelint-config-recommended"
