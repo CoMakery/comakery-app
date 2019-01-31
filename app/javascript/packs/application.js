@@ -10,6 +10,13 @@
 // Support ES6 syntax
 import 'babel-polyfill'
 
+import '../src/application.js'
+
+import '../src/application.css'
+
+import Rails from 'rails-ujs'
+Rails.start()
+
 // Support component names relative to this directory:
 let componentRequireContext = require.context('components', true)
 let ReactRailsUJS = require('react_ujs')

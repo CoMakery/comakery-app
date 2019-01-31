@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="13px" viewBox="0 0 16 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>ICON/REARRANGE</title>
+    <desc>Created with Sketch.</desc>
+    <g id="ICON/REARRANGE" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g fill="#201662" fill-rule="nonzero">
+            <g id="ARROW">
+                <rect id="Rectangle" transform="translate(6.101650, 2.750000) rotate(45.000000) translate(-6.101650, -2.750000) " x="3.10165043" y="2" width="6" height="1.5" rx="0.75"></rect>
+                <rect id="Rectangle-Copy-7" transform="translate(2.901650, 2.750000) scale(-1, 1) rotate(45.000000) translate(-2.901650, -2.750000) " x="-0.0983495706" y="2" width="6" height="1.5" rx="0.75"></rect>
+                <path d="M-0.25,6 L9.25,6 C9.66421356,6 10,6.33578644 10,6.75 L10,6.75 C10,7.16421356 9.66421356,7.5 9.25,7.5 L-0.25,7.5 C-0.664213562,7.5 -1,7.16421356 -1,6.75 L-1,6.75 C-1,6.33578644 -0.664213562,6 -0.25,6 Z" id="Rectangle-Copy-2" transform="translate(4.500000, 6.750000) rotate(90.000000) translate(-4.500000, -6.750000) "></path>
+            </g>
+            <g id="ARROW-Copy" transform="translate(11.500000, 6.500000) scale(1, -1) translate(-11.500000, -6.500000) translate(7.000000, 0.000000)">
+                <rect id="Rectangle" transform="translate(6.101650, 2.750000) rotate(45.000000) translate(-6.101650, -2.750000) " x="3.10165043" y="2" width="6" height="1.5" rx="0.75"></rect>
+                <rect id="Rectangle-Copy-7" transform="translate(2.901650, 2.750000) scale(-1, 1) rotate(45.000000) translate(-2.901650, -2.750000) " x="-0.0983495706" y="2" width="6" height="1.5" rx="0.75"></rect>
+                <path d="M-0.25,6 L9.25,6 C9.66421356,6 10,6.33578644 10,6.75 L10,6.75 C10,7.16421356 9.66421356,7.5 9.25,7.5 L-0.25,7.5 C-0.664213562,7.5 -1,7.16421356 -1,6.75 L-1,6.75 C-1,6.33578644 -0.664213562,6 -0.25,6 Z" id="Rectangle-Copy-2" transform="translate(4.500000, 6.750000) rotate(90.000000) translate(-4.500000, -6.750000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

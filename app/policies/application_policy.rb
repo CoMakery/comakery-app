@@ -6,21 +6,8 @@ class ApplicationPolicy
     @record = record
   end
 
-  def scope
-    Pundit.policy_scope!(account, record.class)
-  end
-
   class Scope
     attr_reader :account, :scope
-
-    def initialize(account, scope)
-      @account = account
-      @scope = scope
-    end
-
-    def resolve
-      scope.none
-    end
   end
 
   def new?

@@ -169,7 +169,7 @@ describe Project do
         expect(project4.ethereum_network).to eq 'ropsten'
         expect(project4.ethereum_contract_address).to be_nil
         expect(project4.token_symbol).to be_nil
-        expect(project4.decimal_places).to be_nil
+        expect(project4.decimal_places).to eq 18
       end
 
       it 'eq qrc20' do
@@ -293,6 +293,11 @@ describe Project do
         expect(build(:project, ethereum_contract_address: "0x#{'A' * 40}")).to be_valid
       end
 
+      it 'validate' do
+        stub_blank_token_symbol
+        expect(build(:project, token_symbol: nil, ethereum_contract_address: "0x#{'a' * 40}")).to be_invalid
+      end
+
       it 'does not validate with an invalid ethereum address' do
         expected_error_message = "Ethereum contract address should start with '0x', followed by a 40 character ethereum address"
         stub_token_symbol
@@ -324,7 +329,7 @@ describe Project do
         award.update ethereum_transaction_address: '0x' + 'a' * 64
         project.reload
         project.ethereum_contract_address = '0x' + 'b' * 40
-        stub_token_symbol
+
         expect(project).not_to be_valid
         expect(project.errors.full_messages.to_sentence).to match \
           /cannot be changed if has completed transactions/
@@ -464,7 +469,6 @@ describe Project do
     it 'is false if an existing project with an account is transitioned from ethereum_enabled = false to true' do
       stub_token_symbol
       project = create(:project, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' * 40)
-      stub_token_symbol
       project.update!(ethereum_enabled: true)
       expect(project.transitioned_to_ethereum_enabled?).to eq(false)
     end
@@ -1052,6 +1056,17 @@ describe Project do
     stub_token_symbol
     project = create :project, token_symbol: 'AAA', ethereum_contract_address: contract_address
     expect project.token_symbol = 'AAA'
+  end
+
+  it 'fills decimal_places' do
+    project = create :project, coin_type: 'eth'
+    expect(project.reload.decimal_places).to eq 18
+
+    project = create :project, coin_type: 'ada'
+    expect(project.reload.decimal_places).to eq 6
+
+    project = create :project, coin_type: 'btc'
+    expect(project.reload.decimal_places).to eq 8
   end
 
   describe '#top_contributors' do

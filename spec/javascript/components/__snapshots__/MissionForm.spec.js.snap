@@ -1,0 +1,653 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MissionForm renders correctly without props 1`] = `
+<MissionForm
+  csrfToken="00"
+  formAction="POST"
+  formUrl="/"
+  mission={Object {}}
+  tokens={
+    Array [
+      Array [
+        "Please select a token ...",
+        null,
+      ],
+    ]
+  }
+  urlOnSuccess="/"
+>
+  <Layout
+    category=""
+    className="mission-form"
+    hasBackButton={true}
+    sidebar={null}
+    subfooter={
+      <React.Fragment>
+        <Button
+          className="button--right-space"
+          disabled={false}
+          form="mission-form--form"
+          onClick={[Function]}
+          type="submit"
+          value="create & close"
+        />
+        <ButtonBorder
+          className="button--right-space"
+          form="mission-form--form"
+          onClick={[Function]}
+          type="submit"
+          value="create"
+        />
+        <ButtonBorder
+          className=""
+          onClick={[Function]}
+          value="cancel"
+        />
+      </React.Fragment>
+    }
+    title="Create a New Mission"
+  >
+    <div
+      className="layout mission-form"
+    >
+      <div
+        className="layout--back-button"
+      >
+        <Icon
+          className=""
+          name="iconCloseCopy.svg"
+          onClick={[Function]}
+        >
+          <img
+            className="icon icon__iconCloseCopy-svg"
+            onClick={[Function]}
+            src="test-file-stub"
+          />
+        </Icon>
+      </div>
+      <div
+        className="layout--content"
+      >
+        <div
+          className="layout--content--title"
+        >
+          Create a New Mission
+        </div>
+        <hr
+          className="layout--content--hr"
+        />
+        <div
+          className="layout--content--wrapper"
+        >
+          <div
+            className="layout--content--content"
+          >
+            <form
+              className="mission-form--form"
+              id="mission-form--form"
+              onSubmit={[Function]}
+            >
+              <InputFieldWhiteDark
+                eventHandler={[Function]}
+                name="name"
+                placeholder="Unicoin"
+                required={true}
+                symbolLimit={100}
+                title="Name"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__white__dark"
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  name="name"
+                  pattern=".*"
+                  placeholder="Unicoin"
+                  readOnly={false}
+                  required={true}
+                  selectEntries={Array []}
+                  symbolLimit={100}
+                  title="Name"
+                  type="text"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__white__dark"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Name
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                      <span
+                        className="input-field--title--counter"
+                      >
+                        0
+                        /
+                        100
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        className="input-field--content__text"
+                        name="name"
+                        onChange={[Function]}
+                        pattern=".*"
+                        placeholder="Unicoin"
+                        readOnly={false}
+                        required={true}
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldWhiteDark>
+              <InputFieldDropdownHalfed
+                eventHandler={[Function]}
+                name="token"
+                required={true}
+                selectEntries={
+                  Array [
+                    Array [
+                      "Please select a token ...",
+                      null,
+                    ],
+                  ]
+                }
+                title="Token"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__dropdown--halfed"
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  name="token"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  required={true}
+                  selectEntries={
+                    Array [
+                      Array [
+                        "Please select a token ...",
+                        null,
+                      ],
+                    ]
+                  }
+                  symbolLimit={0}
+                  title="Token"
+                  type="select"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__dropdown--halfed"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Token
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <select
+                        className="input-field--content__select"
+                        disabled={false}
+                        name="token"
+                        onChange={[Function]}
+                        required={true}
+                        value=""
+                      >
+                        <option
+                          key="null"
+                          value={null}
+                        >
+                          Please select a token ...
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldDropdownHalfed>
+              <InputFieldWhiteDark
+                eventHandler={[Function]}
+                name="subtitle"
+                placeholder="Unicoin is the future of tokenizing fantastical beast networks"
+                required={true}
+                symbolLimit={140}
+                title="Subtitle"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__white__dark"
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  name="subtitle"
+                  pattern=".*"
+                  placeholder="Unicoin is the future of tokenizing fantastical beast networks"
+                  readOnly={false}
+                  required={true}
+                  selectEntries={Array []}
+                  symbolLimit={140}
+                  title="Subtitle"
+                  type="text"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__white__dark"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Subtitle
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                      <span
+                        className="input-field--title--counter"
+                      >
+                        0
+                        /
+                        140
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        className="input-field--content__text"
+                        name="subtitle"
+                        onChange={[Function]}
+                        pattern=".*"
+                        placeholder="Unicoin is the future of tokenizing fantastical beast networks"
+                        readOnly={false}
+                        required={true}
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldWhiteDark>
+              <InputFieldDescription
+                eventHandler={[Function]}
+                name="description"
+                placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
+                required={true}
+                symbolLimit={250}
+                title="Description"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__description"
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  name="description"
+                  pattern=".*"
+                  placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
+                  readOnly={false}
+                  required={true}
+                  selectEntries={Array []}
+                  symbolLimit={250}
+                  title="Description"
+                  type="textarea"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__description"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Description
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                      <span
+                        className="input-field--title--counter"
+                      >
+                        0
+                        /
+                        250
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <textarea
+                        className="input-field--content__text"
+                        name="description"
+                        onChange={[Function]}
+                        pattern=".*"
+                        placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
+                        readOnly={false}
+                        required={true}
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldDescription>
+              <InputFieldUploadFile
+                eventHandler={[Function]}
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="logo"
+                      required=""
+                      type="file"
+                    />,
+                  }
+                }
+                imgPreviewDimensions="150x100"
+                imgRequirements="Image should be 800px x 800px"
+                imgVerifier={[Function]}
+                name="logo"
+                required={true}
+                title="Mission Logo"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__upload-file"
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="logo"
+                        required=""
+                        type="file"
+                      />,
+                    }
+                  }
+                  imgPreviewDimensions="150x100"
+                  imgPreviewUrl=""
+                  imgRequirements="Image should be 800px x 800px"
+                  imgVerifier={[Function]}
+                  name="logo"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  required={true}
+                  selectEntries={Array []}
+                  symbolLimit={0}
+                  title="Mission Logo"
+                  type="file"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__upload-file"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Mission Logo
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        accept="image/*"
+                        className="input-field--content__file"
+                        name="logo"
+                        onChange={[Function]}
+                        required={true}
+                        type="file"
+                      />
+                      <span
+                        className="input-field--content__file--requirements"
+                      >
+                        Image should be 800px x 800px
+                      </span>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldUploadFile>
+              <InputFieldUploadFile
+                eventHandler={[Function]}
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="image"
+                      required=""
+                      type="file"
+                    />,
+                  }
+                }
+                imgPreviewDimensions="100x100"
+                imgRequirements="Image should be 1200px x 800px"
+                imgVerifier={[Function]}
+                name="image"
+                required={true}
+                title="Mission Image"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__upload-file"
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="image"
+                        required=""
+                        type="file"
+                      />,
+                    }
+                  }
+                  imgPreviewDimensions="100x100"
+                  imgPreviewUrl=""
+                  imgRequirements="Image should be 1200px x 800px"
+                  imgVerifier={[Function]}
+                  name="image"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  required={true}
+                  selectEntries={Array []}
+                  symbolLimit={0}
+                  title="Mission Image"
+                  type="file"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__upload-file"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Mission Image
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        accept="image/*"
+                        className="input-field--content__file"
+                        name="image"
+                        onChange={[Function]}
+                        required={true}
+                        type="file"
+                      />
+                      <span
+                        className="input-field--content__file--requirements"
+                      >
+                        Image should be 1200px x 800px
+                      </span>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldUploadFile>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div
+        className="layout--subfooter"
+      >
+        <div
+          className="layout--subfooter--buttons"
+        >
+          <Button
+            className="button--right-space"
+            disabled={false}
+            form="mission-form--form"
+            onClick={[Function]}
+            type="submit"
+            value="create & close"
+          >
+            <input
+              className="button button--right-space"
+              disabled={false}
+              form="mission-form--form"
+              onClick={[Function]}
+              type="submit"
+              value="create & close"
+            />
+          </Button>
+          <ButtonBorder
+            className="button--right-space"
+            form="mission-form--form"
+            onClick={[Function]}
+            type="submit"
+            value="create"
+          >
+            <Button
+              className="button__border button--right-space"
+              disabled={false}
+              form="mission-form--form"
+              onClick={[Function]}
+              type="submit"
+              value="create"
+            >
+              <input
+                className="button button__border button--right-space"
+                disabled={false}
+                form="mission-form--form"
+                onClick={[Function]}
+                type="submit"
+                value="create"
+              />
+            </Button>
+          </ButtonBorder>
+          <ButtonBorder
+            className=""
+            onClick={[Function]}
+            value="cancel"
+          >
+            <Button
+              className="button__border"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+              value="cancel"
+            >
+              <input
+                className="button button__border"
+                disabled={false}
+                onClick={[Function]}
+                type="button"
+                value="cancel"
+              />
+            </Button>
+          </ButtonBorder>
+        </div>
+      </div>
+    </div>
+  </Layout>
+</MissionForm>
+`;

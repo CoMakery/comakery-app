@@ -9,7 +9,9 @@ const unusedVars = [
 const config = {
   env: {
     browser: true,
-    jquery : true
+    jquery : true,
+    es6    : true,
+    jest   : true
   },
   extends: 'comakery',
   globals: {
@@ -19,7 +21,7 @@ const config = {
     'window'     : false,
   },
   rules: {
-    'complexity'                 : [ERR, { 'max': 20 }],
+    'complexity'                 : [ERR, { 'max': 22 }],
     'jsx-quotes'                 : [ERR, 'prefer-double'],
     'key-spacing'                : [ERR, {'align': 'colon'}],
     'no-debugger'                : OFF,

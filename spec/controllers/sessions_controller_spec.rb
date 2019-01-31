@@ -82,6 +82,12 @@ describe SessionsController do
         expect(session[:account_id]).to be_nil
       end
     end
+
+    it 'redirects to root_path if user already signed in' do
+      login(account)
+      get :create
+      expect(response).to redirect_to root_path
+    end
   end
 
   describe '#oauth_failure' do
@@ -139,6 +145,12 @@ describe SessionsController do
       expect(response).to redirect_to root_path
     end
 
+    it 'redirects to root_path if user already signed in' do
+      login(account)
+      post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+      expect(response).to redirect_to root_path
+    end
+
     context 'on Qtum network' do
       let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, coin_type: 'qrc20') }
 
@@ -155,6 +167,46 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Qtum address is')).to eq true
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'on Cardano network' do
+      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, coin_type: 'ada') }
+
+      it 'notice to update cardano_wallet' do
+        account.update new_award_notice: true
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Cardano Address on your <a href="/account">account page</a> to receive your tokens.'
+        expect(response).to redirect_to root_path
+      end
+
+      it 'notice new award' do
+        account.update new_award_notice: true, cardano_wallet: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Cardano address is')).to eq true
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'on Bitcoin network' do
+      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, coin_type: 'btc') }
+
+      it 'notice to update bitcoin_wallet' do
+        account.update new_award_notice: true
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Bitcoin Address on your <a href="/account">account page</a> to receive your tokens.'
+        expect(response).to redirect_to root_path
+      end
+
+      it 'notice new award' do
+        account.update new_award_notice: true, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Bitcoin address is')).to eq true
         expect(response).to redirect_to root_path
       end
     end

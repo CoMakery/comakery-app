@@ -26,15 +26,99 @@ describe AccountDecorator do
 
   describe '#can_send_awards?' do
     let!(:project_owner) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
-    let!(:project) { create :project, payment_type: 'project_token' }
-    let!(:project2) { build :project, payment_type: 'project_token', account: project_owner, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005' }
 
-    it 'can send' do
-      expect(project_owner.decorate.can_send_awards?(project2)).to be true
+    context 'on ethereum network' do
+      let!(:project) { create :project, payment_type: 'project_token' }
+      let!(:project2) { build :project, payment_type: 'project_token', account: project_owner, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005' }
+
+      it 'can send' do
+        expect(project_owner.decorate.can_send_awards?(project2)).to be true
+      end
+
+      it 'cannot send' do
+        expect(project_owner.decorate.can_send_awards?(project)).to be false
+      end
     end
 
-    it 'cannot send' do
-      expect(project_owner.decorate.can_send_awards?(project)).to be false
+    context 'on bitcoin network' do
+      let!(:recipient) { create(:account, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps') }
+      let!(:project) { build :project, payment_type: 'project_token', account: project_owner, coin_type: 'btc' }
+
+      it 'can send' do
+        expect(project_owner.decorate.can_send_awards?(project)).to be true
+      end
+
+      it 'cannot send' do
+        project.coin_type = nil
+        expect(project_owner.decorate.can_send_awards?(project)).to be false
+      end
+    end
+  end
+
+  describe '#can_receive_awards?' do
+    context 'on ethereum network' do
+      let!(:recipient) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
+      let!(:project) { build :project, payment_type: 'project_token', coin_type: 'eth' }
+
+      it 'returns true' do
+        expect(recipient.decorate.can_receive_awards?(project)).to be true
+      end
+
+      it 'returns false' do
+        recipient.ethereum_wallet = nil
+        expect(recipient.decorate.can_receive_awards?(project)).to be false
+      end
+    end
+
+    context 'on bitcoin network' do
+      let!(:recipient) { create(:account, bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps') }
+      let!(:project) { build :project, payment_type: 'project_token', coin_type: 'btc' }
+
+      it 'returns true' do
+        expect(recipient.decorate.can_receive_awards?(project)).to be true
+      end
+
+      it 'returns false' do
+        recipient.bitcoin_wallet = nil
+        expect(recipient.decorate.can_receive_awards?(project)).to be false
+      end
+    end
+
+    context 'on cardano network' do
+      let!(:recipient) { create(:account, cardano_wallet: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp') }
+      let!(:project) { build :project, payment_type: 'project_token', coin_type: 'ada' }
+
+      it 'returns true' do
+        expect(recipient.decorate.can_receive_awards?(project)).to be true
+      end
+
+      it 'returns false' do
+        recipient.cardano_wallet = nil
+        expect(recipient.decorate.can_receive_awards?(project)).to be false
+      end
+    end
+
+    context 'on qtum network' do
+      let!(:recipient) { create(:account, qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM') }
+      let!(:project) { build :project, payment_type: 'project_token', coin_type: 'qrc20' }
+
+      it 'returns true' do
+        expect(recipient.decorate.can_receive_awards?(project)).to be true
+      end
+
+      it 'returns false' do
+        recipient.qtum_wallet = nil
+        expect(recipient.decorate.can_receive_awards?(project)).to be false
+      end
+    end
+
+    context 'coin_type nil' do
+      let!(:recipient) { create(:account, qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM') }
+      let!(:project) { build :project, payment_type: 'project_token', coin_type: nil }
+
+      it 'returns false' do
+        expect(recipient.decorate.can_receive_awards?(project)).to be false
+      end
     end
   end
 

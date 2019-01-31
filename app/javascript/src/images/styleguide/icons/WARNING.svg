@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21px" height="21px" viewBox="0 0 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>ICON/WARNING</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#FB40E5" offset="0%"></stop>
+            <stop stop-color="#0089F4" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="WARNING_FIELD/CONSUMER_PAGE" transform="translate(-15.000000, -16.000000)" fill="url(#linearGradient-1)">
+            <g id="ICON/WARNING">
+                <g transform="translate(15.000000, 16.000000)">
+                    <g>
+                        <rect id="Rectangle" x="10" y="4" width="2" height="9"></rect>
+                        <rect id="Rectangle" x="10" y="15" width="2" height="2"></rect>
+                        <path d="M14.8492148,0 L6.15074414,0 L0,6.15074414 L0,14.8492559 L6.15074414,21 L14.8492559,21 L21,14.8492148 L21,6.15074414 L14.8492148,0 Z M19.359375,14.169668 L14.169668,19.359375 L6.83033203,19.359375 L1.640625,14.169668 L1.640625,6.83033203 L6.83033203,1.640625 L14.169668,1.640625 L19.359375,6.83033203 L19.359375,14.169668 Z" id="Shape" fill-rule="nonzero"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

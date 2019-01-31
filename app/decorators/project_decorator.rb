@@ -94,11 +94,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def format_with_decimal_places(amount)
-    if decimal_places.to_i.zero?
-      number_with_precision(amount, precision: 0, delimiter: ',')
-    else
-      number_to_currency(amount, precision: decimal_places, unit: '')
-    end
+    number_to_currency(amount, precision: decimal_places.to_i, unit: '')
   end
 
   def maximum_tokens_pretty
@@ -169,6 +165,14 @@ class ProjectDecorator < Draper::Decorator
 
   def tokens_awarded_with_symbol
     token_symbol ? "#{token_symbol} Tokens Awarded" : 'Tokens Awarded'
+  end
+
+  def use_trezor?
+    coin_type_on_bitcoin? || coin_type_on_cardano?
+  end
+
+  def send_coins?
+    coin_type_eth? || coin_type_ada? || coin_type_btc?
   end
 
   private

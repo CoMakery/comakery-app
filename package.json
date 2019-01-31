@@ -1,32 +1,46 @@
 {
   "engines": {
     "npm": "6.x",
-    "node": "10.13.0"
+    "node": "10.13.0",
+    "yarn": "1.12.3"
   },
   "scripts": {
     "lint": "yarn lint:ci --fix",
-    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript",
+    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript spec/javascript",
+    "stylelint": "stylelint 'app/javascript/**/*.css' --fix",
     "test": "jest"
   },
   "dependencies": {
     "@rails/webpacker": "^3.5.5",
     "babel-preset-react": "^6.24.1",
+    "borc": "^2.0.4",
+    "cardano-crypto.js": "^5.0.0",
+    "classnames": "^2.2.6",
     "coffeescript": "1.12.7",
     "d3pie": "^0.1.9",
+    "formdata-polyfill": "^3.0.13",
+    "jquery": "^3.3.1",
     "prop-types": "^15.6.2",
     "qweb3": "^1.2.2",
+    "rails-ujs": "^5.2.2",
     "react": "^16.6.0",
+    "react-beautiful-dnd": "^10.0.3",
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
-    "react_ujs": "^2.4.4"
+    "react_ujs": "^2.4.4",
+    "trezor-connect": "^6.0.3",
+    "wallet-address-validator": "^0.2.4",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.1",
     "babel-jest": "^23.6.0",
+    "babel-plugin-rewire": "^1.2.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
+    "enzyme-to-json": "^3.3.5",
     "eslint": "^4.7.1",
     "eslint-config-comakery": "^0.0.4",
     "eslint-config-react-app": "^0.6.2",
@@ -36,11 +50,18 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "eslint-plugin-standard": "^4.0.0",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^23.6.0",
     "jest-enzyme": "^7.0.1",
+    "jest-fetch-mock": "^2.1.0",
     "react-test-renderer": "^16.6.0",
     "regenerator-runtime": "^0.12.1",
+    "stylelint": "^9.9.0",
+    "stylelint-config-recommended": "^2.1.0",
     "webpack-dev-server": "^2.9.4"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-recommended"
   },
   "jest": {
     "roots": [
@@ -54,6 +75,17 @@
     "globals": {
       "window": {}
     },
-    "setupTestFrameworkScriptFile": "./spec/javascript/setup.js"
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "moduleNameMapper": {
+      ".+\\.(css|styl|less|sass|scss)$": "identity-obj-proxy",
+      ".+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/spec/javascript/mockAssets.js"
+    },
+    "setupTestFrameworkScriptFile": "./spec/javascript/setupFramework.js",
+    "automock": false,
+    "setupFiles": [
+      "./spec/javascript/setupJest.js"
+    ]
   }
 }

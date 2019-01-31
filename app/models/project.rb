@@ -1,5 +1,12 @@
 class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
+  BLOCKCHAIN_NAMES = {
+    erc20: 'ethereum',
+    eth: 'ethereum',
+    qrc20: 'qtum',
+    ada: 'cardano',
+    btc: 'bitcoin'
+  }.freeze
 
   include EthereumAddressable
   include QtumContractAddressable
@@ -8,6 +15,7 @@ class Project < ApplicationRecord
   attachment :image
 
   belongs_to :account
+  belongs_to :mission
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards
@@ -44,7 +52,9 @@ class Project < ApplicationRecord
   enum coin_type: {
     erc20: 'ERC20',
     eth: 'ETH',
-    qrc20: 'QRC20'
+    qrc20: 'QRC20',
+    ada: 'ADA',
+    btc: 'BTC'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -60,9 +70,14 @@ class Project < ApplicationRecord
     rinkeby: 'Rinkeby Test Network'
   }
   enum blockchain_network: {
+    bitcoin_mainnet: 'Main Bitcoin Network',
+    bitcoin_testnet: 'Test Bitcoin Network',
+    cardano_mainnet: 'Main Cardano Network',
+    cardano_testnet: 'Test Cardano Network',
     qtum_mainnet: 'Main QTUM Network',
     qtum_testnet: 'Test QTUM Network'
   }
+  enum status: %i[active passive]
 
   validates :description, :account, :title, :legal_project_owner, :denomination, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
@@ -89,6 +104,7 @@ class Project < ApplicationRecord
   before_validation :check_coin_type
   before_save :set_transitioned_to_ethereum_enabled
   before_save :enable_ethereum
+  before_save :fill_decimal_places
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -128,6 +144,14 @@ class Project < ApplicationRecord
 
   def coin_type_on_qtum?
     coin_type_qrc20?
+  end
+
+  def coin_type_on_cardano?
+    coin_type_ada?
+  end
+
+  def coin_type_on_bitcoin?
+    coin_type_btc?
   end
 
   def total_revenue
@@ -316,6 +340,17 @@ class Project < ApplicationRecord
 
   def enable_ethereum
     self.ethereum_enabled = ethereum_contract_address.present? || contract_address? unless ethereum_enabled
+  end
+
+  def fill_decimal_places
+    self.decimal_places ||= case coin_type
+                            when 'eth'
+                              18
+                            when 'ada'
+                              6
+                            when 'btc'
+                              8
+    end
   end
 
   def valid_tracker_url

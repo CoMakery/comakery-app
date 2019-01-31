@@ -61,6 +61,38 @@ describe UtilitiesService do
 
       expect(result).to eq "https://testnet.qtum.org/address/#{wallet}"
     end
+
+    it 'wallet on cardano mainnet' do
+      network = 'cardano_mainnet'
+
+      result = described_class.get_wallet_url(network, wallet)
+
+      expect(result).to eq "https://cardanoexplorer.com/address/#{wallet}"
+    end
+
+    it 'wallet on cardano testnet' do
+      network = 'cardano_testnet'
+
+      result = described_class.get_wallet_url(network, wallet)
+
+      expect(result).to eq "https://cardano-explorer.cardano-testnet.iohkdev.io/address/#{wallet}"
+    end
+
+    it 'wallet on bitcoin mainnet' do
+      network = 'bitcoin_mainnet'
+
+      result = described_class.get_wallet_url(network, wallet)
+
+      expect(result).to eq "https://live.blockcypher.com/btc/address/#{wallet}"
+    end
+
+    it 'wallet on bitcoin testnet' do
+      network = 'bitcoin_testnet'
+
+      result = described_class.get_wallet_url(network, wallet)
+
+      expect(result).to eq "https://live.blockcypher.com/btc-testnet/address/#{wallet}"
+    end
   end
 
   context '.get_transaction_url' do
@@ -78,6 +110,30 @@ describe UtilitiesService do
       result = described_class.get_transaction_url(network, tx)
 
       expect(result).to eq "https://testnet.qtum.org/tx/#{tx}"
+    end
+
+    it 'transaction on cardano mainnet' do
+      network = 'cardano_mainnet'
+
+      result = described_class.get_transaction_url(network, tx)
+
+      expect(result).to eq "https://cardanoexplorer.com/tx/#{tx}"
+    end
+
+    it 'transaction on bitcoin mainnet' do
+      network = 'bitcoin_mainnet'
+
+      result = described_class.get_transaction_url(network, tx)
+
+      expect(result).to eq "https://live.blockcypher.com/btc/tx/#{tx}"
+    end
+
+    it 'transaction on bitcoin testnet' do
+      network = 'bitcoin_testnet'
+
+      result = described_class.get_transaction_url(network, tx)
+
+      expect(result).to eq "https://live.blockcypher.com/btc-testnet/tx/#{tx}"
     end
   end
 

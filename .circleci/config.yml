@@ -4,7 +4,7 @@ jobs:
     parallelism: 1
     working_directory: ~/CoMakery/comakery-app
     docker:
-      - image: circleci/ruby:2.4.4-stretch-browsers-legacy
+      - image: circleci/ruby:2.4.4-stretch-browsers
         environment:
           NODE_VER: 10.13.0
           YARN_VER: 1.12.3
@@ -21,6 +21,7 @@ jobs:
         key: comakery-yarn-{{ checksum "yarn.lock" }}
 
       - run: sudo gem update --system --no-ri --no-rdoc
+      - run: sudo gem install bundler
       - run: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
       - run: bin/yarn install
 
@@ -32,20 +33,20 @@ jobs:
         key: comakery-yarn-{{ checksum "yarn.lock" }}
         paths:
           - node_modules
-          
+
       - run: yarn test
+      - run: yarn stylelint
+      - run: bundle exec rake assets:precompile
 
       - run: bundle exec rake db:create db:migrate
       - run: bundle exec rake db:migrate VERSION=20160227015851
       - run: git checkout db/schema.rb
       - run: bundle exec rake db:reset
       - run: bundle exec citizen checks
-      
-      - type: store_test_results
-        path: /tmp/circleci-test-results
+
       - type: store_artifacts
-        path: /tmp/circleci-test-results
+        path: ./tmp/capybara
       - type: store_artifacts
-        path: /tmp/circleci-artifacts
+        path: ./log/test.log
       - type: store_artifacts
         path: coverage

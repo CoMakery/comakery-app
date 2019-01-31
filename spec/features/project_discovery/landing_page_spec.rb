@@ -25,18 +25,16 @@ describe 'landing page', :js do
 
     visit my_project_path
 
-    expect(page).to have_content 'gleenn'
-
     expect(page).to have_content 'mine'
     expect(page).to have_content 'mine'
-    expect(page).to have_content 'New Project'
+    expect(page).to have_content /new project/i
 
     expect(page.all('.project').size).to eq(13)
 
     click_link 'Browse All'
 
     within('h2') { expect(page.text).to eq('Projects') }
-    expect(page).to have_content 'New Project'
+    expect(page).to have_content /new project/i
 
     expect(page.all('.project').size).to eq(9)
   end

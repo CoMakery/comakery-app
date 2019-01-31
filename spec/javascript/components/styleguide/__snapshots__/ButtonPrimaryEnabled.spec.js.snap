@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ButtonPrimaryEnabled renders correctly without props 1`] = `
+<Fragment>
+  <Button
+    className="button__primary__enabled"
+    disabled={false}
+    type="button"
+    value="publish"
+  />
+</Fragment>
+`;

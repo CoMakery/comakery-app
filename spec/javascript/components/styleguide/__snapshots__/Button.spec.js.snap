@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button renders correctly without props 1`] = `
+<Fragment>
+  <input
+    className="button"
+    disabled={false}
+    type="button"
+    value="publish"
+  />
+</Fragment>
+`;

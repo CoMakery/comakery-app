@@ -10,28 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181106062233) do
+ActiveRecord::Schema.define(version: 20190108094717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "accounts", id: :serial, force: :cascade do |t|
     t.string "email"
     t.string "crypted_password"
     t.string "salt"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.string "reset_password_token"
-    t.datetime "reset_password_token_expires_at"
-    t.datetime "reset_password_email_sent_at"
+    t.datetime "reset_password_token_expires_at", precision: 6
+    t.datetime "reset_password_email_sent_at", precision: 6
     t.string "remember_me_token"
-    t.datetime "remember_me_token_expires_at"
+    t.datetime "remember_me_token_expires_at", precision: 6
     t.integer "failed_logins_count", default: 0
-    t.datetime "lock_expires_at"
+    t.datetime "lock_expires_at", precision: 6
     t.string "unlock_token"
-    t.datetime "last_login_at"
-    t.datetime "last_logout_at"
-    t.datetime "last_activity_at"
+    t.datetime "last_login_at", precision: 6
+    t.datetime "last_logout_at", precision: 6
+    t.datetime "last_activity_at", precision: 6
     t.string "last_login_from_ip_address"
     t.string "ethereum_wallet"
     t.string "password_digest"
@@ -53,7 +54,9 @@ ActiveRecord::Schema.define(version: 20181106062233) do
     t.boolean "new_award_notice", default: false
     t.boolean "contributor_form", default: false
     t.string "qtum_wallet"
-    t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
+    t.boolean "comakery_admin", default: false
+    t.string "cardano_wallet"
+    t.string "bitcoin_wallet"
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
     t.index ["public_address"], name: "index_accounts_on_public_address"
@@ -63,8 +66,8 @@ ActiveRecord::Schema.define(version: 20181106062233) do
 
   create_table "authentication_teams", force: :cascade do |t|
     t.integer "authentication_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "account_id"
     t.integer "team_id"
     t.boolean "manager", default: false
@@ -76,26 +79,23 @@ ActiveRecord::Schema.define(version: 20181106062233) do
   create_table "authentications", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.string "provider", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.string "uid", null: false
     t.string "token"
-    t.string "slack_user_name"
-    t.string "slack_first_name"
-    t.string "slack_last_name"
-    t.string "slack_image_32_url"
     t.jsonb "oauth_response"
     t.string "email"
     t.string "confirm_token"
     t.index ["account_id"], name: "index_authentications_on_account_id"
+    t.index ["uid"], name: "index_authentications_on_uid"
   end
 
   create_table "award_types", id: :serial, force: :cascade do |t|
     t.integer "project_id", null: false
     t.string "name", null: false
     t.integer "amount", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
     t.boolean "disabled"
@@ -105,30 +105,31 @@ ActiveRecord::Schema.define(version: 20181106062233) do
   create_table "awards", id: :serial, force: :cascade do |t|
     t.integer "issuer_id", null: false
     t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "award_type_id", null: false
-    t.integer "authentication_id"
+    t.integer "account_id"
     t.string "ethereum_transaction_address"
     t.text "proof_id", null: false
     t.string "proof_link"
     t.decimal "quantity", default: "1.0"
     t.decimal "total_amount"
     t.integer "unit_amount"
-    t.integer "account_id"
     t.integer "channel_id"
     t.string "uid"
     t.string "confirm_token"
     t.string "email"
+    t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
+    t.index ["issuer_id"], name: "index_awards_on_issuer_id"
   end
 
   create_table "channels", force: :cascade do |t|
     t.integer "project_id"
     t.integer "team_id"
     t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.string "channel_id"
     t.index ["project_id"], name: "index_channels_on_project_id"
     t.index ["team_id"], name: "index_channels_on_team_id"
@@ -138,9 +139,29 @@ ActiveRecord::Schema.define(version: 20181106062233) do
     t.bigint "account_id"
     t.string "protocol"
     t.string "project"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_interests_on_account_id"
+  end
+
+  create_table "missions", force: :cascade do |t|
+    t.string "name", limit: 100
+    t.string "subtitle", limit: 140
+    t.text "description"
+    t.string "logo_id"
+    t.string "logo_filename"
+    t.string "logo_content_size"
+    t.string "logo_content_type"
+    t.string "image_id"
+    t.string "image_filename"
+    t.string "image_content_size"
+    t.string "image_content_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_interests_on_account_id"
+    t.bigint "token_id"
+    t.integer "status", default: 0
+    t.integer "display_order"
+    t.index ["token_id"], name: "index_missions_on_token_id"
   end
 
   create_table "payments", id: :serial, force: :cascade do |t|
@@ -148,8 +169,8 @@ ActiveRecord::Schema.define(version: 20181106062233) do
     t.integer "issuer_id"
     t.integer "account_id"
     t.decimal "total_value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.decimal "share_value"
     t.integer "quantity_redeemed"
     t.decimal "transaction_fee"
@@ -158,6 +179,8 @@ ActiveRecord::Schema.define(version: 20181106062233) do
     t.string "currency"
     t.integer "status", default: 0
     t.boolean "reconciled", default: false
+    t.index ["account_id"], name: "index_payments_on_account_id"
+    t.index ["issuer_id"], name: "index_payments_on_issuer_id"
     t.index ["project_id"], name: "index_payments_on_project_id"
   end
 
@@ -165,11 +188,10 @@ ActiveRecord::Schema.define(version: 20181106062233) do
     t.string "title", null: false
     t.text "description"
     t.string "tracker"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.boolean "public", default: false, null: false
     t.integer "account_id", null: false
-    t.string "slack_team_id"
     t.string "image_id"
     t.string "slack_channel"
     t.integer "maximum_tokens", default: 0, null: false
@@ -185,7 +207,7 @@ ActiveRecord::Schema.define(version: 20181106062233) do
     t.integer "maximum_royalties_per_month"
     t.boolean "license_finalized", default: false, null: false
     t.integer "denomination", default: 0, null: false
-    t.datetime "revenue_sharing_end_date"
+    t.datetime "revenue_sharing_end_date", precision: 6
     t.integer "featured"
     t.string "image_filename"
     t.string "image_content_size"
@@ -198,9 +220,11 @@ ActiveRecord::Schema.define(version: 20181106062233) do
     t.string "coin_type"
     t.string "blockchain_network"
     t.string "contract_address"
+    t.bigint "mission_id"
+    t.integer "status", default: 0
     t.index ["account_id"], name: "index_projects_on_account_id"
+    t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
-    t.index ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public"
   end
 
   create_table "revenues", id: :serial, force: :cascade do |t|
@@ -209,8 +233,8 @@ ActiveRecord::Schema.define(version: 20181106062233) do
     t.decimal "amount"
     t.text "comment"
     t.text "transaction_reference"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.integer "recorded_by_id"
     t.index ["project_id"], name: "index_revenues_on_project_id"
     t.index ["recorded_by_id"], name: "index_revenues_on_recorded_by_id"
@@ -222,6 +246,25 @@ ActiveRecord::Schema.define(version: 20181106062233) do
     t.string "domain"
     t.string "provider"
     t.string "image"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "tokens", force: :cascade do |t|
+    t.string "name"
+    t.string "coin_type"
+    t.integer "denomination", default: 0, null: false
+    t.boolean "ethereum_enabled", default: false
+    t.string "ethereum_network"
+    t.string "blockchain_network"
+    t.string "contract_address"
+    t.string "ethereum_contract_address"
+    t.string "symbol"
+    t.integer "decimal_places"
+    t.string "logo_image_id"
+    t.string "logo_image_filename"
+    t.string "logo_image_content_size"
+    t.string "logo_image_content_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

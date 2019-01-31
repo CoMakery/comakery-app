@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  skip_before_action :require_login, except: %i[new edit create update landing]
+  skip_before_action :require_login, except: %i[new edit create update update_status landing]
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
@@ -107,6 +107,18 @@ class ProjectsController < ApplicationController
     render :edit
   end
 
+  def update_status
+    @project = Project.find(params[:project_id])
+    authorize @project
+
+    begin
+      @project.update(status: params[:status])
+      render json: { message: 'Successfully updated.' }, status: :ok
+    rescue ArgumentError
+      render json: { message: 'Invalid Status' }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def project_params
@@ -131,6 +143,7 @@ class ProjectsController < ApplicationController
       :maximum_royalties_per_month,
       :license_finalized,
       :denomination,
+      :mission_id,
       :visibility,
       :ethereum_network,
       :ethereum_contract_address,
@@ -138,6 +151,7 @@ class ProjectsController < ApplicationController
       :contract_address,
       :token_symbol,
       :decimal_places,
+      :status,
       award_types_attributes: %i[
         _destroy
         amount

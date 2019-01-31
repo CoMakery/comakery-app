@@ -1,0 +1,425 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TokenForm renders correctly without props 1`] = `
+<TokenForm
+  blockchainNetworks={
+    Object {
+      "default": "_",
+    }
+  }
+  coinTypes={
+    Object {
+      "default": "_",
+    }
+  }
+  csrfToken="00"
+  ethereumNetworks={
+    Object {
+      "default": "_",
+    }
+  }
+  formAction="POST"
+  formUrl="/"
+  token={
+    Object {
+      "default": "_",
+    }
+  }
+  urlOnSuccess="/"
+>
+  <Layout
+    category=""
+    className="token-form"
+    hasBackButton={true}
+    sidebar={null}
+    subfooter={
+      <React.Fragment>
+        <Button
+          className=""
+          disabled={false}
+          form="token-form--form"
+          onClick={[Function]}
+          type="submit"
+          value="create & close"
+        />
+        <ButtonBorder
+          className=""
+          form="token-form--form"
+          onClick={[Function]}
+          type="submit"
+          value="create"
+        />
+        <ButtonBorder
+          className=""
+          onClick={[Function]}
+          value="cancel"
+        />
+      </React.Fragment>
+    }
+    title="Create a New Token"
+  >
+    <div
+      className="layout token-form"
+    >
+      <div
+        className="layout--back-button"
+      >
+        <Icon
+          className=""
+          name="iconCloseCopy.svg"
+          onClick={[Function]}
+        >
+          <img
+            className="icon icon__iconCloseCopy-svg"
+            onClick={[Function]}
+            src="test-file-stub"
+          />
+        </Icon>
+      </div>
+      <div
+        className="layout--content"
+      >
+        <div
+          className="layout--content--title"
+        >
+          Create a New Token
+        </div>
+        <hr
+          className="layout--content--hr"
+        />
+        <div
+          className="layout--content--wrapper"
+        >
+          <div
+            className="layout--content--content"
+          >
+            <form
+              className="token-form--form"
+              id="token-form--form"
+              onSubmit={[Function]}
+            >
+              <InputFieldDropdownHalfed
+                eventHandler={[Function]}
+                name="token[coin_type]"
+                required={true}
+                selectEntries={
+                  Array [
+                    Array [
+                      "default",
+                      "_",
+                    ],
+                  ]
+                }
+                symbolLimit={0}
+                title="payment type"
+                value="_"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__dropdown--halfed"
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  name="token[coin_type]"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  required={true}
+                  selectEntries={
+                    Array [
+                      Array [
+                        "default",
+                        "_",
+                      ],
+                    ]
+                  }
+                  symbolLimit={0}
+                  title="payment type"
+                  type="select"
+                  value="_"
+                >
+                  <div
+                    className="input-field input-field__dropdown--halfed"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        payment type
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <select
+                        className="input-field--content__select"
+                        disabled={false}
+                        name="token[coin_type]"
+                        onChange={[Function]}
+                        required={true}
+                        value="_"
+                      >
+                        <option
+                          key="_"
+                          value="_"
+                        >
+                          default
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldDropdownHalfed>
+              <InputFieldHalfed
+                eventHandler={[Function]}
+                name="token[name]"
+                placeholder="Bitcoin"
+                required={true}
+                symbolLimit={0}
+                title="token name"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__halfed"
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  name="token[name]"
+                  pattern=".*"
+                  placeholder="Bitcoin"
+                  readOnly={false}
+                  required={true}
+                  selectEntries={Array []}
+                  symbolLimit={0}
+                  title="token name"
+                  type="text"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__halfed"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        token name
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        className="input-field--content__text"
+                        name="token[name]"
+                        onChange={[Function]}
+                        pattern=".*"
+                        placeholder="Bitcoin"
+                        readOnly={false}
+                        required={true}
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldHalfed>
+              <InputFieldUploadFile
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="token[logo_image]"
+                      required=""
+                      type="file"
+                    />,
+                  }
+                }
+                imgRequirements="Image should be at least 500px x 500px"
+                imgVerifier={[Function]}
+                name="token[logo_image]"
+                required={true}
+                title="token logo"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__upload-file"
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="token[logo_image]"
+                        required=""
+                        type="file"
+                      />,
+                    }
+                  }
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements="Image should be at least 500px x 500px"
+                  imgVerifier={[Function]}
+                  name="token[logo_image]"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  required={true}
+                  selectEntries={Array []}
+                  symbolLimit={0}
+                  title="token logo"
+                  type="file"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__upload-file"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        token logo
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        accept="image/*"
+                        className="input-field--content__file"
+                        name="token[logo_image]"
+                        onChange={[Function]}
+                        required={true}
+                        type="file"
+                      />
+                      <span
+                        className="input-field--content__file--requirements"
+                      >
+                        Image should be at least 500px x 500px
+                      </span>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldUploadFile>
+              <input
+                name="authenticity_token"
+                readOnly={true}
+                type="hidden"
+                value="00"
+              />
+            </form>
+          </div>
+        </div>
+      </div>
+      <div
+        className="layout--subfooter"
+      >
+        <div
+          className="layout--subfooter--buttons"
+        >
+          <Button
+            className=""
+            disabled={false}
+            form="token-form--form"
+            onClick={[Function]}
+            type="submit"
+            value="create & close"
+          >
+            <input
+              className="button"
+              disabled={false}
+              form="token-form--form"
+              onClick={[Function]}
+              type="submit"
+              value="create & close"
+            />
+          </Button>
+          <ButtonBorder
+            className=""
+            form="token-form--form"
+            onClick={[Function]}
+            type="submit"
+            value="create"
+          >
+            <Button
+              className="button__border"
+              disabled={false}
+              form="token-form--form"
+              onClick={[Function]}
+              type="submit"
+              value="create"
+            >
+              <input
+                className="button button__border"
+                disabled={false}
+                form="token-form--form"
+                onClick={[Function]}
+                type="submit"
+                value="create"
+              />
+            </Button>
+          </ButtonBorder>
+          <ButtonBorder
+            className=""
+            onClick={[Function]}
+            value="cancel"
+          >
+            <Button
+              className="button__border"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+              value="cancel"
+            >
+              <input
+                className="button button__border"
+                disabled={false}
+                onClick={[Function]}
+                type="button"
+                value="cancel"
+              />
+            </Button>
+          </ButtonBorder>
+        </div>
+      </div>
+    </div>
+  </Layout>
+</TokenForm>
+`;

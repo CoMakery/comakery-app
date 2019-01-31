@@ -15,6 +15,7 @@
   ],
   "env": {
     "test": {
+      "plugins": ["babel-plugin-rewire"],
       "presets": [["env"], "react"]
     }
   },

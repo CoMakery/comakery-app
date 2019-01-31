@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders correctly without props 1`] = `
+<Fragment>
+  <div
+    className="header"
+  >
+    <div
+      className="header--logo"
+    >
+      <Icon
+        className=""
+        name="Logo-Header.svg"
+        width="200px"
+      />
+    </div>
+    <div
+      className="header--nav"
+    >
+      <div
+        className="header--nav--links"
+      >
+        <a
+          className="header--nav--links--current"
+          href="/"
+        >
+          Home
+        </a>
+        <a
+          href="mailto:support@comakery.com"
+        >
+          Contact Us
+        </a>
+        <a
+          className="header--nav--links--sign"
+          href="/session/new"
+        >
+          Sign In
+        </a>
+        <a
+          className="header--nav--links--sign"
+          href="/accounts/new"
+        >
+          Sign Up
+        </a>
+      </div>
+    </div>
+  </div>
+  <div
+    className="header-mobile"
+  >
+    <Icon
+      className=""
+      name="Logo-Header.svg"
+      width="162px"
+    />
+    <div
+      className="header-mobile__menu-icon"
+      onClick={[Function]}
+    >
+      <span
+        className=""
+      />
+    </div>
+  </div>
+</Fragment>
+`;

@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Icon renders correctly without props 1`] = `
+<Fragment>
+  <img
+    className="icon icon__atomsIconsSystemHeart-svg"
+    src="test-file-stub"
+  />
+</Fragment>
+`;

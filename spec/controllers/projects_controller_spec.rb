@@ -6,6 +6,7 @@ describe ProjectsController do
   let!(:account) { authentication.account }
 
   let!(:account1) { create :account }
+  let!(:admin_account) { create :account, comakery_admin: true }
   let!(:authentication1) { create(:authentication, account: account) }
 
   before do
@@ -265,6 +266,33 @@ describe ProjectsController do
       end.not_to change { AwardType.count }
 
       expect(flash[:error]).to eq('Project already created')
+    end
+  end
+
+  describe '#update_status' do
+    let!(:project) { create(:project) }
+
+    context 'when not logged in' do
+      it 'redirects to root' do
+        session[:account_id] = nil
+        post :update_status, params: { project_id: project.id }
+        expect(response.status).to eq(302)
+        expect(response).to redirect_to(root_url)
+      end
+    end
+
+    context 'when logged in with admin flag' do
+      it 'update valid project status' do
+        login admin_account
+        post :update_status, params: { project_id: project.id, status: 'active' }
+        expect(response.status).to eq(200)
+      end
+
+      it 'renders error with invalid status' do
+        login admin_account
+        post :update_status, params: { project_id: project.id, status: 'archived' }
+        expect(response.status).to eq(422)
+      end
     end
   end
 

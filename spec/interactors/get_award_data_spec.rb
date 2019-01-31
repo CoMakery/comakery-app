@@ -41,9 +41,16 @@ describe GetAwardData do
     let!(:award_type) { create(:award_type, project: new_project, amount: 1000, name: 'Small Award') }
     let!(:award) { create(:award, award_type: award_type, quantity: 0.15, account: contributor, created_at: Time.zone.today - 200.days) }
 
-    it 'return contributors by day' do
+    it 'return contributors by day - only return last 150' do
       result = described_class.call(project: new_project)
       h = { 'date' => (Time.zone.today - 150.days).strftime('%Y-%m-%d') }
+      expect(result[:award_data][:contributions_by_day].first).to eq h
+    end
+
+    it 'return contributors by day' do
+      create(:award, award_type: award_type, quantity: 1, account: contributor, created_at: Time.zone.today - 10.days)
+      result = described_class.call(project: new_project)
+      h = { 'Amy Win' => 0.1e4, 'date' => (Time.zone.today - 10.days).strftime('%Y-%m-%d') }
       expect(result[:award_data][:contributions_by_day].first).to eq h
     end
   end

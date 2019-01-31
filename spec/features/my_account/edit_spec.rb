@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-describe 'my account' do
+describe 'my account', js: true do
   let!(:account) { create :account, email: 'test@test.st' }
 
   before do
     login account
     visit root_path
-    first('.menu').click_link account.decorate.name
+    first('.header--nav--links').click_link 'My Account'
     expect(page).to have_content 'Account Details'
 
     within('.view-ethereum-wallet') do
@@ -15,10 +15,10 @@ describe 'my account' do
   end
 
   scenario 'edit account information failed', js: true do
-    fill_in 'firstName', with: ''
-    fill_in 'lastName', with: ''
-    fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
-    click_on 'Save'
+    fill_in 'firstName', with: '', fill_options: { clear: :backspace }
+    fill_in 'lastName', with: '', fill_options: { clear: :backspace }
+    fill_in 'ethereumWallet', with: "0x#{'a' * 40}", fill_options: { clear: :backspace }
+    find('input[type=submit]').click
 
     expect(page).to have_content("First name can't be blank")
     expect(page).to have_content("Last name can't be blank")
@@ -29,7 +29,9 @@ describe 'my account' do
     fill_in 'lastName', with: 'Dev'
     fill_in 'ethereumWallet', with: "0x#{'a' * 40}"
     fill_in 'qtumWallet', with: "Q#{'a' * 33}"
-    click_on 'Save'
+    fill_in 'cardanoWallet', with: 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
+    fill_in 'bitcoinWallet', with: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
+    find('input[type=submit]').click
 
     expect(page).to have_content 'Your account details have been updated.'
     expect(page).to have_content 'Tester'

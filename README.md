@@ -41,6 +41,7 @@ Prerequisites:
 - Phantomjs binary in PATH (build from official Ubuntu repo will crash on `attach_file`, more info [here](https://github.com/teampoltergeist/poltergeist))
 - Bundler
 - Yarn
+- Chrome browser
 
 Set up .env:
 
@@ -55,6 +56,7 @@ Basics :
 source .env
 bundle install
 yarn install
+chromedriver-update
 rails db:create:all
 rails db:schema:load
 ```
@@ -93,6 +95,16 @@ JS tests via Jest: `yarn test`
 ## Pushing code to Github
 
 To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
+
+## Deploying to Heroku with app.json
+- [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
+- During setup update API keys and secrets according to environment
+- After deployment manually update formation and addons plans according to environment
+- Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
+- Setup DNS and install following addons in case of production or staging environment:
+  - https://elements.heroku.com/addons/ssl
+  - https://elements.heroku.com/addons/expeditedssl
+- Update Cloudfront and Airbrake settings
 
 ## Deploying to heroku staging
 

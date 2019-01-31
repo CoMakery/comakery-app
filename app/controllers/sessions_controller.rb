@@ -3,6 +3,8 @@ class SessionsController < ApplicationController
   skip_before_action :require_email_confirmation, only: %i[destroy]
   skip_after_action :verify_authorized, :verify_policy_scoped
 
+  before_action :redirect_if_signed_in, only: %i[create sign_in new]
+
   def oauth_failure
     flash[:error] = "Sorry, logging in failed... please try again, or email us at #{I18n.t('tech_support_email')}"
     redirect_to root_path
@@ -59,29 +61,57 @@ class SessionsController < ApplicationController
     elsif @path
       @path
     else
-      if current_account.new_award_notice
-        process_new_award_notice(current_account)
-      end
+      process_new_award_notice if current_account.new_award_notice
       root_path
     end
   end
 
-  def process_new_award_notice(current_account)
+  def process_new_award_notice
     project = current_account.awards.last&.project
     if project&.coin_type_on_ethereum?
-      if current_account.ethereum_wallet.blank?
-        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      else
-        flash[:notice] = "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
-        current_account.update new_award_notice: false
-      end
+      process_new_ethereum_award_notice
     elsif project&.coin_type_on_qtum?
-      if current_account.qtum_wallet.blank?
-        flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Qtum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
-      else
-        flash[:notice] = "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your QRC20 tokens."
-        current_account.update new_award_notice: false
-      end
+      process_new_qtum_award_notice
+    elsif project&.coin_type_on_cardano?
+      process_new_cardano_award_notice
+    elsif project&.coin_type_on_bitcoin?
+      process_new_bitcoin_award_notice
+    end
+  end
+
+  def process_new_ethereum_award_notice
+    if current_account.ethereum_wallet.blank?
+      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    else
+      flash[:notice] = "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
+      current_account.update new_award_notice: false
+    end
+  end
+
+  def process_new_qtum_award_notice
+    if current_account.qtum_wallet.blank?
+      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Qtum Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    else
+      flash[:notice] = "Congratulations, you just claimed your award! Your Qtum address is #{view_context.link_to current_account.qtum_wallet, current_account.decorate.qtum_wallet_url} you can change your Qtum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Qtum tokens."
+      current_account.update new_award_notice: false
+    end
+  end
+
+  def process_new_cardano_award_notice
+    if current_account.cardano_wallet.blank?
+      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Cardano Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    else
+      flash[:notice] = "Congratulations, you just claimed your award! Your Cardano address is #{view_context.link_to current_account.cardano_wallet, current_account.decorate.cardano_wallet_url} you can change your Cardano address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Cardano tokens."
+      current_account.update new_award_notice: false
+    end
+  end
+
+  def process_new_bitcoin_award_notice
+    if current_account.bitcoin_wallet.blank?
+      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Bitcoin Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    else
+      flash[:notice] = "Congratulations, you just claimed your award! Your Bitcoin address is #{view_context.link_to current_account.bitcoin_wallet, current_account.decorate.bitcoin_wallet_url} you can change your Bitcoin address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Bitcoin tokens."
+      current_account.update new_award_notice: false
     end
   end
 end

@@ -41,8 +41,42 @@ RSpec.describe PagesController, type: :controller do
     expect(response).to redirect_to action: :featured
   end
 
+  it 'sets paperform id correctly in default environment' do
+    account = create :account
+    login account
+    get :landing
+    expect(assigns[:paperform_id]).to eq('homepage')
+  end
+
+  it 'sets paperform id correctly in demo environment' do
+    account = create :account
+    login account
+    ENV['APP_NAME'] = 'demo'
+    get :landing
+    ENV['APP_NAME'] = ''
+    expect(assigns[:paperform_id]).to eq('demo-homepage')
+  end
+
+  it 'sets paperform id correctly in staging environment' do
+    account = create :account
+    login account
+    ENV['APP_NAME'] = 'staging'
+    get :landing
+    ENV['APP_NAME'] = ''
+    expect(assigns[:paperform_id]).to eq('0f2g0j1q')
+  end
+
   it 'access featured page - set contributor form' do
     account = create :account
+    login account
+    get :featured
+    expect(account.reload.finished_contributor_form?).to be_truthy
+  end
+
+  it 'access featured page - disable interested button' do
+    account = create :account
+    stub_airtable
+    account.interests.create(project: 'Market Research', protocol: 'Holo')
     login account
     get :featured
     expect(account.reload.finished_contributor_form?).to be_truthy
@@ -62,5 +96,18 @@ RSpec.describe PagesController, type: :controller do
     ENV.stub(:key?) { 'test:test' }
     ENV.stub(:fetch) { 'test:test' }
     get :landing
+  end
+
+  it 'redirects from styleguide page' do
+    get :styleguide
+    expect(response.status).to eq(302)
+  end
+
+  it 'returns styleguide page in dev env' do
+    env_backup = Rails.env
+    Rails.env  = 'development'
+    get :styleguide
+    Rails.env = env_backup
+    expect(response.status).to eq(200)
   end
 end

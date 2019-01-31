@@ -1,6 +1,12 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+
+  resources :tokens, only: [:index, :new, :create, :show, :edit, :update]
+  post 'tokens/fetch_contract_details'
+
+  get '/styleguide' => "pages#styleguide"
+
   resource :account, only: [:update]
   resources :accounts, only: [:new, :create, :show] do
     collection do
@@ -51,6 +57,7 @@ Rails.application.routes.draw do
     resources :payments, only: [:index, :create, :update]
     collection do
       get :landing
+      patch :update_status
     end
   end
 
@@ -66,6 +73,12 @@ Rails.application.routes.draw do
   resources :channels, only: [] do
     member do
       get :users
+    end
+  end
+
+  resources :missions do
+    collection do
+      post :rearrange
     end
   end
 

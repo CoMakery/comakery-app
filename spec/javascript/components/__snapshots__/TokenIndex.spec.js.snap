@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TokenIndex renders correctly without props 1`] = `
+<TokenIndex
+  tokens={Array []}
+>
+  <Layout
+    category=""
+    className="token-index"
+    hasBackButton={false}
+    sidebar={
+      <React.Fragment>
+        <div
+          className="token-index--sidebar"
+        >
+          <SidebarItemBold
+            className="token-index--sidebar--item__bold"
+            iconLeftName="MARK-WHITE.svg"
+            iconRightName="PLUS.svg"
+            onClick={[Function]}
+            text="Create a Token"
+          />
+        </div>
+      </React.Fragment>
+    }
+    subfooter={null}
+    title="Tokens"
+  >
+    <div
+      className="layout token-index"
+    >
+      <div
+        className="layout--content"
+      >
+        <div
+          className="layout--content--title"
+        >
+          Tokens
+        </div>
+        <hr
+          className="layout--content--hr"
+        />
+        <div
+          className="layout--content--wrapper"
+        >
+          <div
+            className="layout--content--sidebar"
+          >
+            <div
+              className="token-index--sidebar"
+            >
+              <SidebarItemBold
+                className="token-index--sidebar--item__bold"
+                iconLeftName="MARK-WHITE.svg"
+                iconRightName="PLUS.svg"
+                onClick={[Function]}
+                text="Create a Token"
+              >
+                <SidebarItem
+                  className="sidebar-item__bold token-index--sidebar--item__bold"
+                  iconLeftName="MARK-WHITE.svg"
+                  iconLeftUrl=""
+                  iconRightName="PLUS.svg"
+                  onClick={[Function]}
+                  selected={false}
+                  text="Create a Token"
+                >
+                  <div
+                    className="sidebar-item--wrapper"
+                    onClick={[Function]}
+                  >
+                    <div
+                      className="sidebar-item sidebar-item__bold token-index--sidebar--item__bold"
+                    >
+                      <span
+                        className="sidebar-item--icon-left"
+                      >
+                        <Icon
+                          className=""
+                          name="MARK-WHITE.svg"
+                        >
+                          <img
+                            className="icon icon__MARK-WHITE-svg"
+                            src="test-file-stub"
+                          />
+                        </Icon>
+                      </span>
+                      <span
+                        className="sidebar-item--text"
+                      >
+                        Create a Token
+                      </span>
+                      <span
+                        className="sidebar-item--icon-right"
+                      >
+                        <Icon
+                          className=""
+                          name="PLUS.svg"
+                        >
+                          <img
+                            className="icon icon__PLUS-svg"
+                            src="test-file-stub"
+                          />
+                        </Icon>
+                      </span>
+                    </div>
+                  </div>
+                </SidebarItem>
+              </SidebarItemBold>
+            </div>
+          </div>
+          <div
+            className="layout--content--content__sidebared"
+          />
+        </div>
+      </div>
+    </div>
+  </Layout>
+</TokenIndex>
+`;

@@ -44,6 +44,7 @@ gem 'refile-s3'
 gem 'responders'
 gem 'rubyzip', '~> 1.2.2'
 gem 'sass-rails'
+gem 'schmooze'
 gem 'sdoc', group: :doc
 gem 'sendgrid-ruby'
 gem 'sidekiq'
@@ -53,6 +54,7 @@ gem 'slack-ruby-client'
 gem 'sprockets', '~>3.7.2'
 gem 'uglifier'
 gem 'underscore-rails'
+gem 'web3-eth'
 gem 'webpacker'
 
 group(:scripts) do
@@ -85,10 +87,10 @@ end
 
 group(:test) do
   gem 'capybara'
+  gem 'capybara-screenshot', '~> 1.0'
+  gem 'chromedriver-helper', '~> 2.1'
   gem 'database_cleaner'
   gem 'guard-rspec', require: false
-  gem 'phantomjs', require: 'phantomjs/poltergeist'
-  gem 'poltergeist'
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
@@ -96,3 +98,5 @@ group(:test) do
   gem 'simplecov', require: false
   gem 'webmock'
 end
+
+gem 'scout_apm', '~> 2.4'
