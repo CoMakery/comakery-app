@@ -10,11 +10,9 @@ export default {
     let findTotal = new BigNumber(0)
     for (let i = 0; i < unspentTransactions.length; i++) {
       let tx = unspentTransactions[i]
-      if (tx.confirmations > 0) {
-        findTotal = findTotal.plus(tx.satoshis)
-        find[find.length] = tx
-        if (findTotal.isGreaterThanOrEqualTo(value)) break
-      }
+      findTotal = findTotal.plus(tx.satoshis)
+      find[find.length] = tx
+      if (findTotal.isGreaterThanOrEqualTo(value)) break
     }
     if (value.isGreaterThan(findTotal)) {
       throw new Error('You do not have enough tokens to send')

@@ -75,8 +75,9 @@ RSpec.describe PagesController, type: :controller do
 
   it 'access featured page - disable interested button' do
     account = create :account
+    project = create :project
     stub_airtable
-    account.interests.create(project: 'Market Research', protocol: 'Holo')
+    account.interests.create(project_id: project.id, protocol: 'Holo')
     login account
     get :featured
     expect(account.reload.finished_contributor_form?).to be_truthy
@@ -84,11 +85,12 @@ RSpec.describe PagesController, type: :controller do
 
   it 'create interest' do
     account = create :account
+    project = create :project
     login account
     stub_airtable
-    post :add_interest, params: { project: 'Promotion', protocol: 'Vevue', format: :json }
+    post :add_interest, params: { project_id: project.id, protocol: 'Vevue', format: :json }
     interest = assigns['interest']
-    expect(interest.project).to eq 'Promotion'
+    expect(interest.project).to eq project
     expect(interest.protocol).to eq 'Vevue'
   end
 

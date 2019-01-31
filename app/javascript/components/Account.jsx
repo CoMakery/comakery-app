@@ -18,6 +18,7 @@ export default class Account extends React.Component {
       awardPage  : 0,
       projectPage: 0,
       ...props.currentAccount, // formData
+
       message    : null, // notify sucess or error after account info update
       messageType: 'notice',
       showMessage: false, // show or hide message
@@ -55,10 +56,10 @@ export default class Account extends React.Component {
     formData.append('account[nickname]', this.state.nickname)
     formData.append('account[date_of_birth]', this.dateInput.current.value)
     formData.append('account[country]', this.state.country)
-    formData.append('account[bitcoin_wallet]', this.state.bitcoinWallet)
-    formData.append('account[cardano_wallet]', this.state.cardanoWallet)
-    formData.append('account[qtum_wallet]', this.state.qtumWallet)
-    formData.append('account[ethereum_wallet]', this.state.ethereumWallet)
+    formData.append('account[bitcoin_wallet]', this.state.bitcoinWallet || '')
+    formData.append('account[cardano_wallet]', this.state.cardanoWallet || '')
+    formData.append('account[qtum_wallet]', this.state.qtumWallet || '')
+    formData.append('account[ethereum_wallet]', this.state.ethereumWallet || '')
     if (this.fileInput.current.files[0]) {
       formData.append('account[image]', this.fileInput.current.files[0])
     }

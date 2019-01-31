@@ -5,10 +5,10 @@ export default {
     let url
     switch (network) {
       case 'testnet':
-        url = 'https://test-insight.bitpay.com/api'
+        url = 'https://test.bitgo.com/api/v1'
         break
       case 'mainnet':
-        url = 'https://insight.bitpay.com/api'
+        url = 'https://www.bitgo.com/api/v1'
         break
       default:
     }
@@ -17,20 +17,26 @@ export default {
 
   async getInfo(address, network) {
     const baseApiUrl = this.getInsightBaseUrl(network)
-    return (await axios.get(`${baseApiUrl}/addr/${address}`)).data
+    const rs = (await axios.get(`${baseApiUrl}/address/${address}`)).data
+    return {
+      address: rs.address,
+      balance: rs.balance / 1e8,
+      balanceSat: rs.balance,
+      confirmedBalance:  rs.confirmedBalance
+    }
   },
 
   async getUtxoList(address, network) {
     const baseApiUrl = this.getInsightBaseUrl(network)
-    return (await axios.get(`${baseApiUrl}/addr/${address}/utxo`)).data.map(item => {
+    return (await axios.get(`${baseApiUrl}/address/${address}/unspents`)).data.unspents.map(item => {
       return {
         address      : item.address,
-        txid         : item.txid,
+        txid         : item.tx_hash,
         confirmations: item.confirmations,
-        amount       : item.amount,
-        satoshis     : item.satoshis,
-        hash         : item.txid,
-        pos          : item.vout
+        amount       : item.value / 1e8,
+        satoshis     : item.value,
+        hash         : item.tx_hash,
+        pos          : item.tx_output_n
       }
     })
   },

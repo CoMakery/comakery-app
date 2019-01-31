@@ -17,6 +17,7 @@ class Project < ApplicationRecord
 
   belongs_to :account
   belongs_to :mission
+  has_many :accounts_interested, through: :interests, source: :account
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards
@@ -106,6 +107,7 @@ class Project < ApplicationRecord
   before_validation :check_coin_type
   before_save :set_transitioned_to_ethereum_enabled
   before_save :enable_ethereum
+  before_save :fill_decimal_places
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -341,6 +343,17 @@ class Project < ApplicationRecord
 
   def enable_ethereum
     self.ethereum_enabled = ethereum_contract_address.present? || contract_address? unless ethereum_enabled
+  end
+
+  def fill_decimal_places
+    self.decimal_places ||= case coin_type
+                            when 'eth'
+                              18
+                            when 'ada'
+                              6
+                            when 'btc'
+                              8
+    end
   end
 
   def valid_tracker_url
