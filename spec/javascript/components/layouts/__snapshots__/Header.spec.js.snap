@@ -41,7 +41,7 @@ exports[`Header renders correctly without props 1`] = `
           className="header--nav--links--sign"
           href="/accounts/new"
         >
-          Register
+          Sign Up
         </a>
       </div>
     </div>

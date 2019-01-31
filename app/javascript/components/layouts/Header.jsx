@@ -20,7 +20,7 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
         </a>
 
         <a href="/accounts/new" className={currentPath.match(/accounts\/new/) ? 'header--nav--links--current header--nav--links--sign' : 'header--nav--links--sign'} >
-          Register
+          Sign Up
         </a>
       </div>
     }
@@ -114,7 +114,7 @@ class Header extends React.Component {
                     </a>
 
                     <a href="/accounts/new" className={currentPath.match(/accounts\/new/) ? 'header--nav--links--current' : null} >
-                      Register
+                      Sign Up
                     </a>
                   </React.Fragment>
                 }
