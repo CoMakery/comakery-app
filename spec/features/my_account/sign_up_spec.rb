@@ -4,9 +4,6 @@ describe 'my account', js: true do
   let!(:unconfirmed_account) { create :account, nickname: 'jason', email_confirm_token: '0' }
   let!(:to_be_confirmed_account) { create :account, nickname: 'jason', email_confirm_token: '1' }
   let!(:confirmed_account) { create :account, nickname: 'jason', email_confirm_token: nil }
-  let!(:token) { create :token }
-  let!(:mission) { create :mission, token_id: token.id }
-  let!(:project) { create :project, mission_id: mission.id }
 
   scenario 'user gets redirected to survey page after signup' do
     visit root_path
@@ -29,20 +26,14 @@ describe 'my account', js: true do
 
   scenario 'featured page is available after signup' do
     login(unconfirmed_account)
-    open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') do |file|
-      mission.image = file
-    end
-    mission.save
-
     visit '/featured'
-
     expect(page.current_url).to have_content '/featured'
-    expect(page).to have_content('CoMakery Hosts Blockchain Missions We Believe In')
+    expect(page).to have_content('Please confirm your email before continuing.')
     stub_airtable
-    find('.featured-mission__project__interest').click
-    sleep 2
+    click_on "I'M INTERESTED!", match: :first
+    wait_for_ajax
     expect(unconfirmed_account.interests.count).to be > 0
-    expect(page).to have_content('REQUEST SENT')
+    expect(page).to have_content('INTEREST, NOTED!')
   end
 
   scenario 'account page is available after signup' do
