@@ -38,7 +38,7 @@ describe('ProjectForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldWhiteDark[title="total budget"][recommended][name="project[budget]"]'
+      'InputFieldWhiteDark[title="total budget"][recommended][name="project[maximum_tokens]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -63,6 +63,10 @@ describe('ProjectForm', () => {
 
     expect(wrapper.exists(
       'InputFieldUploadFile[title="project image – panoramic"][required][name="project[panoramic_image]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
+      'input[type="hidden"][name="project[long_id]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -135,9 +139,10 @@ describe('ProjectForm', () => {
       'title'                 : 'title',
       'description'           : 'desc',
       'videoUrl'              : 'https://youtube.com/',
-      'budget'                : '1000',
+      'maximumTokens'         : '1000',
       'visibility'            : 'archived',
       'url'                   : 'https://www.comakery.com/p/test',
+      'longId'                : '123',
       'requireConfidentiality': false,
       'legalProjectOwner'     : 'CoMakery',
       'squareImageUrl'        : '/s.png',
@@ -186,7 +191,7 @@ describe('ProjectForm', () => {
     ).props().value).toBe('https://youtube.com/')
 
     expect(wrapper.find(
-      'InputFieldWhiteDark[title="total budget"][recommended][name="project[budget]"]'
+      'InputFieldWhiteDark[title="total budget"][recommended][name="project[maximum_tokens]"]'
     ).props().value).toBe('1000')
 
     expect(wrapper.find(
@@ -212,6 +217,10 @@ describe('ProjectForm', () => {
     expect(wrapper.find(
       'InputFieldUploadFile[title="project image – panoramic"][required][name="project[panoramic_image]"]'
     ).props().imgPreviewUrl).toBe('/p.png')
+
+    expect(wrapper.find(
+      'input[type="hidden"][name="project[long_id]"]'
+    ).props().value).toBe('123')
   })
 
   it('renders correctly with csrfToken', () => {

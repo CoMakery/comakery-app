@@ -71,7 +71,7 @@ class ProjectForm extends React.Component {
       'project[url]'                    : this.props.project.url || '',
       'project[title]'                  : this.props.project.title || '',
       'project[description]'            : this.props.project.description || '',
-      'project[budget]'                 : this.props.project.budget || '',
+      'project[maximum_tokens]'         : this.props.project.maximumTokens || '',
       'project[video_url]'              : this.props.project.videoUrl || '',
       'project[legal_project_owner]'    : this.props.project.legalProjectOwner || ''
     }
@@ -303,9 +303,9 @@ class ProjectForm extends React.Component {
             <InputFieldWhiteDark
               title="total budget"
               recommended
-              name="project[budget]"
-              value={this.state['project[budget]']}
-              errorText={this.state.errors['project[budget]']}
+              name="project[maximum_tokens]"
+              value={this.state['project[maximum_tokens]']}
+              errorText={this.state.errors['project[maximum_tokens]']}
               placeholder="Provide the budget for completing the entire project"
               pattern="\d+"
               eventHandler={this.handleFieldChange}
@@ -381,6 +381,13 @@ class ProjectForm extends React.Component {
               imgRequirements="Image should be at least 1500px x 300px"
               imgVerifier={this.verifyPanoramicImgRes}
               imgInputRef={this.panoramicImgInputRef}
+            />
+
+            <input
+              type="hidden"
+              name="project[long_id]"
+              value={this.props.project.longId}
+              readOnly
             />
 
             <input

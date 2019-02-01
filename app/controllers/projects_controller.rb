@@ -62,9 +62,6 @@ class ProjectsController < ApplicationController
 
   def create
     @project = current_account.projects.build project_params
-    @project.long_id = params[:long_id] || SecureRandom.hex(20)
-
-    @project.maximum_tokens = 1_000_000
     @project.maximum_royalties_per_month = 50_000
     @project.public = false
 
@@ -182,6 +179,7 @@ class ProjectsController < ApplicationController
       :panoramic_image,
       :maximum_tokens,
       :token_id,
+      :long_id,
       :title,
       :tracker,
       :video_url,
