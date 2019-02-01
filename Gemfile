@@ -98,3 +98,5 @@ group(:test) do
   gem 'simplecov', require: false
   gem 'webmock'
 end
+
+gem 'scout_apm', '~> 2.4'

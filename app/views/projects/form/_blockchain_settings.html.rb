@@ -239,6 +239,7 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
             $(".blockchain-network-lbl").addClass('hide')
             $(".ethereum-network-lbl").removeClass('hide')
             break;
+          case 'qtum':
           case 'ada':
           case 'btc':
           case 'eos':

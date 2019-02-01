@@ -4,6 +4,7 @@ class Project < ApplicationRecord
     erc20: 'ethereum',
     eth: 'ethereum',
     qrc20: 'qtum',
+    qtum: 'qtum',
     ada: 'cardano',
     btc: 'bitcoin',
     eos: 'eos'
@@ -54,6 +55,7 @@ class Project < ApplicationRecord
     erc20: 'ERC20',
     eth: 'ETH',
     qrc20: 'QRC20',
+    qtum:  'QTUM',
     ada: 'ADA',
     btc: 'BTC',
     eos: 'EOS'
@@ -147,7 +149,7 @@ class Project < ApplicationRecord
   end
 
   def coin_type_on_qtum?
-    coin_type_qrc20?
+    coin_type_qrc20? || coin_type_qtum?
   end
 
   def coin_type_on_cardano?
@@ -351,7 +353,14 @@ class Project < ApplicationRecord
   end
 
   def fill_decimal_places
-    self.decimal_places ||= mission&.token&.decimal_places
+    self.decimal_places ||= case coin_type
+                            when 'eth'
+                              18
+                            when 'ada'
+                              6
+                            when 'btc'
+                              8
+    end
   end
 
   def valid_tracker_url
