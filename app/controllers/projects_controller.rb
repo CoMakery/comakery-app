@@ -37,9 +37,7 @@ class ProjectsController < ApplicationController
   def new
     assign_slack_channels
 
-    @project = current_account.projects.build(public: false,
-                                              maximum_tokens: 1_000_000,
-                                              maximum_royalties_per_month: 50_000)
+    @project = current_account.projects.build
     @project.award_types.build(name: 'Thanks', amount: 10)
     @project.award_types.build(name: 'Software development hour', amount: 100)
     @project.award_types.build(name: 'Graphic design hour', amount: 100)
@@ -53,9 +51,12 @@ class ProjectsController < ApplicationController
     @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
+
     authorize @project
 
-    @props[:project] = @project.serializable_hash
+    @props[:project] = @project.serializable_hash.merge(
+      url: "https://www.comakery.com/p/#{@project.long_id}"
+    )
     render component: 'ProjectForm', props: @props, prerender: false
   end
 
@@ -63,7 +64,6 @@ class ProjectsController < ApplicationController
     @project = current_account.projects.build project_params
     @project.long_id = params[:long_id] || SecureRandom.hex(20)
 
-    @project.legal_project_owner = 'TODO'
     @project.maximum_tokens = 1_000_000
     @project.maximum_royalties_per_month = 50_000
     @project.public = false
@@ -149,7 +149,7 @@ class ProjectsController < ApplicationController
   end
 
   def set_visibilities
-    @visibilities = Project.visibilities.map { |k, _| [k.humanize, k] }.to_h
+    @visibilities = Project.visibilities.keys
   end
 
   def set_generic_props
@@ -159,7 +159,8 @@ class ProjectsController < ApplicationController
           square_image_url: @project&.square_image&.present? ? Refile.attachment_url(@project, :square_image, :fill, 800, 800) : nil,
           panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
           mission_id: @project&.mission&.id,
-          token_id: @project&.token&.id
+          token_id: @project&.token&.id,
+          url: "https://www.comakery.com/p/#{@project.long_id}"
         }
       ),
       tokens: @tokens,

@@ -6,6 +6,7 @@ exports[`InputFieldUploadFile renders correctly without props 1`] = `
     checkboxText=""
     checked={false}
     className="input-field__upload-file"
+    copyOnClick={false}
     disabled={false}
     errorText=""
     eventHandler={[Function]}

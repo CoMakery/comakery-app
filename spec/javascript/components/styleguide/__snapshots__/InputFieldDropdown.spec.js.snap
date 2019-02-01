@@ -6,6 +6,7 @@ exports[`InputFieldDropdown renders correctly without props 1`] = `
     checkboxText=""
     checked={false}
     className="input-field__dropdown"
+    copyOnClick={false}
     disabled={false}
     errorText=""
     eventHandler={[Function]}

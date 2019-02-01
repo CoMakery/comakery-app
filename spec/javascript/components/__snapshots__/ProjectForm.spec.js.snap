@@ -21,11 +21,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
     }
   }
   urlOnSuccess="/"
-  visibilities={
-    Object {
-      "default": "_",
-    }
-  }
+  visibilities={Array []}
 >
   <Layout
     category=""
@@ -138,6 +134,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__dropdown"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -224,6 +221,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__dropdown"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -293,7 +291,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
               <InputFieldWhiteDark
                 eventHandler={[Function]}
                 name="project[title]"
-                placeholder="..."
+                placeholder="Provide a name for the project"
                 required={true}
                 symbolLimit={100}
                 title="title"
@@ -303,6 +301,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__white__dark"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -313,7 +312,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgVerifier={[Function]}
                   name="project[title]"
                   pattern=".*"
-                  placeholder="..."
+                  placeholder="Provide a name for the project"
                   readOnly={false}
                   recommended={false}
                   required={true}
@@ -354,8 +353,9 @@ exports[`ProjectForm renders correctly without props 1`] = `
                         className="input-field--content__text"
                         name="project[title]"
                         onChange={[Function]}
+                        onClick={null}
                         pattern=".*"
-                        placeholder="..."
+                        placeholder="Provide a name for the project"
                         readOnly={false}
                         required={true}
                         type="text"
@@ -368,7 +368,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
               <InputFieldDescription
                 eventHandler={[Function]}
                 name="project[description]"
-                placeholder="..."
+                placeholder="Explain the outline and goal of the project, and why people should be excited about helping to execute the vision"
                 required={true}
                 symbolLimit={250}
                 title="description"
@@ -378,6 +378,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__description"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -388,7 +389,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgVerifier={[Function]}
                   name="project[description]"
                   pattern=".*"
-                  placeholder="..."
+                  placeholder="Explain the outline and goal of the project, and why people should be excited about helping to execute the vision"
                   readOnly={false}
                   recommended={false}
                   required={true}
@@ -426,11 +427,11 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       className="input-field--content"
                     >
                       <textarea
-                        className="input-field--content__text"
+                        className="input-field--content__text z"
                         name="project[description]"
                         onChange={[Function]}
                         pattern=".*"
-                        placeholder="..."
+                        placeholder="Explain the outline and goal of the project, and why people should be excited about helping to execute the vision"
                         readOnly={false}
                         required={true}
                         value=""
@@ -442,7 +443,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
               <InputFieldWhiteDark
                 eventHandler={[Function]}
                 name="project[video_url]"
-                placeholder="..."
+                placeholder="Paste in a link to a YouTube or Vimeo video detailing the project"
                 recommended={true}
                 symbolLimit={0}
                 title="narrated video overview"
@@ -452,6 +453,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__white__dark"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -462,7 +464,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgVerifier={[Function]}
                   name="project[video_url]"
                   pattern=".*"
-                  placeholder="..."
+                  placeholder="Paste in a link to a YouTube or Vimeo video detailing the project"
                   readOnly={false}
                   recommended={true}
                   required={false}
@@ -496,8 +498,80 @@ exports[`ProjectForm renders correctly without props 1`] = `
                         className="input-field--content__text"
                         name="project[video_url]"
                         onChange={[Function]}
+                        onClick={null}
                         pattern=".*"
-                        placeholder="..."
+                        placeholder="Paste in a link to a YouTube or Vimeo video detailing the project"
+                        readOnly={false}
+                        required={false}
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldWhiteDark>
+              <InputFieldWhiteDark
+                eventHandler={[Function]}
+                name="project[budget]"
+                pattern="\\\\d+"
+                placeholder="Provide the budget for completing the entire project"
+                recommended={true}
+                symbolLimit={0}
+                title="total budget"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__white__dark"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  name="project[budget]"
+                  pattern="\\\\d+"
+                  placeholder="Provide the budget for completing the entire project"
+                  readOnly={false}
+                  recommended={true}
+                  required={false}
+                  selectEntries={Array []}
+                  symbolLimit={0}
+                  title="total budget"
+                  type="text"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__white__dark"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        total budget
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        recommended
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        className="input-field--content__text"
+                        name="project[budget]"
+                        onChange={[Function]}
+                        onClick={null}
+                        pattern="\\\\d+"
+                        placeholder="Provide the budget for completing the entire project"
                         readOnly={false}
                         required={false}
                         type="text"
@@ -511,22 +585,15 @@ exports[`ProjectForm renders correctly without props 1`] = `
                 eventHandler={[Function]}
                 name="project[visibility]"
                 required={true}
-                selectEntries={
-                  Array [
-                    Array [
-                      "default",
-                      "_",
-                    ],
-                  ]
-                }
+                selectEntries={Array []}
                 symbolLimit={0}
-                title="visibility"
-                value="_"
+                title="project visibility"
               >
                 <InputField
                   checkboxText=""
                   checked={false}
                   className="input-field__dropdown"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -541,18 +608,11 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   readOnly={false}
                   recommended={false}
                   required={true}
-                  selectEntries={
-                    Array [
-                      Array [
-                        "default",
-                        "_",
-                      ],
-                    ]
-                  }
+                  selectEntries={Array []}
                   symbolLimit={0}
-                  title="visibility"
+                  title="project visibility"
                   type="select"
-                  value="_"
+                  value=""
                 >
                   <div
                     className="input-field input-field__dropdown"
@@ -563,7 +623,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       <span
                         className="input-field--title--title"
                       >
-                        visibility
+                        project visibility
                       </span>
                       <span
                         className="input-field--title--required"
@@ -580,19 +640,254 @@ exports[`ProjectForm renders correctly without props 1`] = `
                         name="project[visibility]"
                         onChange={[Function]}
                         required={true}
-                        value="_"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldDropdown>
+              <InputFieldWhiteDark
+                copyOnClick={true}
+                eventHandler={[Function]}
+                name="project[url]"
+                readOnly={true}
+                required={true}
+                symbolLimit={0}
+                title="project url"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__white__dark"
+                  copyOnClick={true}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  name="project[url]"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={true}
+                  recommended={false}
+                  required={true}
+                  selectEntries={Array []}
+                  symbolLimit={0}
+                  title="project url"
+                  type="text"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__white__dark"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        project url
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        className="input-field--content__text input-field--content__text__copyable"
+                        name="project[url]"
+                        onChange={[Function]}
+                        onClick={[Function]}
+                        pattern=".*"
+                        placeholder="Please enter value"
+                        readOnly={true}
+                        required={true}
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldWhiteDark>
+              <InputFieldDropdown
+                eventHandler={[Function]}
+                name="project[require_confidentiality]"
+                required={true}
+                selectEntries={
+                  Array [
+                    Array [
+                      "Only admins can see list of rewards",
+                      "true",
+                    ],
+                    Array [
+                      "Show all awards & contributions",
+                      "false",
+                    ],
+                  ]
+                }
+                symbolLimit={0}
+                title="awards visibility"
+                value="false"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__dropdown"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  name="project[require_confidentiality]"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={true}
+                  selectEntries={
+                    Array [
+                      Array [
+                        "Only admins can see list of rewards",
+                        "true",
+                      ],
+                      Array [
+                        "Show all awards & contributions",
+                        "false",
+                      ],
+                    ]
+                  }
+                  symbolLimit={0}
+                  title="awards visibility"
+                  type="select"
+                  value="false"
+                >
+                  <div
+                    className="input-field input-field__dropdown"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        awards visibility
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <select
+                        className="input-field--content__select"
+                        disabled={false}
+                        name="project[require_confidentiality]"
+                        onChange={[Function]}
+                        required={true}
+                        value="false"
                       >
                         <option
-                          key="_"
-                          value="_"
+                          key="true"
+                          value="true"
                         >
-                          default
+                          Only admins can see list of rewards
+                        </option>
+                        <option
+                          key="false"
+                          value="false"
+                        >
+                          Show all awards & contributions
                         </option>
                       </select>
                     </div>
                   </div>
                 </InputField>
               </InputFieldDropdown>
+              <InputFieldWhiteDark
+                eventHandler={[Function]}
+                name="project[legal_project_owner]"
+                placeholder="Provide a legal entity or individual owner's name"
+                required={true}
+                symbolLimit={0}
+                title="legal owner of the project"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__white__dark"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  name="project[legal_project_owner]"
+                  pattern=".*"
+                  placeholder="Provide a legal entity or individual owner's name"
+                  readOnly={false}
+                  recommended={false}
+                  required={true}
+                  selectEntries={Array []}
+                  symbolLimit={0}
+                  title="legal owner of the project"
+                  type="text"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__white__dark"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        legal owner of the project
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        className="input-field--content__text"
+                        name="project[legal_project_owner]"
+                        onChange={[Function]}
+                        onClick={null}
+                        pattern=".*"
+                        placeholder="Provide a legal entity or individual owner's name"
+                        readOnly={false}
+                        required={true}
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldWhiteDark>
               <InputFieldUploadFile
                 imgInputRef={
                   Object {
@@ -616,6 +911,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__upload-file"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -706,6 +1002,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__upload-file"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}

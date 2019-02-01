@@ -6,6 +6,7 @@ exports[`InputFieldDescription renders correctly without props 1`] = `
     checkboxText=""
     checked={false}
     className="input-field__description"
+    copyOnClick={false}
     disabled={false}
     errorText=""
     eventHandler={[Function]}

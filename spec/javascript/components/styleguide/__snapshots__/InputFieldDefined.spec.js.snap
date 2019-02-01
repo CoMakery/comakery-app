@@ -6,6 +6,7 @@ exports[`InputFieldDefined renders correctly without props 1`] = `
     checkboxText=""
     checked={false}
     className="input-field__defined"
+    copyOnClick={false}
     disabled={false}
     errorText=""
     eventHandler={[Function]}

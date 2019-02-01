@@ -33,6 +33,7 @@ exports[`InputField renders correctly without props 1`] = `
         className="input-field--content__text"
         name="field"
         onChange={[Function]}
+        onClick={null}
         pattern=".*"
         placeholder="Please enter value"
         readOnly={false}

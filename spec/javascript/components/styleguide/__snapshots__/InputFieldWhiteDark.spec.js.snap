@@ -6,6 +6,7 @@ exports[`InputFieldWhiteDark renders correctly without props 1`] = `
     checkboxText=""
     checked={false}
     className="input-field__white__dark"
+    copyOnClick={false}
     disabled={false}
     errorText=""
     eventHandler={[Function]}

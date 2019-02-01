@@ -6,6 +6,7 @@ exports[`InputFieldHalfed renders correctly without props 1`] = `
     checkboxText=""
     checked={false}
     className="input-field__halfed"
+    copyOnClick={false}
     disabled={false}
     errorText=""
     eventHandler={[Function]}

@@ -166,6 +166,12 @@ describe('InputField', () => {
     expect(wrapper.find('.input-field--content__text').props().readOnly).toBe(true)
   })
 
+  it('renders correctly with copyOnClick flag', () => {
+    const wrapper = shallow(<InputField copyOnClick />)
+
+    expect(wrapper.exists('.input-field--content__text__copyable')).toBe(true)
+  })
+
   it('renders correctly with errorText', () => {
     const wrapper = shallow(<InputField errorText="test" />)
 

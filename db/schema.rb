@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190125172058) do
+ActiveRecord::Schema.define(version: 20190129201928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -200,9 +200,9 @@ ActiveRecord::Schema.define(version: 20190125172058) do
     t.text "contributor_agreement_url"
     t.text "video_url"
     t.integer "payment_type", default: 1
-    t.boolean "exclusive_contributions"
+    t.boolean "exclusive_contributions", default: true
     t.string "legal_project_owner"
-    t.boolean "require_confidentiality"
+    t.boolean "require_confidentiality", default: true
     t.decimal "royalty_percentage", precision: 16, scale: 13
     t.integer "maximum_royalties_per_month"
     t.boolean "license_finalized", default: false, null: false

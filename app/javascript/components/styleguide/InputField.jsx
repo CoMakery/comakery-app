@@ -7,6 +7,7 @@ class InputField extends React.Component {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this.handleFileChange = this.handleFileChange.bind(this)
+    this.copyToClipboard = this.copyToClipboard.bind(this)
     this.passImg = this.passImg.bind(this)
     this.state = {
       fileLocalUrl : null,
@@ -43,6 +44,12 @@ class InputField extends React.Component {
     this.props.eventHandler(event)
   }
 
+  copyToClipboard(event) {
+    event.target.focus()
+    event.target.select()
+    document.execCommand('copy')
+  }
+
   render() {
     const {
       className,
@@ -53,6 +60,7 @@ class InputField extends React.Component {
       recommended,
       disabled,
       checked,
+      copyOnClick,
       name,
       value,
       selectEntries,
@@ -109,12 +117,13 @@ class InputField extends React.Component {
             }
 
             { type === 'text' &&
-              <input className="input-field--content__text"
+              <input className={classNames('input-field--content__text', (copyOnClick ? 'input-field--content__text__copyable' : ''))}
                 required={required}
                 type={type}
                 name={name}
                 value={value}
                 onChange={this.handleChange}
+                onClick={copyOnClick ? this.copyToClipboard : null}
                 placeholder={placeholder}
                 pattern={pattern}
                 readOnly={readOnly}
@@ -122,7 +131,7 @@ class InputField extends React.Component {
             }
 
             { type === 'textarea' &&
-              <textarea className="input-field--content__text"
+              <textarea className="input-field--content__text z"
                 required={required}
                 name={name}
                 value={value}
@@ -226,6 +235,7 @@ InputField.propTypes = {
   recommended         : PropTypes.bool,
   disabled            : PropTypes.bool,
   checked             : PropTypes.bool,
+  copyOnClick         : PropTypes.bool,
   name                : PropTypes.string,
   value               : PropTypes.string,
   selectEntries       : PropTypes.array,
@@ -250,6 +260,7 @@ InputField.defaultProps = {
   recommended         : false,
   disabled            : false,
   checked             : false,
+  copyOnClick         : false,
   name                : 'field',
   value               : '',
   selectEntries       : [],

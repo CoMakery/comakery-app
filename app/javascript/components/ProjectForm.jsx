@@ -26,20 +26,54 @@ class ProjectForm extends React.Component {
     this.squareImgInputRef = React.createRef()
     this.panoramicImgInputRef = React.createRef()
 
+    let awardVisibilitiesPretty = {
+      'Only admins can see list of rewards': 'true',
+      'Show all awards & contributions'    : 'false'
+    }
+
+    let visibilitiesPretty = {}
+    this.props.visibilities.forEach(v => {
+      switch (v) {
+        case 'member':
+          visibilitiesPretty['Logged in team members'] = v
+          break
+        case 'public_listed':
+          visibilitiesPretty['Publicly listed in CoMakery searches'] = v
+          break
+        case 'member_unlisted':
+          visibilitiesPretty['Logged in team member via unlisted URL'] = v
+          break
+        case 'public_unlisted':
+          visibilitiesPretty['Unlisted URL (no login required)'] = v
+          break
+        case 'archived':
+          visibilitiesPretty['Archived (visible only to me)'] = v
+          break
+        default:
+          visibilitiesPretty[v] = v
+      }
+    })
+
     this.state = {
-      errorMessage          : null,
-      infoMessage           : null,
-      errors                : {},
-      disabled              : {},
-      formAction            : this.props.formAction,
-      formUrl               : this.props.formUrl,
-      closeOnSuccess        : false,
-      'project[mission_id]' : this.props.project.missionId || Object.values(this.props.missions)[0],
-      'project[token_id]'   : this.props.project.tokenId || Object.values(this.props.tokens)[0],
-      'project[visibility]' : this.props.project.visibility || Object.values(this.props.visibilities)[0],
-      'project[title]'      : this.props.project.title || '',
-      'project[description]': this.props.project.description || '',
-      'project[video_url]'  : this.props.project.videoUrl || ''
+      errorMessage                      : null,
+      infoMessage                       : null,
+      errors                            : {},
+      disabled                          : {},
+      formAction                        : this.props.formAction,
+      formUrl                           : this.props.formUrl,
+      closeOnSuccess                    : false,
+      awardVisibilitiesPretty           : awardVisibilitiesPretty,
+      visibilitiesPretty                : visibilitiesPretty,
+      'project[mission_id]'             : this.props.project.missionId || Object.values(this.props.missions)[0],
+      'project[token_id]'               : this.props.project.tokenId || Object.values(this.props.tokens)[0],
+      'project[visibility]'             : this.props.project.visibility || Object.values(visibilitiesPretty)[0],
+      'project[require_confidentiality]': (this.props.project.requireConfidentiality === true || this.props.project.requireConfidentiality === null) ? 'true' : 'false',
+      'project[url]'                    : this.props.project.url || '',
+      'project[title]'                  : this.props.project.title || '',
+      'project[description]'            : this.props.project.description || '',
+      'project[budget]'                 : this.props.project.budget || '',
+      'project[video_url]'              : this.props.project.videoUrl || '',
+      'project[legal_project_owner]'    : this.props.project.legalProjectOwner || ''
     }
   }
 
@@ -76,7 +110,7 @@ class ProjectForm extends React.Component {
   verifySquareImgRes(img) {
     if ((img.naturalWidth !== 800) || (img.naturalHeight !== 800)) {
       this.squareImgInputRef.current.value = ''
-      this.errorAdd('project[square_image]', 'invalid resolution')
+      this.errorAdd('project[square_image]', 'Please attach the correct image')
     } else {
       this.errorRemove('project[square_image]')
     }
@@ -85,7 +119,7 @@ class ProjectForm extends React.Component {
   verifyPanoramicImgRes(img) {
     if ((img.naturalWidth !== 1500) || (img.naturalHeight !== 300)) {
       this.panoramicImgInputRef.current.value = ''
-      this.errorAdd('project[panoramic_image]', 'invalid resolution')
+      this.errorAdd('project[panoramic_image]', 'Please attach the correct image')
     } else {
       this.errorRemove('project[panoramic_image]')
     }
@@ -95,7 +129,7 @@ class ProjectForm extends React.Component {
     this.setState({ [event.target.name]: event.target.value })
 
     if (!event.target.checkValidity()) {
-      this.errorAdd(event.target.name, 'invalid value')
+      this.errorAdd(event.target.name, 'Please provide the correct value')
       return
     } else {
       this.errorRemove(event.target.name)
@@ -239,7 +273,7 @@ class ProjectForm extends React.Component {
               name="project[title]"
               value={this.state['project[title]']}
               errorText={this.state.errors['project[title]']}
-              placeholder="..."
+              placeholder="Provide a name for the project"
               eventHandler={this.handleFieldChange}
               symbolLimit={100}
             />
@@ -250,7 +284,7 @@ class ProjectForm extends React.Component {
               name="project[description]"
               value={this.state['project[description]']}
               errorText={this.state.errors['project[description]']}
-              placeholder="..."
+              placeholder="Explain the outline and goal of the project, and why people should be excited about helping to execute the vision"
               eventHandler={this.handleFieldChange}
               symbolLimit={250}
             />
@@ -261,20 +295,67 @@ class ProjectForm extends React.Component {
               name="project[video_url]"
               value={this.state['project[video_url]']}
               errorText={this.state.errors['project[video_url]']}
-              placeholder="..."
+              placeholder="Paste in a link to a YouTube or Vimeo video detailing the project"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="total budget"
+              recommended
+              name="project[budget]"
+              value={this.state['project[budget]']}
+              errorText={this.state.errors['project[budget]']}
+              placeholder="Provide the budget for completing the entire project"
+              pattern="\d+"
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
 
             <InputFieldDropdown
-              title="visibility"
+              title="project visibility"
               required
               name="project[visibility]"
               value={this.state['project[visibility]']}
               errorText={this.state.errors['project[visibility]']}
               disabled={this.state.disabled['project[visibility]']}
               eventHandler={this.handleFieldChange}
-              selectEntries={Object.entries(this.props.visibilities)}
+              selectEntries={Object.entries(this.state.visibilitiesPretty)}
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="project url"
+              required
+              readOnly
+              copyOnClick
+              name="project[url]"
+              value={this.state['project[url]']}
+              errorText={this.state.errors['project[url]']}
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+
+            <InputFieldDropdown
+              title="awards visibility"
+              required
+              name="project[require_confidentiality]"
+              value={this.state['project[require_confidentiality]']}
+              errorText={this.state.errors['project[require_confidentiality]']}
+              disabled={this.state.disabled['project[require_confidentiality]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.state.awardVisibilitiesPretty)}
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="legal owner of the project"
+              required
+              name="project[legal_project_owner]"
+              value={this.state['project[legal_project_owner]']}
+              errorText={this.state.errors['project[legal_project_owner]']}
+              placeholder="Provide a legal entity or individual owner's name"
+              eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
 
@@ -319,7 +400,7 @@ ProjectForm.propTypes = {
   project     : PropTypes.object.isRequired,
   tokens      : PropTypes.object.isRequired,
   missions    : PropTypes.object.isRequired,
-  visibilities: PropTypes.object.isRequired,
+  visibilities: PropTypes.array.isRequired,
   formUrl     : PropTypes.string.isRequired,
   formAction  : PropTypes.string.isRequired,
   urlOnSuccess: PropTypes.string.isRequired,
@@ -329,7 +410,7 @@ ProjectForm.defaultProps = {
   project     : {'default': '_'},
   tokens      : {'default': '_'},
   missions    : {'default': '_'},
-  visibilities: {'default': '_'},
+  visibilities: [],
   formUrl     : '/',
   formAction  : 'POST',
   urlOnSuccess: '/',

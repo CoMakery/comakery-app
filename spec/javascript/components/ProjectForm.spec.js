@@ -38,7 +38,23 @@ describe('ProjectForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDropdown[title="visibility"][required][name="project[visibility]"]'
+      'InputFieldWhiteDark[title="total budget"][recommended][name="project[budget]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
+      'InputFieldDropdown[title="project visibility"][required][name="project[visibility]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
+      'InputFieldWhiteDark[title="project url"][required][name="project[url]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
+      'InputFieldDropdown[title="awards visibility"][required][name="project[require_confidentiality]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
+      'InputFieldWhiteDark[title="legal owner of the project"][required][name="project[legal_project_owner]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -87,37 +103,53 @@ describe('ProjectForm', () => {
   })
 
   it('renders correctly with visibilities', () => {
-    const visibilities = {
-      'visibility 1': 'visibility1',
-      'visibility 2': 'visibility2'
-    }
+    const visibilities = [
+      'member_unlisted',
+      'member',
+      'archived',
+      'public_listed',
+      'public_unlisted'
+    ]
     const wrapper = mount(<ProjectForm visibilities={visibilities} />)
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="visibility"][required][name="project[visibility]"]'
-    ).props().value).toBe('visibility1')
+      'InputFieldDropdown[title="project visibility"][required][name="project[visibility]"]'
+    ).props().value).toBe('member_unlisted')
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="visibility"][required][name="project[visibility]"]'
-    ).props().selectEntries).toEqual(Object.entries(visibilities))
+      'InputFieldDropdown[title="project visibility"][required][name="project[visibility]"]'
+    ).props().selectEntries).toEqual([
+      ['Logged in team member via unlisted URL', 'member_unlisted'],
+      ['Logged in team members', 'member'],
+      ['Archived (visible only to me)', 'archived'],
+      ['Publicly listed in CoMakery searches', 'public_listed'],
+      ['Unlisted URL (no login required)', 'public_unlisted']
+    ])
   })
 
   it('renders correctly with project', () => {
     const project = {
-      'id'               : 2,
-      'missionId'        : 2,
-      'tokenId'          : 2,
-      'title'            : 'title',
-      'description'      : 'desc',
-      'videoUrl'         : 'https://youtube.com/',
-      'visibility'       : 'visibility2',
-      'squareImageUrl'   : '/s.png',
-      'panoramicImageUrl': '/p.png'
+      'id'                    : 2,
+      'missionId'             : 2,
+      'tokenId'               : 2,
+      'title'                 : 'title',
+      'description'           : 'desc',
+      'videoUrl'              : 'https://youtube.com/',
+      'budget'                : '1000',
+      'visibility'            : 'archived',
+      'url'                   : 'https://www.comakery.com/p/test',
+      'requireConfidentiality': false,
+      'legalProjectOwner'     : 'CoMakery',
+      'squareImageUrl'        : '/s.png',
+      'panoramicImageUrl'     : '/p.png'
     }
-    const visibilities = {
-      'visibility 1': 'visibility1',
-      'visibility 2': 'visibility2'
-    }
+    const visibilities = [
+      'member_unlisted',
+      'member',
+      'archived',
+      'public_listed',
+      'public_unlisted'
+    ]
     const missions = {
       'mission1': 1,
       'mission2': 2
@@ -154,8 +186,24 @@ describe('ProjectForm', () => {
     ).props().value).toBe('https://youtube.com/')
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="visibility"][required][name="project[visibility]"]'
-    ).props().value).toBe('visibility2')
+      'InputFieldWhiteDark[title="total budget"][recommended][name="project[budget]"]'
+    ).props().value).toBe('1000')
+
+    expect(wrapper.find(
+      'InputFieldDropdown[title="project visibility"][required][name="project[visibility]"]'
+    ).props().value).toBe('archived')
+
+    expect(wrapper.find(
+      'InputFieldWhiteDark[title="project url"][required][name="project[url]"]'
+    ).props().value).toBe('https://www.comakery.com/p/test')
+
+    expect(wrapper.find(
+      'InputFieldDropdown[title="awards visibility"][required][name="project[require_confidentiality]"]'
+    ).props().value).toBe('false')
+
+    expect(wrapper.find(
+      'InputFieldWhiteDark[title="legal owner of the project"][required][name="project[legal_project_owner]"]'
+    ).props().value).toBe('CoMakery')
 
     expect(wrapper.find(
       'InputFieldUploadFile[title="project image – square"][required][name="project[square_image]"]'
