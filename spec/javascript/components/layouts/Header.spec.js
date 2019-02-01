@@ -30,7 +30,7 @@ describe('Header', () => {
   })
 
   it('renders correctly with root path and loggedIn flag', () => {
-    const wrapper = shallow(<Header isLoggedIn currentPath="/featured" />)
+    const wrapper = shallow(<Header isLoggedIn currentPath="/" />)
 
     expect(wrapper.find('.header--nav--links--current').text()).toBe('Home')
     expect(wrapper.find('.header--nav--links--current').props().href).toBe('/')

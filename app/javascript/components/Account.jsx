@@ -18,7 +18,6 @@ export default class Account extends React.Component {
       awardPage  : 0,
       projectPage: 0,
       ...props.currentAccount, // formData
-
       message    : null, // notify sucess or error after account info update
       messageType: 'notice',
       showMessage: false, // show or hide message
@@ -50,12 +49,12 @@ export default class Account extends React.Component {
   handleUpdateAccountInfo = e => {
     e.preventDefault()
     let formData = new FormData()
-    formData.append('account[email]', this.state.email)
-    formData.append('account[first_name]', this.state.firstName)
-    formData.append('account[last_name]', this.state.lastName)
-    formData.append('account[nickname]', this.state.nickname)
-    formData.append('account[date_of_birth]', this.dateInput.current.value)
-    formData.append('account[country]', this.state.country)
+    formData.append('account[email]', this.state.email || '')
+    formData.append('account[first_name]', this.state.firstName || '')
+    formData.append('account[last_name]', this.state.lastName || '')
+    formData.append('account[nickname]', this.state.nickname || '')
+    formData.append('account[date_of_birth]', this.dateInput.current.value || '')
+    formData.append('account[country]', this.state.country || '')
     formData.append('account[bitcoin_wallet]', this.state.bitcoinWallet || '')
     formData.append('account[cardano_wallet]', this.state.cardanoWallet || '')
     formData.append('account[qtum_wallet]', this.state.qtumWallet || '')

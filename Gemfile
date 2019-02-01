@@ -16,7 +16,6 @@ gem 'foundation-icons-sass-rails'
 gem 'foundation-rails', '~>6.2.4.0'
 gem 'httparty'
 gem 'interactor'
-gem 'intercom-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'kaminari'
@@ -99,3 +98,5 @@ group(:test) do
   gem 'simplecov', require: false
   gem 'webmock'
 end
+
+gem 'scout_apm', '~> 2.4'

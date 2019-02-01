@@ -32,7 +32,6 @@
     "react-beautiful-dnd": "^10.0.3",
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
-    "react-slick": "^0.23.2",
     "react_ujs": "^2.4.4",
     "safe-buffer": "^5.1.2",
     "store": "^2.0.12",
