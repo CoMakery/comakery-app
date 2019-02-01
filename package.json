@@ -11,8 +11,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ledgerhq/hw-app-btc": "^4.33.5",
+    "@ledgerhq/hw-transport-u2f": "^4.32.0",
     "@rails/webpacker": "^3.5.5",
     "babel-preset-react": "^6.24.1",
+    "bip39": "^2.5.0",
     "borc": "^2.0.4",
     "cardano-crypto.js": "^5.0.0",
     "classnames": "^2.2.6",
@@ -21,6 +24,8 @@
     "formdata-polyfill": "^3.0.13",
     "jquery": "^3.3.1",
     "prop-types": "^15.6.2",
+    "qtum-opcodes": "^1.0.0",
+    "qtumjs-lib": "^0.0.7",
     "qweb3": "^1.2.2",
     "rails-ujs": "^5.2.2",
     "react": "^16.6.0",
@@ -28,6 +33,9 @@
     "react-dom": "^16.6.0",
     "react-paginate": "^5.2.4",
     "react_ujs": "^2.4.4",
+    "safe-buffer": "^5.1.2",
+    "store": "^2.0.12",
+    "slick-carousel": "^1.8.1",
     "trezor-connect": "^6.0.3",
     "wallet-address-validator": "^0.2.4",
     "whatwg-fetch": "^3.0.0"

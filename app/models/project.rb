@@ -4,6 +4,7 @@ class Project < ApplicationRecord
     erc20: 'ethereum',
     eth: 'ethereum',
     qrc20: 'qtum',
+    qtum: 'qtum',
     ada: 'cardano',
     btc: 'bitcoin'
   }.freeze
@@ -53,6 +54,7 @@ class Project < ApplicationRecord
     erc20: 'ERC20',
     eth: 'ETH',
     qrc20: 'QRC20',
+    qtum:  'QTUM',
     ada: 'ADA',
     btc: 'BTC'
   }, _prefix: :coin_type
@@ -143,7 +145,7 @@ class Project < ApplicationRecord
   end
 
   def coin_type_on_qtum?
-    coin_type_qrc20?
+    coin_type_qrc20? || coin_type_qtum?
   end
 
   def coin_type_on_cardano?
