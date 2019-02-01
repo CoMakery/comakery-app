@@ -1,4 +1,6 @@
 class Account < ApplicationRecord
+  SPECIALTIES = ['Audio or Video Production', 'Community Development', 'Data Gathering', 'Marketing & Social Media', 'Software Development', 'UX / UI Design', 'Writing'].freeze
+
   paginates_per 50
   has_secure_password validations: false
   attachment :image
@@ -177,9 +179,12 @@ class Account < ApplicationRecord
     contributor_form == true
   end
 
+  def finished_build_profile? # check if all of the required fields are filled
+    email.present? && first_name.present? && last_name.present? && country.present? && date_of_birth.present?
+  end
+
   def valid_and_underage?
-    self.name_required = true
-    valid? && age < 18
+    valid? && date_of_birth.present? && age < 18
   end
 
   def owned_project?(project)

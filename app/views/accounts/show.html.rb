@@ -4,7 +4,7 @@ class Views::Accounts::Show < Views::Base
   def content
     text react_component(
       'Account',
-      currentAccount: current_account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet cardano_wallet bitcoin_wallet]).merge(
+      currentAccount: current_account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet cardano_wallet bitcoin_wallet specialty occupation linkedin_url github_url dribble_url behance_url]).merge(
         etherscan_address: current_account.decorate.etherscan_address,
         qtum_address: current_account.decorate.qtum_wallet_url,
         cardano_address: current_account.decorate.cardano_wallet_url,
