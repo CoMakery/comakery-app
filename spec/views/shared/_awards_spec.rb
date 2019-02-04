@@ -130,6 +130,24 @@ describe 'shared/_awards.html.rb' do
             end
           end
 
+          context 'coin_type eq qtum' do
+            let!(:project2) do
+              create(:project, account: issuer, ethereum_enabled: true, contract_address: 'a' * 40, coin_type: 'qtum')
+            end
+            let!(:award_type2) { create(:award_type, project: project2) }
+            let!(:award2) { create(:award, award_type: award_type2, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
+
+            before do
+              recipient1.qtum_wallet = 'q123'
+              assign :project, project2.decorate
+              assign :awards, [award2]
+            end
+            it 'display Ledger icon on Send button' do
+              render
+              expect(rendered).to have_css 'img[alt=Ledger]'
+            end
+          end
+
           context 'coin_type eq ada' do
             let!(:project2) do
               create(:project, account: issuer, ethereum_enabled: true, coin_type: 'ada')
@@ -145,6 +163,24 @@ describe 'shared/_awards.html.rb' do
             it 'display Trezor icon on Send button' do
               render
               expect(rendered).to have_css 'img[alt=Trezor]'
+            end
+          end
+
+          context 'coin_type eq eos' do
+            let!(:project2) do
+              create(:project, account: issuer, ethereum_enabled: true, coin_type: 'eos')
+            end
+            let!(:award_type2) { create(:award_type, project: project2) }
+            let!(:award2) { create(:award, award_type: award_type2, description: 'markdown _rocks_: www.auto.link', issuer: issuer, account: recipient1).decorate }
+
+            before do
+              recipient1.eos_wallet = 'aaatestnet11'
+              assign :project, project2.decorate
+              assign :awards, [award2]
+            end
+            it 'display eos icon on Send button' do
+              render
+              expect(rendered).to have_css 'img[alt=Eos]'
             end
           end
         end

@@ -94,6 +94,8 @@ class Views::Shared::Awards < Views::Base
       'ledger.png'
     elsif project.coin_type_ada? || project.coin_type_btc?
       'trezor.png'
+    elsif project.coin_type_eos?
+      'eos.png'
     end
   end
 

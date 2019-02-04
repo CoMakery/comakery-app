@@ -12,6 +12,9 @@ const customBlockchainNetwork = function(coinType) {
     case 'btc':
       prefix = 'bitcoin_'
       break
+    case 'eos':
+      prefix = 'eos_'
+      break
     default:
   }
   if (prefix !== '') {

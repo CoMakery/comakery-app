@@ -96,6 +96,17 @@ describe AwardDecorator do
         expect(award.decorate.recipient_address).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
       end
     end
+
+    context 'on eos network' do
+      before do
+        award.account.eos_wallet = 'aaatestnet11'
+        award.project.coin_type = 'eos'
+      end
+
+      it 'returns the recipient address' do
+        expect(award.decorate.recipient_address).to eq('aaatestnet11')
+      end
+    end
   end
 
   context 'recipient names' do
@@ -130,7 +141,7 @@ describe AwardDecorator do
 
     it 'valid' do
       award.project.ethereum_contract_address = '0x8023214bf21b1467be550d9b889eca672355c005'
-      expected = %({"id":521,"total_amount":"1337.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":1337,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null},"project":{"id":512,"ethereum_contract_address":"0x8023214bf21b1467be550d9b889eca672355c005","ethereum_network":null,"coin_type":"erc20","blockchain_network":null,"contract_address":null}})
+      expected = %({"id":521,"total_amount":"1337.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":1337,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null,"eos_wallet":null},"project":{"id":512,"ethereum_contract_address":"0x8023214bf21b1467be550d9b889eca672355c005","ethereum_network":null,"coin_type":"erc20","blockchain_network":null,"contract_address":null}})
 
       expect(award.decorate.json_for_sending_awards).to eq(expected)
     end

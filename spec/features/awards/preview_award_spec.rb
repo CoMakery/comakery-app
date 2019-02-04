@@ -103,4 +103,35 @@ describe 'preview award', js: true do
       expect(page.find('.preview_award_div')).to have_content '1000.0 ADA'
     end
   end
+
+  context 'on eos network' do
+    let!(:project) do
+      create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, contract_address: '2' * 40, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token_symbol: 'BIG', decimal_places: 8, blockchain_network: 'eos_testnet', coin_type: 'eos')
+    end
+
+    before do
+      visit project_path(project)
+    end
+
+    it 'recipient has a eos account' do
+      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', eos_wallet: 'aaatestnet11')
+
+      fill_in 'Email Address', with: 'bobjohnson@example.com'
+      page.find('body').click
+      sleep 2
+      expect(page.find('.preview_award_div')).to have_content '1000.0 EOS total to aaatestnet11'
+      expect(page.find('.button_submit img')[:alt]).to have_content 'Eos'
+      click_button 'Send'
+      expect(page).to have_content 'Successfully sent award to bobjohnson'
+    end
+
+    it 'recipient has not a eos account' do
+      create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
+
+      fill_in 'Email Address', with: 'bobjohnson@example.com'
+      page.find('body').click
+      sleep 2
+      expect(page.find('.preview_award_div')).to have_content '1000.0 EOS'
+    end
+  end
 end

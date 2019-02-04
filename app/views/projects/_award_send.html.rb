@@ -144,7 +144,7 @@ class Views::Projects::AwardSend < Views::Base
       javascript_include_tag Webpacker.manifest.lookup!('cardano_script.js') if project.coin_type_ada?
       javascript_include_tag Webpacker.manifest.lookup!('wallets/bitcoin_trezor_script.js') if project.coin_type_btc?
       javascript_include_tag Webpacker.manifest.lookup!('wallets/qtum_ledger_script.js') if project.coin_type_qtum?
-
+      javascript_include_tag Webpacker.manifest.lookup!('wallets/eos_scatter_script.js') if project.coin_type_eos?
       render 'sessions/metamask_modal'
       javascript_tag(transfer_tokens_script(last_award))
     end
