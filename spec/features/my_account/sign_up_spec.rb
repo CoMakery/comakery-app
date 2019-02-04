@@ -19,10 +19,11 @@ describe 'my account', js: true do
   end
 
   scenario 'show email input field if email is empty' do
+    # rubocop:disable SkipsModelValidations
     confirmed_account.update_column('email', nil)
     login(confirmed_account)
     visit build_profile_accounts_path
-    expect(page).to have_content("E-mail: *")
+    expect(page).to have_content('E-mail: *')
   end
 
   scenario 'featured page is available after signup' do

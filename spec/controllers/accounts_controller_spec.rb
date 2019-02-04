@@ -48,7 +48,7 @@ describe AccountsController do
         put :update, params: { account: { bitcoin_wallet: 'not a valid bitcoin address' } }
       end.not_to change { account.reload.bitcoin_wallet }
 
-      expect(flash[:error]).to eq("Bitcoin wallet should start with either 1 or 3, make sure the length is between 26 and 35 characters")
+      expect(flash[:error]).to eq('Bitcoin wallet should start with either 1 or 3, make sure the length is between 26 and 35 characters')
       expect(assigns[:current_account]).to be
     end
 
