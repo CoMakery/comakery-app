@@ -39,6 +39,39 @@ describe Account do
       expect(account.tap { |a| a.update(qtum_wallet: "q#{'a' * 33}") }).to be_valid
       expect(account.tap { |a| a.update(qtum_wallet: "Q#{'m' * 33}") }).to be_valid
     end
+
+    it 'requires #cardano_wallet to be a valid cardano address' do
+      expect(account.cardano_wallet).to be_blank
+      expect(account).to be_valid
+      error_message = "Cardano wallet should start with 'A', followed by 58 characters; or should start with 'D', followed by 103 characters"
+
+      expect(account.tap { |a| a.update(cardano_wallet: 'foo') }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(cardano_wallet: '0x') }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(cardano_wallet: "Q#{'a' * 32}") }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(cardano_wallet: '37btjrVyb4KFNB81QswXHLkY39qp9WKocRpSuHk6BJJFewbS6hJxabQiMJyr7iAhb9wFKZH4U2vEbCfGpEW5TbpYwspeREeyfJSj3JqVF8sQRudC6q') }).to be_valid
+    end
+
+    it 'requires #bitcoin_wallet to be a valid bitcoin address' do
+      expect(account.bitcoin_wallet).to be_blank
+      expect(account).to be_valid
+      error_message = 'Bitcoin wallet should start with either 1 or 3, make sure the length is between 26 and 35 characters'
+
+      expect(account.tap { |a| a.update(bitcoin_wallet: 'foo') }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(bitcoin_wallet: '0x') }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(bitcoin_wallet: "Q#{'a' * 32}") }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(bitcoin_wallet: '2N3g7srauQ8HYCEXrTMiMkm43Hx9pSopmHU') }).to be_valid
+    end
+
+    it 'requires #eos_wallet to be a valid EOS address' do
+      expect(account.eos_wallet).to be_blank
+      expect(account).to be_valid
+      error_message = 'Eos wallet a-z,1-5 are allowed only, the length is 12 characters'
+
+      expect(account.tap { |a| a.update(eos_wallet: 'foo') }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(eos_wallet: '0x') }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(eos_wallet: "Q#{'a' * 32}") }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(eos_wallet: ('a' * 12).to_s) }).to be_valid
+    end
   end
 
   it 'enforces unique emails, case-insensitively' do

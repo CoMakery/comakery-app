@@ -8,6 +8,7 @@ class Account < ApplicationRecord
   include EthereumAddressable
   include QtumAddressable
   include CardanoAddressable
+  include EosAddressable
 
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :authentication_teams, dependent: :destroy
@@ -34,6 +35,7 @@ class Account < ApplicationRecord
   validates :qtum_wallet, qtum_address: true # see QtumAddressable
   validates :cardano_wallet, cardano_address: true # see CardanoAddressable
   validates :bitcoin_wallet, bitcoin_address: true # see BitcoinAddressable
+  validates :eos_wallet, eos_address: true # see EosAddressable
   validates :email, format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }, allow_nil: true
   validate :validate_age, on: :create
   validates :agreed_to_user_agreement, presence: { message: 'You must agree to the terms of the CoMakery User Agreement to sign up ' }, if: :agreement_required

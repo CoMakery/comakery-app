@@ -21,7 +21,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def json_for_sending_awards
-    to_json(only: %i[id total_amount], methods: %i[issuer_address amount_to_send recipient_display_name], include: { account: { only: %i[id ethereum_wallet qtum_wallet cardano_wallet bitcoin_wallet] }, project: { only: %i[id contract_address ethereum_contract_address coin_type ethereum_network blockchain_network] } })
+    to_json(only: %i[id total_amount], methods: %i[issuer_address amount_to_send recipient_display_name], include: { account: { only: %i[id ethereum_wallet qtum_wallet cardano_wallet qtum_wallet bitcoin_wallet eos_wallet] }, project: { only: %i[id contract_address ethereum_contract_address coin_type ethereum_network blockchain_network] } })
   end
 
   def unit_amount_pretty
@@ -45,15 +45,9 @@ class AwardDecorator < Draper::Decorator
   end
 
   def recipient_address
-    if object.project.coin_type_on_ethereum?
-      account&.ethereum_wallet
-    elsif object.project.coin_type_on_qtum?
-      account&.qtum_wallet
-    elsif object.project.coin_type_on_cardano?
-      account&.cardano_wallet
-    elsif object.project.coin_type_on_bitcoin?
-      account&.bitcoin_wallet
-    end
+    return nil unless project.coin_type?
+    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    account&.send("#{blockchain_name}_wallet")
   end
 
   def issuer_address

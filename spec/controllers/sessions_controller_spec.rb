@@ -210,5 +210,25 @@ describe SessionsController do
         expect(response).to redirect_to root_path
       end
     end
+
+    context 'on EOS network' do
+      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, coin_type: 'eos') }
+
+      it 'notice to update eos_wallet' do
+        account.update new_award_notice: true
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your EOS Address on your <a href="/account">account page</a> to receive your tokens.'
+        expect(response).to redirect_to root_path
+      end
+
+      it 'notice new award' do
+        account.update new_award_notice: true, eos_wallet: 'aaatestnet11'
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS address is')).to eq true
+        expect(response).to redirect_to root_path
+      end
+    end
   end
 end
