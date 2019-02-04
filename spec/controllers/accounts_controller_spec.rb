@@ -42,6 +42,24 @@ describe AccountsController do
       expect(flash[:error]).to eq("Ethereum wallet should start with '0x', followed by a 40 character ethereum address")
       expect(assigns[:current_account]).to be
     end
+
+    it 'renders errors for an invalid bitcoin address' do
+      expect do
+        put :update, params: { account: { bitcoin_wallet: 'not a valid bitcoin address' } }
+      end.not_to change { account.reload.bitcoin_wallet }
+
+      expect(flash[:error]).to eq("Bitcoin wallet should start with either 1 or 3, make sure the length is between 26 and 35 characters")
+      expect(assigns[:current_account]).to be
+    end
+
+    it 'renders errors for an invalid cardano address' do
+      expect do
+        put :update, params: { account: { cardano_wallet: 'not a valid bitcoin address' } }
+      end.not_to change { account.reload.cardano_wallet }
+
+      expect(flash[:error]).to eq("Cardano wallet should start with 'A', followed by 58 characters; or should start with 'D', followed by 103 characters")
+      expect(assigns[:current_account]).to be
+    end
   end
 
   describe '#new' do
@@ -100,7 +118,7 @@ describe AccountsController do
         }
         expect(response.status).to eq(302)
       end.to change { Account.count }.by(1)
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to build_profile_accounts_path
     end
 
     it 'renders errors if email has already been taken' do
@@ -152,6 +170,32 @@ describe AccountsController do
       get :confirm, params: { token: '1234qwer' }
       expect(new_account.reload.confirmed?).to be true
       expect(flash[:notice]).to eq 'Please click the link in your email to claim your contributor token award!'
+    end
+  end
+
+  describe '#update_profile' do
+    before { login(account) }
+
+    it 'updates profile with valid params' do
+      post :update_profile, params: {
+        account: {
+          first_name: 'Update',
+          last_name: 'Profile',
+          country: 'United Kingdom'
+        }
+      }
+      expect(response).to redirect_to root_path
+      expect(flash[:notice]).to eq('Thank you for signing up. Now, let us know what projects you are interested in.')
+    end
+
+    it 'renders errors for invalid params' do
+      post :update_profile, params: {
+        account: {
+          first_name: nil,
+          last_name: nil
+        }
+      }
+      expect(flash[:error]).to eq("First name can't be blank, Last name can't be blank")
     end
   end
 

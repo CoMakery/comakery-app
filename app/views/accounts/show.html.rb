@@ -16,6 +16,7 @@ class Views::Accounts::Show < Views::Base
       projects: projects,
       projectsCount: projects_count,
       countryList: Country.all.sort,
+      specialtyList: Account::SPECIALTIES,
       clippyIcon: image_url('Octicons-clippy.png')
     )
   end

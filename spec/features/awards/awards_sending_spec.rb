@@ -80,12 +80,13 @@ describe 'awarding users' do
       expect(bobjohnsons_auth).not_to be_nil
       award = Award.last
       expect(AwardMessage.call(award: award).notifications_message).to match '@Michael Jackson sent @bobjohnson a 1579.0 token Small'
+      bobjohnsons_auth.account.update(country: 'United States of America', date_of_birth: '01/01/1900', first_name: 'Test', last_name: 'Test')
       bobjohnsons_auth.account.confirm!
 
       login(bobjohnsons_auth.account)
-
       visit project_awards_path(project)
       expect(page).to have_content 'bobjohnson'
+      expect(page).to have_content 'Overview'
 
       click_link('Overview')
       within('.project-nav') do

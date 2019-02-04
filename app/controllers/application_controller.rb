@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
 
   def require_build_profile
     if current_account && !current_account.finished_build_profile?
-      redirect_to build_profile_accounts_path
+      redirect_to build_profile_accounts_path, alert: 'Please fill in required fields before continuing.'
     end
   end
 

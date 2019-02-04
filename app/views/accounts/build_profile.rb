@@ -8,11 +8,13 @@ class Views::Accounts::BuildProfile < Views::Base
 
         form_for account, url: update_profile_accounts_path do |f|
           row do
-            column('large-12') do
-              with_errors(account, :email) do
-                label do
-                  text 'E-mail: *'
-                  f.email_field :email
+            if account.email.blank?
+              column('large-12') do
+                with_errors(account, :email) do
+                  label do
+                    text 'E-mail: *'
+                    f.email_field :email
+                  end
                 end
               end
             end
@@ -58,7 +60,7 @@ class Views::Accounts::BuildProfile < Views::Base
               with_errors(account, :specialty) do
                 label do
                   text 'What Is Your Specialty?'
-                  f.select :specialty, Account::SPECIALTIES.map { |specialty| [specialty, specialty]  }
+                  f.select :specialty, (Account::SPECIALTIES.map { |specialty| [specialty, specialty] })
                 end
               end
             end

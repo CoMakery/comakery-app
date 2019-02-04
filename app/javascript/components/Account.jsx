@@ -197,7 +197,21 @@ export default class Account extends React.Component {
                 </small>}
               </div>
 
-              <FormField fieldLabel="My Specialty" fieldName="specialty" fieldValue={this.state.specialty} handleChange={this.handleChangeAccountFormData} error={this.state.errors.specialty} />
+              <div className="columns small-3">
+                <label>My Specialty</label>
+              </div>
+              <div className={`columns small-9 ${this.state.errors.specialty ? 'error' : ''}`}>
+                <select name="specialty" value={this.state.specialty || ''} onChange={this.handleChangeAccountFormData}>
+                  {this.props.specialtyList.map(specialty =>
+                    <option key={specialty} value={specialty}>
+                      {specialty}
+                    </option>
+                  )}
+                </select>
+                {this.state.errors.country && <small className="error">
+                  {this.state.errors.country}
+                </small>}
+              </div>
 
               <FormField fieldLabel="Occupation" fieldName="occupation" fieldValue={this.state.occupation} handleChange={this.handleChangeAccountFormData} error={this.state.errors.occupation} />
 
@@ -255,7 +269,7 @@ export default class Account extends React.Component {
             <DataField fieldName="Dribble Profile URL" fieldValue={this.state.dribbleUrl} />
 
             <DataField fieldName="Behance Profile URL" fieldValue={this.state.behanceUrl} />
-            
+
             <div className="row">
               <div className="columns medium-3" style={{ marginTop: 8 }}>
                 Qtum Address
