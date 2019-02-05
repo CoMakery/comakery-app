@@ -153,6 +153,8 @@ export default class Account extends React.Component {
       </div>
     )
 
+    const specialty = this.props.specialtyList.find(specialty => specialty[1] === this.state.specialty)
+
     return <React.Fragment>
       <Alert message={this.state.message} messageType={this.state.messageType} isVisible={this.state.showMessage} toggleVisible={() => {
         this.setState({ showMessage: !this.state.showMessage })
@@ -261,7 +263,7 @@ export default class Account extends React.Component {
             <DataField fieldName="Date of Birth" fieldValue={this.state.accountData.dateOfBirth} />
             <DataField fieldName="Country" fieldValue={this.state.accountData.country} />
 
-            <DataField fieldName="My Specialty" fieldValue={this.props.specialtyList.find(specialty => specialty[1] === this.state.specialty)[0]} />
+            <DataField fieldName="My Specialty" fieldValue={specialty ? specialty[0] : ''} />
 
             <DataField fieldName="Occupation" fieldValue={this.state.occupation} />
 
@@ -378,5 +380,6 @@ Account.propTypes = {
   projects      : PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   projectsCount : PropTypes.number.isRequired,
   countryList   : PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  specialtyList : PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   clippyIcon    : PropTypes.string.isRequired
 }
