@@ -66,9 +66,7 @@ class AccountsController < ApplicationController
     @account = current_account
     authorize @account
 
-    old_age = @current_account.age || 18
     if @account.update(account_params.merge(name_required: true))
-      check_date(old_age) if old_age < 18
       redirect_to root_path, notice: 'Thank you for signing up. Now, let us know what projects you are interested in.'
     else
       error_msg = @account.errors.full_messages.join(', ')

@@ -204,8 +204,8 @@ export default class Account extends React.Component {
               <div className={`columns small-9 ${this.state.errors.specialty ? 'error' : ''}`}>
                 <select name="specialty" value={this.state.specialty || ''} onChange={this.handleChangeAccountFormData}>
                   {this.props.specialtyList.map(specialty =>
-                    <option key={specialty} value={specialty}>
-                      {specialty}
+                    <option key={specialty[0]} value={specialty[1]}>
+                      {specialty[0]}
                     </option>
                   )}
                 </select>
@@ -261,7 +261,7 @@ export default class Account extends React.Component {
             <DataField fieldName="Date of Birth" fieldValue={this.state.accountData.dateOfBirth} />
             <DataField fieldName="Country" fieldValue={this.state.accountData.country} />
 
-            <DataField fieldName="My Specialty" fieldValue={this.state.specialty} />
+            <DataField fieldName="My Specialty" fieldValue={this.props.specialtyList.find(specialty => specialty[1] === this.state.specialty)[0]} />
 
             <DataField fieldName="Occupation" fieldValue={this.state.occupation} />
 

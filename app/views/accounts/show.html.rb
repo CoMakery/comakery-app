@@ -17,7 +17,7 @@ class Views::Accounts::Show < Views::Base
       projects: projects,
       projectsCount: projects_count,
       countryList: Country.all.sort,
-      specialtyList: Account::SPECIALTIES,
+      specialtyList: Account.specialties.map { |key, value| [value, key] },
       clippyIcon: image_url('Octicons-clippy.png')
     )
   end

@@ -1,6 +1,4 @@
 class Account < ApplicationRecord
-  SPECIALTIES = ['Audio or Video Production', 'Community Development', 'Data Gathering', 'Marketing & Social Media', 'Software Development', 'UX / UI Design', 'Writing'].freeze
-
   paginates_per 50
   has_secure_password validations: false
   attachment :image
@@ -25,6 +23,17 @@ class Account < ApplicationRecord
   has_many :payments
   has_many :channels, through: :projects
   has_many :interests, dependent: :destroy
+
+  enum specialty: {
+    audio_video_production: 'Audio or Video Production',
+    community_development: 'Community Development',
+    data_gathering: 'Data Gathering',
+    marketing_social: 'Marketing & Social Media',
+    software_development: 'Software Development',
+    design: 'UX / UI Design',
+    writing: 'Writing'
+  }
+
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
