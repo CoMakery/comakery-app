@@ -145,10 +145,11 @@ ActiveRecord::Schema.define(version: 20190129131524) do
   create_table "interests", force: :cascade do |t|
     t.bigint "account_id"
     t.string "protocol"
-    t.string "project"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "project_id"
     t.index ["account_id"], name: "index_interests_on_account_id"
+    t.index ["project_id"], name: "index_interests_on_project_id"
   end
 
   create_table "missions", force: :cascade do |t|
