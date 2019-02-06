@@ -1,7 +1,6 @@
 const {derivePublic} = require('cardano-crypto.js')
 const indexIsHardened = require('./helpers/indexIsHardened')
-// eslint-disable-next-line import/no-unresolved
-// const {default: TrezorConnect} = require('trezor-connect')
+const {default: TrezorConnect} = require('trezor-connect')
 
 const CardanoTrezorCryptoProvider = (ADALITE_CONFIG, walletState) => {
   const state = Object.assign(walletState, {
