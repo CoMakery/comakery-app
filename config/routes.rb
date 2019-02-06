@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   resources :accounts, only: [:new, :create, :show] do
     collection do
       get :download_data
+      get :build_profile
+      patch :update_profile
     end
   end
 

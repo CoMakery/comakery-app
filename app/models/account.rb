@@ -23,6 +23,17 @@ class Account < ApplicationRecord
   has_many :payments
   has_many :channels, through: :projects
   has_many :interests, dependent: :destroy
+
+  enum specialty: {
+    audio_video_production: 'Audio or Video Production',
+    community_development: 'Community Development',
+    data_gathering: 'Data Gathering',
+    marketing_social: 'Marketing & Social Media',
+    software_development: 'Software Development',
+    design: 'UX / UI Design',
+    writing: 'Writing'
+  }
+
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
@@ -179,9 +190,12 @@ class Account < ApplicationRecord
     contributor_form == true
   end
 
+  def finished_build_profile? # check if all of the required fields are filled
+    email.present? && first_name.present? && last_name.present? && country.present? && date_of_birth.present?
+  end
+
   def valid_and_underage?
-    self.name_required = true
-    valid? && age < 18
+    valid? && date_of_birth.present? && age < 18
   end
 
   def owned_project?(project)

@@ -60,6 +60,12 @@ export default class Account extends React.Component {
     formData.append('account[cardano_wallet]', this.state.cardanoWallet || '')
     formData.append('account[qtum_wallet]', this.state.qtumWallet || '')
     formData.append('account[ethereum_wallet]', this.state.ethereumWallet || '')
+    formData.append('account[specialty]', this.state.specialty || '')
+    formData.append('account[occupation]', this.state.occupation || '')
+    formData.append('account[linkedin_url]', this.state.linkedinUrl || '')
+    formData.append('account[github_url]', this.state.githubUrl || '')
+    formData.append('account[dribble_url]', this.state.dribbleUrl || '')
+    formData.append('account[behance_url]', this.state.behanceUrl || '')
     if (this.fileInput.current.files[0]) {
       formData.append('account[image]', this.fileInput.current.files[0])
     }
@@ -147,6 +153,8 @@ export default class Account extends React.Component {
       </div>
     )
 
+    const specialty = this.props.specialtyList.find(specialty => specialty[1] === this.state.specialty)
+
     return <React.Fragment>
       <Alert message={this.state.message} messageType={this.state.messageType} isVisible={this.state.showMessage} toggleVisible={() => {
         this.setState({ showMessage: !this.state.showMessage })
@@ -191,6 +199,33 @@ export default class Account extends React.Component {
                   {this.state.errors.country}
                 </small>}
               </div>
+
+              <div className="columns small-3">
+                <label>My Specialty</label>
+              </div>
+              <div className={`columns small-9 ${this.state.errors.specialty ? 'error' : ''}`}>
+                <select name="specialty" value={this.state.specialty || ''} onChange={this.handleChangeAccountFormData}>
+                  {this.props.specialtyList.map(specialty =>
+                    <option key={specialty[0]} value={specialty[1]}>
+                      {specialty[0]}
+                    </option>
+                  )}
+                </select>
+                {this.state.errors.country && <small className="error">
+                  {this.state.errors.country}
+                </small>}
+              </div>
+
+              <FormField fieldLabel="Occupation" fieldName="occupation" fieldValue={this.state.occupation} handleChange={this.handleChangeAccountFormData} error={this.state.errors.occupation} />
+
+              <FormField fieldLabel="LinkedIn Profile URL" fieldName="linkedinUrl" fieldValue={this.state.linkedinUrl} handleChange={this.handleChangeAccountFormData} error={this.state.errors.linkedinUrl} />
+
+              <FormField fieldLabel="GitHub Profile URL" fieldName="githubUrl" fieldValue={this.state.githubUrl} handleChange={this.handleChangeAccountFormData} error={this.state.errors.githubUrl} />
+
+              <FormField fieldLabel="Dribble Profile URL" fieldName="dribbleUrl" fieldValue={this.state.dribbleUrl} handleChange={this.handleChangeAccountFormData} error={this.state.errors.dribbleUrl} />
+
+              <FormField fieldLabel="Behance Profile URL" fieldName="behanceUrl" fieldValue={this.state.behanceUrl} handleChange={this.handleChangeAccountFormData} error={this.state.errors.behanceUrl} />
+
               <FormField fieldLabel="Qtum Address" fieldName="qtumWallet" fieldValue={this.state.qtumWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.qtumWallet} />
 
               <FormField fieldLabel="Ethereum Address" fieldName="ethereumWallet" fieldValue={this.state.ethereumWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.ethereumWallet} />
@@ -227,6 +262,19 @@ export default class Account extends React.Component {
             <DataField fieldName="Nickname" fieldValue={this.state.accountData.nickname} />
             <DataField fieldName="Date of Birth" fieldValue={this.state.accountData.dateOfBirth} />
             <DataField fieldName="Country" fieldValue={this.state.accountData.country} />
+
+            <DataField fieldName="My Specialty" fieldValue={specialty ? specialty[0] : ''} />
+
+            <DataField fieldName="Occupation" fieldValue={this.state.occupation} />
+
+            <DataField fieldName="LinkedIn Profile URL" fieldValue={this.state.linkedinUrl} />
+
+            <DataField fieldName="GitHub Profile URL" fieldValue={this.state.githubUrl} />
+
+            <DataField fieldName="Dribble Profile URL" fieldValue={this.state.dribbleUrl} />
+
+            <DataField fieldName="Behance Profile URL" fieldValue={this.state.behanceUrl} />
+
             <div className="row">
               <div className="columns medium-3" style={{ marginTop: 8 }}>
                 Qtum Address
@@ -332,5 +380,6 @@ Account.propTypes = {
   projects      : PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   projectsCount : PropTypes.number.isRequired,
   countryList   : PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  specialtyList : PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   clippyIcon    : PropTypes.string.isRequired
 }
