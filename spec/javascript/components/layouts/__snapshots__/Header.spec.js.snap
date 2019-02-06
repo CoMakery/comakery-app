@@ -27,21 +27,34 @@ exports[`Header renders correctly without props 1`] = `
           Home
         </a>
         <a
-          href="mailto:support@comakery.com"
+          className={null}
+          href="/projects/mine"
         >
-          Contact Us
+          My Projects
+        </a>
+        <a
+          href="/"
+          style={
+            Object {
+              "display": "none",
+            }
+          }
+        >
+          My Tasks
+        </a>
+        <a
+          className={null}
+          href="/account"
+        >
+          My Account
         </a>
         <a
           className="header--nav--links--sign"
-          href="/session/new"
+          data-method="delete"
+          href="/session"
+          rel="nofollow"
         >
-          Sign In
-        </a>
-        <a
-          className="header--nav--links--sign"
-          href="/accounts/new"
-        >
-          Sign Up
+          Sign out
         </a>
       </div>
     </div>

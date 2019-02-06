@@ -346,7 +346,7 @@ a.header--nav--links--current {
   opacity: 0.6;
   text-align: justify;
   -webkit-hyphens: auto;
-  margin-bottom: 30px;
+  margin-bottom: 60px;
   margin-right: 20px;
 }
 
@@ -363,6 +363,7 @@ a.header--nav--links--current {
   .footer--content--nav--join,
   .footer--content--nav--legal {
     margin-left: 0;
+    margin-bottom: 40px;
   }
 }
 
@@ -900,7 +901,6 @@ input[type="submit"].button:disabled {
   cursor: pointer;
 }
 
-
 .mission-form--form {
   margin-bottom: 24px;
 }
@@ -1106,7 +1106,15 @@ input[type="submit"].button:disabled {
   text-decoration: underline;
 }
 
+@media screen and (max-width: 1023px) {
+  .footer {
+    padding: 90px 75px 0 75px;
+  }
 
+  .footer--copyright {
+    margin: 80px -75px 0px -75px;
+  }
+}
 
 @media screen and (max-width: 650px) {
   .layout--content {
@@ -1118,11 +1126,11 @@ input[type="submit"].button:disabled {
   }
 
   .footer {
-    padding: 70px 25px 0px 25px;
+    padding: 70px 30px 0px 30px;
   }
 
   .footer--copyright {
-    margin: 80px -25px 0px -25px;
+    margin: 80px -30px 0px -30px;
   }
 
   .footer--content--nav {
@@ -1177,6 +1185,7 @@ input[type="submit"].button:disabled {
 }
 
 .featured-missions__header {
+  position: relative;
   width: 100%;
   height: 518px;
   background-color: #ffffff;
@@ -1283,6 +1292,125 @@ input[type="submit"].button:disabled {
   margin-bottom: 55px;
 }
 
+@media screen and (max-width: 1439px) {
+  .featured-missions__header_container {
+    padding-left: 75px;
+    padding-right: 75px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .featured-missions__header {
+    height: auto;
+  }
+
+  .featured-missions__header_container {
+    padding: 55px 75px 0 75px;
+    height: auto;
+  }
+
+  .featured-missions__header__img {
+    height: 248px;
+  }
+
+  .featured-missions__header__description {
+    padding-top: 14px;
+  }
+
+  .featured-missions__header__logo {
+    width: 170px;
+  }
+
+  .featured-missions__header__title {
+    font-size: 30px;
+  }
+
+  .featured-missions__header__subtitle {
+    font-size: 16px;
+  }
+
+  .featured-missions__content {
+    padding: 30px 75px 0 75px;
+    max-width: 1024px;
+  }
+
+  .featured-missions__content__title {
+    font-size: 48px;
+  }
+
+  .featured-missions__content__title--big {
+    font-size: 96px;
+  }
+
+  .featured-missions__content__description {
+    font-size: 24px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: -24px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .featured-missions__header {
+    height: 100%;
+  }
+
+  .featured-missions__header__logo {
+    display: none;
+  }
+
+  .featured-missions__header_container {
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    padding: 55px 30px 0 30px;
+    height: 100%;
+    align-items: center;
+  }
+
+  .featured-missions__header__description {
+    padding-top: 0;
+  }
+
+  .featured-missions__header__title {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+  }
+
+  .featured-missions__header__subtitle {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .featured-missions__header__img {
+    margin-top: 0px;
+    margin-left: -5px;
+    margin-right: -5px;
+    width: calc(100% + 10px);
+    max-width: 324px;
+    height: auto;
+  }
+
+  .featured-missions__content {
+    padding: 34px 30px 0 30px;
+  }
+
+  .featured-missions__content__title {
+    font-size: 36px;
+  }
+
+  .featured-missions__content__title--big {
+    font-size: 64px;
+  }
+
+  .featured-missions__content__description {
+    font-size: 20px;
+    margin-top: -16px;
+  }
+}
+
 .featured-mission {
   width: 100%;
   display: flex;
@@ -1315,6 +1443,7 @@ input[type="submit"].button:disabled {
 }
 
 .featured-mission__detail {
+  width: calc(100% - 422px);
   padding-top: 36px;
 }
 
@@ -1360,6 +1489,7 @@ input[type="submit"].button:disabled {
   line-height: 1.44;
   letter-spacing: normal;
   color: var(--black);
+  width: calc(100% - 180px);
 }
 
 .featured-mission__project__interest {
@@ -1398,13 +1528,131 @@ input[type="submit"].button:disabled {
   cursor: pointer;
 }
 
+@media screen and (max-width: 1280px) {
+  .featured-mission__image {
+    width: 219px;
+    height: 245px;
+    padding: 14px;
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  .featured-mission__image img {
+    width: 100%;
+  }
+
+  .featured-mission__detail {
+    width: calc(100% - 240px);
+    padding-top: 19px;
+  }
+
+  .featured-mission__name {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .featured-mission__description {
+    font-size: 14px;
+    margin-bottom: 33px;
+  }
+
+  .featured-mission__project__title {
+    font-size: 14px;
+    width: calc(100% - 150px);
+  }
+
+  .featured-mission__project__interest {
+    font-size: 14px;
+  }
+
+  .featured-mission__project__interest--sent {
+    opacity: 0.2;
+  }
+
+  .featured-mission__create-project {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .featured-mission {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 60px;
+  }
+
+  .featured-mission--right {
+    flex-direction: column;
+  }
+
+  .featured-mission__image {
+    width: 188px;
+    height: 211px;
+    padding: 12px;
+    margin: 0;
+  }
+
+  .featured-mission__image img {
+    width: 100%;
+  }
+
+  .featured-mission__image--right {
+    margin: 0;
+  }
+
+  .featured-mission__image--right img {
+    float: left;
+  }
+
+  .featured-mission__detail {
+    width: 100%;
+    padding-top: 36px;
+    text-align: center;
+  }
+
+  .featured-mission__name {
+    font-size: 24px;
+    margin-bottom: 19px;
+  }
+
+  .featured-mission__description {
+    font-size: 14px;
+    margin-bottom: 33px;
+  }
+
+  .featured-mission__project {
+    flex-direction: column;
+  }
+
+  .featured-mission__project__title {
+    font-size: 14px;
+    margin-bottom: 13px;
+  }
+
+  .featured-mission__project__interest {
+    font-size: 14px;
+  }
+
+  .featured-mission__project__interest--sent {
+    opacity: 0.2;
+  }
+
+  .featured-mission__create-project {
+    font-size: 14px;
+    text-align: center;
+    float: none;
+  }
+}
+
 .featured-missions__more {
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 825px;
+  height: auto;
   box-sizing: border-box;
-  padding-top: 58px;
+  padding-top: 60px;
+  padding-bottom: 60px;
 }
 
 .featured-missions__more::after {
@@ -1458,7 +1706,7 @@ input[type="submit"].button:disabled {
   color: var(--black);
   text-transform: capitalize;
   text-align: center;
-  margin-top: -30px;
+  margin-top: 0;
   margin-bottom: 68px;
 }
 
@@ -1521,6 +1769,10 @@ input[type="submit"].button:disabled {
   box-shadow: 1px 1px 10px 0 rgba(32, 22, 98, .1);
 }
 
+.gallery-content__image img {
+  width: 100%;
+}
+
 .gallery-content__title {
   width: 263px;
   box-sizing: border-box;
@@ -1550,6 +1802,51 @@ input[type="submit"].button:disabled {
   letter-spacing: normal;
   text-align: center;
   color: var(--primary-blue);
+}
+
+@media screen and (max-width: 1280px) {
+  .featured-missions__gallery {
+    width: calc(100% - 100px);
+    margin: 0 50px;
+  }
+
+  .gallery-content {
+    width: 220px;
+    padding-bottom: 13px;
+    text-align: center;
+  }
+
+  .gallery-content__image {
+    width: 220px;
+    height: 248px;
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+
+  .gallery-content__title {
+    width: 220px;
+    padding: 0 16px;
+    font-size: 16px;
+  }
+
+  .gallery-content__description {
+    width: 220px;
+    font-size: 15px;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .featured-missions__more {
+    padding: 40px 30px;
+  }
+
+  .featured-missions__more__description {
+    padding: 0 20px;
+    margin-top: 0;
+    margin-bottom: 36px;
+    font-size: 20px;
+  }
 }
 
 .featured-missions__footer {
@@ -1601,9 +1898,74 @@ input[type="submit"].button:disabled {
   margin-top: 6px;
 }
 
+.featured-missions__footer__mobile {
+  display: none;
+}
+
+@media screen and (max-width: 1280px) {
+  .featured-missions__footer {
+    height: auto;
+  }
+
+  .featured-missions__footer img {
+    height: 153px;
+  }
+
+  .featured-missions__footer_container {
+    padding: 18px 35px 0 35px;
+    align-items: center;
+  }
+
+  .featured-missions__footer__stat__num {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .featured-missions__footer__stat__name {
+    font-size: 14px;
+    margin: 0 0 24px 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .featured-missions__footer {
+    height: auto;
+  }
+
+  .featured-missions__footer_container {
+    padding: 48px 24px 0 24px;
+    flex-direction: column;
+  }
+
+  .featured-missions__footer__stat__num {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .featured-missions__footer__stat__name {
+    font-size: 14px;
+    margin: 0 0 24px 0;
+  }
+
+  .hide-on-mobile {
+    display: none;
+  }
+
+  .featured-missions__footer__mobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .featured-missions__footer__mobile img {
+    height: 145px;
+  }
+}
+
 .intercom {
   position: absolute;
-  top: 574px;
+  bottom: 0;
+  margin-bottom: -36px;
   right: 35px;
   width: 72px;
   height: 72px;
