@@ -23,6 +23,32 @@ export default class FeaturedMissions extends React.Component {
   render() {
     const { topMissions } = this.state
     const { moreMissions } = this.props
+    const settings = {
+      speed         : 500,
+      slidesToShow  : 4,
+      slidesToScroll: 1,
+      initialSlide  : 0,
+      responsive    : [
+        {
+          breakpoint: 1024,
+          settings  : {
+            slidesToShow: 3
+          }
+        },
+        {
+          breakpoint: 600,
+          settings  : {
+            slidesToShow: 2
+          }
+        },
+        {
+          breakpoint: 480,
+          settings  : {
+            slidesToShow: 1
+          }
+        }
+      ]
+    }
     return (
       <div className="featured-missions">
         <div className="intercom">
@@ -64,12 +90,12 @@ export default class FeaturedMissions extends React.Component {
         </div>
         <div className="featured-missions__more">
           <div className="featured-missions__more_container">
-            <p className="featured-missions__more__title">
+            {/* <p className="featured-missions__more__title">
               40+<br />
               <span className="featured-missions__more__title--big">missions</span>
-            </p>
+            </p> */}
             <p className="featured-missions__more__description">Discover Missions With Cutting Edge Projects</p>
-            <Slider className="featured-missions__gallery" slidesToShow={4} slidesToScroll={1}>
+            <Slider className="featured-missions__gallery" {...settings}>
               { moreMissions.map((mission) =>
                 <div key={mission.id}>
                   <div className="gallery-content">
