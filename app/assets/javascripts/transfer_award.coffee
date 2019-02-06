@@ -4,7 +4,7 @@ window.alertMsg = (modal, msg) ->
 
 window.transferAwardOnQtum = (award) -> # award in JSON
   if award.project.coin_type == 'qrc20'
-    transferQrc20Tokens award
+    qrc20Qweb3.transferQrc20Tokens award
   else if award.project.coin_type == 'qtum'
     qtumLedger.transferQtumCoins award
 

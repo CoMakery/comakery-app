@@ -29,7 +29,7 @@ class Views::Awards::Index < Views::Base
            locals: { project: project, awards: awards, show_recipient: true }
     pages
     render 'sessions/metamask_modal' if current_account&.decorate&.can_send_awards?(project)
-    javascript_include_tag Webpacker.manifest.lookup!('qtum_script.js') if project.coin_type_qrc20?
+    javascript_include_tag Webpacker.manifest.lookup!('wallets/qrc20_qweb3_script.js') if project.coin_type_qrc20?
     javascript_include_tag Webpacker.manifest.lookup!('wallets/cardano_trezor_script.js') if project.coin_type_ada?
     javascript_include_tag Webpacker.manifest.lookup!('wallets/bitcoin_trezor_script.js') if project.coin_type_btc?
     javascript_include_tag Webpacker.manifest.lookup!('wallets/qtum_ledger_script.js') if project.coin_type_qtum?
