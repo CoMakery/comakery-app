@@ -100,15 +100,9 @@ class AwardsController < ApplicationController
   end
 
   def confirm_message(project)
-    if project.coin_type_on_ethereum?
-      confirm_message_for_ethereum_award
-    elsif project.coin_type_on_qtum?
-      confirm_message_for_qtum_award
-    elsif project.coin_type_on_cardano?
-      confirm_message_for_cardano_award
-    elsif project.coin_type_on_bitcoin?
-      confirm_message_for_bitcoin_award
-    end
+    return nil unless project.coin_type?
+    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    send("confirm_message_for_#{blockchain_name}_award")
   end
 
   def confirm_message_for_ethereum_award
@@ -143,6 +137,14 @@ class AwardsController < ApplicationController
     end
   end
 
+  def confirm_message_for_eos_award
+    if current_account.eos_wallet.present?
+      "Congratulations, you just claimed your award! Your EOS address is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
+    else
+      "Congratulations, you just claimed your award! Be sure to enter your EOS Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    end
+  end
+
   def project_overview_path(project)
     project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
   end
@@ -160,17 +162,23 @@ class AwardsController < ApplicationController
     if project.coin_type_on_ethereum?
       @network = project.ethereum_network.presence || 'main'
       @wallet_logo = 'metamask2.png'
-      # @recipient_address = account&.ethereum_wallet
-    elsif project.coin_type_on_qtum?
-      @network = project.blockchain_network
-      @wallet_logo = 'qrypto.png'
     else
       @network = project.blockchain_network
-      @wallet_logo = 'trezor.png'
+      get_wallet_logo(project)
     end
     blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
     @recipient_address = account&.send("#{blockchain_name}_wallet")
     @unit   = project.token_symbol
     @unit ||= Project.coin_types[project.coin_type]
+  end
+
+  def get_wallet_logo(project)
+    @wallet_logo = if project.coin_type_on_qtum?
+      project.coin_type_qrc20? ? 'qrypto.png' : 'ledger.png'
+    elsif project.coin_type_eos?
+      'eos.png'
+    else
+      'trezor.png'
+    end
   end
 end

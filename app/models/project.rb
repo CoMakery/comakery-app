@@ -4,8 +4,10 @@ class Project < ApplicationRecord
     erc20: 'ethereum',
     eth: 'ethereum',
     qrc20: 'qtum',
+    qtum: 'qtum',
     ada: 'cardano',
-    btc: 'bitcoin'
+    btc: 'bitcoin',
+    eos: 'eos'
   }.freeze
 
   include EthereumAddressable
@@ -16,7 +18,6 @@ class Project < ApplicationRecord
 
   belongs_to :account
   belongs_to :mission
-  has_many :accounts_interested, through: :interests, source: :account
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards
@@ -54,8 +55,10 @@ class Project < ApplicationRecord
     erc20: 'ERC20',
     eth: 'ETH',
     qrc20: 'QRC20',
+    qtum:  'QTUM',
     ada: 'ADA',
-    btc: 'BTC'
+    btc: 'BTC',
+    eos: 'EOS'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -76,7 +79,9 @@ class Project < ApplicationRecord
     cardano_mainnet: 'Main Cardano Network',
     cardano_testnet: 'Test Cardano Network',
     qtum_mainnet: 'Main QTUM Network',
-    qtum_testnet: 'Test QTUM Network'
+    qtum_testnet: 'Test QTUM Network',
+    eos_mainnet: 'Main EOS Network',
+    eos_testnet: 'Test EOS Network'
   }
   enum status: %i[active passive]
 
@@ -144,7 +149,7 @@ class Project < ApplicationRecord
   end
 
   def coin_type_on_qtum?
-    coin_type_qrc20?
+    coin_type_qrc20? || coin_type_qtum?
   end
 
   def coin_type_on_cardano?
@@ -153,6 +158,10 @@ class Project < ApplicationRecord
 
   def coin_type_on_bitcoin?
     coin_type_btc?
+  end
+
+  def coin_type_on_eos?
+    coin_type_eos?
   end
 
   def total_revenue

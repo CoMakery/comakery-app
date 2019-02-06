@@ -11,12 +11,8 @@ class UtilitiesService
 
   def self.get_wallet_url(network, wallet)
     case network
-    when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet'
-      begin
-        UtilitiesService.send("get_wallet_url_on_#{network}", wallet)
-      rescue
-        nil
-      end
+    when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet', 'eos_mainnet', 'eos_testnet'
+      UtilitiesService.send("get_wallet_url_on_#{network}", wallet)
     else
       get_ethereum_wallet_url(network, wallet)
     end
@@ -38,6 +34,14 @@ class UtilitiesService
     "https://cardano-explorer.cardano-testnet.iohkdev.io/address/#{wallet}"
   end
 
+  def self.get_wallet_url_on_eos_mainnet(wallet)
+    "https://explorer.eosvibes.io/account/#{wallet}"
+  end
+
+  def self.get_wallet_url_on_eos_testnet(wallet)
+    "https://jungle.bloks.io/account/#{wallet}"
+  end
+
   def self.get_wallet_url_on_qtum_mainnet(wallet)
     "https://explorer.qtum.org/address/#{wallet}"
   end
@@ -48,12 +52,8 @@ class UtilitiesService
 
   def self.get_transaction_url(network, tx)
     case network
-    when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet'
-      begin
-        UtilitiesService.send("get_transaction_url_on_#{network}", tx)
-      rescue
-        nil
-      end
+    when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet', 'eos_mainnet', 'eos_testnet'
+      UtilitiesService.send("get_transaction_url_on_#{network}", tx)
     end
   end
 
@@ -79,6 +79,14 @@ class UtilitiesService
 
   def self.get_transaction_url_on_qtum_testnet(tx)
     "https://testnet.qtum.org/tx/#{tx}"
+  end
+
+  def self.get_transaction_url_on_eos_mainnet(tx)
+    "https://explorer.eosvibes.io/transaction/#{tx}"
+  end
+
+  def self.get_transaction_url_on_eos_testnet(tx)
+    "https://jungle.bloks.io/transaction/#{tx}"
   end
 
   def self.get_contract_url(network, contract_address)

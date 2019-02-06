@@ -3,7 +3,10 @@ window.alertMsg = (modal, msg) ->
   $(modal).foundation('open')
 
 window.transferAwardOnQtum = (award) -> # award in JSON
-  transferQrc20Tokens award
+  if award.project.coin_type == 'qrc20'
+    transferQrc20Tokens award
+  else if award.project.coin_type == 'qtum'
+    qtumLedger.transferQtumCoins award
 
 transferAwardOnCardano = (award) -> # award in JSON
   cardanoTrezor.transferAdaCoins award
@@ -11,15 +14,20 @@ transferAwardOnCardano = (award) -> # award in JSON
 transferAwardOnBitcoin = (award) -> # award in JSON
   bitcoinTrezor.transferBtcCoins award
 
+transferAwardOnEos = (award) -> # award in JSON
+  eosScatter.transferEosCoins award
+
 window.transferAward = (award) -> # award in JSON
   if award.project.coin_type == 'erc20' || award.project.coin_type == 'eth'
     transferAwardOnEthereum award
-  else if award.project.coin_type == 'qrc20'
+  else if award.project.coin_type == 'qrc20' || award.project.coin_type == 'qtum'
     transferAwardOnQtum award
   else if award.project.coin_type == 'ada'
     transferAwardOnCardano award
   else if award.project.coin_type == 'btc'
     transferAwardOnBitcoin award
+  else if award.project.coin_type == 'eos'
+    transferAwardOnEos award
 
 $ ->
   $(document).on 'click', '.transfer-tokens-btn', ->

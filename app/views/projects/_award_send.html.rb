@@ -139,10 +139,11 @@ class Views::Projects::AwardSend < Views::Base
   def transfer_tokens
     last_award_id = session.delete(:last_award_id)
     if (last_award = Award.find_by(id: last_award_id)) && current_account.decorate.can_send_awards?(last_award.project) && !last_award.ethereum_transaction_address?
-      javascript_include_tag 'https://connect.trezor.io/6/trezor-connect.js' if project.use_trezor?
-      javascript_include_tag Webpacker.manifest.lookup!('qtum_script.js') if project.coin_type_on_qtum?
-      javascript_include_tag Webpacker.manifest.lookup!('wallets/cardano_trezor_script.js') if project.coin_type_on_cardano?
-      javascript_include_tag Webpacker.manifest.lookup!('wallets/bitcoin_trezor_script.js') if project.coin_type_on_bitcoin?
+      javascript_include_tag Webpacker.manifest.lookup!('qtum_script.js') if project.coin_type_qrc20?
+      javascript_include_tag Webpacker.manifest.lookup!('wallets/cardano_trezor_script.js') if project.coin_type_ada?
+      javascript_include_tag Webpacker.manifest.lookup!('wallets/bitcoin_trezor_script.js') if project.coin_type_btc?
+      javascript_include_tag Webpacker.manifest.lookup!('wallets/qtum_ledger_script.js') if project.coin_type_qtum?
+      javascript_include_tag Webpacker.manifest.lookup!('wallets/eos_scatter_script.js') if project.coin_type_eos?
       render 'sessions/metamask_modal'
       javascript_tag(transfer_tokens_script(last_award))
     end
