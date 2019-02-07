@@ -2,14 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FeaturedMission from './FeaturedMission'
 import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
 
 import headerImg from '../src/images/featured/header.png'
 import logo from '../src/images/styleguide/icons/Logo-Footer.svg'
 import developersImg from '../src/images/featured/developers.png'
 import communityManagersImg from '../src/images/featured/community-managers.png'
 import chatImg from '../src/images/featured/chat.svg'
+import notificationImg from '../src/images/featured/warning.svg'
+
+const confirmNotification = (
+  <div className="confirm-message">
+    <div className="confirm-message__box">
+      <img src={notificationImg} className="confirm-message__icon" />
+      Please confirm your email address to continue
+    </div>
+  </div>
+)
 
 export default class FeaturedMissions extends React.Component {
   constructor(props) {
@@ -52,6 +60,7 @@ export default class FeaturedMissions extends React.Component {
     }
     return (
       <div className="featured-missions">
+        {!this.props.isConfirmed && confirmNotification}
         <div className="featured-missions__header">
           <div className="intercom">
             <img src={chatImg} />
@@ -144,11 +153,13 @@ export default class FeaturedMissions extends React.Component {
 FeaturedMissions.propTypes = {
   topMissions : PropTypes.array,
   moreMissions: PropTypes.array,
-  csrfToken   : PropTypes.string
+  csrfToken   : PropTypes.string,
+  isConfirmed : PropTypes.bool
 }
 
 FeaturedMissions.defaultProps = {
   topMissions : [],
   moreMissions: [],
-  csrfToken   : '00'
+  csrfToken   : '00',
+  isConfirmed : false
 }

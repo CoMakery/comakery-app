@@ -14,6 +14,10 @@ import '../src/application.js'
 
 import '../src/application.css'
 
+import 'slick-carousel/slick/slick.css'
+
+import 'slick-carousel/slick/slick-theme.css'
+
 import Rails from 'rails-ujs'
 Rails.start()
 

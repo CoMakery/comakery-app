@@ -380,6 +380,6 @@ Account.propTypes = {
   projects      : PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   projectsCount : PropTypes.number.isRequired,
   countryList   : PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  specialtyList : PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  specialtyList : PropTypes.arrayOf(PropTypes.array).isRequired,
   clippyIcon    : PropTypes.string.isRequired
 }
