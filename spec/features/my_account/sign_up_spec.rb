@@ -29,7 +29,7 @@ describe 'my account', js: true do
   end
 
   scenario 'featured page is available after signup' do
-    login(unconfirmed_account)
+    login(confirmed_account)
     open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') do |file|
       mission.image = file
     end
@@ -41,7 +41,7 @@ describe 'my account', js: true do
     stub_airtable
     find('.featured-mission__project__interest').click
     sleep 2
-    expect(unconfirmed_account.interests.count).to be > 0
+    expect(confirmed_account.interests.count).to be > 0
     expect(page).to have_content('REQUEST SENT')
   end
 
@@ -49,27 +49,28 @@ describe 'my account', js: true do
     login(unconfirmed_account)
     visit '/account'
     expect(page.current_url).to have_content '/account'
-    expect(page).not_to have_content('Please confirm your email before continuing.')
+    expect(page).not_to have_content('Please confirm your email address to continue')
   end
 
   scenario 'projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects'
-    expect(page.current_url).to have_content %r{\/$}
-    expect(page).to have_content('Please confirm your email before continuing.')
+    expect(page).to have_current_path(featured_path)
+    expect(page).to have_content('Please confirm your email address to continue')
   end
 
   scenario 'my projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects/mine'
-    expect(page.current_url).to have_content %r{\/$}
-    expect(page).to have_content('Please confirm your email before continuing.')
+    expect(page).to have_current_path(featured_path)
+    expect(page).to have_content('Please confirm your email address to continue')
   end
 
   scenario 'account gets confirmed after visiting confirmation link' do
     visit "/accounts/confirm/#{to_be_confirmed_account.email_confirm_token}"
-    expect(page.current_url).to have_content %r{\/$}
-    expect(page).to have_content('Success! Your email is confirmed.')
+    expect(page).to have_current_path(featured_path)
+    # we don't have notification inside react pages
+    # expect(page).to have_content 'Success! Your email is confirmed.'
     expect(page).to have_content(/Sign out/i)
   end
 
@@ -77,13 +78,13 @@ describe 'my account', js: true do
     login(confirmed_account)
     visit '/projects'
     expect(page.current_url).to have_content '/projects'
-    expect(page).not_to have_content('Please confirm your email before continuing.')
+    expect(page).not_to have_content('Please confirm your email address to continue')
   end
 
   scenario 'my projects page is available after email confirmation' do
     login(confirmed_account)
     visit '/projects/mine'
     expect(page.current_url).to have_content '/projects/mine'
-    expect(page).not_to have_content('Please confirm your email before continuing.')
+    expect(page).not_to have_content('Please confirm your email address to continue')
   end
 end

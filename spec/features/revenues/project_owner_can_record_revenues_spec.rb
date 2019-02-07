@@ -238,7 +238,8 @@ describe 'when recording revenue' do
     expect(page).not_to have_link 'Revenues'
 
     visit project_revenues_path(project)
-    expect(page).to have_current_path(root_path)
+    # root_path redirected to featured path
+    expect(page).to have_current_path(featured_path)
   end
 
   it 'no revenues page displayed when 0% royalty percentage' do
@@ -250,7 +251,8 @@ describe 'when recording revenue' do
     expect(page).not_to have_link 'Revenues'
 
     visit project_revenues_path(project)
-    expect(page).to have_current_path(root_path)
+    # root_path redirected to featured path
+    expect(page).to have_current_path(featured_path)
   end
 
   describe 'non-members' do

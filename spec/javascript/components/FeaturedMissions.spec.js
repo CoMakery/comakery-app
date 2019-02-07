@@ -1,7 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import FeaturedMissions from 'components/FeaturedMissions'
-import FeaturedMission from '../../../app/javascript/components/FeaturedMission'
 
 describe('FeaturedMissions', () => {
   beforeEach(() => {
@@ -16,6 +15,12 @@ describe('FeaturedMissions', () => {
     expect(wrapper.exists('.featured-missions__content')).toBe(true)
     expect(wrapper.exists('.featured-missions__more')).toBe(true)
     expect(wrapper.exists('.featured-missions__footer')).toBe(true)
+  })
+
+  it('renders confirm email notification', () => {
+    const wrapper = mount(<FeaturedMissions isConfirmed={false} />)
+
+    expect(wrapper.exists('.confirm-message')).toBe(true)
   })
 
   it('renders correctly with props', () => {

@@ -6,40 +6,18 @@ class PagesController < ApplicationController
   layout 'react', only: %i[styleguide featured]
 
   def landing
-    if current_account
-      if current_account.finished_contributor_form?
-        redirect_to action: :featured
-      else
-        @paperform_id = case ENV['APP_NAME']
-                        when 'demo'
-                          'demo-homepage'
-                        when 'staging'
-                          '0f2g0j1q'
-                        else
-                          'homepage'
-        end
-        render :home
-      end
-    end
+    redirect_to action: :featured if current_account
   end
 
-  def home; end
-
   def featured
-    unless current_account.finished_contributor_form?
-      current_account.update(contributor_form: true)
-    end
-    unless current_account.confirmed?
-      flash[:alert] = 'Please confirm your email before continuing.'
-    end
-
     top_missions = Mission.active.first(4)
     more_missions = Mission.active.offset(4)
 
     render component: 'FeaturedMissions', props: {
       csrf_token: form_authenticity_token,
       top_missions: top_missions.map { |mission| featured_mission_props(mission) },
-      more_missions: more_missions.map { |mission| more_mission_props(mission) }
+      more_missions: more_missions.map { |mission| more_mission_props(mission) },
+      is_confirmed: current_account.confirmed?
     }
   end
 
@@ -64,7 +42,7 @@ class PagesController < ApplicationController
     mission.as_json(only: %i[id name description]).merge(
       image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 312, 312) : nil,
       symbol: mission.token&.symbol,
-      projects: mission.projects.map do |project|
+      projects: mission.projects.active.map do |project|
         project.as_json(only: %i[id title]).merge(
           interested: current_account.interested?(project.id)
         )
