@@ -58,7 +58,7 @@ export default class FeaturedMission extends React.Component {
             <div className="featured-mission__project__interest" onClick={() => { this.addInterest(project.id) }}>I’m interested</div>
             }
           </div>)}
-          <a href="/projects/new" className="featured-mission__create-project">Create New Project</a>
+          <a href={`/projects/new${this.props.id ? `?mission_id=${this.props.id}` : ''}`} className="featured-mission__create-project">Create New Project</a>
         </div>
       </div>
     )
@@ -67,6 +67,7 @@ export default class FeaturedMission extends React.Component {
 
 FeaturedMission.propTypes = {
   float      : PropTypes.string,
+  id         : PropTypes.number,
   name       : PropTypes.string,
   symbol     : PropTypes.string,
   description: PropTypes.string,
@@ -77,6 +78,7 @@ FeaturedMission.propTypes = {
 
 FeaturedMission.defaultProps = {
   float      : 'left',
+  id         : undefined,
   name       : '',
   symbol     : '',
   description: '',

@@ -87,6 +87,7 @@ export default class FeaturedMissions extends React.Component {
             topMissions.map((mission, index) =>
               <FeaturedMission
                 key={mission.id}
+                id={mission.id}
                 float={index % 2 === 0 ? 'left' : 'right'}
                 name={mission.name}
                 symbol={mission.symbol}

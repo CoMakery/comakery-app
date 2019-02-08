@@ -31,7 +31,8 @@ class ProjectsController < ApplicationController
 
     @project = current_account.projects.build(public: false,
                                               maximum_tokens: 1_000_000,
-                                              maximum_royalties_per_month: 50_000)
+                                              maximum_royalties_per_month: 50_000,
+                                              mission_id: params[:mission_id])
     @project.award_types.build(name: 'Thanks', amount: 10)
     @project.award_types.build(name: 'Software development hour', amount: 100)
     @project.award_types.build(name: 'Graphic design hour', amount: 100)
