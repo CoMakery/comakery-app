@@ -102,4 +102,4 @@ end
 
 gem 'scout_apm', '~> 2.4'
 
-gem "mini_racer", "~> 0.2.4"
+gem 'mini_racer', '~> 0.2.4'
