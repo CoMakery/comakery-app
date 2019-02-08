@@ -94,7 +94,10 @@ class Header extends React.Component {
         <div className="header-mobile">
           <Icon name="Logo-Header.svg" width="162px" />
 
-          <div className="header-mobile__menu-icon" onClick={() => { this.setState({mobileMenuActive: !mobileMenuActive}) }} >
+          <div className="header-mobile__menu-icon" onClick={() => {
+            this.setState({mobileMenuActive: !mobileMenuActive})
+            document.body.classList.toggle('body--overflow')
+          }} >
             <span className={mobileMenuActive ? 'active' : ''} />
           </div>
 
