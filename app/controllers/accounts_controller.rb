@@ -67,7 +67,7 @@ class AccountsController < ApplicationController
     authorize @account
 
     if @account.update(account_params.merge(name_required: true))
-      redirect_to root_path
+      redirect_to root_path, notice: 'Thank you for signing up. Now, let us know what projects you are interested in.'
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
