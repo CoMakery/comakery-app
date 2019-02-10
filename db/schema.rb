@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190129201928) do
+ActiveRecord::Schema.define(version: 20190210152712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,13 @@ ActiveRecord::Schema.define(version: 20190129201928) do
     t.boolean "comakery_admin", default: false
     t.string "cardano_wallet"
     t.string "bitcoin_wallet"
+    t.string "eos_wallet"
+    t.string "specialty"
+    t.string "occupation"
+    t.string "linkedin_url"
+    t.string "github_url"
+    t.string "dribble_url"
+    t.string "behance_url"
     t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
@@ -212,7 +219,7 @@ ActiveRecord::Schema.define(version: 20190129201928) do
     t.string "image_content_size"
     t.string "image_content_type"
     t.string "long_id"
-    t.integer "visibility", default: 0
+    t.integer "visibility", default: 1
     t.bigint "mission_id"
     t.integer "status", default: 0
     t.bigint "token_id"

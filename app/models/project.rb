@@ -66,11 +66,11 @@ class Project < ApplicationRecord
   validate :maximum_tokens_unchanged, if: -> { !new_record? }
 
   scope :featured, -> { order :featured }
-  scope :unlisted, -> { where 'projects.visibility in(2,3)' }
-  scope :listed, -> { where 'projects.visibility not in(2,3)' }
-  scope :visible, -> { where 'projects.visibility not in(2,3,4)' }
+  scope :unlisted, -> { where 'projects.visibility in(0,3)' }
+  scope :listed, -> { where 'projects.visibility not in(0,3)' }
+  scope :visible, -> { where 'projects.visibility not in(0,3,4)' }
   scope :unarchived, -> { where.not visibility: 4 }
-  scope :publics, -> { where 'projects.visibility in(1,3)' }
+  scope :publics, -> { where 'projects.visibility in(2,3)' }
 
   delegate :coin_type_token?, to: :token
   delegate :coin_type_on_ethereum?, to: :token

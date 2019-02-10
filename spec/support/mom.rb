@@ -58,9 +58,13 @@ class Mom
       royalty_percentage: 5.9,
       maximum_royalties_per_month: 10_000,
       legal_project_owner: 'UberCatz Inc',
+      require_confidentiality: false,
+      exclusive_contributions: false,
+      visibility: 'member',
       long_id: SecureRandom.hex(20),
       maximum_tokens: 10_000_000,
-      token: create(:token)
+      token: create(:token),
+      mission: create(:mission)
     }
     Project.new(defaults.merge(attrs))
   end

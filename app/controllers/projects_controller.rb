@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
-  before_action :set_project, only: %i[show edit update]
+  before_action :set_project, only: %i[edit update]
   before_action :set_tokens, only: %i[new show edit]
   before_action :set_missions, only: %i[new show edit]
   before_action :set_visibilities, only: %i[new show edit]
@@ -38,17 +38,6 @@ class ProjectsController < ApplicationController
     assign_slack_channels
 
     @project = current_account.projects.build
-    @project.award_types.build(name: 'Thanks', amount: 10)
-    @project.award_types.build(name: 'Software development hour', amount: 100)
-    @project.award_types.build(name: 'Graphic design hour', amount: 100)
-    @project.award_types.build(name: 'Product management hour', amount: 100)
-    @project.award_types.build(name: 'Marketing hour', amount: 100)
-    @project.award_types.build(name: 'Expert software development hour', amount: 150)
-    @project.award_types.build(name: 'Expert graphic design hour', amount: 150)
-    @project.award_types.build(name: 'Expert product management hour', amount: 150)
-    @project.award_types.build(name: 'Expert marketing hour', amount: 150)
-    @project.award_types.build(name: 'Blog post (600+ words)', amount: 150)
-    @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
 
@@ -57,13 +46,28 @@ class ProjectsController < ApplicationController
     @props[:project] = @project.serializable_hash.merge(
       url: "https://www.comakery.com/p/#{@project.long_id}"
     )
-    render component: 'ProjectForm', props: @props, prerender: false
+    render component: 'ProjectForm', props: @props
   end
 
   def create
     @project = current_account.projects.build project_params
     @project.maximum_royalties_per_month = 50_000
     @project.public = false
+    @project.long_id ||= SecureRandom.hex(20)
+
+    unless params["project"]["award_types_attributes"]
+      @project.award_types.build(name: 'Thanks', amount: 10)
+      @project.award_types.build(name: 'Software development hour', amount: 100)
+      @project.award_types.build(name: 'Graphic design hour', amount: 100)
+      @project.award_types.build(name: 'Product management hour', amount: 100)
+      @project.award_types.build(name: 'Marketing hour', amount: 100)
+      @project.award_types.build(name: 'Expert software development hour', amount: 150)
+      @project.award_types.build(name: 'Expert graphic design hour', amount: 150)
+      @project.award_types.build(name: 'Expert product management hour', amount: 150)
+      @project.award_types.build(name: 'Expert marketing hour', amount: 150)
+      @project.award_types.build(name: 'Blog post (600+ words)', amount: 150)
+      @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
+    end
 
     authorize @project
 
@@ -77,13 +81,13 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.listed.includes(:award_types).find(params[:id]).decorate
+    @project = Project.listed.find(params[:id])&.decorate
     authorize @project
     set_award
   end
 
   def unlisted
-    @project = Project.includes(:award_types).find_by(long_id: params[:long_id])&.decorate
+    @project = Project.find_by(long_id: params[:long_id])&.decorate
     authorize @project
     if @project&.access_unlisted?(current_account)
       set_award
@@ -102,7 +106,7 @@ class ProjectsController < ApplicationController
     @props[:form_action] = 'PATCH'
     @props[:form_url]    = project_path(@project)
 
-    render component: 'ProjectForm', props: @props, prerender: false
+    render component: 'ProjectForm', props: @props
   end
 
   def update
@@ -179,6 +183,7 @@ class ProjectsController < ApplicationController
       :panoramic_image,
       :maximum_tokens,
       :token_id,
+      :mission_id,
       :long_id,
       :title,
       :tracker,
@@ -192,7 +197,6 @@ class ProjectsController < ApplicationController
       :royalty_percentage,
       :maximum_royalties_per_month,
       :license_finalized,
-      :mission_id,
       :visibility,
       :status,
       award_types_attributes: %i[

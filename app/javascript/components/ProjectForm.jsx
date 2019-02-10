@@ -247,7 +247,7 @@ class ProjectForm extends React.Component {
               title="mission"
               required
               name="project[mission_id]"
-              value={this.state['project[mission_id]'].toString()}
+              value={this.state['project[mission_id]'] ? this.state['project[mission_id]'].toString() : null}
               errorText={this.state.errors['project[mission_id]']}
               disabled={this.state.disabled['project[mission_id]']}
               eventHandler={this.handleFieldChange}
@@ -259,7 +259,7 @@ class ProjectForm extends React.Component {
               title="token"
               required
               name="project[token_id]"
-              value={this.state['project[token_id]'].toString()}
+              value={this.state['project[token_id]'] ? this.state['project[token_id]'].toString() : null}
               errorText={this.state.errors['project[token_id]']}
               disabled={this.state.disabled['project[token_id]']}
               eventHandler={this.handleFieldChange}

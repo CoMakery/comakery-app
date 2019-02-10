@@ -123,12 +123,6 @@ describe ProjectsController do
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
         expect(assigns[:project]).not_to be_public
-        expect(assigns[:project].maximum_tokens).to eq(1_000_000)
-        expect(assigns[:project].award_types.size).to be > 4
-
-        expect(assigns[:project].award_types.first).to be_a_new_record
-        expect(assigns[:project].award_types.first.name).to eq('Thanks')
-        expect(assigns[:project].award_types.first.amount).to eq(10)
       end
     end
   end
@@ -143,7 +137,8 @@ describe ProjectsController do
             project: {
               title: 'Project title here',
               description: 'Project description here',
-              image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
               tracker: 'http://github.com/here/is/my/tracker',
               contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
               video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
@@ -152,6 +147,10 @@ describe ProjectsController do
               legal_project_owner: 'legal project owner',
               payment_type: 'project_token',
               token_id: create(:token).id,
+              mission_id: create(:mission).id,
+              require_confidentiality: false,
+              exclusive_contributions: false,
+              visibility: 'member',
               award_types_attributes: [
                 { name: 'Community Award', amount: 10, community_awardable: true },
                 { name: 'Small Award', amount: 1000 },
@@ -160,14 +159,15 @@ describe ProjectsController do
               ]
             }
           }
-          expect(response.status).to eq(302)
+          expect(response.status).to eq(200)
         end.to change { Project.count }.by(1)
       end.to change { AwardType.count }.by(3)
 
       project = Project.last
       expect(project.title).to eq('Project title here')
       expect(project.description).to eq('Project description here')
-      expect(project.image).to be_a(Refile::File)
+      expect(project.square_image).to be_a(Refile::File)
+      expect(project.panoramic_image).to be_a(Refile::File)
       expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
       expect(project.contributor_agreement_url).to eq('http://docusign.com/here/is/my/signature')
       expect(project.video_url).to eq('https://www.youtube.com/watch?v=Dn3ZMhmmzK0')
@@ -179,16 +179,21 @@ describe ProjectsController do
       expect(project.account_id).to eq(account.id)
     end
 
-    it 'when invalid, re-renders with errors' do
+    it 'when invalid, returns 422' do
       expect do
         expect do
           post :create, params: {
             project: {
               # title: "Project title here",
               description: 'Project description here',
-              image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
               tracker: 'http://github.com/here/is/my/tracker',
               token_id: create(:token).id,
+              mission_id: create(:mission).id,
+              require_confidentiality: false,
+              exclusive_contributions: false,
+              visibility: 'member',
               award_types_attributes: [
                 { name: 'Small Award', amount: 1000, community_awardable: true },
                 { name: 'Big Award', amount: 2000 },
@@ -196,31 +201,32 @@ describe ProjectsController do
               ]
             }
           }
-          expect(response.status).to eq(200)
+          expect(response.status).to eq(422)
         end.not_to change { Project.count }
       end.not_to change { AwardType.count }
 
-      expect(assigns[:error]).to eq('Project saving failed, please correct the errors below')
+      expect(JSON.parse(response.body)["message"]).to eq("Title can't be blank, Legal project owner can't be blank, Maximum tokens must be greater than 0")
       project = assigns[:project]
 
       expect(project.description).to eq('Project description here')
-      expect(project.image).to be_a(Refile::File)
+      expect(project.square_image).to be_a(Refile::File)
+      expect(project.panoramic_image).to be_a(Refile::File)
       expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
       expect(project.award_types.first.name).to eq('Small Award')
       expect(project.award_types.first.community_awardable).to eq(true)
       expect(project.account_id).to eq(account.id)
-      expect(project.award_types.size).to eq(3) # 2 + 1 template
+      expect(project.award_types.size).to eq(2)
     end
 
     it 'when duplicated, redirects with error' do
       expect do
         expect do
           post :create, params: {
-            long_id: '0',
             project: {
               title: 'Project title here',
               description: 'Project description here',
-              image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
               tracker: 'http://github.com/here/is/my/tracker',
               contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
               video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
@@ -229,6 +235,11 @@ describe ProjectsController do
               legal_project_owner: 'legal project owner',
               payment_type: 'project_token',
               token_id: create(:token).id,
+              mission_id: create(:mission).id,
+              long_id: '0',
+              require_confidentiality: false,
+              exclusive_contributions: false,
+              visibility: 'member',
               award_types_attributes: [
                 { name: 'Community Award', amount: 10, community_awardable: true },
                 { name: 'Small Award', amount: 1000 },
@@ -237,18 +248,18 @@ describe ProjectsController do
               ]
             }
           }
-          expect(response.status).to eq(302)
+          expect(response.status).to eq(200)
         end.to change { Project.count }.by(1)
       end.to change { AwardType.count }.by(3)
 
       expect do
         expect do
           post :create, params: {
-            long_id: '0',
             project: {
               title: 'Project title here',
               description: 'Project description here',
-              image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+              panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
               tracker: 'http://github.com/here/is/my/tracker',
               contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
               video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
@@ -257,6 +268,11 @@ describe ProjectsController do
               legal_project_owner: 'legal project owner',
               payment_type: 'project_token',
               token_id: create(:token).id,
+              mission_id: create(:mission).id,
+              long_id: '0',
+              require_confidentiality: false,
+              exclusive_contributions: false,
+              visibility: 'member',
               award_types_attributes: [
                 { name: 'Community Award', amount: 10, community_awardable: true },
                 { name: 'Small Award', amount: 1000 },
@@ -265,11 +281,11 @@ describe ProjectsController do
               ]
             }
           }
-          expect(response.status).to eq(302)
+          expect(response.status).to eq(422)
         end.not_to change { Project.count }
       end.not_to change { AwardType.count }
 
-      expect(flash[:error]).to eq('Project already created')
+      expect(JSON.parse(response.body)["message"]).to eq("Long identifier can't be blank or not unique")
     end
   end
 
@@ -406,7 +422,7 @@ describe ProjectsController do
 
       context 'with rendered views' do
         render_views
-        it 're-renders with errors when updating fails' do
+        it 'returns 422 when updating fails' do
           small_award_type = cat_project.award_types.create!(name: 'Small Award', amount: 100)
           medium_award_type = cat_project.award_types.create!(name: 'Medium Award', amount: 300)
           destroy_me_award_type = cat_project.award_types.create!(name: 'Destroy Me Award', amount: 400)
@@ -421,7 +437,6 @@ describe ProjectsController do
                   tracker: 'http://github.com/here/is/my/tracker/updated',
                   legal_project_owner: 'legal project owner',
                   payment_type: 'project_token',
-                  token_id: create(:token).id,
                   award_types_attributes: [
                     { id: small_award_type.to_param, name: 'Small Award', amount: 150, _destroy: 'false' },
                     { id: destroy_me_award_type.to_param, _destroy: '1' },
@@ -429,29 +444,26 @@ describe ProjectsController do
                   ]
                 }
               }
-              expect(response.status).to eq(200)
+              expect(response.status).to eq(422)
             end.not_to change { Project.count }
           end.not_to change { AwardType.count }
 
           project = assigns[:project]
-          expect(assigns[:error]).to eq('Project update failed, please correct the errors below')
+          expect(JSON.parse(response.body)["message"]).to eq("Title can't be blank")
           expect(project.title).to eq('')
           expect(project.description).to eq('updated Project description here')
           expect(project.tracker).to eq('http://github.com/here/is/my/tracker/updated')
           award_types = project.award_types.sort_by(&:amount)
-          expect(award_types.size).to eq((expected_rows = 4) + (expected_template_rows = 1))
+          expect(award_types.size).to eq(4)
 
-          expect(award_types.first.name).to be_nil
-          expect(award_types.first.amount).to eq(0)
-
-          expect(award_types.second.name).to eq('Small Award')
-          expect(award_types.second.amount).to eq(150)
-          expect(award_types.third.name).to eq('Medium Award')
-          expect(award_types.third.amount).to eq(300)
-          expect(award_types.fourth.name).to eq('Destroy Me Award')
-          expect(award_types.fourth.amount).to eq(400)
-          expect(award_types.fifth.name).to eq('Big Award')
-          expect(award_types.fifth.amount).to eq(500)
+          expect(award_types.first.name).to eq('Small Award')
+          expect(award_types.first.amount).to eq(150)
+          expect(award_types.second.name).to eq('Medium Award')
+          expect(award_types.second.amount).to eq(300)
+          expect(award_types.third.name).to eq('Destroy Me Award')
+          expect(award_types.third.amount).to eq(400)
+          expect(award_types.fourth.name).to eq('Big Award')
+          expect(award_types.fourth.amount).to eq(500)
         end
       end
 
@@ -468,13 +480,14 @@ describe ProjectsController do
                 legal_project_owner: 'legal project owner',
                 payment_type: 'project_token',
                 token_id: create(:token).id,
+                mission_id: create(:mission).id,
                 award_types_attributes: [
                   { id: award_type.to_param, name: 'Bigger Award', amount: 500 }
                 ]
               }
             }
-            expect(response.status).to eq(200)
-            expect(assigns[:error]).to eq('Project update failed, please correct the errors below')
+            expect(response.status).to eq(422)
+            expect(JSON.parse(response.body)["message"]).to eq("Award types amount can't be modified if there are existing awards")
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
       end

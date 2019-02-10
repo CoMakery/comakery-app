@@ -12,7 +12,7 @@ class InputField extends React.Component {
     this.state = {
       fileLocalUrl : null,
       fileLocalName: null,
-      symbolCounter: this.props.value.length
+      symbolCounter: this.props.value ? this.props.value.length : null
     }
   }
 
