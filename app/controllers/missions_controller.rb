@@ -91,7 +91,7 @@ class MissionsController < ApplicationController
       m.serialize.merge(
         token_name: m.token&.name,
         token_symbol: m.token&.symbol,
-        projects: m.projects.as_json(only: %i[id title status])
+        projects: m.projects.public_listed.as_json(only: %i[id title status])
       )
     end
   end
