@@ -234,7 +234,7 @@ export default class Account extends React.Component {
 
               <FormField fieldLabel="Bitcoin Address" fieldName="bitcoinWallet" fieldValue={this.state.bitcoinWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.bitcoinWallet} />
 
-              <FormField fieldLabel="EOS Address" fieldName="eosWallet" fieldValue={this.state.eosWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.eosWallet} />
+              <FormField fieldLabel="EOS Account Name" fieldName="eosWallet" fieldValue={this.state.eosWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.eosWallet} />
 
               <div className="columns small-3">
                 <label>Image</label>
@@ -333,7 +333,7 @@ export default class Account extends React.Component {
 
             <div className="row">
               <div className="columns medium-3" style={{ marginTop: 8 }}>
-                EOS Address
+                EOS Account Name
               </div>
               <div className="columns medium-9">
                 {this.state.accountData.eosWallet && <React.Fragment>

@@ -112,9 +112,9 @@ class SessionsController < ApplicationController
 
   def process_new_eos_award_notice
     if current_account.eos_wallet.blank?
-      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your EOS Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your EOS account name on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
     else
-      flash[:notice] = "Congratulations, you just claimed your award! Your EOS address is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
+      flash[:notice] = "Congratulations, you just claimed your award! Your EOS account name is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS account name on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
       current_account.update new_award_notice: false
     end
   end
