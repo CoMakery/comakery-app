@@ -31,21 +31,22 @@ export default class FeaturedMissions extends React.Component {
   render() {
     const { topMissions } = this.state
     const { moreMissions } = this.props
+    const moreMissionsCount = moreMissions.length
     const settings = {
-      slidesToShow  : 4,
+      slidesToShow  : Math.min(4, moreMissionsCount),
       slidesToScroll: 1,
       responsive    : [
         {
           breakpoint: 1440,
           settings  : {
-            slidesToShow  : 3,
+            slidesToShow  : Math.min(3, moreMissionsCount),
             slidesToScroll: 1,
           }
         },
         {
           breakpoint: 800,
           settings  : {
-            slidesToShow  : 2,
+            slidesToShow  : Math.min(2, moreMissionsCount),
             slidesToScroll: 1,
           }
         },

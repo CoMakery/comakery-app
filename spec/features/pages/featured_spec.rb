@@ -8,7 +8,7 @@ feature 'pages' do
   let!(:mission3) { create :mission, name: 'test3', token_id: token.id, image: File.open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') }
   let!(:mission4) { create :mission, name: 'test4', token_id: token.id, image: File.open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') }
   let!(:mission5) { create :mission, name: 'test5', token_id: token.id, image: File.open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') }
-  let!(:project) { create :project, mission_id: mission1.id }
+  let!(:project) { create :project, mission_id: mission1.id, visibility: 'public_listed' }
 
   scenario '#featured' do
     stub_airtable

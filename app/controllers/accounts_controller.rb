@@ -59,6 +59,7 @@ class AccountsController < ApplicationController
   def build_profile
     redirect_to root_path if current_account.blank?
     @account = current_account
+    @skip_validation = true # for the first time, don't show error message for metamask user's email field
     authorize @account
   end
 
@@ -71,6 +72,7 @@ class AccountsController < ApplicationController
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
+      @skip_validation = false
       render :build_profile
     end
   end
