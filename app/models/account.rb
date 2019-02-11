@@ -187,10 +187,6 @@ class Account < ApplicationRecord
     projects_interested.exists? project_id
   end
 
-  def finished_contributor_form?
-    contributor_form == true
-  end
-
   def finished_build_profile? # check if all of the required fields are filled
     email.present? && first_name.present? && last_name.present? && country.present? && date_of_birth.present?
   end
