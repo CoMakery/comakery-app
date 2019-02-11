@@ -1,12 +1,5 @@
 class Project < ApplicationRecord
   ROYALTY_PERCENTAGE_PRECISION = 13
-  BLOCKCHAIN_NAMES = {
-    erc20: 'ethereum',
-    eth: 'ethereum',
-    qrc20: 'qtum',
-    ada: 'cardano',
-    btc: 'bitcoin'
-  }.freeze
 
   nilify_blanks
   attachment :image
@@ -72,6 +65,7 @@ class Project < ApplicationRecord
   scope :unarchived, -> { where.not visibility: 4 }
   scope :publics, -> { where 'projects.visibility in(2,3)' }
 
+  delegate :coin_type, to: :token, allow_nil: true
   delegate :coin_type_token?, to: :token
   delegate :coin_type_on_ethereum?, to: :token
   delegate :coin_type_on_qtum?, to: :token

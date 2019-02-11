@@ -168,9 +168,9 @@ class AwardsController < ApplicationController
       @network = project.blockchain_network
       @wallet_logo = 'trezor.png'
     end
-    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    blockchain_name = Token::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
     @recipient_address = account&.send("#{blockchain_name}_wallet")
-    @unit   = project.token_symbol
-    @unit ||= Project.coin_types[project.coin_type]
+    @unit   = project.token.symbol
+    @unit ||= Token.coin_types[project.coin_type]
   end
 end

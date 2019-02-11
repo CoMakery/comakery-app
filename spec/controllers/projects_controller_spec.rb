@@ -205,7 +205,7 @@ describe ProjectsController do
         end.not_to change { Project.count }
       end.not_to change { AwardType.count }
 
-      expect(JSON.parse(response.body)["message"]).to eq("Title can't be blank, Legal project owner can't be blank, Maximum tokens must be greater than 0")
+      expect(JSON.parse(response.body)['message']).to eq("Title can't be blank, Legal project owner can't be blank, Maximum tokens must be greater than 0")
       project = assigns[:project]
 
       expect(project.description).to eq('Project description here')
@@ -285,7 +285,7 @@ describe ProjectsController do
         end.not_to change { Project.count }
       end.not_to change { AwardType.count }
 
-      expect(JSON.parse(response.body)["message"]).to eq("Long identifier can't be blank or not unique")
+      expect(JSON.parse(response.body)['message']).to eq("Long identifier can't be blank or not unique")
     end
   end
 
@@ -449,7 +449,7 @@ describe ProjectsController do
           end.not_to change { AwardType.count }
 
           project = assigns[:project]
-          expect(JSON.parse(response.body)["message"]).to eq("Title can't be blank")
+          expect(JSON.parse(response.body)['message']).to eq("Title can't be blank")
           expect(project.title).to eq('')
           expect(project.description).to eq('updated Project description here')
           expect(project.tracker).to eq('http://github.com/here/is/my/tracker/updated')
@@ -487,7 +487,7 @@ describe ProjectsController do
               }
             }
             expect(response.status).to eq(422)
-            expect(JSON.parse(response.body)["message"]).to eq("Award types amount can't be modified if there are existing awards")
+            expect(JSON.parse(response.body)['message']).to eq("Award types amount can't be modified if there are existing awards")
           end.not_to change { Project.count }
         end.not_to change { AwardType.count }
       end

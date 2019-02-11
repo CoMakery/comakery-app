@@ -2,6 +2,14 @@ class Token < ApplicationRecord
   include EthereumAddressable
   include QtumContractAddressable
 
+  BLOCKCHAIN_NAMES = {
+    erc20: 'ethereum',
+    eth: 'ethereum',
+    qrc20: 'qtum',
+    ada: 'cardano',
+    btc: 'bitcoin'
+  }.freeze
+
   nilify_blanks
   attachment :logo_image, type: :image
 

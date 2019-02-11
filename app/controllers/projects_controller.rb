@@ -55,7 +55,7 @@ class ProjectsController < ApplicationController
     @project.public = false
     @project.long_id ||= SecureRandom.hex(20)
 
-    unless params["project"]["award_types_attributes"]
+    unless params['project']['award_types_attributes']
       @project.award_types.build(name: 'Thanks', amount: 10)
       @project.award_types.build(name: 'Software development hour', amount: 100)
       @project.award_types.build(name: 'Graphic design hour', amount: 100)
