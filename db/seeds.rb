@@ -48,10 +48,7 @@ if Rails.env == 'development'
     visibility: 'member',
     long_id: SecureRandom.hex(20),
     maximum_tokens: 10_000_000,
-    square_image: Refile::FileDouble.new('dummy_square_image', 'image.png', content_type: 'image/png'),
-    panoramic_image: Refile::FileDouble.new('dummy_panoramic_image', 'image.png', content_type: 'image/png'),
-    token: Token.last,
-    mission: Mission.last,
+    image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
     account: Account.last
   )
 end
