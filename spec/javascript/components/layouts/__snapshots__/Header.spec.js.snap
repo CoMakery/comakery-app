@@ -8,11 +8,15 @@ exports[`Header renders correctly without props 1`] = `
     <div
       className="header--logo"
     >
-      <Icon
-        className=""
-        name="Logo-Header.svg"
-        width="200px"
-      />
+      <a
+        href="/"
+      >
+        <Icon
+          className=""
+          name="Logo-Header.svg"
+          width="200px"
+        />
+      </a>
     </div>
     <div
       className="header--nav"

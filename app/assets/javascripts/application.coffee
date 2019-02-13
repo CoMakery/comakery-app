@@ -13,7 +13,6 @@
 # = require jquery
 # = require jquery-ui
 # = require d3
-# = require d3pie
 # = require foundation
 # = require moment
 # = require underscore

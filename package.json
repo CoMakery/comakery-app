@@ -20,6 +20,7 @@
     "cardano-crypto.js": "^5.0.0",
     "classnames": "^2.2.6",
     "coffeescript": "1.12.7",
+    "d3": "^5.9.1",
     "d3pie": "^0.1.9",
     "eosjs": "^16.0.9",
     "formdata-polyfill": "^3.0.13",
