@@ -4,7 +4,7 @@ import Header from 'components/layouts/Header'
 
 describe('Header', () => {
   it('renders correctly without props', () => {
-    const wrapper = shallow(<Header />)
+    const wrapper = shallow(<Header isLoggedIn currentPath="/featured" />)
 
     expect(wrapper).toMatchSnapshot()
     expect(wrapper.exists('.header')).toBe(true)

@@ -1,7 +1,8 @@
 require 'zip'
 class AccountsController < ApplicationController
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
-  skip_before_action :require_email_confirmation, only: %i[new create show update download_data confirm confirm_authentication]
+  skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
+  skip_before_action :require_build_profile, only: %i[build_profile update_profile]
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm confirm_authentication show download_data]
 
   before_action :redirect_if_signed_in, only: %i[new create]
@@ -38,7 +39,7 @@ class AccountsController < ApplicationController
     @account = Account.new account_params
     @account.email_confirm_token = SecureRandom.hex
     @account.password_required = true
-    @account.name_required = true
+    @account.name_required = false
     @account.agreement_required = true
     @account.agreed_to_user_agreement = if params[:account][:agreed_to_user_agreement] == '0'
       nil
@@ -48,10 +49,29 @@ class AccountsController < ApplicationController
     if @account.save
       session[:account_id] = @account.id
       UserMailer.confirm_email(@account).deliver
-      redirect_to root_path
+      redirect_to build_profile_accounts_path
     else
       @account.agreed_to_user_agreement = params[:account][:agreed_to_user_agreement]
       render :new
+    end
+  end
+
+  def build_profile
+    redirect_to root_path if current_account.blank?
+    @account = current_account
+    authorize @account
+  end
+
+  def update_profile
+    @account = current_account
+    authorize @account
+
+    if @account.update(account_params.merge(name_required: true))
+      redirect_to root_path, notice: 'Thank you for signing up. Now, let us know what projects you are interested in.'
+    else
+      error_msg = @account.errors.full_messages.join(', ')
+      flash[:error] = error_msg
+      render :build_profile
     end
   end
 
@@ -133,7 +153,7 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :cardano_wallet, :bitcoin_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password)
+    result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :cardano_wallet, :bitcoin_wallet, :eos_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password, :specialty, :occupation, :linkedin_url, :github_url, :dribble_url, :behance_url)
     result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y') if result[:date_of_birth].present?
     result
   end
@@ -153,11 +173,12 @@ class AccountsController < ApplicationController
   end
 
   def account_decorate(account)
-    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet cardano_wallet bitcoin_wallet]).merge(
+    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet]).merge(
       etherscan_address: account.decorate.etherscan_address,
       qtum_address: account.decorate.qtum_wallet_url,
       cardano_address: account.decorate.cardano_wallet_url,
       bitcoin_address: account.decorate.bitcoin_wallet_url,
+      eos_address: account.decorate.eos_wallet_url,
       image_url: account.image.present? ? Refile.attachment_url(account, :image, :fill, 190, 190) : nil
     )
   end

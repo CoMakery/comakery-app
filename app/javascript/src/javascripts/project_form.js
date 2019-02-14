@@ -2,6 +2,7 @@ const customBlockchainNetwork = function(coinType) {
   const $ = require('jquery')
   let prefix = ''
   switch (coinType) {
+    case 'qtum':
     case 'qrc20':
       prefix = 'qtum_'
       break
@@ -10,6 +11,9 @@ const customBlockchainNetwork = function(coinType) {
       break
     case 'btc':
       prefix = 'bitcoin_'
+      break
+    case 'eos':
+      prefix = 'eos_'
       break
     default:
   }

@@ -226,5 +226,6 @@ const qrc20TokenABI = [
     'name': 'Transfer',
     'type': 'event',
   },
-];
+]
 
+module.exports = qrc20TokenABI

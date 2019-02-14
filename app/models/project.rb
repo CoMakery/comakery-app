@@ -10,6 +10,8 @@ class Project < ApplicationRecord
   belongs_to :account
   belongs_to :mission
   belongs_to :token
+  has_many :accounts_interested, through: :interests, source: :account
+
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards

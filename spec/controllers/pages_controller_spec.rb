@@ -31,7 +31,7 @@ RSpec.describe PagesController, type: :controller do
     account = create :account
     login account
     get :landing
-    expect(response).to render_template 'pages/home'
+    expect(response).to redirect_to action: :featured
   end
 
   it 'access featured page' do
@@ -41,54 +41,14 @@ RSpec.describe PagesController, type: :controller do
     expect(response).to redirect_to action: :featured
   end
 
-  it 'sets paperform id correctly in default environment' do
-    account = create :account
-    login account
-    get :landing
-    expect(assigns[:paperform_id]).to eq('homepage')
-  end
-
-  it 'sets paperform id correctly in demo environment' do
-    account = create :account
-    login account
-    ENV['APP_NAME'] = 'demo'
-    get :landing
-    ENV['APP_NAME'] = ''
-    expect(assigns[:paperform_id]).to eq('demo-homepage')
-  end
-
-  it 'sets paperform id correctly in staging environment' do
-    account = create :account
-    login account
-    ENV['APP_NAME'] = 'staging'
-    get :landing
-    ENV['APP_NAME'] = ''
-    expect(assigns[:paperform_id]).to eq('0f2g0j1q')
-  end
-
-  it 'access featured page - set contributor form' do
-    account = create :account
-    login account
-    get :featured
-    expect(account.reload.finished_contributor_form?).to be_truthy
-  end
-
-  it 'access featured page - disable interested button' do
-    account = create :account
-    stub_airtable
-    account.interests.create(project: 'Market Research', protocol: 'Holo')
-    login account
-    get :featured
-    expect(account.reload.finished_contributor_form?).to be_truthy
-  end
-
   it 'create interest' do
     account = create :account
+    project = create :project
     login account
     stub_airtable
-    post :add_interest, params: { project: 'Promotion', protocol: 'Vevue', format: :json }
+    post :add_interest, params: { project_id: project.id, protocol: 'Vevue', format: :json }
     interest = assigns['interest']
-    expect(interest.project).to eq 'Promotion'
+    expect(interest.project).to eq project
     expect(interest.protocol).to eq 'Vevue'
   end
 

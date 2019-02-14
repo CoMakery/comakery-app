@@ -307,6 +307,32 @@ describe AwardsController do
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your Bitcoin Adress')).to be_truthy
       end
     end
+
+    context 'on EOS network' do
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'eos') }
+      let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
+
+      it 'add award to account' do
+        account = receiver.account
+        account.update ethereum_wallet: '0x' + 'a' * 40, eos_wallet: 'aaatestnet11'
+        login receiver.account
+        get :confirm, params: { token: 61234 }
+        expect(response).to redirect_to(project_path(award2.project))
+        expect(award2.reload.account_id).to eq receiver.account_id
+
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS address is')).to be_truthy
+      end
+
+      it 'add award to account. notice about update EOS wallet address' do
+        account = receiver.account
+        account.update ethereum_wallet: '0x' + 'a' * 40, eos_wallet: nil
+        login receiver.account
+        get :confirm, params: { token: 61234 }
+        expect(response).to redirect_to(project_path(award2.project))
+        expect(award2.reload.account_id).to eq receiver.account_id
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Be sure to enter your EOS Adress')).to be_truthy
+      end
+    end
   end
 
   describe '#update_transaction_address' do

@@ -21,23 +21,59 @@ exports[`Header renders correctly without props 1`] = `
         className="header--nav--links"
       >
         <a
-          href="mailto:support@comakery.com"
+          className="header--nav--links--current"
+          href="/"
         >
-          Contact Us
+          Home
         </a>
         <a
           className={null}
-          href="/session/new"
+          href="/projects/mine"
         >
-          Sign In
+          My Projects
+        </a>
+        <a
+          href="/"
+          style={
+            Object {
+              "display": "none",
+            }
+          }
+        >
+          My Tasks
         </a>
         <a
           className={null}
-          href="/accounts/new"
+          href="/account"
         >
-          Sign Up
+          My Account
+        </a>
+        <a
+          className="header--nav--links--sign"
+          data-method="delete"
+          href="/session"
+          rel="nofollow"
+        >
+          Sign out
         </a>
       </div>
+    </div>
+  </div>
+  <div
+    className="header-mobile"
+  >
+    <Icon
+      className=""
+      name="Logo-Header.svg"
+      width="162px"
+    />
+    <div
+      className="header-mobile__menu-icon"
+      onClick={[Function]}
+    >
+      <span
+        className=""
+      />
     </div>
   </div>
 </Fragment>

@@ -23,4 +23,6 @@ class AccountPolicy < ApplicationPolicy
   end
   alias update? edit?
   alias show? edit?
+  alias build_profile? edit?
+  alias update_profile? edit?
 end

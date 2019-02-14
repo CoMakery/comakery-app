@@ -2,6 +2,7 @@ class SessionsController < ApplicationController
   skip_before_action :require_login, :check_age
   skip_before_action :require_email_confirmation, only: %i[destroy]
   skip_after_action :verify_authorized, :verify_policy_scoped
+  skip_before_action :require_build_profile
 
   before_action :redirect_if_signed_in, only: %i[create sign_in new]
 
@@ -68,15 +69,9 @@ class SessionsController < ApplicationController
 
   def process_new_award_notice
     project = current_account.awards.last&.project
-    if project&.coin_type_on_ethereum?
-      process_new_ethereum_award_notice
-    elsif project&.coin_type_on_qtum?
-      process_new_qtum_award_notice
-    elsif project&.coin_type_on_cardano?
-      process_new_cardano_award_notice
-    elsif project&.coin_type_on_bitcoin?
-      process_new_bitcoin_award_notice
-    end
+    return nil unless project.coin_type?
+    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    send("process_new_#{blockchain_name}_award_notice")
   end
 
   def process_new_ethereum_award_notice
@@ -111,6 +106,15 @@ class SessionsController < ApplicationController
       flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Bitcoin Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
     else
       flash[:notice] = "Congratulations, you just claimed your award! Your Bitcoin address is #{view_context.link_to current_account.bitcoin_wallet, current_account.decorate.bitcoin_wallet_url} you can change your Bitcoin address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Bitcoin tokens."
+      current_account.update new_award_notice: false
+    end
+  end
+
+  def process_new_eos_award_notice
+    if current_account.eos_wallet.blank?
+      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your EOS Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    else
+      flash[:notice] = "Congratulations, you just claimed your award! Your EOS address is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
       current_account.update new_award_notice: false
     end
   end
