@@ -54,7 +54,7 @@ class PagesController < ApplicationController
     mission.as_json(only: %i[id name]).merge(
       image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 231, 231) : nil,
       symbol: mission.token&.symbol,
-      projects_count: mission.projects.count
+      projects_count: mission.projects.public_listed.active.count
     )
   end
 end
