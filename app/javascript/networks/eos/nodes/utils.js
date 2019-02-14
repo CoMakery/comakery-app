@@ -3,7 +3,7 @@ import ScatterJS from 'scatterjs-core'
 const testNet = ScatterJS.Network.fromJson({
   blockchain: 'eos',
   chainId   : 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473',
-  host      : 'jungle2.cryptolions.io',
+  host      : 'api.jungle.alohaeos.com',
   port      : 443,
   protocol  : 'https'
 })
