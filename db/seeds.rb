@@ -25,7 +25,8 @@ if Rails.env == 'development'
     decimal_places: 8,
     ethereum_network: 'ropsten',
     ethereum_contract_address: '0x' + 'a' * 40,
-    coin_type: 'erc20'
+    coin_type: 'erc20',
+    logo_image: Refile::FileDouble.new('dummy_logo_image', 'logo_image.png', content_type: 'image/png')
   )
 
   Mission.create(
@@ -48,7 +49,10 @@ if Rails.env == 'development'
     visibility: 'member',
     long_id: SecureRandom.hex(20),
     maximum_tokens: 10_000_000,
-    image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+    square_image: Refile::FileDouble.new('dummy_square_image', 'image.png', content_type: 'image/png'),
+    panoramic_image: Refile::FileDouble.new('dummy_panoramic_image', 'image.png', content_type: 'image/png'),
+    token: Token.last,
+    mission: Mission.last,
     account: Account.last
   )
 end

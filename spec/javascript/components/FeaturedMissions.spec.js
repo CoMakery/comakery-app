@@ -30,7 +30,6 @@ describe('FeaturedMissions', () => {
         name       : 'Mission 1',
         description: 'Description 1',
         imageUrl   : '/logo.png',
-        symbol     : 'BTC',
         projects   : [
           { id: 1, title: 'Project 1', interested: true },
           { id: 2, title: 'Project 2', interested: false }
@@ -41,7 +40,6 @@ describe('FeaturedMissions', () => {
         name       : 'Mission 2',
         description: 'Description 2',
         imageUrl   : '/logo.png',
-        symbol     : 'BTC',
         projects   : [
           { id: 3, title: 'Project 3', interested: true },
           { id: 4, title: 'Project 4', interested: false }
@@ -53,28 +51,24 @@ describe('FeaturedMissions', () => {
         id           : 3,
         name         : 'Mission 3',
         imageUrl     : '/logo.png',
-        symbol       : 'BTC',
         projectsCount: 3
       },
       {
         id           : 4,
         name         : 'Mission 4',
         imageUrl     : '/logo.png',
-        symbol       : 'BTC',
         projectsCount: 2
       },
       {
         id           : 5,
         name         : 'Mission 5',
         imageUrl     : '/logo.png',
-        symbol       : 'BTC',
         projectsCount: 3
       },
       {
         id           : 6,
         name         : 'Mission 6',
         imageUrl     : '/logo.png',
-        symbol       : 'BTC',
         projectsCount: 2
       }
     ]

@@ -36,8 +36,8 @@ class ProjectsController < ApplicationController
 
   def new
     assign_slack_channels
-    
-		@project = current_account.projects.build
+
+    @project = current_account.projects.build
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
 
