@@ -57,6 +57,12 @@ IntercomRails.config do |config|
   #   :favorite_color => :favorite_color
   # }
 
+  config.user.custom_data = {
+    :skill => Proc.new { |user| user.specialty },
+    :full_name => Proc.new { |user| "#{user.first_name} #{user.last_name}" },
+    :occupation => Proc.new { |user| user.occupation }
+  }
+
   # == Current company method/variable
   # The method/variable that contains the current company for the current user,
   # in your controllers. 'Companies' are generic groupings of users, so this

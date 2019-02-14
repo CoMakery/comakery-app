@@ -75,7 +75,23 @@
         prerender: true
       }
     )%>
-    <%= yield %>
+    <div class="react-container">
+      <% 
+        if flash[:notice].present?
+          msg = flash[:notice]
+          msg_type = "notice"
+        elsif flash[:error].present? 
+          msg = flash[:error]
+          msg_type = "error"
+        end
+
+        flash.clear
+      %>
+      <% if msg.present? %>
+        <%= react_component 'layouts/Flash', { flashType: msg_type, message: msg } %>
+      <% end %>
+      <%= yield %>
+    </div>
     <%= react_component(
       'layouts/Footer',
       {
