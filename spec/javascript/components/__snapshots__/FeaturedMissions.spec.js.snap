@@ -100,21 +100,18 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
               Object {
                 "breakpoint": 1440,
                 "settings": Object {
-                  "slidesToScroll": 1,
                   "slidesToShow": 0,
                 },
               },
               Object {
                 "breakpoint": 800,
                 "settings": Object {
-                  "slidesToScroll": 1,
                   "slidesToShow": 0,
                 },
               },
               Object {
                 "breakpoint": 650,
                 "settings": Object {
-                  "slidesToScroll": 1,
                   "slidesToShow": 1,
                 },
               },
@@ -161,21 +158,18 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
                 Object {
                   "breakpoint": 1440,
                   "settings": Object {
-                    "slidesToScroll": 1,
                     "slidesToShow": 0,
                   },
                 },
                 Object {
                   "breakpoint": 800,
                   "settings": Object {
-                    "slidesToScroll": 1,
                     "slidesToShow": 0,
                   },
                 },
                 Object {
                   "breakpoint": 650,
                   "settings": Object {
-                    "slidesToScroll": 1,
                     "slidesToShow": 1,
                   },
                 },
