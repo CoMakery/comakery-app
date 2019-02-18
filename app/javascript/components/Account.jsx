@@ -205,6 +205,7 @@ export default class Account extends React.Component {
               </div>
               <div className={`columns small-9 ${this.state.errors.specialty ? 'error' : ''}`}>
                 <select name="specialty" value={this.state.specialty || ''} onChange={this.handleChangeAccountFormData}>
+                  <option value="">Please Select One</option>
                   {this.props.specialtyList.map(specialty =>
                     <option key={specialty[0]} value={specialty[1]}>
                       {specialty[0]}

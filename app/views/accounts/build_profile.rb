@@ -66,8 +66,8 @@ class Views::Accounts::BuildProfile < Views::Base
             column('large-12') do
               with_errors(account, :specialty) do
                 label do
-                  text 'What Is Your Specialty?'
-                  f.select :specialty, (Account.specialties.map { |key, value| [value, key] })
+                  text 'What Is Your Specialty? *'
+                  f.select :specialty, Account.specialties.map { |key, value| [value, key] }, include_blank: 'Please Select One'
                 end
               end
             end

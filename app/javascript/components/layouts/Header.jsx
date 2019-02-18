@@ -109,7 +109,7 @@ class Header extends React.Component {
               <div className="header-mobile__menu__sign">
                 {isLoggedIn &&
                   <a rel="nofollow" href="/session" data-method="delete">
-                    LOGOUT
+                    Sign out
                   </a>
                 }
                 {!isLoggedIn &&
