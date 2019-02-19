@@ -38,7 +38,7 @@ class Account < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
-  validates :first_name, :last_name, :country, :date_of_birth, presence: true, if: :name_required
+  validates :first_name, :last_name, :country, :date_of_birth, :specialty, presence: true, if: :name_required
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
@@ -185,10 +185,6 @@ class Account < ApplicationRecord
 
   def interested?(project_id)
     projects_interested.exists? project_id
-  end
-
-  def finished_contributor_form?
-    contributor_form == true
   end
 
   def finished_build_profile? # check if all of the required fields are filled

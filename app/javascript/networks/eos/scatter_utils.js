@@ -39,14 +39,14 @@ const transferEosCoins = async function(award) { // award in JSON
 // amount in EOS
 // network: 'mainnet' or 'testnet'
 const submitTransaction = async function(network, to, amount, memo = 'CoMakery') {
-  const networkObj = network === 'mainnet' ? EosUtils.mainNet : EosUtils.testNet
-  const connected = await ScatterJS.connect('ComakeryAppName', {networkObj})
+  network = (network === 'mainnet') ? EosUtils.mainNet : EosUtils.testNet
+  const connected = await ScatterJS.connect('ComakeryAppName', {network})
   if (!connected) return
   if (!await ScatterJS.login()) return
   console.log('Signed in successfully')
   const account = ScatterJS.account('eos')
   debugLog(account)
-  const eos = ScatterJS.eos(networkObj, Eos)
+  const eos = ScatterJS.eos(network, Eos)
   debugLog(eos)
   debugLog(`recipientAddress: ${to}`)
   const rs = await eos.transfer(account.name, to, `${amount.toFixed(4)} EOS`, memo)

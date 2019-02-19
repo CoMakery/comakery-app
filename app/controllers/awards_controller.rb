@@ -139,7 +139,7 @@ class AwardsController < ApplicationController
 
   def confirm_message_for_eos_award
     if current_account.eos_wallet.present?
-      "Congratulations, you just claimed your award! Your EOS address is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
+      "Congratulations, you just claimed your award! Your EOS account name is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS account name on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
     else
       "Congratulations, you just claimed your award! Be sure to enter your EOS Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
     end

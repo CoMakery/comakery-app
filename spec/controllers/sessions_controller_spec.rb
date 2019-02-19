@@ -218,7 +218,7 @@ describe SessionsController do
         account.update new_award_notice: true
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your EOS Address on your <a href="/account">account page</a> to receive your tokens.'
+        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your EOS account name on your <a href="/account">account page</a> to receive your tokens.'
         expect(response).to redirect_to root_path
       end
 
@@ -226,7 +226,7 @@ describe SessionsController do
         account.update new_award_notice: true, eos_wallet: 'aaatestnet11'
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS address is')).to eq true
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS account name is')).to eq true
         expect(response).to redirect_to root_path
       end
     end

@@ -20,6 +20,9 @@ const config = {
     'Utils'      : true,
     'window'     : false,
   },
+  plugins: [
+    'react-hooks'
+  ],
   rules: {
     'complexity'                 : [ERR, { 'max': 27 }],
     'jsx-quotes'                 : [ERR, 'prefer-double'],
@@ -30,6 +33,7 @@ const config = {
     'promise/always-return'      : OFF,
     'promise/catch-or-return'    : OFF,
     'react/prop-types'           : OFF,
+    'react-hooks/rules-of-hooks' : ERR,
     'space-before-function-paren': [ERR, 'never'],
   },
 }

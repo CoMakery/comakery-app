@@ -6,7 +6,7 @@ describe 'my account', js: true do
   let!(:confirmed_account) { create :account, nickname: 'jason', email_confirm_token: nil }
   let!(:token) { create :token }
   let!(:mission) { create :mission, token_id: token.id }
-  let!(:project) { create :project, mission_id: mission.id }
+  let!(:project) { create :project, mission_id: mission.id, visibility: 'public_listed' }
 
   scenario 'user gets redirected to build profile page after signup' do
     visit root_path
@@ -26,6 +26,16 @@ describe 'my account', js: true do
     login(confirmed_account)
     visit build_profile_accounts_path
     expect(page).to have_content('E-mail: *')
+  end
+
+  scenario 'Sign up flow with metamask' do
+    metamask_account = Account.new(email: nil, public_address: '0xtest_address', nonce: 'test_nonce')
+    metamask_account.save(validate: false)
+    login(metamask_account)
+    visit build_profile_accounts_path
+    expect(page).not_to have_content("can't be blank")
+    click_on 'SAVE YOUR PROFILE'
+    expect(page).to have_content("Email can't be blank, Email is invalid")
   end
 
   scenario 'featured page is available after signup' do

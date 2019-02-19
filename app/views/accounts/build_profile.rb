@@ -1,5 +1,5 @@
 class Views::Accounts::BuildProfile < Views::Base
-  needs :account
+  needs :account, :skip_validation
 
   def content
     row do
@@ -10,10 +10,17 @@ class Views::Accounts::BuildProfile < Views::Base
           row do
             if account.email.blank?
               column('large-12') do
-                with_errors(account, :email) do
+                if skip_validation
                   label do
                     text 'E-mail: *'
                     f.email_field :email
+                  end
+                else
+                  with_errors(account, :email) do
+                    label do
+                      text 'E-mail: *'
+                      f.email_field :email
+                    end
                   end
                 end
               end
@@ -59,8 +66,8 @@ class Views::Accounts::BuildProfile < Views::Base
             column('large-12') do
               with_errors(account, :specialty) do
                 label do
-                  text 'What Is Your Specialty?'
-                  f.select :specialty, (Account.specialties.map { |key, value| [value, key] })
+                  text 'What Is Your Specialty? *'
+                  f.select :specialty, Account.specialties.map { |key, value| [value, key] }, include_blank: 'Please Select One'
                 end
               end
             end

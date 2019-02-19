@@ -95,33 +95,31 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
         </p>
         <Slider
           className="featured-missions__gallery"
+          lazyLoad={true}
           responsive={
             Array [
               Object {
                 "breakpoint": 1440,
                 "settings": Object {
-                  "slidesToScroll": 1,
-                  "slidesToShow": 3,
+                  "slidesToShow": 0,
                 },
               },
               Object {
                 "breakpoint": 800,
                 "settings": Object {
-                  "slidesToScroll": 1,
-                  "slidesToShow": 2,
+                  "slidesToShow": 0,
                 },
               },
               Object {
                 "breakpoint": 650,
                 "settings": Object {
-                  "slidesToScroll": 1,
                   "slidesToShow": 1,
                 },
               },
             ]
           }
           slidesToScroll={1}
-          slidesToShow={4}
+          slidesToShow={0}
         >
           <InnerSlider
             accessibility={true}
@@ -146,7 +144,7 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
             focusOnSelect={false}
             infinite={true}
             initialSlide={0}
-            lazyLoad={null}
+            lazyLoad={true}
             nextArrow={null}
             onEdge={null}
             onInit={null}
@@ -161,21 +159,18 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
                 Object {
                   "breakpoint": 1440,
                   "settings": Object {
-                    "slidesToScroll": 1,
-                    "slidesToShow": 3,
+                    "slidesToShow": 0,
                   },
                 },
                 Object {
                   "breakpoint": 800,
                   "settings": Object {
-                    "slidesToScroll": 1,
-                    "slidesToShow": 2,
+                    "slidesToShow": 0,
                   },
                 },
                 Object {
                   "breakpoint": 650,
                   "settings": Object {
-                    "slidesToScroll": 1,
                     "slidesToShow": 1,
                   },
                 },
@@ -186,7 +181,7 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
             slide="div"
             slidesPerRow={1}
             slidesToScroll={1}
-            slidesToShow={4}
+            slidesToShow={0}
             speed={500}
             swipe={true}
             swipeEvent={null}
@@ -214,7 +209,7 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
                   fade={false}
                   focusOnSelect={null}
                   infinite={true}
-                  lazyLoad={null}
+                  lazyLoad={true}
                   lazyLoadedList={Array []}
                   listHeight={0}
                   onMouseEnter={[Function]}
@@ -223,9 +218,9 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
                   rtl={false}
                   slideCount={0}
                   slideHeight={0}
-                  slideWidth={0}
+                  slideWidth={NaN}
                   slidesToScroll={1}
-                  slidesToShow={4}
+                  slidesToShow={0}
                   speed={500}
                   trackStyle={
                     Object {

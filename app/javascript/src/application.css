@@ -44,7 +44,12 @@ hr {
   margin-bottom: 0px;
 }
 
+.react-container {
+  position: relative;
+}
+
 .header {
+  z-index: 1;
   min-height: 90px;
   box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
   background-color: #ffffff;
@@ -271,7 +276,7 @@ a.header--nav--links--current {
 
 .layout--back-button {
   position: absolute;
-  top: 113px;
+  top: 20px;
   left: 20px;
   cursor: pointer;
 }
@@ -2090,4 +2095,82 @@ input[type="submit"].button:disabled {
     width: 22px;
     height: 22px;
   }
+}
+
+.flash-message {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  width: 550px;
+  padding: 10px 40px 10px 10px;
+  border: solid 3px var(--primary-purple);
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.5);
+  background-color: #ffffff;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--black);
+}
+
+.flash-message--notice {
+  border: solid 3px #41d462;
+}
+
+.flash-message--error {
+  border: solid 3px #d0021b;
+}
+
+.flash-message__icon {
+  width: 25px;
+  height: 25px;
+  margin-right: 15px;
+}
+
+.flash-message__text {
+  width: 100%;
+  text-align: justify;
+  word-break: break-all;
+}
+
+@media screen and (max-width: 1024px) {
+  .flash-message {
+    width: 350px;
+    font-size: 12px;
+    border-width: 2px;
+  }
+
+  .flash-message__icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .flash-message {
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    width: calc(100% - 30px);
+  }
+
+  .flash-message__icon {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.flash-message__icon--close {
+  position: absolute;
+  right: 10px;
+  margin-right: 0;
+  cursor: pointer;
 }

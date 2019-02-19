@@ -2,7 +2,7 @@ require 'zip'
 class AccountsController < ApplicationController
   skip_before_action :require_login, only: %i[new create confirm confirm_authentication]
   skip_before_action :require_email_confirmation, only: %i[new create build_profile update_profile show update download_data confirm confirm_authentication]
-  skip_before_action :require_build_profile, only: %i[build_profile update_profile]
+  skip_before_action :require_build_profile, only: %i[build_profile update_profile confirm]
   skip_after_action :verify_authorized, :verify_policy_scoped, only: %i[new create confirm confirm_authentication show download_data]
 
   before_action :redirect_if_signed_in, only: %i[new create]
@@ -59,6 +59,7 @@ class AccountsController < ApplicationController
   def build_profile
     redirect_to root_path if current_account.blank?
     @account = current_account
+    @skip_validation = true # for the first time, don't show error message for metamask user's email field
     authorize @account
   end
 
@@ -71,6 +72,7 @@ class AccountsController < ApplicationController
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
+      @skip_validation = false
       render :build_profile
     end
   end

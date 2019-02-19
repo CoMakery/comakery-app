@@ -320,7 +320,7 @@ describe AwardsController do
         expect(response).to redirect_to(project_path(award2.project))
         expect(award2.reload.account_id).to eq receiver.account_id
 
-        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS address is')).to be_truthy
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS account name is')).to be_truthy
       end
 
       it 'add award to account. notice about update EOS wallet address' do

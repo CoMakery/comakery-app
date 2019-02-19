@@ -88,7 +88,7 @@ class MissionsController < ApplicationController
   def set_missions_prop
     @missions = policy_scope(Mission).map do |m|
       m.serialize.merge(
-        projects: m.projects.as_json(only: %i[id title status])
+        projects: m.projects.public_listed.as_json(only: %i[id title status])
       )
     end
   end

@@ -83,7 +83,9 @@ class Header extends React.Component {
       <React.Fragment>
         <div className={classnames} {...other}>
           <div className="header--logo">
-            <Icon name="Logo-Header.svg" width="200px" />
+            <a href="/">
+              <Icon name="Logo-Header.svg" width="200px" />
+            </a>
           </div>
 
           <div className="header--nav">
@@ -107,7 +109,7 @@ class Header extends React.Component {
               <div className="header-mobile__menu__sign">
                 {isLoggedIn &&
                   <a rel="nofollow" href="/session" data-method="delete">
-                    LOGOUT
+                    Sign out
                   </a>
                 }
                 {!isLoggedIn &&

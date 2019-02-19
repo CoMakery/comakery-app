@@ -205,6 +205,7 @@ export default class Account extends React.Component {
               </div>
               <div className={`columns small-9 ${this.state.errors.specialty ? 'error' : ''}`}>
                 <select name="specialty" value={this.state.specialty || ''} onChange={this.handleChangeAccountFormData}>
+                  <option value="">Please Select One</option>
                   {this.props.specialtyList.map(specialty =>
                     <option key={specialty[0]} value={specialty[1]}>
                       {specialty[0]}
@@ -234,7 +235,7 @@ export default class Account extends React.Component {
 
               <FormField fieldLabel="Bitcoin Address" fieldName="bitcoinWallet" fieldValue={this.state.bitcoinWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.bitcoinWallet} />
 
-              <FormField fieldLabel="EOS Address" fieldName="eosWallet" fieldValue={this.state.eosWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.eosWallet} />
+              <FormField fieldLabel="EOS Account Name" fieldName="eosWallet" fieldValue={this.state.eosWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.eosWallet} />
 
               <div className="columns small-3">
                 <label>Image</label>
@@ -333,7 +334,7 @@ export default class Account extends React.Component {
 
             <div className="row">
               <div className="columns medium-3" style={{ marginTop: 8 }}>
-                EOS Address
+                EOS Account Name
               </div>
               <div className="columns medium-9">
                 {this.state.accountData.eosWallet && <React.Fragment>

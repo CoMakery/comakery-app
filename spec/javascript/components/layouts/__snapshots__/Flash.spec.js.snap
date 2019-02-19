@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Flash renders correctly without props 1`] = `
+<Fragment>
+  <div
+    className="flash-message flash-message--notice"
+  >
+    <Icon
+      className="flash-message__icon"
+      name="flash/notice.svg"
+    />
+    <p
+      className="flash-message__text"
+    />
+    <Icon
+      className="flash-message__icon flash-message__icon--close"
+      name="flash/close.svg"
+      onClick={[Function]}
+    />
+  </div>
+</Fragment>
+`;

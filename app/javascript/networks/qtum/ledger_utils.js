@@ -63,6 +63,15 @@ const submitTransaction = async function(network, to, amount, fee) {
     wallet.extend.ledger.path += '/' + item.path
   })
   debugLog(wallet)
+  const fromAddress = wallet.info.address
+  const info = await server.currentNode().getInfo(fromAddress)
+  if (amount + fee >= info.balance) {
+    const sub = network === 'mainnet' ? 'explorer' : 'testnet'
+    const link = `https://${sub}.qtum.org/address/${fromAddress}`
+    const e = new Error(`Account <a href='${link}' target='_blank'>${fromAddress}</a> <br> You don't have sufficient Tokens to send`)
+    e.name = 'ErrorMessage'
+    throw e
+  }
   const serializedTx = await wallet.generateTx(to, amount, fee)
   if (serializedTx) {
     const txId = await server.currentNode().sendRawTx(serializedTx)

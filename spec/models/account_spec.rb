@@ -62,7 +62,7 @@ describe Account do
       expect(account.tap { |a| a.update(bitcoin_wallet: '2N3g7srauQ8HYCEXrTMiMkm43Hx9pSopmHU') }).to be_valid
     end
 
-    it 'requires #eos_wallet to be a valid EOS address' do
+    it 'requires #eos_wallet to be a valid EOS account name' do
       expect(account.eos_wallet).to be_blank
       expect(account).to be_valid
       error_message = 'Eos wallet a-z,1-5 are allowed only, the length is 12 characters'
