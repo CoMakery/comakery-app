@@ -35,26 +35,24 @@ export default class FeaturedMissions extends React.Component {
     const settings = {
       slidesToShow  : Math.min(4, moreMissionsCount),
       slidesToScroll: 1,
+      lazyLoad      : true,
       responsive    : [
         {
           breakpoint: 1440,
           settings  : {
-            slidesToShow  : Math.min(3, moreMissionsCount),
-            slidesToScroll: 1,
+            slidesToShow: Math.min(3, moreMissionsCount)
           }
         },
         {
           breakpoint: 800,
           settings  : {
-            slidesToShow  : Math.min(2, moreMissionsCount),
-            slidesToScroll: 1,
+            slidesToShow: Math.min(2, moreMissionsCount)
           }
         },
         {
           breakpoint: 650,
           settings  : {
-            slidesToShow  : 1,
-            slidesToScroll: 1
+            slidesToShow: 1
           }
         }
       ]

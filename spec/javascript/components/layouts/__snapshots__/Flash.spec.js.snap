@@ -9,6 +9,9 @@ exports[`Flash renders correctly without props 1`] = `
       className="flash-message__icon"
       name="flash/notice.svg"
     />
+    <p
+      className="flash-message__text"
+    />
     <Icon
       className="flash-message__icon flash-message__icon--close"
       name="flash/close.svg"
