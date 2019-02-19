@@ -95,6 +95,7 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
         </p>
         <Slider
           className="featured-missions__gallery"
+          lazyLoad={true}
           responsive={
             Array [
               Object {
@@ -143,7 +144,7 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
             focusOnSelect={false}
             infinite={true}
             initialSlide={0}
-            lazyLoad={null}
+            lazyLoad={true}
             nextArrow={null}
             onEdge={null}
             onInit={null}
@@ -208,7 +209,7 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
                   fade={false}
                   focusOnSelect={null}
                   infinite={true}
-                  lazyLoad={null}
+                  lazyLoad={true}
                   lazyLoadedList={Array []}
                   listHeight={0}
                   onMouseEnter={[Function]}

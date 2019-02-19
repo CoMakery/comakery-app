@@ -10,8 +10,6 @@ class PagesController < ApplicationController
   end
 
   def featured
-    flash[:notice] = "Congratulations, you just claimed your award! Your Ethereum address is #{view_context.link_to current_account.ethereum_wallet, current_account.decorate.etherscan_address} you can change your Ethereum address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Ethereum tokens."
-    # flash[:notice] = "Thank you"
     top_missions = Mission.active.first(4)
     more_missions = Mission.active.offset(4)
 
