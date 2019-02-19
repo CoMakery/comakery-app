@@ -11,7 +11,7 @@ describe 'preview award', js: true do
   context 'on ethereum network' do
     let!(:project) do
       stub_token_symbol
-      create(:project, title: 'Project that needs awards', account: account, revenue_sharing_end_date: Time.zone.now + 3.days, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token: create(:token, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, ethereum_network: 'ropsten', coin_type: 'erc20'))
+      create(:project, title: 'Project that needs awards', account: account, revenue_sharing_end_date: Time.zone.now + 3.days, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token: create(:token, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, ethereum_network: 'ropsten', coin_type: 'erc20', symbol: 'FCBB'))
     end
 
     before do
@@ -106,7 +106,7 @@ describe 'preview award', js: true do
 
   context 'on eos network' do
     let!(:project) do
-      create(:project, title: 'Project that needs awards', account: account, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token: create(:token, ethereum_enabled: true, contract_address: '2' * 40, symbol: 'BIG', decimal_places: 8, blockchain_network: 'eos_testnet', coin_type: 'eos'))
+      create(:project, title: 'Project that needs awards', account: account, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token: create(:token, ethereum_enabled: true, contract_address: '2' * 40, decimal_places: 8, blockchain_network: 'eos_testnet', coin_type: 'eos'))
     end
 
     before do

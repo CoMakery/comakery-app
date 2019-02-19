@@ -227,7 +227,8 @@ describe 'when redeeming revenue shares for payments' do
           payment_type: 'revenue_share',
           account: owner,
           require_confidentiality: false,
-          denomination: 'BTC')
+          token: create(:token,
+            denomination: 'BTC'))
       end
 
       specify do
@@ -271,7 +272,8 @@ describe 'when redeeming revenue shares for payments' do
           payment_type: 'revenue_share',
           account: owner,
           require_confidentiality: false,
-          denomination: 'ETH')
+          token: create(:token,
+            denomination: 'ETH'))
       end
 
       specify do

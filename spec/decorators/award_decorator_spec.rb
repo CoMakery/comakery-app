@@ -135,13 +135,13 @@ describe AwardDecorator do
   context 'json_for_sending_awards' do
     let!(:recipient) { create :account, id: 529, first_name: 'Account', last_name: 'ABC', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec488' }
     let!(:issuer) { create :account, first_name: 'johnny', last_name: 'johnny', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec453' }
-    let!(:project) { create :project, id: 512, account: issuer, token: create(:token, id: 65, coin_type: 'erc20') }
+    let!(:project) { create :project, id: 512, account: issuer, token: create(:token, coin_type: 'erc20') }
     let!(:award_type) { create :award_type, project: project }
     let!(:award) { create :award, id: 521, award_type: award_type, issuer: issuer, account: recipient }
 
     it 'valid' do
       award.project.token.ethereum_contract_address = '0x8023214bf21b1467be550d9b889eca672355c005'
-      expected = %({"id":521,"total_amount":"1337.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":1337,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null,"eos_wallet":null},"token":{"id":65,"coin_type":"erc20","ethereum_network":null,"blockchain_network":null,"contract_address":null,"ethereum_contract_address":null}})
+      expected = %({"id":521,"total_amount":"1337.0","issuer_address":"0xD8655aFe58B540D8372faaFe48441AeEc3bec453","amount_to_send":1337,"recipient_display_name":"Account ABC","account":{"id":529,"ethereum_wallet":"0xD8655aFe58B540D8372faaFe48441AeEc3bec488","qtum_wallet":null,"cardano_wallet":null,"bitcoin_wallet":null,"eos_wallet":null},"project":{"id":512},"token":{"id":#{project.token.id},"coin_type":"erc20","ethereum_network":null,"blockchain_network":null,"contract_address":null,"ethereum_contract_address":null}})
       expect(award.decorate.json_for_sending_awards).to eq(expected)
     end
 

@@ -84,3 +84,6 @@ Style/NumericLiterals:
 # Don't turn this on, it's overzealous
 Style/MethodCallWithArgsParentheses:
   Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
