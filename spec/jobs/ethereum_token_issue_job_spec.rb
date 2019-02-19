@@ -4,7 +4,7 @@ describe EthereumTokenIssueJob do
   let(:contract_address) { '0x' + 'a' * 40 }
   let(:recipient_address) { '0x' + 'b' * 40 }
   let(:transaction_adddress) { '0x' + 'c' * 64 }
-  let(:project) { create :project, ethereum_contract_address: contract_address }
+  let(:project) { create :project, token: create(:token, ethereum_contract_address: contract_address) }
   let(:award_type) { create :award_type, project: project, amount: 2 }
   let(:award) { create :award, award_type: award_type, proof_id: '873!' }
   let(:job) { described_class.new }
@@ -14,7 +14,7 @@ describe EthereumTokenIssueJob do
     stub_token_symbol
     expect(Comakery::Ethereum).to receive(:token_issue).with(recipient: award.decorate.recipient_address,
                                                              amount: award.award_type.amount,
-                                                             contractAddress: award.project.ethereum_contract_address,
+                                                             contractAddress: award.project.token.ethereum_contract_address,
                                                              proofId: '873!') { transaction_adddress }
 
     job.perform(award.id)
@@ -32,7 +32,7 @@ describe EthereumTokenIssueJob do
   it 'raises if there is no ethereum contract yet' do
     allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
     stub_token_symbol
-    project.update_attribute(:ethereum_contract_address, nil)
+    project.token.update_attribute(:ethereum_contract_address, nil)
     expect do
       job.perform(award.id)
     end.to raise_error(ArgumentError, /project ##{project.id} which has no ethereum contract address/i)
@@ -58,7 +58,7 @@ describe EthereumTokenIssueJob do
       stub_token_symbol
       expect(Comakery::Ethereum).to receive(:token_issue).with(recipient: award.decorate.recipient_address,
                                                                amount: award.total_amount,
-                                                               contractAddress: award.project.ethereum_contract_address,
+                                                               contractAddress: award.project.token.ethereum_contract_address,
                                                                proofId: award.proof_id) { transaction_adddress }
 
       job.perform(award.id)

@@ -17,7 +17,7 @@ describe 'shared/table/_reserved_for_contributors.html.rb' do
   end
 
   describe 'USD' do
-    let(:project) { create :project, denomination: 'USD', payment_type: :revenue_share }
+    let(:project) { create :project, token: create(:token, denomination: 'USD'), payment_type: :revenue_share }
 
     specify do
       expect(rendered).to have_css('.total-revenue-shared', text: '$0.00')
@@ -33,7 +33,7 @@ describe 'shared/table/_reserved_for_contributors.html.rb' do
   end
 
   describe 'BTC' do
-    let(:project) { create :project, denomination: 'BTC', payment_type: :revenue_share }
+    let(:project) { create :project, token: create(:token, denomination: 'BTC'), payment_type: :revenue_share }
 
     specify do
       expect(rendered).to have_css('.total-revenue-shared', text: '฿0.00')

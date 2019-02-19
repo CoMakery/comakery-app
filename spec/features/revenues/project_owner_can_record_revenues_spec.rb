@@ -187,7 +187,7 @@ describe 'when recording revenue' do
     end
 
     it 'usd' do
-      project.USD!
+      project.token.USD!
       visit project_path(project)
       click_link 'Revenues'
 
@@ -202,7 +202,7 @@ describe 'when recording revenue' do
     end
 
     it 'btc' do
-      project.BTC!
+      project.token.BTC!
       visit project_path(project)
       click_link 'Revenues'
 
@@ -216,7 +216,7 @@ describe 'when recording revenue' do
     end
 
     it 'eth' do
-      project.ETH!
+      project.token.ETH!
       visit project_path(project)
       click_link 'Revenues'
 

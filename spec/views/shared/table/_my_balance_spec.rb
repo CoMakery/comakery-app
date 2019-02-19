@@ -17,7 +17,7 @@ describe 'shared/table/_my_balance.html.rb' do
   end
 
   describe 'USD' do
-    let(:project) { create :project, denomination: 'USD', payment_type: :revenue_share }
+    let(:project) { create :project, token: create(:token, denomination: 'USD'), payment_type: :revenue_share }
 
     specify do
       expect(rendered).to have_css('.total-awards-remaining', text: '0')
@@ -33,7 +33,7 @@ describe 'shared/table/_my_balance.html.rb' do
   end
 
   describe 'BTC' do
-    let(:project) { create :project, denomination: 'BTC', payment_type: :revenue_share }
+    let(:project) { create :project, token: create(:token, denomination: 'BTC'), payment_type: :revenue_share }
 
     specify do
       expect(rendered).to have_css('.total-revenue-unpaid', text: '฿0.00')

@@ -51,7 +51,7 @@ describe Award do
     end
 
     describe '#ethereum_transaction_address' do
-      let(:project) { create(:project, coin_type: 'erc20') }
+      let(:project) { create(:project, token: create(:token, coin_type: 'erc20')) }
       let(:award_type) { create(:award_type, project: project) }
       let(:award) { create(:award, award_type: award_type) }
       let(:address) { '0x' + 'a' * 64 }
@@ -100,7 +100,7 @@ describe Award do
     end
 
     describe '#ethereum_transaction_address on qtum network' do
-      let(:project) { create(:project, coin_type: 'qrc20') }
+      let(:project) { create(:project, token: create(:token, coin_type: 'qrc20')) }
       let(:award_type) { create(:award_type, project: project) }
       let(:award) { create(:award, award_type: award_type) }
       let(:address) { 'a' * 64 }
@@ -168,9 +168,9 @@ describe Award do
     end
 
     describe 'with project awards' do
-      let!(:project1) { create :project, coin_type: 'erc20' }
+      let!(:project1) { create :project, token: create(:token, coin_type: 'erc20') }
       let!(:project1_award_type) { (create :award_type, project: project1, amount: 3) }
-      let(:project2) { create :project, coin_type: 'erc20' }
+      let(:project2) { create :project, token: create(:token, coin_type: 'erc20') }
       let!(:project2_award_type) { (create :award_type, project: project2, amount: 5) }
       let(:account) { create :account }
 
@@ -200,7 +200,7 @@ describe Award do
     let!(:authentication) { create :authentication, account: account }
     let!(:account1) { create :account }
     let!(:authentication1) { create :authentication, account: account1, provider: 'discord' }
-    let!(:project) { create :project, account: account, coin_type: 'erc20' }
+    let!(:project) { create :project, account: account, token: create(:token, coin_type: 'erc20') }
     let!(:award_type) { (create :award_type, project: project, amount: 3) }
     let!(:award) { create :award, award_type: award_type, issuer: account, account: account }
     let!(:award1) { create :award, award_type: award_type, issuer: account, account: account1 }
@@ -215,7 +215,7 @@ describe Award do
     it 'check for ethereum issue ready' do
       expect(award.ethereum_issue_ready?).to be_falsey
 
-      project.update ethereum_enabled: true
+      project.token.update ethereum_enabled: true
       account.update ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423'
 
       expect(award.reload.ethereum_issue_ready?).to be_truthy
@@ -267,7 +267,7 @@ describe Award do
     let!(:account) { create :account }
     let!(:authentication) { create :authentication, account: account }
     let!(:discord_team) { create :team, provider: 'discord' }
-    let!(:project) { create :project, account: account, coin_type: 'erc20' }
+    let!(:project) { create :project, account: account, token: create(:token, coin_type: 'erc20') }
     let!(:award_type) { create :award_type, project: project }
     let!(:channel) { create :channel, team: team, project: project, channel_id: 'channel_id', name: 'channel_id' }
     let!(:account1) { create :account }

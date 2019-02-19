@@ -2,7 +2,29 @@ import $ from 'jquery'
 import trezorUtils from 'networks/cardano/trezor_utils'
 
 describe('cardano trezor utils #transferAdaCoins', () => {
-  const award = {'id': 96, 'total_amount': '1.0', 'issuer_address': null, 'amount_to_send': 1, 'recipient_display_name': 'Vu', 'account': {'id': 9, 'ethereum_wallet': '0x7ed37fad1954961819fa08555cf90f6c5b609dc', 'qtum_wallet': 'qSf61RfH28cins3EyiL3BQrGmbqaJUHDf', 'cardano_wallet': 'Ae2tdPwUPEZC8obLcka73T3g7WNhb5x1563KdgQyDenoeLbaP9LjHNwsCLa', 'bitcoin_wallet': 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'}, 'project': {'id': 22, 'ethereum_contract_address': null, 'ethereum_network': null, 'coin_type': 'ada', 'blockchain_network': 'cardano_testnet', 'contract_address': null}}
+  const award = {
+    'id'                    : 96,
+    'total_amount'          : '1.0',
+    'issuer_address'        : null,
+    'amount_to_send'        : 1,
+    'recipient_display_name': 'Vu',
+    'account'               : {
+      'id'             : 9,
+      'ethereum_wallet': '0x7ed37fad1954961819fa08555cf90f6c5b609dc',
+      'qtum_wallet'    : 'qSf61RfH28cins3EyiL3BQrGmbqaJUHDf',
+      'cardano_wallet' : 'Ae2tdPwUPEZC8obLcka73T3g7WNhb5x1563KdgQyDenoeLbaP9LjHNwsCLa',
+      'bitcoin_wallet' : 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
+    },
+    'project': {
+      'id': 22
+    },
+    'token': {
+      'id'                : 1,
+      'coin_type'         : 'ada',
+      'blockchain_network': 'cardano_testnet',
+      'contract_address'  : null
+    }
+  }
 
   beforeEach(() => {
     console.error = jest.fn(() => false)

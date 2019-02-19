@@ -100,8 +100,8 @@ class AwardsController < ApplicationController
   end
 
   def confirm_message(project)
-    return nil unless project.coin_type?
-    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    return nil unless project.token.coin_type?
+    blockchain_name = Token::BLOCKCHAIN_NAMES[project.token.coin_type.to_sym]
     send("confirm_message_for_#{blockchain_name}_award")
   end
 
@@ -159,23 +159,23 @@ class AwardsController < ApplicationController
   end
 
   def preview_data(project, account)
-    if project.coin_type_on_ethereum?
-      @network = project.ethereum_network.presence || 'main'
+    if project.token.coin_type_on_ethereum?
+      @network = project.token.ethereum_network.presence || 'main'
       @wallet_logo = 'metamask2.png'
     else
-      @network = project.blockchain_network
+      @network = project.token.blockchain_network
       get_wallet_logo(project)
     end
-    blockchain_name = Token::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    blockchain_name = Token::BLOCKCHAIN_NAMES[project.token.coin_type.to_sym]
     @recipient_address = account&.send("#{blockchain_name}_wallet")
     @unit   = project.token.symbol
-    @unit ||= Token.coin_types[project.coin_type]
+    @unit ||= Token.coin_types[project.token.coin_type]
   end
 
   def get_wallet_logo(project)
-    @wallet_logo = if project.coin_type_on_qtum?
-      project.coin_type_qrc20? ? 'qrypto.png' : 'ledger.png'
-    elsif project.coin_type_eos?
+    @wallet_logo = if project.token.coin_type_on_qtum?
+      project.token.coin_type_qrc20? ? 'qrypto.png' : 'ledger.png'
+    elsif project.token.coin_type_eos?
       'eos.png'
     else
       'trezor.png'

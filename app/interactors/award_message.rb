@@ -24,7 +24,7 @@ class AwardMessage
   def discord_message(award)
     text = "on the #{award.project.title} project: #{project_url(award.project)}."
 
-    if award.project.ethereum_enabled && award.recipient_address.blank?
+    if award.project.token.ethereum_enabled && award.recipient_address.blank?
       text = "#{text} Set up your account: #{account_url} to receive Ethereum tokens."
     end
     text
@@ -33,7 +33,7 @@ class AwardMessage
   def slack_message(award)
     text = "on the <#{project_url(award.project)}|#{award.project.title}> project."
 
-    if award.project.ethereum_enabled && award.recipient_address.blank?
+    if award.project.token.ethereum_enabled && award.recipient_address.blank?
       text = "#{text} <#{account_url}|Set up your account> to receive Ethereum tokens."
     end
     text

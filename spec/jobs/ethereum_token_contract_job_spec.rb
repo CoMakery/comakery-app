@@ -9,6 +9,6 @@ describe EthereumTokenContractJob do
     expect(Comakery::Ethereum).to receive(:token_contract).with(maxSupply: 101) { address }
     stub_token_symbol
     job.perform(project.id)
-    expect(project.reload.ethereum_contract_address).to eq(address)
+    expect(project.token.reload.ethereum_contract_address).to eq(address)
   end
 end

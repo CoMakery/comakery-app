@@ -11,6 +11,7 @@ class Award < ApplicationRecord
   belongs_to :channel, optional: true
   has_one :team, through: :channel
   has_one :project, through: :award_type
+  has_one :token, through: :project
 
   validates :proof_id, :award_type, :unit_amount, :total_amount, :quantity, presence: true
   validates :quantity, :total_amount, :unit_amount, numericality: { greater_than: 0 }
@@ -32,7 +33,7 @@ class Award < ApplicationRecord
   end
 
   def ethereum_issue_ready?
-    project.ethereum_enabled && project.coin_type_on_ethereum? &&
+    project.token.ethereum_enabled && project.token.coin_type_on_ethereum? &&
       account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end

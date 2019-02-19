@@ -6,7 +6,7 @@ import caValidator from 'wallet-address-validator'
 
 const transferQtumCoins = async function(award) { // award in JSON
   const fee = 0.0015
-  const network = award.project.blockchain_network.replace('qtum_', '')
+  const network = award.token.blockchain_network.replace('qtum_', '')
   const recipientAddress = award.account.qtum_wallet
   let amount = parseFloat(award.total_amount)
 

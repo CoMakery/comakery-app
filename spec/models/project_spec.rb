@@ -96,14 +96,15 @@ describe Project do
       end
     end
 
-    it 'video_url is valid if video_url is a valid, absolute url, the domain is youtube.com, and there is the identifier inside' do
+    it 'video_url is valid if video_url is a valid, absolute url, the domain is youtube.com or vimeo, and there is the identifier inside' do
       expect(build(:sb_project, video_url: 'https://youtube.com/watch?v=Dn3ZMhmmzK0')).to be_valid
       expect(build(:sb_project, video_url: 'https://youtube.com/embed/Dn3ZMhmmzK0')).to be_valid
       expect(build(:sb_project, video_url: 'https://youtu.be/jJrzIdDUfT4')).to be_valid
+      expect(build(:sb_project, video_url: 'https://vimeo.com/314309860')).to be_valid
 
       expect(build(:sb_project, video_url: 'https://youtube.com/embed/')).not_to be_valid
       expect(build(:sb_project, video_url: 'https://youtu.be/')).not_to be_valid
-      expect(build(:sb_project, video_url: 'https://youtu.be/').tap(&:valid?).errors.full_messages).to eq(["Video url must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'"])
+      expect(build(:sb_project, video_url: 'https://youtu.be/').tap(&:valid?).errors.full_messages).to eq(['Video url must be a link to Youtube or Vimeo video'])
     end
 
     %w[video_url tracker contributor_agreement_url].each do |method|
@@ -537,7 +538,7 @@ describe Project do
   describe 'with large numbers' do
     let(:billion_minus_one) { BigDecimal('999,999,999') }
 
-    let(:project) { create :project, payment_type: :revenue_share, royalty_percentage: 100, denomination: :ETH }
+    let(:project) { create :project, payment_type: :revenue_share, royalty_percentage: 100, token: create(:token, denomination: :ETH) }
     let(:big_award) { create :award_type, project: project, amount: billion_minus_one }
 
     before do

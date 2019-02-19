@@ -304,7 +304,7 @@ class ProjectForm extends React.Component {
               title="total budget"
               recommended
               name="project[maximum_tokens]"
-              value={this.state['project[maximum_tokens]']}
+              value={this.state['project[maximum_tokens]'] ? this.state['project[maximum_tokens]'].toString() : null}
               errorText={this.state.errors['project[maximum_tokens]']}
               placeholder="Provide the budget for completing the entire project"
               pattern="\d+"

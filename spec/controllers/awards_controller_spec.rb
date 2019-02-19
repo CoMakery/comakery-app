@@ -10,7 +10,7 @@ describe AwardsController do
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
-  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'erc20') }
+  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
 
   before do
     stub_discord_channels
@@ -38,7 +38,7 @@ describe AwardsController do
 
       it 'shows metamask awards' do
         stub_token_symbol
-        project.update ethereum_contract_address: '0x' + 'a' * 40
+        project.token.update ethereum_contract_address: '0x' + 'a' * 40
         get :index, params: { project_id: project.to_param }
 
         expect(response.status).to eq(200)
@@ -232,7 +232,7 @@ describe AwardsController do
     end
 
     context 'on Qtum network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'qrc20') }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'qrc20')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -257,7 +257,7 @@ describe AwardsController do
     end
 
     context 'on Cardano network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'ada') }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'ada')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -283,7 +283,7 @@ describe AwardsController do
     end
 
     context 'on Bitcoin network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'btc') }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'btc')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -309,7 +309,7 @@ describe AwardsController do
     end
 
     context 'on EOS network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'eos') }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'eos')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -356,8 +356,8 @@ describe AwardsController do
   end
 
   describe '#preview' do
-    let(:project1) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'erc20') }
-    let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'qrc20') }
+    let(:project1) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+    let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'qrc20')) }
 
     it 'when channel_id is blank' do
       award_type = create(:award_type)

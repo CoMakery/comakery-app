@@ -7,7 +7,7 @@ import caValidator from 'wallet-address-validator'
 import TrezorConnect from 'trezor-connect'
 
 const transferBtcCoins = async function(award) { // award in JSON
-  const network = award.project.blockchain_network.replace('bitcoin_', '')
+  const network = award.token.blockchain_network.replace('bitcoin_', '')
   const recipientAddress = award.account.bitcoin_wallet
   let amount = parseFloat(award.total_amount)
   if (!recipientAddress || recipientAddress === '' || amount <= 0 || !(network === 'mainnet' || network === 'testnet')) {

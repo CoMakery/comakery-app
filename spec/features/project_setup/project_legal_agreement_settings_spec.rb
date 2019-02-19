@@ -73,18 +73,18 @@ describe 'viewing projects, creating and editing', :js do
     end
 
     specify do
-      project.update(denomination: :USD)
+      project.token.update(denomination: :USD)
       visit edit_project_path(project)
     end
 
     specify do
-      project.update(denomination: :BTC)
+      project.token.update(denomination: :BTC)
       visit edit_project_path(project)
       expect_denomination_btc
     end
 
     specify do
-      project.update(denomination: :ETH)
+      project.token.update(denomination: :ETH)
       visit edit_project_path(project)
       expect_denomination_eth
     end

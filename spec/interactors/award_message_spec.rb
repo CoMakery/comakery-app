@@ -28,7 +28,7 @@ describe AwardMessage do
       result = described_class.call(award: award)
       award = award.decorate
       expect(result.notifications_message).to eq "@#{award.issuer_user_name} sent @#{award.recipient_user_name} a #{award.total_amount} token #{award.award_type.name} for \"Great work\" on the <#{project_url(award.project)}|#{award.project.title}> project."
-      project.update ethereum_enabled: true
+      project.token.update ethereum_enabled: true
       result = described_class.call(award: award.reload)
       award = award.decorate
       expect(result.notifications_message).to eq "@#{award.issuer_user_name} sent @#{award.recipient_user_name} a #{award.total_amount} token #{award.award_type.name} for \"Great work\" on the <#{project_url(award.project)}|#{award.project.title}> project. <#{account_url}|Set up your account> to receive Ethereum tokens."
@@ -41,7 +41,7 @@ describe AwardMessage do
       result = described_class.call(award: award)
       award = award.decorate
       expect(result.notifications_message).to eq "@#{award.issuer_user_name} sent @#{award.recipient_user_name} a #{award.total_amount} token #{award.award_type.name} for \"Great work\" on the #{award.project.title} project: #{project_url(award.project)}."
-      project.update ethereum_enabled: true
+      project.token.update ethereum_enabled: true
       result = described_class.call(award: award.reload)
       award = award.decorate
       expect(result.notifications_message).to eq "@#{award.issuer_user_name} sent @#{award.recipient_user_name} a #{award.total_amount} token #{award.award_type.name} for \"Great work\" on the #{award.project.title} project: #{project_url(award.project)}. Set up your account: #{account_url} to receive Ethereum tokens."
@@ -54,7 +54,7 @@ describe AwardMessage do
       result = described_class.call(award: award)
       award = award.decorate
       expect(result.notifications_message).to eq "@#{award.issuer_user_name} self-issued for \"Great work\" on the #{award.project.title} project: #{project_url(award.project)}."
-      project.update ethereum_enabled: true
+      project.token.update ethereum_enabled: true
       result = described_class.call(award: award.reload)
       award = award.decorate
       expect(result.notifications_message).to eq "@#{award.issuer_user_name} self-issued for \"Great work\" on the #{award.project.title} project: #{project_url(award.project)}. Set up your account: #{account_url} to receive Ethereum tokens."

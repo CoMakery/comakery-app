@@ -1,5 +1,5 @@
 window.transferTokens = (award) -> # award in JSON
-  contractAddress = award.project.ethereum_contract_address
+  contractAddress = award.token.ethereum_contract_address
   toAddress = award.account.ethereum_wallet
   amount = award.amount_to_send
 

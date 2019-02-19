@@ -11,7 +11,7 @@ const getQtumBalance = async function(contract, owner) {
 }
 
 const transferQrc20Tokens = async function(award) { // award in JSON
-  const contractAddress = award.project.contract_address
+  const contractAddress = award.token.contract_address
   const recipientAddress = award.account.qtum_wallet
   let amount = award.amount_to_send
   if (!recipientAddress || recipientAddress === '' || !contractAddress || contractAddress === '' || amount <= 0) {

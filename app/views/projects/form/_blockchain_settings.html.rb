@@ -4,7 +4,7 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
   def content
     row do
       column('large-6 small-12') do
-        selected = f.object.coin_type
+        selected = f.object.token.coin_type
         options = capture do
           options_for_select(coin_type_options, selected: selected)
         end
@@ -15,13 +15,13 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
           end
         end
 
-        selected = f.object.ethereum_network
-        selected = 'main' if project.completed_awards.blank? && f.object.ethereum_network.blank? && project.coin_type_on_ethereum?
+        selected = f.object.token.ethereum_network
+        selected = 'main' if project.completed_awards.blank? && f.object.token.ethereum_network.blank? && project.token.coin_type_on_ethereum?
         options = capture do
           options_for_select(ethereum_network_options, selected: selected)
         end
         with_errors(project, :ethereum_network) do
-          label(class: "ethereum-network-lbl #{'hide' unless project.coin_type_on_ethereum?}") do
+          label(class: "ethereum-network-lbl #{'hide' unless project.token.coin_type_on_ethereum?}") do
             text 'Blockchain Network'
             f.select :ethereum_network, options, { include_blank: true }, disabled: project.completed_awards.any?
           end
@@ -32,23 +32,23 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
           options_for_select(blockchain_network_options, selected: selected)
         end
         with_errors(project, :blockchain_network) do
-          label(class: "blockchain-network-lbl #{'hide' if project.coin_type_on_ethereum?}") do
+          label(class: "blockchain-network-lbl #{'hide' if project.token.coin_type_on_ethereum?}") do
             text 'Blockchain Network'
-            f.select :blockchain_network, options, { include_blank: true }, disabled: project.completed_awards.any?, 'data-info': Project.blockchain_networks.to_json
+            f.select :blockchain_network, options, { include_blank: true }, disabled: project.completed_awards.any?, 'data-info': Token.blockchain_networks.to_json
           end
         end
 
-        css_class = "contract-info-div #{'hide' unless project.coin_type_token?}"
+        css_class = "contract-info-div #{'hide' unless project.token.coin_type_token?}"
         div(class: css_class) do
           with_errors(project, :ethereum_contract_address) do
-            label(class: "ethereum-contract-address-lbl #{'hide' unless project.coin_type_erc20?}") do
+            label(class: "ethereum-contract-address-lbl #{'hide' unless project.token.coin_type_erc20?}") do
               text 'Contract Address'
               f.text_field :ethereum_contract_address, placeholder: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367', disabled: project.completed_awards.any?
             end
           end
 
           with_errors(project, :contract_address) do
-            label(class: "contract-address-lbl #{'hide' unless project.coin_type_qrc20?}") do
+            label(class: "contract-address-lbl #{'hide' unless project.token.coin_type_qrc20?}") do
               text 'Contract Address'
               f.text_field :contract_address, placeholder: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc', disabled: project.completed_awards.any?
             end
@@ -72,7 +72,7 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
         with_errors(project, :maximum_tokens) do
           label do
             required_label_text 'Budget'
-            f.text_field :maximum_tokens, type: 'number', disabled: project.license_finalized? || project.ethereum_enabled?
+            f.text_field :maximum_tokens, type: 'number', disabled: project.license_finalized? || project.token.ethereum_enabled?
           end
         end
 
@@ -155,15 +155,15 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
   end
 
   def coin_type_options
-    Project.coin_types.invert
+    Token.coin_types.invert
   end
 
   def ethereum_network_options
-    Project.ethereum_networks.invert
+    Token.ethereum_networks.invert
   end
 
   def blockchain_network_options
-    Project.blockchain_networks.invert
+    Token.blockchain_networks.invert
   end
 
   def contract_address_on_change

@@ -8,7 +8,7 @@ import ScatterEOS from 'scatterjs-plugin-eosjs'
 ScatterJS.plugins(new ScatterEOS())
 
 const transferEosCoins = async function(award) { // award in JSON
-  const network = award.project.blockchain_network.replace('eos_', '')
+  const network = award.token.blockchain_network.replace('eos_', '')
   const recipientAddress = award.account.eos_wallet
   let amount = parseFloat(award.total_amount)
   if (!recipientAddress || recipientAddress === '' || amount <= 0 || !(network === 'mainnet' || network === 'testnet')) {

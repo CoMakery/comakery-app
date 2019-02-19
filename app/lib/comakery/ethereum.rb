@@ -53,8 +53,8 @@ class Comakery::Ethereum
       end
     end
 
-    def token_symbol(contract_address, project = nil)
-      site = project&.ethereum_network? ? "#{project.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
+    def token_symbol(contract_address, token = nil)
+      site = token&.ethereum_network? ? "#{token.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
       site = site.gsub('main.', '')
       url = "https://#{site}/tokens?q=#{contract_address}"
       doc = Nokogiri::HTML(open(url))

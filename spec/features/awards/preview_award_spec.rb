@@ -11,7 +11,7 @@ describe 'preview award', js: true do
   context 'on ethereum network' do
     let!(:project) do
       stub_token_symbol
-      create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, revenue_sharing_end_date: Time.zone.now + 3.days, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, ethereum_network: 'ropsten', coin_type: 'erc20')
+      create(:project, title: 'Project that needs awards', account: account, revenue_sharing_end_date: Time.zone.now + 3.days, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token: create(:token, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, ethereum_network: 'ropsten', coin_type: 'erc20'))
     end
 
     before do
@@ -44,7 +44,7 @@ describe 'preview award', js: true do
 
   context 'on qtum network' do
     let!(:project) do
-      create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, contract_address: '2' * 40, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token_symbol: 'BIG', decimal_places: 8, blockchain_network: 'qtum_testnet', coin_type: 'qrc20')
+      create(:project, title: 'Project that needs awards', account: account, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token: create(:token, ethereum_enabled: true, contract_address: '2' * 40, symbol: 'BIG', decimal_places: 8, blockchain_network: 'qtum_testnet', coin_type: 'qrc20'))
     end
 
     before do
@@ -75,7 +75,7 @@ describe 'preview award', js: true do
 
   context 'on cardano network' do
     let!(:project) do
-      create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, contract_address: '2' * 40, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token_symbol: 'BIG', decimal_places: 8, blockchain_network: 'cardano_testnet', coin_type: 'ada')
+      create(:project, title: 'Project that needs awards', account: account, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token: create(:token, ethereum_enabled: true, contract_address: '2' * 40, symbol: 'BIG', decimal_places: 8, blockchain_network: 'cardano_testnet', coin_type: 'ada'))
     end
 
     before do
@@ -106,7 +106,7 @@ describe 'preview award', js: true do
 
   context 'on eos network' do
     let!(:project) do
-      create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, contract_address: '2' * 40, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token_symbol: 'BIG', decimal_places: 8, blockchain_network: 'eos_testnet', coin_type: 'eos')
+      create(:project, title: 'Project that needs awards', account: account, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token: create(:token, ethereum_enabled: true, contract_address: '2' * 40, symbol: 'BIG', decimal_places: 8, blockchain_network: 'eos_testnet', coin_type: 'eos'))
     end
 
     before do

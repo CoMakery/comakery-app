@@ -9,8 +9,8 @@ describe Comakery::Currency do
     expect(Comakery::Currency::DENOMINATIONS.keys.sort).to eq(Comakery::Currency::PER_SHARE_PRECISION.keys.sort)
   end
 
-  it 'matches project denominations' do
-    project_denominations = Project.denominations.map { |x, _| x }.sort
-    expect(Comakery::Currency::DENOMINATIONS.keys.sort).to eq(project_denominations)
+  it 'matches token denominations' do
+    token_denominations = Token.denominations.map { |x, _| x }.sort
+    expect(Comakery::Currency::DENOMINATIONS.keys.sort).to eq(token_denominations)
   end
 end

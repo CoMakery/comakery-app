@@ -54,7 +54,7 @@ describe RevenuesController do
 
       specify { expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
-      specify { expect(response).to redirect_to(project_revenues_path(my_project)) }
+      specify { expect(response.status).to eq 200 }
     end
 
     describe 'owner invalid' do

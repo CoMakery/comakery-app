@@ -13,7 +13,7 @@ describe 'awarding users' do
 
   let!(:project) do
     stub_token_symbol
-    create(:project, title: 'Project that needs awards', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, revenue_sharing_end_date: Time.zone.now + 3.days, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, coin_type: 'erc20')
+    create(:project, title: 'Project that needs awards', account: account, revenue_sharing_end_date: Time.zone.now + 3.days, maximum_tokens: 10000000, maximum_royalties_per_month: 1000000, token: create(:token, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40, coin_type: 'erc20'))
   end
   let!(:same_team_project) { create(:project, title: 'Same Team Project', account: account) }
   let!(:different_team_project) { create(:project, visibility: 'public_listed', title: 'Different Team Project', account: different_team_account) }
@@ -100,7 +100,7 @@ describe 'awarding users' do
   end
 
   it 'list awards' do
-    project.update decimal_places: 2
+    project.token.update decimal_places: 2
     receiver = create :account, email: 'test@test.st', ethereum_wallet: '0x' + 'b' * 40
     create :award, account: receiver, award_type: small_award_type
     login(account)

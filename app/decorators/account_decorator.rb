@@ -32,13 +32,13 @@ class AccountDecorator < Draper::Decorator
   end
 
   def can_receive_awards?(project)
-    return false unless project.coin_type?
-    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    return false unless project.token.coin_type?
+    blockchain_name = Token::BLOCKCHAIN_NAMES[project.token.coin_type.to_sym]
     account&.send("#{blockchain_name}_wallet?")
   end
 
   def can_send_awards?(project)
-    project&.account == self && (project&.ethereum_contract_address? || project&.contract_address? || project.decorate.send_coins?)
+    project&.account == self && (project&.token&.ethereum_contract_address? || project&.token&.contract_address? || project.decorate.send_coins?)
   end
 
   def total_awards_earned_pretty(project)
@@ -64,8 +64,8 @@ class AccountDecorator < Draper::Decorator
   private
 
   def pretty_currency(project, amount_to_make_pretty)
-    precision = Comakery::Currency::PRECISION[project.denomination]
-    denomination = Comakery::Currency::DENOMINATIONS[project.denomination]
+    precision = Comakery::Currency::PRECISION[project.token.denomination]
+    denomination = Comakery::Currency::DENOMINATIONS[project.token.denomination]
     "#{denomination}#{number_with_precision(amount_to_make_pretty.truncate(precision),
       precision: precision,
       delimiter: ',')}"
