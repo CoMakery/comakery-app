@@ -5,16 +5,22 @@ class Authentication < ApplicationRecord
 
   def self.find_or_create_by_omniauth(auth_hash)
     authentication = find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
+    acc, authentication = process_authentication(authentication, auth_hash)
+
+    acc&.update_columns agreed_to_user_agreement: Date.current if acc&.agreed_to_user_agreement.blank?
+    authentication
+  end
+
+  def self.process_authentication(authentication, auth_hash)
     if authentication
       authentication.update_info auth_hash if authentication.confirmed?
       acc = authentication.account
-    elsif auth_hash['info']
+    elsif auth_hash['info'] && auth_hash['info']['email'].present?
       acc = Account.find_or_create_by email: auth_hash['info']['email']
 
       authentication = acc.authentications.create(uid: auth_hash['uid'], provider: auth_hash['provider'], confirm_token: SecureRandom.hex, oauth_response: auth_hash)
     end
-    acc&.update agreed_to_user_agreement: Date.current if acc&.agreed_to_user_agreement.blank?
-    authentication
+    [acc, authentication]
   end
 
   def update_info(auth_hash)
@@ -77,4 +83,6 @@ class Authentication < ApplicationRecord
     update confirm_token: nil
     update_info oauth_response
   end
+
+  private_class_method :process_authentication
 end
