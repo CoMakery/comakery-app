@@ -47,8 +47,8 @@ describe('MissionForm', () => {
       'token'       : '1',
       'subtitle'    : 'test subtitle',
       'description' : 'test description',
-      'logoPreview' : '/logo.png',
-      'imagePreview': '/image.png'
+      'logoUrl'     : '/logo.png',
+      'imageUrl'    : '/image.png'
     }
     const tokens = [['token1', 1], ['token2', 2]]
     const wrapper = mount(<MissionForm mission={mission} tokens={tokens} />)
