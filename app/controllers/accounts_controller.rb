@@ -68,6 +68,11 @@ class AccountsController < ApplicationController
     authorize @account
 
     if @account.update(account_params.merge(name_required: true))
+      authentication_id = session.delete(:authentication_id)
+      if authentication_id && !Authentication.find_by(id: authentication_id).confirmed?
+        session.delete(:account_id)
+        @current_account = nil
+      end
       redirect_to root_path, notice: 'Thank you for signing up. Now, let us know what projects you are interested in.'
     else
       error_msg = @account.errors.full_messages.join(', ')

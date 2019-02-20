@@ -31,6 +31,8 @@ describe SessionsController do
     end
 
     context 'with valid login credentials' do
+      let!(:account2) { create(:account, email: 'bob2@example.com') }
+
       it 'create authentication' do
         request.env['omniauth.auth'] = auth_hash
 
@@ -67,6 +69,20 @@ describe SessionsController do
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
         assert_redirected_to root_path
+      end
+
+      it 'login authentication with an account that missing email' do
+        account2.update_columns email: nil # rubocop:disable Rails/SkipsModelValidations
+        create :authentication, uid: 'another_id_same_email', account: account2, confirm_token: SecureRandom.hex
+        request.env['omniauth.auth'] = auth_hash.merge('uid' => 'another_id_same_email')
+
+        expect do
+          post :create
+        end.to change { Authentication.count }.by(0)
+        auth = Authentication.last
+        expect(auth.confirmed?).to eq false
+        assert_response :redirect
+        assert_redirected_to build_profile_accounts_path
       end
     end
 
