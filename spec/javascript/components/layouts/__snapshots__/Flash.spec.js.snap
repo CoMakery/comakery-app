@@ -9,8 +9,13 @@ exports[`Flash renders correctly without props 1`] = `
       className="flash-message__icon"
       name="flash/notice.svg"
     />
-    <p
+    <div
       className="flash-message__text"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
     />
     <Icon
       className="flash-message__icon flash-message__icon--close"

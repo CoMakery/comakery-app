@@ -28,6 +28,6 @@ describe('Flash', () => {
     const wrapper = shallow(<Flash flashType="notice" message="Test Message" />)
 
     expect(wrapper.exists('.flash-message--notice')).toBe(true)
-    expect(wrapper.find('.flash-message').text()).toBe('<Icon />Test Message<Icon />')
+    expect(wrapper.find('.flash-message').html()).toContain('Test Message')
   })
 })
