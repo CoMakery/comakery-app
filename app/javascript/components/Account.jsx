@@ -60,6 +60,7 @@ export default class Account extends React.Component {
     formData.append('account[cardano_wallet]', this.state.cardanoWallet || '')
     formData.append('account[qtum_wallet]', this.state.qtumWallet || '')
     formData.append('account[ethereum_wallet]', this.state.ethereumWallet || '')
+    formData.append('account[tezos_wallet]', this.state.tezosWallet || '')
     formData.append('account[specialty]', this.state.specialty || '')
     formData.append('account[occupation]', this.state.occupation || '')
     formData.append('account[linkedin_url]', this.state.linkedinUrl || '')
@@ -237,6 +238,8 @@ export default class Account extends React.Component {
 
               <FormField fieldLabel="EOS Account Name" fieldName="eosWallet" fieldValue={this.state.eosWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.eosWallet} />
 
+              <FormField fieldLabel="Tezos Address" fieldName="tezosWallet" fieldValue={this.state.tezosWallet} handleChange={this.handleChangeAccountFormData} error={this.state.errors.tezosWallet} />
+
               <div className="columns small-3">
                 <label>Image</label>
               </div>
@@ -340,6 +343,20 @@ export default class Account extends React.Component {
                 {this.state.accountData.eosWallet && <React.Fragment>
                   <input type="text" value={this.state.accountData.eosWallet} readOnly className="fake-link copy-source5 fake-link--input" data-href={this.state.accountData.eosAddress} />
                   <a className="copiable5 copiable--link">
+                    <img src={this.props.clippyIcon} width={20} height={20} />
+                  </a>
+                </React.Fragment>}
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="columns medium-3" style={{ marginTop: 8 }}>
+                Tezos Address
+              </div>
+              <div className="columns medium-9">
+                {this.state.accountData.tezosWallet && <React.Fragment>
+                  <input type="text" value={this.state.accountData.tezosWallet} readOnly className="fake-link copy-source6 fake-link--input" data-href={this.state.accountData.tezosWallet} />
+                  <a className="copiable6 copiable--link">
                     <img src={this.props.clippyIcon} width={20} height={20} />
                   </a>
                 </React.Fragment>}

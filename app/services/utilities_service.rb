@@ -11,7 +11,7 @@ class UtilitiesService
 
   def self.get_wallet_url(network, wallet)
     case network
-    when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet', 'eos_mainnet', 'eos_testnet'
+    when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet', 'eos_mainnet', 'eos_testnet', 'tezos_mainnet'
       UtilitiesService.send("get_wallet_url_on_#{network}", wallet)
     else
       get_ethereum_wallet_url(network, wallet)
@@ -48,6 +48,10 @@ class UtilitiesService
 
   def self.get_wallet_url_on_qtum_testnet(wallet)
     "https://testnet.qtum.org/address/#{wallet}"
+  end
+
+  def self.get_wallet_url_on_tezos_mainnet(wallet)
+    "https://tzscan.io/#{wallet}"
   end
 
   def self.get_transaction_url(network, tx)
