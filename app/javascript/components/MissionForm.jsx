@@ -269,7 +269,7 @@ export default class MissionForm extends React.Component {
             errorText={errors.subtitle} />
 
           <InputFieldDescription
-            name="description" title="Description" symbolLimit={250} required value={description}
+            name="description" title="Description" symbolLimit={375} required value={description}
             placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
             eventHandler={this.handleChangeFormData}
             errorText={errors.description}
