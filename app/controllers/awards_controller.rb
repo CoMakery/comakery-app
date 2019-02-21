@@ -177,6 +177,8 @@ class AwardsController < ApplicationController
       project.coin_type_qrc20? ? 'qrypto.png' : 'ledger.png'
     elsif project.coin_type_eos?
       'eos.png'
+    elsif project.coin_type_xtz?
+      'tezos.png'
     else
       'trezor.png'
     end
