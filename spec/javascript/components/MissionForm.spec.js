@@ -39,12 +39,12 @@ describe('MissionForm', () => {
 
   it('renders correctly with props', () => {
     const mission = {
-      'id'          : 0,
-      'name'        : 'Test Mission',
-      'subtitle'    : 'test subtitle',
-      'description' : 'test description',
-      'logoPreview' : '/logo.png',
-      'imagePreview': '/image.png'
+      'id'         : 0,
+      'name'       : 'Test Mission',
+      'subtitle'   : 'test subtitle',
+      'description': 'test description',
+      'logoUrl'    : '/logo.png',
+      'imageUrl'   : '/image.png'
     }
     const wrapper = mount(<MissionForm mission={mission} />)
 

@@ -28,7 +28,7 @@ export default class Flash extends React.Component {
           this.state.isActive &&
           <div className={classnames} >
             <Icon className="flash-message__icon" name={`flash/${flashType}.svg`} />
-            <p className="flash-message__text">{message}</p>
+            <div className="flash-message__text" dangerouslySetInnerHTML={{ __html: message }} />
             <Icon className="flash-message__icon flash-message__icon--close" name="flash/close.svg" onClick={() => { this.setState({ isActive: false }) }} />
           </div>
         }

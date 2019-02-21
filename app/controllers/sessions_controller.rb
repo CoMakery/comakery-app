@@ -16,6 +16,7 @@ class SessionsController < ApplicationController
     if authentication && authentication.confirmed?
       session[:account_id] = authentication.account_id
     elsif authentication
+      redirect_to_the_build_profile_accounts_page(authentication) && return
       UserMailer.confirm_authentication(authentication).deliver
       flash[:error] = 'Please check your email for confirmation instruction'
       @path = root_path
@@ -65,6 +66,16 @@ class SessionsController < ApplicationController
       process_new_award_notice if current_account.new_award_notice
       root_path
     end
+  end
+
+  def redirect_to_the_build_profile_accounts_page(authentication)
+    unless authentication.account.email?
+      session[:account_id] = authentication.account_id
+      session[:authentication_id] = authentication.id
+      redirect_to build_profile_accounts_path
+      return true
+    end
+    false
   end
 
   def process_new_award_notice

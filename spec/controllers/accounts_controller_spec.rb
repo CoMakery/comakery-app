@@ -174,6 +174,8 @@ describe AccountsController do
   end
 
   describe '#update_profile' do
+    let!(:authentication) { create(:authentication, confirm_token: '1234qwer') }
+
     before { login(account) }
 
     it 'updates profile with valid params' do
@@ -196,6 +198,19 @@ describe AccountsController do
         }
       }
       expect(flash[:error]).to eq("First name can't be blank, Last name can't be blank")
+    end
+
+    it 'updates profile with valid params for an un-confirmed authentication' do
+      session[:authentication_id] = authentication.id
+      post :update_profile, params: {
+        account: {
+          first_name: 'Update',
+          last_name: 'Profile',
+          country: 'United Kingdom'
+        }
+      }
+      expect(response).to redirect_to root_path
+      expect(assigns[:current_account]).to eq nil
     end
   end
 

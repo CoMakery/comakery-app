@@ -2137,7 +2137,7 @@ input[type="submit"].button:disabled {
 .flash-message__text {
   width: 100%;
   text-align: justify;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 @media screen and (max-width: 1024px) {
