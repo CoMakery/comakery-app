@@ -56,7 +56,7 @@ class UtilitiesService
 
   def self.get_transaction_url(network, tx)
     case network
-    when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet', 'eos_mainnet', 'eos_testnet'
+    when 'bitcoin_mainnet', 'bitcoin_testnet', 'cardano_mainnet', 'cardano_testnet', 'qtum_mainnet', 'qtum_testnet', 'eos_mainnet', 'eos_testnet', 'tezos_mainnet'
       UtilitiesService.send("get_transaction_url_on_#{network}", tx)
     end
   end
@@ -91,6 +91,10 @@ class UtilitiesService
 
   def self.get_transaction_url_on_eos_testnet(tx)
     "https://jungle.bloks.io/transaction/#{tx}"
+  end
+
+  def self.get_transaction_url_on_tezos_mainnet(tx)
+    "https://tzscan.io/#{tx}"
   end
 
   def self.get_contract_url(network, contract_address)

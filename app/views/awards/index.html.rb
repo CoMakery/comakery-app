@@ -34,6 +34,11 @@ class Views::Awards::Index < Views::Base
     javascript_include_tag Webpacker.manifest.lookup!('wallets/bitcoin_trezor_script.js') if project.coin_type_btc?
     javascript_include_tag Webpacker.manifest.lookup!('wallets/qtum_ledger_script.js') if project.coin_type_qtum?
     javascript_include_tag Webpacker.manifest.lookup!('wallets/eos_scatter_script.js') if project.coin_type_eos?
+    if project.coin_type_xtz?
+      javascript_include_tag 'eztz.min'
+      javascript_include_tag '//connect.trezor.io/6/trezor-connect.js'
+      javascript_include_tag Webpacker.manifest.lookup!('wallets/tezos_trezor_script.js')
+    end
   end
 
   def pages

@@ -11,4 +11,4 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
-Rails.application.config.assets.precompile += %w( email_ink.css email_custom.css airbrake-shim.js jquery.visible.js )
+Rails.application.config.assets.precompile += %w( email_ink.css email_custom.css airbrake-shim.js jquery.visible.js eztz.min.js )
