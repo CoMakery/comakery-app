@@ -72,6 +72,17 @@ describe Account do
       expect(account.tap { |a| a.update(eos_wallet: "Q#{'a' * 32}") }.errors.full_messages).to eq([error_message])
       expect(account.tap { |a| a.update(eos_wallet: ('a' * 12).to_s) }).to be_valid
     end
+
+    it 'requires #tezos_wallet to be a valid tezos address' do
+      expect(account.tezos_wallet).to be_blank
+      expect(account).to be_valid
+      error_message = "Tezos wallet should start with 'tz1', followed by 33 characters"
+
+      expect(account.tap { |a| a.update(tezos_wallet: 'foo') }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(tezos_wallet: '0x') }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(tezos_wallet: "tz1#{'a' * 32}") }.errors.full_messages).to eq([error_message])
+      expect(account.tap { |a| a.update(tezos_wallet: 'tz1Zbe9hjjSnJN2U51E5W5fyRDqPCqWMCFN9') }).to be_valid
+    end
   end
 
   it 'enforces unique emails, case-insensitively' do
