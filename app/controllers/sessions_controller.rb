@@ -129,4 +129,13 @@ class SessionsController < ApplicationController
       current_account.update new_award_notice: false
     end
   end
+
+  def process_new_tezos_award_notice
+    if current_account.tezos_wallet.blank?
+      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Tezos Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    else
+      flash[:notice] = "Congratulations, you just claimed your award! Your Tezos address is #{view_context.link_to current_account.tezos_wallet, current_account.decorate.tezos_wallet_url} you can change your Tezos address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Tezos tokens."
+      current_account.update new_award_notice: false
+    end
+  end
 end
