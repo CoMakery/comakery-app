@@ -12,7 +12,7 @@ class Mission < ApplicationRecord
   validates :name, :subtitle, :description, :logo, :image, presence: true
   validates :name, length: { maximum: 100 }
   validates :subtitle, length: { maximum: 140 }
-  validates :description, length: { maximum: 250 }
+  validates :description, length: { maximum: 375 }
   validate :validate_token_id
 
   def serialize
