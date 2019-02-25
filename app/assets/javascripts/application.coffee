@@ -219,5 +219,8 @@ window.initializeAccountPage = () ->
   $('.copiable5').click ->
     $(".copy-source5").select()
     document.execCommand('Copy')
+  $('.copiable6').click ->
+    $(".copy-source6").select()
+    document.execCommand('Copy')
   $('.fake-link').click ->
     window.location.href = $(@).data("href")

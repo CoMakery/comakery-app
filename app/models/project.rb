@@ -7,7 +7,8 @@ class Project < ApplicationRecord
     qtum: 'qtum',
     ada: 'cardano',
     btc: 'bitcoin',
-    eos: 'eos'
+    eos: 'eos',
+    xtz: 'tezos'
   }.freeze
 
   include EthereumAddressable
@@ -59,7 +60,8 @@ class Project < ApplicationRecord
     qtum:  'QTUM',
     ada: 'ADA',
     btc: 'BTC',
-    eos: 'EOS'
+    eos: 'EOS',
+    xtz: 'XTZ'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -82,7 +84,8 @@ class Project < ApplicationRecord
     qtum_mainnet: 'Main QTUM Network',
     qtum_testnet: 'Test QTUM Network',
     eos_mainnet: 'Main EOS Network',
-    eos_testnet: 'Test EOS Network'
+    eos_testnet: 'Test EOS Network',
+    tezos_mainnet: 'Main Tezos Network'
   }
   enum status: %i[active passive]
 
@@ -163,6 +166,10 @@ class Project < ApplicationRecord
 
   def coin_type_on_eos?
     coin_type_eos?
+  end
+
+  def coin_type_on_tezos?
+    coin_type_xtz?
   end
 
   def total_revenue

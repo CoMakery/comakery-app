@@ -1069,6 +1069,34 @@ describe Project do
     expect(project.reload.decimal_places).to eq 8
   end
 
+  it 'coin_type_on_cardano?' do
+    project = create :project, coin_type: 'eth'
+    expect(project.coin_type_on_cardano?).to eq false
+    project.update coin_type: 'ada'
+    expect(project.coin_type_on_cardano?).to eq true
+  end
+
+  it 'coin_type_on_bitcoin?' do
+    project = create :project, coin_type: 'eth'
+    expect(project.coin_type_on_bitcoin?).to eq false
+    project.update coin_type: 'btc'
+    expect(project.coin_type_on_bitcoin?).to eq true
+  end
+
+  it 'coin_type_on_eos?' do
+    project = create :project, coin_type: 'eth'
+    expect(project.coin_type_on_eos?).to eq false
+    project.update coin_type: 'eos'
+    expect(project.coin_type_on_eos?).to eq true
+  end
+
+  it 'coin_type_on_tezos?' do
+    project = create :project, coin_type: 'eth'
+    expect(project.coin_type_on_tezos?).to eq false
+    project.update coin_type: 'xtz'
+    expect(project.coin_type_on_tezos?).to eq true
+  end
+
   describe '#top_contributors' do
     let!(:account) { create :account }
     let!(:account1) { create :account }
