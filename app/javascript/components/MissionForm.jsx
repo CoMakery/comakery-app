@@ -44,8 +44,8 @@ export default class MissionForm extends React.Component {
       token         : (token || '').toString(),
       subtitle      : props.mission.subtitle || '',
       description   : props.mission.description || '',
-      logoPreview   : props.mission.logoPreview,
-      imagePreview  : props.mission.imagePreview,
+      logoPreview   : props.mission.logoUrl,
+      imagePreview  : props.mission.imageUrl,
       logo          : null,
       image         : null
     }
@@ -151,7 +151,7 @@ export default class MissionForm extends React.Component {
   }
 
   verifyImageRes(img) {
-    if ((img.naturalWidth !== 1200) || (img.naturalHeight !== 800)) {
+    if ((img.naturalWidth < 1200) || (img.naturalHeight < 800) || (img.naturalWidth / img.naturalHeight !== 1.5)) {
       this.imageInputRef.current.value = ''
       this.errorAdd('image', 'invalid resolution')
     } else {
@@ -160,7 +160,7 @@ export default class MissionForm extends React.Component {
   }
 
   verifyLogoRes(img) {
-    if ((img.naturalWidth !== 800) || (img.naturalHeight !== 800)) {
+    if ((img.naturalWidth < 800) || (img.naturalHeight < 800) || (img.naturalWidth / img.naturalHeight !== 1)) {
       this.logoInputRef.current.value = ''
       this.errorAdd('logo', 'invalid resolution')
     } else {
@@ -269,7 +269,7 @@ export default class MissionForm extends React.Component {
             errorText={errors.subtitle} />
 
           <InputFieldDescription
-            name="description" title="Description" symbolLimit={250} required value={description}
+            name="description" title="Description" symbolLimit={375} required value={description}
             placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
             eventHandler={this.handleChangeFormData}
             errorText={errors.description}
@@ -277,18 +277,18 @@ export default class MissionForm extends React.Component {
 
           <InputFieldUploadFile
             name="logo" title="Mission Logo" required
-            imgPreviewDimensions="150x100"
+            imgPreviewDimensions="100x100"
             imgPreviewUrl={logoPreview}
-            imgRequirements="Image should be 800px x 800px"
+            imgRequirements="Image should be at least 800px x 800px"
             imgVerifier={this.verifyLogoRes}
             imgInputRef={this.logoInputRef}
             eventHandler={this.handleChangeFormData}
             errorText={errors.logo} />
           <InputFieldUploadFile
             name="image" title="Mission Image" required
-            imgPreviewDimensions="100x100"
+            imgPreviewDimensions="150x100"
             imgPreviewUrl={imagePreview}
-            imgRequirements="Image should be 1200px x 800px"
+            imgRequirements="Image should be at least 1200px x 800px"
             imgVerifier={this.verifyImageRes}
             imgInputRef={this.imageInputRef}
             eventHandler={this.handleChangeFormData}

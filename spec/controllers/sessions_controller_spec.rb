@@ -31,6 +31,8 @@ describe SessionsController do
     end
 
     context 'with valid login credentials' do
+      let!(:account2) { create(:account, email: 'bob2@example.com') }
+
       it 'create authentication' do
         request.env['omniauth.auth'] = auth_hash
 
@@ -67,6 +69,20 @@ describe SessionsController do
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
         assert_redirected_to root_path
+      end
+
+      it 'login authentication with an account that missing email' do
+        account2.update_columns email: nil # rubocop:disable Rails/SkipsModelValidations
+        create :authentication, uid: 'another_id_same_email', account: account2, confirm_token: SecureRandom.hex
+        request.env['omniauth.auth'] = auth_hash.merge('uid' => 'another_id_same_email')
+
+        expect do
+          post :create
+        end.to change { Authentication.count }.by(0)
+        auth = Authentication.last
+        expect(auth.confirmed?).to eq false
+        assert_response :redirect
+        assert_redirected_to build_profile_accounts_path
       end
     end
 
@@ -207,6 +223,26 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Bitcoin address is')).to eq true
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'on EOS network' do
+      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, coin_type: 'eos') }
+
+      it 'notice to update eos_wallet' do
+        account.update new_award_notice: true
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your EOS account name on your <a href="/account">account page</a> to receive your tokens.'
+        expect(response).to redirect_to root_path
+      end
+
+      it 'notice new award' do
+        account.update new_award_notice: true, eos_wallet: 'aaatestnet11'
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS account name is')).to eq true
         expect(response).to redirect_to root_path
       end
     end

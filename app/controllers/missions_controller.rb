@@ -78,7 +78,12 @@ class MissionsController < ApplicationController
   def set_generic_props
     @props = {
       tokens: Token.all.map { |token| [token.name, token.id.to_s] },
-      mission: @mission&.serialize,
+      mission: @mission&.serializable_hash&.merge(
+        {
+          logo_url: @mission&.logo&.present? ? Refile.attachment_url(@mission, :logo, :fill, 800, 800) : nil,
+          image_url: @mission&.image&.present? ? Refile.attachment_url(@mission, :image, :fill, 1200, 800) : nil
+        }
+      ),
       form_url: missions_path,
       form_action: 'POST',
       url_on_success: missions_path,
@@ -91,7 +96,7 @@ class MissionsController < ApplicationController
       m.serialize.merge(
         token_name: m.token&.name,
         token_symbol: m.token&.symbol,
-        projects: m.projects.as_json(only: %i[id title status])
+        projects: m.projects.public_listed.as_json(only: %i[id title status])
       )
     end
   end

@@ -18,52 +18,6 @@ class Views::Accounts::New < Views::Base
             end
 
             column('large-12') do
-              with_errors(account, :first_name) do
-                label do
-                  text 'First Name: *'
-                  f.text_field :first_name
-                end
-              end
-            end
-
-            column('large-12') do
-              with_errors(account, :last_name) do
-                label do
-                  text 'Last Name: *'
-                  f.text_field :last_name
-                end
-              end
-            end
-
-            column('large-12') do
-              with_errors(account, :nickname) do
-                label do
-                  text 'Nickname: '
-                  f.text_field :nickname
-                end
-              end
-            end
-
-            column('large-12') do
-              with_errors(account, :date_of_birth) do
-                label do
-                  text 'Date of Birth: *'
-                  f.text_field :date_of_birth, placeholder: 'mm/dd/yyyy', class: 'datepicker'
-                end
-              end
-            end
-
-            column('large-12') do
-              f.object.country ||= 'United States of America'
-              with_errors(account, :country) do
-                label do
-                  text 'Country: *'
-                  f.select :country, Country.all.sort
-                end
-              end
-            end
-
-            column('large-12') do
               with_errors(account, :password) do
                 label do
                   text 'Password: *'

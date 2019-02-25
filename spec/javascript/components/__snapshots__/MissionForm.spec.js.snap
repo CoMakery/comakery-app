@@ -324,7 +324,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                 name="description"
                 placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
                 required={true}
-                symbolLimit={250}
+                symbolLimit={375}
                 title="Description"
                 value=""
               >
@@ -346,7 +346,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   readOnly={false}
                   required={true}
                   selectEntries={Array []}
-                  symbolLimit={250}
+                  symbolLimit={375}
                   title="Description"
                   type="textarea"
                   value=""
@@ -372,7 +372,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                       >
                         0
                         /
-                        250
+                        375
                       </span>
                     </div>
                     <div
@@ -405,8 +405,8 @@ exports[`MissionForm renders correctly without props 1`] = `
                     />,
                   }
                 }
-                imgPreviewDimensions="150x100"
-                imgRequirements="Image should be 800px x 800px"
+                imgPreviewDimensions="100x100"
+                imgRequirements="Image should be at least 800px x 800px"
                 imgVerifier={[Function]}
                 name="logo"
                 required={true}
@@ -430,9 +430,9 @@ exports[`MissionForm renders correctly without props 1`] = `
                       />,
                     }
                   }
-                  imgPreviewDimensions="150x100"
+                  imgPreviewDimensions="100x100"
                   imgPreviewUrl=""
-                  imgRequirements="Image should be 800px x 800px"
+                  imgRequirements="Image should be at least 800px x 800px"
                   imgVerifier={[Function]}
                   name="logo"
                   pattern=".*"
@@ -476,7 +476,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                       <span
                         className="input-field--content__file--requirements"
                       >
-                        Image should be 800px x 800px
+                        Image should be at least 800px x 800px
                       </span>
                     </div>
                   </div>
@@ -495,8 +495,8 @@ exports[`MissionForm renders correctly without props 1`] = `
                     />,
                   }
                 }
-                imgPreviewDimensions="100x100"
-                imgRequirements="Image should be 1200px x 800px"
+                imgPreviewDimensions="150x100"
+                imgRequirements="Image should be at least 1200px x 800px"
                 imgVerifier={[Function]}
                 name="image"
                 required={true}
@@ -520,9 +520,9 @@ exports[`MissionForm renders correctly without props 1`] = `
                       />,
                     }
                   }
-                  imgPreviewDimensions="100x100"
+                  imgPreviewDimensions="150x100"
                   imgPreviewUrl=""
-                  imgRequirements="Image should be 1200px x 800px"
+                  imgRequirements="Image should be at least 1200px x 800px"
                   imgVerifier={[Function]}
                   name="image"
                   pattern=".*"
@@ -566,7 +566,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                       <span
                         className="input-field--content__file--requirements"
                       >
-                        Image should be 1200px x 800px
+                        Image should be at least 1200px x 800px
                       </span>
                     </div>
                   </div>

@@ -58,6 +58,7 @@
 
     <%= javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js', defer: true %>
     <%= javascript_pack_tag 'application' %>
+    <%= intercom_script_tag %>
   </head>
 
   <body>
@@ -74,7 +75,23 @@
         prerender: true
       }
     )%>
-    <%= yield %>
+    <div class="react-container">
+      <% 
+        if flash[:notice].present?
+          msg = flash[:notice]
+          msg_type = "notice"
+        elsif flash[:error].present? 
+          msg = flash[:error]
+          msg_type = "error"
+        end
+
+        flash.clear
+      %>
+      <% if msg.present? %>
+        <%= react_component 'layouts/Flash', { flashType: msg_type, message: msg } %>
+      <% end %>
+      <%= yield %>
+    </div>
     <%= react_component(
       'layouts/Footer',
       {

@@ -24,6 +24,7 @@ class Views::Layouts::Application < Views::Base
         javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js'
         javascript_include_tag :modernizr
         javascript_include_tag 'application'
+        intercom_script_tag
 
         javascript_include_tag Webpacker.manifest.lookup!('application.js')
 

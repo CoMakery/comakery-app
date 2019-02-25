@@ -105,7 +105,11 @@ const CardanoWallet = async (options) => {
   async function prepareSignedTx(address, coins) {
     const txAux = await prepareTxAux(address, coins).catch((e) => {
       debugLog(e)
-      throw NamedError('TransactionCorrupted')
+      if (e.name === 'InsufficientCoinsError') {
+        throw e
+      } else {
+        throw NamedError('TransactionCorrupted')
+      }
     })
 
     const rawInputTxs = await Promise.all(
@@ -138,8 +142,10 @@ const CardanoWallet = async (options) => {
     const changeAmount = txInputsCoinsSum - coins - fee
 
     if (changeAmount < 0) {
-      throw Error(`
+      const e = new Error(`
         Transaction inputs (sum ${txInputsCoinsSum}) don't cover coins (${coins}) + fee (${fee})`)
+      e.name = 'InsufficientCoinsError'
+      throw e
     }
 
     const txOutputs = [TxOutput(address, coins, false)]
@@ -151,6 +157,11 @@ const CardanoWallet = async (options) => {
     }
 
     return TxAux(txInputs, txOutputs, {})
+  }
+
+  async function getFirstAddress() {
+    const visibleAddresses = await visibleAddressManager.discoverAddresses()
+    return visibleAddresses[0]
   }
 
   async function getMaxSendableAmount(address) {
@@ -395,6 +406,7 @@ const CardanoWallet = async (options) => {
     verifyAddress,
     fetchTxInfo,
     _getNewUtxosFromTxAux: getNewUtxosFromTxAux,
+    getFirstAddress
   }
 }
 

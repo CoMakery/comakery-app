@@ -8,6 +8,7 @@ class Mom
       last_name: (1..100).to_a.sample,
       date_of_birth: '1990/01/01',
       country: 'United States of America',
+      specialty: 'Software Development',
       password: valid_password
     }
     Account.new(defaults.merge(attrs))
@@ -76,7 +77,6 @@ class Mom
   def interest(account = create(:account), **attrs)
     defaults = {
       protocol: 'Vevue',
-      project: 'Wallet Intergrations',
       account: account
     }
     Interest.new(defaults.merge(attrs))
