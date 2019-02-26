@@ -71,10 +71,10 @@ export default class FeaturedMissions extends React.Component {
             <div className="featured-missions__header__description">
               <img className="featured-missions__header__logo" src={logo} />
               <div className="featured-missions__header__title">
-                Find Your Mission.<br />
-                Prepare For Liftoff.
+                Find Your Mission,<br />
+                Join Blockchain Projects.
               </div>
-              <div className="featured-missions__header__subtitle">Accelerating Blockchain Adoption</div>
+              <div className="featured-missions__header__subtitle">Work on projects. Freelance flexibly. Earn tokens & USD.</div>
             </div>
           </div>
         </div>

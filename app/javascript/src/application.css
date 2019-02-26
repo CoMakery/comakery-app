@@ -1235,7 +1235,7 @@ input[type="submit"].button:disabled {
 
 .featured-missions__header__title {
   font-family: Montserrat, sans-serif;
-  font-size: 53px;
+  font-size: 38px;
   font-weight: 800;
   font-style: normal;
   font-stretch: normal;
@@ -1243,11 +1243,12 @@ input[type="submit"].button:disabled {
   letter-spacing: normal;
   color: #ffffff;
   margin-bottom: 14px;
+  text-transform: uppercase;
 }
 
 .featured-missions__header__subtitle {
   font-family: Montserrat, sans-serif;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 500;
   font-style: normal;
   font-stretch: normal;
