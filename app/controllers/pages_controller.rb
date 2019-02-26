@@ -1,13 +1,10 @@
 class PagesController < ApplicationController
-  skip_before_action :require_login, except: %i[featured home]
-  skip_before_action :require_email_confirmation, only: %i[featured home landing add_interest]
+  skip_before_action :require_login, except: %i[add_interest]
+  skip_before_action :require_email_confirmation, except: %i[add_interest]
+
   skip_after_action :verify_authorized
 
   layout 'react', only: %i[styleguide featured]
-
-  def landing
-    redirect_to action: :featured if current_account
-  end
 
   def featured
     top_missions = Mission.active.first(4)
@@ -17,7 +14,7 @@ class PagesController < ApplicationController
       csrf_token: form_authenticity_token,
       top_missions: top_missions.map { |mission| featured_mission_props(mission) },
       more_missions: more_missions.map { |mission| more_mission_props(mission) },
-      is_confirmed: current_account.confirmed?
+      is_confirmed: current_account.nil? ? true : current_account.confirmed?
     }
   end
 
@@ -44,7 +41,7 @@ class PagesController < ApplicationController
       symbol: mission.token&.symbol,
       projects: mission.projects.public_listed.active.map do |project|
         project.as_json(only: %i[id title]).merge(
-          interested: current_account.interested?(project.id)
+          interested: current_account&.interested?(project.id)
         )
       end
     )
