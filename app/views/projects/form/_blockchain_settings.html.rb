@@ -200,13 +200,16 @@ class Views::Projects::Form::BlockchainSettings < Views::Base
           var symbol = $("[name='project[token_symbol]']").val();
           var decimals = $("[name='project[decimal_places]']").val()
           if(network && network != '' && contract != '' && (!symbol || symbol == '' || !decimals || decimals == '')) {
-            var rs = getSymbolsAndDecimals(network, contract)
-            if (!symbol || symbol == '') {
-              $("[name='project[token_symbol]']").val(rs[0]);
-            }
-            if (!decimals || decimals == '') {
-              $("[name='project[decimal_places]']").val(rs[1])
-            }
+            getSymbolsAndDecimals(network, contract).then(function(rs) {
+              if(rs) {
+                if (!symbol || symbol == '') {
+                  $("[name='project[token_symbol]']").val(rs[0]);
+                }
+                if (!decimals || decimals == '') {
+                  $("[name='project[decimal_places]']").val(rs[1])
+                }
+              }
+            })
           }
         });
       })
