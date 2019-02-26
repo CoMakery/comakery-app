@@ -92,7 +92,7 @@ describe RevenuesController do
 
       specify { expect(controller).not_to have_received(:authorize).with(controller.instance_variable_get('@project')) }
 
-      specify { expect(response).to redirect_to(root_url) }
+      specify { expect(response).to redirect_to(new_account_url) }
     end
   end
 end

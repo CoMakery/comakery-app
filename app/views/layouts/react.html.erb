@@ -88,7 +88,16 @@
         flash.clear
       %>
       <% if msg.present? %>
-        <%= react_component 'layouts/Flash', { flashType: msg_type, message: msg } %>
+        <%= react_component(
+          'layouts/Flash',
+          {
+            flashType: msg_type,
+            message: msg
+          },
+          {
+            prerender: true
+          }
+        )%>
       <% end %>
       <%= yield %>
     </div>

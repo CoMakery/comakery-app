@@ -9,7 +9,6 @@ export default class FeaturedMission extends React.Component {
     this.addInterest = this.addInterest.bind(this)
     this.state = {
       name       : props.name,
-      symbol     : props.symbol,
       description: props.description,
       imageUrl   : props.imageUrl,
       projects   : props.projects
@@ -27,13 +26,12 @@ export default class FeaturedMission extends React.Component {
       }
     }).then(response => {
       if (response.status === 200) {
-        // need to update project
         let newProjects = Array.from(this.state.projects)
         const index = newProjects.findIndex(project => project.id === projectId)
-
         newProjects[index].interested = true
-
         this.setState({projects: newProjects})
+      } if (response.status === 406) {
+        window.location = response.url
       } else {
         throw Error(response.text())
       }
@@ -41,7 +39,7 @@ export default class FeaturedMission extends React.Component {
   }
 
   render() {
-    const { name, symbol, description, imageUrl, projects } = this.state
+    const { name, description, imageUrl, projects } = this.state
 
     return (
       <div className={`featured-mission ${this.props.float === 'right' ? 'featured-mission--right' : ''}`}>
@@ -49,7 +47,7 @@ export default class FeaturedMission extends React.Component {
           <img src={imageUrl} />
         </div>
         <div className="featured-mission__detail">
-          <div className="featured-mission__name">{name} {symbol && `(${symbol})`}</div>
+          <div className="featured-mission__name">{name}</div>
           <div className="featured-mission__description">{description}</div>
           {projects.map(project => <div key={project.id} className="featured-mission__project">
             <a href={`/projects/${project.id}`} className="featured-mission__project__title">{project.title}</a>

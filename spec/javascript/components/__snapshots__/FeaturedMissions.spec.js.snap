@@ -27,13 +27,6 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
       className="featured-missions__header"
     >
       <div
-        className="intercom"
-      >
-        <img
-          src="test-file-stub"
-        />
-      </div>
-      <div
         className="featured-missions__header_container"
       >
         <img
@@ -50,14 +43,14 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
           <div
             className="featured-missions__header__title"
           >
-            Find Your Mission.
+            Find Your Mission,
             <br />
-            Prepare For Liftoff.
+            Join Blockchain Projects.
           </div>
           <div
             className="featured-missions__header__subtitle"
           >
-            Accelerating Blockchain Adoption
+            Work on projects. Freelance flexibly. Earn tokens & USD.
           </div>
         </div>
       </div>
