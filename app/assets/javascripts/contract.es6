@@ -1,4 +1,4 @@
-window.getSymbolsAndDecimals = function(network, contractAddress) {
+window.getSymbolsAndDecimals = async function(network, contractAddress) {
   let contractABI, tokenContract, web3;
   if (network === 'main') {
     network = 'mainnet';
@@ -9,9 +9,17 @@ window.getSymbolsAndDecimals = function(network, contractAddress) {
   try {
     return [tokenContract.symbol(), tokenContract.decimals().toNumber()];
   } catch (error) {
-    return ['', ''];
+    return await getErc20SymbolsAndDecimalsFromEthplorer(contractAddress)
   }
 };
+
+window.getErc20SymbolsAndDecimalsFromEthplorer = async function(contractAddress) {
+  const url = `https://api.ethplorer.io/getTokenInfo/${contractAddress}?apiKey=freekey`
+  const rs = await fetch(url).then((response) =>
+    response.json()
+  )
+  return [rs.symbol, rs.decimals]
+}
 
 window.getQtumSymbolsAndDecimals = async function(network, contractAddress) {
   let url, response, data;
