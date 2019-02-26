@@ -9,7 +9,6 @@ export default class FeaturedMission extends React.Component {
     this.addInterest = this.addInterest.bind(this)
     this.state = {
       name       : props.name,
-      symbol     : props.symbol,
       description: props.description,
       imageUrl   : props.imageUrl,
       projects   : props.projects
@@ -41,7 +40,7 @@ export default class FeaturedMission extends React.Component {
   }
 
   render() {
-    const { name, symbol, description, imageUrl, projects } = this.state
+    const { name, description, imageUrl, projects } = this.state
 
     return (
       <div className={`featured-mission ${this.props.float === 'right' ? 'featured-mission--right' : ''}`}>
@@ -49,7 +48,7 @@ export default class FeaturedMission extends React.Component {
           <img src={imageUrl} />
         </div>
         <div className="featured-mission__detail">
-          <div className="featured-mission__name">{name} {symbol && `(${symbol})`}</div>
+          <div className="featured-mission__name">{name}</div>
           <div className="featured-mission__description">{description}</div>
           {projects.map(project => <div key={project.id} className="featured-mission__project">
             <a href={`/projects/${project.id}`} className="featured-mission__project__title">{project.title}</a>

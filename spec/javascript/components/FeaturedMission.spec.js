@@ -36,7 +36,7 @@ describe('FeaturedMission', () => {
 
     expect(wrapper.exists('.featured-mission--right')).toBe(true)
     expect(wrapper.find('.featured-mission__image').find('img').prop('src')).toEqual('/logo.png')
-    expect(wrapper.find('.featured-mission__name').text()).toEqual('Test Mission Name (BTC)')
+    expect(wrapper.find('.featured-mission__name').text()).toEqual('Test Mission Name')
     expect(wrapper.find('.featured-mission__description').text()).toEqual('This is test mission')
     expect(wrapper.find('.featured-mission__project').first().find('.featured-mission__project__title').text()).toEqual('Project 1')
     expect(wrapper.find('.featured-mission__project').first().find('.featured-mission__project__interest--sent').text()).toEqual('Request Sent')
