@@ -27,13 +27,6 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
       className="featured-missions__header"
     >
       <div
-        className="intercom"
-      >
-        <img
-          src="test-file-stub"
-        />
-      </div>
-      <div
         className="featured-missions__header_container"
       >
         <img

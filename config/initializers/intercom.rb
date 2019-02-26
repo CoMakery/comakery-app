@@ -60,6 +60,7 @@ IntercomRails.config do |config|
   config.user.custom_data = {
     :skill => Proc.new { |user| user.specialty },
     :full_name => Proc.new { |user| "#{user.first_name} #{user.last_name}" },
+    :name => Proc.new { |user| "#{user.first_name} #{user.last_name}" },
     :occupation => Proc.new { |user| user.occupation }
   }
 

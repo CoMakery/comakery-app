@@ -61,9 +61,11 @@ export default class FeaturedMissions extends React.Component {
       <div className="featured-missions">
         {!this.props.isConfirmed && confirmNotification}
         <div className="featured-missions__header">
-          <div className="intercom">
-            <img src={chatImg} />
-          </div>
+          {this.props.isConfirmed &&
+            <div className="intercom">
+              <img src={chatImg} />
+            </div>
+          }
           <div className="featured-missions__header_container">
             <img className="featured-missions__header__img" src={headerImg} />
             <div className="featured-missions__header__description">
