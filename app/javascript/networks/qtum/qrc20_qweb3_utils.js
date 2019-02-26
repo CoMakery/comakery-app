@@ -25,6 +25,7 @@ const transferQrc20Tokens = async function(award) { // award in JSON
     window.alertMsg('#metamaskModal1', 'Not logged in. Please log in to Qrypto first')
     return
   }
+  const network = award.project.blockchain_network.replace('qtum_', '')
   const qweb3 = new Qweb3(window.qrypto.rpcProvider)
   const contract = qweb3.Contract(contractAddress, qrc20TokenABI)
   debugLog(amount)
@@ -42,15 +43,19 @@ const transferQrc20Tokens = async function(award) { // award in JSON
       gasLimit     : 1000000,
       senderAddress: window.qrypto.account.address,
     })
+    if (rs && rs.txid) {
+      window.alertMsg('#metamaskModal1', 'Waiting...')
+    }
     console.log('transaction address: ' + rs.txid)
-
   } catch (err) {
     console.error(err)
     window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
   if (rs && rs.txid) {
-    jQuery.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: rs.txid })
+    const sub = network === 'mainnet' ? 'explorer' : 'testnet'
+    const link = `https://${sub}.qtum.org/tx/${rs.txid}`
+    utils.updateTransactionAddress(award, rs.txid, link)
   }
 }
 
