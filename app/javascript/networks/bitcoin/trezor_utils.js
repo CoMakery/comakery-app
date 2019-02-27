@@ -1,37 +1,39 @@
-import jQuery from 'jquery'
 import utils from 'networks/bitcoin/helpers/utils'
 import insight from 'networks/bitcoin/nodes/insight'
 import debugLog from 'src/javascripts/debugLog'
 import BigNumber from 'bignumber.js'
 import caValidator from 'wallet-address-validator'
 import TrezorConnect from 'trezor-connect'
-import utils from 'networks/helpers/utils'
+import helpers from 'networks/helpers/utils'
 
 const transferBtcCoins = async function(award) { // award in JSON
   const network = award.project.blockchain_network.replace('bitcoin_', '')
   const recipientAddress = award.account.bitcoin_wallet
   let amount = parseFloat(award.total_amount)
+
   if (!recipientAddress || recipientAddress === '' || amount <= 0 || !(network === 'mainnet' || network === 'testnet')) {
     return
   }
   const networkType = network === 'mainnet' ? 'prod' : 'testnet'
   const addressValid = caValidator.validate(recipientAddress, 'BTC', networkType)
+  let txHash
   try {
     if (addressValid) {
       window.alertMsg('#metamaskModal1', 'Waiting...')
-      const txHash = await submitTransaction(network, recipientAddress, amount)
-      debugLog('transaction address: ' + txHash)
-      if (txHash) {
-        jQuery.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash })
-      }
-      window.foundationCmd('#metamaskModal1', 'close')
-      return txHash
+      txHash = await submitTransaction(network, recipientAddress, amount)
+      console.log('transaction address: ' + txHash)
     }
   } catch (err) {
     console.log(err)
     window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
-    utils.showMessageWhenTransactionFailed(award)
+    helpers.showMessageWhenTransactionFailed(award)
   }
+  if (txHash) {
+    const sub = network === 'mainnet' ? 'btc' : 'btc-testnet'
+    const link = `https://live.blockcypher.com/${sub}/tx/${txHash}`
+    helpers.updateTransactionAddress(award, txHash, link)
+  }
+  return txHash
 }
 
 // amount in BTC
@@ -49,9 +51,7 @@ const submitTransaction = async function(network, to, amount) {
   if (amount + fee >= account.balance) {
     const sub = network === 'mainnet' ? 'btc' : 'btc-testnet'
     const link = `https://live.blockcypher.com/${sub}/address/${fromAddress}`
-    const e = new Error(`Account <a href='${link}' target='_blank'>${fromAddress}</a> <br> You don't have sufficient Tokens to send`)
-    e.name = 'ErrorMessage'
-    throw e
+    throw Error(`Account <a href='${link}' target='_blank'>${fromAddress}</a> <br> You don't have sufficient Tokens to send`)
   }
   const utxoList = await insight.getUtxoList(fromAddress, network)
   const amountSat = new BigNumber(amount).times(1e8)
@@ -93,6 +93,8 @@ const submitTransaction = async function(network, to, amount) {
   debugLog(rs)
   if (rs.success) {
     return rs.payload.txid
+  } else if (rs.payload.error) {
+    throw Error(rs.payload.error)
   }
 }
 
