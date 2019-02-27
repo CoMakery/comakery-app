@@ -13,6 +13,10 @@ class PagesController < ApplicationController
     top_missions = Mission.active.first(4)
     more_missions = Mission.active.offset(4)
 
+    if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
+      flash[:warning] = 'Please confirm your email address to continue'
+    end
+
     render component: 'FeaturedMissions', props: {
       csrf_token: form_authenticity_token,
       top_missions: top_missions.map { |mission| featured_mission_props(mission) },

@@ -11,18 +11,8 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
     className="featured-missions"
   >
     <div
-      className="confirm-message"
-    >
-      <div
-        className="confirm-message__box"
-      >
-        <img
-          className="confirm-message__icon"
-          src="test-file-stub"
-        />
-        Please confirm your email address to continue
-      </div>
-    </div>
+      className="grayed-page"
+    />
     <div
       className="featured-missions__header"
     >

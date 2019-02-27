@@ -1,33 +1,61 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import Flash from 'components/layouts/Flash'
 
 describe('Flash', () => {
   it('renders correctly without props', () => {
-    const wrapper = shallow(<Flash />)
+    const wrapper = mount(<Flash />)
 
     expect(wrapper).toMatchSnapshot()
+    expect(wrapper.exists('.flash-message-container')).toBe(true)
     expect(wrapper.exists('.flash-message')).toBe(true)
     expect(wrapper.exists('.flash-message__icon')).toBe(true)
     expect(wrapper.exists('.flash-message__icon--close')).toBe(true)
   })
 
-  it('renders correctly with notice flashType prop', () => {
-    const wrapper = shallow(<Flash flashType="notice" />)
+  it('renders correctly with several messages', () => {
+    const messages = [
+      {
+        'severity': 'notice',
+        'text'    : 'notice text'
+      },
+      {
+        'severity': 'warning',
+        'text'    : 'warning text'
+      },
+      {
+        'severity': 'error',
+        'text'    : 'error text'
+      },
+    ]
+    const wrapper = mount(<Flash messages={messages} />)
 
     expect(wrapper.exists('.flash-message--notice')).toBe(true)
-  })
-
-  it('renders correctly with error flashType prop', () => {
-    const wrapper = shallow(<Flash flashType="error" />)
-
+    expect(wrapper.find('.flash-message--notice').html()).toContain('notice text')
+    expect(wrapper.exists('.flash-message--warning')).toBe(true)
+    expect(wrapper.find('.flash-message--warning').html()).toContain('warning text')
     expect(wrapper.exists('.flash-message--error')).toBe(true)
+    expect(wrapper.find('.flash-message--error').html()).toContain('error text')
   })
 
-  it('renders correctly with message prop', () => {
-    const wrapper = shallow(<Flash flashType="notice" message="Test Message" />)
+  it('closes message on click', () => {
+    const messages = [
+      {
+        'severity': 'notice',
+        'text'    : 'notice text'
+      },
+      {
+        'severity': 'warning',
+        'text'    : 'warning text'
+      },
+      {
+        'severity': 'error',
+        'text'    : 'error text'
+      },
+    ]
+    const wrapper = mount(<Flash messages={messages} />)
 
-    expect(wrapper.exists('.flash-message--notice')).toBe(true)
-    expect(wrapper.find('.flash-message').html()).toContain('Test Message')
+    wrapper.find('.flash-message--warning > .flash-message__icon--close').simulate('click')
+    expect(wrapper.exists('.flash-message--warning')).toBe(false)
   })
 })

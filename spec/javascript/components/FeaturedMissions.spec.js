@@ -17,10 +17,10 @@ describe('FeaturedMissions', () => {
     expect(wrapper.exists('.featured-missions__footer')).toBe(true)
   })
 
-  it('renders confirm email notification', () => {
+  it('grays out page for unconfirmed accounts', () => {
     const wrapper = mount(<FeaturedMissions isConfirmed={false} />)
 
-    expect(wrapper.exists('.confirm-message')).toBe(true)
+    expect(wrapper.exists('.grayed-page')).toBe(true)
   })
 
   it('renders correctly with props', () => {
