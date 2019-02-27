@@ -25,7 +25,7 @@ exports[`Header renders correctly without props 1`] = `
         className="header--nav--links"
       >
         <a
-          className="header--nav--links--current"
+          className={null}
           href="/"
         >
           Home

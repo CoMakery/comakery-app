@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
 
   # called from before_filter :require_login
   def not_authenticated(msg = nil)
-    redirect_to root_path, alert: msg
+    redirect_to new_account_url, alert: msg
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found

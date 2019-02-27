@@ -17,10 +17,11 @@ describe('FeaturedMissions', () => {
     expect(wrapper.exists('.featured-missions__footer')).toBe(true)
   })
 
-  it('grays out page for unconfirmed accounts', () => {
+  it('grays out page for unconfirmed accounts and disables intercom', () => {
     const wrapper = mount(<FeaturedMissions isConfirmed={false} />)
 
     expect(wrapper.exists('.grayed-page')).toBe(true)
+    expect(wrapper.exists('.intercom')).toBe(false)
   })
 
   it('renders correctly with props', () => {

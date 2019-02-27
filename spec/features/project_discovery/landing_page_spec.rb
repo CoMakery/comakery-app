@@ -39,7 +39,7 @@ describe 'landing page', :js do
     expect(page.all('.project').size).to eq(9)
   end
 
-  it 'when logged out redirect to home page' do
+  it 'when logged out redirect to signup' do
     (1..3).each { |i| create(:project, account: swarmbot_account, title: "Featured Project #{i}", visibility: 'public_listed', featured: i) }
     (1..7).each { |i| create(:project, account: swarmbot_account, title: "Public Project #{i}", visibility: 'public_listed') }
 
@@ -48,6 +48,6 @@ describe 'landing page', :js do
     visit my_project_path
 
     expect(page.all('.project').size).to eq(0)
-    expect(page).to have_content 'JOIN INCREDIBLE BLOCKCHAIN PROJECTS'
+    expect(page.current_path).to eq('/accounts/new')
   end
 end
