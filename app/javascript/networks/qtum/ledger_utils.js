@@ -13,24 +13,26 @@ const transferQtumCoins = async function(award) { // award in JSON
   if (!recipientAddress || recipientAddress === '' || amount <= 0 || !(network === 'mainnet' || network === 'testnet')) {
     return
   }
+  let txHash
   try {
     const networkType = network === 'mainnet' ? 'prod' : 'testnet'
     const addressValid = caValidator.validate(recipientAddress, 'QTUM', networkType)
     if (addressValid) {
       window.alertMsg('#metamaskModal1', 'Waiting...')
-      const txHash = await submitTransaction(network, recipientAddress, amount, fee)
-      debugLog(`transaction address: ${txHash}`)
-      if (txHash) {
-        jQuery.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash })
-      }
-      window.foundationCmd('#metamaskModal1', 'close')
-      return txHash
+      txHash = await submitTransaction(network, recipientAddress, amount, fee)
+      console.log(`transaction address: ${txHash}`)
     }
   } catch (err) {
     console.log(err)
     window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
+  if (txHash) {
+    const sub = network === 'mainnet' ? 'explorer' : 'testnet'
+    const link = `https://${sub}.qtum.org/tx/${txHash}`
+    utils.updateTransactionAddress(award, txHash, link)
+  }
+  return txHash
 }
 
 // amount, fee in QTUM
