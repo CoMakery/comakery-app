@@ -77,7 +77,7 @@ class AccountsController < ApplicationController
         session.delete(:account_id)
         @current_account = nil
       end
-      redirect_to root_path, notice: 'Thank you for signing up. Now, let us know what projects you are interested in.'
+      redirect_to root_path, flash: { warning: 'Please confirm your email address to continue' }
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
@@ -91,7 +91,7 @@ class AccountsController < ApplicationController
     if account
       account.confirm!
       session[:account_id] = account.id
-      flash[:notice] = 'Success! Your email is confirmed.'
+      flash[:notice] = 'Thank you for signing up. Now, let us know what projects you are interested in.'
       if session[:redeem]
         flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
         session[:redeem] = nil

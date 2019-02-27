@@ -1,27 +1,53 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Flash renders correctly without props 1`] = `
-<Fragment>
+<Flash
+  className=""
+  messages={
+    Array [
+      Object {
+        "severity": "warning",
+        "text": "warning text",
+      },
+    ]
+  }
+>
   <div
-    className="flash-message flash-message--notice"
+    className="flash-message-container"
   >
-    <Icon
-      className="flash-message__icon"
-      name="flash/notice.svg"
-    />
     <div
-      className="flash-message__text"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "",
+      className="flash-message flash-message--warning"
+      key="0"
+    >
+      <Icon
+        className="flash-message__icon"
+        name="flash/warning.svg"
+      >
+        <img
+          className="icon icon__flash/warning-svg flash-message__icon"
+          src="test-file-stub"
+        />
+      </Icon>
+      <div
+        className="flash-message__text"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "warning text",
+          }
         }
-      }
-    />
-    <Icon
-      className="flash-message__icon flash-message__icon--close"
-      name="flash/close.svg"
-      onClick={[Function]}
-    />
+      />
+      <Icon
+        className="flash-message__icon flash-message__icon--close"
+        name="flash/close.svg"
+        onClick={[Function]}
+      >
+        <img
+          className="icon icon__flash/close-svg flash-message__icon flash-message__icon--close"
+          onClick={[Function]}
+          src="test-file-stub"
+        />
+      </Icon>
+    </div>
   </div>
-</Fragment>
+</Flash>
 `;

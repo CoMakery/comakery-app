@@ -14,8 +14,6 @@ import InputFieldDropdownHalfed from './InputFieldDropdownHalfed'
 import Checkbox from './Checkbox'
 import InputFieldUploadFile from './InputFieldUploadFile'
 import Icon from './Icon'
-import MessageError from './MessageError'
-import MessageWarning from './MessageWarning'
 import SidebarItem from './SidebarItem'
 import SidebarItemBold from './SidebarItemBold'
 
@@ -235,15 +233,6 @@ class Index extends React.Component {
           ].map(i =>
             <Icon key={i} name={i} className="styleguide-index--icon" />
           )}
-
-          <MessageError
-            text="Please confirm your  email address to continue"
-            className="styleguide-index--message"
-          />
-          <MessageWarning
-            text="Please confirm your  email address to continue"
-            className="styleguide-index--message"
-          />
 
           <ButtonBorder className="styleguide-index--button" />
           <ButtonPrimaryDisabled className="styleguide-index--button" />

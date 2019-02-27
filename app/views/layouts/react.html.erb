@@ -76,29 +76,18 @@
       }
     )%>
     <div class="react-container">
-      <% 
-        if flash[:notice].present?
-          msg = flash[:notice]
-          msg_type = "notice"
-        elsif flash[:error].present? 
-          msg = flash[:error]
-          msg_type = "error"
-        end
+      <%= react_component(
+        'layouts/Flash',
+        {
+          messages: [:notice, :warning, :error].map do |severity|
+            flash[severity] ? { severity: severity, text: flash[severity] } : nil
+          end.compact
+        },
+        {
+          prerender: true
+        }
+      )%>
 
-        flash.clear
-      %>
-      <% if msg.present? %>
-        <%= react_component(
-          'layouts/Flash',
-          {
-            flashType: msg_type,
-            message: msg
-          },
-          {
-            prerender: true
-          }
-        )%>
-      <% end %>
       <%= yield %>
     </div>
     <%= react_component(

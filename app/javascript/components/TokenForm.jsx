@@ -7,7 +7,7 @@ import InputFieldHalfed from './styleguide/InputFieldHalfed'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
-import Message from './styleguide/Message'
+import Flash from './layouts/Flash'
 
 class TokenForm extends React.Component {
   constructor(props) {
@@ -27,8 +27,7 @@ class TokenForm extends React.Component {
     this.lofoInputRef = React.createRef()
 
     this.state = {
-      errorMessage                      : null,
-      infoMessage                       : null,
+      flashMessages                     : [],
       errors                            : {},
       disabled                          : {},
       formAction                        : this.props.formAction,
@@ -173,9 +172,9 @@ class TokenForm extends React.Component {
       if (response.status === 200) {
         return response.json()
       } else {
-        this.setState({
-          errorMessage: response.text()
-        })
+        this.setState(state => ({
+          flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': response.text()}])
+        }))
         this.enableContractFields()
         throw Error(response.text())
       }
@@ -218,11 +217,11 @@ class TokenForm extends React.Component {
         } else {
           if (this.state.formAction === 'POST') {
             response.json().then(data => {
-              this.setState({
-                formAction : 'PUT',
-                formUrl    : `/tokens/${data.id}`,
-                infoMessage: 'Token Created'
-              })
+              this.setState(state => ({
+                formAction   : 'PUT',
+                formUrl      : `/tokens/${data.id}`,
+                flashMessages: state.flashMessages.concat([{'severity': 'notice', 'text': 'Token Created'}])
+              }))
               history.replaceState(
                 {},
                 document.title,
@@ -230,18 +229,18 @@ class TokenForm extends React.Component {
               )
             })
           } else {
-            this.setState({
-              infoMessage: 'Token Updated'
-            })
+            this.setState(state => ({
+              flashMessages: state.flashMessages.concat([{'severity': 'notice', 'text': 'Token Updated'}])
+            }))
           }
           this.enable(['token[submit]', 'token[submit_and_close]'])
         }
       } else {
         response.json().then(data => {
-          this.setState({
-            errors      : data.errors,
-            errorMessage: data.message
-          })
+          this.setState(state => ({
+            errors       : data.errors,
+            flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
+          }))
           this.enable(['token[submit]', 'token[submit_and_close]'])
         })
       }
@@ -282,17 +281,7 @@ class TokenForm extends React.Component {
             </React.Fragment>
           }
         >
-          { this.state.errorMessage &&
-            <div className="token-form--message">
-              <Message severity="error" text={this.state.errorMessage} />
-            </div>
-          }
-
-          { this.state.infoMessage &&
-            <div className="token-form--message">
-              <Message severity="warning" text={this.state.infoMessage} />
-            </div>
-          }
+          <Flash messages={this.state.flashMessages} />
 
           <form className="token-form--form" id="token-form--form" onSubmit={this.handleSubmit}>
             <InputFieldDropdownHalfed
