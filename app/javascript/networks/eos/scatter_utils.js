@@ -25,11 +25,7 @@ const transferEosCoins = async function(award) { // award in JSON
     return txHash
   } catch (err) {
     console.error(err)
-    if (err.name === 'ErrorMessage') {
-      window.alertMsg('#metamaskModal1', err.message)
-    } else {
-      window.foundationCmd('#metamaskModal1', 'close')
-    }
+    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
     if (jQuery('body.projects-show').length > 0) {
       jQuery('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
     }
@@ -47,7 +43,13 @@ const submitTransaction = async function(network, to, amount, memo = 'CoMakery')
   const account = ScatterJS.account('eos')
   debugLog(account)
   const eos = ScatterJS.eos(network, Eos)
-  debugLog(eos)
+  const info = await eos.getAccount(account.name)
+  debugLog(['account info: ', info])
+  if (amount >= parseFloat(info.core_liquid_balance)) {
+    const sub = network === 'mainnet' ? 'explorer.eosvibes.io' : 'jungle.bloks.io'
+    const link = `https://${sub}/account/${account.name}`
+    throw Error(`Account <a href='${link}' target='_blank'>${account.name}</a> <br> You don't have sufficient Tokens to send`)
+  }
   debugLog(`recipientAddress: ${to}`)
   const rs = await eos.transfer(account.name, to, `${amount.toFixed(4)} EOS`, memo)
   debugLog(['result: ', rs])
