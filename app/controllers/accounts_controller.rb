@@ -9,6 +9,10 @@ class AccountsController < ApplicationController
 
   def new
     @account = Account.new(email: params[:account_email])
+    respond_to do |format|
+      format.html
+      format.json { render json: nil }
+    end
   end
 
   def show
