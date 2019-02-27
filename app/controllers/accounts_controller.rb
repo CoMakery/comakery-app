@@ -73,7 +73,7 @@ class AccountsController < ApplicationController
         session.delete(:account_id)
         @current_account = nil
       end
-      redirect_to root_path, flash: { warning: 'Please confirm your email address to continue' } 
+      redirect_to root_path, flash: { warning: 'Please confirm your email address to continue' }
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
