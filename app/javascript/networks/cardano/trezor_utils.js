@@ -1,8 +1,8 @@
-import jQuery from 'jquery'
 import debugLog from 'src/javascripts/debugLog'
 import {ADALITE_CONFIG} from 'networks/cardano/trezor/config'
 import derivationSchemes from 'networks/cardano/trezor/wallet/derivation-schemes'
 import Cardano from 'networks/cardano/trezor/wallet/cardano-wallet'
+import utils from 'networks/helpers/utils'
 import {
   sendAddressValidator,
   sendAmountValidator,
@@ -18,24 +18,24 @@ const transferAdaCoins = async function(award) { // award in JSON
   }
   const addressValidator = sendAddressValidator(recipientAddress)
   const coins = sendAmountValidator(`${amount}`).coins
+  let txHash
   try {
     if (!addressValidator.validationError && !coins.validationError) {
       window.alertMsg('#metamaskModal1', 'Waiting...')
-      const txHash = await submitTransaction(network, recipientAddress, coins)
-      debugLog('transaction address: ' + txHash)
-      if (txHash) {
-        jQuery.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash })
-      }
-      window.foundationCmd('#metamaskModal1', 'close')
-      return txHash
+      txHash = await submitTransaction(network, recipientAddress, coins)
+      console.log('transaction address: ' + txHash)
     }
   } catch (err) {
     console.error(err)
-    window.alertMsg('#metamaskModal1', err.message)
-    if (jQuery('body.projects-show').length > 0) {
-      jQuery('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
-    }
+    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
+    utils.showMessageWhenTransactionFailed(award)
   }
+  if (txHash) {
+    const basicUrl = network === 'mainnet' ? 'https://cardanoexplorer.com' : 'https://cardano-explorer.cardano-testnet.iohkdev.io'
+    const link = `${basicUrl}/tx/${txHash}`
+    utils.updateTransactionAddress(award, txHash, link)
+  }
+  return txHash
 }
 
 // network: 'mainnet'
@@ -59,9 +59,7 @@ const submitTransaction = async function(network, address, amount) {
       const fromAddress = await wallet.getFirstAddress()
       const basicUrl = network === 'mainnet' ? 'https://cardanoexplorer.com' : 'https://cardano-explorer.cardano-testnet.iohkdev.io'
       const link = `${basicUrl}/address/${fromAddress}`
-      const e = new Error(`Account <a href='${link}' target='_blank'>${fromAddress}</a> <br> You don't have sufficient Tokens to send`)
-      e.name = 'ErrorMessage'
-      throw e
+      throw Error(`Account <a href='${link}' target='_blank'>${fromAddress}</a> <br> You don't have sufficient Tokens to send`)
     } else {
       throw Error('Transaction rejected')
     }
