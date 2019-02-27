@@ -43,14 +43,14 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
           <div
             className="featured-missions__header__title"
           >
-            Find Your Mission,
+            Find Your Mission.
             <br />
             Join Blockchain Projects.
           </div>
           <div
             className="featured-missions__header__subtitle"
           >
-            Work on projects. Freelance flexibly. Earn tokens & USD.
+            Freelance flexibly. Earn tokens & USD. Grow your skills.
           </div>
         </div>
       </div>
