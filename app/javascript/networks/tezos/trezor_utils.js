@@ -1,5 +1,5 @@
-import jQuery from 'jquery'
 import debugLog from 'src/javascripts/debugLog'
+import utils from 'networks/helpers/utils'
 import { of } from 'rxjs'
 import { initializeWallet, transaction, confirmOperation } from 'tezos-wallet'
 
@@ -18,12 +18,8 @@ const transferXtzCoins = async function(award) { // award in JSON
     }
   } catch (err) {
     console.error(err)
-    if (err.name === 'ErrorMessage') {
-      window.alertMsg('#metamaskModal1', err.message)
-    } else {
-      window.foundationCmd('#metamaskModal1', 'close')
-    }
-    showMessageWhenTransactionFailed(award)
+    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
+    utils.showMessageWhenTransactionFailed(award)
   }
 }
 
@@ -43,9 +39,7 @@ const submitTransaction = async function(award, network, to, amount) {
   const balance = await window.eztz.rpc.getBalance(fromAddress)
   if ((amount + fee) * 1e6 >= parseFloat(balance)) {
     const link = `https://tzscan.io/${fromAddress}`
-    const e = new Error(`Account <a href='${link}' target='_blank'>${fromAddress}</a> <br> You don't have sufficient Tokens to send`)
-    e.name = 'ErrorMessage'
-    throw e
+    throw Error(`Account <a href='${link}' target='_blank'>${fromAddress}</a> <br> You don't have sufficient Tokens to send`)
   }
   of([]).pipe(
     initializeWallet(state => ({
@@ -81,25 +75,16 @@ const submitTransaction = async function(award, network, to, amount) {
     },
     error => {
       console.error('transaction failed', error)
-      showMessageWhenTransactionFailed(award)
-      window.foundationCmd('#metamaskModal1', 'close')
+      utils.showMessageWhenTransactionFailed(award)
+      window.alertMsg('#metamaskModal1', error.message || 'The transaction failed')
     }
   )
 }
 
 const updateTransactionAddress = function(award, txHash) {
   if (txHash) {
-    jQuery.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash }, () => {
-      const link = `https://tzscan.io/${txHash}`
-      const alertMsg = `The <a href='${link}' target='_blank'>transaction address</a> of the award has been successfully updated`
-      window.alertMsg('#metamaskModal1', alertMsg)
-    })
-  }
-}
-
-const showMessageWhenTransactionFailed = function(award) {
-  if (jQuery('body.projects-show').length > 0) {
-    jQuery('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
+    const link = `https://tzscan.io/${txHash}`
+    utils.updateTransactionAddress(award, txHash, link)
   }
 }
 
