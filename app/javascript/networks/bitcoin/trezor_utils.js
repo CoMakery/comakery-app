@@ -5,6 +5,7 @@ import debugLog from 'src/javascripts/debugLog'
 import BigNumber from 'bignumber.js'
 import caValidator from 'wallet-address-validator'
 import TrezorConnect from 'trezor-connect'
+import utils from 'networks/helpers/utils'
 
 const transferBtcCoins = async function(award) { // award in JSON
   const network = award.project.blockchain_network.replace('bitcoin_', '')
@@ -28,14 +29,8 @@ const transferBtcCoins = async function(award) { // award in JSON
     }
   } catch (err) {
     console.log(err)
-    if (err.name === 'ErrorMessage') {
-      window.alertMsg('#metamaskModal1', err.message)
-    } else {
-      window.foundationCmd('#metamaskModal1', 'close')
-    }
-    if (jQuery('body.projects-show').length > 0) {
-      jQuery('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
-    }
+    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
+    utils.showMessageWhenTransactionFailed(award)
   }
 }
 
