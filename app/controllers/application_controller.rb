@@ -32,7 +32,12 @@ class ApplicationController < ActionController::Base
 
   # called from before_filter :require_login
   def not_authenticated(msg = nil)
-    redirect_to new_account_url, alert: msg
+    respond_to do |format|
+      format.html { redirect_to new_account_url, alert: msg }
+      format.json { head :unauthorized }
+    end
+  rescue ActionController::UnknownFormat
+    head :unauthorized
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found

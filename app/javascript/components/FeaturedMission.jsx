@@ -30,8 +30,8 @@ export default class FeaturedMission extends React.Component {
         const index = newProjects.findIndex(project => project.id === projectId)
         newProjects[index].interested = true
         this.setState({projects: newProjects})
-      } if (response.status === 406) {
-        window.location = response.url
+      } if (response.status === 401) {
+        window.location = '/accounts/new'
       } else {
         throw Error(response.text())
       }
