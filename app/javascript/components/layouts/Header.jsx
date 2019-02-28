@@ -7,7 +7,7 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
   return <React.Fragment>
     { !isLoggedIn &&
       <div className="header--nav--links">
-        <a href="/" className={(currentPath === '/' || currentPath === '/featured') ? 'header--nav--links--current' : null}>
+        <a href="/" className={(currentPath === '/') ? 'header--nav--links--current' : null}>
           Home
         </a>
 
@@ -27,7 +27,7 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
 
     { isLoggedIn &&
       <div className="header--nav--links">
-        <a href="/" className={(currentPath === '/' || currentPath === '/featured') ? 'header--nav--links--current' : null}>
+        <a href="/" className={(currentPath === '/') ? 'header--nav--links--current' : null}>
           Home
         </a>
 

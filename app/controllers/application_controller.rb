@@ -32,7 +32,12 @@ class ApplicationController < ActionController::Base
 
   # called from before_filter :require_login
   def not_authenticated(msg = nil)
-    redirect_to root_path, alert: msg
+    respond_to do |format|
+      format.html { redirect_to new_account_url, alert: msg }
+      format.json { head :unauthorized }
+    end
+  rescue ActionController::UnknownFormat
+    head :unauthorized
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
@@ -59,7 +64,7 @@ class ApplicationController < ActionController::Base
 
   def require_email_confirmation
     if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
-      not_authenticated('Please confirm your email before continuing.')
+      redirect_to root_path, flash: { warning: 'Please confirm your email address to continue' }
     end
   end
 

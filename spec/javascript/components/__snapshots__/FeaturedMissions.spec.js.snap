@@ -11,28 +11,11 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
     className="featured-missions"
   >
     <div
-      className="confirm-message"
-    >
-      <div
-        className="confirm-message__box"
-      >
-        <img
-          className="confirm-message__icon"
-          src="test-file-stub"
-        />
-        Please confirm your email address to continue
-      </div>
-    </div>
+      className="grayed-page"
+    />
     <div
       className="featured-missions__header"
     >
-      <div
-        className="intercom"
-      >
-        <img
-          src="test-file-stub"
-        />
-      </div>
       <div
         className="featured-missions__header_container"
       >
@@ -52,12 +35,12 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
           >
             Find Your Mission.
             <br />
-            Prepare For Liftoff.
+            Join Blockchain Projects.
           </div>
           <div
             className="featured-missions__header__subtitle"
           >
-            Accelerating Blockchain Adoption
+            Freelance flexibly. Earn tokens & USD. Grow your skills.
           </div>
         </div>
       </div>

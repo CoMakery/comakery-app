@@ -5,6 +5,7 @@ class SessionsController < ApplicationController
   skip_before_action :require_build_profile
 
   before_action :redirect_if_signed_in, only: %i[create sign_in new]
+  before_action :check_discord_oauth, only: %i[create]
 
   def oauth_failure
     flash[:error] = "Sorry, logging in failed... please try again, or email us at #{I18n.t('tech_support_email')}"
@@ -52,6 +53,13 @@ class SessionsController < ApplicationController
 
   def auth_hash
     request.env['omniauth.auth']
+  end
+
+  def check_discord_oauth
+    if auth_hash['provider']&.include?('discord') && auth_hash['info'] && !auth_hash['info']['email']&.include?('@')
+      flash[:error] = 'Please use Discord account with a valid email address'
+      redirect_to new_session_path
+    end
   end
 
   def redirect_path
@@ -126,6 +134,15 @@ class SessionsController < ApplicationController
       flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your EOS account name on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
     else
       flash[:notice] = "Congratulations, you just claimed your award! Your EOS account name is #{view_context.link_to current_account.eos_wallet, current_account.decorate.eos_wallet_url} you can change your EOS account name on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your EOS tokens."
+      current_account.update new_award_notice: false
+    end
+  end
+
+  def process_new_tezos_award_notice
+    if current_account.tezos_wallet.blank?
+      flash[:notice] = "Congratulations, you just claimed your award! Be sure to enter your Tezos Address on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    else
+      flash[:notice] = "Congratulations, you just claimed your award! Your Tezos address is #{view_context.link_to current_account.tezos_wallet, current_account.decorate.tezos_wallet_url} you can change your Tezos address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Tezos tokens."
       current_account.update new_award_notice: false
     end
   end

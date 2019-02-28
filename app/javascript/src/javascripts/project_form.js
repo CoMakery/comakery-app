@@ -15,6 +15,9 @@ const customBlockchainNetwork = function(coinType) {
     case 'eos':
       prefix = 'eos_'
       break
+    case 'xtz':
+      prefix = 'tezos_'
+      break
     default:
   }
   if (prefix !== '') {

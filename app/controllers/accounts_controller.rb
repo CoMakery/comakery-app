@@ -73,7 +73,7 @@ class AccountsController < ApplicationController
         session.delete(:account_id)
         @current_account = nil
       end
-      redirect_to root_path, notice: 'Thank you for signing up. Now, let us know what projects you are interested in.'
+      redirect_to root_path, flash: { warning: 'Please confirm your email address to continue' }
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
@@ -87,7 +87,7 @@ class AccountsController < ApplicationController
     if account
       account.confirm!
       session[:account_id] = account.id
-      flash[:notice] = 'Success! Your email is confirmed.'
+      flash[:notice] = 'Thank you for signing up. Now, let us know what projects you are interested in.'
       if session[:redeem]
         flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
         session[:redeem] = nil
@@ -160,7 +160,7 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :cardano_wallet, :bitcoin_wallet, :eos_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password, :specialty, :occupation, :linkedin_url, :github_url, :dribble_url, :behance_url)
+    result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :cardano_wallet, :bitcoin_wallet, :eos_wallet, :tezos_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password, :specialty, :occupation, :linkedin_url, :github_url, :dribble_url, :behance_url)
     result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y') if result[:date_of_birth].present?
     result
   end
@@ -180,12 +180,13 @@ class AccountsController < ApplicationController
   end
 
   def account_decorate(account)
-    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet]).merge(
+    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet]).merge(
       etherscan_address: account.decorate.etherscan_address,
       qtum_address: account.decorate.qtum_wallet_url,
       cardano_address: account.decorate.cardano_wallet_url,
       bitcoin_address: account.decorate.bitcoin_wallet_url,
       eos_address: account.decorate.eos_wallet_url,
+      tezos_address: account.decorate.tezos_wallet_url,
       image_url: account.image.present? ? Refile.attachment_url(account, :image, :fill, 190, 190) : nil
     )
   end
