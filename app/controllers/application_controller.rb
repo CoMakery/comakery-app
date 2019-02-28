@@ -36,6 +36,8 @@ class ApplicationController < ActionController::Base
       format.html { redirect_to new_account_url, alert: msg }
       format.json { head :unauthorized }
     end
+  rescue ActionController::UnknownFormat
+    head :unauthorized
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
