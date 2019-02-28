@@ -8,6 +8,26 @@ describe 'my account', js: true do
   let!(:mission) { create :mission, token_id: token.id }
   let!(:project) { create :project, mission_id: mission.id, visibility: 'public_listed', status: 0 }
 
+  scenario 'user gets redirected to signup on create project click' do
+    visit '/'
+    expect(page.current_url).to have_content '/'
+    expect(page).to have_content('CoMakery Hosts Blockchain Missions We Believe In')
+    stub_airtable
+    find('a.featured-mission__create-project').click
+    sleep 2
+    expect(page.current_url).to have_content '/accounts/new'
+  end
+
+  scenario 'user gets redirected to signup on interest click' do
+    visit '/'
+    expect(page.current_url).to have_content '/'
+    expect(page).to have_content('CoMakery Hosts Blockchain Missions We Believe In')
+    stub_airtable
+    find('.featured-mission__project__interest').click
+    sleep 2
+    expect(page.current_url).to have_content '/accounts/new'
+  end
+
   scenario 'user gets redirected to build profile page after signup' do
     visit root_path
     first('.header--nav--links').click_link 'Sign Up'
