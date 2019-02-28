@@ -33,7 +33,21 @@ describe SessionsController do
     context 'with valid login credentials' do
       let!(:account2) { create(:account, email: 'bob2@example.com') }
 
-      it 'create authentication' do
+      it 'create authentication from slack' do
+        request.env['omniauth.auth'] = auth_hash
+
+        expect do
+          post :create
+        end.to change { Authentication.count }.by(1)
+        auth = Authentication.last
+        expect(auth.confirmed?).to eq false
+        expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
+        assert_response :redirect
+        assert_redirected_to root_path
+      end
+
+      it 'create authentication from discord' do
+        auth_hash['provider'] = 'discord'
         request.env['omniauth.auth'] = auth_hash
 
         expect do
@@ -97,6 +111,19 @@ describe SessionsController do
         expect(flash[:error]).to eq('Failed authentication - Auth hash is missing one or more required values')
         expect(session[:account_id]).to be_nil
       end
+    end
+
+    it 'redirects to new_session_path with error when email is missing from discord oauth' do
+      auth_hash['provider'] = 'discord'
+        auth_hash['info']['email'] = nil
+
+        request.env['omniauth.auth'] = auth_hash
+        post :create
+
+        assert_response :redirect
+        assert_redirected_to new_session_path
+        expect(flash[:error]).to eq('Please use Discord account with a valid email address')
+        expect(session[:account_id]).to be_nil
     end
 
     it 'redirects to root_path if user already signed in' do
