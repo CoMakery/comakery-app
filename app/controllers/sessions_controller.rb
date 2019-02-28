@@ -5,6 +5,7 @@ class SessionsController < ApplicationController
   skip_before_action :require_build_profile
 
   before_action :redirect_if_signed_in, only: %i[create sign_in new]
+  before_action :check_discord_oauth, only: %i[create]
 
   def oauth_failure
     flash[:error] = "Sorry, logging in failed... please try again, or email us at #{I18n.t('tech_support_email')}"
@@ -52,6 +53,13 @@ class SessionsController < ApplicationController
 
   def auth_hash
     request.env['omniauth.auth']
+  end
+
+  def check_discord_oauth
+    if auth_hash['provider']&.include?('discord') && auth_hash['info'] && !auth_hash['info']['email']&.include?('@')
+      flash[:error] = 'Please use Discord account with a valid email address'
+      redirect_to new_session_path
+    end
   end
 
   def redirect_path
