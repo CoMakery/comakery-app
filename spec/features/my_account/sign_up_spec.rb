@@ -8,6 +8,26 @@ describe 'my account', js: true do
   let!(:mission) { create :mission, token_id: token.id }
   let!(:project) { create :project, mission_id: mission.id, visibility: 'public_listed', status: 0 }
 
+  scenario 'intercom is enabled before signup' do
+    visit '/'
+    expect(page).to have_css('.intercom')
+    expect(page).to have_css('iframe#intercom-frame', visible: false)
+  end
+
+  scenario 'intercom is disabled after signup' do
+    login(unconfirmed_account)
+    visit '/'
+    expect(page).not_to have_css('.intercom')
+    expect(page).not_to have_css('iframe#intercom-frame', visible: false)
+  end
+
+  scenario 'intercom is enabled after email confirmation' do
+    login(confirmed_account)
+    visit '/'
+    expect(page).to have_css('.intercom')
+    expect(page).to have_css('iframe#intercom-frame', visible: false)
+  end
+
   scenario 'user gets redirected to signup on create project click' do
     visit '/'
     expect(page.current_url).to have_content '/'
