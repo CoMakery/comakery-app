@@ -72,8 +72,9 @@ class AccountsController < ApplicationController
       if authentication_id && !Authentication.find_by(id: authentication_id).confirmed?
         session.delete(:account_id)
         @current_account = nil
+        flash[:warning] = 'Please confirm your email address to continue'
       end
-      redirect_to root_path, flash: { warning: 'Please confirm your email address to continue' }
+      redirect_to root_path
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
@@ -87,6 +88,7 @@ class AccountsController < ApplicationController
     if account
       account.confirm!
       session[:account_id] = account.id
+      flash.clear
       flash[:notice] = 'Thank you for signing up. Now, let us know what projects you are interested in.'
       if session[:redeem]
         flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
@@ -103,6 +105,7 @@ class AccountsController < ApplicationController
     if authentication
       authentication.confirm!
       session[:account_id] = authentication.account_id
+      flash.clear
       flash[:notice] = 'Success! Your email is confirmed.'
     else
       flash[:error] = 'Invalid token'
