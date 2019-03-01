@@ -11,7 +11,7 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
           Home
         </a>
 
-        <a href="mailto:support@comakery.com">
+        <a className="intercom" href="mailto:support@comakery.com">
           Contact Us
         </a>
 
