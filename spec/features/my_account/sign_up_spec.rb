@@ -10,14 +10,14 @@ describe 'my account', js: true do
 
   scenario 'intercom is enabled before signup' do
     visit '/'
-    expect(page).to have_css('.intercom')
+    expect(page).to have_css('.intercom-button')
     expect(page).to have_css('iframe#intercom-frame', visible: false)
   end
 
   scenario 'intercom is disabled after signup' do
     login(unconfirmed_account)
     visit '/'
-    expect(page).not_to have_css('.intercom')
+    expect(page).not_to have_css('.intercom-button')
     expect(page).not_to have_css('iframe#intercom-frame', visible: false)
   end
 

@@ -67,7 +67,7 @@ class Views::Layouts::Application < Views::Base
           prerender: true
         )
 
-        div(class: "app-container row#{' home' if current_account && action_name == 'landing'}") do
+        div(class: "app-container row#{' home' if current_account && action_name == 'join_us'}") do
           message
           content_for?(:pre_body) ? yield(:pre_body) : ''
           div(class: 'main') do

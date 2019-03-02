@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
   post '/add-interest' => "pages#add_interest", as: :add_interest
 
+  get '/joinus' => "pages#join_us"
   get '/user-agreement' => "pages#user_agreement"
   get '/e-sign-disclosure' => "pages#e_sign_disclosure"
   get '/privacy-policy' => "pages#privacy_policy"

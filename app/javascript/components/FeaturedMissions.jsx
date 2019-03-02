@@ -54,7 +54,7 @@ export default class FeaturedMissions extends React.Component {
         }
         <div className="featured-missions__header">
           {this.props.isConfirmed &&
-            <div className="intercom">
+            <div className="intercom intercom-button">
               <img src={chatImg} />
             </div>
           }

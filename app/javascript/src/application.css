@@ -1974,7 +1974,7 @@ input[type="submit"].button:disabled {
   }
 }
 
-.intercom {
+.intercom-button {
   position: absolute;
   bottom: 0;
   margin-bottom: -36px;
