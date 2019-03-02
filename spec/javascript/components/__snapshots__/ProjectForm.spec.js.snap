@@ -15,6 +15,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
       "default": "_",
     }
   }
+  teams={Array []}
   tokens={
     Object {
       "default": "_",
@@ -1081,6 +1082,16 @@ exports[`ProjectForm renders correctly without props 1`] = `
                 type="hidden"
                 value="00"
               />
+              <div
+                className="project-form--form--channels--header"
+              >
+                COMMUNICATION CHANNELS
+              </div>
+              <div
+                className="project-form--form--channels--empty"
+              >
+                Start adding channels by signing in with Slack or Discord
+              </div>
             </form>
           </div>
         </div>

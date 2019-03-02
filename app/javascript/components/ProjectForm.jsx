@@ -5,10 +5,12 @@ import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
-import Message from './styleguide/Message'
+import Flash from './layouts/Flash'
 import InputFieldDropdown from './styleguide/InputFieldDropdown'
+import InputFieldDropdownHalfed from './styleguide/InputFieldDropdownHalfed'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
+import Icon from './styleguide/Icon'
 
 class ProjectForm extends React.Component {
   constructor(props) {
@@ -18,6 +20,9 @@ class ProjectForm extends React.Component {
     this.errorRemove = this.errorRemove.bind(this)
     this.disable = this.disable.bind(this)
     this.enable = this.enable.bind(this)
+    this.addChannel = this.addChannel.bind(this)
+    this.destroyChannel = this.destroyChannel.bind(this)
+    this.handleChannelFieldChange = this.handleChannelFieldChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.verifySquareImgRes = this.verifySquareImgRes.bind(this)
@@ -73,7 +78,8 @@ class ProjectForm extends React.Component {
       'project[description]'            : this.props.project.description || '',
       'project[maximum_tokens]'         : this.props.project.maximumTokens || '',
       'project[video_url]'              : this.props.project.videoUrl || '',
-      'project[legal_project_owner]'    : this.props.project.legalProjectOwner || ''
+      'project[legal_project_owner]'    : this.props.project.legalProjectOwner || '',
+      'project[channels]'               : this.props.project.channels || []
     }
   }
 
@@ -104,6 +110,55 @@ class ProjectForm extends React.Component {
     a.forEach(n => delete d[n])
     this.setState({
       disabled: d
+    })
+  }
+
+  addChannel() {
+    this.setState(state => ({
+      'project[channels]': state['project[channels]'].concat({
+        channelId: this.props.teams.find(t => t.teamId === this.props.teams[0].teamId).channels[0].channelId,
+        teamId   : this.props.teams[0].teamId,
+        id       : `${state['project[channels]'].length + 1000000}`,
+        new      : true
+      })
+    }))
+  }
+
+  handleChannelFieldChange(event, i) {
+    let channels = this.state['project[channels]']
+
+    if (event.target.name.match(/channel_id/)) {
+      channels[i] = {
+        channelId: event.target.value,
+        teamId   : channels[i].teamId,
+        id       : channels[i].id,
+        new      : channels[i].new
+      }
+    } else {
+      channels[i] = {
+        channelId: this.props.teams.find(t => t.teamId === event.target.value).channels[0].channelId,
+        teamId   : event.target.value,
+        id       : channels[i].id,
+        new      : channels[i].new
+      }
+    }
+
+    this.setState({
+      'project[channels]': channels
+    })
+  }
+
+  destroyChannel(event, i) {
+    let channels = this.state['project[channels]']
+
+    channels[i] = {
+      id     : channels[i].id,
+      destroy: true,
+      new    : channels[i].new
+    }
+
+    this.setState({
+      'project[channels]': channels
     })
   }
 
@@ -164,24 +219,26 @@ class ProjectForm extends React.Component {
         if (this.state.closeOnSuccess) {
           window.location = this.props.urlOnSuccess
         } else {
-          if (this.state.formAction === 'POST') {
-            response.json().then(data => {
+          response.json().then(data => {
+            if (this.state.formAction === 'POST') {
               this.setState({
-                formAction : 'PUT',
-                formUrl    : `/projects/${data.id}`,
-                infoMessage: 'Project Created'
+                formAction         : 'PUT',
+                formUrl            : `/projects/${data.id}`,
+                'project[channels]': data.props.project.channels || [],
+                infoMessage        : 'Project Created'
               })
               history.replaceState(
                 {},
                 document.title,
-                `${window.location.origin}/projects/${data.id}`
+                `${window.location.origin}/projects/${data.id}/edit`
               )
-            })
-          } else {
-            this.setState({
-              infoMessage: 'Project Updated'
-            })
-          }
+            } else {
+              this.setState({
+                'project[channels]': data.props.project.channels || [],
+                infoMessage        : 'Project Updated'
+              })
+            }
+          })
           this.enable(['project[submit]', 'project[submit_and_close]'])
         }
       } else {
@@ -232,13 +289,13 @@ class ProjectForm extends React.Component {
         >
           { this.state.errorMessage &&
             <div className="project-form--message">
-              <Message severity="error" text={this.state.errorMessage} />
+              <Flash flashType="error" message={this.state.errorMessage} />
             </div>
           }
 
           { this.state.infoMessage &&
             <div className="project-form--message">
-              <Message severity="warning" text={this.state.infoMessage} />
+              <Flash flashType="notice" message={this.state.infoMessage} />
             </div>
           }
 
@@ -396,6 +453,66 @@ class ProjectForm extends React.Component {
               value={this.props.csrfToken}
               readOnly
             />
+
+            <div className="project-form--form--channels--header">
+              COMMUNICATION CHANNELS
+            </div>
+
+            {this.props.teams.length > 0 && this.state['project[channels]'].map((c, i) =>
+              <div className="project-form--form--channels--channel" key={i}>
+                <input
+                  type="hidden"
+                  name={`project[channels_attributes][${c.id}][id]`}
+                  value={c.new ? '' : c.id}
+                />
+
+                {!c.destroy &&
+                  <React.Fragment>
+                    <InputFieldDropdownHalfed
+                      required
+                      className="project-form--form--channels--channel--select"
+                      title="team or guild"
+                      name={`project[channels_attributes][${c.id}][team_id]`}
+                      value={this.state['project[channels]'][i].teamId}
+                      eventHandler={(e) => this.handleChannelFieldChange(e, i)}
+                      selectEntries={this.props.teams.map(t => [t.team, t.teamId])}
+                    />
+                    <InputFieldDropdownHalfed
+                      required
+                      className="project-form--form--channels--channel--select"
+                      title="channel"
+                      name={`project[channels_attributes][${c.id}][channel_id]`}
+                      value={this.state['project[channels]'][i].channelId}
+                      eventHandler={(e) => this.handleChannelFieldChange(e, i)}
+                      selectEntries={c.teamId ? this.props.teams.find(t => t.teamId === c.teamId).channels.map(ch => [ch.channel, ch.channelId]) : []}
+                    />
+                    <div className="project-form--form--channels--channel--del" onClick={(e) => this.destroyChannel(e, i)}>
+                      <Icon name="iconTrash.svg" />
+                    </div>
+                  </React.Fragment>
+                }
+
+                {c.destroy && !c.new &&
+                  <input
+                    type="hidden"
+                    name={`project[channels_attributes][${c.id}][_destroy]`}
+                    value="1"
+                  />
+                }
+              </div>
+            )}
+
+            {this.props.teams.length > 0 &&
+              <div className="project-form--form--channels--add" onClick={this.addChannel}>
+                Add Channel +
+              </div>
+            }
+
+            {this.props.teams.length === 0 &&
+              <div className="project-form--form--channels--empty">
+                Start adding channels by signing in with Slack or Discord
+              </div>
+            }
           </form>
         </Layout>
       </React.Fragment>
@@ -408,6 +525,7 @@ ProjectForm.propTypes = {
   tokens      : PropTypes.object.isRequired,
   missions    : PropTypes.object.isRequired,
   visibilities: PropTypes.array.isRequired,
+  teams       : PropTypes.array.isRequired,
   formUrl     : PropTypes.string.isRequired,
   formAction  : PropTypes.string.isRequired,
   urlOnSuccess: PropTypes.string.isRequired,
@@ -418,6 +536,7 @@ ProjectForm.defaultProps = {
   tokens      : {'default': '_'},
   missions    : {'default': '_'},
   visibilities: [],
+  teams       : [],
   formUrl     : '/',
   formAction  : 'POST',
   urlOnSuccess: '/',

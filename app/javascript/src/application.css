@@ -851,6 +851,7 @@ input[type="submit"].button:disabled {
   border: 1px dashed var(--primary-blue);
   display: block;
   margin-bottom: 11px;
+  box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
 }
 
 .input-field--content__file--preview__40x40 {
@@ -1211,14 +1212,54 @@ input[type="submit"].button:disabled {
 
 
 .token-form--message,
-.mission-form--message,
-.project-form--message {
+.mission-form--message {
   margin: 30px 0px;
 }
 
-.token-form--form.
+.token-form--form,
 .project-form--form {
   margin-bottom: 30px;
+}
+
+.project-form--form--channels--header {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  color: var(--black);
+  text-transform: capitalize;
+}
+
+.project-form--form--channels--channel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.project-form--form--channels--channel--select {
+  min-width: 273px;
+  margin: 0 10px 16px 0;
+}
+
+.project-form--form--channels--channel--del {
+  cursor: pointer;
+  width: 16px;
+  height: 20px;
+  object-fit: contain;
+  margin-top: 7px;
+  box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
+}
+
+.project-form--form--channels--add {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--azure);
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.project-form--form--channels--empty {
+  font-size: 14px;
 }
 
 .featured-missions {

@@ -35,8 +35,6 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    assign_slack_channels
-
     @project = current_account.projects.build
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
@@ -72,7 +70,9 @@ class ProjectsController < ApplicationController
     authorize @project
 
     if @project.save
-      render json: { id: @project.id }, status: :ok
+      set_generic_props
+      camelize_props
+      render json: { id: @project.id, props: @props }, status: :ok
     else
       errors  = @project.errors.messages.map { |k, v| ["project[#{k}]", v.to_sentence] }.to_h
       message = @project.errors.full_messages.join(', ')
@@ -101,7 +101,6 @@ class ProjectsController < ApplicationController
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
     authorize @project
-    assign_slack_channels
 
     @props[:form_action] = 'PATCH'
     @props[:form_url]    = project_path(@project)
@@ -110,12 +109,14 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    @project = current_account.projects.includes(:award_types, :channels).find(params[:id])
+    @project = current_account.projects.find(params[:id])
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
 
     if @project.update project_params
-      render json: { message: 'Project updated' }, status: :ok
+      set_generic_props
+      camelize_props
+      render json: { message: 'Project updated', props: @props }, status: :ok
     else
       errors  = @project.errors.messages.map { |k, v| [k, v.to_sentence] }.to_s
       message = @project.errors.full_messages.join(', ')
@@ -161,17 +162,40 @@ class ProjectsController < ApplicationController
           panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
           mission_id: @project&.mission&.id,
           token_id: @project&.token&.id,
+          channels: @project&.channels&.map do |channel|
+            {
+              channel_id: channel&.channel_id&.to_s,
+              team_id: channel&.team&.id&.to_s,
+              id: channel&.id
+            }
+          end,
           url: "https://www.comakery.com/p/#{@project.long_id}"
         }
       ),
       tokens: @tokens,
       missions: @missions,
       visibilities: @visibilities,
+      teams: current_account.authentication_teams&.map do |a_team|
+        {
+          team: "[#{a_team.team.provider}] #{a_team.team.name}",
+          team_id: a_team.team.id.to_s,
+          channels: a_team.channels.map do |channel|
+            {
+              channel: channel.to_s,
+              channel_id: channel.to_s
+            }
+          end
+        }
+      end,
       form_url: projects_path,
       form_action: 'POST',
       url_on_success: projects_path,
       csrf_token: form_authenticity_token
     }
+  end
+
+  def camelize_props
+    @props.deep_transform_keys! { |key| key.to_s.camelize(:lower) }
   end
 
   def project_params
@@ -199,6 +223,12 @@ class ProjectsController < ApplicationController
       :license_finalized,
       :visibility,
       :status,
+      channels_attributes: %i[
+        _destroy
+        id
+        team_id
+        channel_id
+      ],
       award_types_attributes: %i[
         _destroy
         amount
@@ -207,26 +237,10 @@ class ProjectsController < ApplicationController
         name
         description
         disabled
-      ],
-      channels_attributes: %i[id team_id channel_id _destroy]
+      ]
     )
     result[:revenue_sharing_end_date] = DateTime.strptime(result[:revenue_sharing_end_date], '%m/%d/%Y') if result[:revenue_sharing_end_date].present?
     result
-  end
-
-  def assign_slack_channels
-    @providers = current_account.teams.map(&:provider).uniq
-    @provider_data = {}
-    @providers.each do |provider|
-      teams = current_account.teams.where(provider: provider)
-      team_data = []
-      teams.each do |_team|
-        team_data
-      end
-      @provider_data[provider] = teams
-    end
-    # result = GetSlackChannels.call(current_account: current_account)
-    # @slack_channels = result.channels
   end
 
   def assign_current_account

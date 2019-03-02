@@ -72,6 +72,14 @@ describe('ProjectForm', () => {
     expect(wrapper.exists(
       'input[type="hidden"][name="authenticity_token"]'
     )).toBe(true)
+
+    expect(wrapper.exists(
+      '.project-form--form--channels--header'
+    )).toBe(true)
+
+    expect(wrapper.exists(
+      '.project-form--form--channels--empty'
+    )).toBe(true)
   })
 
   it('renders correctly with tokens', () => {
@@ -131,16 +139,94 @@ describe('ProjectForm', () => {
     ])
   })
 
+  it('renders correctly with teams', () => {
+    const teams = [
+      {
+        'team'    : 'team1Name',
+        'teamId'  : 'team1Id',
+        'channels': [
+          {
+            'channel'  : 'ch1Name',
+            'channelId': 'ch1Id'
+          },
+          {
+            'channel'  : 'ch2Name',
+            'channelId': 'ch2Id'
+          },
+        ]
+      },
+      {
+        'team'    : 'team2Name',
+        'teamId'  : 'team2Id',
+        'channels': [
+          {
+            'channel'  : 'ch3Name',
+            'channelId': 'ch3Id'
+          },
+          {
+            'channel'  : 'ch4Name',
+            'channelId': 'ch4Id'
+          },
+        ]
+      }
+    ]
+    const wrapper = mount(<ProjectForm teams={teams} />)
+
+    wrapper.find('.project-form--form--channels--add').simulate('click')
+
+    expect(wrapper.find(
+      'input[type="hidden"][name="project[channels_attributes][1000000][id]"]'
+    ).props().value).toBe('')
+
+    expect(wrapper.find(
+      'InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][1000000][team_id]"]'
+    ).props().value).toBe('team1Id')
+    expect(wrapper.find(
+      'InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][1000000][team_id]"]'
+    ).props().selectEntries).toEqual([
+      ['team1Name', 'team1Id'],
+      ['team2Name', 'team2Id']
+    ])
+
+    expect(wrapper.find(
+      'InputFieldDropdownHalfed[title="channel"][required][name="project[channels_attributes][1000000][channel_id]"]'
+    ).props().value).toBe('ch1Id')
+    expect(wrapper.find(
+      'InputFieldDropdownHalfed[title="channel"][required][name="project[channels_attributes][1000000][channel_id]"]'
+    ).props().selectEntries).toEqual([
+      ['ch1Name', 'ch1Id'],
+      ['ch2Name', 'ch2Id']
+    ])
+
+    wrapper.find('.project-form--form--channels--channel--del').at(0).simulate('click')
+    expect(wrapper.exists('input[type="hidden"][name="project[channels_attributes][1000000][id]"]')).toBe(true)
+    expect(wrapper.exists('input[type="hidden"][name="project[channels_attributes][1000000][_destroy]"]')).toBe(false)
+    expect(wrapper.exists('InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][1000000][team_id]"]')).toBe(false)
+    expect(wrapper.exists('InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][1000000][channel_id]"]')).toBe(false)
+  })
+
   it('renders correctly with project', () => {
     const project = {
-      'id'                    : 2,
-      'missionId'             : 2,
-      'tokenId'               : 2,
-      'title'                 : 'title',
-      'description'           : 'desc',
-      'videoUrl'              : 'https://youtube.com/',
-      'maximumTokens'         : '1000',
-      'visibility'            : 'archived',
+      'id'           : 2,
+      'missionId'    : 2,
+      'tokenId'      : 2,
+      'title'        : 'title',
+      'description'  : 'desc',
+      'videoUrl'     : 'https://youtube.com/',
+      'maximumTokens': '1000',
+      'visibility'   : 'archived',
+      'channels'     : [
+        {
+          'channelId': 'ch1Id',
+          'teamId'   : 'team1Id',
+          'id'       : 1
+        },
+        {
+          'channelId': 'ch2Id',
+          'teamId'   : 'team1Id',
+          'id'       : 2
+        }
+      ],
       'url'                   : 'https://www.comakery.com/p/test',
       'longId'                : '123',
       'requireConfidentiality': false,
@@ -163,11 +249,28 @@ describe('ProjectForm', () => {
       'token1': 1,
       'token2': 2
     }
+    const teams = [
+      {
+        'team'    : 'team1Name',
+        'teamId'  : 'team1Id',
+        'channels': [
+          {
+            'channel'  : 'ch1Name',
+            'channelId': 'ch1Id'
+          },
+          {
+            'channel'  : 'ch2Name',
+            'channelId': 'ch2Id'
+          },
+        ]
+      }
+    ]
     const wrapper = mount(<ProjectForm
       project={project}
       tokens={tokens}
       missions={missions}
       visibilities={visibilities}
+      teams={teams}
     />)
 
     expect(wrapper.find(
@@ -221,6 +324,42 @@ describe('ProjectForm', () => {
     expect(wrapper.find(
       'input[type="hidden"][name="project[long_id]"]'
     ).props().value).toBe('123')
+
+    expect(wrapper.find(
+      'input[type="hidden"][name="project[channels_attributes][1][id]"]'
+    ).props().value).toBe(1)
+
+    expect(wrapper.find(
+      'InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][1][team_id]"]'
+    ).props().value).toBe('team1Id')
+
+    expect(wrapper.find(
+      'InputFieldDropdownHalfed[title="channel"][required][name="project[channels_attributes][1][channel_id]"]'
+    ).props().value).toBe('ch1Id')
+
+    expect(wrapper.find(
+      'input[type="hidden"][name="project[channels_attributes][2][id]"]'
+    ).props().value).toBe(2)
+
+    expect(wrapper.find(
+      'InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][2][team_id]"]'
+    ).props().value).toBe('team1Id')
+
+    expect(wrapper.find(
+      'InputFieldDropdownHalfed[title="channel"][required][name="project[channels_attributes][2][channel_id]"]'
+    ).props().value).toBe('ch2Id')
+
+    wrapper.find('.project-form--form--channels--channel--del').at(0).simulate('click')
+    expect(wrapper.find(
+      'input[type="hidden"][name="project[channels_attributes][1][_destroy]"]'
+    ).props().value).toBe('1')
+    expect(wrapper.exists('input[type="hidden"][name="project[channels_attributes][1][id]"]')).toBe(true)
+    expect(wrapper.exists('InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][1][team_id]"]')).toBe(false)
+    expect(wrapper.exists('InputFieldDropdownHalfed[title="channel"][required][name="project[channels_attributes][1][channel_id]"]')).toBe(false)
+
+    expect(wrapper.exists('input[type="hidden"][name="project[channels_attributes][2][id]"]')).toBe(true)
+    expect(wrapper.exists('InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][2][team_id]"]')).toBe(true)
+    expect(wrapper.exists('InputFieldDropdownHalfed[title="channel"][required][name="project[channels_attributes][2][channel_id]"]')).toBe(true)
   })
 
   it('renders correctly with csrfToken', () => {
