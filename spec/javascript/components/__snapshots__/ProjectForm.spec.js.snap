@@ -524,6 +524,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                 name="project[maximum_tokens]"
                 pattern="\\\\d+"
                 placeholder="Provide the budget for completing the entire project"
+                readOnly={false}
                 recommended={true}
                 symbolLimit={0}
                 title="total budget"

@@ -356,6 +356,7 @@ class ProjectForm extends React.Component {
               pattern="\d+"
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
+              readOnly={this.state.formAction !== 'POST'}
             />
 
             <InputFieldDropdown
