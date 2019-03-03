@@ -96,7 +96,7 @@ class Views::Shared::Awards < Views::Base
       'trezor.png'
     elsif project.token.coin_type_eos?
       'eos.png'
-    elsif project.coin_type_xtz?
+    elsif project.token.coin_type_xtz?
       'tezos.png'
     end
   end

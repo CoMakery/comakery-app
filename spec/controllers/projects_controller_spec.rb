@@ -13,6 +13,7 @@ describe ProjectsController do
     team.build_authentication_team authentication
     team.build_authentication_team authentication1
     login(account)
+    stub_slack_channel_list
   end
 
   describe '#unlisted' do

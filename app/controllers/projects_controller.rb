@@ -4,10 +4,10 @@ class ProjectsController < ApplicationController
   before_action :assign_current_account
 
   before_action :set_project, only: %i[edit update]
-  before_action :set_tokens, only: %i[new show edit]
-  before_action :set_missions, only: %i[new show edit]
-  before_action :set_visibilities, only: %i[new show edit]
-  before_action :set_generic_props, only: %i[new show edit]
+  before_action :set_tokens, only: %i[new edit]
+  before_action :set_missions, only: %i[new edit]
+  before_action :set_visibilities, only: %i[new edit]
+  before_action :set_generic_props, only: %i[new edit]
 
   layout 'react', only: %i[new edit]
 
@@ -175,7 +175,7 @@ class ProjectsController < ApplicationController
       tokens: @tokens,
       missions: @missions,
       visibilities: @visibilities,
-      teams: current_account.authentication_teams&.map do |a_team|
+      teams: current_account&.authentication_teams&.map do |a_team|
         {
           team: "[#{a_team.team.provider}] #{a_team.team.name}",
           team_id: a_team.team.id.to_s,

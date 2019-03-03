@@ -60,7 +60,7 @@ class ProjectForm extends React.Component {
     })
 
     this.state = {
-      flashMessages : [],
+      flashMessages                     : [],
       errors                            : {},
       disabled                          : {},
       formAction                        : this.props.formAction,
@@ -224,7 +224,7 @@ class ProjectForm extends React.Component {
                 formAction         : 'PUT',
                 formUrl            : `/projects/${data.id}`,
                 'project[channels]': data.props.project.channels || [],
-                flashMessages: state.flashMessages.concat([{'severity': 'notice', 'text': 'Project Created'}])
+                flashMessages      : state.flashMessages.concat([{'severity': 'notice', 'text': 'Project Created'}])
               }))
               history.replaceState(
                 {},
@@ -234,7 +234,7 @@ class ProjectForm extends React.Component {
             } else {
               this.setState(state => ({
                 'project[channels]': data.props.project.channels || [],
-                flashMessages: state.flashMessages.concat([{'severity': 'notice', 'text': 'Project Updated'}])
+                flashMessages      : state.flashMessages.concat([{'severity': 'notice', 'text': 'Project Updated'}])
               }))
             }
           })
@@ -243,7 +243,7 @@ class ProjectForm extends React.Component {
       } else {
         response.json().then(data => {
           this.setState(state => ({
-            errors      : data.errors,
+            errors       : data.errors,
             flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
           }))
           this.enable(['project[submit]', 'project[submit_and_close]'])

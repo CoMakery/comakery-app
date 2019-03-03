@@ -18,7 +18,6 @@ const transferEosCoins = async function(award) { // award in JSON
   try {
     window.alertMsg('#metamaskModal1', 'Waiting...')
     txHash = await submitTransaction(network, recipientAddress, amount)
-    console.log('transaction address: ' + txHash)
   } catch (err) {
     console.error(err)
     window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
@@ -40,7 +39,6 @@ const submitTransaction = async function(network, to, amount, memo = 'CoMakery')
   const connected = await ScatterJS.connect('ComakeryAppName', {network})
   if (!connected) return
   if (!await ScatterJS.login()) return
-  console.log('Signed in successfully')
   const account = ScatterJS.account('eos')
   debugLog(account)
   const eos = ScatterJS.eos(network, Eos)

@@ -10,7 +10,6 @@ window.transferTokens = function(award) { // award in JSON
       if (result && (parseFloat(web3.fromWei(result.toNumber(), 'wei')) >= parseFloat(amount))) {
         contractIns.transfer(toAddress, web3.toWei(amount, 'wei'), { gasPrice: web3.toWei(1, 'gwei') }, function(err, tx) {
           if (tx) {
-            console.log(`transaction address: ${tx}`)
             // update_transaction_address_project_award_path
             $.post(`/projects/${award.project.id}/awards/${award.id}/update_transaction_address`, {tx})
             if ($('body.projects-show').length > 0) {
