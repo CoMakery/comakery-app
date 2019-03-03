@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  root 'pages#featured'
 
   resources :tokens, only: [:index, :new, :create, :show, :edit, :update]
   post 'tokens/fetch_contract_details'
@@ -29,10 +30,9 @@ Rails.application.routes.draw do
 
   get '/logout', to: "sessions#destroy"
 
-  root 'pages#landing'
-  get '/featured' => "pages#featured"
   post '/add-interest' => "pages#add_interest", as: :add_interest
 
+  get '/joinus' => "pages#join_us"
   get '/user-agreement' => "pages#user_agreement"
   get '/e-sign-disclosure' => "pages#e_sign_disclosure"
   get '/privacy-policy' => "pages#privacy_policy"

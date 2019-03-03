@@ -1,4 +1,4 @@
-class Views::Pages::Landing < Views::Base
+class Views::Pages::JoinUs < Views::Base
   def content
     content_for :pre_body do
       header
@@ -190,11 +190,11 @@ class Views::Pages::Landing < Views::Base
               text 'Vevue is revolutionizing the way people interact with distribute, watch, and appreciate video content using blockchain technology.'
             end
             p do
-              text 'The CoMakery platform connected talented developer and community managers to Vevue, each of them earning tokens while helping accelerate the project to bootstrap towards a successful $2.5 Million ICO.'
+              text 'The CoMakery platform connected talented developer and community managers to Vevue, each of them earning tokens while helping accelerate the use of the Vevue platform.'
             end
 
             p do
-              link_to 'See How Vevue Uses CoMakery', 'https://www.comakery.com/projects/59'
+              link_to 'See How Vevue Used CoMakery', 'https://www.comakery.com/projects/59'
             end
           end
         end
@@ -219,7 +219,7 @@ class Views::Pages::Landing < Views::Base
             text 'Vevue is revolutionizing the way people interact with distribute, watch, and appreciate video content using blockchain technology.'
           end
           p do
-            text 'The CoMakery platform connected talented developer and community managers to Vevue, each of them earning tokens while helping accelerate the project to bootstrap towards a successful $2.5 Million ICO.'
+            text 'The CoMakery platform connected talented developers and community managers to Vevue, each of them earning tokens while helping accelerate the project to bootstrap towards a successful $2.5 Million ICO.'
           end
         end
       end

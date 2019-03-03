@@ -32,7 +32,12 @@ class ApplicationController < ActionController::Base
 
   # called from before_filter :require_login
   def not_authenticated(msg = nil)
-    redirect_to root_path, alert: msg
+    respond_to do |format|
+      format.html { redirect_to new_account_url, alert: msg }
+      format.json { head :unauthorized }
+    end
+  rescue ActionController::UnknownFormat
+    head :unauthorized
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
@@ -59,7 +64,7 @@ class ApplicationController < ActionController::Base
 
   def require_email_confirmation
     if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
-      not_authenticated('Please confirm your email before continuing.')
+      redirect_to root_path, flash: { warning: 'Please confirm your email address to continue' }
     end
   end
 
@@ -74,14 +79,18 @@ class ApplicationController < ActionController::Base
   end
 
   def check_age
-    redirect_to account_path, alert: 'Sorry, you must be 18 years or older to use this website' if current_account && current_account.valid_and_underage? && controller_name != 'accounts'
+    if current_account && current_account.valid_and_underage? && controller_name != 'accounts'
+      redirect_to build_profile_accounts_path, alert: 'Sorry, you must be 18 years or older to use this website'
+    end
   end
 
   def check_account_info
     current_account.name_required = true
     unless current_account.valid?
-      flash[:error] = "To help us comply with regulations, please update your account info for #{current_account.errors.keys.join(', ').humanize.titleize}"
-      redirect_to account_path
+      @account = current_account
+      @skip_validation = true
+      flash[:error] = "Please complete your profile info for #{current_account.errors.keys.join(', ').humanize.titleize}"
+      render 'accounts/build_profile'
     end
   end
 

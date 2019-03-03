@@ -60,8 +60,7 @@ class ProjectForm extends React.Component {
     })
 
     this.state = {
-      errorMessage                      : null,
-      infoMessage                       : null,
+      flashMessages : [],
       errors                            : {},
       disabled                          : {},
       formAction                        : this.props.formAction,
@@ -221,32 +220,32 @@ class ProjectForm extends React.Component {
         } else {
           response.json().then(data => {
             if (this.state.formAction === 'POST') {
-              this.setState({
+              this.setState(state => ({
                 formAction         : 'PUT',
                 formUrl            : `/projects/${data.id}`,
                 'project[channels]': data.props.project.channels || [],
-                infoMessage        : 'Project Created'
-              })
+                flashMessages: state.flashMessages.concat([{'severity': 'notice', 'text': 'Project Created'}])
+              }))
               history.replaceState(
                 {},
                 document.title,
                 `${window.location.origin}/projects/${data.id}/edit`
               )
             } else {
-              this.setState({
+              this.setState(state => ({
                 'project[channels]': data.props.project.channels || [],
-                infoMessage        : 'Project Updated'
-              })
+                flashMessages: state.flashMessages.concat([{'severity': 'notice', 'text': 'Project Updated'}])
+              }))
             }
           })
           this.enable(['project[submit]', 'project[submit_and_close]'])
         }
       } else {
         response.json().then(data => {
-          this.setState({
+          this.setState(state => ({
             errors      : data.errors,
-            errorMessage: data.message
-          })
+            flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
+          }))
           this.enable(['project[submit]', 'project[submit_and_close]'])
         })
       }
@@ -287,17 +286,7 @@ class ProjectForm extends React.Component {
             </React.Fragment>
           }
         >
-          { this.state.errorMessage &&
-            <div className="project-form--message">
-              <Flash flashType="error" message={this.state.errorMessage} />
-            </div>
-          }
-
-          { this.state.infoMessage &&
-            <div className="project-form--message">
-              <Flash flashType="notice" message={this.state.infoMessage} />
-            </div>
-          }
+          <Flash messages={this.state.flashMessages} />
 
           <form className="project-form--form" id="project-form--form" onSubmit={this.handleSubmit}>
             <InputFieldDropdown

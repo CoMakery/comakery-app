@@ -145,6 +145,14 @@ class AwardsController < ApplicationController
     end
   end
 
+  def confirm_message_for_tezos_award
+    if current_account.tezos_wallet.present?
+      "Congratulations, you just claimed your award! Your Tezos address is #{view_context.link_to current_account.tezos_wallet, current_account.decorate.tezos_wallet_url} you can change your Tezos address on your #{view_context.link_to('account page', show_account_path)}. The project owner can now issue your Tezos tokens."
+    else
+      "Congratulations, you just claimed your award! Be sure to enter your Tezos Adress on your #{view_context.link_to('account page', show_account_path)} to receive your tokens."
+    end
+  end
+
   def project_overview_path(project)
     project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
   end
@@ -177,6 +185,8 @@ class AwardsController < ApplicationController
       project.token.coin_type_qrc20? ? 'qrypto.png' : 'ledger.png'
     elsif project.token.coin_type_eos?
       'eos.png'
+    elsif project.token.coin_type_xtz?
+      'tezos.png'
     else
       'trezor.png'
     end

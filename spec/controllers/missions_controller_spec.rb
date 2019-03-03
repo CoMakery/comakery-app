@@ -13,11 +13,11 @@ describe MissionsController do
 
   describe '#index' do
     context 'when not logged in' do
-      it 'redirects to root' do
+      it 'redirects to signup' do
         session[:account_id] = nil
         get :index
         expect(response.status).to eq(302)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(new_account_url)
       end
     end
 
@@ -41,11 +41,11 @@ describe MissionsController do
 
   describe '#new' do
     context 'when not logged in' do
-      it 'redirects to root' do
+      it 'redirects to signup' do
         session[:account_id] = nil
         get :new
         expect(response.status).to eq(302)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(new_account_url)
       end
     end
 
@@ -69,11 +69,11 @@ describe MissionsController do
 
   describe '#edit' do
     context 'when not logged in' do
-      it 'redirects to root' do
+      it 'redirects to signup' do
         session[:account_id] = nil
         get :edit, params: { id: mission1.id }
         expect(response.status).to eq(302)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(new_account_url)
       end
     end
 

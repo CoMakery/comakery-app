@@ -9,11 +9,6 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
         column('small-12') do
           h2 do
             text project.title
-            if project.legal_project_owner.present?
-              span(style: 'color: #9A9A9A;') do
-                text " by #{project.legal_project_owner}"
-              end
-            end
           end
         end
       end

@@ -33,7 +33,21 @@ describe SessionsController do
     context 'with valid login credentials' do
       let!(:account2) { create(:account, email: 'bob2@example.com') }
 
-      it 'create authentication' do
+      it 'create authentication from slack' do
+        request.env['omniauth.auth'] = auth_hash
+
+        expect do
+          post :create
+        end.to change { Authentication.count }.by(1)
+        auth = Authentication.last
+        expect(auth.confirmed?).to eq false
+        expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
+        assert_response :redirect
+        assert_redirected_to root_path
+      end
+
+      it 'create authentication from discord' do
+        auth_hash['provider'] = 'discord'
         request.env['omniauth.auth'] = auth_hash
 
         expect do
@@ -97,6 +111,19 @@ describe SessionsController do
         expect(flash[:error]).to eq('Failed authentication - Auth hash is missing one or more required values')
         expect(session[:account_id]).to be_nil
       end
+    end
+
+    it 'redirects to new_session_path with error when email is missing from discord oauth' do
+      auth_hash['provider'] = 'discord'
+        auth_hash['info']['email'] = nil
+
+        request.env['omniauth.auth'] = auth_hash
+        post :create
+
+        assert_response :redirect
+        assert_redirected_to new_session_path
+        expect(flash[:error]).to eq('Please use Discord account with a valid email address')
+        expect(session[:account_id]).to be_nil
     end
 
     it 'redirects to root_path if user already signed in' do
@@ -243,6 +270,26 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS account name is')).to eq true
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    context 'on Tezos network' do
+      let(:project2) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'xtz')) }
+
+      it 'notice to update tezos_wallet' do
+        account.update new_award_notice: true
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Tezos Address on your <a href="/account">account page</a> to receive your tokens.'
+        expect(response).to redirect_to root_path
+      end
+
+      it 'notice new award' do
+        account.update new_award_notice: true, tezos_wallet: 'tz1Zbe9hjjSnJN2U51E5W5fyRDqPCqWMCFN9'
+        create(:award, award_type: create(:award_type, project: project2), account: account)
+        post :sign_in, params: { email: 'user@example.com', password: '12345678' }
+        expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Tezos address is')).to eq true
         expect(response).to redirect_to root_path
       end
     end

@@ -94,6 +94,14 @@ exports[`TokenForm renders correctly without props 1`] = `
           <div
             className="layout--content--content"
           >
+            <Flash
+              className=""
+              messages={Array []}
+            >
+              <div
+                className="flash-message-container"
+              />
+            </Flash>
             <form
               className="token-form--form"
               id="token-form--form"

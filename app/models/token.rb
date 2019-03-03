@@ -9,7 +9,8 @@ class Token < ApplicationRecord
     qtum: 'qtum',
     ada: 'cardano',
     btc: 'bitcoin',
-    eos: 'eos'
+    eos: 'eos',
+    xtz: 'tezos'
   }.freeze
 
   nilify_blanks
@@ -29,7 +30,8 @@ class Token < ApplicationRecord
     qtum:  'QTUM',
     ada: 'ADA',
     btc: 'BTC',
-    eos: 'EOS'
+    eos: 'EOS',
+    xtz: 'XTZ'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -53,7 +55,8 @@ class Token < ApplicationRecord
     qtum_mainnet: 'Main QTUM Network',
     qtum_testnet: 'Test QTUM Network',
     eos_mainnet: 'Main EOS Network',
-    eos_testnet: 'Test EOS Network'
+    eos_testnet: 'Test EOS Network',
+    tezos_mainnet: 'Main Tezos Network'
   }
 
   validates :name, :denomination, presence: true
@@ -95,6 +98,10 @@ class Token < ApplicationRecord
 
   def coin_type_on_eos?
     coin_type_eos?
+  end
+
+  def coin_type_on_tezos?
+    coin_type_xtz?
   end
 
   def transitioned_to_ethereum_enabled?

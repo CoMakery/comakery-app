@@ -10,11 +10,11 @@ describe TokensController do
 
   describe '#new' do
     context 'when not logged in' do
-      it 'redirects to root' do
+      it 'redirects to signup' do
         session[:account_id] = nil
         get :new
         expect(response.status).to eq(302)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(new_account_url)
       end
     end
 
@@ -38,11 +38,11 @@ describe TokensController do
 
   describe '#create' do
     context 'when not logged in' do
-      it 'redirects to root' do
+      it 'redirects to signup' do
         session[:account_id] = nil
         post :create
         expect(response.status).to eq(302)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(new_account_url)
       end
     end
 
@@ -97,11 +97,11 @@ describe TokensController do
 
   describe '#fetch_contract_details' do
     context 'when not logged in' do
-      it 'redirects to root' do
+      it 'redirects to signup' do
         session[:account_id] = nil
         post :fetch_contract_details
         expect(response.status).to eq(302)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(new_account_url)
       end
     end
 
@@ -143,11 +143,11 @@ describe TokensController do
 
     describe '#index' do
       context 'when not logged in' do
-        it 'redirects to root' do
+        it 'redirects to signup' do
           session[:account_id] = nil
           get :index
           expect(response.status).to eq(302)
-          expect(response).to redirect_to(root_url)
+          expect(response).to redirect_to(new_account_url)
         end
       end
 
@@ -171,11 +171,11 @@ describe TokensController do
 
     describe '#show' do
       context 'when not logged in' do
-        it 'redirects to root' do
+        it 'redirects to signup' do
           session[:account_id] = nil
           get :show, params: { id: cat_token.to_param }
           expect(response.status).to eq(302)
-          expect(response).to redirect_to(root_url)
+          expect(response).to redirect_to(new_account_url)
         end
       end
 
@@ -199,11 +199,11 @@ describe TokensController do
 
     describe '#edit' do
       context 'when not logged in' do
-        it 'redirects to root' do
+        it 'redirects to signup' do
           session[:account_id] = nil
           get :edit, params: { id: cat_token.to_param }
           expect(response.status).to eq(302)
-          expect(response).to redirect_to(root_url)
+          expect(response).to redirect_to(new_account_url)
         end
       end
 
@@ -227,11 +227,11 @@ describe TokensController do
 
     describe '#update' do
       context 'when not logged in' do
-        it 'redirects to root' do
+        it 'redirects to signup' do
           session[:account_id] = nil
           patch :update, params: { id: cat_token.to_param }
           expect(response.status).to eq(302)
-          expect(response).to redirect_to(root_url)
+          expect(response).to redirect_to(new_account_url)
         end
       end
 

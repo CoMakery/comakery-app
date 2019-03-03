@@ -1,8 +1,8 @@
-import jQuery from 'jquery'
 import config from 'networks/qtum/config'
 import Wallet from 'networks/qtum/ledger/wallet'
 import debugLog from 'src/javascripts/debugLog'
 import caValidator from 'wallet-address-validator'
+import utils from 'networks/helpers/utils'
 
 const transferQtumCoins = async function(award) { // award in JSON
   const fee = 0.0015
@@ -13,26 +13,25 @@ const transferQtumCoins = async function(award) { // award in JSON
   if (!recipientAddress || recipientAddress === '' || amount <= 0 || !(network === 'mainnet' || network === 'testnet')) {
     return
   }
+  let txHash
   try {
     const networkType = network === 'mainnet' ? 'prod' : 'testnet'
     const addressValid = caValidator.validate(recipientAddress, 'QTUM', networkType)
     if (addressValid) {
       window.alertMsg('#metamaskModal1', 'Waiting...')
-      const txHash = await submitTransaction(network, recipientAddress, amount, fee)
-      debugLog(`transaction address: ${txHash}`)
-      if (txHash) {
-        jQuery.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash })
-      }
-      window.foundationCmd('#metamaskModal1', 'close')
-      return txHash
+      txHash = await submitTransaction(network, recipientAddress, amount, fee)
     }
   } catch (err) {
     console.log(err)
-    window.alertMsg('#metamaskModal1', err.message)
-    if (jQuery('body.projects-show').length > 0) {
-      jQuery('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
-    }
+    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
+    utils.showMessageWhenTransactionFailed(award)
   }
+  if (txHash) {
+    const sub = network === 'mainnet' ? 'explorer' : 'testnet'
+    const link = `https://${sub}.qtum.org/tx/${txHash}`
+    utils.updateTransactionAddress(award, txHash, link)
+  }
+  return txHash
 }
 
 // amount, fee in QTUM
@@ -68,15 +67,14 @@ const submitTransaction = async function(network, to, amount, fee) {
   if (amount + fee >= info.balance) {
     const sub = network === 'mainnet' ? 'explorer' : 'testnet'
     const link = `https://${sub}.qtum.org/address/${fromAddress}`
-    const e = new Error(`Account <a href='${link}' target='_blank'>${fromAddress}</a> <br> You don't have sufficient Tokens to send`)
-    e.name = 'ErrorMessage'
-    throw e
+    throw Error(`Account <a href='${link}' target='_blank'>${fromAddress}</a> <br> You don't have sufficient Tokens to send`)
   }
   const serializedTx = await wallet.generateTx(to, amount, fee)
   if (serializedTx) {
     const txId = await server.currentNode().sendRawTx(serializedTx)
-    debugLog('txId =' + txId)
     return txId
+  } else {
+    throw Error('The transaction failed')
   }
 }
 

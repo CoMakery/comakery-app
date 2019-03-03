@@ -23,6 +23,10 @@ class AccountDecorator < Draper::Decorator
     UtilitiesService.get_wallet_url('eos_mainnet', eos_wallet)
   end
 
+  def tezos_wallet_url
+    UtilitiesService.get_wallet_url('tezos_mainnet', tezos_wallet)
+  end
+
   def etherscan_address
     "https://etherscan.io/address/#{ethereum_wallet}"
   end

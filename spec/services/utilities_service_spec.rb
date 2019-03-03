@@ -109,6 +109,14 @@ describe UtilitiesService do
 
       expect(result).to eq "https://jungle.bloks.io/account/#{wallet}"
     end
+
+    it 'wallet on tezos testnet' do
+      network = 'tezos_mainnet'
+
+      result = described_class.get_wallet_url(network, wallet)
+
+      expect(result).to eq "https://tzscan.io/#{wallet}"
+    end
   end
 
   context '.get_transaction_url' do
@@ -174,6 +182,14 @@ describe UtilitiesService do
       result = described_class.get_transaction_url(network, tx)
 
       expect(result).to eq "https://jungle.bloks.io/transaction/#{tx}"
+    end
+
+    it 'transaction on tezos mainnet' do
+      network = 'tezos_mainnet'
+
+      result = described_class.get_transaction_url(network, tx)
+
+      expect(result).to eq "https://tzscan.io/#{tx}"
     end
   end
 

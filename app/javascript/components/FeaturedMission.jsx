@@ -26,13 +26,12 @@ export default class FeaturedMission extends React.Component {
       }
     }).then(response => {
       if (response.status === 200) {
-        // need to update project
         let newProjects = Array.from(this.state.projects)
         const index = newProjects.findIndex(project => project.id === projectId)
-
         newProjects[index].interested = true
-
         this.setState({projects: newProjects})
+      } if (response.status === 401) {
+        window.location = '/accounts/new'
       } else {
         throw Error(response.text())
       }

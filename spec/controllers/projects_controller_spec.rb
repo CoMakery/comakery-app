@@ -80,11 +80,11 @@ describe ProjectsController do
       end
     end
   describe 'logged out'
-    it 'redirect to home page if you are not logged in' do
+    it 'redirect to signup page if you are not logged in' do
       logout
       get :landing
       expect(response.status).to eq(302)
-      expect(response).to redirect_to(root_url)
+      expect(response).to redirect_to(new_account_url)
     end
   end
 
@@ -96,7 +96,7 @@ describe ProjectsController do
         get :new
 
         expect(response.status).to eq(302)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(new_account_url)
       end
     end
 
@@ -294,7 +294,7 @@ describe ProjectsController do
         session[:account_id] = nil
         post :update_status, params: { project_id: project.id }
         expect(response.status).to eq(302)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(new_account_url)
       end
     end
 

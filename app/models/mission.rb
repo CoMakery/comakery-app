@@ -11,7 +11,7 @@ class Mission < ApplicationRecord
   validates :name, :subtitle, :description, :logo, :image, presence: true
   validates :name, length: { maximum: 100 }
   validates :subtitle, length: { maximum: 140 }
-  validates :description, length: { maximum: 250 }
+  validates :description, length: { maximum: 375 }
 
   def serialize
     as_json(only: %i[id name token_id subtitle description status display_order]).merge(
@@ -25,9 +25,5 @@ class Mission < ApplicationRecord
   def assign_display_order
     self.display_order = id
     save
-  end
-
-  def validate_token_id
-    errors.add(:token, 'is invalid') unless Token.exists?(token_id)
   end
 end

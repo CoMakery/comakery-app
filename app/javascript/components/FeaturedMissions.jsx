@@ -8,16 +8,6 @@ import logo from '../src/images/styleguide/icons/Logo-Footer.svg'
 import developersImg from '../src/images/featured/developers.png'
 import communityManagersImg from '../src/images/featured/community-managers.png'
 import chatImg from '../src/images/featured/chat.svg'
-import notificationImg from '../src/images/featured/warning.svg'
-
-const confirmNotification = (
-  <div className="confirm-message">
-    <div className="confirm-message__box">
-      <img src={notificationImg} className="confirm-message__icon" />
-      Please confirm your email address to continue
-    </div>
-  </div>
-)
 
 export default class FeaturedMissions extends React.Component {
   constructor(props) {
@@ -59,20 +49,24 @@ export default class FeaturedMissions extends React.Component {
     }
     return (
       <div className="featured-missions">
-        {!this.props.isConfirmed && confirmNotification}
+        {!this.props.isConfirmed &&
+          <div className="grayed-page" />
+        }
         <div className="featured-missions__header">
-          <div className="intercom">
-            <img src={chatImg} />
-          </div>
+          {this.props.isConfirmed &&
+            <div className="intercom intercom-button">
+              <img src={chatImg} />
+            </div>
+          }
           <div className="featured-missions__header_container">
             <img className="featured-missions__header__img" src={headerImg} />
             <div className="featured-missions__header__description">
               <img className="featured-missions__header__logo" src={logo} />
               <div className="featured-missions__header__title">
                 Find Your Mission.<br />
-                Prepare For Liftoff.
+                Join Blockchain Projects.
               </div>
-              <div className="featured-missions__header__subtitle">Accelerating Blockchain Adoption</div>
+              <div className="featured-missions__header__subtitle">Freelance flexibly. Earn tokens & USD. Grow your skills.</div>
             </div>
           </div>
         </div>

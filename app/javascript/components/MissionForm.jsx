@@ -6,7 +6,7 @@ import InputFieldDescription from './styleguide/InputFieldDescription'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
-import Message from './styleguide/Message'
+import Flash from './layouts/Flash'
 import Layout from './layouts/Layout'
 
 export default class MissionForm extends React.Component {
@@ -29,8 +29,7 @@ export default class MissionForm extends React.Component {
     this.state = {
       errors        : {}, // error hash for account form
       disabled      : {}, // disabled hash
-      errorMessage  : null,
-      infoMessage   : null,
+      flashMessages : [],
       formAction    : this.props.formAction,
       formUrl       : this.props.formUrl,
       closeOnSuccess: false,
@@ -112,11 +111,11 @@ export default class MissionForm extends React.Component {
         } else {
           if (this.state.formAction === 'POST') {
             response.json().then(data => {
-              this.setState({
-                formAction : 'PUT',
-                formUrl    : `/missions/${data.id}`,
-                infoMessage: 'Mission Created'
-              })
+              this.setState(state => ({
+                formAction   : 'PUT',
+                formUrl      : `/missions/${data.id}`,
+                flashMessages: state.flashMessages.concat([{'severity': 'notice', 'text': 'Mission Created'}])
+              }))
               history.replaceState(
                 {},
                 document.title,
@@ -124,18 +123,18 @@ export default class MissionForm extends React.Component {
               )
             })
           } else {
-            this.setState({
-              infoMessage: 'Mission Updated'
-            })
+            this.setState(state => ({
+              flashMessages: state.flashMessages.concat([{'severity': 'notice', 'text': 'Mission Updated'}])
+            }))
           }
           this.enable(['submit', 'submit_and_close'])
         }
       } else {
         response.json().then(data => {
-          this.setState({
-            errors      : data.errors,
-            errorMessage: data.message
-          })
+          this.setState(state => ({
+            errors       : data.errors,
+            flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
+          }))
           this.enable(['submit', 'submit_and_close'])
         })
       }
@@ -228,17 +227,7 @@ export default class MissionForm extends React.Component {
         }
       >
 
-        { this.state.errorMessage &&
-        <div className="mission-form--message">
-          <Message severity="error" text={this.state.errorMessage} />
-        </div>
-        }
-
-        { this.state.infoMessage &&
-        <div className="mission-form--message">
-          <Message severity="warning" text={this.state.infoMessage} />
-        </div>
-        }
+        <Flash messages={this.state.flashMessages} />
 
         <form id="mission-form--form" className="mission-form--form" onSubmit={this.handleSaveMission}>
           <InputFieldWhiteDark
@@ -254,7 +243,7 @@ export default class MissionForm extends React.Component {
             errorText={errors.subtitle} />
 
           <InputFieldDescription
-            name="description" title="Description" symbolLimit={250} required value={description}
+            name="description" title="Description" symbolLimit={375} required value={description}
             placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
             eventHandler={this.handleChangeFormData}
             errorText={errors.description}

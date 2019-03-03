@@ -20,6 +20,9 @@ const transferAwardOnBitcoin = award => // award in JSON
 const transferAwardOnEos = award => // award in JSON
   eosScatter.transferEosCoins(award)
 
+const transferAwardOnTezos = award => // award in JSON
+  tezosTrezor.transferXtzCoins(award)
+
 window.transferAward = function(award) { // award in JSON
   if ((award.token.coin_type === 'erc20') || (award.token.coin_type === 'eth')) {
     transferAwardOnEthereum(award)
@@ -31,6 +34,8 @@ window.transferAward = function(award) { // award in JSON
     transferAwardOnBitcoin(award)
   } else if (award.token.coin_type === 'eos') {
     transferAwardOnEos(award)
+  } else if (award.token.coin_type === 'xtz') {
+    transferAwardOnTezos(award)
   }
 }
 

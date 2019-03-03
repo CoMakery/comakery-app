@@ -166,7 +166,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def send_coins?
-    token&.coin_type_eth? || token&.coin_type_ada? || token&.coin_type_btc? || token&.coin_type_eos? || token&.coin_type_qtum?
+    token&.coin_type? && %w[eth btc ada qtum eos xtz].include?(token&.coin_type)
   end
 
   private

@@ -1,9 +1,9 @@
 import Eos from 'eosjs'
-import jQuery from 'jquery'
 import debugLog from 'src/javascripts/debugLog'
 import EosUtils from 'networks/eos/nodes/utils'
 import ScatterJS from 'scatterjs-core'
 import ScatterEOS from 'scatterjs-plugin-eosjs'
+import utils from 'networks/helpers/utils'
 
 ScatterJS.plugins(new ScatterEOS())
 
@@ -14,31 +14,28 @@ const transferEosCoins = async function(award) { // award in JSON
   if (!recipientAddress || recipientAddress === '' || amount <= 0 || !(network === 'mainnet' || network === 'testnet')) {
     return
   }
+  let txHash
   try {
     window.alertMsg('#metamaskModal1', 'Waiting...')
-    const txHash = await submitTransaction(network, recipientAddress, amount)
-    debugLog('transaction address: ' + txHash)
-    if (txHash) {
-      jQuery.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash })
-    }
-    window.foundationCmd('#metamaskModal1', 'close')
-    return txHash
+    txHash = await submitTransaction(network, recipientAddress, amount)
+    console.log('transaction address: ' + txHash)
   } catch (err) {
     console.error(err)
-    if (err.name === 'ErrorMessage') {
-      window.alertMsg('#metamaskModal1', err.message)
-    } else {
-      window.foundationCmd('#metamaskModal1', 'close')
-    }
-    if (jQuery('body.projects-show').length > 0) {
-      jQuery('.flash-msg').html('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
-    }
+    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
+    utils.showMessageWhenTransactionFailed(award)
   }
+  if (txHash) {
+    const sub = network === 'mainnet' ? 'explorer.eosvibes.io' : 'jungle.bloks.io'
+    const link = `https://${sub}/transaction/${txHash}`
+    utils.updateTransactionAddress(award, txHash, link)
+  }
+  return txHash
 }
 
 // amount in EOS
 // network: 'mainnet' or 'testnet'
 const submitTransaction = async function(network, to, amount, memo = 'CoMakery') {
+  const nodeHost = network === 'mainnet' ? 'explorer.eosvibes.io' : 'jungle.bloks.io'
   network = (network === 'mainnet') ? EosUtils.mainNet : EosUtils.testNet
   const connected = await ScatterJS.connect('ComakeryAppName', {network})
   if (!connected) return
@@ -47,7 +44,12 @@ const submitTransaction = async function(network, to, amount, memo = 'CoMakery')
   const account = ScatterJS.account('eos')
   debugLog(account)
   const eos = ScatterJS.eos(network, Eos)
-  debugLog(eos)
+  const info = await eos.getAccount(account.name)
+  debugLog(['account info: ', info])
+  if (amount >= parseFloat(info.core_liquid_balance)) {
+    const link = `https://${nodeHost}/account/${account.name}`
+    throw Error(`Account <a href='${link}' target='_blank'>${account.name}</a> <br> You don't have sufficient Tokens to send`)
+  }
   debugLog(`recipientAddress: ${to}`)
   const rs = await eos.transfer(account.name, to, `${amount.toFixed(4)} EOS`, memo)
   debugLog(['result: ', rs])

@@ -1313,7 +1313,7 @@ input[type="submit"].button:disabled {
 
 .featured-missions__header__title {
   font-family: Montserrat, sans-serif;
-  font-size: 53px;
+  font-size: 38px;
   font-weight: 800;
   font-style: normal;
   font-stretch: normal;
@@ -1321,11 +1321,12 @@ input[type="submit"].button:disabled {
   letter-spacing: normal;
   color: #ffffff;
   margin-bottom: 14px;
+  text-transform: uppercase;
 }
 
 .featured-missions__header__subtitle {
   font-family: Montserrat, sans-serif;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 500;
   font-style: normal;
   font-stretch: normal;
@@ -2051,7 +2052,7 @@ input[type="submit"].button:disabled {
   }
 }
 
-.intercom {
+.intercom-button {
   position: absolute;
   bottom: 0;
   margin-bottom: -36px;
@@ -2067,7 +2068,7 @@ input[type="submit"].button:disabled {
   cursor: pointer;
 }
 
-.confirm-message {
+.grayed-page {
   position: absolute;
   z-index: 2;
   top: 0;
@@ -2077,96 +2078,32 @@ input[type="submit"].button:disabled {
   background-color: rgba(58, 58, 58, 0.8);
 }
 
-.confirm-message__box {
-  position: absolute;
-  box-sizing: border-box;
-  top: 12px;
-  right: 12px;
-  display: flex;
-  align-items: center;
-  width: 550px;
-  padding: 15px 10px;
-  border: solid 3px var(--primary-purple);
-  box-shadow: 0 5px 10px 0 rgba(74, 74, 74, 0.2);
-  background-color: #ffffff;
-  font-family: Montserrat, sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: var(--black);
-}
-
-.confirm-message__icon {
-  width: 25px;
-  height: 25px;
-  margin-right: 15px;
-}
-
-@media screen and (max-width: 1024px) {
-  .confirm-message__box {
-    width: 350px;
-    font-size: 12px;
-    border-width: 2px;
-  }
-
-  .confirm-message__icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .confirm-message {
-    padding: 16px;
-  }
-
-  .confirm-message__box {
-    position: relative;
-    top: 0;
-    right: 0;
-    width: 100%;
-    padding: 10px;
-  }
-
-  .confirm-message__icon {
-    width: 22px;
-    height: 22px;
-  }
+.flash-message-container {
+  position: fixed;
+  z-index: 99;  
+  top: 20px;
+  right: 20px;
 }
 
 .flash-message {
-  position: absolute;
-  z-index: 1;
+  margin-bottom: 5px;
   box-sizing: border-box;
-  top: 12px;
-  right: 12px;
   display: flex;
   align-items: center;
   width: 550px;
-  padding: 10px 40px 10px 10px;
-  border: solid 3px var(--primary-purple);
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.5);
+  padding: 20px 20px 20px 20px;
+  box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
+  border: 1px solid rgba(74, 74, 74, .2);
   background-color: #ffffff;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: bold;
   font-style: normal;
   font-stretch: normal;
   line-height: normal;
   letter-spacing: normal;
   color: var(--black);
-}
-
-.flash-message--notice {
-  border: solid 3px #41d462;
-}
-
-.flash-message--error {
-  border: solid 3px #d0021b;
+  text-transform: uppercase;
 }
 
 .flash-message__icon {
@@ -2177,7 +2114,6 @@ input[type="submit"].button:disabled {
 
 .flash-message__text {
   width: 100%;
-  text-align: justify;
   word-break: break-word;
 }
 
@@ -2185,7 +2121,6 @@ input[type="submit"].button:disabled {
   .flash-message {
     width: 350px;
     font-size: 12px;
-    border-width: 2px;
   }
 
   .flash-message__icon {
@@ -2196,11 +2131,14 @@ input[type="submit"].button:disabled {
 }
 
 @media screen and (max-width: 767px) {
-  .flash-message {
+  .flash-message-container {
     top: 15px;
     left: 15px;
     right: 15px;
-    width: calc(100% - 30px);
+  }
+
+  .flash-message {
+    width: 100%;
   }
 
   .flash-message__icon {
@@ -2210,8 +2148,6 @@ input[type="submit"].button:disabled {
 }
 
 .flash-message__icon--close {
-  position: absolute;
-  right: 10px;
   margin-right: 0;
   cursor: pointer;
 }

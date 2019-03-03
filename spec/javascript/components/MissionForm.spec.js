@@ -87,14 +87,25 @@ describe('MissionForm', () => {
     const wrapper = mount(<MissionForm />)
 
     wrapper.setState({
-      errorMessage: 'test error',
-      infoMessage : 'test info'
+      flashMessages: [
+        {
+          'severity': 'notice',
+          'text'    : 'notice text'
+        },
+        {
+          'severity': 'warning',
+          'text'    : 'warning text'
+        },
+        {
+          'severity': 'error',
+          'text'    : 'error text'
+        },
+      ]
     })
 
     wrapper.update()
 
-    expect(wrapper.exists('Message[severity="error"][text="test error"]')).toBe(true)
-    expect(wrapper.exists('Message[severity="warning"][text="test info"]')).toBe(true)
+    expect(wrapper.exists('Flash')).toBe(true)
   })
 
   it('displays errors', () => {

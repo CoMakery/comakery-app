@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe PagesController, type: :controller do
+  it 'access joinus' do
+    get :join_us
+    expect(response).to render_template('pages/join_us')
+  end
+
   it 'access e-sign disclosure' do
     get :e_sign_disclosure
     expect(response).to render_template('pages/e_sign_disclosure')
@@ -22,23 +27,9 @@ RSpec.describe PagesController, type: :controller do
     expect(response).to render_template('pages/user_agreement')
   end
 
-  it 'access landing page' do
-    get :landing
-    expect(response).to render_template('pages/landing')
-  end
-
-  it 'access home page' do
-    account = create :account
-    login account
-    get :landing
-    expect(response).to redirect_to action: :featured
-  end
-
   it 'access featured page' do
-    account = create :account, contributor_form: true
-    login account
-    get :landing
-    expect(response).to redirect_to action: :featured
+    get :featured
+    expect(response.status).to eq(200)
   end
 
   it 'create interest' do
@@ -55,7 +46,7 @@ RSpec.describe PagesController, type: :controller do
   it 'basic auth' do
     ENV.stub(:key?) { 'test:test' }
     ENV.stub(:fetch) { 'test:test' }
-    get :landing
+    get :featured
   end
 
   it 'redirects from styleguide page' do

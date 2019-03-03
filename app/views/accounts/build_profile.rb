@@ -75,7 +75,7 @@ class Views::Accounts::BuildProfile < Views::Base
             column('large-12') do
               with_errors(account, :occupation) do
                 label do
-                  text 'What is your occupation?'
+                  text 'What Is Your Occupation?'
                   f.text_field :occupation
                 end
               end

@@ -6,7 +6,47 @@ describe 'my account', js: true do
   let!(:confirmed_account) { create :account, nickname: 'jason', email_confirm_token: nil }
   let!(:token) { create :token }
   let!(:mission) { create :mission, token_id: token.id }
-  let!(:project) { create :project, mission_id: mission.id, visibility: 'public_listed' }
+  let!(:project) { create :project, mission_id: mission.id, visibility: 'public_listed', status: 0 }
+
+  scenario 'intercom is enabled before signup' do
+    visit '/'
+    expect(page).to have_css('.intercom-button')
+    expect(page).to have_css('iframe#intercom-frame', visible: false)
+  end
+
+  scenario 'intercom is disabled after signup' do
+    login(unconfirmed_account)
+    visit '/'
+    expect(page).not_to have_css('.intercom-button')
+    expect(page).not_to have_css('iframe#intercom-frame', visible: false)
+  end
+
+  scenario 'intercom is enabled after email confirmation' do
+    login(confirmed_account)
+    visit '/'
+    expect(page).to have_css('.intercom')
+    expect(page).to have_css('iframe#intercom-frame', visible: false)
+  end
+
+  scenario 'user gets redirected to signup on create project click' do
+    visit '/'
+    expect(page.current_url).to have_content '/'
+    expect(page).to have_content('CoMakery Hosts Blockchain Missions We Believe In')
+    stub_airtable
+    find('a.featured-mission__create-project').click
+    sleep 2
+    expect(page.current_url).to have_content '/accounts/new'
+  end
+
+  scenario 'user gets redirected to signup on interest click' do
+    visit '/'
+    expect(page.current_url).to have_content '/'
+    expect(page).to have_content('CoMakery Hosts Blockchain Missions We Believe In')
+    stub_airtable
+    find('.featured-mission__project__interest').click
+    sleep 2
+    expect(page.current_url).to have_content '/accounts/new'
+  end
 
   scenario 'user gets redirected to build profile page after signup' do
     visit root_path
@@ -45,8 +85,8 @@ describe 'my account', js: true do
     end
     mission.save
 
-    visit '/featured'
-    expect(page.current_url).to have_content '/featured'
+    visit '/'
+    expect(page.current_url).to have_content '/'
     expect(page).to have_content('CoMakery Hosts Blockchain Missions We Believe In')
     stub_airtable
     find('.featured-mission__project__interest').click
@@ -65,20 +105,20 @@ describe 'my account', js: true do
   scenario 'projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects'
-    expect(page).to have_current_path(featured_path)
-    expect(page).to have_content('Please confirm your email address to continue')
+    expect(page).to have_current_path(root_path)
+    expect(page).to have_content('PLEASE CONFIRM YOUR EMAIL ADDRESS TO CONTINUE')
   end
 
   scenario 'my projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects/mine'
-    expect(page).to have_current_path(featured_path)
-    expect(page).to have_content('Please confirm your email address to continue')
+    expect(page).to have_current_path(root_path)
+    expect(page).to have_content('PLEASE CONFIRM YOUR EMAIL ADDRESS TO CONTINUE')
   end
 
   scenario 'account gets confirmed after visiting confirmation link' do
     visit "/accounts/confirm/#{to_be_confirmed_account.email_confirm_token}"
-    expect(page).to have_current_path(featured_path)
+    expect(page).to have_current_path(root_path)
     # we don't have notification inside react pages
     # expect(page).to have_content 'Success! Your email is confirmed.'
     expect(page).to have_content(/Sign out/i)

@@ -15,7 +15,7 @@ IntercomRails.config do |config|
   # == Enabled Environments
   # Which environments is auto inclusion of the Javascript enabled for
   #
-  config.enabled_environments = ["development", "production"]
+  config.enabled_environments = ["test", "development", "production"]
 
   # == Current user method/variable
   # The method/variable that contains the logged in user in your controllers.
@@ -45,7 +45,7 @@ IntercomRails.config do |config|
   # A Proc that given a user returns true if the user should be excluded
   # from imports and Javascript inclusion, false otherwise.
   #
-  # config.user.exclude_if = Proc.new { |user| user.deleted? }
+  config.user.exclude_if = Proc.new { |user| not user.confirmed? }
 
   # == User Custom Data
   # A hash of additional data you wish to send about your users.
@@ -60,6 +60,7 @@ IntercomRails.config do |config|
   config.user.custom_data = {
     :skill => Proc.new { |user| user.specialty },
     :full_name => Proc.new { |user| "#{user.first_name} #{user.last_name}" },
+    :name => Proc.new { |user| "#{user.first_name} #{user.last_name}" },
     :occupation => Proc.new { |user| user.occupation }
   }
 
