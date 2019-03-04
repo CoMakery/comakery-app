@@ -41,11 +41,16 @@ class Layout extends React.Component {
               {category &&
                 <span className="layout--content--title--category">{category}</span>
               }
-              {navTitle && navTitle.all.map((t) =>
-                <span key={t}
-                  className={navTitle.current === t ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}
+              {navTitle && navTitle.map((n, i) =>
+                <span
+                  key={i}
+                  className={n.current ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}
                 >
-                  {t}
+                  <a
+                    href={n.current ? '#' : n.url}
+                  >
+                    {n.name}
+                  </a>
                 </span>
               )}
             </div>
@@ -82,7 +87,7 @@ Layout.propTypes = {
   className    : PropTypes.string,
   category     : PropTypes.string,
   title        : PropTypes.string,
-  navTitle     : PropTypes.object,
+  navTitle     : PropTypes.array,
   hasBackButton: PropTypes.bool,
   subfooter    : PropTypes.object,
   sidebar      : PropTypes.object

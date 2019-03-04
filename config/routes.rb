@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       get  :preview, on: :collection
       post :update_transaction_address, on: :member
     end
+    resources :award_types, except: [:show]
     resources :contributors, only: [:index]
     resources :revenues, only: [:index, :create]
     resources :payments, only: [:index, :create, :update]

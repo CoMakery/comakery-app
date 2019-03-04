@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190226193253) do
+ActiveRecord::Schema.define(version: 20190303234233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "accounts", id: :serial, force: :cascade do |t|
     t.string "email"
@@ -104,12 +105,14 @@ ActiveRecord::Schema.define(version: 20190226193253) do
   create_table "award_types", id: :serial, force: :cascade do |t|
     t.integer "project_id", null: false
     t.string "name", null: false
-    t.integer "amount", null: false
+    t.integer "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
     t.boolean "disabled"
+    t.text "goal"
+    t.string "specialty"
     t.index ["project_id"], name: "index_award_types_on_project_id"
   end
 
@@ -214,7 +217,7 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.decimal "royalty_percentage", precision: 16, scale: 13
     t.integer "maximum_royalties_per_month"
     t.boolean "license_finalized", default: false, null: false
-    t.integer "denomination", default: 0, null: false
+    t.integer "denomination"
     t.datetime "revenue_sharing_end_date"
     t.integer "featured"
     t.string "image_filename"
@@ -232,7 +235,6 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.string "blockchain_network"
     t.string "ethereum_network"
     t.boolean "ethereum_enabled"
-    t.integer "denomination"
     t.string "coin_type"
     t.string "square_image_id"
     t.string "square_image_filename"

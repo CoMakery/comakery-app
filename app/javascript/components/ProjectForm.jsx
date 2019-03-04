@@ -68,6 +68,7 @@ class ProjectForm extends React.Component {
       closeOnSuccess                    : false,
       awardVisibilitiesPretty           : awardVisibilitiesPretty,
       visibilitiesPretty                : visibilitiesPretty,
+      id                                : this.props.project.id || null,
       'project[mission_id]'             : this.props.project.missionId || Object.values(this.props.missions)[0],
       'project[token_id]'               : this.props.project.tokenId || Object.values(this.props.tokens)[0],
       'project[visibility]'             : this.props.project.visibility || Object.values(visibilitiesPretty)[0],
@@ -223,6 +224,7 @@ class ProjectForm extends React.Component {
               this.setState(state => ({
                 formAction         : 'PUT',
                 formUrl            : `/projects/${data.id}`,
+                id                 : data.id,
                 'project[channels]': data.props.project.channels || [],
                 flashMessages      : state.flashMessages.concat([{'severity': 'notice', 'text': 'Project Created'}])
               }))
@@ -261,8 +263,16 @@ class ProjectForm extends React.Component {
       <React.Fragment>
         <Layout
           className="project-form"
-          navTitle={{'all': ['project settings', 'batches'], 'current': 'project settings'}}
-          hasBackButton
+          navTitle={[
+            {
+              name: 'project settings',
+              current: true
+            },
+            {
+              name: 'batches',
+              url : this.state.id ? `/projects/${this.state.id}/award_types` : '#'
+            }
+          ]}
           subfooter={
             <React.Fragment>
               <Button
