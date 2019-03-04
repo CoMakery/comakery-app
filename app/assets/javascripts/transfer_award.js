@@ -1,5 +1,8 @@
-window.alertMsg = function(modal, msg) {
+window.alertMsg = function(modal, msg, closeLabel) {
   $(modal).find('.alert-msg').html(msg)
+  if (closeLabel) {
+    $(modal).find('a[data-close]').html(closeLabel)
+  }
   $(modal).foundation('open')
 }
 
