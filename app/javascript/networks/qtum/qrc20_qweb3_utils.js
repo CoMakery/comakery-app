@@ -49,7 +49,7 @@ const transferQrc20Tokens = async function(award) { // award in JSON
     console.log('transaction address: ' + rs.txid)
   } catch (err) {
     console.error(err)
-    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
+    window.alertMsg('#metamaskModal1', customErrorMessage(err) || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
   if (rs && rs.txid) {
@@ -57,6 +57,14 @@ const transferQrc20Tokens = async function(award) { // award in JSON
     const link = `https://${sub}.qtum.org/tx/${rs.txid}`
     utils.updateTransactionAddress(award, rs.txid, link)
   }
+}
+
+const customErrorMessage = function(error) {
+  let errMsg = error.message
+  if (errMsg === 'could not find UTXOs to build transaction') {
+    errMsg = "You don't have enough QTUM to process transaction"
+  }
+  return errMsg
 }
 
 export default { transferQrc20Tokens }
