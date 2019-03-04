@@ -39,6 +39,7 @@ exports[`Footer renders correctly without props 1`] = `
             Home
           </a>
           <a
+            className="intercom"
             href="mailto:support@comakery.com"
           >
             Contact Us

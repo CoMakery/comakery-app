@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe PagesController, type: :controller do
+  it 'access joinus' do
+    get :join_us
+    expect(response).to render_template('pages/join_us')
+  end
+
   it 'access e-sign disclosure' do
     get :e_sign_disclosure
     expect(response).to render_template('pages/e_sign_disclosure')
