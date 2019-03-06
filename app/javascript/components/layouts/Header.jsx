@@ -11,7 +11,7 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
           Home
         </a>
 
-        <a className="intercom" href="#">
+        <a className="intercom" href="">
           Contact Us
         </a>
 

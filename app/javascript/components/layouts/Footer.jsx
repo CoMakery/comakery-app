@@ -32,7 +32,7 @@ class Footer extends React.Component {
                 <a href="/">
                   Home
                 </a>
-                <a className="intercom" href="#">
+                <a className="intercom" href="">
                   Contact Us
                 </a>
               </div>
