@@ -40,7 +40,7 @@ exports[`Footer renders correctly without props 1`] = `
           </a>
           <a
             className="intercom"
-            href="mailto:support@comakery.com"
+            href=""
           >
             Contact Us
           </a>
