@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="81px" viewBox="0 0 70 81" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53 (72520) - https://sketchapp.com -->
+    <title>SKILLS_GRAPHIC_ELEMENT 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M34.8898142,40.7846444 L34.8898142,80.5709976 L0.352422366,60.677821 L34.8898142,40.7846444 Z M1.41042733e-12,20.5953138 L34.1849695,40.2854988 L1.41398004e-12,59.9756838 L1.41042733e-12,20.5953138 Z M35.3597107,-8.84625706e-13 L69.8971026,19.8931766 L35.3597107,39.7863533 L35.3597107,-8.84625706e-13 Z M35.3597107,40.7846444 L69.8971026,60.677821 L35.3597107,80.5709976 L35.3597107,40.7846444 Z M34.8898142,2.065903e-12 L34.8898142,39.7863533 L0.352422366,19.8931766 L34.8898142,2.065903e-12 Z M36.0645555,40.2854988 L69.5446803,21.001297 L69.5446803,59.5697007 L36.0645555,40.2854988 Z" id="path-1"></path>
+        <filter x="0.0%" y="-0.0%" width="100.0%" height="100.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feGaussianBlur stdDeviation="0" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+    </defs>
+    <g id="MISSIONS-+-PROJECTS" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="MISSIONS/SINGLE_PROJECT/LOGGED_IN" transform="translate(-1005.000000, -2860.000000)">
+            <g id="SKILLS-NEEDED" transform="translate(0.000000, 1336.000000)">
+                <g id="WRITING" transform="translate(345.000000, 1505.000000)">
+                    <g id="SKILLS_GRAPHIC_ELEMENT" transform="translate(660.000000, 19.000000)">
+                        <g id="SKILLS_GRAPHIC_ELEMENT-2">
+                            <g>
+                                <mask id="mask-3" fill="white">
+                                    <use xlink:href="#path-1"></use>
+                                </mask>
+                                <use id="SKILLS_GRAPHIC_ELEMENT" fill="#FFFFFF" fill-rule="nonzero" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

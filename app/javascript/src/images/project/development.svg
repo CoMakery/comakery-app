@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="47px" height="26px" viewBox="0 0 47 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53 (72520) - https://sketchapp.com -->
+    <title>ICON/MARKETING</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#FB40E5" offset="0%"></stop>
+            <stop stop-color="#0089F4" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="MISSIONS-+-PROJECTS" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="MISSIONS/SINGLE_PROJECT/LOGGED_IN" transform="translate(-1016.000000, -1591.000000)">
+            <g id="SKILLS-NEEDED" transform="translate(0.000000, 1336.000000)">
+                <g id="SOFTWARE-DEVELOPMENT" transform="translate(345.000000, 209.000000)">
+                    <g id="ICON/SOFTWARE_DEVELOPMENT" transform="translate(671.000000, 36.000000)">
+                        <g id="html-coding" transform="translate(0.920000, 10.120000)">
+                            <path d="M14.0671292,22.243332 L0,14.5715746 L0,10.3224732 L14.0671292,2.69415507 L14.0671292,7.68501789 L4.26492247,12.3937535 L14.0671292,17.2800875 C14.0671292,17.2800875 14.0671292,22.243332 14.0671292,22.243332 Z" id="Path" fill="#010002"></path>
+                            <polygon id="Path" fill="url(#linearGradient-1)" points="16.469829 24.928159 25.7986839 0.00731610338 28.7458847 0.00731610338 19.3953559 24.928159"></polygon>
+                            <polygon id="Path" fill="#010002" points="31.9021431 22.243332 31.9021431 17.2800875 41.7024294 12.4332604 31.9021431 7.62383698 31.9021431 2.69214314 45.9692724 10.330338 45.9692724 14.553833"></polygon>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

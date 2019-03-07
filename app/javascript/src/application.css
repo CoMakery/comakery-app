@@ -2073,3 +2073,425 @@ input[type="submit"].button:disabled {
   margin-right: 0;
   cursor: pointer;
 }
+
+
+
+.project-container {
+  background: white;
+  font-family: Montserrat, sans-serif;
+  color: #ffffff;
+}
+
+.project-header {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  background-position-x: 50%;
+  background-position-y: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.project-header__blur {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.project-header__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  color: white;
+}
+
+.project-header__menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: right;
+}
+
+.project-header__menu__back {
+  display: inline-flex;
+  align-items: center;
+}
+
+.project-header__menu__link {
+  display: inline-block;
+  padding: 0 12px;
+  border-right: 1px solid white;
+}
+
+.project-header__menu__link--last {
+  border-right: none;
+}
+
+.project-header__mission-image {
+  width: 150px;
+  height: 100px;
+  margin: auto;
+}
+
+.project-header__name {
+  margin: auto;
+  font-size: 36px;
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 2.5;
+  letter-spacing: normal;
+  text-align: center;
+}
+
+.project-header__owner {
+  font-family: Georgia;
+  font-size: 18px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  letter-spacing: normal;
+  text-align: center;
+}
+
+.project-award {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 150px;
+  color: var(--black);
+  text-align: center;
+  box-shadow: 0 0 20px -5px rgba(0, 137, 244, 0.52);
+}
+
+.project-award__token {
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  margin-bottom: 20px;
+}
+
+.project-award__token__img {
+  margin-right: 6px;
+}
+
+.project-award__token__type {
+  display: flex;
+  margin-left: 6px;
+  font-size: 14px;
+}
+
+.project-award__token__address {
+  display: flex;
+  align-items: center;
+  margin-left: 6px;
+  color: var(--primary-blue);
+}
+
+.project-award__token__address a {
+  color: var(--primary-blue);
+  text-decoration: none;
+}
+
+.project-award__progress {
+  width: 650px;
+  box-sizing: border-box;
+}
+
+.project-award__progress__stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: italic;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  margin-bottom: 15px;
+  color: var(--black);
+}
+
+.project-award__percent {
+  font-size: 16px;
+}
+
+.project-award__progress__bar-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 18px;
+  border-radius: 11.5px;
+  box-shadow: inset 0 1px 5px 0 rgba(0, 0, 0, 0.5);
+  background-color: #ffffff;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.project-award__progress__bar-gradient {
+  z-index: 1;
+  height: 12px;
+  background-image: linear-gradient(to right, var(--primary-pink), var(--primary-blue));
+}
+
+.project-award__progress__bar-line {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  border-radius: 11.5px;
+  background-color: #dedede;
+  top: 50%;
+}
+
+.project-description {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
+  margin: auto;
+  padding: 50px 150px;
+}
+
+.project-description__video {
+  width: 50%;
+  padding: 38px 35px 38px 0;
+  border-right: solid 1px #d8d8d8;
+  border-radius: 1.5px;
+}
+
+.project-description__text {
+  width: 50%;
+  padding: 38px 0 38px 35px;
+}
+
+.project-interest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  height: 240px;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25'%3E%3Crect fill='%23fb40e5' width='540' height='450'/%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' x2='0' y1='0' y2='100%25' gradientTransform='rotate(250,1280,653)'%3E%3Cstop offset='0' stop-color='%23fb40e5'/%3E%3Cstop offset='1' stop-color='%230089f4'/%3E%3C/linearGradient%3E%3Cpattern patternUnits='userSpaceOnUse' id='b' width='504' height='420' x='0' y='0' viewBox='0 0 1080 900'%3E%3Cg fill-opacity='0.08'%3E%3Cpolygon fill='%23444' points='90 150 0 300 180 300'/%3E%3Cpolygon points='90 150 180 0 0 0'/%3E%3Cpolygon fill='%23AAA' points='270 150 360 0 180 0'/%3E%3Cpolygon fill='%23DDD' points='450 150 360 300 540 300'/%3E%3Cpolygon fill='%23999' points='450 150 540 0 360 0'/%3E%3Cpolygon points='630 150 540 300 720 300'/%3E%3Cpolygon fill='%23DDD' points='630 150 720 0 540 0'/%3E%3Cpolygon fill='%23444' points='810 150 720 300 900 300'/%3E%3Cpolygon fill='%23FFF' points='810 150 900 0 720 0'/%3E%3Cpolygon fill='%23DDD' points='990 150 900 300 1080 300'/%3E%3Cpolygon fill='%23444' points='990 150 1080 0 900 0'/%3E%3Cpolygon fill='%23DDD' points='90 450 0 600 180 600'/%3E%3Cpolygon points='90 450 180 300 0 300'/%3E%3Cpolygon fill='%23666' points='270 450 180 600 360 600'/%3E%3Cpolygon fill='%23AAA' points='270 450 360 300 180 300'/%3E%3Cpolygon fill='%23DDD' points='450 450 360 600 540 600'/%3E%3Cpolygon fill='%23999' points='450 450 540 300 360 300'/%3E%3Cpolygon fill='%23999' points='630 450 540 600 720 600'/%3E%3Cpolygon fill='%23FFF' points='630 450 720 300 540 300'/%3E%3Cpolygon points='810 450 720 600 900 600'/%3E%3Cpolygon fill='%23DDD' points='810 450 900 300 720 300'/%3E%3Cpolygon fill='%23AAA' points='990 450 900 600 1080 600'/%3E%3Cpolygon fill='%23444' points='990 450 1080 300 900 300'/%3E%3Cpolygon fill='%23222' points='90 750 0 900 180 900'/%3E%3Cpolygon points='270 750 180 900 360 900'/%3E%3Cpolygon fill='%23DDD' points='270 750 360 600 180 600'/%3E%3Cpolygon points='450 750 540 600 360 600'/%3E%3Cpolygon points='630 750 540 900 720 900'/%3E%3Cpolygon fill='%23444' points='630 750 720 600 540 600'/%3E%3Cpolygon fill='%23AAA' points='810 750 720 900 900 900'/%3E%3Cpolygon fill='%23666' points='810 750 900 600 720 600'/%3E%3Cpolygon fill='%23999' points='990 750 900 900 1080 900'/%3E%3Cpolygon fill='%23999' points='180 0 90 150 270 150'/%3E%3Cpolygon fill='%23444' points='360 0 270 150 450 150'/%3E%3Cpolygon fill='%23FFF' points='540 0 450 150 630 150'/%3E%3Cpolygon points='900 0 810 150 990 150'/%3E%3Cpolygon fill='%23222' points='0 300 -90 450 90 450'/%3E%3Cpolygon fill='%23FFF' points='0 300 90 150 -90 150'/%3E%3Cpolygon fill='%23FFF' points='180 300 90 450 270 450'/%3E%3Cpolygon fill='%23666' points='180 300 270 150 90 150'/%3E%3Cpolygon fill='%23222' points='360 300 270 450 450 450'/%3E%3Cpolygon fill='%23FFF' points='360 300 450 150 270 150'/%3E%3Cpolygon fill='%23444' points='540 300 450 450 630 450'/%3E%3Cpolygon fill='%23222' points='540 300 630 150 450 150'/%3E%3Cpolygon fill='%23AAA' points='720 300 630 450 810 450'/%3E%3Cpolygon fill='%23666' points='720 300 810 150 630 150'/%3E%3Cpolygon fill='%23FFF' points='900 300 810 450 990 450'/%3E%3Cpolygon fill='%23999' points='900 300 990 150 810 150'/%3E%3Cpolygon points='0 600 -90 750 90 750'/%3E%3Cpolygon fill='%23666' points='0 600 90 450 -90 450'/%3E%3Cpolygon fill='%23AAA' points='180 600 90 750 270 750'/%3E%3Cpolygon fill='%23444' points='180 600 270 450 90 450'/%3E%3Cpolygon fill='%23444' points='360 600 270 750 450 750'/%3E%3Cpolygon fill='%23999' points='360 600 450 450 270 450'/%3E%3Cpolygon fill='%23666' points='540 600 630 450 450 450'/%3E%3Cpolygon fill='%23222' points='720 600 630 750 810 750'/%3E%3Cpolygon fill='%23FFF' points='900 600 810 750 990 750'/%3E%3Cpolygon fill='%23222' points='900 600 990 450 810 450'/%3E%3Cpolygon fill='%23DDD' points='0 900 90 750 -90 750'/%3E%3Cpolygon fill='%23444' points='180 900 270 750 90 750'/%3E%3Cpolygon fill='%23FFF' points='360 900 450 750 270 750'/%3E%3Cpolygon fill='%23AAA' points='540 900 630 750 450 750'/%3E%3Cpolygon fill='%23FFF' points='720 900 810 750 630 750'/%3E%3Cpolygon fill='%23222' points='900 900 990 750 810 750'/%3E%3Cpolygon fill='%23222' points='1080 300 990 450 1170 450'/%3E%3Cpolygon fill='%23FFF' points='1080 300 1170 150 990 150'/%3E%3Cpolygon points='1080 600 990 750 1170 750'/%3E%3Cpolygon fill='%23666' points='1080 600 1170 450 990 450'/%3E%3Cpolygon fill='%23DDD' points='1080 900 1170 750 990 750'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect x='0' y='0' fill='url(%23a)' width='100%25' height='100%25'/%3E%3Crect x='0' y='0' fill='url(%23b)' width='100%25' height='100%25'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.project-interest__button {
+  width: 230px;
+  height: 40px;
+  background-color: var(--primary-blue);
+  text-transform: uppercase;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-family: Montserrat, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  transition: 0.5s all;
+  opacity: 0.8;
+}
+
+.project-interest__button:hover {
+  opacity: 1;
+}
+
+.project-interest__text {
+  width: 695px;
+  font-family: Georgia;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.63;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+
+.project-skills {
+  box-sizing: border-box;
+  max-width: 1440px;
+  margin: auto;
+  width: 100%;
+  padding: 60px 345px;
+}
+
+.project-skills__title {
+  font-family: Montserrat, sans-serif;
+  font-size: 30px;
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--black);
+  margin-bottom: 25px;
+}
+
+.project-skills__subtitle {
+  font-family: Georgia, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.63;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--greyish-brown);
+  margin: 0 84px;
+}
+
+.project-skill-container {
+  margin-top: 40px;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
+  border: solid 1px #f5f5f5;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.project-skill__background {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.project-skill__background__img {
+  width: 100%;
+  height: 115px;
+}
+
+.project-skill__background__title {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  box-sizing: border-box;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #ffffff;
+}
+
+.project-skill__background__icon {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.skill-icon {
+  position: absolute;
+  width: 45px;
+  height: 45px;
+}
+
+.skill-icon--background {
+  width: 69.9px;
+  height: 80.6px;
+}
+
+.project-skill__interest {
+  padding: 18px;
+  font-family: Montserrat, sans-serif;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 18px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--primary-pink);
+}
+
+.project-skill__interest__button {
+  cursor: pointer;
+}
+
+.project-team {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1440px;
+  margin: auto;
+  background-color: #f8f8f8;
+  padding: 55px 345px;
+}
+
+.project-team__title {
+  font-family: Montserrat, sans-serif;
+  font-size: 30px;
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--black);
+  margin-bottom: 17px;
+}
+
+.project-team__subtitle {
+  font-family: Georgia, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.63;
+  letter-spacing: normal;
+  text-align: center;
+  color: var(--greyish-brown);
+  margin-bottom: 57px;
+}
+
+.project-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+}
+

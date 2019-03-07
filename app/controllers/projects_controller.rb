@@ -3,6 +3,8 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
+  layout 'react', only: %i[show]
+
   def landing
     if current_account
       check_account_info
@@ -71,6 +73,28 @@ class ProjectsController < ApplicationController
     @project = Project.listed.includes(:award_types).find(params[:id]).decorate
     authorize @project
     set_award
+
+    token = @project.mission.token.decorate
+
+    render component: 'Project', props: {
+      interested: false,
+      project_data: @project.as_json(only: %i[id title description]).merge(
+        image_url: @project.image.present? ? 'url(' + Refile.attachment_url(@project, :image) + ')': nil,
+        youtube_url: @project.youtube_id,
+        default_image_url: helpers.image_url('defaul_project.jpg'),
+        owner: [@project.account.first_name, @project.account.last_name].join(' '),
+        token_percentage: @project.maximum_tokens > 0 ? 100 * @project.total_awarded / @project.maximum_tokens : 0,
+        maximum_tokens: @project.maximum_tokens_pretty,
+        awarded_tokens: @project.total_awarded_pretty
+      ),
+      mission_data: @project.mission.as_json(only: %i[id name]).merge(
+        image_url: @project.mission.image.present? ? Refile.attachment_url(@project.mission, :image, :fill, 150, 100) : nil
+      ),
+      token_data: token.as_json(only: %i[name symbol coin_type]).merge(
+        image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
+        contract_url: token.ethereum_contract_explorer_url
+      )
+    }
   end
 
   def unlisted
