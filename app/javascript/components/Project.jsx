@@ -27,10 +27,15 @@ export default class Project extends React.Component {
     }
 
     this.arcTween = this.arcTween.bind(this)
+    this.drawChart = this.drawChart.bind(this)
   }
 
   componentDidMount() {
     // draw piecharts
+    this.drawChart()
+  }
+
+  drawChart() {
     let data = [89, 34, 56, 18, 200]
 
     let width = 255
@@ -148,6 +153,24 @@ export default class Project extends React.Component {
             <div className="project-award__progress__bar-line" />
             <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}%`}} />
           </div>
+        </div>
+
+        <div className="project-contributors">
+          <div className="project-leader">
+            <div className="project-leader__info">
+              <div className="project-leader__title">Team Leader</div>
+              {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
+            </div>
+            <img className="project-leader__avatar" src={projectData.teamLeader.imageUrl} />
+          </div>
+
+          {projectData.contributors.map((contributor, index) =>
+            <div key={contributor.id} className="project-contributor-container">
+              <img className="project-contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
+              <div className="project-contributor__modal">Test</div>
+            </div>
+          )}
+          {projectData.contributorsNumber > 5 && <div className="project-contributors__more">+{projectData.contributorsNumber - 5}</div>}
         </div>
       </div>
 

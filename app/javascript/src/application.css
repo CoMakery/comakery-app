@@ -2265,6 +2265,95 @@ input[type="submit"].button:disabled {
   top: 50%;
 }
 
+.project-contributors {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.project-leader {
+  display: inline-flex;
+  align-items: center;
+}
+
+.project-leader__info {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: right;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: right;
+  color: var(--greyish-brown);
+  margin-right: 8px;
+}
+
+.project-leader__title {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: var(--black);
+}
+
+.project-leader__avatar {
+  width: 44px;
+  height: 44px;
+  border: double 1px transparent;
+  border-radius: 50%;
+  background-image: linear-gradient(white, white), radial-gradient(circle at top left, var(--primary-pink),var(--primary-blue));
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  margin-right: 8px;
+}
+
+.project-contributors {
+  display: inline-flex;
+}
+
+.project-contributor-container {
+  position: relative;
+}
+
+.project-contributor-container:hover .project-contributor__modal {
+  display: block;
+}
+
+.project-contributor__avatar {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: solid 1px #8d9599;
+  margin-left: -4px;
+}
+
+.project-contributor__modal {
+  display: none;
+  position: absolute;
+  left: -110px;
+  bottom: 38px;
+  width: 250px;
+  height: 88.1px;
+  border-radius: 2px;
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+}
+
+.project-contributors__more {
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--black);
+  margin-left: 5px;
+}
+
 .project-description {
   box-sizing: border-box;
   display: flex;
@@ -2494,4 +2583,3 @@ input[type="submit"].button:disabled {
   align-items: center;
   margin-bottom: 40px;
 }
-

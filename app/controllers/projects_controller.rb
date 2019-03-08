@@ -76,16 +76,23 @@ class ProjectsController < ApplicationController
 
     token = @project.mission.token.decorate
 
+    contributors_number = @project.contributors_by_award_amount.size
+    chart_data = @project.contributors_by_award_amount.limit(12).decorate.map { |contributor|  @project.format_with_decimal_places(contributor.total) }
+
     render component: 'Project', props: {
       interested: false,
       project_data: @project.as_json(only: %i[id title description]).merge(
-        image_url: @project.image.present? ? 'url(' + Refile.attachment_url(@project, :image) + ')': nil,
+        image_url: @project.image.present? ? 'url(' + Refile.attachment_url(@project, :image) + ')' : nil,
         youtube_url: @project.youtube_id,
         default_image_url: helpers.image_url('defaul_project.jpg'),
         owner: [@project.account.first_name, @project.account.last_name].join(' '),
-        token_percentage: @project.maximum_tokens > 0 ? 100 * @project.total_awarded / @project.maximum_tokens : 0,
+        token_percentage: @project.maximum_tokens.positive? ? 100 * @project.total_awarded / @project.maximum_tokens : 0,
         maximum_tokens: @project.maximum_tokens_pretty,
-        awarded_tokens: @project.total_awarded_pretty
+        awarded_tokens: @project.total_awarded_pretty,
+        team_leader: contributor_props(@project.account),
+        contributors_number: contributors_number,
+        contributors: @project.top_contributors.map { |contributor| contributor_props(contributor) },
+        chart_data: chart_data
       ),
       mission_data: @project.mission.as_json(only: %i[id name]).merge(
         image_url: @project.mission.image.present? ? Refile.attachment_url(@project.mission, :image, :fill, 150, 100) : nil
@@ -221,5 +228,11 @@ class ProjectsController < ApplicationController
 
   def project_detail_path
     @project.unlisted? ? unlisted_project_path(@project.long_id) : project_path(@project)
+  end
+
+  def contributor_props(account)
+    account.as_json(only: %i[id nickname first_name last_award specialty]).merge(
+      image_url: helpers.account_image_url(account, 44)
+    )
   end
 end
