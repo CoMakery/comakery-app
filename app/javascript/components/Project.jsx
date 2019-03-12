@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
 import d3 from 'd3/d3'
+import {fetch as fetchPolyfill} from 'whatwg-fetch'
 
 const chartColors = [
   '#0089F4',
@@ -28,6 +29,7 @@ export default class Project extends React.Component {
 
     this.arcTween = this.arcTween.bind(this)
     this.drawChart = this.drawChart.bind(this)
+    this.chartData = props.projectData.chartData
   }
 
   componentDidMount() {
@@ -36,7 +38,8 @@ export default class Project extends React.Component {
   }
 
   drawChart() {
-    let data = [89, 34, 56, 18, 200]
+    const sum = this.chartData.reduce((sub, ele) => sub + ele, 0)
+    let data = this.chartData.map(ele => sum > 0 ? (ele / sum * 100).toFixed(2) : 0)
 
     let width = 255
     let height = 255
@@ -67,10 +70,10 @@ export default class Project extends React.Component {
       .attr('text-anchor', 'middle')
 
     svg.selectAll('path')
-      .data(pie(data))
+      .data(pie(data.slice(0, 12)))
       .enter().append('path')
-      .style('fill', (d) => {
-        return '#3f4eff'
+      .style('fill', (d, i) => {
+        return chartColors[i]
       })
       .each((d) => { d.outerRadius = outerRadius - 10 })
       .attr('d', arc)
@@ -90,8 +93,30 @@ export default class Project extends React.Component {
     }
   }
 
+  addInterest(projectId) { // protocol = mission name
+    const { missionData } = this.props
+    fetchPolyfill('/add-interest', {
+      credentials: 'same-origin',
+      method     : 'POST',
+      body       : JSON.stringify({'project_id': projectId, 'protocol': missionData.name, 'authenticity_token': this.props.csrfToken}),
+      headers    : {
+        'Accept'      : 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      if (response.status === 200) {
+        this.setState({ interested: true })
+      } if (response.status === 401) {
+        window.location = '/accounts/new'
+      } else {
+        throw Error(response.text())
+      }
+    })
+  }
+
   render() {
     const { projectData, missionData, tokenData } = this.props
+    const { interested } = this.state
     const skills = {
       development: 'Software Development',
       design     : 'UX / UI DESIGN',
@@ -102,6 +127,9 @@ export default class Project extends React.Component {
       writing    : 'WRITING',
       marketing  : 'MARKETING & SOCIAL MEDIA'
     }
+    let descriptionText = projectData.description.split('.')
+    const first = descriptionText.shift()
+    descriptionText = descriptionText.join('.')
 
     return <div className="project-container">
       <div className="project-header" style={{backgroundImage: projectData.imageUrl}}>
@@ -167,7 +195,14 @@ export default class Project extends React.Component {
           {projectData.contributors.map((contributor, index) =>
             <div key={contributor.id} className="project-contributor-container">
               <img className="project-contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
-              <div className="project-contributor__modal">Test</div>
+              <div className="project-contributor__modal">
+                <img className="project-contributor__modal-avatar" src={contributor.imageUrl} />
+                <div className="project-contributor__modal__info">
+                  <div className="project-contributor__modal-nickname">{contributor.nickname && contributor.nickname}</div>
+                  <div className="project-contributor__modal-name">{contributor.firstName} {contributor.lastName}</div>
+                  <div className="project-contributor__modal-specialty">{contributor.specialty}</div>
+                </div>
+              </div>
             </div>
           )}
           {projectData.contributorsNumber > 5 && <div className="project-contributors__more">+{projectData.contributorsNumber - 5}</div>}
@@ -181,11 +216,15 @@ export default class Project extends React.Component {
             <iframe width="100%" height="304" src={`//www.youtube.com/embed/${projectData.youtubeUrl}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0`} frameBorder="0" />
           }
         </div>
-        <div className="project-description__text">Test</div>
+        <div className="project-description__text">
+          <div className="project-description__text--first">{first}.</div>
+          {descriptionText}
+        </div>
       </div>
 
       <div className="project-interest">
-        <button className="project-interest__button">I’m Interested</button>
+        {!interested && <button className="project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
+        {interested && <button className="project-interest__button" disabled>Request Sent</button>}
         <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
       </div>
 
@@ -206,20 +245,48 @@ export default class Project extends React.Component {
             </div>
 
             <div className="project-skill__interest">
-              <div className="project-skill__interest__button">I'm Interested</div>
+              {!interested && <div className="project-skill__interest__button" onClick={() => this.addInterest(projectData.id)}>I'm Interested</div>}
+              {interested && <div className="project-skill__interest__button">Request Sent</div>}
             </div>
           </div>
         )}
       </div>
-      <div className="project-interest">
-        <button className="project-interest__button">I’m Interested</button>
-        <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
-      </div>
 
       <div className="project-team">
-        <div className="project-team__title">The Team</div>
-        <div className="project-team__subtitle">Great projects are the result dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
-        <div className="project-chart" />
+        <div className="project-team__container">
+          <div className="project-team__title">The Team</div>
+          <div className="project-team__subtitle">Great projects are the result dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
+          <div className="project-chart" />
+
+          <div className="project-team__contributors-container">
+            <div className="project-team__leader-name">{projectData.teamLeader.nickname && projectData.teamLeader.nickname}</div>
+            {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
+
+            <div className="project-team__contributors" >
+              <img className="project-team__leader-avatar" src={projectData.teamLeader.imageUrl} />
+              {projectData.contributors.map((contributor, index) =>
+                <div key={contributor.id} className="project-team__contributor-container">
+                  <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
+                  <div className="project-team__contributor__modal">
+                    <img className="project-team__contributor__modal-avatar" src={contributor.imageUrl} />
+                    <div className="project-team__contributor__modal__info">
+                      <div className="project-team__contributor__modal-nickname">{contributor.nickname && contributor.nickname}</div>
+                      <div className="project-team__contributor__modal-name">{contributor.firstName} {contributor.lastName}</div>
+                      <div className="project-team__contributor__modal-specialty">{contributor.specialty}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            {projectData.contributorsNumber > 5 && <div className="project-team__contributors__more">+{projectData.contributorsNumber - 5}</div>}
+          </div>
+        </div>
+      </div>
+
+      <div className="project-interest">
+        {!interested && <button className="project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
+        {interested && <button className="project-interest__button" disabled>Request Sent</button>}
+        <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
       </div>
     </div>
   }
@@ -229,12 +296,14 @@ Project.propTypes = {
   projectData: PropTypes.shape({}),
   missionData: PropTypes.shape({}),
   tokenData  : PropTypes.shape({}),
-  interested : PropTypes.bool
+  interested : PropTypes.bool,
+  csrfToken  : PropTypes.string
 }
 
 Project.defaultProps = {
   projectData: {},
   missionData: {},
   tokenData  : {},
-  interested : false
+  interested : false,
+  csrfToken  : ''
 }
