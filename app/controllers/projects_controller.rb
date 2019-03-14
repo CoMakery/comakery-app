@@ -75,34 +75,21 @@ class ProjectsController < ApplicationController
     set_award
 
     token = @project.mission.token.decorate
-
-    contributors_number = @project.contributors_by_award_amount.size
-    award_data = GetContributorData.call(project: @project).award_data
-    chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort{ |a, b| b <=> a }
-
     render component: 'Project', props: {
       interested: current_account&.interested?(@project.id),
-      project_data: @project.as_json(only: %i[id title description]).merge(
-        image_url: @project.image.present? ? 'url(' + Refile.attachment_url(@project, :image) + ')' : nil,
-        youtube_url: @project.video_url ? @project.youtube_id : nil,
-        default_image_url: helpers.image_url('defaul_project.jpg'),
-        owner: [@project.account.first_name, @project.account.last_name].join(' '),
-        token_percentage: @project.maximum_tokens.positive? ? 100 * @project.total_awarded / @project.maximum_tokens : 0,
-        maximum_tokens: @project.maximum_tokens_pretty,
-        awarded_tokens: @project.total_awarded_pretty,
-        team_leader: contributor_props(@project.account),
-        contributors_number: contributors_number,
-        contributors: @project.top_contributors.map { |contributor| contributor_props(contributor) },
-        chart_data: chart_data
-      ),
+      project_data: project_props(@project),
       mission_data: @project.mission.as_json(only: %i[id name]).merge(
-        image_url: @project.mission.image.present? ? Refile.attachment_url(@project.mission, :image, :fill, 150, 100) : nil
+        image_url: @project.mission.image.present? ? Refile.attachment_url(@project.mission, :image, :fill, 150, 100) : nil,
+        mission_url: mission_path(@project.mission)
       ),
       token_data: token.as_json(only: %i[name symbol coin_type]).merge(
         image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
         contract_url: token.ethereum_contract_explorer_url
       ),
-      csrf_token: form_authenticity_token
+      csrf_token: form_authenticity_token,
+      contributors_path: project_contributors_path(@project.show_id),
+      awards_path: project_awards_path(@project.show_id),
+      edit_path: current_account && @project.account == current_account ? edit_project_path(@project) : nil
     }
   end
 
@@ -236,6 +223,26 @@ class ProjectsController < ApplicationController
     account.as_json(only: %i[id nickname first_name last_award]).merge(
       image_url: helpers.account_image_url(account, 44),
       specialty: Account.specialties[account.specialty]
+    )
+  end
+
+  def project_props(project)
+    contributors_number = @project.contributors_by_award_amount.size
+    award_data = GetContributorData.call(project: @project).award_data
+    chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
+
+    project.as_json(only: %i[id title description]).merge(
+      image_url: project.image.present? ? 'url(' + Refile.attachment_url(project, :image) + ')' : nil,
+      youtube_url: project.video_url ? project.youtube_id : nil,
+      default_image_url: helpers.image_url('defaul_project.jpg'),
+      owner: [project.account.first_name, project.account.last_name].join(' '),
+      token_percentage: project.maximum_tokens.positive? ? 100 * project.total_awarded / project.maximum_tokens : 0,
+      maximum_tokens: project.maximum_tokens_pretty,
+      awarded_tokens: project.total_awarded_pretty,
+      team_leader: contributor_props(project.account),
+      contributors_number: contributors_number,
+      contributors: project.top_contributors.map { |contributor| contributor_props(contributor) },
+      chart_data: chart_data
     )
   end
 end

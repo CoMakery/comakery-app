@@ -115,7 +115,7 @@ export default class Project extends React.Component {
   }
 
   render() {
-    const { projectData, missionData, tokenData } = this.props
+    const { projectData, missionData, tokenData, contributorsPath, awardsPath, editPath } = this.props
     const { interested } = this.state
     const skills = {
       development: 'Software Development',
@@ -132,19 +132,19 @@ export default class Project extends React.Component {
     descriptionText = descriptionText.join('.')
 
     return <div className="project-container">
-      <div className="project-header" style={{backgroundImage: projectData.imageUrl}}>
+      <div className="project-header" style={{backgroundImage: projectData.imageUrl || `url(${projectData.defaultImageUrl})`}}>
         <div className="project-header__blur" />
         <div className="project-header__content">
           <div className="project-header__menu">
-            <div className="project-header__menu__back">
+            <a className="project-header__menu__back" href={missionData.missionUrl}>
               <Icon name="iconBackWhite.svg" style={{marginRight: 8}} />
               {missionData.name}
-            </div>
+            </a>
 
             <div className="project-header__menu__links">
-              <div className="project-header__menu__link">Contributors</div>
-              <div className="project-header__menu__link">Payments</div>
-              <div className="project-header__menu__link project-header__menu__link--last">Edit This Project</div>
+              <a className="project-header__menu__link project-header__menu__link--first" href={contributorsPath}>Contributors</a>
+              <a className="project-header__menu__link" href={awardsPath}>Payments</a>
+              {editPath && <a className="project-header__menu__link" href={editPath}>Edit This Project</a>}
             </div>
           </div>
 
@@ -159,14 +159,16 @@ export default class Project extends React.Component {
 
       <div className="project-award">
         <div className="project-award__token">
-          <img className="project-award__token__img" src={tokenData.imageUrl} />
-          {tokenData.name} ({tokenData.symbol})
+          <div className="project-award__token__left">
+            <img className="project-award__token__img" src={tokenData.imageUrl} />
+            {tokenData.name} ({tokenData.symbol})
+          </div>
           <div className="project-award__token__type">
             {tokenData.coinType}
             {tokenData.contractUrl &&
               <div className="project-award__token__address">
                 <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
-                <a href={tokenData.contractUrl}>Smart Contract</a>
+                <a className="project-award__token__address__link" href={tokenData.contractUrl}>Smart Contract</a>
               </div>
             }
           </div>
@@ -213,7 +215,7 @@ export default class Project extends React.Component {
         <div className="project-description__video">
           {!projectData.youtubeUrl && <img src={projectData.defaultImageUrl} width="100%" />}
           {projectData.youtubeUrl &&
-            <iframe width="100%" height="304" src={`//www.youtube.com/embed/${projectData.youtubeUrl}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0`} frameBorder="0" />
+            <iframe className="project-description__video__iframe" src={`//www.youtube.com/embed/${projectData.youtubeUrl}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0`} frameBorder="0" />
           }
         </div>
         <div className="project-description__text">
@@ -239,7 +241,7 @@ export default class Project extends React.Component {
                 {skills[skill]}
                 <div className="project-skill__background__icon">
                   <img className="skill-icon--background" src={require(`src/images/project/background.svg`)} />
-                  <img className="skill-icon" width="45" height="45" src={require(`src/images/project/${skill}.svg`)} />
+                  <img className="skill-icon" src={require(`src/images/project/${skill}.svg`)} />
                 </div>
               </div>
             </div>
@@ -293,17 +295,23 @@ export default class Project extends React.Component {
 }
 
 Project.propTypes = {
-  projectData: PropTypes.shape({}),
-  missionData: PropTypes.shape({}),
-  tokenData  : PropTypes.shape({}),
-  interested : PropTypes.bool,
-  csrfToken  : PropTypes.string
+  projectData     : PropTypes.shape({}),
+  missionData     : PropTypes.shape({}),
+  tokenData       : PropTypes.shape({}),
+  interested      : PropTypes.bool,
+  csrfToken       : PropTypes.string,
+  contributorsPath: PropTypes.string,
+  awardsPath      : PropTypes.string,
+  editPath        : PropTypes.string
 }
 
 Project.defaultProps = {
-  projectData: {},
-  missionData: {},
-  tokenData  : {},
-  interested : false,
-  csrfToken  : ''
+  projectData     : {},
+  missionData     : {},
+  tokenData       : {},
+  interested      : false,
+  csrfToken       : '',
+  contributorsPath: '',
+  awardsPath      : '',
+  editPath        : null
 }
