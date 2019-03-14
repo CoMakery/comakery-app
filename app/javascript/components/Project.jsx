@@ -193,20 +193,22 @@ export default class Project extends React.Component {
             </div>
             <img className="project-leader__avatar" src={projectData.teamLeader.imageUrl} />
           </div>
-
-          {projectData.contributors.map((contributor, index) =>
-            <div key={contributor.id} className="project-contributor-container">
-              <img className="project-contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
-              <div className="project-contributor__modal">
-                <img className="project-contributor__modal-avatar" src={contributor.imageUrl} />
-                <div className="project-contributor__modal__info">
-                  <div className="project-contributor__modal-nickname">{contributor.nickname && contributor.nickname}</div>
-                  <div className="project-contributor__modal-name">{contributor.firstName} {contributor.lastName}</div>
-                  <div className="project-contributor__modal-specialty">{contributor.specialty}</div>
+          <div className="project-contributors__container">
+            <img className="project-leader__avatar project-leader__avatar--mobile" src={projectData.teamLeader.imageUrl} />
+            {projectData.contributors.map((contributor, index) =>
+              <div key={contributor.id} className="project-contributor-container">
+                <img className="project-contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
+                <div className="project-contributor__modal">
+                  <img className="project-contributor__modal-avatar" src={contributor.imageUrl} />
+                  <div className="project-contributor__modal__info">
+                    <div className="project-contributor__modal-nickname">{contributor.nickname && contributor.nickname}</div>
+                    <div className="project-contributor__modal-name">{contributor.firstName} {contributor.lastName}</div>
+                    <div className="project-contributor__modal-specialty">{contributor.specialty}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
           {projectData.contributorsNumber > 5 && <div className="project-contributors__more">+{projectData.contributorsNumber - 5}</div>}
         </div>
       </div>

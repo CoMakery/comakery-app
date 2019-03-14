@@ -2388,6 +2388,11 @@ input[type="submit"].button:disabled {
   margin-right: 8px;
 }
 
+.project-contributors__container {
+  display: inline-flex;
+  align-items: center;
+}
+
 .project-contributor-container {
   position: relative;
   box-sizing: border-box;
@@ -2476,6 +2481,51 @@ input[type="submit"].button:disabled {
   letter-spacing: normal;
   color: var(--black);
   margin-left: 5px;
+}
+
+.project-leader__avatar--mobile {
+  display: none;
+}
+
+@media screen and (max-width: 650px) {
+  .project-contributors {
+    flex-direction: column;
+  }
+
+  .project-leader__info {
+    align-items: center;
+    margin: 0 0 12px 0;
+  }
+
+  .project-leader__avatar {
+    display: none;
+  }
+
+  .project-leader__avatar--mobile {
+    position: relative;
+    top: -2px;
+    margin: 0;
+    display: block;
+    border-width: 2px;
+    z-index: 6;
+    box-sizing: border-box;
+    width: 45px;
+    height: 45px;
+  }
+
+  .project-contributors__more {
+    margin: 12px 0 0 0;
+  }
+
+  .project-contributor__avatar {
+    width: 45px;
+    height: 45px;
+  }
+
+  .project-contributor__modal {
+    left: -107px;
+    bottom: 50px;
+  }
 }
 
 .project-description {
