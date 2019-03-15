@@ -7,8 +7,7 @@ export default {
     }
   },
   updateTransactionAddress(award, txHash, linkToTx) {
-    // update_transaction_address_project_award path
-    jQuery.post('/projects/' + award.project.id + '/awards/' + award.id + '/update_transaction_address', { tx: txHash }, () => {
+    jQuery.post(`/projects/${award.project.id}/batches/${award.award_type.id}/tasks/${award.id}/update_transaction_address`, { tx: txHash }, () => {
       const alertMsg = `The <a href='${linkToTx}' target='_blank'>transaction address</a> of the award has been successfully updated`
       window.alertMsg('#metamaskModal1', alertMsg)
     }).fail(() => {

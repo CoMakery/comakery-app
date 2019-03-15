@@ -13,16 +13,25 @@ class Award < ApplicationRecord
   has_one :project, through: :award_type
   has_one :token, through: :project
 
-  validates :proof_id, :award_type, :unit_amount, :total_amount, :quantity, presence: true
-  validates :quantity, :total_amount, :unit_amount, numericality: { greater_than: 0 }
-
+  validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
+  validates :amount, numericality: { greater_than: 0 }
+  validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&.coin_type_on_ethereum? } # see EthereumAddressable
   validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
+  validates :name, length: { maximum: 100 }
+  validates :why, length: { maximum: 100 }
+  validates :description, length: { maximum: 500 }
+  validates :message, length: { maximum: 150 }
+  validates :requirements, length: { maximum: 750 }
+  validates :proof_link, length: { maximum: 150 }
+  validates :proof_link, format: { with: URI.regexp(%w[http https]) }
 
   before_validation :ensure_proof_id_exists
 
   scope :confirmed, -> { where confirm_token: nil }
+
+  enum status: %i[ready started submitted revisions done cancelled]
 
   def self.total_awarded
     sum(:total_amount)
@@ -89,6 +98,10 @@ class Award < ApplicationRecord
 
   def discord?
     team && team.discord?
+  end
+
+  def done?
+    status == 'done'
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true

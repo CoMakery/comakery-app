@@ -12,8 +12,7 @@ window.transferEthers = function(award) { // award in JSON
           gasPrice: web3.toWei(1, 'gwei')
         }, function(err, tx) {
           if (tx) {
-            // update_transaction_address_project_award_path
-            $.post(`/projects/${award.project.id}/awards/${award.id}/update_transaction_address`, {tx})
+            $.post(`/projects/${award.project.id}/batches/${award.award_type.id}/tasks/${award.id}/update_transaction_address`, {tx})
             if ($('body.projects-show').length > 0) {
               $('.flash-msg').html(`Successfully sent award to ${award.recipient_display_name}`)
             }

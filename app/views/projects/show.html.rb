@@ -10,9 +10,6 @@ class Views::Projects::Show < Views::Projects::Base
 
     div(class: 'project-body content-box') do
       row do
-        column('large-6 medium-12', id: 'awards') do
-          render partial: 'projects/award_send'
-        end
         column('large-6 medium-12') do
           row(class: 'project-terms') do
             h4 'Project Terms'

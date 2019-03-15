@@ -41,8 +41,13 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
-  def not_found
-    redirect_to '/404.html'
+
+  def not_found(e)
+    if Rails.env.development?
+      raise e
+    else
+      redirect_to '/404.html'
+    end
   end
 
   rescue_from Slack::Web::Api::Error do |exception|
@@ -111,7 +116,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def assign_project
-    project = policy_scope(Project).find_by id: params[:project_id]
+    project = policy_scope(Project).find_by id: (params[:project_id] || params[:id])
     project = policy_scope(Project).find_by long_id: params[:project_id] unless project
     @project = project&.decorate if project&.can_be_access?(current_account)
     redirect_to root_path unless @project

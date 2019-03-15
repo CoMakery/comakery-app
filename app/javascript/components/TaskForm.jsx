@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Layout from './layouts/Layout'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
-import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
@@ -10,7 +9,7 @@ import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
 
-class BatchForm extends React.Component {
+class TaskForm extends React.Component {
   constructor(props) {
     super(props)
 
@@ -28,10 +27,12 @@ class BatchForm extends React.Component {
       formAction          : this.props.formAction,
       formUrl             : this.props.formUrl,
       closeOnSuccess      : false,
-      'batch[specialty]'  : this.props.batch.specialty || Object.values(this.props.specialties)[0],
-      'batch[name]'       : this.props.batch.name || '',
-      'batch[goal]'       : this.props.batch.goal || '',
-      'batch[description]': this.props.batch.description || ''
+      'task[name]'        : this.props.task.name || '',
+      'task[why]'         : this.props.task.why || '',
+      'task[description]' : this.props.task.description || '',
+      'task[requirements]': this.props.task.requirements || '',
+      'task[amount]'      : this.props.task.amount || '',
+      'task[proof_link]'  : this.props.task.proofLink || ''
     }
   }
 
@@ -87,10 +88,10 @@ class BatchForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault()
 
-    this.disable(['batch[submit]', 'batch[submit_and_close]'])
+    this.disable(['task[submit]', 'task[submit_and_close]'])
 
     if (!event.target.checkValidity()) {
-      this.enable(['batch[submit]', 'batch[submit_and_close]'])
+      this.enable(['task[submit]', 'task[submit_and_close]'])
       return
     }
 
@@ -112,13 +113,13 @@ class BatchForm extends React.Component {
             if (this.state.formAction === 'POST') {
               this.setState(state => ({
                 formAction   : 'PUT',
-                formUrl      : `/projects/${this.props.projectId}/batches/${data.id}`,
+                formUrl      : data.formUrl,
                 flashMessages: state.flashMessages.concat([{'severity': 'notice', 'text': data.message}])
               }))
               history.replaceState(
                 {},
                 document.title,
-                `${window.location.origin}/projects/${this.props.projectId}/batches/${data.id}/edit`
+                `${window.location.origin}${data.editUrl}`
               )
             } else {
               this.setState(state => ({
@@ -126,7 +127,7 @@ class BatchForm extends React.Component {
               }))
             }
           })
-          this.enable(['batch[submit]', 'batch[submit_and_close]'])
+          this.enable(['task[submit]', 'task[submit_and_close]'])
         }
       } else {
         response.json().then(data => {
@@ -134,7 +135,7 @@ class BatchForm extends React.Component {
             errors       : data.errors,
             flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
           }))
-          this.enable(['batch[submit]', 'batch[submit_and_close]'])
+          this.enable(['task[submit]', 'task[submit_and_close]'])
         })
       }
     })
@@ -144,23 +145,23 @@ class BatchForm extends React.Component {
     return (
       <React.Fragment>
         <Layout
-          className="batch-form"
-          title={this.state.formAction === 'POST' ? 'Create a New Batch' : 'Edit Batch'}
+          className="task-form"
+          title={this.state.formAction === 'POST' ? 'Create a New Task' : 'Edit Task'}
           hasBackButton
           subfooter={
             <React.Fragment>
               <Button
                 value={this.state.formAction === 'POST' ? 'create & close' : 'save & close'}
                 type="submit"
-                form="batch-form--form"
-                disabled={this.state.disabled['batch[submit_and_close]']}
+                form="task-form--form"
+                disabled={this.state.disabled['task[submit_and_close]']}
                 onClick={() => this.setState({closeOnSuccess: true})}
               />
               <ButtonBorder
                 value={this.state.formAction === 'POST' ? 'create' : 'save'}
                 type="submit"
-                form="batch-form--form"
-                disabled={this.state.disabled['batch[submit]']}
+                form="task-form--form"
+                disabled={this.state.disabled['task[submit]']}
                 onClick={() => this.setState({closeOnSuccess: false})}
               />
               <ButtonBorder
@@ -172,49 +173,74 @@ class BatchForm extends React.Component {
         >
           <Flash messages={this.state.flashMessages} />
 
-          <form className="batch-form--form" id="batch-form--form" onSubmit={this.handleSubmit}>
-            <InputFieldDropdown
-              title="specialty"
-              required
-              name="batch[specialty]"
-              value={this.state['batch[specialty]']}
-              errorText={this.state.errors['batch[specialty]']}
-              eventHandler={this.handleFieldChange}
-              selectEntries={Object.entries(this.props.specialties)}
-              symbolLimit={0}
-            />
-
+          <form className="task-form--form" id="task-form--form" onSubmit={this.handleSubmit}>
             <InputFieldWhiteDark
               title="name"
               required
-              name="batch[name]"
-              value={this.state['batch[name]']}
-              errorText={this.state.errors['batch[name]']}
+              name="task[name]"
+              value={this.state['task[name]']}
+              errorText={this.state.errors['task[name]']}
               eventHandler={this.handleFieldChange}
-              placeholder='Provide a clear title for the batch'
+              placeholder="Provide a clear title for the Task"
               symbolLimit={100}
             />
 
             <InputFieldDescriptionMiddle
-              title="the goal of the batch"
+              title="why"
               required
-              name="batch[goal]"
-              value={this.state['batch[goal]']}
-              errorText={this.state.errors['batch[goal]']}
+              name="task[why]"
+              value={this.state['task[why]']}
+              errorText={this.state.errors['task[why]']}
               eventHandler={this.handleFieldChange}
-              placeholder='Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)'
-              symbolLimit={250}
+              placeholder="Let people know what will be the result of this task being completed (ex: When task is finished, the result will be xxxx)"
+              symbolLimit={500}
+            />
+
+            <InputFieldDescriptionMiddle
+              title="description"
+              required
+              name="task[description]"
+              value={this.state['task[description]']}
+              errorText={this.state.errors['task[description]']}
+              eventHandler={this.handleFieldChange}
+              placeholder="Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch"
+              symbolLimit={500}
             />
 
             <InputFieldDescription
-              title="description"
+              title="acceptance requirements"
               required
-              name="batch[description]"
-              value={this.state['batch[description]']}
-              errorText={this.state.errors['batch[description]']}
+              name="task[requirements]"
+              value={this.state['task[requirements]']}
+              errorText={this.state.errors['task[requirements]']}
               eventHandler={this.handleFieldChange}
-              placeholder='Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project'
+              placeholder="This section is free text that allows for the use of markdown. Create bullets using an asterick and a space before each sentence. Make sure to list a bullet point for each acceptance criteria. These bullet points will be used by reviewers to verify the work."
               symbolLimit={750}
+            />
+
+            <InputFieldWhiteDark
+              title={`award amount (${this.props.token.symbol})`}
+              required
+              name="task[amount]"
+              value={this.state['task[amount]']}
+              errorText={this.state.errors['task[amount]']}
+              eventHandler={this.handleFieldChange}
+              type="number"
+              min="0"
+              step={`${1.0 / (10 ** this.props.token.decimalPlaces)}`}
+              placeholder="The total amount of tokens or coins you are paying for this task to be completed"
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="where to submit completed work"
+              required
+              name="task[proof_link]"
+              value={this.state['task[proof_link]']}
+              errorText={this.state.errors['task[proof_link]']}
+              eventHandler={this.handleFieldChange}
+              placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo"
+              symbolLimit={150}
             />
 
             <input
@@ -230,22 +256,20 @@ class BatchForm extends React.Component {
   }
 }
 
-BatchForm.propTypes = {
-  batch       : PropTypes.object.isRequired,
-  specialties : PropTypes.object.isRequired,
+TaskForm.propTypes = {
+  task        : PropTypes.object.isRequired,
+  token       : PropTypes.object.isRequired,
   formUrl     : PropTypes.string.isRequired,
   formAction  : PropTypes.string.isRequired,
   urlOnSuccess: PropTypes.string.isRequired,
-  projectId   : PropTypes.number.isRequired,
   csrfToken   : PropTypes.string.isRequired
 }
-BatchForm.defaultProps = {
+TaskForm.defaultProps = {
+  task        : {'default': '_'},
   token       : {'default': '_'},
-  specialties : {'default': '_'},
   formUrl     : '/',
   formAction  : 'POST',
   urlOnSuccess: '/',
-  projectId   : null,
   csrfToken   : '00'
 }
-export default BatchForm
+export default TaskForm

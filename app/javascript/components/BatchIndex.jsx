@@ -31,7 +31,7 @@ class BatchIndex extends React.Component {
               url : this.props.projectEditPath
             },
             {
-              name: 'batches',
+              name   : 'batches',
               current: true
             }
           ]}
@@ -71,29 +71,75 @@ class BatchIndex extends React.Component {
           }
         >
           {this.state.selectedBatch &&
-            <div className="batch-index--view">
-              <div className="batch-index--view--name">
-                {this.state.selectedBatch.name}
+            <React.Fragment>
+              <div>
+                BATCH
               </div>
 
-              <div className="batch-index--view--specialty">
-                {this.state.selectedBatch.specialty}
+              <div className="batch-index--view">
+                <div className="batch-index--view--name">
+                  {this.state.selectedBatch.name}
+                </div>
+
+                <div className="batch-index--view--specialty">
+                  {this.state.selectedBatch.specialty}
+                </div>
+
+                <div className="batch-index--view--team-members" />
+
+                <div className="batch-index--view--edit">
+                  <a href={this.state.selectedBatch.editPath}>
+                    <Icon name="iconEdit.svg" />
+                  </a>
+                </div>
+
+                <div className="batch-index--view--delete">
+                  <a rel="nofollow" data-method="delete" href={this.state.selectedBatch.destroyPath}>
+                    <Icon name="iconTrash.svg" />
+                  </a>
+                </div>
               </div>
 
-              <div className="batch-index--view--team-members" />
-              
-              <div className="batch-index--view--edit">
-                <a href={this.state.selectedBatch.editPath}>
-                  <Icon name="iconEdit.svg"/>
+              <div>
+                TASKS
+              </div>
+
+              <div className="batch-index--tasks">
+                {this.state.selectedBatch.tasks.map((t, i) =>
+                  <div key={i} className="batch-index--tasks--task">
+                    <div className="batch-index--tasks--task--name">
+                      {t.name}
+                    </div>
+                    <div className="batch-index--tasks--task--amount">
+                      {`${t.amount} ${t.tokenSymbol}`}
+                    </div>
+                    <div className="batch-index--tasks--task--award">
+                      {t.status !== 'done' &&
+                        <a href={t.awardPath}>
+                          Pay
+                        </a>
+                      }
+                    </div>
+                    <div className="batch-index--tasks--task--edit">
+                      <a href={t.editPath}>
+                        <Icon name="iconEdit.svg" />
+                      </a>
+                    </div>
+                    <div className="batch-index--tasks--task--delete">
+                      <a rel="nofollow" data-method="delete" href={t.destroyPath}>
+                        <Icon name="iconTrash.svg" />
+                      </a>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="batch-index--create-task">
+                <a href={this.state.selectedBatch.newTaskPath}>
+                  Create a Task
                 </a>
               </div>
-
-              <div className="batch-index--view--delete">
-                <a rel="nofollow" data-method="delete" href={this.state.selectedBatch.destroyPath}>
-                  <Icon name="iconTrash.svg"/>
-                </a>
-              </div>
-            </div>
+            </React.Fragment>
           }
         </Layout>
       </React.Fragment>
@@ -109,5 +155,4 @@ BatchIndex.defaultProps = {
   batches  : [],
   projectId: null
 }
-
 export default BatchIndex

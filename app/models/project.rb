@@ -39,7 +39,6 @@ class Project < ApplicationRecord
   has_many :revenues
   has_many :teams, through: :account
 
-  accepts_nested_attributes_for :award_types, reject_if: :invalid_params, allow_destroy: true
   accepts_nested_attributes_for :channels, reject_if: :invalid_channel, allow_destroy: true
 
   enum payment_type: {
@@ -142,10 +141,6 @@ class Project < ApplicationRecord
 
   def community_award_types
     award_types.where(community_awardable: true)
-  end
-
-  def invalid_params(attributes)
-    AwardType.invalid_params(attributes)
   end
 
   def invalid_channel(attributes)

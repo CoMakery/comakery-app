@@ -190,9 +190,6 @@ class Views::Projects::AwardSend < Views::Base
           var quantity = $("[name='award[quantity]']").val();
           var award_type_id = $("[name='award[award_type_id]']").val();
           resetSendingAwardButtonSection();
-          if(uid && uid != '' && quantity && award_type_id) {
-            $.get('#{preview_project_awards_path(project_id: project.id, format: :js)}', {uid: uid, quantity: quantity, award_type_id: award_type_id, channel_id: channel_id})
-          }
         })
       });
     JAVASCRIPT

@@ -31,6 +31,9 @@ class AwardDecorator < Draper::Decorator
         project: {
           only: %i[id]
         },
+        award_type: {
+          only: %i[id]
+        },
         token: {
           only: %i[id contract_address ethereum_contract_address coin_type ethereum_network blockchain_network]
         }

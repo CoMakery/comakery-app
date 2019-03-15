@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
-  before_action :set_project, only: %i[edit update]
+  before_action :assign_project, only: %i[edit update awards]
   before_action :set_tokens, only: %i[new edit]
   before_action :set_missions, only: %i[new edit]
   before_action :set_visibilities, only: %i[new edit]
@@ -21,6 +21,15 @@ class ProjectsController < ApplicationController
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
     @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
+  end
+
+  def awards
+    authorize @project, :show_contributions?
+    @awards = @project.awards.where(status: 'done')
+    @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
+    @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
+
+    render 'awards/index'
   end
 
   def index
@@ -52,20 +61,6 @@ class ProjectsController < ApplicationController
     @project.maximum_royalties_per_month = 50_000
     @project.public = false
     @project.long_id ||= SecureRandom.hex(20)
-
-    unless params['project']['award_types_attributes']
-      @project.award_types.build(name: 'Thanks', amount: 10)
-      @project.award_types.build(name: 'Software development hour', amount: 100)
-      @project.award_types.build(name: 'Graphic design hour', amount: 100)
-      @project.award_types.build(name: 'Product management hour', amount: 100)
-      @project.award_types.build(name: 'Marketing hour', amount: 100)
-      @project.award_types.build(name: 'Expert software development hour', amount: 150)
-      @project.award_types.build(name: 'Expert graphic design hour', amount: 150)
-      @project.award_types.build(name: 'Expert product management hour', amount: 150)
-      @project.award_types.build(name: 'Expert marketing hour', amount: 150)
-      @project.award_types.build(name: 'Blog post (600+ words)', amount: 150)
-      @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
-    end
 
     authorize @project
 
@@ -137,10 +132,6 @@ class ProjectsController < ApplicationController
   end
 
   private
-
-  def set_project
-    @project = Project.find(params[:id]).decorate
-  end
 
   def set_tokens
     @tokens = Token.all.map { |t| [t.name, t.id] }.to_h
@@ -228,15 +219,6 @@ class ProjectsController < ApplicationController
         id
         team_id
         channel_id
-      ],
-      award_types_attributes: %i[
-        _destroy
-        amount
-        community_awardable
-        id
-        name
-        description
-        disabled
       ]
     )
     result[:revenue_sharing_end_date] = DateTime.strptime(result[:revenue_sharing_end_date], '%m/%d/%Y') if result[:revenue_sharing_end_date].present?

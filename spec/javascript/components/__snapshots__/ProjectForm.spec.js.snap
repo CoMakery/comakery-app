@@ -27,15 +27,18 @@ exports[`ProjectForm renders correctly without props 1`] = `
   <Layout
     category=""
     className="project-form"
-    hasBackButton={true}
+    hasBackButton={false}
     navTitle={
-      Object {
-        "all": Array [
-          "project settings",
-          "batches",
-        ],
-        "current": "project settings",
-      }
+      Array [
+        Object {
+          "current": true,
+          "name": "project settings",
+        },
+        Object {
+          "name": "batches",
+          "url": "#",
+        },
+      ]
     }
     sidebar={null}
     subfooter={
@@ -68,21 +71,6 @@ exports[`ProjectForm renders correctly without props 1`] = `
       className="layout project-form"
     >
       <div
-        className="layout--back-button"
-      >
-        <Icon
-          className=""
-          name="iconCloseCopy.svg"
-          onClick={[Function]}
-        >
-          <img
-            className="icon icon__iconCloseCopy-svg"
-            onClick={[Function]}
-            src="test-file-stub"
-          />
-        </Icon>
-      </div>
-      <div
         className="layout--content"
       >
         <div
@@ -90,15 +78,23 @@ exports[`ProjectForm renders correctly without props 1`] = `
         >
           <span
             className="layout--content--title--nav__current"
-            key="project settings"
+            key="0"
           >
-            project settings
+            <a
+              href="#"
+            >
+              project settings
+            </a>
           </span>
           <span
             className="layout--content--title--nav"
-            key="batches"
+            key="1"
           >
-            batches
+            <a
+              href="#"
+            >
+              batches
+            </a>
           </span>
         </div>
         <hr
@@ -152,6 +148,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[mission_id]"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -166,6 +164,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       ],
                     ]
                   }
+                  step=""
                   symbolLimit={0}
                   title="mission"
                   type="select"
@@ -239,6 +238,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[token_id]"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -253,6 +254,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       ],
                     ]
                   }
+                  step=""
                   symbolLimit={0}
                   title="token"
                   type="select"
@@ -319,6 +321,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[title]"
                   pattern=".*"
                   placeholder="Provide a name for the project"
@@ -326,6 +330,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={100}
                   title="title"
                   type="text"
@@ -396,6 +401,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[description]"
                   pattern=".*"
                   placeholder="Explain the outline and goal of the project, and why people should be excited about helping to execute the vision"
@@ -403,6 +410,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={250}
                   title="description"
                   type="textarea"
@@ -436,7 +444,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       className="input-field--content"
                     >
                       <textarea
-                        className="input-field--content__text z"
+                        className="input-field--content__text"
                         name="project[description]"
                         onChange={[Function]}
                         pattern=".*"
@@ -471,6 +479,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[video_url]"
                   pattern=".*"
                   placeholder="Paste in a link to a YouTube or Vimeo video detailing the project"
@@ -478,6 +488,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   recommended={true}
                   required={false}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={0}
                   title="narrated video overview"
                   type="text"
@@ -525,7 +536,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                 pattern="\\\\d+"
                 placeholder="Provide the budget for completing the entire project"
                 readOnly={false}
-                recommended={true}
+                required={true}
                 symbolLimit={0}
                 title="total budget"
                 value=""
@@ -543,13 +554,16 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[maximum_tokens]"
                   pattern="\\\\d+"
                   placeholder="Provide the budget for completing the entire project"
                   readOnly={false}
-                  recommended={true}
-                  required={false}
+                  recommended={false}
+                  required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={0}
                   title="total budget"
                   type="text"
@@ -569,7 +583,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       <span
                         className="input-field--title--required"
                       >
-                        recommended
+                        required
                       </span>
                     </div>
                     <div
@@ -583,7 +597,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                         pattern="\\\\d+"
                         placeholder="Provide the budget for completing the entire project"
                         readOnly={false}
-                        required={false}
+                        required={true}
                         type="text"
                         value=""
                       />
@@ -612,6 +626,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[visibility]"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -619,6 +635,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={0}
                   title="project visibility"
                   type="select"
@@ -679,6 +696,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[url]"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -686,6 +705,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={0}
                   title="project url"
                   type="text"
@@ -760,6 +780,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[require_confidentiality]"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -778,6 +800,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       ],
                     ]
                   }
+                  step=""
                   symbolLimit={0}
                   title="awards visibility"
                   type="select"
@@ -850,6 +873,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[legal_project_owner]"
                   pattern=".*"
                   placeholder="Provide a legal entity or individual owner's name"
@@ -857,6 +882,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={0}
                   title="legal owner of the project"
                   type="text"
@@ -940,6 +966,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements="Image should be at least 800px x 800px"
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[square_image]"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -947,6 +975,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={0}
                   title="project image – square"
                   type="file"
@@ -1031,6 +1060,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements="Image should be at least 1500px x 300px"
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="project[panoramic_image]"
                   pattern=".*"
                   placeholder="Please enter value"
@@ -1038,6 +1069,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={0}
                   title="project image – panoramic"
                   type="file"

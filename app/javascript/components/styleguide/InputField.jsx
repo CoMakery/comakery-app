@@ -67,6 +67,9 @@ class InputField extends React.Component {
       checkboxText,
       placeholder,
       pattern,
+      min,
+      max,
+      step,
       readOnly,
       errorText,
       imgPreviewUrl,
@@ -116,7 +119,7 @@ class InputField extends React.Component {
               </div>
             }
 
-            { type === 'text' &&
+            { (type === 'text' || type === 'email') &&
               <input className={classNames('input-field--content__text', (copyOnClick ? 'input-field--content__text__copyable' : ''))}
                 required={required}
                 type={type}
@@ -130,8 +133,24 @@ class InputField extends React.Component {
               />
             }
 
+            { type === 'number' &&
+              <input className={classNames('input-field--content__text', (copyOnClick ? 'input-field--content__text__copyable' : ''))}
+                required={required}
+                type={type}
+                name={name}
+                value={value}
+                onChange={this.handleChange}
+                onClick={copyOnClick ? this.copyToClipboard : null}
+                placeholder={placeholder}
+                min={min}
+                max={max}
+                step={step}
+                readOnly={readOnly}
+              />
+            }
+
             { type === 'textarea' &&
-              <textarea className="input-field--content__text z"
+              <textarea className="input-field--content__text"
                 required={required}
                 name={name}
                 value={value}
@@ -237,12 +256,15 @@ InputField.propTypes = {
   checked             : PropTypes.bool,
   copyOnClick         : PropTypes.bool,
   name                : PropTypes.string,
-  value               : PropTypes.string,
+  value               : PropTypes.node,
   selectEntries       : PropTypes.array,
   checkboxText        : PropTypes.string,
   eventHandler        : PropTypes.func,
   placeholder         : PropTypes.string,
   pattern             : PropTypes.string,
+  min                 : PropTypes.string,
+  max                 : PropTypes.string,
+  step                : PropTypes.string,
   readOnly            : PropTypes.bool,
   errorText           : PropTypes.string,
   imgPreviewUrl       : PropTypes.string,
@@ -268,6 +290,9 @@ InputField.defaultProps = {
   eventHandler        : () => {},
   placeholder         : 'Please enter value',
   pattern             : '.*',
+  min                 : '',
+  max                 : '',
+  step                : '',
   readOnly            : false,
   errorText           : '',
   imgPreviewUrl       : '',

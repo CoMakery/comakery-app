@@ -1,8 +1,8 @@
 class AwardTypesController < ApplicationController
   before_action :assign_project
   before_action :authorize_project_edit
-  before_action :set_award_type, only: [:show, :edit, :update, :destroy]
-  before_action :set_form_props, only: [:new, :edit]
+  before_action :set_award_type, only: %i[show edit update destroy]
+  before_action :set_form_props, only: %i[new edit]
   before_action :set_index_props, only: [:index]
 
   layout 'react'
@@ -71,10 +71,19 @@ class AwardTypesController < ApplicationController
     def set_index_props
       @props = {
         batches: @project.award_types&.map do |batch|
-          batch.serializable_hash.merge({
+          batch.serializable_hash.merge(
             edit_path: edit_project_award_type_path(@project, batch),
-            destroy_path: project_award_type_path(@project, batch)
-          })
+            destroy_path: project_award_type_path(@project, batch),
+            new_task_path: new_project_award_type_award_path(@project, batch),
+            tasks: batch.awards&.map do |task|
+              task.serializable_hash.merge(
+                token_symbol: @project.token.symbol,
+                award_path: project_award_type_award_path(@project, batch, task),
+                edit_path: edit_project_award_type_award_path(@project, batch, task),
+                destroy_path: project_award_type_award_path(@project, batch, task)
+              )
+            end
+          )
         end,
         project_edit_path: edit_project_path(@project)
       }

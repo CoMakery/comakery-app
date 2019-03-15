@@ -27,12 +27,6 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
             end
           end
 
-          li_if(project.can_be_access?(current_account), class: ('active' if controller_name == 'awards').to_s) do
-            a(href: project_awards_path(project.show_id)) do
-              text 'Awards'
-            end
-          end
-
           li_if(project.show_revenue_info?(current_account), class: ('active' if controller_name == 'revenues').to_s) do
             a(href: project_revenues_path(project.show_id)) do
               text 'Revenues'

@@ -265,12 +265,12 @@ class ProjectForm extends React.Component {
           className="project-form"
           navTitle={[
             {
-              name: 'project settings',
+              name   : 'project settings',
               current: true
             },
             {
               name: 'batches',
-              url : this.state.id ? `/projects/${this.state.id}/award_types` : '#'
+              url : this.state.id ? `/projects/${this.state.id}/batches` : '#'
             }
           ]}
           subfooter={
@@ -358,7 +358,7 @@ class ProjectForm extends React.Component {
 
             <InputFieldWhiteDark
               title="total budget"
-              recommended
+              required
               name="project[maximum_tokens]"
               value={this.state['project[maximum_tokens]'] ? this.state['project[maximum_tokens]'].toString() : ''}
               errorText={this.state.errors['project[maximum_tokens]']}

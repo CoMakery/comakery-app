@@ -176,7 +176,7 @@ class AccountsController < ApplicationController
 
   def project_decorate(project)
     project.as_json(only: %i[id title token_symbol ethereum_contract_address]).merge(
-      awards_path: project_awards_path(project.show_id, mine: true),
+      awards_path: project_award_types_path(project.show_id, mine: true),
       total_awarded: project.decorate.total_awarded_to_user(current_account),
       ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url,
       token: project.token.serializable_hash
