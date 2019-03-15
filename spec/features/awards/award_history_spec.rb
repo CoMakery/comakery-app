@@ -7,7 +7,9 @@ describe 'viewing projects, creating and editing', :js do
     let!(:owner_auth) { create(:authentication, account: owner) }
     let!(:other_account) { create(:account) }
     let!(:other_account_auth) { create(:authentication, account: other_account) }
-    let!(:project) { create(:project, visibility: 'public_listed', account: owner) }
+    let!(:token) { create(:token) }
+    let!(:mission) { create(:mission, token_id: token.id) }
+    let!(:project) { create(:project, visibility: 'public_listed', account: owner, mission_id: mission.id) }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
     let!(:channel) { create(:channel, project: project, team: team) }
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }
@@ -56,7 +58,7 @@ describe 'viewing projects, creating and editing', :js do
         it 'lets people view awards' do
           visit project_path(project)
 
-          click_link 'Awards'
+          click_link 'Payments'
           expect(page).to have_content 'Project Tokens Awarded'
         end
 
@@ -67,7 +69,7 @@ describe 'viewing projects, creating and editing', :js do
           login(owner)
           visit project_path(project.reload)
 
-          click_link 'Awards'
+          click_link 'Payments'
           expect(page).to have_content 'Blockchain Transaction'
         end
 
@@ -78,7 +80,7 @@ describe 'viewing projects, creating and editing', :js do
 
           visit project_path(project)
 
-          click_link 'Awards'
+          click_link 'Payments'
           expect(page.all('table.award-rows tr.award-row').size).to eq(50)
           expect(page).to have_content '1 2 3 4 5 … Next › Last »'
 

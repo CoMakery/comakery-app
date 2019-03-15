@@ -75,7 +75,7 @@ class ProjectsController < ApplicationController
     set_award
 
     token = @project.mission.token.decorate
-    render component: 'Project', props: {
+    @props = {
       interested: current_account&.interested?(@project.id),
       project_data: project_props(@project),
       mission_data: @project.mission.as_json(only: %i[id name]).merge(
