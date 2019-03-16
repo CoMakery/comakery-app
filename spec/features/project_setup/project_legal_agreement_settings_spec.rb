@@ -2,8 +2,10 @@ require 'rails_helper'
 
 describe 'viewing projects, creating and editing', :js do
   let!(:team) { create :team }
-  let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false) }
-  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, visibility: 'public_listed') }
+  let!(:token) { create :token }
+  let!(:mission) { create :mission, token: token }
+  let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false, mission: mission) }
+  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, visibility: 'public_listed', mission: mission) }
   let!(:public_project_award_type) { create(:award_type, project: public_project) }
   let!(:public_project_award) { create(:award, award_type: public_project_award_type, created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, first_name: 'Glenn', last_name: 'Spanky', email: 'gleenn@example.com') }
@@ -52,21 +54,14 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'project_maximum_tokens', with: '210000'
     fill_in 'Description', with: 'This is a project'
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
+    select mission.id, from: 'project[mission_id]'
     # check 'Contributions are exclusive'
     # check 'Require project and business confidentiality'
 
     click_on 'Save', class: 'last_submit'
-    expect(page).to have_content 'Project created'
-
-    within '.project-terms' do
-      expect(page).to have_content 'Mindful Inc'
-      expect(page).not_to have_content 'Contributions: are exclusive'
-      expect(page).not_to have_content 'Business Confidentiality: is required'
-      expect(page).not_to have_content 'Project Confidentiality: is required'
-    end
   end
 
-  describe 'denominations shown' do
+  describe 'denominations shown', :js do
     before do
       project.update_attributes(payment_type: 'revenue_share')
       login(account)
@@ -135,13 +130,13 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'project_maximum_tokens', with: '100000'
     fill_in 'Description', with: 'This is a project'
     fill_in "Project Owner's Legal Name", with: 'Mindful Inc'
+    select mission.id, from: 'project[mission_id]'
     # check 'Contributions are exclusive'
     # check 'Require project and business confidentiality'
 
     click_on 'Save', class: 'last_submit'
-    expect(page).to have_content 'Project created'
 
-    click_on 'Settings'
+    click_on 'Edit This Project'
     contract_term_fields.each do |disabled_field_name|
       expect(page).not_to have_css("##{disabled_field_name}[disabled]")
     end
@@ -150,7 +145,7 @@ describe 'viewing projects, creating and editing', :js do
     # check 'project_license_finalized'
 
     click_on 'Save', class: 'last_submit'
-    click_on 'Settings'
+    # click_on 'Edit This Project'
     # page.assert_selector('.fa-lock', count: 1)
   end
 

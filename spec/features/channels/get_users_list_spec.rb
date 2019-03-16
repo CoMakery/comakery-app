@@ -9,7 +9,9 @@ describe 'channels' do
   let!(:account1) { create :account }
   let!(:authentication1) { create :authentication, account: account1 }
   let!(:discord_auth1) { create :authentication, account: account1, provider: 'discord' }
-  let!(:project) { create :project, account: account }
+  let!(:token) { create(:token) }
+  let!(:mission) { create(:mission, token: token) }
+  let!(:project) { create :project, account: account, mission: mission }
   let!(:channel) { create :channel, team: team, project: project, channel_id: 'general' }
 
   before do

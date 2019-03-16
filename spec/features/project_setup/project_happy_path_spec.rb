@@ -2,8 +2,10 @@ require 'rails_helper'
 
 describe 'viewing projects, creating and editing', :js do
   let!(:team) { create :team }
-  let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false) }
-  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, visibility: 'public_listed') }
+  let!(:token) { create :token }
+  let!(:mission) { create :mission, token: token }
+  let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false, mission: mission) }
+  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, visibility: 'public_listed', mission: mission) }
   let!(:public_project_award_type) { create(:award_type, project: public_project) }
   let!(:public_project_award) { create(:award, award_type: public_project_award_type, created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, first_name: 'Glenn', last_name: 'Spanky', email: 'gleenn@example.com') }
@@ -77,10 +79,10 @@ describe 'viewing projects, creating and editing', :js do
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to eq(4)
     fill_in 'Title', with: 'This is a project'
+    select mission.id, from: 'project[mission_id]'
 
     click_on 'Save', class: 'last_submit'
 
-    expect(page).to have_content 'Project created'
     expect(page).to have_content 'This is a project'
     expect(page).to have_content 'This is a project description'
 
@@ -89,7 +91,7 @@ describe 'viewing projects, creating and editing', :js do
     expect(Project.last.award_types.count).to eq(4)
     expect(page.all('select#award_award_type_id option').map(&:text)).to eq(['1,000 This is a small award type', '2,000 This is a medium award type', '3,000 This is a large award type', '5,000 This is a super big award type'])
 
-    click_on 'Settings'
+    click_on 'Edit This Project'
 
     expect(page.find('.project-image')[:src]).to match(/helmet_cat.png/)
 

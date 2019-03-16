@@ -4,6 +4,8 @@ describe 'Collaborator projects' do
   let!(:owner) { create(:account, email: 'gleenn@example.com').tap { |a| create(:authentication, account: a) } }
   let!(:collab1) { create(:account, email: 'collab1@example.com').tap { |a| create(:authentication, account: a) } }
   let!(:collab2) { create(:account, email: 'collab2@example.com').tap { |a| create(:authentication, account: a) } }
+  let!(:token) { create(:token) }
+  let!(:mission) { create(:mission, token_id: token.id) }
 
   it 'allow creating of award types that are community-awardable' do
     stub_slack_channel_list
@@ -25,6 +27,7 @@ describe 'Collaborator projects' do
     fill_in 'project_royalty_percentage', with: 10.75
     check 'Contributions are exclusive'
     check 'Require project and business confidentiality'
+    select mission.id, from: 'project[mission_id]'
 
     award_type_inputs = get_award_type_rows
     expect(award_type_inputs.size).to be > 4
