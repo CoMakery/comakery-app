@@ -13,12 +13,12 @@ jobs:
     steps:
       - run: wget "https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo tar -xJf "node-v$NODE_VER-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner && rm "node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
       - run: wget "https://yarnpkg.com/downloads/$YARN_VER/yarn-v$YARN_VER.tar.gz" && sudo mkdir -p /opt && sudo tar -xzf yarn-v$YARN_VER.tar.gz -C /opt/ && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarn /usr/local/bin/yarn && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarnpkg /usr/local/bin/yarnpkg && rm yarn-v$YARN_VER.tar.gz
-       - run:
-          name: Update ChromeDriver Version
-          command: |
-            CHROME_VERSION=$(google-chrome --version | sed -r 's/[^0-9]+([0-9]+\.[0-9]+\.[0-9]+).*/\1/g')
-            CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
-            bundle exec chromedriver-update $CHROMEDRIVER_VERSION
+      - run:
+        name: Update ChromeDriver Version
+        command: |
+          CHROME_VERSION=$(google-chrome --version | sed -r 's/[^0-9]+([0-9]+\.[0-9]+\.[0-9]+).*/\1/g')
+          CHROMEDRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)
+          bundle exec chromedriver-update $CHROMEDRIVER_VERSION
       - checkout
 
       - type: cache-restore
