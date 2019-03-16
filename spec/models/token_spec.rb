@@ -253,6 +253,16 @@ describe Token do
     expect token.symbol = 'FCBB'
   end
 
+  it 'set_predefined_name for coins' do
+    %w[eth btc qtum ada eos xtz].each do |coin|
+      expect((create :token, coin_type: coin, name: nil).name).to eq coin
+    end
+
+    %w[qrc20 erc20].each do |token|
+      expect((create :token, coin_type: token).name).to match(/Token/)
+    end
+  end
+
   it 'check_coin_type' do
     token = create :token, symbol: 'FCBB', decimal_places: 8, ethereum_contract_address: '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d', contract_address: 'a8112e56eb96bd3da7741cfea0e3cbd841fc009a', blockchain_network: 'qtum_testnet', coin_type: 'eth'
     expect(token).to be_valid

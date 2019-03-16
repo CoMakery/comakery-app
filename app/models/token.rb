@@ -73,6 +73,7 @@ class Token < ApplicationRecord
 
   before_validation :populate_token_symbol
   before_validation :check_coin_type
+  before_validation :set_predefined_name
   before_save :set_transitioned_to_ethereum_enabled
   before_save :enable_ethereum
 
@@ -134,6 +135,10 @@ class Token < ApplicationRecord
       self.symbol = nil
       self.decimal_places = nil
     end
+  end
+
+  def set_predefined_name
+    self.name = coin_type if !coin_type_token? && !name
   end
 
   def check_coin_type_blockchain_network

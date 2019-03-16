@@ -25,10 +25,6 @@ describe('TokenForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldHalfed[title="token name"][required][name="token[name]"][placeholder="Bitcoin"]'
-    )).toBe(true)
-
-    expect(wrapper.exists(
       'InputFieldUploadFile[title="token logo"][required][name="token[logo_image]"]'
     )).toBe(true)
 
@@ -143,10 +139,6 @@ describe('TokenForm', () => {
     expect(wrapper.find(
       'InputFieldDropdownHalfed[title="payment type"][required][name="token[coin_type]"]'
     ).props().value).toBe('eth')
-
-    expect(wrapper.find(
-      'InputFieldHalfed[title="token name"][required][name="token[name]"]'
-    ).props().value).toBe('Ether')
 
     expect(wrapper.find(
       'InputFieldUploadFile[title="token logo"][required][name="token[logo_image]"]'
@@ -288,7 +280,6 @@ describe('TokenForm', () => {
     wrapper.setState({
       errors: {
         'token[coin_type]' : 'coin_type error',
-        'token[name]'      : 'name error',
         'token[logo_image]': 'logo_image error'
       }
     })
@@ -297,10 +288,6 @@ describe('TokenForm', () => {
 
     expect(wrapper.exists(
       'InputFieldDropdownHalfed[errorText="coin_type error"][title="payment type"][required][name="token[coin_type]"]'
-    )).toBe(true)
-
-    expect(wrapper.exists(
-      'InputFieldHalfed[errorText="name error"][title="token name"][required][name="token[name]"][placeholder="Bitcoin"]'
     )).toBe(true)
 
     expect(wrapper.exists(

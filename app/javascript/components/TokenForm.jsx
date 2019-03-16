@@ -296,19 +296,7 @@ class TokenForm extends React.Component {
               symbolLimit={0}
             />
 
-            {this.state['token[coin_type]'] === 'eth' &&
-              <InputFieldHalfed
-                title="token name"
-                required
-                readOnly
-                name="token[name]"
-                value="Ether"
-                errorText={this.state.errors['token[name]']}
-                symbolLimit={0}
-              />
-            }
-
-            {this.state['token[coin_type]'] !== 'eth' &&
+            {this.state['token[coin_type]'].match(/erc20|qrc20/) &&
               <InputFieldHalfed
                 title="token name"
                 required
@@ -380,7 +368,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[coin_type]'] === 'qrc20' &&
+            {this.state['token[coin_type]'].match('qrc20|qtum|ada|btc|eos|xtz') &&
               <InputFieldDropdownHalfed
                 title="blockchain network"
                 required
