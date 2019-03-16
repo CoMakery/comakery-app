@@ -52,7 +52,7 @@ class ProjectsController < ApplicationController
 
     @props[:project] = @project.serializable_hash.merge(
       url: "https://www.comakery.com/p/#{@project.long_id}",
-      mission_id: Mission.find(params[:mission_id])&.id
+      mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
     )
     render component: 'ProjectForm', props: @props
   end
