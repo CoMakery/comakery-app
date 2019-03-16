@@ -18,6 +18,9 @@ describe('cardano trezor utils #transferAdaCoins', () => {
     'project': {
       'id': 22
     },
+    'award_type': {
+      'id': 22
+    },
     'token': {
       'id'                : 1,
       'coin_type'         : 'ada',

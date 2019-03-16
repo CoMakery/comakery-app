@@ -191,7 +191,7 @@ class BatchForm extends React.Component {
               value={this.state['batch[name]']}
               errorText={this.state.errors['batch[name]']}
               eventHandler={this.handleFieldChange}
-              placeholder='Provide a clear title for the batch'
+              placeholder="Provide a clear title for the batch"
               symbolLimit={100}
             />
 
@@ -202,7 +202,7 @@ class BatchForm extends React.Component {
               value={this.state['batch[goal]']}
               errorText={this.state.errors['batch[goal]']}
               eventHandler={this.handleFieldChange}
-              placeholder='Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)'
+              placeholder="Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)"
               symbolLimit={250}
             />
 
@@ -213,7 +213,7 @@ class BatchForm extends React.Component {
               value={this.state['batch[description]']}
               errorText={this.state.errors['batch[description]']}
               eventHandler={this.handleFieldChange}
-              placeholder='Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project'
+              placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
               symbolLimit={750}
             />
 
@@ -240,12 +240,12 @@ BatchForm.propTypes = {
   csrfToken   : PropTypes.string.isRequired
 }
 BatchForm.defaultProps = {
-  token       : {'default': '_'},
+  batch       : {'default': '_'},
   specialties : {'default': '_'},
   formUrl     : '/',
   formAction  : 'POST',
   urlOnSuccess: '/',
-  projectId   : null,
+  projectId   : 0,
   csrfToken   : '00'
 }
 export default BatchForm

@@ -340,8 +340,8 @@ TaskShow.propTypes = {
   task               : PropTypes.object.isRequired,
   batch              : PropTypes.object.isRequired,
   token              : PropTypes.object.isRequired,
-  channels           : PropTypes.array.isRequired,
-  members            : PropTypes.array.isRequired,
+  channels           : PropTypes.object.isRequired,
+  members            : PropTypes.object.isRequired,
   recipientAddressUrl: PropTypes.string.isRequired,
   formUrl            : PropTypes.string.isRequired,
   formAction         : PropTypes.string.isRequired,
@@ -349,11 +349,20 @@ TaskShow.propTypes = {
   csrfToken          : PropTypes.string.isRequired
 }
 TaskShow.defaultProps = {
-  task               : {'default': '_'},
-  batch              : {'default': '_'},
-  token              : {'default': '_'},
-  channels           : [],
-  members            : [],
+  task: {
+    'id'         : 28,
+    'awardTypeId': 10,
+    'name'       : 'Task name',
+    'amount'     : '100.0',
+    'quantity'   : 1
+  },
+  batch: {'default': '_'},
+  token: {
+    'symbol'       : 'DMT',
+    'decimalPlaces': 8,
+  },
+  channels           : {'email': '', 'default': '1'},
+  members            : {'1': {'default': '_'}},
   recipientAddressUrl: '/',
   formUrl            : '/',
   formAction         : 'POST',

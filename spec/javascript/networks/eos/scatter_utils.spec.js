@@ -18,6 +18,9 @@ describe('eos scatter utils #transferEosCoins', () => {
     'project': {
       'id': 22
     },
+    'award_type': {
+      'id': 22
+    },
     'token': {
       'id'                       : 1,
       'ethereum_contract_address': null,
