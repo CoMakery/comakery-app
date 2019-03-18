@@ -12,8 +12,8 @@ class GetAwardData
   def contributions_by_day(awards_scope)
     history = 150
     recent_awards = awards_scope
-                    .where('awards.created_at > ?', history.days.ago)
-                    .order('awards.created_at asc')
+                    .where('awards.updated_at > ?', history.days.ago)
+                    .order('awards.updated_at asc')
 
     accounts = recent_awards.map(&:account).freeze
     empty_row_template = accounts.each_with_object({}) do |account, contributors|

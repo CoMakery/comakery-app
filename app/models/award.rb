@@ -1,3 +1,5 @@
+require 'bigdecimal'
+
 class Award < ApplicationRecord
   paginates_per 50
 
@@ -14,7 +16,7 @@ class Award < ApplicationRecord
   has_one :token, through: :project
 
   validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
-  validates :amount, numericality: { greater_than: 0 }
+  validates :amount, :total_amount, numericality: { greater_than: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&.coin_type_on_ethereum? } # see EthereumAddressable
   validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
@@ -27,7 +29,10 @@ class Award < ApplicationRecord
   validates :proof_link, length: { maximum: 150 }
   validates :proof_link, format: { with: URI.regexp(%w[http https]) }
 
+  validate :total_amount_fits_into_project_budget
+
   before_validation :ensure_proof_id_exists
+  before_validation :calculate_total_amount
 
   scope :confirmed, -> { where confirm_token: nil }
 
@@ -105,4 +110,16 @@ class Award < ApplicationRecord
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true
+
+  private
+
+    def calculate_total_amount
+      self.total_amount = amount * BigDecimal(quantity || 1)
+    end
+
+    def total_amount_fits_into_project_budget
+      if total_amount + project.awards.sum(:total_amount) > project.maximum_tokens
+        errors.add(:total_amount, "can't exceed project's remaining budget")
+      end
+    end
 end

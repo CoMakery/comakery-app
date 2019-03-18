@@ -98,8 +98,8 @@ class Mom
 
   def award_type(**attrs)
     defaults = {
-      amount: 1337,
-      name: 'Contribution'
+      name: 'Contribution',
+      specialty: 'software_development'
     }
     attrs[:project] = create(:project) unless attrs[:project]
     AwardType.new(defaults.merge(attrs))
@@ -108,18 +108,20 @@ class Mom
   def award(**attrs)
     params = {
       issuer: create(:account),
-      description: 'Great work',
+      name: 'none',
+      description: 'none',
+      why: 'none',
+      requirements: 'none',
+      proof_link: 'http://nil',
       proof_id: 'abc123',
+      status: 'done',
+      message: 'Great work',
       quantity: 1,
-      unit_amount: 50,
-      total_amount: 50
+      amount: 50
     }.merge(attrs)
 
-    params[:award_type] ||= create(:award_type, amount: params[:unit_amount])
+    params[:award_type] ||= create(:award_type)
     params[:account] ||= create(:account)
-
-    params[:unit_amount] = params[:award_type].amount
-    params[:total_amount] = params[:award_type].amount * params[:quantity]
 
     Award.new(params)
   end
