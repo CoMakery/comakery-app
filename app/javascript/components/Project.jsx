@@ -308,7 +308,12 @@ Project.propTypes = {
 }
 
 Project.defaultProps = {
-  projectData     : {},
+  projectData: {
+    description : '',
+    teamLeader  : {},
+    contributors: [],
+    chartData   : []
+  },
   missionData     : {},
   tokenData       : {},
   interested      : false,
