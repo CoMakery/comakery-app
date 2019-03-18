@@ -6,7 +6,9 @@ describe 'when recording revenue' do
   let!(:owner_auth) { create(:authentication, account: owner) }
   let!(:other_account) { create(:account) }
   let!(:other_account_auth) { create(:authentication, account: other_account) }
-  let!(:project) { create(:project, visibility: 'public_listed', payment_type: 'revenue_share', require_confidentiality: false, account: owner) }
+  let!(:token) { create :token }
+  let!(:mission) { create :mission, token: token }
+  let!(:project) { create(:project, visibility: 'public_listed', payment_type: 'revenue_share', require_confidentiality: false, account: owner, mission: mission) }
   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000, name: 'Code Contribution') }
 
   before do
@@ -18,8 +20,7 @@ describe 'when recording revenue' do
 
   it 'revenue page looks sensible when there are no entries recorded yet' do
     login owner
-    visit project_path(project)
-    click_link 'Revenues'
+    visit project_revenues_path(project.show_id)
 
     within '.revenues' do
       expect(page).not_to have_css('table')
@@ -29,8 +30,7 @@ describe 'when recording revenue' do
 
   it 'project owner can record revenues' do
     login owner
-    visit project_path(project)
-    click_link 'Revenues'
+    visit project_revenues_path(project.show_id)
 
     fill_in 'Amount', with: 10
     fill_in :revenue_comment, with: 'A comment'
@@ -47,8 +47,7 @@ describe 'when recording revenue' do
 
   it 'parses amounts with both commas and decimal point' do
     login owner
-    visit project_path(project)
-    click_link 'Revenues'
+    visit project_revenues_path(project.show_id)
 
     fill_in :revenue_amount, with: '1,234.56'
     click_on 'Record Revenue'
@@ -61,8 +60,7 @@ describe 'when recording revenue' do
   it 'project denomination cannot be changed after first revenue is recorded but other settings can be edited' do
     login owner
 
-    visit project_path(project)
-    click_link 'Revenues'
+    visit project_revenues_path(project.show_id)
     fill_in :revenue_amount, with: 1
     click_on 'Record Revenue'
 
@@ -83,8 +81,7 @@ describe 'when recording revenue' do
 
   it 'revenues appear in reverse chronological order' do
     login owner
-    visit project_path(project)
-    click_link 'Revenues'
+    visit project_revenues_path(project.show_id)
 
     [3, 2, 1].each do |amount|
       fill_in :revenue_amount, with: amount
@@ -101,8 +98,7 @@ describe 'when recording revenue' do
   it 'non-project owner cannot record revenues' do
     login other_account
 
-    visit project_path(project)
-    click_link 'Revenues'
+    visit project_revenues_path(project.show_id)
 
     expect(page).not_to have_css('.new_revenue')
   end
@@ -114,8 +110,7 @@ describe 'when recording revenue' do
     award_type.awards.create_with_quantity(1.01, issuer: owner, account: owner)
 
     login owner
-    visit project_path(project)
-    click_link 'Revenues'
+    visit project_revenues_path(project.show_id)
 
     within('.reserved-for-contributors') do
       expect(page.find('.royalty-percentage')).to have_content('10%')
@@ -128,9 +123,7 @@ describe 'when recording revenue' do
     before do
       project.update(royalty_percentage: 10)
       login owner
-      visit project_path(project)
-      visit project_path(project)
-      click_link 'Revenues'
+      visit project_revenues_path(project.show_id)
 
       [3, 2, 1].each do |amount|
         fill_in :revenue_amount, with: amount
@@ -153,8 +146,7 @@ describe 'when recording revenue' do
     award_type.awards.create_with_quantity(5, issuer: owner, account: other_account)
 
     login owner
-    visit project_path(project)
-    click_link 'Revenues'
+    visit project_revenues_path(project.show_id)
 
     [3, 2, 1].each do |amount|
       fill_in :revenue_amount, with: amount
@@ -170,8 +162,7 @@ describe 'when recording revenue' do
 
   it 'shows errors if there were missing fields' do
     login owner
-    visit project_path(project)
-    click_link 'Revenues'
+    visit project_revenues_path(project.show_id)
 
     click_on 'Record Revenue'
     expect(page.all('.amount').size).to eq(0)
@@ -188,8 +179,7 @@ describe 'when recording revenue' do
 
     it 'usd' do
       project.USD!
-      visit project_path(project)
-      click_link 'Revenues'
+      visit project_revenues_path(project.show_id)
 
       fill_in :revenue_amount, with: '4,321.12'
       click_on 'Record Revenue'
@@ -203,8 +193,7 @@ describe 'when recording revenue' do
 
     it 'btc' do
       project.BTC!
-      visit project_path(project)
-      click_link 'Revenues'
+      visit project_revenues_path(project.show_id)
 
       fill_in :revenue_amount, with: '4,321.12345678'
       click_on 'Record Revenue'
@@ -217,8 +206,7 @@ describe 'when recording revenue' do
 
     it 'eth' do
       project.ETH!
-      visit project_path(project)
-      click_link 'Revenues'
+      visit project_revenues_path(project.show_id)
 
       fill_in :revenue_amount, with: '4,321.123456789012345678'
       click_on 'Record Revenue'
@@ -260,10 +248,6 @@ describe 'when recording revenue' do
     end
 
     it "non-members can see revenues if confidentiality isn't required for a public project" do
-      visit project_path(project)
-
-      expect(page).to have_link 'Revenues'
-
       visit project_revenues_path(project)
       expect(page).to have_current_path(project_revenues_path(project))
     end

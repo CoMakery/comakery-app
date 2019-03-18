@@ -9,13 +9,17 @@ describe 'when reconciling redeemed revenue shares' do
   let!(:other_account) { create(:account, first_name: 'Other') }
   let!(:other_account_auth) { create(:authentication, account: other_account) }
 
+  let!(:token) { create :token }
+  let!(:mission) { create :mission, token: token }
+
   let!(:project) do
     create(:project,
       royalty_percentage: 100,
       visibility: 'public_listed',
       account: owner,
       payment_type: 'revenue_share',
-      require_confidentiality: false)
+      require_confidentiality: false,
+      mission: mission)
   end
   let!(:revenue) { create(:revenue, project: project, amount: 1234.5, currency: 'USD') }
 
@@ -45,8 +49,7 @@ describe 'when reconciling redeemed revenue shares' do
 
   it 'owner can reconcile revenue shares' do
     login owner
-    visit project_path(project)
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
     fill_in :payment_quantity_redeemed, with: 2
     click_on 'Redeem My Revenue Shares'
 
@@ -78,8 +81,7 @@ describe 'when reconciling redeemed revenue shares' do
 
   it 'owner sees errors if the transaction fee is higher than the total value' do
     login owner
-    visit project_path(project)
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
     fill_in :payment_quantity_redeemed, with: 2
     click_on 'Redeem My Revenue Shares'
 
@@ -99,8 +101,7 @@ describe 'when reconciling redeemed revenue shares' do
     expect(same_team_account&.same_team_project?(project)).to eq true
     expect(same_team_account.total_awards_remaining(project) > 0).to eq true
     login same_team_account
-    visit project_path(project)
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
     fill_in :payment_quantity_redeemed, with: 2
     click_on 'Redeem My Revenue Shares'
 
@@ -118,8 +119,7 @@ describe 'when reconciling redeemed revenue shares' do
 
   it 'other team member cannot reconcile payments' do
     login other_account
-    visit project_path(project)
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
     expect(page).to have_content 'by contributing to the project - then cash them out here for your share of the revenue'
   end
 end

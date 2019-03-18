@@ -8,6 +8,8 @@ describe 'when redeeming revenue shares for payments' do
   let!(:owner_auth) { create(:authentication, account: owner) }
   let!(:other_account) { create(:account) }
   let!(:other_account_auth) { create(:authentication, account: other_account) }
+  let!(:token) { create :token }
+  let!(:mission) { create :mission, token: token }
 
   let!(:project) do
     create(:project,
@@ -15,7 +17,8 @@ describe 'when redeeming revenue shares for payments' do
       visibility: 'public_listed',
       payment_type: 'revenue_share',
       account: owner,
-      require_confidentiality: false)
+      require_confidentiality: false,
+      mission: mission)
   end
   let!(:revenue) { create(:revenue, project: project, amount: 1234.5, currency: 'USD') }
 
@@ -42,8 +45,7 @@ describe 'when redeeming revenue shares for payments' do
 
   it 'revenue page looks sensible when there are no entries recorded yet' do
     login owner
-    visit project_path(project)
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
 
     within '.payments' do
       expect(page).not_to have_css('table')
@@ -53,9 +55,7 @@ describe 'when redeeming revenue shares for payments' do
 
   it 'contributor can redeem revenue shares' do
     login same_team_account
-    visit project_path(project)
-
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
 
     within('.current-share-value') do
       expect(page.find('.revenue-per-share')).to have_content(/^\$12.34500000$/)
@@ -80,16 +80,14 @@ describe 'when redeeming revenue shares for payments' do
 
   it "non team member of public project can't redeem shares" do
     login ray_dog_account
-    visit project_path(project)
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
 
     page.assert_selector('#new_payment', count: 0)
   end
 
   it 'payments appear in reverse chronological order' do
     login owner
-    visit project_path(project)
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
 
     [3, 2, 1].each do |amount|
       fill_in :payment_quantity_redeemed, with: amount
@@ -107,9 +105,7 @@ describe 'when redeeming revenue shares for payments' do
     before do
       project.update(royalty_percentage: 10)
       login owner
-      visit project_path(project)
-      visit project_path(project)
-      click_link 'Payments'
+      visit project_payments_path(project.show_id)
 
       [3, 2, 1].each do |amount|
         fill_in :payment_quantity_redeemed, with: amount
@@ -133,8 +129,7 @@ describe 'when redeeming revenue shares for payments' do
 
   it 'shows errors if there were missing fields' do
     login owner
-    visit project_path(project)
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
 
     click_on 'Redeem My Revenue Shares'
     expect(page.all('.amount').size).to eq(0)
@@ -145,8 +140,7 @@ describe 'when redeeming revenue shares for payments' do
 
   it 'has a grayed out form if the user has 0 revenue shares' do
     login other_account
-    visit project_path(project)
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
 
     expect(page).to have_content('Earn awards by contributing')
     within('.no-awards-message') { click_on 'awards' }
@@ -157,7 +151,7 @@ describe 'when redeeming revenue shares for payments' do
     login owner
     visit project_path(project)
     project.revenues.create(amount: 4321, recorded_by: owner, currency: 'USD')
-    click_link 'Payments'
+    visit project_payments_path(project.show_id)
 
     expect(page).to have_content 'of my 50 revenue shares'
     expect(page.find('form#new_payment #payment_quantity_redeemed').disabled?).to eq(false)
@@ -170,7 +164,8 @@ describe 'when redeeming revenue shares for payments' do
         royalty_percentage: 100,
         visibility: 'public_listed',
         account: owner,
-        require_confidentiality: false)
+        require_confidentiality: false,
+        mission: mission)
     end
 
     describe 'usd' do
@@ -180,15 +175,15 @@ describe 'when redeeming revenue shares for payments' do
           visibility: 'public_listed',
           payment_type: 'revenue_share',
           account: owner,
-          require_confidentiality: false)
+          require_confidentiality: false,
+          mission: mission)
       end
 
       specify do
         login owner
         project.revenues.create(amount: 4321, recorded_by: owner, currency: 'USD')
 
-        visit project_path(project)
-        click_link 'Payments'
+        visit project_payments_path(project.show_id)
 
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
@@ -203,8 +198,7 @@ describe 'when redeeming revenue shares for payments' do
         login owner
         project.revenues.create(amount: 4321, recorded_by: owner, currency: 'USD')
 
-        visit project_path(project)
-        click_link 'Payments'
+        visit project_payments_path(project.show_id)
 
         click_on 'Redeem My Revenue Shares'
         expect(page.first('.error')).to have_content 'Total value must be greater than or equal to $1'
@@ -213,8 +207,7 @@ describe 'when redeeming revenue shares for payments' do
 
       it 'displays the minimum payment amount' do
         login owner
-        visit project_path(project)
-        click_link 'Payments'
+        visit project_payments_path(project.show_id)
         expect(page.first('.min-transaction-amount')).to have_content 'The minimum transaction amount is $1'
       end
     end
@@ -227,13 +220,13 @@ describe 'when redeeming revenue shares for payments' do
           payment_type: 'revenue_share',
           account: owner,
           require_confidentiality: false,
-          denomination: 'BTC')
+          denomination: 'BTC',
+          mission: mission)
       end
 
       specify do
         login owner
-        visit project_path(project)
-        click_link 'Payments'
+        visit project_payments_path(project.show_id)
 
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
@@ -248,8 +241,7 @@ describe 'when redeeming revenue shares for payments' do
         login owner
         project.revenues.create(amount: 4321, recorded_by: owner, currency: 'BTC')
 
-        visit project_path(project)
-        click_link 'Payments'
+        visit project_payments_path(project.show_id)
 
         click_on 'Redeem My Revenue Shares'
         expect(page.first('.error')).to have_content 'Total value must be greater than or equal to ฿0.001'
@@ -257,8 +249,7 @@ describe 'when redeeming revenue shares for payments' do
 
       it 'displays the minimum payment amount' do
         login owner
-        visit project_path(project)
-        click_link 'Payments'
+        visit project_payments_path(project.show_id)
         expect(page.first('.min-transaction-amount')).to have_content 'The minimum transaction amount is ฿0.001'
       end
     end
@@ -271,13 +262,13 @@ describe 'when redeeming revenue shares for payments' do
           payment_type: 'revenue_share',
           account: owner,
           require_confidentiality: false,
-          denomination: 'ETH')
+          denomination: 'ETH',
+          mission: mission)
       end
 
       specify do
         login owner
-        visit project_path(project)
-        click_link 'Payments'
+        visit project_payments_path(project.show_id)
 
         fill_in :payment_quantity_redeemed, with: '50'
         click_on 'Redeem My Revenue Shares'
@@ -292,8 +283,7 @@ describe 'when redeeming revenue shares for payments' do
         login owner
         project.revenues.create(amount: 4321, recorded_by: owner, currency: 'ETH')
 
-        visit project_path(project)
-        click_link 'Payments'
+        visit project_payments_path(project.show_id)
 
         click_on 'Redeem My Revenue Shares'
         expect(page.first('.error')).to have_content 'Total value must be greater than or equal to Ξ0.1'
@@ -301,8 +291,7 @@ describe 'when redeeming revenue shares for payments' do
 
       it 'displays the minimum payment amount' do
         login owner
-        visit project_path(project)
-        click_link 'Payments'
+        visit project_payments_path(project.show_id)
         expect(page.first('.min-transaction-amount')).to have_content 'The minimum transaction amount is Ξ0.1'
       end
     end
@@ -339,10 +328,6 @@ describe 'when redeeming revenue shares for payments' do
     end
 
     it "non-members can see payments if confidentiality isn't required for a public project" do
-      visit project_path(project)
-
-      expect(page).to have_link 'Payments'
-
       visit project_payments_path(project)
       expect(page).to have_current_path(project_payments_path(project))
     end
