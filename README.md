@@ -8,10 +8,8 @@ CoMakery helps coordinate blockchain missions, projects and token awards.
 
 This project is in open beta. It is being actively developed by CoMakery.
 
-## Starting Schema
-![starting schema](doc/diagrams/simplified-current-schema.png)
 
-## Future Schema
+## Updated Schema
 
 **Summary of changes**
 
@@ -22,7 +20,11 @@ This project is in open beta. It is being actively developed by CoMakery.
 * AWARDS renamed to TASKS and new fields added
 * New tables TASK_SKILLS, SKILLS, and ACCEPTANCE_REQUIREMENTS added
 
-![new schema](doc/diagrams/schema-with-batches.png)
+![new schema](doc/schema-with-batches/updated-schema.png)
+
+## Updated Skills & Interests Schema
+
+![new schema](doc/schema-with-batches/skill-interest-schema.png)
 
 ## Configuration
 
