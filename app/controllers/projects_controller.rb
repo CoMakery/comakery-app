@@ -86,7 +86,6 @@ class ProjectsController < ApplicationController
       awards_path: project_awards_path(@project.show_id),
       edit_path: current_account && @project.account == current_account ? edit_project_path(@project) : nil
     }
-    render component: 'Project', props: @props
   end
 
   def unlisted
