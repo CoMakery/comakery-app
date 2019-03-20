@@ -9,13 +9,13 @@ feature 'my account', js: true do
 
   let!(:auth) { create(:sb_authentication, account: account) }
   let!(:issuer) { create(:sb_authentication) }
-  let!(:award_type) { create(:award_type, project: project, amount: 1337) }
+  let!(:award_type) { create(:award_type, project: project) }
   let!(:award1) do
-    create(:award, award_type: award_type, account: auth.account,
+    create(:award, award_type: award_type, amount: 1337, account: auth.account,
                    issuer: issuer.account, created_at: Date.new(2016, 3, 25))
   end
   let!(:award2) do
-    create(:award, award_type: award_type, account: auth.account,
+    create(:award, award_type: award_type, amount: 1337, account: auth.account,
                    issuer: issuer.account, created_at: Date.new(2016, 3, 25))
   end
 

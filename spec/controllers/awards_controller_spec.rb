@@ -21,6 +21,7 @@ describe AwardsController do
     discord_team.build_authentication_team receiver_discord
     project.channels.create(team: team, channel_id: '123')
   end
+
   describe '#index' do
     let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_auth.account) }
     let!(:different_project_award) { create(:award, award_type: create(:award_type, project: create(:project)), account: other_auth.account) }
@@ -171,7 +172,7 @@ describe AwardsController do
           post :create, params: {
             project_id: project.to_param, award: {
               uid: 'receiver id',
-              award_type_id: create(:award_type, amount: 10000, project: create(:project, maximum_tokens: 100_000, maximum_royalties_per_month: 25000)).to_param,
+              award_type_id: create(:award_type, project: create(:project, maximum_tokens: 100_000, maximum_royalties_per_month: 25000)).to_param,
               description: 'I am teh haxor',
               channel_id: project.channels.first.id
             }

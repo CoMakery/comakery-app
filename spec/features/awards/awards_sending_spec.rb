@@ -21,14 +21,14 @@ describe 'awarding users' do
   let!(:channel) { create(:channel, team: team, project: project, channel_id: 'channel id') }
   let!(:other_channel) { create(:channel, team: other_team, project: different_team_project, name: 'other channel') }
 
-  let!(:small_award_type) { create(:award_type, project: project, name: 'Small', amount: 1000) }
-  let!(:large_award_type) { create(:award_type, project: project, name: 'Large', amount: 3000) }
+  let!(:small_award_type) { create(:award_type, project: project, name: 'Small') }
+  let!(:large_award_type) { create(:award_type, project: project, name: 'Large') }
 
-  let!(:same_team_small_award_type) { create(:award_type, project: same_team_project, name: 'Small', amount: 10) }
-  let!(:same_team_small_award) { create(:award, issuer: account, account: account, award_type: same_team_small_award_type) }
+  let!(:same_team_small_award_type) { create(:award_type, project: same_team_project, name: 'Small') }
+  let!(:same_team_small_award) { create(:award, issuer: account, account: account, award_type: same_team_small_award_type, amount: 10) }
 
-  let!(:different_large_award_type) { create(:award_type, project: different_team_project, name: 'Large', amount: 3000) }
-  let!(:different_large_award) { create(:award, issuer: different_team_account, award_type: different_large_award_type, account: different_team_account) }
+  let!(:different_large_award_type) { create(:award_type, project: different_team_project, name: 'Large') }
+  let!(:different_large_award) { create(:award, issuer: different_team_account, award_type: different_large_award_type, amount: 3000, account: different_team_account) }
 
   before do
     team.build_authentication_team owner_authentication
@@ -102,7 +102,7 @@ describe 'awarding users' do
   it 'list awards' do
     project.token.update decimal_places: 2
     receiver = create :account, email: 'test@test.st', ethereum_wallet: '0x' + 'b' * 40
-    create :award, account: receiver, award_type: small_award_type
+    create :award, account: receiver, award_type: small_award_type, amount: 1000
     login(account)
     visit project_awards_path(project)
     expect(page).to have_content '1,000'

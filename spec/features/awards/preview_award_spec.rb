@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'preview award', js: true do
   let!(:account) { create(:account, email: 'hubert@example.com', first_name: 'Michael', last_name: 'Jackson') }
-  let!(:small_award_type) { create(:award_type, project: project, name: 'Small', amount: 1000) }
+  let!(:small_award_type) { create(:award_type, project: project, name: 'Small') }
 
   before do
     login(account)

@@ -9,9 +9,6 @@ describe GetContributorData do
   let!(:bob) { create(:account, email: 'other@example.com', first_name: 'bob', last_name: 'bob') }
   let!(:bob_auth) { create(:authentication, account: bob) }
   let!(:project) { create(:project, title: 'Cats', account: sam) }
-  let!(:award_type1) { create(:award_type, project: project, amount: 1000, name: 'Small Award') }
-  let!(:award_type2) { create(:award_type, project: project, amount: 2000, name: 'Medium Award') }
-  let!(:award_type3) { create(:award_type, project: project, amount: 3000, name: 'Big Award') }
 
   before do
     team.build_authentication_team sam_auth

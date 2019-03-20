@@ -5,15 +5,15 @@ describe EthereumTokenIssueJob do
   let(:recipient_address) { '0x' + 'b' * 40 }
   let(:transaction_adddress) { '0x' + 'c' * 64 }
   let(:project) { create :project, token: create(:token, ethereum_contract_address: contract_address) }
-  let(:award_type) { create :award_type, project: project, amount: 2 }
-  let(:award) { create :award, award_type: award_type, proof_id: '873!' }
+  let(:award_type) { create :award_type, project: project }
+  let(:award) { create :award, award_type: award_type, amount: 2, proof_id: '873!' }
   let(:job) { described_class.new }
 
   it 'returns an ethereum transaction address on completion' do
     allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
     stub_token_symbol
     expect(Comakery::Ethereum).to receive(:token_issue).with(recipient: award.decorate.recipient_address,
-                                                             amount: award.award_type.amount,
+                                                             amount: award.amount,
                                                              contractAddress: award.project.token.ethereum_contract_address,
                                                              proofId: '873!') { transaction_adddress }
 
@@ -39,10 +39,10 @@ describe EthereumTokenIssueJob do
   end
 
   describe 'when award total amount calculation includes a quantity' do
-    let(:award_type) { create :award_type, amount: 2, project: project }
+    let(:award_type) { create :award_type, project: project }
     let(:issuer) { create :account }
     let(:authentication) { create :authentication }
-    let(:award) { award_type.awards.create_with_quantity 1.5, issuer: issuer, account: authentication.account }
+    let(:award) { create :award, award_type: award_type, quantity: 1.5, amount: 2, issuer: issuer, account: authentication.account }
 
     before do
       allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
@@ -50,7 +50,7 @@ describe EthereumTokenIssueJob do
 
     it 'with the right test conditions' do
       stub_token_symbol
-      expect(award.unit_amount).to eq(2)
+      expect(award.amount).to eq(2)
       expect(award.total_amount).to eq(3)
     end
 

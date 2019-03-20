@@ -87,15 +87,15 @@ describe 'precise financial calculations across the integrated revenue sharing c
                                  name: 'Code Contribution')
     end
     let!(:same_team_award) do
-      code_award_type.awards.create_with_quantity(50,
-        issuer: owner,
-        account: same_team_account)
+      create(:award, award_type: code_award_type, quantity: 50,
+                     issuer: owner,
+                     account: same_team_account)
     end
 
     let!(:owner_award) do
-      code_award_type.awards.create_with_quantity(50,
-        issuer: owner,
-        account: owner)
+      create(:award, award_type: code_award_type, quantity: 50,
+                     issuer: owner,
+                     account: owner)
     end
 
     let!(:revenues) do
@@ -128,15 +128,15 @@ describe 'precise financial calculations across the integrated revenue sharing c
                                  name: 'Code Contribution')
     end
     let!(:same_team_award) do
-      code_award_type.awards.create_with_quantity(50,
-        issuer: owner,
-        account: same_team_account)
+      create(:award, award_type: code_award_type, quantity: 50,
+                     issuer: owner,
+                     account: same_team_account)
     end
 
     let!(:owner_award) do
-      code_award_type.awards.create_with_quantity(50,
-        issuer: owner,
-        account: owner)
+      create(:award, award_type: code_award_type, quantity: 50,
+                     issuer: owner,
+                     account: owner)
     end
 
     let!(:revenues) do
@@ -180,15 +180,15 @@ describe 'precise financial calculations across the integrated revenue sharing c
                                  name: 'Code Contribution')
     end
     let!(:same_team_award) do
-      code_award_type.awards.create_with_quantity(50_000_000,
-        issuer: owner,
-        account: same_team_account)
+      create(:award, award_type: code_award_type, quantity: 50_000_000,
+                     issuer: owner,
+                     account: same_team_account)
     end
 
     let!(:owner_award) do
-      code_award_type.awards.create_with_quantity(50_000_000,
-        issuer: owner,
-        account: owner)
+      create(:award, award_type: code_award_type, quantity: 50_000_000,
+                     issuer: owner,
+                     account: owner)
     end
 
     let!(:revenues) do
@@ -222,15 +222,15 @@ describe 'precise financial calculations across the integrated revenue sharing c
                                  name: 'Code Contribution')
     end
     let!(:same_team_award) do
-      code_award_type.awards.create_with_quantity(50_000_000,
-        issuer: owner,
-        account: same_team_account)
+      create(:award, award_type: code_award_type, quantity: 50_000_000,
+                     issuer: owner,
+                     account: same_team_account)
     end
 
     let!(:owner_award) do
-      code_award_type.awards.create_with_quantity(50_000_000,
-        issuer: owner,
-        account: owner)
+      create(:award, award_type: code_award_type, quantity: 50_000_000,
+                     issuer: owner,
+                     account: owner)
     end
 
     let!(:revenues) do
@@ -295,9 +295,9 @@ describe 'precise financial calculations across the integrated revenue sharing c
     # ---
     # 2) issue awards
     # ---
-    code_award_type = project.award_types.create(community_awardable: false, amount: 1, name: 'Code Contribution')
-    code_award_type.awards.create_with_quantity(50, issuer: owner, account: same_team_account)
-    code_award_type.awards.create_with_quantity(50, issuer: owner, account: owner)
+    code_award_type = project.award_types.create(community_awardable: false, name: 'Code Contribution')
+    create(:award, award_type: code_award_type, quantity: 50, amount: 1, issuer: owner, account: same_team_account)
+    create(:award, award_type: code_award_type, quantity: 50, amount: 1, issuer: owner, account: owner)
 
     # project
     expect(project.total_revenue).to eq(0)
@@ -407,9 +407,9 @@ describe 'precise financial calculations across the integrated revenue sharing c
     # ---
     # 2) issue awards
     # ---
-    code_award_type = project.award_types.create(community_awardable: false, amount: 1, name: 'Code Contribution')
-    code_award_type.awards.create_with_quantity(50, issuer: owner, account: same_team_account)
-    code_award_type.awards.create_with_quantity(50, issuer: owner, account: owner)
+    code_award_type = project.award_types.create(community_awardable: false, name: 'Code Contribution')
+    create(:award, award_type: code_award_type, quantity: 50, amount: 1, issuer: owner, account: same_team_account)
+    create(:award, award_type: code_award_type, quantity: 50, amount: 1, issuer: owner, account: owner)
 
     # project
     expect(project.total_revenue).to eq(0)

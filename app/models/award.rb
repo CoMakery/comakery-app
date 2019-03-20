@@ -114,11 +114,11 @@ class Award < ApplicationRecord
   private
 
     def calculate_total_amount
-      self.total_amount = amount * BigDecimal(quantity || 1)
+      self.total_amount = BigDecimal(amount || 0) * BigDecimal(quantity || 1)
     end
 
     def total_amount_fits_into_project_budget
-      if total_amount + project.awards.sum(:total_amount) > project.maximum_tokens
+      if total_amount + BigDecimal(project&.awards&.sum(:total_amount) || 0) > BigDecimal(project&.maximum_tokens || 0)
         errors.add(:total_amount, "can't exceed project's remaining budget")
       end
     end

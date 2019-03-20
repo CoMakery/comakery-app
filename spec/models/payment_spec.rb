@@ -20,7 +20,7 @@ describe Payment do
 
   describe 'validations' do
     let(:project) { create :project, payment_type: 'revenue_share' }
-    let(:award_type) { create :award_type, amount: 1, project: project }
+    let(:award_type) { create :award_type, project: project }
     let(:account) { create :account }
     let(:payment) { described_class.new(account: account, project: project, total_value: 1, share_value: 1, currency: 'USD') }
 
@@ -43,7 +43,7 @@ describe Payment do
     end
 
     it 'Payee can redeem shares that they do have' do
-      award_type.awards.create_with_quantity(1, issuer: project.account, account: account)
+      create(:award, award_type: award_type, quantity: 1, amount: 1, issuer: project.account, account: account)
       expect(account.total_awards_remaining(project)).to eq(1)
       payment.quantity_redeemed = 1
       payment.valid?
@@ -51,7 +51,7 @@ describe Payment do
     end
 
     it "can't update the quantity_redeemed to an amount greater than they have" do
-      award_type.awards.create_with_quantity(1, issuer: project.account, account: account)
+      create(:award, award_type: award_type, quantity: 1, amount: 1, issuer: project.account, account: account)
       expect(account.total_awards_remaining(project)).to eq(1)
       payment.quantity_redeemed = 1
       payment.share_value = 1
@@ -63,7 +63,7 @@ describe Payment do
     end
 
     it 'can update the quantity_redeemed to an amount they have' do
-      award_type.awards.create_with_quantity(2, issuer: project.account, account: account)
+      create(:award, award_type: award_type, quantity: 2, amount: 1, issuer: project.account, account: account)
       expect(account.total_awards_remaining(project)).to eq(2)
       payment.quantity_redeemed = 1
       payment.save!
@@ -73,7 +73,7 @@ describe Payment do
     end
 
     it 'can update the quantity_redeemed to an amount they have that is lower than the previous amount' do
-      award_type.awards.create_with_quantity(2, issuer: project.account, account: account)
+      create(:award, award_type: award_type, quantity: 2, amount: 1, issuer: project.account, account: account)
       expect(account.total_awards_remaining(project)).to eq(2)
       payment.quantity_redeemed = 2
       payment.total_value = 2
@@ -133,7 +133,7 @@ describe Payment do
 
     describe 'with quantity_redeemed, share_value, total_value, fee, and payment amount' do
       let!(:project) { create :project }
-      let!(:award_type) { create :award_type, amount: 1, project: project }
+      let!(:award_type) { create :award_type, project: project }
       let!(:account) { create :account }
       let!(:payment) do
         described_class.new(account: account,
@@ -146,8 +146,8 @@ describe Payment do
                             currency: 'USD')
       end
       let!(:award) do
-        award_type.awards.create_with_quantity(100, issuer: project.account,
-                                                    account: account)
+        create(:award, award_type: award_type, quantity: 100, amount: 1, issuer: project.account,
+                       account: account)
       end
 
       it 'is valid when they add up' do
@@ -176,7 +176,7 @@ describe Payment do
 
     describe 'has min total_value specific to the currency' do
       let!(:project) { create :project }
-      let!(:award_type) { create :award_type, amount: 1, project: project }
+      let!(:award_type) { create :award_type, project: project }
       let!(:account) { create :account }
       let!(:payment) do
         described_class.new(account: account,
@@ -189,8 +189,8 @@ describe Payment do
                             currency: 'USD')
       end
       let!(:award) do
-        award_type.awards.create_with_quantity(100, issuer: project.account,
-                                                    account: account)
+        create(:award, award_type: award_type, quantity: 100, amount: 1, issuer: project.account,
+                       account: account)
       end
 
       before do
@@ -236,7 +236,7 @@ describe Payment do
 
   describe '#truncate_total_value_to_currency' do
     let(:project) { create :project }
-    let(:award_type) { create :award_type, amount: 1, project: project }
+    let(:award_type) { create :award_type, project: project }
     let(:account) { create :account }
     let(:payment) { described_class.new(account: account, project: project, total_value: 0, share_value: 0, currency: 'USD') }
 
@@ -263,11 +263,11 @@ describe Payment do
 
   describe 'scopes' do
     let!(:project) { create :project, royalty_percentage: 100, payment_type: 'revenue_share' }
-    let!(:award_type) { create :award_type, amount: 1, project: project }
+    let!(:award_type) { create :award_type, project: project }
     let!(:account) { create :account }
     let!(:award1) do
-      award_type.awards.create_with_quantity(100, issuer: project.account,
-                                                  account: account)
+      create(:award, award_type: award_type, quantity: 100, amount: 1, issuer: project.account,
+                     account: account)
     end
     let!(:revenues) { project.revenues.create!(amount: 300, currency: 'USD', recorded_by: project.account) }
 

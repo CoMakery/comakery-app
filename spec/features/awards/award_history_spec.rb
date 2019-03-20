@@ -8,11 +8,11 @@ describe 'viewing projects, creating and editing', :js do
     let!(:other_account) { create(:account) }
     let!(:other_account_auth) { create(:authentication, account: other_account) }
     let!(:project) { create(:project, visibility: 'public_listed', account: owner) }
-    let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000) }
+    let!(:award_type) { create(:award_type, project: project, community_awardable: false) }
     let!(:channel) { create(:channel, project: project, team: team) }
-    let!(:community_award_type) { create(:award_type, project: project, community_awardable: true, amount: 10) }
-    let!(:award) { create(:award, award_type: award_type, account: other_account, channel: channel) }
-    let!(:community_award) { create(:award, award_type: community_award_type, account: owner) }
+    let!(:community_award_type) { create(:award_type, project: project, community_awardable: true) }
+    let!(:award) { create(:award, award_type: award_type, account: other_account, channel: channel, amount: 1000) }
+    let!(:community_award) { create(:award, award_type: community_award_type, account: owner, amount: 10) }
 
     before do
       team.build_authentication_team owner_auth
@@ -73,7 +73,7 @@ describe 'viewing projects, creating and editing', :js do
 
         it 'paginates when there are lots of awards' do
           (305 - project.awards.count).times do
-            create(:award, award_type: community_award_type, issuer: other_account, account: owner)
+            create(:award, award_type: community_award_type, issuer: other_account, account: owner, amount: 1000)
           end
 
           visit project_path(project)

@@ -142,31 +142,6 @@ describe Project do
     end
   end
 
-  describe 'associations' do
-    it 'has many award_types and accepts them as nested attributes' do
-      project = described_class.create!(description: 'foo',
-                                        title: 'This is a title',
-                                        account: create(:account),
-                                        token: create(:token),
-                                        slack_channel: 'slack_channel',
-                                        maximum_tokens: 10_000_000,
-                                        legal_project_owner: 'legal project owner',
-                                        payment_type: 'project_token',
-                                        award_types_attributes: [
-                                          { 'name' => 'Small award', 'amount' => '1000' },
-                                          { 'name' => '', 'amount' => '1000' },
-                                          { 'name' => 'Award', 'amount' => '' }
-                                        ],
-                                        long_id: SecureRandom.hex(20))
-
-      expect(project.award_types.count).to eq(1)
-      expect(project.award_types.first.name).to eq('Small award')
-      expect(project.award_types.first.amount).to eq(1000)
-      project.update(award_types_attributes: { id: project.award_types.first.id, _destroy: true })
-      expect(project.award_types.count).to eq(0)
-    end
-  end
-
   describe 'scopes' do
     describe '.with_last_activity_at' do
       it 'returns projects ordered by when the most recent award created_at, then by project created_at' do
@@ -212,18 +187,18 @@ describe Project do
 
     describe 'with project awards' do
       let!(:project1) { create :project }
-      let!(:project1_award_type) { (create :award_type, project: project1, amount: 3) }
+      let!(:project1_award_type) { (create :award_type, project: project1) }
       let(:project2) { create :project }
-      let!(:project2_award_type) { (create :award_type, project: project2, amount: 5) }
+      let!(:project2_award_type) { (create :award_type, project: project2) }
       let(:issuer) { create :account }
       let(:account) { create :account }
 
       before do
-        project1_award_type.awards.create_with_quantity(5, issuer: account, account: account)
-        project1_award_type.awards.create_with_quantity(5, issuer: account, account: account)
+        create(:award, award_type: project1_award_type, quantity: 5, amount: 3, issuer: account, account: account)
+        create(:award, award_type: project1_award_type, quantity: 5, amount: 3, issuer: account, account: account)
 
-        project2_award_type.awards.create_with_quantity(3, issuer: account, account: account)
-        project2_award_type.awards.create_with_quantity(7, issuer: account, account: account)
+        create(:award, award_type: project2_award_type, quantity: 3, amount: 5, issuer: account, account: account)
+        create(:award, award_type: project2_award_type, quantity: 7, amount: 5, issuer: account, account: account)
       end
 
       it 'returns the total amount of awards issued for the project' do
@@ -292,7 +267,7 @@ describe Project do
     describe 'with revenue sharing awards' do
       let!(:project) { create :project, payment_type: :revenue_share }
       let(:account) { create :account }
-      let(:project_award_type) { create :award_type, project: project, amount: 1 }
+      let(:project_award_type) { create :award_type, project: project }
 
       it 'with no revenue sharing percentage entered' do
         project.update(royalty_percentage: nil)
@@ -318,7 +293,7 @@ describe Project do
 
       it 'with percentage, revenue, and payments' do
         project.update(royalty_percentage: 10)
-        project_award_type.awards.create_with_quantity(9, issuer: project.account, account: account)
+        create(:award, award_type: project_award_type, quantity: 9, amount: 1, issuer: project.account, account: account)
         project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
         project.payments.new_with_quantity(quantity_redeemed: 2, account: account).save!
 
@@ -371,12 +346,12 @@ describe Project do
       end
 
       describe 'with percentage and revenue and shares' do
-        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let!(:project_award_type) { (create :award_type, project: project) }
         let(:issuer) { create :account }
         let(:account) { create :account }
 
         before do
-          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
+          create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -390,13 +365,13 @@ describe Project do
       end
 
       describe 'with payments made' do
-        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let!(:project_award_type) { (create :award_type, project: project) }
         let(:issuer) { create :account }
         let(:account) { create :account }
         let(:expected_revenue_per_share) { BigDecimal('3.628571428571428571') }
 
         before do
-          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
+          create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -466,12 +441,12 @@ describe Project do
       end
 
       describe 'with percentage and revenue and shares for USD' do
-        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let!(:project_award_type) { (create :award_type, project: project) }
         let(:issuer) { create :account }
         let(:account) { create :account }
 
         before do
-          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
+          create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -496,13 +471,13 @@ describe Project do
       end
 
       describe 'with percentage and revenue and shares for high precision currency (ETH)' do
-        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let!(:project_award_type) { (create :award_type, project: project) }
         let(:issuer) { create :account }
         let(:account) { create :account }
 
         before do
           project.token.update(denomination: 'ETH')
-          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
+          create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'ETH', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'ETH', recorded_by: project.account)
@@ -539,10 +514,10 @@ describe Project do
     let(:billion_minus_one) { BigDecimal('999,999,999') }
 
     let(:project) { create :project, payment_type: :revenue_share, royalty_percentage: 100, token: create(:token, denomination: :ETH) }
-    let(:big_award) { create :award_type, project: project, amount: billion_minus_one }
+    let(:big_award) { create :award_type, project: project }
 
     before do
-      big_award.awards.create_with_quantity(1, issuer: project.account, account: project.account)
+      create(:award, award_type: big_award, quantity: 1, amount: billion_minus_one, issuer: project.account, account: project.account)
 
       project.revenues.create(amount: billion_minus_one, currency: 'USD', recorded_by: project.account)
     end
@@ -572,12 +547,12 @@ describe Project do
 
   describe 'payments association methods' do
     let!(:project) { create :project, payment_type: :revenue_share }
-    let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+    let!(:project_award_type) { (create :award_type, project: project) }
     let(:issuer) { create :account }
     let!(:account) { create :account }
 
     before do
-      project_award_type.awards.create_with_quantity(5, issuer: project.account, account: account)
+      create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: project.account, account: account)
       project.update(royalty_percentage: 10)
       project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
       project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -621,8 +596,8 @@ describe Project do
     let(:issuer) { create :account }
     let!(:account) { create :account }
 
-    let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
-    let!(:awards) { project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account) }
+    let!(:project_award_type) { (create :award_type, project: project) }
+    let!(:awards) { create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account) }
 
     specify { expect(project.awards.size).to eq(1) }
 
@@ -719,10 +694,10 @@ describe Project do
 
   it 'total_month_awarded' do
     project = create :project
-    award_type = create :award_type, project: project, amount: 10
-    award_type2 = create :award_type, project: project, amount: 20
-    award = create :award, award_type: award_type
-    create :award, award_type: award_type2
+    award_type = create :award_type, project: project
+    award_type2 = create :award_type, project: project
+    award = create :award, award_type: award_type, amount: 10
+    create :award, award_type: award_type2, amount: 20
     expect(project.total_month_awarded).to eq 30
     award.update created_at: DateTime.current - 35.days
     expect(project.total_month_awarded).to eq 20
@@ -766,19 +741,19 @@ describe Project do
     let!(:account) { create :account }
     let!(:account1) { create :account }
     let!(:project) { create :project }
-    let!(:award_type) { create :award_type, amount: 10, project: project }
-    let!(:award_type1) { create :award_type, amount: 20, project: project }
-    let!(:other_award_type) { create :award_type, amount: 15 }
+    let!(:award_type) { create :award_type, project: project }
+    let!(:award_type1) { create :award_type, project: project }
+    let!(:other_award_type) { create :award_type }
 
     before do
-      create :award, award_type: award_type, account: account
-      create :award, award_type: award_type1, account: account1
+      create :award, award_type: award_type, amount: 10, account: account
+      create :award, award_type: award_type1, amount: 20, account: account1
     end
     it 'return project contributors sort by total amount' do
       expect(project.top_contributors.map(&:id)).to eq [account1.id, account.id]
     end
     it 'does not count other project award' do
-      create :award, award_type: other_award_type, account: account
+      create :award, award_type: other_award_type, amount: 15, account: account
       expect(project.top_contributors.map(&:id)).to eq [account1.id, account.id]
     end
     it 'sort by newest if have same total_amount' do
@@ -796,12 +771,12 @@ describe Project do
   describe '#awards_for_chart' do
     let!(:account) { create :account }
     let!(:project) { create :project }
-    let!(:award_type) { create :award_type, amount: 10, project: project }
+    let!(:award_type) { create :award_type, project: project }
 
     before do
-      8.times { create :award, award_type: award_type, account: account, created_at: 2.days.ago }
-      1.times { create :award, award_type: award_type, account: account, created_at: 3.days.ago }
-      3.times { create :award, award_type: award_type, account: account, created_at: 4.days.ago }
+      8.times { create :award, award_type: award_type, amount: 10, account: account, created_at: 2.days.ago }
+      1.times { create :award, award_type: award_type, amount: 10, account: account, created_at: 3.days.ago }
+      3.times { create :award, award_type: award_type, amount: 10, account: account, created_at: 4.days.ago }
     end
 
     it 'limit number of days by requested number of latest awards' do

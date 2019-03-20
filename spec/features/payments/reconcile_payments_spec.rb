@@ -19,7 +19,7 @@ describe 'when reconciling redeemed revenue shares' do
   end
   let!(:revenue) { create(:revenue, project: project, amount: 1234.5, currency: 'USD') }
 
-  let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1, name: 'Code Contribution') }
+  let!(:award_type) { create(:award_type, project: project, community_awardable: false, name: 'Code Contribution') }
 
   let!(:same_team_account) { create(:account, first_name: 'Bob', ethereum_wallet: "0x#{'1' * 40}") }
   let!(:same_team_account_authentication) { create(:authentication, account: same_team_account) }
@@ -34,8 +34,8 @@ describe 'when reconciling redeemed revenue shares' do
     stub_slack_channel_list
 
     channel = project.channels.create(team: team, channel_id: 'general')
-    create :award, quantity: 50, issuer: owner, account: owner, channel: channel, award_type: award_type
-    create :award, quantity: 50, issuer: owner, account: same_team_account, channel: channel, award_type: award_type
+    create :award, quantity: 50, issuer: owner, account: owner, channel: channel, award_type: award_type, amount: 1
+    create :award, quantity: 50, issuer: owner, account: same_team_account, channel: channel, award_type: award_type, amount: 1
 
     open(Rails.root.join('spec', 'fixtures', 'helmet_cat.png'), 'rb') do |file|
       owner.image = file

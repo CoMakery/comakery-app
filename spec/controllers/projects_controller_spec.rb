@@ -130,36 +130,28 @@ describe ProjectsController do
 
     it 'when valid, creates a project and associates it with the current account' do
       expect do
-        expect do
-          post :create, params: {
-            project: {
-              title: 'Project title here',
-              description: 'Project description here',
-              square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-              panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-              tracker: 'http://github.com/here/is/my/tracker',
-              contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
-              video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
-              slack_channel: 'slack_channel',
-              maximum_tokens: '150',
-              legal_project_owner: 'legal project owner',
-              payment_type: 'project_token',
-              token_id: create(:token).id,
-              mission_id: create(:mission).id,
-              require_confidentiality: false,
-              exclusive_contributions: false,
-              visibility: 'member',
-              award_types_attributes: [
-                { name: 'Community Award', amount: 10, community_awardable: true },
-                { name: 'Small Award', amount: 1000 },
-                { name: 'Big Award', amount: 2000 },
-                { name: '', amount: '' }
-              ]
-            }
+        post :create, params: {
+          project: {
+            title: 'Project title here',
+            description: 'Project description here',
+            square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+            panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+            tracker: 'http://github.com/here/is/my/tracker',
+            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
+            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
+            slack_channel: 'slack_channel',
+            maximum_tokens: '150',
+            legal_project_owner: 'legal project owner',
+            payment_type: 'project_token',
+            token_id: create(:token).id,
+            mission_id: create(:mission).id,
+            require_confidentiality: false,
+            exclusive_contributions: false,
+            visibility: 'member'
           }
-          expect(response.status).to eq(200)
-        end.to change { Project.count }.by(1)
-      end.to change { AwardType.count }.by(3)
+        }
+        expect(response.status).to eq(200)
+      end.to change { Project.count }.by(1)
 
       project = Project.last
       expect(project.title).to eq('Project title here')
@@ -170,10 +162,6 @@ describe ProjectsController do
       expect(project.contributor_agreement_url).to eq('http://docusign.com/here/is/my/signature')
       expect(project.video_url).to eq('https://www.youtube.com/watch?v=Dn3ZMhmmzK0')
       expect(project.maximum_tokens).to eq(150)
-      expect(project.award_types.first.name).to eq('Community Award')
-      expect(project.award_types.first.community_awardable).to eq(true)
-      expect(project.award_types.second.name).to eq('Small Award')
-      expect(project.award_types.second.community_awardable).to eq(false)
       expect(project.account_id).to eq(account.id)
     end
 
@@ -210,78 +198,59 @@ describe ProjectsController do
       expect(project.square_image).to be_a(Refile::File)
       expect(project.panoramic_image).to be_a(Refile::File)
       expect(project.tracker).to eq('http://github.com/here/is/my/tracker')
-      expect(project.award_types.first.name).to eq('Small Award')
-      expect(project.award_types.first.community_awardable).to eq(true)
       expect(project.account_id).to eq(account.id)
-      expect(project.award_types.size).to eq(2)
     end
 
     it 'when duplicated, redirects with error' do
       expect do
-        expect do
-          post :create, params: {
-            project: {
-              title: 'Project title here',
-              description: 'Project description here',
-              square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-              panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-              tracker: 'http://github.com/here/is/my/tracker',
-              contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
-              video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
-              slack_channel: 'slack_channel',
-              maximum_tokens: '150',
-              legal_project_owner: 'legal project owner',
-              payment_type: 'project_token',
-              token_id: create(:token).id,
-              mission_id: create(:mission).id,
-              long_id: '0',
-              require_confidentiality: false,
-              exclusive_contributions: false,
-              visibility: 'member',
-              award_types_attributes: [
-                { name: 'Community Award', amount: 10, community_awardable: true },
-                { name: 'Small Award', amount: 1000 },
-                { name: 'Big Award', amount: 2000 },
-                { name: '', amount: '' }
-              ]
-            }
+        post :create, params: {
+          project: {
+            title: 'Project title here',
+            description: 'Project description here',
+            square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+            panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+            tracker: 'http://github.com/here/is/my/tracker',
+            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
+            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
+            slack_channel: 'slack_channel',
+            maximum_tokens: '150',
+            legal_project_owner: 'legal project owner',
+            payment_type: 'project_token',
+            token_id: create(:token).id,
+            mission_id: create(:mission).id,
+            long_id: '0',
+            require_confidentiality: false,
+            exclusive_contributions: false,
+            visibility: 'member'
           }
-          expect(response.status).to eq(200)
-        end.to change { Project.count }.by(1)
-      end.to change { AwardType.count }.by(3)
+        }
+        expect(response.status).to eq(200)
+      end.to change { Project.count }.by(1)
 
       expect do
-        expect do
-          post :create, params: {
-            project: {
-              title: 'Project title here',
-              description: 'Project description here',
-              square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-              panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
-              tracker: 'http://github.com/here/is/my/tracker',
-              contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
-              video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
-              slack_channel: 'slack_channel',
-              maximum_tokens: '150',
-              legal_project_owner: 'legal project owner',
-              payment_type: 'project_token',
-              token_id: create(:token).id,
-              mission_id: create(:mission).id,
-              long_id: '0',
-              require_confidentiality: false,
-              exclusive_contributions: false,
-              visibility: 'member',
-              award_types_attributes: [
-                { name: 'Community Award', amount: 10, community_awardable: true },
-                { name: 'Small Award', amount: 1000 },
-                { name: 'Big Award', amount: 2000 },
-                { name: '', amount: '' }
-              ]
-            }
+        post :create, params: {
+          project: {
+            title: 'Project title here',
+            description: 'Project description here',
+            square_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+            panoramic_image: fixture_file_upload('helmet_cat.png', 'image/png', :binary),
+            tracker: 'http://github.com/here/is/my/tracker',
+            contributor_agreement_url: 'http://docusign.com/here/is/my/signature',
+            video_url: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0',
+            slack_channel: 'slack_channel',
+            maximum_tokens: '150',
+            legal_project_owner: 'legal project owner',
+            payment_type: 'project_token',
+            token_id: create(:token).id,
+            mission_id: create(:mission).id,
+            long_id: '0',
+            require_confidentiality: false,
+            exclusive_contributions: false,
+            visibility: 'member'
           }
-          expect(response.status).to eq(422)
-        end.not_to change { Project.count }
-      end.not_to change { AwardType.count }
+        }
+        expect(response.status).to eq(422)
+      end.not_to change { Project.count }
 
       expect(JSON.parse(response.body)['message']).to eq("Long identifier can't be blank or not unique")
     end
@@ -321,9 +290,9 @@ describe ProjectsController do
     let!(:fox_project) { create(:project, title: 'Foxes', description: 'Foxes with boxes', account: account) }
 
     describe '#index' do
-      let!(:cat_project_award) { create(:award, account: create(:account), award_type: create(:award_type, project: cat_project, amount: 200), created_at: 2.days.ago) }
-      let!(:dog_project_award) { create(:award, account: create(:account), award_type: create(:award_type, project: dog_project, amount: 100), created_at: 1.day.ago) }
-      let!(:yak_project_award) { create(:award, account: create(:account), award_type: create(:award_type, project: yak_project, amount: 300), created_at: 3.days.ago) }
+      let!(:cat_project_award) { create(:award, account: create(:account), amount: 200, award_type: create(:award_type, project: cat_project), created_at: 2.days.ago, updated_at: 2.days.ago) }
+      let!(:dog_project_award) { create(:award, account: create(:account), amount: 100, award_type: create(:award_type, project: dog_project), created_at: 1.day.ago, updated_at: 1.day.ago) }
+      let!(:yak_project_award) { create(:award, account: create(:account), amount: 300, award_type: create(:award_type, project: yak_project), created_at: 3.days.ago, updated_at: 3.days.ago) }
 
       before do
         expect(TopContributors).to receive(:call).and_return(double(success?: true, contributors: { cat_project => [], dog_project => [], yak_project => [] }))
@@ -379,149 +348,52 @@ describe ProjectsController do
 
     describe '#update' do
       it 'updates a project' do
-        small_award_type = cat_project.award_types.create!(name: 'Small Award', amount: 100, community_awardable: false)
-        medium_award_type = cat_project.award_types.create!(name: 'Medium Award', amount: 300)
-        destroy_me_award_type = cat_project.award_types.create!(name: 'Destroy Me Award', amount: 300)
-
         expect do
-          expect do
-            put :update, params: {
-              id: cat_project.to_param,
-              project: {
-                title: 'updated Project title here',
-                description: 'updated Project description here',
-                tracker: 'http://github.com/here/is/my/tracker/updated',
-                award_types_attributes: [
-                  { id: small_award_type.to_param, name: 'Small Award', amount: 150, community_awardable: true, _destroy: 'false' },
-                  { id: destroy_me_award_type.to_param, _destroy: '1' },
-                  { name: 'Big Award', amount: 500, _destroy: 'false' }
-                ]
-              }
+          put :update, params: {
+            id: cat_project.to_param,
+            project: {
+              title: 'updated Project title here',
+              description: 'updated Project description here',
+              tracker: 'http://github.com/here/is/my/tracker/updated'
             }
-            expect(response.status).to eq(200)
-          end.to change { Project.count }.by(0)
-        end.to change { AwardType.count }.by(0) # +1 and -1
+          }
+          expect(response.status).to eq(200)
+        end.to change { Project.count }.by(0)
 
         cat_project.reload
         expect(cat_project.title).to eq('updated Project title here')
         expect(cat_project.description).to eq('updated Project description here')
         expect(cat_project.tracker).to eq('http://github.com/here/is/my/tracker/updated')
-
-        award_types = cat_project.award_types.order(:amount)
-        expect(award_types.size).to eq(3)
-        expect(award_types.first.name).to eq('Small Award')
-        expect(award_types.first.amount).to eq(150)
-        expect(award_types.first.community_awardable).to eq(true)
-        expect(award_types.second.name).to eq('Medium Award')
-        expect(award_types.second.amount).to eq(300)
-        expect(award_types.third.name).to eq('Big Award')
-        expect(award_types.third.amount).to eq(500)
       end
 
       context 'with rendered views' do
         render_views
         it 'returns 422 when updating fails' do
-          small_award_type = cat_project.award_types.create!(name: 'Small Award', amount: 100)
-          medium_award_type = cat_project.award_types.create!(name: 'Medium Award', amount: 300)
-          destroy_me_award_type = cat_project.award_types.create!(name: 'Destroy Me Award', amount: 400)
-
           expect do
-            expect do
-              put :update, params: {
-                id: cat_project.to_param,
-                project: {
-                  title: '',
-                  description: 'updated Project description here',
-                  tracker: 'http://github.com/here/is/my/tracker/updated',
-                  legal_project_owner: 'legal project owner',
-                  payment_type: 'project_token',
-                  award_types_attributes: [
-                    { id: small_award_type.to_param, name: 'Small Award', amount: 150, _destroy: 'false' },
-                    { id: destroy_me_award_type.to_param, _destroy: '1' },
-                    { name: 'Big Award', amount: 500, _destroy: 'false' }
-                  ]
-                }
+            put :update, params: {
+              id: cat_project.to_param,
+              project: {
+                title: '',
+                description: 'updated Project description here',
+                tracker: 'http://github.com/here/is/my/tracker/updated',
+                legal_project_owner: 'legal project owner',
+                payment_type: 'project_token'
               }
-              expect(response.status).to eq(422)
-            end.not_to change { Project.count }
-          end.not_to change { AwardType.count }
+            }
+            expect(response.status).to eq(422)
+          end.not_to change { Project.count }
 
           project = assigns[:project]
           expect(JSON.parse(response.body)['message']).to eq("Title can't be blank")
           expect(project.title).to eq('')
           expect(project.description).to eq('updated Project description here')
           expect(project.tracker).to eq('http://github.com/here/is/my/tracker/updated')
-          award_types = project.award_types.sort_by(&:amount)
-          expect(award_types.size).to eq(4)
-
-          expect(award_types.first.name).to eq('Small Award')
-          expect(award_types.first.amount).to eq(150)
-          expect(award_types.second.name).to eq('Medium Award')
-          expect(award_types.second.amount).to eq(300)
-          expect(award_types.third.name).to eq('Destroy Me Award')
-          expect(award_types.third.amount).to eq(400)
-          expect(award_types.fourth.name).to eq('Big Award')
-          expect(award_types.fourth.amount).to eq(500)
         end
-      end
-
-      it "doesn't allow modification of award_types' amounts when the award_type has awards already sent" do
-        award_type = cat_project.award_types.create!(name: 'Medium Award', amount: 300).tap do |award_type|
-          create(:award, award_type: award_type)
-        end
-
-        expect do
-          expect do
-            put :update, params: {
-              id: cat_project.to_param,
-              project: {
-                legal_project_owner: 'legal project owner',
-                payment_type: 'project_token',
-                token_id: create(:token).id,
-                mission_id: create(:mission).id,
-                award_types_attributes: [
-                  { id: award_type.to_param, name: 'Bigger Award', amount: 500 }
-                ]
-              }
-            }
-            expect(response.status).to eq(422)
-            expect(JSON.parse(response.body)['message']).to eq("Award types amount can't be modified if there are existing awards")
-          end.not_to change { Project.count }
-        end.not_to change { AwardType.count }
-      end
-
-      it "does allow modification of award_types' non-amount attributes when the award_type has awards already sent" do
-        award_type = cat_project.award_types.create!(name: 'Medium Award', amount: 300, community_awardable: false)
-        create(:award, award_type: award_type)
-
-        expect do
-          expect do
-            put :update, params: {
-              id: cat_project.to_param,
-              project: {
-                award_types_attributes: [
-                  { id: award_type.to_param, name: 'Bigger Award', community_awardable: true, amount: award_type.amount }
-                ]
-              }
-            }
-            expect(response.status).to eq(200)
-          end.not_to change { Project.count }
-        end.not_to change { AwardType.count }
-
-        award_type.reload
-        expect(award_type.name).to eq('Bigger Award')
-        expect(award_type).to be_community_awardable
       end
     end
 
     describe '#show' do
-      let!(:cat_award_type) { create(:award_type, name: 'cat award type', project: cat_project, community_awardable: false) }
-      let!(:cat_award_type_community) { create(:award_type, name: 'cat award type community', project: cat_project, community_awardable: true) }
       let!(:awardable_auth) { create(:authentication) }
-
-      before do
-        expect(GetAwardableTypes).to receive(:call).and_return(double(awardable_types: [cat_award_type, cat_award_type_community], can_award: true))
-      end
 
       context 'when on team' do
         it 'allows team members to view projects and assigns awardable accounts from slack api and db and de-dups' do
@@ -532,7 +404,6 @@ describe ProjectsController do
           expect(assigns(:project)).to eq cat_project
           expect(assigns[:award]).to be_new_record
           expect(assigns[:can_award]).to eq(true)
-          expect(assigns[:awardable_types].map(&:name).sort).to eq(['cat award type', 'cat award type community'])
         end
       end
     end

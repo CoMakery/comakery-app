@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe PaymentDecorator do
   let(:project) { create :project, payment_type: 'revenue_share' }
-  let(:award_type) { create :award_type, amount: 1, project: project }
+  let(:award_type) { create :award_type, project: project }
   let(:account) { create :account, first_name: 'Diana', last_name: 'Ross' }
   let(:issuer) { create :account, first_name: 'Michael', last_name: 'Jackson' }
   let(:payment) { Payment.new(account: account, project: project, total_value: 100, share_value: 50, currency: 'USD', issuer: issuer) }

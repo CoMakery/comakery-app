@@ -9,7 +9,7 @@ describe PaymentPolicy do
   let!(:receiver) { create :account }
   let!(:receiver_auth) { create :authentication, account: receiver }
   let!(:my_public_project) { create(:project, title: 'public mine', account: account, public: true) }
-  let!(:award_type) { create :award_type, amount: 1000, project: my_public_project }
+  let!(:award_type) { create :award_type, project: my_public_project }
 
   let!(:payment_my_project) { build :project_payment, project: my_public_project }
   let!(:payment_not_my_project) { build :project_payment }
@@ -21,7 +21,7 @@ describe PaymentPolicy do
   before do
     team1.build_authentication_team authentication1
     team2.build_authentication_team authentication2
-    award_type.awards.create_with_quantity 1, issuer: account, account: receiver
+    create :award, award_type: award_type, quantity: 1, amount: 1000, issuer: account, account: receiver
   end
 
   permissions :create? do

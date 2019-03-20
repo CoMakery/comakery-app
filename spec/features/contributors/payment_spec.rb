@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'contributors', type: :feature, js: true do
   let!(:team) { create :team }
   let!(:project) { create(:project, title: 'Project that needs awards', payment_type: 'revenue_share', account: account, ethereum_enabled: true, ethereum_contract_address: '0x' + '2' * 40) }
-  let!(:small_award_type) { create(:award_type, project: project, name: 'Small', amount: 10) }
+  let!(:small_award_type) { create(:award_type, project: project, name: 'Small') }
   let!(:account) { create(:account, email: 'hubert@example.com') }
   let!(:other_account) { create(:account, nickname: 'sherman', email: 'sherman@example.com') }
 
@@ -18,7 +18,7 @@ describe 'contributors', type: :feature, js: true do
   describe 'when awards and payments have been issued' do
     before do
       stub_slack_user_list([])
-      small_award_type.awards.create_with_quantity(1, issuer: account, account: other_account)
+      create(:award, award_type: small_award_type, quantity: 1, amount: 10, issuer: account, account: other_account)
       project.revenues.create(amount: 100, currency: 'USD', recorded_by: account)
       project.payments.create_with_quantity(account: other_account,
                                             quantity_redeemed: 5)

@@ -19,7 +19,7 @@ describe 'when redeeming revenue shares for payments' do
   end
   let!(:revenue) { create(:revenue, project: project, amount: 1234.5, currency: 'USD') }
 
-  let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1, name: 'Code Contribution') }
+  let!(:award_type) { create(:award_type, project: project, community_awardable: false, name: 'Code Contribution') }
 
   let!(:same_team_account) { create(:account, ethereum_wallet: "0x#{'1' * 40}") }
   let!(:same_team_account_authentication) { create(:authentication, account: same_team_account) }
@@ -36,8 +36,8 @@ describe 'when redeeming revenue shares for payments' do
     stub_slack_channel_list
 
     channel = project.channels.create(team: team, channel_id: 'general')
-    create :award, quantity: 50, issuer: owner, account: owner, channel: channel, award_type: award_type
-    create :award, quantity: 50, issuer: owner, account: same_team_account, channel: channel, award_type: award_type
+    create :award, quantity: 50, issuer: owner, account: owner, channel: channel, award_type: award_type, amount: 1
+    create :award, quantity: 50, issuer: owner, account: same_team_account, channel: channel, award_type: award_type, amount: 1
   end
 
   it 'revenue page looks sensible when there are no entries recorded yet' do
@@ -122,11 +122,11 @@ describe 'when redeeming revenue shares for payments' do
     end
 
     it 'holdings value appears on the project show page' do
-      award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
+      create(:award, award_type: award_type, quantity: 7, amount: 1, issuer: owner, account: owner)
       visit project_path(project)
 
-      award_type.awards.create_with_quantity(1, issuer: owner, account: owner)
-      award_type.awards.create_with_quantity(5, issuer: owner, account: other_account)
+      create(:award, award_type: award_type, quantity: 1, amount: 1, issuer: owner, account: owner)
+      create(:award, award_type: award_type, quantity: 5, amount: 1, issuer: owner, account: other_account)
       visit project_path(project)
     end
   end

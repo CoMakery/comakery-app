@@ -126,9 +126,9 @@ describe AccountDecorator do
     let!(:contributor) { create(:account) }
     let!(:bystander) { create(:account) }
     let!(:project) { create :project, payment_type: 'revenue_share' }
-    let!(:award_type) { create(:award_type, amount: 10, project: project) }
-    let!(:award1) { create :award, account: contributor, issuer: project.account, award_type: award_type }
-    let!(:award2) { create :award, account: contributor, issuer: project.account, award_type: award_type, quantity: 3.5 }
+    let!(:award_type) { create(:award_type, project: project) }
+    let!(:award1) { create :award, account: contributor, issuer: project.account, award_type: award_type, amount: 10 }
+    let!(:award2) { create :award, account: contributor, issuer: project.account, award_type: award_type, quantity: 3.5, amount: 10 }
 
     specify do
       expect(bystander.decorate.total_awards_earned_pretty(project)).to eq '0'
@@ -144,9 +144,9 @@ describe AccountDecorator do
     let!(:bystander) { create(:account) }
     let!(:project) { create :project, payment_type: 'revenue_share'  }
     let!(:revenue) { create :revenue, amount: 1000, project: project }
-    let!(:award_type) { create(:award_type, amount: 10, project: project) }
-    let!(:award1) { create :award, account: contributor, issuer: project.account, award_type: award_type }
-    let!(:award2) { create :award, account: contributor, issuer: project.account, award_type: award_type }
+    let!(:award_type) { create(:award_type, project: project) }
+    let!(:award1) { create :award, account: contributor, issuer: project.account, award_type: award_type, amount: 10 }
+    let!(:award2) { create :award, account: contributor, issuer: project.account, award_type: award_type, amount: 10 }
     let!(:payment1) { project.payments.create_with_quantity(quantity_redeemed: 10, account: contributor) }
     let!(:payment2) { project.payments.create_with_quantity(quantity_redeemed: 1, account: contributor) }
 
@@ -163,11 +163,11 @@ describe AccountDecorator do
     let!(:contributor) { create(:account) }
     let!(:bystander) { create(:account) }
     let!(:project) { create :project, payment_type: 'revenue_share' }
-    let!(:award_type) { create(:award_type, amount: 10, project: project) }
+    let!(:award_type) { create(:award_type, project: project) }
     let!(:revenue) { create :revenue, amount: 1000, project: project }
 
     before do
-      award_type.awards.create_with_quantity(2, account: contributor, issuer: project.account)
+      create(:award, award_type: award_type, quantity: 2, amount: 10, account: contributor, issuer: project.account)
       project.payments.create_with_quantity(quantity_redeemed: 10, account: contributor)
       project.payments.create_with_quantity(quantity_redeemed: 1, account: contributor)
     end
@@ -185,11 +185,11 @@ describe AccountDecorator do
     let!(:contributor) { create(:account) }
     let!(:bystander) { create(:account) }
     let!(:project) { create :project, payment_type: 'revenue_share' }
-    let!(:award_type) { create(:award_type, amount: 10, project: project) }
+    let!(:award_type) { create(:award_type, project: project) }
     let!(:revenue) { create :revenue, amount: 1000, project: project }
 
     before do
-      award_type.awards.create_with_quantity(2, account: contributor, issuer: project.account)
+      create(:award, award_type: award_type, quantity: 2, amount: 10, account: contributor, issuer: project.account)
       project.payments.create_with_quantity(quantity_redeemed: 10, account: contributor)
       project.payments.create_with_quantity(quantity_redeemed: 1, account: contributor)
     end
@@ -207,9 +207,9 @@ describe AccountDecorator do
     let!(:contributor) { create(:account) }
     let!(:bystander) { create(:account) }
     let!(:project) { create :project, royalty_percentage: 100, payment_type: 'revenue_share' }
-    let!(:award_type) { create(:award_type, amount: 1, project: project) }
-    let!(:award1) { create :award, account: contributor, issuer: project.account, award_type: award_type, quantity: 50 }
-    let!(:award2) { create :award, account: contributor, issuer: project.account, award_type: award_type, quantity: 50 }
+    let!(:award_type) { create(:award_type, project: project) }
+    let!(:award1) { create :award, account: contributor, issuer: project.account, award_type: award_type, quantity: 50, amount: 1 }
+    let!(:award2) { create :award, account: contributor, issuer: project.account, award_type: award_type, quantity: 50, amount: 1 }
 
     describe 'no revenue' do
       specify { expect(bystander.decorate.total_revenue_paid_pretty(project)).to eq '$0.00' }

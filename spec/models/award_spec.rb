@@ -4,12 +4,16 @@ describe Award do
   describe 'associations' do
     it 'has the expected associations' do
       described_class.create!(
+        name: 'test',
+        why: 'test',
+        description: 'test',
+        requirements: 'test',
+        proof_link: 'http://none',
+        proof_id: 'xyz123',
         issuer: create(:account),
         account: create(:account),
         award_type: create(:award_type),
-        proof_id: 'xyz123',
-        total_amount: 100,
-        unit_amount: 50,
+        amount: 50,
         quantity: 2
       )
     end
@@ -17,16 +21,17 @@ describe Award do
 
   describe 'validations' do
     it 'requires things be present' do
-      expect(described_class.new(quantity: nil).tap(&:valid?).errors.full_messages)
-        .to match_array([
-                          "Award type can't be blank",
-                          "Quantity can't be blank",
-                          "Unit amount can't be blank",
-                          "Total amount can't be blank",
-                          'Unit amount is not a number',
-                          'Quantity is not a number',
-                          'Total amount is not a number'
-                        ])
+      expect(described_class.new(quantity: nil).tap(&:valid?).errors.full_messages).to match_array([
+                                                                                                     "Award type can't be blank",
+                                                                                                     "Name can't be blank",
+                                                                                                     "Why can't be blank",
+                                                                                                     "Description can't be blank",
+                                                                                                     "Requirements can't be blank",
+                                                                                                     "Proof link can't be blank",
+                                                                                                     'Proof link is invalid',
+                                                                                                     'Amount is not a number',
+                                                                                                     'Total amount must be greater than 0'
+                                                                                                   ])
     end
     describe 'awards amounts must be > 0' do
       let(:award) { build :award }
@@ -38,15 +43,20 @@ describe Award do
       end
 
       specify do
-        award.total_amount = -1
+        award.amount = -1
         expect(award.valid?).to eq(false)
-        expect(award.errors[:total_amount]).to eq(['must be greater than 0'])
+        expect(award.errors[:amount]).to eq(['must be greater than 0'])
       end
+    end
+
+    describe 'total_amount should be calculated based on amount and quantity' do
+      let(:award) { build :award }
 
       specify do
-        award.unit_amount = -1
-        expect(award.valid?).to eq(false)
-        expect(award.errors[:unit_amount]).to eq(['must be greater than 0'])
+        award.quantity = 2
+        award.amount = 100
+        expect(award.valid?).to eq(true)
+        expect(award.total_amount).to eq 200
       end
     end
 
@@ -150,13 +160,13 @@ describe Award do
 
   describe '#total_amount should no be round' do
     specify do
-      award = create :award, quantity: 1.4, unit_amount: 1, total_amount: 1.4
+      award = create :award, quantity: 1.4, amount: 1
       award.reload
       expect(award.total_amount).to eq(0.14e1)
     end
 
     specify do
-      award = create :award, quantity: 1.5, unit_amount: 1, total_amount: 1.5
+      award = create :award, quantity: 1.5, amount: 1
       award.reload
       expect(award.total_amount).to eq(0.15e1)
     end
@@ -169,17 +179,17 @@ describe Award do
 
     describe 'with project awards' do
       let!(:project1) { create :project, token: create(:token, coin_type: 'erc20') }
-      let!(:project1_award_type) { (create :award_type, project: project1, amount: 3) }
+      let!(:project1_award_type) { (create :award_type, project: project1) }
       let(:project2) { create :project, token: create(:token, coin_type: 'erc20') }
-      let!(:project2_award_type) { (create :award_type, project: project2, amount: 5) }
+      let!(:project2_award_type) { (create :award_type, project: project2) }
       let(:account) { create :account }
 
       before do
-        project1_award_type.awards.create_with_quantity(5, issuer: project1.account, account: account)
-        project1_award_type.awards.create_with_quantity(5, issuer: project1.account, account: account)
+        create(:award, award_type: project1_award_type, quantity: 5, amount: 3, issuer: project1.account, account: account)
+        create(:award, award_type: project1_award_type, quantity: 5, amount: 3, issuer: project1.account, account: account)
 
-        project2_award_type.awards.create_with_quantity(3, issuer: project2.account, account: account)
-        project2_award_type.awards.create_with_quantity(7, issuer: project2.account, account: account)
+        create(:award, award_type: project2_award_type, quantity: 3, amount: 5, issuer: project2.account, account: account)
+        create(:award, award_type: project2_award_type, quantity: 7, amount: 5, issuer: project2.account, account: account)
       end
 
       it 'is able to scope to a project' do
@@ -201,9 +211,9 @@ describe Award do
     let!(:account1) { create :account }
     let!(:authentication1) { create :authentication, account: account1, provider: 'discord' }
     let!(:project) { create :project, account: account, token: create(:token, coin_type: 'erc20') }
-    let!(:award_type) { (create :award_type, project: project, amount: 3) }
-    let!(:award) { create :award, award_type: award_type, issuer: account, account: account }
-    let!(:award1) { create :award, award_type: award_type, issuer: account, account: account1 }
+    let!(:award_type) { (create :award_type, project: project) }
+    let!(:award) { create :award, award_type: award_type, amount: 3, issuer: account, account: account }
+    let!(:award1) { create :award, award_type: award_type, amount: 3, issuer: account, account: account1 }
 
     before do
       team.build_authentication_team authentication
@@ -233,7 +243,7 @@ describe Award do
     end
 
     it 'round total_amount' do
-      award.total_amount = 2.2
+      award.amount = 2.2
       award.save
       expect(award.reload.total_amount).to eq 0.22e1
     end
@@ -304,7 +314,7 @@ describe Award do
     it 'sends a Discord notification' do
       stub_discord_channels
       channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
-      award = create :award, award_type: award_type, issuer: account, channel: channel
+      award = create :award, award_type: award_type, amount: 3, issuer: account, channel: channel
       allow(award.discord_client).to receive(:send_message)
       award.send_award_notifications
       expect(award.discord_client).to have_received(:send_message)

@@ -6,10 +6,10 @@ describe 'awarding up to limit of maximum awardable tokens for a project' do
   let!(:awardee_auth) { create(:sb_authentication, account: create(:account, ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
   let!(:project) { create(:sb_project, account: current_auth.account, maximum_tokens: 3, maximum_royalties_per_month: 2) }
   let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 1, maximum_royalties_per_month: 1) }
-  let!(:award_type) { create(:award_type, project: project, amount: 1) }
+  let!(:award_type) { create(:award_type, project: project) }
   let!(:channel) { create(:channel, team: team, project: project, name: 'channel') }
   let!(:channel1) { create(:channel, team: team, project: project1, name: 'channel1') }
-  let!(:award_type1) { create(:award_type, project: project1, amount: 1) }
+  let!(:award_type1) { create(:award_type, project: project1) }
 
   before do
     team.build_authentication_team current_auth

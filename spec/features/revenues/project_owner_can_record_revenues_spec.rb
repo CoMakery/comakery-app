@@ -9,7 +9,7 @@ require 'rails_helper'
 #   let!(:other_account) { create(:account) }
 #   let!(:other_account_auth) { create(:authentication, account: other_account) }
 #   let!(:project) { create(:project, visibility: 'public_listed', payment_type: 'revenue_share', require_confidentiality: false, account: owner) }
-#   let!(:award_type) { create(:award_type, project: project, community_awardable: false, amount: 1000, name: 'Code Contribution') }
+#   let!(:award_type) { create(:award_type, project: project, community_awardable: false, name: 'Code Contribution') }
 
 #   before do
 #     team.build_authentication_team owner_auth
@@ -113,7 +113,7 @@ require 'rails_helper'
 #     project.update(royalty_percentage: 10)
 #     project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
 #     project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
-#     award_type.awards.create_with_quantity(1.01, issuer: owner, account: owner)
+#     award_type.awards.create(quantity: 1.01, amount: 1000, issuer: owner, account: owner)
 
 #     login owner
 #     visit project_path(project)
@@ -141,18 +141,18 @@ require 'rails_helper'
 #     end
 
 #     it 'holdings value appears on the project show page' do
-#       award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
+#       award_type.awards.create(quantity: 7, amount: 1000, issuer: owner, account: owner)
 #       visit project_path(project)
 
-#       award_type.awards.create_with_quantity(5, issuer: owner, account: other_account)
+#       award_type.awards.create(quantity: 5, amount: 1000, issuer: owner, account: other_account)
 #       visit project_path(project)
 #     end
 #   end
 
 #   it 'updates the contributors page', js: true do
 #     project.update(royalty_percentage: 10)
-#     award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
-#     award_type.awards.create_with_quantity(5, issuer: owner, account: other_account)
+#     award_type.awards.create(quantity: 7, amount: 1000, issuer: owner, account: owner)
+#     award_type.awards.create(quantity: 5, amount: 1000, issuer: owner, account: other_account)
 
 #     login owner
 #     visit project_path(project)
@@ -185,7 +185,7 @@ require 'rails_helper'
 #   describe 'it displays correct currency precision for' do
 #     before do
 #       login owner
-#       award_type.awards.create_with_quantity(7, issuer: owner, account: owner)
+#       award_type.awards.create(quantity: 7, amount: 1000, issuer: owner, account: owner)
 #     end
 
 #     it 'usd' do

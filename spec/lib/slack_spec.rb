@@ -10,7 +10,7 @@ describe Comakery::Slack do
   let!(:project) { create :project }
   let!(:channel) { create :channel, project: project, team: team, name: 'super sweet slack channel' }
   let!(:award_type) { create :award_type, project: project }
-  let!(:award) { create :award, channel: channel, award_type: award_type, issuer: issuer, account: recipient, quantity: 2 }
+  let!(:award) { create :award, channel: channel, award_type: award_type, issuer: issuer, account: recipient, amount: 2674 }
   let!(:message) { AwardMessage.call(award: award).notifications_message }
   let!(:slack) { described_class.new(slack_token) }
   let!(:slack_token) { issuer_authentication.token }
@@ -59,15 +59,7 @@ describe Comakery::Slack do
 
     describe 'when the award has a description' do
       it 'includes award description' do
-        expect(message).to match /for "Great work"/
-      end
-    end
-
-    describe 'when the award has no description' do
-      before { award.update! description: '' }
-      it 'includes award description' do
-        message = AwardMessage.call(award: award).notifications_message
-        expect(message).not_to match /for ".*"/m
+        expect(message).to match /for "none"/
       end
     end
 
