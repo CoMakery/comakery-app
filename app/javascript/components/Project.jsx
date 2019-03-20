@@ -34,7 +34,9 @@ export default class Project extends React.Component {
 
   componentDidMount() {
     // draw piecharts
-    this.drawChart()
+    if (this.chartData && this.chartData.length > 0) {
+      this.drawChart()
+    }
   }
 
   drawChart() {
@@ -314,7 +316,9 @@ Project.defaultProps = {
     contributors: [],
     chartData   : []
   },
-  missionData     : {},
+  missionData: {
+    missionUrl: ''
+  },
   tokenData       : {},
   interested      : false,
   csrfToken       : '',

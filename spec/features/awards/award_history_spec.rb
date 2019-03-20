@@ -23,37 +23,7 @@ describe 'viewing projects, creating and editing', :js do
       stub_slack_channel_list
     end
 
-    context 'when logged in as non-owner' do
-      context 'viewing projects' do
-        before { login(owner) }
-
-        it 'shows radio buttons for community awardable awards' do
-          visit project_path(project)
-
-          within('.award-types') do
-            expect(page.all('input[type=text]').size).to eq(2)
-            expect(page).to have_content 'Communication Channel'
-            expect(page).to have_content 'Email Address'
-            expect(page).to have_content 'Award Type'
-            expect(page).to have_content 'Description'
-          end
-        end
-      end
-    end
-
     context 'when logged out' do
-      context 'viewing projects' do
-        it "doesn't show forms for awarding" do
-          visit project_path(project)
-
-          within('.award-types') do
-            expect(page.all('input[type=text]').size).to eq(0)
-            expect(page).not_to have_content 'User'
-            expect(page).not_to have_content 'Description'
-          end
-        end
-      end
-
       context 'viewing awards' do
         it 'lets people view awards' do
           visit project_path(project)

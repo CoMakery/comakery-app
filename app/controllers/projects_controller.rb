@@ -74,18 +74,13 @@ class ProjectsController < ApplicationController
     authorize @project
     set_award
 
-    token = @project.mission.token.decorate
+    token = @project.mission&.token&.decorate
+    mission = @project.mission
     @props = {
       interested: current_account&.interested?(@project.id),
       project_data: project_props(@project),
-      mission_data: @project.mission.as_json(only: %i[id name]).merge(
-        image_url: @project.mission.image.present? ? Refile.attachment_url(@project.mission, :image, :fill, 150, 100) : nil,
-        mission_url: mission_path(@project.mission)
-      ),
-      token_data: token.as_json(only: %i[name symbol coin_type]).merge(
-        image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
-        contract_url: token.ethereum_contract_explorer_url
-      ),
+      mission_data: mission_props(mission),
+      token_data: token_props(token),
       csrf_token: form_authenticity_token,
       contributors_path: project_contributors_path(@project.show_id),
       awards_path: project_awards_path(@project.show_id),
@@ -244,5 +239,27 @@ class ProjectsController < ApplicationController
       contributors: project.top_contributors.map { |contributor| contributor_props(contributor) },
       chart_data: chart_data
     )
+  end
+
+  def mission_props(mission)
+    if mission.present?
+      mission.as_json(only: %i[id name]).merge(
+        image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 150, 100) : nil,
+        mission_url: mission_path(mission)
+      )
+    else
+      {}
+    end
+  end
+
+  def token_props(token)
+    if token.present?
+      token.as_json(only: %i[name symbol coin_type]).merge(
+        image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
+        contract_url: token.ethereum_contract_explorer_url
+      )
+    else
+      {}
+    end
   end
 end

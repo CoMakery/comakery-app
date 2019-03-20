@@ -7,7 +7,11 @@ exports[`Project renders correctly without props 1`] = `
   csrfToken=""
   editPath={null}
   interested={false}
-  missionData={Object {}}
+  missionData={
+    Object {
+      "missionUrl": "",
+    }
+  }
   projectData={
     Object {
       "chartData": Array [],
@@ -40,6 +44,7 @@ exports[`Project renders correctly without props 1`] = `
         >
           <a
             className="project-header__menu__back"
+            href=""
           >
             <Icon
               className=""
