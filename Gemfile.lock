@@ -376,6 +376,8 @@ GEM
       actionpack (~> 5.x, >= 5.0.1)
       actionview (~> 5.x, >= 5.0.1)
       activesupport (~> 5.x)
+    rails-data-migrations (1.1.0)
+      rails (>= 4.0.0)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -610,6 +612,7 @@ DEPENDENCIES
   rack_session_access
   rails (~> 5.1.4)
   rails-controller-testing
+  rails-data-migrations
   rails-html-sanitizer (~> 1.0.4)
   rails_12factor
   react-rails

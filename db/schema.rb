@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190226193253) do
+ActiveRecord::Schema.define(version: 20190319211008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -249,6 +249,10 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.integer "recorded_by_id"
     t.index ["project_id"], name: "index_revenues_on_project_id"
     t.index ["recorded_by_id"], name: "index_revenues_on_recorded_by_id"
+  end
+
+  create_table "specialties", force: :cascade do |t|
+    t.string "name"
   end
 
   create_table "teams", force: :cascade do |t|

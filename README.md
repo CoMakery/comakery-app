@@ -98,15 +98,23 @@ JS tests via Jest: `yarn test`
 
 To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
 
-## Deploying to Heroku with app.json
-- [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
-- During setup update API keys and secrets according to environment
-- After deployment manually update formation and addons plans according to environment
-- Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
-- Setup DNS and install following addons in case of production or staging environment:
-  - https://elements.heroku.com/addons/ssl
-  - https://elements.heroku.com/addons/expeditedssl
-- Update Cloudfront and Airbrake settings
+## Data migrations
+
+We are using the data-migrate gem to load static table data or transform data. data migrate works similarly to schema migrations - they run in sequence, are run only once, track the last database migration that was run in the database, and can be run with rake.
+
+Data migration scripts are located in `db/data_migrations`. 
+
+If you need to migrate data or add static table data run
+```
+bundle exec rake data:migrate
+```
+
+To generate a new data migration run
+```
+rails g data_migration add_this_to_that
+```
+
+More documentation is [here](https://github.com/ilyakatz/data-migrate)
 
 ## Deploying to heroku staging
 
@@ -145,18 +153,28 @@ Set an environment variable called `BASIC_AUTH` in the format
 `<username>:<password>` (e.g., `chewie:r0000ar`). Basic auth will be enabled if
 that environment variable exists.
 
+## Deploying to Heroku with app.json
+- [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
+- During setup update API keys and secrets according to environment
+- After deployment manually update formation and addons plans according to environment
+- Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
+- Setup DNS and install following addons in case of production or staging environment:
+  - https://elements.heroku.com/addons/ssl
+  - https://elements.heroku.com/addons/expeditedssl
+- Update Cloudfront and Airbrake settings
+
 ## Sidekiq
 
 Visit <COMAKERY_INSTANCE>/admin/sidekiq
 
 Username admin, password is in heroku app settings
 
-## Scheduled Jobs
+### Scheduled Jobs
 
 On staging and production, we use Heroku Scheduler to run `rails runner bin/patch_ethereum_awards`
 on a daily basis.  This task backfills "pending" ethereum awards, if they are no longer retired by Sidekiq.
 
-## Clear and regenerate dead sidekiq jobs
+### Clear and regenerate dead sidekiq jobs
 
 If you are getting an out of memory error for Redis. The processed queue can take up a lot of memory. It can be cleared with `Sidekiq::Stats.new.reset`
 
@@ -175,7 +193,7 @@ You can regenerated the jobs manually with:
 heroku run bundle exec rails runner bin/patch_ethereum_awards --app comakery-staging
 ```
 
-## Redis Configuration On Heroku
+### Redis Configuration On Heroku
 
 You can find the configuration details at the Heroku Overview Redis To Go link. Notice that this is **redis to go** and **NOT Heroku Redis**. This means that Heroku Redis commands will not work.
 
@@ -198,7 +216,7 @@ More info with:
 heroku addons:info redistogo-spherical-15306
 ```
 
-## Flushing Redis Directly
+### Flushing Redis Directly
 
 Hopefully you won't need this...
 

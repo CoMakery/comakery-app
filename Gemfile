@@ -57,6 +57,7 @@ gem 'uglifier'
 gem 'underscore-rails'
 gem 'web3-eth'
 gem 'webpacker'
+gem 'rails-data-migrations'
 
 group(:scripts) do
   gem 'easy_shell'
