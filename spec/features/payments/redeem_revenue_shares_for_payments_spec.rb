@@ -303,8 +303,6 @@ describe 'when redeeming revenue shares for payments' do
     login owner
     visit project_path(project)
 
-    expect(page).not_to have_link 'Payments'
-
     visit project_payments_path(project)
     expect(page).to have_current_path(root_path)
   end
@@ -314,8 +312,6 @@ describe 'when redeeming revenue shares for payments' do
 
     login owner
     visit project_path(project)
-
-    expect(page).not_to have_link 'Payments'
 
     visit project_payments_path(project)
     expect(page).to have_current_path(root_path)
@@ -336,7 +332,6 @@ describe 'when redeeming revenue shares for payments' do
       project.update_attribute(:require_confidentiality, true)
 
       visit project_path(project)
-      expect(page).not_to have_link 'Payments'
 
       visit project_payments_path(project)
       expect(page).to have_current_path(root_path)
@@ -346,7 +341,6 @@ describe 'when redeeming revenue shares for payments' do
       project.member!
 
       visit project_path(project)
-      expect(page).not_to have_link 'Payments'
 
       visit project_payments_path(project)
       expect(page).to have_current_path('/404.html')

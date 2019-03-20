@@ -66,18 +66,4 @@ describe 'awarding users' do
     expect(page).to have_content '1,000'
     expect(page).to have_content 'Send'
   end
-
-  it 'awarding a user with an ethereum account' do
-    expect_any_instance_of(Award).to receive(:send_award_notifications)
-    create(:account, nickname: 'bobjohnson', email: 'bobjohnson@example.com', ethereum_wallet: '0x' + 'a' * 40)
-
-    login(account)
-    visit project_path(project)
-    select "[slack] #{team.name} ##{channel.name}", from: 'Communication Channel'
-    fill_in 'Email Address', with: 'U99M9QYFQ'
-    click_button 'Send'
-
-    expect(page).to have_content 'Successfully sent award to bobjohnson'
-    expect(EthereumTokenIssueJob.jobs.length).to eq(0)
-  end
 end
