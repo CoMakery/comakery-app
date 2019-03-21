@@ -95,7 +95,7 @@ class AwardsController < ApplicationController
       award = Award.find_by confirm_token: params[:token]
       if award
         flash[:notice] = confirm_message(award.project) if award.confirm!(current_account)
-        redirect_to project_overview_path(award.project)
+        redirect_to project_path(award.project)
       else
         flash[:error] = 'Invalid award token!'
         redirect_to root_path

@@ -9,11 +9,95 @@ describe ProjectsController do
   let!(:admin_account) { create :account, comakery_admin: true }
   let!(:authentication1) { create(:authentication, account: account) }
 
+  let!(:discord_team) { create :team, provider: 'discord' }
+  let!(:issuer) { create(:authentication) }
+  let!(:issuer_discord) { create(:authentication, account: issuer.account, provider: 'discord') }
+  let!(:receiver) { create(:authentication, account: create(:account, ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
+  let!(:receiver_discord) { create(:authentication, account: receiver.account, provider: 'discord') }
+  let!(:other_auth) { create(:authentication) }
+  let!(:different_team_account) { create(:authentication) }
+
+  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+
   before do
     team.build_authentication_team authentication
     team.build_authentication_team authentication1
     login(account)
     stub_slack_channel_list
+  end
+
+  describe '#awards' do
+    let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_auth.account) }
+    let!(:different_project_award) { create(:award, award_type: create(:award_type, project: create(:project)), account: other_auth.account) }
+
+    context 'when logged in' do
+      before { login(issuer.account) }
+
+      it 'shows awards for current project' do
+        get :awards, params: { id: project.to_param }
+
+        expect(response.status).to eq(200)
+        expect(assigns[:project]).to eq(project)
+        expect(assigns[:awards]).to match_array([award])
+      end
+
+      it 'shows metamask awards' do
+        stub_token_symbol
+        project.token.update ethereum_contract_address: '0x' + 'a' * 40
+        get :awards, params: { id: project.to_param }
+
+        expect(response.status).to eq(200)
+        expect(assigns[:project]).to eq(project)
+        expect(assigns[:awards]).to match_array([award])
+      end
+    end
+
+    context 'when logged out' do
+      context 'with a public project' do
+        let!(:public_project) { create(:project, account: issuer.account, visibility: 'public_listed') }
+        let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
+
+        it 'shows awards for public projects' do
+          get :awards, params: { id: public_project.id }
+
+          expect(response.status).to eq(200)
+          expect(assigns[:project]).to eq(public_project)
+          expect(assigns[:awards]).to match_array([public_award])
+        end
+      end
+
+      context 'with a private project' do
+        let!(:private_project) { create(:project, account: issuer.account, public: false) }
+        let!(:private_award) { create(:award, award_type: create(:award_type, project: private_project)) }
+
+        it 'sends you away' do
+          get :awards, params: { id: private_project.to_param }
+
+          expect(response.status).to eq(302)
+          expect(response).to redirect_to(root_path)
+        end
+      end
+    end
+
+    describe 'checks policy' do
+      before do
+        allow(controller).to receive(:policy_scope).and_call_original
+        allow(controller).to receive(:authorize).and_call_original
+      end
+
+      specify do
+        login issuer.account
+
+        get :awards, params: { id: project.id }
+        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
+      end
+
+      specify do
+        project.public_listed!
+        get :awards, params: { id: project.id }
+        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
+      end
+    end
   end
 
   describe '#unlisted' do

@@ -107,7 +107,6 @@ class Mom
 
   def award(**attrs)
     params = {
-      issuer: create(:account),
       name: 'none',
       description: 'none',
       why: 'none',
@@ -122,6 +121,7 @@ class Mom
 
     params[:award_type] ||= create(:award_type)
     params[:account] ||= create(:account)
+    params[:issuer] ||= create(:account)
 
     Award.new(params)
   end
