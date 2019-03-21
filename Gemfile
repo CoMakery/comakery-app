@@ -35,6 +35,7 @@ gem 'puma'
 gem 'pundit'
 gem 'rack', '>= 2.0.6'
 gem 'rails', '~>5.1.4'
+gem 'rails-data-migrations'
 gem 'rails-html-sanitizer', '~> 1.0.4'
 gem 'rails_12factor', group: :production
 gem 'react-rails'
@@ -57,7 +58,6 @@ gem 'uglifier'
 gem 'underscore-rails'
 gem 'web3-eth'
 gem 'webpacker'
-gem 'rails-data-migrations'
 
 group(:scripts) do
   gem 'easy_shell'
