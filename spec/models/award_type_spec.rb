@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe AwardType do
+  it { is_expected.to belong_to(:specialty) }
+
   describe '#validations' do
     it 'requires many attributes' do
       award_type = described_class.new

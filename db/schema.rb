@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190226193253) do
+ActiveRecord::Schema.define(version: 20190321005006) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.string "dribble_url"
     t.string "behance_url"
     t.string "tezos_wallet"
+    t.integer "specialty_id"
     t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
@@ -110,6 +111,7 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
     t.boolean "disabled"
+    t.integer "specialty_id"
     t.index ["project_id"], name: "index_award_types_on_project_id"
   end
 
@@ -145,12 +147,16 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.index ["team_id"], name: "index_channels_on_team_id"
   end
 
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
   create_table "interests", force: :cascade do |t|
     t.bigint "account_id"
     t.string "protocol"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "project_id"
+    t.integer "specialty_id"
     t.index ["account_id"], name: "index_interests_on_account_id"
     t.index ["project_id"], name: "index_interests_on_project_id"
   end
@@ -249,6 +255,10 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.integer "recorded_by_id"
     t.index ["project_id"], name: "index_revenues_on_project_id"
     t.index ["recorded_by_id"], name: "index_revenues_on_recorded_by_id"
+  end
+
+  create_table "specialties", force: :cascade do |t|
+    t.string "name"
   end
 
   create_table "teams", force: :cascade do |t|
