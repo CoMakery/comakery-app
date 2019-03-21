@@ -1,5 +1,9 @@
 # Think of the contents of this table as an enumeration (enum) that can serve as a join between tables
 class Specialty < ActiveRecord::Base
+  has_many :accounts
+  has_many :interests
+  has_many :award_types
+
   validates :name, uniqueness: true
 
   # To be called when the application loads in config/initalizers/specialty_values

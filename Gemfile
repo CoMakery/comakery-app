@@ -96,6 +96,7 @@ group(:test) do
   gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'webmock'
 end

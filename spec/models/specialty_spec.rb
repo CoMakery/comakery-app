@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 describe Specialty do
+  it { is_expected.to have_many(:accounts) }
+  it { is_expected.to have_many(:interests) }
+  it { is_expected.to have_many(:award_types) }
+
   describe '#initializer_setup' do
     before do
       described_class.initializer_setup

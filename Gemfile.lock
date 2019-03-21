@@ -479,6 +479,8 @@ GEM
       ruby_http_client (~> 3.2)
       sinatra (>= 1.4.7, < 3)
     shellany (0.0.1)
+    shoulda-matchers (3.1.3)
+      activesupport (>= 4.0.0)
     sidekiq (5.2.1)
       connection_pool (~> 2.2, >= 2.2.2)
       rack-protection (>= 1.5.0)
@@ -631,6 +633,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   sendgrid-ruby
+  shoulda-matchers
   sidekiq
   sidekiq-failures
   simplecov
@@ -651,4 +654,4 @@ RUBY VERSION
    ruby 2.4.4p296
 
 BUNDLED WITH
-   1.17.1
+   2.0.1

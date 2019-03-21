@@ -33,7 +33,7 @@ hide stereotypes
     // note this is not the same as interests
   }
   ACCOUNTS -right-{ INTERESTS
-  ACCOUNTS -- SPECIALTIES: 1:1
+  ACCOUNTS }-- SPECIALTIES
   INTERESTS }-right- PROJECTS
   PROJECTS -right-{ BATCHES
   INTERESTS }-- SPECIALTIES
