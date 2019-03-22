@@ -124,17 +124,16 @@ describe 'precise financial calculations across the integrated revenue sharing c
 
     let!(:code_award_type) do
       project.award_types.create(community_awardable: false,
-                                 amount: 1,
                                  name: 'Code Contribution')
     end
     let!(:same_team_award) do
-      create(:award, award_type: code_award_type, quantity: 50,
+      create(:award, award_type: code_award_type, quantity: 50, amount: 1,
                      issuer: owner,
                      account: same_team_account)
     end
 
     let!(:owner_award) do
-      create(:award, award_type: code_award_type, quantity: 50,
+      create(:award, award_type: code_award_type, quantity: 50, amount: 1,
                      issuer: owner,
                      account: owner)
     end
@@ -176,17 +175,16 @@ describe 'precise financial calculations across the integrated revenue sharing c
 
     let!(:code_award_type) do
       project.award_types.create(community_awardable: false,
-                                 amount: 1,
                                  name: 'Code Contribution')
     end
     let!(:same_team_award) do
-      create(:award, award_type: code_award_type, quantity: 50_000_000,
+      create(:award, award_type: code_award_type, quantity: 50, amount: 1,
                      issuer: owner,
                      account: same_team_account)
     end
 
     let!(:owner_award) do
-      create(:award, award_type: code_award_type, quantity: 50_000_000,
+      create(:award, award_type: code_award_type, quantity: 50, amount: 1,
                      issuer: owner,
                      account: owner)
     end
@@ -218,17 +216,16 @@ describe 'precise financial calculations across the integrated revenue sharing c
 
     let!(:code_award_type) do
       project.award_types.create(community_awardable: false,
-                                 amount: 1,
                                  name: 'Code Contribution')
     end
     let!(:same_team_award) do
-      create(:award, award_type: code_award_type, quantity: 50_000_000,
+      create(:award, award_type: code_award_type, quantity: 50, amount: 1,
                      issuer: owner,
                      account: same_team_account)
     end
 
     let!(:owner_award) do
-      create(:award, award_type: code_award_type, quantity: 50_000_000,
+      create(:award, award_type: code_award_type, quantity: 50, amount: 1,
                      issuer: owner,
                      account: owner)
     end

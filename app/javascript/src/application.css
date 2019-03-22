@@ -308,17 +308,12 @@ a.header--nav--links--current {
   text-decoration: none;
 }
 
-.layout--content--title--nav a {
-  color: #9b9b9b;
-}
-
-.layout--content--title--nav a:hover,
-.layout--content--title--nav a:focus {
-  text-decoration: underline;
-}
-
 .layout--content--title--nav__current a {
   color: var(--azure);
+}
+
+.layout--content--title--nav a {
+  color: #9b9b9b;
 }
 
 .layout--content--wrapper {
@@ -401,15 +396,6 @@ a.header--nav--links--current {
     margin-left: 0;
     margin-bottom: 40px;
   }
-}
-
-.footer--content--nav a {
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  opacity: 0.5;
-  line-height: 3;
-  color: #e8eff7;
 }
 
 .footer--content--nav--about,
@@ -1012,6 +998,8 @@ select:disabled {
   text-decoration: none;
 }
 
+
+
 .mission-index--view--link span {
   font-family: Montserrat, sans-serif;
   font-size: 12px;
@@ -1027,10 +1015,6 @@ select:disabled {
 .token-index--view--link a {
   color: var(--primary-blue);
   text-decoration: none;
-}
-
-.mission-index--view--link a:hover {
-  text-decoration: underline;
 }
 
 .mission-index--sidebar--info {
@@ -1133,10 +1117,6 @@ select:disabled {
   text-transform: capitalize;
 }
 
-.token-index--view--link a:hover {
-  text-decoration: underline;
-}
-
 .token-index--sidebar--info,
 .styleguide-index--sidebar--info,
 .batch-index--sidebar--info {
@@ -1176,14 +1156,13 @@ select:disabled {
   text-align: center;
 }
 
-.footer--content--nav a:hover,
-.footer--content--nav a:focus {
-  text-decoration: underline;
-}
-
-.header--nav--links a:hover,
-.header--nav--links a:focus {
-  text-decoration: underline;
+.footer--content--nav a {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.5;
+  line-height: 3;
+  color: #e8eff7;
 }
 
 @media screen and (max-width: 1023px) {
@@ -3264,4 +3243,27 @@ select:disabled {
   letter-spacing: normal;
   color: var(--black);
   margin-left: 5px;
+}
+
+.layout--content--title--nav a:hover,
+.layout--content--title--nav a:focus {
+  text-decoration: underline;
+}
+
+.mission-index--view--link a:hover {
+  text-decoration: underline;
+}
+
+.token-index--view--link a:hover {
+  text-decoration: underline;
+}
+
+.footer--content--nav a:hover,
+.footer--content--nav a:focus {
+  text-decoration: underline;
+}
+
+.header--nav--links a:hover,
+.header--nav--links a:focus {
+  text-decoration: underline;
 }

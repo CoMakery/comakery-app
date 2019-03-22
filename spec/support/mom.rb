@@ -63,7 +63,7 @@ class Mom
       exclusive_contributions: false,
       visibility: 'member',
       long_id: SecureRandom.hex(20),
-      maximum_tokens: 10_000_000,
+      maximum_tokens: 1_000_000_000,
       token: create(:token),
       mission: create(:mission)
     }

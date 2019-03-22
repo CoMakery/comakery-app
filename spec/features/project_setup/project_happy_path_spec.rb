@@ -76,17 +76,9 @@ require 'rails_helper'
 
 #     click_remove(award_type_inputs.last)
 
-
-
 #     click_on 'Save', class: 'last_submit'
 
-
-
 #     expect(page).not_to have_link 'Project Tasks'
-
-
-
-
 
 #     expect(page.find('.project-image')[:src]).to match(/helmet_cat.png/)
 

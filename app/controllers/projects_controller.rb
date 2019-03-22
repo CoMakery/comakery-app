@@ -81,8 +81,8 @@ class ProjectsController < ApplicationController
     authorize @project
     set_award
 
-    token = @project.mission&.token&.decorate
-    mission = @project.mission
+    token = @project&.token&.decorate
+    mission = @project&.mission
     @props = {
       interested: current_account&.interested?(@project.id),
       project_data: project_props(@project),
@@ -90,7 +90,7 @@ class ProjectsController < ApplicationController
       token_data: token_props(token),
       csrf_token: form_authenticity_token,
       contributors_path: project_contributors_path(@project.show_id),
-      awards_path: project_awards_path(@project.show_id),
+      awards_path: awards_project_path(@project.show_id),
       edit_path: current_account && @project.account == current_account ? edit_project_path(@project) : nil
     }
   end

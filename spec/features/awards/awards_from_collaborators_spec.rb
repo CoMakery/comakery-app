@@ -1,7 +1,5 @@
 require 'rails_helper'
 
-
-
 #   it 'allow creating of award types that are community-awardable' do
 #     stub_slack_channel_list
 #     stub_slack_user_list([slack_user(first_name: 'collab1', last_name: 'collab1', user_id: 'collab1'),
@@ -13,8 +11,6 @@ require 'rails_helper'
 #     visit my_project_path
 
 #     click_link 'New Project'
-
-
 
 #     award_type_inputs = get_award_type_rows
 #     expect(award_type_inputs.size).to be > 4
