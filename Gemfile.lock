@@ -70,8 +70,6 @@ GEM
     airbrake (7.3.5)
       airbrake-ruby (~> 2.10)
     airbrake-ruby (2.11.0)
-    archive-zip (0.11.0)
-      io-like (~> 0.3.0)
     arel (8.0.0)
     ast (2.4.0)
     awesome_print (1.8.0)
@@ -112,9 +110,6 @@ GEM
       launchy
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
-    chromedriver-helper (2.0.1)
-      archive-zip (~> 0.10)
-      nokogiri (~> 1.8)
     chunky_png (1.3.10)
     coderay (1.1.2)
     coffee-rails (4.2.2)
@@ -226,7 +221,6 @@ GEM
     interactor (3.1.1)
     intercom-rails (0.4.0)
       activesupport (> 3.0)
-    io-like (0.3.0)
     jira-ruby (1.5.0)
       activesupport
       multipart-post
@@ -382,6 +376,8 @@ GEM
       actionpack (~> 5.x, >= 5.0.1)
       actionview (~> 5.x, >= 5.0.1)
       activesupport (~> 5.x)
+    rails-data-migrations (1.1.0)
+      rails (>= 4.0.0)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -483,6 +479,8 @@ GEM
       ruby_http_client (~> 3.2)
       sinatra (>= 1.4.7, < 3)
     shellany (0.0.1)
+    shoulda-matchers (3.1.3)
+      activesupport (>= 4.0.0)
     sidekiq (5.2.1)
       connection_pool (~> 2.2, >= 2.2.2)
       rack-protection (>= 1.5.0)
@@ -571,7 +569,6 @@ DEPENDENCIES
   bullet
   capybara
   capybara-screenshot (~> 1.0)
-  chromedriver-helper (~> 2.0.1)
   citizen-scripts!
   coffee-rails
   compass-rails
@@ -617,6 +614,7 @@ DEPENDENCIES
   rack_session_access
   rails (~> 5.1.4)
   rails-controller-testing
+  rails-data-migrations
   rails-html-sanitizer (~> 1.0.4)
   rails_12factor
   react-rails
@@ -635,6 +633,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   sendgrid-ruby
+  shoulda-matchers
   sidekiq
   sidekiq-failures
   simplecov
@@ -655,4 +654,4 @@ RUBY VERSION
    ruby 2.4.4p296
 
 BUNDLED WITH
-   1.17.1
+   2.0.1

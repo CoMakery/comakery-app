@@ -1,5 +1,6 @@
 class AwardType < ApplicationRecord
   belongs_to :project, touch: true
+  belongs_to :specialty
   has_many :awards
 
   validates :project, :specialty, presence: true

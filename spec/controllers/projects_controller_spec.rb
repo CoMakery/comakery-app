@@ -19,6 +19,9 @@ describe ProjectsController do
 
   let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
 
+  let!(:token) { create(:token) }
+  let!(:mission) { create(:mission, token_id: token.id) }
+
   before do
     team.build_authentication_team authentication
     team.build_authentication_team authentication1
@@ -101,9 +104,9 @@ describe ProjectsController do
   end
 
   describe '#unlisted' do
-    let!(:public_unlisted_project) { create(:project, account: account, visibility: 'public_unlisted', title: 'Unlisted Project') }
-    let!(:member_unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'Unlisted Project') }
-    let!(:normal_project) { create :project, account: account }
+    let!(:public_unlisted_project) { create(:project, account: account, visibility: 'public_unlisted', title: 'Unlisted Project', mission_id: mission.id) }
+    let!(:member_unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'Unlisted Project', mission_id: mission.id) }
+    let!(:normal_project) { create :project, account: account, mission_id: mission.id }
     let!(:account2) { create :account }
     let!(:authentication2) { create(:authentication, account: account2) }
 
@@ -140,11 +143,11 @@ describe ProjectsController do
   end
 
   describe '#landing' do
-    let!(:public_project) { create(:project, visibility: 'public_listed', title: 'public project', account: account) }
-    let!(:archived_project) { create(:project, visibility: 'archived', title: 'archived project', account: account) }
-    let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project') }
-    let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project') }
-    let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project') }
+    let!(:public_project) { create(:project, visibility: 'public_listed', title: 'public project', account: account, mission_id: mission.id) }
+    let!(:archived_project) { create(:project, visibility: 'archived', title: 'archived project', account: account, mission_id: mission.id) }
+    let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project', mission_id: mission.id) }
+    let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project', mission_id: mission.id) }
+    let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project', mission_id: mission.id) }
 
     describe '#login' do
       it 'redirect to account page if account info is not enough' do
@@ -341,7 +344,7 @@ describe ProjectsController do
   end
 
   describe '#update_status' do
-    let!(:project) { create(:project) }
+    let!(:project) { create(:project, mission_id: mission.id) }
 
     context 'when not logged in' do
       it 'redirects to root' do
@@ -368,10 +371,10 @@ describe ProjectsController do
   end
 
   context 'with a project' do
-    let!(:cat_project) { create(:project, title: 'Cats', description: 'Cats with lazers', account: account) }
-    let!(:dog_project) { create(:project, title: 'Dogs', description: 'Dogs with donuts', account: account) }
-    let!(:yak_project) { create(:project, title: 'Yaks', description: 'Yaks with parser generaters', account: account) }
-    let!(:fox_project) { create(:project, title: 'Foxes', description: 'Foxes with boxes', account: account) }
+    let!(:cat_project) { create(:project, title: 'Cats', description: 'Cats with lazers', account: account, mission_id: mission.id) }
+    let!(:dog_project) { create(:project, title: 'Dogs', description: 'Dogs with donuts', account: account, mission_id: mission.id) }
+    let!(:yak_project) { create(:project, title: 'Yaks', description: 'Yaks with parser generaters', account: account, mission_id: mission.id) }
+    let!(:fox_project) { create(:project, title: 'Foxes', description: 'Foxes with boxes', account: account, mission_id: mission.id) }
 
     describe '#index' do
       let!(:cat_project_award) { create(:award, account: create(:account), amount: 200, award_type: create(:award_type, project: cat_project), created_at: 2.days.ago, updated_at: 2.days.ago) }

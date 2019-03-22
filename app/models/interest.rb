@@ -1,6 +1,8 @@
 class Interest < ApplicationRecord
   belongs_to :account
   belongs_to :project
+  belongs_to :specialty
+
   # comment out airtable
   # after_create :add_airtable
   validates :protocol, presence: true

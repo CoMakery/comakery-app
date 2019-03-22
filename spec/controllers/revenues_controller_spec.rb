@@ -22,6 +22,7 @@ describe RevenuesController do
       get :index, params: { project_id: my_project.id }
       expect(controller).to have_received(:policy_scope).with(Project)
       expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
+      expect(response).to render_template('revenues/index')
     end
 
     it 'anonymous can access public' do

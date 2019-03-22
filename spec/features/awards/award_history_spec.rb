@@ -21,42 +21,12 @@ describe 'viewing projects, creating and editing', :js do
       stub_slack_channel_list
     end
 
-    context 'when logged in as non-owner' do
-      context 'viewing projects' do
-        before { login(owner) }
-
-        it 'shows radio buttons for community awardable awards' do
-          visit project_path(project)
-
-          within('.award-types') do
-            expect(page.all('input[type=text]').size).to eq(2)
-            expect(page).to have_content 'Communication Channel'
-            expect(page).to have_content 'Email Address'
-            expect(page).to have_content 'Award Type'
-            expect(page).to have_content 'Description'
-          end
-        end
-      end
-    end
-
     context 'when logged out' do
-      context 'viewing projects' do
-        it "doesn't show forms for awarding" do
-          visit project_path(project)
-
-          within('.award-types') do
-            expect(page.all('input[type=text]').size).to eq(0)
-            expect(page).not_to have_content 'User'
-            expect(page).not_to have_content 'Description'
-          end
-        end
-      end
-
       context 'viewing awards' do
         it 'lets people view awards' do
           visit project_path(project)
 
-          click_link 'Awards'
+          click_link 'Payments'
           expect(page).to have_content 'Project Tokens Awarded'
         end
 
@@ -67,7 +37,7 @@ describe 'viewing projects, creating and editing', :js do
           login(owner)
           visit project_path(project.token.reload)
 
-          click_link 'Awards'
+          click_link 'Payments'
           expect(page).to have_content 'Blockchain Transaction'
         end
 
@@ -78,7 +48,7 @@ describe 'viewing projects, creating and editing', :js do
 
           visit project_path(project)
 
-          click_link 'Awards'
+          click_link 'Payments'
           expect(page.all('table.award-rows tr.award-row').size).to eq(50)
           expect(page).to have_content '1 2 3 4 5 … Next › Last »'
 

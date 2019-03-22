@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Interest, type: :model do
+  it { is_expected.to belong_to(:specialty) }
+
   describe 'add_airtable' do
     it 'add record to airtable on create' do
       ENV['AIRTABLE_SIGNUPS_TABLE_ID'] = '123qwer'

@@ -8,11 +8,11 @@ export default {
   },
   updateTransactionAddress(award, txHash, linkToTx) {
     jQuery.post(`/projects/${award.project.id}/batches/${award.award_type.id}/tasks/${award.id}/update_transaction_address`, { tx: txHash }, () => {
-      const alertMsg = `The <a href='${linkToTx}' target='_blank'>transaction address</a> of the award has been successfully updated`
-      window.alertMsg('#metamaskModal1', alertMsg)
+      const alertMsg = `Your award is successfully sent. Please check the <a href='${linkToTx}' target='_blank'>transaction address</a>`
+      window.alertMsg('#metamaskModal1', alertMsg, 'OK')
     }).fail(() => {
       const alertMsg = `The tokens have been successfully transferred, but the <a href='${linkToTx}' target='_blank'>transaction address</a> of the award cannot be updated`
-      window.alertMsg('#metamaskModal1', alertMsg)
+      window.alertMsg('#metamaskModal1', alertMsg, 'OK')
     })
   }
 }

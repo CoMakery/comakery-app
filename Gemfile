@@ -35,6 +35,7 @@ gem 'puma'
 gem 'pundit'
 gem 'rack', '>= 2.0.6'
 gem 'rails', '~>5.1.4'
+gem 'rails-data-migrations'
 gem 'rails-html-sanitizer', '~> 1.0.4'
 gem 'rails_12factor', group: :production
 gem 'react-rails'
@@ -89,13 +90,13 @@ end
 group(:test) do
   gem 'capybara'
   gem 'capybara-screenshot', '~> 1.0'
-  gem 'chromedriver-helper', '~> 2.0.1'
   gem 'database_cleaner'
   gem 'guard-rspec', require: false
   gem 'rack_session_access'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'webmock'
 end

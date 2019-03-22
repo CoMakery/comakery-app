@@ -28,6 +28,7 @@ describe PaymentsController do
       get :index, params: { project_id: other_project.id }
       expect(controller).to have_received(:policy_scope).with(Project)
       expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_revenue_info?)
+      expect(response).to render_template('payments/index')
     end
 
     it "anonymous can't access private" do

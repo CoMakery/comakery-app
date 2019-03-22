@@ -76,22 +76,17 @@ require 'rails_helper'
 
 #     click_remove(award_type_inputs.last)
 
-#     award_type_inputs = get_award_type_rows
-#     expect(award_type_inputs.size).to eq(4)
-#     fill_in 'Title', with: 'This is a project'
+
 
 #     click_on 'Save', class: 'last_submit'
 
-#     expect(page).to have_content 'Project created'
-#     expect(page).to have_content 'This is a project'
-#     expect(page).to have_content 'This is a project description'
+
 
 #     expect(page).not_to have_link 'Project Tasks'
 
-#     expect(Project.last.award_types.count).to eq(4)
-#     expect(page.all('select#award_award_type_id option').map(&:text)).to eq(['1,000 This is a small award type', '2,000 This is a medium award type', '3,000 This is a large award type', '5,000 This is a super big award type'])
 
-#     click_on 'Settings'
+
+
 
 #     expect(page.find('.project-image')[:src]).to match(/helmet_cat.png/)
 
