@@ -60,7 +60,7 @@ describe 'awarding users' do
     receiver = create :account, email: 'test@test.st', ethereum_wallet: '0x' + 'b' * 40
     create :award, account: receiver, award_type: small_award_type, amount: 1000
     login(account)
-    visit project_awards_path(project)
+    visit awards_project_path(project)
     expect(page).to have_content '1,000'
     expect(page).to have_content 'Send'
   end

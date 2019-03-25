@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe ProjectDecorator do
   let(:amount_with_24_decimal_precision) { BigDecimal('9.999_999_999_999_999_999_999') }
-  let(:project) { (create :project, royalty_percentage: 100).decorate }
+  let(:project) { (create :project, royalty_percentage: 100, maximum_tokens: 1000000000).decorate }
   let(:award_type) { create :award_type, project: project }
 
   describe 'total_revenue_pretty method truncates' do
@@ -457,7 +457,7 @@ describe ProjectDecorator do
   end
 
   it 'maximum_tokens_pretty' do
-    expect(project.maximum_tokens_pretty).to eq '10,000,000'
+    expect(project.maximum_tokens_pretty).to eq '1,000,000,000'
   end
 
   it 'format_with_decimal_places' do

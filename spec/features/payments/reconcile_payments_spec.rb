@@ -9,17 +9,13 @@ describe 'when reconciling redeemed revenue shares' do
   let!(:other_account) { create(:account, first_name: 'Other') }
   let!(:other_account_auth) { create(:authentication, account: other_account) }
 
-  let!(:token) { create :token }
-  let!(:mission) { create :mission, token: token }
-
   let!(:project) do
     create(:project,
       royalty_percentage: 100,
       visibility: 'public_listed',
       account: owner,
       payment_type: 'revenue_share',
-      require_confidentiality: false,
-      mission: mission)
+      require_confidentiality: false)
   end
   let!(:revenue) { create(:revenue, project: project, amount: 1234.5, currency: 'USD') }
 

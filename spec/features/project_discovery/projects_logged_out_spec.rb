@@ -2,10 +2,8 @@ require 'rails_helper'
 
 describe 'viewing projects, creating and editing', :js do
   let!(:team) { create :team }
-  let!(:token) { create :token }
-  let!(:mission) { create :mission, token: token }
-  let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, mission: mission) }
-  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, visibility: 'public_listed', mission: mission) }
+  let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account) }
+  let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, visibility: 'public_listed') }
   let!(:public_project_award) { create(:award, award_type: create(:award_type, project: public_project), created_at: Date.new(2016, 1, 9)) }
   let!(:account) { create(:account, email: 'gleenn@example.com') }
   let!(:authentication) { create(:authentication, account: account) }

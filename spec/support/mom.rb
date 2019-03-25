@@ -99,10 +99,28 @@ class Mom
   def award_type(**attrs)
     defaults = {
       name: 'Contribution',
-      specialty: 'software_development'
+      specialty: 'software_development',
+      goal: 'none',
+      description: 'none'
     }
     attrs[:project] = create(:project) unless attrs[:project]
     AwardType.new(defaults.merge(attrs))
+  end
+
+  def award_ready(**attrs)
+    params = {
+      name: 'none',
+      description: 'none',
+      why: 'none',
+      requirements: 'none',
+      proof_link: 'http://nil',
+      amount: 50
+    }.merge(attrs)
+
+    params[:award_type] ||= create(:award_type)
+    params[:issuer] ||= create(:account)
+
+    Award.new(params)
   end
 
   def award(**attrs)
