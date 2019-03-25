@@ -45,7 +45,7 @@ class Project < ApplicationRecord
     revenue_share: 0,
     project_token: 1
   }
-  enum visibility: %i[member_unlisted member public_listed public_unlisted archived]
+  enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
   enum status: %i[active passive]
 
   validates :description, :account, :title, :legal_project_owner, :token_id, presence: true
@@ -60,11 +60,11 @@ class Project < ApplicationRecord
   validate :maximum_tokens_unchanged, if: -> { !new_record? }
 
   scope :featured, -> { order :featured }
-  scope :unlisted, -> { where 'projects.visibility in(0,3)' }
-  scope :listed, -> { where 'projects.visibility not in(0,3)' }
-  scope :visible, -> { where 'projects.visibility not in(0,3,4)' }
+  scope :unlisted, -> { where 'projects.visibility in(2,3)' }
+  scope :listed, -> { where 'projects.visibility not in(2,3)' }
+  scope :visible, -> { where 'projects.visibility not in(2,3,4)' }
   scope :unarchived, -> { where.not visibility: 4 }
-  scope :publics, -> { where 'projects.visibility in(2,3)' }
+  scope :publics, -> { where 'projects.visibility in(1,3)' }
 
   delegate :coin_type, to: :token, allow_nil: true
   delegate :coin_type_token?, to: :token

@@ -178,7 +178,7 @@ class Account < ApplicationRecord
       left join channels on channels.project_id=projects.id
       left join teams on teams.id=channels.team_id
       left join authentication_teams on authentication_teams.team_id=teams.id")
-           .where("(authentication_teams.account_id=#{id} and channels.id is not null) or projects.visibility=2 or awards.account_id=#{id} or projects.account_id=#{id}").distinct
+           .where("(authentication_teams.account_id=#{id} and channels.id is not null) or projects.visibility=1 or awards.account_id=#{id} or projects.account_id=#{id}").distinct
   end
 
   def confirmed?
