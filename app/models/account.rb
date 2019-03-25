@@ -189,6 +189,10 @@ class Account < ApplicationRecord
     projects_interested.exists? project_id
   end
 
+  def specialty_interested?(project_id, specialty_id)
+    interests.exists?(project_id: project_id, specialty_id: specialty_id)
+  end
+
   def finished_build_profile? # check if all of the required fields are filled
     email.present? && first_name.present? && last_name.present? && country.present? && date_of_birth.present?
   end
