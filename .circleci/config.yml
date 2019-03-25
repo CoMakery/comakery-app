@@ -39,10 +39,8 @@ jobs:
       - run: yarn stylelint
       - run: bundle exec rake assets:precompile
 
-      - run: bundle exec rake db:create db:migrate
-      - run: bundle exec rake db:migrate VERSION=20160227015851
-      - run: git checkout db/schema.rb
-      - run: bundle exec rake db:reset
+      - run: bundle exec rake db:setup
+      - run: bundle exec rake data:migrate
       - run: bundle exec citizen checks
 
       - type: store_artifacts
