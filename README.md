@@ -40,10 +40,9 @@ Prerequisites:
 
 - PostgreSQL
 - Redis (if you want to run delayed jobs)
-- Phantomjs binary in PATH (build from official Ubuntu repo will crash on `attach_file`, more info [here](https://github.com/teampoltergeist/poltergeist))
 - Bundler
 - Yarn
-- Chrome browser
+- Chrome and Chromedriver ([Reference setup](https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/ruby/images/2.4.4-stretch/browsers/Dockerfile))
 
 Set up .env:
 
@@ -58,9 +57,8 @@ Basics :
 source .env
 bundle install
 yarn install
-chromedriver-update
-rails db:create:all
-rails db:schema:load
+rails db:setup
+rails data:migrate
 ```
 
 Run server:

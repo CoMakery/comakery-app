@@ -25,7 +25,8 @@ class PagesController < ApplicationController
   def add_interest
     @interest = current_user.interests.new
     @interest.project_id = params[:project_id]
-    @interest.protocol = params[:protocol] # mission name
+    @interest.specialty_id = params[:specialty_id]
+    @interest.protocol = params[:protocol] || 'No mission assigned to the project' # mission name
     @interest.save
     respond_to do |format|
       format.json { render json: @interest.to_json }

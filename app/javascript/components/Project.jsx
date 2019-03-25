@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
 import d3 from 'd3/d3'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
+import { SSL_OP_EPHEMERAL_RSA } from 'constants'
 
 const chartColors = [
   '#0089F4',
@@ -24,24 +25,26 @@ export default class Project extends React.Component {
     super(props)
 
     this.state = {
-      interested: props.interested
+      interested         : props.interested,
+      specialtyInterested: [ ...props.specialtyInterested ]
     }
 
     this.arcTween = this.arcTween.bind(this)
     this.drawChart = this.drawChart.bind(this)
-    this.chartData = props.projectData.chartData
   }
 
   componentDidMount() {
     // draw piecharts
-    if (this.chartData && this.chartData.length > 0) {
+    const { chartData } = this.props.projectData
+    if (chartData && chartData.length > 0) {
       this.drawChart()
     }
   }
 
   drawChart() {
-    const sum = this.chartData.reduce((sub, ele) => sub + ele, 0)
-    let data = this.chartData.map(ele => sum > 0 ? (ele / sum * 100).toFixed(2) : 0)
+    const { chartData } = this.props.projectData
+    const sum = chartData.reduce((sub, ele) => sub + ele, 0)
+    let data = chartData.map((ele, index) => ({ index: index, value: sum > 0 ? (ele / sum * 100).toFixed(2) : 0 }))
 
     let width = 255
     let height = 255
@@ -50,6 +53,7 @@ export default class Project extends React.Component {
     let innerRadius = outerRadius / 3
 
     let pie = d3.layout.pie()
+      .value((d) => { return d.value })
       .padAngle(0.02)
 
     let arc = d3.svg.arc()
@@ -60,6 +64,7 @@ export default class Project extends React.Component {
       .attr('width', width)
       .attr('height', height)
       .append('g')
+      .attr('class', 'project-chart__svg')
       .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')')
 
     let centerEle = svg.append('text')
@@ -84,31 +89,49 @@ export default class Project extends React.Component {
   }
 
   arcTween(arc, centerEle, outerRadius, delay, changeText) {
-    return function() {
+    const contributors = this.props.projectData.contributors
+    return function(d) {
+      const { layerX, layerY } = d3.event
+      if (changeText) {
+        centerEle.text(d.value + '%')
+        d3.select('#tooltip')
+          .style('left', layerX + 'px')
+          .style('top', layerY + 'px')
+          .style('opacity', 1)
+          .select('#value')
+          .text(contributors[d.data.index].nickname || `${contributors[d.data.index].firstName || ''} ${contributors[d.data.index].lastName || ''}`)
+      } else {
+        d3.select('#tooltip')
+          .style('opacity', 0)
+      }
       d3.select(this).transition().delay(delay).attrTween('d', (d) => {
         const i = d3.interpolate(d.outerRadius, outerRadius)
-        if (changeText) {
-          centerEle.text(d.value + '%')
-        }
         return function(t) { d.outerRadius = i(t); return arc(d) }
       })
     }
   }
 
-  addInterest(projectId) { // protocol = mission name
+  addInterest(projectId, specialtyId = null) { // protocol = mission name
     const { missionData } = this.props
+    const { specialtyInterested } = this.state
     fetchPolyfill('/add-interest', {
       credentials: 'same-origin',
       method     : 'POST',
-      body       : JSON.stringify({'project_id': projectId, 'protocol': missionData.name, 'authenticity_token': this.props.csrfToken}),
+      body       : JSON.stringify({'project_id': projectId, 'specialty_id': specialtyId, 'protocol': missionData.name, 'authenticity_token': this.props.csrfToken}),
       headers    : {
         'Accept'      : 'application/json',
         'Content-Type': 'application/json'
       }
     }).then(response => {
       if (response.status === 200) {
-        this.setState({ interested: true })
-      } if (response.status === 401) {
+        if (specialtyId) {
+          const newSpecialtyInterested = [...specialtyInterested]
+          newSpecialtyInterested[specialtyId - 1] = true
+          this.setState({ specialtyInterested: [...newSpecialtyInterested] })
+        } else {
+          this.setState({ interested: true })
+        }
+      } else if (response.status === 401) {
         window.location = '/accounts/new'
       } else {
         throw Error(response.text())
@@ -118,17 +141,19 @@ export default class Project extends React.Component {
 
   render() {
     const { projectData, missionData, tokenData, contributorsPath, awardsPath, editPath } = this.props
-    const { interested } = this.state
+    const { interested, specialtyInterested } = this.state
     const skills = {
-      development: 'Software Development',
-      design     : 'UX / UI DESIGN',
-      research   : 'Research',
-      community  : 'COMMUNITY MANAGEMENT',
-      data       : 'DATA GATHERING',
-      audio      : 'AUDIO & VIDEO PRODUCTION',
-      writing    : 'WRITING',
-      marketing  : 'MARKETING & SOCIAL MEDIA'
+      development: 'Software Development', // specialty ID 5
+      design     : 'UX / UI DESIGN', // specialty ID 6
+      research   : 'Research', // specialty ID 8
+      community  : 'COMMUNITY MANAGEMENT', // specialty ID 2
+      data       : 'DATA GATHERING', // specialty ID 3
+      audio      : 'AUDIO & VIDEO PRODUCTION', // specialty ID 1
+      writing    : 'WRITING', // specialty ID 7
+      marketing  : 'MARKETING & SOCIAL MEDIA' // specialty ID 4
     }
+    const skillIds = [5, 6, 8, 2, 3, 1, 7, 4]
+
     let descriptionText = projectData.description.split('.')
     const first = descriptionText.shift()
     descriptionText = descriptionText.join('.')
@@ -138,7 +163,7 @@ export default class Project extends React.Component {
         <div className="project-header__blur" />
         <div className="project-header__content">
           <div className="project-header__menu">
-            <a className="project-header__menu__back" href={missionData.missionUrl}>
+            <a className="project-header__menu__back" href={missionData.missionUrl} style={{visibility: 'hidden'}}>
               <Icon name="iconBackWhite.svg" style={{marginRight: 8}} />
               {missionData.name}
             </a>
@@ -237,7 +262,7 @@ export default class Project extends React.Component {
       <div className="project-skills">
         <div className="project-skills__title">SKILLS NEEDED</div>
         <div className="project-skills__subtitle">Take a challenge to demonstrate your skills. You will be invited to complete tasks that match your skill level for this and other projects</div>
-        {Object.keys(skills).map(skill =>
+        {Object.keys(skills).map((skill, index) =>
           <div key={skill} className="project-skill-container">
             <div className="project-skill__background">
               <img className="project-skill__background__img" src={require(`src/images/project/${skill}.jpg`)} />
@@ -251,8 +276,8 @@ export default class Project extends React.Component {
             </div>
 
             <div className="project-skill__interest">
-              {!interested && <div className="project-skill__interest__button" onClick={() => this.addInterest(projectData.id)}>I'm Interested</div>}
-              {interested && <div className="project-skill__interest__button">Request Sent</div>}
+              {!specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button" onClick={() => this.addInterest(projectData.id, skillIds[index])}>I'm Interested</div>}
+              {specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button">Request Sent</div>}
             </div>
           </div>
         )}
@@ -262,7 +287,12 @@ export default class Project extends React.Component {
         <div className="project-team__container">
           <div className="project-team__title">The Team</div>
           <div className="project-team__subtitle">Great projects are the result dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
-          <div className="project-chart" />
+
+          <div className="project-chart">
+            <div id="tooltip" className="tooltip-hidden">
+              <span id="value">100</span>
+            </div>
+          </div>
 
           <div className="project-team__contributors-container">
             <div className="project-team__leader-name">{projectData.teamLeader.nickname && projectData.teamLeader.nickname}</div>
@@ -319,10 +349,11 @@ Project.defaultProps = {
   missionData: {
     missionUrl: ''
   },
-  tokenData       : {},
-  interested      : false,
-  csrfToken       : '',
-  contributorsPath: '',
-  awardsPath      : '',
-  editPath        : null
+  tokenData          : {},
+  interested         : false,
+  specialtyInterested: [],
+  csrfToken          : '',
+  contributorsPath   : '',
+  awardsPath         : '',
+  editPath           : null
 }

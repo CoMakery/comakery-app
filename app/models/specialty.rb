@@ -16,5 +16,6 @@ class Specialty < ActiveRecord::Base
     Specialty.where(id: 5).first_or_create(name: 'Software Development')
     Specialty.where(id: 6).first_or_create(name: 'Design')
     Specialty.where(id: 7).first_or_create(name: 'Writing')
+    Specialty.where(id: 8).first_or_create(name: 'Research')
   end
 end
