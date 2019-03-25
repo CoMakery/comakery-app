@@ -98,7 +98,7 @@ a.header--nav--links--current {
   }
 
   .header-mobile {
-    z-index: 3;
+    z-index: 99;
     display: flex;
     position: relative;
     align-items: center;
@@ -2085,7 +2085,7 @@ input[type="submit"].button:disabled {
 .project-header {
   position: relative;
   width: 100%;
-  height: 280px;
+  min-height: 280px;
   background-position-x: 50%;
   background-position-y: center;
   background-repeat: no-repeat;
@@ -2161,7 +2161,9 @@ input[type="submit"].button:disabled {
   font-weight: 900;
   font-style: normal;
   font-stretch: normal;
-  line-height: 2.5;
+  line-height: 1.2;
+  margin-top: 20px;
+  margin-bottom: 20px;
   letter-spacing: normal;
   text-align: center;
 }
@@ -2939,6 +2941,7 @@ input[type="submit"].button:disabled {
 }
 
 .project-chart {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3123,4 +3126,23 @@ input[type="submit"].button:disabled {
   letter-spacing: normal;
   color: var(--black);
   margin-left: 5px;
+}
+
+.tooltip-hidden {
+  background: white;
+  min-width: 100px;
+  color: var(--black);
+  opacity: 0;
+  position: absolute;
+  padding: 8px;
+  font-size: 14px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  transform: translate(8px, 8px);
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  -mox-box-shadow: 4px 4px 4px 10px rgba(0, 0, 0, 0.4);
+  box-shadow: 4px 4px 10px rbga(0, 0, 0, 0.4);
+  pointer-events: none;
 }

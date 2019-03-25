@@ -254,7 +254,7 @@ a.header--nav--links--current {
   }
 
   .header-mobile {
-    z-index: 3;
+    z-index: 99;
     display: flex;
     position: relative;
     align-items: center;
