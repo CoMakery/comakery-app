@@ -84,7 +84,8 @@ class ProjectsController < ApplicationController
     token = @project&.token&.decorate
     mission = @project&.mission
     @props = {
-      interested: current_account&.interested?(@project.id),
+      interested: current_account&.interested?(@project.id), # project level interest
+      specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
       project_data: project_props(@project),
       mission_data: mission_props(mission),
       token_data: token_props(token),
@@ -256,8 +257,8 @@ class ProjectsController < ApplicationController
   end
 
   def contributor_props(account)
-    account.as_json(only: %i[id nickname first_name last_award]).merge(
-      image_url: helpers.account_image_url(account, 44),
+    account.as_json(only: %i[id nickname first_name last_name]).merge(
+      image_url: helpers.account_image_url(account, 68),
       specialty: Account.specialties[account.specialty]
     )
   end
