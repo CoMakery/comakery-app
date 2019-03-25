@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-describe RevenuesController do
+# TODO: Deprecated
+describe RevenuesController, skip: true do
   let!(:team) { create :team }
   let!(:authentication) { create :authentication }
   let!(:account) { authentication.account }
