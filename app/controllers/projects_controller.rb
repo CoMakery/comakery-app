@@ -268,7 +268,7 @@ class ProjectsController < ApplicationController
     chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
 
     project.as_json(only: %i[id title description]).merge(
-      image_url: project.image.present? ? 'url(' + Refile.attachment_url(project, :image) + ')' : nil,
+      image_url: project.panoramic_image.present? ? Refile.attachment_url(project, :panoramic_image) : nil,
       youtube_url: project.video_url ? project.youtube_id : nil,
       default_image_url: helpers.image_url('defaul_project.jpg'),
       owner: [project.account.first_name, project.account.last_name].join(' '),
