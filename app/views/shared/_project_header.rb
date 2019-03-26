@@ -27,12 +27,6 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
             end
           end
 
-          li_if(project.can_be_access?(current_account), class: ('active' if controller_name == 'awards').to_s) do
-            a(href: project_awards_path(project.show_id)) do
-              text 'Awards'
-            end
-          end
-
           li_if(project.show_revenue_info?(current_account), class: ('active' if controller_name == 'revenues').to_s) do
             a(href: project_revenues_path(project.show_id)) do
               text 'Revenues'
@@ -61,7 +55,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
 
           li_if(project.ethereum_contract_explorer_url) do
             a_text = 'Ξthereum Token'
-            a_text = 'Qtum Token' if project.coin_type_on_qtum?
+            a_text = 'Qtum Token' if project.token.coin_type_on_qtum?
             link_to a_text, project.ethereum_contract_explorer_url,
               target: '_blank', class: 'text-link'
           end

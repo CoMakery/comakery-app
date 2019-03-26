@@ -150,12 +150,26 @@ describe('InputField', () => {
     const wrapper = shallow(<InputField required />)
 
     expect(wrapper.find('.input-field--content__text').props().required).toBe(true)
+    expect(wrapper.find('.input-field--title--required').text()).toBe('required')
+  })
+
+  it('renders correctly with recommended flag', () => {
+    const wrapper = shallow(<InputField recommended />)
+
+    expect(wrapper.find('.input-field--content__text').props().required).toBe(false)
+    expect(wrapper.find('.input-field--title--required').text()).toBe('recommended')
   })
 
   it('renders correctly with readOnly flag', () => {
     const wrapper = shallow(<InputField readOnly />)
 
     expect(wrapper.find('.input-field--content__text').props().readOnly).toBe(true)
+  })
+
+  it('renders correctly with copyOnClick flag', () => {
+    const wrapper = shallow(<InputField copyOnClick />)
+
+    expect(wrapper.exists('.input-field--content__text__copyable')).toBe(true)
   })
 
   it('renders correctly with errorText', () => {

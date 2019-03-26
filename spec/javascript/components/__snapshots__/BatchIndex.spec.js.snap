@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BatchIndex renders correctly without props 1`] = `
+<BatchIndex
+  batches={Array []}
+  projectId={null}
+>
+  <Layout
+    category=""
+    className="batch-index"
+    hasBackButton={false}
+    navTitle={
+      Array [
+        Object {
+          "name": "project settings",
+          "url": undefined,
+        },
+        Object {
+          "current": true,
+          "name": "batches",
+        },
+      ]
+    }
+    sidebar={
+      <React.Fragment>
+        <div
+          className="batch-index--sidebar"
+        >
+          <SidebarItemBold
+            className="batch-index--sidebar--item__bold"
+            iconLeftName="BATCH/WHITE.svg"
+            iconRightName="PLUS.svg"
+            onClick={[Function]}
+            text="Create a New Batch"
+          />
+        </div>
+      </React.Fragment>
+    }
+    subfooter={null}
+    title={null}
+  >
+    <div
+      className="layout batch-index"
+    >
+      <div
+        className="layout--content"
+      >
+        <div
+          className="layout--content--title"
+        >
+          <span
+            className="layout--content--title--nav"
+            key="0"
+          >
+            <a>
+              project settings
+            </a>
+          </span>
+          <span
+            className="layout--content--title--nav__current"
+            key="1"
+          >
+            <a
+              href="#"
+            >
+              batches
+            </a>
+          </span>
+        </div>
+        <hr
+          className="layout--content--hr"
+        />
+        <div
+          className="layout--content--wrapper"
+        >
+          <div
+            className="layout--content--sidebar"
+          >
+            <div
+              className="batch-index--sidebar"
+            >
+              <SidebarItemBold
+                className="batch-index--sidebar--item__bold"
+                iconLeftName="BATCH/WHITE.svg"
+                iconRightName="PLUS.svg"
+                onClick={[Function]}
+                text="Create a New Batch"
+              >
+                <SidebarItem
+                  className="sidebar-item__bold batch-index--sidebar--item__bold"
+                  iconLeftName="BATCH/WHITE.svg"
+                  iconLeftUrl=""
+                  iconRightName="PLUS.svg"
+                  onClick={[Function]}
+                  selected={false}
+                  text="Create a New Batch"
+                >
+                  <div
+                    className="sidebar-item--wrapper"
+                    onClick={[Function]}
+                  >
+                    <div
+                      className="sidebar-item sidebar-item__bold batch-index--sidebar--item__bold"
+                    >
+                      <span
+                        className="sidebar-item--icon-left"
+                      >
+                        <Icon
+                          className=""
+                          name="BATCH/WHITE.svg"
+                        >
+                          <img
+                            className="icon icon__BATCH/WHITE-svg"
+                            src="test-file-stub"
+                          />
+                        </Icon>
+                      </span>
+                      <span
+                        className="sidebar-item--text"
+                      >
+                        Create a New Batch
+                      </span>
+                      <span
+                        className="sidebar-item--icon-right"
+                      >
+                        <Icon
+                          className=""
+                          name="PLUS.svg"
+                        >
+                          <img
+                            className="icon icon__PLUS-svg"
+                            src="test-file-stub"
+                          />
+                        </Icon>
+                      </span>
+                    </div>
+                  </div>
+                </SidebarItem>
+              </SidebarItemBold>
+            </div>
+          </div>
+          <div
+            className="layout--content--content__sidebared"
+          />
+        </div>
+      </div>
+    </div>
+  </Layout>
+</BatchIndex>
+`;

@@ -88,8 +88,8 @@ class SessionsController < ApplicationController
 
   def process_new_award_notice
     project = current_account.awards.last&.project
-    return nil unless project.coin_type?
-    blockchain_name = Project::BLOCKCHAIN_NAMES[project.coin_type.to_sym]
+    return nil unless project.token.coin_type?
+    blockchain_name = Token::BLOCKCHAIN_NAMES[project.token.coin_type.to_sym]
     send("process_new_#{blockchain_name}_award_notice")
   end
 

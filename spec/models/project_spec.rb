@@ -8,15 +8,9 @@ describe Project do
                 'Maximum tokens must be greater than 0',
                 "Account can't be blank",
                 "Title can't be blank",
+                "Token can't be blank",
                 "Legal project owner can't be blank",
                 "Long identifier can't be blank"].sort)
-    end
-
-    it 'rails error if not found Ethereum address' do
-      stub_const('Comakery::Ethereum::ADDRESS', {})
-      expect(Comakery::Ethereum::ADDRESS['account']).to be_nil
-      stub_token_symbol
-      expect { described_class.create(payment_type: 'project_token', ethereum_contract_address: '111') }.to raise_error(ArgumentError)
     end
 
     describe 'payment types' do
@@ -35,73 +29,6 @@ describe Project do
       def expect_royalty_fields_present
         expect(project.tap(&:valid?).errors.full_messages.sort).to eq(["Royalty percentage can't be blank",
                                                                        "Maximum royalties per month can't be blank"].sort)
-      end
-    end
-
-    describe 'denomination enumeration' do
-      let(:project) { build :project }
-
-      it 'default' do
-        expect(described_class.new.denomination).to eq('USD')
-      end
-
-      specify do
-        project.USD!
-        expect(project.denomination).to eq('USD')
-      end
-
-      specify do
-        project.BTC!
-        expect(project.denomination).to eq('BTC')
-      end
-
-      specify do
-        project.ETH!
-        expect(project.denomination).to eq('ETH')
-      end
-    end
-
-    describe 'denomination' do
-      let(:project) { create :project, denomination: 'USD' }
-
-      it 'can be changed' do
-        project.denomination = 'BTC'
-
-        expect(project).to be_valid
-      end
-
-      it 'cannot be changed after revenue is recorded' do
-        create :revenue, project: project
-        project.reload
-        project.denomination = 'BTC'
-
-        expect(project).to be_invalid
-        expect(project.errors[:denomination]).to eq(['cannot be changed because revenue has been recorded'])
-      end
-
-      it 'does not block the project from being changed after revenue is recorded' do
-        create :revenue, project: project
-        project.reload
-        project.title = 'new title'
-        expect(project).to be_valid
-
-        project.denomination = 'BTC'
-        expect(project).not_to be_valid
-      end
-
-      it 'cannot be changed after the contract terms are finalized' do
-        project.update(license_finalized: true)
-        project.denomination = 'BTC'
-
-        expect(project).to be_invalid
-        expect(project.errors[:denomination]).to eq(['cannot be changed because the license terms are finalized'])
-      end
-
-      it 'can be changed at the same time the license terms are finalized' do
-        project.denomination = 'BTC'
-        project.license_finalized = true
-
-        expect(project).to be_valid
       end
     end
 
@@ -145,46 +72,6 @@ describe Project do
       end
     end
 
-    describe 'coin_type' do
-      let(:attrs) { { token_symbol: 'CBB', decimal_places: 8, ethereum_network: 'ropsten', ethereum_contract_address: '0x' + 'a' * 40, contract_address: 'a' * 40, blockchain_network: 'qtum_testnet' } }
-
-      it 'eq erc20' do
-        project4 = create :project, attrs.merge(coin_type: 'erc20')
-        expect(project4).to be_valid
-        expect(project4.reload.coin_type).to eq 'erc20'
-        expect(project4.blockchain_network).to be_nil
-        expect(project4.contract_address).to be_nil
-        expect(project4.ethereum_network).to eq 'ropsten'
-        expect(project4.ethereum_contract_address).to eq '0x' + 'a' * 40
-        expect(project4.token_symbol).to eq 'CBB'
-        expect(project4.decimal_places).to eq 8
-      end
-
-      it 'eq eth' do
-        project4 = create :project, attrs.merge(coin_type: 'eth')
-        expect(project4).to be_valid
-        expect(project4.reload.coin_type).to eq 'eth'
-        expect(project4.blockchain_network).to be_nil
-        expect(project4.contract_address).to be_nil
-        expect(project4.ethereum_network).to eq 'ropsten'
-        expect(project4.ethereum_contract_address).to be_nil
-        expect(project4.token_symbol).to be_nil
-        expect(project4.decimal_places).to eq 18
-      end
-
-      it 'eq qrc20' do
-        project4 = create :project, attrs.merge(coin_type: 'qrc20')
-        expect(project4).to be_valid
-        expect(project4.reload.coin_type).to eq 'qrc20'
-        expect(project4.blockchain_network).to eq 'qtum_testnet'
-        expect(project4.contract_address).to eq 'a' * 40
-        expect(project4.ethereum_network).to be_nil
-        expect(project4.ethereum_contract_address).to be_nil
-        expect(project4.token_symbol).to eq 'CBB'
-        expect(project4.decimal_places).to eq 8
-      end
-    end
-
     describe 'payment_type' do
       let(:project) { create(:project, payment_type: 'revenue_share') }
       let(:order) { %i[revenue_share project_token] }
@@ -209,141 +96,15 @@ describe Project do
       end
     end
 
-    describe 'ethereum_enabled' do
-      let(:project) { create(:project) }
-
-      it { expect(project.ethereum_enabled).to eq(false) }
-
-      it 'can be set to true' do
-        project.ethereum_enabled = true
-        project.save!
-        project.reload
-        expect(project.ethereum_enabled).to eq(true)
-      end
-
-      it 'if set to false can be set to false' do
-        project.ethereum_enabled = false
-        project.save!
-        project.ethereum_enabled = false
-        expect(project).to be_valid
-      end
-
-      it 'once set to true it cannot be set to false' do
-        project.ethereum_enabled = true
-        project.save!
-        project.ethereum_enabled = false
-        expect(project.tap(&:valid?).errors.full_messages.first)
-          .to eq('Ethereum enabled cannot be set to false after it has been set to true')
-      end
-    end
-
-    describe '#contract_address' do
-      let(:project) { create(:project, coin_type: 'qrc20') }
-      let(:award_type) { create(:award_type, project: project) }
-      let(:award) { create(:award, award_type: award_type) }
-      let(:address) { 'b' * 40 }
-
-      it 'valid qtum contract address' do
-        expect(build(:project, coin_type: 'qrc20', contract_address: nil)).to be_valid
-        expect(project.tap { |o| o.contract_address = ('a' * 40).to_s }).to be_valid
-        expect(project.tap { |o| o.contract_address = ('A' * 40).to_s }).to be_valid
-      end
-
-      it 'invalid qtum contract address' do
-        expected_error_message = "Contract address should have 40 characters, should not start with '0x'"
-        expect(project.tap { |o| o.contract_address = 'foo' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(project.tap { |o| o.contract_address = '0x' }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(project.tap { |o| o.contract_address = "0x#{'a' * 38}" }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(project.tap { |o| o.contract_address = ('a' * 39).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        expect(project.tap { |o| o.contract_address = ('f' * 41).to_s }.tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-      end
-
-      it { expect(project.contract_address).to eq(nil) }
-
-      it 'can be set' do
-        project.contract_address = address
-        project.save!
-        project.reload
-        expect(project.contract_address).to eq(address)
-      end
-
-      it 'once has finished transaction cannot be set to another value' do
-        project.contract_address = address
-        project.save!
-        award.update ethereum_transaction_address: 'a' * 64
-        project.reload
-        project.contract_address = 'c' * 40
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages.to_sentence).to match \
-          /cannot be changed if has completed transactions/
-      end
-    end
-
-    describe '#ethereum_contract_address' do
-      let(:project) { create(:project) }
-      let(:award_type) { create(:award_type, project: project) }
-      let(:award) { create(:award, award_type: award_type) }
-      let(:address) { '0x' + 'a' * 40 }
-
-      it 'validates with a valid ethereum address' do
-        stub_token_symbol
-        expect(build(:project, ethereum_contract_address: nil)).to be_valid
-        expect(build(:project, ethereum_contract_address: "0x#{'a' * 40}")).to be_valid
-        stub_token_symbol
-        expect(build(:project, ethereum_contract_address: "0x#{'A' * 40}")).to be_valid
-      end
-
-      it 'validate' do
-        stub_blank_token_symbol
-        expect(build(:project, token_symbol: nil, ethereum_contract_address: "0x#{'a' * 40}")).to be_invalid
-      end
-
-      it 'does not validate with an invalid ethereum address' do
-        expected_error_message = "Ethereum contract address should start with '0x', followed by a 40 character ethereum address"
-        stub_token_symbol
-        expect(build(:project, ethereum_contract_address: 'foo').tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_token_symbol
-        expect(build(:project, ethereum_contract_address: '0x').tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_token_symbol
-        expect(build(:project, ethereum_contract_address: "0x#{'a' * 39}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_token_symbol
-        expect(build(:project, ethereum_contract_address: "0x#{'a' * 41}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_token_symbol
-        expect(build(:project, ethereum_contract_address: "0x#{'g' * 40}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-      end
-
-      it { expect(project.ethereum_contract_address).to eq(nil) }
-
-      it 'can be set' do
-        stub_token_symbol
-        project.ethereum_contract_address = address
-        project.save!
-        project.reload
-        expect(project.ethereum_contract_address).to eq(address)
-      end
-
-      it 'once has finished transaction cannot be set to another value' do
-        stub_token_symbol
-        project.ethereum_contract_address = address
-        project.save!
-        award.update ethereum_transaction_address: '0x' + 'a' * 64
-        project.reload
-        project.ethereum_contract_address = '0x' + 'b' * 40
-
-        expect(project).not_to be_valid
-        expect(project.errors.full_messages.to_sentence).to match \
-          /cannot be changed if has completed transactions/
-      end
-    end
-
-    it 'video_url is valid if video_url is a valid, absolute url, the domain is youtube.com, and there is the identifier inside' do
+    it 'video_url is valid if video_url is a valid, absolute url, the domain is youtube.com or vimeo, and there is the identifier inside' do
       expect(build(:sb_project, video_url: 'https://youtube.com/watch?v=Dn3ZMhmmzK0')).to be_valid
       expect(build(:sb_project, video_url: 'https://youtube.com/embed/Dn3ZMhmmzK0')).to be_valid
       expect(build(:sb_project, video_url: 'https://youtu.be/jJrzIdDUfT4')).to be_valid
+      expect(build(:sb_project, video_url: 'https://vimeo.com/314309860')).to be_valid
 
       expect(build(:sb_project, video_url: 'https://youtube.com/embed/')).not_to be_valid
       expect(build(:sb_project, video_url: 'https://youtu.be/')).not_to be_valid
-      expect(build(:sb_project, video_url: 'https://youtu.be/').tap(&:valid?).errors.full_messages).to eq(["Video url must be a Youtube link like 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'"])
+      expect(build(:sb_project, video_url: 'https://youtu.be/').tap(&:valid?).errors.full_messages).to eq(['Video url must be a link to Youtube or Vimeo video'])
     end
 
     %w[video_url tracker contributor_agreement_url].each do |method|
@@ -379,36 +140,6 @@ describe Project do
         end
       end
     end
-  end
-
-  describe 'associations' do
-    it 'has many award_types and accepts them as nested attributes' do
-      project = described_class.create!(description: 'foo',
-                                        title: 'This is a title',
-                                        account: create(:account),
-                                        slack_channel: 'slack_channel',
-                                        maximum_tokens: 10_000_000,
-                                        legal_project_owner: 'legal project owner',
-                                        payment_type: 'project_token',
-                                        award_types_attributes: [
-                                          { 'name' => 'Small award', 'amount' => '1000' },
-                                          { 'name' => '', 'amount' => '1000' },
-                                          { 'name' => 'Award', 'amount' => '' }
-                                        ],
-                                        long_id: SecureRandom.hex(20))
-
-      expect(project.award_types.count).to eq(1)
-      expect(project.award_types.first.name).to eq('Small award')
-      expect(project.award_types.first.amount).to eq(1000)
-      project.update(award_types_attributes: { id: project.award_types.first.id, _destroy: true })
-      expect(project.award_types.count).to eq(0)
-    end
-  end
-
-  it 'enum of denominations should contain the platform wide currencies' do
-    project_denominations = described_class.denominations.map { |x, _| x }.sort
-    platform_denominations = Comakery::Currency::DENOMINATIONS.keys.sort
-    expect(project_denominations).to eq(platform_denominations)
   end
 
   describe 'scopes' do
@@ -447,33 +178,6 @@ describe Project do
     end
   end
 
-  describe '#transitioned_to_ethereum_enabled?' do
-    it 'triggers if new project is saved with ethereum_enabled = true' do
-      project = build(:project, ethereum_enabled: true)
-      project.save!
-      expect(project.transitioned_to_ethereum_enabled?).to eq(true)
-    end
-
-    it 'triggers if existing project is saved with ethereum_enabled = true' do
-      project = create(:project, ethereum_enabled: false)
-      project.update!(ethereum_enabled: true)
-      expect(project.transitioned_to_ethereum_enabled?).to eq(true)
-    end
-
-    it 'does not trigger if new project is saved with ethereum_enabled = false' do
-      project = build(:project, ethereum_enabled: false)
-      project.save!
-      expect(project.transitioned_to_ethereum_enabled?).to eq(false)
-    end
-
-    it 'is false if an existing project with an account is transitioned from ethereum_enabled = false to true' do
-      stub_token_symbol
-      project = create(:project, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' * 40)
-      project.update!(ethereum_enabled: true)
-      expect(project.transitioned_to_ethereum_enabled?).to eq(false)
-    end
-  end
-
   describe '#total_awarded' do
     describe 'without project awards' do
       let(:project) { create :project }
@@ -483,18 +187,18 @@ describe Project do
 
     describe 'with project awards' do
       let!(:project1) { create :project }
-      let!(:project1_award_type) { (create :award_type, project: project1, amount: 3) }
+      let!(:project1_award_type) { (create :award_type, project: project1) }
       let(:project2) { create :project }
-      let!(:project2_award_type) { (create :award_type, project: project2, amount: 5) }
+      let!(:project2_award_type) { (create :award_type, project: project2) }
       let(:issuer) { create :account }
       let(:account) { create :account }
 
       before do
-        project1_award_type.awards.create_with_quantity(5, issuer: account, account: account)
-        project1_award_type.awards.create_with_quantity(5, issuer: account, account: account)
+        create(:award, award_type: project1_award_type, quantity: 5, amount: 3, issuer: account, account: account)
+        create(:award, award_type: project1_award_type, quantity: 5, amount: 3, issuer: account, account: account)
 
-        project2_award_type.awards.create_with_quantity(3, issuer: account, account: account)
-        project2_award_type.awards.create_with_quantity(7, issuer: account, account: account)
+        create(:award, award_type: project2_award_type, quantity: 3, amount: 5, issuer: account, account: account)
+        create(:award, award_type: project2_award_type, quantity: 7, amount: 5, issuer: account, account: account)
       end
 
       it 'returns the total amount of awards issued for the project' do
@@ -563,7 +267,7 @@ describe Project do
     describe 'with revenue sharing awards' do
       let!(:project) { create :project, payment_type: :revenue_share }
       let(:account) { create :account }
-      let(:project_award_type) { create :award_type, project: project, amount: 1 }
+      let(:project_award_type) { create :award_type, project: project }
 
       it 'with no revenue sharing percentage entered' do
         project.update(royalty_percentage: nil)
@@ -589,7 +293,7 @@ describe Project do
 
       it 'with percentage, revenue, and payments' do
         project.update(royalty_percentage: 10)
-        project_award_type.awards.create_with_quantity(9, issuer: project.account, account: account)
+        create(:award, award_type: project_award_type, quantity: 9, amount: 1, issuer: project.account, account: account)
         project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
         project.payments.new_with_quantity(quantity_redeemed: 2, account: account).save!
 
@@ -642,12 +346,12 @@ describe Project do
       end
 
       describe 'with percentage and revenue and shares' do
-        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let!(:project_award_type) { (create :award_type, project: project) }
         let(:issuer) { create :account }
         let(:account) { create :account }
 
         before do
-          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
+          create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -661,13 +365,13 @@ describe Project do
       end
 
       describe 'with payments made' do
-        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let!(:project_award_type) { (create :award_type, project: project) }
         let(:issuer) { create :account }
         let(:account) { create :account }
         let(:expected_revenue_per_share) { BigDecimal('3.628571428571428571') }
 
         before do
-          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
+          create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -737,12 +441,12 @@ describe Project do
       end
 
       describe 'with percentage and revenue and shares for USD' do
-        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let!(:project_award_type) { (create :award_type, project: project) }
         let(:issuer) { create :account }
         let(:account) { create :account }
 
         before do
-          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
+          create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -767,13 +471,13 @@ describe Project do
       end
 
       describe 'with percentage and revenue and shares for high precision currency (ETH)' do
-        let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+        let!(:project_award_type) { (create :award_type, project: project) }
         let(:issuer) { create :account }
         let(:account) { create :account }
 
         before do
-          project.update(denomination: 'ETH')
-          project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account)
+          project.token.update(denomination: 'ETH')
+          create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account)
           project.update(royalty_percentage: 10)
           project.revenues.create(amount: 1000, currency: 'ETH', recorded_by: project.account)
           project.revenues.create(amount: 270, currency: 'ETH', recorded_by: project.account)
@@ -809,11 +513,11 @@ describe Project do
   describe 'with large numbers' do
     let(:billion_minus_one) { BigDecimal('999,999,999') }
 
-    let(:project) { create :project, payment_type: :revenue_share, royalty_percentage: 100, denomination: :ETH }
-    let(:big_award) { create :award_type, project: project, amount: billion_minus_one }
+    let(:project) { create :project, payment_type: :revenue_share, royalty_percentage: 100, token: create(:token, denomination: :ETH) }
+    let(:big_award) { create :award_type, project: project }
 
     before do
-      big_award.awards.create_with_quantity(1, issuer: project.account, account: project.account)
+      create(:award, award_type: big_award, quantity: 1, amount: billion_minus_one, issuer: project.account, account: project.account)
 
       project.revenues.create(amount: billion_minus_one, currency: 'USD', recorded_by: project.account)
     end
@@ -843,12 +547,12 @@ describe Project do
 
   describe 'payments association methods' do
     let!(:project) { create :project, payment_type: :revenue_share }
-    let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
+    let!(:project_award_type) { (create :award_type, project: project) }
     let(:issuer) { create :account }
     let!(:account) { create :account }
 
     before do
-      project_award_type.awards.create_with_quantity(5, issuer: project.account, account: account)
+      create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: project.account, account: account)
       project.update(royalty_percentage: 10)
       project.revenues.create(amount: 1000, currency: 'USD', recorded_by: project.account)
       project.revenues.create(amount: 270, currency: 'USD', recorded_by: project.account)
@@ -892,8 +596,8 @@ describe Project do
     let(:issuer) { create :account }
     let!(:account) { create :account }
 
-    let!(:project_award_type) { (create :award_type, project: project, amount: 7) }
-    let!(:awards) { project_award_type.awards.create_with_quantity(5, issuer: issuer, account: account) }
+    let!(:project_award_type) { (create :award_type, project: project) }
+    let!(:awards) { create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account) }
 
     specify { expect(project.awards.size).to eq(1) }
 
@@ -990,10 +694,10 @@ describe Project do
 
   it 'total_month_awarded' do
     project = create :project
-    award_type = create :award_type, project: project, amount: 10
-    award_type2 = create :award_type, project: project, amount: 20
-    award = create :award, award_type: award_type
-    create :award, award_type: award_type2
+    award_type = create :award_type, project: project
+    award_type2 = create :award_type, project: project
+    award = create :award, award_type: award_type, amount: 10
+    create :award, award_type: award_type2, amount: 20
     expect(project.total_month_awarded).to eq 30
     award.update created_at: DateTime.current - 35.days
     expect(project.total_month_awarded).to eq 20
@@ -1033,87 +737,23 @@ describe Project do
     expect(project.show_revenue_info?(other_account)).to eq false
   end
 
-  it 'populate_token_symbol' do
-    contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
-    stub_token_symbol
-    project = create :project, token_symbol: nil, ethereum_contract_address: contract_address
-    expect project.token_symbol = 'FCBB'
-  end
-
-  it 'check_coin_type' do
-    project = create :project, token_symbol: 'FCBB', decimal_places: 8, ethereum_contract_address: '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d', contract_address: 'a8112e56eb96bd3da7741cfea0e3cbd841fc009a', blockchain_network: 'qtum_testnet', coin_type: 'eth'
-    expect(project).to be_valid
-    expect(project.contract_address).to be_nil
-    expect(project.ethereum_contract_address).to be_nil
-    expect(project.token_symbol).to be_nil
-    expect(project.decimal_places).to be_nil
-    expect(project.blockchain_network).to be_nil
-  end
-
-  it 'can manual input token_symbol' do
-    contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
-    # stub_token_symbol(contract_address, 'FCBB')
-    stub_token_symbol
-    project = create :project, token_symbol: 'AAA', ethereum_contract_address: contract_address
-    expect project.token_symbol = 'AAA'
-  end
-
-  it 'fills decimal_places' do
-    project = create :project, coin_type: 'eth'
-    expect(project.reload.decimal_places).to eq 18
-
-    project = create :project, coin_type: 'ada'
-    expect(project.reload.decimal_places).to eq 6
-
-    project = create :project, coin_type: 'btc'
-    expect(project.reload.decimal_places).to eq 8
-  end
-
-  it 'coin_type_on_cardano?' do
-    project = create :project, coin_type: 'eth'
-    expect(project.coin_type_on_cardano?).to eq false
-    project.update coin_type: 'ada'
-    expect(project.coin_type_on_cardano?).to eq true
-  end
-
-  it 'coin_type_on_bitcoin?' do
-    project = create :project, coin_type: 'eth'
-    expect(project.coin_type_on_bitcoin?).to eq false
-    project.update coin_type: 'btc'
-    expect(project.coin_type_on_bitcoin?).to eq true
-  end
-
-  it 'coin_type_on_eos?' do
-    project = create :project, coin_type: 'eth'
-    expect(project.coin_type_on_eos?).to eq false
-    project.update coin_type: 'eos'
-    expect(project.coin_type_on_eos?).to eq true
-  end
-
-  it 'coin_type_on_tezos?' do
-    project = create :project, coin_type: 'eth'
-    expect(project.coin_type_on_tezos?).to eq false
-    project.update coin_type: 'xtz'
-    expect(project.coin_type_on_tezos?).to eq true
-  end
-
   describe '#top_contributors' do
     let!(:account) { create :account }
     let!(:account1) { create :account }
     let!(:project) { create :project }
-    let!(:award_type) { create :award_type, amount: 10, project: project }
-    let!(:award_type1) { create :award_type, amount: 20, project: project }
-    let!(:other_award_type) { create :award_type, amount: 15 }
+    let!(:award_type) { create :award_type, project: project }
+    let!(:award_type1) { create :award_type, project: project }
+    let!(:other_award_type) { create :award_type }
 
     before do
-      create :award, award_type: award_type, account: account
-      create :award, award_type: award_type1, account: account1
+      create :award, award_type: award_type, amount: 10, account: account
+      create :award, award_type: award_type1, amount: 20, account: account1
     end
     it 'return project contributors sort by total amount' do
       expect(project.top_contributors.map(&:id)).to eq [account1.id, account.id]
     end
     it 'does not count other project award' do
-      create :award, award_type: other_award_type, account: account
+      create :award, award_type: other_award_type, amount: 15, account: account
       expect(project.top_contributors.map(&:id)).to eq [account1.id, account.id]
     end
     it 'sort by newest if have same total_amount' do
@@ -1131,12 +771,12 @@ describe Project do
   describe '#awards_for_chart' do
     let!(:account) { create :account }
     let!(:project) { create :project }
-    let!(:award_type) { create :award_type, amount: 10, project: project }
+    let!(:award_type) { create :award_type, project: project }
 
     before do
-      8.times { create :award, award_type: award_type, account: account, created_at: 2.days.ago }
-      1.times { create :award, award_type: award_type, account: account, created_at: 3.days.ago }
-      3.times { create :award, award_type: award_type, account: account, created_at: 4.days.ago }
+      8.times { create :award, award_type: award_type, amount: 10, account: account, created_at: 2.days.ago }
+      1.times { create :award, award_type: award_type, amount: 10, account: account, created_at: 3.days.ago }
+      3.times { create :award, award_type: award_type, amount: 10, account: account, created_at: 4.days.ago }
     end
 
     it 'limit number of days by requested number of latest awards' do

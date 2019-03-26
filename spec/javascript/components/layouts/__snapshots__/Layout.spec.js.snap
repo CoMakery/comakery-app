@@ -10,9 +10,7 @@ exports[`Layout renders correctly without props 1`] = `
     >
       <div
         className="layout--content--title"
-      >
-        title
-      </div>
+      />
       <hr
         className="layout--content--hr"
       />

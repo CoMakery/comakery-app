@@ -7,11 +7,12 @@ class InputField extends React.Component {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this.handleFileChange = this.handleFileChange.bind(this)
+    this.copyToClipboard = this.copyToClipboard.bind(this)
     this.passImg = this.passImg.bind(this)
     this.state = {
       fileLocalUrl : null,
       fileLocalName: null,
-      symbolCounter: this.props.value.length
+      symbolCounter: this.props.value ? this.props.value.length : 0
     }
   }
 
@@ -43,6 +44,12 @@ class InputField extends React.Component {
     this.props.eventHandler(event)
   }
 
+  copyToClipboard(event) {
+    event.target.focus()
+    event.target.select()
+    document.execCommand('copy')
+  }
+
   render() {
     const {
       className,
@@ -50,14 +57,19 @@ class InputField extends React.Component {
       type,
       symbolLimit,
       required,
+      recommended,
       disabled,
       checked,
+      copyOnClick,
       name,
       value,
       selectEntries,
       checkboxText,
       placeholder,
       pattern,
+      min,
+      max,
+      step,
       readOnly,
       errorText,
       imgPreviewUrl,
@@ -83,7 +95,17 @@ class InputField extends React.Component {
           { type !== 'checkbox' &&
             <div className="input-field--title">
               <span className="input-field--title--title">{title}</span>
-              <span className="input-field--title--required">{required ? 'required' : 'optional'}</span>
+              <span className="input-field--title--required">
+                {required &&
+                  'required'
+                }
+                {recommended &&
+                  'recommended'
+                }
+                {!required && !recommended &&
+                  'optional'
+                }
+              </span>
               { symbolLimit > 0 &&
                 <span className="input-field--title--counter">{this.state.symbolCounter}/{symbolLimit}</span>
               }
@@ -97,15 +119,32 @@ class InputField extends React.Component {
               </div>
             }
 
-            { type === 'text' &&
-              <input className="input-field--content__text"
+            { (type === 'text' || type === 'email') &&
+              <input className={classNames('input-field--content__text', (copyOnClick ? 'input-field--content__text__copyable' : ''))}
                 required={required}
                 type={type}
                 name={name}
                 value={value}
                 onChange={this.handleChange}
+                onClick={copyOnClick ? this.copyToClipboard : null}
                 placeholder={placeholder}
                 pattern={pattern}
+                readOnly={readOnly}
+              />
+            }
+
+            { type === 'number' &&
+              <input className={classNames('input-field--content__text', (copyOnClick ? 'input-field--content__text__copyable' : ''))}
+                required={required}
+                type={type}
+                name={name}
+                value={value}
+                onChange={this.handleChange}
+                onClick={copyOnClick ? this.copyToClipboard : null}
+                placeholder={placeholder}
+                min={min}
+                max={max}
+                step={step}
                 readOnly={readOnly}
               />
             }
@@ -212,15 +251,20 @@ InputField.propTypes = {
   type                : PropTypes.string,
   symbolLimit         : PropTypes.number,
   required            : PropTypes.bool,
+  recommended         : PropTypes.bool,
   disabled            : PropTypes.bool,
   checked             : PropTypes.bool,
+  copyOnClick         : PropTypes.bool,
   name                : PropTypes.string,
-  value               : PropTypes.string,
+  value               : PropTypes.node,
   selectEntries       : PropTypes.array,
   checkboxText        : PropTypes.string,
   eventHandler        : PropTypes.func,
   placeholder         : PropTypes.string,
   pattern             : PropTypes.string,
+  min                 : PropTypes.string,
+  max                 : PropTypes.string,
+  step                : PropTypes.string,
   readOnly            : PropTypes.bool,
   errorText           : PropTypes.string,
   imgPreviewUrl       : PropTypes.string,
@@ -235,8 +279,10 @@ InputField.defaultProps = {
   type                : 'text',
   symbolLimit         : 100,
   required            : false,
+  recommended         : false,
   disabled            : false,
   checked             : false,
+  copyOnClick         : false,
   name                : 'field',
   value               : '',
   selectEntries       : [],
@@ -244,6 +290,9 @@ InputField.defaultProps = {
   eventHandler        : () => {},
   placeholder         : 'Please enter value',
   pattern             : '.*',
+  min                 : '',
+  max                 : '',
+  step                : '',
   readOnly            : false,
   errorText           : '',
   imgPreviewUrl       : '',

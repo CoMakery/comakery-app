@@ -40,7 +40,7 @@ describe 'my account', js: true do
     expect(page).to have_content 'Dev'
 
     stub_token_symbol
-    project = create(:project, ethereum_contract_address: '0x' + 'a' * 40)
+    project = create(:project, token: create(:token, ethereum_contract_address: '0x' + 'a' * 40))
     award_type = create :award_type, project: project
     award = create :award, award_type: award_type, account: account
 

@@ -9,9 +9,6 @@ describe GetAwardData do
   let!(:bob) { create(:account, email: 'other@example.com', first_name: 'bob', last_name: 'bob') }
   let!(:bob_auth) { create(:authentication, account: bob) }
   let!(:project) { create(:project, title: 'Cats', account: sam) }
-  let!(:award_type1) { create(:award_type, project: project, amount: 1000, name: 'Small Award') }
-  let!(:award_type2) { create(:award_type, project: project, amount: 2000, name: 'Medium Award') }
-  let!(:award_type3) { create(:award_type, project: project, amount: 3000, name: 'Big Award') }
 
   before do
     team.build_authentication_team sam_auth
@@ -20,9 +17,9 @@ describe GetAwardData do
   end
 
   describe '#contributor_by_day_row' do
-    let!(:bobs_award) { create(:award, award_type: award_type1, account: bob, created_at: Date.new(2016, 3, 2)) }
-    let!(:johns_award) { create(:award, award_type: award_type2, account: john, created_at: Date.new(2016, 3, 2)) }
-    let!(:johns_award2) { create(:award, award_type: award_type2, account: john, created_at: Date.new(2016, 3, 2)) }
+    let!(:bobs_award) { create(:award, project: project, amount: 1000, account: bob, created_at: Date.new(2016, 3, 2)) }
+    let!(:johns_award) { create(:award, project: project, amount: 2000, account: john, created_at: Date.new(2016, 3, 2)) }
+    let!(:johns_award2) { create(:award, project: project, amount: 2000, account: john, created_at: Date.new(2016, 3, 2)) }
 
     it 'returns a row of data with defaults for missing data and summed amounts for multiple awards on the sam same day' do
       interactor = described_class.new
@@ -38,17 +35,17 @@ describe GetAwardData do
   describe '#contributions_by_day' do
     let!(:contributor) { create :account, first_name: 'Amy', last_name: 'Win' }
     let!(:new_project) { create(:project, title: 'Dogs', account: sam) }
-    let!(:award_type) { create(:award_type, project: new_project, amount: 1000, name: 'Small Award') }
-    let!(:award) { create(:award, award_type: award_type, quantity: 0.15, account: contributor, created_at: Time.zone.today - 200.days) }
+    let!(:award_type) { create(:award_type, project: new_project) }
 
     it 'return contributors by day - only return last 150' do
+      create(:award, award_type: award_type, amount: 1000, quantity: 0.15, account: contributor, created_at: Time.zone.today - 200.days, updated_at: Time.zone.today - 200.days)
       result = described_class.call(project: new_project)
       h = { 'date' => (Time.zone.today - 150.days).strftime('%Y-%m-%d') }
       expect(result[:award_data][:contributions_by_day].first).to eq h
     end
 
     it 'return contributors by day' do
-      create(:award, award_type: award_type, quantity: 1, account: contributor, created_at: Time.zone.today - 10.days)
+      create(:award, award_type: award_type, amount: 1000, quantity: 1, account: contributor, created_at: Time.zone.today - 10.days)
       result = described_class.call(project: new_project)
       h = { 'Amy Win' => 0.1e4, 'date' => (Time.zone.today - 10.days).strftime('%Y-%m-%d') }
       expect(result[:award_data][:contributions_by_day].first).to eq h

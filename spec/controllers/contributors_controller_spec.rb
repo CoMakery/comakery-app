@@ -23,7 +23,7 @@ describe ContributorsController do
     login(issuer.account)
   end
   describe '#index' do
-    let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_auth.account) }
+    let!(:award) { create(:award, amount: 1337, award_type: create(:award_type, project: project), account: other_auth.account) }
 
     it 'get contributors list' do
       get :index, params: { project_id: project.to_param }

@@ -6,20 +6,13 @@ exports[`MissionForm renders correctly without props 1`] = `
   formAction="POST"
   formUrl="/"
   mission={Object {}}
-  tokens={
-    Array [
-      Array [
-        "Please select a token ...",
-        null,
-      ],
-    ]
-  }
   urlOnSuccess="/"
 >
   <Layout
     category=""
     className="mission-form"
     hasBackButton={true}
+    navTitle={null}
     sidebar={null}
     subfooter={
       <React.Fragment>
@@ -108,6 +101,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__white__dark"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -116,12 +110,16 @@ exports[`MissionForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="name"
                   pattern=".*"
                   placeholder="Unicoin"
                   readOnly={false}
+                  recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={100}
                   title="Name"
                   type="text"
@@ -158,6 +156,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                         className="input-field--content__text"
                         name="name"
                         onChange={[Function]}
+                        onClick={null}
                         pattern=".*"
                         placeholder="Unicoin"
                         readOnly={false}
@@ -169,90 +168,6 @@ exports[`MissionForm renders correctly without props 1`] = `
                   </div>
                 </InputField>
               </InputFieldWhiteDark>
-              <InputFieldDropdownHalfed
-                eventHandler={[Function]}
-                name="token"
-                required={true}
-                selectEntries={
-                  Array [
-                    Array [
-                      "Please select a token ...",
-                      null,
-                    ],
-                  ]
-                }
-                title="Token"
-                value=""
-              >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__dropdown--halfed"
-                  disabled={false}
-                  errorText=""
-                  eventHandler={[Function]}
-                  imgInputRef={null}
-                  imgPreviewDimensions="40x40"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  name="token"
-                  pattern=".*"
-                  placeholder="Please enter value"
-                  readOnly={false}
-                  required={true}
-                  selectEntries={
-                    Array [
-                      Array [
-                        "Please select a token ...",
-                        null,
-                      ],
-                    ]
-                  }
-                  symbolLimit={0}
-                  title="Token"
-                  type="select"
-                  value=""
-                >
-                  <div
-                    className="input-field input-field__dropdown--halfed"
-                  >
-                    <div
-                      className="input-field--title"
-                    >
-                      <span
-                        className="input-field--title--title"
-                      >
-                        Token
-                      </span>
-                      <span
-                        className="input-field--title--required"
-                      >
-                        required
-                      </span>
-                    </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <select
-                        className="input-field--content__select"
-                        disabled={false}
-                        name="token"
-                        onChange={[Function]}
-                        required={true}
-                        value=""
-                      >
-                        <option
-                          key="null"
-                          value={null}
-                        >
-                          Please select a token ...
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                </InputField>
-              </InputFieldDropdownHalfed>
               <InputFieldWhiteDark
                 eventHandler={[Function]}
                 name="subtitle"
@@ -266,6 +181,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__white__dark"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -274,12 +190,16 @@ exports[`MissionForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="subtitle"
                   pattern=".*"
                   placeholder="Unicoin is the future of tokenizing fantastical beast networks"
                   readOnly={false}
+                  recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={140}
                   title="Subtitle"
                   type="text"
@@ -316,6 +236,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                         className="input-field--content__text"
                         name="subtitle"
                         onChange={[Function]}
+                        onClick={null}
                         pattern=".*"
                         placeholder="Unicoin is the future of tokenizing fantastical beast networks"
                         readOnly={false}
@@ -340,6 +261,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__description"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -348,12 +270,16 @@ exports[`MissionForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements=""
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="description"
                   pattern=".*"
                   placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
                   readOnly={false}
+                  recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={375}
                   title="Description"
                   type="textarea"
@@ -424,6 +350,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__upload-file"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -442,12 +369,16 @@ exports[`MissionForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements="Image should be at least 800px x 800px"
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="logo"
                   pattern=".*"
                   placeholder="Please enter value"
                   readOnly={false}
+                  recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={0}
                   title="Mission Logo"
                   type="file"
@@ -514,6 +445,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   checkboxText=""
                   checked={false}
                   className="input-field__upload-file"
+                  copyOnClick={false}
                   disabled={false}
                   errorText=""
                   eventHandler={[Function]}
@@ -532,12 +464,16 @@ exports[`MissionForm renders correctly without props 1`] = `
                   imgPreviewUrl=""
                   imgRequirements="Image should be at least 1200px x 800px"
                   imgVerifier={[Function]}
+                  max=""
+                  min=""
                   name="image"
                   pattern=".*"
                   placeholder="Please enter value"
                   readOnly={false}
+                  recommended={false}
                   required={true}
                   selectEntries={Array []}
+                  step=""
                   symbolLimit={0}
                   title="Mission Image"
                   type="file"

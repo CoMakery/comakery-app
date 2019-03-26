@@ -11,7 +11,7 @@ describe 'shared/award_form_terms.html.rb' do
       maximum_royalties_per_month: 27_000,
       require_confidentiality: true,
       exclusive_contributions: true,
-      denomination: :USD,
+      token: create(:token, denomination: :USD),
       payment_type: :revenue_share,
       license_finalized: false,
       revenue_sharing_end_date: '2050/01/02',
@@ -68,7 +68,7 @@ describe 'shared/award_form_terms.html.rb' do
 
     describe 'currency displayed correctly for' do
       specify do
-        project.USD!
+        project.token.USD!
         render
 
         expect(rendered).to have_content /Minimum Revenue.*\$/
@@ -76,7 +76,7 @@ describe 'shared/award_form_terms.html.rb' do
       end
 
       specify do
-        project.BTC!
+        project.token.BTC!
         render
 
         expect(rendered).to have_content /Minimum Revenue.*฿/
@@ -84,7 +84,7 @@ describe 'shared/award_form_terms.html.rb' do
       end
 
       specify do
-        project.ETH!
+        project.token.ETH!
         render
 
         expect(rendered).to have_content /Minimum Revenue.*Ξ/

@@ -3,7 +3,14 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
-  layout 'react', only: %i[show]
+  before_action :assign_project, only: %i[edit update awards]
+  before_action :assign_project_by_long_id, only: %i[unlisted]
+  before_action :set_tokens, only: %i[new edit]
+  before_action :set_missions, only: %i[new edit]
+  before_action :set_visibilities, only: %i[new edit]
+  before_action :set_generic_props, only: %i[new edit]
+
+  layout 'react', only: %i[show new edit]
 
   def landing
     if current_account
@@ -15,6 +22,15 @@ class ProjectsController < ApplicationController
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
     @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
+  end
+
+  def awards
+    authorize @project, :show_contributions?
+    @awards = @project.awards.where(status: 'done')
+    @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
+    @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
+
+    render 'awards/index'
   end
 
   def index
@@ -29,53 +45,45 @@ class ProjectsController < ApplicationController
   end
 
   def new
-    assign_slack_channels
-
-    @project = current_account.projects.build(public: false,
-                                              maximum_tokens: 1_000_000,
-                                              maximum_royalties_per_month: 50_000,
-                                              mission_id: params[:mission_id])
-    @project.award_types.build(name: 'Thanks', amount: 10)
-    @project.award_types.build(name: 'Software development hour', amount: 100)
-    @project.award_types.build(name: 'Graphic design hour', amount: 100)
-    @project.award_types.build(name: 'Product management hour', amount: 100)
-    @project.award_types.build(name: 'Marketing hour', amount: 100)
-
-    @project.award_types.build(name: 'Expert software development hour', amount: 150)
-    @project.award_types.build(name: 'Expert graphic design hour', amount: 150)
-    @project.award_types.build(name: 'Expert product management hour', amount: 150)
-    @project.award_types.build(name: 'Expert marketing hour', amount: 150)
-    @project.award_types.build(name: 'Blog post (600+ words)', amount: 150)
-    @project.award_types.build(name: 'Long form article (2,000+ words)', amount: 2000)
+    @project = current_account.projects.build
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
+
     authorize @project
+
+    @props[:project] = @project.serializable_hash.merge(
+      url: "https://www.comakery.com/p/#{@project.long_id}",
+      mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
+    )
+    render component: 'ProjectForm', props: @props
   end
 
   def create
     @project = current_account.projects.build project_params
-    @project.long_id = params[:long_id] || SecureRandom.hex(20)
+    @project.maximum_royalties_per_month = 50_000
+    @project.public = false
+    @project.long_id ||= SecureRandom.hex(20)
+
     authorize @project
+
     if @project.save
-      flash[:notice] = 'Project created'
-      redirect_to project_detail_path
-    elsif @project.errors&.details&.dig(:long_id)&.any? { |e| e[:error] == :taken }
-      flash[:error] = 'Project already created'
-      redirect_to projects_path
+      set_generic_props
+      camelize_props
+      render json: { id: @project.id, props: @props }, status: :ok
     else
-      @error = 'Project saving failed, please correct the errors below'
-      assign_slack_channels
-      render :new
+      errors  = @project.errors.messages.map { |k, v| ["project[#{k}]", v.to_sentence] }.to_h
+      message = @project.errors.full_messages.join(', ')
+      render json: { message: message, errors: errors }, status: :unprocessable_entity
     end
   end
 
   def show
-    @project = Project.listed.includes(:award_types).find(params[:id]).decorate
+    @project = Project.listed.find(params[:id])&.decorate
     authorize @project
     set_award
 
-    token = @project.mission&.token&.decorate
-    mission = @project.mission
+    token = @project&.token&.decorate
+    mission = @project&.mission
     @props = {
       interested: current_account&.interested?(@project.id), # project level interest
       specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
@@ -84,13 +92,12 @@ class ProjectsController < ApplicationController
       token_data: token_props(token),
       csrf_token: form_authenticity_token,
       contributors_path: project_contributors_path(@project.show_id),
-      awards_path: project_awards_path(@project.show_id),
+      awards_path: awards_project_path(@project.show_id),
       edit_path: current_account && @project.account == current_account ? edit_project_path(@project) : nil
     }
   end
 
   def unlisted
-    @project = Project.includes(:award_types).find_by(long_id: params[:long_id])&.decorate
     authorize @project
     if @project&.access_unlisted?(current_account)
       set_award
@@ -101,27 +108,30 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = current_account.projects.includes(:award_types).find(params[:id]).decorate
     @project.channels.build if current_account.teams.any?
     @project.long_id ||= SecureRandom.hex(20)
     authorize @project
-    assign_slack_channels
-    @current_section = '#general'
+
+    @props[:form_action] = 'PATCH'
+    @props[:form_url]    = project_path(@project)
+
+    render component: 'ProjectForm', props: @props
   end
 
   def update
-    @project = current_account.projects.includes(:award_types, :channels).find(params[:id])
+    @project = current_account.projects.find(params[:id])
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
+
     if @project.update project_params
-      @notice = 'Project updated'
+      set_generic_props
+      camelize_props
+      render json: { message: 'Project updated', props: @props }, status: :ok
     else
-      @error = 'Project update failed, please correct the errors below'
+      errors  = @project.errors.messages.map { |k, v| [k, v.to_sentence] }.to_s
+      message = @project.errors.full_messages.join(', ')
+      render json: { message: message, errors: errors }, status: :unprocessable_entity
     end
-    @project = @project.decorate
-    assign_slack_channels
-    @current_section = params[:current_section]
-    render :edit
   end
 
   def update_status
@@ -138,19 +148,82 @@ class ProjectsController < ApplicationController
 
   private
 
+  def assign_project_by_long_id
+    @project = Project.find_by(long_id: params[:long_id])&.decorate
+    redirect_to('/404.html') unless @project
+  end
+
+  def set_tokens
+    @tokens = Token.all.map { |t| [t.name, t.id] }.to_h
+  end
+
+  def set_missions
+    @missions = Mission.all.map { |m| [m.name, m.id] }.to_h
+  end
+
+  def set_visibilities
+    @visibilities = Project.visibilities.keys
+  end
+
+  def set_generic_props
+    @props = {
+      project: @project&.serializable_hash&.merge(
+        {
+          square_image_url: @project&.square_image&.present? ? Refile.attachment_url(@project, :square_image, :fill, 800, 800) : nil,
+          panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
+          mission_id: @project&.mission&.id,
+          token_id: @project&.token&.id,
+          channels: @project&.channels&.map do |channel|
+            {
+              channel_id: channel&.channel_id&.to_s,
+              team_id: channel&.team&.id&.to_s,
+              id: channel&.id
+            }
+          end,
+          url: "https://www.comakery.com/p/#{@project.long_id}"
+        }
+      ),
+      tokens: @tokens,
+      missions: @missions,
+      visibilities: @visibilities,
+      teams: current_account&.authentication_teams&.map do |a_team|
+        {
+          team: "[#{a_team.team.provider}] #{a_team.team.name}",
+          team_id: a_team.team.id.to_s,
+          channels: a_team.channels.map do |channel|
+            {
+              channel: channel.to_s,
+              channel_id: channel.to_s
+            }
+          end
+        }
+      end,
+      form_url: projects_path,
+      form_action: 'POST',
+      url_on_success: projects_path,
+      csrf_token: form_authenticity_token
+    }
+  end
+
+  def camelize_props
+    @props.deep_transform_keys! { |key| key.to_s.camelize(:lower) }
+  end
+
   def project_params
     result = params.require(:project).permit(
       :revenue_sharing_end_date,
       :contributor_agreement_url,
       :description,
-      :ethereum_enabled,
-      :image,
+      :square_image,
+      :panoramic_image,
       :maximum_tokens,
+      :token_id,
+      :mission_id,
+      :long_id,
       :title,
       :tracker,
       :video_url,
       :payment_type,
-      :coin_type,
       :exclusive_contributions,
       :legal_project_owner,
       :minimum_payment,
@@ -159,44 +232,17 @@ class ProjectsController < ApplicationController
       :royalty_percentage,
       :maximum_royalties_per_month,
       :license_finalized,
-      :denomination,
-      :mission_id,
       :visibility,
-      :ethereum_network,
-      :ethereum_contract_address,
-      :blockchain_network,
-      :contract_address,
-      :token_symbol,
-      :decimal_places,
       :status,
-      award_types_attributes: %i[
+      channels_attributes: %i[
         _destroy
-        amount
-        community_awardable
         id
-        name
-        description
-        disabled
-      ],
-      channels_attributes: %i[id team_id channel_id _destroy]
+        team_id
+        channel_id
+      ]
     )
     result[:revenue_sharing_end_date] = DateTime.strptime(result[:revenue_sharing_end_date], '%m/%d/%Y') if result[:revenue_sharing_end_date].present?
     result
-  end
-
-  def assign_slack_channels
-    @providers = current_account.teams.map(&:provider).uniq
-    @provider_data = {}
-    @providers.each do |provider|
-      teams = current_account.teams.where(provider: provider)
-      team_data = []
-      teams.each do |_team|
-        team_data
-      end
-      @provider_data[provider] = teams
-    end
-    # result = GetSlackChannels.call(current_account: current_account)
-    # @slack_channels = result.channels
   end
 
   def assign_current_account
@@ -228,7 +274,7 @@ class ProjectsController < ApplicationController
     chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
 
     project.as_json(only: %i[id title description]).merge(
-      image_url: project.image.present? ? 'url(' + Refile.attachment_url(project, :image) + ')' : nil,
+      image_url: project.panoramic_image.present? ? Refile.attachment_url(project, :panoramic_image) : nil,
       youtube_url: project.video_url ? project.youtube_id : nil,
       default_image_url: helpers.image_url('defaul_project.jpg'),
       owner: [project.account.first_name, project.account.last_name].join(' '),

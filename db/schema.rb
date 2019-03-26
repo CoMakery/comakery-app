@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190321005006) do
+ActiveRecord::Schema.define(version: 20190325233431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "accounts", id: :serial, force: :cascade do |t|
     t.string "email"
@@ -105,12 +106,14 @@ ActiveRecord::Schema.define(version: 20190321005006) do
   create_table "award_types", id: :serial, force: :cascade do |t|
     t.integer "project_id", null: false
     t.string "name", null: false
-    t.integer "amount", null: false
+    t.integer "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
     t.boolean "disabled"
+    t.text "goal"
+    t.string "specialty"
     t.integer "specialty_id"
     t.index ["project_id"], name: "index_award_types_on_project_id"
   end
@@ -133,6 +136,12 @@ ActiveRecord::Schema.define(version: 20190321005006) do
     t.string "uid"
     t.string "confirm_token"
     t.string "email"
+    t.string "name"
+    t.text "why"
+    t.text "requirements"
+    t.integer "status", default: 0
+    t.decimal "amount"
+    t.text "message"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
   end
 
@@ -213,16 +222,14 @@ ActiveRecord::Schema.define(version: 20190321005006) do
     t.integer "maximum_tokens", default: 0, null: false
     t.text "contributor_agreement_url"
     t.text "video_url"
-    t.string "ethereum_contract_address"
-    t.boolean "ethereum_enabled", default: false
     t.integer "payment_type", default: 1
-    t.boolean "exclusive_contributions"
+    t.boolean "exclusive_contributions", default: true
     t.string "legal_project_owner"
-    t.boolean "require_confidentiality"
+    t.boolean "require_confidentiality", default: true
     t.decimal "royalty_percentage", precision: 16, scale: 13
     t.integer "maximum_royalties_per_month"
     t.boolean "license_finalized", default: false, null: false
-    t.integer "denomination", default: 0, null: false
+    t.integer "denomination"
     t.datetime "revenue_sharing_end_date"
     t.integer "featured"
     t.string "image_filename"
@@ -230,18 +237,30 @@ ActiveRecord::Schema.define(version: 20190321005006) do
     t.string "image_content_type"
     t.string "long_id"
     t.integer "visibility", default: 0
-    t.string "token_symbol"
-    t.string "ethereum_network"
-    t.integer "decimal_places"
-    t.string "coin_type"
-    t.string "blockchain_network"
-    t.string "contract_address"
     t.bigint "mission_id"
     t.integer "status", default: 1
+    t.bigint "token_id"
+    t.integer "decimal_places"
+    t.string "token_symbol"
+    t.string "contract_address"
+    t.string "ethereum_contract_address"
+    t.string "blockchain_network"
+    t.string "ethereum_network"
+    t.boolean "ethereum_enabled"
+    t.string "coin_type"
+    t.string "square_image_id"
+    t.string "square_image_filename"
+    t.string "square_image_content_size"
+    t.string "square_image_content_type"
+    t.string "panoramic_image_id"
+    t.string "panoramic_image_filename"
+    t.string "panoramic_image_content_size"
+    t.string "panoramic_image_content_type"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
     t.index ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public"
+    t.index ["token_id"], name: "index_projects_on_token_id"
   end
 
   create_table "revenues", id: :serial, force: :cascade do |t|
@@ -291,4 +310,5 @@ ActiveRecord::Schema.define(version: 20190321005006) do
   end
 
   add_foreign_key "interests", "accounts"
+  add_foreign_key "projects", "tokens"
 end

@@ -41,11 +41,11 @@ describe PaymentsController do
   end
 
   describe '#create' do
-    let!(:award_type) { create(:award_type, amount: 1, project: my_project) }
+    let!(:award_type) { create(:award_type, project: my_project) }
     let!(:revenue) { create :revenue, amount: 100, project: my_project }
 
     before do
-      award_type.awards.create_with_quantity(50, issuer: account, account: account)
+      create(:award, award_type: award_type, quantity: 50, amount: 1, issuer: account, account: account)
     end
 
     describe 'owner success' do
@@ -106,8 +106,8 @@ describe PaymentsController do
   end
 
   describe 'update' do
-    let!(:award_type) { create(:award_type, amount: 1, project: my_project) }
-    let!(:award) { award_type.awards.create_with_quantity(1, issuer: account, account: account) }
+    let!(:award_type) { create(:award_type, project: my_project) }
+    let!(:award) { create(:award, award_type: award_type, quantity: 1, amount: 1, issuer: account, account: account) }
     let!(:revenue) { my_project.revenues.create(amount: 100, currency: 'USD', recorded_by: account) }
     let!(:payment) { my_project.payments.create_with_quantity(quantity_redeemed: 1, account: account) }
 
@@ -138,8 +138,8 @@ describe PaymentsController do
   end
 
   describe 'update with blank transaction fee' do
-    let!(:award_type) { create(:award_type, amount: 1, project: my_project) }
-    let!(:award) { award_type.awards.create_with_quantity(1, issuer: account, account: account) }
+    let!(:award_type) { create(:award_type, project: my_project) }
+    let!(:award) { create(:award, award_type: award_type, quantity: 1, amount: 1, issuer: account, account: account) }
     let!(:revenue) { my_project.revenues.create(amount: 100, currency: 'USD', recorded_by: account) }
     let!(:payment) { my_project.payments.create_with_quantity(quantity_redeemed: 1, account: account) }
 

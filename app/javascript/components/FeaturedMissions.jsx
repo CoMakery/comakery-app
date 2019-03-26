@@ -83,7 +83,6 @@ export default class FeaturedMissions extends React.Component {
                 id={mission.id}
                 float={index % 2 === 0 ? 'left' : 'right'}
                 name={mission.name}
-                symbol={mission.symbol}
                 imageUrl={mission.imageUrl}
                 description={mission.description}
                 projects={mission.projects}

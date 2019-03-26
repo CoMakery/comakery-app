@@ -77,7 +77,7 @@ Lint/UselessAssignment:
     - 'importer/demo/create_awards.rb'
     - 'importer/git_importer.rb'
     - 'spec/controllers/projects_controller_spec.rb'
-    - 'spec/features/awards/awards_sending_spec.rb'
+    - 'spec/features/awards/awards_paying_spec.rb'
     - 'spec/features/precise_financial_calculations_spec.rb'
     - 'spec/models/account_spec.rb'
     - 'spec/models/authentication_spec.rb'
@@ -114,7 +114,8 @@ Metrics/PerceivedComplexity:
 RSpec/AnyInstance:
   Exclude:
     - 'spec/controllers/awards_controller_spec.rb'
-    - 'spec/features/awards/awards_sending_spec.rb'
+    - 'spec/features/awards/awards_paying_spec.rb'
+    - 'spec/features/awards/awards_issuing_spec.rb'
     - 'spec/features/awards/awards_with_limit_spec.rb'
     - 'spec/features/project_setup/project_legal_agreement_settings_spec.rb'
     - 'spec/features/project_setup/revenue_sharing_calculator_spec.rb'
@@ -279,7 +280,7 @@ Rails/SkipsModelValidations:
 Rails/TimeZone:
   Exclude:
     - 'app/interactors/get_award_data.rb'
-    - 'spec/features/awards/awards_sending_spec.rb'
+    - 'spec/features/awards/awards_paying_spec.rb'
     - 'spec/features/project_setup/project_legal_agreement_settings_spec.rb'
     - 'spec/features/project_setup/revenue_sharing_calculator_spec.rb'
 

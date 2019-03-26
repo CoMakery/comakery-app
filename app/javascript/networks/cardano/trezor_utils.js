@@ -9,7 +9,7 @@ import {
 } from 'networks/cardano/trezor/helpers/validators'
 
 const transferAdaCoins = async function(award) { // award in JSON
-  const network = award.project.blockchain_network.replace('cardano_', '')
+  const network = award.token.blockchain_network.replace('cardano_', '')
   const recipientAddress = award.account.cardano_wallet
   let amount = parseFloat(award.total_amount)
 
@@ -23,7 +23,6 @@ const transferAdaCoins = async function(award) { // award in JSON
     if (!addressValidator.validationError && !coins.validationError) {
       window.alertMsg('#metamaskModal1', 'Waiting...')
       txHash = await submitTransaction(network, recipientAddress, coins)
-      console.log('transaction address: ' + txHash)
     }
   } catch (err) {
     console.error(err)

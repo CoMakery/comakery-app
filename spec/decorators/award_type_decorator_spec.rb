@@ -10,13 +10,5 @@ describe AwardTypeDecorator do
     it 'drescription_markdown' do
       expect(award_type.decorate.description_markdown).to eq('award for contributor')
     end
-
-    it 'amount_pretty' do
-      expect(award_type.decorate.amount_pretty).to eq('1,337')
-    end
-
-    it 'name_with_amount' do
-      expect(award_type.decorate.name_with_amount).to eq('1,337 Contribution')
-    end
   end
 end

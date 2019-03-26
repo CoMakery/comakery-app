@@ -159,7 +159,7 @@ export default class Project extends React.Component {
     descriptionText = descriptionText.join('.')
 
     return <div className="project-container">
-      <div className="project-header" style={{backgroundImage: projectData.imageUrl || `url(${projectData.defaultImageUrl})`}}>
+      <div className="project-header" style={{backgroundImage: `url(${projectData.imageUrl})` || `url(${projectData.defaultImageUrl})`}}>
         <div className="project-header__blur" />
         <div className="project-header__content">
           <div className="project-header__menu">

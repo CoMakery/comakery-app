@@ -43,7 +43,6 @@ class PagesController < ApplicationController
   def featured_mission_props(mission)
     mission.as_json(only: %i[id name description]).merge(
       image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 312, 312) : nil,
-      symbol: mission.token&.symbol,
       projects: mission.projects.public_listed.active.map do |project|
         project.as_json(only: %i[id title]).merge(
           interested: current_account&.interested?(project.id)
@@ -55,7 +54,6 @@ class PagesController < ApplicationController
   def more_mission_props(mission)
     mission.as_json(only: %i[id name]).merge(
       image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 231, 231) : nil,
-      symbol: mission.token&.symbol,
       projects_count: mission.projects.public_listed.active.count
     )
   end

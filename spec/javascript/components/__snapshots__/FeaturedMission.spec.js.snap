@@ -8,7 +8,6 @@ exports[`FeaturedMission renders correctly without props 1`] = `
   imageUrl=""
   name=""
   projects={Array []}
-  symbol=""
 >
   <div
     className="featured-mission "

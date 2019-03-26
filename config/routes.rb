@@ -3,8 +3,11 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   root 'pages#featured'
 
-  resources :tokens, only: [:index, :new, :create, :show, :edit, :update]
-  post 'tokens/fetch_contract_details'
+  resources :tokens, only: [:index, :new, :create, :show, :edit, :update] do
+    collection do
+      post :fetch_contract_details
+    end
+  end
 
   get '/styleguide' => "pages#styleguide"
 
@@ -49,14 +52,23 @@ Rails.application.routes.draw do
   post '/slack/command' => "slack#command"
 
   get '/projects/mine' => "projects#landing", as: :my_project
+  
   resources :projects do
-    resources :awards, only: [:index, :create] do
-      get  :preview, on: :collection
-      post :update_transaction_address, on: :member
+    resources :award_types, path: 'batches', except: [:show] do
+      resources :awards, path: 'tasks', except: [:index] do
+        post :recipient_address
+        post :send_award
+        post :update_transaction_address
+      end
     end
     resources :contributors, only: [:index]
-    resources :revenues, only: [:index, :create]
+    resources :revenues, only: [:index]
     resources :payments, only: [:index, :create, :update]
+    
+    member do
+      get :awards
+    end
+    
     collection do
       get :landing
       patch :update_status

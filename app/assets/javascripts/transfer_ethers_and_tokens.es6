@@ -20,9 +20,9 @@ async function transferAwardOnEthereum(award) { // award in JSON
     alertMsg($('#metamaskModal1'), 'Please unlock your MetaMask Accounts');
     return;
   }
-  if (award.project.coin_type === 'erc20') {
+  if (award.token.coin_type === 'erc20') {
     transferTokens(award);
-  } else if (award.project.coin_type === 'eth') {
+  } else if (award.token.coin_type === 'eth') {
     transferEthers(award);
   }
 };

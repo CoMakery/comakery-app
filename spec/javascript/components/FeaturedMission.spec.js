@@ -22,7 +22,6 @@ describe('FeaturedMission', () => {
     const mission = {
       float      : 'right',
       name       : 'Test Mission Name',
-      symbol     : 'BTC',
       description: 'This is test mission',
       imageUrl   : '/logo.png',
       projects   : [
@@ -48,7 +47,6 @@ describe('FeaturedMission', () => {
     const mission = {
       float      : 'right',
       name       : 'Test Mission Name',
-      symbol     : 'BTC',
       description: 'This is test mission',
       imageUrl   : '/logo.png',
       projects   : [

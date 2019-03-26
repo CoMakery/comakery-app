@@ -13,6 +13,7 @@ class Layout extends React.Component {
       className,
       category,
       title,
+      navTitle,
       hasBackButton,
       subfooter,
       sidebar,
@@ -36,8 +37,22 @@ class Layout extends React.Component {
 
           <div className="layout--content">
             <div className="layout--content--title">
-              {category && <span>{category}</span>}
               {title}
+              {category &&
+                <span className="layout--content--title--category">{category}</span>
+              }
+              {navTitle && navTitle.map((n, i) =>
+                <span
+                  key={i}
+                  className={n.current ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}
+                >
+                  <a
+                    href={n.current ? '#' : n.url}
+                  >
+                    {n.name}
+                  </a>
+                </span>
+              )}
             </div>
 
             <hr className="layout--content--hr" />
@@ -72,6 +87,7 @@ Layout.propTypes = {
   className    : PropTypes.string,
   category     : PropTypes.string,
   title        : PropTypes.string,
+  navTitle     : PropTypes.array,
   hasBackButton: PropTypes.bool,
   subfooter    : PropTypes.object,
   sidebar      : PropTypes.object
@@ -79,7 +95,8 @@ Layout.propTypes = {
 Layout.defaultProps = {
   className    : '',
   category     : '',
-  title        : 'title',
+  title        : null,
+  navTitle     : null,
   hasBackButton: false,
   subfooter    : null,
   sidebar      : null

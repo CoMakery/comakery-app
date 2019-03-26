@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe ProjectDecorator do
   let(:amount_with_24_decimal_precision) { BigDecimal('9.999_999_999_999_999_999_999') }
-  let(:project) { (create :project, royalty_percentage: 100).decorate }
+  let(:project) { (create :project, royalty_percentage: 100, maximum_tokens: 1000000000).decorate }
   let(:award_type) { create :award_type, project: project }
 
   describe 'total_revenue_pretty method truncates' do
@@ -15,17 +15,17 @@ describe ProjectDecorator do
     end
 
     specify do
-      project.USD!
+      project.token.USD!
       expect(pretty_method_call).to eq('$9.99')
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
       expect(pretty_method_call).to match(/^฿9.9{8}$/)
     end
 
     specify do
-      project.ETH!
+      project.token.ETH!
       expect(pretty_method_call).to match(/^Ξ9.9{18}$/)
     end
   end
@@ -40,17 +40,17 @@ describe ProjectDecorator do
     end
 
     specify do
-      project.USD!
+      project.token.USD!
       expect(pretty_method_call).to eq('$9.99')
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
       expect(pretty_method_call).to match(/^฿9.9{8}$/)
     end
 
     specify do
-      project.ETH!
+      project.token.ETH!
       expect(pretty_method_call).to match(/^Ξ9.9{18}$/)
     end
 
@@ -70,17 +70,17 @@ describe ProjectDecorator do
     end
 
     specify do
-      project.USD!
+      project.token.USD!
       expect(pretty_method_call).to match(/^\$9.9{8}$/)
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
       expect(pretty_method_call).to match(/^฿9.9{8}$/)
     end
 
     specify do
-      project.ETH!
+      project.token.ETH!
       expect(pretty_method_call).to match(/^Ξ9.9{8}$/)
     end
   end
@@ -99,26 +99,39 @@ describe ProjectDecorator do
 
   describe 'with ethereum contract' do
     let(:project) do
-      build(:project,
-        ethereum_contract_address: '0xa234567890b234567890a234567890b234567890').decorate
+      build(
+        :project,
+        token: create(
+          :token,
+          ethereum_contract_address: '0xa234567890b234567890a234567890b234567890',
+          symbol: 'TST',
+          decimal_places: 2
+        )
+      ).decorate
     end
 
     specify do
       expect(project.ethereum_contract_explorer_url)
-        .to include("#{Rails.application.config.ethereum_explorer_site}/token/#{project.ethereum_contract_address}")
+        .to include("#{Rails.application.config.ethereum_explorer_site}/token/#{project.token.ethereum_contract_address}")
     end
   end
 
   describe 'with contract_address' do
     let(:project) do
-      build(:project,
-        coin_type: 'qrc20', blockchain_network: 'qtum_testnet',
-        contract_address: 'a234567890b234567890a234567890b234567890').decorate
+      build(
+        :project,
+        token: create(
+          :token,
+          coin_type: 'qrc20',
+          blockchain_network: 'qtum_testnet',
+          contract_address: 'a234567890b234567890a234567890b234567890'
+        )
+      ).decorate
     end
 
     specify do
       expect(project.ethereum_contract_explorer_url)
-        .to include(UtilitiesService.get_contract_url(project.blockchain_network, project.contract_address))
+        .to include(UtilitiesService.get_contract_url(project.token.blockchain_network, project.token.contract_address))
     end
   end
 
@@ -136,17 +149,17 @@ describe ProjectDecorator do
 
   describe '#currency_denomination' do
     specify do
-      project.update denomination: 'USD'
+      project.token.update denomination: 'USD'
       expect(project.currency_denomination).to eq('$')
     end
 
     specify do
-      project.update denomination: 'BTC'
+      project.token.update denomination: 'BTC'
       expect(project.currency_denomination).to eq('฿')
     end
 
     specify do
-      project.update denomination: 'ETH'
+      project.token.update denomination: 'ETH'
       expect(project.currency_denomination).to eq('Ξ')
     end
   end
@@ -223,42 +236,41 @@ describe ProjectDecorator do
 
   describe 'total_revenue_pretty' do
     specify do
-      project.USD!
+      project.token.USD!
       expect(project.total_revenue_pretty).to eq('$0.00')
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
       expect(project.total_revenue_pretty).to eq('฿0.00000000')
     end
 
     specify do
-      project.ETH!
+      project.token.ETH!
       expect(project.total_revenue_pretty).to eq('Ξ0.000000000000000000')
     end
   end
 
   describe 'total_revenue_shared_pretty' do
     specify do
-      project.USD!
+      project.token.USD!
       expect(project.total_revenue_shared_pretty).to eq('$0.00')
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
       expect(project.total_revenue_shared_pretty).to eq('฿0.00000000')
     end
 
     specify do
-      project.ETH!
+      project.token.ETH!
       expect(project.total_revenue_shared_pretty).to eq('Ξ0.000000000000000000')
     end
   end
 
   describe '#total_awarded_pretty' do
     before do
-      award_type.awards.create_with_quantity(1_000, issuer: project.account,
-                                                    account: create(:account))
+      create(:award, award_type: award_type, quantity: 1000, amount: 1337, issuer: project.account, account: create(:account))
     end
 
     specify { expect(project.total_awarded_pretty).to eq('1,337,000') }
@@ -289,7 +301,7 @@ describe ProjectDecorator do
   describe '#total_awarded_to_user' do
     specify do
       account = create(:account)
-      create(:award, award_type: award_type, account: account)
+      create(:award, award_type: award_type, amount: 1337, account: account)
       expect(project.total_awarded_to_user(account))
         .to eq('1,337')
     end
@@ -308,19 +320,19 @@ describe ProjectDecorator do
 
   describe '#revenue_per_share' do
     specify do
-      project.USD!
+      project.token.USD!
       expect(project.revenue_per_share_pretty)
         .to eq('$0.00000000')
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
       expect(project.revenue_per_share_pretty)
         .to eq('฿0.00000000')
     end
 
     specify do
-      project.ETH!
+      project.token.ETH!
       expect(project.revenue_per_share_pretty)
         .to eq('Ξ0.00000000')
     end
@@ -337,7 +349,7 @@ describe ProjectDecorator do
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
       expect(project)
         .to receive(:total_revenue_shared_unpaid)
         .and_return(BigDecimal('1234567'))
@@ -358,7 +370,7 @@ describe ProjectDecorator do
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
       expect(project)
         .to receive(:total_paid_to_contributors)
         .and_return(BigDecimal('1234567'))
@@ -370,29 +382,29 @@ describe ProjectDecorator do
 
   describe '#miniumum_revenue' do
     specify do
-      project.USD!
+      project.token.USD!
       expect(project.minimum_revenue).to eq('$0')
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
       expect(project.minimum_revenue).to eq('฿0')
     end
   end
 
   describe '#minimum_payment' do
     specify do
-      project.USD!
+      project.token.USD!
       expect(project.minimum_payment).to eq('$1')
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
       expect(project.minimum_payment).to eq('฿0.001')
     end
 
     specify do
-      project.ETH!
+      project.token.ETH!
       expect(project.minimum_payment).to eq('Ξ0.1')
     end
   end
@@ -404,14 +416,14 @@ describe ProjectDecorator do
     end
 
     specify do
-      project.USD!
+      project.token.USD!
 
       expect(project.share_of_revenue_unpaid_pretty(1234567))
         .to eq('$1,234,567.00')
     end
 
     specify do
-      project.BTC!
+      project.token.BTC!
 
       expect(project.share_of_revenue_unpaid_pretty(1234567))
         .to eq('฿1,234,567.00000000')
@@ -445,11 +457,11 @@ describe ProjectDecorator do
   end
 
   it 'maximum_tokens_pretty' do
-    expect(project.maximum_tokens_pretty).to eq '10,000,000'
+    expect(project.maximum_tokens_pretty).to eq '1,000,000,000'
   end
 
   it 'format_with_decimal_places' do
-    project.update decimal_places: 3
+    project.token.update decimal_places: 3
     expect(project.format_with_decimal_places(10)).to eq '10.000'
   end
 end

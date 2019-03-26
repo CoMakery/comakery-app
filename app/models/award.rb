@@ -1,3 +1,5 @@
+require 'bigdecimal'
+
 class Award < ApplicationRecord
   paginates_per 50
 
@@ -11,17 +13,30 @@ class Award < ApplicationRecord
   belongs_to :channel, optional: true
   has_one :team, through: :channel
   has_one :project, through: :award_type
+  has_one :token, through: :project
 
-  validates :proof_id, :award_type, :unit_amount, :total_amount, :quantity, presence: true
-  validates :quantity, :total_amount, :unit_amount, numericality: { greater_than: 0 }
-
+  validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
+  validates :amount, :total_amount, numericality: { greater_than: 0 }
+  validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&.coin_type_on_ethereum? } # see EthereumAddressable
   validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
+  validates :name, length: { maximum: 100 }
+  validates :why, length: { maximum: 100 }
+  validates :description, length: { maximum: 500 }
+  validates :message, length: { maximum: 150 }
+  validates :requirements, length: { maximum: 750 }
+  validates :proof_link, length: { maximum: 150 }
+  validates :proof_link, format: { with: URI.regexp(%w[http https]) }
+
+  validate :total_amount_fits_into_project_budget
 
   before_validation :ensure_proof_id_exists
+  before_validation :calculate_total_amount
 
   scope :confirmed, -> { where confirm_token: nil }
+
+  enum status: %i[ready started submitted revisions done cancelled]
 
   def self.total_awarded
     sum(:total_amount)
@@ -32,7 +47,7 @@ class Award < ApplicationRecord
   end
 
   def ethereum_issue_ready?
-    project.ethereum_enabled && project.coin_type_on_ethereum? &&
+    project.token.ethereum_enabled && project.token.coin_type_on_ethereum? &&
       account&.ethereum_wallet.present? &&
       ethereum_transaction_address.blank?
   end
@@ -90,5 +105,21 @@ class Award < ApplicationRecord
     team && team.discord?
   end
 
+  def done?
+    status == 'done'
+  end
+
   delegate :image, to: :team, prefix: true, allow_nil: true
+
+  private
+
+    def calculate_total_amount
+      self.total_amount = BigDecimal(amount || 0) * BigDecimal(quantity || 1)
+    end
+
+    def total_amount_fits_into_project_budget
+      if total_amount + BigDecimal(project&.awards&.sum(:total_amount) || 0) > BigDecimal(project&.maximum_tokens || 0)
+        errors[:base] << "Sorry, you can't send more awards than the project's budget"
+      end
+    end
 end

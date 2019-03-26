@@ -13,7 +13,7 @@ class Views::Shared::Awards < Views::Base
           th(class: 'small-2') { text 'Recipient' } if show_recipient
           th(class: 'small-2') { text 'Contribution' }
           th(class: 'small-2') { text 'Authorized By' }
-          if project.coin_type?
+          if project.token.coin_type?
             th(class: 'small-2 blockchain-address') { text 'Blockchain Transaction' }
           end
           th(class: 'small-1', style: 'text-align: center') { text 'status' }
@@ -58,7 +58,7 @@ class Views::Shared::Awards < Views::Base
               end
               text award.issuer_display_name
             end
-            if project.coin_type?
+            if project.token.coin_type?
               td(class: 'small-2 blockchain-address') do
                 if award.ethereum_transaction_explorer_url
                   link_to award.ethereum_transaction_address_short, award.ethereum_transaction_explorer_url, target: '_blank'
@@ -86,17 +86,17 @@ class Views::Shared::Awards < Views::Base
   end
 
   def wallet_logo
-    if project.coin_type_on_ethereum?
+    if project.token.coin_type_on_ethereum?
       'metamask2.png'
-    elsif project.coin_type_qrc20?
+    elsif project.token.coin_type_qrc20?
       'qrypto.png'
-    elsif project.coin_type_qtum?
+    elsif project.token.coin_type_qtum?
       'ledger.png'
-    elsif project.coin_type_ada? || project.coin_type_btc?
+    elsif project.token.coin_type_ada? || project.token.coin_type_btc?
       'trezor.png'
-    elsif project.coin_type_eos?
+    elsif project.token.coin_type_eos?
       'eos.png'
-    elsif project.coin_type_xtz?
+    elsif project.token.coin_type_xtz?
       'tezos.png'
     end
   end

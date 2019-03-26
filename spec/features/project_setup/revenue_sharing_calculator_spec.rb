@@ -1,6 +1,7 @@
 require 'rails_helper'
 
-describe 'viewing projects, creating and editing', :js do
+# TODO: Depricated
+describe 'viewing projects, creating and editing', skip: true, js: true do
   let!(:team) { create :team }
   let!(:project) { create(:project, title: 'Cats with Lazers Project', description: 'cats with lazers', account: account, public: false) }
   let!(:public_project) { create(:project, title: 'Public Project', description: 'dogs with donuts', account: account, visibility: 'public_listed') }

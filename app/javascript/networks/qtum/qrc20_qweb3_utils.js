@@ -12,7 +12,7 @@ const getQtumBalance = async function(contract, owner) {
 }
 
 const transferQrc20Tokens = async function(award) { // award in JSON
-  const contractAddress = award.project.contract_address
+  const contractAddress = award.token.contract_address
   const recipientAddress = award.account.qtum_wallet
   let amount = award.amount_to_send
   if (!recipientAddress || recipientAddress === '' || !contractAddress || contractAddress === '' || amount <= 0) {
@@ -25,7 +25,7 @@ const transferQrc20Tokens = async function(award) { // award in JSON
     window.alertMsg('#metamaskModal1', 'Not logged in. Please log in to Qrypto first')
     return
   }
-  const network = award.project.blockchain_network.replace('qtum_', '')
+  const network = award.project.token.blockchain_network.replace('qtum_', '')
   const qweb3 = new Qweb3(window.qrypto.rpcProvider)
   const contract = qweb3.Contract(contractAddress, qrc20TokenABI)
   debugLog(amount)
@@ -46,7 +46,6 @@ const transferQrc20Tokens = async function(award) { // award in JSON
     if (rs && rs.txid) {
       window.alertMsg('#metamaskModal1', 'Waiting...')
     }
-    console.log('transaction address: ' + rs.txid)
   } catch (err) {
     console.error(err)
     window.alertMsg('#metamaskModal1', customErrorMessage(err) || 'The transaction failed')
