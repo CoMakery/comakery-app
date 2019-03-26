@@ -140,6 +140,11 @@ describe ProjectsController do
       get :show, params: { id: public_unlisted_project.id }
       expect(response).to redirect_to('/404.html')
     end
+
+    it 'redirects to 404 when long id is not valid' do
+      get :unlisted, params: { long_id: 'wrong' }
+      expect(response).to redirect_to('/404.html')
+    end
   end
 
   describe '#landing' do

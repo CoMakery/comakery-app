@@ -4,6 +4,7 @@ class ProjectsController < ApplicationController
   before_action :assign_current_account
 
   before_action :assign_project, only: %i[edit update awards]
+  before_action :assign_project_by_long_id, only: %i[unlisted]
   before_action :set_tokens, only: %i[new edit]
   before_action :set_missions, only: %i[new edit]
   before_action :set_visibilities, only: %i[new edit]
@@ -97,7 +98,6 @@ class ProjectsController < ApplicationController
   end
 
   def unlisted
-    @project = Project.find_by(long_id: params[:long_id])&.decorate
     authorize @project
     if @project&.access_unlisted?(current_account)
       set_award
@@ -147,6 +147,11 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def assign_project_by_long_id
+    @project = Project.find_by(long_id: params[:long_id])&.decorate
+    redirect_to('/404.html') unless @project
+  end
 
   def set_tokens
     @tokens = Token.all.map { |t| [t.name, t.id] }.to_h
