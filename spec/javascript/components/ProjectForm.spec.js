@@ -18,11 +18,11 @@ describe('ProjectForm', () => {
     expect(wrapper.exists('#project-form--form')).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDropdown[title="mission"][required][name="project[mission_id]"]'
+      'InputFieldDropdown[title="mission"][name="project[mission_id]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDropdown[title="token"][required][name="project[token_id]"]'
+      'InputFieldDropdown[title="token"][name="project[token_id]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -90,11 +90,11 @@ describe('ProjectForm', () => {
     const wrapper = mount(<ProjectForm tokens={tokens} />)
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="token"][required][name="project[token_id]"]'
+      'InputFieldDropdown[title="token"][name="project[token_id]"]'
     ).props().value).toBe('1')
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="token"][required][name="project[token_id]"]'
+      'InputFieldDropdown[title="token"][name="project[token_id]"]'
     ).props().selectEntries).toEqual(Object.entries(tokens))
   })
 
@@ -106,11 +106,11 @@ describe('ProjectForm', () => {
     const wrapper = mount(<ProjectForm missions={missions} />)
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="mission"][required][name="project[mission_id]"]'
+      'InputFieldDropdown[title="mission"][name="project[mission_id]"]'
     ).props().value).toBe('1')
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="mission"][required][name="project[mission_id]"]'
+      'InputFieldDropdown[title="mission"][name="project[mission_id]"]'
     ).props().selectEntries).toEqual(Object.entries(missions))
   })
 
@@ -274,11 +274,11 @@ describe('ProjectForm', () => {
     />)
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="mission"][required][name="project[mission_id]"]'
+      'InputFieldDropdown[title="mission"][name="project[mission_id]"]'
     ).props().value).toBe('2')
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="token"][required][name="project[token_id]"]'
+      'InputFieldDropdown[title="token"][name="project[token_id]"]'
     ).props().value).toBe('2')
 
     expect(wrapper.find(
@@ -431,7 +431,7 @@ describe('ProjectForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDropdown[errorText="mission_id error"][title="mission"][required][name="project[mission_id]"]'
+      'InputFieldDropdown[errorText="mission_id error"][title="mission"][name="project[mission_id]"]'
     )).toBe(true)
 
     expect(wrapper.exists(

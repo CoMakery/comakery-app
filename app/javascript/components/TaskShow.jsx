@@ -282,7 +282,7 @@ class TaskShow extends React.Component {
                   Decimal(
                     this.props.task.amount
                   ).toFixed(
-                    this.props.token.decimalPlaces,
+                    this.props.token.decimalPlaces || 0,
                     Decimal.ROUND_DOWN
                   )
                 }
@@ -294,10 +294,10 @@ class TaskShow extends React.Component {
                     this.props.task.amount,
                     parseFloat(this.state['task[quantity]'])
                   ).toDecimalPlaces(
-                    this.props.token.decimalPlaces,
+                    this.props.token.decimalPlaces || 0,
                     Decimal.ROUND_DOWN
                   ).toFixed(
-                    this.props.token.decimalPlaces,
+                    this.props.token.decimalPlaces || 0,
                     Decimal.ROUND_DOWN
                   )
                 }

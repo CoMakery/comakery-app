@@ -10,10 +10,10 @@ class AwardDecorator < Draper::Decorator
 
   def ethereum_transaction_explorer_url
     if object.ethereum_transaction_address
-      if (network = object.token.blockchain_network).present?
+      if (network = object.token&.blockchain_network).present?
         UtilitiesService.get_transaction_url(network, object.ethereum_transaction_address)
       else
-        site = object.token&.ethereum_network? ? "#{object.token.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
+        site = object.token&.ethereum_network? ? "#{object.token&.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
         site = 'etherscan.io' if site == 'main.etherscan.io'
         "https://#{site}/tx/#{object.ethereum_transaction_address}"
       end
@@ -42,11 +42,11 @@ class AwardDecorator < Draper::Decorator
   end
 
   def unit_amount_pretty
-    number_with_precision(unit_amount, precision: token.decimal_places.to_i)
+    number_with_precision(unit_amount, precision: token&.decimal_places.to_i)
   end
 
   def total_amount_pretty
-    number_to_currency(total_amount, precision: token.decimal_places.to_i, unit: '')
+    number_to_currency(total_amount, precision: token&.decimal_places.to_i, unit: '')
   end
 
   def part_of_email
@@ -68,11 +68,11 @@ class AwardDecorator < Draper::Decorator
   end
 
   def issuer_address
-    if object.token.coin_type_on_ethereum?
+    if object.token&.coin_type_on_ethereum?
       issuer&.ethereum_wallet
-    elsif object.token.coin_type_on_qtum?
+    elsif object.token&.coin_type_on_qtum?
       issuer&.qtum_wallet
-    elsif object.token.coin_type_on_cardano?
+    elsif object.token&.coin_type_on_cardano?
       issuer&.cardano_wallet
     end
   end

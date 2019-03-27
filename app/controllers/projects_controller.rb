@@ -154,11 +154,11 @@ class ProjectsController < ApplicationController
   end
 
   def set_tokens
-    @tokens = Token.all.map { |t| [t.name, t.id] }.to_h
+    @tokens = Token.all.pluck(:name, :id).append(['No Token', '']).reverse.to_h
   end
 
   def set_missions
-    @missions = Mission.all.map { |m| [m.name, m.id] }.to_h
+    @missions = Mission.all.pluck(:name, :id).append(['No Mission', '']).reverse.to_h
   end
 
   def set_visibilities
