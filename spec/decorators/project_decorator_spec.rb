@@ -464,4 +464,9 @@ describe ProjectDecorator do
     project.token.update decimal_places: 3
     expect(project.format_with_decimal_places(10)).to eq '10.000'
   end
+
+  it 'format_with_decimal_places with no token associated' do
+    project.update(token: nil)
+    expect(project.format_with_decimal_places(10)).to eq '10'
+  end
 end

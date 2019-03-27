@@ -57,7 +57,7 @@ class Award < ApplicationRecord
   end
 
   def amount_to_send
-    (total_amount * project.decimal_places_value).to_i
+    (total_amount * project.decimal_places_value.to_i).to_i
   end
 
   def recipient_auth_team

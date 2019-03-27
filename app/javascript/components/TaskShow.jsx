@@ -275,14 +275,14 @@ class TaskShow extends React.Component {
 
             <div className="task-award-form--form--field">
               <div className="task-award-form--form--field--title">
-                {`total award amount (${this.props.token.symbol})`}
+                {`total award amount (${this.props.token.symbol ? this.props.token.symbol : 'TOKEN NOT SPECIFIED'})`}
               </div>
               <div className="task-award-form--form--field--value">
                 {
                   Decimal(
                     this.props.task.amount
                   ).toFixed(
-                    this.props.token.decimalPlaces,
+                    this.props.token.decimalPlaces || 0,
                     Decimal.ROUND_DOWN
                   )
                 }
@@ -294,10 +294,10 @@ class TaskShow extends React.Component {
                     this.props.task.amount,
                     parseFloat(this.state['task[quantity]'])
                   ).toDecimalPlaces(
-                    this.props.token.decimalPlaces,
+                    this.props.token.decimalPlaces || 0,
                     Decimal.ROUND_DOWN
                   ).toFixed(
-                    this.props.token.decimalPlaces,
+                    this.props.token.decimalPlaces || 0,
                     Decimal.ROUND_DOWN
                   )
                 }

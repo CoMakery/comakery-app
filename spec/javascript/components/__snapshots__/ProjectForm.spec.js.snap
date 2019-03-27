@@ -122,7 +122,6 @@ exports[`ProjectForm renders correctly without props 1`] = `
               <InputFieldDropdown
                 eventHandler={[Function]}
                 name="project[mission_id]"
-                required={true}
                 selectEntries={
                   Array [
                     Array [
@@ -155,7 +154,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   placeholder="Please enter value"
                   readOnly={false}
                   recommended={false}
-                  required={true}
+                  required={false}
                   selectEntries={
                     Array [
                       Array [
@@ -184,7 +183,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       <span
                         className="input-field--title--required"
                       >
-                        required
+                        optional
                       </span>
                     </div>
                     <div
@@ -195,7 +194,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                         disabled={false}
                         name="project[mission_id]"
                         onChange={[Function]}
-                        required={true}
+                        required={false}
                         value="_"
                       >
                         <option
@@ -212,7 +211,6 @@ exports[`ProjectForm renders correctly without props 1`] = `
               <InputFieldDropdown
                 eventHandler={[Function]}
                 name="project[token_id]"
-                required={true}
                 selectEntries={
                   Array [
                     Array [
@@ -245,7 +243,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   placeholder="Please enter value"
                   readOnly={false}
                   recommended={false}
-                  required={true}
+                  required={false}
                   selectEntries={
                     Array [
                       Array [
@@ -274,7 +272,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       <span
                         className="input-field--title--required"
                       >
-                        required
+                        optional
                       </span>
                     </div>
                     <div
@@ -285,7 +283,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                         disabled={false}
                         name="project[token_id]"
                         onChange={[Function]}
-                        required={true}
+                        required={false}
                         value="_"
                       >
                         <option

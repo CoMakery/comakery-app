@@ -77,7 +77,7 @@ class AwardTypesController < ApplicationController
             new_task_path: new_project_award_type_award_path(@project, batch),
             tasks: batch.awards&.map do |task|
               task.serializable_hash.merge(
-                token_symbol: @project.token.symbol,
+                token_symbol: @project.token&.symbol&.to_s,
                 award_path: project_award_type_award_path(@project, batch, task),
                 edit_path: edit_project_award_type_award_path(@project, batch, task),
                 destroy_path: project_award_type_award_path(@project, batch, task)

@@ -154,11 +154,11 @@ class ProjectsController < ApplicationController
   end
 
   def set_tokens
-    @tokens = Token.all.map { |t| [t.name, t.id] }.to_h
+    @tokens = Token.all.pluck(:name, :id).append(['No Token', '']).reverse.to_h
   end
 
   def set_missions
-    @missions = Mission.all.map { |m| [m.name, m.id] }.to_h
+    @missions = Mission.all.pluck(:name, :id).append(['No Mission', '']).reverse.to_h
   end
 
   def set_visibilities
@@ -294,8 +294,6 @@ class ProjectsController < ApplicationController
         image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 150, 100) : nil,
         mission_url: mission_path(mission)
       )
-    else
-      {}
     end
   end
 
@@ -305,8 +303,6 @@ class ProjectsController < ApplicationController
         image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
         contract_url: token.ethereum_contract_explorer_url
       )
-    else
-      {}
     end
   end
 end

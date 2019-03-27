@@ -301,7 +301,6 @@ class ProjectForm extends React.Component {
           <form className="project-form--form" id="project-form--form" onSubmit={this.handleSubmit}>
             <InputFieldDropdown
               title="mission"
-              required
               name="project[mission_id]"
               value={this.state['project[mission_id]'] ? this.state['project[mission_id]'].toString() : null}
               errorText={this.state.errors['project[mission_id]']}
@@ -313,7 +312,6 @@ class ProjectForm extends React.Component {
 
             <InputFieldDropdown
               title="token"
-              required
               name="project[token_id]"
               value={this.state['project[token_id]'] ? this.state['project[token_id]'].toString() : null}
               errorText={this.state.errors['project[token_id]']}

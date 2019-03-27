@@ -44,9 +44,4 @@ describe TokenDecorator do
       expect(token.currency_denomination).to eq('Ξ')
     end
   end
-
-  it 'format_with_decimal_places' do
-    token.update decimal_places: 3
-    expect(token.format_with_decimal_places(10)).to eq '10.000'
-  end
 end

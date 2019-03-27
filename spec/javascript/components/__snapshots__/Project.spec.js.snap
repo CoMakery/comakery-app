@@ -7,11 +7,7 @@ exports[`Project renders correctly without props 1`] = `
   csrfToken=""
   editPath={null}
   interested={false}
-  missionData={
-    Object {
-      "missionUrl": "",
-    }
-  }
+  missionData={null}
   projectData={
     Object {
       "chartData": Array [],
@@ -21,7 +17,7 @@ exports[`Project renders correctly without props 1`] = `
     }
   }
   specialtyInterested={Array []}
-  tokenData={Object {}}
+  tokenData={null}
 >
   <div
     className="project-container"
@@ -43,35 +39,6 @@ exports[`Project renders correctly without props 1`] = `
         <div
           className="project-header__menu"
         >
-          <a
-            className="project-header__menu__back"
-            href=""
-            style={
-              Object {
-                "visibility": "hidden",
-              }
-            }
-          >
-            <Icon
-              className=""
-              name="iconBackWhite.svg"
-              style={
-                Object {
-                  "marginRight": 8,
-                }
-              }
-            >
-              <img
-                className="icon icon__iconBackWhite-svg"
-                src="test-file-stub"
-                style={
-                  Object {
-                    "marginRight": 8,
-                  }
-                }
-              />
-            </Icon>
-          </a>
           <div
             className="project-header__menu__links"
           >
@@ -90,11 +57,6 @@ exports[`Project renders correctly without props 1`] = `
           </div>
         </div>
         <div
-          className="project-header__mission-image"
-        >
-          <img />
-        </div>
-        <div
           className="project-header__name"
         >
            
@@ -111,56 +73,6 @@ exports[`Project renders correctly without props 1`] = `
     <div
       className="project-award"
     >
-      <div
-        className="project-award__token"
-      >
-        <div
-          className="project-award__token__left"
-        >
-          <img
-            className="project-award__token__img"
-          />
-           (
-          )
-        </div>
-        <div
-          className="project-award__token__type"
-        />
-      </div>
-      <div
-        className="project-award__progress"
-      >
-        <div
-          className="project-award__progress__stats"
-        >
-          Tokens awarded
-          <div>
-            <strong
-              className="project-award__percent"
-            >
-              %
-            </strong>
-             - 
-             out of 
-             
-          </div>
-        </div>
-        <div
-          className="project-award__progress__bar-container"
-        >
-          <div
-            className="project-award__progress__bar-line"
-          />
-          <div
-            className="project-award__progress__bar-gradient"
-            style={
-              Object {
-                "width": "undefined%",
-              }
-            }
-          />
-        </div>
-      </div>
       <div
         className="project-contributors"
       >

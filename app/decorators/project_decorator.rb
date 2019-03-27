@@ -21,7 +21,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def ethereum_contract_explorer_url
-    token.decorate.ethereum_contract_explorer_url
+    token&.decorate&.ethereum_contract_explorer_url
   end
 
   def status_description
@@ -33,7 +33,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def currency_denomination
-    token.decorate.currency_denomination
+    token&.decorate&.currency_denomination
   end
 
   def payment_description
@@ -60,14 +60,14 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def total_revenue_pretty
-    precision = Comakery::Currency::PRECISION[token.denomination]
+    precision = token ? Comakery::Currency::PRECISION[token.denomination] : 0
     "#{currency_denomination}#{number_with_precision(total_revenue.truncate(precision),
       precision: precision,
       delimiter: ',')}"
   end
 
   def total_revenue_shared_pretty
-    precision = Comakery::Currency::PRECISION[token.denomination]
+    precision = token ? Comakery::Currency::PRECISION[token.denomination] : 0
     "#{currency_denomination}#{number_with_precision(total_revenue_shared.truncate(precision),
       precision: precision,
       delimiter: ',')}"
@@ -88,7 +88,11 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def format_with_decimal_places(amount)
-    token.decorate.format_with_decimal_places(amount)
+    if token && token.decimal_places.to_i.positive?
+      number_to_currency(amount, precision: token.decimal_places, unit: '')
+    else
+      number_with_precision(amount, precision: 0, delimiter: ',')
+    end
   end
 
   def maximum_tokens_pretty
@@ -104,21 +108,21 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def revenue_per_share_pretty
-    precision = Comakery::Currency::PER_SHARE_PRECISION[token.denomination]
+    precision = token ? Comakery::Currency::PER_SHARE_PRECISION[token.denomination] : 0
     "#{currency_denomination}#{number_with_precision(revenue_per_share.truncate(precision),
       precision: precision,
       delimiter: ',')}"
   end
 
   def total_revenue_shared_unpaid_pretty
-    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination]
+    precision = token ? Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination] : 0
     "#{currency_denomination}#{number_with_precision(total_revenue_shared_unpaid.truncate(precision),
       precision: precision,
       delimiter: ',')}"
   end
 
   def total_paid_to_contributors_pretty
-    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination]
+    precision = token ? Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination] : 0
     "#{currency_denomination}#{number_with_precision(total_paid_to_contributors.truncate(precision),
       precision: precision,
       delimiter: ',')}"
@@ -142,7 +146,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def share_of_revenue_unpaid_pretty(users_project_tokens)
-    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination]
+    precision = token ? Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination] : 0
     "#{currency_denomination}#{number_with_precision(share_of_revenue_unpaid(users_project_tokens).truncate(precision),
       precision: precision,
       delimiter: ',')}"

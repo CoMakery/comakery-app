@@ -138,7 +138,10 @@ class Token < ApplicationRecord
   end
 
   def set_predefined_name
-    self.name = coin_type if !coin_type_token? && !name
+    if !coin_type_token? && !name && !symbol
+      self.name = coin_type
+      self.symbol = coin_type
+    end
   end
 
   def check_coin_type_blockchain_network
