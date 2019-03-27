@@ -294,8 +294,6 @@ class ProjectsController < ApplicationController
         image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 150, 100) : nil,
         mission_url: mission_path(mission)
       )
-    else
-      {}
     end
   end
 
@@ -305,8 +303,6 @@ class ProjectsController < ApplicationController
         image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
         contract_url: token.ethereum_contract_explorer_url
       )
-    else
-      {}
     end
   end
 end

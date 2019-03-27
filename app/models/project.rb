@@ -8,8 +8,8 @@ class Project < ApplicationRecord
   attachment :panoramic_image, type: :image
 
   belongs_to :account
-  belongs_to :mission
-  belongs_to :token
+  belongs_to :mission, optional: true
+  belongs_to :token, optional: true
   has_many :accounts_interested, through: :interests, source: :account
 
   has_many :award_types, inverse_of: :project, dependent: :destroy
@@ -48,7 +48,7 @@ class Project < ApplicationRecord
   enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
   enum status: %i[active passive]
 
-  validates :description, :account, :title, :legal_project_owner, :token_id, presence: true
+  validates :description, :account, :title, :legal_project_owner, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
   validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { if: :revenue_share? }
@@ -67,15 +67,15 @@ class Project < ApplicationRecord
   scope :publics, -> { where 'projects.visibility in(1,3)' }
 
   delegate :coin_type, to: :token, allow_nil: true
-  delegate :coin_type_token?, to: :token
-  delegate :coin_type_on_ethereum?, to: :token
-  delegate :coin_type_on_qtum?, to: :token
-  delegate :coin_type_on_cardano?, to: :token
-  delegate :coin_type_on_bitcoin?, to: :token
-  delegate :transitioned_to_ethereum_enabled?, to: :token
-  delegate :decimal_places_value, to: :token
-  delegate :populate_token?, to: :token
-  delegate :total_awarded, to: :awards
+  delegate :coin_type_token?, to: :token, allow_nil: true
+  delegate :coin_type_on_ethereum?, to: :token, allow_nil: true
+  delegate :coin_type_on_qtum?, to: :token, allow_nil: true
+  delegate :coin_type_on_cardano?, to: :token, allow_nil: true
+  delegate :coin_type_on_bitcoin?, to: :token, allow_nil: true
+  delegate :transitioned_to_ethereum_enabled?, to: :token, allow_nil: true
+  delegate :decimal_places_value, to: :token, allow_nil: true
+  delegate :populate_token?, to: :token, allow_nil: true
+  delegate :total_awarded, to: :awards, allow_nil: true
 
   def self.with_last_activity_at
     select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))

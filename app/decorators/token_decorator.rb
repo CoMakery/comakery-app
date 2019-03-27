@@ -15,12 +15,4 @@ class TokenDecorator < Draper::Decorator
   def currency_denomination
     Comakery::Currency::DENOMINATIONS[token.denomination]
   end
-
-  def format_with_decimal_places(amount)
-    if decimal_places.to_i.zero?
-      number_with_precision(amount, precision: 0, delimiter: ',')
-    else
-      number_to_currency(amount, precision: decimal_places, unit: '')
-    end
-  end
 end

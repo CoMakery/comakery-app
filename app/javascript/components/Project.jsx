@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
 import d3 from 'd3/d3'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
-import { SSL_OP_EPHEMERAL_RSA } from 'constants'
 
 const chartColors = [
   '#0089F4',
@@ -163,10 +162,12 @@ export default class Project extends React.Component {
         <div className="project-header__blur" />
         <div className="project-header__content">
           <div className="project-header__menu">
-            <a className="project-header__menu__back" href={missionData.missionUrl} style={{visibility: 'hidden'}}>
-              <Icon name="iconBackWhite.svg" style={{marginRight: 8}} />
-              {missionData.name}
-            </a>
+            {missionData &&
+              <a className="project-header__menu__back" href={missionData.missionUrl} style={{visibility: 'hidden'}}>
+                <Icon name="iconBackWhite.svg" style={{marginRight: 8}} />
+                {missionData.name}
+              </a>
+            }
 
             <div className="project-header__menu__links">
               <a className="project-header__menu__link project-header__menu__link--first" href={contributorsPath}>Contributors</a>
@@ -175,9 +176,11 @@ export default class Project extends React.Component {
             </div>
           </div>
 
-          <div className="project-header__mission-image">
-            <img src={missionData.imageUrl} />
-          </div>
+          {missionData &&
+            <div className="project-header__mission-image">
+              <img src={missionData.imageUrl} />
+            </div>
+          }
 
           <div className="project-header__name"> {projectData.title} </div>
           <div className="project-header__owner"> by {projectData.owner} </div>
@@ -185,32 +188,36 @@ export default class Project extends React.Component {
       </div>
 
       <div className="project-award">
-        <div className="project-award__token">
-          <div className="project-award__token__left">
-            <img className="project-award__token__img" src={tokenData.imageUrl} />
-            {tokenData.name} ({tokenData.symbol})
+        {tokenData &&
+          <div className="project-award__token">
+            <div className="project-award__token__left">
+              <img className="project-award__token__img" src={tokenData.imageUrl} />
+              {tokenData.name} ({tokenData.symbol})
+            </div>
+            <div className="project-award__token__type">
+              {tokenData.coinType}
+              {tokenData.contractUrl &&
+                <div className="project-award__token__address">
+                  <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
+                  <a className="project-award__token__address__link" href={tokenData.contractUrl}>Smart Contract</a>
+                </div>
+              }
+            </div>
           </div>
-          <div className="project-award__token__type">
-            {tokenData.coinType}
-            {tokenData.contractUrl &&
-              <div className="project-award__token__address">
-                <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
-                <a className="project-award__token__address__link" href={tokenData.contractUrl}>Smart Contract</a>
-              </div>
-            }
-          </div>
-        </div>
+        }
 
-        <div className="project-award__progress">
-          <div className="project-award__progress__stats">
-            Tokens awarded
-            <div><strong className="project-award__percent">{projectData.tokenPercentage}%</strong> - {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}</div>
+        {tokenData &&
+          <div className="project-award__progress">
+            <div className="project-award__progress__stats">
+              Tokens awarded
+              <div><strong className="project-award__percent">{projectData.tokenPercentage}%</strong> - {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}</div>
+            </div>
+            <div className="project-award__progress__bar-container">
+              <div className="project-award__progress__bar-line" />
+              <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}%`}} />
+            </div>
           </div>
-          <div className="project-award__progress__bar-container">
-            <div className="project-award__progress__bar-line" />
-            <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}%`}} />
-          </div>
-        </div>
+        }
 
         <div className="project-contributors">
           <div className="project-leader">
@@ -346,10 +353,8 @@ Project.defaultProps = {
     contributors: [],
     chartData   : []
   },
-  missionData: {
-    missionUrl: ''
-  },
-  tokenData          : {},
+  missionData        : null,
+  tokenData          : null,
   interested         : false,
   specialtyInterested: [],
   csrfToken          : '',

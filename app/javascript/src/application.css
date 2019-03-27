@@ -2232,7 +2232,7 @@ select:disabled {
 
 .project-header__menu {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   text-transform: uppercase;
   font-size: 12px;

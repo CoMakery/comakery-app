@@ -88,7 +88,11 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def format_with_decimal_places(amount)
-    token.decorate.format_with_decimal_places(amount)
+    if token && token.decimal_places.to_i.positive?
+      number_to_currency(amount, precision: token.decimal_places, unit: '')
+    else
+      number_with_precision(amount, precision: 0, delimiter: ',')
+    end
   end
 
   def maximum_tokens_pretty

@@ -56,7 +56,7 @@ class AwardsController < ApplicationController
   end
 
   def recipient_address
-    set_recipient_address_response
+    @project.token ? set_recipient_address_response : set_recipient_address_response_for_missing_token
     render json: @recipient_address_response, status: :ok
   end
 
@@ -146,7 +146,7 @@ class AwardsController < ApplicationController
       @props = {
         task: @award.serializable_hash,
         batch: @award.award_type.serializable_hash,
-        token: @project.token.serializable_hash,
+        token: @project.token ? @project.token.serializable_hash : {},
         channels: (@project.channels + [Channel.new(name: 'Email')]).map { |c| [c.name, c.id.to_s] }.to_h,
         members: @project.channels.map { |c| [c.id.to_s, c.members.to_h] }.to_h,
         recipient_address_url: project_award_type_award_recipient_address_path(@project, @award_type, @award),
@@ -160,7 +160,7 @@ class AwardsController < ApplicationController
     def set_form_props
       @props = {
         task: (@award ? @award : @award_type.awards.new).serializable_hash,
-        token: @project.token.serializable_hash,
+        token: @project.token ? @project.token.serializable_hash : {},
         form_url: project_award_type_awards_path(@project, @award_type),
         form_action: 'POST',
         url_on_success: project_award_types_path,
@@ -217,6 +217,13 @@ class AwardsController < ApplicationController
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
+    def set_recipient_address_response_for_missing_token
+      @recipient_address_response = {
+        address: nil,
+        wallet_url: nil
+      }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+    end
+
     def send_award_notice
       if !@award.self_issued? && @award.decorate.recipient_address.blank?
         "The award recipient hasn't entered a blockchain address for us to send the award to. When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page."
@@ -226,7 +233,7 @@ class AwardsController < ApplicationController
     end
 
     def confirm_message(project)
-      return nil unless project.token.coin_type?
+      return nil unless project.token&.coin_type?
       blockchain_name = Token::BLOCKCHAIN_NAMES[project.token.coin_type.to_sym]
       send("confirm_message_for_#{blockchain_name}_award")
     end

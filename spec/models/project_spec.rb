@@ -8,7 +8,6 @@ describe Project do
                 'Maximum tokens must be greater than 0',
                 "Account can't be blank",
                 "Title can't be blank",
-                "Token can't be blank",
                 "Legal project owner can't be blank",
                 "Long identifier can't be blank"].sort)
     end
