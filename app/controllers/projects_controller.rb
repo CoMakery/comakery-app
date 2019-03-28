@@ -305,8 +305,6 @@ class ProjectsController < ApplicationController
         image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
         contract_url: token.ethereum_contract_explorer_url
       )
-    else
-      nil
     end
   end
 end
