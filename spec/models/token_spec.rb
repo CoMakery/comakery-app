@@ -253,9 +253,12 @@ describe Token do
     expect token.symbol = 'FCBB'
   end
 
-  it 'set_predefined_name for coins' do
+  it 'set_predefined_values for coins' do
     %w[eth btc qtum ada eos xtz].each do |coin|
-      expect((create :token, coin_type: coin, name: nil).name).to eq coin
+      token = create :token, coin_type: coin, name: nil
+      expect(token.name).to eq coin
+      expect(token.symbol).to eq coin
+      expect(token.decimal_places).to eq Token::DECIMALS[coin]
     end
 
     %w[qrc20 erc20].each do |token|
