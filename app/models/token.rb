@@ -147,10 +147,10 @@ class Token < ApplicationRecord
   end
 
   def set_predefined_values
-    if !coin_type_token? && !name
+    if coin_type && !coin_type_token?
       self.name = coin_type
       self.symbol = coin_type
-      self.decimal_places = DECIMALS[coin_type]
+      self.decimal_places = DECIMALS[coin_type.to_sym]
     end
   end
 
