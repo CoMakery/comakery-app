@@ -56,8 +56,8 @@ class Comakery::Discord
     url = "https://discordapp.com/api#{@path}"
     res = RestClient.get(url, Authorization: @token)
     JSON.parse(res)
-  rescue RestClient => e
-    logger.error e
+  rescue RestClient::ExceptionWithResponse => e
+    logger.error e.response
     return []
   end
 
@@ -66,8 +66,8 @@ class Comakery::Discord
     header = { Authorization: @token, content_type: :json, accept: :json }
     res = RestClient.post(url, @data, header)
     parse_json ? JSON.parse(res) : res
-  rescue RestClient => e
-    logger.error e
+  rescue RestClient::ExceptionWithResponse => e
+    logger.error e.response
     return []
   end
 end

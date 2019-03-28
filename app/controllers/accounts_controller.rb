@@ -179,7 +179,7 @@ class AccountsController < ApplicationController
       awards_path: project_award_types_path(project.show_id, mine: true),
       total_awarded: project.decorate.total_awarded_to_user(current_account),
       ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url,
-      token: project.token.serializable_hash
+      token: project.token ? project.token.serializable_hash : {}
     )
   end
 
