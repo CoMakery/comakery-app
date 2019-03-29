@@ -7,11 +7,7 @@ exports[`Project renders correctly without props 1`] = `
   csrfToken=""
   editPath={null}
   interested={false}
-  missionData={
-    Object {
-      "missionUrl": "",
-    }
-  }
+  missionData={null}
   projectData={
     Object {
       "chartData": Array [],
@@ -43,35 +39,6 @@ exports[`Project renders correctly without props 1`] = `
         <div
           className="project-header__menu"
         >
-          <a
-            className="project-header__menu__back"
-            href=""
-            style={
-              Object {
-                "visibility": "hidden",
-              }
-            }
-          >
-            <Icon
-              className=""
-              name="iconBackWhite.svg"
-              style={
-                Object {
-                  "marginRight": 8,
-                }
-              }
-            >
-              <img
-                className="icon icon__iconBackWhite-svg"
-                src="test-file-stub"
-                style={
-                  Object {
-                    "marginRight": 8,
-                  }
-                }
-              />
-            </Icon>
-          </a>
           <div
             className="project-header__menu__links"
           >
@@ -88,11 +55,6 @@ exports[`Project renders correctly without props 1`] = `
               Payments
             </a>
           </div>
-        </div>
-        <div
-          className="project-header__mission-image"
-        >
-          <img />
         </div>
         <div
           className="project-header__name"
@@ -544,9 +506,7 @@ exports[`Project renders correctly without props 1`] = `
         >
           <div
             className="project-team__leader-name"
-          >
-            Team Leader 
-          </div>
+          />
            
           <div
             className="project-team__contributors"

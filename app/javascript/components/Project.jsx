@@ -158,7 +158,7 @@ export default class Project extends React.Component {
     descriptionText = descriptionText.join('.')
 
     return <div className="project-container">
-      <div className="project-header" style={{backgroundImage: projectData.imageUrl || `url(${projectData.defaultImageUrl})`}}>
+      <div className="project-header" style={{backgroundImage: `url(${projectData.imageUrl})` || `url(${projectData.defaultImageUrl})`}}>
         <div className="project-header__blur" />
         <div className="project-header__content">
           <div className="project-header__menu">
@@ -302,7 +302,7 @@ export default class Project extends React.Component {
           </div>
 
           <div className="project-team__contributors-container">
-            <div className="project-team__leader-name">Team Leader {projectData.teamLeader.nickname && projectData.teamLeader.nickname}</div>
+            <div className="project-team__leader-name">{projectData.teamLeader.nickname && projectData.teamLeader.nickname}</div>
             {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
 
             <div className="project-team__contributors" >
@@ -353,9 +353,7 @@ Project.defaultProps = {
     contributors: [],
     chartData   : []
   },
-  missionData: {
-    missionUrl: ''
-  },
+  missionData        : null,
   tokenData          : null,
   interested         : false,
   specialtyInterested: [],
