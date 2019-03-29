@@ -210,7 +210,7 @@ export default class Project extends React.Component {
           <div className="project-award__progress">
             <div className="project-award__progress__stats">
               Tokens awarded
-              <div><strong className="project-award__percent">{projectData.tokenPercentage}%</strong> - {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}</div>
+              <div><strong className="project-award__percent">{projectData.tokenPercentage}</strong> - {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}</div>
             </div>
             <div className="project-award__progress__bar-container">
               <div className="project-award__progress__bar-line" />

@@ -52,12 +52,11 @@ class Project < ApplicationRecord
   validates :long_id, presence: { message: "identifier can't be blank" }
   validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
   validates :royalty_percentage, :maximum_royalties_per_month, presence: { if: :revenue_share? }
-  validates :maximum_tokens, numericality: { greater_than: 0 }
+  validates :maximum_tokens, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
   validates :royalty_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_nil: true }
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
   validate :valid_video_url, if: -> { video_url.present? }
-  validate :maximum_tokens_unchanged, if: -> { !new_record? }
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -206,7 +205,11 @@ class Project < ApplicationRecord
   end
 
   def percent_awarded
-    total_awarded * 100.0 / maximum_tokens
+    if maximum_tokens
+      total_awarded * 100.0 / maximum_tokens
+    else
+      0
+    end
   end
 
   def awards_for_chart(max: 1000)
@@ -259,11 +262,5 @@ class Project < ApplicationRecord
   ensure
     errors[attribute_name] << 'must be a valid url' unless uri&.absolute?
     uri
-  end
-
-  def maximum_tokens_unchanged
-    if maximum_tokens_was > 0 && maximum_tokens_was != maximum_tokens
-      errors[:maximum_tokens] << "can't be changed" if license_finalized? || token.ethereum_enabled?
-    end
   end
 end

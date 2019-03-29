@@ -534,7 +534,6 @@ exports[`ProjectForm renders correctly without props 1`] = `
                 pattern="\\\\d+"
                 placeholder="Provide the budget for completing the entire project"
                 readOnly={false}
-                required={true}
                 symbolLimit={0}
                 title="total budget"
                 value=""
@@ -559,7 +558,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   placeholder="Provide the budget for completing the entire project"
                   readOnly={false}
                   recommended={false}
-                  required={true}
+                  required={false}
                   selectEntries={Array []}
                   step=""
                   symbolLimit={0}
@@ -581,7 +580,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       <span
                         className="input-field--title--required"
                       >
-                        required
+                        optional
                       </span>
                     </div>
                     <div
@@ -595,7 +594,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                         pattern="\\\\d+"
                         placeholder="Provide the budget for completing the entire project"
                         readOnly={false}
-                        required={true}
+                        required={false}
                         type="text"
                         value=""
                       />
