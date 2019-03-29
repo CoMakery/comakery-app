@@ -116,8 +116,13 @@ export default class Project extends React.Component {
     fetchPolyfill('/add-interest', {
       credentials: 'same-origin',
       method     : 'POST',
-      body       : JSON.stringify({'project_id': projectId, 'specialty_id': specialtyId, 'protocol': missionData.name, 'authenticity_token': this.props.csrfToken}),
-      headers    : {
+      body       : JSON.stringify({
+        'project_id'        : projectId,
+        'specialty_id'      : specialtyId,
+        'protocol'          : (missionData ? missionData.name : null),
+        'authenticity_token': this.props.csrfToken
+      }),
+      headers: {
         'Accept'      : 'application/json',
         'Content-Type': 'application/json'
       }
@@ -158,7 +163,7 @@ export default class Project extends React.Component {
     descriptionText = descriptionText.join('.')
 
     return <div className="project-container">
-      <div className="project-header" style={{backgroundImage: projectData.imageUrl || `url(${projectData.defaultImageUrl})`}}>
+      <div className="project-header" style={{backgroundImage: `url(${projectData.imageUrl})` || `url(${projectData.defaultImageUrl})`}}>
         <div className="project-header__blur" />
         <div className="project-header__content">
           <div className="project-header__menu">
@@ -353,9 +358,7 @@ Project.defaultProps = {
     contributors: [],
     chartData   : []
   },
-  missionData: {
-    missionUrl: ''
-  },
+  missionData        : null,
   tokenData          : null,
   interested         : false,
   specialtyInterested: [],

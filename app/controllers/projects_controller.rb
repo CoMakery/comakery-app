@@ -294,8 +294,6 @@ class ProjectsController < ApplicationController
         image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 150, 100) : nil,
         mission_url: mission_path(mission)
       )
-    else
-      {}
     end
   end
 
