@@ -88,5 +88,12 @@ describe GetContributorData do
                                                                              { name: 'c c', net_amount: 20 }
                                                                            ])
     end
+
+    it 'handles missing token correctly' do
+      project = create(:project)
+      project.update(token: nil)
+      award = create(:award, amount: 10, award_type: create(:award_type, project: project))
+      expect(described_class.new.contributions_summary_pie_chart([award])).to eq([{ name: award.account.decorate.name, net_amount: 10 }])
+    end
   end
 end
