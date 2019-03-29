@@ -116,8 +116,13 @@ export default class Project extends React.Component {
     fetchPolyfill('/add-interest', {
       credentials: 'same-origin',
       method     : 'POST',
-      body       : JSON.stringify({'project_id': projectId, 'specialty_id': specialtyId, 'protocol': missionData.name, 'authenticity_token': this.props.csrfToken}),
-      headers    : {
+      body       : JSON.stringify({
+        'project_id'        : projectId,
+        'specialty_id'      : specialtyId,
+        'protocol'          : (missionData ? missionData.name : null),
+        'authenticity_token': this.props.csrfToken
+      }),
+      headers: {
         'Accept'      : 'application/json',
         'Content-Type': 'application/json'
       }
@@ -302,7 +307,7 @@ export default class Project extends React.Component {
           </div>
 
           <div className="project-team__contributors-container">
-            <div className="project-team__leader-name">{projectData.teamLeader.nickname && projectData.teamLeader.nickname}</div>
+            <div className="project-team__leader-name">Team Leader {projectData.teamLeader.nickname && projectData.teamLeader.nickname}</div>
             {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
 
             <div className="project-team__contributors" >
