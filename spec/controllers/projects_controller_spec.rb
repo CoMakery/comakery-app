@@ -283,7 +283,7 @@ describe ProjectsController do
         end.not_to change { Project.count }
       end.not_to change { AwardType.count }
 
-      expect(JSON.parse(response.body)['message']).to eq("Title can't be blank, Legal project owner can't be blank, Maximum tokens must be greater than 0")
+      expect(JSON.parse(response.body)['message']).to eq("Title can't be blank, Legal project owner can't be blank")
       project = assigns[:project]
 
       expect(project.description).to eq('Project description here')

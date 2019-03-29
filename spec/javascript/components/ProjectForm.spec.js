@@ -38,7 +38,7 @@ describe('ProjectForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldWhiteDark[title="total budget"][required][name="project[maximum_tokens]"]'
+      'InputFieldWhiteDark[title="total budget"][name="project[maximum_tokens]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -294,7 +294,7 @@ describe('ProjectForm', () => {
     ).props().value).toBe('https://youtube.com/')
 
     expect(wrapper.find(
-      'InputFieldWhiteDark[title="total budget"][required][name="project[maximum_tokens]"]'
+      'InputFieldWhiteDark[title="total budget"][name="project[maximum_tokens]"]'
     ).props().value).toBe('1000')
 
     expect(wrapper.find(

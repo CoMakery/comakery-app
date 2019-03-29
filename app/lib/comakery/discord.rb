@@ -57,7 +57,7 @@ class Comakery::Discord
     res = RestClient.get(url, Authorization: @token)
     JSON.parse(res)
   rescue RestClient::ExceptionWithResponse => e
-    logger.error e.response
+    Rails.logger.error e.response
     return []
   end
 
@@ -67,7 +67,7 @@ class Comakery::Discord
     res = RestClient.post(url, @data, header)
     parse_json ? JSON.parse(res) : res
   rescue RestClient::ExceptionWithResponse => e
-    logger.error e.response
+    Rails.logger.error e.response
     return []
   end
 end

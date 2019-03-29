@@ -5,7 +5,6 @@ describe Project do
     it 'requires attributes' do
       expect(described_class.new(payment_type: 'project_token').tap(&:valid?).errors.full_messages.sort)
         .to eq(["Description can't be blank",
-                'Maximum tokens must be greater than 0',
                 "Account can't be blank",
                 "Title can't be blank",
                 "Legal project owner can't be blank",
@@ -87,11 +86,30 @@ describe Project do
     end
 
     describe 'maximum_tokens' do
-      it 'can modify if the record has been saved' do
+      it 'accepts empty, zero or positive value' do
+        project = create(:project)
+        project.maximum_tokens = nil
+        expect(project).to be_valid
+
+        project.maximum_tokens = 0
+        expect(project).to be_valid
+
+        project.maximum_tokens = 100
+        expect(project).to be_valid
+      end
+
+      it 'rejects negative value' do
+        project = create(:project)
+        project.maximum_tokens = -1
+        expect(project).not_to be_valid
+      end
+
+      it 'can be modified if the record has been saved' do
         project = create(:project)
         project.maximum_tokens += 10
         expect(project).to be_valid
-        # expect(project.errors.full_messages).to be_include("Maximum tokens can't be changed")
+        project.maximum_tokens -= 5
+        expect(project).to be_valid
       end
     end
 

@@ -356,7 +356,6 @@ class ProjectForm extends React.Component {
 
             <InputFieldWhiteDark
               title="total budget"
-              required
               name="project[maximum_tokens]"
               value={this.state['project[maximum_tokens]'] ? this.state['project[maximum_tokens]'].toString() : ''}
               errorText={this.state.errors['project[maximum_tokens]']}
@@ -364,7 +363,6 @@ class ProjectForm extends React.Component {
               pattern="\d+"
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
-              readOnly={this.state.formAction !== 'POST'}
             />
 
             <InputFieldDropdown

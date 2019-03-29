@@ -96,7 +96,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def maximum_tokens_pretty
-    number_with_precision(maximum_tokens, precision: 0, delimiter: ',')
+    number_with_precision(maximum_tokens.to_i, precision: 0, delimiter: ',')
   end
 
   def total_awards_redeemed_pretty

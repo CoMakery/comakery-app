@@ -275,10 +275,10 @@ class ProjectsController < ApplicationController
 
     project.as_json(only: %i[id title description]).merge(
       image_url: project.panoramic_image.present? ? Refile.attachment_url(project, :panoramic_image) : nil,
-      youtube_url: project.video_url ? project.video_id : nil,
+      youtube_url: project.video_id,
       default_image_url: helpers.image_url('defaul_project.jpg'),
-      owner: [project.account.first_name, project.account.last_name].join(' '),
-      token_percentage: project.maximum_tokens.positive? ? 100 * project.total_awarded / project.maximum_tokens : 0,
+      owner: project.account.decorate.name,
+      token_percentage: project.percent_awarded_pretty,
       maximum_tokens: project.maximum_tokens_pretty,
       awarded_tokens: project.total_awarded_pretty,
       team_leader: contributor_props(project.account),
