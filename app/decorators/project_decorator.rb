@@ -3,12 +3,10 @@ class ProjectDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
 
   PAYMENT_DESCRIPTIONS = {
-    'revenue_share' => 'Revenue Shares',
     'project_token' => 'Project Tokens'
   }.freeze
 
   OUTSTANDING_AWARD_DESCRIPTIONS = {
-    'revenue_share' => 'Unpaid Revenue Shares',
     'project_token' => 'Project Tokens'
   }.freeze
 
@@ -44,13 +42,6 @@ class ProjectDecorator < Draper::Decorator
     OUTSTANDING_AWARD_DESCRIPTIONS[project.payment_type]
   end
 
-  def royalty_percentage_pretty
-    return '0%' if project.royalty_percentage.blank?
-    "#{number_with_precision(project.royalty_percentage,
-      precision: Project::ROYALTY_PERCENTAGE_PRECISION,
-      strip_insignificant_zeros: true)}%"
-  end
-
   def require_confidentiality_text
     project.require_confidentiality ? 'is required' : 'is not required'
   end
@@ -59,22 +50,8 @@ class ProjectDecorator < Draper::Decorator
     project.exclusive_contributions ? 'are exclusive' : 'are not exclusive'
   end
 
-  def total_revenue_pretty
-    precision = token ? Comakery::Currency::PRECISION[token.denomination] : 0
-    "#{currency_denomination}#{number_with_precision(total_revenue.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
-  def total_revenue_shared_pretty
-    precision = token ? Comakery::Currency::PRECISION[token.denomination] : 0
-    "#{currency_denomination}#{number_with_precision(total_revenue_shared.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
   def total_awards_outstanding_pretty
-    # awards (e.g. project tokens or revenue shares) are validated as whole numbers; they are rounded
+    # awards are validated as whole numbers; they are rounded
     number_with_precision(total_awards_outstanding, precision: 0, delimiter: ',')
   end
 
@@ -107,20 +84,6 @@ class ProjectDecorator < Draper::Decorator
     "#{number_with_precision(percent_awarded, precision: 3, delimiter: ',')}%"
   end
 
-  def revenue_per_share_pretty
-    precision = token ? Comakery::Currency::PER_SHARE_PRECISION[token.denomination] : 0
-    "#{currency_denomination}#{number_with_precision(revenue_per_share.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
-  def total_revenue_shared_unpaid_pretty
-    precision = token ? Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination] : 0
-    "#{currency_denomination}#{number_with_precision(total_revenue_shared_unpaid.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
   def total_paid_to_contributors_pretty
     precision = token ? Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination] : 0
     "#{currency_denomination}#{number_with_precision(total_paid_to_contributors.truncate(precision),
@@ -128,33 +91,9 @@ class ProjectDecorator < Draper::Decorator
       delimiter: ',')}"
   end
 
-  def minimum_revenue
-    "#{currency_denomination}0"
-  end
-
   def minimum_payment
     project_min_payment = Comakery::Currency::DEFAULT_MIN_PAYMENT[token.denomination]
     "#{currency_denomination}#{project_min_payment}"
-  end
-
-  def revenue_history
-    project.revenues.order(created_at: :desc, id: :desc).decorate
-  end
-
-  def payment_history
-    project.payments.order(created_at: :desc, id: :desc)
-  end
-
-  def share_of_revenue_unpaid_pretty(users_project_tokens)
-    precision = token ? Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination] : 0
-    "#{currency_denomination}#{number_with_precision(share_of_revenue_unpaid(users_project_tokens).truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
-  def revenue_sharing_end_date_pretty
-    return 'revenue sharing does not have an end date.' if project.revenue_sharing_end_date.blank?
-    project.revenue_sharing_end_date.strftime('%B %-d, %Y')
   end
 
   def contributors_by_award_amount
@@ -183,5 +122,5 @@ class ProjectDecorator < Draper::Decorator
     end
   end
 
-  pretty_number :maximum_royalties_per_month, :maximum_tokens
+  pretty_number :maximum_tokens
 end

@@ -62,8 +62,6 @@ Rails.application.routes.draw do
       end
     end
     resources :contributors, only: [:index]
-    resources :revenues, only: [:index]
-    resources :payments, only: [:index, :create, :update]
     
     member do
       get :awards

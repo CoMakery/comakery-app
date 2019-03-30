@@ -56,8 +56,6 @@ class Mom
       description: 'We are going to build amazing',
       tracker: 'https://github.com/example/uber_for_cats',
       account: account,
-      royalty_percentage: 5.9,
-      maximum_royalties_per_month: 10_000,
       legal_project_owner: 'UberCatz Inc',
       require_confidentiality: false,
       exclusive_contributions: false,
@@ -144,17 +142,6 @@ class Mom
     Award.new(params)
   end
 
-  def payment(currency: 'USD', **attrs)
-    Payment.new(currency: currency, **attrs)
-  end
-
-  def project_payment(quantity_redeemed: 1, account: create(:account), project: create(:project))
-    project
-      .payments
-      .new_with_quantity(quantity_redeemed: quantity_redeemed,
-                         account: account)
-  end
-
   def slack(authentication = create(:authentication))
     Comakery::Slack.new(authentication)
   end
@@ -171,13 +158,6 @@ class Mom
 
   def valid_password
     'a password'
-  end
-
-  def revenue(project: create(:project), amount: 10, currency: 'USD')
-    Revenue.new amount: amount,
-                currency: currency,
-                project: project,
-                recorded_by: project.account
   end
 
   def mission(**attrs)

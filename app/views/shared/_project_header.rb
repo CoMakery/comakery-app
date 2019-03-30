@@ -27,25 +27,6 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
             end
           end
 
-          li_if(project.show_revenue_info?(current_account), class: ('active' if controller_name == 'revenues').to_s) do
-            a(href: project_revenues_path(project.show_id)) do
-              text 'Revenues'
-            end
-          end
-
-          li_if(project.show_revenue_info?(current_account), class: ('active' if controller_name == 'payments').to_s) do
-            a(href: project_payments_path(project.show_id)) do
-              text 'Payments'
-            end
-          end
-          # TODO: link to channel(s)
-          # li_if(project.slack_team_domain) {
-          #   a(href: "https://#{project.slack_team_domain}.slack.com/messages/#{project.slack_channel}", target: '_blank', class: 'text-link') {
-          #     i(class: 'fa fa-slack')
-          #     text 'Slack Channel'
-          #   }
-          # }
-
           li_if(project.tracker) do
             a(href: project.tracker, target: '_blank', class: 'text-link') do
               i(class: 'fa fa-tasks')

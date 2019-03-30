@@ -1,6 +1,4 @@
 class Project < ApplicationRecord
-  ROYALTY_PERCENTAGE_PRECISION = 13
-
   nilify_blanks
   attachment :image
 
@@ -17,32 +15,13 @@ class Project < ApplicationRecord
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards
   has_many :channels, -> { order :created_at }, inverse_of: :project, dependent: :destroy
 
-  has_many :payments, dependent: :destroy do
-    def new_with_quantity(quantity_redeemed:, account:)
-      project = @association.owner
-      quantity = quantity_redeemed.blank? ? 0 : quantity_redeemed
-      new(total_value: BigDecimal(quantity) * project.revenue_per_share,
-          quantity_redeemed: quantity_redeemed,
-          share_value: project.revenue_per_share,
-          currency: project.token.denomination,
-          account: account)
-        .tap(&:truncate_total_value_to_currency_precision)
-    end
-
-    def create_with_quantity(**attrs)
-      new_with_quantity(**attrs).tap(&:save)
-    end
-  end
-
   has_many :contributors, through: :awards, source: :account # TODO: deprecate in favor of contributors_distinct
   has_many :contributors_distinct, -> { distinct }, through: :awards, source: :account
-  has_many :revenues
   has_many :teams, through: :account
 
   accepts_nested_attributes_for :channels, reject_if: :invalid_channel, allow_destroy: true
 
   enum payment_type: {
-    revenue_share: 0,
     project_token: 1
   }
   enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
@@ -51,9 +30,7 @@ class Project < ApplicationRecord
   validates :description, :account, :title, :legal_project_owner, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
   validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
-  validates :royalty_percentage, :maximum_royalties_per_month, presence: { if: :revenue_share? }
   validates :maximum_tokens, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
-  validates :royalty_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, allow_nil: true }
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
   validate :valid_video_url, if: -> { video_url.present? }
@@ -98,44 +75,12 @@ class Project < ApplicationRecord
     CreateEthereumAwards.call(awards: awards)
   end
 
-  def total_revenue
-    revenues.total_amount
-  end
-
   def total_month_awarded
     awards.where('awards.created_at >= ?', Time.zone.today.beginning_of_month).sum(:total_amount)
   end
 
   def total_awards_outstanding
     total_awarded - total_awards_redeemed
-  end
-
-  def total_awards_redeemed
-    payments.sum(:quantity_redeemed)
-  end
-
-  def share_of_revenue_unpaid(awards)
-    return BigDecimal(0) if royalty_percentage.blank? || total_revenue_shared == 0 || total_awarded == 0 || awards.blank?
-    (BigDecimal(awards) * revenue_per_share).truncate(token.currency_precision)
-  end
-
-  def total_revenue_shared
-    return BigDecimal(0) if royalty_percentage.blank? || project_token?
-    total_revenue * (royalty_percentage * BigDecimal('0.01'))
-  end
-
-  def total_paid_to_contributors
-    payments.sum(:total_value)
-  end
-
-  def total_revenue_shared_unpaid
-    total_revenue_shared - total_paid_to_contributors
-  end
-
-  # truncated to 8 decimal places
-  def revenue_per_share
-    return BigDecimal(0) if royalty_percentage.blank? || total_awarded == 0
-    (total_revenue_shared_unpaid / BigDecimal(total_awards_outstanding)).truncate(8)
   end
 
   def community_award_types
@@ -165,10 +110,6 @@ class Project < ApplicationRecord
     end
   end
 
-  def share_revenue?
-    revenue_share? && (royalty_percentage&.> 0)
-  end
-
   def show_id
     unlisted? ? long_id : id
   end
@@ -191,17 +132,8 @@ class Project < ApplicationRecord
     check_account && check_account.same_team_or_owned_project?(self)
   end
 
-  def show_revenue_info?(account)
-    share_revenue? && can_be_access?(account)
-  end
-
   def unlisted?
     member_unlisted? || public_unlisted?
-  end
-
-  def royalty_percentage=(x)
-    x_truncated = BigDecimal(x, ROYALTY_PERCENTAGE_PRECISION).truncate(ROYALTY_PERCENTAGE_PRECISION) if x.present?
-    self[:royalty_percentage] = x_truncated
   end
 
   def percent_awarded

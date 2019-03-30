@@ -60,7 +60,6 @@ class ProjectsController < ApplicationController
 
   def create
     @project = current_account.projects.build project_params
-    @project.maximum_royalties_per_month = 50_000
     @project.public = false
     @project.long_id ||= SecureRandom.hex(20)
 
@@ -211,7 +210,6 @@ class ProjectsController < ApplicationController
 
   def project_params
     result = params.require(:project).permit(
-      :revenue_sharing_end_date,
       :contributor_agreement_url,
       :description,
       :square_image,
@@ -227,10 +225,7 @@ class ProjectsController < ApplicationController
       :exclusive_contributions,
       :legal_project_owner,
       :minimum_payment,
-      :minimum_revenue,
       :require_confidentiality,
-      :royalty_percentage,
-      :maximum_royalties_per_month,
       :license_finalized,
       :visibility,
       :status,
@@ -241,7 +236,6 @@ class ProjectsController < ApplicationController
         channel_id
       ]
     )
-    result[:revenue_sharing_end_date] = DateTime.strptime(result[:revenue_sharing_end_date], '%m/%d/%Y') if result[:revenue_sharing_end_date].present?
     result
   end
 

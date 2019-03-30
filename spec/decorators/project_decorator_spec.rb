@@ -2,88 +2,8 @@ require 'rails_helper'
 
 describe ProjectDecorator do
   let(:amount_with_24_decimal_precision) { BigDecimal('9.999_999_999_999_999_999_999') }
-  let(:project) { (create :project, royalty_percentage: 100, maximum_tokens: 1000000000).decorate }
+  let(:project) { (create :project, maximum_tokens: 1000000000).decorate }
   let(:award_type) { create :award_type, project: project }
-
-  describe 'total_revenue_pretty method truncates' do
-    let(:project_method) { 'total_revenue' }
-
-    before { allow(project).to receive(project_method).and_return(amount_with_24_decimal_precision) }
-
-    def pretty_method_call
-      project.send "#{project_method}_pretty"
-    end
-
-    specify do
-      project.token.USD!
-      expect(pretty_method_call).to eq('$9.99')
-    end
-
-    specify do
-      project.token.BTC!
-      expect(pretty_method_call).to match(/^฿9.9{8}$/)
-    end
-
-    specify do
-      project.token.ETH!
-      expect(pretty_method_call).to match(/^Ξ9.9{18}$/)
-    end
-  end
-
-  describe 'revenue_per_share_pretty method truncates' do
-    let(:project_method) { 'total_revenue_shared' }
-
-    before { allow(project).to receive(project_method).and_return(amount_with_24_decimal_precision) }
-
-    def pretty_method_call
-      project.send "#{project_method}_pretty"
-    end
-
-    specify do
-      project.token.USD!
-      expect(pretty_method_call).to eq('$9.99')
-    end
-
-    specify do
-      project.token.BTC!
-      expect(pretty_method_call).to match(/^฿9.9{8}$/)
-    end
-
-    specify do
-      project.token.ETH!
-      expect(pretty_method_call).to match(/^Ξ9.9{18}$/)
-    end
-
-    specify do
-      expect(project.decorate.revenue_history).to eq []
-      expect(project.decorate.payment_history).to eq []
-    end
-  end
-
-  describe 'revenue_per_share_pretty method truncates' do
-    let(:project_method) { 'revenue_per_share' }
-
-    before { allow(project).to receive(project_method).and_return(amount_with_24_decimal_precision) }
-
-    def pretty_method_call
-      project.send "#{project_method}_pretty"
-    end
-
-    specify do
-      project.token.USD!
-      expect(pretty_method_call).to match(/^\$9.9{8}$/)
-    end
-
-    specify do
-      project.token.BTC!
-      expect(pretty_method_call).to match(/^฿9.9{8}$/)
-    end
-
-    specify do
-      project.token.ETH!
-      expect(pretty_method_call).to match(/^Ξ9.9{8}$/)
-    end
-  end
 
   describe '#description_html' do
     let(:project) do
@@ -169,44 +89,12 @@ describe ProjectDecorator do
       project.project_token!
       expect(project.payment_description).to eq('Project Tokens')
     end
-
-    specify do
-      project.revenue_share!
-      expect(project.payment_description).to eq('Revenue Shares')
-    end
   end
 
   describe '#outstanding_award_description' do
     specify do
       project.project_token!
       expect(project.outstanding_award_description).to eq('Project Tokens')
-    end
-
-    specify do
-      project.revenue_share!
-      expect(project.outstanding_award_description).to eq('Unpaid Revenue Shares')
-    end
-  end
-
-  describe 'royalty_percentage_pretty' do
-    specify do
-      project.royalty_percentage = nil
-      expect(project.royalty_percentage_pretty).to eq('0%')
-    end
-
-    specify do
-      project.royalty_percentage = 10
-      expect(project.royalty_percentage_pretty).to eq('10%')
-    end
-
-    specify do
-      project.royalty_percentage = 10.9
-      expect(project.royalty_percentage_pretty).to eq('10.9%')
-    end
-
-    specify do
-      project.royalty_percentage = BigDecimal('10.999_999_999_999_9')
-      expect(project.royalty_percentage_pretty).to eq('10.' + ('9' * 13) + '%')
     end
   end
 
@@ -231,40 +119,6 @@ describe ProjectDecorator do
     specify do
       project.exclusive_contributions = false
       expect(project.exclusive_contributions_text).to eq('are not exclusive')
-    end
-  end
-
-  describe 'total_revenue_pretty' do
-    specify do
-      project.token.USD!
-      expect(project.total_revenue_pretty).to eq('$0.00')
-    end
-
-    specify do
-      project.token.BTC!
-      expect(project.total_revenue_pretty).to eq('฿0.00000000')
-    end
-
-    specify do
-      project.token.ETH!
-      expect(project.total_revenue_pretty).to eq('Ξ0.000000000000000000')
-    end
-  end
-
-  describe 'total_revenue_shared_pretty' do
-    specify do
-      project.token.USD!
-      expect(project.total_revenue_shared_pretty).to eq('$0.00')
-    end
-
-    specify do
-      project.token.BTC!
-      expect(project.total_revenue_shared_pretty).to eq('฿0.00000000')
-    end
-
-    specify do
-      project.token.ETH!
-      expect(project.total_revenue_shared_pretty).to eq('Ξ0.000000000000000000')
     end
   end
 
@@ -307,142 +161,6 @@ describe ProjectDecorator do
     end
   end
 
-  describe '#total_awards_redeemed' do
-    specify do
-      expect(project)
-        .to receive(:total_awards_redeemed)
-        .and_return(1_234_567)
-
-      expect(project.total_awards_redeemed_pretty)
-        .to eq('1,234,567')
-    end
-  end
-
-  describe '#revenue_per_share' do
-    specify do
-      project.token.USD!
-      expect(project.revenue_per_share_pretty)
-        .to eq('$0.00000000')
-    end
-
-    specify do
-      project.token.BTC!
-      expect(project.revenue_per_share_pretty)
-        .to eq('฿0.00000000')
-    end
-
-    specify do
-      project.token.ETH!
-      expect(project.revenue_per_share_pretty)
-        .to eq('Ξ0.00000000')
-    end
-  end
-
-  describe '#total_revenue_shared_unpaid' do
-    specify do
-      expect(project)
-        .to receive(:total_revenue_shared_unpaid)
-        .and_return(BigDecimal('1234567'))
-
-      expect(project.total_revenue_shared_unpaid_pretty)
-        .to eq('$1,234,567.00')
-    end
-
-    specify do
-      project.token.BTC!
-      expect(project)
-        .to receive(:total_revenue_shared_unpaid)
-        .and_return(BigDecimal('1234567'))
-
-      expect(project.total_revenue_shared_unpaid_pretty)
-        .to eq('฿1,234,567.00000000')
-    end
-  end
-
-  describe '#total_paid_to_contributors' do
-    specify do
-      expect(project)
-        .to receive(:total_paid_to_contributors)
-        .and_return(BigDecimal('1234567'))
-
-      expect(project.total_paid_to_contributors_pretty)
-        .to eq('$1,234,567.00')
-    end
-
-    specify do
-      project.token.BTC!
-      expect(project)
-        .to receive(:total_paid_to_contributors)
-        .and_return(BigDecimal('1234567'))
-
-      expect(project.total_paid_to_contributors_pretty)
-        .to eq('฿1,234,567.00000000')
-    end
-  end
-
-  describe '#miniumum_revenue' do
-    specify do
-      project.token.USD!
-      expect(project.minimum_revenue).to eq('$0')
-    end
-
-    specify do
-      project.token.BTC!
-      expect(project.minimum_revenue).to eq('฿0')
-    end
-  end
-
-  describe '#minimum_payment' do
-    specify do
-      project.token.USD!
-      expect(project.minimum_payment).to eq('$1')
-    end
-
-    specify do
-      project.token.BTC!
-      expect(project.minimum_payment).to eq('฿0.001')
-    end
-
-    specify do
-      project.token.ETH!
-      expect(project.minimum_payment).to eq('Ξ0.1')
-    end
-  end
-
-  describe '#share_of_revenue_unpaid' do
-    before do
-      expect(project).to receive(:share_of_revenue_unpaid)
-        .and_return(BigDecimal('1234567'))
-    end
-
-    specify do
-      project.token.USD!
-
-      expect(project.share_of_revenue_unpaid_pretty(1234567))
-        .to eq('$1,234,567.00')
-    end
-
-    specify do
-      project.token.BTC!
-
-      expect(project.share_of_revenue_unpaid_pretty(1234567))
-        .to eq('฿1,234,567.00000000')
-    end
-  end
-
-  describe '#revenue_shareing_end_date_pretty' do
-    specify do
-      project.revenue_sharing_end_date = nil
-      expect(project.revenue_sharing_end_date_pretty).to eq('revenue sharing does not have an end date.')
-    end
-
-    specify do
-      project.revenue_sharing_end_date = '2123-01-02'
-      expect(project.revenue_sharing_end_date_pretty)
-        .to eq('January 2, 2123')
-    end
-  end
-
   it '#description_text' do
     expect(project.decorate.description_text(12)).to eq 'We are go...'
     expect(project.decorate.description_text(4)).to eq 'W...'
@@ -450,10 +168,6 @@ describe ProjectDecorator do
 
   it '#contributors_by_award_amount' do
     expect(project.contributors_by_award_amount).to eq []
-  end
-
-  it 'maximum_royalties_per_month_pretty' do
-    expect(project.maximum_royalties_per_month_pretty).to eq '10,000'
   end
 
   it 'maximum_tokens_pretty' do

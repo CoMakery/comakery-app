@@ -53,14 +53,6 @@ class AccountDecorator < Draper::Decorator
     pretty_award total_awards_remaining(project)
   end
 
-  def total_revenue_unpaid_remaining_pretty(project)
-    pretty_currency(project, total_revenue_unpaid(project))
-  end
-
-  def total_revenue_paid_pretty(project)
-    pretty_currency(project, total_revenue_paid(project))
-  end
-
   def percentage_of_unpaid_pretty(project)
     "#{number_with_precision(percent_unpaid(project).truncate(1), precision: 1)}%"
   end

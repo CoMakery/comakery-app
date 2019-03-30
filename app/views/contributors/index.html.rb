@@ -1,12 +1,11 @@
 class Views::Contributors::Index < Views::Projects::Base
-  needs :chart_data, :table_data, :revenue_share, :contributors
+  needs :chart_data, :table_data, :contributors
 
   def content
     render partial: 'shared/project_header'
     column do
       full_row do
         text react_component 'ContributorsSummaryPieChart', chart_data: chart_data
-        render partial: 'shared/table/unpaid_revenue_shares'
         render partial: 'shared/table/unpaid_pool'
       end
 
@@ -14,7 +13,7 @@ class Views::Contributors::Index < Views::Projects::Base
 
       full_row do
         if contributors.present?
-          text react_component 'ContributorsTable', table_data: table_data, revenue_share: revenue_share
+          text react_component 'ContributorsTable', table_data: table_data
         end
       end
 

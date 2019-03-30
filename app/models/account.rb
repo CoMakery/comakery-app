@@ -21,7 +21,6 @@ class Account < ApplicationRecord
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   # default_scope { includes(:slack_auth) }
   has_many :projects
-  has_many :payments
   has_many :channels, through: :projects
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
@@ -135,20 +134,8 @@ class Account < ApplicationRecord
     project.awards.where(account: self).sum(:total_amount)
   end
 
-  def total_awards_paid(project)
-    project.payments.where(account: self).sum(:quantity_redeemed)
-  end
-
   def total_awards_remaining(project)
     total_awards_earned(project) - total_awards_paid(project)
-  end
-
-  def total_revenue_paid(project)
-    project.payments.where(account: self).sum(:total_value)
-  end
-
-  def total_revenue_unpaid(project)
-    project.share_of_revenue_unpaid(total_awards_remaining(project))
   end
 
   def percent_unpaid(project)
