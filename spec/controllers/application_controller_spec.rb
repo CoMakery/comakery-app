@@ -42,10 +42,10 @@ describe ApplicationController do
       login account
 
       get :index
-      expect(response).to render_template("accounts/build_profile")
+      expect(response).to render_template('accounts/build_profile')
       expect(assigns[:account]).to eq(account)
       expect(assigns[:skip_validation]).to be true
-      expect(flash[:error]).to eq("Please complete your profile info for Country, Specialty")
+      expect(flash[:error]).to eq('Please complete your profile info for Country, Specialty')
     end
   end
 

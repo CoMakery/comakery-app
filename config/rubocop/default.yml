@@ -45,6 +45,9 @@ Lint/EndAlignment:
 Lint/RequireParentheses:
   Enabled: true
 
+Metrics/ModuleLength:
+  Max: 110
+
 Metrics/BlockLength:
   Enabled: false
 
