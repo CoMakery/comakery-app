@@ -98,22 +98,6 @@ class Token < ApplicationRecord
     coin_type_qrc20? || coin_type_qtum?
   end
 
-  def coin_type_on_cardano?
-    coin_type_ada?
-  end
-
-  def coin_type_on_bitcoin?
-    coin_type_btc?
-  end
-
-  def coin_type_on_eos?
-    coin_type_eos?
-  end
-
-  def coin_type_on_tezos?
-    coin_type_xtz?
-  end
-
   def transitioned_to_ethereum_enabled?
     @transitioned_to_ethereum_enabled
   end
@@ -124,10 +108,6 @@ class Token < ApplicationRecord
 
   def populate_token?
     ethereum_contract_address.present? && (symbol.blank? || decimal_places.blank?)
-  end
-
-  def currency_precision
-    Comakery::Currency::PRECISION[denomination]
   end
 
   private
@@ -199,19 +179,20 @@ class Token < ApplicationRecord
     end
   end
 
-  def denomination_changeable
-    errors.add(:blockchain_network, 'cannot be changed if has associated tasks') if denomination_changed?
-  end
+  # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
+  # def denomination_changeable
+  #   errors.add(:blockchain_network, 'cannot be changed if has associated tasks') if denomination_changed?
+  # end
 
-  def contract_address_changeable
-    ethereum_contract_address_changeable
-    errors.add(:blockchain_network, 'cannot be changed if has associated tasks') if blockchain_network_changed?
-    errors.add(:contract_address, 'cannot be changed if has associated tasks') if contract_address_changed?
-    errors.add(:decimal_places, 'cannot be changed if has associated tasks') if decimal_places_changed?
-  end
+  # def contract_address_changeable
+  #   ethereum_contract_address_changeable
+  #   errors.add(:blockchain_network, 'cannot be changed if has associated tasks') if blockchain_network_changed?
+  #   errors.add(:contract_address, 'cannot be changed if has associated tasks') if contract_address_changed?
+  #   errors.add(:decimal_places, 'cannot be changed if has associated tasks') if decimal_places_changed?
+  # end
 
-  def ethereum_contract_address_changeable
-    errors.add(:ethereum_network, 'cannot be changed if has associated tasks') if ethereum_network_changed?
-    errors.add(:ethereum_contract_address, 'cannot be changed if has associated tasks') if ethereum_contract_address_changed?
-  end
+  # def ethereum_contract_address_changeable
+  #   errors.add(:ethereum_network, 'cannot be changed if has associated tasks') if ethereum_network_changed?
+  #   errors.add(:ethereum_contract_address, 'cannot be changed if has associated tasks') if ethereum_contract_address_changed?
+  # end
 end

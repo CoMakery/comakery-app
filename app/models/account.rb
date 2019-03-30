@@ -134,16 +134,6 @@ class Account < ApplicationRecord
     project.awards.where(account: self).sum(:total_amount)
   end
 
-  def total_awards_remaining(project)
-    total_awards_earned(project) - total_awards_paid(project)
-  end
-
-  def percent_unpaid(project)
-    return BigDecimal('0') if project.total_awards_outstanding.zero?
-    precise_percentage = (BigDecimal(total_awards_remaining(project)) * 100) / BigDecimal(project.total_awards_outstanding)
-    precise_percentage.truncate(8)
-  end
-
   def other_member_projects
     Project.joins("
       left join award_types at1 on at1.project_id=projects.id
@@ -178,10 +168,6 @@ class Account < ApplicationRecord
 
   def specialty_interested?(project_id, specialty_id)
     interests.exists?(project_id: project_id, specialty_id: specialty_id)
-  end
-
-  def finished_build_profile? # check if all of the required fields are filled
-    email.present? && first_name.present? && last_name.present? && country.present? && date_of_birth.present?
   end
 
   def valid_and_underage?

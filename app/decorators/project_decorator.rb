@@ -76,19 +76,8 @@ class ProjectDecorator < Draper::Decorator
     number_with_precision(maximum_tokens.to_i, precision: 0, delimiter: ',')
   end
 
-  def total_awards_redeemed_pretty
-    number_with_precision(total_awards_redeemed, precision: 0, delimiter: ',')
-  end
-
   def percent_awarded_pretty
     "#{number_with_precision(percent_awarded, precision: 3, delimiter: ',')}%"
-  end
-
-  def total_paid_to_contributors_pretty
-    precision = token ? Comakery::Currency::ROUNDED_BALANCE_PRECISION[token.denomination] : 0
-    "#{currency_denomination}#{number_with_precision(total_paid_to_contributors.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
   end
 
   def minimum_payment
@@ -102,10 +91,6 @@ class ProjectDecorator < Draper::Decorator
 
   def tokens_awarded_with_symbol
     token&.symbol ? "#{token.symbol} Tokens Awarded" : 'Tokens Awarded'
-  end
-
-  def use_trezor?
-    coin_type_on_bitcoin? || coin_type_on_cardano?
   end
 
   def send_coins?

@@ -155,12 +155,6 @@ describe ProjectsController do
     let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project', mission_id: mission.id) }
 
     describe '#login' do
-      it 'redirect to account page if account info is not enough' do
-        account.update country: nil
-        get :landing
-        expect(response).to redirect_to(build_profile_accounts_path)
-      end
-
       it 'returns your private projects, and public projects that *do not* belong to you' do
         expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
         other_member_project.channels.create(team: team, channel_id: 'general')

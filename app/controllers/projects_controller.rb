@@ -14,7 +14,6 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      check_account_info
       @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
       @team_projects = current_account.other_member_projects.unarchived.with_last_activity_at.limit(6).decorate

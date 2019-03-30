@@ -6,7 +6,6 @@ class Views::Contributors::Index < Views::Projects::Base
     column do
       full_row do
         text react_component 'ContributorsSummaryPieChart', chart_data: chart_data
-        render partial: 'shared/table/unpaid_pool'
       end
 
       pages
