@@ -168,22 +168,6 @@ describe Project do
     end
   end
 
-  describe 'create_ethereum_awards!' do
-    let(:project) { create :project }
-    let(:issuer) { create :account }
-    let!(:account) { create :account }
-
-    let!(:project_award_type) { (create :award_type, project: project) }
-    let!(:awards) { create(:award, award_type: project_award_type, quantity: 5, amount: 7, issuer: issuer, account: account) }
-
-    specify { expect(project.awards.size).to eq(1) }
-
-    it 'kicks of jobs to issue ethereum awards for the project' do
-      expect(CreateEthereumAwards).to receive(:call).with(awards: project.awards)
-      project.create_ethereum_awards!
-    end
-  end
-
   describe '#show_id' do
     let(:project) { create :project, long_id: '12345' }
 

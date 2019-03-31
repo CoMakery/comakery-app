@@ -89,8 +89,6 @@ feature 'my account', js: true do
     expect(page.find('.fake-link.copy-source').value).to eq "Q#{'a' * 33}"
     expect(page.find('.fake-link.copy-source2').value).to eq "0x#{'a' * 40}"
     expect(page.find('.fake-link.copy-source3').value).to eq 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
-
-    expect(EthereumTokenIssueJob.jobs.length).to eq(0)
   end
 
   scenario 'show account image' do
