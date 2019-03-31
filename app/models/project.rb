@@ -68,10 +68,6 @@ class Project < ApplicationRecord
            .order('total_awarded desc, last_awarded_at desc').first(5)
   end
 
-  def create_ethereum_awards!
-    CreateEthereumAwards.call(awards: awards)
-  end
-
   def total_month_awarded
     awards.where('awards.created_at >= ?', Time.zone.today.beginning_of_month).sum(:total_amount)
   end
