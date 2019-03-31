@@ -4,13 +4,16 @@ class ProjectsController < ApplicationController
   before_action :assign_current_account
 
   before_action :assign_project, only: %i[edit update awards]
+  before_action :assign_listed_project, only: %i[show]
   before_action :assign_project_by_long_id, only: %i[unlisted]
+  before_action :set_award, only: %i[show unlisted]
   before_action :set_tokens, only: %i[new edit]
   before_action :set_missions, only: %i[new edit]
   before_action :set_visibilities, only: %i[new edit]
   before_action :set_generic_props, only: %i[new edit]
+  before_action :set_show_props, only: %i[show unlisted]
 
-  layout 'react', only: %i[show new edit]
+  layout 'react', only: %i[show unlisted new edit]
 
   def landing
     if current_account
@@ -76,30 +79,15 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.listed.find(params[:id])&.decorate
     authorize @project
-    set_award
-
-    token = @project&.token&.decorate
-    mission = @project&.mission
-    @props = {
-      interested: current_account&.interested?(@project.id), # project level interest
-      specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
-      project_data: project_props(@project),
-      mission_data: mission_props(mission),
-      token_data: token_props(token),
-      csrf_token: form_authenticity_token,
-      contributors_path: project_contributors_path(@project.show_id),
-      awards_path: awards_project_path(@project.show_id),
-      edit_path: current_account && @project.account == current_account ? edit_project_path(@project) : nil
-    }
+    render component: 'Project', props: @props
   end
 
   def unlisted
     authorize @project
+
     if @project&.access_unlisted?(current_account)
-      set_award
-      render :show
+      render component: 'Project', props: @props
     elsif @project&.can_be_access?(current_account)
       redirect_to project_path(@project)
     end
@@ -145,6 +133,11 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def assign_listed_project
+    @project = Project.listed.find(params[:id])&.decorate
+    redirect_to('/404.html') unless @project
+  end
 
   def assign_project_by_long_id
     @project = Project.find_by(long_id: params[:long_id])&.decorate
@@ -200,6 +193,22 @@ class ProjectsController < ApplicationController
       form_action: 'POST',
       url_on_success: projects_path,
       csrf_token: form_authenticity_token
+    }
+  end
+
+  def set_show_props
+    token = @project&.token&.decorate
+    mission = @project&.mission
+    @props = {
+      interested: current_account&.interested?(@project.id), # project level interest
+      specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
+      project_data: project_props(@project),
+      mission_data: mission_props(mission),
+      token_data: token_props(token),
+      csrf_token: form_authenticity_token,
+      contributors_path: project_contributors_path(@project.show_id),
+      awards_path: awards_project_path(@project.show_id),
+      edit_path: current_account && @project.account == current_account ? edit_project_path(@project) : nil
     }
   end
 
