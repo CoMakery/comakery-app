@@ -11,8 +11,7 @@ describe 'shared/_award_progress_bar.html.rb' do
       title: 'Cats with Lazers Project',
       description: 'cats with lazers',
       account: account,
-      public: false,
-      payment_type: :revenue_share)
+      public: false)
   end
 
   before do

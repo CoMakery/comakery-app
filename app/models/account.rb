@@ -21,7 +21,6 @@ class Account < ApplicationRecord
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   # default_scope { includes(:slack_auth) }
   has_many :projects
-  has_many :payments
   has_many :channels, through: :projects
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
@@ -135,28 +134,6 @@ class Account < ApplicationRecord
     project.awards.where(account: self).sum(:total_amount)
   end
 
-  def total_awards_paid(project)
-    project.payments.where(account: self).sum(:quantity_redeemed)
-  end
-
-  def total_awards_remaining(project)
-    total_awards_earned(project) - total_awards_paid(project)
-  end
-
-  def total_revenue_paid(project)
-    project.payments.where(account: self).sum(:total_value)
-  end
-
-  def total_revenue_unpaid(project)
-    project.share_of_revenue_unpaid(total_awards_remaining(project))
-  end
-
-  def percent_unpaid(project)
-    return BigDecimal('0') if project.total_awards_outstanding.zero?
-    precise_percentage = (BigDecimal(total_awards_remaining(project)) * 100) / BigDecimal(project.total_awards_outstanding)
-    precise_percentage.truncate(8)
-  end
-
   def other_member_projects
     Project.joins("
       left join award_types at1 on at1.project_id=projects.id
@@ -191,10 +168,6 @@ class Account < ApplicationRecord
 
   def specialty_interested?(project_id, specialty_id)
     interests.exists?(project_id: project_id, specialty_id: specialty_id)
-  end
-
-  def finished_build_profile? # check if all of the required fields are filled
-    email.present? && first_name.present? && last_name.present? && country.present? && date_of_birth.present?
   end
 
   def valid_and_underage?

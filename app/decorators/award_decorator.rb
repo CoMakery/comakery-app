@@ -72,7 +72,7 @@ class AwardDecorator < Draper::Decorator
       issuer&.ethereum_wallet
     elsif object.token&.coin_type_on_qtum?
       issuer&.qtum_wallet
-    elsif object.token&.coin_type_on_cardano?
+    elsif object.token&.coin_type_ada?
       issuer&.cardano_wallet
     end
   end

@@ -42,8 +42,6 @@ if Rails.env == 'development'
     title: 'Dummy Project',
     description: 'Created for development',
     tracker: 'https://github.com/CoMakery/comakery-app',
-    royalty_percentage: 5.9,
-    maximum_royalties_per_month: 10_000,
     legal_project_owner: 'Dummy Inc',
     require_confidentiality: false,
     exclusive_contributions: false,

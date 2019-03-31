@@ -9,7 +9,7 @@ describe('Contributors Table', () => {
     expect(wrapper).toMatchSnapshot()
   })
 
-  it('renders component correctly without revenue share', () => {
+  it('renders component correctly with tableData', () => {
     const tableData = [
       {
         'imageUrl': '/test.png',
@@ -42,97 +42,13 @@ describe('Contributors Table', () => {
     expect(wrapper).toMatchSnapshot()
   })
 
-  it('renders component correctly with revenue share', () => {
+  it('shows table with USD', () => {
     const tableData = [
       {
         'imageUrl': '/test2.png',
         'name'    : 'Betsy',
-        'awards'  : [
-          {
-            'name' : 'Bugfix',
-            'total': '20,000'
-          },
-          {
-            'name' : 'Contribution',
-            'total': '5,333'
-          }
-        ],
-        'total'    : '49,877',
-        'remaining': '49,377',
-        'unpaid'   : '$1,348.68',
-        'paid'     : '$15.08'
-      }
-    ]
-    const wrapper = shallow(<ContributorsTable tableData={tableData} revenueShare />)
-    expect(wrapper).toMatchSnapshot()
-  })
-
-  it('shows table with USD', () => {
-    const tableData = [
-      {
-        'imageUrl' : '/test2.png',
-        'name'     : 'Betsy',
-        'awards'   : [],
-        'total'    : '49,877',
-        'remaining': '49,377',
-        'unpaid'   : '$1,348.68',
-        'paid'     : '$15.08'
-      }
-    ]
-    const wrapper = shallow(<ContributorsTable tableData={tableData} revenueShare />)
-    expect(wrapper.text()).toContain('Contributors')
-    expect(wrapper.exists('td.contributor')).toBe(true)
-    expect(wrapper.find('td.contributor').first().text()).toContain('Betsy')
-    expect(wrapper.find('td.awards-earned').first().text()).toContain('49,877')
-    expect(wrapper.find('td.paid').first().text()).toContain('$15.08')
-    expect(wrapper.find('td.award-holdings').first().text()).toContain('49,377')
-    expect(wrapper.find('td.holdings-value').first().text()).toContain('$1,348.68')
-  })
-
-  it('shows table with Bittoken', () => {
-    const tableData = [
-      {
-        'imageUrl' : '/test2.png',
-        'name'     : 'Betsy',
-        'awards'   : [],
-        'total'    : '0',
-        'remaining': '0',
-        'unpaid'   : '฿0',
-        'paid'     : '฿0'
-      }
-    ]
-    const wrapper = shallow(<ContributorsTable tableData={tableData} revenueShare />)
-    expect(wrapper.find('td.paid').first().text()).toContain('฿0')
-    expect(wrapper.find('td.holdings-value').first().text()).toContain('฿0')
-  })
-
-  it('shows table with Eth', () => {
-    const tableData = [
-      {
-        'imageUrl' : '/test2.png',
-        'name'     : 'Betsy',
-        'awards'   : [],
-        'total'    : '0',
-        'remaining': '0',
-        'unpaid'   : 'Ξ0',
-        'paid'     : 'Ξ0'
-      }
-    ]
-    const wrapper = shallow(<ContributorsTable tableData={tableData} revenueShare />)
-    expect(wrapper.find('td.paid').first().text()).toContain('Ξ0')
-    expect(wrapper.find('td.holdings-value').first().text()).toContain('Ξ0')
-  })
-
-  it('shows table without revenue share', () => {
-    const tableData = [
-      {
-        'imageUrl' : '/test2.png',
-        'name'     : 'Betsy',
-        'awards'   : [],
-        'total'    : '49,877',
-        'remaining': '49,377',
-        'unpaid'   : '$1,348.68',
-        'paid'     : '$15.08'
+        'awards'  : [],
+        'total'   : '49,877'
       }
     ]
     const wrapper = shallow(<ContributorsTable tableData={tableData} />)
@@ -140,9 +56,48 @@ describe('Contributors Table', () => {
     expect(wrapper.exists('td.contributor')).toBe(true)
     expect(wrapper.find('td.contributor').first().text()).toContain('Betsy')
     expect(wrapper.find('td.awards-earned').first().text()).toContain('49,877')
-    expect(wrapper.exists('td.paid')).toBe(false)
-    expect(wrapper.exists('td.award-holdings')).toBe(false)
-    expect(wrapper.exists('td.holdings-value')).toBe(false)
+  })
+
+  it('shows table with BTC', () => {
+    const tableData = [
+      {
+        'imageUrl': '/test2.png',
+        'name'    : 'Betsy',
+        'awards'  : [],
+        'total'   : '฿0'
+      }
+    ]
+    const wrapper = shallow(<ContributorsTable tableData={tableData} />)
+    expect(wrapper.find('td.awards-earned').first().text()).toContain('฿0')
+  })
+
+  it('shows table with ETH', () => {
+    const tableData = [
+      {
+        'imageUrl': '/test2.png',
+        'name'    : 'Betsy',
+        'awards'  : [],
+        'total'   : 'Ξ0'
+      }
+    ]
+    const wrapper = shallow(<ContributorsTable tableData={tableData} />)
+    expect(wrapper.find('td.awards-earned').first().text()).toContain('Ξ0')
+  })
+
+  it('shows table', () => {
+    const tableData = [
+      {
+        'imageUrl': '/test2.png',
+        'name'    : 'Betsy',
+        'awards'  : [],
+        'total'   : '49,877'
+      }
+    ]
+    const wrapper = shallow(<ContributorsTable tableData={tableData} />)
+    expect(wrapper.text()).toContain('Contributors')
+    expect(wrapper.exists('td.contributor')).toBe(true)
+    expect(wrapper.find('td.contributor').first().text()).toContain('Betsy')
+    expect(wrapper.find('td.awards-earned').first().text()).toContain('49,877')
     expect(wrapper.text()).not.toContain('$')
     expect(wrapper.text()).not.toContain('Paid')
   })
@@ -152,8 +107,5 @@ describe('Contributors Table', () => {
     const wrapper = shallow(<ContributorsTable tableData={tableData} />)
     expect(wrapper.exists('td.contributor')).toBe(false)
     expect(wrapper.exists('td.awards-earned')).toBe(false)
-    expect(wrapper.exists('td.paid')).toBe(false)
-    expect(wrapper.exists('td.award-holdings')).toBe(false)
-    expect(wrapper.exists('td.holdings-value')).toBe(false)
   })
 })

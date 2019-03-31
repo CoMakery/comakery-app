@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'project award_types', js: true do
   let!(:current_auth) { create(:sb_authentication) }
-  let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 10, maximum_royalties_per_month: 1) }
+  let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 10) }
   let!(:award_type1) { create(:award_type, name: 'first', project: project1) }
   let!(:award_type2) { create(:award_type, name: 'second', project: project1) }
 

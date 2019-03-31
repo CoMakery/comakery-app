@@ -44,6 +44,21 @@ describe Comakery::Ethereum do
         end.to raise_error(/please set env var ETHEREUM_BRIDGE_API_KEY/)
       end
     end
+
+    describe 'with error on response parsing' do
+      it 'raises expection' do
+        stub_request(:post, 'https://eth.example.com/project')
+          .with(body: hash_including(maxSupply: 101,
+                                     apiKey: 'abc123apikey'))
+          .to_return(
+            headers: { 'Content-Type': 'application/json' },
+            body: {}.to_json
+          )
+        expect do
+          described_class.token_contract(maxSupply: 101)
+        end.to raise_error(/Error received:/)
+      end
+    end
   end
 
   describe '#token_issue' do

@@ -92,23 +92,6 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#show_revenue_info?' do
-    let(:policy) { described_class.new(project_account, my_public_project) }
-
-    it 'relies on show_contributions? and show_contributions?' do
-      expect(my_public_project).to receive(:share_revenue?).and_return(true)
-
-      expect(policy.show_revenue_info?).to be true
-    end
-
-    it 'returns false if revenue is not shared' do
-      expect(my_public_project).to receive(:share_revenue?).and_return(false)
-      expect(policy).not_to receive(:show_contributions?)
-
-      expect(policy.show_revenue_info?).to be_falsey
-    end
-  end
-
   describe '#send_community_award?' do
     it 'returns true if an account belongs to the project' do
       expect(described_class.new(nil, my_public_project).send_community_award?).to be_falsey

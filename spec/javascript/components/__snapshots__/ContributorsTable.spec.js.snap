@@ -1,171 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Contributors Table renders component correctly with revenue share 1`] = `
-<Fragment>
-  <div
-    className="table-scroll table-box contributors"
-  >
-    <table
-      className="table-scroll"
-      style={
-        Object {
-          "width": "100%",
-        }
-      }
-    >
-      <tbody>
-        <tr
-          className="header-row"
-        >
-          <th>
-            Contributors
-          </th>
-          <th>
-            Total Tokens Awarded
-          </th>
-          <th>
-            Unpaid Revenue Shares
-          </th>
-          <th>
-            Unpaid Revenue Share Balance
-          </th>
-          <th>
-            Lifetime Paid
-          </th>
-        </tr>
-        <tr
-          className="award-row"
-          key="Betsy"
-        >
-          <td
-            className="contributor"
-          >
-            <img
-              className="icon avatar-img"
-              src="/test2.png"
-            />
-            <div
-              className="margin-small margin-collapse inline-block"
-            >
-              Betsy
-              <table
-                className="table-scroll table-box overlay"
-                style={
-                  Object {
-                    "display": "none",
-                  }
-                }
-              >
-                <tbody>
-                  <tr>
-                    <th
-                      style={
-                        Object {
-                          "paddingBottom": "20px",
-                        }
-                      }
-                    >
-                      Contribution Summary
-                    </th>
-                  </tr>
-                  <tr
-                    key="Bugfix"
-                  >
-                    <td>
-                      Bugfix
-                    </td>
-                    <td>
-                      20,000
-                    </td>
-                  </tr>
-                  <tr
-                    key="Contribution"
-                  >
-                    <td>
-                      Contribution
-                    </td>
-                    <td>
-                      5,333
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </td>
-          <td
-            className="awards-earned financial"
-          >
-            <span
-              className="margin-small"
-            >
-              49,877
-            </span>
-          </td>
-          <td
-            className="award-holdings financial"
-          >
-            <span
-              className="margin-small"
-            >
-              49,377
-            </span>
-          </td>
-          <td
-            className="holdings-value financial"
-          >
-            <span
-              className="margin-small"
-            >
-              $1,348.68
-            </span>
-          </td>
-          <td
-            className="paid hidden financial"
-          >
-            <span
-              className="margin-small"
-            >
-              $15.08
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</Fragment>
-`;
-
-exports[`Contributors Table renders component correctly without props 1`] = `
-<Fragment>
-  <div
-    className="table-scroll table-box contributors"
-  >
-    <table
-      className="table-scroll"
-      style={
-        Object {
-          "width": "100%",
-        }
-      }
-    >
-      <tbody>
-        <tr
-          className="header-row"
-        >
-          <th>
-            Contributors
-          </th>
-          <th>
-            Total Tokens Awarded
-          </th>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</Fragment>
-`;
-
-exports[`Contributors Table renders component correctly without revenue share 1`] = `
+exports[`Contributors Table renders component correctly with tableData 1`] = `
 <Fragment>
   <div
     className="table-scroll table-box contributors"
@@ -316,6 +151,36 @@ exports[`Contributors Table renders component correctly without revenue share 1`
               0
             </span>
           </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</Fragment>
+`;
+
+exports[`Contributors Table renders component correctly without props 1`] = `
+<Fragment>
+  <div
+    className="table-scroll table-box contributors"
+  >
+    <table
+      className="table-scroll"
+      style={
+        Object {
+          "width": "100%",
+        }
+      }
+    >
+      <tbody>
+        <tr
+          className="header-row"
+        >
+          <th>
+            Contributors
+          </th>
+          <th>
+            Total Tokens Awarded
+          </th>
         </tr>
       </tbody>
     </table>

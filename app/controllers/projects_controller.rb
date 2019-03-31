@@ -4,17 +4,19 @@ class ProjectsController < ApplicationController
   before_action :assign_current_account
 
   before_action :assign_project, only: %i[edit update awards]
+  before_action :assign_listed_project, only: %i[show]
   before_action :assign_project_by_long_id, only: %i[unlisted]
+  before_action :set_award, only: %i[show unlisted]
   before_action :set_tokens, only: %i[new edit]
   before_action :set_missions, only: %i[new edit]
   before_action :set_visibilities, only: %i[new edit]
   before_action :set_generic_props, only: %i[new edit]
+  before_action :set_show_props, only: %i[show unlisted]
 
-  layout 'react', only: %i[show new edit]
+  layout 'react', only: %i[show unlisted new edit]
 
   def landing
     if current_account
-      check_account_info
       @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
       @team_projects = current_account.other_member_projects.unarchived.with_last_activity_at.limit(6).decorate
@@ -60,7 +62,6 @@ class ProjectsController < ApplicationController
 
   def create
     @project = current_account.projects.build project_params
-    @project.maximum_royalties_per_month = 50_000
     @project.public = false
     @project.long_id ||= SecureRandom.hex(20)
 
@@ -78,30 +79,15 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.listed.find(params[:id])&.decorate
     authorize @project
-    set_award
-
-    token = @project&.token&.decorate
-    mission = @project&.mission
-    @props = {
-      interested: current_account&.interested?(@project.id), # project level interest
-      specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
-      project_data: project_props(@project),
-      mission_data: mission_props(mission),
-      token_data: token_props(token),
-      csrf_token: form_authenticity_token,
-      contributors_path: project_contributors_path(@project.show_id),
-      awards_path: awards_project_path(@project.show_id),
-      edit_path: current_account && @project.account == current_account ? edit_project_path(@project) : nil
-    }
+    render component: 'Project', props: @props
   end
 
   def unlisted
     authorize @project
+
     if @project&.access_unlisted?(current_account)
-      set_award
-      render :show
+      render component: 'Project', props: @props
     elsif @project&.can_be_access?(current_account)
       redirect_to project_path(@project)
     end
@@ -147,6 +133,11 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def assign_listed_project
+    @project = Project.listed.find(params[:id])&.decorate
+    redirect_to('/404.html') unless @project
+  end
 
   def assign_project_by_long_id
     @project = Project.find_by(long_id: params[:long_id])&.decorate
@@ -205,13 +196,28 @@ class ProjectsController < ApplicationController
     }
   end
 
+  def set_show_props
+    token = @project&.token&.decorate
+    mission = @project&.mission
+    @props = {
+      interested: current_account&.interested?(@project.id), # project level interest
+      specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
+      project_data: project_props(@project),
+      mission_data: mission_props(mission),
+      token_data: token_props(token),
+      csrf_token: form_authenticity_token,
+      contributors_path: project_contributors_path(@project.show_id),
+      awards_path: awards_project_path(@project.show_id),
+      edit_path: current_account && @project.account == current_account ? edit_project_path(@project) : nil
+    }
+  end
+
   def camelize_props
     @props.deep_transform_keys! { |key| key.to_s.camelize(:lower) }
   end
 
   def project_params
     result = params.require(:project).permit(
-      :revenue_sharing_end_date,
       :contributor_agreement_url,
       :description,
       :square_image,
@@ -227,10 +233,7 @@ class ProjectsController < ApplicationController
       :exclusive_contributions,
       :legal_project_owner,
       :minimum_payment,
-      :minimum_revenue,
       :require_confidentiality,
-      :royalty_percentage,
-      :maximum_royalties_per_month,
       :license_finalized,
       :visibility,
       :status,
@@ -241,7 +244,6 @@ class ProjectsController < ApplicationController
         channel_id
       ]
     )
-    result[:revenue_sharing_end_date] = DateTime.strptime(result[:revenue_sharing_end_date], '%m/%d/%Y') if result[:revenue_sharing_end_date].present?
     result
   end
 
