@@ -28,7 +28,7 @@ class ProjectsController < ApplicationController
 
   def awards
     authorize @project, :show_contributions?
-    @awards = @project.awards.where(status: 'done')
+    @awards = @project.awards.completed
     @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
     @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
 
@@ -252,7 +252,7 @@ class ProjectsController < ApplicationController
   end
 
   def set_award
-    last_award = @project.awards.last
+    last_award = @project.awards&.completed&.last
     @award = Award.new channel: last_award&.channel, award_type: last_award&.award_type
     awardable_types_result = GetAwardableTypes.call(account: current_account, project: @project)
     @awardable_types = awardable_types_result.awardable_types

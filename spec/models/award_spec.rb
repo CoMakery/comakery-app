@@ -19,6 +19,32 @@ describe Award do
     end
   end
 
+  describe 'scopes' do
+    before do
+      described_class.statuses.each_key { |status| (create :award).update(status: status) }
+    end
+
+    it '.completed returns only accepted and paid awards' do
+      described_class.statuses.each_key do |status|
+        if %w[accepted paid].include? status
+          expect(described_class.completed.pluck(:status).include?(status)).to be_truthy
+        else
+          expect(described_class.completed.pluck(:status).include?(status)).to be_falsey
+        end
+      end
+    end
+
+    it '.listed returns all but cancelled awards' do
+      described_class.statuses.each_key do |status|
+        if status == 'cancelled'
+          expect(described_class.listed.pluck(:status).include?(status)).to be_falsey
+        else
+          expect(described_class.listed.pluck(:status).include?(status)).to be_truthy
+        end
+      end
+    end
+  end
+
   describe 'validations' do
     it 'requires things be present' do
       expect(described_class.new(quantity: nil).tap(&:valid?).errors.full_messages).to match_array([

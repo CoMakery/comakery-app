@@ -118,7 +118,7 @@ class AwardsController < ApplicationController
     end
 
     def set_award
-      @award = @award_type.awards.find(params[:id] || params[:award_id])
+      @award = @award_type.awards&.listed&.find(params[:id] || params[:award_id])
     end
 
     def award_params
@@ -169,7 +169,7 @@ class AwardsController < ApplicationController
     end
 
     def redirect_if_award_issued
-      if @award.done?
+      if @award.completed?
         flash[:error] = 'Completed task cannot be changed'
         redirect_to project_award_types_path
       end

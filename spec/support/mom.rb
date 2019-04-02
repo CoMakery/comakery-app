@@ -129,7 +129,7 @@ class Mom
       requirements: 'none',
       proof_link: 'http://nil',
       proof_id: 'abc123',
-      status: 'done',
+      status: 'accepted',
       message: 'Great work',
       quantity: 1,
       amount: 50
