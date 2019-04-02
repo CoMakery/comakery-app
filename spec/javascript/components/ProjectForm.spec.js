@@ -58,7 +58,7 @@ describe('ProjectForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldUploadFile[title="project image – square"][name="project[square_image]"]'
+      'InputFieldUploadFile[title="project image"][name="project[square_image]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -314,7 +314,7 @@ describe('ProjectForm', () => {
     ).props().value).toBe('CoMakery')
 
     expect(wrapper.find(
-      'InputFieldUploadFile[title="project image – square"][name="project[square_image]"]'
+      'InputFieldUploadFile[title="project image"][name="project[square_image]"]'
     ).props().imgPreviewUrl).toBe('/s.png')
 
     expect(wrapper.find(
@@ -435,7 +435,7 @@ describe('ProjectForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldUploadFile[errorText="square_image error"][title="project image – square"][name="project[square_image]"]'
+      'InputFieldUploadFile[errorText="square_image error"][title="project image"][name="project[square_image]"]'
     )).toBe(true)
   })
 })

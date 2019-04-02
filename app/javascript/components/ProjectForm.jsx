@@ -163,20 +163,20 @@ class ProjectForm extends React.Component {
   }
 
   verifySquareImgRes(img) {
-    if ((img.naturalWidth !== 800) || (img.naturalHeight !== 800)) {
+    if ((img.naturalWidth >= 1200) && (img.naturalHeight >= 800) && (img.naturalWidth / img.naturalHeight === 1.5)) {
+      this.errorRemove('project[square_image]')
+    } else {
       this.squareImgInputRef.current.value = ''
       this.errorAdd('project[square_image]', 'Please attach the correct image')
-    } else {
-      this.errorRemove('project[square_image]')
     }
   }
 
   verifyPanoramicImgRes(img) {
-    if ((img.naturalWidth !== 1500) || (img.naturalHeight !== 300)) {
+    if ((img.naturalWidth >= 1500) && (img.naturalHeight >= 300) && (img.naturalWidth / img.naturalHeight === 5)) {
+      this.errorRemove('project[panoramic_image]')
+    } else {
       this.panoramicImgInputRef.current.value = ''
       this.errorAdd('project[panoramic_image]', 'Please attach the correct image')
-    } else {
-      this.errorRemove('project[panoramic_image]')
     }
   }
 
@@ -413,12 +413,12 @@ class ProjectForm extends React.Component {
             />
 
             <InputFieldUploadFile
-              title="project image – square"
+              title="project image"
               name="project[square_image]"
               errorText={this.state.errors['project[square_image]']}
               imgPreviewUrl={this.props.project.squareImageUrl}
-              imgPreviewDimensions="100x100"
-              imgRequirements="Image should be at least 800px x 800px"
+              imgPreviewDimensions="150x100"
+              imgRequirements="Image should be at least 1200px x 800px"
               imgVerifier={this.verifySquareImgRes}
               imgInputRef={this.squareImgInputRef}
             />

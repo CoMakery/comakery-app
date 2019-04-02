@@ -160,7 +160,7 @@ class ProjectsController < ApplicationController
     @props = {
       project: @project&.serializable_hash&.merge(
         {
-          square_image_url: @project&.square_image&.present? ? Refile.attachment_url(@project, :square_image, :fill, 800, 800) : nil,
+          square_image_url: @project&.square_image&.present? ? Refile.attachment_url(@project, :square_image, :fill, 1200, 800) : nil,
           panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
           mission_id: @project&.mission&.id,
           token_id: @project&.token&.id,
@@ -171,7 +171,7 @@ class ProjectsController < ApplicationController
               id: channel&.id
             }
           end,
-          url: "https://www.comakery.com/p/#{@project.long_id}"
+          url: unlisted_project_url(@project.long_id)
         }
       ),
       tokens: @tokens,
@@ -276,8 +276,9 @@ class ProjectsController < ApplicationController
     chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
 
     project.as_json(only: %i[id title description]).merge(
-      image_url: project.panoramic_image.present? ? Refile.attachment_url(project, :panoramic_image) : nil,
-      youtube_url: project.video_id,
+      square_image_url: project.square_image.present? ? Refile.attachment_url(project, :square_image) : nil,
+      panoramic_image_url: project.panoramic_image.present? ? Refile.attachment_url(project, :panoramic_image) : nil,
+      video_id: project.video_id,
       default_image_url: helpers.image_url('defaul_project.jpg'),
       owner: project.account.decorate.name,
       token_percentage: project.percent_awarded_pretty,

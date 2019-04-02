@@ -20,7 +20,7 @@ describe 'project channels', js: true do
     fill_in 'project[maximum_tokens]', with: '1000'
     fill_in 'project[video_url]', with: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'
     fill_in 'project[legal_project_owner]', with: 'Mindful Inc'
-    attach_file 'project[square_image]', Rails.root.join('spec', 'fixtures', '800.png')
+    attach_file 'project[square_image]', Rails.root.join('spec', 'fixtures', '1200.png')
     attach_file 'project[panoramic_image]', Rails.root.join('spec', 'fixtures', '1500.png')
     expect(page).not_to have_selector('.project-form--form--channels--channel')
     find('.project-form--form--channels--add').click
