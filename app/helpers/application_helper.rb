@@ -4,6 +4,6 @@ module ApplicationHelper
   end
 
   def project_image_url(obj, size)
-    attachment_url(obj, :image, :fill, size, size, fallback: 'defaul_project.jpg')
+    attachment_url(obj, :panoramic_image, :fill, size, size, fallback: 'defaul_project.jpg')
   end
 end

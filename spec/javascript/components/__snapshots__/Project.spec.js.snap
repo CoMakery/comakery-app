@@ -506,7 +506,9 @@ exports[`Project renders correctly without props 1`] = `
         >
           <div
             className="project-team__leader-name"
-          />
+          >
+            Team Leader 
+          </div>
            
           <div
             className="project-team__contributors"

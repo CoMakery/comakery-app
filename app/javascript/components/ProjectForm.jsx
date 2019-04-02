@@ -414,7 +414,6 @@ class ProjectForm extends React.Component {
 
             <InputFieldUploadFile
               title="project image"
-              required
               name="project[square_image]"
               errorText={this.state.errors['project[square_image]']}
               imgPreviewUrl={this.props.project.squareImageUrl}
@@ -426,7 +425,6 @@ class ProjectForm extends React.Component {
 
             <InputFieldUploadFile
               title="project image – panoramic"
-              required
               name="project[panoramic_image]"
               errorText={this.state.errors['project[panoramic_image]']}
               imgPreviewUrl={this.props.project.panoramicImageUrl}
