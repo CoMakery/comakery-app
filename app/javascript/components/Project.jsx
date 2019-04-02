@@ -163,7 +163,7 @@ export default class Project extends React.Component {
     descriptionText = descriptionText.join('.')
 
     return <div className="project-container">
-      <div className="project-header" style={{backgroundImage: `url(${projectData.imageUrl})` || `url(${projectData.defaultImageUrl})`}}>
+      <div className="project-header" style={{backgroundImage: `url(${projectData.panoramicImageUrl})` || `url(${projectData.defaultImageUrl})`}}>
         <div className="project-header__blur" />
         <div className="project-header__content">
           <div className="project-header__menu">
@@ -254,9 +254,14 @@ export default class Project extends React.Component {
 
       <div className="project-description">
         <div className="project-description__video">
-          {!projectData.youtubeUrl && <img src={projectData.defaultImageUrl} width="100%" />}
-          {projectData.youtubeUrl &&
-            <iframe className="project-description__video__iframe" src={`//www.youtube.com/embed/${projectData.youtubeUrl}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0`} frameBorder="0" />
+          {projectData.videoId &&
+            <iframe className="project-description__video__iframe" src={`//www.youtube.com/embed/${projectData.videoId}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0`} frameBorder="0" />
+          }
+          {!projectData.videoId && projectData.squareImageUrl &&
+            <img src={projectData.squareImageUrl} width="100%" />
+          }
+          {!projectData.videoId && !projectData.squareImageUrl &&
+            <img src={projectData.defaultImageUrl} width="100%" />
           }
         </div>
         <div className="project-description__text">
