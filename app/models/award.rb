@@ -34,9 +34,10 @@ class Award < ApplicationRecord
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
 
-  scope :confirmed, -> { where confirm_token: nil }
+  scope :completed, -> { where 'awards.status in(3,5)' }
+  scope :listed, -> { where 'awards.status not in(6)' }
 
-  enum status: %i[ready started submitted revisions done cancelled]
+  enum status: %i[ready started submitted accepted rejected paid cancelled]
 
   def self.total_awarded
     sum(:total_amount)
@@ -105,8 +106,8 @@ class Award < ApplicationRecord
     team && team.discord?
   end
 
-  def done?
-    status == 'done'
+  def completed?
+    %w[accepted paid].include? status
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true

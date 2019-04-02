@@ -29,7 +29,7 @@ class ContributorsController < ApplicationController
       }
     end
 
-    @table_data += @project.awards.reject(&:account).group_by { |award| award.decorate.recipient_display_name }.values.map do |awards|
+    @table_data += @project.awards&.completed&.reject(&:account)&.group_by { |award| award.decorate.recipient_display_name }.values.map do |awards|
       {
         image_url: helpers.account_image_url(nil, 27),
         name: awards.first.decorate.recipient_display_name,

@@ -3,7 +3,7 @@ class GetAwardData
 
   def call
     project = context.project
-    awards = project.awards.includes(:account, :award_type)
+    awards = project.awards.completed.includes(:account, :award_type)
     context.award_data = {
       contributions_by_day: contributions_by_day(awards)
     }

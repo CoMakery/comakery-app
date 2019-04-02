@@ -13,7 +13,7 @@ class AccountsController < ApplicationController
 
   def show
     @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:project_page]).per(20)
-    @awards = current_account.awards.order(created_at: :desc).page(params[:award_page]).per(20)
+    @awards = current_account.awards&.completed&.order(created_at: :desc)&.page(params[:award_page])&.per(20)
     @projects_count = @projects.total_count
     @awards_count = @awards.total_count
 
@@ -133,7 +133,7 @@ class AccountsController < ApplicationController
           flash[:error] = error_msg
           # Legacy code caused issue
           @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:project_page]).per(20)
-          @awards = current_account.awards.order(created_at: :desc).page(params[:award_page]).per(20)
+          @awards = current_account.awards&.completed&.order(created_at: :desc)&.page(params[:award_page])&.per(20)
           render :show
         end
         format.json do

@@ -15,7 +15,7 @@ class SendAward
       channel: context.channel,
       quantity: context.quantity,
       message: context.message,
-      status: 'done'
+      status: 'accepted'
     )
       context.fail!(message: context.award.errors.full_messages.join(', '))
     end
