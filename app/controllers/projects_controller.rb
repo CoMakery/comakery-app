@@ -160,7 +160,7 @@ class ProjectsController < ApplicationController
     @props = {
       project: @project&.serializable_hash&.merge(
         {
-          square_image_url: @project&.square_image&.present? ? Refile.attachment_url(@project, :square_image, :fill, 800, 800) : nil,
+          square_image_url: @project&.square_image&.present? ? Refile.attachment_url(@project, :square_image, :fill, 1200, 800) : nil,
           panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
           mission_id: @project&.mission&.id,
           token_id: @project&.token&.id,
@@ -171,7 +171,7 @@ class ProjectsController < ApplicationController
               id: channel&.id
             }
           end,
-          url: "https://www.comakery.com/p/#{@project.long_id}"
+          url: unlisted_project_url(@project.long_id)
         }
       ),
       tokens: @tokens,
