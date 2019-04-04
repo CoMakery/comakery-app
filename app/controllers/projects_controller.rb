@@ -276,10 +276,9 @@ class ProjectsController < ApplicationController
     chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
 
     project.as_json(only: %i[id title description]).merge(
-      square_image_url: project.square_image.present? ? Refile.attachment_url(project, :square_image) : nil,
-      panoramic_image_url: project.panoramic_image.present? ? Refile.attachment_url(project, :panoramic_image) : nil,
+      square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
+      panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),
       video_id: project.video_id,
-      default_image_url: helpers.image_url('defaul_project.jpg'),
       owner: project.account.decorate.name,
       token_percentage: project.percent_awarded_pretty,
       maximum_tokens: project.maximum_tokens_pretty,
@@ -294,7 +293,7 @@ class ProjectsController < ApplicationController
   def mission_props(mission)
     if mission.present?
       mission.as_json(only: %i[id name]).merge(
-        image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 150, 100) : nil,
+        logo_url: mission.image.present? ? Refile.attachment_url(mission, :logo, :fill, 100, 100) : nil,
         mission_url: mission_path(mission)
       )
     end

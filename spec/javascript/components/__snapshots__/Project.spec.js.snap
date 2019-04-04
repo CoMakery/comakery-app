@@ -126,7 +126,7 @@ exports[`Project renders correctly without props 1`] = `
       className="project-interest"
     >
       <button
-        className="project-interest__button"
+        className="button project-interest__button"
         onClick={[Function]}
       >
         I’m Interested
@@ -524,7 +524,7 @@ exports[`Project renders correctly without props 1`] = `
       className="project-interest"
     >
       <button
-        className="project-interest__button"
+        className="button project-interest__button"
         onClick={[Function]}
       >
         I’m Interested
