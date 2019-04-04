@@ -206,8 +206,8 @@ class ProjectsController < ApplicationController
       mission_data: mission_props(mission),
       token_data: token_props(token),
       csrf_token: form_authenticity_token,
-      contributors_path: project_contributors_path(@project.show_id),
-      awards_path: awards_project_path(@project.show_id),
+      contributors_path: project_contributors_path(@project.id),
+      awards_path: awards_project_path(@project.id),
       edit_path: current_account && @project.account == current_account ? edit_project_path(@project) : nil
     }
   end

@@ -64,12 +64,13 @@ class Project < ApplicationRecord
       left join award_types on a1.award_type_id=award_types.id
       left join projects on award_types.project_id=projects.id")
            .where('projects.id=?', id)
+           .where('a1.status in(3,5)')
            .group('accounts.id')
            .order('total_awarded desc, last_awarded_at desc').first(5)
   end
 
   def total_month_awarded
-    awards.where('awards.created_at >= ?', Time.zone.today.beginning_of_month).sum(:total_amount)
+    awards.completed.where('awards.created_at >= ?', Time.zone.today.beginning_of_month).sum(:total_amount)
   end
 
   def total_awards_outstanding
@@ -139,9 +140,9 @@ class Project < ApplicationRecord
 
   def awards_for_chart(max: 1000)
     result = []
-    recents = awards.limit(max).order('id desc')
+    recents = awards.completed.limit(max).order('id desc')
     date_groups = recents.group_by { |a| a.created_at.strftime('%Y-%m-%d') }
-    if awards.count > max
+    if awards.completed.count > max
       date_groups.delete(recents.first.created_at.strftime('%Y-%m-%d'))
     end
     contributors = {}
