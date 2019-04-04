@@ -14,7 +14,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
       end
       row do
         ul(class: 'menu') do
-          li(class: ('active' if controller_name == 'projects' && params[:action] != 'edit').to_s) do
+          li do
             path = project.unlisted? ? unlisted_project_path(project.long_id) : project_path(project)
             a(href: path) do
               text 'Overview'
@@ -24,6 +24,12 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           li_if(project.can_be_access?(current_account), class: ('active' if controller_name == 'contributors').to_s) do
             a(href: project_contributors_path(project.show_id)) do
               text ' Contributors'
+            end
+          end
+
+          li_if(project.can_be_access?(current_account), class: ('active' if controller_name == 'projects' && params[:action] == 'awards').to_s) do
+            a(href: awards_project_path(project.id)) do
+              text 'Payments'
             end
           end
 

@@ -2270,9 +2270,10 @@ select:disabled {
 }
 
 .project-header__mission-image {
-  width: 150px;
+  width: 100%;
   height: 100px;
-  margin: auto;
+  display: flex;
+  justify-content: center;
 }
 
 .project-header__name {
@@ -2764,25 +2765,7 @@ select:disabled {
 .project-interest__button {
   width: 230px;
   height: 40px;
-  background-color: var(--primary-blue);
-  text-transform: uppercase;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  color: white;
-  font-family: Montserrat, sans-serif;
   font-size: 18px;
-  font-weight: bold;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  transition: 0.5s all;
-  opacity: 0.8;
-}
-
-.project-interest__button:hover {
-  opacity: 1;
 }
 
 .project-interest__text {
@@ -3287,5 +3270,11 @@ select:disabled {
 
 .header--nav--links a:hover,
 .header--nav--links a:focus {
+  text-decoration: underline;
+}
+
+.project-header__menu__link:hover,
+.project-award__token__address__link:hover,
+.project-skill__interest__button:hover {
   text-decoration: underline;
 }

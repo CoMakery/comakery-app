@@ -163,7 +163,7 @@ export default class Project extends React.Component {
     descriptionText = descriptionText.join('.')
 
     return <div className="project-container">
-      <div className="project-header" style={{backgroundImage: `url(${projectData.panoramicImageUrl})` || `url(${projectData.defaultImageUrl})`}}>
+      <div className="project-header" style={{backgroundImage: `url(${projectData.panoramicImageUrl})`}}>
         <div className="project-header__blur" />
         <div className="project-header__content">
           <div className="project-header__menu">
@@ -183,7 +183,7 @@ export default class Project extends React.Component {
 
           {missionData &&
             <div className="project-header__mission-image">
-              <img src={missionData.imageUrl} />
+              <img src={missionData.logoUrl} />
             </div>
           }
 
@@ -257,11 +257,8 @@ export default class Project extends React.Component {
           {projectData.videoId &&
             <iframe className="project-description__video__iframe" src={`//www.youtube.com/embed/${projectData.videoId}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0`} frameBorder="0" />
           }
-          {!projectData.videoId && projectData.squareImageUrl &&
+          {!projectData.videoId &&
             <img src={projectData.squareImageUrl} width="100%" />
-          }
-          {!projectData.videoId && !projectData.squareImageUrl &&
-            <img src={projectData.defaultImageUrl} width="100%" />
           }
         </div>
         <div className="project-description__text">
@@ -271,8 +268,8 @@ export default class Project extends React.Component {
       </div>
 
       <div className="project-interest">
-        {!interested && <button className="project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
-        {interested && <button className="project-interest__button" disabled>Request Sent</button>}
+        {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
+        {interested && <button className="button project-interest__button" disabled>Request Sent</button>}
         <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
       </div>
 
@@ -337,8 +334,8 @@ export default class Project extends React.Component {
       </div>
 
       <div className="project-interest">
-        {!interested && <button className="project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
-        {interested && <button className="project-interest__button" disabled>Request Sent</button>}
+        {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
+        {interested && <button className="button project-interest__button" disabled>Request Sent</button>}
         <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
       </div>
     </div>
