@@ -196,10 +196,8 @@ class ProjectsController < ApplicationController
       visibilities: @visibilities,
       teams: @teams&.reject { |t| t[:channels].empty? },
       discord_bot_url: if @teams&.any? { |t| t[:discord] && t[:channels].empty? }
-        Comakery::Discord.new.add_bot_link
-      else
-        nil
-      end,
+                         Comakery::Discord.new.add_bot_link
+                       end,
       form_url: projects_path,
       form_action: 'POST',
       url_on_success: projects_path,
