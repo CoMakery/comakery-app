@@ -133,6 +133,43 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def contributor_props(account)
+    account.as_json(only: %i[id nickname first_name last_name]).merge(
+      image_url: helpers.account_image_url(account, 68),
+      specialty: Account.specialties[account.specialty]
+    )
+  end
+
+  def project_props(project)
+    contributors_number = project.contributors_by_award_amount.size
+    award_data = GetContributorData.call(project: project).award_data
+    chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
+
+    project.as_json(only: %i[id title description]).merge(
+      image_url: project.panoramic_image.present? ? Refile.attachment_url(project, :panoramic_image) : nil,
+      square_url: project.square_image.present? ? Refile.attachment_url(project, :square_image) : nil,
+      youtube_url: project.video_id,
+      default_image_url: helpers.image_url('defaul_project.jpg'),
+      owner: project.account.decorate.name,
+      token_percentage: project.percent_awarded_pretty,
+      maximum_tokens: project.maximum_tokens_pretty,
+      awarded_tokens: project.total_awarded_pretty,
+      team_leader: contributor_props(project.account),
+      contributors_number: contributors_number,
+      contributors: project.top_contributors.map { |contributor| contributor_props(contributor) },
+      chart_data: chart_data
+    )
+  end
+
+  def token_props(token)
+    if token.present?
+      token.as_json(only: %i[name symbol coin_type]).merge(
+        image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
+        contract_url: token.ethereum_contract_explorer_url
+      )
+    end
+  end
+
   private
 
   def compare_all(*pairs)

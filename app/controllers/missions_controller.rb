@@ -1,8 +1,9 @@
 class MissionsController < ApplicationController
   layout 'react'
-  before_action :find_mission_by_id, only: %i[edit update update_status destroy]
+  before_action :find_mission_by_id, only: %i[show edit update update_status destroy]
   before_action :set_generic_props, only: %i[new show edit]
   before_action :set_missions_prop, only: %i[index]
+  before_action :set_detailed_props, only: %i[show]
 
   def index
     render component: 'MissionIndex', props: { csrf_token: form_authenticity_token, missions: @missions }
@@ -14,6 +15,11 @@ class MissionsController < ApplicationController
 
     @props[:mission] = @mission&.serialize
     render component: 'MissionForm', props: @props
+  end
+
+  def show
+    authorize @mission
+    render component: 'Mission', props: @props
   end
 
   def create
@@ -73,6 +79,41 @@ class MissionsController < ApplicationController
 
   def find_mission_by_id
     @mission = Mission.find(params[:id])
+  end
+
+  def set_detailed_props
+    projects = @mission.projects.public_listed
+
+    @props = {
+      mission: @mission&.serializable_hash&.merge(
+        {
+          logo_url: @mission&.logo&.present? ? Refile.attachment_url(@mission, :logo, :fill, 800, 800) : nil,
+          image_url: @mission&.image&.present? ? Refile.attachment_url(@mission, :image, :fill, 1200, 800) : nil
+        }
+      ),
+      leaders: @mission.project_leaders,
+      tokens: @mission.project_tokens,
+      new_project_url: new_project_path(mission_id: @mission.id),
+      csrf_token: form_authenticity_token,
+      stats: {
+        projects: projects.size,
+        batches: projects.select('award_types.id').joins(:award_types).size,
+        tasks: projects.select('awards.id').joins(:awards).size,
+        interests: Interest.where(project_id: projects).select(:account_id).distinct.size
+      },
+      projects: projects.map do |project|
+        {
+          editable: current_account.id == project.account_id,
+          interested: Interest.exists?(account_id: current_account.id, project_id: project.id),
+          project_data: project_props(project.decorate),
+          token_data: project.token.as_json(only: %i[name]).merge(
+            logo_url: project.token.logo_image.present? ? Refile.attachment_url(project.token, :logo_image, :fill, 30, 30) : nil
+          ),
+          batches: project.award_types.size,
+          tasks: project.awards.size
+        }
+      end
+    }
   end
 
   def set_generic_props
