@@ -3297,6 +3297,12 @@ select:disabled {
   padding-bottom: 80px;
 }
 
+@media screen and (max-width: 650px) {
+  .mission-container {
+    padding-bottom: 60px;
+  }
+}
+
 .mission-header {
   position: relative;
   box-sizing: border-box;
@@ -3348,6 +3354,24 @@ select:disabled {
   text-align: right;
   color: #ffffff;
   text-decoration: none;
+}
+
+@media screen and (max-width: 650px) {
+  .mission-header__blur {
+    min-height: 380px;
+  }
+
+  .mission-header__logo {
+    width: 315px;
+    height: 353px;
+    padding: 20px;
+    bottom: -58px;
+  }
+
+  .mission-header__logo__img {
+    width: 275px;
+    height: 275px;
+  }
 }
 
 .mission-details {
@@ -3409,6 +3433,42 @@ select:disabled {
   text-align: center;
   color: var(--greyish-brown);
   margin-top: 24px;
+}
+
+@media screen and (max-width: 1439px) {
+  .mission-details {
+    padding-left: 75px;
+    padding-right: 75px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .mission-details {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .mission-details__subtitle {
+    padding-left: 75px;
+    padding-right: 75px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .mission-details {
+    padding-top: 90px;
+    padding-bottom: 60px;
+  }
+
+  .mission-details__name {
+    font-size: 30px;
+  }
+
+  .mission-details__subtitle {
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 30px;
+  }
 }
 
 .mission-leaders {
@@ -3559,6 +3619,7 @@ select:disabled {
   height: 148px;
   display: flex;
   position: relative;
+  justify-content: space-between;
   flex-wrap: nowrap;
   overflow: hidden;
   -webkit-overflow-scrolling: touch;
@@ -3650,6 +3711,20 @@ select:disabled {
   color: var(--azure);
 }
 
+@media screen and (max-width: 1439px) {
+  .mission-tokens {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .mission-tokens {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
 .mission-stats {
   margin-top: 25px;
   font-family: Georgia, sans-serif;
@@ -3693,6 +3768,10 @@ select:disabled {
   box-sizing: border-box;
 }
 
+.mission-stats__kpis__row { 
+  display: none;
+}
+
 .mission-stats__kpi {
   box-sizing: border-box;
   display: flex;
@@ -3704,6 +3783,57 @@ select:disabled {
 .mission-stats__kpi .icon {
   margin-right: 12px;
   height: 100%;
+}
+
+.mission-stats__contributor {
+  width: 55px;
+  height: 55px;
+  background: white;
+  margin-right: 12px;
+  border-radius: 50%;
+}
+
+@media screen and (max-width: 1439px) {
+  .mission-stats__kpis {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .mission-stats__kpis {
+    height: 278px;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .mission-stats__kpis__row {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    justify-content: space-between;
+    justify-content: space-between;
+  }
+
+  .mission-stats__kpi--desktop {
+    display: none;
+  }
+
+  .mission-stats__kpi {
+    height: auto;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mission-stats__kpi .icon {
+    margin: 0 0 12px 0;
+    height: 60px;
+  }
+
+  .mission-stats__contributor {
+    margin: 0 0 12px 0;
+  }
 }
 
 .mission-projects {
@@ -3771,6 +3901,36 @@ select:disabled {
   color: var(--black);
 }
 
+.mission-projects__single__title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mission-projects__single__title {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--greyish-brown);
+}
+
+.mission-projects__single__title__heading {
+  font-family: Georgia, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--black);
+}
 .mission-projects__single__card {
   box-sizing: border-box;
   position: relative;
@@ -3778,8 +3938,18 @@ select:disabled {
   justify-content: space-between;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
-  margin: 22px 15px;
+  margin: 0 15px 22px;
   padding: 25px;
+}
+
+.mission-projects__single__desktop {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.mission-projects__single__mobile {
+  display: none;
 }
 
 .mission-projects__single__card__img {
@@ -3877,4 +4047,78 @@ select:disabled {
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
+}
+
+.project-contributors__more--mobile {
+  display: none;
+}
+
+@media screen and (max-width: 1439px) {
+  .mission-projects__container {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .mission-projects__container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .mission-projects__single__header {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .project-contributor-container--desktop {
+    display: none;
+  }
+
+  .project-contributors__more--mobile {
+    display: block;
+  }
+
+  .mission-projects__single__card {
+    margin-left: -30px;
+    margin-right: -30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    flex-direction: column;
+  }
+
+  .mission-projects__single__description--desktop {
+    display: none;
+  }
+
+  .mission-column__wrapper {
+    align-items: flex-end;
+  }
+
+  .mission-projects__single__card__info__interest {
+    display: none;
+  }
+
+  .mission-projects__single__card__info__interest--mobile {
+    margin-top: 30px;
+    display: flex;
+  }
+
+  .mission-projects__single__desktop {
+    margin-bottom: 33px;
+  }
+
+  .mission-projects__single__mobile {
+    box-sizing: border-box;
+    width: 100%;
+    display: block;
+    font-family: Georgia;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.71;
+    letter-spacing: normal;
+    color: var(--greyish-brown);
+  }
 }
