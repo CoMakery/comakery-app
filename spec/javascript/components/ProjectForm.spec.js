@@ -80,6 +80,10 @@ describe('ProjectForm', () => {
     expect(wrapper.exists(
       '.project-form--form--channels--empty'
     )).toBe(true)
+
+    expect(wrapper.exists(
+      '.project-form--form--channels--discord-link'
+    )).toBe(false)
   })
 
   it('renders correctly with tokens', () => {
@@ -137,6 +141,14 @@ describe('ProjectForm', () => {
       ['Publicly listed in CoMakery searches', 'public_listed'],
       ['Unlisted URL (no login required)', 'public_unlisted']
     ])
+  })
+
+  it('renders discord auth link when supplied with one', () => {
+    const wrapper = mount(<ProjectForm discordBotUrl="http://null" />)
+
+    expect(wrapper.exists(
+      '.project-form--form--channels--discord-link'
+    )).toBe(true)
   })
 
   it('renders correctly with teams', () => {
