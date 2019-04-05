@@ -40,7 +40,7 @@ class Award < ApplicationRecord
   enum status: %i[ready started submitted accepted rejected paid cancelled]
 
   def self.total_awarded
-    sum(:total_amount)
+    completed.sum(:total_amount)
   end
 
   def ensure_proof_id_exists

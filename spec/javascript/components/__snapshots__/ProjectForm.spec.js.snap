@@ -3,6 +3,7 @@
 exports[`ProjectForm renders correctly without props 1`] = `
 <ProjectForm
   csrfToken="00"
+  discordBotUrl={null}
   formAction="POST"
   formUrl="/"
   missions={
@@ -931,11 +932,11 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     />,
                   }
                 }
-                imgPreviewDimensions="100x100"
-                imgRequirements="Image should be at least 800px x 800px"
+                imgPreviewDimensions="150x100"
+                imgRequirements="Image should be at least 1200px x 800px"
                 imgVerifier={[Function]}
                 name="project[square_image]"
-                title="project image – square"
+                title="project image"
               >
                 <InputField
                   checkboxText=""
@@ -955,9 +956,9 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       />,
                     }
                   }
-                  imgPreviewDimensions="100x100"
+                  imgPreviewDimensions="150x100"
                   imgPreviewUrl=""
-                  imgRequirements="Image should be at least 800px x 800px"
+                  imgRequirements="Image should be at least 1200px x 800px"
                   imgVerifier={[Function]}
                   max=""
                   min=""
@@ -970,7 +971,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   selectEntries={Array []}
                   step=""
                   symbolLimit={0}
-                  title="project image – square"
+                  title="project image"
                   type="file"
                   value=""
                 >
@@ -983,7 +984,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       <span
                         className="input-field--title--title"
                       >
-                        project image – square
+                        project image
                       </span>
                       <span
                         className="input-field--title--required"
@@ -1005,7 +1006,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       <span
                         className="input-field--content__file--requirements"
                       >
-                        Image should be at least 800px x 800px
+                        Image should be at least 1200px x 800px
                       </span>
                     </div>
                   </div>

@@ -163,20 +163,20 @@ class ProjectForm extends React.Component {
   }
 
   verifySquareImgRes(img) {
-    if ((img.naturalWidth !== 800) || (img.naturalHeight !== 800)) {
+    if ((img.naturalWidth >= 1200) && (img.naturalHeight >= 800) && (img.naturalWidth / img.naturalHeight === 1.5)) {
+      this.errorRemove('project[square_image]')
+    } else {
       this.squareImgInputRef.current.value = ''
       this.errorAdd('project[square_image]', 'Please attach the correct image')
-    } else {
-      this.errorRemove('project[square_image]')
     }
   }
 
   verifyPanoramicImgRes(img) {
-    if ((img.naturalWidth !== 1500) || (img.naturalHeight !== 300)) {
+    if ((img.naturalWidth >= 1500) && (img.naturalHeight >= 300) && (img.naturalWidth / img.naturalHeight === 5)) {
+      this.errorRemove('project[panoramic_image]')
+    } else {
       this.panoramicImgInputRef.current.value = ''
       this.errorAdd('project[panoramic_image]', 'Please attach the correct image')
-    } else {
-      this.errorRemove('project[panoramic_image]')
     }
   }
 
@@ -413,12 +413,12 @@ class ProjectForm extends React.Component {
             />
 
             <InputFieldUploadFile
-              title="project image – square"
+              title="project image"
               name="project[square_image]"
               errorText={this.state.errors['project[square_image]']}
               imgPreviewUrl={this.props.project.squareImageUrl}
-              imgPreviewDimensions="100x100"
-              imgRequirements="Image should be at least 800px x 800px"
+              imgPreviewDimensions="150x100"
+              imgRequirements="Image should be at least 1200px x 800px"
               imgVerifier={this.verifySquareImgRes}
               imgInputRef={this.squareImgInputRef}
             />
@@ -502,7 +502,13 @@ class ProjectForm extends React.Component {
               </div>
             }
 
-            {this.props.teams.length === 0 &&
+            {this.props.discordBotUrl &&
+              <div className="project-form--form--channels--discord-link">
+                <a href={this.props.discordBotUrl}>Allow Access to Discord Channels →</a>
+              </div>
+            }
+
+            {this.props.teams.length === 0 && !this.props.discordBotUrl &&
               <div className="project-form--form--channels--empty">
                 Start adding channels by signing in with Slack or Discord
               </div>
@@ -515,25 +521,27 @@ class ProjectForm extends React.Component {
 }
 
 ProjectForm.propTypes = {
-  project     : PropTypes.object.isRequired,
-  tokens      : PropTypes.object.isRequired,
-  missions    : PropTypes.object.isRequired,
-  visibilities: PropTypes.array.isRequired,
-  teams       : PropTypes.array.isRequired,
-  formUrl     : PropTypes.string.isRequired,
-  formAction  : PropTypes.string.isRequired,
-  urlOnSuccess: PropTypes.string.isRequired,
-  csrfToken   : PropTypes.string.isRequired
+  project      : PropTypes.object.isRequired,
+  tokens       : PropTypes.object.isRequired,
+  missions     : PropTypes.object.isRequired,
+  visibilities : PropTypes.array.isRequired,
+  teams        : PropTypes.array.isRequired,
+  discordBotUrl: PropTypes.string,
+  formUrl      : PropTypes.string.isRequired,
+  formAction   : PropTypes.string.isRequired,
+  urlOnSuccess : PropTypes.string.isRequired,
+  csrfToken    : PropTypes.string.isRequired
 }
 ProjectForm.defaultProps = {
-  project     : {'default': '_'},
-  tokens      : {'default': '_'},
-  missions    : {'default': '_'},
-  visibilities: [],
-  teams       : [],
-  formUrl     : '/',
-  formAction  : 'POST',
-  urlOnSuccess: '/',
-  csrfToken   : '00'
+  project      : {'default': '_'},
+  tokens       : {'default': '_'},
+  missions     : {'default': '_'},
+  visibilities : [],
+  teams        : [],
+  discordBotUrl: null,
+  formUrl      : '/',
+  formAction   : 'POST',
+  urlOnSuccess : '/',
+  csrfToken    : '00'
 }
 export default ProjectForm

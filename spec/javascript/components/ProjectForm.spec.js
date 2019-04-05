@@ -58,7 +58,7 @@ describe('ProjectForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldUploadFile[title="project image – square"][name="project[square_image]"]'
+      'InputFieldUploadFile[title="project image"][name="project[square_image]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -80,6 +80,10 @@ describe('ProjectForm', () => {
     expect(wrapper.exists(
       '.project-form--form--channels--empty'
     )).toBe(true)
+
+    expect(wrapper.exists(
+      '.project-form--form--channels--discord-link'
+    )).toBe(false)
   })
 
   it('renders correctly with tokens', () => {
@@ -137,6 +141,14 @@ describe('ProjectForm', () => {
       ['Publicly listed in CoMakery searches', 'public_listed'],
       ['Unlisted URL (no login required)', 'public_unlisted']
     ])
+  })
+
+  it('renders discord auth link when supplied with one', () => {
+    const wrapper = mount(<ProjectForm discordBotUrl="http://null" />)
+
+    expect(wrapper.exists(
+      '.project-form--form--channels--discord-link'
+    )).toBe(true)
   })
 
   it('renders correctly with teams', () => {
@@ -314,7 +326,7 @@ describe('ProjectForm', () => {
     ).props().value).toBe('CoMakery')
 
     expect(wrapper.find(
-      'InputFieldUploadFile[title="project image – square"][name="project[square_image]"]'
+      'InputFieldUploadFile[title="project image"][name="project[square_image]"]'
     ).props().imgPreviewUrl).toBe('/s.png')
 
     expect(wrapper.find(
@@ -435,7 +447,7 @@ describe('ProjectForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldUploadFile[errorText="square_image error"][title="project image – square"][name="project[square_image]"]'
+      'InputFieldUploadFile[errorText="square_image error"][title="project image"][name="project[square_image]"]'
     )).toBe(true)
   })
 })

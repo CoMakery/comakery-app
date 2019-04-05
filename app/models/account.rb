@@ -55,7 +55,7 @@ class Account < ApplicationRecord
     def order_by_award(project)
       award_types = project.award_types.map(&:id).join(',')
       return Account.none if award_types.blank?
-      select("accounts.*, (select sum(total_amount) from awards where awards.account_id = accounts.id and awards.award_type_id in(#{award_types})) as total").distinct.order('total desc')
+      select("accounts.*, (select sum(total_amount) from awards where awards.status in(3,5) and awards.account_id = accounts.id and awards.award_type_id in(#{award_types})) as total").distinct.order('total desc')
     end
 
     def find_from_uid_channel(uid, channel)
@@ -122,7 +122,7 @@ class Account < ApplicationRecord
   end
 
   def award_by_project(project)
-    groups = project.awards.where(account: self).group_by { |a| a.award_type.name }
+    groups = project.awards.completed.where(account: self).group_by { |a| a.award_type.name }
     arr = []
     groups.each do |group|
       arr << { name: group[0], total: group[1].sum(&:total_amount) }
@@ -131,7 +131,7 @@ class Account < ApplicationRecord
   end
 
   def total_awards_earned(project)
-    project.awards.where(account: self).sum(:total_amount)
+    project.awards.completed.where(account: self).sum(:total_amount)
   end
 
   def other_member_projects
@@ -206,7 +206,7 @@ class Account < ApplicationRecord
   def awards_csv
     Comakery::CSV.generate_multiplatform do |csv|
       csv << ['Project', 'Award Type', 'Total Amount', 'Issuer', 'Date']
-      awards.order(:created_at).decorate.each do |award|
+      awards.completed.order(:created_at).decorate.each do |award|
         csv << [award.project.title, award.award_type.name, award.total_amount_pretty, award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]
       end
     end
