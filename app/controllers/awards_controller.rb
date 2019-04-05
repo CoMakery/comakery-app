@@ -147,7 +147,7 @@ class AwardsController < ApplicationController
         task: @award.serializable_hash,
         batch: @award.award_type.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
-        channels: (@project.channels + [Channel.new(name: 'Email')]).map { |c| [c.name, c.id.to_s] }.to_h,
+        channels: (@project.channels + [Channel.new(name: 'Email')]).map { |c| [c.name || c.channel_id, c.id.to_s] }.to_h,
         members: @project.channels.map { |c| [c.id.to_s, c.members.to_h] }.to_h,
         recipient_address_url: project_award_type_award_recipient_address_path(@project, @award_type, @award),
         form_url: project_award_type_award_send_award_path(@project, @award_type, @award),

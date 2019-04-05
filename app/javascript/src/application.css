@@ -1270,12 +1270,18 @@ select:disabled {
   box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
 }
 
-.project-form--form--channels--add {
+.project-form--form--channels--add,
+.project-form--form--channels--discord-link {
   font-size: 14px;
   font-weight: bold;
   color: var(--azure);
   cursor: pointer;
   margin-left: 15px;
+}
+
+.project-form--form--channels--discord-link a {
+  color: var(--azure);
+  text-decoration: none;
 }
 
 .project-form--form--channels--empty {
@@ -3276,5 +3282,9 @@ select:disabled {
 .project-header__menu__link:hover,
 .project-award__token__address__link:hover,
 .project-skill__interest__button:hover {
+  text-decoration: underline;
+}
+
+.project-form--form--channels--discord-link a:hover {
   text-decoration: underline;
 }

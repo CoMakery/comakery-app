@@ -10,6 +10,7 @@ class ProjectsController < ApplicationController
   before_action :set_tokens, only: %i[new edit]
   before_action :set_missions, only: %i[new edit]
   before_action :set_visibilities, only: %i[new edit]
+  before_action :set_teams, only: %i[new edit]
   before_action :set_generic_props, only: %i[new edit]
   before_action :set_show_props, only: %i[show unlisted]
 
@@ -156,6 +157,22 @@ class ProjectsController < ApplicationController
     @visibilities = Project.visibilities.keys
   end
 
+  def set_teams
+    @teams = current_account&.authentication_teams&.map do |a_team|
+      {
+        team: "[#{a_team.team.provider}] #{a_team.team.name}",
+        team_id: a_team.team.id.to_s,
+        discord: a_team.team.discord?,
+        channels: a_team.channels.map do |channel|
+          {
+            channel: channel.to_s,
+            channel_id: channel.to_s
+          }
+        end
+      }
+    end
+  end
+
   def set_generic_props
     @props = {
       project: @project&.serializable_hash&.merge(
@@ -177,18 +194,10 @@ class ProjectsController < ApplicationController
       tokens: @tokens,
       missions: @missions,
       visibilities: @visibilities,
-      teams: current_account&.authentication_teams&.map do |a_team|
-        {
-          team: "[#{a_team.team.provider}] #{a_team.team.name}",
-          team_id: a_team.team.id.to_s,
-          channels: a_team.channels.map do |channel|
-            {
-              channel: channel.to_s,
-              channel_id: channel.to_s
-            }
-          end
-        }
-      end,
+      teams: @teams&.reject { |t| t[:channels].empty? },
+      discord_bot_url: if @teams&.any? { |t| t[:discord] && t[:channels].empty? }
+                         Comakery::Discord.new.add_bot_link
+                       end,
       form_url: projects_path,
       form_action: 'POST',
       url_on_success: projects_path,

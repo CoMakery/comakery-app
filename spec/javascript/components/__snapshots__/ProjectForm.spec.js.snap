@@ -3,6 +3,7 @@
 exports[`ProjectForm renders correctly without props 1`] = `
 <ProjectForm
   csrfToken="00"
+  discordBotUrl={null}
   formAction="POST"
   formUrl="/"
   missions={

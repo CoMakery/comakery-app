@@ -502,7 +502,13 @@ class ProjectForm extends React.Component {
               </div>
             }
 
-            {this.props.teams.length === 0 &&
+            {this.props.discordBotUrl &&
+              <div className="project-form--form--channels--discord-link">
+                <a href={this.props.discordBotUrl}>Allow Access to Discord Channels →</a>
+              </div>
+            }
+
+            {this.props.teams.length === 0 && !this.props.discordBotUrl &&
               <div className="project-form--form--channels--empty">
                 Start adding channels by signing in with Slack or Discord
               </div>
@@ -515,25 +521,27 @@ class ProjectForm extends React.Component {
 }
 
 ProjectForm.propTypes = {
-  project     : PropTypes.object.isRequired,
-  tokens      : PropTypes.object.isRequired,
-  missions    : PropTypes.object.isRequired,
-  visibilities: PropTypes.array.isRequired,
-  teams       : PropTypes.array.isRequired,
-  formUrl     : PropTypes.string.isRequired,
-  formAction  : PropTypes.string.isRequired,
-  urlOnSuccess: PropTypes.string.isRequired,
-  csrfToken   : PropTypes.string.isRequired
+  project      : PropTypes.object.isRequired,
+  tokens       : PropTypes.object.isRequired,
+  missions     : PropTypes.object.isRequired,
+  visibilities : PropTypes.array.isRequired,
+  teams        : PropTypes.array.isRequired,
+  discordBotUrl: PropTypes.string,
+  formUrl      : PropTypes.string.isRequired,
+  formAction   : PropTypes.string.isRequired,
+  urlOnSuccess : PropTypes.string.isRequired,
+  csrfToken    : PropTypes.string.isRequired
 }
 ProjectForm.defaultProps = {
-  project     : {'default': '_'},
-  tokens      : {'default': '_'},
-  missions    : {'default': '_'},
-  visibilities: [],
-  teams       : [],
-  formUrl     : '/',
-  formAction  : 'POST',
-  urlOnSuccess: '/',
-  csrfToken   : '00'
+  project      : {'default': '_'},
+  tokens       : {'default': '_'},
+  missions     : {'default': '_'},
+  visibilities : [],
+  teams        : [],
+  discordBotUrl: null,
+  formUrl      : '/',
+  formAction   : 'POST',
+  urlOnSuccess : '/',
+  csrfToken    : '00'
 }
 export default ProjectForm
