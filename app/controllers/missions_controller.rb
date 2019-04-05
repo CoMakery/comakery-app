@@ -1,5 +1,7 @@
 class MissionsController < ApplicationController
   layout 'react'
+  skip_before_action :require_login, only: %i[show]
+
   before_action :find_mission_by_id, only: %i[show edit update update_status destroy]
   before_action :set_generic_props, only: %i[new show edit]
   before_action :set_missions_prop, only: %i[index]
@@ -103,8 +105,8 @@ class MissionsController < ApplicationController
       },
       projects: projects.map do |project|
         {
-          editable: current_account.id == project.account_id,
-          interested: Interest.exists?(account_id: current_account.id, project_id: project.id),
+          editable: current_account&.id == project.account_id,
+          interested: Interest.exists?(account_id: current_account&.id, project_id: project.id),
           project_data: project_props(project.decorate),
           token_data: project.token.as_json(only: %i[name]).merge(
             logo_url: project.token.logo_image.present? ? Refile.attachment_url(project.token, :logo_image, :fill, 30, 30) : nil
