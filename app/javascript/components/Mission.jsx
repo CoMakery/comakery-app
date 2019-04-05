@@ -11,7 +11,9 @@ export default class Mission extends React.Component {
 
     const interests = {}
     props.projects.forEach(project => {
-      interests[project.projectData.id] = project.interested
+      if (project.projectData) {
+        interests[project.projectData.id] = project.interested
+      }
     })
     this.state = { interests }
   }
@@ -263,4 +265,20 @@ export default class Mission extends React.Component {
       </div>
     </div>
   }
+}
+
+Mission.propTypes = {
+  mission : PropTypes.shape({}),
+  projects: PropTypes.array,
+  leaders : PropTypes.array,
+  tokens  : PropTypes.shape({}),
+  stats   : PropTypes.shape({})
+}
+
+Mission.defaultProps = {
+  mission : {},
+  projects: [],
+  leaders : [],
+  tokens  : { tokens: [] },
+  stats   : {}
 }
