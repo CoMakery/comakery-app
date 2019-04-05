@@ -3812,7 +3812,6 @@ select:disabled {
     max-width: 400px;
     height: auto;
     justify-content: space-between;
-    justify-content: space-between;
   }
 
   .mission-stats__kpi--desktop {
@@ -4111,7 +4110,7 @@ select:disabled {
     box-sizing: border-box;
     width: 100%;
     display: block;
-    font-family: Georgia;
+    font-family: Georgia, sans-serif;
     font-size: 14px;
     font-weight: normal;
     font-style: normal;
