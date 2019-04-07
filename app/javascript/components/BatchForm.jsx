@@ -22,16 +22,16 @@ class BatchForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
 
     this.state = {
-      flashMessages       : [],
-      errors              : {},
-      disabled            : {},
-      formAction          : this.props.formAction,
-      formUrl             : this.props.formUrl,
-      closeOnSuccess      : false,
-      'batch[specialty]'  : this.props.batch.specialty || Object.values(this.props.specialties)[0],
-      'batch[name]'       : this.props.batch.name || '',
-      'batch[goal]'       : this.props.batch.goal || '',
-      'batch[description]': this.props.batch.description || ''
+      flashMessages        : [],
+      errors               : {},
+      disabled             : {},
+      formAction           : this.props.formAction,
+      formUrl              : this.props.formUrl,
+      closeOnSuccess       : false,
+      'batch[specialty_id]': this.props.batch.specialtyId || Object.values(this.props.specialties)[0],
+      'batch[name]'        : this.props.batch.name || '',
+      'batch[goal]'        : this.props.batch.goal || '',
+      'batch[description]' : this.props.batch.description || ''
     }
   }
 
@@ -176,9 +176,9 @@ class BatchForm extends React.Component {
             <InputFieldDropdown
               title="specialty"
               required
-              name="batch[specialty]"
-              value={this.state['batch[specialty]']}
-              errorText={this.state.errors['batch[specialty]']}
+              name="batch[specialty_id]"
+              value={this.state['batch[specialty_id]']}
+              errorText={this.state.errors['batch[specialty_id]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.specialties)}
               symbolLimit={0}

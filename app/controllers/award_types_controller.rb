@@ -61,7 +61,7 @@ class AwardTypesController < ApplicationController
 
     def award_type_params
       params.fetch(:batch, {}).permit(
-        :specialty,
+        :specialty_id,
         :name,
         :goal,
         :description
@@ -92,7 +92,7 @@ class AwardTypesController < ApplicationController
     def set_form_props
       @props = {
         batch: (@award_type ? @award_type : @project.award_types.new).serializable_hash,
-        specialties: AwardType.specialties.invert,
+        specialties: Specialty.all.map { |s| [s.name, s.id] }.to_h,
         form_url: project_award_types_path,
         form_action: 'POST',
         url_on_success: project_award_types_path,

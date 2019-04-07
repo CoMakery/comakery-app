@@ -3,15 +3,22 @@ require 'refile/file_double'
 class Mom
   def account(**attrs)
     defaults = {
-      email: "me+#{Random.new.urlsafe_base64}@example.com",
+      email: "me+#{SecureRandom.hex(20)}@example.com",
       first_name: 'Account',
-      last_name: (1..100).to_a.sample,
+      last_name: SecureRandom.hex(20),
       date_of_birth: '1990/01/01',
       country: 'United States of America',
-      specialty: 'Software Development',
+      specialty: create(:specialty),
       password: valid_password
     }
     Account.new(defaults.merge(attrs))
+  end
+
+  def specialty(**attrs)
+    defaults = {
+      name: "Specialty #{SecureRandom.hex(20)}"
+    }
+    Specialty.new(defaults.merge(attrs))
   end
 
   def account_with_auth(**attrs)
@@ -70,8 +77,8 @@ class Mom
 
   def token(**attrs)
     defaults = {
-      name: "Token-#{SecureRandom.hex(2)}",
-      symbol: "TKN#{SecureRandom.hex(2)}"
+      name: "Token-#{SecureRandom.hex(20)}",
+      symbol: "TKN#{SecureRandom.hex(20)}"
     }
     Token.new(defaults.merge(attrs))
   end
@@ -97,7 +104,7 @@ class Mom
   def award_type(**attrs)
     defaults = {
       name: 'Contribution',
-      specialty: 'software_development',
+      specialty: create(:specialty),
       goal: 'none',
       description: 'none'
     }

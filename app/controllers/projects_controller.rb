@@ -275,7 +275,7 @@ class ProjectsController < ApplicationController
   def contributor_props(account)
     account.as_json(only: %i[id nickname first_name last_name]).merge(
       image_url: helpers.account_image_url(account, 68),
-      specialty: Account.specialties[account.specialty]
+      specialty: account.specialty&.name
     )
   end
 

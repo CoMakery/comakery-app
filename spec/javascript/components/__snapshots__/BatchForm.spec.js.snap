@@ -100,7 +100,7 @@ exports[`BatchForm renders correctly without props 1`] = `
             >
               <InputFieldDropdown
                 eventHandler={[Function]}
-                name="batch[specialty]"
+                name="batch[specialty_id]"
                 required={true}
                 selectEntries={
                   Array [
@@ -129,7 +129,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                   imgVerifier={[Function]}
                   max=""
                   min=""
-                  name="batch[specialty]"
+                  name="batch[specialty_id]"
                   pattern=".*"
                   placeholder="Please enter value"
                   readOnly={false}
@@ -172,7 +172,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                       <select
                         className="input-field--content__select"
                         disabled={false}
-                        name="batch[specialty]"
+                        name="batch[specialty_id]"
                         onChange={[Function]}
                         required={true}
                         value="_"
