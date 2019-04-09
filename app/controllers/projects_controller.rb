@@ -299,20 +299,20 @@ class ProjectsController < ApplicationController
     )
   end
 
-  def mission_props(mission)
-    if mission.present?
-      mission.as_json(only: %i[id name]).merge(
-        logo_url: mission.image.present? ? Refile.attachment_url(mission, :logo, :fill, 100, 100) : nil,
-        mission_url: mission_path(mission)
-      )
-    end
-  end
-
   def token_props(token)
     if token.present?
       token.as_json(only: %i[name symbol coin_type]).merge(
         image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
         contract_url: token.ethereum_contract_explorer_url
+      )
+    end
+  end
+
+  def mission_props(mission)
+    if mission.present?
+      mission.as_json(only: %i[id name]).merge(
+        logo_url: mission.image.present? ? Refile.attachment_url(mission, :logo, :fill, 100, 100) : nil,
+        mission_url: mission_path(mission)
       )
     end
   end

@@ -23,6 +23,10 @@ class MissionPolicy < ApplicationPolicy
     end
   end
 
+  def show?
+    true
+  end
+
   def new?
     @account.comakery_admin?
   end
