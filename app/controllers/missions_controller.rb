@@ -83,6 +83,37 @@ class MissionsController < ApplicationController
     @mission = Mission.find(params[:id])
   end
 
+  def project_leaders(mission)
+    leaders = mission.projects.public_listed.select('accounts.id').joins('left join accounts on projects.account_id=accounts.id')
+    project_counts = leaders.group(:account_id).count
+
+    Account.where(id: leaders).limit(4).select('id, first_name, last_name, image_id').map do |account|
+      account.as_json.merge(
+        count: project_counts[account.id],
+        project_name: mission.projects.public_listed.find_by(account_id: account.id).title,
+        image_url: account.image.present? ? Refile.attachment_url(account, :image, :fill, 240, 240) : nil
+      )
+    end
+  end
+
+  def project_tokens(mission)
+    tokens = mission.projects.public_listed.select('tokens.id').joins('left join tokens on projects.token_id=tokens.id')
+    project_counts = tokens.group(:token_id).count
+
+    {
+      tokens:
+        Token.where(id: tokens).limit(4).select('id, name, symbol, coin_type, logo_image_id, ethereum_contract_address, ethereum_network, blockchain_network, contract_address').map do |token|
+          token.as_json.merge(
+            count: project_counts[token.id],
+            project_name: mission.projects.public_listed.find_by(token_id: token.id).title,
+            logo_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 30, 30) : nil,
+            contract_url: token.decorate.ethereum_contract_explorer_url
+          )
+        end,
+      token_count: tokens.size
+    }
+  end
+
   def set_detailed_props
     projects = @mission.projects.public_listed
 
@@ -93,8 +124,8 @@ class MissionsController < ApplicationController
           image_url: @mission&.image&.present? ? Refile.attachment_url(@mission, :image, :fill, 1200, 800) : nil
         }
       ),
-      leaders: @mission.project_leaders,
-      tokens: @mission.project_tokens,
+      leaders: project_leaders(@mission),
+      tokens: project_tokens(@mission),
       new_project_url: new_project_path(mission_id: @mission.id),
       csrf_token: form_authenticity_token,
       stats: {
