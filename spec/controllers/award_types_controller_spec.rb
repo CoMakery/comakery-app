@@ -3,11 +3,12 @@ require 'rails_helper'
 RSpec.describe AwardTypesController, type: :controller do
   let(:issuer) { create(:authentication) }
   let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+  let(:specialty) { create(:specialty) }
 
   let(:valid_attributes) do
     {
       project_id: project.to_param,
-      specialty: 'software_development',
+      specialty_id: specialty.to_param,
       name: 'test',
       goal: 'none',
       description: 'none'

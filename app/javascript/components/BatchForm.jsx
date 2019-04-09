@@ -6,6 +6,7 @@ import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
+import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
@@ -22,16 +23,16 @@ class BatchForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
 
     this.state = {
-      flashMessages       : [],
-      errors              : {},
-      disabled            : {},
-      formAction          : this.props.formAction,
-      formUrl             : this.props.formUrl,
-      closeOnSuccess      : false,
-      'batch[specialty]'  : this.props.batch.specialty || Object.values(this.props.specialties)[0],
-      'batch[name]'       : this.props.batch.name || '',
-      'batch[goal]'       : this.props.batch.goal || '',
-      'batch[description]': this.props.batch.description || ''
+      flashMessages        : [],
+      errors               : {},
+      disabled             : {},
+      formAction           : this.props.formAction,
+      formUrl              : this.props.formUrl,
+      closeOnSuccess       : false,
+      'batch[specialty_id]': this.props.batch.specialtyId || Object.values(this.props.specialties)[0],
+      'batch[name]'        : this.props.batch.name || '',
+      'batch[goal]'        : this.props.batch.goal || '',
+      'batch[description]' : this.props.batch.description || ''
     }
   }
 
@@ -176,9 +177,9 @@ class BatchForm extends React.Component {
             <InputFieldDropdown
               title="specialty"
               required
-              name="batch[specialty]"
-              value={this.state['batch[specialty]']}
-              errorText={this.state.errors['batch[specialty]']}
+              name="batch[specialty_id]"
+              value={this.state['batch[specialty_id]']}
+              errorText={this.state.errors['batch[specialty_id]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.specialties)}
               symbolLimit={0}
@@ -215,6 +216,14 @@ class BatchForm extends React.Component {
               eventHandler={this.handleFieldChange}
               placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
               symbolLimit={750}
+            />
+
+            <InputFieldUploadFile
+              title="diagram or screenshot"
+              name="batch[diagram]"
+              errorText={this.state.errors['batch[diagram]']}
+              imgPreviewUrl={this.props.batch.diagramUrl}
+              imgPreviewDimensions="100x100"
             />
 
             <input

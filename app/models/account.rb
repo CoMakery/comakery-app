@@ -25,14 +25,17 @@ class Account < ApplicationRecord
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
 
-  enum specialty: {
-    audio_video_production: 'Audio or Video Production',
+  belongs_to :specialty
+
+  enum deprecated_specialty: {
+    audio_video_production: 'Audio Or Video Production',
     community_development: 'Community Development',
     data_gathering: 'Data Gathering',
-    marketing_social: 'Marketing & Social Media',
+    marketing_social: 'Marketing & Social',
     software_development: 'Software Development',
-    design: 'UX / UI Design',
-    writing: 'Writing'
+    design: 'Design',
+    writing: 'Writing',
+    research: 'Research'
   }
 
   validates :email, presence: true, uniqueness: true

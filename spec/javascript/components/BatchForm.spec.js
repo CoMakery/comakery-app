@@ -18,7 +18,7 @@ describe('BatchForm', () => {
     expect(wrapper.exists('#batch-form--form')).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDropdown[title="specialty"][required][name="batch[specialty]"]'
+      'InputFieldDropdown[title="specialty"][required][name="batch[specialty_id]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -34,6 +34,10 @@ describe('BatchForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
+      'InputFieldUploadFile[title="diagram or screenshot"][name="batch[diagram]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
       'input[type="hidden"][name="authenticity_token"]'
     )).toBe(true)
   })
@@ -46,11 +50,11 @@ describe('BatchForm', () => {
     const wrapper = mount(<BatchForm specialties={specialties} />)
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="specialty"][required][name="batch[specialty]"]'
+      'InputFieldDropdown[title="specialty"][required][name="batch[specialty_id]"]'
     ).props().value).toBe(1)
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="specialty"][required][name="batch[specialty]"]'
+      'InputFieldDropdown[title="specialty"][required][name="batch[specialty_id]"]'
     ).props().selectEntries).toEqual(Object.entries(specialties))
   })
 
@@ -60,7 +64,7 @@ describe('BatchForm', () => {
       'name'       : 'Batch name',
       'description': 'Batch description',
       'goal'       : 'Batch goal',
-      'specialty'  : 'writing'
+      'specialtyId': 'writing'
     }
     const specialties = {
       'audio or Video Production'    : 'audio_video_production',
@@ -78,7 +82,7 @@ describe('BatchForm', () => {
     />)
 
     expect(wrapper.find(
-      'InputFieldDropdown[title="specialty"][required][name="batch[specialty]"]'
+      'InputFieldDropdown[title="specialty"][required][name="batch[specialty_id]"]'
     ).props().value).toBe('writing')
 
     expect(wrapper.find(
