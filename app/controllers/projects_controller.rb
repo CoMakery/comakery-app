@@ -272,6 +272,33 @@ class ProjectsController < ApplicationController
     @project.unlisted? ? unlisted_project_path(@project.long_id) : project_path(@project)
   end
 
+  def contributor_props(account)
+    account.as_json(only: %i[id nickname first_name last_name]).merge(
+      image_url: helpers.account_image_url(account, 68),
+      specialty: account.specialty&.name
+    )
+  end
+
+  def project_props(project)
+    contributors_number = @project.contributors_by_award_amount.size
+    award_data = GetContributorData.call(project: @project).award_data
+    chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
+
+    project.as_json(only: %i[id title description]).merge(
+      square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
+      panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),
+      video_id: project.video_id,
+      owner: project.account.decorate.name,
+      token_percentage: project.percent_awarded_pretty,
+      maximum_tokens: project.maximum_tokens_pretty,
+      awarded_tokens: project.total_awarded_pretty,
+      team_leader: contributor_props(project.account),
+      contributors_number: contributors_number,
+      contributors: project.top_contributors.map { |contributor| contributor_props(contributor) },
+      chart_data: chart_data
+    )
+  end
+
   def mission_props(mission)
     if mission.present?
       mission.as_json(only: %i[id name]).merge(

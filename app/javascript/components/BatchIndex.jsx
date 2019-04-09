@@ -82,7 +82,7 @@ class BatchIndex extends React.Component {
                 </div>
 
                 <div className="batch-index--view--specialty">
-                  {this.state.selectedBatch.specialty}
+                  {this.state.selectedBatch.specialtyId}
                 </div>
 
                 <div className="batch-index--view--team-members" />

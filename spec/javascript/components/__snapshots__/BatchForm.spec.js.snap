@@ -100,7 +100,7 @@ exports[`BatchForm renders correctly without props 1`] = `
             >
               <InputFieldDropdown
                 eventHandler={[Function]}
-                name="batch[specialty]"
+                name="batch[specialty_id]"
                 required={true}
                 selectEntries={
                   Array [
@@ -129,7 +129,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                   imgVerifier={[Function]}
                   max=""
                   min=""
-                  name="batch[specialty]"
+                  name="batch[specialty_id]"
                   pattern=".*"
                   placeholder="Please enter value"
                   readOnly={false}
@@ -172,7 +172,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                       <select
                         className="input-field--content__select"
                         disabled={false}
-                        name="batch[specialty]"
+                        name="batch[specialty_id]"
                         onChange={[Function]}
                         required={true}
                         value="_"
@@ -424,6 +424,74 @@ exports[`BatchForm renders correctly without props 1`] = `
                   </div>
                 </InputField>
               </InputFieldDescription>
+              <InputFieldUploadFile
+                imgPreviewDimensions="100x100"
+                name="batch[diagram]"
+                title="diagram or screenshot"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__upload-file"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="100x100"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="batch[diagram]"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={false}
+                  selectEntries={Array []}
+                  step=""
+                  symbolLimit={0}
+                  title="diagram or screenshot"
+                  type="file"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__upload-file"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        diagram or screenshot
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        optional
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        accept="image/*"
+                        className="input-field--content__file"
+                        name="batch[diagram]"
+                        onChange={[Function]}
+                        required={false}
+                        type="file"
+                      />
+                      <span
+                        className="input-field--content__file--requirements"
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldUploadFile>
               <input
                 name="authenticity_token"
                 readOnly={true}

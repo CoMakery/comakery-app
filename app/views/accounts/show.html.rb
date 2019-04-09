@@ -4,7 +4,8 @@ class Views::Accounts::Show < Views::Base
   def content
     text react_component(
       'Account',
-      currentAccount: current_account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet specialty occupation linkedin_url github_url dribble_url behance_url]).merge(
+      currentAccount: current_account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet occupation linkedin_url github_url dribble_url behance_url]).merge(
+        specialty_id: current_account.specialty_id.to_s,
         etherscan_address: current_account.decorate.etherscan_address,
         qtum_address: current_account.decorate.qtum_wallet_url,
         cardano_address: current_account.decorate.cardano_wallet_url,
@@ -18,7 +19,7 @@ class Views::Accounts::Show < Views::Base
       projects: projects,
       projectsCount: projects_count,
       countryList: Country.all.sort,
-      specialtyList: Account.specialties.map { |key, value| [value, key] },
+      specialtyList: Specialty.all.map { |s| [s.name, s.id.to_s] },
       clippyIcon: image_url('Octicons-clippy.png')
     )
   end
