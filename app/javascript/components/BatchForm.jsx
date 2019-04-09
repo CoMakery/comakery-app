@@ -6,6 +6,7 @@ import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
+import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
@@ -215,6 +216,14 @@ class BatchForm extends React.Component {
               eventHandler={this.handleFieldChange}
               placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
               symbolLimit={750}
+            />
+
+            <InputFieldUploadFile
+              title="diagram or screenshot"
+              name="batch[diagram]"
+              errorText={this.state.errors['batch[diagram]']}
+              imgPreviewUrl={this.props.batch.diagramUrl}
+              imgPreviewDimensions="100x100"
             />
 
             <input

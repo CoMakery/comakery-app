@@ -34,6 +34,10 @@ describe('BatchForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
+      'InputFieldUploadFile[title="diagram or screenshot"][name="batch[diagram]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
       'input[type="hidden"][name="authenticity_token"]'
     )).toBe(true)
   })

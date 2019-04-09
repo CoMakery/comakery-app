@@ -64,7 +64,8 @@ class AwardTypesController < ApplicationController
         :specialty_id,
         :name,
         :goal,
-        :description
+        :description,
+        :diagram
       )
     end
 
@@ -91,7 +92,9 @@ class AwardTypesController < ApplicationController
 
     def set_form_props
       @props = {
-        batch: (@award_type ? @award_type : @project.award_types.new).serializable_hash,
+        batch: (@award_type ? @award_type : @project.award_types.new).serializable_hash&.merge(
+          diagram_url: Refile.attachment_url(@award_type ? @award_type : @project.award_types.new, :diagram, :fill, 300, 300)
+        ),
         specialties: Specialty.all.map { |s| [s.name, s.id] }.to_h,
         form_url: project_award_types_path,
         form_action: 'POST',

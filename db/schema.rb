@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190406150605) do
+ActiveRecord::Schema.define(version: 20190408162751) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,6 +112,10 @@ ActiveRecord::Schema.define(version: 20190406150605) do
     t.integer "specialty_id"
     t.text "goal"
     t.string "specialty"
+    t.string "diagram_id"
+    t.string "diagram_filename"
+    t.string "diagram_content_size"
+    t.string "diagram_content_type"
     t.index ["project_id"], name: "index_award_types_on_project_id"
   end
 
