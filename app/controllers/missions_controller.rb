@@ -86,7 +86,7 @@ class MissionsController < ApplicationController
   def contributor_props(account)
     account.as_json(only: %i[id nickname first_name last_name]).merge(
       image_url: helpers.account_image_url(account, 68),
-      specialty: Account.specialties[account.specialty]
+      specialty: account.specialty&.name
     )
   end
 
@@ -110,16 +110,6 @@ class MissionsController < ApplicationController
       chart_data: chart_data
     )
   end
-
-  def token_props(token)
-    if token.present?
-      token.as_json(only: %i[name symbol coin_type]).merge(
-        image_url: token.logo_image.present? ? Refile.attachment_url(token, :logo_image, :fill, 25, 18) : nil,
-        contract_url: token.ethereum_contract_explorer_url
-      )
-    end
-  end
-
 
   def project_leaders(mission)
     leaders = mission.projects.public_listed.select('accounts.id').joins('left join accounts on projects.account_id=accounts.id')
