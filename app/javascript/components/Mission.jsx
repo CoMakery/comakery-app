@@ -168,10 +168,10 @@ export default class Mission extends React.Component {
 
           {projects.map(project => <div key={project.projectData.id} className="mission-projects__single">
             <div className="mission-projects__single__header">
-              <div className="mission-projects__single__token">
+              {project.tokenData && <div className="mission-projects__single__token">
                 <img src={project.tokenData.logoUrl} /> Paid in&nbsp;
                 <span className="mission-projects__single__token__name">{project.tokenData.name}</span>
-              </div>
+              </div>}
 
               <div className="mission-projects__single__title-wrapper">
                 <div className="mission-projects__single__title">
@@ -214,7 +214,7 @@ export default class Mission extends React.Component {
             <div className="mission-projects__single__card">
               <div className="mission-projects__single__desktop">
                 <div className="mission-projects__single__card__img">
-                  <img style={{width: '100%'}} src={project.projectData.squareUrl || project.projectData.defaultImageUrl} />
+                  <img style={{width: '100%', height: '100%'}} src={project.projectData.squareUrl || project.projectData.defaultImageUrl} />
                   <Icon className="mission-projects__single__card__img__mask" name="PROJECT/MASK.svg" />
                 </div>
 
