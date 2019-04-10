@@ -5,6 +5,9 @@ class Mission < ApplicationRecord
   attachment :image
 
   has_many :projects, inverse_of: :mission
+  has_many :public_projects, -> { public_listed }, class_name: 'Project'
+  has_many :leaders, through: :public_projects, source: :account
+  has_many :tokens, through: :public_projects, source: :token
   enum status: %i[active passive]
 
   after_create :assign_display_order
