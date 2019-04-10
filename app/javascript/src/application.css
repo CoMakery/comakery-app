@@ -1598,6 +1598,11 @@ select:disabled {
   margin-bottom: 21px;
 }
 
+.featured-mission__name a {
+  color: var(--black);
+  text-decoration: none;
+}
+
 .featured-mission__description {
   font-family: Georgia, sans-serif;
   font-size: 16px;
@@ -1928,6 +1933,11 @@ select:disabled {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.gallery-content__title a {
+  color: var(--black);
+  text-decoration: none;
 }
 
 .gallery-content__description {
@@ -3703,6 +3713,7 @@ select:disabled {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: pointer;
   margin-right: 8px;
 }
 
