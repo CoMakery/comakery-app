@@ -97,7 +97,7 @@ class MissionsController < ApplicationController
 
     project.as_json(only: %i[id title description]).merge(
       image_url: project.panoramic_image.present? ? Refile.attachment_url(project, :panoramic_image) : nil,
-      square_url: project.square_image.present? ? Refile.attachment_url(project, :square_image) : nil,
+      square_url: project.square_image.present? ? Refile.attachment_url(project, :square_image, :fill, 800, 800) : nil,
       youtube_url: project.video_id,
       default_image_url: helpers.image_url('defaul_project.jpg'),
       owner: project.account.decorate.name,
