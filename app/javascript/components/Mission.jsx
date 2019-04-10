@@ -94,12 +94,14 @@ export default class Mission extends React.Component {
         Tokens Used In The Mission
         <div className="mission-tokens__cards">
           {tokens.tokens.map(token => <div key={token.id} className="mission-tokens__card">
+            {token.contractUrl && <a href={token.contractUrl} className="mission-tokens__card__header__link">
+              <Icon name="iconLink.svg" style={{width: 18}} />
+            </a>}
             <div className="mission-tokens__card__header">
               <img className="mission-tokens__card__header__logo" src={token.logoUrl} />
-              {token.name} ({token.symbol})
-              {token.contractUrl && <a href={token.contractUrl} className="mission-tokens__card__header__link">
-                <Icon name="iconLink.svg" style={{width: 18}} />
-              </a>}
+              <div className="mission-tokens__card__header__name">
+                {token.name} ({token.symbol})
+              </div>
             </div>
 
             <div className="mission-tokens__card__info">

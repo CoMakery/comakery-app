@@ -2238,7 +2238,7 @@ select:disabled {
 
 .project-header__menu {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   text-transform: uppercase;
   font-size: 12px;
@@ -3507,6 +3507,12 @@ select:disabled {
   overflow-x: auto;
 }
 
+@media screen and (max-width: 850px) {
+  .mission-leaders__wrapper {
+    overflow-x: auto;
+  }
+}
+
 .mission-leaders__individual {
   position: relative;
   flex: 0 0 auto;
@@ -3627,6 +3633,7 @@ select:disabled {
 }
 
 .mission-tokens__card {
+  position: relative;
   box-sizing: border-box;
   min-width: 278px;
   width: 278px;
@@ -3659,6 +3666,12 @@ select:disabled {
   overflow-x: auto;
 }
 
+@media screen and (max-width: 850px) {
+  .mission-tokens__cards {
+    overflow-x: auto;
+  }
+}
+
 .mission-tokens__card__header {
   position: relative;
   box-sizing: border-box;
@@ -3678,11 +3691,18 @@ select:disabled {
 
 .mission-tokens__card__header__link {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: 8px;
+  right: 8px;
 }
 
 .mission-tokens__card__header__logo {
+  margin-right: 10px;
+}
+
+.mission-tokens__card__header__name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin-right: 8px;
 }
 
