@@ -78,8 +78,7 @@ export default class Mission extends React.Component {
                 {leader.firstName} {leader.lastName}
               </div>
               <div className="mission-leaders__individual__info__associate">Associated with</div>
-              {leader.projectName}
-              {leader.count > 1 && `, +${leader.count - 1}`}
+              <Pluralize singular="project" count={leader.count} />
             </div>
           </div>)}
 
@@ -105,8 +104,8 @@ export default class Mission extends React.Component {
             </div>
 
             <div className="mission-tokens__card__info">
-              {token.projectName}
-              {token.count > 1 && `, +${token.count - 1}`}
+              <div className="mission-tokens__card__info__associate">Associated with</div>
+              <Pluralize singular="project" count={token.count} />
             </div>
           </div>)}
         </div>
@@ -175,8 +174,7 @@ export default class Mission extends React.Component {
 
               <div className="mission-projects__single__title-wrapper">
                 <div className="mission-projects__single__title">
-                  <div className="mission-projects__single__title__heading">{project.projectData.title}</div>
-                  {project.projectData.title}
+                  <a href={project.projectUrl} className="mission-projects__single__title__heading">{project.projectData.title}</a>
                 </div>
 
                 <div className="mission-projects__single__contributors">
@@ -213,10 +211,10 @@ export default class Mission extends React.Component {
 
             <div className="mission-projects__single__card">
               <div className="mission-projects__single__desktop">
-                <div className="mission-projects__single__card__img">
+                <a href={project.projectUrl} className="mission-projects__single__card__img">
                   <img style={{width: '100%', height: '100%'}} src={project.projectData.squareUrl || project.projectData.defaultImageUrl} />
                   <Icon className="mission-projects__single__card__img__mask" name="PROJECT/MASK.svg" />
-                </div>
+                </a>
 
                 <div className="mission-column__wrapper">
                   <div className="mission-projects__single__card__info">
