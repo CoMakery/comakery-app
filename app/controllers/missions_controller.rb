@@ -162,6 +162,7 @@ class MissionsController < ApplicationController
       },
       projects: projects.map do |project|
         {
+          project_url: project_url(project),
           editable: current_account&.id == project.account_id,
           interested: Interest.exists?(account_id: current_account&.id, project_id: project.id),
           project_data: project_props(project.decorate),
