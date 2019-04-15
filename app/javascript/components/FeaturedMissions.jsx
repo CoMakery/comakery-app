@@ -104,7 +104,9 @@ export default class FeaturedMissions extends React.Component {
                 <div key={mission.id}>
                   <div className="gallery-content">
                     <div className="gallery-content__image">
-                      <img src={mission.imageUrl} />
+                      <a href={mission.missionUrl}>
+                        <img src={mission.imageUrl} />
+                      </a>
                     </div>
                     <div className="gallery-content__title">
                       <a href={mission.missionUrl}>{mission.name}</a>
