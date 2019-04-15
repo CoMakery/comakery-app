@@ -1599,7 +1599,7 @@ select:disabled {
 }
 
 .featured-mission__name a {
-  color: var(--black);
+  color: var(--primary-blue);
   text-decoration: none;
 }
 
@@ -1631,7 +1631,7 @@ select:disabled {
   font-stretch: normal;
   line-height: 1.44;
   letter-spacing: normal;
-  color: var(--black);
+  color: var(--primary-blue);
   width: calc(100% - 180px);
   text-decoration: none;
 }
@@ -1936,7 +1936,7 @@ select:disabled {
 }
 
 .gallery-content__title a {
-  color: var(--black);
+  color: var(--primary-blue);
   text-decoration: none;
 }
 

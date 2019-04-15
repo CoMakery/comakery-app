@@ -44,9 +44,9 @@ export default class FeaturedMission extends React.Component {
 
     return (
       <div className={`featured-mission ${this.props.float === 'right' ? 'featured-mission--right' : ''}`}>
-        <div className={`featured-mission__image ${this.props.float === 'right' ? 'featured-mission__image--right' : ''}`}>
+        <a href={missionUrl} className={`featured-mission__image ${this.props.float === 'right' ? 'featured-mission__image--right' : ''}`}>
           <img src={imageUrl} />
-        </div>
+        </a>
         <div className="featured-mission__detail">
           <div className="featured-mission__name">
             <a href={missionUrl}>{name}</a>

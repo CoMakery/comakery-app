@@ -13,13 +13,14 @@ exports[`FeaturedMission renders correctly without props 1`] = `
   <div
     className="featured-mission "
   >
-    <div
+    <a
       className="featured-mission__image "
+      href=""
     >
       <img
         src=""
       />
-    </div>
+    </a>
     <div
       className="featured-mission__detail"
     >
