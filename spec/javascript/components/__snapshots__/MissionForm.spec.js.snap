@@ -253,7 +253,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                 name="description"
                 placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
                 required={true}
-                symbolLimit={375}
+                symbolLimit={500}
                 title="Description"
                 value=""
               >
@@ -280,7 +280,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                   required={true}
                   selectEntries={Array []}
                   step=""
-                  symbolLimit={375}
+                  symbolLimit={500}
                   title="Description"
                   type="textarea"
                   value=""
@@ -306,7 +306,7 @@ exports[`MissionForm renders correctly without props 1`] = `
                       >
                         0
                         /
-                        375
+                        500
                       </span>
                     </div>
                     <div
