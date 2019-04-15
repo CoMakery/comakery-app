@@ -3325,9 +3325,6 @@ select:disabled {
   background-position-y: center;
   background-repeat: no-repeat;
   background-size: cover;
-
-  -webkit-filter: blur(2px);
-  filter: blur(2px);
 }
 
 .mission-header__logo {
@@ -3528,6 +3525,11 @@ select:disabled {
   flex: 0 0 auto;
   width: 240px;
   height: 240px;
+}
+
+.mission-leaders__individual img {
+  width: 100%;
+  height: auto;
 }
 
 .mission-leaders__individual__blur {
@@ -4056,6 +4058,7 @@ select:disabled {
   color: var(--black);
   margin-bottom: 8px;
   justify-content: flex-end;
+  text-transform: capitalize;
 }
 
 .mission-column__wrapper {

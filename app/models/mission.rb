@@ -14,7 +14,7 @@ class Mission < ApplicationRecord
   validates :name, :subtitle, :description, :logo, :image, presence: true
   validates :name, length: { maximum: 100 }
   validates :subtitle, length: { maximum: 140 }
-  validates :description, length: { maximum: 375 }
+  validates :description, length: { maximum: 500 }
 
   def serialize
     as_json(only: %i[id name token_id subtitle description status display_order]).merge(

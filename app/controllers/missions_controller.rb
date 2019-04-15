@@ -118,7 +118,7 @@ class MissionsController < ApplicationController
       account.serializable_hash.merge(
         count: project_counts[account.id],
         project_name: mission.public_projects.find_by(account_id: account.id).title,
-        image_url: account.image.present? ? Refile.attachment_url(account, :image, :fill, 240, 240) : nil
+        image_url: helpers.account_image_url(account, 240),
       )
     end
   end
