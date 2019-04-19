@@ -67,6 +67,13 @@ describe MissionsController do
     end
   end
 
+  describe '#show' do
+    it 'returns correct react component' do
+      get :show, params: { id: mission1.id }
+      expect(response.status).to eq(200)
+    end
+  end
+
   describe '#edit' do
     context 'when not logged in' do
       it 'redirects to signup' do

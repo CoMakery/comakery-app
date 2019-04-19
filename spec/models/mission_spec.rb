@@ -14,10 +14,10 @@ describe Mission do
     end
 
     it 'raises error if the attribute is too long' do
-      errors = described_class.new(name: 'a' * 101, subtitle: 'a' * 141, description: 'a' * 376).tap(&:valid?).errors.full_messages
+      errors = described_class.new(name: 'a' * 101, subtitle: 'a' * 141, description: 'a' * 501).tap(&:valid?).errors.full_messages
       expect(errors).to include('Name is too long (maximum is 100 characters)')
       expect(errors).to include('Subtitle is too long (maximum is 140 characters)')
-      expect(errors).to include('Description is too long (maximum is 375 characters)')
+      expect(errors).to include('Description is too long (maximum is 500 characters)')
     end
   end
 end

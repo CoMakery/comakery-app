@@ -25,7 +25,7 @@ class Views::Sessions::New < Views::Base
         end
         column('large-12 no-h-pad', style: 'margin-top: 5px') do
           link_to 'javascript:void(0)', class: 'auth-button metamask signin-with-metamask' do
-            span 'Sigin in with MetaMask'
+            span 'Sign in with MetaMask'
           end
         end
         column('large-12 no-h-pad', style: 'margin-top: 20px') do

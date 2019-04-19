@@ -168,7 +168,7 @@ export default class Project extends React.Component {
         <div className="project-header__content">
           <div className="project-header__menu">
             {missionData &&
-              <a className="project-header__menu__back" href={missionData.missionUrl} style={{visibility: 'hidden'}}>
+              <a className="project-header__menu__back" href={missionData.missionUrl}>
                 <Icon name="iconBackWhite.svg" style={{marginRight: 8}} />
                 {missionData.name}
               </a>

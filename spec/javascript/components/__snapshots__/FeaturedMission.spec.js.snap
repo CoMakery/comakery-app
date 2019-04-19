@@ -6,25 +6,31 @@ exports[`FeaturedMission renders correctly without props 1`] = `
   description=""
   float="left"
   imageUrl=""
+  missionUrl=""
   name=""
   projects={Array []}
 >
   <div
     className="featured-mission "
   >
-    <div
+    <a
       className="featured-mission__image "
+      href=""
     >
       <img
         src=""
       />
-    </div>
+    </a>
     <div
       className="featured-mission__detail"
     >
       <div
         className="featured-mission__name"
-      />
+      >
+        <a
+          href=""
+        />
+      </div>
       <div
         className="featured-mission__description"
       />

@@ -25,7 +25,7 @@ const transferQrc20Tokens = async function(award) { // award in JSON
     window.alertMsg('#metamaskModal1', 'Not logged in. Please log in to Qrypto first')
     return
   }
-  const network = award.project.token.blockchain_network.replace('qtum_', '')
+  const network = award.token.blockchain_network.replace('qtum_', '')
   const qweb3 = new Qweb3(window.qrypto.rpcProvider)
   const contract = qweb3.Contract(contractAddress, qrc20TokenABI)
   debugLog(amount)

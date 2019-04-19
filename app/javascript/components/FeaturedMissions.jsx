@@ -81,6 +81,7 @@ export default class FeaturedMissions extends React.Component {
               <FeaturedMission
                 key={mission.id}
                 id={mission.id}
+                missionUrl={mission.missionUrl}
                 float={index % 2 === 0 ? 'left' : 'right'}
                 name={mission.name}
                 imageUrl={mission.imageUrl}
@@ -103,9 +104,13 @@ export default class FeaturedMissions extends React.Component {
                 <div key={mission.id}>
                   <div className="gallery-content">
                     <div className="gallery-content__image">
-                      <img src={mission.imageUrl} />
+                      <a href={mission.missionUrl}>
+                        <img src={mission.imageUrl} />
+                      </a>
                     </div>
-                    <div className="gallery-content__title">{mission.name}</div>
+                    <div className="gallery-content__title">
+                      <a href={mission.missionUrl}>{mission.name}</a>
+                    </div>
                     <div className="gallery-content__description">
                       {mission.projectsCount === 0 && 'No projects'}
                       {mission.projectsCount > 0 && `${mission.projectsCount} ${mission.projectsCount === 1 ? 'project' : 'projects'}` }
