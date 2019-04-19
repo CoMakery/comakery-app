@@ -30,8 +30,8 @@ exports[`TokenForm renders correctly without props 1`] = `
   <Layout
     category=""
     className="token-form"
+    customTitle={null}
     hasBackButton={true}
-    navTitle={null}
     sidebar={null}
     subfooter={
       <React.Fragment>

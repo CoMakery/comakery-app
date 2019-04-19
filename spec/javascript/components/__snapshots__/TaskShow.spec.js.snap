@@ -44,8 +44,8 @@ exports[`TaskShow renders correctly without props 1`] = `
   <Layout
     category=""
     className="task-award-form"
+    customTitle={null}
     hasBackButton={true}
-    navTitle={null}
     sidebar={null}
     subfooter={
       <React.Fragment>
@@ -63,7 +63,7 @@ exports[`TaskShow renders correctly without props 1`] = `
         />
       </React.Fragment>
     }
-    title="Send An Award For Task: Task name"
+    title="Issue Award For Task: Task name"
   >
     <div
       className="layout task-award-form"
@@ -89,7 +89,7 @@ exports[`TaskShow renders correctly without props 1`] = `
         <div
           className="layout--content--title"
         >
-          Send An Award For Task: Task name
+          Issue Award For Task: Task name
         </div>
         <hr
           className="layout--content--hr"

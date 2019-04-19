@@ -48,6 +48,8 @@ class SidebarItem extends React.Component {
                 <Icon name={iconRightName} />
               </span>
             }
+
+            <div className="sidebar-item--left-border" />
           </div>
         </div>
       </React.Fragment>

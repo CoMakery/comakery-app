@@ -8,7 +8,7 @@ describe('BatchForm', () => {
 
     expect(wrapper).toMatchSnapshot()
 
-    expect(wrapper.exists('Layout[navTitle]')).toBe(true)
+    expect(wrapper.exists('Layout[title]')).toBe(true)
     expect(wrapper.exists('.batch-form')).toBe(true)
     expect(wrapper.exists('ButtonBorder[value="cancel"]')).toBe(true)
     expect(wrapper.exists('ButtonBorder[value="create"]')).toBe(true)

@@ -24,8 +24,8 @@ describe 'awards issuing', js: true do
 
   it 'allows to create award' do
     visit project_award_types_path(project1)
-    find('.batch-index--sidebar--item', text: award_type1.name.upcase).click
-    find_link('Create a Task').click
+    find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
+    find_link('create a task +').click
     expect(page).to have_content 'Create A New Task'
     fill_in 'task[name]', with: 'test name'
     fill_in 'task[why]', with: 'test why'
@@ -45,7 +45,7 @@ describe 'awards issuing', js: true do
 
   it 'allows to edit award' do
     visit project_award_types_path(project1)
-    find('.batch-index--sidebar--item', text: award_type1.name.upcase).click
+    find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
     find("a[href='#{edit_project_award_type_award_path(project1, award_type1, award1)}']").click
     expect(page).to have_content 'Edit Task'
     fill_in 'task[name]', with: 'test name updated'
@@ -56,7 +56,7 @@ describe 'awards issuing', js: true do
 
   it 'allows to delete award' do
     visit project_award_types_path(project1)
-    find('.batch-index--sidebar--item', text: award_type1.name.upcase).click
+    find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
     find("a[data-method='delete'][href='#{project_award_type_award_path(project1, award_type1, award2)}']").click
     expect(page).to have_content 'TASK DESTROYED'
   end
@@ -66,7 +66,7 @@ describe 'awards issuing', js: true do
     find_button('proceed').click
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
     expect(page).to have_content '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
-    find_button('pay & complete task').click
+    find_button('issue award').click
     expect(page).to have_content 'You can initiate the token transfer on the awards page.'.upcase
   end
 
@@ -77,7 +77,7 @@ describe 'awards issuing', js: true do
     find_button('proceed').click
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
     expect(page).to have_content 'The recipient must register their address before they can accept the award.'
-    find_button('pay & complete task').click
+    find_button('issue award').click
     expect(page).to have_content "The award recipient hasn't entered a blockchain address for us to send the award to. When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page.".upcase
   end
 
@@ -85,21 +85,21 @@ describe 'awards issuing', js: true do
     visit project_award_type_award_path(project1, award_type1, award5)
     fill_in 'task[quantity]', with: 100
     find_button('proceed').click
-    find_button('pay & complete task').click
+    find_button('issue award').click
     find('.flash-message-container')
     expect(page).to have_content "SORRY, YOU CAN'T SEND MORE AWARDS THAN THE PROJECT'S BUDGET"
   end
 
   it "doesn't allow to edit award after sending" do
     visit project_award_types_path(project1)
-    find('.batch-index--sidebar--item', text: award_type1.name.upcase).click
+    find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
     find("a[href='#{edit_project_award_type_award_path(project1, award_type1, award6)}']").click
     expect(page).to have_content 'Completed task cannot be changed'.upcase
   end
 
   it "doesn't allow to delete award after sending" do
     visit project_award_types_path(project1)
-    find('.batch-index--sidebar--item', text: award_type1.name.upcase).click
+    find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
     find("a[data-method='delete'][href='#{project_award_type_award_path(project1, award_type1, award6)}']").click
     expect(page).to have_content 'Completed task cannot be changed'.upcase
   end

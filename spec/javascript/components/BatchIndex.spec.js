@@ -13,7 +13,6 @@ describe('BatchIndex', () => {
     expect(wrapper.find('.batch-index--sidebar SidebarItemBold').props().iconLeftName).toBe('BATCH/WHITE.svg')
     expect(wrapper.find('.batch-index--sidebar SidebarItemBold').props().iconRightName).toBe('PLUS.svg')
     expect(wrapper.exists('.batch-index--sidebar--info')).toBe(false)
-    expect(wrapper.exists('.batch-index--view')).toBe(false)
   })
 
   it('renders correctly with batches', () => {
@@ -62,8 +61,6 @@ describe('BatchIndex', () => {
     ]
 
     const wrapper = mount(<BatchIndex batches={batches} />)
-
-    expect(wrapper.find('.batch-index--sidebar--info').text()).toBe('Please select batch:')
 
     expect(wrapper.exists('SidebarItem[text="Write a book"]')).toBe(true)
   })
@@ -127,13 +124,11 @@ describe('BatchIndex', () => {
 
     const wrapper = mount(<BatchIndex batches={batches} />)
 
-    expect(wrapper.exists('.batch-index--view')).toBe(false)
-
     wrapper.find('SidebarItem[text="Write a book"]').simulate('click')
-    expect(wrapper.find('.batch-index--view').text()).toMatch(/Write a book/)
+    expect(wrapper.find('.layout--content--content__sidebared').text()).toMatch(/Write a book/)
 
     wrapper.find('SidebarItem[text="Write a blog post"]').simulate('click')
-    expect(wrapper.find('.batch-index--view').text()).toMatch(/Write a blog post/)
-    expect(wrapper.find('.batch-index--view').text()).not.toMatch(/Write a book/)
+    expect(wrapper.find('.layout--content--content__sidebared').text()).toMatch(/Write a blog post/)
+    expect(wrapper.find('.layout--content--content__sidebared').text()).not.toMatch(/Write a book/)
   })
 })

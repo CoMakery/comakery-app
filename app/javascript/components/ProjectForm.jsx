@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Layout from './layouts/Layout'
+import ProjectSetup from './layouts/ProjectSetup'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import Button from './styleguide/Button'
@@ -261,18 +261,11 @@ class ProjectForm extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Layout
+        <ProjectSetup
           className="project-form"
-          navTitle={[
-            {
-              name   : 'project settings',
-              current: true
-            },
-            {
-              name: 'batches',
-              url : this.state.id ? `/projects/${this.state.id}/batches` : '#'
-            }
-          ]}
+          projectTitle={this.state['project[title]']}
+          projectId={this.state.id}
+          projectPage="form"
           subfooter={
             <React.Fragment>
               <Button
@@ -514,7 +507,7 @@ class ProjectForm extends React.Component {
               </div>
             }
           </form>
-        </Layout>
+        </ProjectSetup>
       </React.Fragment>
     )
   }
