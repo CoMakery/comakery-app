@@ -27,7 +27,8 @@ describe 'viewing projects, creating and editing', :js do
           visit project_path(project)
 
           click_link 'Payments'
-          expect(page).to have_content 'Project Tokens Awarded'
+          expect(page).to have_css '#contributions-chart'
+          expect(page).to have_css 'table.award-rows'
         end
 
         it 'show link to ethereum transaction' do

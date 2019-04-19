@@ -73,20 +73,31 @@ class AwardTypesController < ApplicationController
       @props = {
         batches: @project.award_types&.map do |batch|
           batch.serializable_hash.merge(
+            diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
+            completed_tasks: batch.awards.completed.count,
+            total_tasks: batch.awards.count,
+            specialty: batch.specialty.name,
+            currency: batch.project.token&.symbol,
+            total_amount: batch.awards.sum(:total_amount),
+            currency_logo: Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100),
+            team_pics: batch.project.contributors_distinct.map { |a| helpers.account_image_url(a, 100) },
             edit_path: edit_project_award_type_path(@project, batch),
             destroy_path: project_award_type_path(@project, batch),
             new_task_path: new_project_award_type_award_path(@project, batch),
             tasks: batch.awards&.listed&.map do |task|
               task.serializable_hash.merge(
-                token_symbol: @project.token&.symbol&.to_s,
+                currency: batch.project.token&.symbol,
+                currency_logo: Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100),
                 award_path: project_award_type_award_path(@project, batch, task),
+                pay_path: awards_project_path(@project),
                 edit_path: edit_project_award_type_award_path(@project, batch, task),
                 destroy_path: project_award_type_award_path(@project, batch, task)
               )
             end
           )
         end,
-        project_edit_path: edit_project_path(@project)
+        new_batch_path: new_project_award_type_path(@project),
+        project: @project.serializable_hash
       }
     end
 

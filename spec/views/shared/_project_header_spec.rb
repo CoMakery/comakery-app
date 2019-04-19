@@ -19,7 +19,7 @@ describe 'shared/_project_header.html.rb' do
     end
 
     specify do
-      expect(rendered).to have_link 'Ξthereum Token'
+      expect(rendered).to have_css 'div[data-react-class="layouts/ProjectSetupHeader"]'
     end
   end
 
@@ -34,7 +34,7 @@ describe 'shared/_project_header.html.rb' do
     end
 
     specify do
-      expect(rendered).to have_link 'Qtum Token'
+      expect(rendered).to have_css 'div[data-react-class="layouts/ProjectSetupHeader"]'
     end
   end
 end

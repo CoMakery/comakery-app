@@ -4,9 +4,6 @@ class Views::Awards::Activity < Views::Base
   def content
     column do
       div do
-        h3 "#{project.payment_description} Awarded"
-        br
-
         if project.awards_for_chart.present?
           p do
             div(id: 'contributions-chart')

@@ -111,7 +111,6 @@ class ContributorsSummaryPieChart extends React.Component {
     return (
       <React.Fragment>
         <div className="columns large-4 medium-12 summary float-left">
-          <h3>Total Tokens Awarded To Contributors</h3>
           <div id="award-percentages" className="royalty-pie" />
         </div>
       </React.Fragment>

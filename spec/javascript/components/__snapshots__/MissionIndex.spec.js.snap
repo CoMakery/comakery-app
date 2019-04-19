@@ -8,8 +8,8 @@ exports[`MissionIndex renders correctly without props 1`] = `
   <Layout
     category="Missions > "
     className="mission-index"
+    customTitle={null}
     hasBackButton={false}
-    navTitle={null}
     sidebar={
       <React.Fragment>
         <div
@@ -110,6 +110,9 @@ exports[`MissionIndex renders correctly without props 1`] = `
                           />
                         </Icon>
                       </span>
+                      <div
+                        className="sidebar-item--left-border"
+                      />
                     </div>
                   </div>
                 </SidebarItem>

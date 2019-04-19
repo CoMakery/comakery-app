@@ -1,16 +1,121 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Layout from './layouts/Layout'
+import ProjectSetup from './layouts/ProjectSetup'
 import SidebarItem from './styleguide/SidebarItem'
 import SidebarItemBold from './styleguide/SidebarItemBold'
-import Icon from './styleguide/Icon'
+import Batch from './Batch'
+import Task from './Task'
+import styled, { css } from 'styled-components'
+
+const Wrapper = styled.div`
+`
+
+const Text = styled.div`
+  font-family: Georgia;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.29;
+  letter-spacing: normal;
+
+  ul {
+    list-style-type: decimal;
+  }
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus {
+    text-decoration: underline;
+  }
+`
+
+const Title = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 7px;
+  margin-top: 7px;
+`
+
+const TitleText = styled.div`
+  margin-bottom: 3px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+`
+
+const BatchStyled = styled(Batch)`
+  margin-bottom: 20px;
+`
+
+const Filter = styled.span`
+  margin-bottom: 3px;
+  margin-right: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #9b9b9b;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  ${props => props.filter === 'ready' && props.selected && css`
+    color: #5037f7;
+  `}
+
+  ${props => props.filter === 'accepted' && props.selected && css`
+    color: #7ed321;
+  `}
+
+  ${props => props.filter === 'paid' && props.selected && css`
+    color: #fb40e5;
+  `}
+
+  ${props => !props.filter && props.selected && css`
+    color: #3a3a3a;
+  `}
+`
+
+const Tasks = styled.div`
+  margin: 20px 0;
+`
+
+const CreateTaskButton = styled.div`
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: right;
+  text-transform: uppercase;
+  margin: 30px 0px;
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus {
+    text-decoration: underline;
+  }
+`
 
 class BatchIndex extends React.Component {
   constructor(props) {
     super(props)
     this.handleListClick = this.handleListClick.bind(this)
     this.state = {
-      selectedBatch: null
+      selectedBatch     : null,
+      selectedTaskFilter: null
     }
   }
 
@@ -23,18 +128,11 @@ class BatchIndex extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Layout
+        <ProjectSetup
           className="batch-index"
-          navTitle={[
-            {
-              name: 'project settings',
-              url : this.props.projectEditPath
-            },
-            {
-              name   : 'batches',
-              current: true
-            }
-          ]}
+          projectId={this.props.project.id}
+          projectTitle={this.props.project.title}
+          projectPage="batches"
           sidebar={
             <React.Fragment>
               <div className="batch-index--sidebar">
@@ -43,22 +141,18 @@ class BatchIndex extends React.Component {
                   iconLeftName="BATCH/WHITE.svg"
                   iconRightName="PLUS.svg"
                   text="Create a New Batch"
-                  onClick={(_) => window.location = `${window.location}/new`}
+                  onClick={(_) => window.location = this.props.newBatchPath}
                 />
 
-                { this.props.batches.length > 0 &&
+                {this.props.batches.length > 0 &&
                   <React.Fragment>
-                    <hr />
-
-                    <div className="batch-index--sidebar--info">
-                      Please select batch:
-                    </div>
+                    <hr className="batch-index--sidebar--hr" />
 
                     {this.props.batches.map((b, i) =>
                       <SidebarItem
                         className="batch-index--sidebar--item"
                         key={i}
-                        iconLeftName="BATCH/WHITE.svg"
+                        iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
                         text={b.name}
                         selected={this.state.selectedBatch === b}
                         onClick={(_) => this.handleListClick(b)}
@@ -70,89 +164,60 @@ class BatchIndex extends React.Component {
             </React.Fragment>
           }
         >
+          {this.props.batches.length === 0 &&
+            <Text>
+              <ul>
+                <li>Batches are “folders” that groups of similar tasks reside in.</li>
+                <li>Projects can have one or many batches in them.</li>
+                <li>A batch must be <a href={this.props.newBatchPath}>created</a> before a task can be created.</li>
+              </ul>
+            </Text>
+          }
           {this.state.selectedBatch &&
             <React.Fragment>
-              <div>
-                BATCH
-              </div>
+              <Wrapper>
+                <Title>
+                  <TitleText>batch</TitleText>
+                </Title>
 
-              <div className="batch-index--view">
-                <div className="batch-index--view--name">
-                  {this.state.selectedBatch.name}
-                </div>
+                <BatchStyled batch={this.state.selectedBatch} />
 
-                <div className="batch-index--view--specialty">
-                  {this.state.selectedBatch.specialtyId}
-                </div>
+                <Tasks>
+                  {this.state.selectedBatch.tasks.length > 0 &&
+                    <Title>
+                      <Filter filter={this.state.selectedTaskFilter} selected={!this.state.selectedTaskFilter} onClick={(_) => this.setState({selectedTaskFilter: null})}>all tasks</Filter>
+                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'ready'} onClick={(_) => this.setState({selectedTaskFilter: 'ready'})}>ready</Filter>
+                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'accepted'} onClick={(_) => this.setState({selectedTaskFilter: 'accepted'})}>accepted</Filter>
+                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'paid'} onClick={(_) => this.setState({selectedTaskFilter: 'paid'})}>paid</Filter>
+                    </Title>
+                  }
+                  {this.state.selectedBatch.tasks.filter(task => !this.state.selectedTaskFilter || task.status === this.state.selectedTaskFilter).map((t, i) =>
+                    <Task key={i} task={t} />
+                  )}
+                </Tasks>
 
-                <div className="batch-index--view--team-members" />
-
-                <div className="batch-index--view--edit">
-                  <a href={this.state.selectedBatch.editPath}>
-                    <Icon name="iconEdit.svg" />
+                <CreateTaskButton>
+                  <a href={this.state.selectedBatch.newTaskPath}>
+                    create a task +
                   </a>
-                </div>
-
-                <div className="batch-index--view--delete">
-                  <a rel="nofollow" data-method="delete" href={this.state.selectedBatch.destroyPath}>
-                    <Icon name="iconTrash.svg" />
-                  </a>
-                </div>
-              </div>
-
-              <div>
-                TASKS
-              </div>
-
-              <div className="batch-index--tasks">
-                {this.state.selectedBatch.tasks.map((t, i) =>
-                  <div key={i} className="batch-index--tasks--task">
-                    <div className="batch-index--tasks--task--name">
-                      {t.name}
-                    </div>
-                    <div className="batch-index--tasks--task--amount">
-                      {`${t.amount} ${t.tokenSymbol}`}
-                    </div>
-                    <div className="batch-index--tasks--task--award">
-                      {t.status !== 'done' &&
-                        <a href={t.awardPath}>
-                          Pay
-                        </a>
-                      }
-                    </div>
-                    <div className="batch-index--tasks--task--edit">
-                      <a href={t.editPath}>
-                        <Icon name="iconEdit.svg" />
-                      </a>
-                    </div>
-                    <div className="batch-index--tasks--task--delete">
-                      <a rel="nofollow" data-method="delete" href={t.destroyPath}>
-                        <Icon name="iconTrash.svg" />
-                      </a>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="batch-index--create-task">
-                <a href={this.state.selectedBatch.newTaskPath}>
-                  Create a Task
-                </a>
-              </div>
+                </CreateTaskButton>
+              </Wrapper>
             </React.Fragment>
           }
-        </Layout>
+        </ProjectSetup>
       </React.Fragment>
     )
   }
 }
 
 BatchIndex.propTypes = {
-  batches  : PropTypes.array.isRequired,
-  projectId: PropTypes.number
+  batches     : PropTypes.array.isRequired,
+  newBatchPath: PropTypes.string,
+  project     : PropTypes.object
 }
 BatchIndex.defaultProps = {
-  batches  : [],
-  projectId: null
+  batches     : [],
+  newBatchPath: '',
+  project     : {}
 }
 export default BatchIndex

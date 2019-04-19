@@ -11,8 +11,8 @@ exports[`MissionForm renders correctly without props 1`] = `
   <Layout
     category=""
     className="mission-form"
+    customTitle={null}
     hasBackButton={true}
-    navTitle={null}
     sidebar={null}
     subfooter={
       <React.Fragment>

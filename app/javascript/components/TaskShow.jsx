@@ -186,13 +186,13 @@ class TaskShow extends React.Component {
       <React.Fragment>
         <Layout
           className="task-award-form"
-          title={`Send An Award For Task: ${this.props.task.name}`}
+          title={`Issue Award For Task: ${this.props.task.name}`}
           hasBackButton
           subfooter={
             <React.Fragment>
               <Button
                 className="metamask-transfer-btn"
-                value={this.state.detailsFetched ? 'pay & complete task' : 'proceed'}
+                value={this.state.detailsFetched ? 'issue award' : 'proceed'}
                 type="submit"
                 form="task-award-form--form"
                 disabled={this.state.disabled['task[submit]']}

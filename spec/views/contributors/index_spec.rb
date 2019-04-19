@@ -15,7 +15,7 @@ describe 'contributors/index.html.rb' do
   end
 
   specify do
-    expect(rendered).to have_css '.project-nav'
+    expect(rendered).to have_css 'div[data-react-class="layouts/ProjectSetupHeader"]'
     expect(rendered).to have_css 'div[data-react-class="ContributorsSummaryPieChart"]'
   end
 end

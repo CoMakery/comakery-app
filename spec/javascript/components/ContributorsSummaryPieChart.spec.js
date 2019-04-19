@@ -7,6 +7,5 @@ describe('Contributors Summary Pie Chart', () => {
     const wrapper = shallow(<ContributorsSummaryPieChart />)
 
     expect(wrapper).toMatchSnapshot()
-    expect(wrapper.find('h3').text()).toBe('Total Tokens Awarded To Contributors')
   })
 })

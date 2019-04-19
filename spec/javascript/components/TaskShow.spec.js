@@ -8,7 +8,7 @@ describe('TaskShow', () => {
 
     expect(wrapper).toMatchSnapshot()
 
-    expect(wrapper.exists('Layout[navTitle]')).toBe(true)
+    expect(wrapper.exists('Layout[title]')).toBe(true)
     expect(wrapper.exists('.task-award-form')).toBe(true)
     expect(wrapper.exists('ButtonBorder[value="cancel"]')).toBe(true)
     expect(wrapper.exists('Button[value="proceed"]')).toBe(true)
