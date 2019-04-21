@@ -419,7 +419,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                 required={true}
                 step="NaN"
                 symbolLimit={0}
-                title="award amount (undefined)"
+                title="award amount (no token)"
                 type="number"
                 value=""
               >
@@ -447,7 +447,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                   selectEntries={Array []}
                   step="NaN"
                   symbolLimit={0}
-                  title="award amount (undefined)"
+                  title="award amount (no token)"
                   type="number"
                   value=""
                 >
@@ -460,7 +460,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                       <span
                         className="input-field--title--title"
                       >
-                        award amount (undefined)
+                        award amount (no token)
                       </span>
                       <span
                         className="input-field--title--required"
@@ -492,10 +492,10 @@ exports[`TaskForm renders correctly without props 1`] = `
               <InputFieldWhiteDark
                 eventHandler={[Function]}
                 name="task[proof_link]"
-                placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo"
+                placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
                 required={true}
                 symbolLimit={150}
-                title="where to submit completed work"
+                title="URL where to submit completed work"
                 value=""
               >
                 <InputField
@@ -515,14 +515,14 @@ exports[`TaskForm renders correctly without props 1`] = `
                   min=""
                   name="task[proof_link]"
                   pattern=".*"
-                  placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo"
+                  placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
                   readOnly={false}
                   recommended={false}
                   required={true}
                   selectEntries={Array []}
                   step=""
                   symbolLimit={150}
-                  title="where to submit completed work"
+                  title="URL where to submit completed work"
                   type="text"
                   value=""
                 >
@@ -535,7 +535,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                       <span
                         className="input-field--title--title"
                       >
-                        where to submit completed work
+                        URL where to submit completed work
                       </span>
                       <span
                         className="input-field--title--required"
@@ -559,7 +559,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                         onChange={[Function]}
                         onClick={null}
                         pattern=".*"
-                        placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo"
+                        placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
                         readOnly={false}
                         required={true}
                         type="text"

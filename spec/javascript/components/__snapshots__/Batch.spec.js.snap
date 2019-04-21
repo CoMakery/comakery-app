@@ -273,10 +273,11 @@ exports[`Batch renders component correctly 1`] = `
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-EHOje",
                                       "isStatic": true,
-                                      "lastClassName": "iqtoiU",
+                                      "lastClassName": "etusMN",
                                       "rules": Array [
                                         "
   margin-right: 0.5em;
+  text-transform: uppercase;
 ",
                                       ],
                                     },
@@ -293,50 +294,12 @@ exports[`Batch renders component correctly 1`] = `
                                 forwardedRef={null}
                               >
                                 <div
-                                  className="sc-EHOje iqtoiU"
-                                />
+                                  className="sc-EHOje etusMN"
+                                >
+                                  (No Token)
+                                </div>
                               </StyledComponent>
                             </styled.div>
-                            <styled.img
-                              alt=" logo"
-                              src=""
-                            >
-                              <StyledComponent
-                                alt=" logo"
-                                forwardedComponent={
-                                  Object {
-                                    "$$typeof": Symbol(react.forward_ref),
-                                    "attrs": Array [],
-                                    "componentStyle": ComponentStyle {
-                                      "componentId": "sc-bZQynM",
-                                      "isStatic": true,
-                                      "lastClassName": "fodEZH",
-                                      "rules": Array [
-                                        "
-  height: 14px;
-",
-                                      ],
-                                    },
-                                    "displayName": "styled.img",
-                                    "foldedComponentIds": Array [],
-                                    "render": [Function],
-                                    "styledComponentId": "sc-bZQynM",
-                                    "target": "img",
-                                    "toString": [Function],
-                                    "warnTooManyClasses": [Function],
-                                    "withComponent": [Function],
-                                  }
-                                }
-                                forwardedRef={null}
-                                src=""
-                              >
-                                <img
-                                  alt=" logo"
-                                  className="sc-bZQynM fodEZH"
-                                  src=""
-                                />
-                              </StyledComponent>
-                            </styled.img>
                           </div>
                         </StyledComponent>
                       </styled.div>
@@ -620,7 +583,9 @@ exports[`Batch renders component correctly 1`] = `
                               >
                                 <div
                                   className="sc-htpNat vZQMM"
-                                />
+                                >
+                                  —
+                                </div>
                               </StyledComponent>
                             </styled.div>
                           </div>

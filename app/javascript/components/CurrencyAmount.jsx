@@ -19,6 +19,7 @@ const Amount = styled.div`
 
 const Currency = styled.div`
   margin-right: 0.5em;
+  text-transform: uppercase;
 `
 
 const Logo = styled.img`
@@ -34,9 +35,11 @@ class CurrencyAmount extends React.Component {
             {this.props.amount}
           </Amount>
           <Currency>
-            {this.props.currency}
+            {this.props.currency || '(No Token)'}
           </Currency>
-          <Logo src={this.props.logoUrl} alt={`${this.props.currency} logo`} />
+          {this.props.logoUrl &&
+            <Logo src={this.props.logoUrl} alt={`${this.props.currency} logo`} />
+          }
         </Wrapper>
       </React.Fragment>
     )

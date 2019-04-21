@@ -219,7 +219,7 @@ class TaskForm extends React.Component {
             />
 
             <InputFieldWhiteDark
-              title={`award amount (${this.props.token.symbol})`}
+              title={`award amount (${this.props.token.symbol || 'no token'})`}
               required
               name="task[amount]"
               value={this.state['task[amount]']}
@@ -233,13 +233,13 @@ class TaskForm extends React.Component {
             />
 
             <InputFieldWhiteDark
-              title="where to submit completed work"
+              title="URL where to submit completed work"
               required
               name="task[proof_link]"
               value={this.state['task[proof_link]']}
-              errorText={this.state.errors['task[proof_link]']}
+              errorText={this.state.errors['task[proofLink]']}
               eventHandler={this.handleFieldChange}
-              placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo"
+              placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
               symbolLimit={150}
             />
 

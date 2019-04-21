@@ -22,12 +22,12 @@ class Award < ApplicationRecord
   validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
   validates :name, length: { maximum: 100 }
-  validates :why, length: { maximum: 100 }
+  validates :why, length: { maximum: 500 }
   validates :description, length: { maximum: 500 }
   validates :message, length: { maximum: 150 }
   validates :requirements, length: { maximum: 750 }
   validates :proof_link, length: { maximum: 150 }
-  validates :proof_link, format: { with: URI.regexp(%w[http https]) }
+  validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }
 
   validate :total_amount_fits_into_project_budget
 

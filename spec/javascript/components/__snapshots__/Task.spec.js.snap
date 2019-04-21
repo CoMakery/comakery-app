@@ -205,7 +205,9 @@ exports[`Task renders component correctly 1`] = `
                       >
                         <div
                           className="sc-gzVnrw cLmKHF"
-                        />
+                        >
+                          Unnamed Task
+                        </div>
                       </StyledComponent>
                     </styled.div>
                     <styled.div
@@ -414,10 +416,11 @@ exports[`Task renders component correctly 1`] = `
                                         "componentStyle": ComponentStyle {
                                           "componentId": "sc-htpNat",
                                           "isStatic": true,
-                                          "lastClassName": "hCgyeI",
+                                          "lastClassName": "eglqcF",
                                           "rules": Array [
                                             "
   margin-right: 0.5em;
+  text-transform: uppercase;
 ",
                                           ],
                                         },
@@ -434,50 +437,12 @@ exports[`Task renders component correctly 1`] = `
                                     forwardedRef={null}
                                   >
                                     <div
-                                      className="sc-htpNat hCgyeI"
-                                    />
+                                      className="sc-htpNat eglqcF"
+                                    >
+                                      (No Token)
+                                    </div>
                                   </StyledComponent>
                                 </styled.div>
-                                <styled.img
-                                  alt=" logo"
-                                  src=""
-                                >
-                                  <StyledComponent
-                                    alt=" logo"
-                                    forwardedComponent={
-                                      Object {
-                                        "$$typeof": Symbol(react.forward_ref),
-                                        "attrs": Array [],
-                                        "componentStyle": ComponentStyle {
-                                          "componentId": "sc-bxivhb",
-                                          "isStatic": true,
-                                          "lastClassName": "iJrLVE",
-                                          "rules": Array [
-                                            "
-  height: 14px;
-",
-                                          ],
-                                        },
-                                        "displayName": "styled.img",
-                                        "foldedComponentIds": Array [],
-                                        "render": [Function],
-                                        "styledComponentId": "sc-bxivhb",
-                                        "target": "img",
-                                        "toString": [Function],
-                                        "warnTooManyClasses": [Function],
-                                        "withComponent": [Function],
-                                      }
-                                    }
-                                    forwardedRef={null}
-                                    src=""
-                                  >
-                                    <img
-                                      alt=" logo"
-                                      className="sc-bxivhb iJrLVE"
-                                      src=""
-                                    />
-                                  </StyledComponent>
-                                </styled.img>
                               </div>
                             </StyledComponent>
                           </styled.div>

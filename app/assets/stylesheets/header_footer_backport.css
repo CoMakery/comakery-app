@@ -426,6 +426,13 @@ a.header--nav--links--current {
   }
 }
 
+@media screen and (max-width: 1024px) {
+  .layout--content--title--nav__current,
+  .layout--content--title--nav {
+    display: block;
+  }
+}
+
 .layout--content {
   margin-top: -38px;
   padding: 13px;

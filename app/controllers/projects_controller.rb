@@ -163,7 +163,7 @@ class ProjectsController < ApplicationController
         team: "[#{a_team.team.provider}] #{a_team.team.name}",
         team_id: a_team.team.id.to_s,
         discord: a_team.team.discord?,
-        channels: a_team.channels.map do |channel|
+        channels: a_team.channels&.map do |channel|
           {
             channel: channel.to_s,
             channel_id: channel.to_s
@@ -194,7 +194,7 @@ class ProjectsController < ApplicationController
       tokens: @tokens,
       missions: @missions,
       visibilities: @visibilities,
-      teams: @teams&.reject { |t| t[:channels].empty? },
+      teams: @teams&.reject { |t| t[:channels].blank? },
       discord_bot_url: if @teams&.any? { |t| t[:discord] && t[:channels].empty? }
                          Comakery::Discord.new.add_bot_link
                        end,

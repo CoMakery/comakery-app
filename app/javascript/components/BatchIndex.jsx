@@ -6,6 +6,7 @@ import SidebarItemBold from './styleguide/SidebarItemBold'
 import Batch from './Batch'
 import Task from './Task'
 import styled, { css } from 'styled-components'
+import * as Cookies from 'js-cookie'
 
 const Wrapper = styled.div`
 `
@@ -119,10 +120,17 @@ class BatchIndex extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({
+      selectedBatch: this.props.batches.find(batch => String(batch.id) === Cookies.get('selectedBatchId'))
+    })
+  }
+
   handleListClick(batch) {
     this.setState({
       selectedBatch: batch
     })
+    Cookies.set('selectedBatchId', batch.id)
   }
 
   render() {

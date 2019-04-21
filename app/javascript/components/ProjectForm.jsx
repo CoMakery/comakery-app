@@ -471,7 +471,7 @@ class ProjectForm extends React.Component {
                       name={`project[channels_attributes][${c.id}][channel_id]`}
                       value={this.state['project[channels]'][i].channelId}
                       eventHandler={(e) => this.handleChannelFieldChange(e, i)}
-                      selectEntries={c.teamId ? this.props.teams.find(t => t.teamId === c.teamId).channels.map(ch => [ch.channel, ch.channelId]) : []}
+                      selectEntries={c.teamId && this.props.teams.find(t => t.teamId === c.teamId) ? this.props.teams.find(t => t.teamId === c.teamId).channels.map(ch => [ch.channel, ch.channelId]) : []}
                     />
                     <div className="project-form--form--channels--channel--del" onClick={(e) => this.destroyChannel(e, i)}>
                       <Icon name="iconTrash.svg" />
