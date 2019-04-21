@@ -280,7 +280,7 @@ class TaskShow extends React.Component {
               <div className="task-award-form--form--field--value">
                 {
                   Decimal(
-                    this.props.task.amount
+                    this.props.task.amount || this.props.batch.amount || 0
                   ).toFixed(
                     this.props.token.decimalPlaces || 0,
                     Decimal.ROUND_DOWN
@@ -291,7 +291,7 @@ class TaskShow extends React.Component {
                 {' = '}
                 {
                   Decimal.mul(
-                    this.props.task.amount,
+                    this.props.task.amount || this.props.batch.amount || 0,
                     parseFloat(this.state['task[quantity]'])
                   ).toDecimalPlaces(
                     this.props.token.decimalPlaces || 0,
