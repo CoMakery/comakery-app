@@ -54,7 +54,7 @@ describe Award do
                                                                                                      "Description can't be blank",
                                                                                                      "Requirements can't be blank",
                                                                                                      "Proof link can't be blank",
-                                                                                                     'Proof link is invalid',
+                                                                                                     'Proof link must include protocol (e.g. https://)',
                                                                                                      'Amount is not a number',
                                                                                                      'Total amount must be greater than 0'
                                                                                                    ])

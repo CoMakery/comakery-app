@@ -10,6 +10,9 @@
 // Support ES6 syntax
 import 'babel-polyfill'
 
+// Support IE11
+import 'react-app-polyfill/ie11'
+
 import '../src/application.js'
 
 import '../src/application.css'

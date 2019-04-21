@@ -76,10 +76,10 @@ class AwardTypesController < ApplicationController
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
             completed_tasks: batch.awards.completed.count,
             total_tasks: batch.awards.count,
-            specialty: batch.specialty.name,
+            specialty: batch.specialty&.name,
             currency: batch.project.token&.symbol,
             total_amount: batch.awards.sum(:total_amount),
-            currency_logo: Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100),
+            currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
             team_pics: batch.project.contributors_distinct.map { |a| helpers.account_image_url(a, 100) },
             edit_path: edit_project_award_type_path(@project, batch),
             destroy_path: project_award_type_path(@project, batch),
@@ -87,7 +87,7 @@ class AwardTypesController < ApplicationController
             tasks: batch.awards&.listed&.map do |task|
               task.serializable_hash.merge(
                 currency: batch.project.token&.symbol,
-                currency_logo: Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100),
+                currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
                 award_path: project_award_type_award_path(@project, batch, task),
                 pay_path: awards_project_path(@project),
                 edit_path: edit_project_award_type_award_path(@project, batch, task),

@@ -34,11 +34,11 @@ describe('TaskForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldWhiteDark[title="award amount (undefined)"][required][name="task[amount]"]'
+      'InputFieldWhiteDark[title="award amount (no token)"][required][name="task[amount]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldWhiteDark[title="where to submit completed work"][required][name="task[proof_link]"]'
+      'InputFieldWhiteDark[title="URL where to submit completed work"][required][name="task[proof_link]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -88,7 +88,7 @@ describe('TaskForm', () => {
     ).props().value).toBe('100.0')
 
     expect(wrapper.find(
-      'InputFieldWhiteDark[title="where to submit completed work"][required][name="task[proof_link]"]'
+      'InputFieldWhiteDark[title="URL where to submit completed work"][required][name="task[proof_link]"]'
     ).props().value).toBe('http://nowhere')
   })
 

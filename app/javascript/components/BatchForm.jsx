@@ -179,7 +179,7 @@ class BatchForm extends React.Component {
               required
               name="batch[specialty_id]"
               value={this.state['batch[specialty_id]']}
-              errorText={this.state.errors['batch[specialty_id]']}
+              errorText={this.state.errors['batch[specialtyId]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.specialties)}
               symbolLimit={0}

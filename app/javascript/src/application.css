@@ -444,6 +444,7 @@ a.header--nav--links--current {
 
 .sidebar-item--wrapper {
   display: inline-block;
+  width: 100%;
 }
 
 .sidebar-item {
@@ -1162,6 +1163,7 @@ select:disabled {
 .styleguide-index--sidebar--item,
 .batch-index--sidebar--item {
   margin: 5px 15px 5px 0px;
+  padding-right: 1em;
 }
 
 .token-index--sidebar--item__bold,
@@ -2211,6 +2213,11 @@ select:disabled {
     width: 20px;
     height: 20px;
     margin-right: 10px;
+  }
+
+  .layout--content--title--nav__current,
+  .layout--content--title--nav {
+    display: block;
   }
 }
 
