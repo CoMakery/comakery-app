@@ -60,11 +60,10 @@ class Project < ApplicationRecord
 
   def top_contributors
     Account.select('accounts.*, sum(a1.total_amount) as total_awarded, max(a1.created_at) as last_awarded_at').joins("
-      left join awards a1 on a1.account_id=accounts.id
+      left join awards a1 on a1.account_id=accounts.id and a1.status in(3,5)
       left join award_types on a1.award_type_id=award_types.id
       left join projects on award_types.project_id=projects.id")
            .where('projects.id=?', id)
-           .where('a1.status in(3,5)')
            .group('accounts.id')
            .order('total_awarded desc, last_awarded_at desc').first(5)
   end
