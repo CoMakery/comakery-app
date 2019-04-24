@@ -5,6 +5,7 @@ import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
+import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
@@ -205,6 +206,14 @@ class TaskForm extends React.Component {
               eventHandler={this.handleFieldChange}
               placeholder="Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch"
               symbolLimit={500}
+            />
+
+            <InputFieldUploadFile
+              title="image asset to help guide the task"
+              name="task[image]"
+              errorText={this.state.errors['task[image]']}
+              imgPreviewUrl={this.props.task.imageUrl}
+              imgPreviewDimensions="100x100"
             />
 
             <InputFieldDescription

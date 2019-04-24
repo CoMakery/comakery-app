@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190408162751) do
+ActiveRecord::Schema.define(version: 20190423162348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,6 +142,10 @@ ActiveRecord::Schema.define(version: 20190408162751) do
     t.integer "status", default: 0
     t.decimal "amount"
     t.text "message"
+    t.string "image_id"
+    t.string "image_filename"
+    t.string "image_content_size"
+    t.string "image_content_type"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"

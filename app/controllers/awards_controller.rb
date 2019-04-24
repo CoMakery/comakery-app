@@ -3,7 +3,7 @@ class AwardsController < ApplicationController
   before_action :authorize_project_edit, except: %i[confirm]
   before_action :set_award_type, except: %i[confirm]
   before_action :set_award, except: %i[new create confirm]
-  before_action :set_form_props, only: %i[new edit]
+  before_action :set_form_props, only: %i[new edit clone]
   before_action :set_show_props, only: %i[show]
   before_action :redirect_if_award_issued, only: %i[update edit destroy show send_award recipient_address]
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
@@ -13,6 +13,12 @@ class AwardsController < ApplicationController
   layout 'react'
 
   def new
+    render component: 'TaskForm', props: @props
+  end
+
+  def clone
+    @props[:task][:image_url] = nil
+
     render component: 'TaskForm', props: @props
   end
 
@@ -126,6 +132,7 @@ class AwardsController < ApplicationController
         :name,
         :why,
         :description,
+        :image,
         :requirements,
         :amount,
         :proof_link
@@ -159,7 +166,9 @@ class AwardsController < ApplicationController
 
     def set_form_props
       @props = {
-        task: (@award ? @award : @award_type.awards.new).serializable_hash,
+        task: (@award ? @award : @award_type.awards.new).serializable_hash&.merge(
+          image_url: Refile.attachment_url(@award ? @award : @award_type.awards.new, :image, :fill, 300, 300)
+        ),
         token: @project.token ? @project.token.serializable_hash : {},
         form_url: project_award_type_awards_path(@project, @award_type),
         form_action: 'POST',

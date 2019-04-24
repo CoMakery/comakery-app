@@ -486,6 +486,52 @@ exports[`Task renders component correctly 1`] = `
                         >
                           <a>
                             <Styled(Icon)
+                              name="DUPLICATE.svg"
+                            >
+                              <StyledComponent
+                                forwardedComponent={
+                                  Object {
+                                    "$$typeof": Symbol(react.forward_ref),
+                                    "attrs": Array [],
+                                    "componentStyle": ComponentStyle {
+                                      "componentId": "sc-jTzLTM",
+                                      "isStatic": true,
+                                      "lastClassName": "dVRLoW",
+                                      "rules": Array [
+                                        "
+  height: 15px;
+  margin-left: 16px;
+",
+                                      ],
+                                    },
+                                    "displayName": "Styled(Icon)",
+                                    "foldedComponentIds": Array [],
+                                    "render": [Function],
+                                    "styledComponentId": "sc-jTzLTM",
+                                    "target": [Function],
+                                    "toString": [Function],
+                                    "warnTooManyClasses": [Function],
+                                    "withComponent": [Function],
+                                    Symbol(Symbol.hasInstance): [Function],
+                                  }
+                                }
+                                forwardedRef={null}
+                                name="DUPLICATE.svg"
+                              >
+                                <Icon
+                                  className="sc-jTzLTM dVRLoW"
+                                  name="DUPLICATE.svg"
+                                >
+                                  <img
+                                    className="icon icon__DUPLICATE-svg sc-jTzLTM dVRLoW"
+                                    src="test-file-stub"
+                                  />
+                                </Icon>
+                              </StyledComponent>
+                            </Styled(Icon)>
+                          </a>
+                          <a>
+                            <Styled(Icon)
                               name="iconEdit.svg"
                             >
                               <StyledComponent
