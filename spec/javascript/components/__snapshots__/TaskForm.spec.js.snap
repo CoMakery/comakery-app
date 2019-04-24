@@ -333,6 +333,74 @@ exports[`TaskForm renders correctly without props 1`] = `
                   </div>
                 </InputField>
               </InputFieldDescriptionMiddle>
+              <InputFieldUploadFile
+                imgPreviewDimensions="100x100"
+                name="task[image]"
+                title="image asset to help guide the task"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__upload-file"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="100x100"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="task[image]"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={false}
+                  selectEntries={Array []}
+                  step=""
+                  symbolLimit={0}
+                  title="image asset to help guide the task"
+                  type="file"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__upload-file"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        image asset to help guide the task
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        optional
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        accept="image/*"
+                        className="input-field--content__file"
+                        name="task[image]"
+                        onChange={[Function]}
+                        required={false}
+                        type="file"
+                      />
+                      <span
+                        className="input-field--content__file--requirements"
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldUploadFile>
               <InputFieldDescription
                 eventHandler={[Function]}
                 name="task[requirements]"

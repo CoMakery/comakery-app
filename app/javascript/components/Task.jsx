@@ -161,6 +161,9 @@ class Task extends React.Component {
                     pay contributor
                 </PaymentButton>
                 }
+                <a href={this.props.task.clonePath}>
+                  <StyledIcon name="DUPLICATE.svg" />
+                </a>
                 <a href={this.props.task.editPath}>
                   <StyledIcon name="iconEdit.svg" />
                 </a>

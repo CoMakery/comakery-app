@@ -6,6 +6,8 @@ class Award < ApplicationRecord
   include EthereumAddressable
   include QtumTransactionAddressable
 
+  attachment :image, type: :image
+
   belongs_to :account, optional: true
   belongs_to :authentication, optional: true
   belongs_to :award_type

@@ -59,6 +59,7 @@ Rails.application.routes.draw do
         post :recipient_address
         post :send_award
         post :update_transaction_address
+        get :clone
       end
     end
     resources :contributors, only: [:index]

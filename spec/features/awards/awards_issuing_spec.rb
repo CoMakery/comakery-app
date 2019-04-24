@@ -43,6 +43,22 @@ describe 'awards issuing', js: true do
     expect(Award.last.proof_link).to eq 'http://test'
   end
 
+  it 'allows to clone award' do
+    visit project_award_types_path(project1)
+    find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
+    find("a[href='#{project_award_type_award_clone_path(project1, award_type1, award1)}']").click
+    expect(page).to have_content 'Create A New Task'
+    fill_in 'task[name]', with: 'test name cloned'
+    find_button('create').click
+    expect(page).to have_content 'TASK CREATED'
+    expect(Award.last.name).to eq 'test name cloned'
+    expect(Award.last.why).to eq award1.why
+    expect(Award.last.description).to eq award1.description
+    expect(Award.last.requirements).to eq award1.requirements
+    expect(Award.last.amount).to eq award1.amount
+    expect(Award.last.proof_link).to eq award1.proof_link
+  end
+
   it 'allows to edit award' do
     visit project_award_types_path(project1)
     find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
