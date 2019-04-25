@@ -3,7 +3,8 @@ require 'rails_helper'
 describe 'awards issuing', js: true do
   let!(:team) { create(:team) }
   let!(:current_auth) { create(:sb_authentication) }
-  let!(:awardee_auth) { create(:sb_authentication, account: create(:account, ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
+  let!(:awardee_auth) { create(:sb_authentication, account: create(:account, first_name: 'A', ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367')) }
+  let!(:awardee_auth2) { create(:sb_authentication, account: create(:account, first_name: 'Z', ethereum_wallet: '0x583cbBb8a8443B38aBcC0c956beCe47340ea1368')) }
   let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 10, token: create(:token, decimal_places: 8, coin_type: 'erc20')) }
   let!(:channel1) { create(:channel, team: team, project: project1, name: 'channel1') }
   let!(:award_type1) { create(:award_type, project: project1) }
@@ -17,8 +18,9 @@ describe 'awards issuing', js: true do
   before do
     team.build_authentication_team current_auth
     team.build_authentication_team awardee_auth
+    team.build_authentication_team awardee_auth2
     login(current_auth.account)
-    stub_slack_user_list([slack_user_from_auth(awardee_auth)])
+    stub_slack_user_list(slack_users_from_auths([awardee_auth, awardee_auth2]))
     allow_any_instance_of(Award).to receive(:send_award_notifications)
   end
 
@@ -82,6 +84,17 @@ describe 'awards issuing', js: true do
     find_button('proceed').click
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
     expect(page).to have_content '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
+    find_button('issue award').click
+    expect(page).to have_content 'You can initiate the token transfer on the awards page.'.upcase
+  end
+
+  it 'allows to send award to a selected channel user' do
+    visit project_award_type_award_path(project1, award_type1, award3)
+    select channel1.channel_id, from: 'task[channel_id]'
+    find('select[name="task[uid]"] > option:nth-child(2)').click
+    find_button('proceed').click
+    find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
+    expect(page).to have_content awardee_auth2.account.ethereum_wallet
     find_button('issue award').click
     expect(page).to have_content 'You can initiate the token transfer on the awards page.'.upcase
   end

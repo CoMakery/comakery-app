@@ -30,15 +30,10 @@ class SessionsController < ApplicationController
 
   def sign_in
     @account = Account.find_by email: params[:email]
-    begin
-      if @account && @account.authenticate(params[:password])
-        session[:account_id] = @account.id
-        redirect_to redirect_path
-      else
-        flash[:error] = 'Invalid email or password'
-        redirect_to new_session_path
-      end
-    rescue StandardError
+    if @account && @account.password_digest && @account.authenticate(params[:password])
+      session[:account_id] = @account.id
+      redirect_to redirect_path
+    else
       flash[:error] = 'Invalid email or password'
       redirect_to new_session_path
     end
@@ -88,7 +83,7 @@ class SessionsController < ApplicationController
 
   def process_new_award_notice
     project = current_account.awards&.completed&.last&.project
-    return nil unless project.token.coin_type?
+    return nil unless project&.token&.coin_type?
     blockchain_name = Token::BLOCKCHAIN_NAMES[project.token.coin_type.to_sym]
     send("process_new_#{blockchain_name}_award_notice")
   end

@@ -140,7 +140,7 @@ class TaskShow extends React.Component {
     if (!this.state.detailsFetched) {
       this.fetchRecipientAddress(
         this.state['task[channel_id]'],
-        this.state['task[uid]'] || this.state['task[channel_id]'] !== '' ? Object.values(this.props.members[this.state['task[channel_id]']])[0] : null,
+        this.state['task[uid]'] || (this.state['task[channel_id]'] !== '' ? Object.values(this.props.members[this.state['task[channel_id]']])[0] : null),
         this.state['task[email]']
       )
 
