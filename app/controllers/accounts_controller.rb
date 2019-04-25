@@ -19,6 +19,7 @@ class AccountsController < ApplicationController
 
     @projects = @projects.map { |project| project_decorate(project) }
     @awards = @awards.map do |award|
+      next unless award.project
       award.as_json(only: %i[id]).merge(
         total_amount_pretty: award.decorate.total_amount_pretty,
         created_at: award.created_at.strftime('%b %d, %Y'),

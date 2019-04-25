@@ -45,8 +45,11 @@ class AwardTypesController < ApplicationController
   end
 
   def destroy
-    @award_type.destroy
-    redirect_to project_award_types_path, notice: 'Batch destroyed'
+    if @award_type.destroy
+      redirect_to project_award_types_path, notice: 'Batch destroyed'
+    else
+      redirect_to project_award_types_path, flash: { error: @award_type.errors.full_messages.join(', ') }
+    end
   end
 
   private

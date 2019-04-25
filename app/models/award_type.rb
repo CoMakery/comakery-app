@@ -1,7 +1,7 @@
 class AwardType < ApplicationRecord
   belongs_to :project, touch: true
   belongs_to :specialty
-  has_many :awards
+  has_many :awards, dependent: :restrict_with_error
 
   attachment :diagram, type: :image
 
