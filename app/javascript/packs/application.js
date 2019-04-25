@@ -7,11 +7,12 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %>
 // to the appropriate layout file
 
-// Support ES6 syntax
-import 'babel-polyfill'
-
 // Support IE11
 import 'react-app-polyfill/ie11'
+import 'react-app-polyfill/stable'
+
+// Support ES6 syntax
+import 'babel-polyfill'
 
 import '../src/application.js'
 
