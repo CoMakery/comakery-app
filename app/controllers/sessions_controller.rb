@@ -30,7 +30,7 @@ class SessionsController < ApplicationController
 
   def sign_in
     @account = Account.find_by email: params[:email]
-    if @account && @account.password && @account.authenticate(params[:password])
+    if @account && @account.password_digest && @account.authenticate(params[:password])
       session[:account_id] = @account.id
       redirect_to redirect_path
     else
