@@ -3,21 +3,23 @@ module SlackStubs
     stub_request(:post, 'https://slack.com/api/users.list').to_return(body: { "ok": true, "members": members }.to_json)
   end
 
-  def slack_user_from_auth(auth)
-    auth_team = AuthenticationTeam.find_by(authentication: auth)
-    {
-      "id": auth.uid,
-      "team_id": auth_team&.team_id,
-      "name": auth.account.decorate.name,
-      "deleted": false,
-      "profile": {
-        "first_name": auth.account.first_name,
-        "last_name": auth.account.last_name,
-        "real_name": auth.account.decorate.name,
-        "real_name_normalized": auth.account.decorate.name,
-        "email": auth.account.email
+  def slack_users_from_auths(auths)
+    auths.map do |auth|
+      auth_team = AuthenticationTeam.find_by(authentication: auth)
+      {
+        "id": auth.uid,
+        "team_id": auth_team&.team_id,
+        "name": auth.account.decorate.name,
+        "deleted": false,
+        "profile": {
+          "first_name": auth.account.first_name,
+          "last_name": auth.account.last_name,
+          "real_name": auth.account.decorate.name,
+          "real_name_normalized": auth.account.decorate.name,
+          "email": auth.account.email
+        }
       }
-    }
+    end
   end
 
   def sb_slack_user(first_name: 'Bob', last_name: 'Johnson', team_id: 'T9999S99P', user_id: 'U9999UVMH')

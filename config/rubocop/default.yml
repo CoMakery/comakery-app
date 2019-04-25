@@ -46,7 +46,7 @@ Lint/RequireParentheses:
   Enabled: true
 
 Metrics/ModuleLength:
-  Max: 110
+  Max: 120
 
 Metrics/BlockLength:
   Enabled: false
