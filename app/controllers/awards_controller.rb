@@ -237,7 +237,7 @@ class AwardsController < ApplicationController
       if !@award.self_issued? && @award.decorate.recipient_address.blank?
         "The award recipient hasn't entered a blockchain address for us to send the award to. When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page."
       else
-        "Successfully sent award to #{@award.decorate.recipient_display_name}. You can initiate the token transfer on the awards page."
+        "#{@award.decorate.recipient_display_name.possessive} task has been accepted. Initiate payment for the task on the payments page."
       end
     end
 

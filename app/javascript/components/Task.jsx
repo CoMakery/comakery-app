@@ -135,7 +135,7 @@ class Task extends React.Component {
           <Info>
             <Title>
               <Name>
-                {this.props.task.name || 'Unnamed Task'}
+                {this.props.task.name || this.props.task.batchName}
               </Name>
 
               <Status status={this.props.task.status}>

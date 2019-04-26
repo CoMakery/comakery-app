@@ -22,7 +22,6 @@ exports[`ProjectForm renders correctly without props 1`] = `
       "default": "_",
     }
   }
-  urlOnSuccess="/"
   visibilities={Array []}
 >
   <ProjectSetup

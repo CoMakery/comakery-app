@@ -205,9 +205,7 @@ exports[`Task renders component correctly 1`] = `
                       >
                         <div
                           className="sc-gzVnrw cLmKHF"
-                        >
-                          Unnamed Task
-                        </div>
+                        />
                       </StyledComponent>
                     </styled.div>
                     <styled.div
