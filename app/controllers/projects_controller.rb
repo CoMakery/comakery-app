@@ -283,7 +283,7 @@ class ProjectsController < ApplicationController
     award_data = GetContributorData.call(project: @project).award_data
     chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
 
-    project.as_json(only: %i[id title description]).merge(
+    project.as_json(only: %i[id title description require_confidentiality]).merge(
       square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
       panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),
       video_id: project.video_id,
