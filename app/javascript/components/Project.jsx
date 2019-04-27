@@ -175,7 +175,7 @@ export default class Project extends React.Component {
             }
 
             <div className="project-header__menu__links">
-              {!projectData.requireConfidentiality &&
+              {projectData.showContributions &&
                 <React.Fragment>
                   <a className="project-header__menu__link project-header__menu__link--first" href={contributorsPath}>Contributors</a>
                   <a className="project-header__menu__link" href={awardsPath}>Payments</a>

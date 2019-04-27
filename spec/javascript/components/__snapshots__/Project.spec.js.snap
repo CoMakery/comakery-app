@@ -41,20 +41,7 @@ exports[`Project renders correctly without props 1`] = `
         >
           <div
             className="project-header__menu__links"
-          >
-            <a
-              className="project-header__menu__link project-header__menu__link--first"
-              href=""
-            >
-              Contributors
-            </a>
-            <a
-              className="project-header__menu__link"
-              href=""
-            >
-              Payments
-            </a>
-          </div>
+          />
         </div>
         <div
           className="project-header__name"

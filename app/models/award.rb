@@ -29,6 +29,7 @@ class Award < ApplicationRecord
   validates :message, length: { maximum: 150 }
   validates :requirements, length: { maximum: 750 }
   validates :proof_link, length: { maximum: 150 }
+  validates :proof_link, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
   validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }
 
   validate :total_amount_fits_into_project_budget
@@ -126,7 +127,7 @@ class Award < ApplicationRecord
 
     def total_amount_fits_into_project_budget
       return unless project&.maximum_tokens
-      if total_amount + BigDecimal(project&.awards&.sum(:total_amount) || 0) > BigDecimal(project&.maximum_tokens)
+      if total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(:total_amount) || 0) > BigDecimal(project&.maximum_tokens)
         errors[:base] << "Sorry, you can't send more awards than the project's budget"
       end
     end

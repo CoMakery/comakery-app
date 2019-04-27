@@ -216,7 +216,7 @@ class ProjectsController < ApplicationController
       csrf_token: form_authenticity_token,
       contributors_path: project_contributors_path(@project.id),
       awards_path: awards_project_path(@project.id),
-      edit_path: current_account && @project.account == current_account ? project_award_types_path(@project) : nil
+      edit_path: policy(@project).edit? ? project_award_types_path(@project) : nil
     }
   end
 
@@ -284,6 +284,7 @@ class ProjectsController < ApplicationController
     chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
 
     project.as_json(only: %i[id title description require_confidentiality]).merge(
+      show_contributions: policy(project).show_contributions?,
       square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
       panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),
       video_id: project.video_id,
