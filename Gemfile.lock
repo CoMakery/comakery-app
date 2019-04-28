@@ -328,6 +328,7 @@ GEM
       nokogiri-happymapper (>= 0.5.4)
       rest-client (>= 1.8.0)
     pivotal_git_scripts (1.4.0)
+    possessive (1.0.1)
     powerpack (0.1.2)
     premailer (1.11.1)
       addressable
@@ -605,6 +606,7 @@ DEPENDENCIES
   omniauth-slack
   pg
   pivotal_git_scripts
+  possessive (~> 1.0)
   premailer-rails
   pry-byebug
   pry-rails

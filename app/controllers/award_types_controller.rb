@@ -89,6 +89,7 @@ class AwardTypesController < ApplicationController
             new_task_path: new_project_award_type_award_path(@project, batch),
             tasks: batch.awards&.listed&.map do |task|
               task.serializable_hash.merge(
+                batch_name: batch.name,
                 currency: batch.project.token&.symbol,
                 currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
                 award_path: project_award_type_award_path(@project, batch, task),
@@ -110,6 +111,7 @@ class AwardTypesController < ApplicationController
         batch: (@award_type ? @award_type : @project.award_types.new).serializable_hash&.merge(
           diagram_url: Refile.attachment_url(@award_type ? @award_type : @project.award_types.new, :diagram, :fill, 300, 300)
         ),
+        project: @project.serializable_hash,
         specialties: Specialty.all.map { |s| [s.name, s.id] }.to_h,
         form_url: project_award_types_path,
         form_action: 'POST',

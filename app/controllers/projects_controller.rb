@@ -113,7 +113,7 @@ class ProjectsController < ApplicationController
     if @project.update project_params
       set_generic_props
       camelize_props
-      render json: { message: 'Project updated', props: @props }, status: :ok
+      render json: { message: 'Project updated', id: @project.id, props: @props }, status: :ok
     else
       errors  = @project.errors.messages.map { |k, v| [k, v.to_sentence] }.to_s
       message = @project.errors.full_messages.join(', ')
@@ -200,7 +200,6 @@ class ProjectsController < ApplicationController
                        end,
       form_url: projects_path,
       form_action: 'POST',
-      url_on_success: projects_path,
       csrf_token: form_authenticity_token
     }
   end
@@ -217,7 +216,7 @@ class ProjectsController < ApplicationController
       csrf_token: form_authenticity_token,
       contributors_path: project_contributors_path(@project.id),
       awards_path: awards_project_path(@project.id),
-      edit_path: current_account && @project.account == current_account ? edit_project_path(@project) : nil
+      edit_path: policy(@project).edit? ? project_award_types_path(@project) : nil
     }
   end
 
@@ -284,7 +283,8 @@ class ProjectsController < ApplicationController
     award_data = GetContributorData.call(project: @project).award_data
     chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
 
-    project.as_json(only: %i[id title description]).merge(
+    project.as_json(only: %i[id title description require_confidentiality]).merge(
+      show_contributions: policy(project).show_contributions?,
       square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
       panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),
       video_id: project.video_id,

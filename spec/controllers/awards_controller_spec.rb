@@ -124,10 +124,9 @@ describe AwardsController do
         }
         expect(response.status).to eq(200)
 
-        expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.decorate.name}. You can initiate the token transfer on the awards page.")
-
         award.reload
 
+        expect(flash[:notice]).to eq("#{award.decorate.recipient_display_name.possessive} task has been accepted. Initiate payment for the task on the payments page.")
         expect(award.award_type).to eq(award_type)
         expect(award.account).to eq(receiver.account)
         expect(award.quantity).to eq(1.5)
@@ -155,10 +154,8 @@ describe AwardsController do
         }
         expect(response.status).to eq(200)
 
-        expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.decorate.name}. You can initiate the token transfer on the awards page.")
-
         award2.reload
-
+        expect(flash[:notice]).to eq("#{award2.decorate.recipient_display_name.possessive} task has been accepted. Initiate payment for the task on the payments page.")
         expect(award2.discord?).to be_truthy
         expect(award2.award_type).to eq(award_type)
         expect(award2.account).to eq(receiver.account)

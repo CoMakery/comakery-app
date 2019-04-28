@@ -23,6 +23,11 @@ exports[`TaskShow renders correctly without props 1`] = `
       },
     }
   }
+  project={
+    Object {
+      "default": "_",
+    }
+  }
   recipientAddressUrl="/"
   task={
     Object {
@@ -41,12 +46,31 @@ exports[`TaskShow renders correctly without props 1`] = `
   }
   urlOnSuccess="/"
 >
-  <Layout
-    category=""
+  <ProjectSetup
     className="task-award-form"
-    customTitle={null}
     hasBackButton={true}
-    sidebar={null}
+    projectId={null}
+    projectPage="batches"
+    projectTitle=""
+    sidebar={
+      <React.Fragment>
+        <div
+          className="batch-index--sidebar"
+        >
+          <SidebarItem
+            className="batch-index--sidebar--item batch-index--sidebar--item__form"
+            iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+            iconLeftUrl=""
+            iconRightName=""
+            selected={true}
+            text="sidebar item"
+          />
+          <hr
+            className="batch-index--sidebar--hr"
+          />
+        </div>
+      </React.Fragment>
+    }
     subfooter={
       <React.Fragment>
         <Button
@@ -63,96 +87,213 @@ exports[`TaskShow renders correctly without props 1`] = `
         />
       </React.Fragment>
     }
-    title="Issue Award For Task: Task name"
   >
-    <div
-      className="layout task-award-form"
+    <Layout
+      category=""
+      className="project-setup task-award-form"
+      customTitle={
+        <ProjectSetupHeader
+          projectId={null}
+          projectPage="batches"
+          projectTitle=""
+        />
+      }
+      hasBackButton={true}
+      sidebar={
+        <React.Fragment>
+          <div
+            className="batch-index--sidebar"
+          >
+            <SidebarItem
+              className="batch-index--sidebar--item batch-index--sidebar--item__form"
+              iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+              iconLeftUrl=""
+              iconRightName=""
+              selected={true}
+              text="sidebar item"
+            />
+            <hr
+              className="batch-index--sidebar--hr"
+            />
+          </div>
+        </React.Fragment>
+      }
+      subfooter={
+        <React.Fragment>
+          <Button
+            className="metamask-transfer-btn"
+            disabled={false}
+            form="task-award-form--form"
+            type="submit"
+            value="proceed"
+          />
+          <ButtonBorder
+            className=""
+            onClick={[Function]}
+            value="cancel"
+          />
+        </React.Fragment>
+      }
+      title={null}
     >
       <div
-        className="layout--back-button"
+        className="layout project-setup task-award-form"
       >
-        <Icon
-          className=""
-          name="iconCloseCopy.svg"
-          onClick={[Function]}
+        <div
+          className="layout--back-button"
         >
-          <img
-            className="icon icon__iconCloseCopy-svg"
+          <Icon
+            className=""
+            name="iconCloseCopy.svg"
             onClick={[Function]}
-            src="test-file-stub"
-          />
-        </Icon>
-      </div>
-      <div
-        className="layout--content"
-      >
-        <div
-          className="layout--content--title"
-        >
-          Issue Award For Task: Task name
+          >
+            <img
+              className="icon icon__iconCloseCopy-svg"
+              onClick={[Function]}
+              src="test-file-stub"
+            />
+          </Icon>
         </div>
-        <hr
-          className="layout--content--hr"
-        />
         <div
-          className="layout--content--wrapper"
+          className="layout--content"
         >
           <div
-            className="layout--content--content"
+            className="layout--content--title"
           >
-            <Flash
-              className=""
-              messages={Array []}
+            <ProjectSetupHeader
+              projectId={null}
+              projectPage="batches"
+              projectTitle=""
             >
               <div
-                className="flash-message-container"
+                className="layout--content--title--header"
               />
-            </Flash>
-            <form
-              className="task-award-form--form"
-              id="task-award-form--form"
-              onSubmit={[Function]}
-            >
-              <InputFieldDropdown
-                eventHandler={[Function]}
-                name="task[channel_id]"
-                selectEntries={
-                  Array [
-                    Array [
-                      "email",
-                      "",
-                    ],
-                    Array [
-                      "default",
-                      "1",
-                    ],
-                  ]
-                }
-                symbolLimit={0}
-                title="communication channel"
-                value=""
+              <span
+                className="layout--content--title--nav"
               >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__dropdown"
-                  copyOnClick={false}
-                  disabled={false}
-                  errorText=""
+                <a
+                  href="#"
+                >
+                  project settings
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav__current"
+              >
+                <a
+                  href="#"
+                >
+                  batches & tasks
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="#"
+                >
+                  contributors
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="#"
+                >
+                  payments
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="#"
+                >
+                  overview
+                </a>
+              </span>
+            </ProjectSetupHeader>
+          </div>
+          <hr
+            className="layout--content--hr"
+          />
+          <div
+            className="layout--content--wrapper"
+          >
+            <div
+              className="layout--content--sidebar"
+            >
+              <div
+                className="batch-index--sidebar"
+              >
+                <SidebarItem
+                  className="batch-index--sidebar--item batch-index--sidebar--item__form"
+                  iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+                  iconLeftUrl=""
+                  iconRightName=""
+                  selected={true}
+                  text="sidebar item"
+                >
+                  <div
+                    className="sidebar-item--wrapper"
+                  >
+                    <div
+                      className="sidebar-item sidebar-item__selected batch-index--sidebar--item batch-index--sidebar--item__form"
+                    >
+                      <span
+                        className="sidebar-item--icon-left"
+                      >
+                        <Icon
+                          className=""
+                          name="BATCH/ACTIVE.GRADIENT.svg"
+                        >
+                          <img
+                            className="icon icon__BATCH/ACTIVE-GRADIENT.svg"
+                            src="test-file-stub"
+                          />
+                        </Icon>
+                      </span>
+                      <span
+                        className="sidebar-item--text"
+                      >
+                        sidebar item
+                      </span>
+                      <div
+                        className="sidebar-item--left-border"
+                      />
+                    </div>
+                  </div>
+                </SidebarItem>
+                <hr
+                  className="batch-index--sidebar--hr"
+                />
+              </div>
+            </div>
+            <div
+              className="layout--content--content__sidebared"
+            >
+              <Flash
+                className=""
+                messages={Array []}
+              >
+                <div
+                  className="flash-message-container"
+                />
+              </Flash>
+              <div
+                className="task-form--form--title"
+              >
+                Issue Award For Task: Task name
+              </div>
+              <form
+                className="task-award-form--form"
+                id="task-award-form--form"
+                onSubmit={[Function]}
+              >
+                <InputFieldDropdown
                   eventHandler={[Function]}
-                  imgInputRef={null}
-                  imgPreviewDimensions="40x40"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  max=""
-                  min=""
                   name="task[channel_id]"
-                  pattern=".*"
-                  placeholder="Please enter value"
-                  readOnly={false}
-                  recommended={false}
-                  required={false}
                   selectEntries={
                     Array [
                       Array [
@@ -165,358 +306,396 @@ exports[`TaskShow renders correctly without props 1`] = `
                       ],
                     ]
                   }
-                  step=""
                   symbolLimit={0}
                   title="communication channel"
-                  type="select"
                   value=""
                 >
-                  <div
-                    className="input-field input-field__dropdown"
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__dropdown"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="task[channel_id]"
+                    pattern=".*"
+                    placeholder="Please enter value"
+                    readOnly={false}
+                    recommended={false}
+                    required={false}
+                    selectEntries={
+                      Array [
+                        Array [
+                          "email",
+                          "",
+                        ],
+                        Array [
+                          "default",
+                          "1",
+                        ],
+                      ]
+                    }
+                    step=""
+                    symbolLimit={0}
+                    title="communication channel"
+                    type="select"
+                    value=""
                   >
                     <div
-                      className="input-field--title"
+                      className="input-field input-field__dropdown"
                     >
-                      <span
-                        className="input-field--title--title"
+                      <div
+                        className="input-field--title"
                       >
-                        communication channel
-                      </span>
-                      <span
-                        className="input-field--title--required"
+                        <span
+                          className="input-field--title--title"
+                        >
+                          communication channel
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          optional
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
                       >
-                        optional
-                      </span>
-                    </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <select
-                        className="input-field--content__select"
-                        disabled={false}
-                        name="task[channel_id]"
-                        onChange={[Function]}
-                        required={false}
-                        value=""
-                      >
-                        <option
-                          key=""
+                        <select
+                          className="input-field--content__select"
+                          disabled={false}
+                          name="task[channel_id]"
+                          onChange={[Function]}
+                          required={false}
                           value=""
                         >
-                          email
-                        </option>
-                        <option
-                          key="1"
-                          value="1"
-                        >
-                          default
-                        </option>
-                      </select>
+                          <option
+                            key=""
+                            value=""
+                          >
+                            email
+                          </option>
+                          <option
+                            key="1"
+                            value="1"
+                          >
+                            default
+                          </option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                </InputField>
-              </InputFieldDropdown>
-              <InputFieldWhiteDark
-                eventHandler={[Function]}
-                name="task[email]"
-                placeholder="Enter the recepient email address"
-                required={true}
-                symbolLimit={0}
-                title="email"
-                type="email"
-              >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__white__dark"
-                  copyOnClick={false}
-                  disabled={false}
-                  errorText=""
+                  </InputField>
+                </InputFieldDropdown>
+                <InputFieldWhiteDark
                   eventHandler={[Function]}
-                  imgInputRef={null}
-                  imgPreviewDimensions="40x40"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  max=""
-                  min=""
                   name="task[email]"
-                  pattern=".*"
                   placeholder="Enter the recepient email address"
-                  readOnly={false}
-                  recommended={false}
                   required={true}
-                  selectEntries={Array []}
-                  step=""
                   symbolLimit={0}
                   title="email"
                   type="email"
-                  value=""
                 >
-                  <div
-                    className="input-field input-field__white__dark"
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__white__dark"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="task[email]"
+                    pattern=".*"
+                    placeholder="Enter the recepient email address"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step=""
+                    symbolLimit={0}
+                    title="email"
+                    type="email"
+                    value=""
                   >
                     <div
-                      className="input-field--title"
+                      className="input-field input-field__white__dark"
                     >
-                      <span
-                        className="input-field--title--title"
+                      <div
+                        className="input-field--title"
                       >
-                        email
-                      </span>
-                      <span
-                        className="input-field--title--required"
+                        <span
+                          className="input-field--title--title"
+                        >
+                          email
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
                       >
-                        required
-                      </span>
+                        <input
+                          className="input-field--content__text"
+                          name="task[email]"
+                          onChange={[Function]}
+                          onClick={null}
+                          pattern=".*"
+                          placeholder="Enter the recepient email address"
+                          readOnly={false}
+                          required={true}
+                          type="email"
+                          value=""
+                        />
+                      </div>
                     </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <input
-                        className="input-field--content__text"
-                        name="task[email]"
-                        onChange={[Function]}
-                        onClick={null}
-                        pattern=".*"
-                        placeholder="Enter the recepient email address"
-                        readOnly={false}
-                        required={true}
-                        type="email"
-                        value=""
-                      />
-                    </div>
-                  </div>
-                </InputField>
-              </InputFieldWhiteDark>
-              <InputFieldDescriptionMiddle
-                eventHandler={[Function]}
-                name="task[message]"
-                placeholder="Give a shoutout or offer some tips to the person who completed the task"
-                recommended={true}
-                symbolLimit={150}
-                title="message"
-              >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__description-middle"
-                  copyOnClick={false}
-                  disabled={false}
-                  errorText=""
+                  </InputField>
+                </InputFieldWhiteDark>
+                <InputFieldDescriptionMiddle
                   eventHandler={[Function]}
-                  imgInputRef={null}
-                  imgPreviewDimensions="40x40"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  max=""
-                  min=""
                   name="task[message]"
-                  pattern=".*"
                   placeholder="Give a shoutout or offer some tips to the person who completed the task"
-                  readOnly={false}
                   recommended={true}
-                  required={false}
-                  selectEntries={Array []}
-                  step=""
                   symbolLimit={150}
                   title="message"
-                  type="textarea"
-                  value=""
                 >
-                  <div
-                    className="input-field input-field__description-middle"
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__description-middle"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="task[message]"
+                    pattern=".*"
+                    placeholder="Give a shoutout or offer some tips to the person who completed the task"
+                    readOnly={false}
+                    recommended={true}
+                    required={false}
+                    selectEntries={Array []}
+                    step=""
+                    symbolLimit={150}
+                    title="message"
+                    type="textarea"
+                    value=""
                   >
                     <div
-                      className="input-field--title"
+                      className="input-field input-field__description-middle"
                     >
-                      <span
-                        className="input-field--title--title"
+                      <div
+                        className="input-field--title"
                       >
-                        message
-                      </span>
-                      <span
-                        className="input-field--title--required"
+                        <span
+                          className="input-field--title--title"
+                        >
+                          message
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          recommended
+                        </span>
+                        <span
+                          className="input-field--title--counter"
+                        >
+                          0
+                          /
+                          150
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
                       >
-                        recommended
-                      </span>
-                      <span
-                        className="input-field--title--counter"
-                      >
-                        0
-                        /
-                        150
-                      </span>
+                        <textarea
+                          className="input-field--content__text"
+                          name="task[message]"
+                          onChange={[Function]}
+                          pattern=".*"
+                          placeholder="Give a shoutout or offer some tips to the person who completed the task"
+                          readOnly={false}
+                          required={false}
+                          value=""
+                        />
+                      </div>
                     </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <textarea
-                        className="input-field--content__text"
-                        name="task[message]"
-                        onChange={[Function]}
-                        pattern=".*"
-                        placeholder="Give a shoutout or offer some tips to the person who completed the task"
-                        readOnly={false}
-                        required={false}
-                        value=""
-                      />
-                    </div>
-                  </div>
-                </InputField>
-              </InputFieldDescriptionMiddle>
-              <InputFieldWhiteDark
-                eventHandler={[Function]}
-                min="0"
-                name="task[quantity]"
-                placeholder="The # of awards to send"
-                required={true}
-                step="0.01"
-                symbolLimit={0}
-                title="quantity"
-                type="number"
-                value={1}
-              >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__white__dark"
-                  copyOnClick={false}
-                  disabled={false}
-                  errorText=""
+                  </InputField>
+                </InputFieldDescriptionMiddle>
+                <InputFieldWhiteDark
                   eventHandler={[Function]}
-                  imgInputRef={null}
-                  imgPreviewDimensions="40x40"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  max=""
                   min="0"
                   name="task[quantity]"
-                  pattern=".*"
                   placeholder="The # of awards to send"
-                  readOnly={false}
-                  recommended={false}
                   required={true}
-                  selectEntries={Array []}
                   step="0.01"
                   symbolLimit={0}
                   title="quantity"
                   type="number"
                   value={1}
                 >
-                  <div
-                    className="input-field input-field__white__dark"
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__white__dark"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min="0"
+                    name="task[quantity]"
+                    pattern=".*"
+                    placeholder="The # of awards to send"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step="0.01"
+                    symbolLimit={0}
+                    title="quantity"
+                    type="number"
+                    value={1}
                   >
                     <div
-                      className="input-field--title"
+                      className="input-field input-field__white__dark"
                     >
-                      <span
-                        className="input-field--title--title"
+                      <div
+                        className="input-field--title"
                       >
-                        quantity
-                      </span>
-                      <span
-                        className="input-field--title--required"
+                        <span
+                          className="input-field--title--title"
+                        >
+                          quantity
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
                       >
-                        required
-                      </span>
+                        <input
+                          className="input-field--content__text"
+                          max=""
+                          min="0"
+                          name="task[quantity]"
+                          onChange={[Function]}
+                          onClick={null}
+                          placeholder="The # of awards to send"
+                          readOnly={false}
+                          required={true}
+                          step="0.01"
+                          type="number"
+                          value={1}
+                        />
+                      </div>
                     </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <input
-                        className="input-field--content__text"
-                        max=""
-                        min="0"
-                        name="task[quantity]"
-                        onChange={[Function]}
-                        onClick={null}
-                        placeholder="The # of awards to send"
-                        readOnly={false}
-                        required={true}
-                        step="0.01"
-                        type="number"
-                        value={1}
-                      />
-                    </div>
+                  </InputField>
+                </InputFieldWhiteDark>
+                <div
+                  className="task-award-form--form--field"
+                >
+                  <div
+                    className="task-award-form--form--field--title"
+                  >
+                    total award amount (DMT)
                   </div>
-                </InputField>
-              </InputFieldWhiteDark>
-              <div
-                className="task-award-form--form--field"
-              >
-                <div
-                  className="task-award-form--form--field--title"
-                >
-                  total award amount (DMT)
+                  <div
+                    className="task-award-form--form--field--value"
+                  >
+                    100.00000000
+                     × 
+                    1
+                     = 
+                    100.00000000
+                  </div>
                 </div>
-                <div
-                  className="task-award-form--form--field--value"
-                >
-                  100.00000000
-                   × 
-                  1
-                   = 
-                  100.00000000
-                </div>
-              </div>
-              <input
-                name="authenticity_token"
-                readOnly={true}
-                type="hidden"
-                value="00"
-              />
-            </form>
+                <input
+                  name="authenticity_token"
+                  readOnly={true}
+                  type="hidden"
+                  value="00"
+                />
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        className="layout--subfooter"
-      >
         <div
-          className="layout--subfooter--buttons"
+          className="layout--subfooter"
         >
-          <Button
-            className="metamask-transfer-btn"
-            disabled={false}
-            form="task-award-form--form"
-            type="submit"
-            value="proceed"
+          <div
+            className="layout--subfooter--buttons"
           >
-            <input
-              className="button metamask-transfer-btn"
+            <Button
+              className="metamask-transfer-btn"
               disabled={false}
               form="task-award-form--form"
               type="submit"
               value="proceed"
-            />
-          </Button>
-          <ButtonBorder
-            className=""
-            onClick={[Function]}
-            value="cancel"
-          >
-            <Button
-              className="button__border"
-              disabled={false}
-              onClick={[Function]}
-              type="button"
-              value="cancel"
             >
               <input
-                className="button button__border"
+                className="button metamask-transfer-btn"
+                disabled={false}
+                form="task-award-form--form"
+                type="submit"
+                value="proceed"
+              />
+            </Button>
+            <ButtonBorder
+              className=""
+              onClick={[Function]}
+              value="cancel"
+            >
+              <Button
+                className="button__border"
                 disabled={false}
                 onClick={[Function]}
                 type="button"
                 value="cancel"
-              />
-            </Button>
-          </ButtonBorder>
+              >
+                <input
+                  className="button button__border"
+                  disabled={false}
+                  onClick={[Function]}
+                  type="button"
+                  value="cancel"
+                />
+              </Button>
+            </ButtonBorder>
+          </div>
         </div>
       </div>
-    </div>
-  </Layout>
+    </Layout>
+  </ProjectSetup>
 </TaskShow>
 `;

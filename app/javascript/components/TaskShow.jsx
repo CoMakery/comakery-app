@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Layout from './layouts/Layout'
+import ProjectSetup from './layouts/ProjectSetup'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import {Decimal} from 'decimal.js'
 import InputFieldDropdown from './styleguide/InputFieldDropdown'
@@ -9,6 +9,7 @@ import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddl
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
+import SidebarItem from './styleguide/SidebarItem'
 
 class TaskShow extends React.Component {
   constructor(props) {
@@ -184,9 +185,11 @@ class TaskShow extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Layout
+        <ProjectSetup
           className="task-award-form"
-          title={`Issue Award For Task: ${this.props.task.name}`}
+          projectId={this.props.project.id}
+          projectTitle={this.props.project.title}
+          projectPage="batches"
           hasBackButton
           subfooter={
             <React.Fragment>
@@ -203,8 +206,25 @@ class TaskShow extends React.Component {
               />
             </React.Fragment>
           }
+          sidebar={
+            <React.Fragment>
+              <div className="batch-index--sidebar">
+                <SidebarItem
+                  className="batch-index--sidebar--item batch-index--sidebar--item__form"
+                  iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+                  text={this.props.batch.name}
+                  selected
+                />
+                <hr className="batch-index--sidebar--hr" />
+              </div>
+            </React.Fragment>
+          }
         >
           <Flash messages={this.state.flashMessages} />
+
+          <div className="task-form--form--title">
+            {`Issue Award For Task: ${this.props.task.name}`}
+          </div>
 
           <form className="task-award-form--form" id="task-award-form--form" onSubmit={this.handleSubmit}>
             <InputFieldDropdown
@@ -331,7 +351,7 @@ class TaskShow extends React.Component {
               readOnly
             />
           </form>
-        </Layout>
+        </ProjectSetup>
       </React.Fragment>
     )
   }
@@ -339,6 +359,7 @@ class TaskShow extends React.Component {
 TaskShow.propTypes = {
   task               : PropTypes.object.isRequired,
   batch              : PropTypes.object.isRequired,
+  project            : PropTypes.object.isRequired,
   token              : PropTypes.object.isRequired,
   channels           : PropTypes.object.isRequired,
   members            : PropTypes.object.isRequired,
@@ -356,8 +377,9 @@ TaskShow.defaultProps = {
     'amount'     : '100.0',
     'quantity'   : 1
   },
-  batch: {'default': '_'},
-  token: {
+  batch  : {'default': '_'},
+  project: {'default': '_'},
+  token  : {
     'symbol'       : 'DMT',
     'decimalPlaces': 8,
   },

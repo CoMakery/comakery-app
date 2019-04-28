@@ -10,7 +10,20 @@
     "stylelint": "stylelint 'app/javascript/**/*.css' --fix",
     "test": "jest"
   },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env"
+      ]
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ],
   "dependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
     "@ledgerhq/hw-app-btc": "^4.33.5",
     "@ledgerhq/hw-transport-u2f": "^4.32.0",
     "@rails/webpacker": "^3.5.5",

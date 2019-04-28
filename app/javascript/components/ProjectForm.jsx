@@ -215,11 +215,11 @@ class ProjectForm extends React.Component {
         'X-Key-Inflection': 'snake'
       }
     }).then(response => {
-      if (response.status === 200) {
-        if (this.state.closeOnSuccess) {
-          window.location = this.props.urlOnSuccess
-        } else {
-          response.json().then(data => {
+      response.json().then(data => {
+        if (response.status === 200) {
+          if (this.state.closeOnSuccess) {
+            window.location = `${window.location.origin}/projects/${data.id}/batches`
+          } else {
             if (this.state.formAction === 'POST') {
               this.setState(state => ({
                 formAction         : 'PUT',
@@ -239,18 +239,16 @@ class ProjectForm extends React.Component {
                 flashMessages      : state.flashMessages.concat([{'severity': 'notice', 'text': 'Project Updated'}])
               }))
             }
-          })
-          this.enable(['project[submit]', 'project[submit_and_close]'])
-        }
-      } else {
-        response.json().then(data => {
+            this.enable(['project[submit]', 'project[submit_and_close]'])
+          }
+        } else {
           this.setState(state => ({
             errors       : data.errors,
             flashMessages: state.flashMessages.concat([{'severity': 'error', 'text': data.message}])
           }))
           this.enable(['project[submit]', 'project[submit_and_close]'])
-        })
-      }
+        }
+      })
     })
   }
 
@@ -522,7 +520,6 @@ ProjectForm.propTypes = {
   discordBotUrl: PropTypes.string,
   formUrl      : PropTypes.string.isRequired,
   formAction   : PropTypes.string.isRequired,
-  urlOnSuccess : PropTypes.string.isRequired,
   csrfToken    : PropTypes.string.isRequired
 }
 ProjectForm.defaultProps = {
@@ -534,7 +531,6 @@ ProjectForm.defaultProps = {
   discordBotUrl: null,
   formUrl      : '/',
   formAction   : 'POST',
-  urlOnSuccess : '/',
   csrfToken    : '00'
 }
 export default ProjectForm

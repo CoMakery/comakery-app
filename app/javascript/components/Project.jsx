@@ -175,9 +175,15 @@ export default class Project extends React.Component {
             }
 
             <div className="project-header__menu__links">
-              <a className="project-header__menu__link project-header__menu__link--first" href={contributorsPath}>Contributors</a>
-              <a className="project-header__menu__link" href={awardsPath}>Payments</a>
-              {editPath && <a className="project-header__menu__link" href={editPath}>Edit This Project</a>}
+              {projectData.showContributions &&
+                <React.Fragment>
+                  <a className="project-header__menu__link project-header__menu__link--first" href={contributorsPath}>Contributors</a>
+                  <a className="project-header__menu__link" href={awardsPath}>Payments</a>
+                </React.Fragment>
+              }
+              {editPath &&
+                <a className="project-header__menu__link" href={editPath}>Edit This Project</a>
+              }
             </div>
           </div>
 
@@ -219,7 +225,7 @@ export default class Project extends React.Component {
             </div>
             <div className="project-award__progress__bar-container">
               <div className="project-award__progress__bar-line" />
-              <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}%`}} />
+              <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}`}} />
             </div>
           </div>
         }

@@ -195,6 +195,7 @@ exports[`Mission renders correctly without props 1`] = `
               <Plural
                 className={null}
                 count={1}
+                plural="people"
                 showCount={true}
                 singular="person"
                 style={Object {}}
@@ -304,6 +305,7 @@ exports[`Mission renders correctly without props 1`] = `
             <Plural
               className={null}
               count={1}
+              plural="people"
               showCount={true}
               singular="person"
               style={Object {}}

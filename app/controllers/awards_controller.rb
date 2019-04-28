@@ -152,7 +152,8 @@ class AwardsController < ApplicationController
     def set_show_props
       @props = {
         task: @award.serializable_hash,
-        batch: @award.award_type.serializable_hash,
+        batch: @award_type.serializable_hash,
+        project: @project.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
         channels: (@project.channels + [Channel.new(name: 'Email')]).map { |c| [c.name || c.channel_id, c.id.to_s] }.to_h,
         members: @project.channels.map { |c| [c.id.to_s, c.members.to_h] }.to_h,
@@ -169,6 +170,8 @@ class AwardsController < ApplicationController
         task: (@award ? @award : @award_type.awards.new).serializable_hash&.merge(
           image_url: Refile.attachment_url(@award ? @award : @award_type.awards.new, :image, :fill, 300, 300)
         ),
+        batch: @award_type.serializable_hash,
+        project: @project.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
         form_url: project_award_type_awards_path(@project, @award_type),
         form_action: 'POST',
@@ -237,7 +240,7 @@ class AwardsController < ApplicationController
       if !@award.self_issued? && @award.decorate.recipient_address.blank?
         "The award recipient hasn't entered a blockchain address for us to send the award to. When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page."
       else
-        "Successfully sent award to #{@award.decorate.recipient_display_name}. You can initiate the token transfer on the awards page."
+        "#{@award.decorate.recipient_display_name.possessive} task has been accepted. Initiate payment for the task on the payments page."
       end
     end
 

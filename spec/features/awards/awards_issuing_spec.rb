@@ -85,7 +85,7 @@ describe 'awards issuing', js: true do
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
     expect(page).to have_content '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
     find_button('issue award').click
-    expect(page).to have_content 'You can initiate the token transfer on the awards page.'.upcase
+    expect(page).to have_content 'TASK HAS BEEN ACCEPTED.'
   end
 
   it 'allows to send award to a selected channel user' do
@@ -96,7 +96,7 @@ describe 'awards issuing', js: true do
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
     expect(page).to have_content awardee_auth2.account.ethereum_wallet
     find_button('issue award').click
-    expect(page).to have_content 'You can initiate the token transfer on the awards page.'.upcase
+    expect(page).to have_content 'TASK HAS BEEN ACCEPTED.'
   end
 
   it "allows to send award when recipient wallet address isn't present" do
