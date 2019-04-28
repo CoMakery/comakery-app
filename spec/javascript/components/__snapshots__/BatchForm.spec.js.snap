@@ -10,6 +10,11 @@ exports[`BatchForm renders correctly without props 1`] = `
   csrfToken="00"
   formAction="POST"
   formUrl="/"
+  project={
+    Object {
+      "default": "_",
+    }
+  }
   projectId={0}
   specialties={
     Object {
@@ -18,12 +23,17 @@ exports[`BatchForm renders correctly without props 1`] = `
   }
   urlOnSuccess="/"
 >
-  <Layout
-    category=""
+  <ProjectSetup
     className="batch-form"
-    customTitle={null}
     hasBackButton={true}
-    sidebar={null}
+    projectId={null}
+    projectPage="batches"
+    projectTitle=""
+    sidebar={
+      <div
+        className="batch-form--sidebar-placeholder"
+      />
+    }
     subfooter={
       <React.Fragment>
         <Button
@@ -48,92 +58,165 @@ exports[`BatchForm renders correctly without props 1`] = `
         />
       </React.Fragment>
     }
-    title="Create a New Batch"
   >
-    <div
-      className="layout batch-form"
+    <Layout
+      category=""
+      className="project-setup batch-form"
+      customTitle={
+        <ProjectSetupHeader
+          projectId={null}
+          projectPage="batches"
+          projectTitle=""
+        />
+      }
+      hasBackButton={true}
+      sidebar={
+        <div
+          className="batch-form--sidebar-placeholder"
+        />
+      }
+      subfooter={
+        <React.Fragment>
+          <Button
+            className=""
+            disabled={false}
+            form="batch-form--form"
+            onClick={[Function]}
+            type="submit"
+            value="create & close"
+          />
+          <ButtonBorder
+            className=""
+            form="batch-form--form"
+            onClick={[Function]}
+            type="submit"
+            value="create"
+          />
+          <ButtonBorder
+            className=""
+            onClick={[Function]}
+            value="cancel"
+          />
+        </React.Fragment>
+      }
+      title={null}
     >
       <div
-        className="layout--back-button"
+        className="layout project-setup batch-form"
       >
-        <Icon
-          className=""
-          name="iconCloseCopy.svg"
-          onClick={[Function]}
+        <div
+          className="layout--back-button"
         >
-          <img
-            className="icon icon__iconCloseCopy-svg"
+          <Icon
+            className=""
+            name="iconCloseCopy.svg"
             onClick={[Function]}
-            src="test-file-stub"
-          />
-        </Icon>
-      </div>
-      <div
-        className="layout--content"
-      >
-        <div
-          className="layout--content--title"
-        >
-          Create a New Batch
+          >
+            <img
+              className="icon icon__iconCloseCopy-svg"
+              onClick={[Function]}
+              src="test-file-stub"
+            />
+          </Icon>
         </div>
-        <hr
-          className="layout--content--hr"
-        />
         <div
-          className="layout--content--wrapper"
+          className="layout--content"
         >
           <div
-            className="layout--content--content"
+            className="layout--content--title"
           >
-            <Flash
-              className=""
-              messages={Array []}
+            <ProjectSetupHeader
+              projectId={null}
+              projectPage="batches"
+              projectTitle=""
             >
               <div
-                className="flash-message-container"
+                className="layout--content--title--header"
               />
-            </Flash>
-            <form
-              className="batch-form--form"
-              id="batch-form--form"
-              onSubmit={[Function]}
-            >
-              <InputFieldDropdown
-                eventHandler={[Function]}
-                name="batch[specialty_id]"
-                required={true}
-                selectEntries={
-                  Array [
-                    Array [
-                      "default",
-                      "_",
-                    ],
-                  ]
-                }
-                symbolLimit={0}
-                title="specialty"
-                value="_"
+              <span
+                className="layout--content--title--nav"
               >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__dropdown"
-                  copyOnClick={false}
-                  disabled={false}
-                  errorText=""
+                <a
+                  href="#"
+                >
+                  project settings
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav__current"
+              >
+                <a
+                  href="#"
+                >
+                  batches & tasks
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="#"
+                >
+                  contributors
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="#"
+                >
+                  payments
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="#"
+                >
+                  overview
+                </a>
+              </span>
+            </ProjectSetupHeader>
+          </div>
+          <hr
+            className="layout--content--hr"
+          />
+          <div
+            className="layout--content--wrapper"
+          >
+            <div
+              className="layout--content--sidebar"
+            >
+              <div
+                className="batch-form--sidebar-placeholder"
+              />
+            </div>
+            <div
+              className="layout--content--content__sidebared"
+            >
+              <Flash
+                className=""
+                messages={Array []}
+              >
+                <div
+                  className="flash-message-container"
+                />
+              </Flash>
+              <div
+                className="batch-form--form--title"
+              >
+                Create a New Batch
+              </div>
+              <form
+                className="batch-form--form"
+                id="batch-form--form"
+                onSubmit={[Function]}
+              >
+                <InputFieldDropdown
                   eventHandler={[Function]}
-                  imgInputRef={null}
-                  imgPreviewDimensions="40x40"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  max=""
-                  min=""
                   name="batch[specialty_id]"
-                  pattern=".*"
-                  placeholder="Please enter value"
-                  readOnly={false}
-                  recommended={false}
                   required={true}
                   selectEntries={
                     Array [
@@ -143,437 +226,471 @@ exports[`BatchForm renders correctly without props 1`] = `
                       ],
                     ]
                   }
-                  step=""
                   symbolLimit={0}
                   title="specialty"
-                  type="select"
                   value="_"
                 >
-                  <div
-                    className="input-field input-field__dropdown"
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__dropdown"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="batch[specialty_id]"
+                    pattern=".*"
+                    placeholder="Please enter value"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={
+                      Array [
+                        Array [
+                          "default",
+                          "_",
+                        ],
+                      ]
+                    }
+                    step=""
+                    symbolLimit={0}
+                    title="specialty"
+                    type="select"
+                    value="_"
                   >
                     <div
-                      className="input-field--title"
+                      className="input-field input-field__dropdown"
                     >
-                      <span
-                        className="input-field--title--title"
+                      <div
+                        className="input-field--title"
                       >
-                        specialty
-                      </span>
-                      <span
-                        className="input-field--title--required"
+                        <span
+                          className="input-field--title--title"
+                        >
+                          specialty
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
                       >
-                        required
-                      </span>
-                    </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <select
-                        className="input-field--content__select"
-                        disabled={false}
-                        name="batch[specialty_id]"
-                        onChange={[Function]}
-                        required={true}
-                        value="_"
-                      >
-                        <option
-                          key="_"
+                        <select
+                          className="input-field--content__select"
+                          disabled={false}
+                          name="batch[specialty_id]"
+                          onChange={[Function]}
+                          required={true}
                           value="_"
                         >
-                          default
-                        </option>
-                      </select>
+                          <option
+                            key="_"
+                            value="_"
+                          >
+                            default
+                          </option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
-                </InputField>
-              </InputFieldDropdown>
-              <InputFieldWhiteDark
-                eventHandler={[Function]}
-                name="batch[name]"
-                placeholder="Provide a clear title for the batch"
-                required={true}
-                symbolLimit={100}
-                title="name"
-                value=""
-              >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__white__dark"
-                  copyOnClick={false}
-                  disabled={false}
-                  errorText=""
+                  </InputField>
+                </InputFieldDropdown>
+                <InputFieldWhiteDark
                   eventHandler={[Function]}
-                  imgInputRef={null}
-                  imgPreviewDimensions="40x40"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  max=""
-                  min=""
                   name="batch[name]"
-                  pattern=".*"
                   placeholder="Provide a clear title for the batch"
-                  readOnly={false}
-                  recommended={false}
                   required={true}
-                  selectEntries={Array []}
-                  step=""
                   symbolLimit={100}
                   title="name"
-                  type="text"
                   value=""
                 >
-                  <div
-                    className="input-field input-field__white__dark"
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__white__dark"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="batch[name]"
+                    pattern=".*"
+                    placeholder="Provide a clear title for the batch"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step=""
+                    symbolLimit={100}
+                    title="name"
+                    type="text"
+                    value=""
                   >
                     <div
-                      className="input-field--title"
+                      className="input-field input-field__white__dark"
                     >
-                      <span
-                        className="input-field--title--title"
+                      <div
+                        className="input-field--title"
                       >
-                        name
-                      </span>
-                      <span
-                        className="input-field--title--required"
+                        <span
+                          className="input-field--title--title"
+                        >
+                          name
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                        <span
+                          className="input-field--title--counter"
+                        >
+                          0
+                          /
+                          100
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
                       >
-                        required
-                      </span>
-                      <span
-                        className="input-field--title--counter"
-                      >
-                        0
-                        /
-                        100
-                      </span>
+                        <input
+                          className="input-field--content__text"
+                          name="batch[name]"
+                          onChange={[Function]}
+                          onClick={null}
+                          pattern=".*"
+                          placeholder="Provide a clear title for the batch"
+                          readOnly={false}
+                          required={true}
+                          type="text"
+                          value=""
+                        />
+                      </div>
                     </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <input
-                        className="input-field--content__text"
-                        name="batch[name]"
-                        onChange={[Function]}
-                        onClick={null}
-                        pattern=".*"
-                        placeholder="Provide a clear title for the batch"
-                        readOnly={false}
-                        required={true}
-                        type="text"
-                        value=""
-                      />
-                    </div>
-                  </div>
-                </InputField>
-              </InputFieldWhiteDark>
-              <InputFieldDescriptionMiddle
-                eventHandler={[Function]}
-                name="batch[goal]"
-                placeholder="Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)"
-                required={true}
-                symbolLimit={250}
-                title="the goal of the batch"
-                value=""
-              >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__description-middle"
-                  copyOnClick={false}
-                  disabled={false}
-                  errorText=""
+                  </InputField>
+                </InputFieldWhiteDark>
+                <InputFieldDescriptionMiddle
                   eventHandler={[Function]}
-                  imgInputRef={null}
-                  imgPreviewDimensions="40x40"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  max=""
-                  min=""
                   name="batch[goal]"
-                  pattern=".*"
                   placeholder="Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)"
-                  readOnly={false}
-                  recommended={false}
                   required={true}
-                  selectEntries={Array []}
-                  step=""
                   symbolLimit={250}
                   title="the goal of the batch"
-                  type="textarea"
                   value=""
                 >
-                  <div
-                    className="input-field input-field__description-middle"
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__description-middle"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="batch[goal]"
+                    pattern=".*"
+                    placeholder="Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step=""
+                    symbolLimit={250}
+                    title="the goal of the batch"
+                    type="textarea"
+                    value=""
                   >
                     <div
-                      className="input-field--title"
+                      className="input-field input-field__description-middle"
                     >
-                      <span
-                        className="input-field--title--title"
+                      <div
+                        className="input-field--title"
                       >
-                        the goal of the batch
-                      </span>
-                      <span
-                        className="input-field--title--required"
+                        <span
+                          className="input-field--title--title"
+                        >
+                          the goal of the batch
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                        <span
+                          className="input-field--title--counter"
+                        >
+                          0
+                          /
+                          250
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
                       >
-                        required
-                      </span>
-                      <span
-                        className="input-field--title--counter"
-                      >
-                        0
-                        /
-                        250
-                      </span>
+                        <textarea
+                          className="input-field--content__text"
+                          name="batch[goal]"
+                          onChange={[Function]}
+                          pattern=".*"
+                          placeholder="Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)"
+                          readOnly={false}
+                          required={true}
+                          value=""
+                        />
+                      </div>
                     </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <textarea
-                        className="input-field--content__text"
-                        name="batch[goal]"
-                        onChange={[Function]}
-                        pattern=".*"
-                        placeholder="Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)"
-                        readOnly={false}
-                        required={true}
-                        value=""
-                      />
-                    </div>
-                  </div>
-                </InputField>
-              </InputFieldDescriptionMiddle>
-              <InputFieldDescription
-                eventHandler={[Function]}
-                name="batch[description]"
-                placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
-                required={true}
-                symbolLimit={750}
-                title="description"
-                value=""
-              >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__description"
-                  copyOnClick={false}
-                  disabled={false}
-                  errorText=""
+                  </InputField>
+                </InputFieldDescriptionMiddle>
+                <InputFieldDescription
                   eventHandler={[Function]}
-                  imgInputRef={null}
-                  imgPreviewDimensions="40x40"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  max=""
-                  min=""
                   name="batch[description]"
-                  pattern=".*"
                   placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
-                  readOnly={false}
-                  recommended={false}
                   required={true}
-                  selectEntries={Array []}
-                  step=""
                   symbolLimit={750}
                   title="description"
-                  type="textarea"
                   value=""
                 >
-                  <div
-                    className="input-field input-field__description"
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__description"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="batch[description]"
+                    pattern=".*"
+                    placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step=""
+                    symbolLimit={750}
+                    title="description"
+                    type="textarea"
+                    value=""
                   >
                     <div
-                      className="input-field--title"
+                      className="input-field input-field__description"
                     >
-                      <span
-                        className="input-field--title--title"
+                      <div
+                        className="input-field--title"
                       >
-                        description
-                      </span>
-                      <span
-                        className="input-field--title--required"
+                        <span
+                          className="input-field--title--title"
+                        >
+                          description
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                        <span
+                          className="input-field--title--counter"
+                        >
+                          0
+                          /
+                          750
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
                       >
-                        required
-                      </span>
-                      <span
-                        className="input-field--title--counter"
-                      >
-                        0
-                        /
-                        750
-                      </span>
+                        <textarea
+                          className="input-field--content__text"
+                          name="batch[description]"
+                          onChange={[Function]}
+                          pattern=".*"
+                          placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
+                          readOnly={false}
+                          required={true}
+                          value=""
+                        />
+                      </div>
                     </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <textarea
-                        className="input-field--content__text"
-                        name="batch[description]"
-                        onChange={[Function]}
-                        pattern=".*"
-                        placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
-                        readOnly={false}
-                        required={true}
-                        value=""
-                      />
-                    </div>
-                  </div>
-                </InputField>
-              </InputFieldDescription>
-              <InputFieldUploadFile
-                imgPreviewDimensions="100x100"
-                name="batch[diagram]"
-                title="diagram or screenshot"
-              >
-                <InputField
-                  checkboxText=""
-                  checked={false}
-                  className="input-field__upload-file"
-                  copyOnClick={false}
-                  disabled={false}
-                  errorText=""
-                  eventHandler={[Function]}
-                  imgInputRef={null}
+                  </InputField>
+                </InputFieldDescription>
+                <InputFieldUploadFile
                   imgPreviewDimensions="100x100"
-                  imgPreviewUrl=""
-                  imgRequirements=""
-                  imgVerifier={[Function]}
-                  max=""
-                  min=""
                   name="batch[diagram]"
-                  pattern=".*"
-                  placeholder="Please enter value"
-                  readOnly={false}
-                  recommended={false}
-                  required={false}
-                  selectEntries={Array []}
-                  step=""
-                  symbolLimit={0}
                   title="diagram or screenshot"
-                  type="file"
-                  value=""
                 >
-                  <div
-                    className="input-field input-field__upload-file"
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__upload-file"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="100x100"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="batch[diagram]"
+                    pattern=".*"
+                    placeholder="Please enter value"
+                    readOnly={false}
+                    recommended={false}
+                    required={false}
+                    selectEntries={Array []}
+                    step=""
+                    symbolLimit={0}
+                    title="diagram or screenshot"
+                    type="file"
+                    value=""
                   >
                     <div
-                      className="input-field--title"
+                      className="input-field input-field__upload-file"
                     >
-                      <span
-                        className="input-field--title--title"
+                      <div
+                        className="input-field--title"
                       >
-                        diagram or screenshot
-                      </span>
-                      <span
-                        className="input-field--title--required"
+                        <span
+                          className="input-field--title--title"
+                        >
+                          diagram or screenshot
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          optional
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
                       >
-                        optional
-                      </span>
+                        <input
+                          accept="image/*"
+                          className="input-field--content__file"
+                          name="batch[diagram]"
+                          onChange={[Function]}
+                          required={false}
+                          type="file"
+                        />
+                        <span
+                          className="input-field--content__file--requirements"
+                        />
+                      </div>
                     </div>
-                    <div
-                      className="input-field--content"
-                    >
-                      <input
-                        accept="image/*"
-                        className="input-field--content__file"
-                        name="batch[diagram]"
-                        onChange={[Function]}
-                        required={false}
-                        type="file"
-                      />
-                      <span
-                        className="input-field--content__file--requirements"
-                      />
-                    </div>
-                  </div>
-                </InputField>
-              </InputFieldUploadFile>
-              <input
-                name="authenticity_token"
-                readOnly={true}
-                type="hidden"
-                value="00"
-              />
-            </form>
+                  </InputField>
+                </InputFieldUploadFile>
+                <input
+                  name="authenticity_token"
+                  readOnly={true}
+                  type="hidden"
+                  value="00"
+                />
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        className="layout--subfooter"
-      >
         <div
-          className="layout--subfooter--buttons"
+          className="layout--subfooter"
         >
-          <Button
-            className=""
-            disabled={false}
-            form="batch-form--form"
-            onClick={[Function]}
-            type="submit"
-            value="create & close"
+          <div
+            className="layout--subfooter--buttons"
           >
-            <input
-              className="button"
+            <Button
+              className=""
               disabled={false}
               form="batch-form--form"
               onClick={[Function]}
               type="submit"
               value="create & close"
-            />
-          </Button>
-          <ButtonBorder
-            className=""
-            form="batch-form--form"
-            onClick={[Function]}
-            type="submit"
-            value="create"
-          >
-            <Button
-              className="button__border"
-              disabled={false}
+            >
+              <input
+                className="button"
+                disabled={false}
+                form="batch-form--form"
+                onClick={[Function]}
+                type="submit"
+                value="create & close"
+              />
+            </Button>
+            <ButtonBorder
+              className=""
               form="batch-form--form"
               onClick={[Function]}
               type="submit"
               value="create"
             >
-              <input
-                className="button button__border"
+              <Button
+                className="button__border"
                 disabled={false}
                 form="batch-form--form"
                 onClick={[Function]}
                 type="submit"
                 value="create"
-              />
-            </Button>
-          </ButtonBorder>
-          <ButtonBorder
-            className=""
-            onClick={[Function]}
-            value="cancel"
-          >
-            <Button
-              className="button__border"
-              disabled={false}
+              >
+                <input
+                  className="button button__border"
+                  disabled={false}
+                  form="batch-form--form"
+                  onClick={[Function]}
+                  type="submit"
+                  value="create"
+                />
+              </Button>
+            </ButtonBorder>
+            <ButtonBorder
+              className=""
               onClick={[Function]}
-              type="button"
               value="cancel"
             >
-              <input
-                className="button button__border"
+              <Button
+                className="button__border"
                 disabled={false}
                 onClick={[Function]}
                 type="button"
                 value="cancel"
-              />
-            </Button>
-          </ButtonBorder>
+              >
+                <input
+                  className="button button__border"
+                  disabled={false}
+                  onClick={[Function]}
+                  type="button"
+                  value="cancel"
+                />
+              </Button>
+            </ButtonBorder>
+          </div>
         </div>
       </div>
-    </div>
-  </Layout>
+    </Layout>
+  </ProjectSetup>
 </BatchForm>
 `;

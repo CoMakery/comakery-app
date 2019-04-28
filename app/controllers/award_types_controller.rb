@@ -111,6 +111,7 @@ class AwardTypesController < ApplicationController
         batch: (@award_type ? @award_type : @project.award_types.new).serializable_hash&.merge(
           diagram_url: Refile.attachment_url(@award_type ? @award_type : @project.award_types.new, :diagram, :fill, 300, 300)
         ),
+        project: @project.serializable_hash,
         specialties: Specialty.all.map { |s| [s.name, s.id] }.to_h,
         form_url: project_award_types_path,
         form_action: 'POST',

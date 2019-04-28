@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Layout from './layouts/Layout'
+import ProjectSetup from './layouts/ProjectSetup'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
@@ -144,9 +144,14 @@ class BatchForm extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Layout
+        <ProjectSetup
           className="batch-form"
-          title={this.state.formAction === 'POST' ? 'Create a New Batch' : 'Edit Batch'}
+          projectId={this.props.project.id}
+          projectTitle={this.props.project.title}
+          projectPage="batches"
+          sidebar={
+            <div className="batch-form--sidebar-placeholder" />
+          }
           hasBackButton
           subfooter={
             <React.Fragment>
@@ -172,6 +177,10 @@ class BatchForm extends React.Component {
           }
         >
           <Flash messages={this.state.flashMessages} />
+
+          <div className="batch-form--form--title">
+            {this.state.formAction === 'POST' ? 'Create a New Batch' : 'Edit Batch'}
+          </div>
 
           <form className="batch-form--form" id="batch-form--form" onSubmit={this.handleSubmit}>
             <InputFieldDropdown
@@ -233,7 +242,7 @@ class BatchForm extends React.Component {
               readOnly
             />
           </form>
-        </Layout>
+        </ProjectSetup>
       </React.Fragment>
     )
   }
@@ -241,6 +250,7 @@ class BatchForm extends React.Component {
 
 BatchForm.propTypes = {
   batch       : PropTypes.object.isRequired,
+  project     : PropTypes.object.isRequired,
   specialties : PropTypes.object.isRequired,
   formUrl     : PropTypes.string.isRequired,
   formAction  : PropTypes.string.isRequired,
@@ -250,6 +260,7 @@ BatchForm.propTypes = {
 }
 BatchForm.defaultProps = {
   batch       : {'default': '_'},
+  project     : {'default': '_'},
   specialties : {'default': '_'},
   formUrl     : '/',
   formAction  : 'POST',

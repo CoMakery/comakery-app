@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Layout from './layouts/Layout'
+import ProjectSetup from './layouts/ProjectSetup'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
@@ -9,6 +9,7 @@ import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
+import SidebarItem from './styleguide/SidebarItem'
 
 class TaskForm extends React.Component {
   constructor(props) {
@@ -145,9 +146,11 @@ class TaskForm extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Layout
+        <ProjectSetup
           className="task-form"
-          title={this.state.formAction === 'POST' ? 'Create a New Task' : 'Edit Task'}
+          projectId={this.props.project.id}
+          projectTitle={this.props.project.title}
+          projectPage="batches"
           hasBackButton
           subfooter={
             <React.Fragment>
@@ -171,8 +174,25 @@ class TaskForm extends React.Component {
               />
             </React.Fragment>
           }
+          sidebar={
+            <React.Fragment>
+              <div className="batch-index--sidebar">
+                <SidebarItem
+                  className="batch-index--sidebar--item batch-index--sidebar--item__form"
+                  iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+                  text={this.props.batch.name}
+                  selected
+                />
+                <hr className="batch-index--sidebar--hr" />
+              </div>
+            </React.Fragment>
+          }
         >
           <Flash messages={this.state.flashMessages} />
+
+          <div className="task-form--form--title">
+            {this.state.formAction === 'POST' ? 'Create a New Task' : 'Edit Task'}
+          </div>
 
           <form className="task-form--form" id="task-form--form" onSubmit={this.handleSubmit}>
             <InputFieldWhiteDark
@@ -259,7 +279,7 @@ class TaskForm extends React.Component {
               readOnly
             />
           </form>
-        </Layout>
+        </ProjectSetup>
       </React.Fragment>
     )
   }
@@ -267,6 +287,8 @@ class TaskForm extends React.Component {
 
 TaskForm.propTypes = {
   task        : PropTypes.object.isRequired,
+  batch       : PropTypes.object.isRequired,
+  project     : PropTypes.object.isRequired,
   token       : PropTypes.object.isRequired,
   formUrl     : PropTypes.string.isRequired,
   formAction  : PropTypes.string.isRequired,
@@ -275,6 +297,8 @@ TaskForm.propTypes = {
 }
 TaskForm.defaultProps = {
   task        : {'default': '_'},
+  batch       : {'default': '_'},
+  project     : {'default': '_'},
   token       : {'default': '_'},
   formUrl     : '/',
   formAction  : 'POST',

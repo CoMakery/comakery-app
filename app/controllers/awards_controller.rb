@@ -152,7 +152,8 @@ class AwardsController < ApplicationController
     def set_show_props
       @props = {
         task: @award.serializable_hash,
-        batch: @award.award_type.serializable_hash,
+        batch: @award_type.serializable_hash,
+        project: @project.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
         channels: (@project.channels + [Channel.new(name: 'Email')]).map { |c| [c.name || c.channel_id, c.id.to_s] }.to_h,
         members: @project.channels.map { |c| [c.id.to_s, c.members.to_h] }.to_h,
@@ -169,6 +170,8 @@ class AwardsController < ApplicationController
         task: (@award ? @award : @award_type.awards.new).serializable_hash&.merge(
           image_url: Refile.attachment_url(@award ? @award : @award_type.awards.new, :image, :fill, 300, 300)
         ),
+        batch: @award_type.serializable_hash,
+        project: @project.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
         form_url: project_award_type_awards_path(@project, @award_type),
         form_action: 'POST',
