@@ -10,6 +10,9 @@
     "stylelint": "stylelint 'app/javascript/**/*.css' --fix",
     "test": "jest"
   },
+  "browserslist": [
+    "defaults"
+  ],
   "dependencies": {
     "@ledgerhq/hw-app-btc": "^4.33.5",
     "@ledgerhq/hw-transport-u2f": "^4.32.0",
