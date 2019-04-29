@@ -102,6 +102,7 @@ export default class Project extends React.Component {
       } else {
         d3.select('#tooltip')
           .style('opacity', 0)
+        centerEle.text('')
       }
       d3.select(this).transition().delay(delay).attrTween('d', (d) => {
         const i = d3.interpolate(d.outerRadius, outerRadius)
