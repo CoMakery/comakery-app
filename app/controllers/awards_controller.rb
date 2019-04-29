@@ -17,7 +17,7 @@ class AwardsController < ApplicationController
   end
 
   def clone
-    @props[:task][:image_url] = nil
+    @props[:task][:image_from_id] = @award.id
 
     render component: 'TaskForm', props: @props
   end
@@ -36,6 +36,13 @@ class AwardsController < ApplicationController
   def create
     @award = @award_type.awards.new(award_params)
     @award.issuer = current_account
+
+    if !@award.image && params[:task][:image_from_id]
+      source_award = Award.find(params[:task][:image_from_id].to_i)
+      if policy(source_award.project).edit?
+        @award.image_id = source_award.image_id
+      end
+    end
 
     if @award.save
       set_ok_response

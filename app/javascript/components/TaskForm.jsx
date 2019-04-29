@@ -236,6 +236,15 @@ class TaskForm extends React.Component {
               imgPreviewDimensions="100x100"
             />
 
+            {this.props.task.imageFromId &&
+              <input
+                type="hidden"
+                name="task[image_from_id]"
+                value={this.props.task.imageFromId}
+                readOnly
+              />
+            }
+
             <InputFieldDescription
               title="acceptance requirements"
               required
