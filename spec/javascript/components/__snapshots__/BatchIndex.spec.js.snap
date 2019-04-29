@@ -34,6 +34,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
       customTitle={
         <ProjectSetupHeader
           projectId={null}
+          projectOwner={true}
           projectPage="batches"
           projectTitle=""
         />
@@ -68,6 +69,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
           >
             <ProjectSetupHeader
               projectId={null}
+              projectOwner={true}
               projectPage="batches"
               projectTitle=""
             >

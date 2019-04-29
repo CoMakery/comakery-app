@@ -1,5 +1,5 @@
 class Views::Shared::ProjectHeader < Views::Projects::Base
-  needs :project
+  needs :project, :current_account
 
   def project_page
     return 'contributors' if controller_name == 'contributors'
@@ -11,7 +11,8 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
       div class: 'layout--content--title' do
         text react_component('layouts/ProjectSetupHeader', project_id: project.id,
                                                            project_title: project.title,
-                                                           project_page: project_page)
+                                                           project_page: project_page,
+                                                           project_owner: current_account&.owned_project?(project))
       end
       hr class: 'layout--content--hr'
     end

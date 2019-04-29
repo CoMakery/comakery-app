@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 class ProjectSetupHeader extends React.Component {
   render() {
-    const {projectId, projectTitle, projectPage} = this.props
+    const {projectId, projectTitle, projectPage, projectOwner} = this.props
 
     return (
       <React.Fragment>
@@ -11,17 +11,21 @@ class ProjectSetupHeader extends React.Component {
           {projectTitle}
         </div>
 
-        <span className={projectPage === 'form' ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}>
-          <a href={projectId ? `/projects/${projectId}/edit` : '#'}>
-            project settings
-          </a>
-        </span>
+        {projectOwner &&
+          <span className={projectPage === 'form' ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}>
+            <a href={projectId ? `/projects/${projectId}/edit` : '#'}>
+              project settings
+            </a>
+          </span>
+        }
 
-        <span className={projectPage === 'batches' ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}>
-          <a href={projectId ? `/projects/${projectId}/batches` : '#'}>
-            batches & tasks
-          </a>
-        </span>
+        {projectOwner &&
+          <span className={projectPage === 'batches' ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}>
+            <a href={projectId ? `/projects/${projectId}/batches` : '#'}>
+              batches & tasks
+            </a>
+          </span>
+        }
 
         <span className={projectPage === 'contributors' ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}>
           <a href={projectId ? `/projects/${projectId}/contributors` : '#'}>
@@ -48,10 +52,12 @@ ProjectSetupHeader.propTypes = {
   projectId   : PropTypes.number,
   projectTitle: PropTypes.string,
   projectPage : PropTypes.string,
+  projectOwner: PropTypes.bool,
 }
 ProjectSetupHeader.defaultProps = {
   projectId   : null,
   projectTitle: '',
   projectPage : '',
+  projectOwner: true,
 }
 export default ProjectSetupHeader
