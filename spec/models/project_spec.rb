@@ -56,6 +56,39 @@ describe Project do
       end
     end
 
+    describe 'token' do
+      it 'can be changed if project has no completed awards' do
+        token1 = create(:token)
+        token2 = create(:token)
+        project = create(:project, token: token1)
+        create(:award_ready, award_type: create(:award_type, project: project))
+        project.update(token: token2)
+        expect(project).to be_valid
+        expect(project.token).to eq token2
+      end
+
+      it 'cannot be changed if project has completed awards' do
+        token1 = create(:token)
+        token2 = create(:token)
+        project = create(:project, token: token1)
+        create(:award, award_type: create(:award_type, project: project))
+        project.update(token: token2)
+        expect(project).not_to be_valid
+        expect(project.errors.full_messages.first).to include 'cannot be changed if project has completed tasks'
+      end
+
+      it 'can be changed if it was not present and project has completed awards' do
+        token1 = create(:token)
+        token2 = create(:token)
+        project = create(:project)
+        project.update(token: nil)
+        create(:award, award_type: create(:award_type, project: project))
+        project.update(token: token2)
+        expect(project).to be_valid
+        expect(project.token).to eq token2
+      end
+    end
+
     it 'video_url is valid if video_url is a valid, absolute url, the domain is youtube.com or vimeo, and there is the identifier inside' do
       expect(build(:sb_project, video_url: 'https://youtube.com/watch?v=Dn3ZMhmmzK0')).to be_valid
       expect(build(:sb_project, video_url: 'https://youtube.com/embed/Dn3ZMhmmzK0')).to be_valid

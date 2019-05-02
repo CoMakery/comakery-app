@@ -34,6 +34,7 @@ class Project < ApplicationRecord
   validate :valid_tracker_url, if: -> { tracker.present? }
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
   validate :valid_video_url, if: -> { video_url.present? }
+  validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -187,5 +188,9 @@ class Project < ApplicationRecord
   ensure
     errors[attribute_name] << 'must be a valid url' unless uri&.absolute?
     uri
+  end
+
+  def token_changeable
+    errors.add(:token_id, 'cannot be changed if project has completed tasks') if awards.completed.any?
   end
 end
