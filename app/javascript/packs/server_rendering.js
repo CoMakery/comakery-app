@@ -1,8 +1,5 @@
 // By default, this pack is loaded for server-side rendering.
 
-// Support ES6 syntax
-import 'babel-polyfill'
-
 import '../src/application.css'
 
 import 'slick-carousel/slick/slick.css'

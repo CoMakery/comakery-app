@@ -1,7 +1,11 @@
-import $ from 'jquery'
-import ledgerUtils from 'networks/qtum/ledger_utils'
+/* eslint-disable */
+// import $ from 'jquery'
+// import ledgerUtils from 'networks/qtum/ledger_utils'
+//
+// Details: https://github.com/CoMakery/comakery-app/pull/1207
+//
 
-describe('qtum ledger utils #transferQtumCoins', () => {
+xdescribe('qtum ledger utils #transferQtumCoins', () => {
   const award = {
     'id'                    : 96,
     'total_amount'          : '1.0',
