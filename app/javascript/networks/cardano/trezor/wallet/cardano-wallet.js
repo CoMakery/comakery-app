@@ -414,9 +414,4 @@ if (typeof window !== 'undefined') {
   window.CardanoWallet = exports.CardanoWallet
 }
 
-module.exports = {
-  CardanoWallet,
-  generateMnemonic,
-  validateMnemonic,
-  txFeeFunction,
-}
+export default { CardanoWallet, generateMnemonic, validateMnemonic, txFeeFunction }

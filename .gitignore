@@ -39,3 +39,10 @@ junk.txt
 /public/assets
 /node_modules
 .vscode
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

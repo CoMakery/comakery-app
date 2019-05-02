@@ -4,14 +4,14 @@ const {validateMnemonic, validatePaperWalletMnemonic} = require('../wallet/mnemo
 
 const parseCoins = (str) => Math.trunc(parseFloat(str) * 1000000)
 
-const sendAddressValidator = (fieldValue) => {
+export const sendAddressValidator = (fieldValue) => {
   return {
     fieldValue,
     validationError: !isValidAddress(fieldValue) ? {code: 'SendAddressInvalidAddress'} : null,
   }
 }
 
-const sendAmountValidator = (fieldValue) => {
+export const sendAmountValidator = (fieldValue) => {
   let validationError = null
   const coins = parseCoins(fieldValue)
 
@@ -31,7 +31,7 @@ const sendAmountValidator = (fieldValue) => {
   return {fieldValue, coins, validationError}
 }
 
-const feeValidator = (sendAmount, transactionFee, balance) => {
+export const feeValidator = (sendAmount, transactionFee, balance) => {
   let validationError = null
 
   if (sendAmount + transactionFee > balance) {
@@ -44,7 +44,7 @@ const feeValidator = (sendAmount, transactionFee, balance) => {
   return validationError
 }
 
-const mnemonicValidator = async (mnemonic) => {
+export const mnemonicValidator = async (mnemonic) => {
   let validationError = null
 
   if (!validateMnemonic(mnemonic) && !(await validatePaperWalletMnemonic(mnemonic))) {
@@ -54,11 +54,4 @@ const mnemonicValidator = async (mnemonic) => {
   }
 
   return validationError
-}
-
-module.exports = {
-  sendAddressValidator,
-  sendAmountValidator,
-  feeValidator,
-  mnemonicValidator,
 }

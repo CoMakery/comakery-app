@@ -11,9 +11,6 @@
 import 'react-app-polyfill/ie11'
 import 'react-app-polyfill/stable'
 
-// Support ES6 syntax
-import 'babel-polyfill'
-
 import '../src/application.js'
 
 import '../src/application.css'

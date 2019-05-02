@@ -1,7 +1,7 @@
-import $ from 'jquery'
-import ledgerUtils from 'networks/qtum/ledger_utils'
+// import $ from 'jquery'
+// import ledgerUtils from 'networks/qtum/ledger_utils'
 
-describe('qtum ledger utils #transferQtumCoins', () => {
+xdescribe('qtum ledger utils #transferQtumCoins', () => {
   const award = {
     'id'                    : 96,
     'total_amount'          : '1.0',
