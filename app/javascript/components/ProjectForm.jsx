@@ -353,6 +353,9 @@ class ProjectForm extends React.Component {
               placeholder="Provide the budget for completing the entire project"
               pattern="\d+"
               eventHandler={this.handleFieldChange}
+              type="number"
+              min="0"
+              step={`${1.0 / (10 ** (this.props.decimalPlaces.find(t => t.id.toString() === this.state['project[token_id]'].toString()) ? this.props.decimalPlaces.find(t => t.id.toString() === this.state['project[token_id]'].toString()).decimal_places : 0))}`}
               symbolLimit={0}
             />
 
@@ -515,6 +518,7 @@ ProjectForm.propTypes = {
   project      : PropTypes.object.isRequired,
   tokens       : PropTypes.object.isRequired,
   missions     : PropTypes.object.isRequired,
+  decimalPlaces: PropTypes.array.isRequired,
   visibilities : PropTypes.array.isRequired,
   teams        : PropTypes.array.isRequired,
   discordBotUrl: PropTypes.string,
@@ -526,6 +530,7 @@ ProjectForm.defaultProps = {
   project      : {'default': '_'},
   tokens       : {'default': '_'},
   missions     : {'default': '_'},
+  decimalPlaces: [],
   visibilities : [],
   teams        : [],
   discordBotUrl: null,

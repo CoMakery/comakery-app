@@ -341,7 +341,9 @@ describe AwardsController do
         award_id: award.id,
         tx: transaction_address
       }
-      expect(award.reload.ethereum_transaction_address).to eq transaction_address
+      award.reload
+      expect(award.ethereum_transaction_address).to eq transaction_address
+      expect(award.status).to eq 'paid'
     end
 
     it 'failure' do

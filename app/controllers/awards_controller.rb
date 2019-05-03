@@ -98,7 +98,7 @@ class AwardsController < ApplicationController
   end
 
   def update_transaction_address
-    @award.update! ethereum_transaction_address: params[:tx]
+    @award.update! ethereum_transaction_address: params[:tx], status: 'paid'
     @award = @award.decorate
     render layout: false
   end
