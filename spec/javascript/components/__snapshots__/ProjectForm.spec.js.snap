@@ -3,6 +3,7 @@
 exports[`ProjectForm renders correctly without props 1`] = `
 <ProjectForm
   csrfToken="00"
+  decimalPlaces={Array []}
   discordBotUrl={null}
   formAction="POST"
   formUrl="/"
@@ -592,11 +593,14 @@ exports[`ProjectForm renders correctly without props 1`] = `
                 </InputFieldWhiteDark>
                 <InputFieldWhiteDark
                   eventHandler={[Function]}
+                  min="0"
                   name="project[maximum_tokens]"
                   pattern="\\\\d+"
                   placeholder="Provide the budget for completing the entire project"
+                  step="1"
                   symbolLimit={0}
                   title="total budget"
+                  type="number"
                   value=""
                 >
                   <InputField
@@ -613,7 +617,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     imgRequirements=""
                     imgVerifier={[Function]}
                     max=""
-                    min=""
+                    min="0"
                     name="project[maximum_tokens]"
                     pattern="\\\\d+"
                     placeholder="Provide the budget for completing the entire project"
@@ -621,10 +625,10 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     recommended={false}
                     required={false}
                     selectEntries={Array []}
-                    step=""
+                    step="1"
                     symbolLimit={0}
                     title="total budget"
-                    type="text"
+                    type="number"
                     value=""
                   >
                     <div
@@ -649,14 +653,16 @@ exports[`ProjectForm renders correctly without props 1`] = `
                       >
                         <input
                           className="input-field--content__text"
+                          max=""
+                          min="0"
                           name="project[maximum_tokens]"
                           onChange={[Function]}
                           onClick={null}
-                          pattern="\\\\d+"
                           placeholder="Provide the budget for completing the entire project"
                           readOnly={false}
                           required={false}
-                          type="text"
+                          step="1"
+                          type="number"
                           value=""
                         />
                       </div>

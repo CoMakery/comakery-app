@@ -7,10 +7,6 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %>
 // to the appropriate layout file
 
-// Support IE11
-import 'react-app-polyfill/ie11'
-import 'react-app-polyfill/stable'
-
 import '../src/application.js'
 
 import '../src/application.css'

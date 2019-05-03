@@ -73,7 +73,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def maximum_tokens_pretty
-    number_with_precision(maximum_tokens.to_i, precision: 0, delimiter: ',')
+    format_with_decimal_places(maximum_tokens)
   end
 
   def percent_awarded_pretty

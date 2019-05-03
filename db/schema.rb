@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190423162348) do
+ActiveRecord::Schema.define(version: 20190502222127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -226,7 +226,7 @@ ActiveRecord::Schema.define(version: 20190423162348) do
     t.integer "account_id", null: false
     t.string "image_id"
     t.string "slack_channel"
-    t.integer "maximum_tokens", default: 0
+    t.decimal "maximum_tokens", default: "0.0"
     t.text "contributor_agreement_url"
     t.text "video_url"
     t.string "ethereum_contract_address"

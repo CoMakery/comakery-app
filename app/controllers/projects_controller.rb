@@ -192,6 +192,7 @@ class ProjectsController < ApplicationController
         }
       ),
       tokens: @tokens,
+      decimal_places: Token.select(:id, :decimal_places),
       missions: @missions,
       visibilities: @visibilities,
       teams: @teams&.reject { |t| t[:channels].blank? },
@@ -290,7 +291,7 @@ class ProjectsController < ApplicationController
       video_id: project.video_id,
       owner: project.account.decorate.name,
       token_percentage: project.percent_awarded_pretty,
-      maximum_tokens: project.maximum_tokens_pretty,
+      maximum_tokens: project.maximum_tokens,
       awarded_tokens: project.total_awarded_pretty,
       team_leader: contributor_props(project.account),
       contributors_number: contributors_number,
