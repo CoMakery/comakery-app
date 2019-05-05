@@ -73,6 +73,19 @@ describe Award do
       end
     end
 
+    it 'allows only predefined experience levels' do
+      [0, 2, 3, 10, 10000].each do |level|
+        a = create(:award)
+        a.experience_level = level
+        if Award::EXPERIENCE_LEVELS.values.include?(level)
+          expect(a).to be_valid
+        else
+          expect(a).not_to be_valid
+          expect(a.errors.full_messages.first).to eq('Experience level is not included in the list')
+        end
+      end
+    end
+
     describe 'awards amounts must be > 0' do
       let(:award) { build :award }
 

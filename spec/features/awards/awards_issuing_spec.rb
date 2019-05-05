@@ -33,6 +33,7 @@ describe 'awards issuing', js: true do
     fill_in 'task[why]', with: 'test why'
     fill_in 'task[description]', with: 'test description'
     fill_in 'task[requirements]', with: 'test requirements'
+    find('select[name="task[experience_level]"] > option:nth-child(2)').click
     fill_in 'task[amount]', with: '1'
     fill_in 'task[proof_link]', with: 'http://test'
     find_button('create').click
@@ -41,6 +42,7 @@ describe 'awards issuing', js: true do
     expect(Award.last.why).to eq 'test why'
     expect(Award.last.description).to eq 'test description'
     expect(Award.last.requirements).to eq 'test requirements'
+    expect(Award.last.experience_level).not_to eq 0
     expect(Award.last.amount).to eq 1
     expect(Award.last.proof_link).to eq 'http://test'
   end

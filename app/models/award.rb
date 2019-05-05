@@ -6,6 +6,12 @@ class Award < ApplicationRecord
   include EthereumAddressable
   include QtumTransactionAddressable
 
+  EXPERIENCE_LEVELS = {
+    'New Contributor' => 0,
+    'Demonstrated Skills' => 3,
+    'Established Contributor' => 10
+  }.freeze
+
   attachment :image, type: :image
 
   belongs_to :account, optional: true
@@ -31,6 +37,7 @@ class Award < ApplicationRecord
   validates :proof_link, length: { maximum: 150 }
   validates :proof_link, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
   validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }
+  validates :experience_level, inclusion: { in: EXPERIENCE_LEVELS.values }, allow_nil: true
 
   validate :total_amount_fits_into_project_budget
 

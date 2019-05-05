@@ -6,6 +6,7 @@ import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
+import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
@@ -23,18 +24,19 @@ class TaskForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
 
     this.state = {
-      flashMessages       : [],
-      errors              : {},
-      disabled            : {},
-      formAction          : this.props.formAction,
-      formUrl             : this.props.formUrl,
-      closeOnSuccess      : false,
-      'task[name]'        : this.props.task.name || '',
-      'task[why]'         : this.props.task.why || '',
-      'task[description]' : this.props.task.description || '',
-      'task[requirements]': this.props.task.requirements || '',
-      'task[amount]'      : this.props.task.amount || '',
-      'task[proof_link]'  : this.props.task.proofLink || ''
+      flashMessages           : [],
+      errors                  : {},
+      disabled                : {},
+      formAction              : this.props.formAction,
+      formUrl                 : this.props.formUrl,
+      closeOnSuccess          : false,
+      'task[name]'            : this.props.task.name || '',
+      'task[why]'             : this.props.task.why || '',
+      'task[description]'     : this.props.task.description || '',
+      'task[requirements]'    : this.props.task.requirements || '',
+      'task[experience_level]': this.props.task.experienceLevel || '',
+      'task[amount]'          : this.props.task.amount || '',
+      'task[proof_link]'      : this.props.task.proofLink || ''
     }
   }
 
@@ -256,6 +258,17 @@ class TaskForm extends React.Component {
               symbolLimit={750}
             />
 
+            <InputFieldDropdown
+              title="skill confirmations required"
+              required
+              name="task[experience_level]"
+              value={this.state['task[experience_level]']}
+              errorText={this.state.errors['task[experienceLevel]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.props.experienceLevels)}
+              symbolLimit={0}
+            />
+
             <InputFieldWhiteDark
               title={`award amount (${this.props.token.symbol || 'no token'})`}
               required
@@ -295,23 +308,25 @@ class TaskForm extends React.Component {
 }
 
 TaskForm.propTypes = {
-  task        : PropTypes.object.isRequired,
-  batch       : PropTypes.object.isRequired,
-  project     : PropTypes.object.isRequired,
-  token       : PropTypes.object.isRequired,
-  formUrl     : PropTypes.string.isRequired,
-  formAction  : PropTypes.string.isRequired,
-  urlOnSuccess: PropTypes.string.isRequired,
-  csrfToken   : PropTypes.string.isRequired
+  task            : PropTypes.object.isRequired,
+  batch           : PropTypes.object.isRequired,
+  project         : PropTypes.object.isRequired,
+  token           : PropTypes.object.isRequired,
+  experienceLevels: PropTypes.object.isRequired,
+  formUrl         : PropTypes.string.isRequired,
+  formAction      : PropTypes.string.isRequired,
+  urlOnSuccess    : PropTypes.string.isRequired,
+  csrfToken       : PropTypes.string.isRequired
 }
 TaskForm.defaultProps = {
-  task        : {'default': '_'},
-  batch       : {'default': '_'},
-  project     : {'default': '_'},
-  token       : {'default': '_'},
-  formUrl     : '/',
-  formAction  : 'POST',
-  urlOnSuccess: '/',
-  csrfToken   : '00'
+  task            : {'default': '_'},
+  batch           : {'default': '_'},
+  project         : {'default': '_'},
+  token           : {'default': '_'},
+  experienceLevels: {'default': '_'},
+  formUrl         : '/',
+  formAction      : 'POST',
+  urlOnSuccess    : '/',
+  csrfToken       : '00'
 }
 export default TaskForm
