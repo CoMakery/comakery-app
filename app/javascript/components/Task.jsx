@@ -123,6 +123,14 @@ const PaymentButton = styled.a`
 
 const StyledIcon = styled(Icon)`
   height: 15px;
+  width: 15px;
+  margin-left: 16px;
+`
+
+const IconPlaceholder = styled.span`
+  display: inline-block; 
+  height: 15px;
+  width: 15px;
   margin-left: 16px;
 `
 
@@ -167,9 +175,14 @@ class Task extends React.Component {
                 <a href={this.props.task.editPath}>
                   <StyledIcon name="iconEdit.svg" />
                 </a>
-                <a rel="nofollow" data-method="delete" href={this.props.task.destroyPath}>
-                  <StyledIcon name="iconTrash.svg" />
-                </a>
+                {this.props.task.destroyPath &&
+                  <a rel="nofollow" data-method="delete" href={this.props.task.destroyPath}>
+                    <StyledIcon name="iconTrash.svg" />
+                  </a>
+                }
+                {!this.props.task.destroyPath &&
+                  <IconPlaceholder />
+                }
               </Buttons>
             </Details>
           </Info>

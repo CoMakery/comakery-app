@@ -33,6 +33,7 @@ describe 'awards issuing', js: true do
     fill_in 'task[why]', with: 'test why'
     fill_in 'task[description]', with: 'test description'
     fill_in 'task[requirements]', with: 'test requirements'
+    find('select[name="task[experience_level]"] > option:nth-child(2)').click
     fill_in 'task[amount]', with: '1'
     fill_in 'task[proof_link]', with: 'http://test'
     find_button('create').click
@@ -41,6 +42,7 @@ describe 'awards issuing', js: true do
     expect(Award.last.why).to eq 'test why'
     expect(Award.last.description).to eq 'test description'
     expect(Award.last.requirements).to eq 'test requirements'
+    expect(Award.last.experience_level).not_to eq 0
     expect(Award.last.amount).to eq 1
     expect(Award.last.proof_link).to eq 'http://test'
   end
@@ -129,7 +131,6 @@ describe 'awards issuing', js: true do
   it "doesn't allow to delete award after sending" do
     visit project_award_types_path(project1)
     find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
-    find("a[data-method='delete'][href='#{project_award_type_award_path(project1, award_type1, award6)}']").click
-    expect(page).to have_content 'Completed task cannot be changed'.upcase
+    expect(page).not_to have_selector "a[data-method='delete'][href='#{project_award_type_award_path(project1, award_type1, award6)}']"
   end
 end

@@ -59,6 +59,33 @@ describe Award do
                                                                                                      'Total amount must be greater than 0'
                                                                                                    ])
     end
+
+    it 'cannot be destroyed unless in ready status' do
+      described_class.statuses.keys.each do |status|
+        a = create(:award)
+        a.update(status: status)
+        if status == 'ready'
+          expect { a.destroy }.to(change { described_class.count }.by(-1))
+        else
+          expect { a.destroy }.not_to(change { described_class.count })
+          expect(a.errors[:base].first).to eq("#{status.capitalize} task can't be deleted")
+        end
+      end
+    end
+
+    it 'allows only predefined experience levels' do
+      [0, 2, 3, 10, 10000].each do |level|
+        a = create(:award)
+        a.experience_level = level
+        if Award::EXPERIENCE_LEVELS.values.include?(level)
+          expect(a).to be_valid
+        else
+          expect(a).not_to be_valid
+          expect(a.errors.full_messages.first).to eq('Experience level is not included in the list')
+        end
+      end
+    end
+
     describe 'awards amounts must be > 0' do
       let(:award) { build :award }
 

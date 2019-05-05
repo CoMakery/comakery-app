@@ -141,6 +141,7 @@ class AwardsController < ApplicationController
         :description,
         :image,
         :requirements,
+        :experience_level,
         :amount,
         :proof_link
       )
@@ -180,6 +181,7 @@ class AwardsController < ApplicationController
         batch: @award_type.serializable_hash,
         project: @project.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
+        experience_levels: Award::EXPERIENCE_LEVELS,
         form_url: project_award_type_awards_path(@project, @award_type),
         form_action: 'POST',
         url_on_success: project_award_types_path,
