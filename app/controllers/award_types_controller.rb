@@ -96,7 +96,7 @@ class AwardTypesController < ApplicationController
                 pay_path: awards_project_path(@project),
                 clone_path: project_award_type_award_clone_path(@project, batch, task),
                 edit_path: edit_project_award_type_award_path(@project, batch, task),
-                destroy_path: project_award_type_award_path(@project, batch, task)
+                destroy_path: task.can_be_deleted? && project_award_type_award_path(@project, batch, task)
               )
             end
           )

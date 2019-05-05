@@ -36,6 +36,7 @@ class Award < ApplicationRecord
 
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
+  before_destroy :abort_destroy
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6)' }
@@ -117,6 +118,10 @@ class Award < ApplicationRecord
     %w[accepted paid].include? status
   end
 
+  def can_be_deleted?
+    status == 'ready'
+  end
+
   delegate :image, to: :team, prefix: true, allow_nil: true
 
   private
@@ -129,6 +134,13 @@ class Award < ApplicationRecord
       return unless project&.maximum_tokens
       if total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(:total_amount) || 0) > BigDecimal(project&.maximum_tokens)
         errors[:base] << "Sorry, you can't send more awards than the project's budget"
+      end
+    end
+
+    def abort_destroy
+      unless can_be_deleted?
+        errors[:base] << "#{status.capitalize} task can't be deleted"
+        throw :abort
       end
     end
 end
