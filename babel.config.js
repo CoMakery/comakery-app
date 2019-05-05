@@ -21,6 +21,7 @@ module.exports = function(api) {
         require('@babel/preset-env').default,
         {
           useBuiltIns: 'entry',
+          forceAllTransforms: true,
           corejs: 2,
           targets: {
             node: 'current'
