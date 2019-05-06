@@ -79,7 +79,7 @@ RSpec.describe AuthenticationTeam, type: :model do
     it 'get discord channels' do
       stub_discord_channels
       authentication_team = discord_authentication.authentication_teams.last
-      expect(authentication_team.channels).to eq [['Text Channels - general', 'channel_id']]
+      expect(authentication_team.channels).to eq [%w[general channel_id]]
     end
   end
 end

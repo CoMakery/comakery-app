@@ -126,7 +126,7 @@ class Award < ApplicationRecord
     end
 
     def total_amount_fits_into_project_budget
-      return unless project&.maximum_tokens
+      return if project&.maximum_tokens.nil? || project&.maximum_tokens&.zero?
       if total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(:total_amount) || 0) > BigDecimal(project&.maximum_tokens)
         errors[:base] << "Sorry, you can't send more awards than the project's budget"
       end

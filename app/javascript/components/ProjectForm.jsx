@@ -68,6 +68,7 @@ class ProjectForm extends React.Component {
       closeOnSuccess                    : false,
       awardVisibilitiesPretty           : awardVisibilitiesPretty,
       visibilitiesPretty                : visibilitiesPretty,
+      discordUrlActivated               : false,
       id                                : this.props.project.id || null,
       'project[mission_id]'             : this.props.project.missionId || Object.values(this.props.missions)[0],
       'project[token_id]'               : this.props.project.tokenId || Object.values(this.props.tokens)[0],
@@ -498,7 +499,16 @@ class ProjectForm extends React.Component {
 
             {this.props.discordBotUrl &&
               <div className="project-form--form--channels--discord-link">
-                <a href={this.props.discordBotUrl}>Allow Access to Discord Channels →</a>
+                {!this.state.discordUrlActivated &&
+                  <a target="_blank" href={this.props.discordBotUrl} onClick={() => this.setState({discordUrlActivated: true})}>
+                    Allow Access to Discord Channels →
+                  </a>
+                }
+                {this.state.discordUrlActivated &&
+                  <a href="">
+                    Refresh the page after Discord access is confirmed ↻
+                  </a>
+                }
               </div>
             }
 
