@@ -23,7 +23,7 @@ describe TeamDecorator do
     end
 
     it 'channel_for_selects' do
-      expect(discord_team.decorate.channel_for_selects).to eq [['Text Channels - general', 'channel_id']]
+      expect(discord_team.decorate.channel_for_selects).to eq [%w[general channel_id]]
     end
   end
 end

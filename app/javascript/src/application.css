@@ -1645,7 +1645,7 @@ select:disabled {
 
 .featured-mission__description {
   font-family: Georgia, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -4029,7 +4029,7 @@ select:disabled {
 .mission-projects__single__card__info {
   flex: 1;
   font-family: Georgia, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;

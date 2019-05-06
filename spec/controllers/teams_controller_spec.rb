@@ -37,7 +37,7 @@ describe TeamsController do
       get :channels, xhr: true, params: { id: team1.id }
       expect(response.status).to eq(200)
       expect(assigns[:auth_team]).to eq(team1.authentication_teams.first)
-      expect(assigns[:channels]).to eq([['Text Channels - general', 'channel_id']])
+      expect(assigns[:channels]).to eq([%w[general channel_id]])
     end
   end
 end

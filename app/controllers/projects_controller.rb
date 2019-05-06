@@ -165,8 +165,8 @@ class ProjectsController < ApplicationController
         discord: a_team.team.discord?,
         channels: a_team.channels&.map do |channel|
           {
-            channel: channel.to_s,
-            channel_id: channel.to_s
+            channel: a_team.team.discord? ? channel.first.to_s : channel,
+            channel_id: a_team.team.discord? ? channel.second.to_s : channel
           }
         end
       }
