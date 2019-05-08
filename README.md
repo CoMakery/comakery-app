@@ -102,7 +102,7 @@ We are using the data-migrate gem to load static table data or transform data. d
 
 Data migration scripts are located in `db/data_migrations`. 
 
-If you need to migrate data or add static table data run
+If you need to migrate data or add static table data run:
 ```
 bundle exec rake data:migrate
 ```
