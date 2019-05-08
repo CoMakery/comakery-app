@@ -1,13 +1,9 @@
 Feature: Finding tasks
 
   Background:
-    Given I am a logged in user
+    Given I am a logged in contributor
     And I am viewing my tasks
     And I want to see only Ready tasks
-
-  Scenario: A project owner should see all tasks from that project
-    Given I have a project with tasks in ready state with different skills
-    Then I should see all ready tasks from that project
 
   Scenario: A contributor from project communication channel should see all tasks from that project
     Given I belong to a communication channel of a project with tasks in ready state with different skills

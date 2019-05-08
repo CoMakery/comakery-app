@@ -3,7 +3,7 @@ Feature: Submitting tasks
 
   Background:
     Given I am a logged in contributor that has started a task
-    And I open a started task details as a contributor
+    And I open a started tasks details
 
   Scenario: A contributor can submit work for the task
     When I submit the work with valid data
