@@ -51,7 +51,7 @@ cp .env.dev .env
 heroku config -a <YOUR_HEROKU_APP> -s | egrep '^(SLACK_|ETHEREUM_|ETHERCAMP_)' | sort >> .env
 ```
 
-Basics :
+Basics 
 
 ```sh
 source .env
