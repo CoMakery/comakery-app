@@ -86,7 +86,7 @@ https://github.com/reactjs/react-rails
 
 ## Running tests
 
-A bit faster `bin/rspec`
+A bit faster: `bin/rspec`
 
 More thorough (integrates views): `bin/rspect`
 
