@@ -98,7 +98,7 @@ group(:test) do
   gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
-  gem "turnip"
+  gem 'turnip'
   gem 'webmock'
 end
 

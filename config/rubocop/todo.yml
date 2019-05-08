@@ -25,8 +25,6 @@ Lint/AmbiguousOperator:
 Lint/AmbiguousRegexpLiteral:
   Exclude:
     - 'spec/controllers/slack_controller_spec.rb'
-    - 'spec/features/project_discovery/landing_page_spec.rb'
-    - 'spec/features/project_setup/project_legal_agreement_settings_spec.rb'
     - 'spec/lib/slack_spec.rb'
     - 'spec/models/award_spec.rb'
     - 'spec/models/project_spec.rb'
@@ -77,8 +75,7 @@ Lint/UselessAssignment:
     - 'importer/demo/create_awards.rb'
     - 'importer/git_importer.rb'
     - 'spec/controllers/projects_controller_spec.rb'
-    - 'spec/features/awards/awards_paying_spec.rb'
-    - 'spec/features/precise_financial_calculations_spec.rb'
+    - 'spec/integrations/awards/awards_paying_spec.rb'
     - 'spec/models/account_spec.rb'
     - 'spec/models/authentication_spec.rb'
     - 'spec/models/project_spec.rb'
@@ -114,11 +111,7 @@ Metrics/PerceivedComplexity:
 RSpec/AnyInstance:
   Exclude:
     - 'spec/controllers/awards_controller_spec.rb'
-    - 'spec/features/awards/awards_paying_spec.rb'
-    - 'spec/features/awards/awards_issuing_spec.rb'
-    - 'spec/features/awards/awards_with_limit_spec.rb'
-    - 'spec/features/project_setup/project_legal_agreement_settings_spec.rb'
-    - 'spec/features/project_setup/revenue_sharing_calculator_spec.rb'
+    - 'spec/integrations/awards/awards_issuing_spec.rb'
     - 'spec/jobs/ethereum_token_issue_job_spec.rb'
 
 # Offense count: 32
@@ -163,7 +156,6 @@ RSpec/MessageSpies:
 # Offense count: 1
 RSpec/MultipleDescribes:
   Exclude:
-    - 'spec/features/confidentiality/project_confidentiality_spec.rb'
 
 # Offense count: 263
 RSpec/MultipleExpectations:
@@ -180,7 +172,6 @@ RSpec/NestedGroups:
   Exclude:
     - 'spec/controllers/awards_controller_spec.rb'
     - 'spec/controllers/projects_controller_spec.rb'
-    - 'spec/features/awards/award_history_spec.rb'
     - 'spec/models/authentication_spec.rb'
     - 'spec/models/project_spec.rb'
     - 'spec/views/shared/_awards_spec.rb'
@@ -193,20 +184,17 @@ RSpec/OverwritingSetup:
 # Offense count: 4
 RSpec/RepeatedDescription:
   Exclude:
-    - 'spec/features/revenues/project_owner_can_record_revenues_spec.rb'
     - 'spec/lib/currency_spec.rb'
 
 # Offense count: 6
 RSpec/RepeatedExample:
   Exclude:
-    - 'spec/features/revenues/project_owner_can_record_revenues_spec.rb'
     - 'spec/policies/payment_policy_spec.rb'
     - 'spec/views/projects/description_spec.rb'
 
 # Offense count: 1
 RSpec/ScatteredLet:
   Exclude:
-    - 'spec/features/project_setup/project_happy_path_spec.rb'
 
 # Offense count: 4
 RSpec/ScatteredSetup:
@@ -267,9 +255,6 @@ Rails/OutputSafety:
 Rails/SkipsModelValidations:
   Exclude:
     - 'app/models/authentication.rb'
-    - 'spec/features/confidentiality/project_confidentiality_spec.rb'
-    - 'spec/features/payments/redeem_revenue_shares_for_payments_spec.rb'
-    - 'spec/features/revenues/project_owner_can_record_revenues_spec.rb'
     - 'spec/jobs/ethereum_token_issue_job_spec.rb'
     - 'spec/lib/metrics_spec.rb'
     - 'lib/tasks/migration/project_coin_types.rake'
@@ -280,9 +265,7 @@ Rails/SkipsModelValidations:
 Rails/TimeZone:
   Exclude:
     - 'app/interactors/get_award_data.rb'
-    - 'spec/features/awards/awards_paying_spec.rb'
-    - 'spec/features/project_setup/project_legal_agreement_settings_spec.rb'
-    - 'spec/features/project_setup/revenue_sharing_calculator_spec.rb'
+    - 'spec/integrations/awards/awards_paying_spec.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
@@ -371,5 +354,4 @@ Style/VariableName:
 # SupportedStyles: snake_case, normalcase, non_integer
 Style/VariableNumber:
   Exclude:
-    - 'spec/features/precise_financial_calculations_spec.rb'
     - 'spec/models/project_spec.rb'
