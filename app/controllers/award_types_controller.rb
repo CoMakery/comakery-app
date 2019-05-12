@@ -112,7 +112,7 @@ class AwardTypesController < ApplicationController
           diagram_url: Refile.attachment_url(@award_type ? @award_type : @project.award_types.new, :diagram, :fill, 300, 300)
         ),
         project: @project.serializable_hash,
-        specialties: Specialty.all.map { |s| [s.name, s.id] }.to_h,
+        specialties: Specialty.all.map { |s| [s.name, s.id] }.unshift(['General', nil]).to_h,
         form_url: project_award_types_path,
         form_action: 'POST',
         url_on_success: project_award_types_path,

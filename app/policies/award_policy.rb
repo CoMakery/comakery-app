@@ -10,10 +10,10 @@ class AwardPolicy < ApplicationPolicy
     end
 
     def resolve
-      if account
-        account.team_awards
+      if @account
+        @account.accessable_awards
       else
-        scope.joins(award_type: :project).where('projects.public = ?', true)
+        scope.none
       end
     end
   end

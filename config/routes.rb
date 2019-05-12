@@ -49,6 +49,8 @@ Rails.application.routes.draw do
   end
   get '/session' => "sessions#create"
 
+  get '/tasks' => "awards#index", as: :my_tasks
+
   post '/slack/command' => "slack#command"
 
   get '/projects/mine' => "projects#landing", as: :my_project

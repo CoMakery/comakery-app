@@ -1,16 +1,23 @@
 class AwardsController < ApplicationController
-  before_action :assign_project, except: %i[confirm]
-  before_action :authorize_project_edit, except: %i[confirm]
-  before_action :set_award_type, except: %i[confirm]
-  before_action :set_award, except: %i[new create confirm]
+  before_action :assign_project, except: %i[index confirm]
+  before_action :authorize_project_edit, except: %i[index confirm]
+  before_action :set_award_type, except: %i[index confirm]
+  before_action :set_award, except: %i[index new create confirm]
+  before_action :set_awards, only: %i[index]
+  before_action :set_page, only: %i[index]
   before_action :set_form_props, only: %i[new edit clone]
   before_action :set_show_props, only: %i[show]
+  before_action :set_index_props, only: %i[index]
   before_action :redirect_if_award_issued, only: %i[update edit destroy show send_award recipient_address]
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
   skip_before_action :require_login, only: %i[confirm]
   skip_after_action :verify_authorized, only: %i[confirm]
 
   layout 'react'
+
+  def index
+    render component: 'MyTasks', props: @props
+  end
 
   def new
     render component: 'TaskForm', props: @props
@@ -134,6 +141,15 @@ class AwardsController < ApplicationController
       @award = @award_type.awards&.listed&.find(params[:id] || params[:award_id])
     end
 
+    def set_awards
+      @awards = policy_scope(Award)
+    end
+
+    def set_page
+      @page = (params[:page] || 1).to_i
+      redirect_to '/404.html' if @awards.page(@page).out_of_range?
+    end
+
     def award_params
       params.fetch(:task, {}).permit(
         :name,
@@ -155,6 +171,31 @@ class AwardsController < ApplicationController
         :uid,
         :email
       )
+    end
+
+    def set_index_props
+      @props = {
+        tasks: @awards.page(@page).map do |task|
+          task&.serializable_hash&.merge({
+            mission: {
+              name: task.project&.mission&.name
+            },
+            project: {
+              name: task.project&.title
+            },
+            batch: {
+              specialty: task.award_type&.specialty&.name
+            },
+            issuer: {
+              name: task.issuer&.decorate&.name
+            }
+          })
+        end,
+        pages: {
+          current: @page,
+          total: @awards.page(@page).total_pages
+        }
+      }
     end
 
     def set_show_props

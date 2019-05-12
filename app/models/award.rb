@@ -1,7 +1,7 @@
 require 'bigdecimal'
 
 class Award < ApplicationRecord
-  paginates_per 50
+  paginates_per 5
 
   include EthereumAddressable
   include QtumTransactionAddressable
@@ -47,6 +47,15 @@ class Award < ApplicationRecord
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6)' }
+  scope :having_suiting_experience_for, lambda { |specialty_id, specialty_experience, total_experience|
+    ready.where(
+      '(award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL)) OR (award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL))',
+      AwardType.where(specialty_id: specialty_id).pluck(:id),
+      specialty_experience,
+      AwardType.where(specialty_id: nil).pluck(:id),
+      total_experience
+    )
+  }
 
   enum status: %i[ready started submitted accepted rejected paid cancelled]
 

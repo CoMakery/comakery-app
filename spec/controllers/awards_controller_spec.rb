@@ -22,6 +22,20 @@ describe AwardsController do
     project.channels.create(team: team, channel_id: '123')
   end
 
+  describe '#index' do
+    before do
+      7.times { create(:award, account: issuer.account) }
+      login(issuer.account)
+    end
+
+    it 'returns my tasks with pagination' do
+      get :index
+      expect(response.status).to eq(200)
+      expect(assigns[:props][:tasks].count).to eq(5)
+      expect(assigns[:props][:pages][:current]).to eq(1)
+    end
+  end
+
   describe '#create' do
     let(:award_type) { create(:award_type, project: project) }
 
