@@ -52,7 +52,7 @@ class Award < ApplicationRecord
       '(award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL)) OR (award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL))',
       AwardType.where(specialty_id: specialty_id).pluck(:id),
       specialty_experience,
-      AwardType.where(specialty_id: nil).pluck(:id),
+      AwardType.where(specialty_id: [0, nil]).pluck(:id),
       total_experience
     )
   }
