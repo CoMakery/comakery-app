@@ -3,7 +3,7 @@ class GetAwardData
 
   def call
     project = context.project
-    awards = project.awards.includes(:account, :award_type)
+    awards = project.awards.completed.includes(:account, :award_type)
     context.award_data = {
       contributions_by_day: contributions_by_day(awards)
     }
@@ -12,8 +12,8 @@ class GetAwardData
   def contributions_by_day(awards_scope)
     history = 150
     recent_awards = awards_scope
-                    .where('awards.created_at > ?', history.days.ago)
-                    .order('awards.created_at asc')
+                    .where('awards.updated_at > ?', history.days.ago)
+                    .order('awards.updated_at asc')
 
     accounts = recent_awards.map(&:account).freeze
     empty_row_template = accounts.each_with_object({}) do |account, contributors|

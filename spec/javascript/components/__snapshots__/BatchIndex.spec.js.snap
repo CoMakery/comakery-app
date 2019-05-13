@@ -1,0 +1,282 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BatchIndex renders correctly without props 1`] = `
+<BatchIndex
+  batches={Array []}
+  newBatchPath=""
+  project={Object {}}
+>
+  <ProjectSetup
+    className="batch-index"
+    projectId={null}
+    projectPage="batches"
+    projectTitle=""
+    sidebar={
+      <React.Fragment>
+        <div
+          className="batch-index--sidebar"
+        >
+          <SidebarItemBold
+            className="batch-index--sidebar--item__bold"
+            iconLeftName="BATCH/WHITE.svg"
+            iconRightName="PLUS.svg"
+            onClick={[Function]}
+            text="Create a New Batch"
+          />
+        </div>
+      </React.Fragment>
+    }
+    subfooter={null}
+  >
+    <Layout
+      category=""
+      className="project-setup batch-index"
+      customTitle={
+        <ProjectSetupHeader
+          projectId={null}
+          projectOwner={true}
+          projectPage="batches"
+          projectTitle=""
+        />
+      }
+      hasBackButton={false}
+      sidebar={
+        <React.Fragment>
+          <div
+            className="batch-index--sidebar"
+          >
+            <SidebarItemBold
+              className="batch-index--sidebar--item__bold"
+              iconLeftName="BATCH/WHITE.svg"
+              iconRightName="PLUS.svg"
+              onClick={[Function]}
+              text="Create a New Batch"
+            />
+          </div>
+        </React.Fragment>
+      }
+      subfooter={null}
+      title={null}
+    >
+      <div
+        className="layout project-setup batch-index"
+      >
+        <div
+          className="layout--content"
+        >
+          <div
+            className="layout--content--title"
+          >
+            <ProjectSetupHeader
+              projectId={null}
+              projectOwner={true}
+              projectPage="batches"
+              projectTitle=""
+            >
+              <div
+                className="layout--content--title--header"
+              />
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="#"
+                >
+                  project settings
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav__current"
+              >
+                <a
+                  href="#"
+                >
+                  batches & tasks
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="#"
+                >
+                  contributors
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="#"
+                >
+                  payments
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="#"
+                >
+                  overview
+                </a>
+              </span>
+            </ProjectSetupHeader>
+          </div>
+          <hr
+            className="layout--content--hr"
+          />
+          <div
+            className="layout--content--wrapper"
+          >
+            <div
+              className="layout--content--sidebar"
+            >
+              <div
+                className="batch-index--sidebar"
+              >
+                <SidebarItemBold
+                  className="batch-index--sidebar--item__bold"
+                  iconLeftName="BATCH/WHITE.svg"
+                  iconRightName="PLUS.svg"
+                  onClick={[Function]}
+                  text="Create a New Batch"
+                >
+                  <SidebarItem
+                    className="sidebar-item__bold batch-index--sidebar--item__bold"
+                    iconLeftName="BATCH/WHITE.svg"
+                    iconLeftUrl=""
+                    iconRightName="PLUS.svg"
+                    onClick={[Function]}
+                    selected={false}
+                    text="Create a New Batch"
+                  >
+                    <div
+                      className="sidebar-item--wrapper"
+                      onClick={[Function]}
+                    >
+                      <div
+                        className="sidebar-item sidebar-item__bold batch-index--sidebar--item__bold"
+                      >
+                        <span
+                          className="sidebar-item--icon-left"
+                        >
+                          <Icon
+                            className=""
+                            name="BATCH/WHITE.svg"
+                          >
+                            <img
+                              className="icon icon__BATCH/WHITE-svg"
+                              src="test-file-stub"
+                            />
+                          </Icon>
+                        </span>
+                        <span
+                          className="sidebar-item--text"
+                        >
+                          Create a New Batch
+                        </span>
+                        <span
+                          className="sidebar-item--icon-right"
+                        >
+                          <Icon
+                            className=""
+                            name="PLUS.svg"
+                          >
+                            <img
+                              className="icon icon__PLUS-svg"
+                              src="test-file-stub"
+                            />
+                          </Icon>
+                        </span>
+                        <div
+                          className="sidebar-item--left-border"
+                        />
+                      </div>
+                    </div>
+                  </SidebarItem>
+                </SidebarItemBold>
+              </div>
+            </div>
+            <div
+              className="layout--content--content__sidebared"
+            >
+              <styled.div>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-cvbbAY",
+                        "isStatic": true,
+                        "lastClassName": "dBGqxD",
+                        "rules": Array [
+                          "
+  font-family: Georgia;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.29;
+  letter-spacing: normal;
+
+  ul {
+    list-style-type: decimal;
+  }
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus {
+    text-decoration: underline;
+  }
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-cvbbAY",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-cvbbAY dBGqxD"
+                  >
+                    <ul>
+                      <li>
+                        Batches are “folders” that groups of similar tasks reside in.
+                      </li>
+                      <li>
+                        Projects can have one or many batches in them.
+                      </li>
+                      <li>
+                        A batch must be 
+                        <a
+                          href=""
+                        >
+                          created
+                        </a>
+                         before a task can be created.
+                      </li>
+                    </ul>
+                  </div>
+                </StyledComponent>
+              </styled.div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  </ProjectSetup>
+</BatchIndex>
+`;

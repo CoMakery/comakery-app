@@ -41,10 +41,6 @@ class ProjectPolicy < ApplicationPolicy
       team_member?
   end
 
-  def show_revenue_info?
-    project.show_revenue_info?(account)
-  end
-
   def project_owner?
     account&.owned_project?(project)
   end

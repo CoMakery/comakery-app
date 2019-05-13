@@ -61,7 +61,7 @@ export default class Account extends React.Component {
     formData.append('account[qtum_wallet]', this.state.qtumWallet || '')
     formData.append('account[ethereum_wallet]', this.state.ethereumWallet || '')
     formData.append('account[tezos_wallet]', this.state.tezosWallet || '')
-    formData.append('account[specialty]', this.state.specialty || '')
+    formData.append('account[specialty_id]', this.state.specialtyId || '')
     formData.append('account[occupation]', this.state.occupation || '')
     formData.append('account[linkedin_url]', this.state.linkedinUrl || '')
     formData.append('account[github_url]', this.state.githubUrl || '')
@@ -154,7 +154,7 @@ export default class Account extends React.Component {
       </div>
     )
 
-    const specialty = this.props.specialtyList.find(specialty => specialty[1] === this.state.specialty)
+    const specialty = this.props.specialtyList.find(specialty => specialty[1] === this.state.specialtyId)
 
     return <React.Fragment>
       <Alert message={this.state.message} messageType={this.state.messageType} isVisible={this.state.showMessage} toggleVisible={() => {
@@ -205,7 +205,7 @@ export default class Account extends React.Component {
                 <label>My Specialty</label>
               </div>
               <div className={`columns small-9 ${this.state.errors.specialty ? 'error' : ''}`}>
-                <select name="specialty" value={this.state.specialty || ''} onChange={this.handleChangeAccountFormData}>
+                <select name="specialtyId" value={this.state.specialtyId || ''} onChange={this.handleChangeAccountFormData}>
                   <option value="">Please Select One</option>
                   {this.props.specialtyList.map(specialty =>
                     <option key={specialty[0]} value={specialty[1]}>

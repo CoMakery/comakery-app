@@ -33,7 +33,7 @@ describe 'my account', js: true do
     expect(page.current_url).to have_content '/'
     expect(page).to have_content('CoMakery Hosts Blockchain Missions We Believe In')
     stub_airtable
-    find('a.featured-mission__create-project').click
+    first('a.featured-mission__create-project').click
     sleep 2
     expect(page.current_url).to have_content '/accounts/new'
   end

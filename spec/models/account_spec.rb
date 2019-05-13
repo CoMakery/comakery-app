@@ -145,143 +145,6 @@ describe Account do
     end
   end
 
-  describe '#total_awards_earned' do
-    let!(:contributor) { create(:account) }
-    let!(:bystander) { create(:account) }
-    let!(:project) { create :project, payment_type: 'revenue_share' }
-    let!(:award_type) { create(:award_type, amount: 10, project: project) }
-    let!(:award1) { create :award, account: contributor, issuer: project.account, award_type: award_type }
-    let!(:award2) { create :award, account: contributor, issuer: project.account, award_type: award_type, quantity: 3.5 }
-
-    specify do
-      expect(bystander.total_awards_earned(project)).to eq 0
-    end
-
-    specify do
-      expect(contributor.total_awards_earned(project)).to eq 45
-    end
-  end
-
-  describe '#total_awards_paid' do
-    let!(:contributor) { create(:account) }
-    let!(:bystander) { create(:account) }
-    let!(:project) { create :project, payment_type: 'revenue_share' }
-    let!(:award_type) { create(:award_type, amount: 10, project: project) }
-    let!(:revenue) { create :revenue, amount: 1000, project: project }
-
-    before do
-      award_type.awards.create_with_quantity(2, account: contributor, issuer: project.account)
-      project.payments.create_with_quantity(quantity_redeemed: 10, account: contributor)
-      project.payments.create_with_quantity(quantity_redeemed: 1, account: contributor)
-    end
-
-    specify do
-      expect(bystander.total_awards_paid(project)).to eq 0
-    end
-
-    specify do
-      expect(contributor.total_awards_paid(project)).to eq 11
-    end
-  end
-
-  describe '#total_awards_remaining' do
-    let!(:contributor) { create(:account) }
-    let!(:bystander) { create(:account) }
-    let!(:project) { create :project, payment_type: 'revenue_share'  }
-    let!(:revenue) { create :revenue, amount: 1000, project: project }
-    let!(:award_type) { create(:award_type, amount: 10, project: project) }
-    let!(:award1) { create :award, account: contributor, issuer: project.account, award_type: award_type }
-    let!(:award2) { create :award, account: contributor, issuer: project.account, award_type: award_type }
-    let!(:payment1) { project.payments.create_with_quantity(quantity_redeemed: 10, account: contributor) }
-    let!(:payment2) { project.payments.create_with_quantity(quantity_redeemed: 1, account: contributor) }
-
-    specify do
-      expect(bystander.total_awards_remaining(project)).to eq 0
-    end
-
-    specify do
-      expect(contributor.total_awards_remaining(project)).to eq 9
-    end
-  end
-
-  describe '#percent_unpaid' do
-    let!(:account1) { create :account }
-    let!(:account2) { create :account }
-    let!(:project) { create :project, payment_type: 'revenue_share' }
-    let!(:award_type) { create(:award_type, amount: 1, project: project) }
-    let!(:revenue) { create :revenue, amount: 1000, project: project }
-
-    specify { expect(account1.percent_unpaid(project)).to eq(0) }
-
-    it 'handles divide by 0 risk' do
-      award_type.awards.create_with_quantity(1, account: account1, issuer: project.account)
-      expect(account1.percent_unpaid(project)).to eq(100)
-    end
-
-    it 'handles two awardees' do
-      award_type.awards.create_with_quantity(1, account: account1, issuer: project.account)
-      award_type.awards.create_with_quantity(1, account: account2, issuer: project.account)
-      expect(account1.percent_unpaid(project)).to eq(50)
-    end
-
-    it 'calculates only unpaid awards' do
-      award_type.awards.create_with_quantity(6, account: account1, issuer: project.account)
-      award_type.awards.create_with_quantity(6, account: account2, issuer: project.account)
-      expect(account1.percent_unpaid(project)).to eq(50)
-
-      project.payments.create_with_quantity(quantity_redeemed: 2, account: account1)
-      expect(account1.percent_unpaid(project)).to eq(40)
-      expect(account2.percent_unpaid(project)).to eq(60)
-
-      project.payments.create_with_quantity(quantity_redeemed: 5, account: account2)
-      expect(account1.percent_unpaid(project)).to eq(80)
-      expect(account2.percent_unpaid(project)).to eq(20)
-    end
-
-    it 'returns 8 decimal point precision BigDecimal' do
-      award_type.awards.create_with_quantity(1, account: account1, issuer: project.account)
-      award_type.awards.create_with_quantity(2, account: account2, issuer: project.account)
-
-      expect(account1.percent_unpaid(project)).to eq(BigDecimal('33.' + ('3' * 8)))
-      expect(account2.percent_unpaid(project)).to eq(BigDecimal('66.' + ('6' * 8)))
-    end
-  end
-
-  describe 'revenue' do
-    let!(:contributor) { create(:account) }
-    let!(:bystander) { create(:account) }
-    let!(:project) { create :project, royalty_percentage: 100, payment_type: 'revenue_share' }
-    let!(:award_type) { create(:award_type, amount: 1, project: project) }
-    let!(:award1) { create :award, account: contributor, issuer: project.account, award_type: award_type, quantity: 50 }
-    let!(:award2) { create :award, account: contributor, issuer: project.account, award_type: award_type, quantity: 50 }
-
-    describe 'no revenue' do
-      specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
-
-      specify { expect(contributor.total_revenue_paid(project)).to eq 0 }
-    end
-
-    describe 'with revenue' do
-      let!(:revenue) { create :revenue, amount: 100, project: project }
-
-      specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
-      specify { expect(contributor.total_revenue_paid(project)).to eq 0 }
-      specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
-      specify { expect(contributor.total_revenue_unpaid(project)).to eq 100 }
-    end
-
-    describe 'with revenue and payments' do
-      let!(:revenue) { create :revenue, amount: 100, project: project }
-      let!(:payment1) { project.payments.create_with_quantity quantity_redeemed: 25, account: contributor }
-      let!(:payment2) { project.payments.create_with_quantity quantity_redeemed: 14, account: contributor }
-
-      specify { expect(bystander.total_revenue_paid(project)).to eq 0 }
-      specify { expect(contributor.total_revenue_paid(project)).to eq 39 }
-      specify { expect(bystander.total_revenue_unpaid(project)).to eq 0 }
-      specify { expect(contributor.total_revenue_unpaid(project)).to eq 61 }
-    end
-  end
-
   describe 'my projects' do
     let!(:team) { create :team }
     let!(:authentication) { create :authentication, account: account }
@@ -341,10 +204,10 @@ describe Account do
   it 'return array of award by project' do
     account = create :account
     project = create :project
-    award_type = create :award_type, project: project, name: 'type 1', amount: 10
-    award_type1 = create :award_type, project: project, name: 'type 2', amount: 20
-    create :award, award_type: award_type, account: account
-    create :award, award_type: award_type1, account: account
+    award_type = create :award_type, project: project, name: 'type 1'
+    award_type1 = create :award_type, project: project, name: 'type 2'
+    create :award, award_type: award_type, amount: 10, account: account
+    create :award, award_type: award_type1, amount: 20, account: account
     expect(account.award_by_project(project)).to eq [{ name: 'type 2', total: 20 }, { name: 'type 1', total: 10 }]
   end
   describe 'team projects' do

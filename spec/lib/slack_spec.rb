@@ -10,7 +10,7 @@ describe Comakery::Slack do
   let!(:project) { create :project }
   let!(:channel) { create :channel, project: project, team: team, name: 'super sweet slack channel' }
   let!(:award_type) { create :award_type, project: project }
-  let!(:award) { create :award, channel: channel, award_type: award_type, issuer: issuer, account: recipient, quantity: 2 }
+  let!(:award) { create :award, channel: channel, award_type: award_type, issuer: issuer, account: recipient, amount: 2674 }
   let!(:message) { AwardMessage.call(award: award).notifications_message }
   let!(:slack) { described_class.new(slack_token) }
   let!(:slack_token) { issuer_authentication.token }
@@ -59,15 +59,7 @@ describe Comakery::Slack do
 
     describe 'when the award has a description' do
       it 'includes award description' do
-        expect(message).to match /for "Great work"/
-      end
-    end
-
-    describe 'when the award has no description' do
-      before { award.update! description: '' }
-      it 'includes award description' do
-        message = AwardMessage.call(award: award).notifications_message
-        expect(message).not_to match /for ".*"/m
+        expect(message).to match /for "none"/
       end
     end
 
@@ -77,7 +69,7 @@ describe Comakery::Slack do
 
     describe 'when project is ethereum enabled and recipient has no ethereum address' do
       it 'links to recipient account' do
-        project.update! ethereum_enabled: true
+        project.token.update! ethereum_enabled: true
         recipient.update! ethereum_wallet: nil
         message = AwardMessage.call(award: award.reload).notifications_message
         expect(message).to match \
@@ -87,7 +79,7 @@ describe Comakery::Slack do
 
     describe 'when project is not ethereum enabled' do
       it 'does not link to recipient account' do
-        project.update! ethereum_enabled: false
+        project.token.update! ethereum_enabled: false
         recipient.update! ethereum_wallet: nil
         message = AwardMessage.call(award: award).notifications_message
         expect(message).not_to match %r{/account}
@@ -96,7 +88,7 @@ describe Comakery::Slack do
 
     describe 'when recipient has ethereum address' do
       it 'does not link to recipient account' do
-        project.update! ethereum_enabled: true
+        project.token.update! ethereum_enabled: true
         recipient.update! ethereum_wallet: '0x' + 'a' * 40
         message = AwardMessage.call(award: award).notifications_message
         expect(message).not_to match %r{/account}

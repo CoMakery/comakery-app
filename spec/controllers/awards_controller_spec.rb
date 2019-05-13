@@ -10,7 +10,7 @@ describe AwardsController do
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
-  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'erc20') }
+  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
 
   before do
     stub_discord_channels
@@ -20,79 +20,6 @@ describe AwardsController do
     discord_team.build_authentication_team issuer_discord
     discord_team.build_authentication_team receiver_discord
     project.channels.create(team: team, channel_id: '123')
-  end
-  describe '#index' do
-    let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_auth.account) }
-    let!(:different_project_award) { create(:award, award_type: create(:award_type, project: create(:project)), account: other_auth.account) }
-
-    context 'when logged in' do
-      before { login(issuer.account) }
-
-      it 'shows awards for current project' do
-        get :index, params: { project_id: project.to_param }
-
-        expect(response.status).to eq(200)
-        expect(assigns[:project]).to eq(project)
-        expect(assigns[:awards]).to match_array([award])
-      end
-
-      it 'shows metamask awards' do
-        stub_token_symbol
-        project.update ethereum_contract_address: '0x' + 'a' * 40
-        get :index, params: { project_id: project.to_param }
-
-        expect(response.status).to eq(200)
-        expect(assigns[:project]).to eq(project)
-        expect(assigns[:awards]).to match_array([award])
-      end
-    end
-
-    context 'when logged out' do
-      context 'with a public project' do
-        let!(:public_project) { create(:project, account: issuer.account, visibility: 'public_listed') }
-        let!(:public_award) { create(:award, award_type: create(:award_type, project: public_project)) }
-
-        it 'shows awards for public projects' do
-          get :index, params: { project_id: public_project.id }
-
-          expect(response.status).to eq(200)
-          expect(assigns[:project]).to eq(public_project)
-          expect(assigns[:awards]).to match_array([public_award])
-        end
-      end
-
-      context 'with a private project' do
-        let!(:private_project) { create(:project, account: issuer.account, public: false) }
-        let!(:private_award) { create(:award, award_type: create(:award_type, project: private_project)) }
-
-        it 'sends you away' do
-          get :index, params: { project_id: private_project.to_param }
-
-          expect(response.status).to eq(302)
-          expect(response).to redirect_to(root_path)
-        end
-      end
-    end
-
-    describe 'checks policy' do
-      before do
-        allow(controller).to receive(:policy_scope).and_call_original
-        allow(controller).to receive(:authorize).and_call_original
-      end
-
-      specify do
-        login issuer.account
-
-        get :index, params: { project_id: project.id }
-        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
-      end
-
-      specify do
-        project.public_listed!
-        get :index, params: { project_id: project.id }
-        expect(controller).to have_received(:authorize).with(controller.instance_variable_get('@project'), :show_contributions?)
-      end
-    end
   end
 
   describe '#create' do
@@ -104,30 +31,104 @@ describe AwardsController do
     end
 
     context 'logged in' do
+      it 'creates task' do
+        expect do
+          post :create, params: {
+            project_id: project.to_param,
+            award_type_id: award_type.to_param,
+            task: {
+              name: 'none',
+              description: 'none',
+              amount: '100',
+              why: 'none',
+              requirements: 'none',
+              proof_link: 'http://nil'
+            }
+          }
+          expect(response.status).to eq(200)
+          expect(response.content_type).to eq('application/json')
+          expect(JSON.parse(response.body)['message']).to eq('Task created')
+          expect(JSON.parse(response.body)['id']).to eq(project.awards.last.id)
+        end.to change { project.awards.count }.by(1)
+
+        award = project.awards.last
+        expect(award.award_type).to eq(award_type)
+        expect(award.status).to eq('ready')
+      end
+
+      it 'returns an error' do
+        expect do
+          post :create, params: {
+            project_id: project.to_param,
+            award_type_id: award_type.to_param,
+            task: {
+              name: '',
+              amount: '100',
+              description: 'none',
+              why: 'none',
+              requirements: 'none',
+              proof_link: 'http://nil'
+            }
+          }
+          expect(response.status).to eq(422)
+          expect(response.content_type).to eq('application/json')
+          expect(JSON.parse(response.body)['message']).to eq("Name can't be blank")
+        end.not_to change { project.awards.count }
+      end
+    end
+  end
+
+  describe '#send_award' do
+    let(:award_type) { create(:award_type, project: project) }
+    let(:award) do
+      create(
+        :award,
+        award_type: award_type,
+        amount: 100,
+        quantity: 1,
+        issuer: issuer.account
+      )
+    end
+    let(:award2) do
+      create(
+        :award,
+        award_type: award_type,
+        amount: 100,
+        quantity: 1,
+        issuer: issuer.account
+      )
+    end
+
+    before do
+      login(issuer.account)
+      request.env['HTTP_REFERER'] = "/projects/#{project.to_param}"
+    end
+
+    context 'logged in' do
       it 'records a slack award being created' do
         expect_any_instance_of(Award).to receive(:send_award_notifications)
         allow_any_instance_of(Award).to receive(:ethereum_issue_ready?) { true }
 
-        expect do
-          post :create, params: {
-            project_id: project.to_param, award: {
-              uid: receiver.uid,
-              award_type_id: award_type.to_param,
-              quantity: 1.5,
-              description: 'This rocks!!11',
-              channel_id: project.channels.first.id
-            }
+        award.update(account: nil, status: 'ready')
+
+        post :send_award, params: {
+          project_id: project.to_param,
+          award_type_id: award_type.to_param,
+          award_id: award.to_param,
+          task: {
+            uid: receiver.uid,
+            quantity: 1.5,
+            channel_id: project.channels.first.id,
+            message: 'Great work'
           }
-          expect(response.status).to eq(302)
-        end.to change { project.awards.count }.by(1)
+        }
+        expect(response.status).to eq(200)
 
-        expect(response).to redirect_to(project_path(project))
-        expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.decorate.name}")
+        award.reload
 
-        award = Award.last
+        expect(flash[:notice]).to eq("#{award.decorate.recipient_display_name.possessive} task has been accepted. Initiate payment for the task on the payments page.")
         expect(award.award_type).to eq(award_type)
         expect(award.account).to eq(receiver.account)
-        expect(award.description).to eq('This rocks!!11')
         expect(award.quantity).to eq(1.5)
       end
 
@@ -138,61 +139,27 @@ describe AwardsController do
         stub_discord_channels
         channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'discord_channel')
 
-        expect do
-          post :create, params: {
-            project_id: project.to_param, award: {
-              uid: receiver_discord.uid,
-              award_type_id: award_type.to_param,
-              quantity: 1.5,
-              description: 'This rocks!!11',
-              channel_id: channel.id
-            }
+        award2.update(account: nil, status: 'ready')
+
+        post :send_award, params: {
+          project_id: project.to_param,
+          award_type_id: award_type.to_param,
+          award_id: award2.to_param,
+          task: {
+            uid: receiver_discord.uid,
+            quantity: 1.5,
+            channel_id: channel.id,
+            message: 'Great work'
           }
-          expect(response.status).to eq(302)
-        end.to change { project.awards.count }.by(1)
+        }
+        expect(response.status).to eq(200)
 
-        expect(response).to redirect_to(project_path(project))
-        expect(flash[:notice]).to eq("Successfully sent award to #{receiver.account.decorate.name}")
-
-        award = Award.last
-        expect(award.discord?).to be_truthy
-        expect(award.award_type).to eq(award_type)
-        expect(award.account).to eq(receiver.account)
-        expect(award.description).to eq('This rocks!!11')
-        expect(award.quantity).to eq(1.5)
-      end
-
-      it "renders error if you specify a award type that doesn't belong to a project" do
-        stub_request(:post, 'https://slack.com/api/users.info')
-          .with(body: { 'token' => 'slack token', 'user' => 'receiver id' })
-          .to_return(status: 200, body: File.read(Rails.root.join('spec', 'fixtures', 'users_info_response.json')), headers: {})
-        expect_any_instance_of(Account).not_to receive(:send_award_notifications)
-        expect do
-          post :create, params: {
-            project_id: project.to_param, award: {
-              uid: 'receiver id',
-              award_type_id: create(:award_type, amount: 10000, project: create(:project, maximum_tokens: 100_000, maximum_royalties_per_month: 25000)).to_param,
-              description: 'I am teh haxor',
-              channel_id: project.channels.first.id
-            }
-          }
-          expect(response.status).to eq(200)
-        end.not_to change { project.awards.count }
-        expect(flash[:error]).to eq('Failed sending award - Not authorized')
-      end
-
-      it 'renders back to projects show if error saving' do
-        expect do
-          post :create, params: {
-            project_id: project.to_param, award: {
-              uid: receiver.uid,
-              description: 'This rocks!!11'
-            }
-          }
-          expect(response.status).to eq(200)
-        end.not_to change { project.awards.count }
-
-        expect(flash[:error]).to eq('Failed sending award - missing award type')
+        award2.reload
+        expect(flash[:notice]).to eq("#{award2.decorate.recipient_display_name.possessive} task has been accepted. Initiate payment for the task on the payments page.")
+        expect(award2.discord?).to be_truthy
+        expect(award2.award_type).to eq(award_type)
+        expect(award2.account).to eq(receiver.account)
+        expect(award2.quantity).to eq(1.5)
       end
     end
   end
@@ -232,7 +199,7 @@ describe AwardsController do
     end
 
     context 'on Qtum network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'qrc20') }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'qrc20')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -257,7 +224,7 @@ describe AwardsController do
     end
 
     context 'on Cardano network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'ada') }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'ada')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -283,7 +250,7 @@ describe AwardsController do
     end
 
     context 'on Bitcoin network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'btc') }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'btc')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -309,7 +276,7 @@ describe AwardsController do
     end
 
     context 'on EOS network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'eos') }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'eos')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -335,7 +302,7 @@ describe AwardsController do
     end
 
     context 'on Tezos network' do
-      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'xtz') }
+      let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'xtz')) }
       let!(:award2) { create(:award, award_type: create(:award_type, project: project2), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '61234') }
 
       it 'add award to account' do
@@ -363,39 +330,68 @@ describe AwardsController do
 
   describe '#update_transaction_address' do
     let(:transaction_address) { '0xdb6f4aad1b0de83284855aafafc1b0a4961f4864b8a627b5e2009f5a6b2346cd' }
-    let!(:award) { create(:award, award_type: create(:award_type, project: project), issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '1234') }
+    let(:award_type) { create(:award_type, project: project) }
+    let!(:award) { create(:award, award_type: award_type, issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '1234') }
 
     it 'success' do
       login issuer.account
       post :update_transaction_address, format: 'js', params: {
-        project_id: project.to_param, id: award.id, tx: transaction_address
+        project_id: project.to_param,
+        award_type_id: award_type.to_param,
+        award_id: award.id,
+        tx: transaction_address
       }
-      expect(award.reload.ethereum_transaction_address).to eq transaction_address
+      award.reload
+      expect(award.ethereum_transaction_address).to eq transaction_address
+      expect(award.status).to eq 'paid'
     end
 
     it 'failure' do
       post :update_transaction_address, format: 'js', params: {
-        project_id: project.to_param, id: award.id, tx: transaction_address
+        project_id: project.to_param,
+        award_type_id: award_type.to_param,
+        award_id: award.id,
+        tx: transaction_address
       }
       expect(award.reload.ethereum_transaction_address).to be_nil
     end
   end
 
-  describe '#preview' do
-    let(:project1) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'erc20') }
-    let(:project2) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, coin_type: 'qrc20') }
+  describe '#recipient_address' do
+    let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+    let(:award_type) { create(:award_type, project: project) }
+    let(:award) { create(:award, award_type: award_type) }
 
-    it 'when channel_id is blank' do
-      award_type = create(:award_type)
+    it 'with email' do
       create(:account, email: 'test2@comakery.com', ethereum_wallet: '0xaBe4449277c893B3e881c29B17FC737ff527Fa47', qtum_wallet: 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
+
       login issuer.account
-      get :preview, format: 'js', params: { project_id: project1.to_param, uid: 'test2@comakery.com', quantity: 1, award_type_id: award_type.id }
-      expect(assigns(:recipient_address)).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa47')
-      get :preview, format: 'js', params: { project_id: project2.to_param, uid: 'test2@comakery.com', quantity: 1, award_type_id: award_type.id }
-      expect(assigns(:recipient_address)).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
+      award.update(status: 'ready')
+      post :recipient_address, format: 'js', params: {
+        project_id: project.to_param,
+        award_type_id: award_type.to_param,
+        award_id: award.id,
+        email: 'test2@comakery.com'
+      }
+      expect(response.status).to eq(200)
+      expect(response.content_type).to eq('application/json')
+      expect(JSON.parse(response.body)['address']).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa47')
+
+      project.token.update(coin_type: 'qrc20')
+      award.update(status: 'ready')
+
+      post :recipient_address, format: 'js', params: {
+        project_id: project.to_param,
+        award_type_id: award_type.to_param,
+        award_id: award.to_param,
+        email: 'test2@comakery.com'
+      }
+      expect(response.status).to eq(200)
+      expect(response.content_type).to eq('application/json')
+      expect(JSON.parse(response.body)['address']).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
     end
 
-    it 'when channel_id is present' do
+    it 'with channel_id and uid' do
       stub_request(:post, 'https://slack.com/api/users.info').to_return(body: {
         ok: true,
         "user": {
@@ -407,11 +403,21 @@ describe AwardsController do
           }
         }
       }.to_json)
+
       create(:account, email: 'bobjohnson@example.com', ethereum_wallet: '0xaBe4449277c893B3e881c29B17FC737ff527Fa48')
-      award_type = create(:award_type, project: project)
       login issuer.account
-      get :preview, format: 'js', params: { project_id: project.to_param, uid: 'receiver id', quantity: 1, award_type_id: award_type.id, channel_id: project.channels.first.id }
-      expect(assigns(:recipient_address)).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa48')
+      award.update(status: 'ready')
+
+      post :recipient_address, format: 'js', params: {
+        project_id: project.to_param,
+        award_type_id: award_type.to_param,
+        award_id: award.to_param,
+        uid: 'receiver id',
+        channel_id: project.channels.first.id
+      }
+      expect(response.status).to eq(200)
+      expect(response.content_type).to eq('application/json')
+      expect(JSON.parse(response.body)['address']).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa48')
     end
   end
 end

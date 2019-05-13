@@ -7,7 +7,6 @@ class ContributorsController < ApplicationController
 
     @contributors  = @project.contributors_by_award_amount.page(params[:page])
     @award_data    = GetContributorData.call(project: @project).award_data
-    @revenue_share = @project.revenue_share?
 
     @chart_data = @award_data[:contributions_summary_pie_chart].map do |award|
       {
@@ -26,14 +25,11 @@ class ContributorsController < ApplicationController
             total: @project.format_with_decimal_places(award[:total])
           }
         end,
-        total: @project.format_with_decimal_places(contributor.total),
-        remaining: @revenue_share ? contributor.total_awards_remaining_pretty(@project) : nil,
-        unpaid: @revenue_share ? contributor.total_revenue_unpaid_remaining_pretty(@project) : nil,
-        paid: @revenue_share ? contributor.total_revenue_paid_pretty(@project) : nil
+        total: @project.format_with_decimal_places(contributor.total)
       }
     end
 
-    @table_data += @project.awards.reject(&:account).group_by { |award| award.decorate.recipient_display_name }.values.map do |awards|
+    @table_data += @project.awards&.completed&.reject(&:account)&.group_by { |award| award.decorate.recipient_display_name }.values.map do |awards|
       {
         image_url: helpers.account_image_url(nil, 27),
         name: awards.first.decorate.recipient_display_name,

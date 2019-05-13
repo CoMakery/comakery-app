@@ -21,19 +21,21 @@ class Account < ApplicationRecord
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   # default_scope { includes(:slack_auth) }
   has_many :projects
-  has_many :payments
   has_many :channels, through: :projects
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
 
-  enum specialty: {
-    audio_video_production: 'Audio or Video Production',
+  belongs_to :specialty
+
+  enum deprecated_specialty: {
+    audio_video_production: 'Audio Or Video Production',
     community_development: 'Community Development',
     data_gathering: 'Data Gathering',
-    marketing_social: 'Marketing & Social Media',
+    marketing_social: 'Marketing & Social',
     software_development: 'Software Development',
-    design: 'UX / UI Design',
-    writing: 'Writing'
+    design: 'Design',
+    writing: 'Writing',
+    research: 'Research'
   }
 
   validates :email, presence: true, uniqueness: true
@@ -56,7 +58,7 @@ class Account < ApplicationRecord
     def order_by_award(project)
       award_types = project.award_types.map(&:id).join(',')
       return Account.none if award_types.blank?
-      select("accounts.*, (select sum(total_amount) from awards where awards.account_id = accounts.id and awards.award_type_id in(#{award_types})) as total").distinct.order('total desc')
+      select("accounts.*, (select sum(total_amount) from awards where awards.status in(3,5) and awards.account_id = accounts.id and awards.award_type_id in(#{award_types})) as total").distinct.order('total desc')
     end
 
     def find_from_uid_channel(uid, channel)
@@ -123,7 +125,7 @@ class Account < ApplicationRecord
   end
 
   def award_by_project(project)
-    groups = project.awards.where(account: self).group_by { |a| a.award_type.name }
+    groups = project.awards.completed.where(account: self).group_by { |a| a.award_type.name }
     arr = []
     groups.each do |group|
       arr << { name: group[0], total: group[1].sum(&:total_amount) }
@@ -132,29 +134,7 @@ class Account < ApplicationRecord
   end
 
   def total_awards_earned(project)
-    project.awards.where(account: self).sum(:total_amount)
-  end
-
-  def total_awards_paid(project)
-    project.payments.where(account: self).sum(:quantity_redeemed)
-  end
-
-  def total_awards_remaining(project)
-    total_awards_earned(project) - total_awards_paid(project)
-  end
-
-  def total_revenue_paid(project)
-    project.payments.where(account: self).sum(:total_value)
-  end
-
-  def total_revenue_unpaid(project)
-    project.share_of_revenue_unpaid(total_awards_remaining(project))
-  end
-
-  def percent_unpaid(project)
-    return BigDecimal('0') if project.total_awards_outstanding.zero?
-    precise_percentage = (BigDecimal(total_awards_remaining(project)) * 100) / BigDecimal(project.total_awards_outstanding)
-    precise_percentage.truncate(8)
+    project.awards.completed.where(account: self).sum(:total_amount)
   end
 
   def other_member_projects
@@ -189,8 +169,8 @@ class Account < ApplicationRecord
     projects_interested.exists? project_id
   end
 
-  def finished_build_profile? # check if all of the required fields are filled
-    email.present? && first_name.present? && last_name.present? && country.present? && date_of_birth.present?
+  def specialty_interested?(project_id, specialty_id)
+    interests.exists?(project_id: project_id, specialty_id: specialty_id)
   end
 
   def valid_and_underage?
@@ -229,7 +209,7 @@ class Account < ApplicationRecord
   def awards_csv
     Comakery::CSV.generate_multiplatform do |csv|
       csv << ['Project', 'Award Type', 'Total Amount', 'Issuer', 'Date']
-      awards.order(:created_at).decorate.each do |award|
+      awards.completed.order(:created_at).decorate.each do |award|
         csv << [award.project.title, award.award_type.name, award.total_amount_pretty, award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]
       end
     end

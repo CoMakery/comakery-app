@@ -117,7 +117,6 @@ export default class Wallet {
       decimal,
       '0x' + new BigNumber(totalSupply1).times(new BigNumber(10).pow(decimal)).toString(16),
     ]);
-    console.log(encodedParam);
     return qtum.utils.buildCreateContractTransaction(wallet.keyPair, qrc20TokenCode + encodedParam.substr(2), gasLimit, gasPrice, fee, utxoList)
   }
 

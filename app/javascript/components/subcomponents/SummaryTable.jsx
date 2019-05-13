@@ -25,15 +25,15 @@ export default class SummaryTable extends React.Component {
                       </a>
                     </td>
                     <td className="small-1">
-                      {project.tokenSymbol || 'pending'}
+                      {project.token.symbol || 'pending'}
                     </td>
                     <td className="small-2">
                       {project.totalAwarded}
                     </td>
                     <td className="small-5">
-                      {project.ethereumContractAddress
+                      {project.token.ethereumContractAddress
                         ? <a href={project.ethereumContractExplorerUrl}>
-                          {project.ethereumContractAddress}
+                          {project.token.ethereumContractAddress}
                         </a>
                         : 'pending'}
                     </td>

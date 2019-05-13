@@ -4,7 +4,7 @@ import { of } from 'rxjs'
 import { initializeWallet, transaction, confirmOperation } from 'tezos-wallet'
 
 const transferXtzCoins = async function(award) { // award in JSON
-  const network = award.project.blockchain_network.replace('tezos_', '')
+  const network = award.project.token.blockchain_network.replace('tezos_', '')
   const recipientAddress = award.account.tezos_wallet
   let amount = parseFloat(award.total_amount)
 
@@ -29,7 +29,6 @@ const submitTransaction = async function(award, network, to, amount) {
   const fee = 0.0015
   const path = "m/44'/1729'/0'"
   const model = await getTrezorModel()
-  console.log('trezor model: ', model)
   if (model !== 'T') {
     throw new Error('The Trezor is not supported')
   }
@@ -70,7 +69,6 @@ const submitTransaction = async function(award, network, to, amount) {
     state => {
       const txHash = state.confirmOperation.injectionOperation
       debugLog(['transaction succeeded', state])
-      console.log('transaction address: ' + txHash)
       updateTransactionAddress(award, txHash)
     },
     error => {

@@ -10,7 +10,7 @@ describe 'shared/_project_header.html.rb' do
   context "with coin_type eq 'erc20'" do
     let!(:project) do
       stub_token_symbol
-      create(:project, ethereum_enabled: true, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'erc20')
+      create(:project, ethereum_enabled: true, token: create(:token, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'erc20'))
     end
 
     before do
@@ -19,13 +19,13 @@ describe 'shared/_project_header.html.rb' do
     end
 
     specify do
-      expect(rendered).to have_link 'Ξthereum Token'
+      expect(rendered).to have_css 'div[data-react-class="layouts/ProjectSetupHeader"]'
     end
   end
 
   context "with coin_type eq 'qrc20'" do
     let!(:project) do
-      create(:project, ethereum_enabled: true, contract_address: '583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'qrc20', blockchain_network: 'qtum_testnet')
+      create(:project, token: create(:token, ethereum_enabled: true, contract_address: '583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'qrc20', blockchain_network: 'qtum_testnet'))
     end
 
     before do
@@ -34,7 +34,7 @@ describe 'shared/_project_header.html.rb' do
     end
 
     specify do
-      expect(rendered).to have_link 'Qtum Token'
+      expect(rendered).to have_css 'div[data-react-class="layouts/ProjectSetupHeader"]'
     end
   end
 end

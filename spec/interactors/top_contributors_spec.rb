@@ -21,11 +21,7 @@ describe TopContributors do
     let!(:account6) { sb_auth6.account }
 
     let!(:sb_project) { create(:sb_project, account: sb_account_owner) }
-
-    let!(:small_award_type) { create(:award_type, project: sb_project, amount: 10) }
-    let!(:medium_award_type) { create(:award_type, project: sb_project, amount: 500) }
-    let!(:large_award_type) { create(:award_type, project: sb_project, amount: 1000) }
-    let!(:extra_large_award_type) { create(:award_type, project: sb_project, amount: 2000) }
+    let!(:award_type) { create(:award_type, project: sb_project) }
 
     before do
       team.build_authentication_team sb_auth_owner
@@ -36,17 +32,17 @@ describe TopContributors do
       team.build_authentication_team sb_auth5
       team.build_authentication_team sb_auth6
 
-      create(:award, account: account1, award_type: medium_award_type, created_at: 5.days.ago)
-      create(:award, account: account1, award_type: medium_award_type, created_at: 5.days.ago)
-      create(:award, account: account1, award_type: large_award_type, created_at: 5.days.ago)
-      create(:award, account: account3, award_type: extra_large_award_type, created_at: 4.days.ago)
-      create(:award, account: account4, award_type: small_award_type, created_at: 3.days.ago)
-      create(:award, account: account5, award_type: small_award_type, created_at: 2.days.ago)
+      create(:award, account: account1, award_type: award_type, amount: 500, created_at: 5.days.ago)
+      create(:award, account: account1, award_type: award_type, amount: 500, created_at: 5.days.ago)
+      create(:award, account: account1, award_type: award_type, amount: 1000, created_at: 5.days.ago)
+      create(:award, account: account3, award_type: award_type, amount: 2000, created_at: 4.days.ago)
+      create(:award, account: account4, award_type: award_type, amount: 10, created_at: 3.days.ago)
+      create(:award, account: account5, award_type: award_type, amount: 10, created_at: 2.days.ago)
     end
 
     describe 'with all award.quantity = 1' do
       before do
-        create(:award, account: account2, award_type: large_award_type, created_at: 1.day.ago)
+        create(:award, account: account2, award_type: award_type, amount: 1000, created_at: 1.day.ago)
       end
 
       it "defaults to top 5 contributors ordered by
@@ -59,7 +55,7 @@ describe TopContributors do
 
     describe 'with some award.quantity > 1' do
       before do
-        create(:award, account: account2, award_type: large_award_type, quantity: 1.5, created_at: 1.day.ago)
+        create(:award, account: account2, award_type: award_type, amount: 1000, quantity: 1.5, created_at: 1.day.ago)
       end
 
       it %(returns the most awarded contributors, ordered by total contribution/recency,

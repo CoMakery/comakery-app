@@ -15,22 +15,6 @@ class ContributorsTable extends React.Component {
                 <th>
                   Total Tokens Awarded
                 </th>
-
-                {this.props.revenueShare &&
-                  <th>
-                    Unpaid Revenue Shares
-                  </th>
-                }
-                {this.props.revenueShare &&
-                  <th>
-                    Unpaid Revenue Share Balance
-                  </th>
-                }
-                {this.props.revenueShare &&
-                  <th>
-                    Lifetime Paid
-                  </th>
-                }
               </tr>
 
               {this.props.tableData.map((t) =>
@@ -65,24 +49,6 @@ class ContributorsTable extends React.Component {
                   <td className="awards-earned financial">
                     <span className="margin-small">{t.total}</span>
                   </td>
-
-                  {this.props.revenueShare &&
-                    <td className="award-holdings financial">
-                      <span className="margin-small">{t.remaining}</span>
-                    </td>
-                  }
-
-                  {this.props.revenueShare &&
-                    <td className="holdings-value financial">
-                      <span className="margin-small">{t.unpaid}</span>
-                    </td>
-                  }
-
-                  {this.props.revenueShare &&
-                    <td className="paid hidden financial">
-                      <span className="margin-small">{t.paid}</span>
-                    </td>
-                  }
                 </tr>
               )}
             </tbody>
@@ -95,11 +61,9 @@ class ContributorsTable extends React.Component {
 }
 
 ContributorsTable.propTypes = {
-  tableData   : PropTypes.array.isRequired,
-  revenueShare: PropTypes.bool.isRequired
+  tableData: PropTypes.array.isRequired
 }
 ContributorsTable.defaultProps = {
-  tableData   : [],
-  revenueShare: false
+  tableData: []
 }
 export default ContributorsTable

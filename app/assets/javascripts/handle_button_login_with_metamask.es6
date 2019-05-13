@@ -26,7 +26,6 @@ loginWithMetaMask.handleClick = async function() {
     return response.json();
   }).then(function(data) {
     if (data.publicAddress) {
-      console.log(data);
       return data;
     } else {
       return loginWithMetaMask.handleSignup(publicAddress, web3.version.network);

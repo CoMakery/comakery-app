@@ -3,15 +3,22 @@ require 'refile/file_double'
 class Mom
   def account(**attrs)
     defaults = {
-      email: "me+#{Random.new.urlsafe_base64}@example.com",
+      email: "me+#{SecureRandom.hex(20)}@example.com",
       first_name: 'Account',
-      last_name: (1..100).to_a.sample,
+      last_name: SecureRandom.hex(20),
       date_of_birth: '1990/01/01',
       country: 'United States of America',
-      specialty: 'Software Development',
+      specialty: create(:specialty),
       password: valid_password
     }
     Account.new(defaults.merge(attrs))
+  end
+
+  def specialty(**attrs)
+    defaults = {
+      name: "Specialty #{SecureRandom.hex(20)}"
+    }
+    Specialty.new(defaults.merge(attrs))
   end
 
   def account_with_auth(**attrs)
@@ -43,11 +50,11 @@ class Mom
   end
 
   def cc_project(account = create(:cc_authentication).account, **attrs)
-    project(account, { title: 'Citizen Code' }.merge(**attrs))
+    project(account, { title: 'Citizen Code', token: create(:token) }.merge(**attrs))
   end
 
   def sb_project(account = create(:account), **attrs)
-    project(account, { title: 'Swarmbot', payment_type: 'project_token' }.merge(**attrs))
+    project(account, { title: 'Swarmbot', payment_type: 'project_token', token: create(:token) }.merge(**attrs))
   end
 
   def project(account = create(:account_with_auth), **attrs)
@@ -56,20 +63,22 @@ class Mom
       description: 'We are going to build amazing',
       tracker: 'https://github.com/example/uber_for_cats',
       account: account,
-      royalty_percentage: 5.9,
-      maximum_royalties_per_month: 10_000,
       legal_project_owner: 'UberCatz Inc',
+      require_confidentiality: false,
+      exclusive_contributions: false,
+      visibility: 'member',
       long_id: SecureRandom.hex(20),
-      maximum_tokens: 10_000_000,
-      token_symbol: 'FCBB'
+      maximum_tokens: 1_000_000_000,
+      token: create(:token),
+      mission: create(:mission)
     }
     Project.new(defaults.merge(attrs))
   end
 
   def token(**attrs)
     defaults = {
-      name: 'Uber for Cats',
-      symbol: 'FCBB'
+      name: "Token-#{SecureRandom.hex(20)}",
+      symbol: "TKN#{SecureRandom.hex(20)}"
     }
     Token.new(defaults.merge(attrs))
   end
@@ -94,41 +103,50 @@ class Mom
 
   def award_type(**attrs)
     defaults = {
-      amount: 1337,
-      name: 'Contribution'
+      name: 'Contribution',
+      specialty: create(:specialty),
+      goal: 'none',
+      description: 'none'
     }
     attrs[:project] = create(:project) unless attrs[:project]
     AwardType.new(defaults.merge(attrs))
   end
 
-  def award(**attrs)
+  def award_ready(**attrs)
     params = {
-      issuer: create(:account),
-      description: 'Great work',
-      proof_id: 'abc123',
-      quantity: 1,
-      unit_amount: 50,
-      total_amount: 50
+      name: 'none',
+      description: 'none',
+      why: 'none',
+      requirements: 'none',
+      proof_link: 'http://nil',
+      amount: 50
     }.merge(attrs)
 
-    params[:award_type] ||= create(:award_type, amount: params[:unit_amount])
-    params[:account] ||= create(:account)
-
-    params[:unit_amount] = params[:award_type].amount
-    params[:total_amount] = params[:award_type].amount * params[:quantity]
+    params[:award_type] ||= create(:award_type)
+    params[:issuer] ||= create(:account)
 
     Award.new(params)
   end
 
-  def payment(currency: 'USD', **attrs)
-    Payment.new(currency: currency, **attrs)
-  end
+  def award(**attrs)
+    params = {
+      name: 'none',
+      description: 'none',
+      why: 'none',
+      requirements: 'none',
+      proof_link: 'http://nil',
+      proof_id: 'abc123',
+      status: 'accepted',
+      message: 'Great work',
+      quantity: 1,
+      amount: 50
+    }.merge(attrs)
 
-  def project_payment(quantity_redeemed: 1, account: create(:account), project: create(:project))
-    project
-      .payments
-      .new_with_quantity(quantity_redeemed: quantity_redeemed,
-                         account: account)
+    params[:award_type] ||= create(:award_type)
+    params[:account] ||= create(:account)
+    params[:issuer] ||= create(:account)
+
+    Award.new(params)
   end
 
   def slack(authentication = create(:authentication))
@@ -147,13 +165,6 @@ class Mom
 
   def valid_password
     'a password'
-  end
-
-  def revenue(project: create(:project), amount: 10, currency: 'USD')
-    Revenue.new amount: amount,
-                currency: currency,
-                project: project,
-                recorded_by: project.account
   end
 
   def mission(**attrs)

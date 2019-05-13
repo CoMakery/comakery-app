@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190226193253) do
+ActiveRecord::Schema.define(version: 20190505143605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "accounts", id: :serial, force: :cascade do |t|
     t.string "email"
@@ -43,12 +44,12 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.string "image_content_size"
     t.string "image_content_type"
     t.string "nickname"
+    t.string "country"
+    t.date "date_of_birth"
     t.string "public_address"
     t.string "nonce"
     t.string "network_id"
     t.boolean "system_email", default: false
-    t.string "country"
-    t.date "date_of_birth"
     t.date "agreed_to_user_agreement"
     t.boolean "new_award_notice", default: false
     t.boolean "contributor_form", default: false
@@ -57,13 +58,14 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.string "cardano_wallet"
     t.string "bitcoin_wallet"
     t.string "eos_wallet"
-    t.string "specialty"
+    t.string "deprecated_specialty"
     t.string "occupation"
     t.string "linkedin_url"
     t.string "github_url"
     t.string "dribble_url"
     t.string "behance_url"
     t.string "tezos_wallet"
+    t.integer "specialty_id"
     t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
@@ -91,25 +93,29 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.datetime "updated_at"
     t.string "uid", null: false
     t.string "token"
-    t.string "slack_user_name"
-    t.string "slack_first_name"
-    t.string "slack_last_name"
-    t.string "slack_image_32_url"
     t.jsonb "oauth_response"
     t.string "email"
     t.string "confirm_token"
     t.index ["account_id"], name: "index_authentications_on_account_id"
+    t.index ["uid"], name: "index_authentications_on_uid"
   end
 
   create_table "award_types", id: :serial, force: :cascade do |t|
     t.integer "project_id", null: false
     t.string "name", null: false
-    t.integer "amount", null: false
+    t.integer "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "community_awardable", default: false, null: false
     t.text "description"
     t.boolean "disabled"
+    t.integer "specialty_id"
+    t.text "goal"
+    t.string "specialty"
+    t.string "diagram_id"
+    t.string "diagram_filename"
+    t.string "diagram_content_size"
+    t.string "diagram_content_type"
     t.index ["project_id"], name: "index_award_types_on_project_id"
   end
 
@@ -119,19 +125,31 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "award_type_id", null: false
-    t.integer "authentication_id"
+    t.integer "account_id"
     t.string "ethereum_transaction_address"
     t.text "proof_id", null: false
     t.string "proof_link"
     t.decimal "quantity", default: "1.0"
     t.decimal "total_amount"
     t.integer "unit_amount"
-    t.integer "account_id"
     t.integer "channel_id"
     t.string "uid"
     t.string "confirm_token"
     t.string "email"
+    t.string "name"
+    t.text "why"
+    t.text "requirements"
+    t.integer "status", default: 0
+    t.decimal "amount"
+    t.text "message"
+    t.string "image_id"
+    t.string "image_filename"
+    t.string "image_content_size"
+    t.string "image_content_type"
+    t.integer "experience_level", default: 0
+    t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
+    t.index ["issuer_id"], name: "index_awards_on_issuer_id"
   end
 
   create_table "channels", force: :cascade do |t|
@@ -145,12 +163,16 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.index ["team_id"], name: "index_channels_on_team_id"
   end
 
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
   create_table "interests", force: :cascade do |t|
     t.bigint "account_id"
     t.string "protocol"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "project_id"
+    t.integer "specialty_id"
     t.index ["account_id"], name: "index_interests_on_account_id"
     t.index ["project_id"], name: "index_interests_on_project_id"
   end
@@ -190,6 +212,8 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.string "currency"
     t.integer "status", default: 0
     t.boolean "reconciled", default: false
+    t.index ["account_id"], name: "index_payments_on_account_id"
+    t.index ["issuer_id"], name: "index_payments_on_issuer_id"
     t.index ["project_id"], name: "index_payments_on_project_id"
   end
 
@@ -201,18 +225,17 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.datetime "updated_at", null: false
     t.boolean "public", default: false, null: false
     t.integer "account_id", null: false
-    t.string "slack_team_id"
     t.string "image_id"
     t.string "slack_channel"
-    t.integer "maximum_tokens", default: 0, null: false
+    t.decimal "maximum_tokens", default: "0.0"
     t.text "contributor_agreement_url"
     t.text "video_url"
     t.string "ethereum_contract_address"
     t.boolean "ethereum_enabled", default: false
     t.integer "payment_type", default: 1
-    t.boolean "exclusive_contributions"
+    t.boolean "exclusive_contributions", default: true
     t.string "legal_project_owner"
-    t.boolean "require_confidentiality"
+    t.boolean "require_confidentiality", default: true
     t.decimal "royalty_percentage", precision: 16, scale: 13
     t.integer "maximum_royalties_per_month"
     t.boolean "license_finalized", default: false, null: false
@@ -232,10 +255,19 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.string "contract_address"
     t.bigint "mission_id"
     t.integer "status", default: 1
+    t.bigint "token_id"
+    t.string "square_image_id"
+    t.string "square_image_filename"
+    t.string "square_image_content_size"
+    t.string "square_image_content_type"
+    t.string "panoramic_image_id"
+    t.string "panoramic_image_filename"
+    t.string "panoramic_image_content_size"
+    t.string "panoramic_image_content_type"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
-    t.index ["slack_team_id", "public"], name: "index_projects_on_slack_team_id_and_public"
+    t.index ["token_id"], name: "index_projects_on_token_id"
   end
 
   create_table "revenues", id: :serial, force: :cascade do |t|
@@ -249,6 +281,10 @@ ActiveRecord::Schema.define(version: 20190226193253) do
     t.integer "recorded_by_id"
     t.index ["project_id"], name: "index_revenues_on_project_id"
     t.index ["recorded_by_id"], name: "index_revenues_on_recorded_by_id"
+  end
+
+  create_table "specialties", force: :cascade do |t|
+    t.string "name"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -281,4 +317,5 @@ ActiveRecord::Schema.define(version: 20190226193253) do
   end
 
   add_foreign_key "interests", "accounts"
+  add_foreign_key "projects", "tokens"
 end

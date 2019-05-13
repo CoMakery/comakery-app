@@ -57,7 +57,7 @@ def make(fixture:, project_model:, owner_name:, team_name:, team_image:, project
     image: File.new(get_fixture(project_image)),
     maximum_tokens: 10_000_000
   )
-  award_type = create :award_type, amount: 100, name: 'Commit', project: project
+  award_type = create :award_type, name: 'Commit', project: project
   fixture_path = get_fixture "#{fixture}.json"
   contributions = JSON.load IO.read fixture_path
   contributions.each do |date, data|
@@ -66,6 +66,7 @@ def make(fixture:, project_model:, owner_name:, team_name:, team_image:, project
         recipient_auth = auth(name, team_name, team_image)
         award = create :award, recipient_auth, owner.account,
           award_type: award_type,
+          amount: 100,
           description: 'Git commit',
           created_at: date,
           updated_at: date

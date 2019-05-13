@@ -25,7 +25,8 @@ class PagesController < ApplicationController
   def add_interest
     @interest = current_user.interests.new
     @interest.project_id = params[:project_id]
-    @interest.protocol = params[:protocol] # mission name
+    @interest.specialty_id = params[:specialty_id]
+    @interest.protocol = params[:protocol] || 'No mission assigned to the project' # mission name
     @interest.save
     respond_to do |format|
       format.json { render json: @interest.to_json }
@@ -41,8 +42,8 @@ class PagesController < ApplicationController
 
   def featured_mission_props(mission)
     mission.as_json(only: %i[id name description]).merge(
+      mission_url: mission_url(mission),
       image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 312, 312) : nil,
-      symbol: mission.token&.symbol,
       projects: mission.projects.public_listed.active.map do |project|
         project.as_json(only: %i[id title]).merge(
           interested: current_account&.interested?(project.id)
@@ -53,8 +54,8 @@ class PagesController < ApplicationController
 
   def more_mission_props(mission)
     mission.as_json(only: %i[id name]).merge(
+      mission_url: mission_url(mission),
       image_url: mission.image.present? ? Refile.attachment_url(mission, :image, :fill, 231, 231) : nil,
-      symbol: mission.token&.symbol,
       projects_count: mission.projects.public_listed.active.count
     )
   end

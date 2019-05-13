@@ -13,12 +13,13 @@ class AccountsController < ApplicationController
 
   def show
     @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:project_page]).per(20)
-    @awards = current_account.awards.order(created_at: :desc).page(params[:award_page]).per(20)
+    @awards = current_account.awards&.completed&.order(created_at: :desc)&.page(params[:award_page])&.per(20)
     @projects_count = @projects.total_count
     @awards_count = @awards.total_count
 
     @projects = @projects.map { |project| project_decorate(project) }
     @awards = @awards.map do |award|
+      next unless award.project
       award.as_json(only: %i[id]).merge(
         total_amount_pretty: award.decorate.total_amount_pretty,
         created_at: award.created_at.strftime('%b %d, %Y'),
@@ -133,7 +134,7 @@ class AccountsController < ApplicationController
           flash[:error] = error_msg
           # Legacy code caused issue
           @projects = Project.left_outer_joins(:awards).where(awards: { account_id: current_account.id }).where.not(awards: { id: nil }).order(:title).group('projects.id').page(params[:project_page]).per(20)
-          @awards = current_account.awards.order(created_at: :desc).page(params[:award_page]).per(20)
+          @awards = current_account.awards&.completed&.order(created_at: :desc)&.page(params[:award_page])&.per(20)
           render :show
         end
         format.json do
@@ -163,7 +164,7 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :cardano_wallet, :bitcoin_wallet, :eos_wallet, :tezos_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password, :specialty, :occupation, :linkedin_url, :github_url, :dribble_url, :behance_url)
+    result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :cardano_wallet, :bitcoin_wallet, :eos_wallet, :tezos_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password, :specialty_id, :occupation, :linkedin_url, :github_url, :dribble_url, :behance_url)
     result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y') if result[:date_of_birth].present?
     result
   end
@@ -176,9 +177,10 @@ class AccountsController < ApplicationController
 
   def project_decorate(project)
     project.as_json(only: %i[id title token_symbol ethereum_contract_address]).merge(
-      awards_path: project_awards_path(project.show_id, mine: true),
+      awards_path: awards_project_path(project.id, mine: true),
       total_awarded: project.decorate.total_awarded_to_user(current_account),
-      ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url
+      ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url,
+      token: project.token ? project.token.serializable_hash : {}
     )
   end
 

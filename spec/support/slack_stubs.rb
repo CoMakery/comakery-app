@@ -3,21 +3,23 @@ module SlackStubs
     stub_request(:post, 'https://slack.com/api/users.list').to_return(body: { "ok": true, "members": members }.to_json)
   end
 
-  def slack_user_from_auth(auth)
-    auth_team = AuthenticationTeam.find_by(authentication: auth)
-    {
-      "id": auth.uid,
-      "team_id": auth_team&.team_id,
-      "name": auth.account.decorate.name,
-      "deleted": false,
-      "profile": {
-        "first_name": auth.account.first_name,
-        "last_name": auth.account.last_name,
-        "real_name": auth.account.decorate.name,
-        "real_name_normalized": auth.account.decorate.name,
-        "email": auth.account.email
+  def slack_users_from_auths(auths)
+    auths.map do |auth|
+      auth_team = AuthenticationTeam.find_by(authentication: auth)
+      {
+        "id": auth.uid,
+        "team_id": auth_team&.team_id,
+        "name": auth.account.decorate.name,
+        "deleted": false,
+        "profile": {
+          "first_name": auth.account.first_name,
+          "last_name": auth.account.last_name,
+          "real_name": auth.account.decorate.name,
+          "real_name_normalized": auth.account.decorate.name,
+          "email": auth.account.email
+        }
       }
-    }
+    end
   end
 
   def sb_slack_user(first_name: 'Bob', last_name: 'Johnson', team_id: 'T9999S99P', user_id: 'U9999UVMH')
@@ -97,18 +99,34 @@ module SlackStubs
     allow_any_instance_of(String).to receive(:text) { 'symbol =' }
   end
 
-  def stub_web3_fetch
-    stub_request(:post, 'https://mainnet.infura.io/').to_return(
+  def stub_web3_fetch(host = 'mainnet.infura.io')
+    stub_request(:post, "https://#{host}/").to_return(
       status: 200,
       body: '{"jsonrpc":"2.0","id":"2197121","result":"0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000003484f540000000000000000000000000000000000000000000000000000000000"}',
       headers: {}
     )
   end
 
-  def stub_qtum_fetch
-    stub_request(:get, 'https://testnet.qtum.info/api/contract/2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc').to_return(
+  def stub_web3_fetch_failure(host = 'mainnet.infura.io')
+    stub_request(:post, "https://#{host}/").to_return(
+      status: 200,
+      body: '{}',
+      headers: {}
+    )
+  end
+
+  def stub_qtum_fetch(host = 'testnet.qtum.info')
+    stub_request(:get, "https://#{host}/api/contract/2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc").to_return(
       status: 200,
       body: '{"qrc20":{"symbol":"BIG", "decimals":"0"}}',
+      headers: {}
+    )
+  end
+
+  def stub_qtum_fetch_failure(host = 'testnet.qtum.info')
+    stub_request(:get, "https://#{host}/api/contract/2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc").to_return(
+      status: 200,
+      body: '{}',
       headers: {}
     )
   end

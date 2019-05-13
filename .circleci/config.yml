@@ -9,6 +9,7 @@ jobs:
           NODE_VER: 10.13.0
           YARN_VER: 1.12.3
           ARCH: x64
+          BUNDLER_VERSION: 2.0.1
       - image: circleci/postgres:9.6.2-alpine
     steps:
       - run: wget "https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo tar -xJf "node-v$NODE_VER-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner && rm "node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
@@ -38,10 +39,8 @@ jobs:
       - run: yarn stylelint
       - run: bundle exec rake assets:precompile
 
-      - run: bundle exec rake db:create db:migrate
-      - run: bundle exec rake db:migrate VERSION=20160227015851
-      - run: git checkout db/schema.rb
-      - run: bundle exec rake db:reset
+      - run: bundle exec rake db:setup
+      - run: bundle exec rake data:migrate
       - run: bundle exec citizen checks
 
       - type: store_artifacts

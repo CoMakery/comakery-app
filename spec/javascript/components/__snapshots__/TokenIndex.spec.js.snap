@@ -7,6 +7,7 @@ exports[`TokenIndex renders correctly without props 1`] = `
   <Layout
     category=""
     className="token-index"
+    customTitle={null}
     hasBackButton={false}
     sidebar={
       <React.Fragment>
@@ -103,6 +104,9 @@ exports[`TokenIndex renders correctly without props 1`] = `
                           />
                         </Icon>
                       </span>
+                      <div
+                        className="sidebar-item--left-border"
+                      />
                     </div>
                   </div>
                 </SidebarItem>

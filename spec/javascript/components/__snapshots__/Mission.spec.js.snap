@@ -1,0 +1,341 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Mission renders correctly without props 1`] = `
+<Mission
+  leaders={Array []}
+  mission={Object {}}
+  projects={Array []}
+  stats={Object {}}
+  tokens={
+    Object {
+      "tokens": Array [],
+    }
+  }
+>
+  <div
+    className="mission-container"
+  >
+    <div
+      className="mission-header"
+    >
+      <div
+        className="mission-header__blur"
+        style={
+          Object {
+            "backgroundImage": "url(undefined)",
+          }
+        }
+      />
+      <div
+        className="mission-header__logo"
+      >
+        <img
+          className="mission-header__logo__img"
+        />
+      </div>
+      <a
+        className="mission-header__link"
+      >
+        CREATE A PROJECT
+      </a>
+    </div>
+    <div
+      className="mission-details"
+    >
+      <div
+        className="mission-details__heading"
+      >
+        Mission
+      </div>
+      <div
+        className="mission-details__name"
+      />
+      <div
+        className="mission-details__subtitle"
+      />
+      <div
+        className="mission-details__description"
+      />
+    </div>
+    <div
+      className="mission-leaders"
+    >
+      Featured Project Leaders
+      <div
+        className="mission-leaders__wrapper"
+      >
+        <div
+          className="mission-leaders__own"
+        >
+          Want to be a project leader for this mission?
+          <a
+            className="mission-leaders__own__create"
+          >
+            CREATE YOUR OWN PROJECT
+          </a>
+        </div>
+      </div>
+    </div>
+    <div
+      className="mission-tokens"
+    >
+      Tokens Used In The Mission
+      <div
+        className="mission-tokens__cards"
+      />
+    </div>
+    <div
+      className="mission-stats"
+    >
+      Mission Stats
+      <div
+        className="mission-stats__container"
+      >
+        <div
+          className="mission-stats__kpis"
+        >
+          <div
+            className="mission-stats__kpis__row"
+          >
+            <div
+              className="mission-stats__kpi"
+            >
+              <Icon
+                className=""
+                name="PROJECT/WHITE.svg"
+              >
+                <img
+                  className="icon icon__PROJECT/WHITE-svg"
+                  src="test-file-stub"
+                />
+              </Icon>
+              <Plural
+                className={null}
+                count={1}
+                showCount={true}
+                singular="project"
+                style={Object {}}
+                zero={null}
+              >
+                <span
+                  className={null}
+                  style={Object {}}
+                >
+                  1 project
+                </span>
+              </Plural>
+            </div>
+            <div
+              className="mission-stats__kpi"
+            >
+              <Icon
+                className=""
+                name="BATCH/WHITE.svg"
+              >
+                <img
+                  className="icon icon__BATCH/WHITE-svg"
+                  src="test-file-stub"
+                />
+              </Icon>
+              <Plural
+                className={null}
+                count={1}
+                plural="batches"
+                showCount={true}
+                singular="batch"
+                style={Object {}}
+                zero={null}
+              >
+                <span
+                  className={null}
+                  style={Object {}}
+                >
+                  1 batch
+                </span>
+              </Plural>
+            </div>
+          </div>
+          <div
+            className="mission-stats__kpis__row"
+          >
+            <div
+              className="mission-stats__kpi"
+            >
+              <Icon
+                className=""
+                name="TASK/WHITE.svg"
+              >
+                <img
+                  className="icon icon__TASK/WHITE-svg"
+                  src="test-file-stub"
+                />
+              </Icon>
+              <Plural
+                className={null}
+                count={1}
+                showCount={true}
+                singular="task"
+                style={Object {}}
+                zero={null}
+              >
+                <span
+                  className={null}
+                  style={Object {}}
+                >
+                  1 task
+                </span>
+              </Plural>
+            </div>
+            <div
+              className="mission-stats__kpi"
+            >
+              <div
+                className="mission-stats__contributor"
+              />
+              <Plural
+                className={null}
+                count={1}
+                plural="people"
+                showCount={true}
+                singular="person"
+                style={Object {}}
+                zero={null}
+              >
+                <span
+                  className={null}
+                  style={Object {}}
+                >
+                  1 person
+                </span>
+              </Plural>
+               INTERESTED
+            </div>
+          </div>
+          <div
+            className="mission-stats__kpi mission-stats__kpi--desktop"
+          >
+            <Icon
+              className=""
+              name="PROJECT/WHITE.svg"
+            >
+              <img
+                className="icon icon__PROJECT/WHITE-svg"
+                src="test-file-stub"
+              />
+            </Icon>
+            <Plural
+              className={null}
+              count={1}
+              showCount={true}
+              singular="project"
+              style={Object {}}
+              zero={null}
+            >
+              <span
+                className={null}
+                style={Object {}}
+              >
+                1 project
+              </span>
+            </Plural>
+          </div>
+          <div
+            className="mission-stats__kpi mission-stats__kpi--desktop"
+          >
+            <Icon
+              className=""
+              name="BATCH/WHITE.svg"
+            >
+              <img
+                className="icon icon__BATCH/WHITE-svg"
+                src="test-file-stub"
+              />
+            </Icon>
+            <Plural
+              className={null}
+              count={1}
+              plural="batches"
+              showCount={true}
+              singular="batch"
+              style={Object {}}
+              zero={null}
+            >
+              <span
+                className={null}
+                style={Object {}}
+              >
+                1 batch
+              </span>
+            </Plural>
+          </div>
+          <div
+            className="mission-stats__kpi mission-stats__kpi--desktop"
+          >
+            <Icon
+              className=""
+              name="TASK/WHITE.svg"
+            >
+              <img
+                className="icon icon__TASK/WHITE-svg"
+                src="test-file-stub"
+              />
+            </Icon>
+            <Plural
+              className={null}
+              count={1}
+              showCount={true}
+              singular="task"
+              style={Object {}}
+              zero={null}
+            >
+              <span
+                className={null}
+                style={Object {}}
+              >
+                1 task
+              </span>
+            </Plural>
+          </div>
+          <div
+            className="mission-stats__kpi mission-stats__kpi--desktop"
+          >
+            <div
+              className="mission-stats__contributor"
+            />
+            <Plural
+              className={null}
+              count={1}
+              plural="people"
+              showCount={true}
+              singular="person"
+              style={Object {}}
+              zero={null}
+            >
+              <span
+                className={null}
+                style={Object {}}
+              >
+                1 person
+              </span>
+            </Plural>
+             INTERESTED
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="mission-projects"
+    >
+      <div
+        className="mission-projects__container"
+      >
+        <div
+          className="mission-projects__heading"
+        >
+          Featured Projects
+        </div>
+      </div>
+    </div>
+  </div>
+</Mission>
+`;

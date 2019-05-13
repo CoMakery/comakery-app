@@ -1,10 +1,12 @@
 class Interest < ApplicationRecord
   belongs_to :account
   belongs_to :project
+  belongs_to :specialty
+
   # comment out airtable
   # after_create :add_airtable
   validates :protocol, presence: true
-  validates :project_id, uniqueness: { scope: %i[account_id protocol] }
+  validates :project_id, uniqueness: { scope: %i[account_id specialty_id protocol] }
 
   # def add_airtable
   #   airtable = Comakery::Airtable.new

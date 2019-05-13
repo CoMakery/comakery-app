@@ -150,39 +150,14 @@ $ ->
   # Run on page ready then bind events
   awardPaymentType()
 
-  royaltyCalc()
-  $('#project_royalty_percentage, #project_maximum_tokens, #project_denomination').change (e) ->
-    royaltyCalc()
-
   if $('.preview-content').height() > 310
     $('.read-more').show()
 
 awardPaymentType = () ->
   switch $('#project_payment_type option:selected').val()
     when 'project_token'
-      $('.revenue-sharing-terms').addClass('hide')
       $('.project-token-terms').removeClass('hide')
       $('span.award-type').html('Project Tokens')
-    when 'revenue_share'
-      $('.revenue-sharing-terms').removeClass('hide')
-      $('.project-token-terms').addClass('hide')
-      $('span.award-type').html('Revenue Shares')
-
-royaltyCalc = () ->
-  return unless $('#project_denomination option:selected').html()
-  percentage = $('#project_royalty_percentage').val()
-  maxAwarded = $('#project_maximum_tokens').val()
-
-  schedule = $("<tbody>")
-  currencyFromSelectedOption = $('#project_denomination option:selected').html().match(/\((.+?)\)/)[1]
-  denomination = "<span class='denomination'>#{currencyFromSelectedOption}</span>"
-
-  for revenue in [1e3, 1e4, 1e5, 1e6]
-    contributorPayment = revenue * percentage / 100
-    $(schedule).append "<tr><td>#{denomination}#{revenue.toLocaleString()}</td>" +
-      "<td>#{denomination}#{contributorPayment.toLocaleString()}</td>"
-
-  $('.royalty-calc tbody').replaceWith(schedule)
 
 floatingLeftMenuItems = () ->
   offsetPixels = 150

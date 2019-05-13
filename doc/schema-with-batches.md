@@ -1,8 +1,53 @@
+# SKILL & INTEREST SCHEMAS
+
+```plantuml
+@startuml skill-interest-schema
+!define table(x) class x << (T,#FFAAAA) >>
+hide circle
+hide methods
+hide stereotypes
+  class ACCOUNTS {
+    specialty_id
+  }
+  class INTERESTS {
+    account_id
+    project_id
+    specialty_id
+  }
+  class SPECIALTIES {
+    enum name
+    // see AwardType model specialty enum for name
+  }
+  class PROJECTS {
+  }
+  class "AWARD_TYPES\n(BATCHES)" as BATCHES {
+    specialty_id
+    project_id
+  }
+  class "AWARDS\n(TASKS)" as TASKS {
+    award_type_id
+    skill_id
+  }
+  class SKILLS {
+    enum name
+    // note this is not the same as interests
+  }
+  ACCOUNTS -right-{ INTERESTS
+  ACCOUNTS }-- SPECIALTIES
+  INTERESTS }-right- PROJECTS
+  PROJECTS -right-{ BATCHES
+  INTERESTS }-- SPECIALTIES
+  BATCHES }-- SPECIALTIES
+  BATCHES -right-{ TASKS
+  TASKS }- SKILLS
+  ACCOUNTS -{ TASKS
+@enduml
+```
+
 # Simplified Current
 
 ```plantuml
-@startuml
-title Simplified Current Schema
+@startuml simplified-current-schema
 hide circle
 hide methods
 hide attributes
@@ -51,8 +96,7 @@ TEAMS -left-{ CHANNELS
 # SCHEMA UPDATES
 
 ```plantuml
-@startuml
-title Schema With Batches
+@startuml updated-schema
 !define table(x) class x << (T,#FFAAAA) >>
 hide circle
 hide methods
@@ -94,7 +138,6 @@ package Authentication <<rectangle>> #lightgray {
 
 package Projects <<rectangle>> {
   class PROJECTS #lightyellow {
-    + type - enum : research, development, graphic_design, software_design, promotion, other
   }
   class "BATCHES\rrenamed from AWARD_TYPES" as BATCHES #lightyellow {
     + goal

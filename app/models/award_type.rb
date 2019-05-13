@@ -1,50 +1,12 @@
 class AwardType < ApplicationRecord
   belongs_to :project, touch: true
-  has_many :awards, dependent: :restrict_with_exception do
-    def create_with_quantity(quantity, issuer:, account:)
-      award_type = @association.owner
+  belongs_to :specialty
+  has_many :awards, dependent: :restrict_with_error
 
-      create quantity: quantity,
-             issuer: issuer,
-             unit_amount: award_type.amount,
-             total_amount: (quantity * award_type.amount),
-             account: account
-    end
-  end
+  attachment :diagram, type: :image
 
-  validates :project, :name, :amount, presence: true
-  validate :amount_didnt_change?, unless: :modifiable?
-  validates :amount, numericality: { greater_than: 0 }
-
-  scope :active, -> { where('award_types.disabled is null or award_types.disabled=false') }
-
-  def self.invalid_params(attributes)
-    attributes['name'].blank? || attributes['amount'].blank?
-  end
-
-  def active?
-    disabled.nil? || disabled == false
-  end
-
-  def modifiable?
-    awards.count == 0
-  end
-
-  def amount_didnt_change?
-    errors.add(:amount, :invalid, message: "can't be modified if there are existing awards") if amount != amount_was
-  end
-
-  # TODO: remove temporary migration method after migrating all environments
-  def self.write_all_award_amounts
-    AwardType.all.find_each(&:write_award_amount)
-  end
-
-  # TODO: remove temporary migration method after migrating all environments
-  def write_award_amount
-    # The find_each method uses find_in_batches with a batch size of 1000 (or as specified by the :batch_size option).
-    # http://api.rubyonrails.org/classes/ActiveRecord/Batches.html
-    awards.find_each do |award|
-      award.update(unit_amount: amount, total_amount: award.quantity * amount)
-    end
-  end
+  validates :project, :specialty, presence: true
+  validates :name, length: { maximum: 100 }
+  validates :goal, length: { maximum: 250 }
+  validates :description, length: { maximum: 750 }
 end

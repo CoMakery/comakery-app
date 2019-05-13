@@ -3,12 +3,10 @@ class ProjectDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
 
   PAYMENT_DESCRIPTIONS = {
-    'revenue_share' => 'Revenue Shares',
     'project_token' => 'Project Tokens'
   }.freeze
 
   OUTSTANDING_AWARD_DESCRIPTIONS = {
-    'revenue_share' => 'Unpaid Revenue Shares',
     'project_token' => 'Project Tokens'
   }.freeze
 
@@ -21,13 +19,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def ethereum_contract_explorer_url
-    if ethereum_contract_address
-      site = ethereum_network? ? "#{ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
-      site = 'etherscan.io' if site == 'main.etherscan.io'
-      "https://#{site}/token/#{project.ethereum_contract_address}"
-    elsif coin_type_on_qtum?
-      UtilitiesService.get_contract_url(project.blockchain_network, project.contract_address)
-    end
+    token&.decorate&.ethereum_contract_explorer_url
   end
 
   def status_description
@@ -39,7 +31,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def currency_denomination
-    Comakery::Currency::DENOMINATIONS[project.denomination]
+    token&.decorate&.currency_denomination
   end
 
   def payment_description
@@ -50,13 +42,6 @@ class ProjectDecorator < Draper::Decorator
     OUTSTANDING_AWARD_DESCRIPTIONS[project.payment_type]
   end
 
-  def royalty_percentage_pretty
-    return '0%' if project.royalty_percentage.blank?
-    "#{number_with_precision(project.royalty_percentage,
-      precision: Project::ROYALTY_PERCENTAGE_PRECISION,
-      strip_insignificant_zeros: true)}%"
-  end
-
   def require_confidentiality_text
     project.require_confidentiality ? 'is required' : 'is not required'
   end
@@ -65,22 +50,8 @@ class ProjectDecorator < Draper::Decorator
     project.exclusive_contributions ? 'are exclusive' : 'are not exclusive'
   end
 
-  def total_revenue_pretty
-    precision = Comakery::Currency::PRECISION[denomination]
-    "#{currency_denomination}#{number_with_precision(total_revenue.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
-  def total_revenue_shared_pretty
-    precision = Comakery::Currency::PRECISION[denomination]
-    "#{currency_denomination}#{number_with_precision(total_revenue_shared.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
   def total_awards_outstanding_pretty
-    # awards (e.g. project tokens or revenue shares) are validated as whole numbers; they are rounded
+    # awards are validated as whole numbers; they are rounded
     number_with_precision(total_awards_outstanding, precision: 0, delimiter: ',')
   end
 
@@ -94,69 +65,24 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def format_with_decimal_places(amount)
-    number_to_currency(amount, precision: decimal_places.to_i, unit: '')
+    if token && token.decimal_places.to_i.positive?
+      number_to_currency(amount, precision: token.decimal_places, unit: '')
+    else
+      number_with_precision(amount, precision: 0, delimiter: ',')
+    end
   end
 
   def maximum_tokens_pretty
-    number_with_precision(maximum_tokens, precision: 0, delimiter: ',')
-  end
-
-  def total_awards_redeemed_pretty
-    number_with_precision(total_awards_redeemed, precision: 0, delimiter: ',')
+    format_with_decimal_places(maximum_tokens)
   end
 
   def percent_awarded_pretty
     "#{number_with_precision(percent_awarded, precision: 3, delimiter: ',')}%"
   end
 
-  def revenue_per_share_pretty
-    precision = Comakery::Currency::PER_SHARE_PRECISION[denomination]
-    "#{currency_denomination}#{number_with_precision(revenue_per_share.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
-  def total_revenue_shared_unpaid_pretty
-    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
-    "#{currency_denomination}#{number_with_precision(total_revenue_shared_unpaid.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
-  def total_paid_to_contributors_pretty
-    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
-    "#{currency_denomination}#{number_with_precision(total_paid_to_contributors.truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
-  def minimum_revenue
-    "#{currency_denomination}0"
-  end
-
   def minimum_payment
-    project_min_payment = Comakery::Currency::DEFAULT_MIN_PAYMENT[denomination]
+    project_min_payment = Comakery::Currency::DEFAULT_MIN_PAYMENT[token.denomination]
     "#{currency_denomination}#{project_min_payment}"
-  end
-
-  def revenue_history
-    project.revenues.order(created_at: :desc, id: :desc).decorate
-  end
-
-  def payment_history
-    project.payments.order(created_at: :desc, id: :desc)
-  end
-
-  def share_of_revenue_unpaid_pretty(users_project_tokens)
-    precision = Comakery::Currency::ROUNDED_BALANCE_PRECISION[denomination]
-    "#{currency_denomination}#{number_with_precision(share_of_revenue_unpaid(users_project_tokens).truncate(precision),
-      precision: precision,
-      delimiter: ',')}"
-  end
-
-  def revenue_sharing_end_date_pretty
-    return 'revenue sharing does not have an end date.' if project.revenue_sharing_end_date.blank?
-    project.revenue_sharing_end_date.strftime('%B %-d, %Y')
   end
 
   def contributors_by_award_amount
@@ -164,11 +90,11 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def tokens_awarded_with_symbol
-    token_symbol ? "#{token_symbol} Tokens Awarded" : 'Tokens Awarded'
+    token&.symbol ? "#{token.symbol} Tokens Awarded" : 'Tokens Awarded'
   end
 
   def send_coins?
-    coin_type? && %w[eth btc ada qtum eos xtz].include?(coin_type)
+    token&.coin_type? && %w[eth btc ada qtum eos xtz].include?(token&.coin_type)
   end
 
   private
@@ -181,5 +107,5 @@ class ProjectDecorator < Draper::Decorator
     end
   end
 
-  pretty_number :maximum_royalties_per_month, :maximum_tokens
+  pretty_number :maximum_tokens
 end

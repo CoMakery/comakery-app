@@ -6,7 +6,7 @@ import utils from 'networks/helpers/utils'
 
 const transferQtumCoins = async function(award) { // award in JSON
   const fee = 0.0015
-  const network = award.project.blockchain_network.replace('qtum_', '')
+  const network = award.token.blockchain_network.replace('qtum_', '')
   const recipientAddress = award.account.qtum_wallet
   let amount = parseFloat(award.total_amount)
 
@@ -20,7 +20,6 @@ const transferQtumCoins = async function(award) { // award in JSON
     if (addressValid) {
       window.alertMsg('#metamaskModal1', 'Waiting...')
       txHash = await submitTransaction(network, recipientAddress, amount, fee)
-      console.log(`transaction address: ${txHash}`)
     }
   } catch (err) {
     console.log(err)
@@ -73,7 +72,6 @@ const submitTransaction = async function(network, to, amount, fee) {
   const serializedTx = await wallet.generateTx(to, amount, fee)
   if (serializedTx) {
     const txId = await server.currentNode().sendRawTx(serializedTx)
-    console.log('txId =' + txId)
     return txId
   } else {
     throw Error('The transaction failed')

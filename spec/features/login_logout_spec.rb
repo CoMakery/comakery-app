@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'logging in and out' do
+describe 'logging in and out', js: true do
   let!(:team) { create :team }
   let!(:project) { create :project, title: 'This is a project', account: account }
   let!(:account) { create :account }
@@ -16,7 +16,7 @@ describe 'logging in and out' do
 
     visit root_path
 
-    expect(page).to have_content 'Sign In'
+    expect(page).to have_content 'SIGN IN'
 
     page.set_rack_session(account_id: account.id)
 
@@ -26,11 +26,11 @@ describe 'logging in and out' do
 
     first('.header--nav--links').click_link 'Sign out'
 
-    expect(page).to have_content 'Sign In'
+    expect(page).to have_content 'SIGN IN'
 
     visit '/logout'
 
-    expect(page).to have_content 'Sign In'
+    expect(page).to have_content 'SIGN IN'
   end
 
   specify do

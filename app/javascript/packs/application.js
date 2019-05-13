@@ -7,9 +7,6 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %>
 // to the appropriate layout file
 
-// Support ES6 syntax
-import 'babel-polyfill'
-
 import '../src/application.js'
 
 import '../src/application.css'

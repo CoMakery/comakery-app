@@ -41,8 +41,13 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
-  def not_found
-    redirect_to '/404.html'
+
+  def not_found(e)
+    if Rails.env.development?
+      raise e
+    else
+      redirect_to '/404.html'
+    end
   end
 
   rescue_from Slack::Web::Api::Error do |exception|
@@ -69,8 +74,11 @@ class ApplicationController < ActionController::Base
   end
 
   def require_build_profile
-    if current_account && !current_account.finished_build_profile?
-      redirect_to build_profile_accounts_path, alert: 'Please fill in required fields before continuing.'
+    if current_account && (current_account.name_required = true) && !current_account.valid?
+      @account = current_account
+      @skip_validation = true
+      flash[:error] = "Please complete your profile info for #{current_account.errors.keys.join(', ').humanize.titleize}"
+      render 'accounts/build_profile', layout: 'application'
     end
   end
 
@@ -81,16 +89,6 @@ class ApplicationController < ActionController::Base
   def check_age
     if current_account && current_account.valid_and_underage? && controller_name != 'accounts'
       redirect_to build_profile_accounts_path, alert: 'Sorry, you must be 18 years or older to use this website'
-    end
-  end
-
-  def check_account_info
-    current_account.name_required = true
-    unless current_account.valid?
-      @account = current_account
-      @skip_validation = true
-      flash[:error] = "Please complete your profile info for #{current_account.errors.keys.join(', ').humanize.titleize}"
-      render 'accounts/build_profile'
     end
   end
 
@@ -111,7 +109,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def assign_project
-    project = policy_scope(Project).find_by id: params[:project_id]
+    project = policy_scope(Project).find_by id: (params[:project_id] || params[:id])
     project = policy_scope(Project).find_by long_id: params[:project_id] unless project
     @project = project&.decorate if project&.can_be_access?(current_account)
     redirect_to root_path unless @project

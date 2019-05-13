@@ -34,7 +34,7 @@ RSpec.describe Channel, type: :model do
     it '#fetch_channels' do
       stub_slack_channel_list
       expect(channel.fetch_channels).to eq ['a-channel-name']
-      expect(channel1.fetch_channels).to eq [['Text Channels - general', 'channel_id']]
+      expect(channel1.fetch_channels).to eq [%w[general channel_id]]
     end
 
     it 'return authorized teams' do

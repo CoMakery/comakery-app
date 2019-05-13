@@ -13,6 +13,7 @@ class Layout extends React.Component {
       className,
       category,
       title,
+      customTitle,
       hasBackButton,
       subfooter,
       sidebar,
@@ -36,8 +37,13 @@ class Layout extends React.Component {
 
           <div className="layout--content">
             <div className="layout--content--title">
-              {category && <span>{category}</span>}
-              {title}
+              {!customTitle &&
+                title
+              }
+              {!customTitle && category &&
+                <span className="layout--content--title--category">{category}</span>
+              }
+              {customTitle}
             </div>
 
             <hr className="layout--content--hr" />
@@ -72,6 +78,7 @@ Layout.propTypes = {
   className    : PropTypes.string,
   category     : PropTypes.string,
   title        : PropTypes.string,
+  customTitle  : PropTypes.object,
   hasBackButton: PropTypes.bool,
   subfooter    : PropTypes.object,
   sidebar      : PropTypes.object
@@ -79,7 +86,8 @@ Layout.propTypes = {
 Layout.defaultProps = {
   className    : '',
   category     : '',
-  title        : 'title',
+  title        : null,
+  customTitle  : null,
   hasBackButton: false,
   subfooter    : null,
   sidebar      : null

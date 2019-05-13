@@ -24,9 +24,6 @@ describe('MissionForm', () => {
       'InputFieldWhiteDark[title="Name"][symbolLimit=100][required][name="name"]'
     )).toBe(true)
     expect(wrapper.exists(
-      'InputFieldDropdownHalfed[title="Token"][required][name="token"]'
-    )).toBe(true)
-    expect(wrapper.exists(
       'InputFieldWhiteDark[title="Subtitle"][required][name="subtitle"]'
     )).toBe(true)
     expect(wrapper.exists(
@@ -44,22 +41,16 @@ describe('MissionForm', () => {
     const mission = {
       'id'         : 0,
       'name'       : 'Test Mission',
-      'token'      : '1',
       'subtitle'   : 'test subtitle',
       'description': 'test description',
       'logoUrl'    : '/logo.png',
       'imageUrl'   : '/image.png'
     }
-    const tokens = [['token1', 1], ['token2', 2]]
-    const wrapper = mount(<MissionForm mission={mission} tokens={tokens} />)
+    const wrapper = mount(<MissionForm mission={mission} />)
 
     expect(wrapper.find(
       'InputFieldWhiteDark[title="Name"][symbolLimit=100][required][name="name"]'
     ).props().value).toBe('Test Mission')
-
-    expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="Token"][required][name="token"]'
-    ).props().value).toBe('1')
     expect(wrapper.find(
       'InputFieldWhiteDark[title="Subtitle"][required][name="subtitle"]'
     ).props().value).toBe('test subtitle')
@@ -123,7 +114,6 @@ describe('MissionForm', () => {
     wrapper.setState({
       errors: {
         'name'       : 'name error',
-        'token'      : 'token error',
         'subtitle'   : 'subtitle error',
         'description': 'description error',
         'logo'       : 'logo error',
@@ -135,9 +125,6 @@ describe('MissionForm', () => {
 
     expect(wrapper.exists(
       'InputFieldWhiteDark[title="Name"][symbolLimit=100][required][name="name"][errorText="name error"]'
-    )).toBe(true)
-    expect(wrapper.exists(
-      'InputFieldDropdownHalfed[title="Token"][required][name="token"][errorText="token error"]'
     )).toBe(true)
     expect(wrapper.exists(
       'InputFieldWhiteDark[title="Subtitle"][required][name="subtitle"][errorText="subtitle error"]'

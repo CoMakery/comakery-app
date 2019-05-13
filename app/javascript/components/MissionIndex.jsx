@@ -240,16 +240,6 @@ export default class MissionIndex extends React.Component {
 
                 <div className="mission-index--view--info--item">
                   <div className="mission-index--view--info--item--name">
-                    token
-                  </div>
-                  <div className="mission-index--view--info--item--value">
-                    {selectedMission.tokenName}
-                    {selectedMission.tokenSymbol && ` (${selectedMission.tokenSymbol})`}
-                  </div>
-                </div>
-
-                <div className="mission-index--view--info--item">
-                  <div className="mission-index--view--info--item--name">
                     subtitle
                   </div>
                   <div className="mission-index--view--info--item--value">

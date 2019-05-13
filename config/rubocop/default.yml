@@ -45,6 +45,9 @@ Lint/EndAlignment:
 Lint/RequireParentheses:
   Enabled: true
 
+Metrics/ModuleLength:
+  Max: 120
+
 Metrics/BlockLength:
   Enabled: false
 
@@ -83,4 +86,7 @@ Style/NumericLiterals:
 
 # Don't turn this on, it's overzealous
 Style/MethodCallWithArgsParentheses:
+  Enabled: false
+
+Style/AsciiComments:
   Enabled: false

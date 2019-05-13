@@ -46,7 +46,6 @@ export default class Ledger {
     const qtum = new btcApp(await transportU2f.create())
     // ensure in Qtum App
     const pubkeyRes = await qtum.getWalletPublicKey(Ledger.defaultPath)
-    console.log(pubkeyRes)
     if (pubkeyRes.bitcoinAddress[0] !== 'Q') {
       throw 'Not Qtum App'
     }
@@ -57,8 +56,6 @@ export default class Ledger {
     const amountSat = new BigNumber(amount).times(1e8)
     const feeSat = new BigNumber(fee).times(1e8)
     const pubkeyRes = await ledger.qtum.getWalletPublicKey(path)
-    console.log('path...')
-    console.log(path)
     if (pubkeyRes.bitcoinAddress !== from && path !== "m/44'/1'/0'/0") {
       throw 'Ledger can not restore the source address, please plugin the correct ledger'
     }

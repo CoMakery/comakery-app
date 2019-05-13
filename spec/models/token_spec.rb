@@ -75,8 +75,8 @@ describe Token do
         expect(token.contract_address).to be_nil
         expect(token.ethereum_network).to eq 'ropsten'
         expect(token.ethereum_contract_address).to be_nil
-        expect(token.symbol).to be_nil
-        expect(token.decimal_places).to be_nil
+        expect(token.symbol).to eq 'eth'
+        expect(token.decimal_places).to eq 18
       end
 
       it 'eq qrc20' do
@@ -253,13 +253,26 @@ describe Token do
     expect token.symbol = 'FCBB'
   end
 
+  it 'set_predefined_values for coins' do
+    %w[eth btc qtum ada eos xtz].each do |coin|
+      token = create :token, coin_type: coin, name: nil
+      expect(token.name).to eq coin
+      expect(token.symbol).to eq coin
+      expect(token.decimal_places).to eq Token::DECIMALS[coin.to_sym]
+    end
+
+    %w[qrc20 erc20].each do |token|
+      expect((create :token, coin_type: token).name).to match(/Token/)
+    end
+  end
+
   it 'check_coin_type' do
     token = create :token, symbol: 'FCBB', decimal_places: 8, ethereum_contract_address: '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d', contract_address: 'a8112e56eb96bd3da7741cfea0e3cbd841fc009a', blockchain_network: 'qtum_testnet', coin_type: 'eth'
     expect(token).to be_valid
     expect(token.contract_address).to be_nil
     expect(token.ethereum_contract_address).to be_nil
-    expect(token.symbol).to be_nil
-    expect(token.decimal_places).to be_nil
+    expect(token.symbol).to eq 'eth'
+    expect(token.decimal_places).to eq 18
     expect(token.blockchain_network).to be_nil
   end
 
