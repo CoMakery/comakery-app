@@ -44,7 +44,7 @@ describe Award do
       end
     end
 
-    describe '.having_suiting_experience_for(specialty_id, specialty_experience, total_experience)' do
+    describe '.having_suitable_experience_for(account)' do
       let(:account) { create(:account) }
       let(:award_type) { create(:award_type, specialty: account.specialty) }
 
@@ -57,7 +57,7 @@ describe Award do
         2.times { create(:award_ready, award_type: award_type) }
         3.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type) }
         4.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'], award_type: award_type) }
-        scope = described_class.having_suiting_experience_for(account.specialty.id, account.specialty_experience, account.total_experience)
+        scope = described_class.having_suitable_experience_for(account)
         expect(scope.count).to eq(5)
         expect(scope.where(experience_level: 0).count).to eq(2)
         expect(scope.where(experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills']).count).to eq(3)
@@ -67,7 +67,7 @@ describe Award do
       it 'returns no awards when there are only awards with a different specialty without experience level' do
         award_type_with_a_different_specialty = create(:award_type)
         2.times { create(:award_ready, award_type: award_type_with_a_different_specialty) }
-        scope = described_class.having_suiting_experience_for(account.specialty.id, account.specialty_experience, account.total_experience)
+        scope = described_class.having_suitable_experience_for(account)
         expect(scope.count).to eq(0)
       end
 
@@ -75,7 +75,7 @@ describe Award do
         award_type_with_no_specialty = create(:award_type)
         award_type_with_no_specialty.update(specialty: nil)
         2.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type_with_no_specialty) }
-        scope = described_class.having_suiting_experience_for(account.specialty.id, account.specialty_experience, account.total_experience)
+        scope = described_class.having_suitable_experience_for(account)
         expect(scope.count).to eq(2)
       end
     end

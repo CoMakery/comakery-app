@@ -21,13 +21,13 @@ describe AwardType do
   end
 
   describe 'scopes' do
-    describe '.matching_specialty_for(account_id)' do
+    describe '.matching_specialty_for(account)' do
       it 'returns award types matching with given account specialty or ones without defined specialty' do
         account = create(:account)
         2.times { create(:award_type).update!(specialty: nil) }
         3.times { create(:award_type, specialty: account.specialty) }
         4.times { create(:award_type) }
-        scope = described_class.matching_specialty_for(account.id)
+        scope = described_class.matching_specialty_for(account)
         expect(scope.count).to eq(5)
         expect(scope.where(specialty: nil).count).to eq(2)
         expect(scope.where(specialty: account.specialty).count).to eq(3)

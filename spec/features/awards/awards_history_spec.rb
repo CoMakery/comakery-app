@@ -50,14 +50,14 @@ describe 'viewing projects, creating and editing', :js do
           visit project_path(project)
 
           click_link 'Payments'
-          expect(page.all('table.award-rows tr.award-row').size).to eq(5)
+          expect(page.all('table.award-rows tr.award-row').size).to eq(50)
           expect(page).to have_content '1 2 3 4 5 … Next › Last »'
 
           within(page.all('.pagination').first) do
             click_link 'Last'
           end
           expect(page.all('table.award-rows tr.award-row').size).to eq(5)
-          expect(page).to have_content 'Prev … 57 58 59 60 61'
+          expect(page).to have_content 'Prev … 3 4 5 6 7'
         end
       end
     end

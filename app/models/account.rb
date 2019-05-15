@@ -168,7 +168,7 @@ class Account < ApplicationRecord
     AwardType.where(id:
       award_types.pluck(:id) |
       team_award_types.pluck(:id) |
-      AwardType.where(project_id: accessable_projects.pluck(:id)).matching_specialty_for(id).pluck(:id))
+      AwardType.where(project_id: accessable_projects.pluck(:id)).matching_specialty_for(self).pluck(:id))
   end
 
   def accessable_awards
@@ -176,11 +176,7 @@ class Account < ApplicationRecord
       awards.pluck(:id) |
       issued_awards.pluck(:id) |
       team_awards.pluck(:id) |
-      Award.where(award_type_id: accessable_award_types.pluck(:id)).having_suiting_experience_for(
-        specialty&.id,
-        specialty_experience,
-        total_experience
-      ).pluck(:id))
+      Award.where(award_type_id: accessable_award_types.pluck(:id)).having_suitable_experience_for(self).pluck(:id))
   end
 
   def specialty_experience

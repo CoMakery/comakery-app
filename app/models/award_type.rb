@@ -10,7 +10,7 @@ class AwardType < ApplicationRecord
   validates :goal, length: { maximum: 250 }
   validates :description, length: { maximum: 750 }
 
-  scope :matching_specialty_for, ->(account_id) { where(specialty_id: [Account.find(account_id).specialty&.id, nil, 0]) }
+  scope :matching_specialty_for, ->(account) { where(specialty_id: [account.specialty&.id, nil, 0]) }
 
   validate :specialty_changeable, if: -> { specialty_id_changed? && specialty_id_was.present? }
 
