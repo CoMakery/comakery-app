@@ -284,7 +284,9 @@ class ProjectsController < ApplicationController
     award_data = GetContributorData.call(project: @project).award_data
     chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
 
-    project.as_json(only: %i[id title description require_confidentiality]).merge(
+    project.as_json(only: %i[id title require_confidentiality]).merge(
+      description_header: project.description.split('.').first,
+      description_html: Comakery::Markdown.to_html(project.description.split('.')[1..-1]&.join('.')),
       show_contributions: policy(project).show_contributions?,
       square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
       panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),

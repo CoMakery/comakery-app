@@ -20,17 +20,18 @@ describe('Project', () => {
     const props = {
       interested : true,
       projectData: {
-        id             : 1,
-        title          : 'Core Network',
-        description    : 'The last social network. Test',
-        imageUrl       : null,
-        youtubeUrl     : 'hBm5M4u2jLs',
-        defaultImageUrl: 'test.jpg',
-        owner          : 'Test User',
-        tokenPercentage: '0.0788',
-        maximumTokens  : '10,000,000',
-        awardedTokens  : '7,880',
-        teamLeader     : {
+        id               : 1,
+        title            : 'Core Network',
+        descriptionHeader: 'The last social network',
+        descriptionHtml  : '<b>Test</b>',
+        imageUrl         : null,
+        youtubeUrl       : 'hBm5M4u2jLs',
+        defaultImageUrl  : 'test.jpg',
+        owner            : 'Test User',
+        tokenPercentage  : '0.0788',
+        maximumTokens    : '10,000,000',
+        awardedTokens    : '7,880',
+        teamLeader       : {
           id       : 1,
           firstName: 'User Leader',
           nickname : 'Nickname Leader', imageUrl : 'leader_image.jpg',
@@ -61,6 +62,6 @@ describe('Project', () => {
     expect(wrapper.find('.project-header__owner').text()).toBe(' by Test User ')
     expect(wrapper.find('.project-award__token__left').text()).toBe('Ether (HOT)')
     expect(wrapper.find('.project-leader__info').text()).toBe('Team LeaderUser Leader ')
-    expect(wrapper.find('.project-description__text').text()).toBe('The last social network. Test')
+    expect(wrapper.find('.project-description__text').text()).toBe('The last social network.Test')
   })
 })
