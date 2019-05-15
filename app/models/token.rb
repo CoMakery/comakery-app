@@ -13,13 +13,22 @@ class Token < ApplicationRecord
     xtz: 'tezos'
   }.freeze
 
-  DECIMALS = {
+  COIN_DECIMALS = {
     eth: 18,
     qtum: 8,
     ada: 6,
     btc: 8,
     eos: 18,
     xtz: 6
+  }.freeze
+
+  COIN_NAMES = {
+    eth: 'Ether',
+    qtum: 'Qtum',
+    ada: 'Cardano',
+    btc: 'Bitcoin',
+    eos: 'EOSIO',
+    xtz: 'Tezos'
   }.freeze
 
   nilify_blanks
@@ -128,9 +137,9 @@ class Token < ApplicationRecord
 
   def set_predefined_values
     if coin_type && !coin_type_token?
-      self.name = coin_type
-      self.symbol = coin_type
-      self.decimal_places = DECIMALS[coin_type.to_sym]
+      self.name = COIN_NAMES[coin_type.to_sym]
+      self.symbol = coin_type.upcase
+      self.decimal_places = COIN_DECIMALS[coin_type.to_sym]
     end
   end
 

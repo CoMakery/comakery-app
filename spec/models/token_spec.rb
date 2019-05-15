@@ -75,7 +75,7 @@ describe Token do
         expect(token.contract_address).to be_nil
         expect(token.ethereum_network).to eq 'ropsten'
         expect(token.ethereum_contract_address).to be_nil
-        expect(token.symbol).to eq 'eth'
+        expect(token.symbol).to eq 'ETH'
         expect(token.decimal_places).to eq 18
       end
 
@@ -256,9 +256,9 @@ describe Token do
   it 'set_predefined_values for coins' do
     %w[eth btc qtum ada eos xtz].each do |coin|
       token = create :token, coin_type: coin, name: nil
-      expect(token.name).to eq coin
-      expect(token.symbol).to eq coin
-      expect(token.decimal_places).to eq Token::DECIMALS[coin.to_sym]
+      expect(token.name).to eq Token::COIN_NAMES[coin.to_sym]
+      expect(token.symbol).to eq coin.upcase
+      expect(token.decimal_places).to eq Token::COIN_DECIMALS[coin.to_sym]
     end
 
     %w[qrc20 erc20].each do |token|
@@ -271,7 +271,7 @@ describe Token do
     expect(token).to be_valid
     expect(token.contract_address).to be_nil
     expect(token.ethereum_contract_address).to be_nil
-    expect(token.symbol).to eq 'eth'
+    expect(token.symbol).to eq 'ETH'
     expect(token.decimal_places).to eq 18
     expect(token.blockchain_network).to be_nil
   end
