@@ -445,7 +445,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   name="project[description]"
                   placeholder="Explain the outline and goal of the project, and why people should be excited about helping to execute the vision"
                   required={true}
-                  symbolLimit={250}
+                  symbolLimit={800}
                   title="description"
                   value=""
                 >
@@ -472,7 +472,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     required={true}
                     selectEntries={Array []}
                     step=""
-                    symbolLimit={250}
+                    symbolLimit={800}
                     title="description"
                     type="textarea"
                     value=""
@@ -498,7 +498,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                         >
                           0
                           /
-                          250
+                          800
                         </span>
                       </div>
                       <div
