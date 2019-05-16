@@ -13,7 +13,7 @@ const Users = styled.div`
 `
 
 const Userpic = styled.img`
-  border-radius: 50%
+  border-radius: 50%;
   width: 15px;
   height: 15px;
   border: solid 1px #ffffff;

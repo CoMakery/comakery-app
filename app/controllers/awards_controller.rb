@@ -178,17 +178,29 @@ class AwardsController < ApplicationController
         tasks: @awards.page(@page).map do |task|
           task&.serializable_hash&.merge({
             mission: {
-              name: task.project&.mission&.name
+              name: task.project&.mission&.name,
+              url: task.project&.mission ? mission_path(task.project&.mission) : nil
+            },
+            token: {
+              currency: task.project&.token&.symbol,
+              logo: helpers.attachment_url(task.project&.token, :logo_image, :fill, 100, 100)
             },
             project: {
-              name: task.project&.title
+              name: task.project&.title,
+              url: task.project && (task.project.unlisted? ? unlisted_project_path(task.project.long_id) : project_path(task.project))
             },
             batch: {
               specialty: task.award_type&.specialty&.name
             },
             issuer: {
-              name: task.issuer&.decorate&.name
-            }
+              name: task.issuer&.decorate&.name,
+              image: helpers.account_image_url(task.issuer, 100)
+            },
+            contributor: {
+              name: task.account&.decorate&.name,
+              image: helpers.account_image_url(task.account, 100)
+            },
+            updated_at: helpers.time_ago_in_words(task.updated_at)
           })
         end,
         pages: {

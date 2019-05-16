@@ -1,15 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import MyTask from './MyTask'
 import styled from 'styled-components'
 
 const Layout = styled.div`
   background-color: white;
   padding: 25px 150px 25px 150px;
   min-height: 50vh;
-  font-family: monospace;
+
+  @media (max-width: 1024px) {
+    padding: 25px 15px 25px 15px;
+  }
 `
 
 const Header = styled.div`
+  height: 140px;
+  background-image: url(${require(`src/images/tasks/header_background.jpg`)});
+  background-position: center;
+  font-family: Montserrat;
+  font-size: 30px;
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `
 
 const Filter = styled.div`
@@ -22,22 +42,15 @@ class MyTasks extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <Header>
+          My Tasks
+        </Header>
         <Layout>
-          <Header />
           <Filter />
           <Pagination />
 
           {this.props.tasks.map(task =>
-            <p key={task.id}>
-              Name: {task.name}<br />
-              Mission: {task.mission.name}<br />
-              Project: {task.project.name}<br />
-              Type: {task.batch.specialty}<br />
-              Amount: {task.amount}<br />
-              Status: {task.status}<br />
-              Created By: {task.issuer.name}<br />
-              Last Updated: {task.updatedAt}<br />
-            </p>
+            <MyTask key={task.id} task={task} />
           )}
           <p>
             Page: {this.props.pages.current}<br />

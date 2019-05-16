@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MyTasks renders component correctly 1`] = `
+<MyTasks
+  pages={
+    Object {
+      "current": 1,
+      "total": 1,
+    }
+  }
+  tasks={Array []}
+>
+  <styled.div>
+    <StyledComponent
+      forwardedComponent={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-kGXeez",
+            "isStatic": true,
+            "lastClassName": "bwQLKI",
+            "rules": Array [
+              "
+  height: 140px;
+  background-image: url(",
+              "test-file-stub",
+              ");
+  background-position: center;
+  font-family: Montserrat;
+  font-size: 30px;
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-kGXeez",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        }
+      }
+      forwardedRef={null}
+    >
+      <div
+        className="sc-kGXeez bwQLKI"
+      >
+        My Tasks
+      </div>
+    </StyledComponent>
+  </styled.div>
+  <styled.div>
+    <StyledComponent
+      forwardedComponent={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-kgoBCf",
+            "isStatic": true,
+            "lastClassName": "fNapPm",
+            "rules": Array [
+              "
+  background-color: white;
+  padding: 25px 150px 25px 150px;
+  min-height: 50vh;
+
+  @media (max-width: 1024px) {
+    padding: 25px 15px 25px 15px;
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-kgoBCf",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        }
+      }
+      forwardedRef={null}
+    >
+      <div
+        className="sc-kgoBCf fNapPm"
+      >
+        <styled.div>
+          <StyledComponent
+            forwardedComponent={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-kpOJdX",
+                  "isStatic": true,
+                  "lastClassName": "hYePhm",
+                  "rules": Array [
+                    "
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-kpOJdX",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              }
+            }
+            forwardedRef={null}
+          >
+            <div
+              className="sc-kpOJdX hYePhm"
+            />
+          </StyledComponent>
+        </styled.div>
+        <styled.div>
+          <StyledComponent
+            forwardedComponent={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-dxgOiQ",
+                  "isStatic": true,
+                  "lastClassName": "cVfJIT",
+                  "rules": Array [
+                    "
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-dxgOiQ",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              }
+            }
+            forwardedRef={null}
+          >
+            <div
+              className="sc-dxgOiQ cVfJIT"
+            />
+          </StyledComponent>
+        </styled.div>
+        <p>
+          Page: 
+          1
+          <br />
+          Total: 
+          1
+          <br />
+        </p>
+      </div>
+    </StyledComponent>
+  </styled.div>
+</MyTasks>
+`;

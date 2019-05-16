@@ -54,7 +54,7 @@ exports[`Task renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-EHOje",
                   "isStatic": false,
-                  "lastClassName": "cgbcNb",
+                  "lastClassName": "jkPdTn",
                   "rules": Array [
                     "
   width: 2px;
@@ -64,6 +64,18 @@ exports[`Task renders component correctly 1`] = `
   z-index: 10;
   position: absolute;
   margin-left: -1px;
+
+  ",
+                    [Function],
+                    "
+
+  ",
+                    [Function],
+                    "
+
+  ",
+                    [Function],
+                    "
 
   ",
                     [Function],
@@ -93,7 +105,7 @@ exports[`Task renders component correctly 1`] = `
             status={null}
           >
             <div
-              className="sc-EHOje cgbcNb"
+              className="sc-EHOje jkPdTn"
             />
           </StyledComponent>
         </styled.div>
@@ -219,7 +231,7 @@ exports[`Task renders component correctly 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-htoDjs",
                               "isStatic": false,
-                              "lastClassName": "gwSITY",
+                              "lastClassName": "cWmucd",
                               "rules": Array [
                                 "
   font-family: Montserrat;
@@ -230,6 +242,18 @@ exports[`Task renders component correctly 1`] = `
   line-height: normal;
   letter-spacing: normal;
   text-transform: uppercase;
+
+  ",
+                                [Function],
+                                "
+
+  ",
+                                [Function],
+                                "
+
+  ",
+                                [Function],
+                                "
 
   ",
                                 [Function],
@@ -259,7 +283,7 @@ exports[`Task renders component correctly 1`] = `
                         status={null}
                       >
                         <div
-                          className="sc-htoDjs gwSITY"
+                          className="sc-htoDjs cWmucd"
                         />
                       </StyledComponent>
                     </styled.div>
