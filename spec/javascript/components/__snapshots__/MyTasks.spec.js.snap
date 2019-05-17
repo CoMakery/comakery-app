@@ -2,12 +2,9 @@
 
 exports[`MyTasks renders component correctly 1`] = `
 <MyTasks
-  pages={
-    Object {
-      "current": 1,
-      "total": 1,
-    }
-  }
+  filters={Array []}
+  paginationHtml=""
+  pastAwardsUrl=""
   tasks={Array []}
 >
   <styled.div>
@@ -19,7 +16,7 @@ exports[`MyTasks renders component correctly 1`] = `
           "componentStyle": ComponentStyle {
             "componentId": "sc-kGXeez",
             "isStatic": true,
-            "lastClassName": "bwQLKI",
+            "lastClassName": "jbhhwe",
             "rules": Array [
               "
   height: 140px;
@@ -27,6 +24,7 @@ exports[`MyTasks renders component correctly 1`] = `
               "test-file-stub",
               ");
   background-position: center;
+  background-size: cover;
   font-family: Montserrat;
   font-size: 30px;
   font-weight: 900;
@@ -56,7 +54,7 @@ exports[`MyTasks renders component correctly 1`] = `
       forwardedRef={null}
     >
       <div
-        className="sc-kGXeez bwQLKI"
+        className="sc-kGXeez jbhhwe"
       >
         My Tasks
       </div>
@@ -108,9 +106,28 @@ exports[`MyTasks renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-kpOJdX",
                   "isStatic": true,
-                  "lastClassName": "hYePhm",
+                  "lastClassName": "dRDVEd",
                   "rules": Array [
                     "
+  text-align: right;
+  width: 100%;
+
+  a {
+    font-family: Montserrat;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #0089f4;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 ",
                   ],
                 },
@@ -127,8 +144,14 @@ exports[`MyTasks renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-kpOJdX hYePhm"
-            />
+              className="sc-kpOJdX dRDVEd"
+            >
+              <a
+                href=""
+              >
+                See past awards
+              </a>
+            </div>
           </StyledComponent>
         </styled.div>
         <styled.div>
@@ -140,9 +163,18 @@ exports[`MyTasks renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-dxgOiQ",
                   "isStatic": true,
-                  "lastClassName": "cVfJIT",
+                  "lastClassName": "fXbpFE",
                   "rules": Array [
                     "
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 25px 0;
+  flex-wrap: wrap;
+
+  @media (max-width: 1024px) {
+    justify-content: center;
+  }
 ",
                   ],
                 },
@@ -159,18 +191,63 @@ exports[`MyTasks renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-dxgOiQ cVfJIT"
+              className="sc-dxgOiQ fXbpFE"
             />
           </StyledComponent>
         </styled.div>
-        <p>
-          Page: 
-          1
-          <br />
-          Total: 
-          1
-          <br />
-        </p>
+        <styled.div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "",
+            }
+          }
+        >
+          <StyledComponent
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "",
+              }
+            }
+            forwardedComponent={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-jKJlTe",
+                  "isStatic": true,
+                  "lastClassName": "jzyxka",
+                  "rules": Array [
+                    "
+  text-align: right;
+  width: 100%;
+  padding: 15px 0;
+  border-bottom: 1px solid #d8d8d8;
+  margin-bottom: 35px;
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-jKJlTe",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              }
+            }
+            forwardedRef={null}
+          >
+            <div
+              className="sc-jKJlTe jzyxka"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "",
+                }
+              }
+            />
+          </StyledComponent>
+        </styled.div>
       </div>
     </StyledComponent>
   </styled.div>

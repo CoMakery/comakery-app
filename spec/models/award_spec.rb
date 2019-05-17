@@ -44,6 +44,46 @@ describe Award do
       end
     end
 
+    describe '.filtered_for_view(filter, account)' do
+      let!(:contributor) { create(:account) }
+      let!(:project_owner) { create(:account) }
+      let!(:ready_award) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed'), specialty: contributor.specialty)) }
+      let!(:started_award) { create(:award, status: 'started', issuer: project_owner, account: contributor) }
+      let!(:submitted_award) { create(:award, status: 'submitted', issuer: project_owner, account: contributor) }
+      let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
+      let!(:paid_award) { create(:award, status: 'paid', issuer: project_owner, account: contributor) }
+      let!(:rejected_award) { create(:award, status: 'rejected', issuer: project_owner, account: contributor) }
+
+      it 'returns only ready awards' do
+        expect(described_class.filtered_for_view('ready', contributor)).to eq(described_class.ready)
+      end
+
+      it 'returns only started awards for a contributor' do
+        expect(described_class.filtered_for_view('started', contributor)).to eq(described_class.started.where(account: contributor))
+      end
+
+      it 'returns only submitted or accepted awards for a contributor' do
+        expect(described_class.filtered_for_view('submitted', contributor)).to eq(described_class.submitted.or(described_class.accepted).where(account: contributor))
+      end
+
+      it 'returns only awards available for review for a project owner' do
+        expect(described_class.filtered_for_view('to review', project_owner)).to eq(described_class.submitted.where(issuer: project_owner))
+      end
+
+      it 'returns only awards available for payment for a project owner' do
+        expect(described_class.filtered_for_view('to pay', project_owner)).to eq(described_class.accepted.where(issuer: project_owner))
+      end
+
+      it 'returns only accepted, paid or rejected awards' do
+        expect(described_class.filtered_for_view('done', contributor)).to eq(described_class.accepted.or(described_class.paid).or(described_class.rejected))
+        expect(described_class.filtered_for_view('done', project_owner)).to eq(described_class.accepted.or(described_class.paid).or(described_class.rejected))
+      end
+
+      it 'returns no awards for an unknown filter' do
+        expect(described_class.filtered_for_view('not finished', contributor)).to eq([])
+      end
+    end
+
     describe '.having_suitable_experience_for(account)' do
       let(:account) { create(:account) }
       let(:award_type) { create(:award_type, specialty: account.specialty) }

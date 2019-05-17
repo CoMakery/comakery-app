@@ -24,16 +24,30 @@ describe AwardsController do
 
   describe '#index' do
     before do
-      51.times { create(:award, account: issuer.account) }
+      21.times { create(:award, account: issuer.account) }
       login(issuer.account)
     end
 
-    it 'returns my tasks with pagination' do
+    it 'returns my tasks' do
       get :index
       expect(response.status).to eq(200)
-      expect(assigns[:props][:tasks].count).to eq(50)
-      expect(assigns[:props][:pages][:current]).to eq(1)
-      expect(assigns[:props][:pages][:total]).to eq(2)
+    end
+
+    it 'uses filtering' do
+      get :index, params: { filter: 'started' }
+      expect(response.status).to eq(200)
+      expect(assigns[:props][:tasks].count).to eq(0)
+    end
+
+    it 'uses pagination' do
+      get :index, params: { filter: 'done', page: '2' }
+      expect(response.status).to eq(200)
+      expect(assigns[:props][:tasks].count).to eq(1)
+    end
+
+    it 'redirects to 404 when provided with incorrect page' do
+      get :index, params: { page: '3' }
+      expect(response).to redirect_to('/404.html')
     end
   end
 

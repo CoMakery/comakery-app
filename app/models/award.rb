@@ -56,6 +56,24 @@ class Award < ApplicationRecord
       account.total_experience
     )
   }
+  scope :filtered_for_view, lambda { |filter, account|
+    case filter
+    when 'ready'
+      ready
+    when 'started'
+      started.where(account: account)
+    when 'submitted'
+      submitted.or(accepted).where(account: account)
+    when 'to review'
+      submitted.where(issuer: account)
+    when 'to pay'
+      accepted.where(issuer: account)
+    when 'done'
+      accepted.or(paid).or(rejected)
+    else
+      none
+    end
+  }
 
   enum status: %i[ready started submitted accepted rejected paid cancelled]
 

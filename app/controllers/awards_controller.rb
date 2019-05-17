@@ -3,6 +3,7 @@ class AwardsController < ApplicationController
   before_action :authorize_project_edit, except: %i[index confirm]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
+  before_action :set_filter, only: %i[index]
   before_action :set_awards, only: %i[index]
   before_action :set_page, only: %i[index]
   before_action :set_form_props, only: %i[new edit clone]
@@ -141,13 +142,18 @@ class AwardsController < ApplicationController
       @award = @award_type.awards&.listed&.find(params[:id] || params[:award_id])
     end
 
+    def set_filter
+      @filter = params[:filter]&.downcase || 'ready'
+    end
+
     def set_awards
-      @awards = policy_scope(Award)
+      @awards = policy_scope(Award).filtered_for_view(@filter, current_account)
     end
 
     def set_page
       @page = (params[:page] || 1).to_i
-      redirect_to '/404.html' if @awards.page(@page).out_of_range?
+      @awards_paginated = @awards.page(@page).per(20)
+      redirect_to '/404.html' if (@page > 1) && @awards_paginated.out_of_range?
     end
 
     def award_params
@@ -175,7 +181,7 @@ class AwardsController < ApplicationController
 
     def set_index_props
       @props = {
-        tasks: @awards.page(@page).map do |task|
+        tasks: @awards_paginated.map do |task|
           task&.serializable_hash&.merge({
             mission: {
               name: task.project&.mission&.name,
@@ -203,10 +209,16 @@ class AwardsController < ApplicationController
             updated_at: helpers.time_ago_in_words(task.updated_at)
           })
         end,
-        pages: {
-          current: @page,
-          total: @awards.page(@page).total_pages
-        }
+        pagination_html: helpers.paginate(@awards_paginated, window: 3),
+        filters: ['ready', 'started', 'submitted', 'to review', 'to pay', 'done'].map do |filter|
+          {
+            name: filter,
+            current: filter == @filter,
+            count: policy_scope(Award).filtered_for_view(filter, current_account).count,
+            url: my_tasks_path(filter: filter)
+          }
+        end,
+        past_awards_url: show_account_path
       }
     end
 
