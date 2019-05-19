@@ -107,6 +107,13 @@ exports[`Project renders correctly without props 1`] = `
         >
           .
         </div>
+        <div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": undefined,
+            }
+          }
+        />
       </div>
     </div>
     <div

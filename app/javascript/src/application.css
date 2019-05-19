@@ -2765,6 +2765,10 @@ select:disabled {
   color: var(--greyish-brown);
 }
 
+.project-description__text a {
+  color: var(--primary-blue);
+}
+
 .project-description__text--first {
   font-family: Montserrat, sans-serif;
   font-size: 30px;

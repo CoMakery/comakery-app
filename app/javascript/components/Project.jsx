@@ -159,10 +159,6 @@ export default class Project extends React.Component {
     }
     const skillIds = [5, 6, 8, 2, 3, 1, 7, 4]
 
-    let descriptionText = projectData.description.split('.')
-    const first = descriptionText.shift()
-    descriptionText = descriptionText.join('.')
-
     return <div className="project-container">
       <div className="project-header" style={{backgroundImage: `url(${projectData.panoramicImageUrl})`}}>
         <div className="project-header__blur" />
@@ -280,8 +276,8 @@ export default class Project extends React.Component {
           }
         </div>
         <div className="project-description__text">
-          <div className="project-description__text--first">{first}.</div>
-          {descriptionText}
+          <div className="project-description__text--first">{projectData.descriptionHeader}.</div>
+          <div dangerouslySetInnerHTML={{__html: projectData.descriptionHtml}} />
         </div>
       </div>
 
