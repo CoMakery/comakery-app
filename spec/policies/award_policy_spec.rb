@@ -37,22 +37,16 @@ describe AwardPolicy do
 
   describe AwardPolicy::Scope do
     context 'logged out' do
-      it 'returns the awards to a project that are public' do
-        expect(AwardPolicy::Scope.new(nil, Award).resolve).to eq([award_with_public_project])
+      it 'returns no awards' do
+        expect(AwardPolicy::Scope.new(nil, Award).resolve).to eq([])
       end
     end
 
     context 'logged in' do
-      it 'returns awards that belong to projects that the specified account belongs to' do
-        award_with_project.save!
-        award_for_unowned_project.save!
-        expect(award_type_for_unowned_project.project.teams).not_to include(team)
-
-        auth = create(:authentication)
-        team.build_authentication_team auth
-
-        awards = AwardPolicy::Scope.new(account, Award).resolve
-        expect(awards).to match_array([award_with_project])
+      it 'returns accounts accessable awards' do
+        2.times { create(:award, account: account) }
+        2.times { create(:award, issuer: account) }
+        expect(AwardPolicy::Scope.new(account, Award).resolve).to match_array(account.accessable_awards)
       end
     end
   end

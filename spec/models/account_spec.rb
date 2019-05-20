@@ -138,10 +138,155 @@ describe Account do
   end
 
   describe 'associations' do
+    let(:account) { create(:account) }
+    let(:project) { create(:project, account: account) }
+    let(:award_type) { create(:award_type, project: project) }
+    let(:award) { create(:award, award_type: award_type, issuer: account) }
+    let(:team) { create :team }
+    let(:teammate) { create :account }
+    let(:authentication) { create :authentication, account: account }
+    let(:authentication_teammate) { create :authentication, account: teammate }
+    let(:teammate_project) { create(:project, account: teammate) }
+    let(:teammate_award_type) { create(:award_type, project: teammate_project) }
+    let(:teammate_award) { create(:award, award_type: teammate_award_type, issuer: teammate) }
+
+    before do
+      team.build_authentication_team authentication
+      team.build_authentication_team authentication_teammate
+      create(:channel, team: team, project: teammate_project, channel_id: 'general')
+    end
+
     it 'has many projects' do
-      account = create(:account)
-      project = create(:project, account_id: account.id)
       expect(account.projects).to match_array([project])
+    end
+
+    it 'has many team projects' do
+      expect(account.team_projects).to match_array([teammate_project])
+    end
+
+    it 'has many team awards' do
+      expect(account.team_awards).to match_array([teammate_award])
+    end
+
+    it 'has many issued awards' do
+      expect(account.issued_awards).to match_array([award])
+    end
+
+    it 'has many award types' do
+      expect(account.award_types).to match_array([award_type])
+    end
+
+    it 'has many team award types' do
+      expect(account.team_award_types).to match_array([teammate_award_type])
+    end
+  end
+
+  describe '.accessable_award_types' do
+    let!(:account) { create(:account) }
+    let!(:project) { create(:project, account: account) }
+    let!(:award_type) { create(:award_type, project: project) }
+    let!(:team) { create :team }
+    let!(:teammate) { create :account }
+    let!(:authentication) { create :authentication, account: account }
+    let!(:authentication_teammate) { create :authentication, account: teammate }
+    let!(:teammate_project) { create(:project, account: teammate) }
+    let!(:teammate_award_type) { create(:award_type, project: teammate_project) }
+
+    before do
+      team.build_authentication_team authentication
+      team.build_authentication_team authentication_teammate
+      create(:channel, team: team, project: teammate_project, channel_id: 'general')
+    end
+
+    it 'returns own award types' do
+      expect(account.accessable_award_types).to include(award_type)
+    end
+
+    it 'returns team award types' do
+      expect(account.accessable_award_types).to include(teammate_award_type)
+    end
+
+    it 'returns award types from accessable projects with specialty scope' do
+      accessable_project = create(:project, visibility: 'public_listed')
+      award_type_w_matching_specialty = create(:award_type, project: accessable_project, specialty: account.specialty)
+      award_type_w_not_matching_specialty = create(:award_type, project: accessable_project)
+      award_type_w_no_specialty = create(:award_type, project: accessable_project)
+      award_type_w_no_specialty.update(specialty: nil)
+
+      expect(account.accessable_award_types).to include(award_type_w_matching_specialty)
+      expect(account.accessable_award_types).not_to include(award_type_w_not_matching_specialty)
+      expect(account.accessable_award_types).to include(award_type_w_no_specialty)
+    end
+  end
+
+  describe '.accessable_awards' do
+    let!(:account) { create(:account) }
+    let!(:project) { create(:project, account: account) }
+    let!(:award_type) { create(:award_type, project: project) }
+    let!(:award) { create(:award, award_type: award_type, issuer: account) }
+    let!(:received_award) { create(:award, award_type: award_type, account: account) }
+    let!(:team) { create :team }
+    let!(:teammate) { create :account }
+    let!(:authentication) { create :authentication, account: account }
+    let!(:authentication_teammate) { create :authentication, account: teammate }
+    let!(:teammate_project) { create(:project, account: teammate) }
+    let!(:teammate_award_type) { create(:award_type, project: teammate_project) }
+    let!(:teammate_award) { create(:award, award_type: teammate_award_type, issuer: teammate) }
+
+    before do
+      team.build_authentication_team authentication
+      team.build_authentication_team authentication_teammate
+      create(:channel, team: team, project: teammate_project, channel_id: 'general')
+    end
+
+    it 'returns received awards' do
+      expect(account.accessable_awards).to include(received_award)
+    end
+
+    it 'returns issued awards' do
+      expect(account.accessable_awards).to include(award)
+    end
+
+    it 'returns team issued awards' do
+      expect(account.accessable_awards).to include(teammate_award)
+    end
+
+    it 'returns awards from accessable award types with experience scope' do
+      Award::EXPERIENCE_LEVELS['Demonstrated Skills'].times do
+        create(:award, account: account, award_type: create(:award_type, specialty: account.specialty))
+      end
+      accessable_project = create(:project, visibility: 'public_listed')
+      accessable_award_type = create(:award_type, project: accessable_project, specialty: account.specialty)
+      award_w_matching_experience = create(:award_ready, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'])
+      award_w_not_matching_experience = create(:award_ready, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'])
+
+      expect(account.accessable_awards).to include(award_w_matching_experience)
+      expect(account.accessable_awards).not_to include(award_w_not_matching_experience)
+    end
+  end
+
+  describe '.specialty_experience' do
+    let(:account) { create(:account) }
+
+    before do
+      3.times { create(:award, award_type: create(:award_type, specialty: account.specialty), account: account) }
+      1.times { create(:award, account: account) }
+    end
+
+    it 'returns number of completed awards for current specialty' do
+      expect(account.specialty_experience).to eq(3)
+    end
+  end
+
+  describe '.total_experience' do
+    let(:account) { create(:account) }
+
+    before do
+      2.times { create(:award, account: account) }
+    end
+
+    it 'returns total number of completed awards' do
+      expect(account.total_experience).to eq(2)
     end
   end
 

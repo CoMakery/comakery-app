@@ -1,16 +1,24 @@
 class AwardsController < ApplicationController
-  before_action :assign_project, except: %i[confirm]
-  before_action :authorize_project_edit, except: %i[confirm]
-  before_action :set_award_type, except: %i[confirm]
-  before_action :set_award, except: %i[new create confirm]
+  before_action :assign_project, except: %i[index confirm]
+  before_action :authorize_project_edit, except: %i[index confirm]
+  before_action :set_award_type, except: %i[index confirm]
+  before_action :set_award, except: %i[index new create confirm]
+  before_action :set_filter, only: %i[index]
+  before_action :set_awards, only: %i[index]
+  before_action :set_page, only: %i[index]
   before_action :set_form_props, only: %i[new edit clone]
   before_action :set_show_props, only: %i[show]
+  before_action :set_index_props, only: %i[index]
   before_action :redirect_if_award_issued, only: %i[update edit destroy show send_award recipient_address]
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
   skip_before_action :require_login, only: %i[confirm]
   skip_after_action :verify_authorized, only: %i[confirm]
 
   layout 'react'
+
+  def index
+    render component: 'MyTasks', props: @props
+  end
 
   def new
     render component: 'TaskForm', props: @props
@@ -134,6 +142,20 @@ class AwardsController < ApplicationController
       @award = @award_type.awards&.listed&.find(params[:id] || params[:award_id])
     end
 
+    def set_filter
+      @filter = params[:filter]&.downcase || 'ready'
+    end
+
+    def set_awards
+      @awards = policy_scope(Award).filtered_for_view(@filter, current_account)
+    end
+
+    def set_page
+      @page = (params[:page] || 1).to_i
+      @awards_paginated = @awards.page(@page).per(20)
+      redirect_to '/404.html' if (@page > 1) && @awards_paginated.out_of_range?
+    end
+
     def award_params
       params.fetch(:task, {}).permit(
         :name,
@@ -155,6 +177,49 @@ class AwardsController < ApplicationController
         :uid,
         :email
       )
+    end
+
+    def set_index_props
+      @props = {
+        tasks: @awards_paginated.map do |task|
+          task&.serializable_hash&.merge({
+            mission: {
+              name: task.project&.mission&.name,
+              url: task.project&.mission ? mission_path(task.project&.mission) : nil
+            },
+            token: {
+              currency: task.project&.token&.symbol,
+              logo: helpers.attachment_url(task.project&.token, :logo_image, :fill, 100, 100)
+            },
+            project: {
+              name: task.project&.title,
+              url: task.project && (task.project.unlisted? ? unlisted_project_path(task.project.long_id) : project_path(task.project))
+            },
+            batch: {
+              specialty: task.award_type&.specialty&.name
+            },
+            issuer: {
+              name: task.issuer&.decorate&.name,
+              image: helpers.account_image_url(task.issuer, 100)
+            },
+            contributor: {
+              name: task.account&.decorate&.name,
+              image: helpers.account_image_url(task.account, 100)
+            },
+            updated_at: helpers.time_ago_in_words(task.updated_at)
+          })
+        end,
+        pagination_html: helpers.paginate(@awards_paginated, window: 3),
+        filters: ['ready', 'started', 'submitted', 'to review', 'to pay', 'done'].map do |filter|
+          {
+            name: filter,
+            current: filter == @filter,
+            count: policy_scope(Award).filtered_for_view(filter, current_account).count,
+            url: my_tasks_path(filter: filter)
+          }
+        end,
+        past_awards_url: show_account_path
+      }
     end
 
     def set_show_props

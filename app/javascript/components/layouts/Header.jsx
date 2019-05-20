@@ -47,7 +47,7 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
           My Projects
         </a>
 
-        <a href="/" style={{'display': 'none'}}>
+        <a href="/tasks" className={currentPath.match(/^\/tasks/) ? 'header--nav--links--current' : null}>
           My Tasks
         </a>
 

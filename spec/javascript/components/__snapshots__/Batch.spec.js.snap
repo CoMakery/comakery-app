@@ -584,7 +584,7 @@ exports[`Batch renders component correctly 1`] = `
                                 <div
                                   className="sc-htpNat vZQMM"
                                 >
-                                  —
+                                  General
                                 </div>
                               </StyledComponent>
                             </styled.div>

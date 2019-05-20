@@ -47,6 +47,33 @@ class Award < ApplicationRecord
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6)' }
+  scope :having_suitable_experience_for, lambda { |account|
+    ready.where(
+      '(award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL)) OR (award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL))',
+      AwardType.where(specialty_id: account.specialty&.id).pluck(:id),
+      account.specialty_experience,
+      AwardType.where(specialty_id: [0, nil]).pluck(:id),
+      account.total_experience
+    )
+  }
+  scope :filtered_for_view, lambda { |filter, account|
+    case filter
+    when 'ready'
+      ready
+    when 'started'
+      started.where(account: account)
+    when 'submitted'
+      submitted.or(accepted).where(account: account)
+    when 'to review'
+      submitted.where(issuer: account)
+    when 'to pay'
+      accepted.where(issuer: account)
+    when 'done'
+      accepted.or(paid).or(rejected)
+    else
+      none
+    end
+  }
 
   enum status: %i[ready started submitted accepted rejected paid cancelled]
 

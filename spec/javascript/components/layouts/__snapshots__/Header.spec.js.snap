@@ -37,12 +37,8 @@ exports[`Header renders correctly without props 1`] = `
           My Projects
         </a>
         <a
-          href="/"
-          style={
-            Object {
-              "display": "none",
-            }
-          }
+          className={null}
+          href="/tasks"
         >
           My Tasks
         </a>

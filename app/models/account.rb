@@ -9,18 +9,21 @@ class Account < ApplicationRecord
   include EosAddressable
   include TezosAddressable
 
+  has_many :projects
+  has_many :awards, dependent: :destroy
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
   has_many :authentication_teams, dependent: :destroy
   has_many :teams, through: :authentication_teams
   has_many :manager_auth_teams, -> { where("manager=true or provider='slack'") }, class_name: 'AuthenticationTeam'
   has_many :manager_teams, through: :manager_auth_teams, source: :team
   has_many :team_projects, through: :teams, source: :projects
-  has_many :team_awards, through: :team_projects, source: :awards
-  has_many :awards, dependent: :destroy
   has_many :award_projects, through: :awards, source: :project
+  has_many :team_awards, through: :team_projects, source: :awards
+  has_many :issued_awards, through: :projects, source: :awards
+  has_many :award_types, through: :projects
+  has_many :team_award_types, through: :team_projects, source: :award_types
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   # default_scope { includes(:slack_auth) }
-  has_many :projects
   has_many :channels, through: :projects
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
@@ -159,6 +162,29 @@ class Account < ApplicationRecord
       left join teams on teams.id=channels.team_id
       left join authentication_teams on authentication_teams.team_id=teams.id")
            .where("(authentication_teams.account_id=#{id} and channels.id is not null) or projects.visibility=1 or awards.account_id=#{id} or projects.account_id=#{id}").distinct
+  end
+
+  def accessable_award_types
+    AwardType.where(id:
+      award_types.pluck(:id) |
+      team_award_types.pluck(:id) |
+      AwardType.where(project_id: accessable_projects.pluck(:id)).matching_specialty_for(self).pluck(:id))
+  end
+
+  def accessable_awards
+    Award.where(id:
+      awards.pluck(:id) |
+      issued_awards.pluck(:id) |
+      team_awards.pluck(:id) |
+      Award.where(award_type_id: accessable_award_types.pluck(:id)).having_suitable_experience_for(self).pluck(:id))
+  end
+
+  def specialty_experience
+    awards.completed.where(award_type_id: AwardType.where(specialty: specialty).pluck(:id)).count
+  end
+
+  def total_experience
+    awards.completed.count
   end
 
   def confirmed?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190505143605) do
+ActiveRecord::Schema.define(version: 20190511191252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,7 +111,6 @@ ActiveRecord::Schema.define(version: 20190505143605) do
     t.boolean "disabled"
     t.integer "specialty_id"
     t.text "goal"
-    t.string "specialty"
     t.string "diagram_id"
     t.string "diagram_filename"
     t.string "diagram_content_size"

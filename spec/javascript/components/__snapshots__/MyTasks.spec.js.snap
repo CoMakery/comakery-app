@@ -1,0 +1,255 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MyTasks renders component correctly 1`] = `
+<MyTasks
+  filters={Array []}
+  paginationHtml=""
+  pastAwardsUrl=""
+  tasks={Array []}
+>
+  <styled.div>
+    <StyledComponent
+      forwardedComponent={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-kGXeez",
+            "isStatic": true,
+            "lastClassName": "jbhhwe",
+            "rules": Array [
+              "
+  height: 140px;
+  background-image: url(",
+              "test-file-stub",
+              ");
+  background-position: center;
+  background-size: cover;
+  font-family: Montserrat;
+  font-size: 30px;
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-kGXeez",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        }
+      }
+      forwardedRef={null}
+    >
+      <div
+        className="sc-kGXeez jbhhwe"
+      >
+        My Tasks
+      </div>
+    </StyledComponent>
+  </styled.div>
+  <styled.div>
+    <StyledComponent
+      forwardedComponent={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-kgoBCf",
+            "isStatic": true,
+            "lastClassName": "fNapPm",
+            "rules": Array [
+              "
+  background-color: white;
+  padding: 25px 150px 25px 150px;
+  min-height: 50vh;
+
+  @media (max-width: 1024px) {
+    padding: 25px 15px 25px 15px;
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-kgoBCf",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        }
+      }
+      forwardedRef={null}
+    >
+      <div
+        className="sc-kgoBCf fNapPm"
+      >
+        <styled.div>
+          <StyledComponent
+            forwardedComponent={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-kpOJdX",
+                  "isStatic": true,
+                  "lastClassName": "dRDVEd",
+                  "rules": Array [
+                    "
+  text-align: right;
+  width: 100%;
+
+  a {
+    font-family: Montserrat;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #0089f4;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-kpOJdX",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              }
+            }
+            forwardedRef={null}
+          >
+            <div
+              className="sc-kpOJdX dRDVEd"
+            >
+              <a
+                href=""
+              >
+                See past awards
+              </a>
+            </div>
+          </StyledComponent>
+        </styled.div>
+        <styled.div>
+          <StyledComponent
+            forwardedComponent={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-dxgOiQ",
+                  "isStatic": true,
+                  "lastClassName": "fXbpFE",
+                  "rules": Array [
+                    "
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 25px 0;
+  flex-wrap: wrap;
+
+  @media (max-width: 1024px) {
+    justify-content: center;
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-dxgOiQ",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              }
+            }
+            forwardedRef={null}
+          >
+            <div
+              className="sc-dxgOiQ fXbpFE"
+            />
+          </StyledComponent>
+        </styled.div>
+        <styled.div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "",
+            }
+          }
+        >
+          <StyledComponent
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "",
+              }
+            }
+            forwardedComponent={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-jKJlTe",
+                  "isStatic": true,
+                  "lastClassName": "jzyxka",
+                  "rules": Array [
+                    "
+  text-align: right;
+  width: 100%;
+  padding: 15px 0;
+  border-bottom: 1px solid #d8d8d8;
+  margin-bottom: 35px;
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-jKJlTe",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              }
+            }
+            forwardedRef={null}
+          >
+            <div
+              className="sc-jKJlTe jzyxka"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "",
+                }
+              }
+            />
+          </StyledComponent>
+        </styled.div>
+      </div>
+    </StyledComponent>
+  </styled.div>
+</MyTasks>
+`;

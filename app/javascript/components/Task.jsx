@@ -22,15 +22,27 @@ const RightBorder = styled.div`
   margin-left: -1px;
 
   ${props => props.status === 'ready' && css`
-    background-color: #5037f7;
+    background-color: #4a4a4a;
+  `}
+
+  ${props => props.status === 'started' && css`
+    background-color: #008e9b;
+  `}
+
+  ${props => props.status === 'submitted' && css`
+    background-color: #007ae7;
   `}
 
   ${props => props.status === 'accepted' && css`
-    background-color: #7ed321;
+    background-color: #5037f7;
   `}
 
   ${props => props.status === 'paid' && css`
     background-color: #fb40e5;
+  `}
+
+  ${props => props.status === 'rejected' && css`
+    background-color: #ff4d4d;
   `}
 `
 
@@ -66,15 +78,27 @@ const Status = styled.div`
   text-transform: uppercase;
 
   ${props => props.status === 'ready' && css`
-    color: #5037f7;
+    color: #4a4a4a;
+  `}
+
+  ${props => props.status === 'started' && css`
+    color: #008e9b;
+  `}
+
+  ${props => props.status === 'submitted' && css`
+    color: #007ae7;
   `}
 
   ${props => props.status === 'accepted' && css`
-    color: #7ed321;
+    color: #5037f7;
   `}
 
   ${props => props.status === 'paid' && css`
     color: #fb40e5;
+  `}
+
+  ${props => props.status === 'rejected' && css`
+    color: #ff4d4d;
   `}
 `
 
