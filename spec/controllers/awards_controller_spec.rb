@@ -40,7 +40,7 @@ describe AwardsController do
     end
 
     it 'uses pagination' do
-      get :index, params: { filter: 'done', page: '2' }
+      get :index, params: { filter: 'submitted', page: '2' }
       expect(response.status).to eq(200)
       expect(assigns[:props][:tasks].count).to eq(1)
     end
@@ -104,6 +104,104 @@ describe AwardsController do
           expect(JSON.parse(response.body)['message']).to eq("Name can't be blank")
         end.not_to change { project.awards.count }
       end
+    end
+  end
+
+  describe '#start' do
+    let!(:award) { create(:award) }
+
+    before do
+      login(award.account)
+      award.update(status: 'ready')
+    end
+
+    it 'starts the task, associating it with current user and redirects to my task page with notice' do
+      post :start, params: {
+        project_id: award.project.to_param,
+        award_type_id: award.award_type.to_param,
+        award_id: award.to_param
+      }
+      expect(response).to redirect_to(my_tasks_path(filter: 'started'))
+      expect(flash[:notice]).to eq('Task started')
+      expect(award.reload.started?).to be true
+    end
+  end
+
+  describe '#submit' do
+    let!(:award) { create(:award) }
+
+    before do
+      login(award.account)
+      award.update(status: 'started')
+    end
+
+    it 'submits the task and redirects to my task page with notice' do
+      post :submit, params: {
+        project_id: award.project.to_param,
+        award_type_id: award.award_type.to_param,
+        award_id: award.to_param,
+        task: {
+          submission_url: 'test',
+          submission_comment: 'test'
+        }
+      }
+      expect(response).to redirect_to(my_tasks_path(filter: 'submitted'))
+      expect(flash[:notice]).to eq('Task submitted')
+      expect(award.reload.submitted?).to be true
+    end
+
+    it 'redirects back to task details page with an error' do
+      post :submit, params: {
+        project_id: award.project.to_param,
+        award_type_id: award.award_type.to_param,
+        award_id: award.to_param,
+        task: {
+          submission_url: 'test'
+        }
+      }
+      expect(response).to redirect_to(project_award_type_award_path(award.project, award.award_type, award))
+      expect(flash[:error]).to eq("Submission comment can't be blank")
+      expect(award.reload.submitted?).to be false
+    end
+  end
+
+  describe '#accept' do
+    let!(:award) { create(:award) }
+
+    before do
+      login(award.issuer)
+      award.update(status: 'submitted')
+    end
+
+    it 'accepts the task and redirects to my task page with notice' do
+      post :accept, params: {
+        project_id: award.project.to_param,
+        award_type_id: award.award_type.to_param,
+        award_id: award.to_param
+      }
+      expect(response).to redirect_to(my_tasks_path(filter: 'done'))
+      expect(flash[:notice]).to eq('Task accepted')
+      expect(award.reload.accepted?).to be true
+    end
+  end
+
+  describe '#reject' do
+    let!(:award) { create(:award) }
+
+    before do
+      login(award.issuer)
+      award.update(status: 'submitted')
+    end
+
+    it 'rejects the task and redirects to my task page with notice' do
+      post :reject, params: {
+        project_id: award.project.to_param,
+        award_type_id: award.award_type.to_param,
+        award_id: award.to_param
+      }
+      expect(response).to redirect_to(my_tasks_path(filter: 'done'))
+      expect(flash[:notice]).to eq('Task rejected')
+      expect(award.reload.rejected?).to be true
     end
   end
 

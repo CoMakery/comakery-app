@@ -24,9 +24,29 @@ class AwardPolicy < ApplicationPolicy
     @project = @award.project
   end
 
+  def show?
+    @account.accessable_awards.where(id: @award.id).exists?
+  end
+
+  def start?
+    show? && (@award.status == 'ready')
+  end
+
   def create?
     return false unless @award.issuer == @account
     same_channel? && (@account == @project&.account || community?)
+  end
+
+  def review?
+    (@award.issuer == @account) && (@award.status == 'submitted')
+  end
+
+  def submit?
+    (@award.account == @account) && (@award.status == 'started')
+  end
+
+  def pay?
+    (@award.issuer == @account) && (@award.status == 'accepted')
   end
 
   def same_channel?

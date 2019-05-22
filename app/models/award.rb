@@ -12,6 +12,8 @@ class Award < ApplicationRecord
     'Established Contributor' => 10
   }.freeze
 
+  STARTED_TASKS_PER_CONTRIBUTOR = 5
+
   attachment :image, type: :image
 
   belongs_to :account, optional: true
@@ -38,8 +40,10 @@ class Award < ApplicationRecord
   validates :proof_link, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
   validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }
   validates :experience_level, inclusion: { in: EXPERIENCE_LEVELS.values }, allow_nil: true
+  validates :submission_url, :submission_comment, presence: true, if: -> { status == 'submitted' }
 
   validate :total_amount_fits_into_project_budget
+  validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }
 
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
@@ -48,7 +52,7 @@ class Award < ApplicationRecord
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6)' }
   scope :having_suitable_experience_for, lambda { |account|
-    ready.where(
+    where(status: :ready).where(
       '(award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL)) OR (award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL))',
       AwardType.where(specialty_id: account.specialty&.id).pluck(:id),
       account.specialty_experience,
@@ -59,17 +63,17 @@ class Award < ApplicationRecord
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
-      ready
+      where(status: :ready)
     when 'started'
-      started.where(account: account)
+      where(status: :started).where(account: account)
     when 'submitted'
-      submitted.or(accepted).where(account: account)
+      where(status: :submitted).or(where(status: :accepted)).where(account: account)
     when 'to review'
-      submitted.where(issuer: account)
+      where(status: :submitted).where(issuer: account)
     when 'to pay'
-      accepted.where(issuer: account)
+      where(status: :accepted).where(issuer: account)
     when 'done'
-      accepted.or(paid).or(rejected)
+      where(status: :paid).or(where(status: :rejected))
     else
       none
     end
@@ -175,6 +179,12 @@ class Award < ApplicationRecord
       unless can_be_deleted?
         errors[:base] << "#{status.capitalize} task can't be deleted"
         throw :abort
+      end
+    end
+
+    def contributor_doesnt_have_too_many_started_tasks
+      if account && account.awards.started.count >= STARTED_TASKS_PER_CONTRIBUTOR
+        errors.add(:base, "Sorry, you can't start more than #{STARTED_TASKS_PER_CONTRIBUTOR} tasks")
       end
     end
 end

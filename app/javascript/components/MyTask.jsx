@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   padding: 10px 20px;
   margin-bottom: 10px;
   text-transform: uppercase;
+  background-color: white;
 `
 
 const RightBorder = styled.div`
@@ -21,7 +22,7 @@ const RightBorder = styled.div`
   background-color: #5037f7;
   z-index: 10;
   position: absolute;
-  margin-left: -21px;
+  margin-left: -20px;
   margin-top: -10px;
 
   ${props => props.status === 'ready' && css`
@@ -127,6 +128,47 @@ const Project = styled.div`
   }
 `
 
+const TaskAction = styled.a`
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #8d9599;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  ${props => props.actionAvailable && css`
+    color: #0089f4;
+  `}
+`
+
+const TaskDetails = styled.a`
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #201662;
+  margin-left: auto;
+  text-transform: uppercase;
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
 const Status = styled.div`
   font-family: Montserrat;
   font-size: 10px;
@@ -197,6 +239,55 @@ class MyTask extends React.Component {
                 <Mission>MISSION: <a href={task.mission.url}>{task.mission.name}</a></Mission>
               }
             </BlockWrapper>
+
+            {this.props.displayActions &&
+              <TaskAction
+                href={
+                  ((task.status === 'accepted' && task.issuer.self) && task.paymentUrl) ||
+                  ((task.status === 'paid') && task.paymentUrl) ||
+                  ((task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) && '/account') ||
+                  (task.detailsUrl)
+                }
+                actionAvailable={
+                  (task.status === 'ready') ||
+                  (task.status === 'started') ||
+                  (task.status === 'submitted' && task.issuer.self) ||
+                  (task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) ||
+                  (task.status === 'accepted' && task.issuer.self && task.contributor.walletPresent)
+                }
+              >
+                {task.status === 'ready' &&
+                  <React.Fragment>Start Task</React.Fragment>
+                }
+                {task.status === 'started' &&
+                  <React.Fragment>Submit Task</React.Fragment>
+                }
+                {task.status === 'submitted' && !task.issuer.self &&
+                  <React.Fragment>Awaiting Review</React.Fragment>
+                }
+                {task.status === 'submitted' && task.issuer.self &&
+                  <React.Fragment>Review Task</React.Fragment>
+                }
+                {task.status === 'accepted' && !task.issuer.self && task.contributor.walletPresent &&
+                  <React.Fragment>Awaiting Payment</React.Fragment>
+                }
+                {task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent &&
+                  <React.Fragment>Provide Wallet</React.Fragment>
+                }
+                {task.status === 'accepted' && task.issuer.self && task.contributor.walletPresent &&
+                  <React.Fragment>Pay Contributor</React.Fragment>
+                }
+                {task.status === 'accepted' && task.issuer.self && !task.contributor.walletPresent &&
+                  <React.Fragment>Account Pending</React.Fragment>
+                }
+                {task.status === 'paid' &&
+                  <React.Fragment>Paid</React.Fragment>
+                }
+                {task.status === 'rejected' &&
+                  <React.Fragment>Rejected</React.Fragment>
+                }
+              </TaskAction>
+            }
           </SecondRow>
 
           <ThirdRow>
@@ -214,6 +305,12 @@ class MyTask extends React.Component {
                 {task.contributor.name}
               </Contributor>
             }
+
+            {this.props.displayActions &&
+              <TaskDetails href={task.detailsUrl}>
+                View Task Details
+              </TaskDetails>
+            }
           </ThirdRow>
         </Wrapper>
       </React.Fragment>
@@ -222,7 +319,8 @@ class MyTask extends React.Component {
 }
 
 MyTask.propTypes = {
-  task: PropTypes.object
+  task          : PropTypes.object,
+  displayActions: PropTypes.bool
 }
 MyTask.defaultProps = {
   task: {
@@ -246,6 +344,7 @@ MyTask.defaultProps = {
       name : null,
       image: null
     }
-  }
+  },
+  displayActions: true
 }
 export default MyTask

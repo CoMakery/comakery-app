@@ -53,6 +53,7 @@ describe Award do
       let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
       let!(:paid_award) { create(:award, status: 'paid', issuer: project_owner, account: contributor) }
       let!(:rejected_award) { create(:award, status: 'rejected', issuer: project_owner, account: contributor) }
+      let!(:paid_award_from_other_user) { create(:award, status: 'paid') }
 
       it 'returns only ready awards' do
         expect(described_class.filtered_for_view('ready', contributor)).to eq(described_class.ready)
@@ -72,11 +73,6 @@ describe Award do
 
       it 'returns only awards available for payment for a project owner' do
         expect(described_class.filtered_for_view('to pay', project_owner)).to eq(described_class.accepted.where(issuer: project_owner))
-      end
-
-      it 'returns only accepted, paid or rejected awards' do
-        expect(described_class.filtered_for_view('done', contributor)).to eq(described_class.accepted.or(described_class.paid).or(described_class.rejected))
-        expect(described_class.filtered_for_view('done', project_owner)).to eq(described_class.accepted.or(described_class.paid).or(described_class.rejected))
       end
 
       it 'returns no awards for an unknown filter' do
@@ -134,6 +130,22 @@ describe Award do
                                                                                                      'Amount is not a number',
                                                                                                      'Total amount must be greater than 0'
                                                                                                    ])
+    end
+
+    it 'requires submission fields when in submitted status' do
+      a = create(:award_ready)
+      a.update(status: 'submitted', account: create(:account))
+      expect(a).not_to be_valid
+      expect(a.errors.full_messages).to eq(["Submission url can't be blank", "Submission comment can't be blank"])
+    end
+
+    it 'cannot be assigned to a contributor having more than allowed number of started tasks' do
+      a = create(:award)
+      c = create(:account)
+      Award::STARTED_TASKS_PER_CONTRIBUTOR.times { create(:award, status: 'started', account: c) }
+      a.update(status: 'started', account: c)
+      expect(a).not_to be_valid
+      expect(a.errors.full_messages).to eq(["Sorry, you can't start more than #{Award::STARTED_TASKS_PER_CONTRIBUTOR} tasks"])
     end
 
     it 'cannot be destroyed unless in ready status' do

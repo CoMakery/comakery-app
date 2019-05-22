@@ -24,7 +24,7 @@ const config = {
     'react-hooks'
   ],
   rules: {
-    'complexity'                 : [ERR, { 'max': 31 }],
+    'complexity'                 : [ERR, { 'max': 50 }],
     'jsx-quotes'                 : [ERR, 'prefer-double'],
     'key-spacing'                : [ERR, {'align': 'colon'}],
     'no-debugger'                : OFF,

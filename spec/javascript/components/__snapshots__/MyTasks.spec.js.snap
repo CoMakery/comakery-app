@@ -14,9 +14,9 @@ exports[`MyTasks renders component correctly 1`] = `
           "$$typeof": Symbol(react.forward_ref),
           "attrs": Array [],
           "componentStyle": ComponentStyle {
-            "componentId": "sc-kGXeez",
+            "componentId": "sc-dxgOiQ",
             "isStatic": true,
-            "lastClassName": "jbhhwe",
+            "lastClassName": "eSCTRs",
             "rules": Array [
               "
   height: 140px;
@@ -44,7 +44,7 @@ exports[`MyTasks renders component correctly 1`] = `
           "displayName": "styled.div",
           "foldedComponentIds": Array [],
           "render": [Function],
-          "styledComponentId": "sc-kGXeez",
+          "styledComponentId": "sc-dxgOiQ",
           "target": "div",
           "toString": [Function],
           "warnTooManyClasses": [Function],
@@ -54,7 +54,7 @@ exports[`MyTasks renders component correctly 1`] = `
       forwardedRef={null}
     >
       <div
-        className="sc-kGXeez jbhhwe"
+        className="sc-dxgOiQ eSCTRs"
       >
         My Tasks
       </div>
@@ -67,9 +67,9 @@ exports[`MyTasks renders component correctly 1`] = `
           "$$typeof": Symbol(react.forward_ref),
           "attrs": Array [],
           "componentStyle": ComponentStyle {
-            "componentId": "sc-kgoBCf",
+            "componentId": "sc-kpOJdX",
             "isStatic": true,
-            "lastClassName": "fNapPm",
+            "lastClassName": "iiIbjp",
             "rules": Array [
               "
   background-color: white;
@@ -85,7 +85,7 @@ exports[`MyTasks renders component correctly 1`] = `
           "displayName": "styled.div",
           "foldedComponentIds": Array [],
           "render": [Function],
-          "styledComponentId": "sc-kgoBCf",
+          "styledComponentId": "sc-kpOJdX",
           "target": "div",
           "toString": [Function],
           "warnTooManyClasses": [Function],
@@ -95,7 +95,7 @@ exports[`MyTasks renders component correctly 1`] = `
       forwardedRef={null}
     >
       <div
-        className="sc-kgoBCf fNapPm"
+        className="sc-kpOJdX iiIbjp"
       >
         <styled.div>
           <StyledComponent
@@ -104,9 +104,9 @@ exports[`MyTasks renders component correctly 1`] = `
                 "$$typeof": Symbol(react.forward_ref),
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
-                  "componentId": "sc-kpOJdX",
+                  "componentId": "sc-ckVGcZ",
                   "isStatic": true,
-                  "lastClassName": "dRDVEd",
+                  "lastClassName": "kSRIQb",
                   "rules": Array [
                     "
   text-align: right;
@@ -134,7 +134,7 @@ exports[`MyTasks renders component correctly 1`] = `
                 "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
-                "styledComponentId": "sc-kpOJdX",
+                "styledComponentId": "sc-ckVGcZ",
                 "target": "div",
                 "toString": [Function],
                 "warnTooManyClasses": [Function],
@@ -144,7 +144,7 @@ exports[`MyTasks renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-kpOJdX dRDVEd"
+              className="sc-ckVGcZ kSRIQb"
             >
               <a
                 href=""
@@ -161,9 +161,9 @@ exports[`MyTasks renders component correctly 1`] = `
                 "$$typeof": Symbol(react.forward_ref),
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
-                  "componentId": "sc-dxgOiQ",
+                  "componentId": "sc-jKJlTe",
                   "isStatic": true,
-                  "lastClassName": "fXbpFE",
+                  "lastClassName": "eMJtVG",
                   "rules": Array [
                     "
   display: flex;
@@ -181,7 +181,7 @@ exports[`MyTasks renders component correctly 1`] = `
                 "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
-                "styledComponentId": "sc-dxgOiQ",
+                "styledComponentId": "sc-jKJlTe",
                 "target": "div",
                 "toString": [Function],
                 "warnTooManyClasses": [Function],
@@ -191,7 +191,7 @@ exports[`MyTasks renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-dxgOiQ fXbpFE"
+              className="sc-jKJlTe eMJtVG"
             />
           </StyledComponent>
         </styled.div>
@@ -213,9 +213,9 @@ exports[`MyTasks renders component correctly 1`] = `
                 "$$typeof": Symbol(react.forward_ref),
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
-                  "componentId": "sc-jKJlTe",
+                  "componentId": "sc-hMqMXs",
                   "isStatic": true,
-                  "lastClassName": "jzyxka",
+                  "lastClassName": "jsrylA",
                   "rules": Array [
                     "
   text-align: right;
@@ -229,7 +229,7 @@ exports[`MyTasks renders component correctly 1`] = `
                 "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
-                "styledComponentId": "sc-jKJlTe",
+                "styledComponentId": "sc-hMqMXs",
                 "target": "div",
                 "toString": [Function],
                 "warnTooManyClasses": [Function],
@@ -239,7 +239,7 @@ exports[`MyTasks renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-jKJlTe jzyxka"
+              className="sc-hMqMXs jsrylA"
               dangerouslySetInnerHTML={
                 Object {
                   "__html": "",
