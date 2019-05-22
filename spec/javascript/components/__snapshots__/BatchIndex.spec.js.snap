@@ -208,9 +208,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "$$typeof": Symbol(react.forward_ref),
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "sc-cvbbAY",
+                        "componentId": "sc-brqgnP",
                         "isStatic": true,
-                        "lastClassName": "dBGqxD",
+                        "lastClassName": "fDjrwQ",
                         "rules": Array [
                           "
   font-family: Georgia;
@@ -240,7 +240,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "sc-cvbbAY",
+                      "styledComponentId": "sc-brqgnP",
                       "target": "div",
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -250,7 +250,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-cvbbAY dBGqxD"
+                    className="sc-brqgnP fDjrwQ"
                   >
                     <ul>
                       <li>
