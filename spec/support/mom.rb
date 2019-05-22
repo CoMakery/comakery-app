@@ -139,12 +139,14 @@ class Mom
       status: 'accepted',
       message: 'Great work',
       quantity: 1,
-      amount: 50
+      amount: 50,
+      submission_url: 'url',
+      submission_comment: 'comment',
+      issuer: create(:account)
     }.merge(attrs)
 
-    params[:award_type] ||= create(:award_type)
+    params[:award_type] ||= create(:award_type, project: create(:project, account: params[:issuer]))
     params[:account] ||= create(:account)
-    params[:issuer] ||= create(:account)
 
     Award.new(params)
   end

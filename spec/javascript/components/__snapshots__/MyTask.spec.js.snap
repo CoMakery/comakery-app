@@ -2,6 +2,7 @@
 
 exports[`MyTask renders component correctly 1`] = `
 <MyTask
+  displayActions={true}
   task={
     Object {
       "batch": Object {
@@ -36,7 +37,7 @@ exports[`MyTask renders component correctly 1`] = `
           "componentStyle": ComponentStyle {
             "componentId": "sc-htoDjs",
             "isStatic": true,
-            "lastClassName": "fRwkQd",
+            "lastClassName": "iiaZQg",
             "rules": Array [
               "
   display: flex;
@@ -46,6 +47,7 @@ exports[`MyTask renders component correctly 1`] = `
   padding: 10px 20px;
   margin-bottom: 10px;
   text-transform: uppercase;
+  background-color: white;
 ",
             ],
           },
@@ -62,7 +64,7 @@ exports[`MyTask renders component correctly 1`] = `
       forwardedRef={null}
     >
       <div
-        className="sc-htoDjs fRwkQd"
+        className="sc-htoDjs iiaZQg"
       >
         <styled.div
           status={null}
@@ -75,7 +77,7 @@ exports[`MyTask renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-dnqmqq",
                   "isStatic": false,
-                  "lastClassName": "SIvvw",
+                  "lastClassName": "gwUKif",
                   "rules": Array [
                     "
   width: 2px;
@@ -84,7 +86,7 @@ exports[`MyTask renders component correctly 1`] = `
   background-color: #5037f7;
   z-index: 10;
   position: absolute;
-  margin-left: -21px;
+  margin-left: -20px;
   margin-top: -10px;
 
   ",
@@ -127,7 +129,7 @@ exports[`MyTask renders component correctly 1`] = `
             status={null}
           >
             <div
-              className="sc-dnqmqq SIvvw"
+              className="sc-dnqmqq gwUKif"
             />
           </StyledComponent>
         </styled.div>
@@ -489,6 +491,60 @@ exports[`MyTask renders component correctly 1`] = `
                   </div>
                 </StyledComponent>
               </styled.div>
+              <styled.a
+                actionAvailable={false}
+              >
+                <StyledComponent
+                  actionAvailable={false}
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-cSHVUG",
+                        "isStatic": false,
+                        "lastClassName": "gPoBLA",
+                        "rules": Array [
+                          "
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #8d9599;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  ",
+                          [Function],
+                          "
+",
+                        ],
+                      },
+                      "displayName": "styled.a",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-cSHVUG",
+                      "target": "a",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <a
+                    className="sc-cSHVUG gPoBLA"
+                  />
+                </StyledComponent>
+              </styled.a>
             </div>
           </StyledComponent>
         </styled.div>
@@ -531,9 +587,9 @@ exports[`MyTask renders component correctly 1`] = `
                       "$$typeof": Symbol(react.forward_ref),
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "sc-cSHVUG",
+                        "componentId": "sc-chPdSV",
                         "isStatic": true,
-                        "lastClassName": "EQMTJ",
+                        "lastClassName": "fmIsbg",
                         "rules": Array [
                           "
   font-family: Montserrat;
@@ -554,7 +610,7 @@ exports[`MyTask renders component correctly 1`] = `
                       "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "sc-cSHVUG",
+                      "styledComponentId": "sc-chPdSV",
                       "target": "div",
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -564,7 +620,7 @@ exports[`MyTask renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-cSHVUG EQMTJ"
+                    className="sc-chPdSV fmIsbg"
                   >
                     <b>
                        
@@ -580,9 +636,9 @@ exports[`MyTask renders component correctly 1`] = `
                       "$$typeof": Symbol(react.forward_ref),
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "sc-kAzzGY",
+                        "componentId": "sc-kgoBCf",
                         "isStatic": true,
-                        "lastClassName": "jYrEjD",
+                        "lastClassName": "dLssdm",
                         "rules": Array [
                           "
   font-family: Montserrat;
@@ -603,7 +659,7 @@ exports[`MyTask renders component correctly 1`] = `
                       "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "sc-kAzzGY",
+                      "styledComponentId": "sc-kgoBCf",
                       "target": "div",
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -613,7 +669,7 @@ exports[`MyTask renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-kAzzGY jYrEjD"
+                    className="sc-kgoBCf dLssdm"
                   >
                     <b>
                       TYPE 
@@ -622,6 +678,56 @@ exports[`MyTask renders component correctly 1`] = `
                   </div>
                 </StyledComponent>
               </styled.div>
+              <styled.a>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-kAzzGY",
+                        "isStatic": true,
+                        "lastClassName": "hdWuoe",
+                        "rules": Array [
+                          "
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #201662;
+  margin-left: auto;
+  text-transform: uppercase;
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+",
+                        ],
+                      },
+                      "displayName": "styled.a",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-kAzzGY",
+                      "target": "a",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <a
+                    className="sc-kAzzGY hdWuoe"
+                  >
+                    View Task Details
+                  </a>
+                </StyledComponent>
+              </styled.a>
             </div>
           </StyledComponent>
         </styled.div>

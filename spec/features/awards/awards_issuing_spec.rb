@@ -82,7 +82,7 @@ describe 'awards issuing', js: true do
   end
 
   it 'allows to send award when recipient wallet address is present' do
-    visit project_award_type_award_path(project1, award_type1, award3)
+    visit project_award_type_award_award_path(project1, award_type1, award3)
     find_button('proceed').click
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
     expect(page).to have_content '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
@@ -91,7 +91,7 @@ describe 'awards issuing', js: true do
   end
 
   it 'allows to send award to a selected channel user' do
-    visit project_award_type_award_path(project1, award_type1, award3)
+    visit project_award_type_award_award_path(project1, award_type1, award3)
     select channel1.channel_id, from: 'task[channel_id]'
     find('select[name="task[uid]"] > option:nth-child(2)').click
     find_button('proceed').click
@@ -102,7 +102,7 @@ describe 'awards issuing', js: true do
   end
 
   it "allows to send award when recipient wallet address isn't present" do
-    visit project_award_type_award_path(project1, award_type1, award4)
+    visit project_award_type_award_award_path(project1, award_type1, award4)
     select 'email', from: 'task[channel_id]'
     find_field('task[email]').set 'test@test.test'
     find_button('proceed').click
@@ -113,7 +113,7 @@ describe 'awards issuing', js: true do
   end
 
   it 'limit send award with project maximum token' do
-    visit project_award_type_award_path(project1, award_type1, award5)
+    visit project_award_type_award_award_path(project1, award_type1, award5)
     fill_in 'task[quantity]', with: 100
     find_button('proceed').click
     find_button('issue award').click
@@ -131,6 +131,6 @@ describe 'awards issuing', js: true do
   it "doesn't allow to delete award after sending" do
     visit project_award_types_path(project1)
     find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
-    expect(page).not_to have_selector "a[data-method='delete'][href='#{project_award_type_award_path(project1, award_type1, award6)}']"
+    expect(page).not_to have_selector "a[data-method='delete'][href='#{project_award_type_award_award_path(project1, award_type1, award6)}']"
   end
 end
