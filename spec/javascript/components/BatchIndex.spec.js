@@ -40,8 +40,8 @@ describe('BatchIndex', () => {
             'awardPath'   : '/projects/3/batches/10/tasks/21',
             'editPath'    : '/projects/3/batches/10/tasks/21/edit',
             'destroyPath' : '/projects/3/batches/10/tasks/21',
-            'contributor': {
-              'name': 'test',
+            'contributor' : {
+              'name' : 'test',
               'image': 'http://test'
             }
           },
@@ -59,8 +59,8 @@ describe('BatchIndex', () => {
             'awardPath'   : '/projects/3/batches/10/tasks/21',
             'editPath'    : '/projects/3/batches/10/tasks/21/edit',
             'destroyPath' : '/projects/3/batches/10/tasks/21',
-            'contributor': {
-              'name': 'test',
+            'contributor' : {
+              'name' : 'test',
               'image': 'http://test'
             }
           },
@@ -98,8 +98,8 @@ describe('BatchIndex', () => {
             'awardPath'   : '/projects/3/batches/10/tasks/21',
             'editPath'    : '/projects/3/batches/10/tasks/21/edit',
             'destroyPath' : '/projects/3/batches/10/tasks/21',
-            'contributor': {
-              'name': 'test',
+            'contributor' : {
+              'name' : 'test',
               'image': 'http://test'
             }
           },
@@ -117,8 +117,8 @@ describe('BatchIndex', () => {
             'awardPath'   : '/projects/3/batches/10/tasks/21',
             'editPath'    : '/projects/3/batches/10/tasks/21/edit',
             'destroyPath' : '/projects/3/batches/10/tasks/21',
-            'contributor': {
-              'name': 'test',
+            'contributor' : {
+              'name' : 'test',
               'image': 'http://test'
             }
           },

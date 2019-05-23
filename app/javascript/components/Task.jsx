@@ -139,6 +139,7 @@ const Details = styled.div`
   flex-direction: column;
   align-items: flex-end;
   justify-content: space-between;
+  padding-right: 15px;
 `
 
 const Amount = styled(CurrencyAmount)`
@@ -147,7 +148,6 @@ const Amount = styled(CurrencyAmount)`
 const Buttons = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-right: 15px;
   align-items: center;
   padding-top: 8px;
 `
@@ -256,7 +256,7 @@ Task.propTypes = {
 }
 Task.defaultProps = {
   task: {
-    status: null,
+    status     : null,
     contributor: {
       name : null,
       image: null

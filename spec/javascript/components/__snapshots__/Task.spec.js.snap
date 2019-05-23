@@ -338,13 +338,14 @@ exports[`Task renders component correctly 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-jzJRlG",
                         "isStatic": true,
-                        "lastClassName": "dGcDzl",
+                        "lastClassName": "hidtVc",
                         "rules": Array [
                           "
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   justify-content: space-between;
+  padding-right: 15px;
 ",
                         ],
                       },
@@ -361,7 +362,7 @@ exports[`Task renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-jzJRlG dGcDzl"
+                    className="sc-jzJRlG hidtVc"
                   >
                     <Styled(CurrencyAmount)>
                       <StyledComponent
@@ -405,7 +406,7 @@ exports[`Task renders component correctly 1`] = `
                                   "componentStyle": ComponentStyle {
                                     "componentId": "sc-ifAKCX",
                                     "isStatic": true,
-                                    "lastClassName": "kJtUrU",
+                                    "lastClassName": "ezuxay",
                                     "rules": Array [
                                       "
   display: flex;
@@ -415,7 +416,6 @@ exports[`Task renders component correctly 1`] = `
   font-size: 14px;
   font-weight: bold;
   color: #201662;
-  padding-right: 15px;
 ",
                                     ],
                                   },
@@ -432,7 +432,7 @@ exports[`Task renders component correctly 1`] = `
                               forwardedRef={null}
                             >
                               <div
-                                className="sc-ifAKCX kJtUrU"
+                                className="sc-ifAKCX ezuxay"
                               >
                                 <styled.div>
                                   <StyledComponent
@@ -518,12 +518,11 @@ exports[`Task renders component correctly 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-kAzzGY",
                               "isStatic": true,
-                              "lastClassName": "hKNLlD",
+                              "lastClassName": "fWFmcx",
                               "rules": Array [
                                 "
   display: flex;
   justify-content: space-between;
-  margin-right: 15px;
   align-items: center;
   padding-top: 8px;
 ",
@@ -542,7 +541,7 @@ exports[`Task renders component correctly 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-kAzzGY hKNLlD"
+                          className="sc-kAzzGY fWFmcx"
                         >
                           <a>
                             <Styled(Icon)

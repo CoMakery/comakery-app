@@ -135,6 +135,22 @@ describe Project do
     end
   end
 
+  describe 'hooks' do
+    describe 'udpate_awards_if_token_was_added' do
+      let!(:task_w_no_token) { create(:award, status: 'ready') }
+
+      before do
+        task_w_no_token.project.update(token: nil)
+        task_w_no_token.update(status: 'paid')
+        task_w_no_token.project.update(token: create(:token))
+      end
+
+      it 'sets paid tasks status to accepted if token was added to the project' do
+        expect(task_w_no_token.reload.accepted?).to be true
+      end
+    end
+  end
+
   describe 'scopes' do
     describe '.with_last_activity_at' do
       it 'returns projects ordered by when the most recent award created_at, then by project created_at' do

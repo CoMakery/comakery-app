@@ -117,6 +117,27 @@ describe Award do
     end
   end
 
+  describe 'hooks' do
+    describe 'set_paid_status_if_project_has_no_token' do
+      let!(:submtted_task_w_no_token) { create(:award, status: 'submitted') }
+      let!(:submtted_task_w_token) { create(:award, status: 'submitted') }
+
+      before do
+        submtted_task_w_no_token.project.update(token: nil)
+        submtted_task_w_no_token.update(status: 'accepted')
+        submtted_task_w_token.update(status: 'accepted')
+      end
+
+      it 'upgrades accepted task to paid immediately if project has no token associated' do
+        expect(submtted_task_w_no_token.paid?).to be true
+      end
+
+      it 'doesnt upgrade accepted task to paid if project has token associated' do
+        expect(submtted_task_w_token.accepted?).to be true
+      end
+    end
+  end
+
   describe 'validations' do
     it 'requires things be present' do
       expect(described_class.new(quantity: nil).tap(&:valid?).errors.full_messages).to match_array([

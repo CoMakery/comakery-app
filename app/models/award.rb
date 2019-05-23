@@ -47,6 +47,7 @@ class Award < ApplicationRecord
 
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
+  before_validation :set_paid_status_if_project_has_no_token, if: -> { status == 'accepted' && !project.token }
   before_destroy :abort_destroy
 
   scope :completed, -> { where 'awards.status in(3,5)' }
@@ -166,6 +167,10 @@ class Award < ApplicationRecord
 
     def calculate_total_amount
       self.total_amount = BigDecimal(amount || 0) * BigDecimal(quantity || 1)
+    end
+
+    def set_paid_status_if_project_has_no_token
+      self.status = 'paid'
     end
 
     def total_amount_fits_into_project_budget

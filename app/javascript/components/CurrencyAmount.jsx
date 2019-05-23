@@ -10,7 +10,6 @@ const Wrapper = styled.div`
   font-size: 14px;
   font-weight: bold;
   color: #201662;
-  padding-right: 15px;
 `
 
 const Amount = styled.div`
