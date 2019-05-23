@@ -222,7 +222,7 @@ exports[`MyTask renders component correctly 1`] = `
                         "componentStyle": ComponentStyle {
                           "componentId": "sc-bdVaJa",
                           "isStatic": true,
-                          "lastClassName": "khtMgg",
+                          "lastClassName": "ehXycH",
                           "rules": Array [
                             "
   display: flex;
@@ -232,7 +232,6 @@ exports[`MyTask renders component correctly 1`] = `
   font-size: 14px;
   font-weight: bold;
   color: #201662;
-  padding-right: 15px;
 ",
                           ],
                         },
@@ -249,7 +248,7 @@ exports[`MyTask renders component correctly 1`] = `
                     forwardedRef={null}
                   >
                     <div
-                      className="sc-bdVaJa khtMgg"
+                      className="sc-bdVaJa ehXycH"
                     >
                       <styled.div>
                         <StyledComponent

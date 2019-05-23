@@ -36,6 +36,8 @@ class Project < ApplicationRecord
   validate :valid_video_url, if: -> { video_url.present? }
   validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
 
+  after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
+
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
   scope :listed, -> { where 'projects.visibility not in(2,3)' }
@@ -192,5 +194,9 @@ class Project < ApplicationRecord
 
   def token_changeable
     errors.add(:token_id, 'cannot be changed if project has completed tasks') if awards.completed.any?
+  end
+
+  def udpate_awards_if_token_was_added
+    awards.paid.each { |a| a.update(status: :accepted) }
   end
 end

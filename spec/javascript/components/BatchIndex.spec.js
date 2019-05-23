@@ -39,7 +39,11 @@ describe('BatchIndex', () => {
             'tokenSymbol' : 'DMT',
             'awardPath'   : '/projects/3/batches/10/tasks/21',
             'editPath'    : '/projects/3/batches/10/tasks/21/edit',
-            'destroyPath' : '/projects/3/batches/10/tasks/21'
+            'destroyPath' : '/projects/3/batches/10/tasks/21',
+            'contributor' : {
+              'name' : 'test',
+              'image': 'http://test'
+            }
           },
           {
             'id'          : 22,
@@ -54,7 +58,11 @@ describe('BatchIndex', () => {
             'tokenSymbol' : 'DMT',
             'awardPath'   : '/projects/3/batches/10/tasks/21',
             'editPath'    : '/projects/3/batches/10/tasks/21/edit',
-            'destroyPath' : '/projects/3/batches/10/tasks/21'
+            'destroyPath' : '/projects/3/batches/10/tasks/21',
+            'contributor' : {
+              'name' : 'test',
+              'image': 'http://test'
+            }
           },
         ]
       }
@@ -89,7 +97,11 @@ describe('BatchIndex', () => {
             'tokenSymbol' : 'DMT',
             'awardPath'   : '/projects/3/batches/10/tasks/21',
             'editPath'    : '/projects/3/batches/10/tasks/21/edit',
-            'destroyPath' : '/projects/3/batches/10/tasks/21'
+            'destroyPath' : '/projects/3/batches/10/tasks/21',
+            'contributor' : {
+              'name' : 'test',
+              'image': 'http://test'
+            }
           },
           {
             'id'          : 22,
@@ -104,7 +116,11 @@ describe('BatchIndex', () => {
             'tokenSymbol' : 'DMT',
             'awardPath'   : '/projects/3/batches/10/tasks/21',
             'editPath'    : '/projects/3/batches/10/tasks/21/edit',
-            'destroyPath' : '/projects/3/batches/10/tasks/21'
+            'destroyPath' : '/projects/3/batches/10/tasks/21',
+            'contributor' : {
+              'name' : 'test',
+              'image': 'http://test'
+            }
           },
         ]
       },

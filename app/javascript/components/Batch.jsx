@@ -39,6 +39,7 @@ const Title = styled.div`
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  padding-right: 15px;
 `
 
 const Name = styled.div`

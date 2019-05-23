@@ -203,6 +203,8 @@ const Contributor = styled.div`
   font-family: Montserrat;
   font-size: 10px;
   font-weight: 500;
+  color: #4a4a4a;
+  text-transform: uppercase;
   font-style: normal;
   font-stretch: normal;
   line-height: normal;
