@@ -64,7 +64,7 @@ describe Award do
       end
 
       it 'returns only submitted or accepted awards for a contributor' do
-        expect(described_class.filtered_for_view('submitted', contributor)).to eq(described_class.submitted.or(described_class.accepted).where(account: contributor))
+        expect(described_class.filtered_for_view('submitted', contributor)).to eq(described_class.where(status: %i[submitted accepted], account: contributor))
       end
 
       it 'returns only awards available for review for a project owner' do
@@ -73,6 +73,11 @@ describe Award do
 
       it 'returns only awards available for payment for a project owner' do
         expect(described_class.filtered_for_view('to pay', project_owner)).to eq(described_class.accepted.where(issuer: project_owner))
+      end
+
+      it 'returns only paid or rejected awards' do
+        expect(described_class.filtered_for_view('done', contributor)).to eq(described_class.where(status: %i[paid rejected], account: contributor).or(described_class.where(status: %i[paid rejected], issuer: contributor)))
+        expect(described_class.filtered_for_view('done', project_owner)).to eq(described_class.where(status: %i[paid rejected], account: project_owner).or(described_class.where(status: %i[paid rejected], issuer: project_owner)))
       end
 
       it 'returns no awards for an unknown filter' do
