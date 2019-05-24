@@ -68,13 +68,13 @@ class Award < ApplicationRecord
     when 'started'
       where(status: :started).where(account: account)
     when 'submitted'
-      where(status: :submitted).or(where(status: :accepted)).where(account: account)
+      where(status: %i[submitted accepted], account: account)
     when 'to review'
       where(status: :submitted).where(issuer: account)
     when 'to pay'
       where(status: :accepted).where(issuer: account)
     when 'done'
-      where(status: :paid).or(where(status: :rejected))
+      where(status: %i[paid rejected], account: account).or(where(status: %i[paid rejected], issuer: account))
     else
       none
     end
