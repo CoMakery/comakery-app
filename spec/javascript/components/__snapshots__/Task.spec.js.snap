@@ -406,7 +406,7 @@ exports[`Task renders component correctly 1`] = `
                                   "componentStyle": ComponentStyle {
                                     "componentId": "sc-ifAKCX",
                                     "isStatic": true,
-                                    "lastClassName": "ezuxay",
+                                    "lastClassName": "fOIRMD",
                                     "rules": Array [
                                       "
   display: flex;
@@ -414,8 +414,8 @@ exports[`Task renders component correctly 1`] = `
   align-items: center;
   font-family: Montserrat;
   font-size: 14px;
-  font-weight: bold;
-  color: #201662;
+  font-weight: 500;
+  color: #4a4a4a;
 ",
                                     ],
                                   },
@@ -432,7 +432,7 @@ exports[`Task renders component correctly 1`] = `
                               forwardedRef={null}
                             >
                               <div
-                                className="sc-ifAKCX ezuxay"
+                                className="sc-ifAKCX fOIRMD"
                               >
                                 <styled.div>
                                   <StyledComponent

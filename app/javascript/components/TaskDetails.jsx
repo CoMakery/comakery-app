@@ -6,6 +6,7 @@ import BackButton from './BackButton'
 import Button from './styleguide/Button'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
+import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -15,6 +16,8 @@ const Wrapper = styled.div`
 const Layout = styled.div`
   padding: 25px 150px 25px 150px;
   min-height: 50vh;
+  max-width: 980px;
+  margin: auto;
   margin-top: -110px;
 
   @media (max-width: 1024px) {
@@ -64,8 +67,8 @@ const Details = styled.div`
   padding: 30px 40px;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
-  margin-top: -9px;
-  margin-bottom: 10px;
+  margin-top: -19px;
+  margin-bottom: 20px;
 
   img {
     max-width: 80px;
@@ -82,16 +85,16 @@ const Submission = styled.div`
   padding: 30px 40px;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
-  margin-top: -9px;
-  margin-bottom: 10px;
+  margin-top: -19px;
+  margin-bottom: 20px;
 `
 
 const Review = styled.div`
   padding: 30px 40px;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
-  margin-top: -9px;
-  margin-bottom: 10px;
+  margin-top: -19px;
+  margin-bottom: 20px;
 
   a {
     color: #0089f4;
@@ -99,6 +102,16 @@ const Review = styled.div`
 
     &:hover {
       text-decoration: underline;
+    }
+  }
+
+  img {
+    max-width: 80px;
+    max-height: 80px;
+    border: 1px solid transparent;
+
+    &:hover {
+      border: 1px solid #0089f4;
     }
   }
 
@@ -170,14 +183,14 @@ class TaskDetails extends React.Component {
                   Task Submission
                 </SubHeader>
 
-                <form action={task.submitUrl} method="post">
+                <form action={task.submitUrl} encType="multipart/form-data" method="post">
                   <InputFieldWhiteDark
                     title="URL Where Completed Work Can Be Viewed"
                     required
                     name="task[submission_url]"
                     value={this.state['task[submission_url]']}
                     eventHandler={this.handleFieldChange}
-                    errorText={this.state.errors['task[submission_url]']}
+                    errorText={this.state.errors['task[submissionUrl]']}
                     placeholder="Provide a URL"
                     symbolLimit={150}
                   />
@@ -188,9 +201,17 @@ class TaskDetails extends React.Component {
                     name="task[submission_comment]"
                     value={this.state['task[submission_comment]']}
                     eventHandler={this.handleFieldChange}
-                    errorText={this.state.errors['task[submission_comment]']}
+                    errorText={this.state.errors['task[submissionComment]']}
                     placeholder="Provide any required comments"
                     symbolLimit={500}
+                  />
+
+                  <InputFieldUploadFile
+                    title="Image attachement"
+                    name="task[submission_image]"
+                    errorText={this.state.errors['task[submissionImage]']}
+                    imgPreviewUrl={this.props.task.submissionImageUrl}
+                    imgPreviewDimensions="100x100"
                   />
 
                   <input
@@ -223,6 +244,14 @@ class TaskDetails extends React.Component {
                 <ContentBlock title="ADDITIONAL COMMENTS">
                   {task.submissionComment}
                 </ContentBlock>
+
+                {task.submissionImageUrl &&
+                  <ContentBlock title="ATTACHED IMAGE">
+                    <a target="_blank" href={task.submissionImageUrl}>
+                      <img src={task.submissionImageUrl} />
+                    </a>
+                  </ContentBlock>
+                }
 
                 {task.status === 'submitted' && task.issuer.self &&
                   <React.Fragment>

@@ -44,4 +44,11 @@ Rails.application.configure do
   config.middleware.use RackSessionAccess::Middleware
 
   config.allow_missing_ethereum_bridge = true
+
+  if ENV['NO_LOGS'].presence
+    config.log_level = :warn
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  end
 end

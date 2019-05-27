@@ -10,9 +10,13 @@ const Wrapper = styled.div`
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
   height: 80px;
   padding: 10px 20px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   text-transform: uppercase;
   background-color: white;
+
+  @media (max-width: 1024px) {
+    height: auto;
+  }
 `
 
 const RightBorder = styled.div`
@@ -48,6 +52,10 @@ const RightBorder = styled.div`
   ${props => props.status === 'rejected' && css`
     background-color: #ff4d4d;
   `}
+
+  @media (max-width: 1024px) {
+    height: 58px;
+  }
 `
 
 const FirstRow = styled.div`
@@ -56,19 +64,32 @@ const FirstRow = styled.div`
   width: 100%;
   justify-content: space-between;
   align-items: flex-start;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 `
 
 const SecondRow = styled.div`
   min-height: 28px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 `
 
 const ThirdRow = styled.div`
   display: flex;
   width: 100%;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 `
 
 const Name = styled.div`
@@ -80,6 +101,10 @@ const Name = styled.div`
   line-height: normal;
   letter-spacing: normal;
   color: #3a3a3a;
+
+  @media (max-width: 1024px) {
+    margin-bottom: 15px;
+  }
 `
 
 const BlockWrapper = styled.div`
@@ -89,64 +114,126 @@ const BlockWrapper = styled.div`
 const Mission = styled.div`
   font-family: Montserrat;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 900;
   font-style: normal;
   font-stretch: normal;
   line-height: 1.4;
   letter-spacing: normal;
   color: #4a4a4a;
-  text-transform: none;
 
   a {
     text-decoration: none;
     color: #0089f4;
+    font-weight: 600;
 
     &:hover {
       text-decoration: underline;
     }
+
+    @media (max-width: 1024px) {
+      display: block;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    margin-bottom: 15px;
   }
 `
 
 const Project = styled.div`
   font-family: Montserrat;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 900;
   font-style: normal;
   font-stretch: normal;
   line-height: 1.4;
   letter-spacing: normal;
   color: #4a4a4a;
-  text-transform: none;
 
   a {
     text-decoration: none;
     color: #0089f4;
+    font-weight: 600;
 
     &:hover {
       text-decoration: underline;
     }
+
+    @media (max-width: 1024px) {
+      display: block;
+    }
+  }
+
+  @media (max-width: 1024px) {
+  margin-bottom: 15px;
+  margin-top: 15px;
   }
 `
 
 const TaskAction = styled.a`
-  font-family: Montserrat;
-  font-size: 14px;
-  font-weight: bold;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  text-align: right;
-  color: #8d9599;
-  text-transform: uppercase;
-  text-decoration: none;
+  ${props => props.componentStyle === 'link' && css`
+    font-family: Montserrat;
+    font-size: 14px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: right;
+    color: #8d9599;
+    text-transform: uppercase;
+    text-decoration: none;
 
-  &:hover {
-    text-decoration: underline;
-  }
+    &:hover {
+      text-decoration: underline;
+    }
 
-  ${props => props.actionAvailable && css`
+    @media (max-width: 1024px) {
+      display: none;
+    }
+  `}
+
+  ${props => props.componentStyle === 'button' && css`
+    display: none;
+    text-decoration: none;
+    height: 30px;
+    padding: 6px 12px;
+    margin-right: 15px;
+    min-width: 90px;
+    color: white;
+    background-color: #8d9599;
+    box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
+    font-family: Montserrat, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    outline: none;
+    border: none;
+    border-radius: 0;
+    transition: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    appearance: none;
+    align-items: flex-start;
+    text-align: center;
+    margin-bottom: 15px;
+    width: fit-content;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 1024px) {
+      display: inline-block;
+    }
+  `}
+
+  ${props => props.actionAvailable && props.componentStyle === 'link' && css`
     color: #0089f4;
+  `}
+
+  ${props => props.actionAvailable && props.componentStyle === 'button' && css`
+    background-color: #0089f4;
   `}
 `
 
@@ -158,20 +245,26 @@ const TaskDetails = styled.a`
   font-stretch: normal;
   line-height: normal;
   letter-spacing: normal;
-  text-align: right;
   color: #201662;
   margin-left: auto;
   text-transform: uppercase;
   text-decoration: none;
-  
+
   &:hover {
     text-decoration: underline;
+  }
+
+  @media (max-width: 1024px) {
+    margin-left: initial;
+    margin-top: 15px;
+    margin-bottom: 15px;
   }
 `
 
 const Status = styled.div`
   font-family: Montserrat;
   font-size: 10px;
+  color: #4a4a4a;
   font-weight: 500;
   font-style: normal;
   font-stretch: normal;
@@ -188,6 +281,7 @@ const Type = styled.div`
   font-family: Montserrat;
   font-size: 10px;
   font-weight: 500;
+  color: #4a4a4a;
   font-style: normal;
   font-stretch: normal;
   line-height: normal;
@@ -216,7 +310,66 @@ const Contributor = styled.div`
   b {
     font-weight: 900;
   }
+
+  @media (max-width: 1024px) {
+    margin-top: 15px;
+  }
 `
+
+class TaskActionComponent extends React.Component {
+  render() {
+    let task = this.props.task
+    return (
+      <TaskAction
+        componentStyle={this.props.componentStyle}
+        href={
+          ((task.status === 'accepted' && task.issuer.self) && task.paymentUrl) ||
+          ((task.status === 'paid') && task.paymentUrl) ||
+          ((task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) && '/account') ||
+          (task.detailsUrl)
+        }
+        actionAvailable={
+          (task.status === 'ready') ||
+          (task.status === 'started') ||
+          (task.status === 'submitted' && task.issuer.self) ||
+          (task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) ||
+          (task.status === 'accepted' && task.issuer.self && task.contributor.walletPresent)
+        }
+      >
+        {task.status === 'ready' &&
+          <React.Fragment>Start Task</React.Fragment>
+        }
+        {task.status === 'started' &&
+          <React.Fragment>Submit Task</React.Fragment>
+        }
+        {task.status === 'submitted' && !task.issuer.self &&
+          <React.Fragment>Awaiting Review</React.Fragment>
+        }
+        {task.status === 'submitted' && task.issuer.self &&
+          <React.Fragment>Review Task</React.Fragment>
+        }
+        {task.status === 'accepted' && !task.issuer.self && task.contributor.walletPresent &&
+          <React.Fragment>Awaiting Payment</React.Fragment>
+        }
+        {task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent &&
+          <React.Fragment>Provide Wallet</React.Fragment>
+        }
+        {task.status === 'accepted' && task.issuer.self && task.contributor.walletPresent &&
+          <React.Fragment>Pay Contributor</React.Fragment>
+        }
+        {task.status === 'accepted' && task.issuer.self && !task.contributor.walletPresent &&
+          <React.Fragment>Account Pending</React.Fragment>
+        }
+        {task.status === 'paid' &&
+          <React.Fragment>Paid</React.Fragment>
+        }
+        {task.status === 'rejected' &&
+          <React.Fragment>Rejected</React.Fragment>
+        }
+      </TaskAction>
+    )
+  }
+}
 
 class MyTask extends React.Component {
   render() {
@@ -236,59 +389,14 @@ class MyTask extends React.Component {
 
           <SecondRow>
             <BlockWrapper>
-              <Project>PROJECT: <a href={task.project.url}>{task.project.name}</a></Project>
+              <Project>PROJECT <a href={task.project.url}>{task.project.name}</a></Project>
               {task.mission.name &&
-                <Mission>MISSION: <a href={task.mission.url}>{task.mission.name}</a></Mission>
+                <Mission>MISSION <a href={task.mission.url}>{task.mission.name}</a></Mission>
               }
             </BlockWrapper>
 
             {this.props.displayActions &&
-              <TaskAction
-                href={
-                  ((task.status === 'accepted' && task.issuer.self) && task.paymentUrl) ||
-                  ((task.status === 'paid') && task.paymentUrl) ||
-                  ((task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) && '/account') ||
-                  (task.detailsUrl)
-                }
-                actionAvailable={
-                  (task.status === 'ready') ||
-                  (task.status === 'started') ||
-                  (task.status === 'submitted' && task.issuer.self) ||
-                  (task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) ||
-                  (task.status === 'accepted' && task.issuer.self && task.contributor.walletPresent)
-                }
-              >
-                {task.status === 'ready' &&
-                  <React.Fragment>Start Task</React.Fragment>
-                }
-                {task.status === 'started' &&
-                  <React.Fragment>Submit Task</React.Fragment>
-                }
-                {task.status === 'submitted' && !task.issuer.self &&
-                  <React.Fragment>Awaiting Review</React.Fragment>
-                }
-                {task.status === 'submitted' && task.issuer.self &&
-                  <React.Fragment>Review Task</React.Fragment>
-                }
-                {task.status === 'accepted' && !task.issuer.self && task.contributor.walletPresent &&
-                  <React.Fragment>Awaiting Payment</React.Fragment>
-                }
-                {task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent &&
-                  <React.Fragment>Provide Wallet</React.Fragment>
-                }
-                {task.status === 'accepted' && task.issuer.self && task.contributor.walletPresent &&
-                  <React.Fragment>Pay Contributor</React.Fragment>
-                }
-                {task.status === 'accepted' && task.issuer.self && !task.contributor.walletPresent &&
-                  <React.Fragment>Account Pending</React.Fragment>
-                }
-                {task.status === 'paid' &&
-                  <React.Fragment>Paid</React.Fragment>
-                }
-                {task.status === 'rejected' &&
-                  <React.Fragment>Rejected</React.Fragment>
-                }
-              </TaskAction>
+              <TaskActionComponent componentStyle="link" task={task} />
             }
           </SecondRow>
 
@@ -312,6 +420,10 @@ class MyTask extends React.Component {
               <TaskDetails href={task.detailsUrl}>
                 View Task Details
               </TaskDetails>
+            }
+
+            {this.props.displayActions &&
+              <TaskActionComponent componentStyle="button" task={task} />
             }
           </ThirdRow>
         </Wrapper>

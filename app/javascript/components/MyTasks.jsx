@@ -3,10 +3,16 @@ import PropTypes from 'prop-types'
 import MyTask from './MyTask'
 import styled, {css} from 'styled-components'
 
+const Wrapper = styled.div`
+  background-color: white;
+`
+
 const Layout = styled.div`
   background-color: white;
   padding: 25px 150px 25px 150px;
   min-height: 50vh;
+  max-width: 980px;
+  margin: auto;
 
   @media (max-width: 1024px) {
     padding: 25px 15px 25px 15px;
@@ -60,10 +66,21 @@ const Filter = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin: 25px 0;
-  flex-wrap: wrap;
+  background-color: #ffffff;
 
   @media (max-width: 1024px) {
-    justify-content: center;
+    background: none;
+    position: sticky;
+    top: 25px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -15px;
+    padding: 10px;
+    z-index: 200;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 `
 
@@ -79,8 +96,9 @@ const FilterLink = styled.a`
   text-align: center;
   color: #8d9599;
   text-decoration: none;
-  padding: 5px;
   line-height: 1.5;
+  min-width: 100px;
+  padding: 5px;
 
   &:hover {
     text-decoration: underline;
@@ -90,6 +108,13 @@ const FilterLink = styled.a`
     color: #0089f4;
     border-bottom: 2px solid #0089f4;
   `}
+
+  @media (max-width: 1024px) {
+    background-color: #ffffff;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+    flex: 0 0 auto;
+    margin-right: 20px;
+  }
 `
 
 const Pagination = styled.div`
@@ -104,31 +129,33 @@ class MyTasks extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Header>
-          My Tasks
-        </Header>
+        <Wrapper>
+          <Header>
+            My Tasks
+          </Header>
 
-        <Layout>
-          <PastAwards>
-            <a href={this.props.pastAwardsUrl}>See past awards</a>
-          </PastAwards>
+          <Layout>
+            <PastAwards>
+              <a href={this.props.pastAwardsUrl}>See past awards</a>
+            </PastAwards>
 
-          <Filter>
-            {this.props.filters.map(filter =>
-              <FilterLink key={filter.name} href={filter.url} current={filter.current}>
-                {filter.name}
-                <br />
-                {filter.count}
-              </FilterLink>
+            <Filter>
+              {this.props.filters.map(filter =>
+                <FilterLink key={filter.name} href={filter.url} current={filter.current}>
+                  {filter.name}
+                  <br />
+                  {filter.count}
+                </FilterLink>
+              )}
+            </Filter>
+
+            <Pagination dangerouslySetInnerHTML={{__html: this.props.paginationHtml}} />
+
+            {this.props.tasks.map(task =>
+              <MyTask key={task.id} task={task} />
             )}
-          </Filter>
-
-          <Pagination dangerouslySetInnerHTML={{__html: this.props.paginationHtml}} />
-
-          {this.props.tasks.map(task =>
-            <MyTask key={task.id} task={task} />
-          )}
-        </Layout>
+          </Layout>
+        </Wrapper>
       </React.Fragment>
     )
   }
