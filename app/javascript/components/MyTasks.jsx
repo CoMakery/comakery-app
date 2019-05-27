@@ -152,7 +152,7 @@ class MyTasks extends React.Component {
             <Pagination dangerouslySetInnerHTML={{__html: this.props.paginationHtml}} />
 
             {this.props.tasks.map(task =>
-              <MyTask key={task.id} task={task} />
+              <MyTask key={task.id} task={task} filter={this.props.filters.find(f => f.current).name} />
             )}
           </Layout>
         </Wrapper>

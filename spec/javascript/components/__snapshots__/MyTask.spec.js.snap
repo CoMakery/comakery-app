@@ -3,6 +3,7 @@
 exports[`MyTask renders component correctly 1`] = `
 <MyTask
   displayActions={true}
+  filter=""
   task={
     Object {
       "batch": Object {
@@ -522,6 +523,7 @@ exports[`MyTask renders component correctly 1`] = `
               </styled.div>
               <TaskActionComponent
                 componentStyle="link"
+                filter=""
                 task={
                   Object {
                     "batch": Object {
@@ -796,6 +798,7 @@ exports[`MyTask renders component correctly 1`] = `
               </styled.a>
               <TaskActionComponent
                 componentStyle="button"
+                filter=""
                 task={
                   Object {
                     "batch": Object {

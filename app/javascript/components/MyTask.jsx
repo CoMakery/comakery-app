@@ -319,6 +319,7 @@ const Contributor = styled.div`
 class TaskActionComponent extends React.Component {
   render() {
     let task = this.props.task
+    let filter = this.props.filter
     return (
       <TaskAction
         componentStyle={this.props.componentStyle}
@@ -342,22 +343,22 @@ class TaskActionComponent extends React.Component {
         {task.status === 'started' &&
           <React.Fragment>Submit Task</React.Fragment>
         }
-        {task.status === 'submitted' && !task.issuer.self &&
+        {task.status === 'submitted' && filter !== 'to review' &&
           <React.Fragment>Awaiting Review</React.Fragment>
         }
-        {task.status === 'submitted' && task.issuer.self &&
+        {task.status === 'submitted' && filter === 'to review' &&
           <React.Fragment>Review Task</React.Fragment>
         }
-        {task.status === 'accepted' && !task.issuer.self && task.contributor.walletPresent &&
+        {task.status === 'accepted' && filter !== 'to pay' && task.contributor.walletPresent &&
           <React.Fragment>Awaiting Payment</React.Fragment>
         }
-        {task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent &&
+        {task.status === 'accepted' && filter !== 'to pay' && !task.contributor.walletPresent &&
           <React.Fragment>Provide Wallet</React.Fragment>
         }
-        {task.status === 'accepted' && task.issuer.self && task.contributor.walletPresent &&
+        {task.status === 'accepted' && filter === 'to pay' && task.contributor.walletPresent &&
           <React.Fragment>Pay Contributor</React.Fragment>
         }
-        {task.status === 'accepted' && task.issuer.self && !task.contributor.walletPresent &&
+        {task.status === 'accepted' && filter === 'to pay' && !task.contributor.walletPresent &&
           <React.Fragment>Account Pending</React.Fragment>
         }
         {task.status === 'paid' &&
@@ -374,6 +375,7 @@ class TaskActionComponent extends React.Component {
 class MyTask extends React.Component {
   render() {
     let task = this.props.task
+    let filter = this.props.filter
     return (
       <React.Fragment>
         <Wrapper>
@@ -396,7 +398,7 @@ class MyTask extends React.Component {
             </BlockWrapper>
 
             {this.props.displayActions &&
-              <TaskActionComponent componentStyle="link" task={task} />
+              <TaskActionComponent componentStyle="link" task={task} filter={filter} />
             }
           </SecondRow>
 
@@ -423,7 +425,7 @@ class MyTask extends React.Component {
             }
 
             {this.props.displayActions &&
-              <TaskActionComponent componentStyle="button" task={task} />
+              <TaskActionComponent componentStyle="button" task={task} filter={filter} />
             }
           </ThirdRow>
         </Wrapper>
@@ -434,6 +436,7 @@ class MyTask extends React.Component {
 
 MyTask.propTypes = {
   task          : PropTypes.object,
+  filter        : PropTypes.string,
   displayActions: PropTypes.bool
 }
 MyTask.defaultProps = {
@@ -459,6 +462,7 @@ MyTask.defaultProps = {
       image: null
     }
   },
-  displayActions: true
+  displayActions: true,
+  filter        : ''
 }
 export default MyTask

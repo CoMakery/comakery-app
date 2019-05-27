@@ -238,6 +238,7 @@ exports[`TaskDetails renders component correctly 1`] = `
             >
               <MyTask
                 displayActions={false}
+                filter=""
                 task={
                   Object {
                     "batch": Object {
