@@ -77,8 +77,8 @@ class AwardTypesController < ApplicationController
         batches: @project.award_types&.map do |batch|
           batch.serializable_hash.merge(
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
-            completed_tasks: batch.awards.completed.count,
-            total_tasks: batch.awards.count,
+            completed_tasks: batch.awards.completed.size,
+            total_tasks: batch.awards.size,
             specialty: batch.specialty&.name,
             currency: batch.project.token&.symbol,
             total_amount: batch.awards.sum(:total_amount),

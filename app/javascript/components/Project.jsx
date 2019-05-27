@@ -202,15 +202,15 @@ export default class Project extends React.Component {
               <img className="project-award__token__img" src={tokenData.imageUrl} />
               {tokenData.name} ({tokenData.symbol})
             </div>
-            <div className="project-award__token__type">
-              {tokenData.coinType}
-              {tokenData.contractUrl &&
+            {tokenData.contractUrl &&
+              <div className="project-award__token__type">
+                {tokenData.coinType}
                 <div className="project-award__token__address">
                   <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
-                  <a className="project-award__token__address__link" href={tokenData.contractUrl}>Smart Contract</a>
+                  <a target="_blank" className="project-award__token__address__link" href={tokenData.contractUrl}>Smart Contract</a>
                 </div>
-              }
-            </div>
+              </div>
+            }
           </div>
         }
 

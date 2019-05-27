@@ -8,8 +8,8 @@ const Wrapper = styled.div`
   align-items: center;
   font-family: Montserrat;
   font-size: 14px;
-  font-weight: bold;
-  color: #201662;
+  font-weight: 500;
+  color: #4a4a4a;
 `
 
 const Amount = styled.div`

@@ -15,6 +15,7 @@ class Award < ApplicationRecord
   STARTED_TASKS_PER_CONTRIBUTOR = 5
 
   attachment :image, type: :image
+  attachment :submission_image, type: :image
 
   belongs_to :account, optional: true
   belongs_to :authentication, optional: true

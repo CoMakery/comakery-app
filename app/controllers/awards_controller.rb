@@ -90,11 +90,7 @@ class AwardsController < ApplicationController
   end
 
   def submit
-    if @award.update(
-      submission_url: params[:task][:submission_url],
-      submission_comment: params[:task][:submission_comment],
-      status: 'submitted'
-    )
+    if @award.update(submit_params.merge(status: 'submitted'))
       redirect_to my_tasks_path(filter: 'submitted'), notice: 'Task submitted'
     else
       redirect_to project_award_type_award_path(@award.project, @award.award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -250,6 +246,14 @@ class AwardsController < ApplicationController
       )
     end
 
+    def submit_params
+      params.fetch(:task, {}).permit(
+        :submission_url,
+        :submission_comment,
+        :submission_image
+      )
+    end
+
     def task_to_props(task)
       task&.serializable_hash&.merge({
         mission: {
@@ -278,6 +282,7 @@ class AwardsController < ApplicationController
           wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
         },
         image_url: helpers.attachment_url(task, :image),
+        submission_image_url: helpers.attachment_url(task, :submission_image),
         payment_url: awards_project_path(task.project),
         details_url: project_award_type_award_path(task.project, task.award_type, task),
         start_url: project_award_type_award_start_path(task.project, task.award_type, task),
@@ -296,7 +301,7 @@ class AwardsController < ApplicationController
           {
             name: filter,
             current: filter == @filter,
-            count: policy_scope(Award).filtered_for_view(filter, current_account).count,
+            count: policy_scope(Award).filtered_for_view(filter, current_account).size,
             url: my_tasks_path(filter: filter)
           }
         end,
