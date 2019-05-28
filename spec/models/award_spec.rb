@@ -43,6 +43,104 @@ describe Award do
         end
       end
     end
+
+    describe '.filtered_for_view(filter, account)' do
+      let!(:contributor) { create(:account) }
+      let!(:project_owner) { create(:account) }
+      let!(:ready_award) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed'), specialty: contributor.specialty)) }
+      let!(:started_award) { create(:award, status: 'started', issuer: project_owner, account: contributor) }
+      let!(:submitted_award) { create(:award, status: 'submitted', issuer: project_owner, account: contributor) }
+      let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
+      let!(:paid_award) { create(:award, status: 'paid', issuer: project_owner, account: contributor) }
+      let!(:rejected_award) { create(:award, status: 'rejected', issuer: project_owner, account: contributor) }
+      let!(:paid_award_from_other_user) { create(:award, status: 'paid') }
+
+      it 'returns only ready awards' do
+        expect(described_class.filtered_for_view('ready', contributor)).to eq(described_class.ready)
+      end
+
+      it 'returns only started awards for a contributor' do
+        expect(described_class.filtered_for_view('started', contributor)).to eq(described_class.started.where(account: contributor))
+      end
+
+      it 'returns only submitted or accepted awards for a contributor' do
+        expect(described_class.filtered_for_view('submitted', contributor)).to eq(described_class.where(status: %i[submitted accepted], account: contributor))
+      end
+
+      it 'returns only awards available for review for a project owner' do
+        expect(described_class.filtered_for_view('to review', project_owner)).to eq(described_class.submitted.where(issuer: project_owner))
+      end
+
+      it 'returns only awards available for payment for a project owner' do
+        expect(described_class.filtered_for_view('to pay', project_owner)).to eq(described_class.accepted.where(issuer: project_owner))
+      end
+
+      it 'returns only paid or rejected awards' do
+        expect(described_class.filtered_for_view('done', contributor)).to eq(described_class.where(status: %i[paid rejected], account: contributor).or(described_class.where(status: %i[paid rejected], issuer: contributor)))
+        expect(described_class.filtered_for_view('done', project_owner)).to eq(described_class.where(status: %i[paid rejected], account: project_owner).or(described_class.where(status: %i[paid rejected], issuer: project_owner)))
+      end
+
+      it 'returns no awards for an unknown filter' do
+        expect(described_class.filtered_for_view('not finished', contributor)).to eq([])
+      end
+    end
+
+    describe '.having_suitable_experience_for(account)' do
+      let(:account) { create(:account) }
+      let(:award_type) { create(:award_type, specialty: account.specialty) }
+
+      before do
+        described_class.destroy_all
+        Award::EXPERIENCE_LEVELS['Demonstrated Skills'].times { create(:award, account: account, award_type: award_type) }
+      end
+
+      it 'returns awards suiting given experience when there are awards with the same specialty and various experience levels' do
+        2.times { create(:award_ready, award_type: award_type) }
+        3.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type) }
+        4.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'], award_type: award_type) }
+        scope = described_class.having_suitable_experience_for(account)
+        expect(scope.count).to eq(5)
+        expect(scope.where(experience_level: 0).count).to eq(2)
+        expect(scope.where(experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills']).count).to eq(3)
+        expect(scope.where(experience_level: Award::EXPERIENCE_LEVELS['Established Contributor']).count).to eq(0)
+      end
+
+      it 'returns no awards when there are only awards with a different specialty without experience level' do
+        award_type_with_a_different_specialty = create(:award_type)
+        2.times { create(:award_ready, award_type: award_type_with_a_different_specialty) }
+        scope = described_class.having_suitable_experience_for(account)
+        expect(scope.count).to eq(0)
+      end
+
+      it 'returns all awards when there are only awards without specialty and matching experience level' do
+        award_type_with_no_specialty = create(:award_type)
+        award_type_with_no_specialty.update(specialty: nil)
+        2.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type_with_no_specialty) }
+        scope = described_class.having_suitable_experience_for(account)
+        expect(scope.count).to eq(2)
+      end
+    end
+  end
+
+  describe 'hooks' do
+    describe 'set_paid_status_if_project_has_no_token' do
+      let!(:submtted_task_w_no_token) { create(:award, status: 'submitted') }
+      let!(:submtted_task_w_token) { create(:award, status: 'submitted') }
+
+      before do
+        submtted_task_w_no_token.project.update(token: nil)
+        submtted_task_w_no_token.update(status: 'accepted')
+        submtted_task_w_token.update(status: 'accepted')
+      end
+
+      it 'upgrades accepted task to paid immediately if project has no token associated' do
+        expect(submtted_task_w_no_token.paid?).to be true
+      end
+
+      it 'doesnt upgrade accepted task to paid if project has token associated' do
+        expect(submtted_task_w_token.accepted?).to be true
+      end
+    end
   end
 
   describe 'validations' do
@@ -58,6 +156,22 @@ describe Award do
                                                                                                      'Amount is not a number',
                                                                                                      'Total amount must be greater than 0'
                                                                                                    ])
+    end
+
+    it 'requires submission fields when in submitted status' do
+      a = create(:award_ready)
+      a.update(status: 'submitted', account: create(:account))
+      expect(a).not_to be_valid
+      expect(a.errors.full_messages).to eq(["Submission url can't be blank", "Submission comment can't be blank"])
+    end
+
+    it 'cannot be assigned to a contributor having more than allowed number of started tasks' do
+      a = create(:award)
+      c = create(:account)
+      Award::STARTED_TASKS_PER_CONTRIBUTOR.times { create(:award, status: 'started', account: c) }
+      a.update(status: 'started', account: c)
+      expect(a).not_to be_valid
+      expect(a.errors.full_messages).to eq(["Sorry, you can't start more than #{Award::STARTED_TASKS_PER_CONTRIBUTOR} tasks"])
     end
 
     it 'cannot be destroyed unless in ready status' do

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import Icon from './styleguide/Icon'
+import Userpics from './Userpics'
 import CurrencyAmount from './CurrencyAmount'
 
 const Wrapper = styled.div`
@@ -22,15 +23,27 @@ const RightBorder = styled.div`
   margin-left: -1px;
 
   ${props => props.status === 'ready' && css`
-    background-color: #5037f7;
+    background-color: #4a4a4a;
+  `}
+
+  ${props => props.status === 'started' && css`
+    background-color: #008e9b;
+  `}
+
+  ${props => props.status === 'submitted' && css`
+    background-color: #007ae7;
   `}
 
   ${props => props.status === 'accepted' && css`
-    background-color: #7ed321;
+    background-color: #5037f7;
   `}
 
   ${props => props.status === 'paid' && css`
     background-color: #fb40e5;
+  `}
+
+  ${props => props.status === 'rejected' && css`
+    background-color: #ff4d4d;
   `}
 `
 
@@ -55,6 +68,10 @@ const Name = styled.div`
   padding-bottom: 8px;
 `
 
+const StatusWrapper = styled.div`
+  display: flex;
+`
+
 const Status = styled.div`
   font-family: Montserrat;
   font-size: 10px;
@@ -64,18 +81,50 @@ const Status = styled.div`
   line-height: normal;
   letter-spacing: normal;
   text-transform: uppercase;
+  margin-right: 2em;
 
   ${props => props.status === 'ready' && css`
-    color: #5037f7;
+    color: #4a4a4a;
+  `}
+
+  ${props => props.status === 'started' && css`
+    color: #008e9b;
+  `}
+
+  ${props => props.status === 'submitted' && css`
+    color: #007ae7;
   `}
 
   ${props => props.status === 'accepted' && css`
-    color: #7ed321;
+    color: #5037f7;
   `}
 
   ${props => props.status === 'paid' && css`
     color: #fb40e5;
   `}
+
+  ${props => props.status === 'rejected' && css`
+    color: #ff4d4d;
+  `}
+`
+
+const Contributor = styled.div`
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: 500;
+  color: #4a4a4a;
+  text-transform: uppercase;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  flex-wrap: nowrap;
+  display: flex;
+  margin-right: 2em;
+
+  b {
+    font-weight: 900;
+  }
 `
 
 const Title = styled.div`
@@ -90,6 +139,7 @@ const Details = styled.div`
   flex-direction: column;
   align-items: flex-end;
   justify-content: space-between;
+  padding-right: 15px;
 `
 
 const Amount = styled(CurrencyAmount)`
@@ -98,7 +148,6 @@ const Amount = styled(CurrencyAmount)`
 const Buttons = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-right: 15px;
   align-items: center;
   padding-top: 8px;
 `
@@ -136,51 +185,61 @@ const IconPlaceholder = styled.span`
 
 class Task extends React.Component {
   render() {
+    let task = this.props.task
     return (
       <React.Fragment>
         <Wrapper>
-          <RightBorder status={this.props.task.status} />
+          <RightBorder status={task.status} />
           <Info>
             <Title>
               <Name>
-                {this.props.task.name || this.props.task.batchName}
+                {task.name || task.batchName}
               </Name>
 
-              <Status status={this.props.task.status}>
-                {this.props.task.status}
-              </Status>
+              <StatusWrapper>
+                <Status status={task.status}>
+                  {task.status}
+                </Status>
+
+                {task.contributor.name &&
+                  <Contributor>
+                    <Userpics pics={[task.contributor.image]} limit={1} />
+                    {task.contributor.name}
+                  </Contributor>
+                }
+              </StatusWrapper>
             </Title>
 
             <Details>
               <Amount
-                amount={this.props.task.totalAmount}
-                currency={this.props.task.currency}
-                logoUrl={this.props.task.currencyLogo}
+                amount={task.totalAmount}
+                currency={task.currency}
+                logoUrl={task.currencyLogo}
               />
 
               <Buttons>
-                {this.props.task.status === 'ready' &&
-                <PaymentButton href={this.props.task.awardPath}>
+                {task.status === 'ready' &&
+                <PaymentButton href={task.awardPath}>
                     issue award
                 </PaymentButton>
                 }
-                {this.props.task.status === 'accepted' &&
-                <PaymentButton href={this.props.task.payPath}>
+                {task.status === 'accepted' &&
+                <PaymentButton href={task.payPath}>
                     pay contributor
                 </PaymentButton>
                 }
-                <a href={this.props.task.clonePath}>
+                <a href={task.clonePath}>
                   <StyledIcon name="DUPLICATE.svg" />
                 </a>
-                <a href={this.props.task.editPath}>
+                <a href={task.editPath}>
                   <StyledIcon name="iconEdit.svg" />
                 </a>
-                {this.props.task.destroyPath &&
-                  <a rel="nofollow" data-method="delete" href={this.props.task.destroyPath}>
+                {task.destroyPath &&
+                  <a rel="nofollow" data-method="delete" href={task.destroyPath}>
                     <StyledIcon name="iconTrash.svg" />
                   </a>
                 }
-                {!this.props.task.destroyPath &&
+                {!task.destroyPath &&
                   <IconPlaceholder />
                 }
               </Buttons>
@@ -197,7 +256,11 @@ Task.propTypes = {
 }
 Task.defaultProps = {
   task: {
-    status: null
+    status     : null,
+    contributor: {
+      name : null,
+      image: null
+    }
   }
 }
 export default Task

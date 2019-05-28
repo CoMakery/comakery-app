@@ -74,7 +74,7 @@ RSpec.describe AwardTypesController, type: :controller do
           }
           expect(response.status).to eq(422)
           expect(response.content_type).to eq('application/json')
-          expect(JSON.parse(response.body)['message']).to eq("Specialty can't be blank, Name is too long (maximum is 100 characters)")
+          expect(JSON.parse(response.body)['message']).to eq('Name is too long (maximum is 100 characters)')
         end.not_to change(AwardType, :count)
       end
     end

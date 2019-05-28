@@ -77,8 +77,8 @@ class AwardTypesController < ApplicationController
         batches: @project.award_types&.map do |batch|
           batch.serializable_hash.merge(
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
-            completed_tasks: batch.awards.completed.count,
-            total_tasks: batch.awards.count,
+            completed_tasks: batch.awards.completed.size,
+            total_tasks: batch.awards.size,
             specialty: batch.specialty&.name,
             currency: batch.project.token&.symbol,
             total_amount: batch.awards.sum(:total_amount),
@@ -92,11 +92,16 @@ class AwardTypesController < ApplicationController
                 batch_name: batch.name,
                 currency: batch.project.token&.symbol,
                 currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
-                award_path: project_award_type_award_path(@project, batch, task),
+                award_path: project_award_type_award_award_path(@project, batch, task),
                 pay_path: awards_project_path(@project),
                 clone_path: project_award_type_award_clone_path(@project, batch, task),
                 edit_path: edit_project_award_type_award_path(@project, batch, task),
-                destroy_path: task.can_be_deleted? && project_award_type_award_path(@project, batch, task)
+                destroy_path: task.can_be_deleted? && project_award_type_award_path(@project, batch, task),
+                contributor: {
+                  name: task.account&.decorate&.name,
+                  image: helpers.account_image_url(task.account, 100),
+                  wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
+                }
               )
             end
           )
@@ -112,7 +117,7 @@ class AwardTypesController < ApplicationController
           diagram_url: Refile.attachment_url(@award_type ? @award_type : @project.award_types.new, :diagram, :fill, 300, 300)
         ),
         project: @project.serializable_hash,
-        specialties: Specialty.all.map { |s| [s.name, s.id] }.to_h,
+        specialties: Specialty.all.map { |s| [s.name, s.id] }.unshift(['General', nil]).to_h,
         form_url: project_award_types_path,
         form_action: 'POST',
         url_on_success: project_award_types_path,

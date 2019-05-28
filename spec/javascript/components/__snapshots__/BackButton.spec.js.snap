@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BackButton renders component correctly 1`] = `
+<BackButton>
+  <styled.div>
+    <StyledComponent
+      forwardedComponent={
+        Object {
+          "$$typeof": Symbol(react.forward_ref),
+          "attrs": Array [],
+          "componentStyle": ComponentStyle {
+            "componentId": "sc-bdVaJa",
+            "isStatic": true,
+            "lastClassName": "fHEVVg",
+            "rules": Array [
+              "
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+",
+            ],
+          },
+          "displayName": "styled.div",
+          "foldedComponentIds": Array [],
+          "render": [Function],
+          "styledComponentId": "sc-bdVaJa",
+          "target": "div",
+          "toString": [Function],
+          "warnTooManyClasses": [Function],
+          "withComponent": [Function],
+        }
+      }
+      forwardedRef={null}
+    >
+      <div
+        className="sc-bdVaJa fHEVVg"
+      >
+        <Icon
+          className=""
+          name="iconCloseCopy.svg"
+          onClick={[Function]}
+        >
+          <img
+            className="icon icon__iconCloseCopy-svg"
+            onClick={[Function]}
+            src="test-file-stub"
+          />
+        </Icon>
+      </div>
+    </StyledComponent>
+  </styled.div>
+</BackButton>
+`;

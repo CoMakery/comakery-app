@@ -37,22 +37,16 @@ describe AwardPolicy do
 
   describe AwardPolicy::Scope do
     context 'logged out' do
-      it 'returns the awards to a project that are public' do
-        expect(AwardPolicy::Scope.new(nil, Award).resolve).to eq([award_with_public_project])
+      it 'returns no awards' do
+        expect(AwardPolicy::Scope.new(nil, Award).resolve).to eq([])
       end
     end
 
     context 'logged in' do
-      it 'returns awards that belong to projects that the specified account belongs to' do
-        award_with_project.save!
-        award_for_unowned_project.save!
-        expect(award_type_for_unowned_project.project.teams).not_to include(team)
-
-        auth = create(:authentication)
-        team.build_authentication_team auth
-
-        awards = AwardPolicy::Scope.new(account, Award).resolve
-        expect(awards).to match_array([award_with_project])
+      it 'returns accounts accessable awards' do
+        2.times { create(:award, account: account) }
+        2.times { create(:award, issuer: account) }
+        expect(AwardPolicy::Scope.new(account, Award).resolve).to match_array(account.accessable_awards)
       end
     end
   end
@@ -85,6 +79,83 @@ describe AwardPolicy do
 
     it "returns false when the award_type on the award does not belong to the account's project" do
       expect(described_class.new(account, award_for_unowned_project)).not_to be_create
+    end
+  end
+
+  describe 'show?' do
+    it 'returns true if award is included in account accessable awards' do
+      a = create(:award)
+      expect(described_class.new(a.account, a).show?).to be true
+    end
+
+    it 'returns false if award is not included in account accessable awards' do
+      expect(described_class.new(create(:account), create(:award)).show?).to be false
+    end
+  end
+
+  describe 'start?' do
+    it 'returns true if award is ready and accessable for a given user' do
+      a = create(:award, status: 'ready')
+      expect(described_class.new(a.account, a).start?).to be true
+    end
+
+    it 'returns false if award is not accessable for a given user' do
+      expect(described_class.new(create(:account), create(:award, status: 'ready')).start?).to be false
+    end
+
+    it 'returns false if award is not ready' do
+      a = create(:award)
+      expect(described_class.new(a.account, a).start?).to be false
+    end
+  end
+
+  describe 'submit?' do
+    it 'returns true if award is started by a given user' do
+      a = create(:award, status: 'started')
+      expect(described_class.new(a.account, a).submit?).to be true
+    end
+
+    it 'returns false if award is not associated with a given user' do
+      expect(described_class.new(create(:account), create(:award, status: 'started')).submit?).to be false
+    end
+
+    it 'returns false if award is not started' do
+      a = create(:award)
+      expect(described_class.new(a.account, a).submit?).to be false
+    end
+  end
+
+  describe 'review?' do
+    it 'returns true if award is submitted and issued by a given user' do
+      a = create(:award, status: 'submitted')
+      expect(described_class.new(a.issuer, a).review?).to be true
+    end
+
+    it 'returns false if award is not issued by a given user' do
+      a = create(:award, status: 'submitted')
+      expect(described_class.new(create(:account), a).review?).to be false
+    end
+
+    it 'returns false if award is not submitted' do
+      a = create(:award)
+      expect(described_class.new(a.issuer, a).review?).to be false
+    end
+  end
+
+  describe 'pay?' do
+    it 'returns true if award is accepted and issued by a given user' do
+      a = create(:award, status: 'accepted')
+      expect(described_class.new(a.issuer, a).pay?).to be true
+    end
+
+    it 'returns false if award is not issued by a given user' do
+      a = create(:award, status: 'accepted')
+      expect(described_class.new(create(:account), a).pay?).to be false
+    end
+
+    it 'returns false if award is not accepted' do
+      a = create(:award, status: 'started')
+      expect(described_class.new(a.issuer, a).pay?).to be false
     end
   end
 end

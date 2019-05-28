@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190505143605) do
+ActiveRecord::Schema.define(version: 20190524184928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,7 +111,6 @@ ActiveRecord::Schema.define(version: 20190505143605) do
     t.boolean "disabled"
     t.integer "specialty_id"
     t.text "goal"
-    t.string "specialty"
     t.string "diagram_id"
     t.string "diagram_filename"
     t.string "diagram_content_size"
@@ -147,6 +146,12 @@ ActiveRecord::Schema.define(version: 20190505143605) do
     t.string "image_content_size"
     t.string "image_content_type"
     t.integer "experience_level", default: 0
+    t.string "submission_url"
+    t.string "submission_comment"
+    t.string "submission_image_id"
+    t.string "submission_image_filename"
+    t.string "submission_image_content_size"
+    t.string "submission_image_content_type"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"

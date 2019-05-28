@@ -67,15 +67,27 @@ const Filter = styled.span`
   }
 
   ${props => props.filter === 'ready' && props.selected && css`
-    color: #5037f7;
+    color: #4a4a4a;
+  `}
+
+  ${props => props.filter === 'started' && props.selected && css`
+    color: #008e9b;
+  `}
+
+  ${props => props.filter === 'submitted' && props.selected && css`
+    color: #007ae7;
   `}
 
   ${props => props.filter === 'accepted' && props.selected && css`
-    color: #7ed321;
+    color: #5037f7;
   `}
 
   ${props => props.filter === 'paid' && props.selected && css`
     color: #fb40e5;
+  `}
+
+  ${props => props.filter === 'rejected' && props.selected && css`
+    color: #ff4d4d;
   `}
 
   ${props => !props.filter && props.selected && css`
@@ -195,8 +207,11 @@ class BatchIndex extends React.Component {
                     <Title>
                       <Filter filter={this.state.selectedTaskFilter} selected={!this.state.selectedTaskFilter} onClick={(_) => this.setState({selectedTaskFilter: null})}>all tasks</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'ready'} onClick={(_) => this.setState({selectedTaskFilter: 'ready'})}>ready</Filter>
+                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'started'} onClick={(_) => this.setState({selectedTaskFilter: 'started'})}>started</Filter>
+                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'submitted'} onClick={(_) => this.setState({selectedTaskFilter: 'submitted'})}>submitted</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'accepted'} onClick={(_) => this.setState({selectedTaskFilter: 'accepted'})}>accepted</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'paid'} onClick={(_) => this.setState({selectedTaskFilter: 'paid'})}>paid</Filter>
+                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'rejected'} onClick={(_) => this.setState({selectedTaskFilter: 'rejected'})}>rejected</Filter>
                     </Title>
                   }
                   {this.state.selectedBatch.tasks.filter(task => !this.state.selectedTaskFilter || task.status === this.state.selectedTaskFilter).map((t, i) =>

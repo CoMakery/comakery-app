@@ -39,6 +39,7 @@ const Title = styled.div`
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  padding-right: 15px;
 `
 
 const Name = styled.div`
@@ -100,7 +101,7 @@ class Batch extends React.Component {
               </ContentElement>
 
               <ContentElement title="batch type">
-                {this.props.batch.specialty || '—'}
+                {this.props.batch.specialty || 'General'}
               </ContentElement>
 
               <ContentElement title="team members">

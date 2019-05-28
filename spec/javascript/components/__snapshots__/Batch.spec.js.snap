@@ -123,12 +123,13 @@ exports[`Batch renders component correctly 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-fjdhpX",
                         "isStatic": true,
-                        "lastClassName": "iMteiD",
+                        "lastClassName": "bVpSSP",
                         "rules": Array [
                           "
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  padding-right: 15px;
 ",
                         ],
                       },
@@ -145,7 +146,7 @@ exports[`Batch renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-fjdhpX iMteiD"
+                    className="sc-fjdhpX bVpSSP"
                   >
                     <styled.div>
                       <StyledComponent
@@ -202,7 +203,7 @@ exports[`Batch renders component correctly 1`] = `
                               "componentStyle": ComponentStyle {
                                 "componentId": "sc-bxivhb",
                                 "isStatic": true,
-                                "lastClassName": "dKBmcB",
+                                "lastClassName": "ljVujs",
                                 "rules": Array [
                                   "
   display: flex;
@@ -210,9 +211,8 @@ exports[`Batch renders component correctly 1`] = `
   align-items: center;
   font-family: Montserrat;
   font-size: 14px;
-  font-weight: bold;
-  color: #201662;
-  padding-right: 15px;
+  font-weight: 500;
+  color: #4a4a4a;
 ",
                                 ],
                               },
@@ -229,7 +229,7 @@ exports[`Batch renders component correctly 1`] = `
                           forwardedRef={null}
                         >
                           <div
-                            className="sc-bxivhb dKBmcB"
+                            className="sc-bxivhb ljVujs"
                           >
                             <styled.div>
                               <StyledComponent
@@ -584,7 +584,7 @@ exports[`Batch renders component correctly 1`] = `
                                 <div
                                   className="sc-htpNat vZQMM"
                                 >
-                                  —
+                                  General
                                 </div>
                               </StyledComponent>
                             </styled.div>

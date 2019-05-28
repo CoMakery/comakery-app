@@ -48,6 +48,51 @@ hr {
   margin-bottom: 0px;
 }
 
+.pagination {
+  text-transform: uppercase;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pagination .page,
+.pagination .first,
+.pagination .next,
+.pagination .prev,
+.pagination .gap,
+.pagination .last {
+  font-family: Montserrat, sans-serif;
+  border: solid 1px #d8d8d8;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #0089f4;
+  margin-right: 5px;
+  display: flex;
+  width: 25px;
+  height: 25px;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.pagination .current {
+  background-color: #0089f4;
+  color: #ffffff;
+  border: 1px solid #0089f4;
+}
+
+.pagination .gap {
+  border: none;
+}
+
+.pagination a {
+  color: #0089f4;
+  text-decoration: none;
+}
+
 .react-container {
   position: relative;
 }
@@ -103,7 +148,7 @@ a.header--nav--links--current {
   }
 
   .header-mobile {
-    z-index: 99;
+    z-index: 999;
     display: flex;
     position: relative;
     align-items: center;
@@ -4251,5 +4296,9 @@ select:disabled {
 }
 
 .project-form--form--channels--discord-link a:hover {
+  text-decoration: underline;
+}
+
+.pagination a:hover {
   text-decoration: underline;
 }

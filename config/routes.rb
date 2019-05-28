@@ -49,6 +49,8 @@ Rails.application.routes.draw do
   end
   get '/session' => "sessions#create"
 
+  get '/tasks' => "awards#index", as: :my_tasks
+
   post '/slack/command' => "slack#command"
 
   get '/projects/mine' => "projects#landing", as: :my_project
@@ -60,6 +62,11 @@ Rails.application.routes.draw do
         post :send_award
         post :update_transaction_address
         get :clone
+        get :award
+        post :start
+        post :submit
+        post :accept
+        post :reject
       end
     end
     resources :contributors, only: [:index]

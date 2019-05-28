@@ -1,10 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CurrencyAmount renders component correctly 1`] = `
-<CurrencyAmount
-  amount=""
-  currency=""
-  logoUrl=""
+exports[`ContentBlock renders component correctly 1`] = `
+<ContentBlock
+  title=""
 >
   <styled.div>
     <StyledComponent
@@ -15,16 +13,10 @@ exports[`CurrencyAmount renders component correctly 1`] = `
           "componentStyle": ComponentStyle {
             "componentId": "sc-bdVaJa",
             "isStatic": true,
-            "lastClassName": "cpIcWx",
+            "lastClassName": "hqxcBJ",
             "rules": Array [
               "
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-family: Montserrat;
-  font-size: 14px;
-  font-weight: 500;
-  color: #4a4a4a;
+  margin-bottom: 25px;
 ",
             ],
           },
@@ -41,7 +33,7 @@ exports[`CurrencyAmount renders component correctly 1`] = `
       forwardedRef={null}
     >
       <div
-        className="sc-bdVaJa cpIcWx"
+        className="sc-bdVaJa hqxcBJ"
       >
         <styled.div>
           <StyledComponent
@@ -52,10 +44,19 @@ exports[`CurrencyAmount renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-bwzfXH",
                   "isStatic": true,
-                  "lastClassName": "eNKWhX",
+                  "lastClassName": "kFENjx",
                   "rules": Array [
                     "
-  margin-right: 0.5em;
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #3a3a3a;
+  text-transform: uppercase;
+  margin-bottom: 5px;
 ",
                   ],
                 },
@@ -72,7 +73,7 @@ exports[`CurrencyAmount renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-bwzfXH eNKWhX"
+              className="sc-bwzfXH kFENjx"
             />
           </StyledComponent>
         </styled.div>
@@ -85,11 +86,17 @@ exports[`CurrencyAmount renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-htpNat",
                   "isStatic": true,
-                  "lastClassName": "eglqcF",
+                  "lastClassName": "bNkIaI",
                   "rules": Array [
                     "
-  margin-right: 0.5em;
-  text-transform: uppercase;
+  font-family: Georgia;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #4a4a4a;
 ",
                   ],
                 },
@@ -106,14 +113,12 @@ exports[`CurrencyAmount renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-htpNat eglqcF"
-            >
-              (No Token)
-            </div>
+              className="sc-htpNat bNkIaI"
+            />
           </StyledComponent>
         </styled.div>
       </div>
     </StyledComponent>
   </styled.div>
-</CurrencyAmount>
+</ContentBlock>
 `;
