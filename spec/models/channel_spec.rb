@@ -70,4 +70,12 @@ RSpec.describe Channel, type: :model do
       expect(described_class.invalid_params(attributes)).to eq false
     end
   end
+
+  describe '.url' do
+    let!(:channel) { create(:channel) }
+
+    it 'returns url for a Slack channel' do
+      expect(channel.url).to eq("https://#{channel.team.domain}.slack.com/messages/#{channel.channel_id}")
+    end
+  end
 end

@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ButtonBorderGray renders correctly without props 1`] = `
+<Fragment>
+  <Button
+    className="button__border__gray"
+    disabled={false}
+    type="button"
+    value="publish"
+  />
+</Fragment>
+`;

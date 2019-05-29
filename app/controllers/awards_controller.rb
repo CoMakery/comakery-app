@@ -266,7 +266,15 @@ class AwardsController < ApplicationController
         },
         project: {
           name: task.project&.title,
-          url: task.project && (task.project.unlisted? ? unlisted_project_path(task.project.long_id) : project_path(task.project))
+          url: task.project && (task.project.unlisted? ? unlisted_project_path(task.project.long_id) : project_path(task.project)),
+          channels: task.project.channels.select { |c| c.provider == 'slack' }.map do |channel|
+            {
+              type: channel.provider,
+              name: channel.name,
+              url: channel.url,
+              id: channel.id
+            }
+          end
         },
         batch: {
           specialty: task.award_type&.specialty&.name

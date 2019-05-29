@@ -47,6 +47,13 @@ class Channel < ApplicationRecord
     attributes['channel_id'].blank? || attributes['team_id'].blank?
   end
 
+  def url
+    case provider
+    when 'slack'
+      "https://#{team.domain}.slack.com/messages/#{channel_id}"
+    end
+  end
+
   before_save :assign_name
 
   private

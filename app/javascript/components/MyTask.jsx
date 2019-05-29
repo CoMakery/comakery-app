@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import CurrencyAmount from './CurrencyAmount'
 import Userpics from './Userpics'
+import Icon from './styleguide/Icon'
 import styled, { css } from 'styled-components'
 
 const Wrapper = styled.div`
@@ -249,9 +250,19 @@ const TaskDetails = styled.a`
   margin-left: auto;
   text-transform: uppercase;
   text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
   &:hover {
     text-decoration: underline;
+  }
+
+  img {
+    margin-left: 7px;
+    ${props => props.displayActions && css`
+      transform: rotate(270deg);
+    `}
   }
 
   @media (max-width: 1024px) {
@@ -418,11 +429,9 @@ class MyTask extends React.Component {
               </Contributor>
             }
 
-            {this.props.displayActions &&
-              <TaskDetails href={task.detailsUrl}>
-                View Task Details
-              </TaskDetails>
-            }
+            <TaskDetails displayActions={this.props.displayActions} href={this.props.displayActions ? task.detailsUrl : null}>
+              View Task Details <Icon name="DROP_DOWN.svg" />
+            </TaskDetails>
 
             {this.props.displayActions &&
               <TaskActionComponent componentStyle="button" task={task} filter={filter} />
