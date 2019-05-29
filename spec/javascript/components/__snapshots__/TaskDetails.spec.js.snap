@@ -16,6 +16,7 @@ exports[`TaskDetails renders component correctly 1`] = `
         "url": null,
       },
       "project": Object {
+        "channels": Array [],
         "name": null,
         "url": null,
       },
@@ -253,6 +254,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                       "url": null,
                     },
                     "project": Object {
+                      "channels": Array [],
                       "name": null,
                       "url": null,
                     },
@@ -895,6 +897,86 @@ exports[`TaskDetails renders component correctly 1`] = `
                                 </div>
                               </StyledComponent>
                             </styled.div>
+                            <styled.a
+                              displayActions={false}
+                              href={null}
+                            >
+                              <StyledComponent
+                                displayActions={false}
+                                forwardedComponent={
+                                  Object {
+                                    "$$typeof": Symbol(react.forward_ref),
+                                    "attrs": Array [],
+                                    "componentStyle": ComponentStyle {
+                                      "componentId": "sc-kAzzGY",
+                                      "isStatic": false,
+                                      "lastClassName": "bEXkUD",
+                                      "rules": Array [
+                                        "
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #201662;
+  margin-left: auto;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  img {
+    margin-left: 7px;
+    ",
+                                        [Function],
+                                        "
+  }
+
+  @media (max-width: 1024px) {
+    margin-left: initial;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+",
+                                      ],
+                                    },
+                                    "displayName": "styled.a",
+                                    "foldedComponentIds": Array [],
+                                    "render": [Function],
+                                    "styledComponentId": "sc-kAzzGY",
+                                    "target": "a",
+                                    "toString": [Function],
+                                    "warnTooManyClasses": [Function],
+                                    "withComponent": [Function],
+                                  }
+                                }
+                                forwardedRef={null}
+                                href={null}
+                              >
+                                <a
+                                  className="sc-kAzzGY bEXkUD"
+                                  href={null}
+                                >
+                                  View Task Details 
+                                  <Icon
+                                    className=""
+                                    name="DROP_DOWN.svg"
+                                  >
+                                    <img
+                                      className="icon icon__DROP_DOWN-svg"
+                                      src="test-file-stub"
+                                    />
+                                  </Icon>
+                                </a>
+                              </StyledComponent>
+                            </styled.a>
                           </div>
                         </StyledComponent>
                       </styled.div>
@@ -1237,7 +1319,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                       </styled.div>
                     </ContentBlock>
                     <ContentBlock
-                      title="acceptance criterias"
+                      title="acceptance criteria"
                     >
                       <styled.div>
                         <StyledComponent
@@ -1310,7 +1392,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                 <div
                                   className="sc-dxgOiQ jLWQEG"
                                 >
-                                  acceptance criterias
+                                  acceptance criteria
                                 </div>
                               </StyledComponent>
                             </styled.div>
