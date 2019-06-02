@@ -1,0 +1,22 @@
+<p>
+  Good news - <%= @issuer.name %> sent you <b><%= @award.total_amount %></b>
+  <% if @award.token %>
+    of <%= @award.token.name %>
+  <% end %>
+  for the <b><%= @award.name %></b> task.
+</p>
+
+<% if @award.token %>
+  <p>
+    Click <a href="<%= show_account_url %>">here</a> to see your account balance.
+  </p>
+<% end %>
+
+<p>
+  If you ever have any questions, concerns, or compliments, please email us at
+  <a href="mailto:community@comakery.com">community@comakery.com</a>
+</p>
+
+<p>
+  Congrats from the team at CoMakery. Thank you for being part of the community.
+</p>
