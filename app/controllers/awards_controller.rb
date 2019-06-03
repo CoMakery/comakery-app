@@ -91,6 +91,7 @@ class AwardsController < ApplicationController
 
   def submit
     if @award.update(submit_params.merge(status: 'submitted'))
+      TaskMailer.with(award: @award).task_submitted.deliver_now
       redirect_to my_tasks_path(filter: 'submitted'), notice: 'Task submitted'
     else
       redirect_to project_award_type_award_path(@award.project, @award.award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -99,6 +100,7 @@ class AwardsController < ApplicationController
 
   def accept
     if @award.update(status: 'accepted')
+      TaskMailer.with(award: @award).task_accepted.deliver_now
       redirect_to my_tasks_path(filter: 'done'), notice: 'Task accepted'
     else
       redirect_to project_award_type_award_path(@award.project, @award.award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -107,6 +109,7 @@ class AwardsController < ApplicationController
 
   def reject
     if @award.update(status: 'rejected')
+      TaskMailer.with(award: @award).task_rejected.deliver_now
       redirect_to my_tasks_path(filter: 'done'), notice: 'Task rejected'
     else
       redirect_to project_award_type_award_path(@award.project, @award.award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -133,8 +136,8 @@ class AwardsController < ApplicationController
       email: send_award_params[:email]
     )
     if result.success?
+      TaskMailer.with(award: @award).task_accepted_direct.deliver_now
       @award.send_award_notifications
-      @award.send_confirm_email
       if @award.account&.decorate&.can_receive_awards?(@project)
         session[:last_award_id] = @award.id
         @award.account&.update new_award_notice: true
@@ -149,6 +152,7 @@ class AwardsController < ApplicationController
 
   def update_transaction_address
     @award.update! ethereum_transaction_address: params[:tx], status: 'paid'
+    TaskMailer.with(award: @award).task_paid.deliver_now
     @award = @award.decorate
     render layout: false
   end

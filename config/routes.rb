@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
 
   get '/styleguide' => "pages#styleguide"
+  get '/unsubscription' => "unsubscription#new", as: :unsubscription
 
   resource :account, only: [:update]
   resources :accounts, only: [:new, :create, :show] do

@@ -1,0 +1,20 @@
+<p>
+  Hello <%= @issuer.name %>.
+</p>
+
+<p>
+  The task <b><%= @award.name %></b> has just been submitted for your review.
+</p>
+
+<p>
+  <a href="<%= project_award_type_award_url(@award.project, @award.award_type, @award) %>">Visit this link</a>
+  to accept or reject the submitted work.
+</p>
+
+<p>
+  Thank you for using CoMakery!
+</p>
+
+<p>
+  Team CoMakery
+</p>
