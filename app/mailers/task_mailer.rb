@@ -41,8 +41,10 @@ class TaskMailer < ApplicationMailer
     end
 
     def send_email
-      mail.perform_deliveries = false if Unsubscription.exists?(email: @to)
-
-      mail to: @to, subject: @subject
+      if Unsubscription.exists?(email: @to)
+        false
+      else
+        mail to: @to, subject: @subject
+      end
     end
 end
