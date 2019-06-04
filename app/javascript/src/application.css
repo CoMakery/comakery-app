@@ -48,6 +48,13 @@ hr {
   margin-bottom: 0px;
 }
 
+.loading-placeholder {
+  background-color: white;
+  min-height: 50vh;
+  width: 100%;
+  clear: both;
+}
+
 .pagination {
   text-transform: uppercase;
   display: flex;
