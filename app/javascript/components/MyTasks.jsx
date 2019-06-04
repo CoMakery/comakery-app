@@ -126,7 +126,21 @@ const Pagination = styled.div`
 `
 
 class MyTasks extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { ready: false }
+  }
+
+  componentDidMount() {
+    this.setState({ ready: true })
+  }
+
   render() {
+    if (!this.state.ready) {
+      return (
+        <div className="loading-placeholder" />
+      )
+    }
     return (
       <React.Fragment>
         <Wrapper>
