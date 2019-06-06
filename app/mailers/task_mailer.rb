@@ -6,6 +6,8 @@ class TaskMailer < ApplicationMailer
 
   layout 'task_mailer'
 
+  default to: -> { @to }, subject: -> { @subject }
+
   def task_paid
     @to = @account.email
     @subject = "You've been paid!"
@@ -41,10 +43,8 @@ class TaskMailer < ApplicationMailer
     end
 
     def send_email
-      if Unsubscription.exists?(email: @to)
-        false
-      else
-        mail to: @to, subject: @subject
-      end
+      mail
+
+      mail.perform_deliveries = false if Unsubscription.exists?(email: @to)
     end
 end
