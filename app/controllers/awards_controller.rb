@@ -85,7 +85,7 @@ class AwardsController < ApplicationController
     if @award.update(account: current_account, status: 'started')
       redirect_to my_tasks_path(filter: 'started'), notice: 'Task started'
     else
-      redirect_to project_award_type_award_path(@award.project, @award.award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
+      redirect_to my_tasks_path(filter: 'ready'), flash: { error: @award.errors&.full_messages&.join(', ') }
     end
   end
 
@@ -94,7 +94,7 @@ class AwardsController < ApplicationController
       TaskMailer.with(award: @award).task_submitted.deliver_now
       redirect_to my_tasks_path(filter: 'submitted'), notice: 'Task submitted'
     else
-      redirect_to project_award_type_award_path(@award.project, @award.award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
+      redirect_to my_tasks_path(filter: 'started'), flash: { error: @award.errors&.full_messages&.join(', ') }
     end
   end
 
@@ -103,7 +103,7 @@ class AwardsController < ApplicationController
       TaskMailer.with(award: @award).task_accepted.deliver_now
       redirect_to my_tasks_path(filter: 'to pay'), notice: 'Task accepted'
     else
-      redirect_to project_award_type_award_path(@award.project, @award.award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
+      redirect_to my_tasks_path(filter: 'to review'), flash: { error: @award.errors&.full_messages&.join(', ') }
     end
   end
 
@@ -112,7 +112,7 @@ class AwardsController < ApplicationController
       TaskMailer.with(award: @award).task_rejected.deliver_now
       redirect_to my_tasks_path(filter: 'done'), notice: 'Task rejected'
     else
-      redirect_to project_award_type_award_path(@award.project, @award.award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
+      redirect_to my_tasks_path(filter: 'to review'), flash: { error: @award.errors&.full_messages&.join(', ') }
     end
   end
 

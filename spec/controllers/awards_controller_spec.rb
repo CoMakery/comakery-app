@@ -150,7 +150,7 @@ describe AwardsController do
       expect(award.reload.submitted?).to be true
     end
 
-    it 'redirects back to task details page with an error' do
+    it 'redirects back to started tasks page with an error' do
       post :submit, params: {
         project_id: award.project.to_param,
         award_type_id: award.award_type.to_param,
@@ -160,7 +160,7 @@ describe AwardsController do
           submission_comment: ' '
         }
       }
-      expect(response).to redirect_to(project_award_type_award_path(award.project, award.award_type, award))
+      expect(response).to redirect_to(my_tasks_path(filter: 'started'))
       expect(flash[:error]).to eq("Submission comment can't be blank")
       expect(award.reload.submitted?).to be false
     end
