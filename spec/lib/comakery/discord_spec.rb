@@ -53,4 +53,17 @@ describe Comakery::Discord do
       expect(discord_client.webhook(channel.channel_id)['name']).to eq 'Comakery'
     end
   end
+
+  describe 'create_invite' do
+    let!(:channel) { create :channel, team: team }
+
+    before do
+      stub_discord_create_invite
+    end
+
+    it 'returns hash with invite data' do
+      response = discord_client.create_invite(channel.channel_id)
+      expect(response['code']).to include('invite_code')
+    end
+  end
 end

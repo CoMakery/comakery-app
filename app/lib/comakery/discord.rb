@@ -50,6 +50,12 @@ class Comakery::Discord
     post_result(false)
   end
 
+  def create_invite(channel_id)
+    @path = "/channels/#{channel_id}/invites"
+    @data = { max_age: Channel::DISCORD_INVITE_MAX_AGE_SECONDS }.to_json
+    post_result
+  end
+
   private
 
   def result
@@ -68,6 +74,6 @@ class Comakery::Discord
     parse_json ? JSON.parse(res) : res
   rescue RestClient::ExceptionWithResponse => e
     Rails.logger.error e.response
-    return []
+    return {}
   end
 end

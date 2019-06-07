@@ -80,6 +80,11 @@ module SlackStubs
     RestClient.stub(:post) { '{"id": "123", "name": "Comakery"}' }
   end
 
+  def stub_discord_create_invite
+    response = %({"code": "invite_code_#{SecureRandom.hex(20)}"})
+    RestClient.stub(:post) { response }
+  end
+
   def stub_airtable
     ENV['AIRTABLE_SIGNUPS_TABLE_ID'] = '123qwer'
     RestClient.stub(:post) { '{"success": "true"}' }
