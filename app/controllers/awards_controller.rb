@@ -101,7 +101,7 @@ class AwardsController < ApplicationController
   def accept
     if @award.update(status: 'accepted')
       TaskMailer.with(award: @award).task_accepted.deliver_now
-      redirect_to my_tasks_path(filter: 'done'), notice: 'Task accepted'
+      redirect_to my_tasks_path(filter: 'to pay'), notice: 'Task accepted'
     else
       redirect_to project_award_type_award_path(@award.project, @award.award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
     end

@@ -180,7 +180,7 @@ describe AwardsController do
         award_type_id: award.award_type.to_param,
         award_id: award.to_param
       }
-      expect(response).to redirect_to(my_tasks_path(filter: 'done'))
+      expect(response).to redirect_to(my_tasks_path(filter: 'to pay'))
       expect(flash[:notice]).to eq('Task accepted')
       expect(award.reload.accepted?).to be true
     end
