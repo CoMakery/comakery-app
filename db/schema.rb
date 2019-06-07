@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190601160648) do
+ActiveRecord::Schema.define(version: 20190607125904) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -164,6 +164,8 @@ ActiveRecord::Schema.define(version: 20190601160648) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "channel_id"
+    t.string "discord_invite_code"
+    t.datetime "discord_invite_created_at"
     t.index ["project_id"], name: "index_channels_on_project_id"
     t.index ["team_id"], name: "index_channels_on_team_id"
   end
