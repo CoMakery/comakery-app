@@ -21,43 +21,14 @@ describe AwardMessage do
     discord_team.build_authentication_team recipient_authentication
   end
 
-  context 'generate message' do
-    it 'generate slack message' do
+  describe 'notifications_message' do
+    it 'generates message' do
       channel = project.channels.create(team: team, channel_id: 'channel_id', name: 'slack_channel')
       award = create :award, award_type: award_type, issuer: issuer, account: recipient, channel: channel
       result = described_class.call(award: award)
       award = award.decorate
-      expect(result.notifications_message).to eq "@#{award.issuer_user_name} sent @#{award.recipient_user_name} a #{award.total_amount} token #{award.award_type.name} for \"#{award.description}\" on the <#{project_url(award.project)}|#{award.project.title}> project."
-      project.token.update ethereum_enabled: true
-      result = described_class.call(award: award.reload)
-      award = award.decorate
-      expect(result.notifications_message).to eq "@#{award.issuer_user_name} sent @#{award.recipient_user_name} a #{award.total_amount} token #{award.award_type.name} for \"#{award.description}\" on the <#{project_url(award.project)}|#{award.project.title}> project. <#{account_url}|Set up your account> to receive Ethereum tokens."
-    end
 
-    it 'generate discord message' do
-      stub_discord_channels
-      channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'slack_channel')
-      award = create :award, award_type: award_type, issuer: issuer, account: recipient, channel: channel
-      result = described_class.call(award: award)
-      award = award.decorate
-      expect(result.notifications_message).to eq "@#{award.issuer_user_name} sent @#{award.recipient_user_name} a #{award.total_amount} token #{award.award_type.name} for \"#{award.description}\" on the #{award.project.title} project: #{project_url(award.project)}."
-      project.token.update ethereum_enabled: true
-      result = described_class.call(award: award.reload)
-      award = award.decorate
-      expect(result.notifications_message).to eq "@#{award.issuer_user_name} sent @#{award.recipient_user_name} a #{award.total_amount} token #{award.award_type.name} for \"#{award.description}\" on the #{award.project.title} project: #{project_url(award.project)}. Set up your account: #{account_url} to receive Ethereum tokens."
-    end
-
-    it 'generate self issued message' do
-      stub_discord_channels
-      channel = project.channels.create(team: discord_team, channel_id: 'channel_id', name: 'slack_channel')
-      award = create :award, award_type: award_type, issuer: issuer, account: issuer, channel: channel
-      result = described_class.call(award: award)
-      award = award.decorate
-      expect(result.notifications_message).to eq "@#{award.issuer_user_name} self-issued for \"#{award.description}\" on the #{award.project.title} project: #{project_url(award.project)}."
-      project.token.update ethereum_enabled: true
-      result = described_class.call(award: award.reload)
-      award = award.decorate
-      expect(result.notifications_message).to eq "@#{award.issuer_user_name} self-issued for \"#{award.description}\" on the #{award.project.title} project: #{project_url(award.project)}. Set up your account: #{account_url} to receive Ethereum tokens."
+      expect(result.notifications_message).to eq "@#{award.issuer_user_name} accepted @#{award.recipient_user_name} task #{award.name} on the #{award.project.title} project: #{project_url(award.project)}. Login to CoMakery with your #{award.discord? ? 'Discord' : 'Slack'} account to claim project awards and start new tasks: #{new_session_url}."
     end
   end
 end

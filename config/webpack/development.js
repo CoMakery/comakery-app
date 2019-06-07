@@ -4,4 +4,6 @@ const environment = require('./environment')
 
 environment.loaders.delete('nodeModules')
 
-module.exports = environment.toWebpackConfig()
+const config = environment.toWebpackConfig()
+
+module.exports = config

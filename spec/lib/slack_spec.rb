@@ -42,60 +42,6 @@ describe Comakery::Slack do
     end
   end
 
-  describe '#award_notifications_message' do
-    describe 'when the issuer sends to someone else' do
-      it 'is from issuer to recipient' do
-        expect(message).to match /@jim jim sent @newt newt a 2674.0 token Contribution/
-      end
-    end
-
-    describe 'when the issuer sends to themselves' do
-      before { award.update! account: issuer }
-      it 'is self-issued' do
-        message = AwardMessage.call(award: award).notifications_message
-        expect(message).to match /@jim jim self-issued/
-      end
-    end
-
-    describe 'when the award has a description' do
-      it 'includes award description' do
-        expect(message).to match /for "none"/
-      end
-    end
-
-    it 'links to the project' do
-      expect(message).to match %r{<https?://localhost:3000/projects/#{project.id}\|Uber for Cats> project}
-    end
-
-    describe 'when project is ethereum enabled and recipient has no ethereum address' do
-      it 'links to recipient account' do
-        project.token.update! ethereum_enabled: true
-        recipient.update! ethereum_wallet: nil
-        message = AwardMessage.call(award: award.reload).notifications_message
-        expect(message).to match \
-          %r{<https?://localhost:3000/account\|Set up your account> to receive Ethereum tokens\.}
-      end
-    end
-
-    describe 'when project is not ethereum enabled' do
-      it 'does not link to recipient account' do
-        project.token.update! ethereum_enabled: false
-        recipient.update! ethereum_wallet: nil
-        message = AwardMessage.call(award: award).notifications_message
-        expect(message).not_to match %r{/account}
-      end
-    end
-
-    describe 'when recipient has ethereum address' do
-      it 'does not link to recipient account' do
-        project.token.update! ethereum_enabled: true
-        recipient.update! ethereum_wallet: '0x' + 'a' * 40
-        message = AwardMessage.call(award: award).notifications_message
-        expect(message).not_to match %r{/account}
-      end
-    end
-  end
-
   describe '#get_users' do
     it 'returns the list of users in the slack instance' do
       stub_request(:post, 'https://slack.com/api/users.list')

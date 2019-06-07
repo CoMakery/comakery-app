@@ -48,6 +48,13 @@ hr {
   margin-bottom: 0px;
 }
 
+.loading-placeholder {
+  background-color: white;
+  min-height: 50vh;
+  width: 100%;
+  clear: both;
+}
+
 .pagination {
   text-transform: uppercase;
   display: flex;
@@ -608,11 +615,7 @@ a.header--nav--links--current {
 
 .button:hover,
 .button:focus {
-  background-color: var(--primary-blue);
-  border: none;
-  outline: none;
-  outline: 1px solid white;
-  outline-offset: -1px;
+  text-decoration: underline;
 }
 
 input[type="button"].button:disabled,
@@ -637,6 +640,18 @@ select:disabled {
   outline: none;
   outline: 1px solid white;
   outline-offset: -1px;
+}
+
+.button__border__gray {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  overflow: hidden;
+  border: none;
+  outline: none;
+  outline: 1px solid #8d9599;
+  outline-offset: -1px;
+  color: #8d9599;
 }
 
 .button__primary__disabled {

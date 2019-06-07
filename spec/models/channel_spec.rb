@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Channel, type: :model do
+  let!(:discord_team) { create :team, provider: 'discord' }
+
+  before do
+    stub_discord_channels
+  end
+
   describe '#validations' do
     it 'requires many attributes' do
       channel = described_class.new
@@ -68,6 +74,51 @@ RSpec.describe Channel, type: :model do
       attributes['channel_id'] = 1
       attributes['team_id'] = 10
       expect(described_class.invalid_params(attributes)).to eq false
+    end
+  end
+
+  describe '.url' do
+    let!(:slack_channel) { create(:channel) }
+    let!(:discord_channel) { create(:channel, team: discord_team) }
+
+    before do
+      stub_discord_create_invite
+    end
+
+    it 'returns url for a Slack channel' do
+      expect(slack_channel.url).to eq("https://#{slack_channel.team.domain}.slack.com/messages/#{slack_channel.channel_id}")
+    end
+
+    it 'returns url for a Discord channel' do
+      expect(discord_channel.url).to include('https://discord.gg/invite_code')
+    end
+  end
+
+  describe '.discord_invite' do
+    let!(:discord_channel) { create(:channel, team: discord_team) }
+
+    before do
+      stub_discord_create_invite
+    end
+
+    it 'creates new invite' do
+      expect(discord_channel.discord_invite).to include('invite_code')
+    end
+
+    it 'caches invite' do
+      invite_created_at = discord_channel.discord_invite && discord_channel.discord_invite_created_at
+
+      travel_to(1.hour.ago) do
+        expect(discord_channel.discord_invite && discord_channel.discord_invite_created_at).to eq invite_created_at
+      end
+    end
+
+    it 'udpates cached invite' do
+      invite_created_at = discord_channel.discord_invite && discord_channel.discord_invite_created_at
+
+      travel_to((Channel::DISCORD_INVITE_MAX_AGE_SECONDS + 10).seconds.from_now) do
+        expect(discord_channel.discord_invite && discord_channel.discord_invite_created_at).not_to eq invite_created_at
+      end
     end
   end
 end

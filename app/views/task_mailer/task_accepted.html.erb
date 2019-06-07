@@ -1,0 +1,33 @@
+<p>
+  Hello <%= @account.name %>.
+</p>
+
+<p>
+  Nice work!
+</p>
+
+<p>
+  The task you completed, <b><%= @award.name %></b> has just been accepted as complete by the project owner.
+  <% if @award.token %>
+    You will be awarded <b><%= @award.total_amount %></b> of <%= @award.token.name %> soon.
+  <% else %>
+    You have been awarded <b><%= @award.total_amount %></b> project points.
+  <% end %>
+</p>
+
+<% if @award.token && !@account.can_receive_awards?(@award.project) %>
+  <p>
+    <b>To take ownership of the payment, you will have to register a wallet on your account.</b>
+    You need to enter your payment information to receive payment.
+    Click <a href="<%= show_account_url %>">here</a>
+    to enter your <%= @award.token.coin_type %> wallet address in your CoMakery account.
+  </p>
+<% else %>
+  <p>
+    Click <a href="<%= my_tasks_url %>">here</a> to see what tasks are ready for you to work on now.
+  </p>
+<% end %>
+
+<p>
+  Team CoMakery
+</p>

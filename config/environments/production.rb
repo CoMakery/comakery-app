@@ -109,5 +109,11 @@ Rails.application.configure do
       :enable_starttls_auto => true
   }
 
+  # Should be enabled ONLY on STAGING/DEMO env, since previews expose sensitive data
+  if ENV['ENABLE_MAILER_PREVIEWS'].present?
+    config.action_mailer.show_previews = true
+    config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
+  end
+
   config.airbrake = true
 end

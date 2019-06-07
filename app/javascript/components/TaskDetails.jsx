@@ -4,6 +4,8 @@ import MyTask from './MyTask'
 import ContentBlock from './ContentBlock'
 import BackButton from './BackButton'
 import Button from './styleguide/Button'
+import ButtonBorderGray from './styleguide/ButtonBorderGray'
+import Icon from './styleguide/Icon'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
@@ -81,6 +83,42 @@ const Details = styled.div`
   }
 `
 
+const Channel = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 7px;
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: bold;
+  color: #3a3a3a;
+  text-transform: uppercase;
+
+  img {
+    max-width: 20px;
+    max-height: 20px;
+    border: none;
+    margin-right: 7px;
+
+    &:hover {
+      border: none;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    text-transform: none;
+    font-family: Georgia;
+    font-size: 14px;
+    font-weight: 500;
+    color: #0089f4;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`
+
 const Submission = styled.div`
   padding: 30px 40px;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
@@ -131,6 +169,10 @@ class TaskDetails extends React.Component {
     this.state = {
       errors: {}
     }
+  }
+
+  goBack() {
+    typeof window === 'undefined' ? null : window.location = document.referrer
   }
 
   errorAdd(n, e) {
@@ -225,6 +267,11 @@ class TaskDetails extends React.Component {
                     type="submit"
                     value="submit task"
                   />
+
+                  <ButtonBorderGray
+                    onClick={this.goBack}
+                    value="cancel"
+                  />
                 </form>
               </Submission>
             }
@@ -275,7 +322,7 @@ class TaskDetails extends React.Component {
                         value={this.props.csrfToken}
                         readOnly
                       />
-                      <Button
+                      <ButtonBorderGray
                         type="submit"
                         value="reject & end"
                       />
@@ -306,9 +353,20 @@ class TaskDetails extends React.Component {
                 </ContentBlock>
               }
 
-              <ContentBlock title="acceptance criterias">
+              <ContentBlock title="acceptance criteria">
                 {task.requirements}
               </ContentBlock>
+
+              {task.project.channels.length > 0 &&
+                <ContentBlock title="chat with the project owner">
+                  {task.project.channels.map(channel =>
+                    <Channel key={channel.id}>
+                      <Icon name={`channel_${channel.type}.svg`} />
+                      <a target="_blank" href={channel.url}>{channel.url}</a>
+                    </Channel>
+                  )}
+                </ContentBlock>
+              }
 
               {task.status === 'ready' &&
                 <form action={task.startUrl} method="post">
@@ -318,9 +376,15 @@ class TaskDetails extends React.Component {
                     value={this.props.csrfToken}
                     readOnly
                   />
+
                   <Button
                     type="submit"
                     value="start task"
+                  />
+
+                  <ButtonBorderGray
+                    onClick={this.goBack}
+                    value="cancel"
                   />
                 </form>
               }
@@ -343,8 +407,9 @@ TaskDetails.defaultProps = {
       logo    : 'test'
     },
     project: {
-      name: null,
-      url : null
+      name    : null,
+      url     : null,
+      channels: []
     },
     mission: {
       name: null,
