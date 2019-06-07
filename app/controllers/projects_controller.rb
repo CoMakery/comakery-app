@@ -3,8 +3,7 @@ class ProjectsController < ApplicationController
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
 
-  before_action :assign_project, only: %i[edit update awards]
-  before_action :assign_listed_project, only: %i[show]
+  before_action :assign_project, only: %i[edit show update awards]
   before_action :assign_project_by_long_id, only: %i[unlisted]
   before_action :set_award, only: %i[show unlisted]
   before_action :set_tokens, only: %i[new edit]
@@ -134,11 +133,6 @@ class ProjectsController < ApplicationController
   end
 
   private
-
-  def assign_listed_project
-    @project = Project.listed.find(params[:id])&.decorate
-    redirect_to('/404.html') unless @project
-  end
 
   def assign_project_by_long_id
     @project = Project.find_by(long_id: params[:long_id])&.decorate

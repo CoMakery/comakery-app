@@ -136,9 +136,17 @@ describe ProjectsController do
       expect(response).to redirect_to(project_path(normal_project))
     end
 
-    it 'cannot access unlisted project by id' do
+    it 'project owner can access unlisted project by id' do
+      login public_unlisted_project.account
       get :show, params: { id: public_unlisted_project.id }
-      expect(response).to redirect_to('/404.html')
+      expect(response.code).to eq '200'
+      expect(assigns(:project)).to eq public_unlisted_project
+    end
+
+    it 'not project owner cannot access unlisted project by id' do
+      login create(:account)
+      get :show, params: { id: public_unlisted_project.id }
+      expect(response).to redirect_to('/')
     end
 
     it 'redirects to 404 when long id is not valid' do
