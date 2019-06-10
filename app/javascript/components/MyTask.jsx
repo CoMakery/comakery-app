@@ -7,56 +7,36 @@ import styled, { css } from 'styled-components'
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-  height: 80px;
+  height: auto;
   padding: 10px 20px;
   margin-bottom: 20px;
   text-transform: uppercase;
   background-color: white;
+  align-items: flex-start;
+  justify-content: space-between;
+`
 
-  @media (max-width: 1024px) {
-    height: auto;
+const ExpandButton = styled.div`
+  box-shadow: 0 5px 10px 0 rgba(0,0,0,0.1);
+  background: white;
+  margin-right: -20px;
+  margin-top: -10px;
+  margin-left: 1em;
+  padding: 5px 5px 0px 5px;
+  z-index: 1;
+  cursor: pointer;
+
+  img {
+    width: 15px;
+    height: 15px;
   }
 `
 
-const RightBorder = styled.div`
-  width: 2px;
-  height: 100px;
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .2);
-  background-color: #5037f7;
-  z-index: 10;
-  position: absolute;
-  margin-left: -20px;
-  margin-top: -10px;
-
-  ${props => props.status === 'ready' && css`
-    background-color: #4a4a4a;
-  `}
-
-  ${props => props.status === 'started' && css`
-    background-color: #008e9b;
-  `}
-
-  ${props => props.status === 'submitted' && css`
-    background-color: #007ae7;
-  `}
-
-  ${props => props.status === 'accepted' && css`
-    background-color: #5037f7;
-  `}
-
-  ${props => props.status === 'paid' && css`
-    background-color: #fb40e5;
-  `}
-
-  ${props => props.status === 'rejected' && css`
-    background-color: #ff4d4d;
-  `}
-
-  @media (max-width: 1024px) {
-    height: 58px;
-  }
+const Rows = styled.div`
+  align-self: flex-start;
+  width: 100%;
 `
 
 const FirstRow = styled.div`
@@ -181,7 +161,7 @@ const TaskAction = styled.a`
     line-height: normal;
     letter-spacing: normal;
     text-align: right;
-    color: #8d9599;
+    color: #3a3a3a;
     text-transform: uppercase;
     text-decoration: none;
 
@@ -384,59 +364,73 @@ class TaskActionComponent extends React.Component {
 }
 
 class MyTask extends React.Component {
+  goBack() {
+    typeof window === 'undefined' ? null : window.location = document.referrer
+  }
+
   render() {
     let task = this.props.task
     let filter = this.props.filter
     return (
       <React.Fragment>
         <Wrapper>
-          <RightBorder status={task.status} />
-          <FirstRow>
-            <Name>{task.name}</Name>
-            <CurrencyAmount
-              amount={task.totalAmount}
-              currency={task.token.currency}
-              logoUrl={task.token.logo}
-            />
-          </FirstRow>
+          <ExpandButton>
+            {this.props.displayActions &&
+              <a href={task.detailsUrl}><Icon name="expand-task.svg" /></a>
+            }
+            {!this.props.displayActions &&
+              <Icon name="iconCloseCopy.svg" onClick={this.goBack} />
+            }
+          </ExpandButton>
 
-          <SecondRow>
-            <BlockWrapper>
-              <Project>PROJECT <a href={task.project.url}>{task.project.name}</a></Project>
-              {task.mission.name &&
-                <Mission>MISSION <a href={task.mission.url}>{task.mission.name}</a></Mission>
+          <Rows>
+            <FirstRow>
+              <Name>{task.name}</Name>
+              <CurrencyAmount
+                amount={task.totalAmount}
+                currency={task.token.currency}
+                logoUrl={task.token.logo}
+              />
+            </FirstRow>
+
+            <SecondRow>
+              <BlockWrapper>
+                <Project>PROJECT <a href={task.project.url}>{task.project.name}</a></Project>
+                {task.mission.name &&
+                  <Mission>MISSION <a href={task.mission.url}>{task.mission.name}</a></Mission>
+                }
+              </BlockWrapper>
+
+              {this.props.displayActions &&
+                <TaskActionComponent componentStyle="link" task={task} filter={filter} />
               }
-            </BlockWrapper>
+            </SecondRow>
 
-            {this.props.displayActions &&
-              <TaskActionComponent componentStyle="link" task={task} filter={filter} />
-            }
-          </SecondRow>
+            <ThirdRow>
+              <Status>
+                <b>{task.status} </b>
+                {task.updatedAt} ago
+              </Status>
+              <Type>
+                <b>TYPE </b>
+                {task.batch.specialty || 'General'}
+              </Type>
+              {task.contributor.name &&
+                <Contributor>
+                  <Userpics pics={[task.contributor.image]} limit={1} />
+                  {task.contributor.name}
+                </Contributor>
+              }
 
-          <ThirdRow>
-            <Status>
-              <b>{task.status} </b>
-              {task.updatedAt} ago
-            </Status>
-            <Type>
-              <b>TYPE </b>
-              {task.batch.specialty || 'General'}
-            </Type>
-            {task.contributor.name &&
-              <Contributor>
-                <Userpics pics={[task.contributor.image]} limit={1} />
-                {task.contributor.name}
-              </Contributor>
-            }
+              <TaskDetails displayActions={this.props.displayActions} href={this.props.displayActions ? task.detailsUrl : null}>
+                View Task Details <Icon name="DROP_DOWN.svg" />
+              </TaskDetails>
 
-            <TaskDetails displayActions={this.props.displayActions} href={this.props.displayActions ? task.detailsUrl : null}>
-              View Task Details <Icon name="DROP_DOWN.svg" />
-            </TaskDetails>
-
-            {this.props.displayActions &&
-              <TaskActionComponent componentStyle="button" task={task} filter={filter} />
-            }
-          </ThirdRow>
+              {this.props.displayActions &&
+                <TaskActionComponent componentStyle="button" task={task} filter={filter} />
+              }
+            </ThirdRow>
+          </Rows>
         </Wrapper>
       </React.Fragment>
     )

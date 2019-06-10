@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import MyTask from './MyTask'
 import ContentBlock from './ContentBlock'
-import BackButton from './BackButton'
 import Button from './styleguide/Button'
 import ButtonBorderGray from './styleguide/ButtonBorderGray'
 import Icon from './styleguide/Icon'
@@ -213,8 +212,6 @@ class TaskDetails extends React.Component {
           <HeaderWrapper>
             <Header />
           </HeaderWrapper>
-
-          <BackButton />
 
           <Layout>
             <MyTask task={task} displayActions={false} />
