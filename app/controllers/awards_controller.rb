@@ -293,7 +293,6 @@ class AwardsController < ApplicationController
           image: helpers.account_image_url(task.account, 100),
           wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
         },
-        experience_level_name: Award::EXPERIENCE_LEVELS.key(task.experience_level),
         image_url: helpers.attachment_url(task, :image),
         submission_image_url: helpers.attachment_url(task, :submission_image),
         payment_url: awards_project_path(task.project),
@@ -325,9 +324,6 @@ class AwardsController < ApplicationController
     def set_show_props
       @props = {
         task: task_to_props(@award),
-        task_allowed_to_start: policy(@award).start?,
-        tasks_to_unlock: current_account.tasks_to_unlock(@award),
-        my_tasks_path: my_tasks_path,
         csrf_token: form_authenticity_token
       }
     end
