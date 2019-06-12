@@ -320,6 +320,19 @@ describe Account do
     end
   end
 
+  describe '.tasks_to_unlock(award)' do
+    let(:account) { create(:account) }
+    let(:award_with_higher_exp_level) { create(:award, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills']) }
+
+    before do
+      create(:award, award_type: award_with_higher_exp_level.award_type, account: account)
+    end
+
+    it 'returns number of tasks to be completed to achieve exp level suitable for a given award' do
+      expect(account.tasks_to_unlock(award_with_higher_exp_level)).to eq(award_with_higher_exp_level.experience_level - account.experience_for(award_with_higher_exp_level.award_type.specialty))
+    end
+  end
+
   describe 'my projects' do
     let!(:team) { create :team }
     let!(:authentication) { create :authentication, account: account }

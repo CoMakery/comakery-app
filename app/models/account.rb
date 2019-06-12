@@ -194,6 +194,10 @@ class Account < ApplicationRecord
     awards.completed.count
   end
 
+  def tasks_to_unlock(award)
+    award.experience_level - experience_for(award.award_type.specialty)
+  end
+
   def confirmed?
     email_confirm_token.nil?
   end
