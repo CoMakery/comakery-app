@@ -284,22 +284,6 @@ const Type = styled.div`
   }
 `
 
-const ExperienceLevel = styled.div`
-  font-family: Montserrat;
-  font-size: 10px;
-  font-weight: 500;
-  color: #4a4a4a;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  margin-right: 2em;
-
-  b {
-    font-weight: 900;
-  }
-`
-
 const Contributor = styled.div`
   font-family: Montserrat;
   font-size: 10px;
@@ -436,13 +420,6 @@ class MyTask extends React.Component {
                   <Userpics pics={[task.contributor.image]} limit={1} />
                   {task.contributor.name}
                 </Contributor>
-              }
-
-              {task.status === 'ready' &&
-                <ExperienceLevel>
-                  <b>MINIMUM EXPERIENCE </b>
-                  {task.experienceLevelName}
-                </ExperienceLevel>
               }
 
               <TaskDetails displayActions={this.props.displayActions} href={this.props.displayActions ? task.detailsUrl : null}>
