@@ -324,6 +324,7 @@ class AwardsController < ApplicationController
     def set_show_props
       @props = {
         task: task_to_props(@award),
+        task_allowed_to_start: policy(@award).start?,
         csrf_token: form_authenticity_token
       }
     end

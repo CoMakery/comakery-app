@@ -53,15 +53,7 @@ class Award < ApplicationRecord
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6)' }
-  scope :having_suitable_experience_for, lambda { |account|
-    where(status: :ready).where(
-      '(award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL)) OR (award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL))',
-      AwardType.where(specialty_id: account.specialty&.id).pluck(:id),
-      account.specialty_experience,
-      AwardType.where(specialty_id: [0, nil]).pluck(:id),
-      account.total_experience
-    )
-  }
+
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
@@ -140,6 +132,10 @@ class Award < ApplicationRecord
     else
       slack_client.send_award_notifications(award: self)
     end
+  end
+
+  def matching_experience_for?(account)
+    experience_level.to_i <= account.experience_for(award_type.specialty)
   end
 
   def confirm!(account)

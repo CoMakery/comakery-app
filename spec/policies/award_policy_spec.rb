@@ -94,9 +94,41 @@ describe AwardPolicy do
   end
 
   describe 'start?' do
-    it 'returns true if award is ready and accessable for a given user' do
+    it 'returns true if award is ready, and related to account' do
       a = create(:award, status: 'ready')
       expect(described_class.new(a.account, a).start?).to be true
+    end
+
+    it 'returns true if award is ready, has matching experience and accessable for a given user' do
+      award = create(
+        :award,
+        status: 'ready',
+        experience_level: Award::EXPERIENCE_LEVELS['New Contributor'],
+        award_type: create(
+          :award_type,
+          project: create(
+            :project,
+            visibility: 'public_listed'
+          )
+        )
+      )
+      expect(described_class.new(create(:account), award).start?).to be true
+    end
+
+    it 'returns false if award has not matching experience for a given user' do
+      award = create(
+        :award,
+        status: 'ready',
+        experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'],
+        award_type: create(
+          :award_type,
+          project: create(
+            :project,
+            visibility: 'public_listed'
+          )
+        )
+      )
+      expect(described_class.new(create(:account), award).start?).to be false
     end
 
     it 'returns false if award is not accessable for a given user' do
