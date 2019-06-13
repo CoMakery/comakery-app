@@ -109,7 +109,7 @@ exports[`Mission renders correctly without props 1`] = `
                   src="test-file-stub"
                 />
               </Icon>
-              <Plural
+              <l
                 className={null}
                 count={1}
                 showCount={true}
@@ -123,7 +123,7 @@ exports[`Mission renders correctly without props 1`] = `
                 >
                   1 project
                 </span>
-              </Plural>
+              </l>
             </div>
             <div
               className="mission-stats__kpi"
@@ -137,7 +137,7 @@ exports[`Mission renders correctly without props 1`] = `
                   src="test-file-stub"
                 />
               </Icon>
-              <Plural
+              <l
                 className={null}
                 count={1}
                 plural="batches"
@@ -152,7 +152,7 @@ exports[`Mission renders correctly without props 1`] = `
                 >
                   1 batch
                 </span>
-              </Plural>
+              </l>
             </div>
           </div>
           <div
@@ -170,7 +170,7 @@ exports[`Mission renders correctly without props 1`] = `
                   src="test-file-stub"
                 />
               </Icon>
-              <Plural
+              <l
                 className={null}
                 count={1}
                 showCount={true}
@@ -184,7 +184,7 @@ exports[`Mission renders correctly without props 1`] = `
                 >
                   1 task
                 </span>
-              </Plural>
+              </l>
             </div>
             <div
               className="mission-stats__kpi"
@@ -192,7 +192,7 @@ exports[`Mission renders correctly without props 1`] = `
               <div
                 className="mission-stats__contributor"
               />
-              <Plural
+              <l
                 className={null}
                 count={1}
                 plural="people"
@@ -207,7 +207,7 @@ exports[`Mission renders correctly without props 1`] = `
                 >
                   1 person
                 </span>
-              </Plural>
+              </l>
                INTERESTED
             </div>
           </div>
@@ -223,7 +223,7 @@ exports[`Mission renders correctly without props 1`] = `
                 src="test-file-stub"
               />
             </Icon>
-            <Plural
+            <l
               className={null}
               count={1}
               showCount={true}
@@ -237,7 +237,7 @@ exports[`Mission renders correctly without props 1`] = `
               >
                 1 project
               </span>
-            </Plural>
+            </l>
           </div>
           <div
             className="mission-stats__kpi mission-stats__kpi--desktop"
@@ -251,7 +251,7 @@ exports[`Mission renders correctly without props 1`] = `
                 src="test-file-stub"
               />
             </Icon>
-            <Plural
+            <l
               className={null}
               count={1}
               plural="batches"
@@ -266,7 +266,7 @@ exports[`Mission renders correctly without props 1`] = `
               >
                 1 batch
               </span>
-            </Plural>
+            </l>
           </div>
           <div
             className="mission-stats__kpi mission-stats__kpi--desktop"
@@ -280,7 +280,7 @@ exports[`Mission renders correctly without props 1`] = `
                 src="test-file-stub"
               />
             </Icon>
-            <Plural
+            <l
               className={null}
               count={1}
               showCount={true}
@@ -294,7 +294,7 @@ exports[`Mission renders correctly without props 1`] = `
               >
                 1 task
               </span>
-            </Plural>
+            </l>
           </div>
           <div
             className="mission-stats__kpi mission-stats__kpi--desktop"
@@ -302,7 +302,7 @@ exports[`Mission renders correctly without props 1`] = `
             <div
               className="mission-stats__contributor"
             />
-            <Plural
+            <l
               className={null}
               count={1}
               plural="people"
@@ -317,7 +317,7 @@ exports[`Mission renders correctly without props 1`] = `
               >
                 1 person
               </span>
-            </Plural>
+            </l>
              INTERESTED
           </div>
         </div>
