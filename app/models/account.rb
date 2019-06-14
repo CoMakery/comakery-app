@@ -171,12 +171,14 @@ class Account < ApplicationRecord
       AwardType.where(project_id: accessable_projects.pluck(:id)).pluck(:id))
   end
 
-  def accessable_awards
-    Award.where(id:
-      awards.pluck(:id) |
-      issued_awards.pluck(:id) |
-      team_awards.pluck(:id) |
-      Award.where(award_type_id: accessable_award_types.pluck(:id)).ready.pluck(:id))
+  def awards_matching_experience
+    Award.ready.where(id:
+      experiences.map do |specialty_id, experience|
+        Award.where(
+          award_type_id: accessable_award_types.where(specialty_id: specialty_id).pluck(:id),
+          experience_level: 0..experience
+        ).pluck(:id)
+      end.flatten.uniq)
   end
 
   def related_awards
@@ -186,8 +188,22 @@ class Account < ApplicationRecord
       team_awards.pluck(:id))
   end
 
-  def experience_for(specialty)
-    awards.completed.where(award_type_id: AwardType.where(specialty: specialty).pluck(:id)).count
+  def accessable_awards
+    Award.where(id:
+      awards_matching_experience.pluck(:id) |
+      related_awards.pluck(:id))
+  end
+
+  def experiences
+    Specialty.all.map { |specialty| [specialty&.id, experience_for(specialty)] }.push([nil, experience_for(nil)]).to_h
+  end
+
+  def experience_for(specialty = nil)
+    if specialty
+      awards.completed.where(award_type_id: AwardType.where(specialty: specialty).pluck(:id)).count
+    else
+      awards.completed.count
+    end
   end
 
   def total_experience

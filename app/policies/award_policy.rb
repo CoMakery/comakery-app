@@ -11,9 +11,7 @@ class AwardPolicy < ApplicationPolicy
 
     def resolve
       if @account
-        Award.where(id:
-          @account.related_awards.pluck(:id) |
-          @account.accessable_awards.select { |award| award.matching_experience_for?(@account) }.pluck(:id))
+        @account.accessable_awards
       else
         scope.none
       end
@@ -31,9 +29,7 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def start?
-    Award.ready.where(id:
-      @account.related_awards.pluck(:id) |
-      @account.accessable_awards.select { |award| award.matching_experience_for?(@account) }.pluck(:id)).where(id: @award.id).exists?
+    show? && (@award.status == 'ready')
   end
 
   def create?
