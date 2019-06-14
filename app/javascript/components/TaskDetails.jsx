@@ -82,6 +82,37 @@ const Details = styled.div`
   }
 `
 
+const LockedMessage = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: Georgia;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #4a4a4a;
+
+  img {
+    margin-right: 0.5em;
+
+    &:hover {
+      border: 1px solid transparent;
+    }
+  }
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`
+
 const Channel = styled.div`
   display: flex;
   flex-direction: row;
@@ -366,24 +397,38 @@ class TaskDetails extends React.Component {
               }
 
               {task.status === 'ready' &&
-                <form action={task.startUrl} method="post">
-                  <input
-                    type="hidden"
-                    name="authenticity_token"
-                    value={this.props.csrfToken}
-                    readOnly
-                  />
+                <React.Fragment>
+                  {this.props.taskAllowedToStart &&
+                    <form action={task.startUrl} method="post">
+                      <input
+                        type="hidden"
+                        name="authenticity_token"
+                        value={this.props.csrfToken}
+                        readOnly
+                      />
 
-                  <Button
-                    type="submit"
-                    value="start task"
-                  />
+                      <Button
+                        type="submit"
+                        value="start task"
+                      />
 
-                  <ButtonBorderGray
-                    onClick={this.goBack}
-                    value="cancel"
-                  />
-                </form>
+                      <ButtonBorderGray
+                        onClick={this.goBack}
+                        value="cancel"
+                      />
+                    </form>
+                  }
+
+                  {!this.props.taskAllowedToStart &&
+                    <LockedMessage>
+                      <Icon name="NO-SKILLS.svg" />
+                      <div>
+                        This task has experince level requirement – {task.experienceLevelName}.
+                        Unlock access by completing <b>{this.props.tasksToUnlock}</b> more {task.batch.specialty || 'General'} {this.props.tasksToUnlock === 1 ? 'task' : 'tasks'} available to you in <a href={this.props.myTasksPath}>My Tasks</a>.
+                      </div>
+                    </LockedMessage>
+                  }
+                </React.Fragment>
               }
             </Details>
           </Layout>
@@ -394,7 +439,10 @@ class TaskDetails extends React.Component {
 }
 
 TaskDetails.propTypes = {
-  task: PropTypes.object
+  task              : PropTypes.object,
+  taskAllowedToStart: PropTypes.bool,
+  tasksToUnlock     : PropTypes.number,
+  myTasksPath       : PropTypes.string
 }
 TaskDetails.defaultProps = {
   task: {
@@ -419,6 +467,9 @@ TaskDetails.defaultProps = {
       name : null,
       image: null
     }
-  }
+  },
+  taskAllowedToStart: true,
+  tasksToUnlock     : 0,
+  myTasksPath       : '/'
 }
 export default TaskDetails
