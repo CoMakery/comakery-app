@@ -84,42 +84,6 @@ describe Award do
         expect(described_class.filtered_for_view('not finished', contributor)).to eq([])
       end
     end
-
-    describe '.having_suitable_experience_for(account)' do
-      let(:account) { create(:account) }
-      let(:award_type) { create(:award_type, specialty: account.specialty) }
-
-      before do
-        described_class.destroy_all
-        Award::EXPERIENCE_LEVELS['Demonstrated Skills'].times { create(:award, account: account, award_type: award_type) }
-      end
-
-      it 'returns awards suiting given experience when there are awards with the same specialty and various experience levels' do
-        2.times { create(:award_ready, award_type: award_type) }
-        3.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type) }
-        4.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'], award_type: award_type) }
-        scope = described_class.having_suitable_experience_for(account)
-        expect(scope.count).to eq(5)
-        expect(scope.where(experience_level: 0).count).to eq(2)
-        expect(scope.where(experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills']).count).to eq(3)
-        expect(scope.where(experience_level: Award::EXPERIENCE_LEVELS['Established Contributor']).count).to eq(0)
-      end
-
-      it 'returns no awards when there are only awards with a different specialty without experience level' do
-        award_type_with_a_different_specialty = create(:award_type)
-        2.times { create(:award_ready, award_type: award_type_with_a_different_specialty) }
-        scope = described_class.having_suitable_experience_for(account)
-        expect(scope.count).to eq(0)
-      end
-
-      it 'returns all awards when there are only awards without specialty and matching experience level' do
-        award_type_with_no_specialty = create(:award_type)
-        award_type_with_no_specialty.update(specialty: nil)
-        2.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type_with_no_specialty) }
-        scope = described_class.having_suitable_experience_for(account)
-        expect(scope.count).to eq(2)
-      end
-    end
   end
 
   describe 'hooks' do
@@ -322,6 +286,32 @@ describe Award do
         expect(award.errors.full_messages.to_sentence).to match \
           /Ethereum transaction address cannot be changed after it has been set/
       end
+    end
+  end
+
+  describe '.matching_experience_for?(account)' do
+    let(:account) { create(:account) }
+    let(:award_type) { create(:award_type, specialty: account.specialty) }
+    let(:award_no_experience) { create(:award_ready, award_type: award_type) }
+    let(:award_level1) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['New Contributor'], award_type: award_type) }
+    let(:award_level2) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type) }
+    let(:award_level3) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'], award_type: award_type) }
+
+    before do
+      described_class.destroy_all
+      Award::EXPERIENCE_LEVELS['Demonstrated Skills'].times { create(:award, account: account, award_type: award_type) }
+    end
+
+    it 'returns true if account experience is greater than award requirement' do
+      expect(award_level1.matching_experience_for?(account)).to be_truthy
+    end
+
+    it 'returns true if account experience is equal to award requirement' do
+      expect(award_level2.matching_experience_for?(account)).to be_truthy
+    end
+
+    it 'returns false if account experience is less than award requirement' do
+      expect(award_level3.matching_experience_for?(account)).to be_falsey
     end
   end
 

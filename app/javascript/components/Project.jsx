@@ -186,7 +186,9 @@ export default class Project extends React.Component {
 
           {missionData &&
             <div className="project-header__mission-image">
-              <img src={missionData.logoUrl} />
+              <a href={missionData.missionUrl}>
+                <img src={missionData.logoUrl} />
+              </a>
             </div>
           }
 
