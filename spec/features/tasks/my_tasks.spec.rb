@@ -13,12 +13,19 @@ describe 'my tasks page', :js do
     expect(page).to have_link(href: show_account_path)
   end
 
+  it 'has project filtering feature for ready tasks' do
+    login(ready_task.account)
+    visit(my_tasks_path)
+    find_link(href: /project_id=/).click
+    expect(page).to have_content 'FILTERED BY PROJECT'
+  end
+
   it 'shows ready tasks to a contributor' do
     login(ready_task.account)
     visit(my_tasks_path)
     expect(page).to have_content ready_task.name.upcase
     expect(page).to have_content ready_task.status.upcase
-    expect(page).to have_content ready_task.project.title
+    expect(page).to have_content ready_task.project.title.upcase
     expect(page).to have_link(href: project_award_type_award_path(ready_task.project, ready_task.award_type, ready_task))
   end
 
@@ -27,7 +34,7 @@ describe 'my tasks page', :js do
     visit(my_tasks_path(filter: 'started'))
     expect(page).to have_content started_task.name.upcase
     expect(page).to have_content started_task.status.upcase
-    expect(page).to have_content started_task.project.title
+    expect(page).to have_content started_task.project.title.upcase
     expect(page).to have_link(href: project_award_type_award_path(started_task.project, started_task.award_type, started_task))
   end
 
@@ -36,7 +43,7 @@ describe 'my tasks page', :js do
     visit(my_tasks_path(filter: 'submitted'))
     expect(page).to have_content submitted_task.name.upcase
     expect(page).to have_content submitted_task.status.upcase
-    expect(page).to have_content submitted_task.project.title
+    expect(page).to have_content submitted_task.project.title.upcase
     expect(page).to have_link(href: project_award_type_award_path(submitted_task.project, submitted_task.award_type, submitted_task))
   end
 
@@ -45,7 +52,7 @@ describe 'my tasks page', :js do
     visit(my_tasks_path(filter: 'done'))
     expect(page).to have_content paid_task.name.upcase
     expect(page).to have_content paid_task.status.upcase
-    expect(page).to have_content paid_task.project.title
+    expect(page).to have_content paid_task.project.title.upcase
     expect(page).to have_link(href: project_award_type_award_path(paid_task.project, paid_task.award_type, paid_task))
   end
 
@@ -54,7 +61,7 @@ describe 'my tasks page', :js do
     visit(my_tasks_path(filter: 'to review'))
     expect(page).to have_content submitted_task.name.upcase
     expect(page).to have_content submitted_task.status.upcase
-    expect(page).to have_content submitted_task.project.title
+    expect(page).to have_content submitted_task.project.title.upcase
     expect(page).to have_link(href: project_award_type_award_path(submitted_task.project, submitted_task.award_type, submitted_task))
   end
 
@@ -63,7 +70,7 @@ describe 'my tasks page', :js do
     visit(my_tasks_path(filter: 'to pay'))
     expect(page).to have_content accepted_task.name.upcase
     expect(page).to have_content accepted_task.status.upcase
-    expect(page).to have_content accepted_task.project.title
+    expect(page).to have_content accepted_task.project.title.upcase
     expect(page).to have_link(href: awards_project_path(accepted_task.project))
   end
 end

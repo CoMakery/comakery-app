@@ -9,6 +9,7 @@ class AwardsController < ApplicationController
   before_action :authorize_award_review, only: %i[accept reject]
   before_action :authorize_award_pay, only: %i[update_transaction_address]
   before_action :set_filter, only: %i[index]
+  before_action :set_project_filter, only: %i[index]
   before_action :set_awards, only: %i[index]
   before_action :set_page, only: %i[index]
   before_action :set_form_props, only: %i[new edit clone]
@@ -217,8 +218,16 @@ class AwardsController < ApplicationController
       @filter = params[:filter]&.downcase || 'ready'
     end
 
+    def set_project_filter
+      @project = Project.find_by(id: params[:project_id])
+    end
+
     def set_awards
       @awards = policy_scope(Award).filtered_for_view(@filter, current_account).order(updated_at: :desc)
+
+      if @project
+        @awards = @awards.where(award_type: AwardType.where(project: @project))
+      end
     end
 
     def set_page
@@ -269,6 +278,7 @@ class AwardsController < ApplicationController
           logo: helpers.attachment_url(task.project&.token, :logo_image, :fill, 100, 100)
         },
         project: {
+          id: task.project&.id,
           name: task.project&.title,
           url: task.project && (task.project.unlisted? ? unlisted_project_path(task.project.long_id) : project_path(task.project)),
           channels: task.project.channels.map do |channel|
@@ -318,6 +328,7 @@ class AwardsController < ApplicationController
             url: my_tasks_path(filter: filter)
           }
         end,
+        project: @project,
         past_awards_url: show_account_path
       }
     end

@@ -145,9 +145,20 @@ const Project = styled.div`
     }
   }
 
+  img {
+    height: 12px;
+    margin-bottom: -1px;
+    margin-left: 0.5em;
+    opacity: 0.2;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
   @media (max-width: 1024px) {
-  margin-bottom: 15px;
-  margin-top: 15px;
+    margin-bottom: 15px;
+    margin-top: 15px;
   }
 `
 
@@ -411,7 +422,13 @@ class MyTask extends React.Component {
 
             <SecondRow>
               <BlockWrapper>
-                <Project>PROJECT <a href={task.project.url}>{task.project.name}</a></Project>
+                <Project>
+                  PROJECT <a href={task.project.url}>{task.project.name}</a>
+                  { this.props.displayFilters &&
+                    <a href={location ? location.pathname + `?project_id=${task.project.id}` : ''}><Icon name="filter-2.svg" /></a>
+                  }
+                </Project>
+
                 {task.mission.name &&
                   <Mission>MISSION <a href={task.mission.url}>{task.mission.name}</a></Mission>
                 }
@@ -463,6 +480,7 @@ class MyTask extends React.Component {
 MyTask.propTypes = {
   task          : PropTypes.object,
   filter        : PropTypes.string,
+  displayFilter : PropTypes.bool,
   displayActions: PropTypes.bool
 }
 MyTask.defaultProps = {
@@ -488,6 +506,7 @@ MyTask.defaultProps = {
       image: null
     }
   },
+  displayFilters: false,
   displayActions: true,
   filter        : ''
 }
