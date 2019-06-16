@@ -252,7 +252,7 @@ MyTasks.propTypes = {
 }
 MyTasks.defaultProps = {
   tasks         : [],
-  filters       : [],
+  filters       : [{"current": true, "name": "_"}],
   paginationHtml: '',
   pastAwardsUrl : ''
 }

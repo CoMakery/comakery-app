@@ -2,7 +2,14 @@
 
 exports[`MyTasks renders component correctly 1`] = `
 <MyTasks
-  filters={Array []}
+  filters={
+    Array [
+      Object {
+        "current": true,
+        "name": "_",
+      },
+    ]
+  }
   paginationHtml=""
   pastAwardsUrl=""
   tasks={Array []}
@@ -236,22 +243,80 @@ exports[`MyTasks renders component correctly 1`] = `
                 >
                   <div
                     className="sc-kEYyzF jSuCvT"
-                  />
+                  >
+                    <styled.a
+                      current={true}
+                      key="_"
+                    >
+                      <StyledComponent
+                        current={true}
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-kkGfuU",
+                              "isStatic": false,
+                              "lastClassName": "clTSfY",
+                              "rules": Array [
+                                "
+  text-transform: uppercase;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #8d9599;
+  text-decoration: none;
+  line-height: 1.5;
+  min-width: 100px;
+  padding: 5px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  ",
+                                [Function],
+                                "
+
+  @media (max-width: 1024px) {
+    background-color: #ffffff;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+    flex: 0 0 auto;
+    margin-right: 20px;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.a",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-kkGfuU",
+                            "target": "a",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <a
+                          className="sc-kkGfuU clTSfY"
+                        >
+                          _
+                          <br />
+                        </a>
+                      </StyledComponent>
+                    </styled.a>
+                  </div>
                 </StyledComponent>
               </styled.div>
-              <styled.div
-                dangerouslySetInnerHTML={
-                  Object {
-                    "__html": "",
-                  }
-                }
-              >
+              <styled.div>
                 <StyledComponent
-                  dangerouslySetInnerHTML={
-                    Object {
-                      "__html": "",
-                    }
-                  }
                   forwardedComponent={
                     Object {
                       "$$typeof": Symbol(react.forward_ref),
@@ -259,14 +324,18 @@ exports[`MyTasks renders component correctly 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-iAyFgw",
                         "isStatic": true,
-                        "lastClassName": "YMnNn",
+                        "lastClassName": "UTBMq",
                         "rules": Array [
                           "
-  text-align: right;
-  width: 100%;
-  padding: 15px 0;
+  display: flex;
+  align-items: center;
   border-bottom: 1px solid #d8d8d8;
   margin-bottom: 35px;
+  padding: 10px 0;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 ",
                         ],
                       },
@@ -283,13 +352,60 @@ exports[`MyTasks renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-iAyFgw YMnNn"
-                    dangerouslySetInnerHTML={
-                      Object {
-                        "__html": "",
+                    className="sc-iAyFgw UTBMq"
+                  >
+                    <styled.div
+                      dangerouslySetInnerHTML={
+                        Object {
+                          "__html": "",
+                        }
                       }
-                    }
-                  />
+                    >
+                      <StyledComponent
+                        dangerouslySetInnerHTML={
+                          Object {
+                            "__html": "",
+                          }
+                        }
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-hSdWYo",
+                              "isStatic": true,
+                              "lastClassName": "dhqwJl",
+                              "rules": Array [
+                                "
+  text-align: right;
+  width: 100%;
+  padding: 15px 0;
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-hSdWYo",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-hSdWYo dhqwJl"
+                          dangerouslySetInnerHTML={
+                            Object {
+                              "__html": "",
+                            }
+                          }
+                        />
+                      </StyledComponent>
+                    </styled.div>
+                  </div>
                 </StyledComponent>
               </styled.div>
             </div>

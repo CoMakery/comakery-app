@@ -188,6 +188,7 @@ exports[`TaskDetails renders component correctly 1`] = `
             >
               <MyTask
                 displayActions={false}
+                displayFilters={false}
                 filter=""
                 task={
                   Object {
@@ -665,7 +666,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                                 "componentStyle": ComponentStyle {
                                                   "componentId": "sc-cSHVUG",
                                                   "isStatic": true,
-                                                  "lastClassName": "iKGZzd",
+                                                  "lastClassName": "jvHjYo",
                                                   "rules": Array [
                                                     "
   font-family: Montserrat;
@@ -691,9 +692,20 @@ exports[`TaskDetails renders component correctly 1`] = `
     }
   }
 
+  img {
+    height: 12px;
+    margin-bottom: -1px;
+    margin-left: 0.5em;
+    opacity: 0.2;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
   @media (max-width: 1024px) {
-  margin-bottom: 15px;
-  margin-top: 15px;
+    margin-bottom: 15px;
+    margin-top: 15px;
   }
 ",
                                                   ],
@@ -711,7 +723,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                             forwardedRef={null}
                                           >
                                             <div
-                                              className="sc-cSHVUG iKGZzd"
+                                              className="sc-cSHVUG jvHjYo"
                                             >
                                               PROJECT 
                                               <a
