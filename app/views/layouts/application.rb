@@ -94,12 +94,6 @@ class Views::Layouts::Application < Views::Base
           ga('send', 'pageview');
         ")
 
-        if content_for?(:footer)
-          footer(class: 'fat-footer') do
-            yield(:footer)
-          end
-        end
-
         if content_for?(:js)
           script do
             yield(:js)
@@ -111,33 +105,13 @@ class Views::Layouts::Application < Views::Base
 
   def message
     div(class: 'large-12 medium-12 small-12 small-centered') do
-      if error
-        div('aria-labelledby' => 'flash-msg-error', 'aria-role' => 'dialog', class: ['callout', 'flash-msg', 'error'], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
+      flash.each do |name, msg|
+        div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
           button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
             span('aria-hidden' => true) { text 'x' }
           end
-          span(id: 'flash-msg-error') do
-            text ActiveSupport::SafeBuffer.new(error)
-          end
-        end
-      elsif notice
-        div('aria-labelledby' => 'flash-msg-notice', 'aria-role' => 'dialog', class: ['callout', 'flash-msg', 'notice'], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
-          button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
-            span('aria-hidden' => true) { text 'x' }
-          end
-          span(id: 'flash-msg-error') do
-            text ActiveSupport::SafeBuffer.new(notice)
-          end
-        end
-      else
-        flash.each do |name, msg|
-          div('aria-labelledby' => "flash-msg-#{name}", 'aria-role' => 'dialog', class: ['callout', 'flash-msg', name], 'data-alert' => '', 'data-closable' => '', style: 'padding-right: 30px;') do
-            button('class' => 'close-button float-right', 'aria-label' => 'Close alert', 'data-close' => '') do
-              span('aria-hidden' => true) { text 'x' }
-            end
-            span(id: "flash-msg-#{name}") do
-              text ActiveSupport::SafeBuffer.new(msg)
-            end
+          span(id: "flash-msg-#{name}") do
+            text ActiveSupport::SafeBuffer.new(msg)
           end
         end
       end

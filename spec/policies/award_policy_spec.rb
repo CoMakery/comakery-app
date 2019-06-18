@@ -83,12 +83,18 @@ describe AwardPolicy do
   end
 
   describe 'show?' do
+    it 'returns if project is visible for user' do
+      a = create(:award)
+      a.project.update(visibility: 'public_listed')
+      expect(described_class.new(create(:account), a).show?).to be true
+    end
+
     it 'returns true if award is included in account accessable awards' do
       a = create(:award)
       expect(described_class.new(a.account, a).show?).to be true
     end
 
-    it 'returns false if award is not included in account accessable awards' do
+    it 'returns false if award is not included in account accessable awards and project is not visible for user' do
       expect(described_class.new(create(:account), create(:award)).show?).to be false
     end
   end

@@ -25,11 +25,11 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def show?
-    @account.accessable_awards.where(id: @award.id).exists?
+    ProjectPolicy.new(@account, @project).show? || @account.accessable_awards.where(id: @award.id).exists?
   end
 
   def start?
-    show? && (@award.status == 'ready')
+    @account.accessable_awards.where(id: @award.id, status: 'ready').exists?
   end
 
   def create?

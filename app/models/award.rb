@@ -25,6 +25,7 @@ class Award < ApplicationRecord
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
+  has_one :specialty, through: :award_type
 
   validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
   validates :amount, :total_amount, numericality: { greater_than: 0 }

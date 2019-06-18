@@ -189,6 +189,7 @@ exports[`TaskDetails renders component correctly 1`] = `
               <MyTask
                 displayActions={false}
                 displayFilters={false}
+                displayParents={true}
                 filter=""
                 task={
                   Object {

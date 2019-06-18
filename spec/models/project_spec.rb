@@ -372,4 +372,26 @@ describe Project do
       expect(project.awards_for_chart(max: 10).any? { |i| i[:date] == 4.days.ago.strftime('%Y-%m-%d') }).to be_falsey
     end
   end
+
+  describe '#ready_tasks_by_specialty' do
+    let!(:project) { create :project }
+    let!(:award_type1) { create :award_type, project: project }
+    let!(:award_type2) { create :award_type, project: project }
+
+    before do
+      2.times { create :award_ready, award_type: award_type1 }
+      2.times { create :award_ready, award_type: award_type2 }
+    end
+
+    it 'returns project tasks in ready state grouped by specialty' do
+      expect(project.ready_tasks_by_specialty.size).to eq(2)
+      expect(project.ready_tasks_by_specialty[award_type1.specialty]).to eq(award_type1.awards)
+      expect(project.ready_tasks_by_specialty[award_type2.specialty]).to eq(award_type2.awards)
+    end
+
+    it 'limits amount of tasks per specialty' do
+      expect(project.ready_tasks_by_specialty(1)[award_type1.specialty].size).to eq(1)
+      expect(project.ready_tasks_by_specialty(1)[award_type2.specialty].size).to eq(1)
+    end
+  end
 end

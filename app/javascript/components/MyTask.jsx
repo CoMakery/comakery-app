@@ -421,18 +421,20 @@ class MyTask extends React.Component {
             </FirstRow>
 
             <SecondRow>
-              <BlockWrapper>
-                <Project>
-                  PROJECT <a href={task.project.url}>{task.project.name}</a>
-                  { this.props.displayFilters &&
-                    <a href={location ? location.pathname + `?project_id=${task.project.id}` : ''}><Icon name="filter-2.svg" /></a>
-                  }
-                </Project>
+              {this.props.displayParents &&
+                <BlockWrapper>
+                  <Project>
+                    PROJECT <a href={task.project.url}>{task.project.name}</a>
+                    { this.props.displayFilters &&
+                      <a href={location ? location.pathname + `?project_id=${task.project.id}` : ''}><Icon name="filter-2.svg" /></a>
+                    }
+                  </Project>
 
-                {task.mission.name &&
-                  <Mission>MISSION <a href={task.mission.url}>{task.mission.name}</a></Mission>
-                }
-              </BlockWrapper>
+                  {task.mission.name &&
+                    <Mission>MISSION <a href={task.mission.url}>{task.mission.name}</a></Mission>
+                  }
+                </BlockWrapper>
+              }
 
               {this.props.displayActions &&
                 <TaskActionComponent componentStyle="link" task={task} filter={filter} />
@@ -481,7 +483,8 @@ MyTask.propTypes = {
   task          : PropTypes.object,
   filter        : PropTypes.string,
   displayFilter : PropTypes.bool,
-  displayActions: PropTypes.bool
+  displayActions: PropTypes.bool,
+  displayParents: PropTypes.bool
 }
 MyTask.defaultProps = {
   task: {
@@ -508,6 +511,7 @@ MyTask.defaultProps = {
   },
   displayFilters: false,
   displayActions: true,
+  displayParents: true,
   filter        : ''
 }
 export default MyTask

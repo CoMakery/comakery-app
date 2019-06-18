@@ -166,6 +166,10 @@ class Project < ApplicationRecord
     result
   end
 
+  def ready_tasks_by_specialty(limit_per_specialty = 5)
+    awards.ready.group_by(&:specialty).map { |specialty, awards| [specialty, awards.take(limit_per_specialty)] }.to_h
+  end
+
   private
 
   def valid_tracker_url

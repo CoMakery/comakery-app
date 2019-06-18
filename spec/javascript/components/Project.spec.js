@@ -12,7 +12,6 @@ describe('Project', () => {
     expect(wrapper.exists('.project-award')).toBe(true)
     expect(wrapper.exists('.project-description')).toBe(true)
     expect(wrapper.exists('.project-interest')).toBe(true)
-    expect(wrapper.exists('.project-skills')).toBe(true)
     expect(wrapper.exists('.project-team')).toBe(true)
   })
 

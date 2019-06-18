@@ -4,6 +4,7 @@ exports[`MyTask renders component correctly 1`] = `
 <MyTask
   displayActions={true}
   displayFilters={false}
+  displayParents={true}
   filter=""
   task={
     Object {
