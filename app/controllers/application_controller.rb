@@ -109,10 +109,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def assign_project
-    project = policy_scope(Project).find_by id: (params[:project_id] || params[:id])
-    project = policy_scope(Project).find_by long_id: params[:project_id] unless project
-    @project = project&.decorate if project&.can_be_access?(current_account)
-    redirect_to root_path unless @project
+    @project = Project.find_by(id: params[:project_id] || params[:id])&.decorate
   end
 
   def task_to_props(task)

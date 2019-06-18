@@ -7,6 +7,7 @@ describe ProjectPolicy do
   let!(:authentication) { create(:authentication, account: project_account) }
 
   let!(:my_public_project) { create(:project, title: 'public mine', account: project_account, visibility: 'public_listed') }
+  let!(:my_public_unlisted_project) { create(:project, title: 'public mine', account: project_account, visibility: 'public_unlisted') }
   let!(:my_private_project) { create(:project, title: 'private mine', account: project_account, public: false, require_confidentiality: false) }
   let!(:my_public_project_business_confidential) { create(:project, title: 'private mine business confidential', account: project_account, visibility: 'public_listed', require_confidentiality: true) }
   let!(:my_archived_project) { create(:project, title: 'archived mine', account: project_account, visibility: 'archived') }
@@ -18,6 +19,7 @@ describe ProjectPolicy do
   let!(:other_team_member) { create(:account) }
   let!(:other_team_member_auth) { create(:authentication, account: other_team_member) }
   let!(:others_public_project) { create(:project, title: 'public someone elses', account: other_team_member, visibility: 'public_listed') }
+  let!(:others_public_unlisted_project) { create(:project, title: 'public someone elses', account: other_team_member, visibility: 'public_unlisted') }
   let!(:others_private_project) { create(:project, title: 'private someone elses', account: other_team_member, public: false) }
   let!(:others_archived_project) { create(:project, title: 'archived someone elses', account: other_team_member, visibility: 'archived') }
 
@@ -36,6 +38,7 @@ describe ProjectPolicy do
         expect(projects.map(&:title).sort).to match_array([my_archived_project,
                                                            my_private_project,
                                                            my_public_project,
+                                                           my_public_unlisted_project,
                                                            my_public_project_business_confidential,
                                                            others_public_project].map(&:title).sort)
       end
@@ -108,28 +111,8 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#index?' do
-    it 'returns true if the project is public or the account belongs to the project' do
-      expect(described_class.new(nil, my_public_project).index?).to be true
-      expect(described_class.new(nil, my_private_project).index?).to be_falsey
-      expect(described_class.new(nil, my_archived_project).index?).to be_falsey
-
-      expect(described_class.new(project_account, my_public_project).index?).to be true
-      expect(described_class.new(project_account, my_private_project).index?).to be true
-      expect(described_class.new(project_account, my_archived_project).index?).to be true
-
-      expect(described_class.new(other_team_member, my_public_project).index?).to be true
-      expect(described_class.new(other_team_member, my_private_project).index?).to be true
-      expect(described_class.new(other_team_member, my_archived_project).index?).to be_falsey
-
-      expect(described_class.new(different_team_account, my_public_project).index?).to be true
-      expect(described_class.new(different_team_account, my_private_project).index?).to be_falsey
-      expect(described_class.new(different_team_account, my_archived_project).index?).to be_falsey
-    end
-  end
-
-  describe '#show? and #index' do
-    it 'allows viewing of projects that are public or are owned by the current account' do
+  describe '#show?' do
+    it 'allows viewing of projects that are public_listed or owned by the current account' do
       expect(described_class.new(nil, my_public_project).show?).to be true
       expect(described_class.new(nil, others_private_project).show?).to be_falsey
       expect(described_class.new(nil, others_archived_project).show?).to be_falsey
@@ -145,6 +128,26 @@ describe ProjectPolicy do
 
       expect(described_class.new(different_team_account, my_public_project).show?).to be true
       expect(described_class.new(different_team_account, my_private_project).show?).to be_falsey
+    end
+  end
+
+  describe '#unlisted?' do
+    it 'allows viewing of projects that are public_unlisted or owned by the current account' do
+      expect(described_class.new(nil, my_public_unlisted_project).unlisted?).to be true
+      expect(described_class.new(nil, others_private_project).unlisted?).to be_falsey
+      expect(described_class.new(nil, others_archived_project).unlisted?).to be_falsey
+
+      expect(described_class.new(project_account, my_public_unlisted_project).unlisted?).to be true
+      expect(described_class.new(project_account, my_private_project).unlisted?).to be true
+      expect(described_class.new(project_account, my_archived_project).unlisted?).to be true
+      expect(described_class.new(project_account, others_private_project).unlisted?).to be false
+      expect(described_class.new(project_account, others_archived_project).unlisted?).to be false
+
+      expect(described_class.new(other_team_member, others_public_unlisted_project).unlisted?).to be true
+      expect(described_class.new(other_team_member, my_private_project).unlisted?).to be true
+
+      expect(described_class.new(different_team_account, my_public_unlisted_project).unlisted?).to be true
+      expect(described_class.new(different_team_account, my_private_project).unlisted?).to be_falsey
     end
   end
 

@@ -84,12 +84,7 @@ class ProjectsController < ApplicationController
 
   def unlisted
     authorize @project
-
-    if @project&.access_unlisted?(current_account)
-      render component: 'Project', props: @props
-    elsif @project&.can_be_access?(current_account)
-      redirect_to project_path(@project)
-    end
+    render component: 'Project', props: @props
   end
 
   def edit
@@ -135,7 +130,9 @@ class ProjectsController < ApplicationController
 
   def assign_project_by_long_id
     @project = Project.find_by(long_id: params[:long_id])&.decorate
-    redirect_to('/404.html') unless @project
+
+    return redirect_to('/404.html') unless @project
+    return redirect_to(project_path(@project)) unless @project.unlisted?
   end
 
   def set_tokens
