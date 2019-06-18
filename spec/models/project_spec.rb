@@ -230,78 +230,6 @@ describe Project do
     end
   end
 
-  describe '#access_unlisted' do
-    let(:team) { create :team }
-    let(:account) { create :account }
-    let(:auth) { create :authentication, account: account }
-    let(:project) { create :project, account: account, long_id: '12345' }
-    let(:same_team_account) { create :account }
-    let(:auth1) { create :authentication, account: same_team_account }
-    let(:other_team_account) { create :account }
-
-    before do
-      team.build_authentication_team auth
-      team.build_authentication_team auth1
-      project.channels.create(team: team, channel_id: '123')
-    end
-
-    it 'can acccess public unlisted project via long_id' do
-      project.public_unlisted!
-      expect(project.access_unlisted?(nil)).to be_truthy
-    end
-
-    it 'other team members can not access member_unlisted project' do
-      project.member_unlisted!
-      expect(project.access_unlisted?(other_team_account)).to be_falsey
-    end
-
-    it 'owner can access member_unlisted project' do
-      project.member_unlisted!
-      expect(project.access_unlisted?(account)).to be_truthy
-    end
-
-    it 'same team members can access member_unlisted project' do
-      project.member_unlisted!
-      expect(project.access_unlisted?(same_team_account)).to be_truthy
-    end
-  end
-
-  describe '#can_be_access' do
-    let(:team) { create :team }
-    let(:account) { create :account }
-    let(:auth) { create :authentication, account: account }
-    let(:project) { create :project, account: account, long_id: '12345' }
-    let(:same_team_account) { create :account }
-    let(:auth1) { create :authentication, account: same_team_account }
-    let(:other_team_account) { create :account }
-
-    before do
-      team.build_authentication_team auth
-      team.build_authentication_team auth1
-      project.channels.create(team: team, channel_id: '123')
-    end
-
-    it 'everyone can acccess public project' do
-      project.public_listed!
-      expect(project.can_be_access?(nil)).to be_truthy
-    end
-
-    it 'other team members can not access public project with require_confidentiality' do
-      project.update require_confidentiality: true
-      expect(project.can_be_access?(other_team_account)).to be_falsey
-    end
-
-    it 'owner can access project' do
-      project.member!
-      expect(project.can_be_access?(account)).to be_truthy
-    end
-
-    it 'same team members can access member_unlisted project' do
-      project.member!
-      expect(project.can_be_access?(same_team_account)).to be_truthy
-    end
-  end
-
   it 'total_month_awarded' do
     project = create :project
     award_type = create :award_type, project: project
@@ -370,6 +298,28 @@ describe Project do
     it 'skip oldest (likely incomplete) day when number of days gets limited' do
       expect(project.awards_for_chart(max: 10).any? { |i| i[:date] == 3.days.ago.strftime('%Y-%m-%d') }).to be_truthy
       expect(project.awards_for_chart(max: 10).any? { |i| i[:date] == 4.days.ago.strftime('%Y-%m-%d') }).to be_falsey
+    end
+  end
+
+  describe '#ready_tasks_by_specialty' do
+    let!(:project) { create :project }
+    let!(:award_type1) { create :award_type, project: project }
+    let!(:award_type2) { create :award_type, project: project }
+
+    before do
+      2.times { create :award_ready, award_type: award_type1 }
+      2.times { create :award_ready, award_type: award_type2 }
+    end
+
+    it 'returns project tasks in ready state grouped by specialty' do
+      expect(project.ready_tasks_by_specialty.size).to eq(2)
+      expect(project.ready_tasks_by_specialty[award_type1.specialty]).to eq(award_type1.awards)
+      expect(project.ready_tasks_by_specialty[award_type2.specialty]).to eq(award_type2.awards)
+    end
+
+    it 'limits amount of tasks per specialty' do
+      expect(project.ready_tasks_by_specialty(1)[award_type1.specialty].size).to eq(1)
+      expect(project.ready_tasks_by_specialty(1)[award_type2.specialty].size).to eq(1)
     end
   end
 end

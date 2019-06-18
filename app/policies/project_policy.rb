@@ -24,10 +24,12 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def show?
-    project.public? || (team_member? && project.unarchived?) || edit?
+    project.public_listed? || (team_member? && project.unarchived?) || edit?
   end
 
-  alias index? show?
+  def unlisted?
+    project.public_unlisted? || (team_member? && project.unarchived?) || edit?
+  end
 
   def edit?
     account.present? && project_owner?
@@ -47,10 +49,6 @@ class ProjectPolicy < ApplicationPolicy
 
   def team_member?
     account&.same_team_or_owned_project?(project)
-  end
-
-  def unlisted?
-    project&.can_be_access?(account)
   end
 
   def update_status?

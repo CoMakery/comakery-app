@@ -2,7 +2,6 @@ class ProjectsController < ApplicationController
   skip_before_action :require_login, except: %i[new edit create update update_status landing]
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
-
   before_action :assign_project, only: %i[edit show update awards]
   before_action :assign_project_by_long_id, only: %i[unlisted]
   before_action :set_award, only: %i[show unlisted]
@@ -85,12 +84,7 @@ class ProjectsController < ApplicationController
 
   def unlisted
     authorize @project
-
-    if @project&.access_unlisted?(current_account)
-      render component: 'Project', props: @props
-    elsif @project&.can_be_access?(current_account)
-      redirect_to project_path(@project)
-    end
+    render component: 'Project', props: @props
   end
 
   def edit
@@ -136,7 +130,9 @@ class ProjectsController < ApplicationController
 
   def assign_project_by_long_id
     @project = Project.find_by(long_id: params[:long_id])&.decorate
-    redirect_to('/404.html') unless @project
+
+    return redirect_to('/404.html') unless @project
+    return redirect_to(project_path(@project)) unless @project.unlisted?
   end
 
   def set_tokens
@@ -200,17 +196,17 @@ class ProjectsController < ApplicationController
   end
 
   def set_show_props
-    token = @project&.token&.decorate
-    mission = @project&.mission
     @props = {
+      tasks_by_specialty: @project.ready_tasks_by_specialty.map { |specialty, awards| [specialty&.name || 'General', awards.map { |task| task_to_props(task) }] },
       interested: current_account&.interested?(@project.id), # project level interest
       specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
       project_data: project_props(@project),
-      mission_data: mission_props(mission),
-      token_data: token_props(token),
+      mission_data: mission_props(@project&.mission),
+      token_data: token_props(@project&.token&.decorate),
       csrf_token: form_authenticity_token,
       contributors_path: project_contributors_path(@project.id),
       awards_path: awards_project_path(@project.id),
+      my_tasks_path: my_tasks_path(project_id: @project.id),
       edit_path: policy(@project).edit? ? project_award_types_path(@project) : nil
     }
   end

@@ -9,6 +9,7 @@ class AwardsController < ApplicationController
   before_action :authorize_award_review, only: %i[accept reject]
   before_action :authorize_award_pay, only: %i[update_transaction_address]
   before_action :set_filter, only: %i[index]
+  before_action :set_project_filter, only: %i[index]
   before_action :set_awards, only: %i[index]
   before_action :set_page, only: %i[index]
   before_action :set_form_props, only: %i[new edit clone]
@@ -217,8 +218,16 @@ class AwardsController < ApplicationController
       @filter = params[:filter]&.downcase || 'ready'
     end
 
+    def set_project_filter
+      @project = Project.find_by(id: params[:project_id])
+    end
+
     def set_awards
       @awards = policy_scope(Award).filtered_for_view(@filter, current_account).order(updated_at: :desc)
+
+      if @project
+        @awards = @awards.where(award_type: AwardType.where(project: @project))
+      end
     end
 
     def set_page
@@ -258,54 +267,6 @@ class AwardsController < ApplicationController
       )
     end
 
-    def task_to_props(task)
-      task&.serializable_hash&.merge({
-        mission: {
-          name: task.project&.mission&.name,
-          url: task.project&.mission ? mission_path(task.project&.mission) : nil
-        },
-        token: {
-          currency: task.project&.token&.symbol,
-          logo: helpers.attachment_url(task.project&.token, :logo_image, :fill, 100, 100)
-        },
-        project: {
-          name: task.project&.title,
-          url: task.project && (task.project.unlisted? ? unlisted_project_path(task.project.long_id) : project_path(task.project)),
-          channels: task.project.channels.map do |channel|
-            {
-              type: channel.provider,
-              name: channel.name,
-              url: channel.url,
-              id: channel.id
-            }
-          end
-        },
-        batch: {
-          specialty: task.award_type&.specialty&.name
-        },
-        issuer: {
-          name: task.issuer&.decorate&.name,
-          image: helpers.account_image_url(task.issuer, 100),
-          self: task.issuer == current_account
-        },
-        contributor: {
-          name: task.account&.decorate&.name,
-          image: helpers.account_image_url(task.account, 100),
-          wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
-        },
-        experience_level_name: Award::EXPERIENCE_LEVELS.key(task.experience_level),
-        image_url: helpers.attachment_url(task, :image),
-        submission_image_url: helpers.attachment_url(task, :submission_image),
-        payment_url: awards_project_path(task.project),
-        details_url: project_award_type_award_path(task.project, task.award_type, task),
-        start_url: project_award_type_award_start_path(task.project, task.award_type, task),
-        submit_url: project_award_type_award_submit_path(task.project, task.award_type, task),
-        accept_url: project_award_type_award_accept_path(task.project, task.award_type, task),
-        reject_url: project_award_type_award_reject_path(task.project, task.award_type, task),
-        updated_at: helpers.time_ago_in_words(task.updated_at)
-      })
-    end
-
     def set_index_props
       @props = {
         tasks: @awards_paginated.map { |task| task_to_props(task) },
@@ -318,6 +279,7 @@ class AwardsController < ApplicationController
             url: my_tasks_path(filter: filter)
           }
         end,
+        project: @project,
         past_awards_url: show_account_path
       }
     end

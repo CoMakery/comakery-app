@@ -5,8 +5,7 @@ namespace :migration do
         begin
           File.open(MiniMagick::Image.read(project.image.read).resize('1200x800!').path)
         rescue SystemCallError => e
-          puts "Rescued from SystemCallError: #{e.message}"
-          next
+          puts "Rescued from SystemCallError: #{e.message}" && next
         end
       ).id
     end
@@ -16,8 +15,7 @@ namespace :migration do
         begin
           File.open(MiniMagick::Image.read(project.image.read).resize('1500x300!').path)
         rescue SystemCallError => e
-          puts "Rescued from SystemCallError: #{e.message}"
-          next
+          puts "Rescued from SystemCallError: #{e.message}" && next
         end
       ).id
     end

@@ -4,6 +4,7 @@ class AwardTypesController < ApplicationController
   before_action :set_award_type, only: %i[show edit update destroy]
   before_action :set_form_props, only: %i[new edit]
   before_action :set_index_props, only: [:index]
+  skip_after_action :verify_policy_scoped, only: [:index]
 
   layout 'react'
 
