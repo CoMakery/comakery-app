@@ -8,7 +8,7 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
     { !isLoggedIn &&
       <div className="header--nav--links">
         <a href="/" className={(currentPath === '/') ? 'header--nav--links--current' : null}>
-          Home
+          Missions
         </a>
 
         <a className="intercom" href="">
@@ -28,17 +28,17 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
     { isLoggedIn &&
       <div className="header--nav--links">
         <a href="/" className={(currentPath === '/') ? 'header--nav--links--current' : null}>
-          Home
+          Missions
         </a>
 
         { isAdmin &&
           <React.Fragment>
             <a href="/missions" className={currentPath.match(/missions/) ? 'header--nav--links--current' : null}>
-              Missions
+              Missions Admin
             </a>
 
             <a href="/tokens" className={currentPath.match(/tokens/) ? 'header--nav--links--current' : null}>
-              Tokens
+              Tokens Admin
             </a>
           </React.Fragment>
         }
