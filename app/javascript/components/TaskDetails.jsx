@@ -370,7 +370,7 @@ class TaskDetails extends React.Component {
               </ContentBlock>
 
               <ContentBlock title="description">
-                {task.description}
+                <div dangerouslySetInnerHTML={{__html: task.descriptionHtml}} />
               </ContentBlock>
 
               {task.imageUrl &&
@@ -382,7 +382,7 @@ class TaskDetails extends React.Component {
               }
 
               <ContentBlock title="acceptance criteria">
-                {task.requirements}
+                <div dangerouslySetInnerHTML={{__html: task.requirementsHtml}} />
               </ContentBlock>
 
               {task.project.channels.length > 0 &&

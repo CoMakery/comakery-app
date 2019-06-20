@@ -28,6 +28,10 @@ class AwardPolicy < ApplicationPolicy
     ProjectPolicy.new(@account, @project).show? || @account.accessable_awards.where(id: @award.id).exists?
   end
 
+  def edit?
+    @award.can_be_edited?
+  end
+
   def start?
     @account.accessable_awards.where(id: @award.id, status: 'ready').exists?
   end

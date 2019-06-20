@@ -202,6 +202,12 @@ class BatchIndex extends React.Component {
 
                 <BatchStyled batch={this.state.selectedBatch} />
 
+                <CreateTaskButton>
+                  <a href={this.state.selectedBatch.newTaskPath}>
+                    create a task +
+                  </a>
+                </CreateTaskButton>
+
                 <Tasks>
                   {this.state.selectedBatch.tasks.length > 0 &&
                     <Title>
@@ -218,12 +224,6 @@ class BatchIndex extends React.Component {
                     <Task key={i} task={t} />
                   )}
                 </Tasks>
-
-                <CreateTaskButton>
-                  <a href={this.state.selectedBatch.newTaskPath}>
-                    create a task +
-                  </a>
-                </CreateTaskButton>
               </Wrapper>
             </React.Fragment>
           }

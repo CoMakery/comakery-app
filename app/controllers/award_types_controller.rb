@@ -88,28 +88,33 @@ class AwardTypesController < ApplicationController
             edit_path: edit_project_award_type_path(@project, batch),
             destroy_path: project_award_type_path(@project, batch),
             new_task_path: new_project_award_type_award_path(@project, batch),
-            tasks: batch.awards&.listed&.map do |task|
-              task.serializable_hash.merge(
-                batch_name: batch.name,
-                currency: batch.project.token&.symbol,
-                currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
-                award_path: project_award_type_award_award_path(@project, batch, task),
-                pay_path: awards_project_path(@project),
-                clone_path: project_award_type_award_clone_path(@project, batch, task),
-                edit_path: edit_project_award_type_award_path(@project, batch, task),
-                destroy_path: task.can_be_deleted? && project_award_type_award_path(@project, batch, task),
-                contributor: {
-                  name: task.account&.decorate&.name,
-                  image: helpers.account_image_url(task.account, 100),
-                  wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
-                }
-              )
-            end
+            tasks: batch.awards&.listed&.map { |task| task_to_index_props(task, batch) }
           )
         end,
         new_batch_path: new_project_award_type_path(@project),
         project: @project.serializable_hash
       }
+    end
+
+    def task_to_index_props(task, batch)
+      task.serializable_hash.merge(
+        batch_name: batch.name,
+        currency: batch.project.token&.symbol,
+        currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
+        award_path: project_award_type_award_award_path(@project, batch, task),
+        pay_path: awards_project_path(@project),
+        clone_path: project_award_type_award_clone_path(@project, batch, task),
+        edit_path: task.can_be_edited? && edit_project_award_type_award_path(@project, batch, task),
+        destroy_path: task.can_be_edited? && project_award_type_award_path(@project, batch, task),
+        contributor: {
+          name: task.account&.decorate&.name,
+          image: helpers.account_image_url(task.account, 100),
+          wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
+        },
+        cloneable: task.cloneable?,
+        cloned: task.cloned?,
+        number_of_clones: task.assignments.size
+      )
     end
 
     def set_form_props

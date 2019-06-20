@@ -114,6 +114,8 @@ class ApplicationController < ActionController::Base
 
   def task_to_props(task)
     task&.serializable_hash&.merge({
+      description_html: Comakery::Markdown.to_html(task.description),
+      requirements_html: Comakery::Markdown.to_html(task.requirements),
       mission: {
         name: task.project&.mission&.name,
         url: task.project&.mission ? mission_path(task.project&.mission) : nil

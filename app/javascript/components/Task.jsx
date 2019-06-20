@@ -107,6 +107,25 @@ const Status = styled.div`
     color: #ff4d4d;
   `}
 `
+const CloneInfo = styled.div`
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  margin-right: 2em;
+
+  b {
+    font-weight: 600;
+  }
+
+  span {
+    margin-left: 0.5em;
+  }
+`
 
 const Contributor = styled.div`
   font-family: Montserrat;
@@ -201,6 +220,19 @@ class Task extends React.Component {
                   {task.status}
                 </Status>
 
+                {task.cloneable &&
+                  <CloneInfo>
+                    <b>template</b>
+                    <span>{task.numberOfClones + 1}/{task.numberOfAssignments}</span>
+                  </CloneInfo>
+                }
+
+                {task.cloned &&
+                  <CloneInfo>
+                    <b>clone</b>
+                  </CloneInfo>
+                }
+
                 {task.contributor.name &&
                   <Contributor>
                     <Userpics pics={[task.contributor.image]} limit={1} />
@@ -231,9 +263,14 @@ class Task extends React.Component {
                 <a href={task.clonePath}>
                   <StyledIcon name="DUPLICATE.svg" />
                 </a>
-                <a href={task.editPath}>
-                  <StyledIcon name="iconEdit.svg" />
-                </a>
+                {task.editPath &&
+                  <a href={task.editPath}>
+                    <StyledIcon name="iconEdit.svg" />
+                  </a>
+                }
+                {!task.editPath &&
+                  <IconPlaceholder />
+                }
                 {task.destroyPath &&
                   <a rel="nofollow" data-method="delete" href={task.destroyPath}>
                     <StyledIcon name="iconTrash.svg" />

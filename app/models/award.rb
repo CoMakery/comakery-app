@@ -22,6 +22,7 @@ class Award < ApplicationRecord
   belongs_to :award_type
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
+  has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
@@ -30,6 +31,7 @@ class Award < ApplicationRecord
   validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
   validates :amount, :total_amount, numericality: { greater_than: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
+  validates :number_of_assignments, numericality: { greater_than: 0 }
   validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&.coin_type_on_ethereum? } # see EthereumAddressable
   validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
@@ -155,8 +157,32 @@ class Award < ApplicationRecord
     %w[accepted paid].include? status
   end
 
-  def can_be_deleted?
-    status == 'ready'
+  def can_be_edited?
+    status == 'ready' && !cloned? && !any_clones?
+  end
+
+  def cloned?
+    cloned_on_assignment_from_id.present?
+  end
+
+  def any_clones?
+    !assignments.empty?
+  end
+
+  def cloneable?
+    number_of_assignments.to_i > 1
+  end
+
+  def should_be_cloned?
+    (number_of_assignments.to_i - 1) > assignments.size
+  end
+
+  def clone_on_assignment
+    new_award = dup
+    new_award.cloned_on_assignment_from_id = id
+    new_award.number_of_assignments = 1
+    new_award.save!
+    new_award
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true
@@ -179,7 +205,7 @@ class Award < ApplicationRecord
     end
 
     def abort_destroy
-      unless can_be_deleted?
+      unless can_be_edited?
         errors[:base] << "#{status.capitalize} task can't be deleted"
         throw :abort
       end

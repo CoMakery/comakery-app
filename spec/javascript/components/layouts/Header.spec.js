@@ -11,8 +11,8 @@ describe('Header', () => {
     expect(wrapper.exists('.header--logo')).toBe(true)
     expect(wrapper.exists('.header--nav')).toBe(true)
     expect(wrapper.exists('.header--nav--links')).toBe(true)
-    expect(wrapper.find('.header--nav--links').text()).not.toMatch(/Missions/)
-    expect(wrapper.find('.header--nav--links').text()).not.toMatch(/Tokens/)
+    expect(wrapper.find('.header--nav--links').text()).not.toMatch(/Missions Admin/)
+    expect(wrapper.find('.header--nav--links').text()).not.toMatch(/Tokens Admin/)
   })
 
   it('renders correctly with signup path and without loggedIn flag', () => {
@@ -32,7 +32,7 @@ describe('Header', () => {
   it('renders correctly with root path and loggedIn flag', () => {
     const wrapper = shallow(<Header isLoggedIn currentPath="/" />)
 
-    expect(wrapper.find('.header--nav--links--current').text()).toBe('Home')
+    expect(wrapper.find('.header--nav--links--current').text()).toBe('Missions')
     expect(wrapper.find('.header--nav--links--current').props().href).toBe('/')
   })
 
@@ -53,8 +53,8 @@ describe('Header', () => {
   it('renders correctly with admin flag', () => {
     const wrapper = shallow(<Header isLoggedIn isAdmin />)
 
-    expect(wrapper.find('.header--nav--links').text()).toMatch(/Missions/)
-    expect(wrapper.find('.header--nav--links').text()).toMatch(/Tokens/)
+    expect(wrapper.find('.header--nav--links').text()).toMatch(/Missions Admin/)
+    expect(wrapper.find('.header--nav--links').text()).toMatch(/Tokens Admin/)
   })
 
   it('renders correctly with custom className', () => {

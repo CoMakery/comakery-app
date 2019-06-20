@@ -847,6 +847,84 @@ exports[`TaskForm renders correctly without props 1`] = `
                 </InputFieldWhiteDark>
                 <InputFieldWhiteDark
                   eventHandler={[Function]}
+                  min="1"
+                  name="task[number_of_assignments]"
+                  placeholder="1"
+                  required={true}
+                  step="1"
+                  symbolLimit={0}
+                  title="how many times can this task be done"
+                  type="number"
+                  value=""
+                >
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__white__dark"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min="1"
+                    name="task[number_of_assignments]"
+                    pattern=".*"
+                    placeholder="1"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step="1"
+                    symbolLimit={0}
+                    title="how many times can this task be done"
+                    type="number"
+                    value=""
+                  >
+                    <div
+                      className="input-field input-field__white__dark"
+                    >
+                      <div
+                        className="input-field--title"
+                      >
+                        <span
+                          className="input-field--title--title"
+                        >
+                          how many times can this task be done
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
+                      >
+                        <input
+                          className="input-field--content__text"
+                          max=""
+                          min="1"
+                          name="task[number_of_assignments]"
+                          onChange={[Function]}
+                          onClick={null}
+                          placeholder="1"
+                          readOnly={false}
+                          required={true}
+                          step="1"
+                          type="number"
+                          value=""
+                        />
+                      </div>
+                    </div>
+                  </InputField>
+                </InputFieldWhiteDark>
+                <InputFieldWhiteDark
+                  eventHandler={[Function]}
                   name="task[proof_link]"
                   placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
                   required={true}
