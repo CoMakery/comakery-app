@@ -45,6 +45,10 @@ const RightBorder = styled.div`
   ${props => props.status === 'rejected' && css`
     background-color: #ff4d4d;
   `}
+
+  ${props => props.status === 'cancelled' && css`
+    background-color: #ff4d4d;
+  `}
 `
 
 const Info = styled.div`
@@ -104,6 +108,10 @@ const Status = styled.div`
   `}
 
   ${props => props.status === 'rejected' && css`
+    color: #ff4d4d;
+  `}
+
+  ${props => props.status === 'cancelled' && css`
     color: #ff4d4d;
   `}
 `

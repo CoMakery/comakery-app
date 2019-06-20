@@ -58,7 +58,7 @@ exports[`Task renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-dnqmqq",
                   "isStatic": false,
-                  "lastClassName": "cQwWcg",
+                  "lastClassName": "iXUeDq",
                   "rules": Array [
                     "
   width: 2px;
@@ -68,6 +68,10 @@ exports[`Task renders component correctly 1`] = `
   z-index: 10;
   position: absolute;
   margin-left: -1px;
+
+  ",
+                    [Function],
+                    "
 
   ",
                     [Function],
@@ -109,7 +113,7 @@ exports[`Task renders component correctly 1`] = `
             status={null}
           >
             <div
-              className="sc-dnqmqq cQwWcg"
+              className="sc-dnqmqq iXUeDq"
             />
           </StyledComponent>
         </styled.div>
@@ -266,7 +270,7 @@ exports[`Task renders component correctly 1`] = `
                                   "componentStyle": ComponentStyle {
                                     "componentId": "sc-VigVT",
                                     "isStatic": false,
-                                    "lastClassName": "gpVGwb",
+                                    "lastClassName": "adQHe",
                                     "rules": Array [
                                       "
   font-family: Montserrat;
@@ -278,6 +282,10 @@ exports[`Task renders component correctly 1`] = `
   letter-spacing: normal;
   text-transform: uppercase;
   margin-right: 2em;
+
+  ",
+                                      [Function],
+                                      "
 
   ",
                                       [Function],
@@ -319,7 +327,7 @@ exports[`Task renders component correctly 1`] = `
                               status={null}
                             >
                               <div
-                                className="sc-VigVT gpVGwb"
+                                className="sc-VigVT adQHe"
                               />
                             </StyledComponent>
                           </styled.div>

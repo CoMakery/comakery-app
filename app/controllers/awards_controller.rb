@@ -1,6 +1,6 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
-  before_action :authorize_project_edit, except: %i[index show confirm start edit update submit accept reject]
+  before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
   before_action :authorize_award_show, only: %i[show]
@@ -18,7 +18,6 @@ class AwardsController < ApplicationController
   before_action :set_show_props, only: %i[show]
   before_action :set_award_props, only: %i[award]
   before_action :set_index_props, only: %i[index]
-  before_action :redirect_if_award_issued, only: %i[start update edit destroy award send_award recipient_address]
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
   skip_before_action :require_login, only: %i[confirm]
   skip_after_action :verify_authorized, only: %i[confirm]
@@ -120,8 +119,11 @@ class AwardsController < ApplicationController
   end
 
   def destroy
-    @award.destroy
-    redirect_to project_award_types_path, notice: 'Task destroyed'
+    if @award.update(status: 'cancelled')
+      redirect_to project_award_types_path, notice: 'Task cancelled'
+    else
+      redirect_to project_award_types_path, flash: { error: @award.errors&.full_messages&.join(', ') }
+    end
   end
 
   def recipient_address
@@ -335,13 +337,6 @@ class AwardsController < ApplicationController
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token
       }
-    end
-
-    def redirect_if_award_issued
-      if @award.completed?
-        flash[:error] = 'Completed task cannot be changed'
-        redirect_to project_award_types_path
-      end
     end
 
     def set_ok_response
