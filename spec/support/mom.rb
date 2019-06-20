@@ -124,6 +124,7 @@ class Mom
 
     params[:award_type] ||= create(:award_type)
     params[:issuer] ||= create(:account)
+    params[:account] ||= create(:account)
 
     Award.new(params)
   end

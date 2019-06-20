@@ -1,13 +1,15 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
-  before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject]
+  before_action :authorize_project_edit, except: %i[index show confirm start edit update submit accept reject]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
   before_action :authorize_award_show, only: %i[show]
+  before_action :authorize_award_edit, only: %i[edit update]
   before_action :authorize_award_start, only: %i[start]
   before_action :authorize_award_submit, only: %i[submit]
   before_action :authorize_award_review, only: %i[accept reject]
   before_action :authorize_award_pay, only: %i[update_transaction_address]
+  before_action :clone_award_on_start, only: %i[start]
   before_action :set_filter, only: %i[index]
   before_action :set_project_filter, only: %i[index]
   before_action :set_awards, only: %i[index]
@@ -190,6 +192,10 @@ class AwardsController < ApplicationController
       authorize @award, :show?
     end
 
+    def authorize_award_edit
+      authorize @award, :edit?
+    end
+
     def authorize_award_start
       authorize @award, :start?
     end
@@ -204,6 +210,10 @@ class AwardsController < ApplicationController
 
     def authorize_award_pay
       authorize @award, :pay?
+    end
+
+    def clone_award_on_start
+      @award = @award.clone_on_assignment if @award.should_be_cloned?
     end
 
     def set_award_type
@@ -245,6 +255,7 @@ class AwardsController < ApplicationController
         :requirements,
         :experience_level,
         :amount,
+        :number_of_assignments,
         :proof_link
       )
     end

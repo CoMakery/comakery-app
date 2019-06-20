@@ -24,19 +24,20 @@ class TaskForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
 
     this.state = {
-      flashMessages           : [],
-      errors                  : {},
-      disabled                : {},
-      formAction              : this.props.formAction,
-      formUrl                 : this.props.formUrl,
-      closeOnSuccess          : false,
-      'task[name]'            : this.props.task.name || '',
-      'task[why]'             : this.props.task.why || '',
-      'task[description]'     : this.props.task.description || '',
-      'task[requirements]'    : this.props.task.requirements || '',
-      'task[experience_level]': this.props.task.experienceLevel || '',
-      'task[amount]'          : this.props.task.amount || '',
-      'task[proof_link]'      : this.props.task.proofLink || ''
+      flashMessages                : [],
+      errors                       : {},
+      disabled                     : {},
+      formAction                   : this.props.formAction,
+      formUrl                      : this.props.formUrl,
+      closeOnSuccess               : false,
+      'task[name]'                 : this.props.task.name || '',
+      'task[why]'                  : this.props.task.why || '',
+      'task[description]'          : this.props.task.description || '',
+      'task[requirements]'         : this.props.task.requirements || '',
+      'task[experience_level]'     : this.props.task.experienceLevel || '',
+      'task[amount]'               : this.props.task.amount || '',
+      'task[number_of_assignments]': this.props.task.numberOfAssignments || '',
+      'task[proof_link]'           : this.props.task.proofLink || ''
     }
   }
 
@@ -280,6 +281,20 @@ class TaskForm extends React.Component {
               min="0"
               step={`${1.0 / (10 ** this.props.token.decimalPlaces)}`}
               placeholder="The total amount of tokens or coins you are paying for this task to be completed"
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="how many times can this task be done"
+              required
+              name="task[number_of_assignments]"
+              value={this.state['task[number_of_assignments]']}
+              errorText={this.state.errors['task[numberOfAssignments]']}
+              eventHandler={this.handleFieldChange}
+              type="number"
+              min="1"
+              step="1"
+              placeholder="1"
               symbolLimit={0}
             />
 

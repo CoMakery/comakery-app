@@ -17,6 +17,13 @@ describe Award do
         quantity: 2
       )
     end
+
+    it 'has_many assignments' do
+      award = create(:award_ready)
+      2.times { award.clone_on_assignment }
+
+      expect(award.assignments.size).to eq(2)
+    end
   end
 
   describe 'scopes' do
@@ -47,7 +54,7 @@ describe Award do
     describe '.filtered_for_view(filter, account)' do
       let!(:contributor) { create(:account) }
       let!(:project_owner) { create(:account) }
-      let!(:ready_award) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed'), specialty: contributor.specialty)) }
+      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed'), specialty: contributor.specialty)) }
       let!(:started_award) { create(:award, status: 'started', issuer: project_owner, account: contributor) }
       let!(:submitted_award) { create(:award, status: 'submitted', issuer: project_owner, account: contributor) }
       let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
@@ -120,6 +127,12 @@ describe Award do
                                                                                                      'Amount is not a number',
                                                                                                      'Total amount must be greater than 0'
                                                                                                    ])
+    end
+
+    it 'requires number_of_assignments to be greater than 0' do
+      a = create(:award_ready)
+      a.update(number_of_assignments: 0)
+      expect(a).not_to be_valid
     end
 
     it 'requires submission fields when in submitted status' do
@@ -475,6 +488,88 @@ describe Award do
       allow(award.discord_client).to receive(:send_message)
       award.send_award_notifications
       expect(award.discord_client).to have_received(:send_message)
+    end
+  end
+
+  describe '.can_be_edited?' do
+    let!(:award) { create(:award) }
+    let!(:award_ready) { create(:award_ready) }
+    let!(:award_cloned) { create(:award_ready, cloned_on_assignment_from_id: award.id) }
+    let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
+
+    before do
+      award_cloneable.clone_on_assignment
+    end
+
+    it 'returns true for ready task when its not cloned or has clones' do
+      expect(award_ready.can_be_edited?).to be_truthy
+    end
+
+    it 'returns false if task in non-ready state' do
+      expect(award.can_be_edited?).to be_falsey
+    end
+
+    it 'returns false if task cloned' do
+      expect(award_cloned.can_be_edited?).to be_falsey
+    end
+
+    it 'returns false if task has clones' do
+      expect(award_cloneable.can_be_edited?).to be_falsey
+    end
+  end
+
+  describe '.cloned?' do
+    let!(:award) { create(:award_ready) }
+    let!(:award_cloned) { create(:award_ready, cloned_on_assignment_from_id: award.id) }
+
+    it 'returns true if task has a reference to another one' do
+      expect(award_cloned.cloned?).to be_truthy
+    end
+
+    it 'returns false if task doesnt have a reference to another one' do
+      expect(award.cloned?).to be_falsey
+    end
+  end
+
+  describe '.any_clones?' do
+    let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
+    let!(:award) { create(:award_ready) }
+
+    before do
+      award_cloneable.clone_on_assignment
+    end
+
+    it 'returns true if task has referenced assignments' do
+      expect(award_cloneable.any_clones?).to be_truthy
+    end
+
+    it 'returns false if task doesnt have referenced assignments' do
+      expect(award.any_clones?).to be_falsey
+    end
+  end
+
+  describe '.cloneable?' do
+    let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
+    let!(:award) { create(:award_ready) }
+
+    it 'returns true if task has number_of_assignments greater than 1' do
+      expect(award_cloneable.cloneable?).to be_truthy
+    end
+
+    it 'returns false if task has default number_of_assignments' do
+      expect(award.cloneable?).to be_falsey
+    end
+  end
+
+  describe '.clone_on_assignment' do
+    let!(:award) { create(:award_ready) }
+
+    it 'returns a new task duped from current one with correct releationships' do
+      new_award = award.clone_on_assignment
+      expect(new_award).not_to eq(award)
+      expect(new_award.name).to eq(award.name)
+      expect(new_award.cloned_on_assignment_from_id).to eq(award.id)
+      expect(new_award.number_of_assignments).to eq(1)
     end
   end
 end

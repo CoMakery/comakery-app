@@ -108,22 +108,36 @@ describe AwardsController do
   end
 
   describe '#start' do
-    let!(:award) { create(:award) }
-
-    before do
-      login(award.account)
-      award.update(status: 'ready')
-    end
+    let!(:award) { create(:award_ready) }
+    let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
 
     it 'starts the task, associating it with current user and redirects to my task page with notice' do
+      login(award.account)
       post :start, params: {
         project_id: award.project.to_param,
         award_type_id: award.award_type.to_param,
         award_id: award.to_param
       }
+
       expect(response).to redirect_to(my_tasks_path(filter: 'started'))
       expect(flash[:notice]).to eq('Task started')
       expect(award.reload.started?).to be true
+    end
+
+    it 'clones the task before start if it should be cloned' do
+      login(award_cloneable.account)
+      post :start, params: {
+        project_id: award_cloneable.project.to_param,
+        award_type_id: award_cloneable.award_type.to_param,
+        award_id: award_cloneable.to_param
+      }
+
+      cloned_award = Award.find_by(cloned_on_assignment_from_id: award_cloneable.id)
+
+      expect(response).to redirect_to(my_tasks_path(filter: 'started'))
+      expect(flash[:notice]).to eq('Task started')
+      expect(award_cloneable.reload.ready?).to be true
+      expect(cloned_award.started?).to be true
     end
   end
 

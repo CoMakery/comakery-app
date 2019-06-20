@@ -99,6 +99,19 @@ describe AwardPolicy do
     end
   end
 
+  describe 'edit?' do
+    let!(:award_editable) { create(:award_ready) }
+    let!(:award_non_editable) { create(:award) }
+
+    it 'returns true if award is editable' do
+      expect(described_class.new(award_editable.account, award_editable).edit?).to be true
+    end
+
+    it 'returns false if award is not editable' do
+      expect(described_class.new(award_non_editable.account, award_non_editable).edit?).to be false
+    end
+  end
+
   describe 'start?' do
     it 'returns true if award is ready, and related to account' do
       a = create(:award, status: 'ready')
