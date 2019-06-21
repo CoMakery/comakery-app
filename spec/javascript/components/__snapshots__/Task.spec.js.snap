@@ -58,7 +58,7 @@ exports[`Task renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-dnqmqq",
                   "isStatic": false,
-                  "lastClassName": "cQwWcg",
+                  "lastClassName": "iXUeDq",
                   "rules": Array [
                     "
   width: 2px;
@@ -68,6 +68,10 @@ exports[`Task renders component correctly 1`] = `
   z-index: 10;
   position: absolute;
   margin-left: -1px;
+
+  ",
+                    [Function],
+                    "
 
   ",
                     [Function],
@@ -109,7 +113,7 @@ exports[`Task renders component correctly 1`] = `
             status={null}
           >
             <div
-              className="sc-dnqmqq cQwWcg"
+              className="sc-dnqmqq iXUeDq"
             />
           </StyledComponent>
         </styled.div>
@@ -266,7 +270,7 @@ exports[`Task renders component correctly 1`] = `
                                   "componentStyle": ComponentStyle {
                                     "componentId": "sc-VigVT",
                                     "isStatic": false,
-                                    "lastClassName": "gpVGwb",
+                                    "lastClassName": "adQHe",
                                     "rules": Array [
                                       "
   font-family: Montserrat;
@@ -278,6 +282,10 @@ exports[`Task renders component correctly 1`] = `
   letter-spacing: normal;
   text-transform: uppercase;
   margin-right: 2em;
+
+  ",
+                                      [Function],
+                                      "
 
   ",
                                       [Function],
@@ -319,7 +327,7 @@ exports[`Task renders component correctly 1`] = `
                               status={null}
                             >
                               <div
-                                className="sc-VigVT gpVGwb"
+                                className="sc-VigVT adQHe"
                               />
                             </StyledComponent>
                           </styled.div>
@@ -589,7 +597,9 @@ exports[`Task renders component correctly 1`] = `
                               </StyledComponent>
                             </Styled(Icon)>
                           </a>
-                          <styled.span>
+                          <Styled(Icon)
+                            name="iconEdit.svg"
+                          >
                             <StyledComponent
                               forwardedComponent={
                                 Object {
@@ -598,34 +608,44 @@ exports[`Task renders component correctly 1`] = `
                                   "componentStyle": ComponentStyle {
                                     "componentId": "sc-kpOJdX",
                                     "isStatic": true,
-                                    "lastClassName": "fJKeaB",
+                                    "lastClassName": "gtRJvz",
                                     "rules": Array [
                                       "
-  display: inline-block; 
   height: 15px;
   width: 15px;
   margin-left: 16px;
+  opacity: 0.3;
+  cursor: not-allowed;
 ",
                                     ],
                                   },
-                                  "displayName": "styled.span",
+                                  "displayName": "Styled(Icon)",
                                   "foldedComponentIds": Array [],
                                   "render": [Function],
                                   "styledComponentId": "sc-kpOJdX",
-                                  "target": "span",
+                                  "target": [Function],
                                   "toString": [Function],
                                   "warnTooManyClasses": [Function],
                                   "withComponent": [Function],
                                 }
                               }
                               forwardedRef={null}
+                              name="iconEdit.svg"
                             >
-                              <span
-                                className="sc-kpOJdX fJKeaB"
-                              />
+                              <Icon
+                                className="sc-kpOJdX gtRJvz"
+                                name="iconEdit.svg"
+                              >
+                                <img
+                                  className="icon icon__iconEdit-svg sc-kpOJdX gtRJvz"
+                                  src="test-file-stub"
+                                />
+                              </Icon>
                             </StyledComponent>
-                          </styled.span>
-                          <styled.span>
+                          </Styled(Icon)>
+                          <Styled(Icon)
+                            name="iconTrash.svg"
+                          >
                             <StyledComponent
                               forwardedComponent={
                                 Object {
@@ -634,33 +654,41 @@ exports[`Task renders component correctly 1`] = `
                                   "componentStyle": ComponentStyle {
                                     "componentId": "sc-kpOJdX",
                                     "isStatic": true,
-                                    "lastClassName": "fJKeaB",
+                                    "lastClassName": "gtRJvz",
                                     "rules": Array [
                                       "
-  display: inline-block; 
   height: 15px;
   width: 15px;
   margin-left: 16px;
+  opacity: 0.3;
+  cursor: not-allowed;
 ",
                                     ],
                                   },
-                                  "displayName": "styled.span",
+                                  "displayName": "Styled(Icon)",
                                   "foldedComponentIds": Array [],
                                   "render": [Function],
                                   "styledComponentId": "sc-kpOJdX",
-                                  "target": "span",
+                                  "target": [Function],
                                   "toString": [Function],
                                   "warnTooManyClasses": [Function],
                                   "withComponent": [Function],
                                 }
                               }
                               forwardedRef={null}
+                              name="iconTrash.svg"
                             >
-                              <span
-                                className="sc-kpOJdX fJKeaB"
-                              />
+                              <Icon
+                                className="sc-kpOJdX gtRJvz"
+                                name="iconTrash.svg"
+                              >
+                                <img
+                                  className="icon icon__iconTrash-svg sc-kpOJdX gtRJvz"
+                                  src="test-file-stub"
+                                />
+                              </Icon>
                             </StyledComponent>
-                          </styled.span>
+                          </Styled(Icon)>
                         </div>
                       </StyledComponent>
                     </styled.div>

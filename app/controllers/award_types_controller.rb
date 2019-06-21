@@ -78,17 +78,17 @@ class AwardTypesController < ApplicationController
         batches: @project.award_types&.map do |batch|
           batch.serializable_hash.merge(
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
-            completed_tasks: batch.awards.completed.size,
-            total_tasks: batch.awards.size,
+            completed_tasks: batch.awards.completed&.size,
+            total_tasks: batch.awards.listed&.size,
             specialty: batch.specialty&.name,
             currency: batch.project.token&.symbol,
-            total_amount: batch.awards.sum(:total_amount),
+            total_amount: batch.awards.listed&.sum(:total_amount),
             currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
             team_pics: batch.project.contributors_distinct.map { |a| helpers.account_image_url(a, 100) },
             edit_path: edit_project_award_type_path(@project, batch),
             destroy_path: project_award_type_path(@project, batch),
             new_task_path: new_project_award_type_award_path(@project, batch),
-            tasks: batch.awards&.listed&.map { |task| task_to_index_props(task, batch) }
+            tasks: batch.awards&.map { |task| task_to_index_props(task, batch) }
           )
         end,
         new_batch_path: new_project_award_type_path(@project),

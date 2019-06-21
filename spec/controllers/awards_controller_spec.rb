@@ -107,6 +107,24 @@ describe AwardsController do
     end
   end
 
+  describe '#destroy' do
+    let!(:award) { create(:award_ready) }
+
+    it 'sets task status to cancelled and redirects to batches page' do
+      login(award.project.account)
+
+      delete :destroy, params: {
+        project_id: award.project.to_param,
+        award_type_id: award.award_type.to_param,
+        id: award.to_param
+      }
+
+      expect(response).to redirect_to(project_award_types_path(award.project))
+      expect(flash[:notice]).to eq('Task cancelled')
+      expect(award.reload.cancelled?).to be true
+    end
+  end
+
   describe '#start' do
     let!(:award) { create(:award_ready) }
     let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }

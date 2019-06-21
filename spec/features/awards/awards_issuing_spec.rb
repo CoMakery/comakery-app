@@ -74,11 +74,11 @@ describe 'awards issuing', js: true do
     expect(award1.reload.name).to eq 'test name updated'
   end
 
-  it 'allows to delete award' do
+  it 'allows to cancel award' do
     visit project_award_types_path(project1)
     find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
     find("a[data-method='delete'][href='#{project_award_type_award_path(project1, award_type1, award2)}']").click
-    expect(page).to have_content 'TASK DESTROYED'
+    expect(page).to have_content 'TASK CANCELLED'
   end
 
   it 'allows to send award when recipient wallet address is present' do

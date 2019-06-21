@@ -45,6 +45,10 @@ const RightBorder = styled.div`
   ${props => props.status === 'rejected' && css`
     background-color: #ff4d4d;
   `}
+
+  ${props => props.status === 'cancelled' && css`
+    background-color: #ff4d4d;
+  `}
 `
 
 const Info = styled.div`
@@ -104,6 +108,10 @@ const Status = styled.div`
   `}
 
   ${props => props.status === 'rejected' && css`
+    color: #ff4d4d;
+  `}
+
+  ${props => props.status === 'cancelled' && css`
     color: #ff4d4d;
   `}
 `
@@ -195,11 +203,12 @@ const StyledIcon = styled(Icon)`
   margin-left: 16px;
 `
 
-const IconPlaceholder = styled.span`
-  display: inline-block; 
+const IconPlaceholder = styled(Icon)`
   height: 15px;
   width: 15px;
   margin-left: 16px;
+  opacity: 0.3;
+  cursor: not-allowed;
 `
 
 class Task extends React.Component {
@@ -269,7 +278,7 @@ class Task extends React.Component {
                   </a>
                 }
                 {!task.editPath &&
-                  <IconPlaceholder />
+                  <IconPlaceholder name="iconEdit.svg" />
                 }
                 {task.destroyPath &&
                   <a rel="nofollow" data-method="delete" href={task.destroyPath}>
@@ -277,7 +286,7 @@ class Task extends React.Component {
                   </a>
                 }
                 {!task.destroyPath &&
-                  <IconPlaceholder />
+                  <IconPlaceholder name="iconTrash.svg" />
                 }
               </Buttons>
             </Details>

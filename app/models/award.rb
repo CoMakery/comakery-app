@@ -31,7 +31,8 @@ class Award < ApplicationRecord
   validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
   validates :amount, :total_amount, numericality: { greater_than: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
-  validates :number_of_assignments, numericality: { greater_than: 0 }
+  validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
+  validates :number_of_assignments_per_user, numericality: { less_than_or_equal_to: :number_of_assignments }
   validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&.coin_type_on_ethereum? } # see EthereumAddressable
   validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
@@ -48,6 +49,7 @@ class Award < ApplicationRecord
 
   validate :total_amount_fits_into_project_budget
   validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }
+  validate :contributor_doesnt_reach_maximum_assignments, if: -> { status == 'started' }
 
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
@@ -174,13 +176,18 @@ class Award < ApplicationRecord
   end
 
   def should_be_cloned?
-    (number_of_assignments.to_i - 1) > assignments.size
+    assignments.size + 1 < number_of_assignments.to_i
+  end
+
+  def reached_maximum_assignments_for?(account)
+    assignments.where(account: account).size >= number_of_assignments_per_user.to_i
   end
 
   def clone_on_assignment
     new_award = dup
     new_award.cloned_on_assignment_from_id = id
     new_award.number_of_assignments = 1
+    new_award.number_of_assignments_per_user = 1
     new_award.save!
     new_award
   end
@@ -214,6 +221,12 @@ class Award < ApplicationRecord
     def contributor_doesnt_have_too_many_started_tasks
       if account && account.awards.started.count >= STARTED_TASKS_PER_CONTRIBUTOR
         errors.add(:base, "Sorry, you can't start more than #{STARTED_TASKS_PER_CONTRIBUTOR} tasks")
+      end
+    end
+
+    def contributor_doesnt_reach_maximum_assignments
+      if account && reached_maximum_assignments_for?(account)
+        errors.add(:base, 'Sorry, you already did the task maximum times allowed')
       end
     end
 end

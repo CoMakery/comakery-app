@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190620125912) do
+ActiveRecord::Schema.define(version: 20190621120016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(version: 20190620125912) do
     t.string "submission_image_content_type"
     t.integer "number_of_assignments", default: 1
     t.integer "cloned_on_assignment_from_id"
+    t.integer "number_of_assignments_per_user", default: 1
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
