@@ -125,8 +125,8 @@ const Channel = styled.div`
   text-transform: uppercase;
 
   img {
-    max-width: 20px;
-    max-height: 20px;
+    max-width: 15px;
+    max-height: 15px;
     border: none;
     margin-right: 7px;
 
