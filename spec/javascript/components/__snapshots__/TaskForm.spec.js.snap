@@ -855,7 +855,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                   symbolLimit={0}
                   title="how many times can this task be done"
                   type="number"
-                  value=""
+                  value={1}
                 >
                   <InputField
                     checkboxText=""
@@ -883,7 +883,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     symbolLimit={0}
                     title="how many times can this task be done"
                     type="number"
-                    value=""
+                    value={1}
                   >
                     <div
                       className="input-field input-field__white__dark"
@@ -917,7 +917,86 @@ exports[`TaskForm renders correctly without props 1`] = `
                           required={true}
                           step="1"
                           type="number"
-                          value=""
+                          value={1}
+                        />
+                      </div>
+                    </div>
+                  </InputField>
+                </InputFieldWhiteDark>
+                <InputFieldWhiteDark
+                  eventHandler={[Function]}
+                  min="1"
+                  name="task[number_of_assignments_per_user]"
+                  placeholder="1"
+                  readOnly={false}
+                  required={true}
+                  step="1"
+                  symbolLimit={0}
+                  title="how many times can this task be done by a single user"
+                  type="number"
+                  value={1}
+                >
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__white__dark"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min="1"
+                    name="task[number_of_assignments_per_user]"
+                    pattern=".*"
+                    placeholder="1"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step="1"
+                    symbolLimit={0}
+                    title="how many times can this task be done by a single user"
+                    type="number"
+                    value={1}
+                  >
+                    <div
+                      className="input-field input-field__white__dark"
+                    >
+                      <div
+                        className="input-field--title"
+                      >
+                        <span
+                          className="input-field--title--title"
+                        >
+                          how many times can this task be done by a single user
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
+                      >
+                        <input
+                          className="input-field--content__text"
+                          max=""
+                          min="1"
+                          name="task[number_of_assignments_per_user]"
+                          onChange={[Function]}
+                          onClick={null}
+                          placeholder="1"
+                          readOnly={false}
+                          required={true}
+                          step="1"
+                          type="number"
+                          value={1}
                         />
                       </div>
                     </div>

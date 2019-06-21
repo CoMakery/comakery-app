@@ -24,20 +24,21 @@ class TaskForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
 
     this.state = {
-      flashMessages                : [],
-      errors                       : {},
-      disabled                     : {},
-      formAction                   : this.props.formAction,
-      formUrl                      : this.props.formUrl,
-      closeOnSuccess               : false,
-      'task[name]'                 : this.props.task.name || '',
-      'task[why]'                  : this.props.task.why || '',
-      'task[description]'          : this.props.task.description || '',
-      'task[requirements]'         : this.props.task.requirements || '',
-      'task[experience_level]'     : this.props.task.experienceLevel || '',
-      'task[amount]'               : this.props.task.amount || '',
-      'task[number_of_assignments]': this.props.task.numberOfAssignments || '',
-      'task[proof_link]'           : this.props.task.proofLink || ''
+      flashMessages                         : [],
+      errors                                : {},
+      disabled                              : {},
+      formAction                            : this.props.formAction,
+      formUrl                               : this.props.formUrl,
+      closeOnSuccess                        : false,
+      'task[name]'                          : this.props.task.name || '',
+      'task[why]'                           : this.props.task.why || '',
+      'task[description]'                   : this.props.task.description || '',
+      'task[requirements]'                  : this.props.task.requirements || '',
+      'task[experience_level]'              : this.props.task.experienceLevel || '',
+      'task[amount]'                        : this.props.task.amount || '',
+      'task[number_of_assignments]'         : this.props.task.numberOfAssignments || 1,
+      'task[number_of_assignments_per_user]': this.props.task.numberOfAssignmentsPerUser || 1,
+      'task[proof_link]'                    : this.props.task.proofLink || ''
     }
   }
 
@@ -77,6 +78,10 @@ class TaskForm extends React.Component {
 
   handleFieldChange(event) {
     this.setState({ [event.target.name]: event.target.value })
+
+    if (event.target.name === 'task[number_of_assignments]' && event.target.value === '1') {
+      this.setState({ 'task[number_of_assignments_per_user]': '1' })
+    }
 
     if (!event.target.checkValidity()) {
       this.errorAdd(event.target.name, 'invalid value')
@@ -292,6 +297,21 @@ class TaskForm extends React.Component {
               errorText={this.state.errors['task[numberOfAssignments]']}
               eventHandler={this.handleFieldChange}
               type="number"
+              min="1"
+              step="1"
+              placeholder="1"
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="how many times can this task be done by a single user"
+              required
+              name="task[number_of_assignments_per_user]"
+              value={this.state['task[number_of_assignments_per_user]']}
+              errorText={this.state.errors['task[numberOfAssignmentsPerUser]']}
+              eventHandler={this.handleFieldChange}
+              type="number"
+              readOnly={this.state['task[number_of_assignments]'] === '1'}
               min="1"
               step="1"
               placeholder="1"

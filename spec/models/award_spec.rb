@@ -135,6 +135,22 @@ describe Award do
       expect(a).not_to be_valid
     end
 
+    it 'requires number_of_assignments_per_user to be greater than 0' do
+      a = create(:award_ready)
+      a.update(number_of_assignments_per_user: 0)
+      expect(a).not_to be_valid
+    end
+
+    it 'requires number_of_assignments_per_user to be less or equal to number_of_assignments' do
+      a = create(:award_ready)
+      a.update(number_of_assignments: 1, number_of_assignments_per_user: 1)
+      expect(a).to be_valid
+      a.update(number_of_assignments: 2, number_of_assignments_per_user: 1)
+      expect(a).to be_valid
+      a.update(number_of_assignments: 1, number_of_assignments_per_user: 2)
+      expect(a).not_to be_valid
+    end
+
     it 'requires submission fields when in submitted status' do
       a = create(:award_ready)
       a.update(status: 'submitted', account: create(:account))
@@ -558,6 +574,43 @@ describe Award do
 
     it 'returns false if task has default number_of_assignments' do
       expect(award.cloneable?).to be_falsey
+    end
+  end
+
+  describe '.should_be_cloned?' do
+    let!(:award_should_be_cloned) { create(:award_ready, number_of_assignments: 10) }
+    let!(:award_has_been_cloned_already) { create(:award_ready, number_of_assignments: 2) }
+    let!(:award_shouldnt_be_cloned_at_all) { create(:award_ready) }
+
+    before do
+      award_has_been_cloned_already.clone_on_assignment
+    end
+
+    it 'returns true if current number of assignments plus one currently creating less than number_of_assignments allowed' do
+      expect(award_should_be_cloned.should_be_cloned?).to be_truthy
+    end
+
+    it 'returns false if current number of assignments plus one currently creating equal or greater than number_of_assignments allowed' do
+      expect(award_shouldnt_be_cloned_at_all.should_be_cloned?).to be_falsey
+      expect(award_has_been_cloned_already.should_be_cloned?).to be_falsey
+    end
+  end
+
+  describe '.reached_maximum_assignments_for?(account)' do
+    let!(:award) { create(:award_ready, number_of_assignments: 10, number_of_assignments_per_user: 2) }
+    let!(:account) { create(:account) }
+    let!(:account_reached_max) { create(:account) }
+
+    before do
+      2.times { award.clone_on_assignment.update!(account: account_reached_max) }
+    end
+
+    it 'returns true if amount of assignments for this task from the user is greater or equal to allowed number_of_assignments_per_user' do
+      expect(award.reached_maximum_assignments_for?(account_reached_max)).to be_truthy
+    end
+
+    it 'returns false if amount of assignments for this task from the user is less than allowed number_of_assignments_per_user' do
+      expect(award.reached_maximum_assignments_for?(account)).to be_falsey
     end
   end
 

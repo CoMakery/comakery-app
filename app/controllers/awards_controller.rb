@@ -258,6 +258,7 @@ class AwardsController < ApplicationController
         :experience_level,
         :amount,
         :number_of_assignments,
+        :number_of_assignments_per_user,
         :proof_link
       )
     end
