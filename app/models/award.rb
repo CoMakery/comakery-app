@@ -29,7 +29,7 @@ class Award < ApplicationRecord
   has_one :specialty, through: :award_type
 
   validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
-  validates :amount, :total_amount, numericality: { greater_than: 0 }
+  validates :amount, numericality: { greater_than: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
   validates :number_of_assignments_per_user, numericality: { less_than_or_equal_to: :number_of_assignments }
@@ -197,7 +197,7 @@ class Award < ApplicationRecord
   private
 
     def calculate_total_amount
-      self.total_amount = BigDecimal(amount || 0) * BigDecimal(quantity || 1)
+      self.total_amount = cloned? ? 0 : BigDecimal(amount || 0) * BigDecimal(quantity || 1) * (number_of_assignments || 1)
     end
 
     def set_paid_status_if_project_has_no_token
@@ -207,7 +207,7 @@ class Award < ApplicationRecord
     def total_amount_fits_into_project_budget
       return if project&.maximum_tokens.nil? || project&.maximum_tokens&.zero?
       if total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(:total_amount) || 0) > BigDecimal(project&.maximum_tokens)
-        errors[:base] << "Sorry, you can't send more awards than the project's budget"
+        errors[:base] << "Sorry, you can't exceed the project's budget"
       end
     end
 

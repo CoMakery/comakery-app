@@ -124,8 +124,7 @@ describe Award do
                                                                                                      "Requirements can't be blank",
                                                                                                      "Proof link can't be blank",
                                                                                                      'Proof link must include protocol (e.g. https://)',
-                                                                                                     'Amount is not a number',
-                                                                                                     'Total amount must be greater than 0'
+                                                                                                     'Amount is not a number'
                                                                                                    ])
     end
 
@@ -209,14 +208,20 @@ describe Award do
       end
     end
 
-    describe 'total_amount should be calculated based on amount and quantity' do
-      let(:award) { build :award }
+    describe 'total_amount calculation' do
+      let(:award_w_quantity) { create :award, amount: 100, quantity: 2 }
+      let(:award_template) { create :award, amount: 100, number_of_assignments: 3 }
 
-      specify do
-        award.quantity = 2
-        award.amount = 100
-        expect(award.valid?).to eq(true)
-        expect(award.total_amount).to eq 200
+      it 'multiplies amount by quantity' do
+        expect(award_w_quantity.total_amount).to eq(200)
+      end
+
+      it 'multiplies amount by number_of_assignments for template tasks' do
+        expect(award_template.total_amount).to eq(300)
+      end
+
+      it 'returns 0 for auto-cloned tasks' do
+        expect(award_template.clone_on_assignment.total_amount).to eq(0)
       end
     end
 
