@@ -186,7 +186,7 @@ describe AccountsController do
           country: 'United Kingdom'
         }
       }
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to my_tasks_path
     end
 
     it 'renders errors for invalid params' do
@@ -208,7 +208,7 @@ describe AccountsController do
           country: 'United Kingdom'
         }
       }
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to my_tasks_path
       expect(assigns[:current_account]).to eq nil
     end
   end
