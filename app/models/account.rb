@@ -191,14 +191,16 @@ class Account < ApplicationRecord
   end
 
   def experiences
-    Specialty.all.map { |specialty| [specialty&.id, experience_for(specialty)] }.push([nil, experience_for(nil)]).to_h
+    Specialty.all.map { |specialty| [specialty&.id, experience_for(specialty)] }
+             .push([nil, experience_for(nil)])
+             .push([0, experience_for(nil)]).to_h
   end
 
   def experience_for(specialty = nil)
     if specialty
-      awards.completed.where(award_type_id: AwardType.where(specialty: specialty).pluck(:id)).count
+      awards.completed.where(award_type_id: AwardType.where(specialty: specialty).pluck(:id)).size
     else
-      awards.completed.count
+      awards.completed.size
     end
   end
 

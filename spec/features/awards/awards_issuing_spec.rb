@@ -118,7 +118,7 @@ describe 'awards issuing', js: true do
     find_button('proceed').click
     find_button('issue award').click
     find('.flash-message-container')
-    expect(page).to have_content "SORRY, YOU CAN'T SEND MORE AWARDS THAN THE PROJECT'S BUDGET"
+    expect(page).to have_content "SORRY, YOU CAN'T EXCEED THE PROJECT'S BUDGET"
   end
 
   it "doesn't allow to edit award after sending" do

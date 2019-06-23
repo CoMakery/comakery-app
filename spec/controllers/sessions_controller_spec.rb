@@ -43,7 +43,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq false
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
-        assert_redirected_to root_path
+        assert_redirected_to my_tasks_path
       end
 
       it 'create authentication from discord' do
@@ -57,7 +57,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq false
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
-        assert_redirected_to root_path
+        assert_redirected_to my_tasks_path
       end
 
       it 'login confirmed authentication' do
@@ -82,7 +82,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq false
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
-        assert_redirected_to root_path
+        assert_redirected_to my_tasks_path
       end
 
       it 'login authentication with an account that missing email' do
@@ -169,7 +169,7 @@ describe SessionsController do
       session[:redeem] = true
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice]).to eq 'Please click the link in your email to claim your contributor token award!'
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to my_tasks_path
     end
 
     it 'notice to update ethereum_wallet' do

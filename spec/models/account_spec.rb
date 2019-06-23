@@ -300,15 +300,19 @@ describe Account do
       accessable_award_type_generic = create(:award_type, project: accessable_project)
       accessable_award_type_generic.update(specialty: nil)
       award_w_matching_experience = create(:award_ready, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'])
+      award_w_zero_experience = create(:award_ready, award_type: accessable_award_type)
       award_w_not_matching_experience = create(:award_ready, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'])
       award_w_matching_generic_experience = create(:award_ready, award_type: accessable_award_type_generic, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'])
-      award_in_ready_state = create(:award_ready, award_type: accessable_award_type)
+      award_w_not_matching_generic_experience = create(:award_ready, award_type: accessable_award_type_generic, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'])
+      award_w_zero_generic_experience = create(:award_ready, award_type: accessable_award_type_generic)
       award_in_non_ready_state = create(:award, award_type: accessable_award_type)
 
-      expect(account.awards_matching_experience).to include(award_in_ready_state)
-      expect(account.awards_matching_experience).not_to include(award_in_non_ready_state)
       expect(account.awards_matching_experience).to include(award_w_matching_experience)
+      expect(account.awards_matching_experience).to include(award_w_zero_experience)
       expect(account.awards_matching_experience).to include(award_w_matching_generic_experience)
+      expect(account.awards_matching_experience).to include(award_w_zero_generic_experience)
+      expect(account.awards_matching_experience).not_to include(award_in_non_ready_state)
+      expect(account.awards_matching_experience).not_to include(award_w_not_matching_generic_experience)
       expect(account.awards_matching_experience).not_to include(award_w_not_matching_experience)
     end
   end
@@ -359,6 +363,7 @@ describe Account do
       expect(account.experiences[account.specialty.id]).to eq(3)
       expect(account.experiences[other_specialty.id]).to eq(1)
       expect(account.experiences[nil]).to eq(4)
+      expect(account.experiences[0]).to eq(4)
     end
   end
 

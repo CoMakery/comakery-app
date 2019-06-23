@@ -12,7 +12,7 @@ loginWithMetaMask.handleAuthenticate = (ref) ->
     method: 'POST').then((response) ->
       response.json()
     ).then (data) ->
-      window.location = '/' if data.success
+      window.location = '/tasks' if data.success
 
 loginWithMetaMask.handleSignup = (publicAddress, network) ->
   fetch('/api/accounts',
