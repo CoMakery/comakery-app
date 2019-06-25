@@ -626,7 +626,7 @@ exports[`MyTask renders component correctly 1`] = `
                           forwardedRef={null}
                         >
                           <a
-                            className="sc-kAzzGY ioMnCC"
+                            className="sc-kAzzGY RPODU"
                           />
                         </StyledComponent>
                       </styled.a>

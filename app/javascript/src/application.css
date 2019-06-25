@@ -2987,9 +2987,7 @@ select:disabled {
   margin-top: 40px;
   box-sizing: border-box;
   width: 100%;
-  border-radius: 4px;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.1);
-  border: solid 1px #f5f5f5;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
   overflow: hidden;
 }
@@ -3048,7 +3046,6 @@ select:disabled {
 .project-skill__interest {
   padding: 18px;
   font-family: Montserrat, sans-serif;
-  text-align: center;
   text-transform: uppercase;
   font-size: 18px;
   font-weight: bold;
@@ -3110,13 +3107,6 @@ select:disabled {
     font-size: 16px;
     line-height: 1.63;
     margin: 0 0 40px 0;
-  }
-
-  .project-skill-container {
-    margin-top: 25px;
-    margin-left: -30px;
-    margin-right: -30px;
-    width: calc(100% + 60px);
   }
 
   .project-skill__background__img {

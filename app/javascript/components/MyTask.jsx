@@ -175,6 +175,7 @@ const TaskAction = styled.a`
     color: #3a3a3a;
     text-transform: uppercase;
     text-decoration: none;
+    margin-left: auto;
 
     &:hover {
       text-decoration: underline;

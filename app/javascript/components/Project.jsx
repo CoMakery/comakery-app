@@ -229,7 +229,18 @@ export default class Project extends React.Component {
 
   render() {
     const { projectData, missionData, tokenData, contributorsPath, awardsPath, editPath } = this.props
-    const { interested } = this.state
+    const { interested, specialtyInterested } = this.state
+    const skills = {
+      development: 'Software Development',
+      design     : 'UX / UI DESIGN',
+      research   : 'Research',
+      community  : 'COMMUNITY MANAGEMENT',
+      data       : 'DATA GATHERING',
+      audio      : 'AUDIO & VIDEO PRODUCTION',
+      writing    : 'WRITING',
+      marketing  : 'MARKETING & SOCIAL MEDIA'
+    }
+    const skillIds = [5, 6, 8, 2, 3, 1, 7, 4]
 
     return <div className="project-container">
       <div className="project-header" style={{backgroundImage: `url(${projectData.panoramicImageUrl})`}}>
@@ -387,6 +398,32 @@ export default class Project extends React.Component {
 
           <AllTasks href={this.props.myTasksPath}>see all available tasks</AllTasks>
         </Tasks>
+      }
+
+      {this.props.tasksBySpecialty.length === 0 &&
+        <div className="project-skills">
+          <div className="project-skills__title">SKILLS NEEDED</div>
+          <div className="project-skills__subtitle">Take a challenge to demonstrate your skills. You will be invited to complete tasks that match your skill level for this and other projects</div>
+
+          {Object.keys(skills).map((skill, index) =>
+            <div key={skill} className="project-skill-container">
+              <div className="project-skill__background">
+                <img className="project-skill__background__img" src={require(`src/images/project/${skill}.jpg`)} />
+                <div className="project-skill__background__title">
+                  {skills[skill]}
+                  <div className="project-skill__background__icon">
+                    <img className="skill-icon--background" src={require(`src/images/project/background.svg`)} />
+                    <img className="skill-icon" src={require(`src/images/project/${skill}.svg`)} />
+                  </div>
+                </div>
+              </div>
+              <div className="project-skill__interest">
+                {!specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button" onClick={() => this.addInterest(projectData.id, skillIds[index])}>I'm Interested</div>}
+                {specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button">Request Sent</div>}
+              </div>
+            </div>
+          )}
+        </div>
       }
 
       <div className="project-team">
