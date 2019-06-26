@@ -22,11 +22,11 @@ class Award < ApplicationRecord
   belongs_to :award_type
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
+  belongs_to :specialty, optional: true
   has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
-  has_one :specialty, through: :award_type
 
   validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
   validates :amount, numericality: { greater_than: 0 }
@@ -140,7 +140,7 @@ class Award < ApplicationRecord
   end
 
   def matching_experience_for?(account)
-    experience_level.to_i <= account.experience_for(award_type.specialty)
+    experience_level.to_i <= account.experience_for(specialty)
   end
 
   def confirm!(account)

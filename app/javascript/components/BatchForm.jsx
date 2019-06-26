@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ProjectSetup from './layouts/ProjectSetup'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
-import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
@@ -23,16 +22,15 @@ class BatchForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
 
     this.state = {
-      flashMessages        : [],
-      errors               : {},
-      disabled             : {},
-      formAction           : this.props.formAction,
-      formUrl              : this.props.formUrl,
-      closeOnSuccess       : false,
-      'batch[specialty_id]': this.props.batch.specialtyId || Object.values(this.props.specialties)[0],
-      'batch[name]'        : this.props.batch.name || '',
-      'batch[goal]'        : this.props.batch.goal || '',
-      'batch[description]' : this.props.batch.description || ''
+      flashMessages       : [],
+      errors              : {},
+      disabled            : {},
+      formAction          : this.props.formAction,
+      formUrl             : this.props.formUrl,
+      closeOnSuccess      : false,
+      'batch[name]'       : this.props.batch.name || '',
+      'batch[goal]'       : this.props.batch.goal || '',
+      'batch[description]': this.props.batch.description || ''
     }
   }
 
@@ -183,17 +181,6 @@ class BatchForm extends React.Component {
           </div>
 
           <form className="batch-form--form" id="batch-form--form" onSubmit={this.handleSubmit}>
-            <InputFieldDropdown
-              title="specialty"
-              required
-              name="batch[specialty_id]"
-              value={this.state['batch[specialty_id]']}
-              errorText={this.state.errors['batch[specialtyId]']}
-              eventHandler={this.handleFieldChange}
-              selectEntries={Object.entries(this.props.specialties)}
-              symbolLimit={0}
-            />
-
             <InputFieldWhiteDark
               title="name"
               required
@@ -251,7 +238,6 @@ class BatchForm extends React.Component {
 BatchForm.propTypes = {
   batch       : PropTypes.object.isRequired,
   project     : PropTypes.object.isRequired,
-  specialties : PropTypes.object.isRequired,
   formUrl     : PropTypes.string.isRequired,
   formAction  : PropTypes.string.isRequired,
   urlOnSuccess: PropTypes.string.isRequired,
@@ -261,7 +247,6 @@ BatchForm.propTypes = {
 BatchForm.defaultProps = {
   batch       : {'default': '_'},
   project     : {'default': '_'},
-  specialties : {'default': '_'},
   formUrl     : '/',
   formAction  : 'POST',
   urlOnSuccess: '/',

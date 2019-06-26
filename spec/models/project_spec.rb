@@ -303,23 +303,24 @@ describe Project do
 
   describe '#ready_tasks_by_specialty' do
     let!(:project) { create :project }
-    let!(:award_type1) { create :award_type, project: project }
-    let!(:award_type2) { create :award_type, project: project }
+    let!(:specialty1) { create :specialty }
+    let!(:specialty2) { create :specialty }
+    let!(:award_type) { create :award_type, project: project }
 
     before do
-      2.times { create :award_ready, award_type: award_type1 }
-      2.times { create :award_ready, award_type: award_type2 }
+      2.times { create :award_ready, specialty: specialty1, award_type: award_type }
+      2.times { create :award_ready, specialty: specialty2, award_type: award_type }
     end
 
     it 'returns project tasks in ready state grouped by specialty' do
       expect(project.ready_tasks_by_specialty.size).to eq(2)
-      expect(project.ready_tasks_by_specialty[award_type1.specialty]).to eq(award_type1.awards)
-      expect(project.ready_tasks_by_specialty[award_type2.specialty]).to eq(award_type2.awards)
+      expect(project.ready_tasks_by_specialty[specialty1]).to eq(project.awards.ready.where(specialty: specialty1))
+      expect(project.ready_tasks_by_specialty[specialty2]).to eq(project.awards.ready.where(specialty: specialty2))
     end
 
     it 'limits amount of tasks per specialty' do
-      expect(project.ready_tasks_by_specialty(1)[award_type1.specialty].size).to eq(1)
-      expect(project.ready_tasks_by_specialty(1)[award_type2.specialty].size).to eq(1)
+      expect(project.ready_tasks_by_specialty(1)[specialty1].size).to eq(1)
+      expect(project.ready_tasks_by_specialty(1)[specialty2].size).to eq(1)
     end
   end
 end

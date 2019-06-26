@@ -34,6 +34,10 @@ describe('TaskForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
+      'InputFieldDropdown[title="specialty"][required][name="task[specialty_id]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
       'InputFieldWhiteDark[title="award amount (no token)"][required][name="task[amount]"]'
     )).toBe(true)
 
@@ -44,6 +48,22 @@ describe('TaskForm', () => {
     expect(wrapper.exists(
       'input[type="hidden"][name="authenticity_token"]'
     )).toBe(true)
+  })
+
+  it('renders correctly with specialties', () => {
+    const specialties = {
+      '1': 1,
+      '2': 2
+    }
+    const wrapper = mount(<TaskForm specialties={specialties} />)
+
+    expect(wrapper.find(
+      'InputFieldDropdown[title="specialty"][required][name="task[specialty_id]"]'
+    ).props().value).toBe(1)
+
+    expect(wrapper.find(
+      'InputFieldDropdown[title="specialty"][required][name="task[specialty_id]"]'
+    ).props().selectEntries).toEqual(Object.entries(specialties))
   })
 
   it('renders correctly with a task and token', () => {

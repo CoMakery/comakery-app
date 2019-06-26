@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190621120016) do
+ActiveRecord::Schema.define(version: 20190625161728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -155,9 +155,11 @@ ActiveRecord::Schema.define(version: 20190621120016) do
     t.integer "number_of_assignments", default: 1
     t.integer "cloned_on_assignment_from_id"
     t.integer "number_of_assignments_per_user", default: 1
+    t.bigint "specialty_id"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
+    t.index ["specialty_id"], name: "index_awards_on_specialty_id"
   end
 
   create_table "channels", force: :cascade do |t|
@@ -333,6 +335,7 @@ ActiveRecord::Schema.define(version: 20190621120016) do
     t.index ["email"], name: "index_unsubscriptions_on_email", unique: true
   end
 
+  add_foreign_key "awards", "specialties"
   add_foreign_key "interests", "accounts"
   add_foreign_key "projects", "tokens"
 end

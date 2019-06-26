@@ -104,7 +104,6 @@ class Mom
   def award_type(**attrs)
     defaults = {
       name: 'Contribution',
-      specialty: create(:specialty),
       goal: 'none',
       description: 'none'
     }

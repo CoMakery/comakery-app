@@ -58,7 +58,7 @@ describe ApplicationController do
       expect(result).to include(:mission)
       expect(result).to include(:token)
       expect(result).to include(:project)
-      expect(result).to include(:batch)
+      expect(result).to include(:specialty)
       expect(result).to include(:issuer)
       expect(result).to include(:contributor)
       expect(result).to include(:experience_level_name)

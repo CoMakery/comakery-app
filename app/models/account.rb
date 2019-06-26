@@ -171,8 +171,9 @@ class Account < ApplicationRecord
     Award.ready.where(id:
       experiences.map do |specialty_id, experience|
         Award.where(
-          award_type_id: accessable_award_types.where(specialty_id: specialty_id).pluck(:id),
-          experience_level: 0..experience
+          specialty_id: specialty_id,
+          experience_level: 0..experience,
+          award_type_id: accessable_award_types.pluck(:id)
         ).pluck(:id)
       end.flatten.uniq)
   end
@@ -198,7 +199,7 @@ class Account < ApplicationRecord
 
   def experience_for(specialty = nil)
     if specialty
-      awards.completed.where(award_type_id: AwardType.where(specialty: specialty).pluck(:id)).size
+      awards.completed.where(specialty: specialty).size
     else
       awards.completed.size
     end
@@ -209,7 +210,7 @@ class Account < ApplicationRecord
   end
 
   def tasks_to_unlock(award)
-    award.experience_level - experience_for(award.award_type.specialty)
+    award.experience_level - experience_for(award.specialty)
   end
 
   def confirmed?

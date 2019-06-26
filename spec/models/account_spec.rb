@@ -208,14 +208,9 @@ describe Account do
 
     it 'returns award types from accessable projects' do
       accessable_project = create(:project, visibility: 'public_listed')
-      award_type_w_matching_specialty = create(:award_type, project: accessable_project, specialty: account.specialty)
-      award_type_w_not_matching_specialty = create(:award_type, project: accessable_project)
-      award_type_w_no_specialty = create(:award_type, project: accessable_project)
-      award_type_w_no_specialty.update(specialty: nil)
+      accessable_award_type = create(:award_type, project: accessable_project)
 
-      expect(account.accessable_award_types).to include(award_type_w_matching_specialty)
-      expect(account.accessable_award_types).to include(award_type_w_not_matching_specialty)
-      expect(account.accessable_award_types).to include(award_type_w_no_specialty)
+      expect(account.accessable_award_types).to include(accessable_award_type)
     end
   end
 
@@ -239,7 +234,7 @@ describe Account do
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
 
       Award::EXPERIENCE_LEVELS['Demonstrated Skills'].times do
-        create(:award, account: account, award_type: create(:award_type, specialty: account.specialty))
+        create(:award, account: account, specialty: account.specialty)
       end
     end
 
@@ -257,11 +252,11 @@ describe Account do
 
     it 'returns awards from accessable award types with ready state and matching experience' do
       accessable_project = create(:project, visibility: 'public_listed')
-      accessable_award_type = create(:award_type, project: accessable_project, specialty: account.specialty)
-      award_w_matching_experience = create(:award_ready, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'])
-      award_w_not_matching_experience = create(:award_ready, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'])
-      award_in_ready_state = create(:award_ready, award_type: accessable_award_type)
-      award_in_non_ready_state = create(:award, award_type: accessable_award_type)
+      accessable_award_type = create(:award_type, project: accessable_project)
+      award_w_matching_experience = create(:award_ready, specialty: account.specialty, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'])
+      award_w_not_matching_experience = create(:award_ready, specialty: account.specialty, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'])
+      award_in_ready_state = create(:award_ready, specialty: account.specialty, award_type: accessable_award_type)
+      award_in_non_ready_state = create(:award, specialty: account.specialty, award_type: accessable_award_type)
 
       expect(account.accessable_awards).to include(award_in_ready_state)
       expect(account.accessable_awards).not_to include(award_in_non_ready_state)
@@ -290,22 +285,20 @@ describe Account do
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
 
       Award::EXPERIENCE_LEVELS['Demonstrated Skills'].times do
-        create(:award, account: account, award_type: create(:award_type, specialty: account.specialty))
+        create(:award, account: account, specialty: account.specialty)
       end
     end
 
     it 'returns awards from accessable award types with ready state and matching experience' do
       accessable_project = create(:project, visibility: 'public_listed')
-      accessable_award_type = create(:award_type, project: accessable_project, specialty: account.specialty)
-      accessable_award_type_generic = create(:award_type, project: accessable_project)
-      accessable_award_type_generic.update(specialty: nil)
-      award_w_matching_experience = create(:award_ready, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'])
-      award_w_zero_experience = create(:award_ready, award_type: accessable_award_type)
-      award_w_not_matching_experience = create(:award_ready, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'])
-      award_w_matching_generic_experience = create(:award_ready, award_type: accessable_award_type_generic, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'])
-      award_w_not_matching_generic_experience = create(:award_ready, award_type: accessable_award_type_generic, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'])
-      award_w_zero_generic_experience = create(:award_ready, award_type: accessable_award_type_generic)
-      award_in_non_ready_state = create(:award, award_type: accessable_award_type)
+      accessable_award_type = create(:award_type, project: accessable_project)
+      award_w_matching_experience = create(:award_ready, specialty: account.specialty, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'])
+      award_w_zero_experience = create(:award_ready, specialty: account.specialty, award_type: accessable_award_type)
+      award_w_not_matching_experience = create(:award_ready, specialty: account.specialty, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'])
+      award_w_matching_generic_experience = create(:award_ready, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'])
+      award_w_not_matching_generic_experience = create(:award_ready, award_type: accessable_award_type, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'])
+      award_w_zero_generic_experience = create(:award_ready, award_type: accessable_award_type)
+      award_in_non_ready_state = create(:award, specialty: account.specialty, award_type: accessable_award_type)
 
       expect(account.awards_matching_experience).to include(award_w_matching_experience)
       expect(account.awards_matching_experience).to include(award_w_zero_experience)
@@ -355,8 +348,8 @@ describe Account do
     let(:other_specialty) { create(:specialty) }
 
     before do
-      3.times { create(:award, award_type: create(:award_type, specialty: account.specialty), account: account) }
-      1.times { create(:award, award_type: create(:award_type, specialty: other_specialty), account: account) }
+      3.times { create(:award, specialty: account.specialty, account: account) }
+      1.times { create(:award, specialty: other_specialty, account: account) }
     end
 
     it 'returns account experiences for all existing specialties' do
@@ -371,7 +364,7 @@ describe Account do
     let(:account) { create(:account) }
 
     before do
-      3.times { create(:award, award_type: create(:award_type, specialty: account.specialty), account: account) }
+      3.times { create(:award, specialty: account.specialty, account: account) }
       1.times { create(:award, account: account) }
     end
 
@@ -405,7 +398,7 @@ describe Account do
     end
 
     it 'returns number of tasks to be completed to achieve exp level suitable for a given award' do
-      expect(account.tasks_to_unlock(award_with_higher_exp_level)).to eq(award_with_higher_exp_level.experience_level - account.experience_for(award_with_higher_exp_level.award_type.specialty))
+      expect(account.tasks_to_unlock(award_with_higher_exp_level)).to eq(award_with_higher_exp_level.experience_level - account.experience_for(award_with_higher_exp_level.specialty))
     end
   end
 

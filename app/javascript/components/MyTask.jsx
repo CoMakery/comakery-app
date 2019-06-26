@@ -449,7 +449,7 @@ class MyTask extends React.Component {
               </Status>
               <Type>
                 <b>TYPE </b>
-                {task.batch.specialty || 'General'}
+                {task.specialty || 'General'}
               </Type>
               {task.contributor.name &&
                 <Contributor>
@@ -491,8 +491,9 @@ MyTask.defaultProps = {
   task: {
     status: null,
     token : {
-      currency: 'test',
-      logo    : 'test'
+      currency : 'test',
+      logo     : 'test',
+      specialty: 'test'
     },
     project: {
       name: null,
@@ -501,9 +502,6 @@ MyTask.defaultProps = {
     mission: {
       name: null,
       url : null
-    },
-    batch: {
-      specialty: null
     },
     contributor: {
       name : null,

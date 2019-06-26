@@ -2,6 +2,9 @@ require 'rails_helper'
 
 describe Award do
   describe 'associations' do
+    let(:specialty) { create(:specialty) }
+    let(:award) { create(:award, specialty: specialty) }
+
     it 'has the expected associations' do
       described_class.create!(
         name: 'test',
@@ -23,6 +26,10 @@ describe Award do
       2.times { award.clone_on_assignment }
 
       expect(award.assignments.size).to eq(2)
+    end
+
+    it 'belongs to specialty' do
+      expect(award.specialty).to eq(specialty)
     end
   end
 
@@ -54,7 +61,7 @@ describe Award do
     describe '.filtered_for_view(filter, account)' do
       let!(:contributor) { create(:account) }
       let!(:project_owner) { create(:account) }
-      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed'), specialty: contributor.specialty)) }
+      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed')), specialty: contributor.specialty) }
       let!(:started_award) { create(:award, status: 'started', issuer: project_owner, account: contributor) }
       let!(:submitted_award) { create(:award, status: 'submitted', issuer: project_owner, account: contributor) }
       let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
@@ -325,8 +332,8 @@ describe Award do
 
   describe '.matching_experience_for?(account)' do
     let(:account) { create(:account) }
-    let(:award_type) { create(:award_type, specialty: account.specialty) }
-    let(:award_no_experience) { create(:award_ready, award_type: award_type) }
+    let(:award_type) { create(:award_type) }
+    let(:award_no_experience) { create(:award_ready, specialty: account.specialty, award_type: award_type) }
     let(:award_level1) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['New Contributor'], award_type: award_type) }
     let(:award_level2) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type) }
     let(:award_level3) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'], award_type: award_type) }
