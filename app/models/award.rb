@@ -199,11 +199,19 @@ class Award < ApplicationRecord
     new_award
   end
 
+  def possible_quantity
+    if cancelled? || rejected?
+      BigDecimal(0)
+    else
+      (number_of_assignments || 1) - assignments.size
+    end
+  end
+
   def possible_total_amount
     if cancelled? || rejected?
       BigDecimal(0)
     else
-      total_amount * ((number_of_assignments || 1) - assignments.size)
+      total_amount * possible_quantity
     end
   end
 

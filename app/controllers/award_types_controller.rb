@@ -78,7 +78,7 @@ class AwardTypesController < ApplicationController
           batch.serializable_hash.merge(
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
             completed_tasks: batch.awards.completed&.size,
-            total_tasks: batch.awards.listed&.size,
+            total_tasks: batch.awards.sum(&:possible_quantity).to_i,
             currency: batch.project.token&.symbol,
             total_amount: batch.awards.sum(&:possible_total_amount),
             currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,

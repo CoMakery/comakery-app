@@ -668,6 +668,30 @@ describe Award do
     end
   end
 
+  describe '.possible_quantity' do
+    let!(:award_ready) { create(:award_ready) }
+    let!(:award_ready_cloneable_2_times) { create(:award_ready, number_of_assignments: 2) }
+    let!(:award_template) { create(:award_ready, number_of_assignments: 10) }
+    let!(:award_cancelled) { create(:award, status: :cancelled) }
+    let!(:award_rejected) { create(:award, status: :rejected) }
+
+    it 'returns possible number_of_assignments' do
+      expect(award_ready.possible_quantity).to eq(1)
+      expect(award_ready_cloneable_2_times.possible_quantity).to eq(2)
+    end
+
+    it 'returns possible number_of_assignments minus current number of assignments for template tasks' do
+      expect(award_template.possible_quantity).to eq(10)
+      award_template.clone_on_assignment
+      expect(award_template.reload.possible_quantity).to eq(9)
+    end
+
+    it 'returns zero for cancelled or rejected tasks' do
+      expect(award_cancelled.possible_quantity).to eq(0)
+      expect(award_rejected.possible_quantity).to eq(0)
+    end
+  end
+
   describe '.possible_total_amount' do
     let!(:award_ready) { create(:award_ready, amount: 1) }
     let!(:award_ready_cloneable_2_times) { create(:award_ready, amount: 1, number_of_assignments: 2) }
