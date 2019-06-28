@@ -182,6 +182,10 @@ class Award < ApplicationRecord
     assignments.size + 1 < number_of_assignments.to_i
   end
 
+  def can_be_cloned_for?(account)
+    (account.awards.started.count < STARTED_TASKS_PER_CONTRIBUTOR) && !reached_maximum_assignments_for?(account)
+  end
+
   def reached_maximum_assignments_for?(account)
     assignments.where(account: account).size >= number_of_assignments_per_user.to_i
   end

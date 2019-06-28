@@ -215,7 +215,9 @@ class AwardsController < ApplicationController
     end
 
     def clone_award_on_start
-      @award = @award.clone_on_assignment if @award.should_be_cloned?
+      if @award.should_be_cloned? && @award.can_be_cloned_for?(current_account)
+        @award = @award.clone_on_assignment
+      end
     end
 
     def set_award_type

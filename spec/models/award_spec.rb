@@ -626,6 +626,26 @@ describe Award do
     end
   end
 
+  describe '.can_be_cloned_for?(account)' do
+    let(:award_ready) { create(:award_ready) }
+    let(:award_account_started_max) { create(:award_ready) }
+    let(:award_account_cloned_max) { create(:award_ready, number_of_assignments: 10, number_of_assignments_per_user: 2) }
+
+    it 'returns true if account hasnt too many started tasks and hasnt reached maximum assignments' do
+      expect(award_ready.can_be_cloned_for?(award_ready.account)).to be_truthy
+    end
+
+    it 'returns false if account has too many started tasks' do
+      Award::STARTED_TASKS_PER_CONTRIBUTOR.times { create(:award, status: 'started', account: award_account_started_max.account) }
+      expect(award_account_started_max.can_be_cloned_for?(award_account_started_max.account)).to be_falsey
+    end
+
+    it 'returns false if account reached maximum assignments' do
+      2.times { award_account_cloned_max.clone_on_assignment.update!(account: award_account_cloned_max.account) }
+      expect(award_account_cloned_max.can_be_cloned_for?(award_account_cloned_max.account)).to be_falsey
+    end
+  end
+
   describe '.reached_maximum_assignments_for?(account)' do
     let!(:award) { create(:award_ready, number_of_assignments: 10, number_of_assignments_per_user: 2) }
     let!(:account) { create(:account) }
