@@ -3046,6 +3046,7 @@ select:disabled {
 .project-skill__interest {
   padding: 18px;
   font-family: Montserrat, sans-serif;
+  text-align: center;
   text-transform: uppercase;
   font-size: 18px;
   font-weight: bold;
