@@ -199,12 +199,28 @@ class Award < ApplicationRecord
     new_award
   end
 
+  def possible_quantity
+    if cancelled? || rejected?
+      BigDecimal(0)
+    else
+      (number_of_assignments || 1) - assignments.size
+    end
+  end
+
+  def possible_total_amount
+    if cancelled? || rejected?
+      BigDecimal(0)
+    else
+      total_amount * possible_quantity
+    end
+  end
+
   delegate :image, to: :team, prefix: true, allow_nil: true
 
   private
 
     def calculate_total_amount
-      self.total_amount = cloned? ? 0 : BigDecimal(amount || 0) * BigDecimal(quantity || 1) * (number_of_assignments || 1)
+      self.total_amount = BigDecimal(amount || 0) * BigDecimal(quantity || 1)
     end
 
     def set_paid_status_if_project_has_no_token
@@ -213,7 +229,8 @@ class Award < ApplicationRecord
 
     def total_amount_fits_into_project_budget
       return if project&.maximum_tokens.nil? || project&.maximum_tokens&.zero?
-      if total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(:total_amount) || 0) > BigDecimal(project&.maximum_tokens)
+
+      if possible_total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(&:possible_total_amount) || 0) > BigDecimal(project&.maximum_tokens)
         errors[:base] << "Sorry, you can't exceed the project's budget"
       end
     end
