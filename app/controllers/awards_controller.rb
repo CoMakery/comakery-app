@@ -249,7 +249,7 @@ class AwardsController < ApplicationController
     end
 
     def award_params
-      a = params.fetch(:task, {}).permit(
+      params.fetch(:task, {}).permit(
         :name,
         :why,
         :description,
@@ -262,8 +262,6 @@ class AwardsController < ApplicationController
         :specialty_id,
         :proof_link
       )
-      a[:specialty_id] = nil if a.fetch(:specialty_id, 'general') == 'general'
-      a
     end
 
     def send_award_params

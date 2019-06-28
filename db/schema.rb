@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190625161728) do
+ActiveRecord::Schema.define(version: 20190626152736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,6 +178,16 @@ ActiveRecord::Schema.define(version: 20190625161728) do
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
+  create_table "experiences", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "specialty_id"
+    t.integer "level", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_experiences_on_account_id"
+    t.index ["specialty_id"], name: "index_experiences_on_specialty_id"
+  end
+
   create_table "interests", force: :cascade do |t|
     t.bigint "account_id"
     t.string "protocol"
@@ -336,6 +346,8 @@ ActiveRecord::Schema.define(version: 20190625161728) do
   end
 
   add_foreign_key "awards", "specialties"
+  add_foreign_key "experiences", "accounts"
+  add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"
   add_foreign_key "projects", "tokens"
 end

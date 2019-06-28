@@ -17,12 +17,14 @@ class Award < ApplicationRecord
   attachment :image, type: :image
   attachment :submission_image, type: :image
 
+  attribute :specialty_id, :integer, default: -> { Specialty.default.id }
+
   belongs_to :account, optional: true
   belongs_to :authentication, optional: true
   belongs_to :award_type
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
-  belongs_to :specialty, optional: true
+  belongs_to :specialty
   has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_one :team, through: :channel
   has_one :project, through: :award_type
@@ -55,6 +57,7 @@ class Award < ApplicationRecord
   before_validation :calculate_total_amount
   before_validation :set_paid_status_if_project_has_no_token, if: -> { status == 'accepted' && !project.token }
   before_destroy :abort_destroy
+  after_save :update_account_experience, if: -> { completed? }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6)' }
@@ -228,5 +231,9 @@ class Award < ApplicationRecord
       if account && reached_maximum_assignments_for?(account)
         errors.add(:base, 'Sorry, you already did the task maximum times allowed')
       end
+    end
+
+    def update_account_experience
+      Experience.increment_for(account, specialty)
     end
 end

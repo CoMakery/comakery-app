@@ -119,6 +119,24 @@ describe Award do
         expect(submtted_task_w_token.accepted?).to be true
       end
     end
+
+    describe 'update_account_experience' do
+      let!(:award_ready) { create(:award_ready) }
+
+      it 'increases contributor experience when award is completed' do
+        expect do
+          award_ready.update(status: :accepted)
+        end.to change { Experience.find_by(account: award_ready.account, specialty: award_ready.specialty)&.level.to_i }.by(1)
+      end
+    end
+
+    describe 'set_default_specialty' do
+      let!(:award) { create(:award_ready) }
+
+      it 'sets default specialty' do
+        expect(award.specialty).to eq(Specialty.default)
+      end
+    end
   end
 
   describe 'validations' do

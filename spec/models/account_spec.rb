@@ -343,23 +343,6 @@ describe Account do
     end
   end
 
-  describe '.experiences' do
-    let(:account) { create(:account) }
-    let(:other_specialty) { create(:specialty) }
-
-    before do
-      3.times { create(:award, specialty: account.specialty, account: account) }
-      1.times { create(:award, specialty: other_specialty, account: account) }
-    end
-
-    it 'returns account experiences for all existing specialties' do
-      expect(account.experiences[account.specialty.id]).to eq(3)
-      expect(account.experiences[other_specialty.id]).to eq(1)
-      expect(account.experiences[nil]).to eq(4)
-      expect(account.experiences[0]).to eq(4)
-    end
-  end
-
   describe '.experience_for(specialty)' do
     let(:account) { create(:account) }
 
@@ -370,22 +353,6 @@ describe Account do
 
     it 'returns number of completed awards for given specialty' do
       expect(account.experience_for(account.specialty)).to eq(3)
-    end
-
-    it 'returns total number of completed awards when no specialty specified' do
-      expect(account.experience_for(nil)).to eq(4)
-    end
-  end
-
-  describe '.total_experience' do
-    let(:account) { create(:account) }
-
-    before do
-      2.times { create(:award, account: account) }
-    end
-
-    it 'returns total number of completed awards' do
-      expect(account.total_experience).to eq(2)
     end
   end
 

@@ -28,6 +28,7 @@ class Account < ApplicationRecord
   # default_scope { includes(:slack_auth) }
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
+  has_many :experiences
 
   belongs_to :specialty
 
@@ -169,10 +170,10 @@ class Account < ApplicationRecord
 
   def awards_matching_experience
     Award.ready.where(id:
-      experiences.map do |specialty_id, experience|
+      Specialty.all.map do |specialty|
         Award.where(
-          specialty_id: specialty_id,
-          experience_level: 0..experience,
+          specialty_id: specialty.id,
+          experience_level: 0..experience_for(specialty),
           award_type_id: accessable_award_types.pluck(:id)
         ).pluck(:id)
       end.flatten.uniq)
@@ -191,22 +192,8 @@ class Account < ApplicationRecord
       related_awards.pluck(:id))
   end
 
-  def experiences
-    Specialty.all.map { |specialty| [specialty&.id, experience_for(specialty)] }
-             .push([nil, experience_for(nil)])
-             .push([0, experience_for(nil)]).to_h
-  end
-
-  def experience_for(specialty = nil)
-    if specialty
-      awards.completed.where(specialty: specialty).size
-    else
-      awards.completed.size
-    end
-  end
-
-  def total_experience
-    awards.completed.count
+  def experience_for(specialty)
+    experiences.find_by(specialty: specialty)&.level.to_i
   end
 
   def tasks_to_unlock(award)

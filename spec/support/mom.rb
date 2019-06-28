@@ -21,6 +21,14 @@ class Mom
     Specialty.new(defaults.merge(attrs))
   end
 
+  def experience(**attrs)
+    defaults = {
+      specialty: create(:specialty),
+      account: create(:account)
+    }
+    Experience.new(defaults.merge(attrs))
+  end
+
   def account_with_auth(**attrs)
     account(**attrs).tap { |a| create(:authentication, account: a) }
   end
