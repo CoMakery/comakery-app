@@ -80,7 +80,7 @@ class AwardTypesController < ApplicationController
             completed_tasks: batch.awards.completed&.size,
             total_tasks: batch.awards.listed&.size,
             currency: batch.project.token&.symbol,
-            total_amount: batch.awards.listed&.sum(:total_amount),
+            total_amount: batch.awards.sum(&:possible_total_amount),
             currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
             team_pics: batch.project.contributors_distinct.map { |a| helpers.account_image_url(a, 100) },
             edit_path: edit_project_award_type_path(@project, batch),

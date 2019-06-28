@@ -240,14 +240,6 @@ describe Award do
       it 'multiplies amount by quantity' do
         expect(award_w_quantity.total_amount).to eq(200)
       end
-
-      it 'multiplies amount by number_of_assignments for template tasks' do
-        expect(award_template.total_amount).to eq(300)
-      end
-
-      it 'returns 0 for auto-cloned tasks' do
-        expect(award_template.clone_on_assignment.total_amount).to eq(0)
-      end
     end
 
     describe '#ethereum_transaction_address' do
@@ -673,6 +665,29 @@ describe Award do
       expect(new_award.name).to eq(award.name)
       expect(new_award.cloned_on_assignment_from_id).to eq(award.id)
       expect(new_award.number_of_assignments).to eq(1)
+    end
+  end
+
+  describe '.possible_total_amount' do
+    let!(:award_ready) { create(:award_ready, amount: 1) }
+    let!(:award_ready_cloneable_2_times) { create(:award_ready, amount: 1, number_of_assignments: 2) }
+    let!(:award_template) { create(:award_ready, amount: 1, number_of_assignments: 10) }
+    let!(:award_cancelled) { create(:award, amount: 1, status: :cancelled) }
+    let!(:award_rejected) { create(:award, amount: 1, status: :rejected) }
+
+    it 'returns total_amount multiplied by possible number_of_assignments' do
+      expect(award_ready.possible_total_amount).to eq(1)
+      expect(award_ready_cloneable_2_times.possible_total_amount).to eq(2)
+    end
+
+    it 'returns total_amount multiplied by possible number_of_assignments minus current number of assignments for template tasks' do
+      award_template.clone_on_assignment
+      expect(award_template.possible_total_amount).to eq(9)
+    end
+
+    it 'returns zero for cancelled or rejected tasks' do
+      expect(award_cancelled.possible_total_amount).to eq(0)
+      expect(award_rejected.possible_total_amount).to eq(0)
     end
   end
 end
