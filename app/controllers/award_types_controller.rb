@@ -65,7 +65,6 @@ class AwardTypesController < ApplicationController
 
     def award_type_params
       params.fetch(:batch, {}).permit(
-        :specialty_id,
         :name,
         :goal,
         :description,
@@ -80,7 +79,6 @@ class AwardTypesController < ApplicationController
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
             completed_tasks: batch.awards.completed&.size,
             total_tasks: batch.awards.listed&.size,
-            specialty: batch.specialty&.name,
             currency: batch.project.token&.symbol,
             total_amount: batch.awards.listed&.sum(:total_amount),
             currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,

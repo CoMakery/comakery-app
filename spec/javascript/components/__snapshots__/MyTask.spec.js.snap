@@ -8,9 +8,6 @@ exports[`MyTask renders component correctly 1`] = `
   filter=""
   task={
     Object {
-      "batch": Object {
-        "specialty": null,
-      },
       "contributor": Object {
         "image": null,
         "name": null,
@@ -27,6 +24,7 @@ exports[`MyTask renders component correctly 1`] = `
       "token": Object {
         "currency": "test",
         "logo": "test",
+        "specialty": "test",
       },
     }
   }
@@ -555,9 +553,6 @@ exports[`MyTask renders component correctly 1`] = `
                       filter=""
                       task={
                         Object {
-                          "batch": Object {
-                            "specialty": null,
-                          },
                           "contributor": Object {
                             "image": null,
                             "name": null,
@@ -574,6 +569,7 @@ exports[`MyTask renders component correctly 1`] = `
                           "token": Object {
                             "currency": "test",
                             "logo": "test",
+                            "specialty": "test",
                           },
                         }
                       }
@@ -852,9 +848,6 @@ exports[`MyTask renders component correctly 1`] = `
                       filter=""
                       task={
                         Object {
-                          "batch": Object {
-                            "specialty": null,
-                          },
                           "contributor": Object {
                             "image": null,
                             "name": null,
@@ -871,6 +864,7 @@ exports[`MyTask renders component correctly 1`] = `
                           "token": Object {
                             "currency": "test",
                             "logo": "test",
+                            "specialty": "test",
                           },
                         }
                       }

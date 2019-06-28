@@ -17,16 +17,18 @@ class Award < ApplicationRecord
   attachment :image, type: :image
   attachment :submission_image, type: :image
 
+  attribute :specialty_id, :integer, default: -> { Specialty.default.id }
+
   belongs_to :account, optional: true
   belongs_to :authentication, optional: true
   belongs_to :award_type
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
+  belongs_to :specialty
   has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
-  has_one :specialty, through: :award_type
 
   validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
   validates :amount, numericality: { greater_than: 0 }
@@ -55,6 +57,7 @@ class Award < ApplicationRecord
   before_validation :calculate_total_amount
   before_validation :set_paid_status_if_project_has_no_token, if: -> { status == 'accepted' && !project.token }
   before_destroy :abort_destroy
+  after_save :update_account_experience, if: -> { completed? }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6)' }
@@ -140,7 +143,7 @@ class Award < ApplicationRecord
   end
 
   def matching_experience_for?(account)
-    experience_level.to_i <= account.experience_for(award_type.specialty)
+    experience_level.to_i <= account.experience_for(specialty)
   end
 
   def confirm!(account)
@@ -177,6 +180,10 @@ class Award < ApplicationRecord
 
   def should_be_cloned?
     assignments.size + 1 < number_of_assignments.to_i
+  end
+
+  def can_be_cloned_for?(account)
+    (account.awards.started.count < STARTED_TASKS_PER_CONTRIBUTOR) && !reached_maximum_assignments_for?(account)
   end
 
   def reached_maximum_assignments_for?(account)
@@ -228,5 +235,9 @@ class Award < ApplicationRecord
       if account && reached_maximum_assignments_for?(account)
         errors.add(:base, 'Sorry, you already did the task maximum times allowed')
       end
+    end
+
+    def update_account_experience
+      Experience.increment_for(account, specialty)
     end
 end

@@ -14,6 +14,7 @@ describe 'awards issuing', js: true do
   let!(:award4) { create(:award_ready, award_type: award_type1, amount: 1) }
   let!(:award5) { create(:award_ready, award_type: award_type1, amount: 1) }
   let!(:award6) { create(:award, award_type: award_type1, amount: 1) }
+  let!(:specialty) { create(:specialty, name: 'writing') }
 
   before do
     team.build_authentication_team current_auth
@@ -33,6 +34,7 @@ describe 'awards issuing', js: true do
     fill_in 'task[why]', with: 'test why'
     fill_in 'task[description]', with: 'test description'
     fill_in 'task[requirements]', with: 'test requirements'
+    select 'writing', from: 'task[specialty_id]'
     find('select[name="task[experience_level]"] > option:nth-child(2)').click
     fill_in 'task[amount]', with: '1'
     fill_in 'task[proof_link]', with: 'http://test'
@@ -41,6 +43,7 @@ describe 'awards issuing', js: true do
     expect(Award.last.name).to eq 'test name'
     expect(Award.last.why).to eq 'test why'
     expect(Award.last.description).to eq 'test description'
+    expect(Award.last.specialty.name).to eq 'writing'
     expect(Award.last.requirements).to eq 'test requirements'
     expect(Award.last.experience_level).not_to eq 0
     expect(Award.last.amount).to eq 1

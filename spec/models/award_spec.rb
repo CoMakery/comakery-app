@@ -2,6 +2,9 @@ require 'rails_helper'
 
 describe Award do
   describe 'associations' do
+    let(:specialty) { create(:specialty) }
+    let(:award) { create(:award, specialty: specialty) }
+
     it 'has the expected associations' do
       described_class.create!(
         name: 'test',
@@ -23,6 +26,10 @@ describe Award do
       2.times { award.clone_on_assignment }
 
       expect(award.assignments.size).to eq(2)
+    end
+
+    it 'belongs to specialty' do
+      expect(award.specialty).to eq(specialty)
     end
   end
 
@@ -54,7 +61,7 @@ describe Award do
     describe '.filtered_for_view(filter, account)' do
       let!(:contributor) { create(:account) }
       let!(:project_owner) { create(:account) }
-      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed'), specialty: contributor.specialty)) }
+      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed')), specialty: contributor.specialty) }
       let!(:started_award) { create(:award, status: 'started', issuer: project_owner, account: contributor) }
       let!(:submitted_award) { create(:award, status: 'submitted', issuer: project_owner, account: contributor) }
       let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
@@ -110,6 +117,24 @@ describe Award do
 
       it 'doesnt upgrade accepted task to paid if project has token associated' do
         expect(submtted_task_w_token.accepted?).to be true
+      end
+    end
+
+    describe 'update_account_experience' do
+      let!(:award_ready) { create(:award_ready) }
+
+      it 'increases contributor experience when award is completed' do
+        expect do
+          award_ready.update(status: :accepted)
+        end.to change { Experience.find_by(account: award_ready.account, specialty: award_ready.specialty)&.level.to_i }.by(1)
+      end
+    end
+
+    describe 'set_default_specialty' do
+      let!(:award) { create(:award_ready) }
+
+      it 'sets default specialty' do
+        expect(award.specialty).to eq(Specialty.default)
       end
     end
   end
@@ -325,8 +350,8 @@ describe Award do
 
   describe '.matching_experience_for?(account)' do
     let(:account) { create(:account) }
-    let(:award_type) { create(:award_type, specialty: account.specialty) }
-    let(:award_no_experience) { create(:award_ready, award_type: award_type) }
+    let(:award_type) { create(:award_type) }
+    let(:award_no_experience) { create(:award_ready, specialty: account.specialty, award_type: award_type) }
     let(:award_level1) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['New Contributor'], award_type: award_type) }
     let(:award_level2) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type) }
     let(:award_level3) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'], award_type: award_type) }
@@ -598,6 +623,26 @@ describe Award do
     it 'returns false if current number of assignments plus one currently creating equal or greater than number_of_assignments allowed' do
       expect(award_shouldnt_be_cloned_at_all.should_be_cloned?).to be_falsey
       expect(award_has_been_cloned_already.should_be_cloned?).to be_falsey
+    end
+  end
+
+  describe '.can_be_cloned_for?(account)' do
+    let(:award_ready) { create(:award_ready) }
+    let(:award_account_started_max) { create(:award_ready) }
+    let(:award_account_cloned_max) { create(:award_ready, number_of_assignments: 10, number_of_assignments_per_user: 2) }
+
+    it 'returns true if account hasnt too many started tasks and hasnt reached maximum assignments' do
+      expect(award_ready.can_be_cloned_for?(award_ready.account)).to be_truthy
+    end
+
+    it 'returns false if account has too many started tasks' do
+      Award::STARTED_TASKS_PER_CONTRIBUTOR.times { create(:award, status: 'started', account: award_account_started_max.account) }
+      expect(award_account_started_max.can_be_cloned_for?(award_account_started_max.account)).to be_falsey
+    end
+
+    it 'returns false if account reached maximum assignments' do
+      2.times { award_account_cloned_max.clone_on_assignment.update!(account: award_account_cloned_max.account) }
+      expect(award_account_cloned_max.can_be_cloned_for?(award_account_cloned_max.account)).to be_falsey
     end
   end
 

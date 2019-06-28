@@ -120,8 +120,7 @@ describe AwardPolicy do
 
     it 'returns true if award is ready, has matching experience and accessable for a given user' do
       award = create(
-        :award,
-        status: 'ready',
+        :award_ready,
         experience_level: Award::EXPERIENCE_LEVELS['New Contributor'],
         award_type: create(
           :award_type,

@@ -215,7 +215,9 @@ class AwardsController < ApplicationController
     end
 
     def clone_award_on_start
-      @award = @award.clone_on_assignment if @award.should_be_cloned?
+      if @award.should_be_cloned? && @award.can_be_cloned_for?(current_account)
+        @award = @award.clone_on_assignment
+      end
     end
 
     def set_award_type
@@ -259,6 +261,7 @@ class AwardsController < ApplicationController
         :amount,
         :number_of_assignments,
         :number_of_assignments_per_user,
+        :specialty_id,
         :proof_link
       )
     end
@@ -333,6 +336,7 @@ class AwardsController < ApplicationController
         project: @project.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
         experience_levels: Award::EXPERIENCE_LEVELS,
+        specialties: Specialty.all.map { |s| [s.name, s.id] }.unshift(['General', nil]).to_h,
         form_url: project_award_type_awards_path(@project, @award_type),
         form_action: 'POST',
         url_on_success: project_award_types_path,

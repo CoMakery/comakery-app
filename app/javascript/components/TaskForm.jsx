@@ -38,6 +38,7 @@ class TaskForm extends React.Component {
       'task[amount]'                        : this.props.task.amount || '',
       'task[number_of_assignments]'         : this.props.task.numberOfAssignments || 1,
       'task[number_of_assignments_per_user]': this.props.task.numberOfAssignmentsPerUser || 1,
+      'task[specialty_id]'                  : this.props.task.specialtyId || Object.values(this.props.specialties)[0],
       'task[proof_link]'                    : this.props.task.proofLink || ''
     }
   }
@@ -265,6 +266,17 @@ class TaskForm extends React.Component {
             />
 
             <InputFieldDropdown
+              title="specialty"
+              required
+              name="task[specialty_id]"
+              value={this.state['task[specialty_id]']}
+              errorText={this.state.errors['task[specialtyId]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.props.specialties)}
+              symbolLimit={0}
+            />
+
+            <InputFieldDropdown
               title="skill confirmations required"
               required
               name="task[experience_level]"
@@ -348,6 +360,7 @@ TaskForm.propTypes = {
   project         : PropTypes.object.isRequired,
   token           : PropTypes.object.isRequired,
   experienceLevels: PropTypes.object.isRequired,
+  specialties     : PropTypes.object.isRequired,
   formUrl         : PropTypes.string.isRequired,
   formAction      : PropTypes.string.isRequired,
   urlOnSuccess    : PropTypes.string.isRequired,
@@ -359,6 +372,7 @@ TaskForm.defaultProps = {
   project         : {'default': '_'},
   token           : {'default': '_'},
   experienceLevels: {'default': '_'},
+  specialties     : {'default': '_'},
   formUrl         : '/',
   formAction      : 'POST',
   urlOnSuccess    : '/',
