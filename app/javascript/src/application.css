@@ -1464,14 +1464,13 @@ select:disabled {
 .featured-missions__header__title {
   font-family: Montserrat, sans-serif;
   font-size: 38px;
-  font-weight: 800;
+  font-weight: 600;
   font-style: normal;
   font-stretch: normal;
   line-height: 1.23;
   letter-spacing: normal;
   color: #ffffff;
   margin-bottom: 14px;
-  text-transform: uppercase;
 }
 
 .featured-missions__header__subtitle {
