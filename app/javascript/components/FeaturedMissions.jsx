@@ -4,49 +4,34 @@ import FeaturedMission from './FeaturedMission'
 import Slider from 'react-slick'
 import styled from 'styled-components'
 
-import headerImg from '../src/images/featured/header.png'
 import logo from '../src/images/styleguide/icons/Logo-Footer.svg'
 import developersImg from '../src/images/featured/developers.png'
 import communityManagersImg from '../src/images/featured/community-managers.png'
 import chatImg from '../src/images/featured/chat.svg'
 
 const VideoHowItWorks = styled.div`
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 3em;
+  flex-grow: 2;
+  padding-right: 50px;
 
-  h3 {
-    text-align: center;
-    opacity: 0.2;
-    background-image: linear-gradient(to right, #fb40e5, #0089f4);
-    font-family: Montserrat, sans-serif;
-    font-size: 62px;
-    font-weight: 600;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 0.9;
-    letter-spacing: normal;
-    background-clip: text;
-    -webkit-background-clip: text;
-    text-fill-color: transparent;
-    -webkit-text-fill-color: transparent;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
+  @media (max-width: 1024px) {
+    padding: 50px 0;
+    height: 334px;
+    width: 100%;
   }
 
-  div {
-    padding: 56.25% 0 0 0;
-    position: relative;
-    height: 0;
-    overflow: hidden;
-    max-width: 100%;
+  @media (max-width: 1024px) {
+    padding: 50px 0;
+    height: 334px;
+    width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    padding: 50px 0;
+    height: 234px;
+    width: 100%;
   }
 
   iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%
   }
@@ -102,7 +87,13 @@ export default class FeaturedMissions extends React.Component {
             </div>
           }
           <div className="featured-missions__header_container">
-            <img className="featured-missions__header__img" src={headerImg} />
+
+            <VideoHowItWorks>
+              <iframe src="https://player.vimeo.com/video/345071697?byline=0&title=false&portrait=0&color=ffffff" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen />
+            </VideoHowItWorks>
+
+            <script async src="https://player.vimeo.com/api/player.js" />
+
             <div className="featured-missions__header__description">
               <img className="featured-missions__header__logo" src={logo} />
               <div className="featured-missions__header__title">
@@ -113,15 +104,6 @@ export default class FeaturedMissions extends React.Component {
             </div>
           </div>
         </div>
-
-        <VideoHowItWorks>
-          <h3>How It Works</h3>
-          <div>
-            <iframe src="https://player.vimeo.com/video/345071697?byline=0&portrait=0" frameBorder="0" allow="autoplay; fullscreen" webkitallowfullscreen mozallowfullscreen allowFullScreen />
-          </div>
-        </VideoHowItWorks>
-
-        <script async src="https://player.vimeo.com/api/player.js" />
 
         <div className="featured-missions__content">
           <p className="featured-missions__content__title">

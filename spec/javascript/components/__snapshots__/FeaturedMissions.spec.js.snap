@@ -19,9 +19,73 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
       <div
         className="featured-missions__header_container"
       >
-        <img
-          className="featured-missions__header__img"
-          src="test-file-stub"
+        <styled.div>
+          <StyledComponent
+            forwardedComponent={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-bdVaJa",
+                  "isStatic": true,
+                  "lastClassName": "hjKsXa",
+                  "rules": Array [
+                    "
+  flex-grow: 2;
+  padding-right: 50px;
+
+  @media (max-width: 1024px) {
+    padding: 50px 0;
+    height: 334px;
+    width: 100%;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 50px 0;
+    height: 334px;
+    width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    padding: 50px 0;
+    height: 234px;
+    width: 100%;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-bdVaJa",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              }
+            }
+            forwardedRef={null}
+          >
+            <div
+              className="sc-bdVaJa hjKsXa"
+            >
+              <iframe
+                allow="autoplay; fullscreen"
+                allowFullScreen={true}
+                frameBorder="0"
+                src="https://player.vimeo.com/video/345071697?byline=0&title=false&portrait=0&color=ffffff"
+              />
+            </div>
+          </StyledComponent>
+        </styled.div>
+        <script
+          async={true}
+          src="https://player.vimeo.com/api/player.js"
         />
         <div
           className="featured-missions__header__description"
@@ -45,95 +109,6 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
         </div>
       </div>
     </div>
-    <styled.div>
-      <StyledComponent
-        forwardedComponent={
-          Object {
-            "$$typeof": Symbol(react.forward_ref),
-            "attrs": Array [],
-            "componentStyle": ComponentStyle {
-              "componentId": "sc-bdVaJa",
-              "isStatic": true,
-              "lastClassName": "fMXWdx",
-              "rules": Array [
-                "
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 3em;
-
-  h3 {
-    text-align: center;
-    opacity: 0.2;
-    background-image: linear-gradient(to right, #fb40e5, #0089f4);
-    font-family: Montserrat, sans-serif;
-    font-size: 62px;
-    font-weight: 600;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 0.9;
-    letter-spacing: normal;
-    background-clip: text;
-    -webkit-background-clip: text;
-    text-fill-color: transparent;
-    -webkit-text-fill-color: transparent;
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-  }
-
-  div {
-    padding: 56.25% 0 0 0;
-    position: relative;
-    height: 0;
-    overflow: hidden;
-    max-width: 100%;
-  }
-
-  iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%
-  }
-",
-              ],
-            },
-            "displayName": "styled.div",
-            "foldedComponentIds": Array [],
-            "render": [Function],
-            "styledComponentId": "sc-bdVaJa",
-            "target": "div",
-            "toString": [Function],
-            "warnTooManyClasses": [Function],
-            "withComponent": [Function],
-          }
-        }
-        forwardedRef={null}
-      >
-        <div
-          className="sc-bdVaJa fMXWdx"
-        >
-          <h3>
-            How It Works
-          </h3>
-          <div>
-            <iframe
-              allow="autoplay; fullscreen"
-              allowFullScreen={true}
-              frameBorder="0"
-              mozallowfullscreen={true}
-              src="https://player.vimeo.com/video/345071697?byline=0&portrait=0"
-              webkitallowfullscreen={true}
-            />
-          </div>
-        </div>
-      </StyledComponent>
-    </styled.div>
-    <script
-      async={true}
-      src="https://player.vimeo.com/api/player.js"
-    />
     <div
       className="featured-missions__content"
     >
