@@ -19,12 +19,6 @@ const VideoHowItWorks = styled.div`
     width: 100%;
   }
 
-  @media (max-width: 1024px) {
-    padding: 50px 0;
-    height: 334px;
-    width: 100%;
-  }
-
   @media (max-width: 600px) {
     padding: 50px 0;
     height: 234px;
