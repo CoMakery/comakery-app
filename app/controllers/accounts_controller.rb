@@ -75,7 +75,7 @@ class AccountsController < ApplicationController
         @current_account = nil
         flash[:warning] = 'Please confirm your email address to continue'
       end
-      redirect_to root_path
+      redirect_to my_tasks_path
     else
       error_msg = @account.errors.full_messages.join(', ')
       flash[:error] = error_msg
@@ -111,7 +111,7 @@ class AccountsController < ApplicationController
     else
       flash[:error] = 'Invalid token'
     end
-    redirect_to root_path
+    redirect_to my_tasks_path
   end
 
   def update

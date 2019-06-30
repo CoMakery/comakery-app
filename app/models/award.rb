@@ -17,18 +17,24 @@ class Award < ApplicationRecord
   attachment :image, type: :image
   attachment :submission_image, type: :image
 
+  attribute :specialty_id, :integer, default: -> { Specialty.default.id }
+
   belongs_to :account, optional: true
   belongs_to :authentication, optional: true
   belongs_to :award_type
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
+  belongs_to :specialty
+  has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
 
   validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
-  validates :amount, :total_amount, numericality: { greater_than: 0 }
+  validates :amount, numericality: { greater_than: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
+  validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
+  validates :number_of_assignments_per_user, numericality: { less_than_or_equal_to: :number_of_assignments }
   validates :ethereum_transaction_address, ethereum_address: { type: :transaction, immutable: true }, if: -> { project&.coin_type_on_ethereum? } # see EthereumAddressable
   validates :ethereum_transaction_address, qtum_transaction_address: { immutable: true }, if: -> { project&.coin_type_on_qtum? }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, allow_nil: true
@@ -45,23 +51,17 @@ class Award < ApplicationRecord
 
   validate :total_amount_fits_into_project_budget
   validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }
+  validate :contributor_doesnt_reach_maximum_assignments, if: -> { status == 'started' }
 
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
   before_validation :set_paid_status_if_project_has_no_token, if: -> { status == 'accepted' && !project.token }
   before_destroy :abort_destroy
+  after_save :update_account_experience, if: -> { completed? }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6)' }
-  scope :having_suitable_experience_for, lambda { |account|
-    where(status: :ready).where(
-      '(award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL)) OR (award_type_id IN (?) AND (experience_level <= ? OR experience_level is NULL))',
-      AwardType.where(specialty_id: account.specialty&.id).pluck(:id),
-      account.specialty_experience,
-      AwardType.where(specialty_id: [0, nil]).pluck(:id),
-      account.total_experience
-    )
-  }
+
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
@@ -142,6 +142,10 @@ class Award < ApplicationRecord
     end
   end
 
+  def matching_experience_for?(account)
+    experience_level.to_i <= account.experience_for(specialty)
+  end
+
   def confirm!(account)
     update confirm_token: nil, account: account
   end
@@ -158,8 +162,57 @@ class Award < ApplicationRecord
     %w[accepted paid].include? status
   end
 
-  def can_be_deleted?
-    status == 'ready'
+  def can_be_edited?
+    status == 'ready' && !cloned? && !any_clones?
+  end
+
+  def cloned?
+    cloned_on_assignment_from_id.present?
+  end
+
+  def any_clones?
+    !assignments.empty?
+  end
+
+  def cloneable?
+    number_of_assignments.to_i > 1
+  end
+
+  def should_be_cloned?
+    assignments.size + 1 < number_of_assignments.to_i
+  end
+
+  def can_be_cloned_for?(account)
+    (account.awards.started.count < STARTED_TASKS_PER_CONTRIBUTOR) && !reached_maximum_assignments_for?(account)
+  end
+
+  def reached_maximum_assignments_for?(account)
+    assignments.where(account: account).size >= number_of_assignments_per_user.to_i
+  end
+
+  def clone_on_assignment
+    new_award = dup
+    new_award.cloned_on_assignment_from_id = id
+    new_award.number_of_assignments = 1
+    new_award.number_of_assignments_per_user = 1
+    new_award.save!
+    new_award
+  end
+
+  def possible_quantity
+    if cancelled? || rejected?
+      BigDecimal(0)
+    else
+      (number_of_assignments || 1) - assignments.size
+    end
+  end
+
+  def possible_total_amount
+    if cancelled? || rejected?
+      BigDecimal(0)
+    else
+      total_amount * possible_quantity
+    end
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true
@@ -176,13 +229,14 @@ class Award < ApplicationRecord
 
     def total_amount_fits_into_project_budget
       return if project&.maximum_tokens.nil? || project&.maximum_tokens&.zero?
-      if total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(:total_amount) || 0) > BigDecimal(project&.maximum_tokens)
-        errors[:base] << "Sorry, you can't send more awards than the project's budget"
+
+      if possible_total_amount + BigDecimal(project&.awards&.where&.not(id: id)&.sum(&:possible_total_amount) || 0) > BigDecimal(project&.maximum_tokens)
+        errors[:base] << "Sorry, you can't exceed the project's budget"
       end
     end
 
     def abort_destroy
-      unless can_be_deleted?
+      unless can_be_edited?
         errors[:base] << "#{status.capitalize} task can't be deleted"
         throw :abort
       end
@@ -192,5 +246,15 @@ class Award < ApplicationRecord
       if account && account.awards.started.count >= STARTED_TASKS_PER_CONTRIBUTOR
         errors.add(:base, "Sorry, you can't start more than #{STARTED_TASKS_PER_CONTRIBUTOR} tasks")
       end
+    end
+
+    def contributor_doesnt_reach_maximum_assignments
+      if account && reached_maximum_assignments_for?(account)
+        errors.add(:base, 'Sorry, you already did the task maximum times allowed')
+      end
+    end
+
+    def update_account_experience
+      Experience.increment_for(account, specialty)
     end
 end

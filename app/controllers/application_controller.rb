@@ -109,10 +109,56 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def assign_project
-    project = policy_scope(Project).find_by id: (params[:project_id] || params[:id])
-    project = policy_scope(Project).find_by long_id: params[:project_id] unless project
-    @project = project&.decorate if project&.can_be_access?(current_account)
-    redirect_to root_path unless @project
+    @project = Project.find_by(id: params[:project_id] || params[:id])&.decorate
+  end
+
+  def task_to_props(task)
+    task&.serializable_hash&.merge({
+      description_html: Comakery::Markdown.to_html(task.description),
+      requirements_html: Comakery::Markdown.to_html(task.requirements),
+      specialty: task.specialty&.name,
+      mission: {
+        name: task.project&.mission&.name,
+        url: task.project&.mission ? mission_path(task.project&.mission) : nil
+      },
+      token: {
+        currency: task.project&.token&.symbol,
+        logo: helpers.attachment_url(task.project&.token, :logo_image, :fill, 100, 100)
+      },
+      project: {
+        id: task.project&.id,
+        name: task.project&.title,
+        url: task.project && (task.project.unlisted? ? unlisted_project_path(task.project.long_id) : project_path(task.project)),
+        channels: task.project.channels.map do |channel|
+          {
+            type: channel.provider,
+            name: channel.name,
+            url: channel.url,
+            id: channel.id
+          }
+        end
+      },
+      issuer: {
+        name: task.issuer&.decorate&.name,
+        image: helpers.account_image_url(task.issuer, 100),
+        self: task.issuer == current_account
+      },
+      contributor: {
+        name: task.account&.decorate&.name,
+        image: helpers.account_image_url(task.account, 100),
+        wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
+      },
+      experience_level_name: Award::EXPERIENCE_LEVELS.key(task.experience_level),
+      image_url: helpers.attachment_url(task, :image),
+      submission_image_url: helpers.attachment_url(task, :submission_image),
+      payment_url: awards_project_path(task.project),
+      details_url: project_award_type_award_path(task.project, task.award_type, task),
+      start_url: project_award_type_award_start_path(task.project, task.award_type, task),
+      submit_url: project_award_type_award_submit_path(task.project, task.award_type, task),
+      accept_url: project_award_type_award_accept_path(task.project, task.award_type, task),
+      reject_url: project_award_type_award_reject_path(task.project, task.award_type, task),
+      updated_at: helpers.time_ago_in_words(task.updated_at)
+    })
   end
 
   # :nocov:

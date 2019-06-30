@@ -23,6 +23,12 @@ describe Specialty do
     end
   end
 
+  describe '.default' do
+    it 'returns General specialty' do
+      expect(described_class.default.name).to eq('General')
+    end
+  end
+
   it 'must have a unique name' do
     described_class.create(name: 'Golf')
     specialty = described_class.new(name: 'Golf')

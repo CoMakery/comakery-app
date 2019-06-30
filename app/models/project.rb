@@ -43,7 +43,7 @@ class Project < ApplicationRecord
   scope :listed, -> { where 'projects.visibility not in(2,3)' }
   scope :visible, -> { where 'projects.visibility not in(2,3,4)' }
   scope :unarchived, -> { where.not visibility: 4 }
-  scope :publics, -> { where 'projects.visibility in(1,3)' }
+  scope :publics, -> { where 'projects.visibility in(1)' }
 
   delegate :coin_type, to: :token, allow_nil: true
   delegate :coin_type_on_ethereum?, to: :token, allow_nil: true
@@ -118,16 +118,6 @@ class Project < ApplicationRecord
     Project.unarchived.where(id: id).present?
   end
 
-  def access_unlisted?(check_account)
-    return true if public_unlisted?
-    return true if member_unlisted? && check_account&.same_team_or_owned_project?(self)
-  end
-
-  def can_be_access?(check_account)
-    return true if public? && !require_confidentiality?
-    check_account && check_account.same_team_or_owned_project?(self)
-  end
-
   def unlisted?
     member_unlisted? || public_unlisted?
   end
@@ -164,6 +154,10 @@ class Project < ApplicationRecord
       result << item
     end
     result
+  end
+
+  def ready_tasks_by_specialty(limit_per_specialty = 5)
+    awards.ready.group_by(&:specialty).map { |specialty, awards| [specialty, awards.take(limit_per_specialty)] }.to_h
   end
 
   private

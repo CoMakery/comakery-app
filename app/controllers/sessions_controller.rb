@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
       redirect_to_the_build_profile_accounts_page(authentication) && return
       UserMailer.confirm_authentication(authentication).deliver
       flash[:error] = 'Please check your email for confirmation instruction'
-      @path = root_path
+      @path = my_tasks_path
     else
       flash[:error] = 'Failed authentication - Auth hash is missing one or more required values'
       @path = root_path
@@ -62,12 +62,12 @@ class SessionsController < ApplicationController
     if token
       session[:redeem] = nil
       flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
-      root_path
+      my_tasks_path
     elsif @path
       @path
     else
       process_new_award_notice if current_account.new_award_notice
-      root_path
+      my_tasks_path
     end
   end
 

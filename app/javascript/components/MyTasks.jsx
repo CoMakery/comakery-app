@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import MyTask from './MyTask'
+import Icon from './styleguide/Icon'
 import styled, {css} from 'styled-components'
 
 const Wrapper = styled.div`
@@ -117,12 +118,60 @@ const FilterLink = styled.a`
   }
 `
 
+const SubHeader = styled.div`
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #d8d8d8;
+  margin-bottom: 35px;
+  padding: 10px 0;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+`
+
 const Pagination = styled.div`
   text-align: right;
   width: 100%;
   padding: 15px 0;
-  border-bottom: 1px solid #d8d8d8;
-  margin-bottom: 35px;
+`
+
+const ProjectFilter = styled.div`
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  width: 100%;
+  text-transform: uppercase;
+  color: #8d9599;
+
+  span {
+    margin-right: 0.5em;
+  }
+
+  img {
+    height: 15px;
+    margin-left: 0.2em;
+    margin-bottom: -3px;
+    opacity: 0.2;
+  }
+
+  a {
+    text-decoration: none;
+    color: #0089f4;
+    padding: 5px 5px;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,0.1);
+    background: white;
+    border: solid 1px #d8d8d8;
+    display: inline-block;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 `
 
 class MyTasks extends React.Component {
@@ -141,6 +190,7 @@ class MyTasks extends React.Component {
         <div className="loading-placeholder" />
       )
     }
+    let filter = this.props.filters.find(f => f.current).name
     return (
       <React.Fragment>
         <Wrapper>
@@ -163,10 +213,28 @@ class MyTasks extends React.Component {
               )}
             </Filter>
 
-            <Pagination dangerouslySetInnerHTML={{__html: this.props.paginationHtml}} />
+            <SubHeader>
+              {this.props.project &&
+                <ProjectFilter>
+                  <span>Filtered by Project:</span>
+
+                  <a href={location ? location.pathname : ''}>
+                    {this.props.project.title}
+                    <Icon name="iconCloseCopy.svg" />
+                  </a>
+                </ProjectFilter>
+              }
+
+              <Pagination dangerouslySetInnerHTML={{__html: this.props.paginationHtml}} />
+            </SubHeader>
 
             {this.props.tasks.map(task =>
-              <MyTask key={task.id} task={task} filter={this.props.filters.find(f => f.current).name} />
+              <MyTask
+                key={task.id}
+                task={task}
+                filter={filter}
+                displayFilters={!this.props.project && filter === 'ready'}
+              />
             )}
           </Layout>
         </Wrapper>
@@ -178,12 +246,13 @@ class MyTasks extends React.Component {
 MyTasks.propTypes = {
   tasks         : PropTypes.array.isRequired,
   filters       : PropTypes.array.isRequired,
+  project       : PropTypes.object,
   paginationHtml: PropTypes.string.isRequired,
   pastAwardsUrl : PropTypes.string.isRequired
 }
 MyTasks.defaultProps = {
   tasks         : [],
-  filters       : [],
+  filters       : [{'current': true, 'name': '_'}],
   paginationHtml: '',
   pastAwardsUrl : ''
 }

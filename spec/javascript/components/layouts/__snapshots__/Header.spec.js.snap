@@ -28,7 +28,7 @@ exports[`Header renders correctly without props 1`] = `
           className={null}
           href="/"
         >
-          Home
+          Missions
         </a>
         <a
           className={null}

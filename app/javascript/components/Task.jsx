@@ -45,6 +45,10 @@ const RightBorder = styled.div`
   ${props => props.status === 'rejected' && css`
     background-color: #ff4d4d;
   `}
+
+  ${props => props.status === 'cancelled' && css`
+    background-color: #ff4d4d;
+  `}
 `
 
 const Info = styled.div`
@@ -106,6 +110,29 @@ const Status = styled.div`
   ${props => props.status === 'rejected' && css`
     color: #ff4d4d;
   `}
+
+  ${props => props.status === 'cancelled' && css`
+    color: #ff4d4d;
+  `}
+`
+const CloneInfo = styled.div`
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  margin-right: 2em;
+
+  b {
+    font-weight: 600;
+  }
+
+  span {
+    margin-left: 0.5em;
+  }
 `
 
 const Contributor = styled.div`
@@ -176,11 +203,12 @@ const StyledIcon = styled(Icon)`
   margin-left: 16px;
 `
 
-const IconPlaceholder = styled.span`
-  display: inline-block; 
+const IconPlaceholder = styled(Icon)`
   height: 15px;
   width: 15px;
   margin-left: 16px;
+  opacity: 0.3;
+  cursor: not-allowed;
 `
 
 class Task extends React.Component {
@@ -200,6 +228,19 @@ class Task extends React.Component {
                 <Status status={task.status}>
                   {task.status}
                 </Status>
+
+                {task.cloneable &&
+                  <CloneInfo>
+                    <b>template</b>
+                    <span>{task.numberOfClones + 1}/{task.numberOfAssignments}</span>
+                  </CloneInfo>
+                }
+
+                {task.cloned &&
+                  <CloneInfo>
+                    <b>clone</b>
+                  </CloneInfo>
+                }
 
                 {task.contributor.name &&
                   <Contributor>
@@ -231,16 +272,21 @@ class Task extends React.Component {
                 <a href={task.clonePath}>
                   <StyledIcon name="DUPLICATE.svg" />
                 </a>
-                <a href={task.editPath}>
-                  <StyledIcon name="iconEdit.svg" />
-                </a>
+                {task.editPath &&
+                  <a href={task.editPath}>
+                    <StyledIcon name="iconEdit.svg" />
+                  </a>
+                }
+                {!task.editPath &&
+                  <IconPlaceholder name="iconEdit.svg" />
+                }
                 {task.destroyPath &&
                   <a rel="nofollow" data-method="delete" href={task.destroyPath}>
                     <StyledIcon name="iconTrash.svg" />
                   </a>
                 }
                 {!task.destroyPath &&
-                  <IconPlaceholder />
+                  <IconPlaceholder name="iconTrash.svg" />
                 }
               </Buttons>
             </Details>

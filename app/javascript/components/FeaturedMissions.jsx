@@ -2,12 +2,40 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FeaturedMission from './FeaturedMission'
 import Slider from 'react-slick'
+import styled from 'styled-components'
 
-import headerImg from '../src/images/featured/header.png'
 import logo from '../src/images/styleguide/icons/Logo-Footer.svg'
 import developersImg from '../src/images/featured/developers.png'
 import communityManagersImg from '../src/images/featured/community-managers.png'
 import chatImg from '../src/images/featured/chat.svg'
+
+const VideoHowItWorks = styled.div`
+  flex-grow: 2;
+  padding-right: 50px;
+
+  @media (max-width: 1024px) {
+    padding: 50px 0;
+    height: 334px;
+    width: 100%;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 50px 0;
+    height: 334px;
+    width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    padding: 50px 0;
+    height: 234px;
+    width: 100%;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%
+  }
+`
 
 export default class FeaturedMissions extends React.Component {
   constructor(props) {
@@ -59,17 +87,24 @@ export default class FeaturedMissions extends React.Component {
             </div>
           }
           <div className="featured-missions__header_container">
-            <img className="featured-missions__header__img" src={headerImg} />
+
+            <VideoHowItWorks>
+              <iframe src="https://player.vimeo.com/video/345071697?byline=0&title=false&portrait=0&color=ffffff" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen />
+            </VideoHowItWorks>
+
+            <script async src="https://player.vimeo.com/api/player.js" />
+
             <div className="featured-missions__header__description">
               <img className="featured-missions__header__logo" src={logo} />
               <div className="featured-missions__header__title">
-                Find Your Mission.<br />
-                Join Blockchain Projects.
+                Gather a Tribe.<br />
+                Achieve Big Missions.
               </div>
-              <div className="featured-missions__header__subtitle">Freelance flexibly. Earn tokens & USD. Grow your skills.</div>
+              <div className="featured-missions__header__subtitle">Bring people together around a common vision.</div>
             </div>
           </div>
         </div>
+
         <div className="featured-missions__content">
           <p className="featured-missions__content__title">
               Featured<br />

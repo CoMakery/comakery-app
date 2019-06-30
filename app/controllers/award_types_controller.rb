@@ -4,6 +4,7 @@ class AwardTypesController < ApplicationController
   before_action :set_award_type, only: %i[show edit update destroy]
   before_action :set_form_props, only: %i[new edit]
   before_action :set_index_props, only: [:index]
+  skip_after_action :verify_policy_scoped, only: [:index]
 
   layout 'react'
 
@@ -64,7 +65,6 @@ class AwardTypesController < ApplicationController
 
     def award_type_params
       params.fetch(:batch, {}).permit(
-        :specialty_id,
         :name,
         :goal,
         :description,
@@ -77,38 +77,42 @@ class AwardTypesController < ApplicationController
         batches: @project.award_types&.map do |batch|
           batch.serializable_hash.merge(
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
-            completed_tasks: batch.awards.completed.size,
-            total_tasks: batch.awards.size,
-            specialty: batch.specialty&.name,
+            completed_tasks: batch.awards.completed&.size,
+            total_tasks: batch.awards.sum(&:possible_quantity).to_i,
             currency: batch.project.token&.symbol,
-            total_amount: batch.awards.sum(:total_amount),
+            total_amount: batch.awards.sum(&:possible_total_amount),
             currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
             team_pics: batch.project.contributors_distinct.map { |a| helpers.account_image_url(a, 100) },
             edit_path: edit_project_award_type_path(@project, batch),
             destroy_path: project_award_type_path(@project, batch),
             new_task_path: new_project_award_type_award_path(@project, batch),
-            tasks: batch.awards&.listed&.map do |task|
-              task.serializable_hash.merge(
-                batch_name: batch.name,
-                currency: batch.project.token&.symbol,
-                currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
-                award_path: project_award_type_award_award_path(@project, batch, task),
-                pay_path: awards_project_path(@project),
-                clone_path: project_award_type_award_clone_path(@project, batch, task),
-                edit_path: edit_project_award_type_award_path(@project, batch, task),
-                destroy_path: task.can_be_deleted? && project_award_type_award_path(@project, batch, task),
-                contributor: {
-                  name: task.account&.decorate&.name,
-                  image: helpers.account_image_url(task.account, 100),
-                  wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
-                }
-              )
-            end
+            tasks: batch.awards&.map { |task| task_to_index_props(task, batch) }
           )
         end,
         new_batch_path: new_project_award_type_path(@project),
         project: @project.serializable_hash
       }
+    end
+
+    def task_to_index_props(task, batch)
+      task.serializable_hash.merge(
+        batch_name: batch.name,
+        currency: batch.project.token&.symbol,
+        currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
+        award_path: project_award_type_award_award_path(@project, batch, task),
+        pay_path: awards_project_path(@project),
+        clone_path: project_award_type_award_clone_path(@project, batch, task),
+        edit_path: task.can_be_edited? && edit_project_award_type_award_path(@project, batch, task),
+        destroy_path: task.can_be_edited? && project_award_type_award_path(@project, batch, task),
+        contributor: {
+          name: task.account&.decorate&.name,
+          image: helpers.account_image_url(task.account, 100),
+          wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
+        },
+        cloneable: task.cloneable?,
+        cloned: task.cloned?,
+        number_of_clones: task.assignments.size
+      )
     end
 
     def set_form_props

@@ -21,6 +21,14 @@ class Mom
     Specialty.new(defaults.merge(attrs))
   end
 
+  def experience(**attrs)
+    defaults = {
+      specialty: create(:specialty),
+      account: create(:account)
+    }
+    Experience.new(defaults.merge(attrs))
+  end
+
   def account_with_auth(**attrs)
     account(**attrs).tap { |a| create(:authentication, account: a) }
   end
@@ -104,7 +112,6 @@ class Mom
   def award_type(**attrs)
     defaults = {
       name: 'Contribution',
-      specialty: create(:specialty),
       goal: 'none',
       description: 'none'
     }
@@ -124,6 +131,7 @@ class Mom
 
     params[:award_type] ||= create(:award_type)
     params[:issuer] ||= create(:account)
+    params[:account] ||= create(:account)
 
     Award.new(params)
   end

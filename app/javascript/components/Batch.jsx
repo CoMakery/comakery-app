@@ -100,10 +100,6 @@ class Batch extends React.Component {
                 {`${this.props.batch.completedTasks} / ${this.props.batch.totalTasks} Completed`}
               </ContentElement>
 
-              <ContentElement title="batch type">
-                {this.props.batch.specialty || 'General'}
-              </ContentElement>
-
               <ContentElement title="team members">
                 <Userpics pics={this.props.batch.teamPics} limit={3} />
               </ContentElement>

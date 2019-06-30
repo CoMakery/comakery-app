@@ -49,6 +49,31 @@ describe ApplicationController do
     end
   end
 
+  describe 'task_to_props(task)' do
+    let!(:award) { create :award }
+
+    it 'serializes task and includes data necessary for task react component' do
+      result = controller.task_to_props(award)
+      expect(result.class).to eq(Hash)
+      expect(result).to include(:mission)
+      expect(result).to include(:token)
+      expect(result).to include(:project)
+      expect(result).to include(:specialty)
+      expect(result).to include(:issuer)
+      expect(result).to include(:contributor)
+      expect(result).to include(:experience_level_name)
+      expect(result).to include(:updated_at)
+      expect(result).to include(:image_url)
+      expect(result).to include(:submission_image_url)
+      expect(result).to include(:payment_url)
+      expect(result).to include(:details_url)
+      expect(result).to include(:start_url)
+      expect(result).to include(:submit_url)
+      expect(result).to include(:accept_url)
+      expect(result).to include(:reject_url)
+    end
+  end
+
   describe 'errors' do
     describe 'ActiveRecord::RecordNotFound' do
       it 'redirects to 404 page' do

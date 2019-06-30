@@ -24,19 +24,22 @@ class TaskForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
 
     this.state = {
-      flashMessages           : [],
-      errors                  : {},
-      disabled                : {},
-      formAction              : this.props.formAction,
-      formUrl                 : this.props.formUrl,
-      closeOnSuccess          : false,
-      'task[name]'            : this.props.task.name || '',
-      'task[why]'             : this.props.task.why || '',
-      'task[description]'     : this.props.task.description || '',
-      'task[requirements]'    : this.props.task.requirements || '',
-      'task[experience_level]': this.props.task.experienceLevel || '',
-      'task[amount]'          : this.props.task.amount || '',
-      'task[proof_link]'      : this.props.task.proofLink || ''
+      flashMessages                         : [],
+      errors                                : {},
+      disabled                              : {},
+      formAction                            : this.props.formAction,
+      formUrl                               : this.props.formUrl,
+      closeOnSuccess                        : false,
+      'task[name]'                          : this.props.task.name || '',
+      'task[why]'                           : this.props.task.why || '',
+      'task[description]'                   : this.props.task.description || '',
+      'task[requirements]'                  : this.props.task.requirements || '',
+      'task[experience_level]'              : this.props.task.experienceLevel || '',
+      'task[amount]'                        : this.props.task.amount || '',
+      'task[number_of_assignments]'         : this.props.task.numberOfAssignments || 1,
+      'task[number_of_assignments_per_user]': this.props.task.numberOfAssignmentsPerUser || 1,
+      'task[specialty_id]'                  : this.props.task.specialtyId || Object.values(this.props.specialties)[0],
+      'task[proof_link]'                    : this.props.task.proofLink || ''
     }
   }
 
@@ -76,6 +79,10 @@ class TaskForm extends React.Component {
 
   handleFieldChange(event) {
     this.setState({ [event.target.name]: event.target.value })
+
+    if (event.target.name === 'task[number_of_assignments]' && event.target.value === '1') {
+      this.setState({ 'task[number_of_assignments_per_user]': '1' })
+    }
 
     if (!event.target.checkValidity()) {
       this.errorAdd(event.target.name, 'invalid value')
@@ -259,6 +266,17 @@ class TaskForm extends React.Component {
             />
 
             <InputFieldDropdown
+              title="specialty"
+              required
+              name="task[specialty_id]"
+              value={this.state['task[specialty_id]']}
+              errorText={this.state.errors['task[specialtyId]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.props.specialties)}
+              symbolLimit={0}
+            />
+
+            <InputFieldDropdown
               title="skill confirmations required"
               required
               name="task[experience_level]"
@@ -280,6 +298,35 @@ class TaskForm extends React.Component {
               min="0"
               step={`${1.0 / (10 ** this.props.token.decimalPlaces)}`}
               placeholder="The total amount of tokens or coins you are paying for this task to be completed"
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="how many times can this task be done"
+              required
+              name="task[number_of_assignments]"
+              value={this.state['task[number_of_assignments]']}
+              errorText={this.state.errors['task[numberOfAssignments]']}
+              eventHandler={this.handleFieldChange}
+              type="number"
+              min="1"
+              step="1"
+              placeholder="1"
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="how many times can this task be done by a single user"
+              required
+              name="task[number_of_assignments_per_user]"
+              value={this.state['task[number_of_assignments_per_user]']}
+              errorText={this.state.errors['task[numberOfAssignmentsPerUser]']}
+              eventHandler={this.handleFieldChange}
+              type="number"
+              readOnly={this.state['task[number_of_assignments]'] === '1'}
+              min="1"
+              step="1"
+              placeholder="1"
               symbolLimit={0}
             />
 
@@ -313,6 +360,7 @@ TaskForm.propTypes = {
   project         : PropTypes.object.isRequired,
   token           : PropTypes.object.isRequired,
   experienceLevels: PropTypes.object.isRequired,
+  specialties     : PropTypes.object.isRequired,
   formUrl         : PropTypes.string.isRequired,
   formAction      : PropTypes.string.isRequired,
   urlOnSuccess    : PropTypes.string.isRequired,
@@ -324,6 +372,7 @@ TaskForm.defaultProps = {
   project         : {'default': '_'},
   token           : {'default': '_'},
   experienceLevels: {'default': '_'},
+  specialties     : {'default': '_'},
   formUrl         : '/',
   formAction      : 'POST',
   urlOnSuccess    : '/',

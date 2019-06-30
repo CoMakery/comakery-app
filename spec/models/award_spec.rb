@@ -2,6 +2,9 @@ require 'rails_helper'
 
 describe Award do
   describe 'associations' do
+    let(:specialty) { create(:specialty) }
+    let(:award) { create(:award, specialty: specialty) }
+
     it 'has the expected associations' do
       described_class.create!(
         name: 'test',
@@ -16,6 +19,17 @@ describe Award do
         amount: 50,
         quantity: 2
       )
+    end
+
+    it 'has_many assignments' do
+      award = create(:award_ready)
+      2.times { award.clone_on_assignment }
+
+      expect(award.assignments.size).to eq(2)
+    end
+
+    it 'belongs to specialty' do
+      expect(award.specialty).to eq(specialty)
     end
   end
 
@@ -47,7 +61,7 @@ describe Award do
     describe '.filtered_for_view(filter, account)' do
       let!(:contributor) { create(:account) }
       let!(:project_owner) { create(:account) }
-      let!(:ready_award) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed'), specialty: contributor.specialty)) }
+      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed')), specialty: contributor.specialty) }
       let!(:started_award) { create(:award, status: 'started', issuer: project_owner, account: contributor) }
       let!(:submitted_award) { create(:award, status: 'submitted', issuer: project_owner, account: contributor) }
       let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
@@ -84,42 +98,6 @@ describe Award do
         expect(described_class.filtered_for_view('not finished', contributor)).to eq([])
       end
     end
-
-    describe '.having_suitable_experience_for(account)' do
-      let(:account) { create(:account) }
-      let(:award_type) { create(:award_type, specialty: account.specialty) }
-
-      before do
-        described_class.destroy_all
-        Award::EXPERIENCE_LEVELS['Demonstrated Skills'].times { create(:award, account: account, award_type: award_type) }
-      end
-
-      it 'returns awards suiting given experience when there are awards with the same specialty and various experience levels' do
-        2.times { create(:award_ready, award_type: award_type) }
-        3.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type) }
-        4.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'], award_type: award_type) }
-        scope = described_class.having_suitable_experience_for(account)
-        expect(scope.count).to eq(5)
-        expect(scope.where(experience_level: 0).count).to eq(2)
-        expect(scope.where(experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills']).count).to eq(3)
-        expect(scope.where(experience_level: Award::EXPERIENCE_LEVELS['Established Contributor']).count).to eq(0)
-      end
-
-      it 'returns no awards when there are only awards with a different specialty without experience level' do
-        award_type_with_a_different_specialty = create(:award_type)
-        2.times { create(:award_ready, award_type: award_type_with_a_different_specialty) }
-        scope = described_class.having_suitable_experience_for(account)
-        expect(scope.count).to eq(0)
-      end
-
-      it 'returns all awards when there are only awards without specialty and matching experience level' do
-        award_type_with_no_specialty = create(:award_type)
-        award_type_with_no_specialty.update(specialty: nil)
-        2.times { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type_with_no_specialty) }
-        scope = described_class.having_suitable_experience_for(account)
-        expect(scope.count).to eq(2)
-      end
-    end
   end
 
   describe 'hooks' do
@@ -141,6 +119,24 @@ describe Award do
         expect(submtted_task_w_token.accepted?).to be true
       end
     end
+
+    describe 'update_account_experience' do
+      let!(:award_ready) { create(:award_ready) }
+
+      it 'increases contributor experience when award is completed' do
+        expect do
+          award_ready.update(status: :accepted)
+        end.to change { Experience.find_by(account: award_ready.account, specialty: award_ready.specialty)&.level.to_i }.by(1)
+      end
+    end
+
+    describe 'set_default_specialty' do
+      let!(:award) { create(:award_ready) }
+
+      it 'sets default specialty' do
+        expect(award.specialty).to eq(Specialty.default)
+      end
+    end
   end
 
   describe 'validations' do
@@ -153,9 +149,30 @@ describe Award do
                                                                                                      "Requirements can't be blank",
                                                                                                      "Proof link can't be blank",
                                                                                                      'Proof link must include protocol (e.g. https://)',
-                                                                                                     'Amount is not a number',
-                                                                                                     'Total amount must be greater than 0'
+                                                                                                     'Amount is not a number'
                                                                                                    ])
+    end
+
+    it 'requires number_of_assignments to be greater than 0' do
+      a = create(:award_ready)
+      a.update(number_of_assignments: 0)
+      expect(a).not_to be_valid
+    end
+
+    it 'requires number_of_assignments_per_user to be greater than 0' do
+      a = create(:award_ready)
+      a.update(number_of_assignments_per_user: 0)
+      expect(a).not_to be_valid
+    end
+
+    it 'requires number_of_assignments_per_user to be less or equal to number_of_assignments' do
+      a = create(:award_ready)
+      a.update(number_of_assignments: 1, number_of_assignments_per_user: 1)
+      expect(a).to be_valid
+      a.update(number_of_assignments: 2, number_of_assignments_per_user: 1)
+      expect(a).to be_valid
+      a.update(number_of_assignments: 1, number_of_assignments_per_user: 2)
+      expect(a).not_to be_valid
     end
 
     it 'requires submission fields when in submitted status' do
@@ -216,14 +233,12 @@ describe Award do
       end
     end
 
-    describe 'total_amount should be calculated based on amount and quantity' do
-      let(:award) { build :award }
+    describe 'total_amount calculation' do
+      let(:award_w_quantity) { create :award, amount: 100, quantity: 2 }
+      let(:award_template) { create :award, amount: 100, number_of_assignments: 3 }
 
-      specify do
-        award.quantity = 2
-        award.amount = 100
-        expect(award.valid?).to eq(true)
-        expect(award.total_amount).to eq 200
+      it 'multiplies amount by quantity' do
+        expect(award_w_quantity.total_amount).to eq(200)
       end
     end
 
@@ -322,6 +337,32 @@ describe Award do
         expect(award.errors.full_messages.to_sentence).to match \
           /Ethereum transaction address cannot be changed after it has been set/
       end
+    end
+  end
+
+  describe '.matching_experience_for?(account)' do
+    let(:account) { create(:account) }
+    let(:award_type) { create(:award_type) }
+    let(:award_no_experience) { create(:award_ready, specialty: account.specialty, award_type: award_type) }
+    let(:award_level1) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['New Contributor'], award_type: award_type) }
+    let(:award_level2) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Demonstrated Skills'], award_type: award_type) }
+    let(:award_level3) { create(:award_ready, experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'], award_type: award_type) }
+
+    before do
+      described_class.destroy_all
+      Award::EXPERIENCE_LEVELS['Demonstrated Skills'].times { create(:award, account: account, award_type: award_type) }
+    end
+
+    it 'returns true if account experience is greater than award requirement' do
+      expect(award_level1.matching_experience_for?(account)).to be_truthy
+    end
+
+    it 'returns true if account experience is equal to award requirement' do
+      expect(award_level2.matching_experience_for?(account)).to be_truthy
+    end
+
+    it 'returns false if account experience is less than award requirement' do
+      expect(award_level3.matching_experience_for?(account)).to be_falsey
     end
   end
 
@@ -485,6 +526,192 @@ describe Award do
       allow(award.discord_client).to receive(:send_message)
       award.send_award_notifications
       expect(award.discord_client).to have_received(:send_message)
+    end
+  end
+
+  describe '.can_be_edited?' do
+    let!(:award) { create(:award) }
+    let!(:award_ready) { create(:award_ready) }
+    let!(:award_cloned) { create(:award_ready, cloned_on_assignment_from_id: award.id) }
+    let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
+
+    before do
+      award_cloneable.clone_on_assignment
+    end
+
+    it 'returns true for ready task when its not cloned or has clones' do
+      expect(award_ready.can_be_edited?).to be_truthy
+    end
+
+    it 'returns false if task in non-ready state' do
+      expect(award.can_be_edited?).to be_falsey
+    end
+
+    it 'returns false if task cloned' do
+      expect(award_cloned.can_be_edited?).to be_falsey
+    end
+
+    it 'returns false if task has clones' do
+      expect(award_cloneable.can_be_edited?).to be_falsey
+    end
+  end
+
+  describe '.cloned?' do
+    let!(:award) { create(:award_ready) }
+    let!(:award_cloned) { create(:award_ready, cloned_on_assignment_from_id: award.id) }
+
+    it 'returns true if task has a reference to another one' do
+      expect(award_cloned.cloned?).to be_truthy
+    end
+
+    it 'returns false if task doesnt have a reference to another one' do
+      expect(award.cloned?).to be_falsey
+    end
+  end
+
+  describe '.any_clones?' do
+    let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
+    let!(:award) { create(:award_ready) }
+
+    before do
+      award_cloneable.clone_on_assignment
+    end
+
+    it 'returns true if task has referenced assignments' do
+      expect(award_cloneable.any_clones?).to be_truthy
+    end
+
+    it 'returns false if task doesnt have referenced assignments' do
+      expect(award.any_clones?).to be_falsey
+    end
+  end
+
+  describe '.cloneable?' do
+    let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
+    let!(:award) { create(:award_ready) }
+
+    it 'returns true if task has number_of_assignments greater than 1' do
+      expect(award_cloneable.cloneable?).to be_truthy
+    end
+
+    it 'returns false if task has default number_of_assignments' do
+      expect(award.cloneable?).to be_falsey
+    end
+  end
+
+  describe '.should_be_cloned?' do
+    let!(:award_should_be_cloned) { create(:award_ready, number_of_assignments: 10) }
+    let!(:award_has_been_cloned_already) { create(:award_ready, number_of_assignments: 2) }
+    let!(:award_shouldnt_be_cloned_at_all) { create(:award_ready) }
+
+    before do
+      award_has_been_cloned_already.clone_on_assignment
+    end
+
+    it 'returns true if current number of assignments plus one currently creating less than number_of_assignments allowed' do
+      expect(award_should_be_cloned.should_be_cloned?).to be_truthy
+    end
+
+    it 'returns false if current number of assignments plus one currently creating equal or greater than number_of_assignments allowed' do
+      expect(award_shouldnt_be_cloned_at_all.should_be_cloned?).to be_falsey
+      expect(award_has_been_cloned_already.should_be_cloned?).to be_falsey
+    end
+  end
+
+  describe '.can_be_cloned_for?(account)' do
+    let(:award_ready) { create(:award_ready) }
+    let(:award_account_started_max) { create(:award_ready) }
+    let(:award_account_cloned_max) { create(:award_ready, number_of_assignments: 10, number_of_assignments_per_user: 2) }
+
+    it 'returns true if account hasnt too many started tasks and hasnt reached maximum assignments' do
+      expect(award_ready.can_be_cloned_for?(award_ready.account)).to be_truthy
+    end
+
+    it 'returns false if account has too many started tasks' do
+      Award::STARTED_TASKS_PER_CONTRIBUTOR.times { create(:award, status: 'started', account: award_account_started_max.account) }
+      expect(award_account_started_max.can_be_cloned_for?(award_account_started_max.account)).to be_falsey
+    end
+
+    it 'returns false if account reached maximum assignments' do
+      2.times { award_account_cloned_max.clone_on_assignment.update!(account: award_account_cloned_max.account) }
+      expect(award_account_cloned_max.can_be_cloned_for?(award_account_cloned_max.account)).to be_falsey
+    end
+  end
+
+  describe '.reached_maximum_assignments_for?(account)' do
+    let!(:award) { create(:award_ready, number_of_assignments: 10, number_of_assignments_per_user: 2) }
+    let!(:account) { create(:account) }
+    let!(:account_reached_max) { create(:account) }
+
+    before do
+      2.times { award.clone_on_assignment.update!(account: account_reached_max) }
+    end
+
+    it 'returns true if amount of assignments for this task from the user is greater or equal to allowed number_of_assignments_per_user' do
+      expect(award.reached_maximum_assignments_for?(account_reached_max)).to be_truthy
+    end
+
+    it 'returns false if amount of assignments for this task from the user is less than allowed number_of_assignments_per_user' do
+      expect(award.reached_maximum_assignments_for?(account)).to be_falsey
+    end
+  end
+
+  describe '.clone_on_assignment' do
+    let!(:award) { create(:award_ready) }
+
+    it 'returns a new task duped from current one with correct releationships' do
+      new_award = award.clone_on_assignment
+      expect(new_award).not_to eq(award)
+      expect(new_award.name).to eq(award.name)
+      expect(new_award.cloned_on_assignment_from_id).to eq(award.id)
+      expect(new_award.number_of_assignments).to eq(1)
+    end
+  end
+
+  describe '.possible_quantity' do
+    let!(:award_ready) { create(:award_ready) }
+    let!(:award_ready_cloneable_2_times) { create(:award_ready, number_of_assignments: 2) }
+    let!(:award_template) { create(:award_ready, number_of_assignments: 10) }
+    let!(:award_cancelled) { create(:award, status: :cancelled) }
+    let!(:award_rejected) { create(:award, status: :rejected) }
+
+    it 'returns possible number_of_assignments' do
+      expect(award_ready.possible_quantity).to eq(1)
+      expect(award_ready_cloneable_2_times.possible_quantity).to eq(2)
+    end
+
+    it 'returns possible number_of_assignments minus current number of assignments for template tasks' do
+      expect(award_template.possible_quantity).to eq(10)
+      award_template.clone_on_assignment
+      expect(award_template.reload.possible_quantity).to eq(9)
+    end
+
+    it 'returns zero for cancelled or rejected tasks' do
+      expect(award_cancelled.possible_quantity).to eq(0)
+      expect(award_rejected.possible_quantity).to eq(0)
+    end
+  end
+
+  describe '.possible_total_amount' do
+    let!(:award_ready) { create(:award_ready, amount: 1) }
+    let!(:award_ready_cloneable_2_times) { create(:award_ready, amount: 1, number_of_assignments: 2) }
+    let!(:award_template) { create(:award_ready, amount: 1, number_of_assignments: 10) }
+    let!(:award_cancelled) { create(:award, amount: 1, status: :cancelled) }
+    let!(:award_rejected) { create(:award, amount: 1, status: :rejected) }
+
+    it 'returns total_amount multiplied by possible number_of_assignments' do
+      expect(award_ready.possible_total_amount).to eq(1)
+      expect(award_ready_cloneable_2_times.possible_total_amount).to eq(2)
+    end
+
+    it 'returns total_amount multiplied by possible number_of_assignments minus current number of assignments for template tasks' do
+      award_template.clone_on_assignment
+      expect(award_template.possible_total_amount).to eq(9)
+    end
+
+    it 'returns zero for cancelled or rejected tasks' do
+      expect(award_cancelled.possible_total_amount).to eq(0)
+      expect(award_rejected.possible_total_amount).to eq(0)
     end
   end
 end

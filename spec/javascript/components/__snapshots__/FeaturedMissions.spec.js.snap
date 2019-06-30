@@ -19,9 +19,73 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
       <div
         className="featured-missions__header_container"
       >
-        <img
-          className="featured-missions__header__img"
-          src="test-file-stub"
+        <styled.div>
+          <StyledComponent
+            forwardedComponent={
+              Object {
+                "$$typeof": Symbol(react.forward_ref),
+                "attrs": Array [],
+                "componentStyle": ComponentStyle {
+                  "componentId": "sc-bdVaJa",
+                  "isStatic": true,
+                  "lastClassName": "hjKsXa",
+                  "rules": Array [
+                    "
+  flex-grow: 2;
+  padding-right: 50px;
+
+  @media (max-width: 1024px) {
+    padding: 50px 0;
+    height: 334px;
+    width: 100%;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 50px 0;
+    height: 334px;
+    width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    padding: 50px 0;
+    height: 234px;
+    width: 100%;
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%
+  }
+",
+                  ],
+                },
+                "displayName": "styled.div",
+                "foldedComponentIds": Array [],
+                "render": [Function],
+                "styledComponentId": "sc-bdVaJa",
+                "target": "div",
+                "toString": [Function],
+                "warnTooManyClasses": [Function],
+                "withComponent": [Function],
+              }
+            }
+            forwardedRef={null}
+          >
+            <div
+              className="sc-bdVaJa hjKsXa"
+            >
+              <iframe
+                allow="autoplay; fullscreen"
+                allowFullScreen={true}
+                frameBorder="0"
+                src="https://player.vimeo.com/video/345071697?byline=0&title=false&portrait=0&color=ffffff"
+              />
+            </div>
+          </StyledComponent>
+        </styled.div>
+        <script
+          async={true}
+          src="https://player.vimeo.com/api/player.js"
         />
         <div
           className="featured-missions__header__description"
@@ -33,14 +97,14 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
           <div
             className="featured-missions__header__title"
           >
-            Find Your Mission.
+            Gather a Tribe.
             <br />
-            Join Blockchain Projects.
+            Achieve Big Missions.
           </div>
           <div
             className="featured-missions__header__subtitle"
           >
-            Freelance flexibly. Earn tokens & USD. Grow your skills.
+            Bring people together around a common vision.
           </div>
         </div>
       </div>

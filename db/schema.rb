@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190607125904) do
+ActiveRecord::Schema.define(version: 20190626152736) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -152,9 +152,14 @@ ActiveRecord::Schema.define(version: 20190607125904) do
     t.string "submission_image_filename"
     t.string "submission_image_content_size"
     t.string "submission_image_content_type"
+    t.integer "number_of_assignments", default: 1
+    t.integer "cloned_on_assignment_from_id"
+    t.integer "number_of_assignments_per_user", default: 1
+    t.bigint "specialty_id"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
+    t.index ["specialty_id"], name: "index_awards_on_specialty_id"
   end
 
   create_table "channels", force: :cascade do |t|
@@ -171,6 +176,16 @@ ActiveRecord::Schema.define(version: 20190607125904) do
   end
 
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
+  create_table "experiences", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "specialty_id"
+    t.integer "level", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_experiences_on_account_id"
+    t.index ["specialty_id"], name: "index_experiences_on_specialty_id"
   end
 
   create_table "interests", force: :cascade do |t|
@@ -330,6 +345,9 @@ ActiveRecord::Schema.define(version: 20190607125904) do
     t.index ["email"], name: "index_unsubscriptions_on_email", unique: true
   end
 
+  add_foreign_key "awards", "specialties"
+  add_foreign_key "experiences", "accounts"
+  add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"
   add_foreign_key "projects", "tokens"
 end

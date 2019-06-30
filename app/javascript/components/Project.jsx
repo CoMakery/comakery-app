@@ -1,8 +1,91 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
+import MyTask from './MyTask'
 import d3 from 'd3/d3'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
+import styled from 'styled-components'
+
+const Tasks = styled.div`
+  padding: 15px;
+  max-width: 980px;
+  margin: auto;
+`
+
+const TasksTitle = styled.div`
+  margin: 40px;
+
+  h2 {
+    font-family: Montserrat;
+    font-size: 24px;
+    font-weight: 900;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    text-transform: uppercase;
+    color: #3a3a3a;
+  }
+
+  p {
+    font-family: Georgia;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.63;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4a4a4a;
+  }
+`
+
+const TasksSpecialty = styled.div`
+  margin-top: 40px;
+
+  h3 {
+    font-family: Montserrat;
+    font-size: 20px;
+    font-weight: 900;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4a4a4a;
+    text-transform: uppercase;
+
+    img {
+      display: block;
+      margin: auto;
+      margin-bottom: 10px;
+      max-height: 30px;
+      max-width: 30px;
+    }
+  }
+`
+
+const AllTasks = styled.a`
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #0089f4;
+  display: block;
+  text-align: right;
+  margin-top: 60px;
+  margin-bottom: 10px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
 
 const chartColors = [
   '#0089F4',
@@ -148,14 +231,14 @@ export default class Project extends React.Component {
     const { projectData, missionData, tokenData, contributorsPath, awardsPath, editPath } = this.props
     const { interested, specialtyInterested } = this.state
     const skills = {
-      development: 'Software Development', // specialty ID 5
-      design     : 'UX / UI DESIGN', // specialty ID 6
-      research   : 'Research', // specialty ID 8
-      community  : 'COMMUNITY MANAGEMENT', // specialty ID 2
-      data       : 'DATA GATHERING', // specialty ID 3
-      audio      : 'AUDIO & VIDEO PRODUCTION', // specialty ID 1
-      writing    : 'WRITING', // specialty ID 7
-      marketing  : 'MARKETING & SOCIAL MEDIA' // specialty ID 4
+      development: 'Software Development',
+      design     : 'UX / UI DESIGN',
+      research   : 'Research',
+      community  : 'COMMUNITY MANAGEMENT',
+      data       : 'DATA GATHERING',
+      audio      : 'AUDIO & VIDEO PRODUCTION',
+      writing    : 'WRITING',
+      marketing  : 'MARKETING & SOCIAL MEDIA'
     }
     const skillIds = [5, 6, 8, 2, 3, 1, 7, 4]
 
@@ -186,7 +269,9 @@ export default class Project extends React.Component {
 
           {missionData &&
             <div className="project-header__mission-image">
-              <img src={missionData.logoUrl} />
+              <a href={missionData.missionUrl}>
+                <img src={missionData.logoUrl} />
+              </a>
             </div>
           }
 
@@ -282,34 +367,64 @@ export default class Project extends React.Component {
       </div>
 
       <div className="project-interest">
+        <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
         {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
         {interested && <button className="button project-interest__button" disabled>Request Sent</button>}
-        <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
       </div>
 
-      <div className="project-skills">
-        <div className="project-skills__title">SKILLS NEEDED</div>
-        <div className="project-skills__subtitle">Take a challenge to demonstrate your skills. You will be invited to complete tasks that match your skill level for this and other projects</div>
-        {Object.keys(skills).map((skill, index) =>
-          <div key={skill} className="project-skill-container">
-            <div className="project-skill__background">
-              <img className="project-skill__background__img" src={require(`src/images/project/${skill}.jpg`)} />
-              <div className="project-skill__background__title">
-                {skills[skill]}
-                <div className="project-skill__background__icon">
-                  <img className="skill-icon--background" src={require(`src/images/project/background.svg`)} />
-                  <img className="skill-icon" src={require(`src/images/project/${skill}.svg`)} />
+      {this.props.tasksBySpecialty.length > 0 &&
+        <Tasks>
+          <TasksTitle>
+            <h2>Available Tasks</h2>
+            <p>Find a task that’s right for your talents, review the details, and get to work!</p>
+          </TasksTitle>
+
+          {this.props.tasksBySpecialty.map(specialty =>
+            <TasksSpecialty key={specialty[0]}>
+              <h3>
+                <img src={require(`src/images/specialties/${specialty[0]}.svg`)} />
+                {specialty[0]}
+              </h3>
+
+              {specialty[1].map(task =>
+                <MyTask
+                  key={task.id}
+                  task={task}
+                  displayParents={false}
+                />
+              )}
+            </TasksSpecialty>
+          )}
+
+          <AllTasks href={this.props.myTasksPath}>see all available tasks</AllTasks>
+        </Tasks>
+      }
+
+      {this.props.tasksBySpecialty.length === 0 &&
+        <div className="project-skills">
+          <div className="project-skills__title">SKILLS NEEDED</div>
+          <div className="project-skills__subtitle">Take a challenge to demonstrate your skills. You will be invited to complete tasks that match your skill level for this and other projects</div>
+
+          {Object.keys(skills).map((skill, index) =>
+            <div key={skill} className="project-skill-container">
+              <div className="project-skill__background">
+                <img className="project-skill__background__img" src={require(`src/images/project/${skill}.jpg`)} />
+                <div className="project-skill__background__title">
+                  {skills[skill]}
+                  <div className="project-skill__background__icon">
+                    <img className="skill-icon--background" src={require(`src/images/project/background.svg`)} />
+                    <img className="skill-icon" src={require(`src/images/project/${skill}.svg`)} />
+                  </div>
                 </div>
               </div>
+              <div className="project-skill__interest">
+                {!specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button" onClick={() => this.addInterest(projectData.id, skillIds[index])}>I'm Interested</div>}
+                {specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button">Request Sent</div>}
+              </div>
             </div>
-
-            <div className="project-skill__interest">
-              {!specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button" onClick={() => this.addInterest(projectData.id, skillIds[index])}>I'm Interested</div>}
-              {specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button">Request Sent</div>}
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      }
 
       <div className="project-team">
         <div className="project-team__container">
@@ -323,7 +438,7 @@ export default class Project extends React.Component {
           </div>
 
           <div className="project-team__contributors-container">
-            <div className="project-team__leader-name">Team Leader {projectData.teamLeader.nickname && projectData.teamLeader.nickname}</div>
+            <div className="project-team__leader-name">Team Leader</div>
             {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
 
             <div className="project-team__contributors" >
@@ -348,15 +463,16 @@ export default class Project extends React.Component {
       </div>
 
       <div className="project-interest">
+        <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
         {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
         {interested && <button className="button project-interest__button" disabled>Request Sent</button>}
-        <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
       </div>
     </div>
   }
 }
 
 Project.propTypes = {
+  tasksBySpecialty: PropTypes.array,
   projectData     : PropTypes.shape({}),
   missionData     : PropTypes.shape({}),
   tokenData       : PropTypes.shape({}),
@@ -364,11 +480,13 @@ Project.propTypes = {
   csrfToken       : PropTypes.string,
   contributorsPath: PropTypes.string,
   awardsPath      : PropTypes.string,
+  myTasksPath     : PropTypes.string,
   editPath        : PropTypes.string
 }
 
 Project.defaultProps = {
-  projectData: {
+  tasksBySpecialty: [ [ null, [] ] ],
+  projectData     : {
     description : '',
     teamLeader  : {},
     contributors: [],
@@ -381,5 +499,6 @@ Project.defaultProps = {
   csrfToken          : '',
   contributorsPath   : '',
   awardsPath         : '',
+  myTasksPath        : '',
   editPath           : null
 }

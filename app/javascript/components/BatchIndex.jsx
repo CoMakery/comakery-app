@@ -90,6 +90,10 @@ const Filter = styled.span`
     color: #ff4d4d;
   `}
 
+  ${props => props.filter === 'cancelled' && props.selected && css`
+    color: #ff4d4d;
+  `}
+
   ${props => !props.filter && props.selected && css`
     color: #3a3a3a;
   `}
@@ -202,6 +206,12 @@ class BatchIndex extends React.Component {
 
                 <BatchStyled batch={this.state.selectedBatch} />
 
+                <CreateTaskButton>
+                  <a href={this.state.selectedBatch.newTaskPath}>
+                    create a task +
+                  </a>
+                </CreateTaskButton>
+
                 <Tasks>
                   {this.state.selectedBatch.tasks.length > 0 &&
                     <Title>
@@ -212,18 +222,13 @@ class BatchIndex extends React.Component {
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'accepted'} onClick={(_) => this.setState({selectedTaskFilter: 'accepted'})}>accepted</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'paid'} onClick={(_) => this.setState({selectedTaskFilter: 'paid'})}>paid</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'rejected'} onClick={(_) => this.setState({selectedTaskFilter: 'rejected'})}>rejected</Filter>
+                      <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'cancelled'} onClick={(_) => this.setState({selectedTaskFilter: 'cancelled'})}>cancelled</Filter>
                     </Title>
                   }
                   {this.state.selectedBatch.tasks.filter(task => !this.state.selectedTaskFilter || task.status === this.state.selectedTaskFilter).map((t, i) =>
                     <Task key={i} task={t} />
                   )}
                 </Tasks>
-
-                <CreateTaskButton>
-                  <a href={this.state.selectedBatch.newTaskPath}>
-                    create a task +
-                  </a>
-                </CreateTaskButton>
               </Wrapper>
             </React.Fragment>
           }

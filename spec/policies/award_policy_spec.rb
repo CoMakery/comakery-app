@@ -83,20 +83,70 @@ describe AwardPolicy do
   end
 
   describe 'show?' do
+    it 'returns if project is visible for user' do
+      a = create(:award)
+      a.project.update(visibility: 'public_listed')
+      expect(described_class.new(create(:account), a).show?).to be true
+    end
+
     it 'returns true if award is included in account accessable awards' do
       a = create(:award)
       expect(described_class.new(a.account, a).show?).to be true
     end
 
-    it 'returns false if award is not included in account accessable awards' do
+    it 'returns false if award is not included in account accessable awards and project is not visible for user' do
       expect(described_class.new(create(:account), create(:award)).show?).to be false
     end
   end
 
+  describe 'edit?' do
+    let!(:award_editable) { create(:award_ready) }
+    let!(:award_non_editable) { create(:award) }
+
+    it 'returns true if award is editable' do
+      expect(described_class.new(award_editable.account, award_editable).edit?).to be true
+    end
+
+    it 'returns false if award is not editable' do
+      expect(described_class.new(award_non_editable.account, award_non_editable).edit?).to be false
+    end
+  end
+
   describe 'start?' do
-    it 'returns true if award is ready and accessable for a given user' do
+    it 'returns true if award is ready, and related to account' do
       a = create(:award, status: 'ready')
       expect(described_class.new(a.account, a).start?).to be true
+    end
+
+    it 'returns true if award is ready, has matching experience and accessable for a given user' do
+      award = create(
+        :award_ready,
+        experience_level: Award::EXPERIENCE_LEVELS['New Contributor'],
+        award_type: create(
+          :award_type,
+          project: create(
+            :project,
+            visibility: 'public_listed'
+          )
+        )
+      )
+      expect(described_class.new(create(:account), award).start?).to be true
+    end
+
+    it 'returns false if award has not matching experience for a given user' do
+      award = create(
+        :award,
+        status: 'ready',
+        experience_level: Award::EXPERIENCE_LEVELS['Established Contributor'],
+        award_type: create(
+          :award_type,
+          project: create(
+            :project,
+            visibility: 'public_listed'
+          )
+        )
+      )
+      expect(described_class.new(create(:account), award).start?).to be false
     end
 
     it 'returns false if award is not accessable for a given user' do

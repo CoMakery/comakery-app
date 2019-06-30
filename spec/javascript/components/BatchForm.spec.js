@@ -18,10 +18,6 @@ describe('BatchForm', () => {
     expect(wrapper.exists('#batch-form--form')).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDropdown[title="specialty"][required][name="batch[specialty_id]"]'
-    )).toBe(true)
-
-    expect(wrapper.exists(
       'InputFieldWhiteDark[title="name"][required][name="batch[name]"]'
     )).toBe(true)
 
@@ -42,48 +38,17 @@ describe('BatchForm', () => {
     )).toBe(true)
   })
 
-  it('renders correctly with specialties', () => {
-    const specialties = {
-      '1': 1,
-      '2': 2
-    }
-    const wrapper = mount(<BatchForm specialties={specialties} />)
-
-    expect(wrapper.find(
-      'InputFieldDropdown[title="specialty"][required][name="batch[specialty_id]"]'
-    ).props().value).toBe(1)
-
-    expect(wrapper.find(
-      'InputFieldDropdown[title="specialty"][required][name="batch[specialty_id]"]'
-    ).props().selectEntries).toEqual(Object.entries(specialties))
-  })
-
   it('renders correctly with a batch', () => {
     const batch = {
       'id'         : 10,
       'name'       : 'Batch name',
       'description': 'Batch description',
       'goal'       : 'Batch goal',
-      'specialtyId': 'writing'
-    }
-    const specialties = {
-      'audio or Video Production'    : 'audio_video_production',
-      'community Development'        : 'community_development',
-      'data Gathering'               : 'data_gathering',
-      'marketing \u0026 Social Media': 'marketing_social',
-      'software Development'         : 'software_development',
-      'uX :: UI Design'              : 'design',
-      'writing'                      : 'writing'
     }
 
     const wrapper = mount(<BatchForm
       batch={batch}
-      specialties={specialties}
     />)
-
-    expect(wrapper.find(
-      'InputFieldDropdown[title="specialty"][required][name="batch[specialty_id]"]'
-    ).props().value).toBe('writing')
 
     expect(wrapper.find(
       'InputFieldWhiteDark[title="name"][required][name="batch[name]"]'

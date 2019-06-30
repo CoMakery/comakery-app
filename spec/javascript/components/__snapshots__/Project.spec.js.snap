@@ -8,6 +8,7 @@ exports[`Project renders correctly without props 1`] = `
   editPath={null}
   interested={false}
   missionData={null}
+  myTasksPath=""
   projectData={
     Object {
       "chartData": Array [],
@@ -17,6 +18,14 @@ exports[`Project renders correctly without props 1`] = `
     }
   }
   specialtyInterested={Array []}
+  tasksBySpecialty={
+    Array [
+      Array [
+        null,
+        Array [],
+      ],
+    ]
+  }
   tokenData={null}
 >
   <div
@@ -119,352 +128,237 @@ exports[`Project renders correctly without props 1`] = `
     <div
       className="project-interest"
     >
+      <p
+        className="project-interest__text"
+      >
+        Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.
+      </p>
       <button
         className="button project-interest__button"
         onClick={[Function]}
       >
         I’m Interested
       </button>
-      <p
-        className="project-interest__text"
-      >
-        Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.
-      </p>
     </div>
-    <div
-      className="project-skills"
-    >
-      <div
-        className="project-skills__title"
-      >
-        SKILLS NEEDED
-      </div>
-      <div
-        className="project-skills__subtitle"
-      >
-        Take a challenge to demonstrate your skills. You will be invited to complete tasks that match your skill level for this and other projects
-      </div>
-      <div
-        className="project-skill-container"
-        key="development"
+    <styled.div>
+      <StyledComponent
+        forwardedComponent={
+          Object {
+            "$$typeof": Symbol(react.forward_ref),
+            "attrs": Array [],
+            "componentStyle": ComponentStyle {
+              "componentId": "sc-ckVGcZ",
+              "isStatic": true,
+              "lastClassName": "jTtBZk",
+              "rules": Array [
+                "
+  padding: 15px;
+  max-width: 980px;
+  margin: auto;
+",
+              ],
+            },
+            "displayName": "styled.div",
+            "foldedComponentIds": Array [],
+            "render": [Function],
+            "styledComponentId": "sc-ckVGcZ",
+            "target": "div",
+            "toString": [Function],
+            "warnTooManyClasses": [Function],
+            "withComponent": [Function],
+          }
+        }
+        forwardedRef={null}
       >
         <div
-          className="project-skill__background"
+          className="sc-ckVGcZ jTtBZk"
         >
-          <img
-            className="project-skill__background__img"
-            src="test-file-stub"
-          />
-          <div
-            className="project-skill__background__title"
-          >
-            Software Development
-            <div
-              className="project-skill__background__icon"
+          <styled.div>
+            <StyledComponent
+              forwardedComponent={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "attrs": Array [],
+                  "componentStyle": ComponentStyle {
+                    "componentId": "sc-jKJlTe",
+                    "isStatic": true,
+                    "lastClassName": "bhUkOZ",
+                    "rules": Array [
+                      "
+  margin: 40px;
+
+  h2 {
+    font-family: Montserrat;
+    font-size: 24px;
+    font-weight: 900;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    text-transform: uppercase;
+    color: #3a3a3a;
+  }
+
+  p {
+    font-family: Georgia;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.63;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4a4a4a;
+  }
+",
+                    ],
+                  },
+                  "displayName": "styled.div",
+                  "foldedComponentIds": Array [],
+                  "render": [Function],
+                  "styledComponentId": "sc-jKJlTe",
+                  "target": "div",
+                  "toString": [Function],
+                  "warnTooManyClasses": [Function],
+                  "withComponent": [Function],
+                }
+              }
+              forwardedRef={null}
             >
-              <img
-                className="skill-icon--background"
-                src="test-file-stub"
-              />
-              <img
-                className="skill-icon"
-                src="test-file-stub"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          className="project-skill__interest"
-        >
-          <div
-            className="project-skill__interest__button"
-            onClick={[Function]}
+              <div
+                className="sc-jKJlTe bhUkOZ"
+              >
+                <h2>
+                  Available Tasks
+                </h2>
+                <p>
+                  Find a task that’s right for your talents, review the details, and get to work!
+                </p>
+              </div>
+            </StyledComponent>
+          </styled.div>
+          <styled.div
+            key="null"
           >
-            I'm Interested
-          </div>
-        </div>
-      </div>
-      <div
-        className="project-skill-container"
-        key="design"
-      >
-        <div
-          className="project-skill__background"
-        >
-          <img
-            className="project-skill__background__img"
-            src="test-file-stub"
-          />
-          <div
-            className="project-skill__background__title"
-          >
-            UX / UI DESIGN
-            <div
-              className="project-skill__background__icon"
+            <StyledComponent
+              forwardedComponent={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "attrs": Array [],
+                  "componentStyle": ComponentStyle {
+                    "componentId": "sc-eNQAEJ",
+                    "isStatic": true,
+                    "lastClassName": "ePQpLa",
+                    "rules": Array [
+                      "
+  margin-top: 40px;
+
+  h3 {
+    font-family: Montserrat;
+    font-size: 20px;
+    font-weight: 900;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4a4a4a;
+    text-transform: uppercase;
+
+    img {
+      display: block;
+      margin: auto;
+      margin-bottom: 10px;
+      max-height: 30px;
+      max-width: 30px;
+    }
+  }
+",
+                    ],
+                  },
+                  "displayName": "styled.div",
+                  "foldedComponentIds": Array [],
+                  "render": [Function],
+                  "styledComponentId": "sc-eNQAEJ",
+                  "target": "div",
+                  "toString": [Function],
+                  "warnTooManyClasses": [Function],
+                  "withComponent": [Function],
+                }
+              }
+              forwardedRef={null}
             >
-              <img
-                className="skill-icon--background"
-                src="test-file-stub"
-              />
-              <img
-                className="skill-icon"
-                src="test-file-stub"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          className="project-skill__interest"
-        >
-          <div
-            className="project-skill__interest__button"
-            onClick={[Function]}
+              <div
+                className="sc-eNQAEJ ePQpLa"
+              >
+                <h3>
+                  <img
+                    src="test-file-stub"
+                  />
+                </h3>
+              </div>
+            </StyledComponent>
+          </styled.div>
+          <styled.a
+            href=""
           >
-            I'm Interested
-          </div>
-        </div>
-      </div>
-      <div
-        className="project-skill-container"
-        key="research"
-      >
-        <div
-          className="project-skill__background"
-        >
-          <img
-            className="project-skill__background__img"
-            src="test-file-stub"
-          />
-          <div
-            className="project-skill__background__title"
-          >
-            Research
-            <div
-              className="project-skill__background__icon"
+            <StyledComponent
+              forwardedComponent={
+                Object {
+                  "$$typeof": Symbol(react.forward_ref),
+                  "attrs": Array [],
+                  "componentStyle": ComponentStyle {
+                    "componentId": "sc-hMqMXs",
+                    "isStatic": true,
+                    "lastClassName": "fZwmQG",
+                    "rules": Array [
+                      "
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #0089f4;
+  display: block;
+  text-align: right;
+  margin-top: 60px;
+  margin-bottom: 10px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+",
+                    ],
+                  },
+                  "displayName": "styled.a",
+                  "foldedComponentIds": Array [],
+                  "render": [Function],
+                  "styledComponentId": "sc-hMqMXs",
+                  "target": "a",
+                  "toString": [Function],
+                  "warnTooManyClasses": [Function],
+                  "withComponent": [Function],
+                }
+              }
+              forwardedRef={null}
+              href=""
             >
-              <img
-                className="skill-icon--background"
-                src="test-file-stub"
-              />
-              <img
-                className="skill-icon"
-                src="test-file-stub"
-              />
-            </div>
-          </div>
+              <a
+                className="sc-hMqMXs fZwmQG"
+                href=""
+              >
+                see all available tasks
+              </a>
+            </StyledComponent>
+          </styled.a>
         </div>
-        <div
-          className="project-skill__interest"
-        >
-          <div
-            className="project-skill__interest__button"
-            onClick={[Function]}
-          >
-            I'm Interested
-          </div>
-        </div>
-      </div>
-      <div
-        className="project-skill-container"
-        key="community"
-      >
-        <div
-          className="project-skill__background"
-        >
-          <img
-            className="project-skill__background__img"
-            src="test-file-stub"
-          />
-          <div
-            className="project-skill__background__title"
-          >
-            COMMUNITY MANAGEMENT
-            <div
-              className="project-skill__background__icon"
-            >
-              <img
-                className="skill-icon--background"
-                src="test-file-stub"
-              />
-              <img
-                className="skill-icon"
-                src="test-file-stub"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          className="project-skill__interest"
-        >
-          <div
-            className="project-skill__interest__button"
-            onClick={[Function]}
-          >
-            I'm Interested
-          </div>
-        </div>
-      </div>
-      <div
-        className="project-skill-container"
-        key="data"
-      >
-        <div
-          className="project-skill__background"
-        >
-          <img
-            className="project-skill__background__img"
-            src="test-file-stub"
-          />
-          <div
-            className="project-skill__background__title"
-          >
-            DATA GATHERING
-            <div
-              className="project-skill__background__icon"
-            >
-              <img
-                className="skill-icon--background"
-                src="test-file-stub"
-              />
-              <img
-                className="skill-icon"
-                src="test-file-stub"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          className="project-skill__interest"
-        >
-          <div
-            className="project-skill__interest__button"
-            onClick={[Function]}
-          >
-            I'm Interested
-          </div>
-        </div>
-      </div>
-      <div
-        className="project-skill-container"
-        key="audio"
-      >
-        <div
-          className="project-skill__background"
-        >
-          <img
-            className="project-skill__background__img"
-            src="test-file-stub"
-          />
-          <div
-            className="project-skill__background__title"
-          >
-            AUDIO & VIDEO PRODUCTION
-            <div
-              className="project-skill__background__icon"
-            >
-              <img
-                className="skill-icon--background"
-                src="test-file-stub"
-              />
-              <img
-                className="skill-icon"
-                src="test-file-stub"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          className="project-skill__interest"
-        >
-          <div
-            className="project-skill__interest__button"
-            onClick={[Function]}
-          >
-            I'm Interested
-          </div>
-        </div>
-      </div>
-      <div
-        className="project-skill-container"
-        key="writing"
-      >
-        <div
-          className="project-skill__background"
-        >
-          <img
-            className="project-skill__background__img"
-            src="test-file-stub"
-          />
-          <div
-            className="project-skill__background__title"
-          >
-            WRITING
-            <div
-              className="project-skill__background__icon"
-            >
-              <img
-                className="skill-icon--background"
-                src="test-file-stub"
-              />
-              <img
-                className="skill-icon"
-                src="test-file-stub"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          className="project-skill__interest"
-        >
-          <div
-            className="project-skill__interest__button"
-            onClick={[Function]}
-          >
-            I'm Interested
-          </div>
-        </div>
-      </div>
-      <div
-        className="project-skill-container"
-        key="marketing"
-      >
-        <div
-          className="project-skill__background"
-        >
-          <img
-            className="project-skill__background__img"
-            src="test-file-stub"
-          />
-          <div
-            className="project-skill__background__title"
-          >
-            MARKETING & SOCIAL MEDIA
-            <div
-              className="project-skill__background__icon"
-            >
-              <img
-                className="skill-icon--background"
-                src="test-file-stub"
-              />
-              <img
-                className="skill-icon"
-                src="test-file-stub"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          className="project-skill__interest"
-        >
-          <div
-            className="project-skill__interest__button"
-            onClick={[Function]}
-          >
-            I'm Interested
-          </div>
-        </div>
-      </div>
-    </div>
+      </StyledComponent>
+    </styled.div>
     <div
       className="project-team"
     >
@@ -501,7 +395,7 @@ exports[`Project renders correctly without props 1`] = `
           <div
             className="project-team__leader-name"
           >
-            Team Leader 
+            Team Leader
           </div>
            
           <div
@@ -517,17 +411,17 @@ exports[`Project renders correctly without props 1`] = `
     <div
       className="project-interest"
     >
+      <p
+        className="project-interest__text"
+      >
+        Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.
+      </p>
       <button
         className="button project-interest__button"
         onClick={[Function]}
       >
         I’m Interested
       </button>
-      <p
-        className="project-interest__text"
-      >
-        Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.
-      </p>
     </div>
   </div>
 </Project>

@@ -7,7 +7,6 @@ describe 'project award_types', js: true do
   let!(:award_type2) { create(:award_type, name: 'Second', project: project1) }
   let!(:award_type3) { create(:award_type, name: 'Third', project: project1) }
   let!(:award) { create(:award, award_type: award_type3) }
-  let!(:specialty) { create(:specialty, name: 'writing') }
 
   before do
     login(current_auth.account)
@@ -17,13 +16,11 @@ describe 'project award_types', js: true do
     visit project_award_types_path(project1)
     find('.batch-index--sidebar--item__bold', text: 'Create a New Batch').click
     expect(page).to have_content 'Create A New Batch'
-    select 'writing', from: 'batch[specialty_id]'
     fill_in 'batch[name]', with: 'test name'
     fill_in 'batch[goal]', with: 'test goal'
     fill_in 'batch[description]', with: 'test description'
     find_button('create').click
     expect(page).to have_content 'BATCH CREATED'
-    expect(AwardType.last.specialty.name).to eq 'writing'
     expect(AwardType.last.name).to eq 'test name'
     expect(AwardType.last.goal).to eq 'test goal'
     expect(AwardType.last.description).to eq 'test description'

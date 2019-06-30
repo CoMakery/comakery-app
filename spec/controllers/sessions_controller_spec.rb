@@ -43,7 +43,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq false
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
-        assert_redirected_to root_path
+        assert_redirected_to my_tasks_path
       end
 
       it 'create authentication from discord' do
@@ -57,7 +57,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq false
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
-        assert_redirected_to root_path
+        assert_redirected_to my_tasks_path
       end
 
       it 'login confirmed authentication' do
@@ -68,7 +68,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq true
         expect(session[:account_id]).to eq account.id
         assert_response :redirect
-        assert_redirected_to root_path
+        assert_redirected_to my_tasks_path
       end
 
       it 'create new un-confirmed authentication' do
@@ -82,7 +82,7 @@ describe SessionsController do
         expect(auth.confirmed?).to eq false
         expect(flash[:error]).to eq 'Please check your email for confirmation instruction'
         assert_response :redirect
-        assert_redirected_to root_path
+        assert_redirected_to my_tasks_path
       end
 
       it 'login authentication with an account that missing email' do
@@ -156,7 +156,7 @@ describe SessionsController do
 
     it 'allow valid user to login' do
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to my_tasks_path
     end
 
     it 'catch for error for account without password' do
@@ -169,7 +169,7 @@ describe SessionsController do
       session[:redeem] = true
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice]).to eq 'Please click the link in your email to claim your contributor token award!'
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to my_tasks_path
     end
 
     it 'notice to update ethereum_wallet' do
@@ -177,7 +177,7 @@ describe SessionsController do
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your <a href="/account">account page</a> to receive your tokens.'
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to my_tasks_path
     end
 
     it 'notice new award' do
@@ -185,7 +185,7 @@ describe SessionsController do
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Ethereum address is')).to eq true
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to my_tasks_path
     end
 
     it 'redirects to root_path if user already signed in' do
@@ -202,7 +202,7 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Qtum Address on your <a href="/account">account page</a> to receive your tokens.'
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to my_tasks_path
       end
 
       it 'notice new award' do
@@ -210,7 +210,7 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Qtum address is')).to eq true
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to my_tasks_path
       end
     end
 
@@ -222,7 +222,7 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Cardano Address on your <a href="/account">account page</a> to receive your tokens.'
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to my_tasks_path
       end
 
       it 'notice new award' do
@@ -230,7 +230,7 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Cardano address is')).to eq true
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to my_tasks_path
       end
     end
 
@@ -242,7 +242,7 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Bitcoin Address on your <a href="/account">account page</a> to receive your tokens.'
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to my_tasks_path
       end
 
       it 'notice new award' do
@@ -250,7 +250,7 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Bitcoin address is')).to eq true
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to my_tasks_path
       end
     end
 
@@ -262,7 +262,7 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your EOS account name on your <a href="/account">account page</a> to receive your tokens.'
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to my_tasks_path
       end
 
       it 'notice new award' do
@@ -270,7 +270,7 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Your EOS account name is')).to eq true
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to my_tasks_path
       end
     end
 
@@ -282,7 +282,7 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Tezos Address on your <a href="/account">account page</a> to receive your tokens.'
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to my_tasks_path
       end
 
       it 'notice new award' do
@@ -290,7 +290,7 @@ describe SessionsController do
         create(:award, award_type: create(:award_type, project: project2), account: account)
         post :sign_in, params: { email: 'user@example.com', password: '12345678' }
         expect(flash[:notice].include?('Congratulations, you just claimed your award! Your Tezos address is')).to eq true
-        expect(response).to redirect_to root_path
+        expect(response).to redirect_to my_tasks_path
       end
     end
   end

@@ -34,7 +34,7 @@ gem 'premailer-rails'
 gem 'puma'
 gem 'pundit'
 gem 'rack', '>= 2.0.6'
-gem 'rails', '~>5.1.4'
+gem 'rails', '~>5.1.6.2'
 gem 'rails-data-migrations'
 gem 'rails-html-sanitizer', '~> 1.0.4'
 gem 'rails_12factor', group: :production
