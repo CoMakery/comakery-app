@@ -275,6 +275,20 @@ html, body{
 
 }
 
+.project_block--title {
+  display: flex;
+}
+
+.project_block--title--edit-link {
+  opacity: 0.3;
+  margin-left: auto;
+  margin-right: 0.5em;
+}
+
+.project_block--title--edit-link:hover {
+  text-decoration: underline;
+}
+
 .project-thumb{
   float: left;
   width: 80px;
