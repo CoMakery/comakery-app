@@ -28,17 +28,11 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-bdVaJa",
                   "isStatic": true,
-                  "lastClassName": "hjKsXa",
+                  "lastClassName": "csEGtU",
                   "rules": Array [
                     "
   flex-grow: 2;
   padding-right: 50px;
-
-  @media (max-width: 1024px) {
-    padding: 50px 0;
-    height: 334px;
-    width: 100%;
-  }
 
   @media (max-width: 1024px) {
     padding: 50px 0;
@@ -72,7 +66,7 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-bdVaJa hjKsXa"
+              className="sc-bdVaJa csEGtU"
             >
               <iframe
                 allow="autoplay; fullscreen"
