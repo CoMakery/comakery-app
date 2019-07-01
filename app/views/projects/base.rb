@@ -38,8 +38,12 @@ class Views::Projects::Base < Views::Base
       end
       div(class: 'info') do
         div(class: 'text-overlay') do
-          h5 do
-            a(project.title, href: path, class: 'project-link')
+          h5(class: 'project_block--title') do
+            a(project.title, href: path)
+
+            if policy(project).edit?
+              a('Edit', href: project_award_types_path(project), class: 'project_block--title--edit-link')
+            end
           end
         end
 
