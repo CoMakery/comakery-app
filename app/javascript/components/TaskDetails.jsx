@@ -70,6 +70,7 @@ const Details = styled.div`
   background-color: #ffffff;
   margin-top: -19px;
   margin-bottom: 20px;
+  border-radius: 3px;
 
   img {
     max-width: 80px;

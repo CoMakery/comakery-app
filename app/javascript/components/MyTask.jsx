@@ -16,6 +16,7 @@ const Wrapper = styled.div`
   background-color: white;
   align-items: flex-start;
   justify-content: space-between;
+  border-radius: 3px;
 `
 
 const ExpandButton = styled.div`

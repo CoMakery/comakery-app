@@ -11,16 +11,13 @@ import chatImg from '../src/images/featured/chat.svg'
 
 const VideoHowItWorks = styled.div`
   flex-grow: 2;
-  padding-right: 50px;
 
   @media (max-width: 1024px) {
-    padding: 50px 0;
     height: 334px;
     width: 100%;
   }
 
   @media (max-width: 600px) {
-    padding: 50px 0;
     height: 234px;
     width: 100%;
   }
@@ -28,6 +25,7 @@ const VideoHowItWorks = styled.div`
   iframe {
     width: 100%;
     height: 100%
+    border-radius: 3px;
   }
 `
 
