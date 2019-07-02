@@ -37,7 +37,6 @@ gem 'rack', '>= 2.0.6'
 gem 'rails', '~>5.1.6.2'
 gem 'rails-data-migrations'
 gem 'rails-html-sanitizer', '~> 1.0.4'
-gem 'rails_12factor', group: :production
 gem 'react-rails'
 gem 'redcarpet'
 gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile.git' # remove git path when version > refile gem > 0.6.2 is released (0.6.2 requires old conflicting rack)
@@ -99,6 +98,11 @@ group(:test) do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'webmock'
+end
+
+group(:production) do
+  gem 'heroku-deflater'
+  gem 'rails_12factor'
 end
 
 gem 'scout_apm', '~> 2.4'
