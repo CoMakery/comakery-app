@@ -28,27 +28,25 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-bdVaJa",
                   "isStatic": true,
-                  "lastClassName": "csEGtU",
+                  "lastClassName": "hqmtib",
                   "rules": Array [
                     "
   flex-grow: 2;
-  padding-right: 50px;
 
   @media (max-width: 1024px) {
-    padding: 50px 0;
     height: 334px;
     width: 100%;
   }
 
   @media (max-width: 600px) {
-    padding: 50px 0;
     height: 234px;
     width: 100%;
   }
 
   iframe {
     width: 100%;
-    height: 100%
+    height: 100%;
+    border-radius: 3px;
   }
 ",
                   ],
@@ -66,7 +64,7 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-bdVaJa csEGtU"
+              className="sc-bdVaJa hqmtib"
             >
               <iframe
                 allow="autoplay; fullscreen"
