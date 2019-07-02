@@ -1453,7 +1453,6 @@ select:disabled {
 
 .featured-missions__header__description {
   padding-top: 45px;
-  display: inline-flex;
   flex-direction: column;
   align-items: baseline;
   display: none;
@@ -4290,6 +4289,11 @@ select:disabled {
   background-color: #5037f7;
 }
 
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
 .layout--content--title--nav a:hover,
 .layout--content--title--nav a:focus {
   text-decoration: underline;
@@ -4325,10 +4329,5 @@ select:disabled {
 }
 
 .pagination a:hover {
-  text-decoration: underline;
-}
-
-a:hover,
-a:focus {
   text-decoration: underline;
 }
