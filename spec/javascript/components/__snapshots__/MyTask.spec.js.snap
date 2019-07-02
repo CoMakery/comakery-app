@@ -38,7 +38,7 @@ exports[`MyTask renders component correctly 1`] = `
           "componentStyle": ComponentStyle {
             "componentId": "sc-htoDjs",
             "isStatic": true,
-            "lastClassName": "dTZGoq",
+            "lastClassName": "eyjoEz",
             "rules": Array [
               "
   display: flex;
@@ -51,6 +51,7 @@ exports[`MyTask renders component correctly 1`] = `
   background-color: white;
   align-items: flex-start;
   justify-content: space-between;
+  border-radius: 3px;
 ",
             ],
           },
@@ -67,7 +68,7 @@ exports[`MyTask renders component correctly 1`] = `
       forwardedRef={null}
     >
       <div
-        className="sc-htoDjs dTZGoq"
+        className="sc-htoDjs eyjoEz"
       >
         <styled.div>
           <StyledComponent
