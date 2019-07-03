@@ -22,7 +22,7 @@ class Footer extends React.Component {
           <div className="footer--content">
             <div className="footer--content--text">
             CoMakery helps you gather a tribe to achieve big missions.
-            <br />
+              <br />
             To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.
             </div>
 

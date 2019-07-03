@@ -102,7 +102,7 @@ export default class FeaturedMissions extends React.Component {
               Featured<br />
             <span className="featured-missions__content__title--big">missions</span>
           </p>
-          <p className="featured-missions__content__description"></p>
+          <p className="featured-missions__content__description" />
           {
             topMissions.map((mission, index) =>
               <FeaturedMission
