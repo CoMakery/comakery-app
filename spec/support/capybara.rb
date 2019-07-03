@@ -42,6 +42,9 @@ Capybara.register_driver :chrome do |app|
   # Disable /dev/shm use in CI. See https://gitlab.com/gitlab-org/gitlab-ee/issues/4252
   options.add_argument('disable-dev-shm-usage') if ENV['CI'] || ENV['CI_SERVER']
 
+  # avoid Selenium::WebDriver::Error::UnknownCommandError: Cannot call non W3C standard command while in W3C mode
+  options.add_option('w3c', false)
+
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
