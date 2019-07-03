@@ -37,6 +37,6 @@ describe 'logging in and out', js: true do
     account.update contributor_form: true
     page.set_rack_session(account_id: account.id)
     visit root_path
-    expect(page).to have_content 'CoMakery Hosts Blockchain Missions We Believe In'
+    expect(page).to have_content 'Discover Missions With Cutting Edge Projects'
   end
 end
