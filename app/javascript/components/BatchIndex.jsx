@@ -178,6 +178,7 @@ class BatchIndex extends React.Component {
                         key={i}
                         iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
                         text={b.name}
+                        notificationColor={b.published ? 'green' : 'orange'}
                         selected={this.state.selectedBatch === b}
                         onClick={(_) => this.handleListClick(b)}
                       />

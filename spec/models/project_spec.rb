@@ -314,8 +314,8 @@ describe Project do
 
     it 'returns project tasks in ready state grouped by specialty' do
       expect(project.ready_tasks_by_specialty.size).to eq(2)
-      expect(project.ready_tasks_by_specialty[specialty1]).to eq(project.awards.ready.where(specialty: specialty1).to_a)
-      expect(project.ready_tasks_by_specialty[specialty2]).to eq(project.awards.ready.where(specialty: specialty2).to_a)
+      expect(project.ready_tasks_by_specialty[specialty1]).to match_array(project.awards.ready.where(specialty: specialty1).to_a)
+      expect(project.ready_tasks_by_specialty[specialty2]).to match_array(project.awards.ready.where(specialty: specialty2).to_a)
     end
 
     it 'limits amount of tasks per specialty' do

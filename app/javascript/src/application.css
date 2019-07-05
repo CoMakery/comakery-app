@@ -48,11 +48,6 @@ hr {
   margin-bottom: 0px;
 }
 
-::selection {
-  background-color: #fb40e5;
-  color: white;
-}
-
 .loading-placeholder {
   background-color: white;
   min-height: 50vh;
@@ -530,6 +525,24 @@ a.header--nav--links--current {
   z-index: 10;
   position: absolute;
   margin-left: -1px;
+}
+
+.sidebar-item--right-border {
+  width: 7px;
+  height: 13px;
+  z-index: 10;
+  position: relative;
+  margin-right: -1em;
+  top: -22.5px;
+  background-color: transparent;
+}
+
+.sidebar-item--right-border__green {
+  background-color: #00be00;
+}
+
+.sidebar-item--right-border__orange {
+  background-color: #f5a623;
 }
 
 .sidebar-item--icon-left {

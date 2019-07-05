@@ -224,7 +224,7 @@ export default class Account extends React.Component {
 
               <FormField fieldLabel="GitHub Profile URL" fieldName="githubUrl" fieldValue={this.state.githubUrl} handleChange={this.handleChangeAccountFormData} error={this.state.errors.githubUrl} />
 
-              <FormField fieldLabel="Dribble Profile URL" fieldName="dribbleUrl" fieldValue={this.state.dribbleUrl} handleChange={this.handleChangeAccountFormData} error={this.state.errors.dribbleUrl} />
+              <FormField fieldLabel="Dribbble Profile URL" fieldName="dribbleUrl" fieldValue={this.state.dribbleUrl} handleChange={this.handleChangeAccountFormData} error={this.state.errors.dribbleUrl} />
 
               <FormField fieldLabel="Behance Profile URL" fieldName="behanceUrl" fieldValue={this.state.behanceUrl} handleChange={this.handleChangeAccountFormData} error={this.state.errors.behanceUrl} />
 
@@ -275,7 +275,7 @@ export default class Account extends React.Component {
 
             <DataField fieldName="GitHub Profile URL" fieldValue={this.state.githubUrl} />
 
-            <DataField fieldName="Dribble Profile URL" fieldValue={this.state.dribbleUrl} />
+            <DataField fieldName="Dribbble Profile URL" fieldValue={this.state.dribbleUrl} />
 
             <DataField fieldName="Behance Profile URL" fieldValue={this.state.behanceUrl} />
 

@@ -23,4 +23,21 @@ describe AwardType do
       expect(award_type.errors.full_messages).to eq(["Project can't be blank"])
     end
   end
+
+  describe 'switch_tasks_publicity' do
+    let!(:award_type_published) { create(:award_type, published: true) }
+    let!(:award_published) { create(:award_ready, award_type: award_type_published) }
+    let!(:award_type_unpublished) { create(:award_type, published: false) }
+    let!(:award_unpublished) { create(:award, award_type: award_type_unpublished, status: :unpublished) }
+
+    it 'switches ready awards to unpublished if published? changed to false' do
+      award_type_published.update(published: false)
+      expect(award_published.reload.unpublished?).to be_truthy
+    end
+
+    it 'switches unpublished awards to ready if published? changed to true' do
+      award_type_unpublished.update(published: true)
+      expect(award_unpublished.reload.ready?).to be_truthy
+    end
+  end
 end

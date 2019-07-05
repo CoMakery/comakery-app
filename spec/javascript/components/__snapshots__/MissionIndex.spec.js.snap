@@ -68,6 +68,7 @@ exports[`MissionIndex renders correctly without props 1`] = `
                   iconLeftName="MISSION/WHITE.svg"
                   iconLeftUrl=""
                   iconRightName="PLUS.svg"
+                  notificationColor=""
                   onClick={[Function]}
                   selected={false}
                   text="Create a Mission"
@@ -112,6 +113,9 @@ exports[`MissionIndex renders correctly without props 1`] = `
                       </span>
                       <div
                         className="sidebar-item--left-border"
+                      />
+                      <div
+                        className="sidebar-item--right-border sidebar-item--right-border__"
                       />
                     </div>
                   </div>

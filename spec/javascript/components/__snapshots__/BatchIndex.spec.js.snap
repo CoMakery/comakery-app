@@ -147,6 +147,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                     iconLeftName="BATCH/WHITE.svg"
                     iconLeftUrl=""
                     iconRightName="PLUS.svg"
+                    notificationColor=""
                     onClick={[Function]}
                     selected={false}
                     text="Create a New Batch"
@@ -192,6 +193,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                         <div
                           className="sidebar-item--left-border"
                         />
+                        <div
+                          className="sidebar-item--right-border sidebar-item--right-border__"
+                        />
                       </div>
                     </div>
                   </SidebarItem>
@@ -208,9 +212,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "$$typeof": Symbol(react.forward_ref),
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "sc-cMljjf",
+                        "componentId": "sc-jAaTju",
                         "isStatic": true,
-                        "lastClassName": "kPwhoC",
+                        "lastClassName": "iLfrhb",
                         "rules": Array [
                           "
   font-family: Georgia;
@@ -240,7 +244,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "sc-cMljjf",
+                      "styledComponentId": "sc-jAaTju",
                       "target": "div",
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -250,7 +254,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-cMljjf kPwhoC"
+                    className="sc-jAaTju iLfrhb"
                   >
                     <ul>
                       <li>

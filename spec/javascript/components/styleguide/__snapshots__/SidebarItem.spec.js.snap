@@ -16,6 +16,9 @@ exports[`SidebarItem renders correctly without props 1`] = `
       <div
         className="sidebar-item--left-border"
       />
+      <div
+        className="sidebar-item--right-border sidebar-item--right-border__"
+      />
     </div>
   </div>
 </Fragment>
