@@ -199,7 +199,19 @@ class AwardsController < ApplicationController
     end
 
     def authorize_award_start
-      authorize @award, :start?
+      if policy(@award).start?
+        authorize @award, :start?
+      else
+        redirect_to my_tasks_path, notice: unlock_award_notice
+      end
+    end
+
+    def unlock_award_notice
+      if @award.specialty == Specialty.default
+        "Complete #{current_account.tasks_to_unlock(@award)} more tasks to access General tasks that require the #{Award::EXPERIENCE_LEVELS.key(@award.experience_level)} skill level"
+      else
+        "Complete #{current_account.tasks_to_unlock(@award)} more #{@award.specialty.name} tasks to access tasks that require the #{Award::EXPERIENCE_LEVELS.key(@award.experience_level)} skill level"
+      end
     end
 
     def authorize_award_submit

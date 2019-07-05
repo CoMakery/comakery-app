@@ -8,6 +8,7 @@ exports[`MyTask renders component correctly 1`] = `
   filter=""
   task={
     Object {
+      "allowedToStart": true,
       "contributor": Object {
         "image": null,
         "name": null,
@@ -554,6 +555,7 @@ exports[`MyTask renders component correctly 1`] = `
                       filter=""
                       task={
                         Object {
+                          "allowedToStart": true,
                           "contributor": Object {
                             "image": null,
                             "name": null,
@@ -849,6 +851,7 @@ exports[`MyTask renders component correctly 1`] = `
                       filter=""
                       task={
                         Object {
+                          "allowedToStart": true,
                           "contributor": Object {
                             "image": null,
                             "name": null,
