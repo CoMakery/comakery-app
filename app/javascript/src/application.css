@@ -434,14 +434,26 @@ a.header--nav--links--current {
   justify-content: space-between;
 }
 
+.footer--content--wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 60px;
+}
+
 .footer--content--text {
   max-width: 448px;
   font-size: 14px;
   opacity: 0.6;
   text-align: justify;
   -webkit-hyphens: auto;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   margin-right: 20px;
+}
+
+.footer--content--social img {
+  max-width: 20px;
+  padding-right: 2em;
+  filter: brightness(3);
 }
 
 .footer--content--nav {

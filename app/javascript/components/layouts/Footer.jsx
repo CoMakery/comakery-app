@@ -20,8 +20,16 @@ class Footer extends React.Component {
           </div>
 
           <div className="footer--content">
-            <div className="footer--content--text">
-              CoMakery accelerates blockchain protocol adoption with scalable teams of talented makers. We build communities of high-level, distributed engineers, designers, and community managers, and match them with unique blockchain projects.
+            <div className="footer--content--wrapper">
+              <div className="footer--content--text">
+                CoMakery accelerates blockchain protocol adoption with scalable teams of talented makers. We build communities of high-level, distributed engineers, designers, and community managers, and match them with unique blockchain projects.
+              </div>
+
+              <div className="footer--content--social">
+                <a href="https://twitter.com/comakery" target="_blank"><img src={require(`src/images/nucleo-social-icons/social-1_logo-twitter.svg`)} /></a>
+                <a href="https://www.facebook.com/comakery" target="_blank"><img src={require(`src/images/nucleo-social-icons/social-1_logo-facebook.svg`)} /></a>
+                <a href="https://www.linkedin.com/company/comakery/about" target="_blank"><img src={require(`src/images/nucleo-social-icons/social-1_logo-linkedin.svg`)} /></a>
+              </div>
             </div>
 
             <div className="footer--content--nav">
@@ -34,6 +42,9 @@ class Footer extends React.Component {
                 </a>
                 <a className="intercom" href="">
                   Contact Us
+                </a>
+                <a href="https://ledger.comakery.com" target="_blank">
+                  Blog
                 </a>
               </div>
 
