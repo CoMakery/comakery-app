@@ -22,7 +22,9 @@ class Footer extends React.Component {
           <div className="footer--content">
             <div className="footer--content--wrapper">
               <div className="footer--content--text">
-                CoMakery accelerates blockchain protocol adoption with scalable teams of talented makers. We build communities of high-level, distributed engineers, designers, and community managers, and match them with unique blockchain projects.
+                CoMakery helps you gather a tribe to achieve big missions.
+                <br />
+                To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.
               </div>
 
               <div className="footer--content--social">

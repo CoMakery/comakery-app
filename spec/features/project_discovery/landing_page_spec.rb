@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'landing page', :js do
+describe 'landing page' do
   let!(:team) { create :team }
   let!(:account) { create(:account, nickname: 'gleenn', email: 'gleenn@example.com') }
   let!(:account1) { create(:account, nickname: 'Rick', email: 'rick@example.com') }

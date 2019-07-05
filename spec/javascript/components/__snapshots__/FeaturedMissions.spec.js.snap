@@ -117,9 +117,7 @@ exports[`FeaturedMissions renders correctly without props 1`] = `
       </p>
       <p
         className="featured-missions__content__description"
-      >
-        CoMakery Hosts Blockchain Missions We Believe In
-      </p>
+      />
     </div>
     <div
       className="featured-missions__more"
