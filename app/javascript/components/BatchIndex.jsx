@@ -42,6 +42,23 @@ const Title = styled.div`
   margin-top: 7px;
 `
 
+const FilterWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 7px;
+  margin-top: 7px;
+  background: none;
+  position: sticky;
+  top: 25px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 200;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
+
 const TitleText = styled.div`
   margin-bottom: 3px;
   font-size: 15px;
@@ -215,7 +232,7 @@ class BatchIndex extends React.Component {
 
                 <Tasks>
                   {this.state.selectedBatch.tasks.length > 0 &&
-                    <Title>
+                    <FilterWrapper>
                       <Filter filter={this.state.selectedTaskFilter} selected={!this.state.selectedTaskFilter} onClick={(_) => this.setState({selectedTaskFilter: null})}>all tasks</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'ready'} onClick={(_) => this.setState({selectedTaskFilter: 'ready'})}>ready</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'started'} onClick={(_) => this.setState({selectedTaskFilter: 'started'})}>started</Filter>
@@ -224,7 +241,7 @@ class BatchIndex extends React.Component {
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'paid'} onClick={(_) => this.setState({selectedTaskFilter: 'paid'})}>paid</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'rejected'} onClick={(_) => this.setState({selectedTaskFilter: 'rejected'})}>rejected</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'cancelled'} onClick={(_) => this.setState({selectedTaskFilter: 'cancelled'})}>cancelled</Filter>
-                    </Title>
+                    </FilterWrapper>
                   }
                   {this.state.selectedBatch.tasks.filter(task => !this.state.selectedTaskFilter || task.status === this.state.selectedTaskFilter).map((t, i) =>
                     <Task key={i} task={t} />

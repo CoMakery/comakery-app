@@ -17,13 +17,12 @@ exports[`Batch renders component correctly 1`] = `
           "componentStyle": ComponentStyle {
             "componentId": "sc-gZMcBi",
             "isStatic": true,
-            "lastClassName": "iAMDlk",
+            "lastClassName": "dlGMur",
             "rules": Array [
               "
   display: flex;
   flex-direction: column;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-  height: 90px;
 ",
             ],
           },
@@ -40,7 +39,7 @@ exports[`Batch renders component correctly 1`] = `
       forwardedRef={null}
     >
       <div
-        className="sc-gZMcBi iAMDlk"
+        className="sc-gZMcBi dlGMur"
       >
         <styled.div>
           <StyledComponent
@@ -50,47 +49,8 @@ exports[`Batch renders component correctly 1`] = `
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-gqjmRU",
-                  "isStatic": true,
-                  "lastClassName": "eAZYhG",
-                  "rules": Array [
-                    "
-  width: 2px;
-  height: 90px;
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .2);
-  background-color: #5037f7;
-  z-index: 10;
-  position: absolute;
-  margin-left: -1px;
-",
-                  ],
-                },
-                "displayName": "styled.div",
-                "foldedComponentIds": Array [],
-                "render": [Function],
-                "styledComponentId": "sc-gqjmRU",
-                "target": "div",
-                "toString": [Function],
-                "warnTooManyClasses": [Function],
-                "withComponent": [Function],
-              }
-            }
-            forwardedRef={null}
-          >
-            <div
-              className="sc-gqjmRU eAZYhG"
-            />
-          </StyledComponent>
-        </styled.div>
-        <styled.div>
-          <StyledComponent
-            forwardedComponent={
-              Object {
-                "$$typeof": Symbol(react.forward_ref),
-                "attrs": Array [],
-                "componentStyle": ComponentStyle {
-                  "componentId": "sc-VigVT",
                   "isStatic": false,
-                  "lastClassName": "ljIYMg",
+                  "lastClassName": "hDGnim",
                   "rules": Array [
                     "
   border-right: 7px solid #f5a623;
@@ -114,7 +74,7 @@ exports[`Batch renders component correctly 1`] = `
                 "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
-                "styledComponentId": "sc-VigVT",
+                "styledComponentId": "sc-gqjmRU",
                 "target": "div",
                 "toString": [Function],
                 "warnTooManyClasses": [Function],
@@ -124,7 +84,7 @@ exports[`Batch renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-VigVT ljIYMg"
+              className="sc-gqjmRU hDGnim"
             >
               not published
             </div>
@@ -137,9 +97,9 @@ exports[`Batch renders component correctly 1`] = `
                 "$$typeof": Symbol(react.forward_ref),
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
-                  "componentId": "sc-fjdhpX",
+                  "componentId": "sc-jTzLTM",
                   "isStatic": true,
-                  "lastClassName": "hRmWhz",
+                  "lastClassName": "cNhanF",
                   "rules": Array [
                     "
   display: flex;
@@ -151,7 +111,7 @@ exports[`Batch renders component correctly 1`] = `
                 "displayName": "styled.div",
                 "foldedComponentIds": Array [],
                 "render": [Function],
-                "styledComponentId": "sc-fjdhpX",
+                "styledComponentId": "sc-jTzLTM",
                 "target": "div",
                 "toString": [Function],
                 "warnTooManyClasses": [Function],
@@ -161,7 +121,7 @@ exports[`Batch renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-fjdhpX hRmWhz"
+              className="sc-jTzLTM cNhanF"
             >
               <styled.div>
                 <StyledComponent
@@ -170,9 +130,9 @@ exports[`Batch renders component correctly 1`] = `
                       "$$typeof": Symbol(react.forward_ref),
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "sc-jzJRlG",
+                        "componentId": "sc-fjdhpX",
                         "isStatic": true,
-                        "lastClassName": "dKTZHJ",
+                        "lastClassName": "bVpSSP",
                         "rules": Array [
                           "
   display: flex;
@@ -185,7 +145,7 @@ exports[`Batch renders component correctly 1`] = `
                       "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "sc-jzJRlG",
+                      "styledComponentId": "sc-fjdhpX",
                       "target": "div",
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -195,7 +155,7 @@ exports[`Batch renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-jzJRlG dKTZHJ"
+                    className="sc-fjdhpX bVpSSP"
                   >
                     <styled.div>
                       <StyledComponent
@@ -204,9 +164,9 @@ exports[`Batch renders component correctly 1`] = `
                             "$$typeof": Symbol(react.forward_ref),
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
-                              "componentId": "sc-cSHVUG",
+                              "componentId": "sc-jzJRlG",
                               "isStatic": true,
-                              "lastClassName": "hQhGDe",
+                              "lastClassName": "jUkrDM",
                               "rules": Array [
                                 "
   padding: 7px 15px 7px 15px;
@@ -224,7 +184,7 @@ exports[`Batch renders component correctly 1`] = `
                             "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
-                            "styledComponentId": "sc-cSHVUG",
+                            "styledComponentId": "sc-jzJRlG",
                             "target": "div",
                             "toString": [Function],
                             "warnTooManyClasses": [Function],
@@ -234,7 +194,7 @@ exports[`Batch renders component correctly 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-cSHVUG hQhGDe"
+                          className="sc-jzJRlG jUkrDM"
                         />
                       </StyledComponent>
                     </styled.div>
@@ -363,9 +323,9 @@ exports[`Batch renders component correctly 1`] = `
                       "$$typeof": Symbol(react.forward_ref),
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "sc-kAzzGY",
+                        "componentId": "sc-cSHVUG",
                         "isStatic": true,
-                        "lastClassName": "bQsLBG",
+                        "lastClassName": "fAviEV",
                         "rules": Array [
                           "
   display: flex;
@@ -377,7 +337,7 @@ exports[`Batch renders component correctly 1`] = `
                       "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "sc-kAzzGY",
+                      "styledComponentId": "sc-cSHVUG",
                       "target": "div",
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -387,7 +347,7 @@ exports[`Batch renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-kAzzGY bQsLBG"
+                    className="sc-cSHVUG fAviEV"
                   >
                     <ContentElement
                       title="progress"
@@ -721,9 +681,9 @@ exports[`Batch renders component correctly 1`] = `
                             "$$typeof": Symbol(react.forward_ref),
                             "attrs": Array [],
                             "componentStyle": ComponentStyle {
-                              "componentId": "sc-chPdSV",
+                              "componentId": "sc-kAzzGY",
                               "isStatic": true,
-                              "lastClassName": "iyqEun",
+                              "lastClassName": "hyUmFa",
                               "rules": Array [
                                 "
   display: flex;
@@ -738,7 +698,7 @@ exports[`Batch renders component correctly 1`] = `
                             "displayName": "styled.div",
                             "foldedComponentIds": Array [],
                             "render": [Function],
-                            "styledComponentId": "sc-chPdSV",
+                            "styledComponentId": "sc-kAzzGY",
                             "target": "div",
                             "toString": [Function],
                             "warnTooManyClasses": [Function],
@@ -748,7 +708,7 @@ exports[`Batch renders component correctly 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-chPdSV iyqEun"
+                          className="sc-kAzzGY hyUmFa"
                         >
                           <a>
                             <Styled(Icon)
@@ -760,9 +720,9 @@ exports[`Batch renders component correctly 1`] = `
                                     "$$typeof": Symbol(react.forward_ref),
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
-                                      "componentId": "sc-kgoBCf",
+                                      "componentId": "sc-chPdSV",
                                       "isStatic": true,
-                                      "lastClassName": "guJNwD",
+                                      "lastClassName": "DlMfj",
                                       "rules": Array [
                                         "
   height: 15px;
@@ -772,7 +732,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "displayName": "Styled(Icon)",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
-                                    "styledComponentId": "sc-kgoBCf",
+                                    "styledComponentId": "sc-chPdSV",
                                     "target": [Function],
                                     "toString": [Function],
                                     "warnTooManyClasses": [Function],
@@ -783,11 +743,11 @@ exports[`Batch renders component correctly 1`] = `
                                 name="iconEdit.svg"
                               >
                                 <Icon
-                                  className="sc-kgoBCf guJNwD"
+                                  className="sc-chPdSV DlMfj"
                                   name="iconEdit.svg"
                                 >
                                   <img
-                                    className="icon icon__iconEdit-svg sc-kgoBCf guJNwD"
+                                    className="icon icon__iconEdit-svg sc-chPdSV DlMfj"
                                     src="test-file-stub"
                                   />
                                 </Icon>
@@ -807,9 +767,9 @@ exports[`Batch renders component correctly 1`] = `
                                     "$$typeof": Symbol(react.forward_ref),
                                     "attrs": Array [],
                                     "componentStyle": ComponentStyle {
-                                      "componentId": "sc-kgoBCf",
+                                      "componentId": "sc-chPdSV",
                                       "isStatic": true,
-                                      "lastClassName": "guJNwD",
+                                      "lastClassName": "DlMfj",
                                       "rules": Array [
                                         "
   height: 15px;
@@ -819,7 +779,7 @@ exports[`Batch renders component correctly 1`] = `
                                     "displayName": "Styled(Icon)",
                                     "foldedComponentIds": Array [],
                                     "render": [Function],
-                                    "styledComponentId": "sc-kgoBCf",
+                                    "styledComponentId": "sc-chPdSV",
                                     "target": [Function],
                                     "toString": [Function],
                                     "warnTooManyClasses": [Function],
@@ -830,11 +790,11 @@ exports[`Batch renders component correctly 1`] = `
                                 name="iconTrash.svg"
                               >
                                 <Icon
-                                  className="sc-kgoBCf guJNwD"
+                                  className="sc-chPdSV DlMfj"
                                   name="iconTrash.svg"
                                 >
                                   <img
-                                    className="icon icon__iconTrash-svg sc-kgoBCf guJNwD"
+                                    className="icon icon__iconTrash-svg sc-chPdSV DlMfj"
                                     src="test-file-stub"
                                   />
                                 </Icon>
