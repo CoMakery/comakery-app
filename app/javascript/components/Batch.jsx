@@ -10,17 +10,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-  height: 90px;
-`
-
-const RightBorder = styled.div`
-  width: 2px;
-  height: 90px;
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .2);
-  background-color: #5037f7;
-  z-index: 10;
-  position: absolute;
-  margin-left: -1px;
 `
 
 const PublishedFlag = styled.div`
@@ -96,8 +85,6 @@ class Batch extends React.Component {
     return (
       <React.Fragment>
         <Wrapper>
-          <RightBorder />
-
           <PublishedFlag published={this.props.batch.published}>
             { this.props.batch.published ? 'published' : 'not published' }
           </PublishedFlag>
