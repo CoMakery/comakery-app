@@ -42,7 +42,7 @@ class Views::Projects::Base < Views::Base
             a(project.title, href: path)
 
             if policy(project).edit?
-              a('Edit', href: project_award_types_path(project), class: 'project_block--title--edit-link')
+              a(href: project_award_types_path(project), class: 'project_block--title--edit-link fa fa-cog')
             end
           end
         end

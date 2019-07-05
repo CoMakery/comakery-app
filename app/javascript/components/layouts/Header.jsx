@@ -11,6 +11,14 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
           Missions
         </a>
 
+        <a href="/projects" className={(currentPath === '/projects') ? 'header--nav--links--current' : null}>
+          Projects
+        </a>
+
+        <a href="https://ledger.comakery.com" target="_blank">
+          Blog
+        </a>
+
         <a className="intercom" href="">
           Contact Us
         </a>
@@ -49,6 +57,10 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
 
         <a href="/tasks" className={currentPath.match(/\/tasks/) ? 'header--nav--links--current' : null}>
           My Tasks
+        </a>
+
+        <a href="https://ledger.comakery.com" target="_blank">
+          Blog
         </a>
 
         <a href="/account" className={currentPath.match(/account/) ? 'header--nav--links--current' : null} >

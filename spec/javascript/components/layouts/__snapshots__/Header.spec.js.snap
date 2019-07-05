@@ -43,6 +43,12 @@ exports[`Header renders correctly without props 1`] = `
           My Tasks
         </a>
         <a
+          href="https://ledger.comakery.com"
+          target="_blank"
+        >
+          Blog
+        </a>
+        <a
           className={null}
           href="/account"
         >

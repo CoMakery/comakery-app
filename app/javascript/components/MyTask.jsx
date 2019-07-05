@@ -340,55 +340,68 @@ class TaskActionComponent extends React.Component {
   render() {
     let task = this.props.task
     let filter = this.props.filter
-    return (
-      <TaskAction
-        componentStyle={this.props.componentStyle}
-        href={
-          ((task.status === 'accepted' && task.issuer.self) && task.paymentUrl) ||
-          ((task.status === 'paid') && task.paymentUrl) ||
-          ((task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) && '/account') ||
-          (task.detailsUrl)
-        }
-        actionAvailable={
-          (task.status === 'ready') ||
-          (task.status === 'started') ||
-          (task.status === 'submitted' && task.issuer.self) ||
-          (task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) ||
-          (task.status === 'accepted' && task.issuer.self && task.contributor.walletPresent)
-        }
-      >
-        {task.status === 'ready' &&
-          <React.Fragment>Start Task</React.Fragment>
-        }
-        {task.status === 'started' &&
-          <React.Fragment>Submit Task</React.Fragment>
-        }
-        {task.status === 'submitted' && filter !== 'to review' &&
-          <React.Fragment>Awaiting Review</React.Fragment>
-        }
-        {task.status === 'submitted' && filter === 'to review' &&
-          <React.Fragment>Review Task</React.Fragment>
-        }
-        {task.status === 'accepted' && filter !== 'to pay' && task.contributor.walletPresent &&
-          <React.Fragment>Awaiting Payment</React.Fragment>
-        }
-        {task.status === 'accepted' && filter !== 'to pay' && !task.contributor.walletPresent &&
-          <React.Fragment>Provide Wallet</React.Fragment>
-        }
-        {task.status === 'accepted' && filter === 'to pay' && task.contributor.walletPresent &&
-          <React.Fragment>Pay Contributor</React.Fragment>
-        }
-        {task.status === 'accepted' && filter === 'to pay' && !task.contributor.walletPresent &&
-          <React.Fragment>Account Pending</React.Fragment>
-        }
-        {task.status === 'paid' &&
-          <React.Fragment>Paid</React.Fragment>
-        }
-        {task.status === 'rejected' &&
-          <React.Fragment>Rejected</React.Fragment>
-        }
-      </TaskAction>
-    )
+
+    if (task.allowedToStart) {
+      return (
+        <TaskAction
+          componentStyle={this.props.componentStyle}
+          href={
+            ((task.status === 'accepted' && task.issuer.self) && task.paymentUrl) ||
+            ((task.status === 'paid') && task.paymentUrl) ||
+            ((task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) && '/account') ||
+            (task.detailsUrl)
+          }
+          actionAvailable={
+            (task.status === 'ready') ||
+            (task.status === 'started') ||
+            (task.status === 'submitted' && task.issuer.self) ||
+            (task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) ||
+            (task.status === 'accepted' && task.issuer.self && task.contributor.walletPresent)
+          }
+        >
+          {task.status === 'ready' &&
+            <React.Fragment>Start Task</React.Fragment>
+          }
+          {task.status === 'started' &&
+            <React.Fragment>Submit Task</React.Fragment>
+          }
+          {task.status === 'submitted' && filter !== 'to review' &&
+            <React.Fragment>Awaiting Review</React.Fragment>
+          }
+          {task.status === 'submitted' && filter === 'to review' &&
+            <React.Fragment>Review Task</React.Fragment>
+          }
+          {task.status === 'accepted' && filter !== 'to pay' && task.contributor.walletPresent &&
+            <React.Fragment>Awaiting Payment</React.Fragment>
+          }
+          {task.status === 'accepted' && filter !== 'to pay' && !task.contributor.walletPresent &&
+            <React.Fragment>Provide Wallet</React.Fragment>
+          }
+          {task.status === 'accepted' && filter === 'to pay' && task.contributor.walletPresent &&
+            <React.Fragment>Pay Contributor</React.Fragment>
+          }
+          {task.status === 'accepted' && filter === 'to pay' && !task.contributor.walletPresent &&
+            <React.Fragment>Account Pending</React.Fragment>
+          }
+          {task.status === 'paid' &&
+            <React.Fragment>Paid</React.Fragment>
+          }
+          {task.status === 'rejected' &&
+            <React.Fragment>Rejected</React.Fragment>
+          }
+        </TaskAction>
+      )
+    } else {
+      return (
+        <TaskAction
+          componentStyle={this.props.componentStyle}
+          href={task.startUrl}
+          actionAvailable
+        >
+          <React.Fragment>Unlock Task</React.Fragment>
+        </TaskAction>
+      )
+    }
   }
 }
 
@@ -507,7 +520,8 @@ MyTask.defaultProps = {
     contributor: {
       name : null,
       image: null
-    }
+    },
+    allowedToStart: true
   },
   displayFilters: false,
   displayActions: true,

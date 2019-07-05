@@ -6,6 +6,7 @@ import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
+import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
@@ -21,6 +22,11 @@ class BatchForm extends React.Component {
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
 
+    let publishedValues = {
+      'Yes': 'true',
+      'No' : 'false'
+    }
+
     this.state = {
       flashMessages       : [],
       errors              : {},
@@ -28,6 +34,8 @@ class BatchForm extends React.Component {
       formAction          : this.props.formAction,
       formUrl             : this.props.formUrl,
       closeOnSuccess      : false,
+      publishedValues     : publishedValues,
+      'batch[published]'  : this.props.batch.published === true ? 'true' : 'false',
       'batch[name]'       : this.props.batch.name || '',
       'batch[goal]'       : this.props.batch.goal || '',
       'batch[description]': this.props.batch.description || ''
@@ -181,6 +189,18 @@ class BatchForm extends React.Component {
           </div>
 
           <form className="batch-form--form" id="batch-form--form" onSubmit={this.handleSubmit}>
+            <InputFieldDropdown
+              title="Published"
+              required
+              name="batch[published]"
+              value={this.state['batch[published]']}
+              errorText={this.state.errors['batch[published]']}
+              disabled={this.state.disabled['batch[published]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.state.publishedValues)}
+              symbolLimit={0}
+            />
+
             <InputFieldWhiteDark
               title="name"
               required

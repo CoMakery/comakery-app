@@ -48,9 +48,9 @@ describe Award do
       end
     end
 
-    it '.listed returns all but cancelled awards' do
+    it '.listed returns all but cancelled and unpublished awards' do
       described_class.statuses.each_key do |status|
-        if status == 'cancelled'
+        if %w[cancelled unpublished].include? status
           expect(described_class.listed.pluck(:status).include?(status)).to be_falsey
         else
           expect(described_class.listed.pluck(:status).include?(status)).to be_truthy
@@ -117,6 +117,25 @@ describe Award do
 
       it 'doesnt upgrade accepted task to paid if project has token associated' do
         expect(submtted_task_w_token.accepted?).to be true
+      end
+    end
+
+    describe 'make_unpublished_if_award_type_is_unpublished' do
+      let!(:award_type_unpublished) { create(:award_type, published: false) }
+      let!(:award_ready_unpublished) { create(:award_ready, award_type: award_type_unpublished) }
+      let!(:award_done_unpublished) { create(:award, award_type: award_type_unpublished) }
+      let!(:award_ready) { create(:award_ready) }
+
+      it 'sets status to unpublished if award_type is unpublished and award is in ready state' do
+        expect(award_ready_unpublished.unpublished?).to be_truthy
+      end
+
+      it 'doesnt set status to unpublished if award_type is published' do
+        expect(award_ready.unpublished?).to be_falsey
+      end
+
+      it 'doesnt set status to unpublished if award is not in ready state' do
+        expect(award_done_unpublished.unpublished?).to be_falsey
       end
     end
 
@@ -191,11 +210,11 @@ describe Award do
       expect(a.errors.full_messages).to eq(["Sorry, you can't start more than #{Award::STARTED_TASKS_PER_CONTRIBUTOR} tasks"])
     end
 
-    it 'cannot be destroyed unless in ready status' do
+    it 'cannot be destroyed unless in ready or unpublished status' do
       described_class.statuses.keys.each do |status|
         a = create(:award)
         a.update(status: status)
-        if status == 'ready'
+        if %w[ready unpublished].include? status
           expect { a.destroy }.to(change { described_class.count }.by(-1))
         else
           expect { a.destroy }.not_to(change { described_class.count })

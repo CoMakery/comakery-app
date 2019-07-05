@@ -53,6 +53,7 @@ exports[`TaskForm renders correctly without props 1`] = `
             iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
             iconLeftUrl=""
             iconRightName=""
+            notificationColor=""
             selected={true}
             text="sidebar item"
           />
@@ -109,6 +110,7 @@ exports[`TaskForm renders correctly without props 1`] = `
               iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
               iconLeftUrl=""
               iconRightName=""
+              notificationColor=""
               selected={true}
               text="sidebar item"
             />
@@ -241,6 +243,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                   iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
                   iconLeftUrl=""
                   iconRightName=""
+                  notificationColor=""
                   selected={true}
                   text="sidebar item"
                 >
@@ -270,6 +273,9 @@ exports[`TaskForm renders correctly without props 1`] = `
                       </span>
                       <div
                         className="sidebar-item--left-border"
+                      />
+                      <div
+                        className="sidebar-item--right-border sidebar-item--right-border__"
                       />
                     </div>
                   </div>
