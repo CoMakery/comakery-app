@@ -31,7 +31,7 @@ describe 'my account', js: true do
   scenario 'user gets redirected to signup on create project click' do
     visit '/'
     expect(page.current_url).to have_content '/'
-    expect(page).to have_content('CoMakery Hosts Blockchain Missions We Believe In')
+    expect(page).to have_content('Discover Missions With Cutting Edge Projects')
     stub_airtable
     first('a.featured-mission__create-project').click
     sleep 2
@@ -41,7 +41,7 @@ describe 'my account', js: true do
   scenario 'user gets redirected to signup on interest click' do
     visit '/'
     expect(page.current_url).to have_content '/'
-    expect(page).to have_content('CoMakery Hosts Blockchain Missions We Believe In')
+    expect(page).to have_content('Discover Missions With Cutting Edge Projects')
     stub_airtable
     find('.featured-mission__project__interest').click
     sleep 2
@@ -87,7 +87,7 @@ describe 'my account', js: true do
 
     visit '/'
     expect(page.current_url).to have_content '/'
-    expect(page).to have_content('CoMakery Hosts Blockchain Missions We Believe In')
+    expect(page).to have_content('Discover Missions With Cutting Edge Projects')
     stub_airtable
     find('.featured-mission__project__interest').click
     sleep 2

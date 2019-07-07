@@ -226,7 +226,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                         "componentStyle": ComponentStyle {
                           "componentId": "sc-htoDjs",
                           "isStatic": true,
-                          "lastClassName": "dTZGoq",
+                          "lastClassName": "eyjoEz",
                           "rules": Array [
                             "
   display: flex;
@@ -239,6 +239,7 @@ exports[`TaskDetails renders component correctly 1`] = `
   background-color: white;
   align-items: flex-start;
   justify-content: space-between;
+  border-radius: 3px;
 ",
                           ],
                         },
@@ -255,7 +256,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                     forwardedRef={null}
                   >
                     <div
-                      className="sc-htoDjs dTZGoq"
+                      className="sc-htoDjs eyjoEz"
                     >
                       <styled.div>
                         <StyledComponent
@@ -974,7 +975,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-eHgmQL",
                         "isStatic": true,
-                        "lastClassName": "ceFpwK",
+                        "lastClassName": "kWBRYg",
                         "rules": Array [
                           "
   padding: 30px 40px;
@@ -982,6 +983,7 @@ exports[`TaskDetails renders component correctly 1`] = `
   background-color: #ffffff;
   margin-top: -19px;
   margin-bottom: 20px;
+  border-radius: 3px;
 
   img {
     max-width: 80px;
@@ -1008,7 +1010,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-eHgmQL ceFpwK"
+                    className="sc-eHgmQL kWBRYg"
                   >
                     <styled.h2>
                       <StyledComponent

@@ -70,6 +70,7 @@ const Details = styled.div`
   background-color: #ffffff;
   margin-top: -19px;
   margin-bottom: 20px;
+  border-radius: 3px;
 
   img {
     max-width: 80px;
@@ -424,7 +425,7 @@ class TaskDetails extends React.Component {
                       <Icon name="NO-SKILLS.svg" />
                       <div>
                         This task has experince level requirement – {task.experienceLevelName}.
-                        Unlock access by completing <b>{this.props.tasksToUnlock}</b> more {task.batch.specialty || 'General'} {this.props.tasksToUnlock === 1 ? 'task' : 'tasks'} available to you in <a href={this.props.myTasksPath}>My Tasks</a>.
+                        Unlock access by completing <b>{this.props.tasksToUnlock}</b> more {task.specialty || 'General'} {this.props.tasksToUnlock === 1 ? 'task' : 'tasks'} available to you in <a href={this.props.myTasksPath}>My Tasks</a>.
                       </div>
                     </LockedMessage>
                   }

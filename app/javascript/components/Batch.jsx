@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Icon from './styleguide/Icon'
 import ContentElement from './ContentElement'
 import CurrencyAmount from './CurrencyAmount'
@@ -8,19 +8,26 @@ import Userpics from './Userpics'
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-  height: 90px;
 `
 
-const RightBorder = styled.div`
-  width: 2px;
-  height: 90px;
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .2);
-  background-color: #5037f7;
-  z-index: 10;
-  position: absolute;
-  margin-left: -1px;
+const PublishedFlag = styled.div`
+  border-right: 7px solid #f5a623;
+  margin-left: auto;
+  font-size: 13px;
+  padding-right: 0.5em;
+  font-weight: 600;
+  font-variant: all-small-caps;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-transform: uppercase;
+
+  ${props => props.published && css`
+    border-right: 7px solid #00be00;
+ `}
 `
 
 const Image = styled.img`
@@ -43,7 +50,7 @@ const Title = styled.div`
 `
 
 const Name = styled.div`
-  padding: 15px 15px 7px 15px;
+  padding: 7px 15px 7px 15px;
   font-family: Montserrat;
   font-size: 14px;
   font-weight: bold;
@@ -56,7 +63,7 @@ const Name = styled.div`
 
 const Details = styled.div`
   display: flex;
-  padding: 7px 15px 11px 15px;
+  padding: 7px 15px 15px 15px;
   width: 100%;
 `
 
@@ -78,7 +85,10 @@ class Batch extends React.Component {
     return (
       <React.Fragment>
         <Wrapper>
-          <RightBorder />
+          <PublishedFlag published={this.props.batch.published}>
+            { this.props.batch.published ? 'published' : 'not published' }
+          </PublishedFlag>
+
           {this.props.batch.diagramUrl &&
             <Image src={this.props.batch.diagramUrl} alt="Batch Image" />
           }

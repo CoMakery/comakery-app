@@ -12,6 +12,7 @@ class SidebarItem extends React.Component {
       iconLeftName,
       iconRightName,
       text,
+      notificationColor,
       selected,
       ...other
     } = this.props
@@ -50,6 +51,8 @@ class SidebarItem extends React.Component {
             }
 
             <div className="sidebar-item--left-border" />
+
+            <div className={`sidebar-item--right-border sidebar-item--right-border__${notificationColor}`} />
           </div>
         </div>
       </React.Fragment>
@@ -58,20 +61,22 @@ class SidebarItem extends React.Component {
 }
 
 SidebarItem.propTypes = {
-  className    : PropTypes.string,
-  iconLeftUrl  : PropTypes.string,
-  iconLeftName : PropTypes.string,
-  iconRightName: PropTypes.string,
-  text         : PropTypes.string,
-  selected     : PropTypes.bool,
-  leftChild    : PropTypes.node
+  className        : PropTypes.string,
+  iconLeftUrl      : PropTypes.string,
+  iconLeftName     : PropTypes.string,
+  iconRightName    : PropTypes.string,
+  text             : PropTypes.string,
+  notificationColor: PropTypes.string,
+  selected         : PropTypes.bool,
+  leftChild        : PropTypes.node
 }
 SidebarItem.defaultProps = {
-  className    : '',
-  iconLeftUrl  : '',
-  iconLeftName : '',
-  iconRightName: '',
-  text         : 'sidebar item',
-  selected     : false
+  className        : '',
+  iconLeftUrl      : '',
+  iconLeftName     : '',
+  iconRightName    : '',
+  text             : 'sidebar item',
+  notificationColor: '',
+  selected         : false
 }
 export default SidebarItem

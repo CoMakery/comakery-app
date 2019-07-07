@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190626152736) do
+ActiveRecord::Schema.define(version: 20190702153901) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 20190626152736) do
     t.string "diagram_filename"
     t.string "diagram_content_size"
     t.string "diagram_content_type"
+    t.boolean "published", default: false
     t.index ["project_id"], name: "index_award_types_on_project_id"
   end
 

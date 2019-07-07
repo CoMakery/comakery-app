@@ -65,6 +65,7 @@ class AwardTypesController < ApplicationController
 
     def award_type_params
       params.fetch(:batch, {}).permit(
+        :published,
         :name,
         :goal,
         :description,

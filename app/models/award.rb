@@ -56,11 +56,12 @@ class Award < ApplicationRecord
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
   before_validation :set_paid_status_if_project_has_no_token, if: -> { status == 'accepted' && !project.token }
+  before_validation :make_unpublished_if_award_type_is_unpublished, if: -> { status == 'ready' && !award_type&.published? }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
-  scope :listed, -> { where 'awards.status not in(6)' }
+  scope :listed, -> { where 'awards.status not in(6,7)' }
 
   scope :filtered_for_view, lambda { |filter, account|
     case filter
@@ -81,7 +82,7 @@ class Award < ApplicationRecord
     end
   }
 
-  enum status: %i[ready started submitted accepted rejected paid cancelled]
+  enum status: %i[ready started submitted accepted rejected paid cancelled unpublished]
 
   def self.total_awarded
     completed.sum(:total_amount)
@@ -163,7 +164,7 @@ class Award < ApplicationRecord
   end
 
   def can_be_edited?
-    status == 'ready' && !cloned? && !any_clones?
+    (ready? || unpublished?) && !cloned? && !any_clones?
   end
 
   def cloned?
@@ -225,6 +226,10 @@ class Award < ApplicationRecord
 
     def set_paid_status_if_project_has_no_token
       self.status = 'paid'
+    end
+
+    def make_unpublished_if_award_type_is_unpublished
+      self.status = 'unpublished'
     end
 
     def total_amount_fits_into_project_budget

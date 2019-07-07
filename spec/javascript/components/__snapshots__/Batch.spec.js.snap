@@ -17,13 +17,12 @@ exports[`Batch renders component correctly 1`] = `
           "componentStyle": ComponentStyle {
             "componentId": "sc-gZMcBi",
             "isStatic": true,
-            "lastClassName": "bZMqXO",
+            "lastClassName": "dlGMur",
             "rules": Array [
               "
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-  height: 90px;
 ",
             ],
           },
@@ -40,7 +39,7 @@ exports[`Batch renders component correctly 1`] = `
       forwardedRef={null}
     >
       <div
-        className="sc-gZMcBi bZMqXO"
+        className="sc-gZMcBi dlGMur"
       >
         <styled.div>
           <StyledComponent
@@ -50,17 +49,25 @@ exports[`Batch renders component correctly 1`] = `
                 "attrs": Array [],
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-gqjmRU",
-                  "isStatic": true,
-                  "lastClassName": "eAZYhG",
+                  "isStatic": false,
+                  "lastClassName": "hDGnim",
                   "rules": Array [
                     "
-  width: 2px;
-  height: 90px;
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .2);
-  background-color: #5037f7;
-  z-index: 10;
-  position: absolute;
-  margin-left: -1px;
+  border-right: 7px solid #f5a623;
+  margin-left: auto;
+  font-size: 13px;
+  padding-right: 0.5em;
+  font-weight: 600;
+  font-variant: all-small-caps;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-transform: uppercase;
+
+  ",
+                    [Function],
+                    "
 ",
                   ],
                 },
@@ -77,8 +84,10 @@ exports[`Batch renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-gqjmRU eAZYhG"
-            />
+              className="sc-gqjmRU hDGnim"
+            >
+              not published
+            </div>
           </StyledComponent>
         </styled.div>
         <styled.div>
@@ -157,10 +166,10 @@ exports[`Batch renders component correctly 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-jzJRlG",
                               "isStatic": true,
-                              "lastClassName": "gDoncv",
+                              "lastClassName": "jUkrDM",
                               "rules": Array [
                                 "
-  padding: 15px 15px 7px 15px;
+  padding: 7px 15px 7px 15px;
   font-family: Montserrat;
   font-size: 14px;
   font-weight: bold;
@@ -185,7 +194,7 @@ exports[`Batch renders component correctly 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-jzJRlG gDoncv"
+                          className="sc-jzJRlG jUkrDM"
                         />
                       </StyledComponent>
                     </styled.div>
@@ -316,11 +325,11 @@ exports[`Batch renders component correctly 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-cSHVUG",
                         "isStatic": true,
-                        "lastClassName": "iPABgF",
+                        "lastClassName": "fAviEV",
                         "rules": Array [
                           "
   display: flex;
-  padding: 7px 15px 11px 15px;
+  padding: 7px 15px 15px 15px;
   width: 100%;
 ",
                         ],
@@ -338,7 +347,7 @@ exports[`Batch renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-cSHVUG iPABgF"
+                    className="sc-cSHVUG fAviEV"
                   >
                     <ContentElement
                       title="progress"

@@ -65,6 +65,7 @@ Rails.application.routes.draw do
         get :clone
         get :award
         post :start
+        get :start
         post :submit
         post :accept
         post :reject

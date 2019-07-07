@@ -148,6 +148,7 @@ class ApplicationController < ActionController::Base
         image: helpers.account_image_url(task.account, 100),
         wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
       },
+      allowedToStart: true,
       experience_level_name: Award::EXPERIENCE_LEVELS.key(task.experience_level),
       image_url: helpers.attachment_url(task, :image),
       submission_image_url: helpers.attachment_url(task, :submission_image),

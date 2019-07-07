@@ -11,29 +11,21 @@ import chatImg from '../src/images/featured/chat.svg'
 
 const VideoHowItWorks = styled.div`
   flex-grow: 2;
-  padding-right: 50px;
 
   @media (max-width: 1024px) {
-    padding: 50px 0;
-    height: 334px;
-    width: 100%;
-  }
-
-  @media (max-width: 1024px) {
-    padding: 50px 0;
     height: 334px;
     width: 100%;
   }
 
   @media (max-width: 600px) {
-    padding: 50px 0;
     height: 234px;
     width: 100%;
   }
 
   iframe {
     width: 100%;
-    height: 100%
+    height: 100%;
+    border-radius: 3px;
   }
 `
 
@@ -110,7 +102,7 @@ export default class FeaturedMissions extends React.Component {
               Featured<br />
             <span className="featured-missions__content__title--big">missions</span>
           </p>
-          <p className="featured-missions__content__description">CoMakery Hosts Blockchain Missions We Believe In</p>
+          <p className="featured-missions__content__description" />
           {
             topMissions.map((mission, index) =>
               <FeaturedMission

@@ -15,7 +15,7 @@ export default class FeaturedMission extends React.Component {
     }
   }
 
-  addInterest(projectId) { // protocol = mission name
+  addInterest(projectId) {
     fetchPolyfill('/add-interest', {
       credentials: 'same-origin',
       method     : 'POST',
@@ -46,6 +46,7 @@ export default class FeaturedMission extends React.Component {
       <div className={`featured-mission ${this.props.float === 'right' ? 'featured-mission--right' : ''}`}>
         <a href={missionUrl} className={`featured-mission__image ${this.props.float === 'right' ? 'featured-mission__image--right' : ''}`}>
           <img src={imageUrl} />
+          <span>view mission</span>
         </a>
         <div className="featured-mission__detail">
           <div className="featured-mission__name">

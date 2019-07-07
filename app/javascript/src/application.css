@@ -434,14 +434,26 @@ a.header--nav--links--current {
   justify-content: space-between;
 }
 
+.footer--content--wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 60px;
+}
+
 .footer--content--text {
   max-width: 448px;
   font-size: 14px;
   opacity: 0.6;
   text-align: justify;
   -webkit-hyphens: auto;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   margin-right: 20px;
+}
+
+.footer--content--social img {
+  max-width: 20px;
+  padding-right: 2em;
+  filter: brightness(3);
 }
 
 .footer--content--nav {
@@ -525,6 +537,24 @@ a.header--nav--links--current {
   z-index: 10;
   position: absolute;
   margin-left: -1px;
+}
+
+.sidebar-item--right-border {
+  width: 7px;
+  height: 13px;
+  z-index: 10;
+  position: relative;
+  margin-right: -1em;
+  top: -22.5px;
+  background-color: transparent;
+}
+
+.sidebar-item--right-border__green {
+  background-color: #00be00;
+}
+
+.sidebar-item--right-border__orange {
+  background-color: #f5a623;
 }
 
 .sidebar-item--icon-left {
@@ -1428,14 +1458,12 @@ select:disabled {
   height: 518px;
   background-color: #ffffff;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25'%3E%3Crect fill='%23fb40e5' width='540' height='450'/%3E%3Cdefs%3E%3ClinearGradient id='a' gradientUnits='userSpaceOnUse' x1='0' x2='0' y1='0' y2='100%25' gradientTransform='rotate(250,1280,653)'%3E%3Cstop offset='0' stop-color='%23fb40e5'/%3E%3Cstop offset='1' stop-color='%230089f4'/%3E%3C/linearGradient%3E%3Cpattern patternUnits='userSpaceOnUse' id='b' width='504' height='420' x='0' y='0' viewBox='0 0 1080 900'%3E%3Cg fill-opacity='0.08'%3E%3Cpolygon fill='%23444' points='90 150 0 300 180 300'/%3E%3Cpolygon points='90 150 180 0 0 0'/%3E%3Cpolygon fill='%23AAA' points='270 150 360 0 180 0'/%3E%3Cpolygon fill='%23DDD' points='450 150 360 300 540 300'/%3E%3Cpolygon fill='%23999' points='450 150 540 0 360 0'/%3E%3Cpolygon points='630 150 540 300 720 300'/%3E%3Cpolygon fill='%23DDD' points='630 150 720 0 540 0'/%3E%3Cpolygon fill='%23444' points='810 150 720 300 900 300'/%3E%3Cpolygon fill='%23FFF' points='810 150 900 0 720 0'/%3E%3Cpolygon fill='%23DDD' points='990 150 900 300 1080 300'/%3E%3Cpolygon fill='%23444' points='990 150 1080 0 900 0'/%3E%3Cpolygon fill='%23DDD' points='90 450 0 600 180 600'/%3E%3Cpolygon points='90 450 180 300 0 300'/%3E%3Cpolygon fill='%23666' points='270 450 180 600 360 600'/%3E%3Cpolygon fill='%23AAA' points='270 450 360 300 180 300'/%3E%3Cpolygon fill='%23DDD' points='450 450 360 600 540 600'/%3E%3Cpolygon fill='%23999' points='450 450 540 300 360 300'/%3E%3Cpolygon fill='%23999' points='630 450 540 600 720 600'/%3E%3Cpolygon fill='%23FFF' points='630 450 720 300 540 300'/%3E%3Cpolygon points='810 450 720 600 900 600'/%3E%3Cpolygon fill='%23DDD' points='810 450 900 300 720 300'/%3E%3Cpolygon fill='%23AAA' points='990 450 900 600 1080 600'/%3E%3Cpolygon fill='%23444' points='990 450 1080 300 900 300'/%3E%3Cpolygon fill='%23222' points='90 750 0 900 180 900'/%3E%3Cpolygon points='270 750 180 900 360 900'/%3E%3Cpolygon fill='%23DDD' points='270 750 360 600 180 600'/%3E%3Cpolygon points='450 750 540 600 360 600'/%3E%3Cpolygon points='630 750 540 900 720 900'/%3E%3Cpolygon fill='%23444' points='630 750 720 600 540 600'/%3E%3Cpolygon fill='%23AAA' points='810 750 720 900 900 900'/%3E%3Cpolygon fill='%23666' points='810 750 900 600 720 600'/%3E%3Cpolygon fill='%23999' points='990 750 900 900 1080 900'/%3E%3Cpolygon fill='%23999' points='180 0 90 150 270 150'/%3E%3Cpolygon fill='%23444' points='360 0 270 150 450 150'/%3E%3Cpolygon fill='%23FFF' points='540 0 450 150 630 150'/%3E%3Cpolygon points='900 0 810 150 990 150'/%3E%3Cpolygon fill='%23222' points='0 300 -90 450 90 450'/%3E%3Cpolygon fill='%23FFF' points='0 300 90 150 -90 150'/%3E%3Cpolygon fill='%23FFF' points='180 300 90 450 270 450'/%3E%3Cpolygon fill='%23666' points='180 300 270 150 90 150'/%3E%3Cpolygon fill='%23222' points='360 300 270 450 450 450'/%3E%3Cpolygon fill='%23FFF' points='360 300 450 150 270 150'/%3E%3Cpolygon fill='%23444' points='540 300 450 450 630 450'/%3E%3Cpolygon fill='%23222' points='540 300 630 150 450 150'/%3E%3Cpolygon fill='%23AAA' points='720 300 630 450 810 450'/%3E%3Cpolygon fill='%23666' points='720 300 810 150 630 150'/%3E%3Cpolygon fill='%23FFF' points='900 300 810 450 990 450'/%3E%3Cpolygon fill='%23999' points='900 300 990 150 810 150'/%3E%3Cpolygon points='0 600 -90 750 90 750'/%3E%3Cpolygon fill='%23666' points='0 600 90 450 -90 450'/%3E%3Cpolygon fill='%23AAA' points='180 600 90 750 270 750'/%3E%3Cpolygon fill='%23444' points='180 600 270 450 90 450'/%3E%3Cpolygon fill='%23444' points='360 600 270 750 450 750'/%3E%3Cpolygon fill='%23999' points='360 600 450 450 270 450'/%3E%3Cpolygon fill='%23666' points='540 600 630 450 450 450'/%3E%3Cpolygon fill='%23222' points='720 600 630 750 810 750'/%3E%3Cpolygon fill='%23FFF' points='900 600 810 750 990 750'/%3E%3Cpolygon fill='%23222' points='900 600 990 450 810 450'/%3E%3Cpolygon fill='%23DDD' points='0 900 90 750 -90 750'/%3E%3Cpolygon fill='%23444' points='180 900 270 750 90 750'/%3E%3Cpolygon fill='%23FFF' points='360 900 450 750 270 750'/%3E%3Cpolygon fill='%23AAA' points='540 900 630 750 450 750'/%3E%3Cpolygon fill='%23FFF' points='720 900 810 750 630 750'/%3E%3Cpolygon fill='%23222' points='900 900 990 750 810 750'/%3E%3Cpolygon fill='%23222' points='1080 300 990 450 1170 450'/%3E%3Cpolygon fill='%23FFF' points='1080 300 1170 150 990 150'/%3E%3Cpolygon points='1080 600 990 750 1170 750'/%3E%3Cpolygon fill='%23666' points='1080 600 1170 450 990 450'/%3E%3Cpolygon fill='%23DDD' points='1080 900 1170 750 990 750'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect x='0' y='0' fill='url(%23a)' width='100%25' height='100%25'/%3E%3Crect x='0' y='0' fill='url(%23b)' width='100%25' height='100%25'/%3E%3C/svg%3E");
-  background-attachment: fixed;
-  background-size: cover;
 }
 
 .featured-missions__header_container {
   display: flex;
   justify-content: space-around;
-  padding: 44px 150px 50px 100px;
+  padding: 25px;
   box-sizing: border-box;
   width: 100%;
   max-width: 1440px;
@@ -1450,9 +1478,9 @@ select:disabled {
 
 .featured-missions__header__description {
   padding-top: 45px;
-  display: inline-flex;
   flex-direction: column;
   align-items: baseline;
+  display: none;
 }
 
 .featured-missions__header__logo {
@@ -1532,8 +1560,8 @@ select:disabled {
 
 @media screen and (max-width: 1439px) {
   .featured-missions__header_container {
-    padding-left: 75px;
-    padding-right: 75px;
+    padding-left: 25px;
+    padding-right: 25px;
   }
 }
 
@@ -1594,7 +1622,7 @@ select:disabled {
   .featured-missions__header_container {
     flex-direction: column-reverse;
     justify-content: space-between;
-    padding: 55px 15px 0 15px;
+    padding: 15px;
     align-items: center;
     height: 100%;
   }
@@ -1657,11 +1685,31 @@ select:disabled {
   width: 356px;
   height: 399px;
   box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.02);
   box-shadow: 0 10px 20px 0 rgba(32, 22, 98, 0.1);
   padding: 22px;
   margin-right: 65px;
   margin-left: 0;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 500;
+  color: #0089f4;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 3px;
+}
+
+.featured-mission__image span {
+  font-weight: 600;
+}
+
+.featured-mission__image img {
+  border-radius: 3px;
+}
+
+.featured-mission__image:hover {
+  text-decoration: underline;
 }
 
 .featured-mission__image--right {
@@ -1675,7 +1723,7 @@ select:disabled {
 
 .featured-mission__detail {
   width: calc(100% - 422px);
-  padding-top: 36px;
+  padding-top: 12px;
 }
 
 .featured-mission__name {
@@ -1934,12 +1982,12 @@ select:disabled {
 
 .featured-missions__more__description {
   font-size: 38px;
-  font-weight: bold;
+  font-weight: 600;
   font-style: normal;
   font-stretch: normal;
   line-height: normal;
   letter-spacing: normal;
-  color: var(--black);
+  color: white;
   text-transform: capitalize;
   text-align: center;
   margin-top: 0;
@@ -1993,20 +2041,20 @@ select:disabled {
   text-align: center;
   background: white;
   box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .gallery-content__image {
-  width: 263px;
-  height: 296px;
+  width: 230px;
   padding: 16px;
-  margin-bottom: 18px;
-  box-sizing: border-box;
-  background-color: #f6f6f6;
-  box-shadow: 1px 1px 10px 0 rgba(32, 22, 98, .1);
 }
 
 .gallery-content__image img {
   width: 100%;
+  border-radius: 3px;
 }
 
 .gallery-content__title {
@@ -2052,26 +2100,24 @@ select:disabled {
   }
 
   .gallery-content {
-    width: 220px;
+    width: 180px;
     padding-bottom: 13px;
     text-align: center;
   }
 
   .gallery-content__image {
-    width: 220px;
-    height: 248px;
+    width: 150px;
     padding: 16px;
-    margin-bottom: 18px;
   }
 
   .gallery-content__title {
-    width: 220px;
+    width: 150px;
     padding: 0 16px;
     font-size: 16px;
   }
 
   .gallery-content__description {
-    width: 220px;
+    width: 150px;
     font-size: 15px;
     text-align: center;
   }
@@ -4266,6 +4312,11 @@ select:disabled {
 .sidebar-item__bold:hover,
 .sidebar-item__bold:focus {
   background-color: #5037f7;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
 }
 
 .layout--content--title--nav a:hover,
