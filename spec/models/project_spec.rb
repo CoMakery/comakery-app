@@ -323,4 +323,30 @@ describe Project do
       expect(project.ready_tasks_by_specialty(1)[specialty2].size).to eq(1)
     end
   end
+
+  describe '#stats' do
+    it 'returns number of published batches' do
+      project = create(:project)
+      create(:award_type, project: project)
+      create(:award_type, published: false, project: project)
+
+      expect(project.stats[:batches]).to eq(1)
+    end
+
+    it 'returns number of tasks in progress' do
+      project = create(:project)
+      create(:award_ready, award_type: create(:award_type, project: project))
+      create(:award, status: :paid, award_type: create(:award_type, project: project))
+
+      expect(project.stats[:tasks]).to eq(1)
+    end
+
+    it 'returns number of accounts which have interest, started a task or created this project' do
+      project = create(:project)
+      create(:award, award_type: create(:award_type, project: project))
+      create(:interest, project: project)
+
+      expect(project.stats[:interests]).to eq(3)
+    end
+  end
 end

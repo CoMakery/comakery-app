@@ -91,12 +91,15 @@ class Mom
     Token.new(defaults.merge(attrs))
   end
 
-  def interest(account = create(:account), **attrs)
-    defaults = {
-      protocol: 'Vevue',
-      account: account
-    }
-    Interest.new(defaults.merge(attrs))
+  def interest(**attrs)
+    params = {
+      protocol: 'Moms protocol',
+      account: create(:account),
+      project: create(:project),
+      specialty: create(:specialty)
+    }.merge(attrs)
+
+    Interest.new(params)
   end
 
   def channel(**attrs)

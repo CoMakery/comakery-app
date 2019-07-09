@@ -8,7 +8,7 @@ class Project < ApplicationRecord
   belongs_to :account
   belongs_to :mission, optional: true
   belongs_to :token, optional: true
-  has_many :accounts_interested, through: :interests, source: :account
+  has_many :interests
 
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :awards, through: :award_types, dependent: :destroy
@@ -158,6 +158,18 @@ class Project < ApplicationRecord
 
   def ready_tasks_by_specialty(limit_per_specialty = 5)
     awards.ready.group_by(&:specialty).map { |specialty, awards| [specialty, awards.take(limit_per_specialty)] }.to_h
+  end
+
+  def stats
+    {
+      batches: award_types.where(published: true).size,
+      tasks: awards.in_progress.size,
+      interests: (
+        [account_id] |
+        interests.pluck(:account_id) |
+        awards.pluck(:account_id)
+      ).size
+    }
   end
 
   private
