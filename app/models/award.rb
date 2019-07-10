@@ -62,6 +62,7 @@ class Award < ApplicationRecord
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6,7)' }
+  scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
 
   scope :filtered_for_view, lambda { |filter, account|
     case filter

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
 import MyTask from './MyTask'
+import Pluralize from 'react-pluralize'
 import d3 from 'd3/d3'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import styled from 'styled-components'
@@ -367,7 +368,27 @@ export default class Project extends React.Component {
       </div>
 
       <div className="project-interest">
+        <div className="project-stats__container">
+          <div className="mission-stats__kpis">
+            <div className="mission-stats__kpi">
+              <Icon name="BATCH/WHITE.svg" />
+              <Pluralize singular="batch" plural="batches" count={projectData.stats.batches} />
+            </div>
+
+            <div className="mission-stats__kpi">
+              <Icon name="TASK/WHITE.svg" />
+              <Pluralize singular="task" count={projectData.stats.tasks} />
+            </div>
+
+            <div className="mission-stats__kpi">
+              <div className="mission-stats__contributor" />
+              <Pluralize singular="person" plural="people" count={projectData.stats.interests} />&nbsp;INTERESTED
+            </div>
+          </div>
+        </div>
+
         <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
+
         {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
         {interested && <button className="button project-interest__button" disabled>Request Sent</button>}
       </div>
@@ -490,7 +511,8 @@ Project.defaultProps = {
     description : '',
     teamLeader  : {},
     contributors: [],
-    chartData   : []
+    chartData   : [],
+    stats       : {}
   },
   missionData        : null,
   tokenData          : null,

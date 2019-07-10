@@ -20,4 +20,39 @@ describe Mission do
       expect(errors).to include('Description is too long (maximum is 500 characters)')
     end
   end
+
+  describe '#stats' do
+    it 'returns number of not archived projects' do
+      mission = create(:mission)
+      create(:project, mission: mission)
+      create(:project, mission: mission, visibility: :archived)
+
+      expect(mission.stats[:projects]).to eq(1)
+    end
+
+    it 'returns number of published batches' do
+      mission = create(:mission)
+      create(:award_type, project: create(:project, mission: mission))
+      create(:award_type, published: false, project: create(:project, mission: mission))
+
+      expect(mission.stats[:batches]).to eq(1)
+    end
+
+    it 'returns number of tasks in progress' do
+      mission = create(:mission)
+      create(:award_ready, award_type: create(:award_type, project: create(:project, mission: mission)))
+      create(:award, status: :paid, award_type: create(:award_type, project: create(:project, mission: mission)))
+
+      expect(mission.stats[:tasks]).to eq(1)
+    end
+
+    it 'returns number of accounts which have interest, started a task or created a project' do
+      mission = create(:mission)
+      project = create(:project, mission: mission)
+      create(:award, award_type: create(:award_type, project: project))
+      create(:interest, project: project)
+
+      expect(mission.stats[:interests]).to eq(3)
+    end
+  end
 end

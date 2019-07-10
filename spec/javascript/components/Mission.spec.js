@@ -51,7 +51,8 @@ describe('Mission', () => {
         imageUrl   : '/attachments/image.jpg',
         logoUrl    : '/attachments/logo.jpg',
         name       : 'HOLOCHAIN',
-        subtitle   : 'Test Mission'
+        subtitle   : 'Test Mission',
+        stats      : {batches: 19, interests: 1, projects: 6, tasks: 369}
       },
       tokens: {
         tokenCount: 6,
@@ -96,10 +97,13 @@ describe('Mission', () => {
       },
       projects: [
         {
-          batches    : 3,
-          editable   : true,
-          interested : false,
-          tasks      : 0,
+          editable  : true,
+          interested: false,
+          stats     : {
+            batches  : 3,
+            tasks    : 0,
+            interests: 0
+          },
           projectData: {
             contributors      : [],
             contributorsNumber: 0,
@@ -124,10 +128,13 @@ describe('Mission', () => {
           }
         },
         {
-          batches    : 3,
-          editable   : true,
-          interested : false,
-          tasks      : 0,
+          editable  : true,
+          interested: false,
+          stats     : {
+            batches  : 3,
+            tasks    : 0,
+            interests: 0
+          },
           projectData: {
             contributors      : [],
             contributorsNumber: 0,
@@ -153,7 +160,6 @@ describe('Mission', () => {
         },
       ],
       newProjectUrl: '/projects/new?mission_id=test',
-      stats        : {batches: 19, interests: 1, projects: 6, tasks: 369},
 
     }
     const wrapper = mount(<Mission {...props} />)
@@ -168,7 +174,7 @@ describe('Mission', () => {
     expect(wrapper.contains(<div className="mission-leaders__individual__info__name">User3 Last3</div>)).toEqual(true)
 
     expect(wrapper.find('.mission-tokens__card')).toHaveLength(4)
-    expect(wrapper.find('.mission-stats__kpi')).toHaveLength(8)
+    expect(wrapper.find('.mission-stats__kpi')).toHaveLength(4)
     expect(wrapper.find('.mission-projects__single')).toHaveLength(2)
   })
 })

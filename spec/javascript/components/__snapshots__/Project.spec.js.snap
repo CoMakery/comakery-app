@@ -14,6 +14,7 @@ exports[`Project renders correctly without props 1`] = `
       "chartData": Array [],
       "contributors": Array [],
       "description": "",
+      "stats": Object {},
       "teamLeader": Object {},
     }
   }
@@ -128,6 +129,95 @@ exports[`Project renders correctly without props 1`] = `
     <div
       className="project-interest"
     >
+      <div
+        className="project-stats__container"
+      >
+        <div
+          className="mission-stats__kpis"
+        >
+          <div
+            className="mission-stats__kpi"
+          >
+            <Icon
+              className=""
+              name="BATCH/WHITE.svg"
+            >
+              <img
+                className="icon icon__BATCH/WHITE-svg"
+                src="test-file-stub"
+              />
+            </Icon>
+            <l
+              className={null}
+              count={1}
+              plural="batches"
+              showCount={true}
+              singular="batch"
+              style={Object {}}
+              zero={null}
+            >
+              <span
+                className={null}
+                style={Object {}}
+              >
+                1 batch
+              </span>
+            </l>
+          </div>
+          <div
+            className="mission-stats__kpi"
+          >
+            <Icon
+              className=""
+              name="TASK/WHITE.svg"
+            >
+              <img
+                className="icon icon__TASK/WHITE-svg"
+                src="test-file-stub"
+              />
+            </Icon>
+            <l
+              className={null}
+              count={1}
+              showCount={true}
+              singular="task"
+              style={Object {}}
+              zero={null}
+            >
+              <span
+                className={null}
+                style={Object {}}
+              >
+                1 task
+              </span>
+            </l>
+          </div>
+          <div
+            className="mission-stats__kpi"
+          >
+            <div
+              className="mission-stats__contributor"
+            />
+            <l
+              className={null}
+              count={1}
+              plural="people"
+              showCount={true}
+              singular="person"
+              style={Object {}}
+              zero={null}
+            >
+              <span
+                className={null}
+                style={Object {}}
+              >
+                1 person
+              </span>
+            </l>
+             INTERESTED
+          </div>
+        </div>
+      </div>
       <p
         className="project-interest__text"
       >

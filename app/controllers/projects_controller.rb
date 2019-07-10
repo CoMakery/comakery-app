@@ -290,7 +290,8 @@ class ProjectsController < ApplicationController
       team_leader: contributor_props(project.account),
       contributors_number: contributors_number,
       contributors: project.top_contributors.map { |contributor| contributor_props(contributor) },
-      chart_data: chart_data
+      chart_data: chart_data,
+      stats: project.stats
     )
   end
 
