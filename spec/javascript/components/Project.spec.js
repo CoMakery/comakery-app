@@ -44,7 +44,7 @@ describe('Project', () => {
           {id: 4, firstName: 'Contributor 4', nickname: 'Nickname 4', imageUrl: 'contributor4.jpg', specialty: 'Community Development'}
         ],
         chartData: [4500, 2260, 1020, 100],
-        stats: {}
+        stats    : {}
       },
       missionData: {id: 1, name: 'First Mission', imageUrl: 'mission1.jpg', missionUrl: '/missions/1'},
       tokenData  : {
