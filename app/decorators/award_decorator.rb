@@ -41,8 +41,8 @@ class AwardDecorator < Draper::Decorator
     )
   end
 
-  def unit_amount_pretty
-    number_with_precision(unit_amount, precision: token&.decimal_places.to_i)
+  def amount_pretty
+    number_with_precision(amount, precision: token&.decimal_places.to_i)
   end
 
   def total_amount_pretty
