@@ -168,7 +168,7 @@ class Project < ApplicationRecord
         [account_id] |
         interests.pluck(:account_id) |
         awards.pluck(:account_id)
-      ).size
+      ).compact.size
     }
   end
 
