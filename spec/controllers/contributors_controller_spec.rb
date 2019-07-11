@@ -42,7 +42,8 @@ describe ContributorsController do
                                                           total: '1,337'
                                                         }
                                                       ],
-                                                      total: '1,337'
+                                                      total: '1,337',
+                                                      total_dec: 0.1337e4
                                                     }
                                                   ])
     end

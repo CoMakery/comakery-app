@@ -35,7 +35,7 @@ class Mission < ApplicationRecord
         Interest.where(project_id: projects).pluck(:account_id) |
         projects.pluck(:account_id) |
         awards.pluck(:account_id)
-      ).size
+      ).compact.size
     }
   end
 

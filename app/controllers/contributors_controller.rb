@@ -26,7 +26,8 @@ class ContributorsController < ApplicationController
             total: @project.format_with_decimal_places(award[:total])
           }
         end,
-        total: @project.format_with_decimal_places(contributor.total)
+        total: @project.format_with_decimal_places(contributor.total),
+        total_dec: contributor.total
       }
     end
 
@@ -35,11 +36,14 @@ class ContributorsController < ApplicationController
         image_url: helpers.account_image_url(nil, 27),
         name: awards.first.decorate.recipient_display_name,
         awards: [],
-        total: @project.format_with_decimal_places(awards.map(&:total_amount).reduce(:+)),
+        total: @project.format_with_decimal_places(awards.sum(:total_amount)),
+        total_dec: awards.sum(:total_amount),
         remaining: nil,
         unpaid: nil,
         paid: nil
       }
     end
+
+    @table_data.sort_by! { |c| -c[:total_dec] }
   end
 end
