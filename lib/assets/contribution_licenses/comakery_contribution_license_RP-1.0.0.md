@@ -1,6 +1,6 @@
 # CoMakery Contribution License
 
-This CoMakery Contribution License  1.0.0, together with the Award Form that references it, make up an agreement between the Project Owner and Contributor identified on the Award Form. Under that contract, the Contributor gives the Project Owner a license to utilize a Contribution in a Project managed by the Project Owner. In return, the Project Owner agrees to pay the Contributor royalties on Project sales and provide transparency about Project business via CoMakery, an online system for licensing and managing contributions. The parties agree:
+This CoMakery Contribution License  RP-1.0.0, together with the Award Form that references it, make up an agreement between the Project Owner and Contributor identified on the Award Form. Under that contract, the Contributor gives the Project Owner a license to utilize a Contribution in a Project managed by the Project Owner. In return, the Project Owner agrees to pay the Contributor royalties on Project sales and provide transparency about Project business via CoMakery, an online system for licensing and managing contributions. The parties agree:
 
 ## License
 
