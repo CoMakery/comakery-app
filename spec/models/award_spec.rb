@@ -28,6 +28,13 @@ describe Award do
       expect(award.assignments.size).to eq(2)
     end
 
+    it 'belongs to cloned_from' do
+      award = create(:award_ready)
+      award.clone_on_assignment
+
+      expect(award.assignments.first.cloned_from).to eq(award)
+    end
+
     it 'belongs to specialty' do
       expect(award.specialty).to eq(specialty)
     end
