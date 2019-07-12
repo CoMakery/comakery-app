@@ -188,8 +188,12 @@ class Account < ApplicationRecord
 
   def accessable_awards
     Award.where(id:
-      awards_matching_experience.pluck(:id) |
+      (awards_matching_experience.pluck(:id) - awards_reached_maximum_assignments.pluck(:id)) |
       related_awards.pluck(:id))
+  end
+
+  def awards_reached_maximum_assignments
+    awards.select { |a| a.cloned? && a.cloned_from.reached_maximum_assignments_for?(self) }.map(&:cloned_from)
   end
 
   def experience_for(specialty)

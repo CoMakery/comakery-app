@@ -263,6 +263,15 @@ describe Account do
       expect(account.accessable_awards).to include(award_w_matching_experience)
       expect(account.accessable_awards).not_to include(award_w_not_matching_experience)
     end
+
+    it 'rejects ready awards reached_maximum_assignments_for self' do
+      account = create(:account)
+      award_account_cloned_max = create(:award_ready, number_of_assignments: 10, number_of_assignments_per_user: 1)
+      award_account_cloned_max.project.update(visibility: :public_listed)
+      award_account_cloned_max.clone_on_assignment.update!(account: account)
+
+      expect(account.accessable_awards).not_to include(award_account_cloned_max)
+    end
   end
 
   describe '.awards_matching_experience' do

@@ -25,6 +25,7 @@ class Award < ApplicationRecord
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
   belongs_to :specialty
+  belongs_to :cloned_from, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_one :team, through: :channel
   has_one :project, through: :award_type
