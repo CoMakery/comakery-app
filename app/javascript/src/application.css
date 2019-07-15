@@ -854,6 +854,11 @@ select:disabled {
   resize: none;
 }
 
+.input-field__description-large textarea {
+  height: 300px;
+  resize: none; 
+}
+
 .input-field--content__defined {
   font-size: 14px;
   height: 35px;

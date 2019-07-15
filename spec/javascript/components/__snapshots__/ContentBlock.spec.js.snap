@@ -86,7 +86,7 @@ exports[`ContentBlock renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-htpNat",
                   "isStatic": true,
-                  "lastClassName": "bNkIaI",
+                  "lastClassName": "eqlEOk",
                   "rules": Array [
                     "
   font-family: Georgia;
@@ -97,6 +97,15 @@ exports[`ContentBlock renders component correctly 1`] = `
   line-height: normal;
   letter-spacing: normal;
   color: #4a4a4a;
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 ",
                   ],
                 },
@@ -113,7 +122,7 @@ exports[`ContentBlock renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-htpNat bNkIaI"
+              className="sc-htpNat eqlEOk"
             />
           </StyledComponent>
         </styled.div>

@@ -257,7 +257,6 @@ class TaskDetails extends React.Component {
                 <form action={task.submitUrl} encType="multipart/form-data" method="post">
                   <InputFieldWhiteDark
                     title="URL Where Completed Work Can Be Viewed"
-                    required
                     name="task[submission_url]"
                     value={this.state['task[submission_url]']}
                     eventHandler={this.handleFieldChange}
@@ -384,6 +383,10 @@ class TaskDetails extends React.Component {
 
               <ContentBlock title="acceptance criteria">
                 <div dangerouslySetInnerHTML={{__html: task.requirementsHtml}} />
+              </ContentBlock>
+
+              <ContentBlock title="URL where to submit completed work">
+                <a href={task.proofLink} target="_blank">{task.proofLink}</a>
               </ContentBlock>
 
               {task.project.channels.length > 0 &&

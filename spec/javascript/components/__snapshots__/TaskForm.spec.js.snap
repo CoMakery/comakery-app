@@ -386,19 +386,19 @@ exports[`TaskForm renders correctly without props 1`] = `
                     </div>
                   </InputField>
                 </InputFieldWhiteDark>
-                <InputFieldDescriptionMiddle
+                <InputFieldDescription
                   eventHandler={[Function]}
                   name="task[why]"
-                  placeholder="Let people know what will be the result of this task being completed (ex: When task is finished, the result will be xxxx)"
+                  placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                   required={true}
                   symbolLimit={500}
-                  title="why"
+                  title="WHAT IS THE EXPECTED BENEFIT"
                   value=""
                 >
                   <InputField
                     checkboxText=""
                     checked={false}
-                    className="input-field__description-middle"
+                    className="input-field__description"
                     copyOnClick={false}
                     disabled={false}
                     errorText=""
@@ -412,19 +412,19 @@ exports[`TaskForm renders correctly without props 1`] = `
                     min=""
                     name="task[why]"
                     pattern=".*"
-                    placeholder="Let people know what will be the result of this task being completed (ex: When task is finished, the result will be xxxx)"
+                    placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                     readOnly={false}
                     recommended={false}
                     required={true}
                     selectEntries={Array []}
                     step=""
                     symbolLimit={500}
-                    title="why"
+                    title="WHAT IS THE EXPECTED BENEFIT"
                     type="textarea"
                     value=""
                   >
                     <div
-                      className="input-field input-field__description-middle"
+                      className="input-field input-field__description"
                     >
                       <div
                         className="input-field--title"
@@ -432,7 +432,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--title"
                         >
-                          why
+                          WHAT IS THE EXPECTED BENEFIT
                         </span>
                         <span
                           className="input-field--title--required"
@@ -455,7 +455,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                           name="task[why]"
                           onChange={[Function]}
                           pattern=".*"
-                          placeholder="Let people know what will be the result of this task being completed (ex: When task is finished, the result will be xxxx)"
+                          placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                           readOnly={false}
                           required={true}
                           value=""
@@ -463,12 +463,89 @@ exports[`TaskForm renders correctly without props 1`] = `
                       </div>
                     </div>
                   </InputField>
-                </InputFieldDescriptionMiddle>
-                <InputFieldDescriptionMiddle
+                </InputFieldDescription>
+                <InputFieldDescriptionLarge
+                  eventHandler={[Function]}
+                  name="task[requirements]"
+                  placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
+                  required={true}
+                  symbolLimit={1000}
+                  title="acceptance requirements"
+                  value=""
+                >
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__description-large"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="task[requirements]"
+                    pattern=".*"
+                    placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step=""
+                    symbolLimit={1000}
+                    title="acceptance requirements"
+                    type="textarea"
+                    value=""
+                  >
+                    <div
+                      className="input-field input-field__description-large"
+                    >
+                      <div
+                        className="input-field--title"
+                      >
+                        <span
+                          className="input-field--title--title"
+                        >
+                          acceptance requirements
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                        <span
+                          className="input-field--title--counter"
+                        >
+                          0
+                          /
+                          1000
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
+                      >
+                        <textarea
+                          className="input-field--content__text"
+                          name="task[requirements]"
+                          onChange={[Function]}
+                          pattern=".*"
+                          placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
+                          readOnly={false}
+                          required={true}
+                          value=""
+                        />
+                      </div>
+                    </div>
+                  </InputField>
+                </InputFieldDescriptionLarge>
+                <InputFieldDescriptionLarge
                   eventHandler={[Function]}
                   name="task[description]"
                   placeholder="Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch"
-                  required={true}
                   symbolLimit={500}
                   title="description"
                   value=""
@@ -476,7 +553,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                   <InputField
                     checkboxText=""
                     checked={false}
-                    className="input-field__description-middle"
+                    className="input-field__description-large"
                     copyOnClick={false}
                     disabled={false}
                     errorText=""
@@ -493,7 +570,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     placeholder="Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch"
                     readOnly={false}
                     recommended={false}
-                    required={true}
+                    required={false}
                     selectEntries={Array []}
                     step=""
                     symbolLimit={500}
@@ -502,7 +579,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     value=""
                   >
                     <div
-                      className="input-field input-field__description-middle"
+                      className="input-field input-field__description-large"
                     >
                       <div
                         className="input-field--title"
@@ -515,7 +592,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--required"
                         >
-                          required
+                          optional
                         </span>
                         <span
                           className="input-field--title--counter"
@@ -535,13 +612,13 @@ exports[`TaskForm renders correctly without props 1`] = `
                           pattern=".*"
                           placeholder="Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch"
                           readOnly={false}
-                          required={true}
+                          required={false}
                           value=""
                         />
                       </div>
                     </div>
                   </InputField>
-                </InputFieldDescriptionMiddle>
+                </InputFieldDescriptionLarge>
                 <InputFieldUploadFile
                   imgPreviewDimensions="100x100"
                   name="task[image]"
@@ -610,84 +687,6 @@ exports[`TaskForm renders correctly without props 1`] = `
                     </div>
                   </InputField>
                 </InputFieldUploadFile>
-                <InputFieldDescription
-                  eventHandler={[Function]}
-                  name="task[requirements]"
-                  placeholder="This section is free text that allows for the use of markdown. Create bullets using an asterick and a space before each sentence. Make sure to list a bullet point for each acceptance criteria. These bullet points will be used by reviewers to verify the work."
-                  required={true}
-                  symbolLimit={750}
-                  title="acceptance requirements"
-                  value=""
-                >
-                  <InputField
-                    checkboxText=""
-                    checked={false}
-                    className="input-field__description"
-                    copyOnClick={false}
-                    disabled={false}
-                    errorText=""
-                    eventHandler={[Function]}
-                    imgInputRef={null}
-                    imgPreviewDimensions="40x40"
-                    imgPreviewUrl=""
-                    imgRequirements=""
-                    imgVerifier={[Function]}
-                    max=""
-                    min=""
-                    name="task[requirements]"
-                    pattern=".*"
-                    placeholder="This section is free text that allows for the use of markdown. Create bullets using an asterick and a space before each sentence. Make sure to list a bullet point for each acceptance criteria. These bullet points will be used by reviewers to verify the work."
-                    readOnly={false}
-                    recommended={false}
-                    required={true}
-                    selectEntries={Array []}
-                    step=""
-                    symbolLimit={750}
-                    title="acceptance requirements"
-                    type="textarea"
-                    value=""
-                  >
-                    <div
-                      className="input-field input-field__description"
-                    >
-                      <div
-                        className="input-field--title"
-                      >
-                        <span
-                          className="input-field--title--title"
-                        >
-                          acceptance requirements
-                        </span>
-                        <span
-                          className="input-field--title--required"
-                        >
-                          required
-                        </span>
-                        <span
-                          className="input-field--title--counter"
-                        >
-                          0
-                          /
-                          750
-                        </span>
-                      </div>
-                      <div
-                        className="input-field--content"
-                      >
-                        <textarea
-                          className="input-field--content__text"
-                          name="task[requirements]"
-                          onChange={[Function]}
-                          pattern=".*"
-                          placeholder="This section is free text that allows for the use of markdown. Create bullets using an asterick and a space before each sentence. Make sure to list a bullet point for each acceptance criteria. These bullet points will be used by reviewers to verify the work."
-                          readOnly={false}
-                          required={true}
-                          value=""
-                        />
-                      </div>
-                    </div>
-                  </InputField>
-                </InputFieldDescription>
                 <InputFieldDropdown
                   eventHandler={[Function]}
                   name="task[specialty_id]"
@@ -1107,7 +1106,6 @@ exports[`TaskForm renders correctly without props 1`] = `
                   eventHandler={[Function]}
                   name="task[proof_link]"
                   placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
-                  required={true}
                   symbolLimit={150}
                   title="URL where to submit completed work"
                   value=""
@@ -1132,7 +1130,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
                     readOnly={false}
                     recommended={false}
-                    required={true}
+                    required={false}
                     selectEntries={Array []}
                     step=""
                     symbolLimit={150}
@@ -1154,7 +1152,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--required"
                         >
-                          required
+                          optional
                         </span>
                         <span
                           className="input-field--title--counter"
@@ -1175,7 +1173,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                           pattern=".*"
                           placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
                           readOnly={false}
-                          required={true}
+                          required={false}
                           type="text"
                           value=""
                         />

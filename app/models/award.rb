@@ -31,7 +31,7 @@ class Award < ApplicationRecord
   has_one :project, through: :award_type
   has_one :token, through: :project
 
-  validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
+  validates :proof_id, :award_type, :name, :why, :requirements, presence: true
   validates :amount, numericality: { greater_than: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
@@ -43,12 +43,12 @@ class Award < ApplicationRecord
   validates :why, length: { maximum: 500 }
   validates :description, length: { maximum: 500 }
   validates :message, length: { maximum: 150 }
-  validates :requirements, length: { maximum: 750 }
+  validates :requirements, length: { maximum: 1000 }
   validates :proof_link, length: { maximum: 150 }
   validates :proof_link, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
-  validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }
+  validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { proof_link.present? }
   validates :experience_level, inclusion: { in: EXPERIENCE_LEVELS.values }, allow_nil: true
-  validates :submission_url, :submission_comment, presence: true, if: -> { status == 'submitted' }
+  validates :submission_comment, presence: true, if: -> { status == 'submitted' }
 
   validate :total_amount_fits_into_project_budget
   validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }

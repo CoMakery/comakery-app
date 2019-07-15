@@ -4,7 +4,7 @@ import ProjectSetup from './layouts/ProjectSetup'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
-import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
+import InputFieldDescriptionLarge from './styleguide/InputFieldDescriptionLarge'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import Button from './styleguide/Button'
@@ -215,20 +215,30 @@ class TaskForm extends React.Component {
               symbolLimit={100}
             />
 
-            <InputFieldDescriptionMiddle
-              title="why"
+            <InputFieldDescription
+              title="WHAT IS THE EXPECTED BENEFIT"
               required
               name="task[why]"
               value={this.state['task[why]']}
               errorText={this.state.errors['task[why]']}
               eventHandler={this.handleFieldChange}
-              placeholder="Let people know what will be the result of this task being completed (ex: When task is finished, the result will be xxxx)"
+              placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
               symbolLimit={500}
             />
 
-            <InputFieldDescriptionMiddle
-              title="description"
+            <InputFieldDescriptionLarge
+              title="acceptance requirements"
               required
+              name="task[requirements]"
+              value={this.state['task[requirements]']}
+              errorText={this.state.errors['task[requirements]']}
+              eventHandler={this.handleFieldChange}
+              placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
+              symbolLimit={1000}
+            />
+
+            <InputFieldDescriptionLarge
+              title="description"
               name="task[description]"
               value={this.state['task[description]']}
               errorText={this.state.errors['task[description]']}
@@ -253,17 +263,6 @@ class TaskForm extends React.Component {
                 readOnly
               />
             }
-
-            <InputFieldDescription
-              title="acceptance requirements"
-              required
-              name="task[requirements]"
-              value={this.state['task[requirements]']}
-              errorText={this.state.errors['task[requirements]']}
-              eventHandler={this.handleFieldChange}
-              placeholder="This section is free text that allows for the use of markdown. Create bullets using an asterick and a space before each sentence. Make sure to list a bullet point for each acceptance criteria. These bullet points will be used by reviewers to verify the work."
-              symbolLimit={750}
-            />
 
             <InputFieldDropdown
               title="specialty"
@@ -332,7 +331,6 @@ class TaskForm extends React.Component {
 
             <InputFieldWhiteDark
               title="URL where to submit completed work"
-              required
               name="task[proof_link]"
               value={this.state['task[proof_link]']}
               errorText={this.state.errors['task[proofLink]']}

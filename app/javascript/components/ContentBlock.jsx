@@ -28,6 +28,15 @@ const Children = styled.div`
   line-height: normal;
   letter-spacing: normal;
   color: #4a4a4a;
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 `
 
 class ContentBlock extends React.Component {
