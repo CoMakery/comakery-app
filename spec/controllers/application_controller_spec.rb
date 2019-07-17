@@ -59,16 +59,16 @@ describe ApplicationController do
 
     it 'redirects if account is valid and confirmed' do
       login(account)
-      get(:index, session: {return_to: '/hi'})
+      get(:index, session: { return_to: '/hi' })
       expect(response).to redirect_to('/hi')
     end
 
     it 'doesnt redirect if account is invalid' do
       invalid_account.first_name = nil
-      invalid_account.save(:validate => false)
+      invalid_account.save(validate: false)
 
       login(invalid_account)
-      get(:index, session: {return_to: '/hi'})
+      get(:index, session: { return_to: '/hi' })
       expect(response).not_to redirect_to('/hi')
     end
 
@@ -77,7 +77,7 @@ describe ApplicationController do
       unconfirmed_account.save
 
       login(unconfirmed_account)
-      get(:index, session: {return_to: '/hi'})
+      get(:index, session: { return_to: '/hi' })
       expect(response).not_to redirect_to('/hi')
     end
   end
@@ -88,9 +88,9 @@ describe ApplicationController do
 
     it 'creates interest for project stored in session' do
       login(account)
-      get(:index, session: {interested_in_project: project.id})
-      
-      expect(account.interested? project.id).to be_truthy
+      get(:index, session: { interested_in_project: project.id })
+
+      expect(account.interested?(project.id)).to be_truthy
     end
   end
 
