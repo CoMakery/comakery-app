@@ -854,6 +854,11 @@ select:disabled {
   resize: none;
 }
 
+.input-field__description-large textarea {
+  height: 300px;
+  resize: none; 
+}
+
 .input-field--content__defined {
   font-size: 14px;
   height: 35px;
@@ -2247,22 +2252,6 @@ select:disabled {
   .featured-missions__footer__mobile img {
     height: 145px;
   }
-}
-
-.intercom-button {
-  position: absolute;
-  bottom: 0;
-  margin-bottom: -36px;
-  right: 35px;
-  width: 72px;
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--primary-blue);
-  border-radius: 50%;
-  border: 1px solid white;
-  cursor: pointer;
 }
 
 .grayed-page {

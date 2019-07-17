@@ -7,6 +7,9 @@ describe ApplicationController do
     skip_before_action :require_login
     skip_after_action :verify_policy_scoped
 
+    before_action :redirect_back, only: %i[index]
+    before_action :create_interest_from_session, only: %i[index]
+
     def index
       raise ActiveRecord::RecordNotFound
     end
@@ -46,6 +49,48 @@ describe ApplicationController do
       expect(assigns[:account]).to eq(account)
       expect(assigns[:skip_validation]).to be true
       expect(flash[:error]).to eq('Please complete your profile info for Country, Specialty')
+    end
+  end
+
+  describe 'redirect_back' do
+    let!(:account) { create(:account) }
+    let!(:invalid_account) { create(:account) }
+    let!(:unconfirmed_account) { create(:account) }
+
+    it 'redirects if account is valid and confirmed' do
+      login(account)
+      get(:index, session: { return_to: '/hi' })
+      expect(response).to redirect_to('/hi')
+    end
+
+    it 'doesnt redirect if account is invalid' do
+      invalid_account.first_name = nil
+      invalid_account.save(validate: false)
+
+      login(invalid_account)
+      get(:index, session: { return_to: '/hi' })
+      expect(response).not_to redirect_to('/hi')
+    end
+
+    it 'doesnt redirect if account is not confirmed' do
+      unconfirmed_account.email_confirm_token = 'abc'
+      unconfirmed_account.save
+
+      login(unconfirmed_account)
+      get(:index, session: { return_to: '/hi' })
+      expect(response).not_to redirect_to('/hi')
+    end
+  end
+
+  describe 'create_interest_from_session' do
+    let!(:account) { create(:account) }
+    let!(:project) { create(:project) }
+
+    it 'creates interest for project stored in session' do
+      login(account)
+      get(:index, session: { interested_in_project: project.id })
+
+      expect(account.interested?(project.id)).to be_truthy
     end
   end
 

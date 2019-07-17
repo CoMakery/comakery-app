@@ -22,15 +22,15 @@ describe('TaskForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDescriptionMiddle[title="why"][required][name="task[why]"]'
+      'InputFieldDescription[title="WHAT IS THE EXPECTED BENEFIT"][required][name="task[why]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDescriptionMiddle[title="description"][required][name="task[description]"]'
+      'InputFieldDescriptionLarge[title="description"][name="task[description]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDescription[title="acceptance requirements"][required][name="task[requirements]"]'
+      'InputFieldDescriptionLarge[title="acceptance requirements"][required][name="task[requirements]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -42,7 +42,7 @@ describe('TaskForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldWhiteDark[title="URL where to submit completed work"][required][name="task[proof_link]"]'
+      'InputFieldWhiteDark[title="URL where to submit completed work"][name="task[proof_link]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -92,15 +92,15 @@ describe('TaskForm', () => {
     ).props().value).toBe('Task name')
 
     expect(wrapper.find(
-      'InputFieldDescriptionMiddle[title="why"][required][name="task[why]"]'
+      'InputFieldDescription[title="WHAT IS THE EXPECTED BENEFIT"][required][name="task[why]"]'
     ).props().value).toBe('Task why')
 
     expect(wrapper.find(
-      'InputFieldDescriptionMiddle[title="description"][required][name="task[description]"]'
+      'InputFieldDescriptionLarge[title="description"][name="task[description]"]'
     ).props().value).toBe('Task description')
 
     expect(wrapper.find(
-      'InputFieldDescription[title="acceptance requirements"][required][name="task[requirements]"]'
+      'InputFieldDescriptionLarge[title="acceptance requirements"][required][name="task[requirements]"]'
     ).props().value).toBe('Task requirements')
 
     expect(wrapper.find(
@@ -108,7 +108,7 @@ describe('TaskForm', () => {
     ).props().value).toBe('100.0')
 
     expect(wrapper.find(
-      'InputFieldWhiteDark[title="URL where to submit completed work"][required][name="task[proof_link]"]'
+      'InputFieldWhiteDark[title="URL where to submit completed work"][name="task[proof_link]"]'
     ).props().value).toBe('http://nowhere')
   })
 
@@ -180,7 +180,7 @@ describe('TaskForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDescriptionMiddle[errorText="description error"][title="description"][required][name="task[description]"]'
+      'InputFieldDescriptionLarge[errorText="description error"][title="description"][name="task[description]"]'
     )).toBe(true)
   })
 })

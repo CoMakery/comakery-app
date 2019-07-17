@@ -32,12 +32,36 @@ class ApplicationController < ActionController::Base
 
   # called from before_filter :require_login
   def not_authenticated(msg = nil)
+    if action_name == 'add_interest' && params[:project_id]
+      session[:interested_in_project] = params[:project_id]
+    end
+
     respond_to do |format|
-      format.html { redirect_to new_account_url, alert: msg }
+      format.html do
+        session[:return_to] = request.url
+        redirect_to new_account_url, alert: msg
+      end
       format.json { head :unauthorized }
     end
   rescue ActionController::UnknownFormat
     head :unauthorized
+  end
+
+  def redirect_back
+    if current_account&.valid? && current_account&.confirmed? && session[:return_to]
+      redirect_url = session[:return_to]
+      session.delete(:return_to)
+      redirect_to redirect_url
+    end
+  end
+
+  def create_interest_from_session
+    if current_account&.valid? && current_account&.confirmed? && session[:interested_in_project]
+      project = Project.find(session[:interested_in_project].to_i)
+      current_user.interests.create!(project: project, protocol: project.mission.name)
+
+      session.delete(:interested_in_project)
+    end
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found

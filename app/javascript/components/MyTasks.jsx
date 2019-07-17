@@ -218,7 +218,7 @@ class MyTasks extends React.Component {
                 <ProjectFilter>
                   <span>Filtered by Project:</span>
 
-                  <a href={location ? location.pathname : ''}>
+                  <a href={location ? location.pathname + '?all=true' : ''}>
                     {this.props.project.title}
                     <Icon name="iconCloseCopy.svg" />
                   </a>

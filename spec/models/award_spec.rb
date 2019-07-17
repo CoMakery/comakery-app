@@ -171,10 +171,7 @@ describe Award do
                                                                                                      "Award type can't be blank",
                                                                                                      "Name can't be blank",
                                                                                                      "Why can't be blank",
-                                                                                                     "Description can't be blank",
                                                                                                      "Requirements can't be blank",
-                                                                                                     "Proof link can't be blank",
-                                                                                                     'Proof link must include protocol (e.g. https://)',
                                                                                                      'Amount is not a number'
                                                                                                    ])
     end
@@ -205,7 +202,7 @@ describe Award do
       a = create(:award_ready)
       a.update(status: 'submitted', account: create(:account))
       expect(a).not_to be_valid
-      expect(a.errors.full_messages).to eq(["Submission url can't be blank", "Submission comment can't be blank"])
+      expect(a.errors.full_messages).to eq(["Submission comment can't be blank"])
     end
 
     it 'cannot be assigned to a contributor having more than allowed number of started tasks' do
