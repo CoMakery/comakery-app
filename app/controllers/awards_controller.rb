@@ -11,6 +11,7 @@ class AwardsController < ApplicationController
   before_action :authorize_award_pay, only: %i[update_transaction_address]
   before_action :clone_award_on_start, only: %i[start]
   before_action :set_filter, only: %i[index]
+  before_action :set_default_project_filter, only: %i[index]
   before_action :set_project_filter, only: %i[index]
   before_action :set_awards, only: %i[index]
   before_action :set_page, only: %i[index]
@@ -21,6 +22,8 @@ class AwardsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
   skip_before_action :require_login, only: %i[confirm]
   skip_after_action :verify_authorized, only: %i[confirm]
+  before_action :redirect_back, only: %i[index]
+  before_action :create_interest_from_session, only: %i[index]
 
   layout 'react'
 
@@ -244,8 +247,16 @@ class AwardsController < ApplicationController
       @filter = params[:filter]&.downcase || 'ready'
     end
 
+    def set_default_project_filter
+      default_project_id = ENV['DEFAULT_PROJECT_ID']
+
+      if @filter == 'ready' && !params[:all] && current_account.experiences.empty? && default_project_id.present?
+        @project = Project.find_by(id: default_project_id)
+      end
+    end
+
     def set_project_filter
-      @project = Project.find_by(id: params[:project_id])
+      @project = (Project.find_by(id: params[:project_id]) || @project)
     end
 
     def set_awards

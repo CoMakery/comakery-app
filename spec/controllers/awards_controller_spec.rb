@@ -49,6 +49,24 @@ describe AwardsController do
       get :index, params: { page: '3' }
       expect(response).to redirect_to('/404.html')
     end
+
+    it 'sets project filter' do
+      project = create(:project)
+      get :index, params: { project_id: project.id }
+
+      expect(response.status).to eq(200)
+      expect(assigns[:project]).to eq(project)
+    end
+
+    it 'sets default project filter if user has no experience' do
+      project = create(:project)
+      ENV['DEFAULT_PROJECT_ID'] = project.id.to_s
+      login(create(:account))
+
+      get :index
+      expect(response.status).to eq(200)
+      expect(assigns[:project]).to eq(project)
+    end
   end
 
   describe '#create' do

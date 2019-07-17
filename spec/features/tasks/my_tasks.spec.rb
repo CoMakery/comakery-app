@@ -7,6 +7,11 @@ describe 'my tasks page', :js do
   let!(:accepted_task) { create(:award, status: 'accepted') }
   let!(:paid_task) { create(:award, status: 'paid') }
 
+  before do
+    ENV['DEFAULT_PROJECT_ID'] = create(:project).id.to_s
+    create(:experience, account: ready_task.account)
+  end
+
   it 'has link to past awards' do
     login(ready_task.account)
     visit(my_tasks_path)
