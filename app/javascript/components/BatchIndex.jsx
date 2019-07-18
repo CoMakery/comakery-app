@@ -48,8 +48,6 @@ const FilterWrapper = styled.div`
   margin-bottom: 7px;
   margin-top: 7px;
   background: none;
-  position: sticky;
-  top: 25px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 200;

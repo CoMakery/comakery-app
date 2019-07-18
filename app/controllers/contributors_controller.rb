@@ -44,6 +44,6 @@ class ContributorsController < ApplicationController
       }
     end
 
-    @table_data.sort_by! { |c| -c[:total_dec] }
+    @table_data.sort_by! { |c| c[:total_dec] }.reverse!
   end
 end

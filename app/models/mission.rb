@@ -5,10 +5,13 @@ class Mission < ApplicationRecord
   attachment :image
 
   has_many :projects, inverse_of: :mission
+  has_many :unarchived_projects, -> { where.not visibility: :archived }, source: :projects, class_name: 'Project'
   has_many :public_projects, -> { public_listed }, class_name: 'Project'
   has_many :leaders, through: :public_projects, source: :account
   has_many :tokens, through: :public_projects, source: :token
   has_many :award_types, through: :projects
+  has_many :published_award_types, -> { where published: true }, through: :unarchived_projects, source: :award_types, class_name: 'AwardType'
+  has_many :published_awards, through: :published_award_types, source: :awards, class_name: 'Award'
   has_many :awards, through: :award_types
   enum status: %i[active passive]
 
@@ -28,13 +31,13 @@ class Mission < ApplicationRecord
 
   def stats
     {
-      projects: projects.where.not(visibility: :archived).size,
-      batches: award_types.where(published: true).size,
-      tasks: awards.in_progress.size,
+      projects: unarchived_projects.size,
+      batches: published_award_types.size,
+      tasks: published_awards.in_progress.size,
       interests: (
-        Interest.where(project_id: projects).pluck(:account_id) |
-        projects.pluck(:account_id) |
-        awards.pluck(:account_id)
+        Interest.where(project_id: unarchived_projects).pluck(:account_id) |
+        unarchived_projects.pluck(:account_id) |
+        published_awards.pluck(:account_id)
       ).compact.size
     }
   end
