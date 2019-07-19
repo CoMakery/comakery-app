@@ -26,4 +26,9 @@ feature 'pages' do
     visit privacy_policy_path
     expect(page).to have_content 'Privacy Policy'
   end
+
+  scenario '#contribution_licenses' do
+    visit contribution_licenses_path('CP')
+    expect(page).to have_content 'Contribution License'
+  end
 end

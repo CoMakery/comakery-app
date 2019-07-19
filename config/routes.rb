@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   get '/e-sign-disclosure' => "pages#e_sign_disclosure"
   get '/privacy-policy' => "pages#privacy_policy"
   get '/prohibited-use' => "pages#prohibited_use"
+  get '/contribution_licenses/:type(/:hash)' => "pages#contribution_licenses", as: :contribution_licenses
 
   resource :session, only: %i[new create destroy] do
     get "oauth_failure"
