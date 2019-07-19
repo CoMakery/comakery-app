@@ -98,10 +98,7 @@ describe 'my account', js: true do
 
   scenario 'account gets confirmed after visiting confirmation link' do
     visit "/accounts/confirm/#{to_be_confirmed_account.email_confirm_token}"
-    expect(page).to have_current_path(root_path)
-    # we don't have notification inside react pages
-    # expect(page).to have_content 'Success! Your email is confirmed.'
-    expect(page).to have_content(/Sign out/i)
+    expect(page).to have_current_path(my_tasks_path)
   end
 
   scenario 'projects page is available after email confirmation' do

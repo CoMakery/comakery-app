@@ -162,7 +162,7 @@ describe AccountsController do
     it 'confirm user email with given token' do
       get :confirm, params: { token: '1234qwer' }
       expect(new_account.reload.confirmed?).to be true
-      expect(flash[:notice]).to eq 'Thank you for signing up. Now, let us know what projects you are interested in.'
+      expect(response).to redirect_to my_tasks_path
     end
 
     it 'notice about redeem award' do
@@ -170,6 +170,7 @@ describe AccountsController do
       get :confirm, params: { token: '1234qwer' }
       expect(new_account.reload.confirmed?).to be true
       expect(flash[:notice]).to eq 'Please click the link in your email to claim your contributor token award!'
+      expect(response).to redirect_to my_tasks_path
     end
   end
 
