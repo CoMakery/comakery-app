@@ -189,6 +189,8 @@ class ProjectsController < ApplicationController
       discord_bot_url: if @teams&.any? { |t| t[:discord] && t[:channels].empty? }
                          Comakery::Discord.new.add_bot_link
                        end,
+      license_url: contribution_licenses_path(type: 'CP'),
+      terms_readonly: @project&.terms_readonly?,
       form_url: projects_path,
       form_action: 'POST',
       csrf_token: form_authenticity_token
@@ -235,6 +237,7 @@ class ProjectsController < ApplicationController
       :legal_project_owner,
       :minimum_payment,
       :require_confidentiality,
+      :confidentiality,
       :license_finalized,
       :visibility,
       :status,

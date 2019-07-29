@@ -54,7 +54,15 @@ describe('ProjectForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldWhiteDark[title="legal owner of the project"][required][name="project[legal_project_owner]"]'
+      'InputFieldInline[required][name="project[legal_project_owner]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
+      'InputFieldDropdownInline[required][name="project[exclusive_contributions]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
+      'InputFieldDropdownInline[required][name="project[confidentiality]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -227,6 +235,8 @@ describe('ProjectForm', () => {
       'videoUrl'     : 'https://youtube.com/',
       'maximumTokens': '1000',
       'visibility'   : 'archived',
+      'exclusive_contributions': false,
+      'confidentiality': false,
       'channels'     : [
         {
           'channelId': 'ch1Id',
@@ -322,8 +332,16 @@ describe('ProjectForm', () => {
     ).props().value).toBe('false')
 
     expect(wrapper.find(
-      'InputFieldWhiteDark[title="legal owner of the project"][required][name="project[legal_project_owner]"]'
+      'InputFieldInline[required][name="project[legal_project_owner]"]'
     ).props().value).toBe('CoMakery')
+
+    expect(wrapper.find(
+      'InputFieldDropdownInline[required][name="project[exclusive_contributions]"]'
+    ).props().value).toBe('false')
+
+    expect(wrapper.find(
+      'InputFieldDropdownInline[required][name="project[confidentiality]"]'
+    ).props().value).toBe('false')
 
     expect(wrapper.find(
       'InputFieldUploadFile[title="project image"][name="project[square_image]"]'

@@ -1019,6 +1019,27 @@ select:disabled {
   margin-bottom: 7px;
 }
 
+.input-field__inline,
+.input-field__dropdown--inline {
+  display: inline;
+  margin-right: 0.5em;
+}
+
+.input-field__inline .input-field--title,
+.input-field__dropdown--inline .input-field--title {
+  display: none;
+}
+
+.input-field__inline .input-field--content,
+.input-field__dropdown--inline .input-field--content {
+  display: inline;
+}
+
+.input-field__inline input,
+.input-field__dropdown--inline select {
+  width: 15em;
+}
+
 .message {
   font-family: Montserrat, sans-serif;
   font-style: normal;
@@ -1422,6 +1443,27 @@ select:disabled {
 
 .project-form--form--channels--empty {
   font-size: 14px;
+}
+
+.project-form--form--terms--header {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  color: var(--black);
+  text-transform: capitalize;
+}
+
+.project-form--form--terms--content {
+  font-size: 14px;
+  color: var(--black);
+  line-height: 3.5em;
+  text-align: justify;
+}
+
+.project-form--form--terms--content a {
+  color: #0089f4;
+  text-decoration: none;
 }
 
 .task-award-form--form--field {

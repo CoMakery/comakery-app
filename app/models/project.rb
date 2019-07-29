@@ -37,6 +37,7 @@ class Project < ApplicationRecord
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
   validate :valid_video_url, if: -> { video_url.present? }
   validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
+  validate :terms_should_be_readonly, if: -> { legal_project_owner_changed? || exclusive_contributions_changed? || confidentiality_changed? }
 
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
 
@@ -174,6 +175,10 @@ class Project < ApplicationRecord
     }
   end
 
+  def terms_readonly?
+    awards.where.not(account_id: nil).any?
+  end
+
   private
 
   def valid_tracker_url
@@ -202,6 +207,10 @@ class Project < ApplicationRecord
 
   def token_changeable
     errors.add(:token_id, 'cannot be changed if project has completed tasks') if awards.completed.any?
+  end
+
+  def terms_should_be_readonly
+    errors.add(:base, 'terms cannot be changed') if terms_readonly?
   end
 
   def udpate_awards_if_token_was_added

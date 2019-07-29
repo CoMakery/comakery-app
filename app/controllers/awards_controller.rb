@@ -329,7 +329,9 @@ class AwardsController < ApplicationController
         task: task_to_props(@award),
         task_allowed_to_start: policy(@award).start?,
         tasks_to_unlock: current_account.tasks_to_unlock(@award),
+        license_url: contribution_licenses_path(type: 'CP'),
         my_tasks_path: my_tasks_path,
+        account_name: current_account.decorate.name,
         csrf_token: form_authenticity_token
       }
     end

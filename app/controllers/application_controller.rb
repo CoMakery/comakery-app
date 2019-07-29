@@ -146,12 +146,15 @@ class ApplicationController < ActionController::Base
         url: task.project&.mission ? mission_path(task.project&.mission) : nil
       },
       token: {
-        currency: task.project&.token&.symbol,
+        currency: task.project&.token&.symbol&.upcase,
         logo: helpers.attachment_url(task.project&.token, :logo_image, :fill, 100, 100)
       },
       project: {
         id: task.project&.id,
         name: task.project&.title,
+        legal_project_owner: task.project&.legal_project_owner,
+        exclusive_contributions: task.project&.exclusive_contributions,
+        confidentiality: task.project&.confidentiality,
         url: task.project && (task.project.unlisted? ? unlisted_project_path(task.project.long_id) : project_path(task.project)),
         channels: task.project.channels.map do |channel|
           {

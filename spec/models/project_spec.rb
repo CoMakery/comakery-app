@@ -89,6 +89,28 @@ describe Project do
       end
     end
 
+    describe 'terms_should_be_readonly' do
+      let(:project_w_started_tasks) { create :project }
+      let(:project_wo_started_tasks) { create :project }
+
+      before do
+        create(:award, status: :started, award_type: create(:award_type, project: project_w_started_tasks))
+      end
+
+      it 'doesnt allow to change terms fields when project has started tasks' do
+        project_w_started_tasks.legal_project_owner = 'change'
+        expect(project_w_started_tasks).not_to be_valid
+        expect(project_w_started_tasks.errors[:base].first).to eq 'terms cannot be changed'
+      end
+
+      it 'allows to change terms fields when project hasnt any started tasks' do
+        project_wo_started_tasks.legal_project_owner = 'change'
+        project_wo_started_tasks.exclusive_contributions = false
+        project_wo_started_tasks.confidentiality = false
+        expect(project_wo_started_tasks).to be_valid
+      end
+    end
+
     it 'video_url is valid if video_url is a valid, absolute url, the domain is youtube.com or vimeo, and there is the identifier inside' do
       expect(build(:sb_project, video_url: 'https://youtube.com/watch?v=Dn3ZMhmmzK0')).to be_valid
       expect(build(:sb_project, video_url: 'https://youtube.com/embed/Dn3ZMhmmzK0')).to be_valid

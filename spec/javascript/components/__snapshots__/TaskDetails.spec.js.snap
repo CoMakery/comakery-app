@@ -2,6 +2,8 @@
 
 exports[`TaskDetails renders component correctly 1`] = `
 <TaskDetails
+  accountName=""
+  licenseUrl="/"
   myTasksPath="/"
   task={
     Object {
@@ -18,6 +20,9 @@ exports[`TaskDetails renders component correctly 1`] = `
       },
       "project": Object {
         "channels": Array [],
+        "confidentiality": null,
+        "exclusiveContributions": null,
+        "legalProjectOwner": null,
         "name": null,
         "url": null,
       },
@@ -206,6 +211,9 @@ exports[`TaskDetails renders component correctly 1`] = `
                     },
                     "project": Object {
                       "channels": Array [],
+                      "confidentiality": null,
+                      "exclusiveContributions": null,
+                      "legalProjectOwner": null,
                       "name": null,
                       "url": null,
                     },
