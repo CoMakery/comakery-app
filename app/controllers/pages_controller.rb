@@ -34,21 +34,18 @@ class PagesController < ApplicationController
   end
 
   def contribution_licenses
-    type = params[:type][/[a-zA-Z]+/]
-    hash = params[:hash] && params[:hash][/[a-zA-Z0-9]+/]
-    dir = Rails.root + 'lib/assets/contribution_licenses/'
-
-    path = if hash
-      "#{dir}/#{type}-#{hash}.md"
-    else
-      Dir.glob("#{dir}/#{type}-*.md").max_by { |f| File.mtime(f) }
-    end
-
-    if path && File.exist?(path)
-      @license_md = File.read(path)
+    case params[:type]
+    when 'CP'
+      type = 'CP'
+    when 'RP'
+      type = 'RP'
     else
       return redirect_to('/404.html')
     end
+
+    path = Rails.root.join('lib', 'assets', 'contribution_licenses', "#{type}-*.md")
+    license = Dir.glob(path).max_by { |f| File.mtime(f) }
+    @license_md = File.read(license)
   end
 
   def styleguide
