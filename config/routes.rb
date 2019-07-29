@@ -27,10 +27,10 @@ Rails.application.routes.draw do
   get "accounts/confirm/:token" => "accounts#confirm", as: :confirm_email
   get "accounts/confirm-authentication/:token" => "accounts#confirm_authentication", as: :confirm_authentication
   get "/auth/slack/callback" => "sessions#create"
-  get "/auth/slack" => "sessions#create", as: :login
+  post "/auth/slack" => "sessions#create", as: :login
 
   get "/auth/discord/callback" => "sessions#create"
-  get "/auth/discord" => "sessions#create", as: :login_discord
+  post "/auth/discord" => "sessions#create", as: :login_discord
 
   get '/logout', to: "sessions#destroy"
 
