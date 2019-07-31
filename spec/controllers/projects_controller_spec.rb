@@ -378,10 +378,12 @@ describe ProjectsController do
   end
 
   context 'with a project' do
+    let!(:token) { create(:token) }
+    let!(:token_unlisted) { create(:token, unlisted: true) }
     let!(:cat_project) { create(:project, title: 'Cats', description: 'Cats with lazers', account: account, mission_id: mission.id) }
     let!(:dog_project) { create(:project, title: 'Dogs', description: 'Dogs with donuts', account: account, mission_id: mission.id) }
     let!(:yak_project) { create(:project, title: 'Yaks', description: 'Yaks with parser generaters', account: account, mission_id: mission.id) }
-    let!(:fox_project) { create(:project, title: 'Foxes', description: 'Foxes with boxes', account: account, mission_id: mission.id) }
+    let!(:fox_project) { create(:project, token: token_unlisted, title: 'Foxes', description: 'Foxes with boxes', account: account, mission_id: mission.id) }
 
     describe '#index' do
       let!(:cat_project_award) { create(:award, account: create(:account), amount: 200, award_type: create(:award_type, project: cat_project), created_at: 2.days.ago, updated_at: 2.days.ago) }
@@ -393,6 +395,7 @@ describe ProjectsController do
       end
 
       include ActionView::Helpers::DateHelper
+
       it 'lists the projects ordered by most recently modify date' do
         get :index
 
@@ -437,6 +440,21 @@ describe ProjectsController do
 
         expect(response.status).to eq(200)
         expect(assigns[:project]).to eq(cat_project)
+      end
+
+      it 'doesnt include unlisted tokens' do
+        get :edit, params: { id: cat_project.to_param }
+
+        expect(response.status).to eq(200)
+        expect(assigns[:tokens][token.name]).to eq(token.id)
+        expect(assigns[:tokens][token_unlisted.name]).to be_nil
+      end
+
+      it 'includes unlisted token associated with project' do
+        get :edit, params: { id: fox_project.to_param }
+
+        expect(response.status).to eq(200)
+        expect(assigns[:tokens][token_unlisted.name]).to eq(token_unlisted.id)
       end
     end
 

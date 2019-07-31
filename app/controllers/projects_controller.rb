@@ -136,7 +136,7 @@ class ProjectsController < ApplicationController
   end
 
   def set_tokens
-    @tokens = Token.all.pluck(:name, :id).append(['No Token', '']).reverse.to_h
+    @tokens = Token.listed.or(Token.where(id: @project&.token&.id)).pluck(:name, :id).append(['No Token', '']).reverse.to_h
   end
 
   def set_missions

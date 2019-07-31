@@ -41,6 +41,8 @@ class Token < ApplicationRecord
   # has_many :tasks, through: :batches, dependent: :destroy
   # has_many :completed_tasks, -> { where.not ethereum_transaction_address: nil }, through: :batches, source: :tasks
 
+  scope :listed, -> { where unlisted: false }
+
   enum coin_type: {
     erc20: 'ERC20',
     eth: 'ETH',

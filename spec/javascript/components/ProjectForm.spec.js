@@ -227,17 +227,17 @@ describe('ProjectForm', () => {
 
   it('renders correctly with project', () => {
     const project = {
-      'id'           : 2,
-      'missionId'    : 2,
-      'tokenId'      : 2,
-      'title'        : 'title',
-      'description'  : 'desc',
-      'videoUrl'     : 'https://youtube.com/',
-      'maximumTokens': '1000',
-      'visibility'   : 'archived',
+      'id'                     : 2,
+      'missionId'              : 2,
+      'tokenId'                : 2,
+      'title'                  : 'title',
+      'description'            : 'desc',
+      'videoUrl'               : 'https://youtube.com/',
+      'maximumTokens'          : '1000',
+      'visibility'             : 'archived',
       'exclusive_contributions': false,
-      'confidentiality': false,
-      'channels'     : [
+      'confidentiality'        : false,
+      'channels'               : [
         {
           'channelId': 'ch1Id',
           'teamId'   : 'team1Id',

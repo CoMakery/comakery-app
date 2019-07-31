@@ -34,6 +34,7 @@ class TokenForm extends React.Component {
       formUrl                           : this.props.formUrl,
       closeOnSuccess                    : false,
       'token[coin_type]'                : this.props.token.coinType || Object.values(this.props.coinTypes)[0],
+      'token[unlisted]'                 : this.props.token.unlisted ? 'true' : 'false',
       'token[name]'                     : this.props.token.name || '',
       'token[symbol]'                   : this.props.token.symbol || '',
       'token[contract_address]'         : this.props.token.contractAddress || '',
@@ -294,6 +295,19 @@ class TokenForm extends React.Component {
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.coinTypes)}
               symbolLimit={0}
+            />
+
+            <InputFieldDropdownHalfed
+              title="visibility"
+              required
+              name="token[unlisted]"
+              value={this.state['token[unlisted]']}
+              errorText={this.state.errors['token[unlisted]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries({
+                'Listed'  : 'false',
+                'Unlisted': 'true'
+              })}
             />
 
             {this.state['token[coin_type]'].match(/erc20|qrc20/) &&

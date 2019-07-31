@@ -1,6 +1,18 @@
 require 'rails_helper'
 
 describe Token do
+  describe 'scopes' do
+    describe '.listed' do
+      let!(:token) { create(:token) }
+      let!(:token_unlisted)  { create(:token, unlisted: true) }
+
+      it 'returns all tokens expect unlisted ones' do
+        expect(described_class.listed).to include(token)
+        expect(described_class.listed).not_to include(token_unlisted)
+      end
+    end
+  end
+
   describe 'validations' do
     it 'raises error if not found Ethereum address' do
       stub_const('Comakery::Ethereum::ADDRESS', {})
