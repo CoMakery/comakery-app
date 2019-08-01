@@ -73,10 +73,10 @@ exports[`Footer renders correctly without props 1`] = `
             Home
           </a>
           <a
-            className="intercom"
-            href=""
+            href="https://info.comakery.com/about_us/"
+            target="_blank"
           >
-            Contact Us
+            About Us
           </a>
           <a
             href="https://ledger.comakery.com"
