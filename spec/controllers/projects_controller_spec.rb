@@ -161,10 +161,11 @@ describe ProjectsController do
     let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project', mission_id: mission.id) }
     let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project', mission_id: mission.id) }
     let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project', mission_id: mission.id) }
+    let!(:interest) { create(:interest, account: account) }
 
     describe '#login' do
       it 'returns your private projects, and public projects that *do not* belong to you' do
-        expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
+        expect(TopContributors).to receive(:call).exactly(4).times.and_return(double(success?: true, contributors: {}))
         other_member_project.channels.create(team: team, channel_id: 'general')
 
         get :landing
@@ -172,6 +173,7 @@ describe ProjectsController do
         expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'unlisted project', 'member project'])
         expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
         expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
+        expect(assigns[:interested_projects].map(&:title)).to match_array([interest.project.title])
       end
     end
   describe 'logged out'

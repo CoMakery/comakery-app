@@ -19,9 +19,11 @@ class ProjectsController < ApplicationController
       @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
       @team_projects = current_account.other_member_projects.unarchived.with_last_activity_at.limit(6).decorate
+      @interested_projects = current_account.projects_interested.unarchived.with_last_activity_at.limit(6).decorate
     end
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
+    @interested_project_contributors = TopContributors.call(projects: @interested_projects).contributors
     @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
   end
 
