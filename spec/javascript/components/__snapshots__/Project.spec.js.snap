@@ -86,15 +86,12 @@ exports[`Project renders correctly without props 1`] = `
             </div>
              
           </div>
-          <img
-            className="project-leader__avatar"
-          />
         </div>
         <div
           className="project-contributors__container"
         >
           <img
-            className="project-leader__avatar project-leader__avatar--mobile"
+            className="project-leader__avatar"
           />
         </div>
       </div>
@@ -237,9 +234,9 @@ exports[`Project renders correctly without props 1`] = `
             "$$typeof": Symbol(react.forward_ref),
             "attrs": Array [],
             "componentStyle": ComponentStyle {
-              "componentId": "sc-ckVGcZ",
+              "componentId": "sc-eHgmQL",
               "isStatic": true,
-              "lastClassName": "jTtBZk",
+              "lastClassName": "bPHjA",
               "rules": Array [
                 "
   padding: 15px;
@@ -251,7 +248,7 @@ exports[`Project renders correctly without props 1`] = `
             "displayName": "styled.div",
             "foldedComponentIds": Array [],
             "render": [Function],
-            "styledComponentId": "sc-ckVGcZ",
+            "styledComponentId": "sc-eHgmQL",
             "target": "div",
             "toString": [Function],
             "warnTooManyClasses": [Function],
@@ -261,7 +258,7 @@ exports[`Project renders correctly without props 1`] = `
         forwardedRef={null}
       >
         <div
-          className="sc-ckVGcZ jTtBZk"
+          className="sc-eHgmQL bPHjA"
         >
           <styled.div>
             <StyledComponent
@@ -270,9 +267,9 @@ exports[`Project renders correctly without props 1`] = `
                   "$$typeof": Symbol(react.forward_ref),
                   "attrs": Array [],
                   "componentStyle": ComponentStyle {
-                    "componentId": "sc-jKJlTe",
+                    "componentId": "sc-cvbbAY",
                     "isStatic": true,
-                    "lastClassName": "bhUkOZ",
+                    "lastClassName": "cnUfLC",
                     "rules": Array [
                       "
   margin: 40px;
@@ -307,7 +304,7 @@ exports[`Project renders correctly without props 1`] = `
                   "displayName": "styled.div",
                   "foldedComponentIds": Array [],
                   "render": [Function],
-                  "styledComponentId": "sc-jKJlTe",
+                  "styledComponentId": "sc-cvbbAY",
                   "target": "div",
                   "toString": [Function],
                   "warnTooManyClasses": [Function],
@@ -317,7 +314,7 @@ exports[`Project renders correctly without props 1`] = `
               forwardedRef={null}
             >
               <div
-                className="sc-jKJlTe bhUkOZ"
+                className="sc-cvbbAY cnUfLC"
               >
                 <h2>
                   Available Tasks
@@ -337,9 +334,9 @@ exports[`Project renders correctly without props 1`] = `
                   "$$typeof": Symbol(react.forward_ref),
                   "attrs": Array [],
                   "componentStyle": ComponentStyle {
-                    "componentId": "sc-eNQAEJ",
+                    "componentId": "sc-jWBwVP",
                     "isStatic": true,
-                    "lastClassName": "ePQpLa",
+                    "lastClassName": "graUqB",
                     "rules": Array [
                       "
   margin-top: 40px;
@@ -370,7 +367,7 @@ exports[`Project renders correctly without props 1`] = `
                   "displayName": "styled.div",
                   "foldedComponentIds": Array [],
                   "render": [Function],
-                  "styledComponentId": "sc-eNQAEJ",
+                  "styledComponentId": "sc-jWBwVP",
                   "target": "div",
                   "toString": [Function],
                   "warnTooManyClasses": [Function],
@@ -380,7 +377,7 @@ exports[`Project renders correctly without props 1`] = `
               forwardedRef={null}
             >
               <div
-                className="sc-eNQAEJ ePQpLa"
+                className="sc-jWBwVP graUqB"
               >
                 <h3>
                   <img
@@ -399,9 +396,9 @@ exports[`Project renders correctly without props 1`] = `
                   "$$typeof": Symbol(react.forward_ref),
                   "attrs": Array [],
                   "componentStyle": ComponentStyle {
-                    "componentId": "sc-hMqMXs",
+                    "componentId": "sc-brqgnP",
                     "isStatic": true,
-                    "lastClassName": "fZwmQG",
+                    "lastClassName": "gwvVjg",
                     "rules": Array [
                       "
   font-family: Montserrat;
@@ -428,7 +425,7 @@ exports[`Project renders correctly without props 1`] = `
                   "displayName": "styled.a",
                   "foldedComponentIds": Array [],
                   "render": [Function],
-                  "styledComponentId": "sc-hMqMXs",
+                  "styledComponentId": "sc-brqgnP",
                   "target": "a",
                   "toString": [Function],
                   "warnTooManyClasses": [Function],
@@ -439,7 +436,7 @@ exports[`Project renders correctly without props 1`] = `
               href=""
             >
               <a
-                className="sc-hMqMXs fZwmQG"
+                className="sc-brqgnP gwvVjg"
                 href=""
               >
                 see all available tasks

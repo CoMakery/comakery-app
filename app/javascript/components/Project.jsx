@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
+import ProfileModal from '../components/ProfileModal'
 import MyTask from './MyTask'
 import Pluralize from 'react-pluralize'
 import d3 from 'd3/d3'
@@ -330,20 +331,14 @@ export default class Project extends React.Component {
               <div className="project-leader__title">Team Leader</div>
               {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
             </div>
-            <img className="project-leader__avatar" src={projectData.teamLeader.imageUrl} />
           </div>
           <div className="project-contributors__container">
-            <img className="project-leader__avatar project-leader__avatar--mobile" src={projectData.teamLeader.imageUrl} />
+            <img className="project-leader__avatar" src={projectData.teamLeader.imageUrl} />
             {projectData.contributors.map((contributor, index) =>
               <div key={contributor.id} className="project-contributor-container">
                 <img className="project-contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
                 <div className="project-contributor__modal">
-                  <img className="project-contributor__modal-avatar" src={contributor.imageUrl} />
-                  <div className="project-contributor__modal__info">
-                    <div className="project-contributor__modal-nickname">{contributor.nickname && contributor.nickname}</div>
-                    <div className="project-contributor__modal-name">{contributor.firstName} {contributor.lastName}</div>
-                    <div className="project-contributor__modal-specialty">{contributor.specialty}</div>
-                  </div>
+                  <ProfileModal profile={contributor} />
                 </div>
               </div>
             )}
@@ -468,12 +463,7 @@ export default class Project extends React.Component {
                 <div key={contributor.id} className="project-team__contributor-container">
                   <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
                   <div className="project-team__contributor__modal">
-                    <img className="project-team__contributor__modal-avatar" src={contributor.imageUrl} />
-                    <div className="project-team__contributor__modal__info">
-                      <div className="project-team__contributor__modal-nickname">{contributor.nickname && contributor.nickname}</div>
-                      <div className="project-team__contributor__modal-name">{contributor.firstName} {contributor.lastName}</div>
-                      <div className="project-team__contributor__modal-specialty">{contributor.specialty}</div>
-                    </div>
+                    <ProfileModal profile={contributor} />
                   </div>
                 </div>
               )}
