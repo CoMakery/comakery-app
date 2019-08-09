@@ -171,6 +171,26 @@ describe Project do
         expect(task_w_no_token.reload.accepted?).to be true
       end
     end
+
+    describe 'store_license_hash' do
+      let!(:project) { create(:project) }
+      let!(:project_finalized) { create(:project) }
+
+      before do
+        create(:award, award_type: create(:award_type, project: project_finalized))
+        project_finalized.update(agreed_to_license_hash: 'test')
+      end
+
+      it 'stores the hash of the latest CP license' do
+        project.save
+        expect(project.reload.agreed_to_license_hash).to eq(Digest::SHA256.hexdigest(File.read(Dir.glob(Rails.root.join('lib', 'assets', 'contribution_licenses', 'CP-*.md')).max_by { |f| File.mtime(f) })))
+      end
+
+      it 'doesnt update the hash if the terms are finalized' do
+        project_finalized.save
+        expect(project_finalized.reload.agreed_to_license_hash).to eq('test')
+      end
+    end
   end
 
   describe 'scopes' do

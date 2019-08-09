@@ -58,12 +58,14 @@ class Award < ApplicationRecord
   before_validation :calculate_total_amount
   before_validation :set_paid_status_if_project_has_no_token, if: -> { status == 'accepted' && !project.token }
   before_validation :make_unpublished_if_award_type_is_unpublished, if: -> { status == 'ready' && !award_type&.published? }
+  before_validation :store_license_hash, if: -> { status == 'started' && agreed_to_license_hash.nil? }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6,7)' }
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
+  scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
 
   scope :filtered_for_view, lambda { |filter, account|
     case filter
@@ -267,5 +269,9 @@ class Award < ApplicationRecord
 
     def update_account_experience
       Experience.increment_for(account, specialty)
+    end
+
+    def store_license_hash
+      self.agreed_to_license_hash = project.agreed_to_license_hash
     end
 end

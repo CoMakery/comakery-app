@@ -39,6 +39,7 @@ class Project < ApplicationRecord
   validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
   validate :terms_should_be_readonly, if: -> { legal_project_owner_changed? || exclusive_contributions_changed? || confidentiality_changed? }
 
+  before_validation :store_license_hash, unless: -> { terms_readonly? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
 
   scope :featured, -> { order :featured }
@@ -176,7 +177,7 @@ class Project < ApplicationRecord
   end
 
   def terms_readonly?
-    awards.where.not(account_id: nil).any?
+    awards.contributed.any?
   end
 
   private
@@ -215,5 +216,9 @@ class Project < ApplicationRecord
 
   def udpate_awards_if_token_was_added
     awards.paid.each { |a| a.update(status: :accepted) }
+  end
+
+  def store_license_hash
+    self.agreed_to_license_hash = Digest::SHA256.hexdigest(File.read(Dir.glob(Rails.root.join('lib', 'assets', 'contribution_licenses', 'CP-*.md')).max_by { |f| File.mtime(f) }))
   end
 end

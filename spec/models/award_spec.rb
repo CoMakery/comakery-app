@@ -65,6 +65,26 @@ describe Award do
       end
     end
 
+    it '.in_progress returns all but rejected, paid, cancelled and unpublished awards' do
+      described_class.statuses.each_key do |status|
+        if %w[rejected paid cancelled unpublished].include? status
+          expect(described_class.in_progress.pluck(:status).include?(status)).to be_falsey
+        else
+          expect(described_class.in_progress.pluck(:status).include?(status)).to be_truthy
+        end
+      end
+    end
+
+    it '.contributed returns all but ready, cancelled and unpublished awards' do
+      described_class.statuses.each_key do |status|
+        if %w[ready cancelled unpublished].include? status
+          expect(described_class.contributed.pluck(:status).include?(status)).to be_falsey
+        else
+          expect(described_class.contributed.pluck(:status).include?(status)).to be_truthy
+        end
+      end
+    end
+
     describe '.filtered_for_view(filter, account)' do
       let!(:contributor) { create(:account) }
       let!(:project_owner) { create(:account) }
@@ -161,6 +181,22 @@ describe Award do
 
       it 'sets default specialty' do
         expect(award.specialty).to eq(Specialty.default)
+      end
+    end
+
+    describe 'store_license_hash' do
+      let!(:project) { create(:project) }
+      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: project)) }
+      let!(:award_ready_w_license) { create(:award_ready, agreed_to_license_hash: 'present', award_type: create(:award_type, project: project)) }
+
+      it 'stores the hash of the project CP license when the task is started' do
+        award_ready.update(status: :started)
+        expect(award_ready.reload.agreed_to_license_hash).to eq(project.reload.agreed_to_license_hash)
+      end
+
+      it 'doesnt update the hash if its already present' do
+        award_ready_w_license.update(status: :started)
+        expect(award_ready_w_license.reload.agreed_to_license_hash).to eq('present')
       end
     end
   end
