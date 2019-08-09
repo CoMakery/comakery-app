@@ -260,31 +260,47 @@ class Task extends React.Component {
 
               <Buttons>
                 {task.status === 'ready' &&
-                <PaymentButton href={task.awardPath}>
-                    issue award
-                </PaymentButton>
+                  <PaymentButton href={task.awardPath}>
+                      issue award
+                  </PaymentButton>
                 }
+
                 {task.status === 'accepted' &&
-                <PaymentButton href={task.payPath}>
-                    pay contributor
-                </PaymentButton>
+                  <PaymentButton href={task.payPath}>
+                      pay contributor
+                  </PaymentButton>
                 }
+
+                {(task.status === 'ready' || task.status === 'unpublished') &&
+                  <a href={task.assignPath}>
+                    <StyledIcon name="INVITE_USER.svg" />
+                  </a>
+                }
+
+                {!(task.status === 'ready' || task.status === 'unpublished') &&
+                  <IconPlaceholder name="INVITE_USER.svg" />
+                }
+
                 <a href={task.clonePath}>
                   <StyledIcon name="DUPLICATE.svg" />
                 </a>
+
                 {task.editPath &&
                   <a href={task.editPath}>
                     <StyledIcon name="iconEdit.svg" />
                   </a>
                 }
+
                 {!task.editPath &&
                   <IconPlaceholder name="iconEdit.svg" />
                 }
+
                 {task.destroyPath &&
                   <a rel="nofollow" data-method="delete" href={task.destroyPath}>
                     <StyledIcon name="iconTrash.svg" />
                   </a>
                 }
+
                 {!task.destroyPath &&
                   <IconPlaceholder name="iconTrash.svg" />
                 }

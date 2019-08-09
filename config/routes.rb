@@ -65,6 +65,8 @@ Rails.application.routes.draw do
         post :update_transaction_address
         get :clone
         get :award
+        get :assignment
+        post :assign
         post :start
         get :start
         post :submit

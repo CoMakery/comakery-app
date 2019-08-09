@@ -68,7 +68,7 @@ class Award < ApplicationRecord
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
-      where(status: :ready)
+      where(status: :ready, account: [nil, account])
     when 'started'
       where(status: :started).where(account: account)
     when 'submitted'
@@ -167,6 +167,10 @@ class Award < ApplicationRecord
 
   def can_be_edited?
     (ready? || unpublished?) && !cloned? && !any_clones?
+  end
+
+  def can_be_assigned?
+    (ready? || unpublished?)
   end
 
   def cloned?

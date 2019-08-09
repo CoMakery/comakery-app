@@ -68,7 +68,7 @@ describe Award do
     describe '.filtered_for_view(filter, account)' do
       let!(:contributor) { create(:account) }
       let!(:project_owner) { create(:account) }
-      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed')), specialty: contributor.specialty) }
+      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed')), specialty: contributor.specialty, account: contributor) }
       let!(:started_award) { create(:award, status: 'started', issuer: project_owner, account: contributor) }
       let!(:submitted_award) { create(:award, status: 'submitted', issuer: project_owner, account: contributor) }
       let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
@@ -76,8 +76,8 @@ describe Award do
       let!(:rejected_award) { create(:award, status: 'rejected', issuer: project_owner, account: contributor) }
       let!(:paid_award_from_other_user) { create(:award, status: 'paid') }
 
-      it 'returns only ready awards' do
-        expect(described_class.filtered_for_view('ready', contributor)).to eq(described_class.ready)
+      it 'returns only ready awards without assigned account or assigned to you' do
+        expect(described_class.filtered_for_view('ready', contributor)).to include(award_ready)
       end
 
       it 'returns only started awards for a contributor' do
@@ -576,6 +576,20 @@ describe Award do
 
     it 'returns false if task has clones' do
       expect(award_cloneable.can_be_edited?).to be_falsey
+    end
+  end
+
+  describe '.can_be_assigned?' do
+    it 'returns true if award is ready or unpublished' do
+      described_class.statuses.each_key do |status|
+        award = create(:award, status: status)
+
+        if status.in? %w[ready unpublished]
+          expect(award.can_be_assigned?).to be_truthy
+        else
+          expect(award.can_be_assigned?).to be_falsey
+        end
+      end
     end
   end
 

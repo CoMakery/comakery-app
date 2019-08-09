@@ -18,7 +18,7 @@ class AwardType < ApplicationRecord
       if published?
         awards.unpublished.each { |a| a.update(status: :ready) }
       else
-        awards.ready.each { |a| a.update(status: :unpublished) }
+        awards.ready.where(account: nil).find_each { |a| a.update(status: :unpublished) }
       end
     end
 end

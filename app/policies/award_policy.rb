@@ -29,7 +29,11 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def edit?
-    @award.can_be_edited?
+    (@award.issuer == @account) && @award.can_be_edited?
+  end
+
+  def assign?
+    (@award.issuer == @account) && @award.can_be_assigned?
   end
 
   def start?

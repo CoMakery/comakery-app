@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const Modal = styled.div`
   display: flex;
@@ -24,6 +24,12 @@ const Modal = styled.div`
   letter-spacing: normal;
   color: #3a3a3a;
 
+  ${props => props.inline && css`
+    position: initial;
+    box-shadow: none;
+    padding: 20px 0;
+  `}
+
   &::after {
     position: absolute;
     display: block;
@@ -37,6 +43,10 @@ const Modal = styled.div`
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 8px solid #ffffff;
+
+    ${props => props.inline && css`
+      display: none;
+    `}
   }
 `
 
@@ -45,6 +55,7 @@ const Image = styled.img`
   height: 45px;
   margin-right: 6px;
   border-radius: 50%;
+  border: 1px solid #8d9599;
 `
 
 const Info = styled.div`
@@ -79,7 +90,7 @@ class ProfileModal extends React.Component {
 
     return (
       <React.Fragment>
-        <Modal>
+        <Modal inline={this.props.displayInline}>
           <Image src={profile.imageUrl} />
           <Info>
             <Nickname>
@@ -91,7 +102,7 @@ class ProfileModal extends React.Component {
             </Name>
 
             <Specialty>
-              {profile.specialty}
+              {profile.specialty.name}
             </Specialty>
 
             <Links>
@@ -116,9 +127,11 @@ class ProfileModal extends React.Component {
 }
 
 ProfileModal.propTypes = {
-  profile: PropTypes.object.isRequired
+  profile      : PropTypes.object.isRequired,
+  displayInline: PropTypes.bool.isRequired
 }
 ProfileModal.defaultProps = {
-  profile: {}
+  profile      : {},
+  displayInline: false
 }
 export default ProfileModal

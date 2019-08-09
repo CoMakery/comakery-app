@@ -1,15 +1,16 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
-  before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject]
+  before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
   before_action :authorize_award_show, only: %i[show]
   before_action :authorize_award_edit, only: %i[edit update]
+  before_action :authorize_award_assign, only: %i[assign]
   before_action :authorize_award_start, only: %i[start]
   before_action :authorize_award_submit, only: %i[submit]
   before_action :authorize_award_review, only: %i[accept reject]
   before_action :authorize_award_pay, only: %i[update_transaction_address]
-  before_action :clone_award_on_start, only: %i[start]
+  before_action :clone_award_on_start, only: %i[start assign]
   before_action :set_filter, only: %i[index]
   before_action :set_default_project_filter, only: %i[index]
   before_action :set_project_filter, only: %i[index]
@@ -18,6 +19,7 @@ class AwardsController < ApplicationController
   before_action :set_form_props, only: %i[new edit clone]
   before_action :set_show_props, only: %i[show]
   before_action :set_award_props, only: %i[award]
+  before_action :set_assignment_props, only: %i[assignment]
   before_action :set_index_props, only: %i[index]
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
   skip_before_action :require_login, only: %i[confirm]
@@ -83,6 +85,21 @@ class AwardsController < ApplicationController
     else
       error_response
       render json: @error_response, status: :unprocessable_entity
+    end
+  end
+
+  def assignment
+    render component: 'TaskAssign', props: @props
+  end
+
+  def assign
+    account = Account.find(params[:account_id])
+
+    if account && @award.update(account: account, status: 'ready')
+      TaskMailer.with(award: @award).task_assigned.deliver_now
+      redirect_to project_award_types_path(@award.project), notice: 'Task has been assigned'
+    else
+      redirect_to project_award_types_path(@award.project), flash: { error: @award.errors&.full_messages&.join(', ') }
     end
   end
 
@@ -199,6 +216,10 @@ class AwardsController < ApplicationController
 
     def authorize_award_edit
       authorize @award, :edit?
+    end
+
+    def authorize_award_assign
+      authorize @award, :assign?
     end
 
     def authorize_award_start
@@ -348,6 +369,20 @@ class AwardsController < ApplicationController
         form_url: project_award_type_award_send_award_path(@project, @award_type, @award),
         form_action: 'POST',
         url_on_success: project_award_types_path,
+        csrf_token: form_authenticity_token
+      }
+    end
+
+    def set_assignment_props
+      @props = {
+        task: @award.serializable_hash(only: %w[id name]),
+        batch: @award_type.serializable_hash(only: %w[id name]),
+        project: @project.serializable_hash(only: %w[id title], methods: :public?)&.merge({
+          url: unlisted_project_url(@project.long_id)
+        }),
+        interested: @project.interests.map { |i| i.account.serializable_hash(only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url], include: :specialty) },
+        interested_select: @project.interests.map { |i| [i.account.decorate.name, i.account.id] }.unshift(['', nil]).to_h,
+        form_url: project_award_type_award_assign_path(@project, @award_type, @award),
         csrf_token: form_authenticity_token
       }
     end
