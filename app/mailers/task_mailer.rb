@@ -8,6 +8,11 @@ class TaskMailer < ApplicationMailer
 
   default to: -> { @to }, subject: -> { @subject }
 
+  def task_assigned
+    @to = @account.email
+    @subject = "Congrats! You've been assigned a task."
+  end
+
   def task_paid
     @to = @account.email
     @subject = "You've been paid!"

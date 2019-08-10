@@ -25,6 +25,10 @@ describe('TokenForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
+      'InputFieldDropdownHalfed[title="visibility"][required][name="token[unlisted]"]'
+    )).toBe(true)
+
+    expect(wrapper.exists(
       'InputFieldUploadFile[title="token logo"][required][name="token[logo_image]"]'
     )).toBe(true)
 

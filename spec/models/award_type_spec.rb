@@ -31,6 +31,7 @@ describe AwardType do
     let!(:award_unpublished) { create(:award, award_type: award_type_unpublished, status: :unpublished) }
 
     it 'switches ready awards to unpublished if published? changed to false' do
+      award_published.update(account: nil)
       award_type_published.update(published: false)
       expect(award_published.reload.unpublished?).to be_truthy
     end

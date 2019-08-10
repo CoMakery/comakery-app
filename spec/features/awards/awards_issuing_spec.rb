@@ -8,12 +8,12 @@ describe 'awards issuing', js: true do
   let!(:project1) { create(:sb_project, account: current_auth.account, maximum_tokens: 10, token: create(:token, decimal_places: 8, coin_type: 'erc20')) }
   let!(:channel1) { create(:channel, team: team, project: project1, name: 'channel1') }
   let!(:award_type1) { create(:award_type, project: project1) }
-  let!(:award1) { create(:award_ready, award_type: award_type1, amount: 1) }
-  let!(:award2) { create(:award_ready, award_type: award_type1, amount: 1) }
-  let!(:award3) { create(:award_ready, award_type: award_type1, amount: 1) }
-  let!(:award4) { create(:award_ready, award_type: award_type1, amount: 1) }
-  let!(:award5) { create(:award_ready, award_type: award_type1, amount: 1) }
-  let!(:award6) { create(:award, award_type: award_type1, amount: 1) }
+  let!(:award1) { create(:award_ready, award_type: award_type1, amount: 1, issuer: current_auth.account) }
+  let!(:award2) { create(:award_ready, award_type: award_type1, amount: 1, issuer: current_auth.account) }
+  let!(:award3) { create(:award_ready, award_type: award_type1, amount: 1, issuer: current_auth.account) }
+  let!(:award4) { create(:award_ready, award_type: award_type1, amount: 1, issuer: current_auth.account) }
+  let!(:award5) { create(:award_ready, award_type: award_type1, amount: 1, issuer: current_auth.account) }
+  let!(:award6) { create(:award, award_type: award_type1, amount: 1, issuer: current_auth.account) }
   let!(:specialty) { create(:specialty, name: 'writing') }
 
   before do

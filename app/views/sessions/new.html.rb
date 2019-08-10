@@ -29,12 +29,12 @@ class Views::Sessions::New < Views::Base
           end
         end
         column('large-12 no-h-pad', style: 'margin-top: 20px') do
-          link_to '/auth/slack', class: 'auth-button slack' do
+          link_to '/auth/slack', method: :post, class: 'auth-button slack' do
             text 'Sign in with Slack'
           end
         end
         column('large-12 no-h-pad', style: 'margin-top: 20px') do
-          link_to login_discord_path, class: 'auth-button discord' do
+          link_to login_discord_path, method: :post, class: 'auth-button discord' do
             text 'Sign in with Discord'
           end
         end

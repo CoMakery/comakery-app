@@ -177,6 +177,45 @@ describe AwardsController do
     end
   end
 
+  describe '#assign' do
+    let!(:award) { create(:award_ready) }
+    let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
+    let!(:account) { create(:account) }
+
+    it 'assignes task with selected account and redirects to batches page with notice' do
+      login(award.issuer)
+      post :assign, params: {
+        project_id: award.project.to_param,
+        award_type_id: award.award_type.to_param,
+        award_id: award.to_param,
+        account_id: account.id
+      }
+
+      expect(response).to redirect_to(project_award_types_path(award.project))
+      expect(flash[:notice]).to eq('Task has been assigned')
+      expect(award.reload.ready?).to be true
+      expect(award.reload.account).to eq account
+    end
+
+    it 'clones the task before assignement if it should be cloned' do
+      login(award_cloneable.issuer)
+      post :assign, params: {
+        project_id: award_cloneable.project.to_param,
+        award_type_id: award_cloneable.award_type.to_param,
+        award_id: award_cloneable.to_param,
+        account_id: account.id
+      }
+
+      cloned_award = Award.find_by(cloned_on_assignment_from_id: award_cloneable.id)
+
+      expect(response).to redirect_to(project_award_types_path(award_cloneable.project))
+      expect(flash[:notice]).to eq('Task has been assigned')
+      expect(award_cloneable.reload.ready?).to be true
+      expect(cloned_award.reload.ready?).to be true
+      expect(cloned_award.reload.account).to eq account
+    end
+  end
+
   describe '#submit' do
     let!(:award) { create(:award) }
 

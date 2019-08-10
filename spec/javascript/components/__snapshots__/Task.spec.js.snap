@@ -551,6 +551,52 @@ exports[`Task renders component correctly 1`] = `
                         <div
                           className="sc-chPdSV kUNENg"
                         >
+                          <Styled(Icon)
+                            name="INVITE_USER.svg"
+                          >
+                            <StyledComponent
+                              forwardedComponent={
+                                Object {
+                                  "$$typeof": Symbol(react.forward_ref),
+                                  "attrs": Array [],
+                                  "componentStyle": ComponentStyle {
+                                    "componentId": "sc-kpOJdX",
+                                    "isStatic": true,
+                                    "lastClassName": "gtRJvz",
+                                    "rules": Array [
+                                      "
+  height: 15px;
+  width: 15px;
+  margin-left: 16px;
+  opacity: 0.3;
+  cursor: not-allowed;
+",
+                                    ],
+                                  },
+                                  "displayName": "Styled(Icon)",
+                                  "foldedComponentIds": Array [],
+                                  "render": [Function],
+                                  "styledComponentId": "sc-kpOJdX",
+                                  "target": [Function],
+                                  "toString": [Function],
+                                  "warnTooManyClasses": [Function],
+                                  "withComponent": [Function],
+                                }
+                              }
+                              forwardedRef={null}
+                              name="INVITE_USER.svg"
+                            >
+                              <Icon
+                                className="sc-kpOJdX gtRJvz"
+                                name="INVITE_USER.svg"
+                              >
+                                <img
+                                  className="icon icon__INVITE_USER-svg sc-kpOJdX gtRJvz"
+                                  src="test-file-stub"
+                                />
+                              </Icon>
+                            </StyledComponent>
+                          </Styled(Icon)>
                           <a>
                             <Styled(Icon)
                               name="DUPLICATE.svg"

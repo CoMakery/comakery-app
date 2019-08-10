@@ -8,6 +8,60 @@ describe Account do
   end
 
   describe 'validations' do
+    describe 'urls' do
+      let!(:account) do
+        create :account,
+          linkedin_url: 'https://www.linkedin.com/',
+          github_url: 'https://github.com/',
+          dribble_url: 'https://dribbble.com/',
+          behance_url: 'https://www.behance.net/'
+      end
+
+      it 'validates urls' do
+        expect(account).to be_valid
+      end
+
+      it 'validates linkedin_url' do
+        account.linkedin_url = 'http://google.com'
+        expect(account).not_to be_valid
+      end
+
+      it 'validates github_url' do
+        account.github_url = 'http://google.com'
+        expect(account).not_to be_valid
+      end
+
+      it 'validates dribble_url' do
+        account.dribble_url = 'http://google.com'
+        expect(account).not_to be_valid
+      end
+
+      it 'validates behance_url' do
+        account.behance_url = 'http://google.com'
+        expect(account).not_to be_valid
+      end
+
+      it 'validates sanity of linkedin_url' do
+        account.linkedin_url = 'https://www.linkedin.com/<script>alert(1)</script>'
+        expect(account).not_to be_valid
+      end
+
+      it 'validates sanity of github_url' do
+        account.github_url = 'https://github.com/<script>alert(1)</script>'
+        expect(account).not_to be_valid
+      end
+
+      it 'validates sanity of dribble_url' do
+        account.dribble_url = 'https://dribbble.com/<script>alert(1)</script>'
+        expect(account).not_to be_valid
+      end
+
+      it 'validates sanity of behance_url' do
+        account.behance_url = 'https://www.behance.net/<script>alert(1)</script>'
+        expect(account).not_to be_valid
+      end
+    end
+
     it 'requires many attributes' do
       expect(described_class.new.tap(&:valid?).errors.full_messages.sort).to eq(["Email can't be blank"])
     end

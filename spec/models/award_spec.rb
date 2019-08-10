@@ -65,10 +65,30 @@ describe Award do
       end
     end
 
+    it '.in_progress returns all but rejected, paid, cancelled and unpublished awards' do
+      described_class.statuses.each_key do |status|
+        if %w[rejected paid cancelled unpublished].include? status
+          expect(described_class.in_progress.pluck(:status).include?(status)).to be_falsey
+        else
+          expect(described_class.in_progress.pluck(:status).include?(status)).to be_truthy
+        end
+      end
+    end
+
+    it '.contributed returns all but ready, cancelled and unpublished awards' do
+      described_class.statuses.each_key do |status|
+        if %w[ready cancelled unpublished].include? status
+          expect(described_class.contributed.pluck(:status).include?(status)).to be_falsey
+        else
+          expect(described_class.contributed.pluck(:status).include?(status)).to be_truthy
+        end
+      end
+    end
+
     describe '.filtered_for_view(filter, account)' do
       let!(:contributor) { create(:account) }
       let!(:project_owner) { create(:account) }
-      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed')), specialty: contributor.specialty) }
+      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed')), specialty: contributor.specialty, account: contributor) }
       let!(:started_award) { create(:award, status: 'started', issuer: project_owner, account: contributor) }
       let!(:submitted_award) { create(:award, status: 'submitted', issuer: project_owner, account: contributor) }
       let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
@@ -76,8 +96,8 @@ describe Award do
       let!(:rejected_award) { create(:award, status: 'rejected', issuer: project_owner, account: contributor) }
       let!(:paid_award_from_other_user) { create(:award, status: 'paid') }
 
-      it 'returns only ready awards' do
-        expect(described_class.filtered_for_view('ready', contributor)).to eq(described_class.ready)
+      it 'returns only ready awards without assigned account or assigned to you' do
+        expect(described_class.filtered_for_view('ready', contributor)).to include(award_ready)
       end
 
       it 'returns only started awards for a contributor' do
@@ -161,6 +181,22 @@ describe Award do
 
       it 'sets default specialty' do
         expect(award.specialty).to eq(Specialty.default)
+      end
+    end
+
+    describe 'store_license_hash' do
+      let!(:project) { create(:project) }
+      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: project)) }
+      let!(:award_ready_w_license) { create(:award_ready, agreed_to_license_hash: 'present', award_type: create(:award_type, project: project)) }
+
+      it 'stores the hash of the project CP license when the task is started' do
+        award_ready.update(status: :started)
+        expect(award_ready.reload.agreed_to_license_hash).to eq(project.reload.agreed_to_license_hash)
+      end
+
+      it 'doesnt update the hash if its already present' do
+        award_ready_w_license.update(status: :started)
+        expect(award_ready_w_license.reload.agreed_to_license_hash).to eq('present')
       end
     end
   end
@@ -576,6 +612,20 @@ describe Award do
 
     it 'returns false if task has clones' do
       expect(award_cloneable.can_be_edited?).to be_falsey
+    end
+  end
+
+  describe '.can_be_assigned?' do
+    it 'returns true if award is ready or unpublished' do
+      described_class.statuses.each_key do |status|
+        award = create(:award, status: status)
+
+        if status.in? %w[ready unpublished]
+          expect(award.can_be_assigned?).to be_truthy
+        else
+          expect(award.can_be_assigned?).to be_falsey
+        end
+      end
     end
   end
 

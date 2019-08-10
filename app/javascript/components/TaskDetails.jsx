@@ -403,24 +403,43 @@ class TaskDetails extends React.Component {
               {task.status === 'ready' &&
                 <React.Fragment>
                   {this.props.taskAllowedToStart &&
-                    <form action={task.startUrl} method="post">
-                      <input
-                        type="hidden"
-                        name="authenticity_token"
-                        value={this.props.csrfToken}
-                        readOnly
-                      />
+                    <React.Fragment>
+                      <ContentBlock title="terms & conditions">
+                        This is the Award Form referenced by this <a href={this.props.licenseUrl}>Comakery Contribution License</a>.&nbsp;
+                        This agreement is made between {this.props.accountName} ("You", the "Contributor") and {task.project.legalProjectOwner} (the "Project Owner").&nbsp;
+                        Your contribution is {task.project.exclusiveContributions ? 'exclusive' : 'not exclusive'}.&nbsp;
+                        Project confidentiality and business confidentiality are {task.project.confidentiality ? 'required' : 'not required'}.&nbsp;
 
-                      <Button
-                        type="submit"
-                        value="start task"
-                      />
+                        {task.token.currency &&
+                          <React.Fragment>
+                            If this Task is accepted for use by the Project Owner, the Project Owner agrees to pay you {task.totalAmount} {task.token.currency}.&nbsp;
+                          </React.Fragment>
+                        }
 
-                      <ButtonBorderGray
-                        onClick={this.goBack}
-                        value="cancel"
-                      />
-                    </form>
+                        <br />
+                        <br />
+                        By starting this Task (clicking START), you confirm that you have read and agree to this <a href={this.props.licenseUrl}>Comakery Contribution License</a>.&nbsp;
+                      </ContentBlock>
+
+                      <form action={task.startUrl} method="post">
+                        <input
+                          type="hidden"
+                          name="authenticity_token"
+                          value={this.props.csrfToken}
+                          readOnly
+                        />
+
+                        <Button
+                          type="submit"
+                          value="start task"
+                        />
+
+                        <ButtonBorderGray
+                          onClick={this.goBack}
+                          value="cancel"
+                        />
+                      </form>
+                    </React.Fragment>
                   }
 
                   {!this.props.taskAllowedToStart &&
@@ -446,6 +465,7 @@ TaskDetails.propTypes = {
   task              : PropTypes.object,
   taskAllowedToStart: PropTypes.bool,
   tasksToUnlock     : PropTypes.number,
+  licenseUrl        : PropTypes.string,
   myTasksPath       : PropTypes.string
 }
 TaskDetails.defaultProps = {
@@ -456,9 +476,12 @@ TaskDetails.defaultProps = {
       logo    : 'test'
     },
     project: {
-      name    : null,
-      url     : null,
-      channels: []
+      name                  : null,
+      legalProjectOwner     : null,
+      exclusiveContributions: null,
+      confidentiality       : null,
+      url                   : null,
+      channels              : []
     },
     mission: {
       name: null,
@@ -474,6 +497,8 @@ TaskDetails.defaultProps = {
   },
   taskAllowedToStart: true,
   tasksToUnlock     : 0,
+  accountName       : '',
+  licenseUrl        : '/',
   myTasksPath       : '/'
 }
 export default TaskDetails

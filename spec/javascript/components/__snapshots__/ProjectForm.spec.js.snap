@@ -7,6 +7,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
   discordBotUrl={null}
   formAction="POST"
   formUrl="/"
+  licenseUrl="/"
   missions={
     Object {
       "default": "_",
@@ -18,6 +19,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
     }
   }
   teams={Array []}
+  termsReadonly={false}
   tokens={
     Object {
       "default": "_",
@@ -915,79 +917,6 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     </div>
                   </InputField>
                 </InputFieldDropdown>
-                <InputFieldWhiteDark
-                  eventHandler={[Function]}
-                  name="project[legal_project_owner]"
-                  placeholder="Provide a legal entity or individual owner's name"
-                  required={true}
-                  symbolLimit={0}
-                  title="legal owner of the project"
-                  value=""
-                >
-                  <InputField
-                    checkboxText=""
-                    checked={false}
-                    className="input-field__white__dark"
-                    copyOnClick={false}
-                    disabled={false}
-                    errorText=""
-                    eventHandler={[Function]}
-                    imgInputRef={null}
-                    imgPreviewDimensions="40x40"
-                    imgPreviewUrl=""
-                    imgRequirements=""
-                    imgVerifier={[Function]}
-                    max=""
-                    min=""
-                    name="project[legal_project_owner]"
-                    pattern=".*"
-                    placeholder="Provide a legal entity or individual owner's name"
-                    readOnly={false}
-                    recommended={false}
-                    required={true}
-                    selectEntries={Array []}
-                    step=""
-                    symbolLimit={0}
-                    title="legal owner of the project"
-                    type="text"
-                    value=""
-                  >
-                    <div
-                      className="input-field input-field__white__dark"
-                    >
-                      <div
-                        className="input-field--title"
-                      >
-                        <span
-                          className="input-field--title--title"
-                        >
-                          legal owner of the project
-                        </span>
-                        <span
-                          className="input-field--title--required"
-                        >
-                          required
-                        </span>
-                      </div>
-                      <div
-                        className="input-field--content"
-                      >
-                        <input
-                          className="input-field--content__text"
-                          name="project[legal_project_owner]"
-                          onChange={[Function]}
-                          onClick={null}
-                          pattern=".*"
-                          placeholder="Provide a legal entity or individual owner's name"
-                          readOnly={false}
-                          required={true}
-                          type="text"
-                          value=""
-                        />
-                      </div>
-                    </div>
-                  </InputField>
-                </InputFieldWhiteDark>
                 <InputFieldUploadFile
                   imgInputRef={
                     Object {
@@ -1190,6 +1119,317 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   className="project-form--form--channels--empty"
                 >
                   Start adding channels by signing in with Slack or Discord
+                </div>
+                <div
+                  className="project-form--form--terms--header"
+                >
+                  TERMS & CONDITIONS
+                </div>
+                <div
+                  className="project-form--form--terms--content"
+                >
+                  <InputFieldInline
+                    eventHandler={[Function]}
+                    name="project[legal_project_owner]"
+                    placeholder="Provide a legal entity or individual owner's name"
+                    readOnly={false}
+                    required={true}
+                    value=""
+                  >
+                    <InputField
+                      checkboxText=""
+                      checked={false}
+                      className="input-field__inline"
+                      copyOnClick={false}
+                      disabled={false}
+                      errorText=""
+                      eventHandler={[Function]}
+                      imgInputRef={null}
+                      imgPreviewDimensions="40x40"
+                      imgPreviewUrl=""
+                      imgRequirements=""
+                      imgVerifier={[Function]}
+                      max=""
+                      min=""
+                      name="project[legal_project_owner]"
+                      pattern=".*"
+                      placeholder="Provide a legal entity or individual owner's name"
+                      readOnly={false}
+                      recommended={false}
+                      required={true}
+                      selectEntries={Array []}
+                      step=""
+                      symbolLimit={100}
+                      title="title"
+                      type="text"
+                      value=""
+                    >
+                      <div
+                        className="input-field input-field__inline"
+                      >
+                        <div
+                          className="input-field--title"
+                        >
+                          <span
+                            className="input-field--title--title"
+                          >
+                            title
+                          </span>
+                          <span
+                            className="input-field--title--required"
+                          >
+                            required
+                          </span>
+                          <span
+                            className="input-field--title--counter"
+                          >
+                            0
+                            /
+                            100
+                          </span>
+                        </div>
+                        <div
+                          className="input-field--content"
+                        >
+                          <input
+                            className="input-field--content__text"
+                            name="project[legal_project_owner]"
+                            onChange={[Function]}
+                            onClick={null}
+                            pattern=".*"
+                            placeholder="Provide a legal entity or individual owner's name"
+                            readOnly={false}
+                            required={true}
+                            type="text"
+                            value=""
+                          />
+                        </div>
+                      </div>
+                    </InputField>
+                  </InputFieldInline>
+                  ("You", the "Project Owner") agree to the 
+                  <a
+                    href="/"
+                  >
+                    Comakery Contribution License
+                  </a>
+                  <br />
+                  You agree that for this Project, Contributions are 
+                  <InputFieldDropdownInline
+                    disabled={false}
+                    eventHandler={[Function]}
+                    name="project[exclusive_contributions]"
+                    required={true}
+                    selectEntries={
+                      Array [
+                        Array [
+                          "Exclusive",
+                          "true",
+                        ],
+                        Array [
+                          "Not Exclusive",
+                          "false",
+                        ],
+                      ]
+                    }
+                    value="false"
+                  >
+                    <InputField
+                      checkboxText=""
+                      checked={false}
+                      className="input-field__dropdown--inline"
+                      copyOnClick={false}
+                      disabled={false}
+                      errorText=""
+                      eventHandler={[Function]}
+                      imgInputRef={null}
+                      imgPreviewDimensions="40x40"
+                      imgPreviewUrl=""
+                      imgRequirements=""
+                      imgVerifier={[Function]}
+                      max=""
+                      min=""
+                      name="project[exclusive_contributions]"
+                      pattern=".*"
+                      placeholder="Please enter value"
+                      readOnly={false}
+                      recommended={false}
+                      required={true}
+                      selectEntries={
+                        Array [
+                          Array [
+                            "Exclusive",
+                            "true",
+                          ],
+                          Array [
+                            "Not Exclusive",
+                            "false",
+                          ],
+                        ]
+                      }
+                      step=""
+                      symbolLimit={0}
+                      title="title"
+                      type="select"
+                      value="false"
+                    >
+                      <div
+                        className="input-field input-field__dropdown--inline"
+                      >
+                        <div
+                          className="input-field--title"
+                        >
+                          <span
+                            className="input-field--title--title"
+                          >
+                            title
+                          </span>
+                          <span
+                            className="input-field--title--required"
+                          >
+                            required
+                          </span>
+                        </div>
+                        <div
+                          className="input-field--content"
+                        >
+                          <select
+                            className="input-field--content__select"
+                            disabled={false}
+                            name="project[exclusive_contributions]"
+                            onChange={[Function]}
+                            required={true}
+                            value="false"
+                          >
+                            <option
+                              key="true"
+                              value="true"
+                            >
+                              Exclusive
+                            </option>
+                            <option
+                              key="false"
+                              value="false"
+                            >
+                              Not Exclusive
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </InputField>
+                  </InputFieldDropdownInline>
+                  <br />
+                  Project confidentiality and business confidentiality are 
+                  <InputFieldDropdownInline
+                    disabled={false}
+                    eventHandler={[Function]}
+                    name="project[confidentiality]"
+                    required={true}
+                    selectEntries={
+                      Array [
+                        Array [
+                          "Required",
+                          "true",
+                        ],
+                        Array [
+                          "Not Required",
+                          "false",
+                        ],
+                      ]
+                    }
+                    value="false"
+                  >
+                    <InputField
+                      checkboxText=""
+                      checked={false}
+                      className="input-field__dropdown--inline"
+                      copyOnClick={false}
+                      disabled={false}
+                      errorText=""
+                      eventHandler={[Function]}
+                      imgInputRef={null}
+                      imgPreviewDimensions="40x40"
+                      imgPreviewUrl=""
+                      imgRequirements=""
+                      imgVerifier={[Function]}
+                      max=""
+                      min=""
+                      name="project[confidentiality]"
+                      pattern=".*"
+                      placeholder="Please enter value"
+                      readOnly={false}
+                      recommended={false}
+                      required={true}
+                      selectEntries={
+                        Array [
+                          Array [
+                            "Required",
+                            "true",
+                          ],
+                          Array [
+                            "Not Required",
+                            "false",
+                          ],
+                        ]
+                      }
+                      step=""
+                      symbolLimit={0}
+                      title="title"
+                      type="select"
+                      value="false"
+                    >
+                      <div
+                        className="input-field input-field__dropdown--inline"
+                      >
+                        <div
+                          className="input-field--title"
+                        >
+                          <span
+                            className="input-field--title--title"
+                          >
+                            title
+                          </span>
+                          <span
+                            className="input-field--title--required"
+                          >
+                            required
+                          </span>
+                        </div>
+                        <div
+                          className="input-field--content"
+                        >
+                          <select
+                            className="input-field--content__select"
+                            disabled={false}
+                            name="project[confidentiality]"
+                            onChange={[Function]}
+                            required={true}
+                            value="false"
+                          >
+                            <option
+                              key="true"
+                              value="true"
+                            >
+                              Required
+                            </option>
+                            <option
+                              key="false"
+                              value="false"
+                            >
+                              Not Required
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </InputField>
+                  </InputFieldDropdownInline>
+                   and at the time that you indicate a Task is complete you agree to pay the Contributor the Award for the Task.
+                  <br />
+                  By 
+                  creating this Project (clicking CREATE & CLOSE or CREATE)
+                  , you agree to these Terms & Conditions.
+                  <br />
+                  You may modify these Terms & Conditions until the first Project Task has been started by a Contributor.
                 </div>
               </form>
             </div>

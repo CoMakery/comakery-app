@@ -104,11 +104,24 @@ describe AwardPolicy do
     let!(:award_non_editable) { create(:award) }
 
     it 'returns true if award is editable' do
-      expect(described_class.new(award_editable.account, award_editable).edit?).to be true
+      expect(described_class.new(award_editable.issuer, award_editable).edit?).to be true
     end
 
     it 'returns false if award is not editable' do
-      expect(described_class.new(award_non_editable.account, award_non_editable).edit?).to be false
+      expect(described_class.new(award_non_editable.issuer, award_non_editable).edit?).to be false
+    end
+  end
+
+  describe 'assign?' do
+    let!(:award_assignable) { create(:award_ready) }
+    let!(:award_non_assignable) { create(:award) }
+
+    it 'returns true if award can be assigned' do
+      expect(described_class.new(award_assignable.issuer, award_assignable).assign?).to be true
+    end
+
+    it 'returns false if award cannot be assigned' do
+      expect(described_class.new(award_non_assignable.issuer, award_non_assignable).assign?).to be false
     end
   end
 

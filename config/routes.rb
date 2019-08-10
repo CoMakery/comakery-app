@@ -27,10 +27,10 @@ Rails.application.routes.draw do
   get "accounts/confirm/:token" => "accounts#confirm", as: :confirm_email
   get "accounts/confirm-authentication/:token" => "accounts#confirm_authentication", as: :confirm_authentication
   get "/auth/slack/callback" => "sessions#create"
-  get "/auth/slack" => "sessions#create", as: :login
+  post "/auth/slack" => "sessions#create", as: :login
 
   get "/auth/discord/callback" => "sessions#create"
-  get "/auth/discord" => "sessions#create", as: :login_discord
+  post "/auth/discord" => "sessions#create", as: :login_discord
 
   get '/logout', to: "sessions#destroy"
 
@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   get '/e-sign-disclosure' => "pages#e_sign_disclosure"
   get '/privacy-policy' => "pages#privacy_policy"
   get '/prohibited-use' => "pages#prohibited_use"
-  get '/contribution_licenses/:type(/:hash)' => "pages#contribution_licenses", as: :contribution_licenses
+  get '/contribution_licenses/:type' => "pages#contribution_licenses", as: :contribution_licenses
 
   resource :session, only: %i[new create destroy] do
     get "oauth_failure"
@@ -65,6 +65,8 @@ Rails.application.routes.draw do
         post :update_transaction_address
         get :clone
         get :award
+        get :assignment
+        post :assign
         post :start
         get :start
         post :submit

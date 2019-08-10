@@ -19,9 +19,11 @@ class ProjectsController < ApplicationController
       @my_projects = current_account.projects.unarchived.with_last_activity_at.limit(6).decorate
       @archived_projects = current_account.projects.archived.with_last_activity_at.limit(6).decorate
       @team_projects = current_account.other_member_projects.unarchived.with_last_activity_at.limit(6).decorate
+      @interested_projects = current_account.projects_interested.unarchived.with_last_activity_at.limit(6).decorate
     end
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
+    @interested_project_contributors = TopContributors.call(projects: @interested_projects).contributors
     @archived_project_contributors = TopContributors.call(projects: @archived_projects).contributors
   end
 
@@ -136,7 +138,7 @@ class ProjectsController < ApplicationController
   end
 
   def set_tokens
-    @tokens = Token.all.pluck(:name, :id).append(['No Token', '']).reverse.to_h
+    @tokens = Token.listed.or(Token.where(id: @project&.token&.id)).pluck(:name, :id).append(['No Token', '']).reverse.to_h
   end
 
   def set_missions
@@ -189,6 +191,8 @@ class ProjectsController < ApplicationController
       discord_bot_url: if @teams&.any? { |t| t[:discord] && t[:channels].empty? }
                          Comakery::Discord.new.add_bot_link
                        end,
+      license_url: contribution_licenses_path(type: 'CP'),
+      terms_readonly: @project&.terms_readonly?,
       form_url: projects_path,
       form_action: 'POST',
       csrf_token: form_authenticity_token
@@ -235,6 +239,7 @@ class ProjectsController < ApplicationController
       :legal_project_owner,
       :minimum_payment,
       :require_confidentiality,
+      :confidentiality,
       :license_finalized,
       :visibility,
       :status,
@@ -265,7 +270,7 @@ class ProjectsController < ApplicationController
   end
 
   def contributor_props(account)
-    account.as_json(only: %i[id nickname first_name last_name]).merge(
+    account.as_json(only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url]).merge(
       image_url: helpers.account_image_url(account, 68),
       specialty: account.specialty&.name
     )

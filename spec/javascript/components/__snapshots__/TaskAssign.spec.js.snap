@@ -1,0 +1,541 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TaskAssign renders correctly without props 1`] = `
+<TaskAssign
+  batch={
+    Object {
+      "id": 28,
+      "name": "Dummy",
+    }
+  }
+  csrfToken="00"
+  formUrl="/"
+  interested={Array []}
+  interestedSelect={Object {}}
+  project={
+    Object {
+      "id": 28,
+      "public?": true,
+      "title": "Dummy",
+      "url": "http://dummy",
+    }
+  }
+  task={
+    Object {
+      "id": 28,
+      "name": "Dummy",
+    }
+  }
+>
+  <ProjectSetup
+    className=""
+    hasBackButton={true}
+    projectId={28}
+    projectPage="batches"
+    projectTitle="Dummy"
+    sidebar={
+      <React.Fragment>
+        <div
+          className="batch-index--sidebar"
+        >
+          <SidebarItem
+            className="batch-index--sidebar--item batch-index--sidebar--item__form"
+            iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+            iconLeftUrl=""
+            iconRightName=""
+            notificationColor=""
+            selected={true}
+            text="Dummy"
+          />
+          <hr
+            className="batch-index--sidebar--hr"
+          />
+        </div>
+      </React.Fragment>
+    }
+    subfooter={
+      <React.Fragment>
+        <ButtonBorder
+          className=""
+          onClick={[Function]}
+          value="cancel"
+        />
+      </React.Fragment>
+    }
+  >
+    <Layout
+      category=""
+      className="project-setup"
+      customTitle={
+        <ProjectSetupHeader
+          projectId={28}
+          projectOwner={true}
+          projectPage="batches"
+          projectTitle="Dummy"
+        />
+      }
+      hasBackButton={true}
+      sidebar={
+        <React.Fragment>
+          <div
+            className="batch-index--sidebar"
+          >
+            <SidebarItem
+              className="batch-index--sidebar--item batch-index--sidebar--item__form"
+              iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+              iconLeftUrl=""
+              iconRightName=""
+              notificationColor=""
+              selected={true}
+              text="Dummy"
+            />
+            <hr
+              className="batch-index--sidebar--hr"
+            />
+          </div>
+        </React.Fragment>
+      }
+      subfooter={
+        <React.Fragment>
+          <ButtonBorder
+            className=""
+            onClick={[Function]}
+            value="cancel"
+          />
+        </React.Fragment>
+      }
+      title={null}
+    >
+      <div
+        className="layout project-setup"
+      >
+        <div
+          className="layout--back-button"
+        >
+          <Icon
+            className=""
+            name="iconCloseCopy.svg"
+            onClick={[Function]}
+          >
+            <img
+              className="icon icon__iconCloseCopy-svg"
+              onClick={[Function]}
+              src="test-file-stub"
+            />
+          </Icon>
+        </div>
+        <div
+          className="layout--content"
+        >
+          <div
+            className="layout--content--title"
+          >
+            <ProjectSetupHeader
+              projectId={28}
+              projectOwner={true}
+              projectPage="batches"
+              projectTitle="Dummy"
+            >
+              <div
+                className="layout--content--title--header"
+              >
+                Dummy
+              </div>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="/projects/28/edit"
+                >
+                  project settings
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav__current"
+              >
+                <a
+                  href="/projects/28/batches"
+                >
+                  batches & tasks
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="/projects/28/contributors"
+                >
+                  contributors
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="/projects/28/awards"
+                >
+                  payments
+                </a>
+              </span>
+              <span
+                className="layout--content--title--nav"
+              >
+                <a
+                  href="/projects/28/"
+                >
+                  overview
+                </a>
+              </span>
+            </ProjectSetupHeader>
+          </div>
+          <hr
+            className="layout--content--hr"
+          />
+          <div
+            className="layout--content--wrapper"
+          >
+            <div
+              className="layout--content--sidebar"
+            >
+              <div
+                className="batch-index--sidebar"
+              >
+                <SidebarItem
+                  className="batch-index--sidebar--item batch-index--sidebar--item__form"
+                  iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+                  iconLeftUrl=""
+                  iconRightName=""
+                  notificationColor=""
+                  selected={true}
+                  text="Dummy"
+                >
+                  <div
+                    className="sidebar-item--wrapper"
+                  >
+                    <div
+                      className="sidebar-item sidebar-item__selected batch-index--sidebar--item batch-index--sidebar--item__form"
+                    >
+                      <span
+                        className="sidebar-item--icon-left"
+                      >
+                        <Icon
+                          className=""
+                          name="BATCH/ACTIVE.GRADIENT.svg"
+                        >
+                          <img
+                            className="icon icon__BATCH/ACTIVE-GRADIENT.svg"
+                            src="test-file-stub"
+                          />
+                        </Icon>
+                      </span>
+                      <span
+                        className="sidebar-item--text"
+                      >
+                        Dummy
+                      </span>
+                      <div
+                        className="sidebar-item--left-border"
+                      />
+                      <div
+                        className="sidebar-item--right-border sidebar-item--right-border__"
+                      />
+                    </div>
+                  </div>
+                </SidebarItem>
+                <hr
+                  className="batch-index--sidebar--hr"
+                />
+              </div>
+            </div>
+            <div
+              className="layout--content--content__sidebared"
+            >
+              <styled.div>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-htoDjs",
+                        "isStatic": true,
+                        "lastClassName": "feYCnt",
+                        "rules": Array [
+                          "
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #3a3a3a;
+  margin-bottom: 10px;
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-htoDjs",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-htoDjs feYCnt"
+                  >
+                    Assign a Contributor To Task
+                  </div>
+                </StyledComponent>
+              </styled.div>
+              <styled.div>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-dnqmqq",
+                        "isStatic": true,
+                        "lastClassName": "bQbhkw",
+                        "rules": Array [
+                          "
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  color: #3a3a3a;
+  margin-bottom: 15px;
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-dnqmqq",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-dnqmqq bQbhkw"
+                  >
+                    Dummy
+                  </div>
+                </StyledComponent>
+              </styled.div>
+              <styled.div>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-iwsKbI",
+                        "isStatic": true,
+                        "lastClassName": "DloAs",
+                        "rules": Array [
+                          "
+  font-family: Georgia;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.43;
+  letter-spacing: normal;
+  max-width: 556px;
+  margin-bottom: 15px;
+  text-align: justify;
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-iwsKbI",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-iwsKbI DloAs"
+                  >
+                    You can only invite CoMakery users that have expressed an interest in your project. If the person you would like to assign a task to is not on the picklist below, share your project URL with them, ask them to click “I’m Interested”, and you will then be able to choose them from the picklist below.
+                  </div>
+                </StyledComponent>
+              </styled.div>
+              <styled.div>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-gZMcBi",
+                        "isStatic": true,
+                        "lastClassName": "eeXrpX",
+                        "rules": Array [
+                          "
+  font-family: Georgia;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.43;
+  letter-spacing: normal;
+  max-width: 556px;
+  margin-bottom: 15px;
+
+  .input-field--title--required {
+    display: none;
+  }
+
+  input {
+    opacity: 1;
+  }
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-gZMcBi",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-gZMcBi eeXrpX"
+                  >
+                    <InputFieldWhiteDark
+                      copyOnClick={true}
+                      readOnly={true}
+                      symbolLimit={0}
+                      title="project link to share"
+                      value="http://dummy"
+                    >
+                      <InputField
+                        checkboxText=""
+                        checked={false}
+                        className="input-field__white__dark"
+                        copyOnClick={true}
+                        disabled={false}
+                        errorText=""
+                        eventHandler={[Function]}
+                        imgInputRef={null}
+                        imgPreviewDimensions="40x40"
+                        imgPreviewUrl=""
+                        imgRequirements=""
+                        imgVerifier={[Function]}
+                        max=""
+                        min=""
+                        name="field"
+                        pattern=".*"
+                        placeholder="Please enter value"
+                        readOnly={true}
+                        recommended={false}
+                        required={false}
+                        selectEntries={Array []}
+                        step=""
+                        symbolLimit={0}
+                        title="project link to share"
+                        type="text"
+                        value="http://dummy"
+                      >
+                        <div
+                          className="input-field input-field__white__dark"
+                        >
+                          <div
+                            className="input-field--title"
+                          >
+                            <span
+                              className="input-field--title--title"
+                            >
+                              project link to share
+                            </span>
+                            <span
+                              className="input-field--title--required"
+                            >
+                              optional
+                            </span>
+                          </div>
+                          <div
+                            className="input-field--content"
+                          >
+                            <input
+                              className="input-field--content__text input-field--content__text__copyable"
+                              name="field"
+                              onChange={[Function]}
+                              onClick={[Function]}
+                              pattern=".*"
+                              placeholder="Please enter value"
+                              readOnly={true}
+                              required={false}
+                              type="text"
+                              value="http://dummy"
+                            />
+                          </div>
+                        </div>
+                      </InputField>
+                    </InputFieldWhiteDark>
+                  </div>
+                </StyledComponent>
+              </styled.div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="layout--subfooter"
+        >
+          <div
+            className="layout--subfooter--buttons"
+          >
+            <ButtonBorder
+              className=""
+              onClick={[Function]}
+              value="cancel"
+            >
+              <Button
+                className="button__border"
+                disabled={false}
+                onClick={[Function]}
+                type="button"
+                value="cancel"
+              >
+                <input
+                  className="button button__border"
+                  disabled={false}
+                  onClick={[Function]}
+                  type="button"
+                  value="cancel"
+                />
+              </Button>
+            </ButtonBorder>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  </ProjectSetup>
+</TaskAssign>
+`;
