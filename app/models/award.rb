@@ -49,6 +49,7 @@ class Award < ApplicationRecord
   validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { proof_link.present? }
   validates :experience_level, inclusion: { in: EXPERIENCE_LEVELS.values }, allow_nil: true
   validates :submission_comment, presence: true, if: -> { status == 'submitted' }
+  validates :expires_in_days, presence: true, numericality: { greater_than: 0 }
 
   validate :total_amount_fits_into_project_budget
   validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }
@@ -59,6 +60,7 @@ class Award < ApplicationRecord
   before_validation :set_paid_status_if_project_has_no_token, if: -> { status == 'accepted' && !project.token }
   before_validation :make_unpublished_if_award_type_is_unpublished, if: -> { status == 'ready' && !award_type&.published? }
   before_validation :store_license_hash, if: -> { status == 'started' && agreed_to_license_hash.nil? }
+  before_validation :set_expires_at, if: -> { status == 'started' && expires_at.nil? }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
 
@@ -224,6 +226,14 @@ class Award < ApplicationRecord
     end
   end
 
+  def expire!
+    if cloned?
+      update(status: :cancelled)
+    else
+      update(status: :ready, expires_at: nil, notify_on_expiration_at: nil, account: nil)
+    end
+  end
+
   delegate :image, to: :team, prefix: true, allow_nil: true
 
   private
@@ -273,5 +283,11 @@ class Award < ApplicationRecord
 
     def store_license_hash
       self.agreed_to_license_hash = project.agreed_to_license_hash
+    end
+
+    def set_expires_at
+      self.updated_at = Time.current
+      self.expires_at = expires_in_days.days.since(updated_at)
+      self.notify_on_expiration_at = (expires_in_days.days * 0.75).since(updated_at)
     end
 end

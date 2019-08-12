@@ -1,0 +1,19 @@
+<p>
+  Hello <%= @account.name %>.
+</p>
+
+<p>
+  The task that you started, <b><%= @award.name %></b> had an expiration setting of <%= @award.expires_in_days %> days to be completed. 
+</p>
+
+<p>
+  That expiration has been reached, and the task has now reverted back to being unassigned.
+</p>
+
+<p>
+  Visit the <a href="<%= my_tasks_url %>">My Tasks</a> page to find other tasks you can begin working on today.
+</p>
+
+<p>
+  Team CoMakery
+</p>

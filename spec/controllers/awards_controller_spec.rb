@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe AwardsController do
+RSpec.describe AwardsController, type: :controller do
   let!(:team) { create :team }
   let!(:discord_team) { create :team, provider: 'discord' }
   let!(:issuer) { create(:authentication) }

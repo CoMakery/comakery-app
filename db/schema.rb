@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190809154401) do
+ActiveRecord::Schema.define(version: 20190811154251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -158,6 +158,9 @@ ActiveRecord::Schema.define(version: 20190809154401) do
     t.integer "number_of_assignments_per_user", default: 1
     t.bigint "specialty_id"
     t.string "agreed_to_license_hash"
+    t.datetime "expires_at"
+    t.integer "expires_in_days", default: 10
+    t.datetime "notify_on_expiration_at"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"

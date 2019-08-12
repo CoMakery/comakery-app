@@ -8,6 +8,7 @@ import Icon from './styleguide/Icon'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
+import Pluralize from 'react-pluralize'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -383,6 +384,10 @@ class TaskDetails extends React.Component {
 
               <ContentBlock title="acceptance criteria">
                 <div dangerouslySetInnerHTML={{__html: task.requirementsHtml}} />
+              </ContentBlock>
+
+              <ContentBlock title="days till task expires (after starting)">
+                <Pluralize singular="day" count={task.expiresInDays} />
               </ContentBlock>
 
               <ContentBlock title="URL where to submit completed work">

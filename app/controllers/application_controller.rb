@@ -185,7 +185,8 @@ class ApplicationController < ActionController::Base
       submit_url: project_award_type_award_submit_path(task.project, task.award_type, task),
       accept_url: project_award_type_award_accept_path(task.project, task.award_type, task),
       reject_url: project_award_type_award_reject_path(task.project, task.award_type, task),
-      updated_at: helpers.time_ago_in_words(task.updated_at)
+      updated_at: helpers.time_ago_in_words(task.updated_at),
+      expires_at: task.expires_at ? helpers.distance_of_time_in_words_to_now(task.expires_at) : nil
     })
   end
 

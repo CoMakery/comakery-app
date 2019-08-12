@@ -38,6 +38,7 @@ class TaskForm extends React.Component {
       'task[amount]'                        : this.props.task.amount || '',
       'task[number_of_assignments]'         : this.props.task.numberOfAssignments || 1,
       'task[number_of_assignments_per_user]': this.props.task.numberOfAssignmentsPerUser || 1,
+      'task[expires_in_days]'               : this.props.task.expiresInDays || 10,
       'task[specialty_id]'                  : this.props.task.specialtyId || Object.values(this.props.specialties)[0],
       'task[proof_link]'                    : this.props.task.proofLink || ''
     }
@@ -326,6 +327,20 @@ class TaskForm extends React.Component {
               min="1"
               step="1"
               placeholder="1"
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="days till task expires (after starting)"
+              required
+              name="task[expires_in_days]"
+              value={this.state['task[expires_in_days]']}
+              errorText={this.state.errors['task[expiresInDays]']}
+              eventHandler={this.handleFieldChange}
+              type="number"
+              min="1"
+              step="1"
+              placeholder="10"
               symbolLimit={0}
             />
 

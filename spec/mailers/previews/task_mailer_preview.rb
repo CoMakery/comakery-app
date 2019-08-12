@@ -1,4 +1,8 @@
 class TaskMailerPreview < ActionMailer::Preview
+  def task_assigned
+    TaskMailer.with(award: Award.started.sample).task_assigned
+  end
+
   def task_paid
     TaskMailer.with(award: Award.paid.sample).task_paid
   end
@@ -21,5 +25,17 @@ class TaskMailerPreview < ActionMailer::Preview
 
   def task_accepted_direct_new_user
     TaskMailer.with(award: Award.accepted.where(account: nil).sample).task_accepted_direct
+  end
+
+  def task_expiring
+    TaskMailer.with(award: Award.started.where.not(expires_at: nil).sample).task_expiring
+  end
+
+  def task_expired_for_account
+    TaskMailer.with(award: Award.started.sample).task_expired_for_account
+  end
+
+  def task_expired_for_issuer
+    TaskMailer.with(award: Award.started.sample).task_expired_for_issuer
   end
 end

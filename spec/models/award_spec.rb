@@ -184,6 +184,18 @@ describe Award do
       end
     end
 
+    describe 'set_expires_at' do
+      let!(:award) { create(:award, status: :started, expires_in_days: 1) }
+
+      it 'sets expires_at timestamp using expires_in_days value' do
+        expect(award.expires_at).to eq(award.expires_in_days.days.since(award.updated_at))
+      end
+
+      it 'sets notify_on_expiration_at timestamp using 3/4 of expires_in_days value' do
+        expect(award.notify_on_expiration_at).to eq((award.expires_in_days.days * 0.75).since(award.updated_at))
+      end
+    end
+
     describe 'store_license_hash' do
       let!(:project) { create(:project) }
       let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: project)) }
@@ -221,6 +233,12 @@ describe Award do
     it 'requires number_of_assignments_per_user to be greater than 0' do
       a = create(:award_ready)
       a.update(number_of_assignments_per_user: 0)
+      expect(a).not_to be_valid
+    end
+
+    it 'requires expires_in_days to be greater than 0' do
+      a = create(:award_ready)
+      a.update(expires_in_days: 0)
       expect(a).not_to be_valid
     end
 
@@ -785,6 +803,26 @@ describe Award do
     it 'returns zero for cancelled or rejected tasks' do
       expect(award_cancelled.possible_total_amount).to eq(0)
       expect(award_rejected.possible_total_amount).to eq(0)
+    end
+  end
+
+  def expire!
+    let!(:award_started) { create(:award, status: :started) }
+    let!(:cloned_award) { create(:award).clone_on_assignment }
+
+    it 'moves task back to ready state' do
+      award_started.expire!
+      award_started.reload
+      expect(award_started.ready?).to be_truthy
+      expect(award_started.expires_at.nil?).to be_truthy
+      expect(award_started.notify_on_expiration_at.nil?).to be_truthy
+      expect(award_started.account.nil?).to be_truthy
+    end
+
+    it 'cancelles cloned task' do
+      cloned_award.expire!
+      cloned_award.reload
+      expect(cloned_award.cancelled?).to be_truthy
     end
   end
 end

@@ -1,0 +1,24 @@
+<p>
+  Hello <%= @issuer.name %>.
+</p>
+
+<p>
+  The task <b><%= @award.name %></b> which was started by a CoMakery contributor, has expired based on the settings you provided when creating or editing the task.
+</p>
+
+<p>
+  The contributor did not submit work within the time allotted.
+</p>
+
+<p>
+  <a href="<%= project_award_types_url(@award.project) %>">Visit this link</a> to manage the task.
+  You can wait another contributor to work on it, cancel it, or directly assign it to someone interested in your project.
+</p>
+
+<p>
+  Feel free to reach out with any questions.
+</p>
+
+<p>
+  Team CoMakery
+</p>

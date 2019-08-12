@@ -38,6 +38,21 @@ class TaskMailer < ApplicationMailer
     @subject = "Incoming Award: #{@award.project.title}"
   end
 
+  def task_expiring
+    @to = @account.email
+    @subject = 'Your task is going to expire'
+  end
+
+  def task_expired_for_account
+    @to = @account.email
+    @subject = 'Your task has expired'
+  end
+
+  def task_expired_for_issuer
+    @to = @issuer.email
+    @subject = "A #{@award.project.title} task has expired"
+  end
+
   private
 
     def set_params
