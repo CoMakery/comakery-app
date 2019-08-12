@@ -102,7 +102,7 @@ class ProfileModal extends React.Component {
             </Name>
 
             <Specialty>
-              {profile.specialty.name}
+              {profile.specialty && profile.specialty.name}
             </Specialty>
 
             <Links>
