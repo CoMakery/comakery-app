@@ -463,6 +463,13 @@ class MyTask extends React.Component {
                 {task.updatedAt} ago
               </Status>
 
+              {task.expiresAt &&
+                <Status>
+                  <b>EXPIRES IN </b>
+                  {task.expiresAt}
+                </Status>
+              }
+
               <Type>
                 <b>TYPE </b>
                 {task.specialty || 'General'}

@@ -1,0 +1,26 @@
+<p>
+  Hello <%= @account.name %>.
+</p>
+
+<p>
+  The task that you started, <b><%= @award.name %></b> is going to expire at <%= @award.expires_at.in_time_zone('Pacific Time (US & Canada)') %> (PST).
+</p>
+
+<p>
+  You can do this! <a href="<%= project_award_type_award_url(@award.project, @award.award_type, @award) %>">Visit this link</a> to submit the work when finished.
+  There's
+  <% if @award.token %>
+    <b><%= @award.total_amount %></b> of <%= @award.token.name %>
+  <% else %>
+    <b><%= @award.total_amount %></b> project points
+  <% end %>
+  waiting for you when its accepted!
+</p>
+
+<p>
+  You've got this.
+</p>
+
+<p>
+  Team CoMakery
+</p>

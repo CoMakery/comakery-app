@@ -281,7 +281,7 @@ class AwardsController < ApplicationController
     end
 
     def set_awards
-      @awards = policy_scope(Award).filtered_for_view(@filter, current_account).order(updated_at: :desc)
+      @awards = policy_scope(Award).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
 
       if @project
         @awards = @awards.where(award_type: AwardType.where(project: @project))
@@ -306,7 +306,8 @@ class AwardsController < ApplicationController
         :number_of_assignments,
         :number_of_assignments_per_user,
         :specialty_id,
-        :proof_link
+        :proof_link,
+        :expires_in_days
       )
     end
 
