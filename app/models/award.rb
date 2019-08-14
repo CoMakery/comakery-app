@@ -61,6 +61,7 @@ class Award < ApplicationRecord
   before_validation :make_unpublished_if_award_type_is_unpublished, if: -> { status == 'ready' && !award_type&.published? }
   before_validation :store_license_hash, if: -> { status == 'started' && agreed_to_license_hash.nil? }
   before_validation :set_expires_at, if: -> { status == 'started' && expires_at.nil? }
+  before_validation :clear_expires_at, if: -> { status == 'submitted' && expires_at.present? }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
 
@@ -293,5 +294,10 @@ class Award < ApplicationRecord
       self.updated_at = Time.current
       self.expires_at = expires_in_days.days.since(updated_at)
       self.notify_on_expiration_at = (expires_in_days.days * 0.75).since(updated_at)
+    end
+
+    def clear_expires_at
+      self.expires_at = nil
+      self.notify_on_expiration_at = nil
     end
 end

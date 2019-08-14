@@ -196,6 +196,23 @@ describe Award do
       end
     end
 
+    describe 'clear_expires_at' do
+      let!(:award) { create(:award, status: :started, expires_in_days: 1) }
+
+      before do
+        award.update(status: :submitted, submission_comment: 'dummy')
+        award.reload
+      end
+
+      it 'clears expires_at timestamp when status is submitted' do
+        expect(award.expires_at).to be_nil
+      end
+
+      it 'clears notify_on_expiaration_at timestamp when status is submitted' do
+        expect(award.notify_on_expiration_at).to be_nil
+      end
+    end
+
     describe 'store_license_hash' do
       let!(:project) { create(:project) }
       let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: project)) }
