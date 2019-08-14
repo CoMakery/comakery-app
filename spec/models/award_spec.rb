@@ -196,6 +196,23 @@ describe Award do
       end
     end
 
+    describe 'clear_expires_at' do
+      let!(:award) { create(:award, status: :started, expires_in_days: 1) }
+
+      before do
+        award.update(status: :submitted, submission_comment: 'dummy')
+        award.reload
+      end
+
+      it 'clears expires_at timestamp when status is submitted' do
+        expect(award.expires_at).to be_nil
+      end
+
+      it 'clears notify_on_expiaration_at timestamp when status is submitted' do
+        expect(award.notify_on_expiration_at).to be_nil
+      end
+    end
+
     describe 'store_license_hash' do
       let!(:project) { create(:project) }
       let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: project)) }
@@ -806,7 +823,7 @@ describe Award do
     end
   end
 
-  def expire!
+  describe 'expire!' do
     let!(:award_started) { create(:award, status: :started) }
     let!(:cloned_award) { create(:award).clone_on_assignment }
 
@@ -815,7 +832,6 @@ describe Award do
       award_started.reload
       expect(award_started.ready?).to be_truthy
       expect(award_started.expires_at.nil?).to be_truthy
-      expect(award_started.notify_on_expiration_at.nil?).to be_truthy
       expect(award_started.account.nil?).to be_truthy
     end
 
@@ -823,6 +839,16 @@ describe Award do
       cloned_award.expire!
       cloned_award.reload
       expect(cloned_award.cancelled?).to be_truthy
+    end
+  end
+
+  describe 'expiring_notification_sent' do
+    let!(:award_started) { create(:award, status: :started) }
+
+    it 'clears notify_on_expiration_at value' do
+      award_started.expiring_notification_sent
+      award_started.reload
+      expect(award_started.notify_on_expiration_at.nil?).to be_truthy
     end
   end
 end
