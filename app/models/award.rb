@@ -230,8 +230,12 @@ class Award < ApplicationRecord
     if cloned?
       update(status: :cancelled)
     else
-      update(status: :ready, expires_at: nil, notify_on_expiration_at: nil, account: nil)
+      update(status: :ready, expires_at: nil, account: nil)
     end
+  end
+
+  def expiring_notification_sent
+    update(notify_on_expiration_at: nil)
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true

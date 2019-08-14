@@ -806,7 +806,7 @@ describe Award do
     end
   end
 
-  def expire!
+  describe 'expire!' do
     let!(:award_started) { create(:award, status: :started) }
     let!(:cloned_award) { create(:award).clone_on_assignment }
 
@@ -815,7 +815,6 @@ describe Award do
       award_started.reload
       expect(award_started.ready?).to be_truthy
       expect(award_started.expires_at.nil?).to be_truthy
-      expect(award_started.notify_on_expiration_at.nil?).to be_truthy
       expect(award_started.account.nil?).to be_truthy
     end
 
@@ -823,6 +822,16 @@ describe Award do
       cloned_award.expire!
       cloned_award.reload
       expect(cloned_award.cancelled?).to be_truthy
+    end
+  end
+
+  describe 'expiring_notification_sent' do
+    let!(:award_started) { create(:award, status: :started) }
+
+    it 'clears notify_on_expiration_at value' do
+      award_started.expiring_notification_sent
+      award_started.reload
+      expect(award_started.notify_on_expiration_at.nil?).to be_truthy
     end
   end
 end
