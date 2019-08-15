@@ -339,7 +339,7 @@ export default class Project extends React.Component {
                 <ProfileModal profile={projectData.teamLeader} />
               </div>
             </div>
-            
+
             {projectData.contributors.map((contributor, index) =>
               <div key={contributor.id} className="project-contributor-container">
                 <img className="project-contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
