@@ -1035,7 +1035,10 @@ select:disabled {
   display: inline;
 }
 
-.input-field__inline input,
+.input-field__inline input {
+  width: 25em;
+}
+
 .input-field__dropdown--inline select {
   width: 15em;
 }
@@ -1458,7 +1461,6 @@ select:disabled {
   font-size: 14px;
   color: var(--black);
   line-height: 3.5em;
-  text-align: justify;
 }
 
 .project-form--form--terms--content a {

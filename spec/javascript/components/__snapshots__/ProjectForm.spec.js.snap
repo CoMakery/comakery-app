@@ -1210,6 +1210,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   ("You", the "Project Owner") agree to the 
                   <a
                     href="/"
+                    target="_blank"
                   >
                     Comakery Contribution License
                   </a>
