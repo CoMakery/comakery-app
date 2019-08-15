@@ -552,4 +552,17 @@ describe Account do
     award = award.decorate
     expect(CSV.parse(account.awards_csv, col_sep: "\t", encoding: 'utf-16le')).to eq([["\uFEFFProject", 'Award Type', 'Total Amount', 'Issuer', 'Date'], ['Uber for Cats', 'Contribution', '50', award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]].map { |row| row.map { |cell| cell.encode 'utf-16le' } })
   end
+
+  describe 'image_url' do
+    let!(:account_w_image) { create(:account, image: Refile::FileDouble.new('dummy', 'dummy_image.png', content_type: 'image/png')) }
+    let!(:account_wo_image) { create :account }
+
+    it 'returns image_url if present' do
+      expect(account_w_image.image_url).to include('dummy_image')
+    end
+
+    it 'returns default image' do
+      expect(account_wo_image.image_url).to include('default_account_image')
+    end
+  end
 end

@@ -525,7 +525,7 @@ class ProjectForm extends React.Component {
                 placeholder="Provide a legal entity or individual owner's name"
                 eventHandler={this.handleFieldChange}
               />
-              ("You", the "Project Owner") agree to the <a href={this.props.licenseUrl}>Comakery Contribution License</a>
+              ("You", the "Project Owner") agree to the <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>
               <br />
 
               You agree that for this Project, Contributions are <InputFieldDropdownInline

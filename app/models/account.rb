@@ -251,6 +251,14 @@ class Account < ApplicationRecord
     calculate_age
   end
 
+  def image_url(size = 100)
+    if image
+      Refile.attachment_url(self, :image, :fill, size, size)
+    else
+      ActionController::Base.helpers.image_url('default_account_image.jpg')
+    end
+  end
+
   def to_csv
     Comakery::CSV.generate_multiplatform do |csv|
       csv << ['First Name', 'Last Name', 'Email', 'Nickname', 'Date of Birth', 'Age', 'Country']

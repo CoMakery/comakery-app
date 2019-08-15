@@ -28,6 +28,26 @@ describe 'my account', js: true do
     expect(page.current_url).to have_content '/accounts/new'
   end
 
+  scenario 'user gets redirected to sign in when accessing My Tasks' do
+    visit '/tasks'
+    expect(page.current_url).to include('/session/new')
+  end
+
+  scenario 'user gets redirected to sign in when accessing Task Details' do
+    visit '/projects/1/batches/1/tasks/1'
+    expect(page.current_url).to include('/session/new')
+  end
+
+  scenario 'user gets redirected to sign in when accessing Batches' do
+    visit '/projects/1/batches'
+    expect(page.current_url).to include('/session/new')
+  end
+
+  scenario 'user gets redirected to sign in when accessing My Account' do
+    visit '/account'
+    expect(page.current_url).to include('/session/new')
+  end
+
   scenario 'user gets redirected to build profile page after signup' do
     visit root_path
     first('.header--nav--links').click_link 'Sign Up'

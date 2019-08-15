@@ -114,6 +114,10 @@ class Batch extends React.Component {
                 <Userpics pics={this.props.batch.teamPics} limit={3} />
               </ContentElement>
 
+              <ContentElement title="interested">
+                <Userpics pics={this.props.batch.interestedPics} limit={3} />
+              </ContentElement>
+
               <Buttons>
                 <a href={this.props.batch.editPath}>
                   <StyledIcon name="iconEdit.svg" />

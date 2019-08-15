@@ -9,6 +9,7 @@ class Project < ApplicationRecord
   belongs_to :mission, optional: true
   belongs_to :token, optional: true
   has_many :interests
+  has_many :interested, through: :interests, source: :account
 
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :published_award_types, -> { where published: true }, source: :award_types, class_name: 'AwardType'
