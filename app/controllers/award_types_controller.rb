@@ -84,6 +84,7 @@ class AwardTypesController < ApplicationController
             total_amount: batch.awards.sum(&:possible_total_amount),
             currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
             team_pics: batch.project.contributors_distinct.map { |a| helpers.account_image_url(a, 100) },
+            interested_pics: batch.project.interested.map { |a| helpers.account_image_url(a, 100) },
             edit_path: edit_project_award_type_path(@project, batch),
             destroy_path: project_award_type_path(@project, batch),
             new_task_path: new_project_award_type_award_path(@project, batch),

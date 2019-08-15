@@ -168,7 +168,7 @@ class TaskAssign extends React.Component {
           </Task>
 
           <Note>
-            You can only invite CoMakery users that have expressed an interest in your project. If the person you would like to assign a task to is not on the picklist below, share your project URL with them, ask them to click “I’m Interested”, and you will then be able to choose them from the picklist below.
+            You can only invite CoMakery users that have expressed an interest or contributed in your project. If the person you would like to assign a task to is not on the picklist below, share your project URL with them, ask them to click “I’m Interested”, and you will then be able to choose them from the picklist below.
           </Note>
 
           {this.props.project['public?'] &&
