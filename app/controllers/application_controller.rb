@@ -30,7 +30,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # called from before_filter :require_login
   def not_authenticated(msg = nil)
     if action_name == 'add_interest' && params[:project_id]
       session[:interested_in_project] = params[:project_id]
@@ -39,8 +38,15 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.html do
         session[:return_to] = request.url
-        redirect_to new_account_url, alert: msg
+
+        case "#{controller_name}##{action_name}"
+        when 'awards#show', 'awards#index', 'award_types#index', 'accounts#show'
+          redirect_to new_session_url, alert: msg
+        else
+          redirect_to new_account_url, alert: msg
+        end
       end
+
       format.json { head :unauthorized }
     end
   rescue ActionController::UnknownFormat
