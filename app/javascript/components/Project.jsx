@@ -333,7 +333,13 @@ export default class Project extends React.Component {
             </div>
           </div>
           <div className="project-contributors__container">
-            <img className="project-leader__avatar" src={projectData.teamLeader.imageUrl} />
+            <div className="project-contributor-container">
+              <img className="project-leader__avatar" src={projectData.teamLeader.imageUrl} />
+              <div className="project-contributor__modal">
+                <ProfileModal profile={projectData.teamLeader} />
+              </div>
+            </div>
+            
             {projectData.contributors.map((contributor, index) =>
               <div key={contributor.id} className="project-contributor-container">
                 <img className="project-contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
@@ -458,7 +464,13 @@ export default class Project extends React.Component {
             {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
 
             <div className="project-team__contributors" >
-              <img className="project-team__leader-avatar" src={projectData.teamLeader.imageUrl} />
+              <div className="project-team__contributor-container">
+                <img className="project-team__leader-avatar" src={projectData.teamLeader.imageUrl} />
+                <div className="project-team__contributor__modal">
+                  <ProfileModal profile={projectData.teamLeader} />
+                </div>
+              </div>
+
               {projectData.contributors.map((contributor, index) =>
                 <div key={contributor.id} className="project-team__contributor-container">
                   <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
