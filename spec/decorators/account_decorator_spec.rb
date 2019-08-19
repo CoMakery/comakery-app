@@ -121,4 +121,17 @@ describe AccountDecorator do
       end
     end
   end
+
+  describe 'image_url' do
+    let!(:account_w_image) { create(:account, image: Refile::FileDouble.new('dummy', 'dummy_image.png', content_type: 'image/png')) }
+    let!(:account_wo_image) { create :account }
+
+    it 'returns image_url if present' do
+      expect(account_w_image.decorate.image_url).to include('dummy_image')
+    end
+
+    it 'returns default image' do
+      expect(account_wo_image.decorate.image_url).to include('default_account_image')
+    end
+  end
 end

@@ -44,4 +44,12 @@ class AccountDecorator < Draper::Decorator
   def can_send_awards?(project)
     project&.account == self && (project&.token&.ethereum_contract_address? || project&.token&.contract_address? || project.decorate.send_coins?)
   end
+
+  def image_url(size = 100)
+    if image
+      Refile.attachment_url(self, :image, :fill, size, size)
+    else
+      ActionController::Base.helpers.image_url('default_account_image.jpg')
+    end
+  end
 end

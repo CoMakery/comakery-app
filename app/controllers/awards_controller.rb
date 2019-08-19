@@ -382,7 +382,7 @@ class AwardsController < ApplicationController
           url: unlisted_project_url(@project.long_id)
         }),
         interested: (@project.interested + @project.contributors).uniq.map do |a|
-          a.serializable_hash(
+          a.decorate.serializable_hash(
             only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
             include: :specialty,
             methods: :image_url
