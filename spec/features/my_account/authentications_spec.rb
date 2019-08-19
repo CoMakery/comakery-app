@@ -5,7 +5,7 @@ feature 'my account', js: true do
   let!(:team) { create :team }
   let!(:project) { create(:sb_project, ethereum_enabled: true) }
   let!(:account) { create :account, nickname: 'jason' }
-  let(:account_nickname) { account.decorate.name }
+  let(:account_nickname) { account.decorate.nick }
 
   let!(:auth) { create(:sb_authentication, account: account) }
   let!(:issuer) { create(:sb_authentication) }

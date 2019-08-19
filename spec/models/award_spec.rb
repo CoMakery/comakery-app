@@ -213,6 +213,19 @@ describe Award do
       end
     end
 
+    describe 'run_expiration' do
+      let!(:award) { create(:award, status: :started) }
+
+      before do
+        award.update(expires_at: 1.day.ago)
+        award.reload
+      end
+
+      it 'expires task if it should be expired' do
+        expect(award.ready?).to be_truthy
+      end
+    end
+
     describe 'store_license_hash' do
       let!(:project) { create(:project) }
       let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: project)) }

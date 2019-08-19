@@ -64,6 +64,7 @@ class Award < ApplicationRecord
   before_validation :clear_expires_at, if: -> { status == 'submitted' && expires_at.present? }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
+  after_find :run_expiration, if: -> { status == 'started' && expires_at.present? }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6,7)' }
@@ -299,5 +300,13 @@ class Award < ApplicationRecord
     def clear_expires_at
       self.expires_at = nil
       self.notify_on_expiration_at = nil
+    end
+
+    def run_expiration
+      if expires_at < Time.current
+        TaskMailer.with(award: self).task_expired_for_account.deliver_now
+        TaskMailer.with(award: self).task_expired_for_issuer.deliver_now
+        expire!
+      end
     end
 end
