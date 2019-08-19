@@ -1,6 +1,7 @@
 class TaskMailer < ApplicationMailer
   before_action :set_params
   after_action :send_email
+  after_action :cancel_duplicated_email, only: [:task_expired_for_account]
 
   helper SignatureHelper
 
@@ -66,5 +67,9 @@ class TaskMailer < ApplicationMailer
       mail
 
       mail.perform_deliveries = false if Unsubscription.exists?(email: @to)
+    end
+
+    def cancel_duplicated_email
+      mail.perform_deliveries = false if @account == @issuer
     end
 end
