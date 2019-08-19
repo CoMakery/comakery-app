@@ -3,7 +3,6 @@ class AccountDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
 
   def name
-    return nickname if nickname.present?
     [first_name, last_name].reject(&:blank?).join(' ')
   end
 
