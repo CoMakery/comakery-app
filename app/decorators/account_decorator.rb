@@ -45,10 +45,6 @@ class AccountDecorator < Draper::Decorator
   end
 
   def image_url(size = 100)
-    if image
-      Refile.attachment_url(self, :image, :fill, size, size)
-    else
-      ActionController::Base.helpers.image_url('default_account_image.jpg')
-    end
+    helpers.attachment_url(self, :image, :fill, size, size, fallback: 'default_account_image.jpg')
   end
 end
