@@ -211,7 +211,6 @@ class TaskShow extends React.Component {
               <div className="batch-index--sidebar">
                 <SidebarItem
                   className="batch-index--sidebar--item batch-index--sidebar--item__form"
-                  iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
                   text={this.props.batch.name}
                   selected
                 />

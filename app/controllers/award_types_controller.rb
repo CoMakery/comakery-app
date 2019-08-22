@@ -92,13 +92,20 @@ class AwardTypesController < ApplicationController
           )
         end,
         new_batch_path: new_project_award_type_path(@project),
-        project: @project.serializable_hash
+        project: @project.serializable_hash.merge(
+          currency: @project.token&.symbol,
+          currency_logo: helpers.attachment_url(@project.token, :logo_image, :fill, 100, 100),
+          allocated_budget: @project.awards.sum(&:possible_total_amount)
+        )
       }
     end
 
     def task_to_index_props(task, batch)
       task.serializable_hash.merge(
         batch_name: batch.name,
+        image_url: helpers.attachment_url(task, :image),
+        description_html: Comakery::Markdown.to_html(task.description),
+        requirements_html: Comakery::Markdown.to_html(task.requirements),
         currency: batch.project.token&.symbol,
         currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
         assign_path: project_award_type_award_assignment_path(@project, batch, task),

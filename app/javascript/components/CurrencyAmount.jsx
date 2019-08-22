@@ -33,9 +33,13 @@ class CurrencyAmount extends React.Component {
           <Amount>
             {this.props.amount}
           </Amount>
-          <Currency>
-            {this.props.currency || '(No Token)'}
-          </Currency>
+
+          {this.props.currency &&
+            <Currency>
+              {this.props.currency}
+            </Currency>
+          }
+
           {this.props.logoUrl &&
             <Logo src={this.props.logoUrl} alt={`${this.props.currency} logo`} />
           }
@@ -47,12 +51,12 @@ class CurrencyAmount extends React.Component {
 
 CurrencyAmount.propTypes = {
   amount  : PropTypes.string.isRequired,
-  currency: PropTypes.string.isRequired,
+  currency: PropTypes.string,
   logoUrl : PropTypes.string.isRequired
 }
 CurrencyAmount.defaultProps = {
   amount  : '',
-  currency: '',
+  currency: null,
   logoUrl : ''
 }
 export default CurrencyAmount

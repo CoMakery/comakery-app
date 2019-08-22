@@ -569,6 +569,12 @@ a.header--nav--links--current {
   filter: grayscale(100%);
 }
 
+.sidebar-item--content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1em;
+}
+
 .sidebar-item--text {
   font-size: 14px;
   font-weight: 500;

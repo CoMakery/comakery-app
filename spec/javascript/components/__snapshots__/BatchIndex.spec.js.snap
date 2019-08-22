@@ -23,6 +23,18 @@ exports[`BatchIndex renders correctly without props 1`] = `
             onClick={[Function]}
             text="Create a New Batch"
           />
+          <ForwardRef(styled.div)>
+            <ForwardRef(styled.div)>
+              <div>
+                allocated budget
+              </div>
+              <CurrencyAmount
+                amount=""
+                currency={null}
+                logoUrl=""
+              />
+            </ForwardRef(styled.div)>
+          </ForwardRef(styled.div)>
         </div>
       </React.Fragment>
     }
@@ -52,6 +64,18 @@ exports[`BatchIndex renders correctly without props 1`] = `
               onClick={[Function]}
               text="Create a New Batch"
             />
+            <ForwardRef(styled.div)>
+              <ForwardRef(styled.div)>
+                <div>
+                  allocated budget
+                </div>
+                <CurrencyAmount
+                  amount=""
+                  currency={null}
+                  logoUrl=""
+                />
+              </ForwardRef(styled.div)>
+            </ForwardRef(styled.div)>
           </div>
         </React.Fragment>
       }
@@ -172,11 +196,18 @@ exports[`BatchIndex renders correctly without props 1`] = `
                             />
                           </Icon>
                         </span>
-                        <span
-                          className="sidebar-item--text"
+                        <div
+                          className="sidebar-item--content"
                         >
-                          Create a New Batch
-                        </span>
+                          <div
+                            className="sidebar-item--text"
+                          >
+                            Create a New Batch
+                          </div>
+                          <div
+                            className="sidebar-item--subchild"
+                          />
+                        </div>
                         <span
                           className="sidebar-item--icon-right"
                         >
@@ -200,6 +231,163 @@ exports[`BatchIndex renders correctly without props 1`] = `
                     </div>
                   </SidebarItem>
                 </SidebarItemBold>
+                <styled.div>
+                  <StyledComponent
+                    forwardedComponent={
+                      Object {
+                        "$$typeof": Symbol(react.forward_ref),
+                        "attrs": Array [],
+                        "componentStyle": ComponentStyle {
+                          "componentId": "sc-fMiknA",
+                          "isStatic": true,
+                          "lastClassName": "kLSkWc",
+                          "rules": Array [
+                            "
+  margin: 1em 0;
+  margin-right: 1em;
+",
+                          ],
+                        },
+                        "displayName": "styled.div",
+                        "foldedComponentIds": Array [],
+                        "render": [Function],
+                        "styledComponentId": "sc-fMiknA",
+                        "target": "div",
+                        "toString": [Function],
+                        "warnTooManyClasses": [Function],
+                        "withComponent": [Function],
+                      }
+                    }
+                    forwardedRef={null}
+                  >
+                    <div
+                      className="sc-fMiknA kLSkWc"
+                    >
+                      <styled.div>
+                        <StyledComponent
+                          forwardedComponent={
+                            Object {
+                              "$$typeof": Symbol(react.forward_ref),
+                              "attrs": Array [],
+                              "componentStyle": ComponentStyle {
+                                "componentId": "sc-dVhcbM",
+                                "isStatic": true,
+                                "lastClassName": "kLQHeK",
+                                "rules": Array [
+                                  "
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #3a3a3a;
+",
+                                ],
+                              },
+                              "displayName": "styled.div",
+                              "foldedComponentIds": Array [],
+                              "render": [Function],
+                              "styledComponentId": "sc-dVhcbM",
+                              "target": "div",
+                              "toString": [Function],
+                              "warnTooManyClasses": [Function],
+                              "withComponent": [Function],
+                            }
+                          }
+                          forwardedRef={null}
+                        >
+                          <div
+                            className="sc-dVhcbM kLQHeK"
+                          >
+                            <div>
+                              allocated budget
+                            </div>
+                            <CurrencyAmount
+                              amount=""
+                              currency={null}
+                              logoUrl=""
+                            >
+                              <styled.div>
+                                <StyledComponent
+                                  forwardedComponent={
+                                    Object {
+                                      "$$typeof": Symbol(react.forward_ref),
+                                      "attrs": Array [],
+                                      "componentStyle": ComponentStyle {
+                                        "componentId": "sc-bxivhb",
+                                        "isStatic": true,
+                                        "lastClassName": "ljVujs",
+                                        "rules": Array [
+                                          "
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a4a4a;
+",
+                                        ],
+                                      },
+                                      "displayName": "styled.div",
+                                      "foldedComponentIds": Array [],
+                                      "render": [Function],
+                                      "styledComponentId": "sc-bxivhb",
+                                      "target": "div",
+                                      "toString": [Function],
+                                      "warnTooManyClasses": [Function],
+                                      "withComponent": [Function],
+                                    }
+                                  }
+                                  forwardedRef={null}
+                                >
+                                  <div
+                                    className="sc-bxivhb ljVujs"
+                                  >
+                                    <styled.div>
+                                      <StyledComponent
+                                        forwardedComponent={
+                                          Object {
+                                            "$$typeof": Symbol(react.forward_ref),
+                                            "attrs": Array [],
+                                            "componentStyle": ComponentStyle {
+                                              "componentId": "sc-ifAKCX",
+                                              "isStatic": true,
+                                              "lastClassName": "gATvmT",
+                                              "rules": Array [
+                                                "
+  margin-right: 0.5em;
+",
+                                              ],
+                                            },
+                                            "displayName": "styled.div",
+                                            "foldedComponentIds": Array [],
+                                            "render": [Function],
+                                            "styledComponentId": "sc-ifAKCX",
+                                            "target": "div",
+                                            "toString": [Function],
+                                            "warnTooManyClasses": [Function],
+                                            "withComponent": [Function],
+                                          }
+                                        }
+                                        forwardedRef={null}
+                                      >
+                                        <div
+                                          className="sc-ifAKCX gATvmT"
+                                        />
+                                      </StyledComponent>
+                                    </styled.div>
+                                  </div>
+                                </StyledComponent>
+                              </styled.div>
+                            </CurrencyAmount>
+                          </div>
+                        </StyledComponent>
+                      </styled.div>
+                    </div>
+                  </StyledComponent>
+                </styled.div>
               </div>
             </div>
             <div
@@ -212,9 +400,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "$$typeof": Symbol(react.forward_ref),
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "sc-cMljjf",
+                        "componentId": "sc-jlyJG",
                         "isStatic": true,
-                        "lastClassName": "kPwhoC",
+                        "lastClassName": "ggWSME",
                         "rules": Array [
                           "
   font-family: Georgia;
@@ -244,7 +432,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "sc-cMljjf",
+                      "styledComponentId": "sc-jlyJG",
                       "target": "div",
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -254,7 +442,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-cMljjf kPwhoC"
+                    className="sc-jlyJG ggWSME"
                   >
                     <ul>
                       <li>

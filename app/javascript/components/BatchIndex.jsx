@@ -5,6 +5,7 @@ import SidebarItem from './styleguide/SidebarItem'
 import SidebarItemBold from './styleguide/SidebarItemBold'
 import Batch from './Batch'
 import Task from './Task'
+import CurrencyAmount from './CurrencyAmount'
 import styled, { css } from 'styled-components'
 import * as Cookies from 'js-cookie'
 
@@ -141,6 +142,21 @@ const CreateTaskButton = styled.div`
   }
 `
 
+const ProjectBudget = styled.div`
+  margin: 1em 0;
+  margin-right: 1em;
+`
+
+const ProjectBudgetEntry = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #3a3a3a;
+`
+
 class BatchIndex extends React.Component {
   constructor(props) {
     super(props)
@@ -183,6 +199,28 @@ class BatchIndex extends React.Component {
                   onClick={(_) => window.location = this.props.newBatchPath}
                 />
 
+                <ProjectBudget>
+                  {this.props.project.maximumTokens &&
+                    <ProjectBudgetEntry>
+                      <div>planned budget</div>
+
+                      <CurrencyAmount
+                        amount={this.props.project.maximumTokens}
+                        logoUrl={this.props.project.currencyLogo}
+                      />
+                    </ProjectBudgetEntry>
+                  }
+
+                  <ProjectBudgetEntry>
+                    <div>allocated budget</div>
+
+                    <CurrencyAmount
+                      amount={this.props.project.allocatedBudget}
+                      logoUrl={this.props.project.currencyLogo}
+                    />
+                  </ProjectBudgetEntry>
+                </ProjectBudget>
+
                 {this.props.batches.length > 0 &&
                   <React.Fragment>
                     <hr className="batch-index--sidebar--hr" />
@@ -191,8 +229,13 @@ class BatchIndex extends React.Component {
                       <SidebarItem
                         className="batch-index--sidebar--item"
                         key={i}
-                        iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
                         text={b.name}
+                        subchild={
+                          <CurrencyAmount
+                            amount={b.totalAmount}
+                            logoUrl={b.currencyLogo}
+                          />
+                        }
                         notificationColor={b.published ? 'green' : 'orange'}
                         selected={this.state.selectedBatch === b}
                         onClick={(_) => this.handleListClick(b)}
