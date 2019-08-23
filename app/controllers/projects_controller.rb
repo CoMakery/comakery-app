@@ -213,7 +213,8 @@ class ProjectsController < ApplicationController
       contributors_path: project_contributors_path(@project.id),
       awards_path: awards_project_path(@project.id),
       my_tasks_path: my_tasks_path(project_id: @project.id),
-      edit_path: policy(@project).edit? ? project_award_types_path(@project) : nil
+      editable: policy(@project).edit?,
+      award_types_path: project_award_types_path(@project)
     }
   end
 

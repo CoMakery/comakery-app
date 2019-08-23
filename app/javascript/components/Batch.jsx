@@ -118,14 +118,16 @@ class Batch extends React.Component {
                 <Userpics pics={this.props.batch.interestedPics} limit={3} />
               </ContentElement>
 
-              <Buttons>
-                <a href={this.props.batch.editPath}>
-                  <StyledIcon name="iconEdit.svg" />
-                </a>
-                <a rel="nofollow" data-method="delete" href={this.props.batch.destroyPath}>
-                  <StyledIcon name="iconTrash.svg" />
-                </a>
-              </Buttons>
+              {this.props.editable &&
+                <Buttons>
+                  <a href={this.props.batch.editPath}>
+                    <StyledIcon name="iconEdit.svg" />
+                  </a>
+                  <a rel="nofollow" data-method="delete" href={this.props.batch.destroyPath}>
+                    <StyledIcon name="iconTrash.svg" />
+                  </a>
+                </Buttons>
+              }
             </Details>
           </Info>
         </Wrapper>
@@ -135,11 +137,13 @@ class Batch extends React.Component {
 }
 
 Batch.propTypes = {
-  batch: PropTypes.object
+  batch   : PropTypes.object,
+  editable: PropTypes.bool
 }
 Batch.defaultProps = {
   batch: {
     diagramUrl: null
-  }
+  },
+  editable: true
 }
 export default Batch

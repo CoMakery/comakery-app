@@ -10,6 +10,7 @@ import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
+import SidebarItem from './styleguide/SidebarItem'
 
 class BatchForm extends React.Component {
   constructor(props) {
@@ -156,7 +157,16 @@ class BatchForm extends React.Component {
           projectTitle={this.props.project.title}
           projectPage="batches"
           sidebar={
-            <div className="batch-form--sidebar-placeholder" />
+            <React.Fragment>
+              <div className="batch-index--sidebar">
+                <SidebarItem
+                  className="batch-index--sidebar--item batch-index--sidebar--item__form"
+                  text={this.state['batch[name]']}
+                  selected
+                />
+                <hr className="batch-index--sidebar--hr" />
+              </div>
+            </React.Fragment>
           }
           hasBackButton
           subfooter={

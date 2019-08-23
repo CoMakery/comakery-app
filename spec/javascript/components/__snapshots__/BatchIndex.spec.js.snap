@@ -3,11 +3,13 @@
 exports[`BatchIndex renders correctly without props 1`] = `
 <BatchIndex
   batches={Array []}
+  editable={true}
   newBatchPath=""
   project={Object {}}
 >
   <ProjectSetup
     className="batch-index"
+    editable={true}
     projectId={null}
     projectPage="batches"
     projectTitle=""
@@ -272,7 +274,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               "componentStyle": ComponentStyle {
                                 "componentId": "sc-dVhcbM",
                                 "isStatic": true,
-                                "lastClassName": "kLQHeK",
+                                "lastClassName": "dxRYGj",
                                 "rules": Array [
                                   "
   display: flex;
@@ -282,6 +284,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
   font-weight: 500;
   text-transform: uppercase;
   color: #3a3a3a;
+  margin: 1em 0;
 ",
                                 ],
                               },
@@ -298,7 +301,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                           forwardedRef={null}
                         >
                           <div
-                            className="sc-dVhcbM kLQHeK"
+                            className="sc-dVhcbM dxRYGj"
                           >
                             <div>
                               allocated budget

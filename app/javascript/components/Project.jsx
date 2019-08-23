@@ -230,7 +230,7 @@ export default class Project extends React.Component {
   }
 
   render() {
-    const { projectData, missionData, tokenData, contributorsPath, awardsPath, editPath } = this.props
+    const { projectData, missionData, tokenData, contributorsPath, awardsPath, awardTypesPath, editable } = this.props
     const { interested, specialtyInterested } = this.state
     const skills = {
       development: 'Software Development',
@@ -263,8 +263,11 @@ export default class Project extends React.Component {
                   <a className="project-header__menu__link" href={awardsPath}>Payments</a>
                 </React.Fragment>
               }
-              {editPath &&
-                <a className="project-header__menu__link" href={editPath}>Edit This Project</a>
+              {editable &&
+                <a className="project-header__menu__link" href={awardTypesPath}>Edit This Project</a>
+              }
+              {!editable &&
+                <a className="project-header__menu__link" href={awardTypesPath}>Project Plan</a>
               }
             </div>
           </div>
@@ -501,8 +504,10 @@ Project.propTypes = {
   tokenData       : PropTypes.shape({}),
   interested      : PropTypes.bool,
   csrfToken       : PropTypes.string,
+  editable        : PropTypes.bool,
   contributorsPath: PropTypes.string,
   awardsPath      : PropTypes.string,
+  awardTypesPath  : PropTypes.string,
   myTasksPath     : PropTypes.string,
   editPath        : PropTypes.string
 }
@@ -521,8 +526,10 @@ Project.defaultProps = {
   interested         : false,
   specialtyInterested: [],
   csrfToken          : '',
+  editable           : true,
   contributorsPath   : '',
   awardsPath         : '',
+  awardTypesPath     : '',
   myTasksPath        : '',
   editPath           : null
 }

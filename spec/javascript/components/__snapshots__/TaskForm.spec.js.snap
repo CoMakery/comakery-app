@@ -39,6 +39,7 @@ exports[`TaskForm renders correctly without props 1`] = `
 >
   <ProjectSetup
     className="task-form"
+    editable={true}
     hasBackButton={true}
     projectId={null}
     projectPage="batches"
@@ -50,7 +51,7 @@ exports[`TaskForm renders correctly without props 1`] = `
         >
           <SidebarItem
             className="batch-index--sidebar--item batch-index--sidebar--item__form"
-            iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+            iconLeftName=""
             iconLeftUrl=""
             iconRightName=""
             notificationColor=""
@@ -107,7 +108,7 @@ exports[`TaskForm renders correctly without props 1`] = `
           >
             <SidebarItem
               className="batch-index--sidebar--item batch-index--sidebar--item__form"
-              iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+              iconLeftName=""
               iconLeftUrl=""
               iconRightName=""
               notificationColor=""
@@ -240,7 +241,7 @@ exports[`TaskForm renders correctly without props 1`] = `
               >
                 <SidebarItem
                   className="batch-index--sidebar--item batch-index--sidebar--item__form"
-                  iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+                  iconLeftName=""
                   iconLeftUrl=""
                   iconRightName=""
                   notificationColor=""
@@ -253,19 +254,6 @@ exports[`TaskForm renders correctly without props 1`] = `
                     <div
                       className="sidebar-item sidebar-item__selected batch-index--sidebar--item batch-index--sidebar--item__form"
                     >
-                      <span
-                        className="sidebar-item--icon-left"
-                      >
-                        <Icon
-                          className=""
-                          name="BATCH/ACTIVE.GRADIENT.svg"
-                        >
-                          <img
-                            className="icon icon__BATCH/ACTIVE-GRADIENT.svg"
-                            src="test-file-stub"
-                          />
-                        </Icon>
-                      </span>
                       <div
                         className="sidebar-item--content"
                       >

@@ -2,6 +2,7 @@
 
 exports[`Task renders component correctly 1`] = `
 <Task
+  editable={true}
   task={
     Object {
       "contributor": Object {

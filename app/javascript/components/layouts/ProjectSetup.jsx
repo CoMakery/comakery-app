@@ -14,6 +14,7 @@ class ProjectSetup extends React.Component {
       projectPage,
       subfooter,
       children,
+      editable,
       ...other
     } = this.props
 
@@ -31,6 +32,7 @@ class ProjectSetup extends React.Component {
               projectTitle={projectTitle}
               projectId={projectId}
               projectPage={projectPage}
+              projectOwner={editable}
             />
           }
           sidebar={sidebar}
@@ -50,7 +52,8 @@ ProjectSetup.propTypes = {
   projectTitle: PropTypes.string,
   projectPage : PropTypes.string,
   subfooter   : PropTypes.object,
-  sidebar     : PropTypes.object
+  sidebar     : PropTypes.object,
+  editable    : PropTypes.bool
 }
 ProjectSetup.defaultProps = {
   className   : '',
@@ -58,6 +61,7 @@ ProjectSetup.defaultProps = {
   projectTitle: '',
   projectPage : '',
   subfooter   : null,
-  sidebar     : null
+  sidebar     : null,
+  editable    : true
 }
 export default ProjectSetup

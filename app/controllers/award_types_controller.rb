@@ -1,6 +1,7 @@
 class AwardTypesController < ApplicationController
   before_action :assign_project
-  before_action :authorize_project_edit
+  before_action :authorize_project_edit, except: [:index]
+  before_action :authorize_project_show, only: [:index]
   before_action :set_award_type, only: %i[show edit update destroy]
   before_action :set_form_props, only: %i[new edit]
   before_action :set_index_props, only: [:index]
@@ -59,6 +60,10 @@ class AwardTypesController < ApplicationController
       authorize @project, :edit?
     end
 
+    def authorize_project_show
+      authorize @project, :show_award_types?
+    end
+
     def set_award_type
       @award_type = @project.award_types.find(params[:id])
     end
@@ -75,6 +80,7 @@ class AwardTypesController < ApplicationController
 
     def set_index_props
       @props = {
+        editable: policy(@project).edit?,
         batches: @project.award_types&.map do |batch|
           batch.serializable_hash.merge(
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),

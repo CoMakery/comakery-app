@@ -29,6 +29,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
 >
   <ProjectSetup
     className=""
+    editable={true}
     hasBackButton={true}
     projectId={28}
     projectPage="batches"

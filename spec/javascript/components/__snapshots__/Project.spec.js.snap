@@ -2,10 +2,12 @@
 
 exports[`Project renders correctly without props 1`] = `
 <Project
+  awardTypesPath=""
   awardsPath=""
   contributorsPath=""
   csrfToken=""
   editPath={null}
+  editable={true}
   interested={false}
   missionData={null}
   myTasksPath=""
@@ -51,7 +53,14 @@ exports[`Project renders correctly without props 1`] = `
         >
           <div
             className="project-header__menu__links"
-          />
+          >
+            <a
+              className="project-header__menu__link"
+              href=""
+            >
+              Edit This Project
+            </a>
+          </div>
         </div>
         <div
           className="project-header__name"

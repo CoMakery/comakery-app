@@ -151,6 +151,29 @@ describe ProjectPolicy do
     end
   end
 
+  describe 'show_award_types?' do
+    it 'allows showing award types of projects that are public or owned by the current account' do
+      expect(described_class.new(nil, my_public_project).show_award_types?).to be true
+      expect(described_class.new(nil, my_public_unlisted_project).show_award_types?).to be true
+      expect(described_class.new(nil, others_private_project).show_award_types?).to be_falsey
+      expect(described_class.new(nil, others_archived_project).show_award_types?).to be_falsey
+
+      expect(described_class.new(project_account, my_public_project).show_award_types?).to be true
+      expect(described_class.new(project_account, my_public_unlisted_project).show_award_types?).to be true
+      expect(described_class.new(project_account, my_private_project).show_award_types?).to be true
+      expect(described_class.new(project_account, my_archived_project).show_award_types?).to be true
+      expect(described_class.new(project_account, others_private_project).show_award_types?).to be false
+      expect(described_class.new(project_account, others_archived_project).show_award_types?).to be false
+
+      expect(described_class.new(other_team_member, others_public_project).show_award_types?).to be true
+      expect(described_class.new(other_team_member, my_private_project).show_award_types?).to be true
+
+      expect(described_class.new(different_team_account, my_public_project).show_award_types?).to be true
+      expect(described_class.new(different_team_account, my_public_unlisted_project).show_award_types?).to be true
+      expect(described_class.new(different_team_account, my_private_project).show_award_types?).to be_falsey
+    end
+  end
+
   describe '#edit? #update?' do
     it 'only allows viewing of projects that are public or are owned by the current account' do
       %i[edit? update?].each do |action|

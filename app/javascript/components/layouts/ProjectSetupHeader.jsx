@@ -19,13 +19,11 @@ class ProjectSetupHeader extends React.Component {
           </span>
         }
 
-        {projectOwner &&
-          <span className={projectPage === 'batches' ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}>
-            <a href={projectId ? `/projects/${projectId}/batches` : '#'}>
-              batches & tasks
-            </a>
-          </span>
-        }
+        <span className={projectPage === 'batches' ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}>
+          <a href={projectId ? `/projects/${projectId}/batches` : '#'}>
+            batches & tasks
+          </a>
+        </span>
 
         <span className={projectPage === 'contributors' ? 'layout--content--title--nav__current' : 'layout--content--title--nav'}>
           <a href={projectId ? `/projects/${projectId}/contributors` : '#'}>

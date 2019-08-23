@@ -48,6 +48,7 @@ exports[`TaskShow renders correctly without props 1`] = `
 >
   <ProjectSetup
     className="task-award-form"
+    editable={true}
     hasBackButton={true}
     projectId={null}
     projectPage="batches"

@@ -155,6 +155,7 @@ const ProjectBudgetEntry = styled.div`
   font-weight: 500;
   text-transform: uppercase;
   color: #3a3a3a;
+  margin: 1em 0;
 `
 
 class BatchIndex extends React.Component {
@@ -188,16 +189,20 @@ class BatchIndex extends React.Component {
           projectId={this.props.project.id}
           projectTitle={this.props.project.title}
           projectPage="batches"
+          editable={this.props.editable}
           sidebar={
             <React.Fragment>
               <div className="batch-index--sidebar">
-                <SidebarItemBold
-                  className="batch-index--sidebar--item__bold"
-                  iconLeftName="BATCH/WHITE.svg"
-                  iconRightName="PLUS.svg"
-                  text="Create a New Batch"
-                  onClick={(_) => window.location = this.props.newBatchPath}
-                />
+
+                {this.props.editable &&
+                  <SidebarItemBold
+                    className="batch-index--sidebar--item__bold"
+                    iconLeftName="BATCH/WHITE.svg"
+                    iconRightName="PLUS.svg"
+                    text="Create a New Batch"
+                    onClick={(_) => window.location = this.props.newBatchPath}
+                  />
+                }
 
                 <ProjectBudget>
                   {this.props.project.maximumTokens &&
@@ -263,13 +268,15 @@ class BatchIndex extends React.Component {
                   <TitleText>batch</TitleText>
                 </Title>
 
-                <BatchStyled batch={this.state.selectedBatch} />
+                <BatchStyled batch={this.state.selectedBatch} editable={this.props.editable} />
 
-                <CreateTaskButton>
-                  <a href={this.state.selectedBatch.newTaskPath}>
-                    create a task +
-                  </a>
-                </CreateTaskButton>
+                {this.props.editable &&
+                  <CreateTaskButton>
+                    <a href={this.state.selectedBatch.newTaskPath}>
+                      create a task +
+                    </a>
+                  </CreateTaskButton>
+                }
 
                 <Tasks>
                   {this.state.selectedBatch.tasks.length > 0 &&
@@ -285,7 +292,7 @@ class BatchIndex extends React.Component {
                     </FilterWrapper>
                   }
                   {this.state.selectedBatch.tasks.filter(task => !this.state.selectedTaskFilter || task.status === this.state.selectedTaskFilter).map((t, i) =>
-                    <Task key={i} task={t} />
+                    <Task editable={this.props.editable} key={i} task={t} />
                   )}
                 </Tasks>
               </Wrapper>
@@ -298,11 +305,13 @@ class BatchIndex extends React.Component {
 }
 
 BatchIndex.propTypes = {
+  editable    : PropTypes.bool,
   batches     : PropTypes.array.isRequired,
   newBatchPath: PropTypes.string,
   project     : PropTypes.object
 }
 BatchIndex.defaultProps = {
+  editable    : true,
   batches     : [],
   newBatchPath: '',
   project     : {}
