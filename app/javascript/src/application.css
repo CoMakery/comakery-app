@@ -557,6 +557,10 @@ a.header--nav--links--current {
   background-color: #f5a623;
 }
 
+.sidebar-item--right-border__gray {
+  background-color: #8d9599;
+}
+
 .sidebar-item--icon-left {
   padding: 4px 9px 0px 13px;
 }
@@ -567,6 +571,12 @@ a.header--nav--links--current {
   min-height: 26px;
   min-width: 26px;
   filter: grayscale(100%);
+}
+
+.sidebar-item--content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1em;
 }
 
 .sidebar-item--text {

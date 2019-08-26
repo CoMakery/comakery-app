@@ -48,6 +48,7 @@ exports[`TaskShow renders correctly without props 1`] = `
 >
   <ProjectSetup
     className="task-award-form"
+    editable={true}
     hasBackButton={true}
     projectId={null}
     projectPage="batches"
@@ -59,7 +60,7 @@ exports[`TaskShow renders correctly without props 1`] = `
         >
           <SidebarItem
             className="batch-index--sidebar--item batch-index--sidebar--item__form"
-            iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+            iconLeftName=""
             iconLeftUrl=""
             iconRightName=""
             notificationColor=""
@@ -108,7 +109,7 @@ exports[`TaskShow renders correctly without props 1`] = `
           >
             <SidebarItem
               className="batch-index--sidebar--item batch-index--sidebar--item__form"
-              iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+              iconLeftName=""
               iconLeftUrl=""
               iconRightName=""
               notificationColor=""
@@ -233,7 +234,7 @@ exports[`TaskShow renders correctly without props 1`] = `
               >
                 <SidebarItem
                   className="batch-index--sidebar--item batch-index--sidebar--item__form"
-                  iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+                  iconLeftName=""
                   iconLeftUrl=""
                   iconRightName=""
                   notificationColor=""
@@ -246,24 +247,18 @@ exports[`TaskShow renders correctly without props 1`] = `
                     <div
                       className="sidebar-item sidebar-item__selected batch-index--sidebar--item batch-index--sidebar--item__form"
                     >
-                      <span
-                        className="sidebar-item--icon-left"
+                      <div
+                        className="sidebar-item--content"
                       >
-                        <Icon
-                          className=""
-                          name="BATCH/ACTIVE.GRADIENT.svg"
+                        <div
+                          className="sidebar-item--text"
                         >
-                          <img
-                            className="icon icon__BATCH/ACTIVE-GRADIENT.svg"
-                            src="test-file-stub"
-                          />
-                        </Icon>
-                      </span>
-                      <span
-                        className="sidebar-item--text"
-                      >
-                        sidebar item
-                      </span>
+                          sidebar item
+                        </div>
+                        <div
+                          className="sidebar-item--subchild"
+                        />
+                      </div>
                       <div
                         className="sidebar-item--left-border"
                       />

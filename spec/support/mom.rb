@@ -118,7 +118,7 @@ class Mom
       name: 'Contribution',
       goal: 'none',
       description: 'none',
-      published: true
+      state: :ready
     }
     attrs[:project] = create(:project) unless attrs[:project]
     AwardType.new(defaults.merge(attrs))

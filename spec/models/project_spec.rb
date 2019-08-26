@@ -370,7 +370,7 @@ describe Project do
     it 'returns number of published batches' do
       project = create(:project)
       create(:award_type, project: project)
-      create(:award_type, published: false, project: project)
+      create(:award_type, state: :draft, project: project)
 
       expect(project.stats[:batches]).to eq(1)
     end

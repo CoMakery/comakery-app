@@ -29,6 +29,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
 >
   <ProjectSetup
     className="project-form"
+    editable={true}
     projectId={null}
     projectPage="form"
     projectTitle=""

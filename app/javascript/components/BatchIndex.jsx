@@ -5,6 +5,7 @@ import SidebarItem from './styleguide/SidebarItem'
 import SidebarItemBold from './styleguide/SidebarItemBold'
 import Batch from './Batch'
 import Task from './Task'
+import CurrencyAmount from './CurrencyAmount'
 import styled, { css } from 'styled-components'
 import * as Cookies from 'js-cookie'
 
@@ -141,6 +142,22 @@ const CreateTaskButton = styled.div`
   }
 `
 
+const ProjectBudget = styled.div`
+  margin: 1em 0;
+  margin-right: 1em;
+`
+
+const ProjectBudgetEntry = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #3a3a3a;
+  margin: 1em 0;
+`
+
 class BatchIndex extends React.Component {
   constructor(props) {
     super(props)
@@ -172,16 +189,42 @@ class BatchIndex extends React.Component {
           projectId={this.props.project.id}
           projectTitle={this.props.project.title}
           projectPage="batches"
+          editable={this.props.editable}
           sidebar={
             <React.Fragment>
               <div className="batch-index--sidebar">
-                <SidebarItemBold
-                  className="batch-index--sidebar--item__bold"
-                  iconLeftName="BATCH/WHITE.svg"
-                  iconRightName="PLUS.svg"
-                  text="Create a New Batch"
-                  onClick={(_) => window.location = this.props.newBatchPath}
-                />
+
+                {this.props.editable &&
+                  <SidebarItemBold
+                    className="batch-index--sidebar--item__bold"
+                    iconLeftName="BATCH/WHITE.svg"
+                    iconRightName="PLUS.svg"
+                    text="Create a New Batch"
+                    onClick={(_) => window.location = this.props.newBatchPath}
+                  />
+                }
+
+                <ProjectBudget>
+                  {this.props.project.maximumTokens &&
+                    <ProjectBudgetEntry>
+                      <div>planned budget</div>
+
+                      <CurrencyAmount
+                        amount={this.props.project.maximumTokens}
+                        logoUrl={this.props.project.currencyLogo}
+                      />
+                    </ProjectBudgetEntry>
+                  }
+
+                  <ProjectBudgetEntry>
+                    <div>allocated budget</div>
+
+                    <CurrencyAmount
+                      amount={this.props.project.allocatedBudget}
+                      logoUrl={this.props.project.currencyLogo}
+                    />
+                  </ProjectBudgetEntry>
+                </ProjectBudget>
 
                 {this.props.batches.length > 0 &&
                   <React.Fragment>
@@ -191,9 +234,14 @@ class BatchIndex extends React.Component {
                       <SidebarItem
                         className="batch-index--sidebar--item"
                         key={i}
-                        iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
                         text={b.name}
-                        notificationColor={b.published ? 'green' : 'orange'}
+                        subchild={
+                          <CurrencyAmount
+                            amount={b.totalAmount}
+                            logoUrl={b.currencyLogo}
+                          />
+                        }
+                        notificationColor={b.state === 'ready' ? 'green' : 'orange'}
                         selected={this.state.selectedBatch === b}
                         onClick={(_) => this.handleListClick(b)}
                       />
@@ -220,13 +268,15 @@ class BatchIndex extends React.Component {
                   <TitleText>batch</TitleText>
                 </Title>
 
-                <BatchStyled batch={this.state.selectedBatch} />
+                <BatchStyled batch={this.state.selectedBatch} editable={this.props.editable} />
 
-                <CreateTaskButton>
-                  <a href={this.state.selectedBatch.newTaskPath}>
-                    create a task +
-                  </a>
-                </CreateTaskButton>
+                {this.props.editable &&
+                  <CreateTaskButton>
+                    <a href={this.state.selectedBatch.newTaskPath}>
+                      create a task +
+                    </a>
+                  </CreateTaskButton>
+                }
 
                 <Tasks>
                   {this.state.selectedBatch.tasks.length > 0 &&
@@ -242,7 +292,7 @@ class BatchIndex extends React.Component {
                     </FilterWrapper>
                   }
                   {this.state.selectedBatch.tasks.filter(task => !this.state.selectedTaskFilter || task.status === this.state.selectedTaskFilter).map((t, i) =>
-                    <Task key={i} task={t} />
+                    <Task editable={this.props.editable} key={i} task={t} />
                   )}
                 </Tasks>
               </Wrapper>
@@ -255,11 +305,13 @@ class BatchIndex extends React.Component {
 }
 
 BatchIndex.propTypes = {
+  editable    : PropTypes.bool,
   batches     : PropTypes.array.isRequired,
   newBatchPath: PropTypes.string,
   project     : PropTypes.object
 }
 BatchIndex.defaultProps = {
+  editable    : true,
   batches     : [],
   newBatchPath: '',
   project     : {}

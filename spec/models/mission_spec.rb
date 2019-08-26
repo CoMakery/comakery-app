@@ -33,7 +33,7 @@ describe Mission do
     it 'returns number of published batches' do
       mission = create(:mission)
       create(:award_type, project: create(:project, mission: mission))
-      create(:award_type, published: false, project: create(:project, mission: mission))
+      create(:award_type, state: :draft, project: create(:project, mission: mission))
 
       expect(mission.stats[:batches]).to eq(1)
     end

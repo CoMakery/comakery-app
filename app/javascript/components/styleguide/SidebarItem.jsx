@@ -12,6 +12,7 @@ class SidebarItem extends React.Component {
       iconLeftName,
       iconRightName,
       text,
+      subchild,
       notificationColor,
       selected,
       ...other
@@ -40,9 +41,15 @@ class SidebarItem extends React.Component {
 
             { leftChild }
 
-            <span className="sidebar-item--text">
-              {text}
-            </span>
+            <div className="sidebar-item--content">
+              <div className="sidebar-item--text">
+                {text}
+              </div>
+
+              <div className="sidebar-item--subchild">
+                {subchild}
+              </div>
+            </div>
 
             { iconRightName !== '' &&
               <span className="sidebar-item--icon-right">
@@ -66,6 +73,7 @@ SidebarItem.propTypes = {
   iconLeftName     : PropTypes.string,
   iconRightName    : PropTypes.string,
   text             : PropTypes.string,
+  subchild         : PropTypes.node,
   notificationColor: PropTypes.string,
   selected         : PropTypes.bool,
   leftChild        : PropTypes.node

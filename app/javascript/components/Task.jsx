@@ -4,18 +4,20 @@ import styled, { css } from 'styled-components'
 import Icon from './styleguide/Icon'
 import Userpics from './Userpics'
 import CurrencyAmount from './CurrencyAmount'
+import ContentBlock from './ContentBlock'
+import Pluralize from 'react-pluralize'
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-  height: 60px;
+  height: 80px;
   margin-bottom: 10px;
 `
 
 const RightBorder = styled.div`
   width: 2px;
-  height: 60px;
+  height: 80px;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .2);
   background-color: #5037f7;
   z-index: 10;
@@ -211,7 +213,68 @@ const IconPlaceholder = styled(Icon)`
   cursor: not-allowed;
 `
 
+const TaskDetails = styled.a`
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #201662;
+  margin-left: auto;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  margin: .5em 1.5em .5em auto;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  img {
+    margin-left: 7px;
+    ${props => props.rotateIcon && css`
+      transform: rotate(180deg);
+    `}
+  }
+
+  @media (max-width: 1024px) {
+    margin-left: initial;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+`
+
+const DetailsBox = styled.div`
+  padding: 30px 40px;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  margin-top: -9px;
+  margin-bottom: 20px;
+
+  img {
+    max-width: 80px;
+    max-height: 80px;
+    border: 1px solid transparent;
+
+    &:hover {
+      border: 1px solid #0089f4;
+    }
+  }
+`
+
 class Task extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      showDetailsBox: false,
+    }
+  }
+
   render() {
     let task = this.props.task
     return (
@@ -258,63 +321,104 @@ class Task extends React.Component {
                 logoUrl={task.currencyLogo}
               />
 
-              <Buttons>
-                {task.status === 'ready' &&
-                  <PaymentButton href={task.awardPath}>
-                      issue award
-                  </PaymentButton>
-                }
+              {this.props.editable &&
+                <Buttons>
+                  {task.status === 'ready' &&
+                    <PaymentButton href={task.awardPath}>
+                        issue award
+                    </PaymentButton>
+                  }
 
-                {task.status === 'accepted' &&
-                  <PaymentButton href={task.payPath}>
-                      pay contributor
-                  </PaymentButton>
-                }
+                  {task.status === 'accepted' &&
+                    <PaymentButton href={task.payPath}>
+                        pay contributor
+                    </PaymentButton>
+                  }
 
-                {(task.status === 'ready' || task.status === 'unpublished') &&
-                  <a href={task.assignPath}>
-                    <StyledIcon name="INVITE_USER.svg" />
+                  {(task.status === 'ready' || task.status === 'unpublished') &&
+                    <a href={task.assignPath}>
+                      <StyledIcon name="INVITE_USER.svg" />
+                    </a>
+                  }
+
+                  {!(task.status === 'ready' || task.status === 'unpublished') &&
+                    <IconPlaceholder name="INVITE_USER.svg" />
+                  }
+
+                  <a href={task.clonePath}>
+                    <StyledIcon name="DUPLICATE.svg" />
                   </a>
-                }
 
-                {!(task.status === 'ready' || task.status === 'unpublished') &&
-                  <IconPlaceholder name="INVITE_USER.svg" />
-                }
+                  {task.editPath &&
+                    <a href={task.editPath}>
+                      <StyledIcon name="iconEdit.svg" />
+                    </a>
+                  }
 
-                <a href={task.clonePath}>
-                  <StyledIcon name="DUPLICATE.svg" />
-                </a>
+                  {!task.editPath &&
+                    <IconPlaceholder name="iconEdit.svg" />
+                  }
 
-                {task.editPath &&
-                  <a href={task.editPath}>
-                    <StyledIcon name="iconEdit.svg" />
-                  </a>
-                }
+                  {task.destroyPath &&
+                    <a rel="nofollow" data-method="delete" href={task.destroyPath}>
+                      <StyledIcon name="iconTrash.svg" />
+                    </a>
+                  }
 
-                {!task.editPath &&
-                  <IconPlaceholder name="iconEdit.svg" />
-                }
-
-                {task.destroyPath &&
-                  <a rel="nofollow" data-method="delete" href={task.destroyPath}>
-                    <StyledIcon name="iconTrash.svg" />
-                  </a>
-                }
-
-                {!task.destroyPath &&
-                  <IconPlaceholder name="iconTrash.svg" />
-                }
-              </Buttons>
+                  {!task.destroyPath &&
+                    <IconPlaceholder name="iconTrash.svg" />
+                  }
+                </Buttons>
+              }
             </Details>
           </Info>
+
+          <TaskDetails rotateIcon={this.state.showDetailsBox} onClick={(_) => this.setState({showDetailsBox: (!this.state.showDetailsBox)})}>
+            Details <Icon name="DROP_DOWN.svg" />
+          </TaskDetails>
         </Wrapper>
+
+        {this.state.showDetailsBox &&
+          <DetailsBox>
+            <ContentBlock title="what is the expected benefit">
+              {task.why}
+            </ContentBlock>
+
+            <ContentBlock title="description">
+              <div dangerouslySetInnerHTML={{__html: task.descriptionHtml}} />
+            </ContentBlock>
+
+            {task.imageUrl &&
+              <ContentBlock>
+                <a target="_blank" href={task.imageUrl}>
+                  <img src={task.imageUrl} />
+                </a>
+              </ContentBlock>
+            }
+
+            <ContentBlock title="acceptance criteria">
+              <div dangerouslySetInnerHTML={{__html: task.requirementsHtml}} />
+            </ContentBlock>
+
+            <ContentBlock title="days till task expires (after starting)">
+              <Pluralize singular="day" count={task.expiresInDays} />
+            </ContentBlock>
+
+            {task.proofLink &&
+              <ContentBlock title="URL where to submit completed work">
+                <a href={task.proofLink} target="_blank">{task.proofLink}</a>
+              </ContentBlock>
+            }
+          </DetailsBox>
+        }
       </React.Fragment>
     )
   }
 }
 
 Task.propTypes = {
-  task: PropTypes.object
+  task    : PropTypes.object,
+  editable: PropTypes.bool
 }
 Task.defaultProps = {
   task: {
@@ -323,6 +427,7 @@ Task.defaultProps = {
       name : null,
       image: null
     }
-  }
+  },
+  editable: true
 }
 export default Task

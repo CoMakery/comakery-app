@@ -43,6 +43,10 @@ class ProjectPolicy < ApplicationPolicy
       team_member?
   end
 
+  def show_award_types?
+    show? || unlisted?
+  end
+
   def project_owner?
     account&.owned_project?(project)
   end

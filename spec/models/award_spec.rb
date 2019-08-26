@@ -147,22 +147,22 @@ describe Award do
       end
     end
 
-    describe 'make_unpublished_if_award_type_is_unpublished' do
-      let!(:award_type_unpublished) { create(:award_type, published: false) }
-      let!(:award_ready_unpublished) { create(:award_ready, award_type: award_type_unpublished) }
-      let!(:award_done_unpublished) { create(:award, award_type: award_type_unpublished) }
+    describe 'make_unpublished_if_award_type_is_not_ready' do
+      let!(:award_type_draft) { create(:award_type, state: :draft) }
+      let!(:award_ready_draft) { create(:award_ready, award_type: award_type_draft) }
+      let!(:award_done_draft) { create(:award, award_type: award_type_draft) }
       let!(:award_ready) { create(:award_ready) }
 
-      it 'sets status to unpublished if award_type is unpublished and award is in ready state' do
-        expect(award_ready_unpublished.unpublished?).to be_truthy
+      it 'sets status to unpublished if award_type is not ready and award is in ready state' do
+        expect(award_ready_draft.unpublished?).to be_truthy
       end
 
-      it 'doesnt set status to unpublished if award_type is published' do
+      it 'doesnt set status to unpublished if award_type is ready' do
         expect(award_ready.unpublished?).to be_falsey
       end
 
       it 'doesnt set status to unpublished if award is not in ready state' do
-        expect(award_done_unpublished.unpublished?).to be_falsey
+        expect(award_done_draft.unpublished?).to be_falsey
       end
     end
 

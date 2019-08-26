@@ -1,10 +1,13 @@
 class AwardTypesController < ApplicationController
   before_action :assign_project
-  before_action :authorize_project_edit
+  before_action :authorize_project_edit, except: %i[index]
+  before_action :authorize_project_show, only: %i[index]
   before_action :set_award_type, only: %i[show edit update destroy]
+  before_action :set_award_types, only: %i[index]
   before_action :set_form_props, only: %i[new edit]
-  before_action :set_index_props, only: [:index]
-  skip_after_action :verify_policy_scoped, only: [:index]
+  before_action :set_index_props, only: %i[index]
+  skip_after_action :verify_policy_scoped, only: %i[index]
+  skip_before_action :require_login, only: %i[index]
 
   layout 'react'
 
@@ -59,13 +62,17 @@ class AwardTypesController < ApplicationController
       authorize @project, :edit?
     end
 
+    def authorize_project_show
+      authorize @project, :show_award_types?
+    end
+
     def set_award_type
       @award_type = @project.award_types.find(params[:id])
     end
 
     def award_type_params
       params.fetch(:batch, {}).permit(
-        :published,
+        :state,
         :name,
         :goal,
         :description,
@@ -73,9 +80,14 @@ class AwardTypesController < ApplicationController
       )
     end
 
+    def set_award_types
+      @award_types = AwardTypePolicy::Scope.new(current_user, @project.account, @project.award_types).resolve
+    end
+
     def set_index_props
       @props = {
-        batches: @project.award_types&.map do |batch|
+        editable: policy(@project).edit?,
+        batches: @award_types&.map do |batch|
           batch.serializable_hash.merge(
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
             completed_tasks: batch.awards.completed&.size,
@@ -92,13 +104,20 @@ class AwardTypesController < ApplicationController
           )
         end,
         new_batch_path: new_project_award_type_path(@project),
-        project: @project.serializable_hash
+        project: @project.serializable_hash.merge(
+          currency: @project.token&.symbol,
+          currency_logo: helpers.attachment_url(@project.token, :logo_image, :fill, 100, 100),
+          allocated_budget: @project.awards.sum(&:possible_total_amount)
+        )
       }
     end
 
     def task_to_index_props(task, batch)
       task.serializable_hash.merge(
         batch_name: batch.name,
+        image_url: helpers.attachment_url(task, :image),
+        description_html: Comakery::Markdown.to_html(task.description),
+        requirements_html: Comakery::Markdown.to_html(task.requirements),
         currency: batch.project.token&.symbol,
         currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
         assign_path: project_award_type_award_assignment_path(@project, batch, task),
@@ -125,6 +144,7 @@ class AwardTypesController < ApplicationController
         ),
         project: @project.serializable_hash,
         specialties: Specialty.all.map { |s| [s.name, s.id] }.unshift(['General', nil]).to_h,
+        states: AwardType.states.map { |k, _| [k, k] }.to_h,
         form_url: project_award_types_path,
         form_action: 'POST',
         url_on_success: project_award_types_path,
