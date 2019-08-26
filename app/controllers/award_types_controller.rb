@@ -1,11 +1,13 @@
 class AwardTypesController < ApplicationController
   before_action :assign_project
-  before_action :authorize_project_edit, except: [:index]
-  before_action :authorize_project_show, only: [:index]
+  before_action :authorize_project_edit, except: %i[index]
+  before_action :authorize_project_show, only: %i[index]
   before_action :set_award_type, only: %i[show edit update destroy]
+  before_action :set_award_types, only: %i[index]
   before_action :set_form_props, only: %i[new edit]
-  before_action :set_index_props, only: [:index]
-  skip_after_action :verify_policy_scoped, only: [:index]
+  before_action :set_index_props, only: %i[index]
+  skip_after_action :verify_policy_scoped, only: %i[index]
+  skip_before_action :require_login, only: %i[index]
 
   layout 'react'
 
@@ -70,7 +72,7 @@ class AwardTypesController < ApplicationController
 
     def award_type_params
       params.fetch(:batch, {}).permit(
-        :published,
+        :state,
         :name,
         :goal,
         :description,
@@ -78,10 +80,14 @@ class AwardTypesController < ApplicationController
       )
     end
 
+    def set_award_types
+      @award_types = AwardTypePolicy::Scope.new(current_user, @project.account, @project.award_types).resolve
+    end
+
     def set_index_props
       @props = {
         editable: policy(@project).edit?,
-        batches: @project.award_types&.map do |batch|
+        batches: @award_types&.map do |batch|
           batch.serializable_hash.merge(
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
             completed_tasks: batch.awards.completed&.size,
@@ -138,6 +144,7 @@ class AwardTypesController < ApplicationController
         ),
         project: @project.serializable_hash,
         specialties: Specialty.all.map { |s| [s.name, s.id] }.unshift(['General', nil]).to_h,
+        states: AwardType.states.map { |k, _| [k, k] }.to_h,
         form_url: project_award_types_path,
         form_action: 'POST',
         url_on_success: project_award_types_path,

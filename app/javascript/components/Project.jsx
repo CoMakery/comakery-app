@@ -267,7 +267,7 @@ export default class Project extends React.Component {
                 <a className="project-header__menu__link" href={awardTypesPath}>Edit This Project</a>
               }
               {!editable &&
-                <a className="project-header__menu__link" href={awardTypesPath}>Project Plan</a>
+                <a className="project-header__menu__link" href={awardTypesPath}>BATCHES & TASKS</a>
               }
             </div>
           </div>

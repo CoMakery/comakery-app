@@ -16,6 +16,11 @@ exports[`BatchForm renders correctly without props 1`] = `
     }
   }
   projectId={0}
+  states={
+    Object {
+      "default": "_",
+    }
+  }
   urlOnSuccess="/"
 >
   <ProjectSetup
@@ -282,23 +287,18 @@ exports[`BatchForm renders correctly without props 1`] = `
               >
                 <InputFieldDropdown
                   eventHandler={[Function]}
-                  name="batch[published]"
+                  name="batch[state]"
                   required={true}
                   selectEntries={
                     Array [
                       Array [
-                        "Yes",
-                        "true",
-                      ],
-                      Array [
-                        "No",
-                        "false",
+                        "default",
+                        "_",
                       ],
                     ]
                   }
                   symbolLimit={0}
-                  title="Published"
-                  value="false"
+                  title="State"
                 >
                   <InputField
                     checkboxText=""
@@ -315,7 +315,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                     imgVerifier={[Function]}
                     max=""
                     min=""
-                    name="batch[published]"
+                    name="batch[state]"
                     pattern=".*"
                     placeholder="Please enter value"
                     readOnly={false}
@@ -324,20 +324,16 @@ exports[`BatchForm renders correctly without props 1`] = `
                     selectEntries={
                       Array [
                         Array [
-                          "Yes",
-                          "true",
-                        ],
-                        Array [
-                          "No",
-                          "false",
+                          "default",
+                          "_",
                         ],
                       ]
                     }
                     step=""
                     symbolLimit={0}
-                    title="Published"
+                    title="State"
                     type="select"
-                    value="false"
+                    value=""
                   >
                     <div
                       className="input-field input-field__dropdown"
@@ -348,7 +344,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--title"
                         >
-                          Published
+                          State
                         </span>
                         <span
                           className="input-field--title--required"
@@ -362,22 +358,16 @@ exports[`BatchForm renders correctly without props 1`] = `
                         <select
                           className="input-field--content__select"
                           disabled={false}
-                          name="batch[published]"
+                          name="batch[state]"
                           onChange={[Function]}
                           required={true}
-                          value="false"
+                          value=""
                         >
                           <option
-                            key="true"
-                            value="true"
+                            key="_"
+                            value="_"
                           >
-                            Yes
-                          </option>
-                          <option
-                            key="false"
-                            value="false"
-                          >
-                            No
+                            default
                           </option>
                         </select>
                       </div>

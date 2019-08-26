@@ -241,7 +241,7 @@ class BatchIndex extends React.Component {
                             logoUrl={b.currencyLogo}
                           />
                         }
-                        notificationColor={b.published ? 'green' : 'orange'}
+                        notificationColor={b.state === 'ready' ? 'green' : 'orange'}
                         selected={this.state.selectedBatch === b}
                         onClick={(_) => this.handleListClick(b)}
                       />

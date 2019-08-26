@@ -23,11 +23,6 @@ class BatchForm extends React.Component {
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
 
-    let publishedValues = {
-      'Yes': 'true',
-      'No' : 'false'
-    }
-
     this.state = {
       flashMessages       : [],
       errors              : {},
@@ -35,8 +30,7 @@ class BatchForm extends React.Component {
       formAction          : this.props.formAction,
       formUrl             : this.props.formUrl,
       closeOnSuccess      : false,
-      publishedValues     : publishedValues,
-      'batch[published]'  : this.props.batch.published === true ? 'true' : 'false',
+      'batch[state]'      : this.props.batch.state,
       'batch[name]'       : this.props.batch.name || '',
       'batch[goal]'       : this.props.batch.goal || '',
       'batch[description]': this.props.batch.description || ''
@@ -200,14 +194,14 @@ class BatchForm extends React.Component {
 
           <form className="batch-form--form" id="batch-form--form" onSubmit={this.handleSubmit}>
             <InputFieldDropdown
-              title="Published"
+              title="State"
               required
-              name="batch[published]"
-              value={this.state['batch[published]']}
-              errorText={this.state.errors['batch[published]']}
-              disabled={this.state.disabled['batch[published]']}
+              name="batch[state]"
+              value={this.state['batch[state]']}
+              errorText={this.state.errors['batch[state]']}
+              disabled={this.state.disabled['batch[state]']}
               eventHandler={this.handleFieldChange}
-              selectEntries={Object.entries(this.state.publishedValues)}
+              selectEntries={Object.entries(this.props.states)}
               symbolLimit={0}
             />
 
@@ -267,6 +261,7 @@ class BatchForm extends React.Component {
 
 BatchForm.propTypes = {
   batch       : PropTypes.object.isRequired,
+  states      : PropTypes.object.isRequired,
   project     : PropTypes.object.isRequired,
   formUrl     : PropTypes.string.isRequired,
   formAction  : PropTypes.string.isRequired,
@@ -276,6 +271,7 @@ BatchForm.propTypes = {
 }
 BatchForm.defaultProps = {
   batch       : {'default': '_'},
+  states      : {'default': '_'},
   project     : {'default': '_'},
   formUrl     : '/',
   formAction  : 'POST',

@@ -12,9 +12,9 @@ class Project < ApplicationRecord
   has_many :interested, through: :interests, source: :account
 
   has_many :award_types, inverse_of: :project, dependent: :destroy
-  has_many :published_award_types, -> { where published: true }, source: :award_types, class_name: 'AwardType'
+  has_many :ready_award_types, -> { where state: :ready }, source: :award_types, class_name: 'AwardType'
   has_many :awards, through: :award_types, dependent: :destroy
-  has_many :published_awards, through: :published_award_types, source: :awards, class_name: 'Award'
+  has_many :published_awards, through: :ready_award_types, source: :awards, class_name: 'Award'
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards
   has_many :channels, -> { order :created_at }, inverse_of: :project, dependent: :destroy
 
@@ -167,7 +167,7 @@ class Project < ApplicationRecord
 
   def stats
     {
-      batches: published_award_types.size,
+      batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
       interests: (
         [account_id] |

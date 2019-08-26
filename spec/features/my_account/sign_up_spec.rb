@@ -7,6 +7,7 @@ describe 'my account', js: true do
   let!(:token) { create :token }
   let!(:mission) { create :mission, token_id: token.id }
   let!(:project) { create :project, mission_id: mission.id, visibility: 'public_listed', status: 0 }
+  let!(:project_member) { create(:project) }
 
   scenario 'user gets redirected to signup on create project click' do
     visit '/'
@@ -38,9 +39,9 @@ describe 'my account', js: true do
     expect(page.current_url).to include('/session/new')
   end
 
-  scenario 'user gets redirected to sign in when accessing Batches' do
-    visit '/projects/1/batches'
-    expect(page.current_url).to include('/session/new')
+  scenario 'user gets redirected to root when accessing Batches for a private project' do
+    visit project_award_types_path(project_member)
+    expect(page.current_path).to eq('/')
   end
 
   scenario 'user gets redirected to sign in when accessing My Account' do

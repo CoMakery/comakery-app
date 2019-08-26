@@ -12,8 +12,7 @@ const Wrapper = styled.div`
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
 `
 
-const PublishedFlag = styled.div`
-  border-right: 7px solid #f5a623;
+const StateFlag = styled.div`
   margin-left: auto;
   font-size: 13px;
   padding-right: 0.5em;
@@ -25,8 +24,16 @@ const PublishedFlag = styled.div`
   letter-spacing: normal;
   text-transform: uppercase;
 
-  ${props => props.published && css`
+  ${props => props.state === 'ready' && css`
     border-right: 7px solid #00be00;
+ `}
+
+  ${props => props.state === 'pending' && css`
+    border-right: 7px solid #f5a623;
+ `}
+
+  ${props => props.state === 'draft' && css`
+    border-right: 7px solid #8d9599;
  `}
 `
 
@@ -85,9 +92,9 @@ class Batch extends React.Component {
     return (
       <React.Fragment>
         <Wrapper>
-          <PublishedFlag published={this.props.batch.published}>
-            { this.props.batch.published ? 'published' : 'not published' }
-          </PublishedFlag>
+          <StateFlag state={this.props.batch.state}>
+            { this.props.batch.state }
+          </StateFlag>
 
           {this.props.batch.diagramUrl &&
             <Image src={this.props.batch.diagramUrl} alt="Batch Image" />
