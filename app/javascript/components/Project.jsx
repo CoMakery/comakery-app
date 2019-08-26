@@ -454,7 +454,7 @@ export default class Project extends React.Component {
       <div className="project-team">
         <div className="project-team__container">
           <div className="project-team__title">The Team</div>
-          <div className="project-team__subtitle">Great projects are the result dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
+          <div className="project-team__subtitle">Great projects are the result of dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
 
           <div className="project-chart">
             <div id="tooltip" className="tooltip-hidden">
