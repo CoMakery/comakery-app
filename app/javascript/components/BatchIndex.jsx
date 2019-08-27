@@ -181,6 +181,19 @@ class BatchIndex extends React.Component {
     Cookies.set('selectedBatchId', batch.id)
   }
 
+  notificationColor(batch) {
+    switch (batch.state) {
+      case 'ready':
+        return 'green'
+      case 'pending':
+        return 'orange'
+      case 'draft':
+        return 'gray'
+      default:
+        return 'gray'
+    }
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -241,7 +254,7 @@ class BatchIndex extends React.Component {
                             logoUrl={b.currencyLogo}
                           />
                         }
-                        notificationColor={b.state === 'ready' ? 'green' : 'orange'}
+                        notificationColor={this.notificationColor(b)}
                         selected={this.state.selectedBatch === b}
                         onClick={(_) => this.handleListClick(b)}
                       />
