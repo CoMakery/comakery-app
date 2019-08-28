@@ -230,10 +230,14 @@ class Award < ApplicationRecord
 
   def expire!
     if cloned?
-      update(status: :cancelled)
+      self.status = :cancelled
     else
-      update(status: :ready, expires_at: nil, account: nil)
+      self.status = :ready
+      self.expires_at = nil
+      self.account = nil
     end
+
+    save
   end
 
   def expiring_notification_sent
@@ -304,9 +308,12 @@ class Award < ApplicationRecord
 
     def run_expiration
       if expires_at < Time.current
-        TaskMailer.with(award: self).task_expired_for_account.deliver_now
-        TaskMailer.with(award: self).task_expired_for_issuer.deliver_now
-        expire!
+        begin
+          TaskMailer.with(award: self).task_expired_for_account.deliver_now
+          TaskMailer.with(award: self).task_expired_for_issuer.deliver_now
+        ensure
+          expire!
+        end
       end
     end
 end
