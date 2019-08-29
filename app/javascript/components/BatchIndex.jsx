@@ -218,7 +218,7 @@ class BatchIndex extends React.Component {
                 }
 
                 <ProjectBudget>
-                  {this.props.project.maximumTokens &&
+                  {this.props.project.maximumTokens && this.props.project.maximumTokens > 0 &&
                     <ProjectBudgetEntry>
                       <div>planned budget</div>
 

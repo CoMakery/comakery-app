@@ -47,6 +47,7 @@ class Account < ApplicationRecord
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
   validates :first_name, :last_name, :country, :date_of_birth, :specialty, presence: true, if: :name_required
+  validates :nickname, uniqueness: true, allow_nil: true
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable

@@ -11,13 +11,13 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-  height: 80px;
+  height: 85px;
   margin-bottom: 10px;
 `
 
 const RightBorder = styled.div`
   width: 2px;
-  height: 80px;
+  height: 85px;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .2);
   background-color: #5037f7;
   z-index: 10;
@@ -76,6 +76,7 @@ const Name = styled.div`
 
 const StatusWrapper = styled.div`
   display: flex;
+  padding: 7px 20px;
 `
 
 const Status = styled.div`
@@ -169,6 +170,7 @@ const Details = styled.div`
   align-items: flex-end;
   justify-content: space-between;
   padding-right: 15px;
+  padding-top: 7px;
 `
 
 const Amount = styled(CurrencyAmount)`
@@ -267,6 +269,10 @@ const DetailsBox = styled.div`
   }
 `
 
+const BottomWrapper = styled.div`
+  display: flex;
+`
+
 class Task extends React.Component {
   constructor(props) {
     super(props)
@@ -286,32 +292,6 @@ class Task extends React.Component {
               <Name>
                 {task.name || task.batchName}
               </Name>
-
-              <StatusWrapper>
-                <Status status={task.status}>
-                  {task.status}
-                </Status>
-
-                {task.cloneable &&
-                  <CloneInfo>
-                    <b>template</b>
-                    <span>{task.numberOfClones + 1}/{task.numberOfAssignments}</span>
-                  </CloneInfo>
-                }
-
-                {task.cloned &&
-                  <CloneInfo>
-                    <b>clone</b>
-                  </CloneInfo>
-                }
-
-                {task.contributor.name &&
-                  <Contributor>
-                    <Userpics pics={[task.contributor.image]} limit={1} />
-                    {task.contributor.name}
-                  </Contributor>
-                }
-              </StatusWrapper>
             </Title>
 
             <Details>
@@ -373,9 +353,37 @@ class Task extends React.Component {
             </Details>
           </Info>
 
-          <TaskDetails rotateIcon={this.state.showDetailsBox} onClick={(_) => this.setState({showDetailsBox: (!this.state.showDetailsBox)})}>
-            Details <Icon name="DROP_DOWN.svg" />
-          </TaskDetails>
+          <BottomWrapper>
+            <StatusWrapper>
+              <Status status={task.status}>
+                {task.status}
+              </Status>
+
+              {task.cloneable &&
+                <CloneInfo>
+                  <b>template</b>
+                  <span>{task.numberOfClones + 1}/{task.numberOfAssignments}</span>
+                </CloneInfo>
+              }
+
+              {task.cloned &&
+                <CloneInfo>
+                  <b>clone</b>
+                </CloneInfo>
+              }
+
+              {task.contributor.name &&
+                <Contributor>
+                  <Userpics pics={[task.contributor.image]} limit={1} />
+                  {task.contributor.name}
+                </Contributor>
+              }
+            </StatusWrapper>
+
+            <TaskDetails rotateIcon={this.state.showDetailsBox} onClick={(_) => this.setState({showDetailsBox: (!this.state.showDetailsBox)})}>
+              Details <Icon name="DROP_DOWN.svg" />
+            </TaskDetails>
+          </BottomWrapper>
         </Wrapper>
 
         {this.state.showDetailsBox &&

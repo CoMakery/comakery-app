@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 describe 'my account', js: true do
-  let!(:unconfirmed_account) { create :account, nickname: 'jason', email_confirm_token: '0' }
-  let!(:to_be_confirmed_account) { create :account, nickname: 'jason', email_confirm_token: '1' }
-  let!(:confirmed_account) { create :account, nickname: 'jason', email_confirm_token: nil }
+  let!(:unconfirmed_account) { create :account, email_confirm_token: '0' }
+  let!(:to_be_confirmed_account) { create :account, email_confirm_token: '1' }
+  let!(:confirmed_account) { create :account, email_confirm_token: nil }
   let!(:token) { create :token }
   let!(:mission) { create :mission, token_id: token.id }
   let!(:project) { create :project, mission_id: mission.id, visibility: 'public_listed', status: 0 }
