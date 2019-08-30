@@ -106,7 +106,7 @@ class AwardsController < ApplicationController
 
   def start
     if @award.update(account: current_account, status: 'started')
-      redirect_to my_tasks_path(filter: 'started'), notice: 'Task started'
+      redirect_to project_award_type_award_path(@project, @award_type, @award), notice: 'Task started'
     else
       redirect_to my_tasks_path(filter: 'ready'), flash: { error: @award.errors&.full_messages&.join(', ') }
     end
