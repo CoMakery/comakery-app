@@ -170,7 +170,7 @@ RSpec.describe AwardsController, type: :controller do
 
       cloned_award = Award.find_by(cloned_on_assignment_from_id: award_cloneable.id)
 
-      expect(response).to redirect_to(my_tasks_path(filter: 'started'))
+      expect(response).to redirect_to(project_award_type_award_path(cloned_award.project, cloned_award.award_type, cloned_award))
       expect(flash[:notice]).to eq('Task started')
       expect(award_cloneable.reload.ready?).to be true
       expect(cloned_award.started?).to be true
