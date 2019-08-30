@@ -14,6 +14,7 @@ class AwardsController < ApplicationController
   before_action :set_filter, only: %i[index]
   before_action :set_default_project_filter, only: %i[index]
   before_action :set_project_filter, only: %i[index]
+  before_action :run_award_expiration, only: %i[index]
   before_action :set_awards, only: %i[index]
   before_action :set_page, only: %i[index]
   before_action :set_form_props, only: %i[new edit clone]
@@ -278,6 +279,10 @@ class AwardsController < ApplicationController
 
     def set_project_filter
       @project = (Project.find_by(id: params[:project_id]) || @project)
+    end
+
+    def run_award_expiration
+      policy_scope(Award).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
     end
 
     def set_awards
