@@ -45,6 +45,15 @@ class Views::Accounts::BuildProfile < Views::Base
             end
 
             column('large-12') do
+              with_errors(account, :nickname) do
+                label do
+                  text 'Nickname:'
+                  f.text_field :nickname
+                end
+              end
+            end
+
+            column('large-12') do
               with_errors(account, :date_of_birth) do
                 label do
                   text 'Date of Birth: *'
