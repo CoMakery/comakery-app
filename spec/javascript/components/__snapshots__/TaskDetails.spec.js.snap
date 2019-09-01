@@ -981,6 +981,112 @@ exports[`TaskDetails renders component correctly 1`] = `
                       "$$typeof": Symbol(react.forward_ref),
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
+                        "componentId": "sc-cMljjf",
+                        "isStatic": true,
+                        "lastClassName": "QUdMe",
+                        "rules": Array [
+                          "
+  padding: 30px 40px;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  margin-top: -19px;
+  margin-bottom: 20px;
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  img {
+    max-width: 80px;
+    max-height: 80px;
+    border: 1px solid transparent;
+
+    &:hover {
+      border: 1px solid #0089f4;
+    }
+  }
+
+  form {
+    display: inline;
+  }
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-cMljjf",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-cMljjf QUdMe"
+                  >
+                    <styled.h2>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-hSdWYo",
+                              "isStatic": true,
+                              "lastClassName": "wHLnF",
+                              "rules": Array [
+                                "
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #3a3a3a;
+",
+                              ],
+                            },
+                            "displayName": "styled.h2",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-hSdWYo",
+                            "target": "h2",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <h2
+                          className="sc-hSdWYo wHLnF"
+                        >
+                          Submitted Work
+                        </h2>
+                      </StyledComponent>
+                    </styled.h2>
+                  </div>
+                </StyledComponent>
+              </styled.div>
+              <styled.div>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
                         "componentId": "sc-eHgmQL",
                         "isStatic": true,
                         "lastClassName": "kWBRYg",
