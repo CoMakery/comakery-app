@@ -38,9 +38,6 @@ exports[`TokenIndex renders correctly without props 1`] = `
         >
           Tokens
         </div>
-        <hr
-          className="layout--content--hr"
-        />
         <div
           className="layout--content--wrapper"
         >

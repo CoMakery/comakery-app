@@ -44,9 +44,6 @@ exports[`MissionIndex renders correctly without props 1`] = `
             Missions &gt; 
           </span>
         </div>
-        <hr
-          className="layout--content--hr"
-        />
         <div
           className="layout--content--wrapper"
         >

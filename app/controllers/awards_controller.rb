@@ -375,7 +375,9 @@ class AwardsController < ApplicationController
         form_url: project_award_type_award_send_award_path(@project, @award_type, @award),
         form_action: 'POST',
         url_on_success: project_award_types_path,
-        csrf_token: form_authenticity_token
+        csrf_token: form_authenticity_token,
+        project_for_header: @project.header_props,
+        mission_for_header: @project&.mission&.decorate&.header_props
       }
     end
 
@@ -395,7 +397,9 @@ class AwardsController < ApplicationController
         end,
         interested_select: (@project.interested + @project.contributors).uniq.map { |a| [a.decorate.name, a.id] }.unshift(['', nil]).to_h,
         form_url: project_award_type_award_assign_path(@project, @award_type, @award),
-        csrf_token: form_authenticity_token
+        csrf_token: form_authenticity_token,
+        project_for_header: @project.header_props,
+        mission_for_header: @project&.mission&.decorate&.header_props
       }
     end
 
@@ -412,7 +416,9 @@ class AwardsController < ApplicationController
         form_url: project_award_type_awards_path(@project, @award_type),
         form_action: 'POST',
         url_on_success: project_award_types_path,
-        csrf_token: form_authenticity_token
+        csrf_token: form_authenticity_token,
+        project_for_header: @project.header_props,
+        mission_for_header: @project&.mission&.decorate&.header_props
       }
     end
 

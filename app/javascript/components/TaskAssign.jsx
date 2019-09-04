@@ -125,9 +125,10 @@ class TaskAssign extends React.Component {
     return (
       <React.Fragment>
         <ProjectSetup
-          projectId={this.props.project.id}
-          projectTitle={this.props.project.title}
-          projectPage="batches"
+          projectForHeader={this.props.projectForHeader}
+          missionForHeader={this.props.missionForHeader}
+          owner
+          current="batches"
           hasBackButton
           subfooter={
             <React.Fragment>
@@ -225,7 +226,9 @@ TaskAssign.propTypes = {
   interested      : PropTypes.array.isRequired,
   interestedSelect: PropTypes.object.isRequired,
   formUrl         : PropTypes.string.isRequired,
-  csrfToken       : PropTypes.string.isRequired
+  csrfToken       : PropTypes.string.isRequired,
+  missionForHeader: PropTypes.object,
+  projectForHeader: PropTypes.object
 }
 TaskAssign.defaultProps = {
   task: {
@@ -245,6 +248,8 @@ TaskAssign.defaultProps = {
   interested      : [],
   interestedSelect: {},
   formUrl         : '/',
-  csrfToken       : '00'
+  csrfToken       : '00',
+  missionForHeader: null,
+  projectForHeader: null
 }
 export default TaskAssign

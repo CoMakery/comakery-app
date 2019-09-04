@@ -195,8 +195,14 @@ class ProjectsController < ApplicationController
       terms_readonly: @project&.terms_readonly?,
       form_url: projects_path,
       form_action: 'POST',
-      csrf_token: form_authenticity_token
+      csrf_token: form_authenticity_token,
+      project_for_header: project_header,
+      mission_for_header: @project&.mission&.decorate&.header_props
     }
+  end
+
+  def project_header
+    @project ? @project.decorate.header_props : { image_url: helpers.image_url('defaul_project.jpg') }
   end
 
   def set_show_props
@@ -207,14 +213,12 @@ class ProjectsController < ApplicationController
       interested: current_account&.interested?(@project.id),
       specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
       project_data: project_props(@project),
-      mission_data: mission_props(@project&.mission),
       token_data: token_props(@project&.token&.decorate),
       csrf_token: form_authenticity_token,
-      contributors_path: project_contributors_path(@project.id),
-      awards_path: awards_project_path(@project.id),
       my_tasks_path: my_tasks_path(project_id: @project.id),
       editable: policy(@project).edit?,
-      award_types_path: project_award_types_path(@project)
+      project_for_header: @project.decorate.header_props,
+      mission_for_header: @project&.mission&.decorate&.header_props
     }
   end
 

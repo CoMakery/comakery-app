@@ -147,15 +147,16 @@ class BatchForm extends React.Component {
       <React.Fragment>
         <ProjectSetup
           className="batch-form"
-          projectId={this.props.project.id}
-          projectTitle={this.props.project.title}
-          projectPage="batches"
+          projectForHeader={this.props.projectForHeader}
+          missionForHeader={this.props.missionForHeader}
+          owner
+          current="batches"
           sidebar={
             <React.Fragment>
               <div className="batch-index--sidebar">
                 <SidebarItem
                   className="batch-index--sidebar--item batch-index--sidebar--item__form"
-                  text={this.state['batch[name]']}
+                  text={this.state['batch[name]'] || 'New Batch'}
                   selected
                 />
                 <hr className="batch-index--sidebar--hr" />
@@ -260,23 +261,27 @@ class BatchForm extends React.Component {
 }
 
 BatchForm.propTypes = {
-  batch       : PropTypes.object.isRequired,
-  states      : PropTypes.object.isRequired,
-  project     : PropTypes.object.isRequired,
-  formUrl     : PropTypes.string.isRequired,
-  formAction  : PropTypes.string.isRequired,
-  urlOnSuccess: PropTypes.string.isRequired,
-  projectId   : PropTypes.number.isRequired,
-  csrfToken   : PropTypes.string.isRequired
+  batch           : PropTypes.object.isRequired,
+  states          : PropTypes.object.isRequired,
+  project         : PropTypes.object.isRequired,
+  formUrl         : PropTypes.string.isRequired,
+  formAction      : PropTypes.string.isRequired,
+  urlOnSuccess    : PropTypes.string.isRequired,
+  projectId       : PropTypes.number.isRequired,
+  csrfToken       : PropTypes.string.isRequired,
+  missionForHeader: PropTypes.object,
+  projectForHeader: PropTypes.object
 }
 BatchForm.defaultProps = {
-  batch       : {'default': '_'},
-  states      : {'default': '_'},
-  project     : {'default': '_'},
-  formUrl     : '/',
-  formAction  : 'POST',
-  urlOnSuccess: '/',
-  projectId   : 0,
-  csrfToken   : '00'
+  batch           : {'default': '_'},
+  states          : {'default': '_'},
+  project         : {'default': '_'},
+  formUrl         : '/',
+  formAction      : 'POST',
+  urlOnSuccess    : '/',
+  projectId       : 0,
+  csrfToken       : '00',
+  missionForHeader: null,
+  projectForHeader: null
 }
 export default BatchForm

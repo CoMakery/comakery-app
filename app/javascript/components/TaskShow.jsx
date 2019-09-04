@@ -187,9 +187,10 @@ class TaskShow extends React.Component {
       <React.Fragment>
         <ProjectSetup
           className="task-award-form"
-          projectId={this.props.project.id}
-          projectTitle={this.props.project.title}
-          projectPage="batches"
+          projectForHeader={this.props.projectForHeader}
+          missionForHeader={this.props.missionForHeader}
+          owner
+          current="batches"
           hasBackButton
           subfooter={
             <React.Fragment>
@@ -366,7 +367,9 @@ TaskShow.propTypes = {
   formUrl            : PropTypes.string.isRequired,
   formAction         : PropTypes.string.isRequired,
   urlOnSuccess       : PropTypes.string.isRequired,
-  csrfToken          : PropTypes.string.isRequired
+  csrfToken          : PropTypes.string.isRequired,
+  missionForHeader   : PropTypes.object,
+  projectForHeader   : PropTypes.object
 }
 TaskShow.defaultProps = {
   task: {
@@ -388,6 +391,8 @@ TaskShow.defaultProps = {
   formUrl            : '/',
   formAction         : 'POST',
   urlOnSuccess       : '/',
-  csrfToken          : '00'
+  csrfToken          : '00',
+  missionForHeader   : null,
+  projectForHeader   : null
 }
 export default TaskShow

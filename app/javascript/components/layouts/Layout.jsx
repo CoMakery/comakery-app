@@ -46,8 +46,6 @@ class Layout extends React.Component {
               {customTitle}
             </div>
 
-            <hr className="layout--content--hr" />
-
             <div className="layout--content--wrapper">
               { sidebar &&
                 <div className="layout--content--sidebar">

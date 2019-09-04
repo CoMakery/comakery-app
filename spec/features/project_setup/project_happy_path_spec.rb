@@ -31,7 +31,7 @@ describe 'viewing projects, creating and editing', :js do
 
     visit projects_path
     click_link 'New Project'
-    expect(page).to have_content 'PROJECT SETTINGS'
+    expect(page).to have_content 'New Project'
     fill_in 'project[title]', with: 'This is a project'
     fill_in 'project[description]', with: 'This is a project description which is very informative'
     fill_in 'project[maximum_tokens]', with: '1000'

@@ -11,7 +11,6 @@ describe('Layout', () => {
     expect(wrapper.exists('.layout--back-button')).toBe(false)
     expect(wrapper.exists('.layout--content')).toBe(true)
     expect(wrapper.exists('.layout--content--title')).toBe(true)
-    expect(wrapper.exists('.layout--content--hr')).toBe(true)
     expect(wrapper.exists('.layout--content--sidebar')).toBe(false)
     expect(wrapper.exists('.layout--content--content')).toBe(true)
     expect(wrapper.exists('.layout--content--content__sidebared')).toBe(false)
