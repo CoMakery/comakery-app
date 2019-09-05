@@ -199,10 +199,10 @@ class BatchIndex extends React.Component {
       <React.Fragment>
         <ProjectSetup
           className="batch-index"
-          projectId={this.props.project.id}
-          projectTitle={this.props.project.title}
-          projectPage="batches"
-          editable={this.props.editable}
+          projectForHeader={this.props.projectForHeader}
+          missionForHeader={this.props.missionForHeader}
+          owner={this.props.editable}
+          current="batches"
           sidebar={
             <React.Fragment>
               <div className="batch-index--sidebar">
@@ -318,15 +318,19 @@ class BatchIndex extends React.Component {
 }
 
 BatchIndex.propTypes = {
-  editable    : PropTypes.bool,
-  batches     : PropTypes.array.isRequired,
-  newBatchPath: PropTypes.string,
-  project     : PropTypes.object
+  editable        : PropTypes.bool,
+  batches         : PropTypes.array.isRequired,
+  newBatchPath    : PropTypes.string,
+  project         : PropTypes.object,
+  missionForHeader: PropTypes.object,
+  projectForHeader: PropTypes.object
 }
 BatchIndex.defaultProps = {
-  editable    : true,
-  batches     : [],
-  newBatchPath: '',
-  project     : {}
+  editable        : true,
+  batches         : [],
+  newBatchPath    : '',
+  project         : {},
+  missionForHeader: null,
+  projectForHeader: null
 }
 export default BatchIndex

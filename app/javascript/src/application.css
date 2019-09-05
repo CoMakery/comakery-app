@@ -1190,7 +1190,7 @@ select:disabled {
 }
 
 .mission-index--sidebar--item__bold {
-  margin: 14px 14px 4px 0;
+  margin: 0px 14px 4px 0;
 }
 
 .mission-index--sidebar--item-check {
@@ -1301,7 +1301,7 @@ select:disabled {
 .token-index--sidebar--item__bold,
 .styleguide-index--sidebar--item__bold,
 .batch-index--sidebar--item__bold {
-  margin: 14px 14px 4px 0;
+  margin: 0px 14px 4px 0;
 }
 
 .batch-index--sidebar--hr {

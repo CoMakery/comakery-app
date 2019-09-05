@@ -26,7 +26,7 @@ describe 'viewing projects, creating and editing', :js do
         it 'lets people view awards' do
           visit project_path(project)
 
-          click_link 'Payments'
+          click_link 'payments'
           expect(page).to have_css '#contributions-chart'
           expect(page).to have_css 'table.award-rows'
         end
@@ -38,7 +38,7 @@ describe 'viewing projects, creating and editing', :js do
           login(owner)
           visit project_path(project.token.reload)
 
-          click_link 'Payments'
+          click_link 'payments'
           expect(page).to have_content 'Blockchain Transaction'
         end
 
@@ -49,7 +49,7 @@ describe 'viewing projects, creating and editing', :js do
 
           visit project_path(project)
 
-          click_link 'Payments'
+          click_link 'payments'
           expect(page.all('table.award-rows tr.award-row').size).to eq(50)
           expect(page).to have_content '1 2 3 4 5 … › »'
 

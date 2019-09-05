@@ -10,11 +10,13 @@ exports[`BatchForm renders correctly without props 1`] = `
   csrfToken="00"
   formAction="POST"
   formUrl="/"
+  missionForHeader={null}
   project={
     Object {
       "default": "_",
     }
   }
+  projectForHeader={null}
   projectId={0}
   states={
     Object {
@@ -25,11 +27,11 @@ exports[`BatchForm renders correctly without props 1`] = `
 >
   <ProjectSetup
     className="batch-form"
-    editable={true}
+    current="batches"
     hasBackButton={true}
-    projectId={null}
-    projectPage="batches"
-    projectTitle=""
+    missionForHeader={null}
+    owner={true}
+    projectForHeader={null}
     sidebar={
       <React.Fragment>
         <div
@@ -42,7 +44,7 @@ exports[`BatchForm renders correctly without props 1`] = `
             iconRightName=""
             notificationColor=""
             selected={true}
-            text=""
+            text="New Batch"
           />
           <hr
             className="batch-index--sidebar--hr"
@@ -80,13 +82,14 @@ exports[`BatchForm renders correctly without props 1`] = `
       className="project-setup batch-form"
       customTitle={
         <ProjectSetupHeader
-          projectId={null}
-          projectOwner={true}
-          projectPage="batches"
-          projectTitle=""
+          current="batches"
+          expanded={false}
+          missionForHeader={null}
+          owner={true}
+          projectForHeader={null}
         />
       }
-      hasBackButton={true}
+      hasBackButton={false}
       sidebar={
         <React.Fragment>
           <div
@@ -99,7 +102,7 @@ exports[`BatchForm renders correctly without props 1`] = `
               iconRightName=""
               notificationColor=""
               selected={true}
-              text=""
+              text="New Batch"
             />
             <hr
               className="batch-index--sidebar--hr"
@@ -137,85 +140,186 @@ exports[`BatchForm renders correctly without props 1`] = `
         className="layout project-setup batch-form"
       >
         <div
-          className="layout--back-button"
-        >
-          <Icon
-            className=""
-            name="iconCloseCopy.svg"
-            onClick={[Function]}
-          >
-            <img
-              className="icon icon__iconCloseCopy-svg"
-              onClick={[Function]}
-              src="test-file-stub"
-            />
-          </Icon>
-        </div>
-        <div
           className="layout--content"
         >
           <div
             className="layout--content--title"
           >
             <ProjectSetupHeader
-              projectId={null}
-              projectOwner={true}
-              projectPage="batches"
-              projectTitle=""
+              current="batches"
+              expanded={false}
+              missionForHeader={null}
+              owner={true}
+              projectForHeader={null}
             >
-              <div
-                className="layout--content--title--header"
-              />
-              <span
-                className="layout--content--title--nav"
+              <styled.div
+                backgroundImageUrl={null}
               >
-                <a
-                  href="#"
+                <StyledComponent
+                  backgroundImageUrl={null}
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-bdVaJa",
+                        "isStatic": false,
+                        "lastClassName": "jKQScu",
+                        "rules": Array [
+                          "
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: default;
+  margin-bottom: 1em;
+  background-image: url(",
+                          [Function],
+                          ");
+  background-position-x: 50%;
+  background-position-y: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  text-shadow: 1px 1px 1px #3a3a3a;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-bdVaJa",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
                 >
-                  project settings
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav__current"
-              >
-                <a
-                  href="#"
-                >
-                  batches & tasks
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  contributors
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  payments
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  overview
-                </a>
-              </span>
+                  <div
+                    className="sc-bdVaJa jKQScu"
+                  >
+                    <styled.div>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-bwzfXH",
+                              "isStatic": true,
+                              "lastClassName": "fFBqGW",
+                              "rules": Array [
+                                "
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0.7em;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-bwzfXH",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-bwzfXH fFBqGW"
+                        />
+                      </StyledComponent>
+                    </styled.div>
+                    <styled.div>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-EHOje",
+                              "isStatic": true,
+                              "lastClassName": "gazehm",
+                              "rules": Array [
+                                "
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-grow: 2;
+  flex-direction: column;
+
+  img {
+    max-height: 150px;
+
+    margin-bottom: -50px;
+    margin-top: 25px;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+  }
+
+  h2 {
+    font-size: 18px;
+    text-transform: capitalize;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    margin-top: -75px;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-EHOje",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-EHOje gazehm"
+                        >
+                          <h1>
+                            New Project
+                          </h1>
+                        </div>
+                      </StyledComponent>
+                    </styled.div>
+                  </div>
+                </StyledComponent>
+              </styled.div>
             </ProjectSetupHeader>
           </div>
-          <hr
-            className="layout--content--hr"
-          />
           <div
             className="layout--content--wrapper"
           >
@@ -232,7 +336,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                   iconRightName=""
                   notificationColor=""
                   selected={true}
-                  text=""
+                  text="New Batch"
                 >
                   <div
                     className="sidebar-item--wrapper"
@@ -245,7 +349,9 @@ exports[`BatchForm renders correctly without props 1`] = `
                       >
                         <div
                           className="sidebar-item--text"
-                        />
+                        >
+                          New Batch
+                        </div>
                         <div
                           className="sidebar-item--subchild"
                         />

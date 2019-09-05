@@ -6,21 +6,9 @@ import ProjectSetupHeader from './ProjectSetupHeader'
 
 class ProjectSetup extends React.Component {
   render() {
-    const {
-      className,
-      sidebar,
-      projectId,
-      projectTitle,
-      projectPage,
-      subfooter,
-      children,
-      editable,
-      ...other
-    } = this.props
-
     const classnames = classNames(
       'project-setup',
-      className
+      this.props.className
     )
 
     return (
@@ -29,17 +17,16 @@ class ProjectSetup extends React.Component {
           className={classnames}
           customTitle={
             <ProjectSetupHeader
-              projectTitle={projectTitle}
-              projectId={projectId}
-              projectPage={projectPage}
-              projectOwner={editable}
+              projectForHeader={this.props.projectForHeader}
+              missionForHeader={this.props.missionForHeader}
+              owner={this.props.owner}
+              current={this.props.current}
             />
           }
-          sidebar={sidebar}
-          subfooter={subfooter}
-          {...other}
+          sidebar={this.props.sidebar}
+          subfooter={this.props.subfooter}
         >
-          {children}
+          {this.props.children}
         </Layout>
       </React.Fragment>
     )
@@ -47,21 +34,21 @@ class ProjectSetup extends React.Component {
 }
 
 ProjectSetup.propTypes = {
-  className   : PropTypes.string,
-  projectId   : PropTypes.number,
-  projectTitle: PropTypes.string,
-  projectPage : PropTypes.string,
-  subfooter   : PropTypes.object,
-  sidebar     : PropTypes.object,
-  editable    : PropTypes.bool
+  className       : PropTypes.string,
+  subfooter       : PropTypes.object,
+  sidebar         : PropTypes.object,
+  missionForHeader: PropTypes.object,
+  projectForHeader: PropTypes.object,
+  owner           : PropTypes.bool,
+  current         : PropTypes.string
 }
 ProjectSetup.defaultProps = {
-  className   : '',
-  projectId   : null,
-  projectTitle: '',
-  projectPage : '',
-  subfooter   : null,
-  sidebar     : null,
-  editable    : true
+  className       : PropTypes.string,
+  subfooter       : null,
+  sidebar         : null,
+  missionForHeader: null,
+  projectForHeader: null,
+  owner           : true,
+  current         : ''
 }
 export default ProjectSetup

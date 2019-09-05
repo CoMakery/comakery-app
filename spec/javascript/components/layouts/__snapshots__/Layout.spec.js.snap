@@ -11,9 +11,6 @@ exports[`Layout renders correctly without props 1`] = `
       <div
         className="layout--content--title"
       />
-      <hr
-        className="layout--content--hr"
-      />
       <div
         className="layout--content--wrapper"
       >

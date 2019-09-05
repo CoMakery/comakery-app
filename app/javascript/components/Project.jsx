@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
 import ProfileModal from '../components/ProfileModal'
+import ProjectSetupHeader from './layouts/ProjectSetupHeader'
 import MyTask from './MyTask'
 import Pluralize from 'react-pluralize'
 import d3 from 'd3/d3'
@@ -230,7 +231,7 @@ export default class Project extends React.Component {
   }
 
   render() {
-    const { projectData, missionData, tokenData, contributorsPath, awardsPath, awardTypesPath, editable } = this.props
+    const { projectData, tokenData } = this.props
     const { interested, specialtyInterested } = this.state
     const skills = {
       development: 'Software Development',
@@ -245,45 +246,13 @@ export default class Project extends React.Component {
     const skillIds = [5, 6, 8, 2, 3, 1, 7, 4]
 
     return <div className="project-container">
-      <div className="project-header" style={{backgroundImage: `url(${projectData.panoramicImageUrl})`}}>
-        <div className="project-header__blur" />
-        <div className="project-header__content">
-          <div className="project-header__menu">
-            {missionData &&
-              <a className="project-header__menu__back" href={missionData.missionUrl}>
-                <Icon name="iconBackWhite.svg" style={{marginRight: 8}} />
-                {missionData.name}
-              </a>
-            }
-
-            <div className="project-header__menu__links">
-              {projectData.showContributions &&
-                <React.Fragment>
-                  <a className="project-header__menu__link project-header__menu__link--first" href={contributorsPath}>Contributors</a>
-                  <a className="project-header__menu__link" href={awardsPath}>Payments</a>
-                </React.Fragment>
-              }
-              {editable &&
-                <a className="project-header__menu__link" href={awardTypesPath}>Edit This Project</a>
-              }
-              {!editable &&
-                <a className="project-header__menu__link" href={awardTypesPath}>BATCHES & TASKS</a>
-              }
-            </div>
-          </div>
-
-          {missionData &&
-            <div className="project-header__mission-image">
-              <a href={missionData.missionUrl}>
-                <img src={missionData.logoUrl} />
-              </a>
-            </div>
-          }
-
-          <div className="project-header__name"> {projectData.title} </div>
-          <div className="project-header__owner"> by {projectData.owner} </div>
-        </div>
-      </div>
+      <ProjectSetupHeader
+        projectForHeader={this.props.projectForHeader}
+        missionForHeader={this.props.missionForHeader}
+        owner={this.props.editable}
+        current="overview"
+        expanded
+      />
 
       <div className="project-award">
         {tokenData &&
@@ -500,16 +469,14 @@ export default class Project extends React.Component {
 Project.propTypes = {
   tasksBySpecialty: PropTypes.array,
   projectData     : PropTypes.shape({}),
-  missionData     : PropTypes.shape({}),
   tokenData       : PropTypes.shape({}),
   interested      : PropTypes.bool,
   csrfToken       : PropTypes.string,
   editable        : PropTypes.bool,
-  contributorsPath: PropTypes.string,
-  awardsPath      : PropTypes.string,
-  awardTypesPath  : PropTypes.string,
   myTasksPath     : PropTypes.string,
-  editPath        : PropTypes.string
+  editPath        : PropTypes.string,
+  missionForHeader: PropTypes.object,
+  projectForHeader: PropTypes.object
 }
 
 Project.defaultProps = {
@@ -531,5 +498,7 @@ Project.defaultProps = {
   awardsPath         : '',
   awardTypesPath     : '',
   myTasksPath        : '',
-  editPath           : null
+  editPath           : null,
+  missionForHeader   : null,
+  projectForHeader   : null
 }

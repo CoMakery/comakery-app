@@ -4,15 +4,17 @@ exports[`BatchIndex renders correctly without props 1`] = `
 <BatchIndex
   batches={Array []}
   editable={true}
+  missionForHeader={null}
   newBatchPath=""
   project={Object {}}
+  projectForHeader={null}
 >
   <ProjectSetup
     className="batch-index"
-    editable={true}
-    projectId={null}
-    projectPage="batches"
-    projectTitle=""
+    current="batches"
+    missionForHeader={null}
+    owner={true}
+    projectForHeader={null}
     sidebar={
       <React.Fragment>
         <div
@@ -47,10 +49,11 @@ exports[`BatchIndex renders correctly without props 1`] = `
       className="project-setup batch-index"
       customTitle={
         <ProjectSetupHeader
-          projectId={null}
-          projectOwner={true}
-          projectPage="batches"
-          projectTitle=""
+          current="batches"
+          expanded={false}
+          missionForHeader={null}
+          owner={true}
+          projectForHeader={null}
         />
       }
       hasBackButton={false}
@@ -94,64 +97,180 @@ exports[`BatchIndex renders correctly without props 1`] = `
             className="layout--content--title"
           >
             <ProjectSetupHeader
-              projectId={null}
-              projectOwner={true}
-              projectPage="batches"
-              projectTitle=""
+              current="batches"
+              expanded={false}
+              missionForHeader={null}
+              owner={true}
+              projectForHeader={null}
             >
-              <div
-                className="layout--content--title--header"
-              />
-              <span
-                className="layout--content--title--nav"
+              <styled.div
+                backgroundImageUrl={null}
               >
-                <a
-                  href="#"
+                <StyledComponent
+                  backgroundImageUrl={null}
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-bdVaJa",
+                        "isStatic": false,
+                        "lastClassName": "jKQScu",
+                        "rules": Array [
+                          "
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: default;
+  margin-bottom: 1em;
+  background-image: url(",
+                          [Function],
+                          ");
+  background-position-x: 50%;
+  background-position-y: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  text-shadow: 1px 1px 1px #3a3a3a;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-bdVaJa",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
                 >
-                  project settings
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav__current"
-              >
-                <a
-                  href="#"
-                >
-                  batches & tasks
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  contributors
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  payments
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  overview
-                </a>
-              </span>
+                  <div
+                    className="sc-bdVaJa jKQScu"
+                  >
+                    <styled.div>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-bwzfXH",
+                              "isStatic": true,
+                              "lastClassName": "fFBqGW",
+                              "rules": Array [
+                                "
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0.7em;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-bwzfXH",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-bwzfXH fFBqGW"
+                        />
+                      </StyledComponent>
+                    </styled.div>
+                    <styled.div>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-EHOje",
+                              "isStatic": true,
+                              "lastClassName": "gazehm",
+                              "rules": Array [
+                                "
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-grow: 2;
+  flex-direction: column;
+
+  img {
+    max-height: 150px;
+
+    margin-bottom: -50px;
+    margin-top: 25px;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+  }
+
+  h2 {
+    font-size: 18px;
+    text-transform: capitalize;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    margin-top: -75px;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-EHOje",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-EHOje gazehm"
+                        >
+                          <h1>
+                            New Project
+                          </h1>
+                        </div>
+                      </StyledComponent>
+                    </styled.div>
+                  </div>
+                </StyledComponent>
+              </styled.div>
             </ProjectSetupHeader>
           </div>
-          <hr
-            className="layout--content--hr"
-          />
           <div
             className="layout--content--wrapper"
           >
@@ -240,9 +359,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                         "$$typeof": Symbol(react.forward_ref),
                         "attrs": Array [],
                         "componentStyle": ComponentStyle {
-                          "componentId": "sc-dVhcbM",
+                          "componentId": "sc-cHGsZl",
                           "isStatic": true,
-                          "lastClassName": "bnloCr",
+                          "lastClassName": "cljqaU",
                           "rules": Array [
                             "
   margin: 1em 0;
@@ -253,7 +372,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                         "displayName": "styled.div",
                         "foldedComponentIds": Array [],
                         "render": [Function],
-                        "styledComponentId": "sc-dVhcbM",
+                        "styledComponentId": "sc-cHGsZl",
                         "target": "div",
                         "toString": [Function],
                         "warnTooManyClasses": [Function],
@@ -263,7 +382,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                     forwardedRef={null}
                   >
                     <div
-                      className="sc-dVhcbM bnloCr"
+                      className="sc-cHGsZl cljqaU"
                     >
                       <styled.div>
                         <StyledComponent
@@ -272,9 +391,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               "$$typeof": Symbol(react.forward_ref),
                               "attrs": Array [],
                               "componentStyle": ComponentStyle {
-                                "componentId": "sc-eqIVtm",
+                                "componentId": "sc-TOsTZ",
                                 "isStatic": true,
-                                "lastClassName": "cQEGGw",
+                                "lastClassName": "hvKIGx",
                                 "rules": Array [
                                   "
   display: flex;
@@ -291,7 +410,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               "displayName": "styled.div",
                               "foldedComponentIds": Array [],
                               "render": [Function],
-                              "styledComponentId": "sc-eqIVtm",
+                              "styledComponentId": "sc-TOsTZ",
                               "target": "div",
                               "toString": [Function],
                               "warnTooManyClasses": [Function],
@@ -301,7 +420,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                           forwardedRef={null}
                         >
                           <div
-                            className="sc-eqIVtm cQEGGw"
+                            className="sc-TOsTZ hvKIGx"
                           >
                             <div>
                               allocated budget
@@ -318,9 +437,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                                       "$$typeof": Symbol(react.forward_ref),
                                       "attrs": Array [],
                                       "componentStyle": ComponentStyle {
-                                        "componentId": "sc-bxivhb",
+                                        "componentId": "sc-dnqmqq",
                                         "isStatic": true,
-                                        "lastClassName": "ljVujs",
+                                        "lastClassName": "eXyKsn",
                                         "rules": Array [
                                           "
   display: flex;
@@ -336,7 +455,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                                       "displayName": "styled.div",
                                       "foldedComponentIds": Array [],
                                       "render": [Function],
-                                      "styledComponentId": "sc-bxivhb",
+                                      "styledComponentId": "sc-dnqmqq",
                                       "target": "div",
                                       "toString": [Function],
                                       "warnTooManyClasses": [Function],
@@ -346,7 +465,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                                   forwardedRef={null}
                                 >
                                   <div
-                                    className="sc-bxivhb ljVujs"
+                                    className="sc-dnqmqq eXyKsn"
                                   >
                                     <styled.div>
                                       <StyledComponent
@@ -355,9 +474,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                                             "$$typeof": Symbol(react.forward_ref),
                                             "attrs": Array [],
                                             "componentStyle": ComponentStyle {
-                                              "componentId": "sc-ifAKCX",
+                                              "componentId": "sc-iwsKbI",
                                               "isStatic": true,
-                                              "lastClassName": "gATvmT",
+                                              "lastClassName": "jnZZpz",
                                               "rules": Array [
                                                 "
   margin-right: 0.5em;
@@ -367,7 +486,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                                             "displayName": "styled.div",
                                             "foldedComponentIds": Array [],
                                             "render": [Function],
-                                            "styledComponentId": "sc-ifAKCX",
+                                            "styledComponentId": "sc-iwsKbI",
                                             "target": "div",
                                             "toString": [Function],
                                             "warnTooManyClasses": [Function],
@@ -377,7 +496,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                                         forwardedRef={null}
                                       >
                                         <div
-                                          className="sc-ifAKCX gATvmT"
+                                          className="sc-iwsKbI jnZZpz"
                                         />
                                       </StyledComponent>
                                     </styled.div>
@@ -403,9 +522,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "$$typeof": Symbol(react.forward_ref),
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "sc-gipzik",
+                        "componentId": "sc-fBuWsC",
                         "isStatic": true,
-                        "lastClassName": "gZCNyP",
+                        "lastClassName": "gDntiF",
                         "rules": Array [
                           "
   font-family: Georgia;
@@ -435,7 +554,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "sc-gipzik",
+                      "styledComponentId": "sc-fBuWsC",
                       "target": "div",
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -445,7 +564,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-gipzik gZCNyP"
+                    className="sc-fBuWsC gDntiF"
                   >
                     <ul>
                       <li>

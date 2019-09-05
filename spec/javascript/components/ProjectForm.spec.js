@@ -8,7 +8,6 @@ describe('ProjectForm', () => {
 
     expect(wrapper).toMatchSnapshot()
 
-    expect(wrapper.exists('ProjectSetup[projectTitle]')).toBe(true)
     expect(wrapper.exists('.project-form')).toBe(true)
     expect(wrapper.exists('ButtonBorder[value="cancel"]')).toBe(true)
     expect(wrapper.exists('ButtonBorder[value="create"]')).toBe(true)

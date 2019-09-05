@@ -108,7 +108,9 @@ class AwardTypesController < ApplicationController
           currency: @project.token&.symbol,
           currency_logo: helpers.attachment_url(@project.token, :logo_image, :fill, 100, 100),
           allocated_budget: @project.awards.sum(&:possible_total_amount)
-        )
+        ),
+        project_for_header: @project.header_props,
+        mission_for_header: @project&.mission&.decorate&.header_props
       }
     end
 
@@ -149,7 +151,9 @@ class AwardTypesController < ApplicationController
         form_action: 'POST',
         url_on_success: project_award_types_path,
         project_id: @project.id,
-        csrf_token: form_authenticity_token
+        csrf_token: form_authenticity_token,
+        project_for_header: @project.header_props,
+        mission_for_header: @project&.mission&.decorate&.header_props
       }
     end
 

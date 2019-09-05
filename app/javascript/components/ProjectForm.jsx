@@ -266,9 +266,10 @@ class ProjectForm extends React.Component {
       <React.Fragment>
         <ProjectSetup
           className="project-form"
-          projectTitle={this.state['project[title]']}
-          projectId={this.state.id}
-          projectPage="form"
+          projectForHeader={this.props.projectForHeader}
+          missionForHeader={this.props.missionForHeader}
+          owner
+          current="form"
           subfooter={
             <React.Fragment>
               <Button
@@ -570,31 +571,35 @@ class ProjectForm extends React.Component {
 }
 
 ProjectForm.propTypes = {
-  project      : PropTypes.object.isRequired,
-  tokens       : PropTypes.object.isRequired,
-  missions     : PropTypes.object.isRequired,
-  decimalPlaces: PropTypes.array.isRequired,
-  visibilities : PropTypes.array.isRequired,
-  teams        : PropTypes.array.isRequired,
-  discordBotUrl: PropTypes.string,
-  licenseUrl   : PropTypes.string.isRequired,
-  termsReadonly: PropTypes.bool.isRequired,
-  formUrl      : PropTypes.string.isRequired,
-  formAction   : PropTypes.string.isRequired,
-  csrfToken    : PropTypes.string.isRequired
+  project         : PropTypes.object.isRequired,
+  tokens          : PropTypes.object.isRequired,
+  missions        : PropTypes.object.isRequired,
+  decimalPlaces   : PropTypes.array.isRequired,
+  visibilities    : PropTypes.array.isRequired,
+  teams           : PropTypes.array.isRequired,
+  discordBotUrl   : PropTypes.string,
+  licenseUrl      : PropTypes.string.isRequired,
+  termsReadonly   : PropTypes.bool.isRequired,
+  formUrl         : PropTypes.string.isRequired,
+  formAction      : PropTypes.string.isRequired,
+  csrfToken       : PropTypes.string.isRequired,
+  missionForHeader: PropTypes.object,
+  projectForHeader: PropTypes.object
 }
 ProjectForm.defaultProps = {
-  project      : {'default': '_'},
-  tokens       : {'default': '_'},
-  missions     : {'default': '_'},
-  decimalPlaces: [],
-  visibilities : [],
-  teams        : [],
-  discordBotUrl: null,
-  licenseUrl   : '/',
-  termsReadonly: false,
-  formUrl      : '/',
-  formAction   : 'POST',
-  csrfToken    : '00'
+  project         : {'default': '_'},
+  tokens          : {'default': '_'},
+  missions        : {'default': '_'},
+  decimalPlaces   : [],
+  visibilities    : [],
+  teams           : [],
+  discordBotUrl   : null,
+  licenseUrl      : '/',
+  termsReadonly   : false,
+  formUrl         : '/',
+  formAction      : 'POST',
+  csrfToken       : '00',
+  missionForHeader: null,
+  projectForHeader: null
 }
 export default ProjectForm
