@@ -305,63 +305,65 @@ class TaskDetails extends React.Component {
               </Submission>
             }
 
-            <Review>
-              <SubHeader>
-                Submitted Work
-              </SubHeader>
+            {((task.status === 'submitted' && task.issuer.self) || task.submissionUrl || task.submissionComment || task.submissionImageUrl) &&
+              <Review>
+                <SubHeader>
+                  Submitted Work
+                </SubHeader>
 
-              {task.submissionUrl &&
-                <ContentBlock title="URL WHERE COMPLETED WORK CAN BE VIEWED">
-                  <a target="_blank" href={task.submissionUrl}>
-                    {task.submissionUrl}
-                  </a>
-                </ContentBlock>
-              }
+                {task.submissionUrl &&
+                  <ContentBlock title="URL WHERE COMPLETED WORK CAN BE VIEWED">
+                    <a target="_blank" href={task.submissionUrl}>
+                      {task.submissionUrl}
+                    </a>
+                  </ContentBlock>
+                }
 
-              {task.submissionComment &&
-                <ContentBlock title="ADDITIONAL COMMENTS">
-                  {task.submissionComment}
-                </ContentBlock>
-              }
+                {task.submissionComment &&
+                  <ContentBlock title="ADDITIONAL COMMENTS">
+                    {task.submissionComment}
+                  </ContentBlock>
+                }
 
-              {task.submissionImageUrl &&
-                <ContentBlock title="ATTACHED IMAGE">
-                  <a target="_blank" href={task.submissionImageUrl}>
-                    <img src={task.submissionImageUrl} />
-                  </a>
-                </ContentBlock>
-              }
+                {task.submissionImageUrl &&
+                  <ContentBlock title="ATTACHED IMAGE">
+                    <a target="_blank" href={task.submissionImageUrl}>
+                      <img src={task.submissionImageUrl} />
+                    </a>
+                  </ContentBlock>
+                }
 
-              {task.status === 'submitted' && task.issuer.self &&
-                <React.Fragment>
-                  <form action={task.acceptUrl} method="post">
-                    <input
-                      type="hidden"
-                      name="authenticity_token"
-                      value={this.props.csrfToken}
-                      readOnly
-                    />
-                    <Button
-                      type="submit"
-                      value="accept"
-                    />
-                  </form>
+                {task.status === 'submitted' && task.issuer.self &&
+                  <React.Fragment>
+                    <form action={task.acceptUrl} method="post">
+                      <input
+                        type="hidden"
+                        name="authenticity_token"
+                        value={this.props.csrfToken}
+                        readOnly
+                      />
+                      <Button
+                        type="submit"
+                        value="accept"
+                      />
+                    </form>
 
-                  <form action={task.rejectUrl} method="post">
-                    <input
-                      type="hidden"
-                      name="authenticity_token"
-                      value={this.props.csrfToken}
-                      readOnly
-                    />
-                    <ButtonBorderGray
-                      type="submit"
-                      value="reject & end"
-                    />
-                  </form>
-                </React.Fragment>
-              }
-            </Review>
+                    <form action={task.rejectUrl} method="post">
+                      <input
+                        type="hidden"
+                        name="authenticity_token"
+                        value={this.props.csrfToken}
+                        readOnly
+                      />
+                      <ButtonBorderGray
+                        type="submit"
+                        value="reject & end"
+                      />
+                    </form>
+                  </React.Fragment>
+                }
+              </Review>
+            }
 
             <Details>
               <SubHeader>
