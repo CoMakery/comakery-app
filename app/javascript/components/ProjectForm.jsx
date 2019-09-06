@@ -8,7 +8,9 @@ import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
 import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import InputFieldDropdownHalfed from './styleguide/InputFieldDropdownHalfed'
+import InputFieldDropdownInline from './styleguide/InputFieldDropdownInline'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
+import InputFieldInline from './styleguide/InputFieldInline'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import Icon from './styleguide/Icon'
 
@@ -80,6 +82,8 @@ class ProjectForm extends React.Component {
       'project[maximum_tokens]'         : this.props.project.maximumTokens || '',
       'project[video_url]'              : this.props.project.videoUrl || '',
       'project[legal_project_owner]'    : this.props.project.legalProjectOwner || '',
+      'project[exclusive_contributions]': this.props.project.exclusiveContributions ? 'true' : 'false',
+      'project[confidentiality]'        : this.props.project.confidentiality ? 'true' : 'false',
       'project[channels]'               : this.props.project.channels || []
     }
   }
@@ -262,9 +266,10 @@ class ProjectForm extends React.Component {
       <React.Fragment>
         <ProjectSetup
           className="project-form"
-          projectTitle={this.state['project[title]']}
-          projectId={this.state.id}
-          projectPage="form"
+          projectForHeader={this.props.projectForHeader}
+          missionForHeader={this.props.missionForHeader}
+          owner
+          current="form"
           subfooter={
             <React.Fragment>
               <Button
@@ -396,17 +401,6 @@ class ProjectForm extends React.Component {
               symbolLimit={0}
             />
 
-            <InputFieldWhiteDark
-              title="legal owner of the project"
-              required
-              name="project[legal_project_owner]"
-              value={this.state['project[legal_project_owner]']}
-              errorText={this.state.errors['project[legal_project_owner]']}
-              placeholder="Provide a legal entity or individual owner's name"
-              eventHandler={this.handleFieldChange}
-              symbolLimit={0}
-            />
-
             <InputFieldUploadFile
               title="project image"
               name="project[square_image]"
@@ -517,6 +511,58 @@ class ProjectForm extends React.Component {
                 Start adding channels by signing in with Slack or Discord
               </div>
             }
+
+            <div className="project-form--form--terms--header">
+              TERMS & CONDITIONS
+            </div>
+
+            <div className="project-form--form--terms--content">
+              <InputFieldInline
+                required
+                readOnly={this.props.termsReadonly}
+                name="project[legal_project_owner]"
+                value={this.state['project[legal_project_owner]']}
+                errorText={this.state.errors['project[legalProjectOwner]']}
+                placeholder="Provide a legal entity or individual owner's name"
+                eventHandler={this.handleFieldChange}
+              />
+              ("You", the "Project Owner") agree to the <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>
+              <br />
+
+              You agree that for this Project, Contributions are <InputFieldDropdownInline
+                required
+                disabled={this.props.termsReadonly}
+                name="project[exclusive_contributions]"
+                value={this.state['project[exclusive_contributions]']}
+                errorText={this.state.errors['project[exclusiveContributions]']}
+                eventHandler={this.handleFieldChange}
+                selectEntries={Object.entries({
+                  'Exclusive'    : 'true',
+                  'Not Exclusive': 'false'
+                })}
+              />
+              <br />
+
+              Project confidentiality and business confidentiality are <InputFieldDropdownInline
+                required
+                disabled={this.props.termsReadonly}
+                name="project[confidentiality]"
+                value={this.state['project[confidentiality]']}
+                errorText={this.state.errors['project[confidentiality]']}
+                eventHandler={this.handleFieldChange}
+                selectEntries={Object.entries({
+                  'Required'    : 'true',
+                  'Not Required': 'false'
+                })}
+              /> and at the time that you indicate a Task is complete you agree to pay the Contributor the Award for the Task.
+              <br />
+
+              By {this.state.formAction === 'POST' ? 'creating this Project (clicking CREATE & CLOSE or CREATE)' : 'updating this Project (clicking SAVE & CLOSE or SAVE)'}, you agree to these Terms & Conditions.
+              <br />
+
+              You may modify these Terms & Conditions until the first Project Task has been started by a Contributor.
+            </div>
+
           </form>
         </ProjectSetup>
       </React.Fragment>
@@ -525,27 +571,35 @@ class ProjectForm extends React.Component {
 }
 
 ProjectForm.propTypes = {
-  project      : PropTypes.object.isRequired,
-  tokens       : PropTypes.object.isRequired,
-  missions     : PropTypes.object.isRequired,
-  decimalPlaces: PropTypes.array.isRequired,
-  visibilities : PropTypes.array.isRequired,
-  teams        : PropTypes.array.isRequired,
-  discordBotUrl: PropTypes.string,
-  formUrl      : PropTypes.string.isRequired,
-  formAction   : PropTypes.string.isRequired,
-  csrfToken    : PropTypes.string.isRequired
+  project         : PropTypes.object.isRequired,
+  tokens          : PropTypes.object.isRequired,
+  missions        : PropTypes.object.isRequired,
+  decimalPlaces   : PropTypes.array.isRequired,
+  visibilities    : PropTypes.array.isRequired,
+  teams           : PropTypes.array.isRequired,
+  discordBotUrl   : PropTypes.string,
+  licenseUrl      : PropTypes.string.isRequired,
+  termsReadonly   : PropTypes.bool.isRequired,
+  formUrl         : PropTypes.string.isRequired,
+  formAction      : PropTypes.string.isRequired,
+  csrfToken       : PropTypes.string.isRequired,
+  missionForHeader: PropTypes.object,
+  projectForHeader: PropTypes.object
 }
 ProjectForm.defaultProps = {
-  project      : {'default': '_'},
-  tokens       : {'default': '_'},
-  missions     : {'default': '_'},
-  decimalPlaces: [],
-  visibilities : [],
-  teams        : [],
-  discordBotUrl: null,
-  formUrl      : '/',
-  formAction   : 'POST',
-  csrfToken    : '00'
+  project         : {'default': '_'},
+  tokens          : {'default': '_'},
+  missions        : {'default': '_'},
+  decimalPlaces   : [],
+  visibilities    : [],
+  teams           : [],
+  discordBotUrl   : null,
+  licenseUrl      : '/',
+  termsReadonly   : false,
+  formUrl         : '/',
+  formAction      : 'POST',
+  csrfToken       : '00',
+  missionForHeader: null,
+  projectForHeader: null
 }
 export default ProjectForm

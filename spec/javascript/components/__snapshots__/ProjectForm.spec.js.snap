@@ -7,6 +7,8 @@ exports[`ProjectForm renders correctly without props 1`] = `
   discordBotUrl={null}
   formAction="POST"
   formUrl="/"
+  licenseUrl="/"
+  missionForHeader={null}
   missions={
     Object {
       "default": "_",
@@ -17,7 +19,9 @@ exports[`ProjectForm renders correctly without props 1`] = `
       "default": "_",
     }
   }
+  projectForHeader={null}
   teams={Array []}
+  termsReadonly={false}
   tokens={
     Object {
       "default": "_",
@@ -27,9 +31,10 @@ exports[`ProjectForm renders correctly without props 1`] = `
 >
   <ProjectSetup
     className="project-form"
-    projectId={null}
-    projectPage="form"
-    projectTitle=""
+    current="form"
+    missionForHeader={null}
+    owner={true}
+    projectForHeader={null}
     sidebar={null}
     subfooter={
       <React.Fragment>
@@ -61,10 +66,11 @@ exports[`ProjectForm renders correctly without props 1`] = `
       className="project-setup project-form"
       customTitle={
         <ProjectSetupHeader
-          projectId={null}
-          projectOwner={true}
-          projectPage="form"
-          projectTitle=""
+          current="form"
+          expanded={false}
+          missionForHeader={null}
+          owner={true}
+          projectForHeader={null}
         />
       }
       hasBackButton={false}
@@ -105,64 +111,180 @@ exports[`ProjectForm renders correctly without props 1`] = `
             className="layout--content--title"
           >
             <ProjectSetupHeader
-              projectId={null}
-              projectOwner={true}
-              projectPage="form"
-              projectTitle=""
+              current="form"
+              expanded={false}
+              missionForHeader={null}
+              owner={true}
+              projectForHeader={null}
             >
-              <div
-                className="layout--content--title--header"
-              />
-              <span
-                className="layout--content--title--nav__current"
+              <styled.div
+                backgroundImageUrl={null}
               >
-                <a
-                  href="#"
+                <StyledComponent
+                  backgroundImageUrl={null}
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-bdVaJa",
+                        "isStatic": false,
+                        "lastClassName": "jKQScu",
+                        "rules": Array [
+                          "
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: default;
+  margin-bottom: 1em;
+  background-image: url(",
+                          [Function],
+                          ");
+  background-position-x: 50%;
+  background-position-y: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  text-shadow: 1px 1px 1px #3a3a3a;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-bdVaJa",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
                 >
-                  project settings
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  batches & tasks
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  contributors
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  payments
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  overview
-                </a>
-              </span>
+                  <div
+                    className="sc-bdVaJa jKQScu"
+                  >
+                    <styled.div>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-bwzfXH",
+                              "isStatic": true,
+                              "lastClassName": "fFBqGW",
+                              "rules": Array [
+                                "
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0.7em;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-bwzfXH",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-bwzfXH fFBqGW"
+                        />
+                      </StyledComponent>
+                    </styled.div>
+                    <styled.div>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-EHOje",
+                              "isStatic": true,
+                              "lastClassName": "gazehm",
+                              "rules": Array [
+                                "
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-grow: 2;
+  flex-direction: column;
+
+  img {
+    max-height: 150px;
+
+    margin-bottom: -50px;
+    margin-top: 25px;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+  }
+
+  h2 {
+    font-size: 18px;
+    text-transform: capitalize;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    margin-top: -75px;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-EHOje",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-EHOje gazehm"
+                        >
+                          <h1>
+                            New Project
+                          </h1>
+                        </div>
+                      </StyledComponent>
+                    </styled.div>
+                  </div>
+                </StyledComponent>
+              </styled.div>
             </ProjectSetupHeader>
           </div>
-          <hr
-            className="layout--content--hr"
-          />
           <div
             className="layout--content--wrapper"
           >
@@ -915,79 +1037,6 @@ exports[`ProjectForm renders correctly without props 1`] = `
                     </div>
                   </InputField>
                 </InputFieldDropdown>
-                <InputFieldWhiteDark
-                  eventHandler={[Function]}
-                  name="project[legal_project_owner]"
-                  placeholder="Provide a legal entity or individual owner's name"
-                  required={true}
-                  symbolLimit={0}
-                  title="legal owner of the project"
-                  value=""
-                >
-                  <InputField
-                    checkboxText=""
-                    checked={false}
-                    className="input-field__white__dark"
-                    copyOnClick={false}
-                    disabled={false}
-                    errorText=""
-                    eventHandler={[Function]}
-                    imgInputRef={null}
-                    imgPreviewDimensions="40x40"
-                    imgPreviewUrl=""
-                    imgRequirements=""
-                    imgVerifier={[Function]}
-                    max=""
-                    min=""
-                    name="project[legal_project_owner]"
-                    pattern=".*"
-                    placeholder="Provide a legal entity or individual owner's name"
-                    readOnly={false}
-                    recommended={false}
-                    required={true}
-                    selectEntries={Array []}
-                    step=""
-                    symbolLimit={0}
-                    title="legal owner of the project"
-                    type="text"
-                    value=""
-                  >
-                    <div
-                      className="input-field input-field__white__dark"
-                    >
-                      <div
-                        className="input-field--title"
-                      >
-                        <span
-                          className="input-field--title--title"
-                        >
-                          legal owner of the project
-                        </span>
-                        <span
-                          className="input-field--title--required"
-                        >
-                          required
-                        </span>
-                      </div>
-                      <div
-                        className="input-field--content"
-                      >
-                        <input
-                          className="input-field--content__text"
-                          name="project[legal_project_owner]"
-                          onChange={[Function]}
-                          onClick={null}
-                          pattern=".*"
-                          placeholder="Provide a legal entity or individual owner's name"
-                          readOnly={false}
-                          required={true}
-                          type="text"
-                          value=""
-                        />
-                      </div>
-                    </div>
-                  </InputField>
-                </InputFieldWhiteDark>
                 <InputFieldUploadFile
                   imgInputRef={
                     Object {
@@ -1190,6 +1239,318 @@ exports[`ProjectForm renders correctly without props 1`] = `
                   className="project-form--form--channels--empty"
                 >
                   Start adding channels by signing in with Slack or Discord
+                </div>
+                <div
+                  className="project-form--form--terms--header"
+                >
+                  TERMS & CONDITIONS
+                </div>
+                <div
+                  className="project-form--form--terms--content"
+                >
+                  <InputFieldInline
+                    eventHandler={[Function]}
+                    name="project[legal_project_owner]"
+                    placeholder="Provide a legal entity or individual owner's name"
+                    readOnly={false}
+                    required={true}
+                    value=""
+                  >
+                    <InputField
+                      checkboxText=""
+                      checked={false}
+                      className="input-field__inline"
+                      copyOnClick={false}
+                      disabled={false}
+                      errorText=""
+                      eventHandler={[Function]}
+                      imgInputRef={null}
+                      imgPreviewDimensions="40x40"
+                      imgPreviewUrl=""
+                      imgRequirements=""
+                      imgVerifier={[Function]}
+                      max=""
+                      min=""
+                      name="project[legal_project_owner]"
+                      pattern=".*"
+                      placeholder="Provide a legal entity or individual owner's name"
+                      readOnly={false}
+                      recommended={false}
+                      required={true}
+                      selectEntries={Array []}
+                      step=""
+                      symbolLimit={100}
+                      title="title"
+                      type="text"
+                      value=""
+                    >
+                      <div
+                        className="input-field input-field__inline"
+                      >
+                        <div
+                          className="input-field--title"
+                        >
+                          <span
+                            className="input-field--title--title"
+                          >
+                            title
+                          </span>
+                          <span
+                            className="input-field--title--required"
+                          >
+                            required
+                          </span>
+                          <span
+                            className="input-field--title--counter"
+                          >
+                            0
+                            /
+                            100
+                          </span>
+                        </div>
+                        <div
+                          className="input-field--content"
+                        >
+                          <input
+                            className="input-field--content__text"
+                            name="project[legal_project_owner]"
+                            onChange={[Function]}
+                            onClick={null}
+                            pattern=".*"
+                            placeholder="Provide a legal entity or individual owner's name"
+                            readOnly={false}
+                            required={true}
+                            type="text"
+                            value=""
+                          />
+                        </div>
+                      </div>
+                    </InputField>
+                  </InputFieldInline>
+                  ("You", the "Project Owner") agree to the 
+                  <a
+                    href="/"
+                    target="_blank"
+                  >
+                    Comakery Contribution License
+                  </a>
+                  <br />
+                  You agree that for this Project, Contributions are 
+                  <InputFieldDropdownInline
+                    disabled={false}
+                    eventHandler={[Function]}
+                    name="project[exclusive_contributions]"
+                    required={true}
+                    selectEntries={
+                      Array [
+                        Array [
+                          "Exclusive",
+                          "true",
+                        ],
+                        Array [
+                          "Not Exclusive",
+                          "false",
+                        ],
+                      ]
+                    }
+                    value="false"
+                  >
+                    <InputField
+                      checkboxText=""
+                      checked={false}
+                      className="input-field__dropdown--inline"
+                      copyOnClick={false}
+                      disabled={false}
+                      errorText=""
+                      eventHandler={[Function]}
+                      imgInputRef={null}
+                      imgPreviewDimensions="40x40"
+                      imgPreviewUrl=""
+                      imgRequirements=""
+                      imgVerifier={[Function]}
+                      max=""
+                      min=""
+                      name="project[exclusive_contributions]"
+                      pattern=".*"
+                      placeholder="Please enter value"
+                      readOnly={false}
+                      recommended={false}
+                      required={true}
+                      selectEntries={
+                        Array [
+                          Array [
+                            "Exclusive",
+                            "true",
+                          ],
+                          Array [
+                            "Not Exclusive",
+                            "false",
+                          ],
+                        ]
+                      }
+                      step=""
+                      symbolLimit={0}
+                      title="title"
+                      type="select"
+                      value="false"
+                    >
+                      <div
+                        className="input-field input-field__dropdown--inline"
+                      >
+                        <div
+                          className="input-field--title"
+                        >
+                          <span
+                            className="input-field--title--title"
+                          >
+                            title
+                          </span>
+                          <span
+                            className="input-field--title--required"
+                          >
+                            required
+                          </span>
+                        </div>
+                        <div
+                          className="input-field--content"
+                        >
+                          <select
+                            className="input-field--content__select"
+                            disabled={false}
+                            name="project[exclusive_contributions]"
+                            onChange={[Function]}
+                            required={true}
+                            value="false"
+                          >
+                            <option
+                              key="true"
+                              value="true"
+                            >
+                              Exclusive
+                            </option>
+                            <option
+                              key="false"
+                              value="false"
+                            >
+                              Not Exclusive
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </InputField>
+                  </InputFieldDropdownInline>
+                  <br />
+                  Project confidentiality and business confidentiality are 
+                  <InputFieldDropdownInline
+                    disabled={false}
+                    eventHandler={[Function]}
+                    name="project[confidentiality]"
+                    required={true}
+                    selectEntries={
+                      Array [
+                        Array [
+                          "Required",
+                          "true",
+                        ],
+                        Array [
+                          "Not Required",
+                          "false",
+                        ],
+                      ]
+                    }
+                    value="false"
+                  >
+                    <InputField
+                      checkboxText=""
+                      checked={false}
+                      className="input-field__dropdown--inline"
+                      copyOnClick={false}
+                      disabled={false}
+                      errorText=""
+                      eventHandler={[Function]}
+                      imgInputRef={null}
+                      imgPreviewDimensions="40x40"
+                      imgPreviewUrl=""
+                      imgRequirements=""
+                      imgVerifier={[Function]}
+                      max=""
+                      min=""
+                      name="project[confidentiality]"
+                      pattern=".*"
+                      placeholder="Please enter value"
+                      readOnly={false}
+                      recommended={false}
+                      required={true}
+                      selectEntries={
+                        Array [
+                          Array [
+                            "Required",
+                            "true",
+                          ],
+                          Array [
+                            "Not Required",
+                            "false",
+                          ],
+                        ]
+                      }
+                      step=""
+                      symbolLimit={0}
+                      title="title"
+                      type="select"
+                      value="false"
+                    >
+                      <div
+                        className="input-field input-field__dropdown--inline"
+                      >
+                        <div
+                          className="input-field--title"
+                        >
+                          <span
+                            className="input-field--title--title"
+                          >
+                            title
+                          </span>
+                          <span
+                            className="input-field--title--required"
+                          >
+                            required
+                          </span>
+                        </div>
+                        <div
+                          className="input-field--content"
+                        >
+                          <select
+                            className="input-field--content__select"
+                            disabled={false}
+                            name="project[confidentiality]"
+                            onChange={[Function]}
+                            required={true}
+                            value="false"
+                          >
+                            <option
+                              key="true"
+                              value="true"
+                            >
+                              Required
+                            </option>
+                            <option
+                              key="false"
+                              value="false"
+                            >
+                              Not Required
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </InputField>
+                  </InputFieldDropdownInline>
+                   and at the time that you indicate a Task is complete you agree to pay the Contributor the Award for the Task.
+                  <br />
+                  By 
+                  creating this Project (clicking CREATE & CLOSE or CREATE)
+                  , you agree to these Terms & Conditions.
+                  <br />
+                  You may modify these Terms & Conditions until the first Project Task has been started by a Contributor.
                 </div>
               </form>
             </div>

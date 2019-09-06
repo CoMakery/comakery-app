@@ -1,12 +1,18 @@
 class TaskMailer < ApplicationMailer
   before_action :set_params
   after_action :send_email
+  after_action :cancel_duplicated_email, only: [:task_expired_for_account]
 
   helper SignatureHelper
 
   layout 'task_mailer'
 
   default to: -> { @to }, subject: -> { @subject }
+
+  def task_assigned
+    @to = @account.email
+    @subject = "Congrats! You've been assigned a task."
+  end
 
   def task_paid
     @to = @account.email
@@ -33,6 +39,21 @@ class TaskMailer < ApplicationMailer
     @subject = "Incoming Award: #{@award.project.title}"
   end
 
+  def task_expiring
+    @to = @account.email
+    @subject = 'Your task is going to expire'
+  end
+
+  def task_expired_for_account
+    @to = @account.email
+    @subject = 'Your task has expired'
+  end
+
+  def task_expired_for_issuer
+    @to = @issuer.email
+    @subject = "A #{@award.project.title} task has expired"
+  end
+
   private
 
     def set_params
@@ -46,5 +67,9 @@ class TaskMailer < ApplicationMailer
       mail
 
       mail.perform_deliveries = false if Unsubscription.exists?(email: @to)
+    end
+
+    def cancel_duplicated_email
+      mail.perform_deliveries = false if @account == @issuer
     end
 end

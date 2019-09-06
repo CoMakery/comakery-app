@@ -8,10 +8,13 @@ class Project < ApplicationRecord
   belongs_to :account
   belongs_to :mission, optional: true
   belongs_to :token, optional: true
-  has_many :accounts_interested, through: :interests, source: :account
+  has_many :interests
+  has_many :interested, through: :interests, source: :account
 
   has_many :award_types, inverse_of: :project, dependent: :destroy
+  has_many :ready_award_types, -> { where state: :ready }, source: :award_types, class_name: 'AwardType'
   has_many :awards, through: :award_types, dependent: :destroy
+  has_many :published_awards, through: :ready_award_types, source: :awards, class_name: 'Award'
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards
   has_many :channels, -> { order :created_at }, inverse_of: :project, dependent: :destroy
 
@@ -35,7 +38,9 @@ class Project < ApplicationRecord
   validate :valid_contributor_agreement_url, if: -> { contributor_agreement_url.present? }
   validate :valid_video_url, if: -> { video_url.present? }
   validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
+  validate :terms_should_be_readonly, if: -> { legal_project_owner_changed? || exclusive_contributions_changed? || confidentiality_changed? }
 
+  before_validation :store_license_hash, unless: -> { terms_readonly? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
 
   scope :featured, -> { order :featured }
@@ -160,6 +165,22 @@ class Project < ApplicationRecord
     awards.ready.group_by(&:specialty).map { |specialty, awards| [specialty, awards.take(limit_per_specialty)] }.to_h
   end
 
+  def stats
+    {
+      batches: ready_award_types.size,
+      tasks: published_awards.in_progress.size,
+      interests: (
+        [account_id] |
+        interests.pluck(:account_id) |
+        published_awards.pluck(:account_id)
+      ).compact.size
+    }
+  end
+
+  def terms_readonly?
+    awards.contributed.any?
+  end
+
   private
 
   def valid_tracker_url
@@ -190,7 +211,15 @@ class Project < ApplicationRecord
     errors.add(:token_id, 'cannot be changed if project has completed tasks') if awards.completed.any?
   end
 
+  def terms_should_be_readonly
+    errors.add(:base, 'terms cannot be changed') if terms_readonly?
+  end
+
   def udpate_awards_if_token_was_added
     awards.paid.each { |a| a.update(status: :accepted) }
+  end
+
+  def store_license_hash
+    self.agreed_to_license_hash = Digest::SHA256.hexdigest(File.read(Dir.glob(Rails.root.join('lib', 'assets', 'contribution_licenses', 'CP-*.md')).max_by { |f| File.mtime(f) }))
   end
 end

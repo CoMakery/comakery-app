@@ -8,6 +8,7 @@ describe 'landing page' do
   let!(:authentication1) { create :authentication, account: account1 }
   let!(:swarmbot_account) { create(:account, email: 'swarm@example.com') }
   let(:swarmbot_authentication) { create :authentication, account: swarmbot_account }
+  let!(:interest) { create(:interest, account: account) }
 
   before do
     team.build_authentication_team authentication
@@ -26,10 +27,10 @@ describe 'landing page' do
     visit my_project_path
 
     expect(page).to have_content 'mine'
-    expect(page).to have_content 'mine'
+    expect(page).to have_content 'interested'
     expect(page).to have_content /new project/i
 
-    expect(page.all('.project').size).to eq(13)
+    expect(page.all('.project').size).to eq(14)
 
     click_link 'Browse All'
 

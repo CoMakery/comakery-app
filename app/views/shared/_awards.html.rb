@@ -25,7 +25,7 @@ class Views::Shared::Awards < Views::Base
             end
 
             td(class: 'small-1 award-unit-amount financial') do
-              text award.unit_amount_pretty
+              text award.amount_pretty
             end
 
             td(class: 'small-1 award-quantity financial') do

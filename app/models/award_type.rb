@@ -9,16 +9,19 @@ class AwardType < ApplicationRecord
   validates :goal, length: { maximum: 250 }
   validates :description, length: { maximum: 750 }
 
-  after_save :switch_tasks_publicity, if: -> { saved_change_to_published? }
   after_create :switch_tasks_publicity
+  after_save :switch_tasks_publicity, if: -> { saved_change_to_state? }
+
+  enum state: %i[draft pending ready]
 
   private
 
     def switch_tasks_publicity
-      if published?
+      case state
+      when 'draft', 'pending'
+        awards.ready.where(account: nil).find_each { |a| a.update(status: :unpublished) }
+      when 'ready'
         awards.unpublished.each { |a| a.update(status: :ready) }
-      else
-        awards.ready.each { |a| a.update(status: :unpublished) }
       end
     end
 end

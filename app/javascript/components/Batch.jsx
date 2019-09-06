@@ -12,8 +12,7 @@ const Wrapper = styled.div`
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
 `
 
-const PublishedFlag = styled.div`
-  border-right: 7px solid #f5a623;
+const StateFlag = styled.div`
   margin-left: auto;
   font-size: 13px;
   padding-right: 0.5em;
@@ -25,8 +24,16 @@ const PublishedFlag = styled.div`
   letter-spacing: normal;
   text-transform: uppercase;
 
-  ${props => props.published && css`
+  ${props => props.state === 'ready' && css`
     border-right: 7px solid #00be00;
+ `}
+
+  ${props => props.state === 'pending' && css`
+    border-right: 7px solid #f5a623;
+ `}
+
+  ${props => props.state === 'draft' && css`
+    border-right: 7px solid #8d9599;
  `}
 `
 
@@ -85,9 +92,9 @@ class Batch extends React.Component {
     return (
       <React.Fragment>
         <Wrapper>
-          <PublishedFlag published={this.props.batch.published}>
-            { this.props.batch.published ? 'published' : 'not published' }
-          </PublishedFlag>
+          <StateFlag state={this.props.batch.state}>
+            { this.props.batch.state }
+          </StateFlag>
 
           {this.props.batch.diagramUrl &&
             <Image src={this.props.batch.diagramUrl} alt="Batch Image" />
@@ -114,14 +121,20 @@ class Batch extends React.Component {
                 <Userpics pics={this.props.batch.teamPics} limit={3} />
               </ContentElement>
 
-              <Buttons>
-                <a href={this.props.batch.editPath}>
-                  <StyledIcon name="iconEdit.svg" />
-                </a>
-                <a rel="nofollow" data-method="delete" href={this.props.batch.destroyPath}>
-                  <StyledIcon name="iconTrash.svg" />
-                </a>
-              </Buttons>
+              <ContentElement title="interested">
+                <Userpics pics={this.props.batch.interestedPics} limit={3} />
+              </ContentElement>
+
+              {this.props.editable &&
+                <Buttons>
+                  <a href={this.props.batch.editPath}>
+                    <StyledIcon name="iconEdit.svg" />
+                  </a>
+                  <a rel="nofollow" data-method="delete" href={this.props.batch.destroyPath}>
+                    <StyledIcon name="iconTrash.svg" />
+                  </a>
+                </Buttons>
+              }
             </Details>
           </Info>
         </Wrapper>
@@ -131,11 +144,13 @@ class Batch extends React.Component {
 }
 
 Batch.propTypes = {
-  batch: PropTypes.object
+  batch   : PropTypes.object,
+  editable: PropTypes.bool
 }
 Batch.defaultProps = {
   batch: {
     diagramUrl: null
-  }
+  },
+  editable: true
 }
 export default Batch

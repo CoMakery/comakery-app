@@ -5,9 +5,14 @@ class Mission < ApplicationRecord
   attachment :image
 
   has_many :projects, inverse_of: :mission
+  has_many :unarchived_projects, -> { where.not visibility: :archived }, source: :projects, class_name: 'Project'
   has_many :public_projects, -> { public_listed }, class_name: 'Project'
   has_many :leaders, through: :public_projects, source: :account
   has_many :tokens, through: :public_projects, source: :token
+  has_many :award_types, through: :projects
+  has_many :ready_award_types, -> { where state: :ready }, through: :unarchived_projects, source: :award_types, class_name: 'AwardType'
+  has_many :published_awards, through: :ready_award_types, source: :awards, class_name: 'Award'
+  has_many :awards, through: :award_types
   enum status: %i[active passive]
 
   after_create :assign_display_order
@@ -19,8 +24,22 @@ class Mission < ApplicationRecord
   def serialize
     as_json(only: %i[id name token_id subtitle description status display_order]).merge(
       logo_preview: logo.present? ? Refile.attachment_url(self, :logo, :fill, 150, 100) : nil,
-      image_preview: image.present? ? Refile.attachment_url(self, :image, :fill, 100, 100) : nil
+      image_preview: image.present? ? Refile.attachment_url(self, :image, :fill, 100, 100) : nil,
+      stats: stats
     )
+  end
+
+  def stats
+    {
+      projects: unarchived_projects.size,
+      batches: ready_award_types.size,
+      tasks: published_awards.in_progress.size,
+      interests: (
+        Interest.where(project_id: unarchived_projects).pluck(:account_id) |
+        unarchived_projects.pluck(:account_id) |
+        published_awards.pluck(:account_id)
+      ).compact.size
+    }
   end
 
   private

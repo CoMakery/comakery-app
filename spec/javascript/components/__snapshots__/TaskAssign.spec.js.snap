@@ -1,0 +1,638 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TaskAssign renders correctly without props 1`] = `
+<TaskAssign
+  batch={
+    Object {
+      "id": 28,
+      "name": "Dummy",
+    }
+  }
+  csrfToken="00"
+  formUrl="/"
+  interested={Array []}
+  interestedSelect={Object {}}
+  missionForHeader={null}
+  project={
+    Object {
+      "id": 28,
+      "public?": true,
+      "title": "Dummy",
+      "url": "http://dummy",
+    }
+  }
+  projectForHeader={null}
+  task={
+    Object {
+      "id": 28,
+      "name": "Dummy",
+    }
+  }
+>
+  <ProjectSetup
+    className={[Function]}
+    current="batches"
+    hasBackButton={true}
+    missionForHeader={null}
+    owner={true}
+    projectForHeader={null}
+    sidebar={
+      <React.Fragment>
+        <div
+          className="batch-index--sidebar"
+        >
+          <SidebarItem
+            className="batch-index--sidebar--item batch-index--sidebar--item__form"
+            iconLeftName=""
+            iconLeftUrl=""
+            iconRightName=""
+            notificationColor=""
+            selected={true}
+            text="Dummy"
+          />
+          <hr
+            className="batch-index--sidebar--hr"
+          />
+        </div>
+      </React.Fragment>
+    }
+    subfooter={
+      <React.Fragment>
+        <ButtonBorder
+          className=""
+          onClick={[Function]}
+          value="cancel"
+        />
+      </React.Fragment>
+    }
+  >
+    <Layout
+      category=""
+      className="project-setup"
+      customTitle={
+        <ProjectSetupHeader
+          current="batches"
+          expanded={false}
+          missionForHeader={null}
+          owner={true}
+          projectForHeader={null}
+        />
+      }
+      hasBackButton={false}
+      sidebar={
+        <React.Fragment>
+          <div
+            className="batch-index--sidebar"
+          >
+            <SidebarItem
+              className="batch-index--sidebar--item batch-index--sidebar--item__form"
+              iconLeftName=""
+              iconLeftUrl=""
+              iconRightName=""
+              notificationColor=""
+              selected={true}
+              text="Dummy"
+            />
+            <hr
+              className="batch-index--sidebar--hr"
+            />
+          </div>
+        </React.Fragment>
+      }
+      subfooter={
+        <React.Fragment>
+          <ButtonBorder
+            className=""
+            onClick={[Function]}
+            value="cancel"
+          />
+        </React.Fragment>
+      }
+      title={null}
+    >
+      <div
+        className="layout project-setup"
+      >
+        <div
+          className="layout--content"
+        >
+          <div
+            className="layout--content--title"
+          >
+            <ProjectSetupHeader
+              current="batches"
+              expanded={false}
+              missionForHeader={null}
+              owner={true}
+              projectForHeader={null}
+            >
+              <styled.div
+                backgroundImageUrl={null}
+              >
+                <StyledComponent
+                  backgroundImageUrl={null}
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-bdVaJa",
+                        "isStatic": false,
+                        "lastClassName": "jKQScu",
+                        "rules": Array [
+                          "
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: default;
+  margin-bottom: 1em;
+  background-image: url(",
+                          [Function],
+                          ");
+  background-position-x: 50%;
+  background-position-y: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  text-shadow: 1px 1px 1px #3a3a3a;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-bdVaJa",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-bdVaJa jKQScu"
+                  >
+                    <styled.div>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-bwzfXH",
+                              "isStatic": true,
+                              "lastClassName": "fFBqGW",
+                              "rules": Array [
+                                "
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0.7em;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-bwzfXH",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-bwzfXH fFBqGW"
+                        />
+                      </StyledComponent>
+                    </styled.div>
+                    <styled.div>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-EHOje",
+                              "isStatic": true,
+                              "lastClassName": "gazehm",
+                              "rules": Array [
+                                "
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-grow: 2;
+  flex-direction: column;
+
+  img {
+    max-height: 150px;
+
+    margin-bottom: -50px;
+    margin-top: 25px;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+  }
+
+  h2 {
+    font-size: 18px;
+    text-transform: capitalize;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    margin-top: -75px;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-EHOje",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-EHOje gazehm"
+                        >
+                          <h1>
+                            New Project
+                          </h1>
+                        </div>
+                      </StyledComponent>
+                    </styled.div>
+                  </div>
+                </StyledComponent>
+              </styled.div>
+            </ProjectSetupHeader>
+          </div>
+          <div
+            className="layout--content--wrapper"
+          >
+            <div
+              className="layout--content--sidebar"
+            >
+              <div
+                className="batch-index--sidebar"
+              >
+                <SidebarItem
+                  className="batch-index--sidebar--item batch-index--sidebar--item__form"
+                  iconLeftName=""
+                  iconLeftUrl=""
+                  iconRightName=""
+                  notificationColor=""
+                  selected={true}
+                  text="Dummy"
+                >
+                  <div
+                    className="sidebar-item--wrapper"
+                  >
+                    <div
+                      className="sidebar-item sidebar-item__selected batch-index--sidebar--item batch-index--sidebar--item__form"
+                    >
+                      <div
+                        className="sidebar-item--content"
+                      >
+                        <div
+                          className="sidebar-item--text"
+                        >
+                          Dummy
+                        </div>
+                        <div
+                          className="sidebar-item--subchild"
+                        />
+                      </div>
+                      <div
+                        className="sidebar-item--left-border"
+                      />
+                      <div
+                        className="sidebar-item--right-border sidebar-item--right-border__"
+                      />
+                    </div>
+                  </div>
+                </SidebarItem>
+                <hr
+                  className="batch-index--sidebar--hr"
+                />
+              </div>
+            </div>
+            <div
+              className="layout--content--content__sidebared"
+            >
+              <styled.div>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-jTzLTM",
+                        "isStatic": true,
+                        "lastClassName": "evXAyl",
+                        "rules": Array [
+                          "
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #3a3a3a;
+  margin-bottom: 10px;
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-jTzLTM",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-jTzLTM evXAyl"
+                  >
+                    Assign a Contributor To Task
+                  </div>
+                </StyledComponent>
+              </styled.div>
+              <styled.div>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-fjdhpX",
+                        "isStatic": true,
+                        "lastClassName": "hCAyId",
+                        "rules": Array [
+                          "
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  color: #3a3a3a;
+  margin-bottom: 15px;
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-fjdhpX",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-fjdhpX hCAyId"
+                  >
+                    Dummy
+                  </div>
+                </StyledComponent>
+              </styled.div>
+              <styled.div>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-jzJRlG",
+                        "isStatic": true,
+                        "lastClassName": "hUUpgZ",
+                        "rules": Array [
+                          "
+  font-family: Georgia;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.43;
+  letter-spacing: normal;
+  max-width: 556px;
+  margin-bottom: 15px;
+  text-align: justify;
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-jzJRlG",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-jzJRlG hUUpgZ"
+                  >
+                    You can only invite CoMakery users that have expressed an interest or contributed in your project. If the person you would like to assign a task to is not on the picklist below, share your project URL with them, ask them to click “I’m Interested”, and you will then be able to choose them from the picklist below.
+                  </div>
+                </StyledComponent>
+              </styled.div>
+              <styled.div>
+                <StyledComponent
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-cSHVUG",
+                        "isStatic": true,
+                        "lastClassName": "eZOJvS",
+                        "rules": Array [
+                          "
+  font-family: Georgia;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.43;
+  letter-spacing: normal;
+  max-width: 556px;
+  margin-bottom: 15px;
+
+  .input-field--title--required {
+    display: none;
+  }
+
+  input {
+    opacity: 1;
+  }
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-cSHVUG",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
+                >
+                  <div
+                    className="sc-cSHVUG eZOJvS"
+                  >
+                    <InputFieldWhiteDark
+                      copyOnClick={true}
+                      readOnly={true}
+                      symbolLimit={0}
+                      title="project link to share"
+                      value="http://dummy"
+                    >
+                      <InputField
+                        checkboxText=""
+                        checked={false}
+                        className="input-field__white__dark"
+                        copyOnClick={true}
+                        disabled={false}
+                        errorText=""
+                        eventHandler={[Function]}
+                        imgInputRef={null}
+                        imgPreviewDimensions="40x40"
+                        imgPreviewUrl=""
+                        imgRequirements=""
+                        imgVerifier={[Function]}
+                        max=""
+                        min=""
+                        name="field"
+                        pattern=".*"
+                        placeholder="Please enter value"
+                        readOnly={true}
+                        recommended={false}
+                        required={false}
+                        selectEntries={Array []}
+                        step=""
+                        symbolLimit={0}
+                        title="project link to share"
+                        type="text"
+                        value="http://dummy"
+                      >
+                        <div
+                          className="input-field input-field__white__dark"
+                        >
+                          <div
+                            className="input-field--title"
+                          >
+                            <span
+                              className="input-field--title--title"
+                            >
+                              project link to share
+                            </span>
+                            <span
+                              className="input-field--title--required"
+                            >
+                              optional
+                            </span>
+                          </div>
+                          <div
+                            className="input-field--content"
+                          >
+                            <input
+                              className="input-field--content__text input-field--content__text__copyable"
+                              name="field"
+                              onChange={[Function]}
+                              onClick={[Function]}
+                              pattern=".*"
+                              placeholder="Please enter value"
+                              readOnly={true}
+                              required={false}
+                              type="text"
+                              value="http://dummy"
+                            />
+                          </div>
+                        </div>
+                      </InputField>
+                    </InputFieldWhiteDark>
+                  </div>
+                </StyledComponent>
+              </styled.div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="layout--subfooter"
+        >
+          <div
+            className="layout--subfooter--buttons"
+          >
+            <ButtonBorder
+              className=""
+              onClick={[Function]}
+              value="cancel"
+            >
+              <Button
+                className="button__border"
+                disabled={false}
+                onClick={[Function]}
+                type="button"
+                value="cancel"
+              >
+                <input
+                  className="button button__border"
+                  disabled={false}
+                  onClick={[Function]}
+                  type="button"
+                  value="cancel"
+                />
+              </Button>
+            </ButtonBorder>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  </ProjectSetup>
+</TaskAssign>
+`;

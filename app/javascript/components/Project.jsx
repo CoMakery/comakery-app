@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
+import ProfileModal from '../components/ProfileModal'
+import ProjectSetupHeader from './layouts/ProjectSetupHeader'
 import MyTask from './MyTask'
+import Pluralize from 'react-pluralize'
 import d3 from 'd3/d3'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import styled from 'styled-components'
@@ -228,7 +231,7 @@ export default class Project extends React.Component {
   }
 
   render() {
-    const { projectData, missionData, tokenData, contributorsPath, awardsPath, editPath } = this.props
+    const { projectData, tokenData } = this.props
     const { interested, specialtyInterested } = this.state
     const skills = {
       development: 'Software Development',
@@ -243,42 +246,13 @@ export default class Project extends React.Component {
     const skillIds = [5, 6, 8, 2, 3, 1, 7, 4]
 
     return <div className="project-container">
-      <div className="project-header" style={{backgroundImage: `url(${projectData.panoramicImageUrl})`}}>
-        <div className="project-header__blur" />
-        <div className="project-header__content">
-          <div className="project-header__menu">
-            {missionData &&
-              <a className="project-header__menu__back" href={missionData.missionUrl}>
-                <Icon name="iconBackWhite.svg" style={{marginRight: 8}} />
-                {missionData.name}
-              </a>
-            }
-
-            <div className="project-header__menu__links">
-              {projectData.showContributions &&
-                <React.Fragment>
-                  <a className="project-header__menu__link project-header__menu__link--first" href={contributorsPath}>Contributors</a>
-                  <a className="project-header__menu__link" href={awardsPath}>Payments</a>
-                </React.Fragment>
-              }
-              {editPath &&
-                <a className="project-header__menu__link" href={editPath}>Edit This Project</a>
-              }
-            </div>
-          </div>
-
-          {missionData &&
-            <div className="project-header__mission-image">
-              <a href={missionData.missionUrl}>
-                <img src={missionData.logoUrl} />
-              </a>
-            </div>
-          }
-
-          <div className="project-header__name"> {projectData.title} </div>
-          <div className="project-header__owner"> by {projectData.owner} </div>
-        </div>
-      </div>
+      <ProjectSetupHeader
+        projectForHeader={this.props.projectForHeader}
+        missionForHeader={this.props.missionForHeader}
+        owner={this.props.editable}
+        current="overview"
+        expanded
+      />
 
       <div className="project-award">
         {tokenData &&
@@ -329,20 +303,20 @@ export default class Project extends React.Component {
               <div className="project-leader__title">Team Leader</div>
               {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
             </div>
-            <img className="project-leader__avatar" src={projectData.teamLeader.imageUrl} />
           </div>
           <div className="project-contributors__container">
-            <img className="project-leader__avatar project-leader__avatar--mobile" src={projectData.teamLeader.imageUrl} />
+            <div className="project-contributor-container">
+              <img className="project-leader__avatar" src={projectData.teamLeader.imageUrl} />
+              <div className="project-contributor__modal">
+                <ProfileModal profile={projectData.teamLeader} />
+              </div>
+            </div>
+
             {projectData.contributors.map((contributor, index) =>
               <div key={contributor.id} className="project-contributor-container">
                 <img className="project-contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
                 <div className="project-contributor__modal">
-                  <img className="project-contributor__modal-avatar" src={contributor.imageUrl} />
-                  <div className="project-contributor__modal__info">
-                    <div className="project-contributor__modal-nickname">{contributor.nickname && contributor.nickname}</div>
-                    <div className="project-contributor__modal-name">{contributor.firstName} {contributor.lastName}</div>
-                    <div className="project-contributor__modal-specialty">{contributor.specialty}</div>
-                  </div>
+                  <ProfileModal profile={contributor} />
                 </div>
               </div>
             )}
@@ -367,7 +341,27 @@ export default class Project extends React.Component {
       </div>
 
       <div className="project-interest">
+        <div className="project-stats__container">
+          <div className="mission-stats__kpis">
+            <div className="mission-stats__kpi">
+              <Icon name="BATCH/WHITE.svg" />
+              <Pluralize singular="batch" plural="batches" count={projectData.stats.batches} />
+            </div>
+
+            <div className="mission-stats__kpi">
+              <Icon name="TASK/WHITE.svg" />
+              <Pluralize singular="task" count={projectData.stats.tasks} />
+            </div>
+
+            <div className="mission-stats__kpi">
+              <div className="mission-stats__contributor" />
+              <Pluralize singular="person" plural="people" count={projectData.stats.interests} />&nbsp;INTERESTED
+            </div>
+          </div>
+        </div>
+
         <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
+
         {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
         {interested && <button className="button project-interest__button" disabled>Request Sent</button>}
       </div>
@@ -429,7 +423,7 @@ export default class Project extends React.Component {
       <div className="project-team">
         <div className="project-team__container">
           <div className="project-team__title">The Team</div>
-          <div className="project-team__subtitle">Great projects are the result dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
+          <div className="project-team__subtitle">Great projects are the result of dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
 
           <div className="project-chart">
             <div id="tooltip" className="tooltip-hidden">
@@ -442,17 +436,18 @@ export default class Project extends React.Component {
             {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
 
             <div className="project-team__contributors" >
-              <img className="project-team__leader-avatar" src={projectData.teamLeader.imageUrl} />
+              <div className="project-team__contributor-container">
+                <img className="project-team__leader-avatar" src={projectData.teamLeader.imageUrl} />
+                <div className="project-team__contributor__modal">
+                  <ProfileModal profile={projectData.teamLeader} />
+                </div>
+              </div>
+
               {projectData.contributors.map((contributor, index) =>
                 <div key={contributor.id} className="project-team__contributor-container">
                   <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
                   <div className="project-team__contributor__modal">
-                    <img className="project-team__contributor__modal-avatar" src={contributor.imageUrl} />
-                    <div className="project-team__contributor__modal__info">
-                      <div className="project-team__contributor__modal-nickname">{contributor.nickname && contributor.nickname}</div>
-                      <div className="project-team__contributor__modal-name">{contributor.firstName} {contributor.lastName}</div>
-                      <div className="project-team__contributor__modal-specialty">{contributor.specialty}</div>
-                    </div>
+                    <ProfileModal profile={contributor} />
                   </div>
                 </div>
               )}
@@ -474,14 +469,14 @@ export default class Project extends React.Component {
 Project.propTypes = {
   tasksBySpecialty: PropTypes.array,
   projectData     : PropTypes.shape({}),
-  missionData     : PropTypes.shape({}),
   tokenData       : PropTypes.shape({}),
   interested      : PropTypes.bool,
   csrfToken       : PropTypes.string,
-  contributorsPath: PropTypes.string,
-  awardsPath      : PropTypes.string,
+  editable        : PropTypes.bool,
   myTasksPath     : PropTypes.string,
-  editPath        : PropTypes.string
+  editPath        : PropTypes.string,
+  missionForHeader: PropTypes.object,
+  projectForHeader: PropTypes.object
 }
 
 Project.defaultProps = {
@@ -490,15 +485,20 @@ Project.defaultProps = {
     description : '',
     teamLeader  : {},
     contributors: [],
-    chartData   : []
+    chartData   : [],
+    stats       : {}
   },
   missionData        : null,
   tokenData          : null,
   interested         : false,
   specialtyInterested: [],
   csrfToken          : '',
+  editable           : true,
   contributorsPath   : '',
   awardsPath         : '',
+  awardTypesPath     : '',
   myTasksPath        : '',
-  editPath           : null
+  editPath           : null,
+  missionForHeader   : null,
+  projectForHeader   : null
 }

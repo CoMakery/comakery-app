@@ -30,14 +30,44 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # called from before_filter :require_login
   def not_authenticated(msg = nil)
+    if action_name == 'add_interest' && params[:project_id]
+      session[:interested_in_project] = params[:project_id]
+    end
+
     respond_to do |format|
-      format.html { redirect_to new_account_url, alert: msg }
+      format.html do
+        session[:return_to] = request.url
+
+        case "#{controller_name}##{action_name}"
+        when 'awards#show', 'awards#index', 'award_types#index', 'accounts#show'
+          redirect_to new_session_url, alert: msg
+        else
+          redirect_to new_account_url, alert: msg
+        end
+      end
+
       format.json { head :unauthorized }
     end
   rescue ActionController::UnknownFormat
     head :unauthorized
+  end
+
+  def redirect_back
+    if current_account&.valid? && current_account&.confirmed? && session[:return_to]
+      redirect_url = session[:return_to]
+      session.delete(:return_to)
+      redirect_to redirect_url
+    end
+  end
+
+  def create_interest_from_session
+    if current_account&.valid? && current_account&.confirmed? && session[:interested_in_project]
+      project = Project.find(session[:interested_in_project].to_i)
+      current_user.interests.create!(project: project, protocol: project.mission.name)
+
+      session.delete(:interested_in_project)
+    end
   end
 
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
@@ -122,12 +152,15 @@ class ApplicationController < ActionController::Base
         url: task.project&.mission ? mission_path(task.project&.mission) : nil
       },
       token: {
-        currency: task.project&.token&.symbol,
+        currency: task.project&.token&.symbol&.upcase,
         logo: helpers.attachment_url(task.project&.token, :logo_image, :fill, 100, 100)
       },
       project: {
         id: task.project&.id,
         name: task.project&.title,
+        legal_project_owner: task.project&.legal_project_owner,
+        exclusive_contributions: task.project&.exclusive_contributions,
+        confidentiality: task.project&.confidentiality,
         url: task.project && (task.project.unlisted? ? unlisted_project_path(task.project.long_id) : project_path(task.project)),
         channels: task.project.channels.map do |channel|
           {
@@ -158,7 +191,8 @@ class ApplicationController < ActionController::Base
       submit_url: project_award_type_award_submit_path(task.project, task.award_type, task),
       accept_url: project_award_type_award_accept_path(task.project, task.award_type, task),
       reject_url: project_award_type_award_reject_path(task.project, task.award_type, task),
-      updated_at: helpers.time_ago_in_words(task.updated_at)
+      updated_at: helpers.time_ago_in_words(task.updated_at),
+      expires_at: task.expires_at ? helpers.distance_of_time_in_words_to_now(task.expires_at) : nil
     })
   end
 

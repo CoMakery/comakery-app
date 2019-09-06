@@ -76,6 +76,8 @@ class Views::Layouts::Application < Views::Base
           end
         end
 
+        text react_component('IntercomButton')
+
         text react_component(
           'layouts/Footer',
           {

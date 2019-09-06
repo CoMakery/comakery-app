@@ -19,8 +19,8 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
           Blog
         </a>
 
-        <a className="intercom" href="">
-          Contact Us
+        <a target="_blank" href="https://info.comakery.com/about_us/">
+          About Us
         </a>
 
         <a href="/session/new" className={currentPath.match(/session\/new/) ? 'header--nav--links--current header--nav--links--sign' : 'header--nav--links--sign'} >

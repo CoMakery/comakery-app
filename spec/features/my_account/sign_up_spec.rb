@@ -1,32 +1,13 @@
 require 'rails_helper'
 
 describe 'my account', js: true do
-  let!(:unconfirmed_account) { create :account, nickname: 'jason', email_confirm_token: '0' }
-  let!(:to_be_confirmed_account) { create :account, nickname: 'jason', email_confirm_token: '1' }
-  let!(:confirmed_account) { create :account, nickname: 'jason', email_confirm_token: nil }
+  let!(:unconfirmed_account) { create :account, email_confirm_token: '0' }
+  let!(:to_be_confirmed_account) { create :account, email_confirm_token: '1' }
+  let!(:confirmed_account) { create :account, email_confirm_token: nil }
   let!(:token) { create :token }
   let!(:mission) { create :mission, token_id: token.id }
   let!(:project) { create :project, mission_id: mission.id, visibility: 'public_listed', status: 0 }
-
-  scenario 'intercom is enabled before signup' do
-    visit '/'
-    expect(page).to have_css('.intercom-button')
-    expect(page).to have_css('iframe#intercom-frame', visible: false)
-  end
-
-  scenario 'intercom is disabled after signup' do
-    login(unconfirmed_account)
-    visit '/'
-    expect(page).not_to have_css('.intercom-button')
-    expect(page).not_to have_css('iframe#intercom-frame', visible: false)
-  end
-
-  scenario 'intercom is enabled after email confirmation' do
-    login(confirmed_account)
-    visit '/'
-    expect(page).to have_css('.intercom')
-    expect(page).to have_css('iframe#intercom-frame', visible: false)
-  end
+  let!(:project_member) { create(:project) }
 
   scenario 'user gets redirected to signup on create project click' do
     visit '/'
@@ -46,6 +27,26 @@ describe 'my account', js: true do
     find('.featured-mission__project__interest').click
     sleep 2
     expect(page.current_url).to have_content '/accounts/new'
+  end
+
+  scenario 'user gets redirected to sign in when accessing My Tasks' do
+    visit '/tasks'
+    expect(page.current_url).to include('/session/new')
+  end
+
+  scenario 'user gets redirected to sign in when accessing Task Details' do
+    visit '/projects/1/batches/1/tasks/1'
+    expect(page.current_url).to include('/session/new')
+  end
+
+  scenario 'user gets redirected to root when accessing Batches for a private project' do
+    visit project_award_types_path(project_member)
+    expect(page.current_path).to eq('/')
+  end
+
+  scenario 'user gets redirected to sign in when accessing My Account' do
+    visit '/account'
+    expect(page.current_url).to include('/session/new')
   end
 
   scenario 'user gets redirected to build profile page after signup' do
@@ -118,10 +119,7 @@ describe 'my account', js: true do
 
   scenario 'account gets confirmed after visiting confirmation link' do
     visit "/accounts/confirm/#{to_be_confirmed_account.email_confirm_token}"
-    expect(page).to have_current_path(root_path)
-    # we don't have notification inside react pages
-    # expect(page).to have_content 'Success! Your email is confirmed.'
-    expect(page).to have_content(/Sign out/i)
+    expect(page).to have_current_path(my_tasks_path)
   end
 
   scenario 'projects page is available after email confirmation' do

@@ -1,1 +1,34 @@
-bundle exec citizen deploy $*
+#!/usr/bin/env ruby
+
+if ARGV.empty?
+  STDERR.puts 'Usage: bin/deploy [heroku app to deploy to] [optional git ref to deploy, default HEAD]'
+  STDERR.puts 'Example 1: bin/deploy comakery-staging'
+  STDERR.puts 'Example 2: bin/deploy comakery-staging hot-fix-branch'
+  exit 1
+end
+
+heroku_app, git_ref = ARGV
+
+git_ref ||= 'HEAD'
+
+git_remotes = %W[
+  https://git.heroku.com/#{heroku_app}.git
+  git@heroku.com:#{heroku_app}.git
+]
+
+`heroku maintenance:on --app #{heroku_app}`
+
+begin
+  `heroku pg:backups:capture --app #{heroku_app}`
+
+  deploy_to_first_successful_remote = git_remotes.map { |remote| "git push --force #{remote} #{git_ref}:master" }.join(' || ')
+  system deploy_to_first_successful_remote
+
+  `heroku run --exit-code rake db:migrate --app #{heroku_app}`
+  `heroku run --exit-code rake data:migrate --app #{heroku_app}`
+ensure
+  try_to_restart = 7.times.map { "heroku restart --app #{heroku_app}" }.join(' || ')
+  system try_to_restart
+
+  `heroku maintenance:off --app #{heroku_app}`
+end

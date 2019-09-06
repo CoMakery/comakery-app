@@ -44,9 +44,6 @@ exports[`MissionIndex renders correctly without props 1`] = `
             Missions &gt; 
           </span>
         </div>
-        <hr
-          className="layout--content--hr"
-        />
         <div
           className="layout--content--wrapper"
         >
@@ -93,11 +90,18 @@ exports[`MissionIndex renders correctly without props 1`] = `
                           />
                         </Icon>
                       </span>
-                      <span
-                        className="sidebar-item--text"
+                      <div
+                        className="sidebar-item--content"
                       >
-                        Create a Mission
-                      </span>
+                        <div
+                          className="sidebar-item--text"
+                        >
+                          Create a Mission
+                        </div>
+                        <div
+                          className="sidebar-item--subchild"
+                        />
+                      </div>
                       <span
                         className="sidebar-item--icon-right"
                       >

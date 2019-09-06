@@ -166,9 +166,9 @@ describe AwardDecorator do
     expect(award.decorate.ethereum_transaction_explorer_url.include?('/tx/b808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb')).to be_truthy
   end
 
-  it 'display unit_amount_pretty' do
-    award = create :award, unit_amount: 2.34
-    expect(award.decorate.unit_amount_pretty).to eq '2'
+  it 'display amount_pretty' do
+    award = create :award, amount: 2.34
+    expect(award.decorate.amount_pretty).to eq '2'
   end
 
   it 'display total_amount_pretty' do

@@ -4,7 +4,7 @@ import ProjectSetup from './layouts/ProjectSetup'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
-import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
+import InputFieldDescriptionLarge from './styleguide/InputFieldDescriptionLarge'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import Button from './styleguide/Button'
@@ -38,6 +38,7 @@ class TaskForm extends React.Component {
       'task[amount]'                        : this.props.task.amount || '',
       'task[number_of_assignments]'         : this.props.task.numberOfAssignments || 1,
       'task[number_of_assignments_per_user]': this.props.task.numberOfAssignmentsPerUser || 1,
+      'task[expires_in_days]'               : this.props.task.expiresInDays || 10,
       'task[specialty_id]'                  : this.props.task.specialtyId || Object.values(this.props.specialties)[0],
       'task[proof_link]'                    : this.props.task.proofLink || ''
     }
@@ -157,9 +158,10 @@ class TaskForm extends React.Component {
       <React.Fragment>
         <ProjectSetup
           className="task-form"
-          projectId={this.props.project.id}
-          projectTitle={this.props.project.title}
-          projectPage="batches"
+          projectForHeader={this.props.projectForHeader}
+          missionForHeader={this.props.missionForHeader}
+          owner
+          current="batches"
           hasBackButton
           subfooter={
             <React.Fragment>
@@ -188,7 +190,6 @@ class TaskForm extends React.Component {
               <div className="batch-index--sidebar">
                 <SidebarItem
                   className="batch-index--sidebar--item batch-index--sidebar--item__form"
-                  iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
                   text={this.props.batch.name}
                   selected
                 />
@@ -215,20 +216,30 @@ class TaskForm extends React.Component {
               symbolLimit={100}
             />
 
-            <InputFieldDescriptionMiddle
-              title="why"
+            <InputFieldDescription
+              title="WHAT IS THE EXPECTED BENEFIT"
               required
               name="task[why]"
               value={this.state['task[why]']}
               errorText={this.state.errors['task[why]']}
               eventHandler={this.handleFieldChange}
-              placeholder="Let people know what will be the result of this task being completed (ex: When task is finished, the result will be xxxx)"
+              placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
               symbolLimit={500}
             />
 
-            <InputFieldDescriptionMiddle
-              title="description"
+            <InputFieldDescriptionLarge
+              title="acceptance requirements"
               required
+              name="task[requirements]"
+              value={this.state['task[requirements]']}
+              errorText={this.state.errors['task[requirements]']}
+              eventHandler={this.handleFieldChange}
+              placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
+              symbolLimit={1000}
+            />
+
+            <InputFieldDescriptionLarge
+              title="description"
               name="task[description]"
               value={this.state['task[description]']}
               errorText={this.state.errors['task[description]']}
@@ -253,17 +264,6 @@ class TaskForm extends React.Component {
                 readOnly
               />
             }
-
-            <InputFieldDescription
-              title="acceptance requirements"
-              required
-              name="task[requirements]"
-              value={this.state['task[requirements]']}
-              errorText={this.state.errors['task[requirements]']}
-              eventHandler={this.handleFieldChange}
-              placeholder="This section is free text that allows for the use of markdown. Create bullets using an asterick and a space before each sentence. Make sure to list a bullet point for each acceptance criteria. These bullet points will be used by reviewers to verify the work."
-              symbolLimit={750}
-            />
 
             <InputFieldDropdown
               title="specialty"
@@ -331,8 +331,21 @@ class TaskForm extends React.Component {
             />
 
             <InputFieldWhiteDark
-              title="URL where to submit completed work"
+              title="days till task expires (after starting)"
               required
+              name="task[expires_in_days]"
+              value={this.state['task[expires_in_days]']}
+              errorText={this.state.errors['task[expiresInDays]']}
+              eventHandler={this.handleFieldChange}
+              type="number"
+              min="1"
+              step="1"
+              placeholder="10"
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="URL where to submit completed work"
               name="task[proof_link]"
               value={this.state['task[proof_link]']}
               errorText={this.state.errors['task[proofLink]']}
@@ -364,7 +377,9 @@ TaskForm.propTypes = {
   formUrl         : PropTypes.string.isRequired,
   formAction      : PropTypes.string.isRequired,
   urlOnSuccess    : PropTypes.string.isRequired,
-  csrfToken       : PropTypes.string.isRequired
+  csrfToken       : PropTypes.string.isRequired,
+  missionForHeader: PropTypes.object,
+  projectForHeader: PropTypes.object
 }
 TaskForm.defaultProps = {
   task            : {'default': '_'},
@@ -376,6 +391,8 @@ TaskForm.defaultProps = {
   formUrl         : '/',
   formAction      : 'POST',
   urlOnSuccess    : '/',
-  csrfToken       : '00'
+  csrfToken       : '00',
+  missionForHeader: null,
+  projectForHeader: null
 }
 export default TaskForm

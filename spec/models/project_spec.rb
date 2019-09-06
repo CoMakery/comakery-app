@@ -89,6 +89,28 @@ describe Project do
       end
     end
 
+    describe 'terms_should_be_readonly' do
+      let(:project_w_started_tasks) { create :project }
+      let(:project_wo_started_tasks) { create :project }
+
+      before do
+        create(:award, status: :started, award_type: create(:award_type, project: project_w_started_tasks))
+      end
+
+      it 'doesnt allow to change terms fields when project has started tasks' do
+        project_w_started_tasks.legal_project_owner = 'change'
+        expect(project_w_started_tasks).not_to be_valid
+        expect(project_w_started_tasks.errors[:base].first).to eq 'terms cannot be changed'
+      end
+
+      it 'allows to change terms fields when project hasnt any started tasks' do
+        project_wo_started_tasks.legal_project_owner = 'change'
+        project_wo_started_tasks.exclusive_contributions = false
+        project_wo_started_tasks.confidentiality = false
+        expect(project_wo_started_tasks).to be_valid
+      end
+    end
+
     it 'video_url is valid if video_url is a valid, absolute url, the domain is youtube.com or vimeo, and there is the identifier inside' do
       expect(build(:sb_project, video_url: 'https://youtube.com/watch?v=Dn3ZMhmmzK0')).to be_valid
       expect(build(:sb_project, video_url: 'https://youtube.com/embed/Dn3ZMhmmzK0')).to be_valid
@@ -147,6 +169,26 @@ describe Project do
 
       it 'sets paid tasks status to accepted if token was added to the project' do
         expect(task_w_no_token.reload.accepted?).to be true
+      end
+    end
+
+    describe 'store_license_hash' do
+      let!(:project) { create(:project) }
+      let!(:project_finalized) { create(:project) }
+
+      before do
+        create(:award, award_type: create(:award_type, project: project_finalized))
+        project_finalized.update(agreed_to_license_hash: 'test')
+      end
+
+      it 'stores the hash of the latest CP license' do
+        project.save
+        expect(project.reload.agreed_to_license_hash).to eq(Digest::SHA256.hexdigest(File.read(Dir.glob(Rails.root.join('lib', 'assets', 'contribution_licenses', 'CP-*.md')).max_by { |f| File.mtime(f) })))
+      end
+
+      it 'doesnt update the hash if the terms are finalized' do
+        project_finalized.save
+        expect(project_finalized.reload.agreed_to_license_hash).to eq('test')
       end
     end
   end
@@ -321,6 +363,32 @@ describe Project do
     it 'limits amount of tasks per specialty' do
       expect(project.ready_tasks_by_specialty(1)[specialty1].size).to eq(1)
       expect(project.ready_tasks_by_specialty(1)[specialty2].size).to eq(1)
+    end
+  end
+
+  describe '#stats' do
+    it 'returns number of published batches' do
+      project = create(:project)
+      create(:award_type, project: project)
+      create(:award_type, state: :draft, project: project)
+
+      expect(project.stats[:batches]).to eq(1)
+    end
+
+    it 'returns number of tasks in progress' do
+      project = create(:project)
+      create(:award_ready, award_type: create(:award_type, project: project))
+      create(:award, status: :paid, award_type: create(:award_type, project: project))
+
+      expect(project.stats[:tasks]).to eq(1)
+    end
+
+    it 'returns number of accounts which have interest, started a task or created this project' do
+      project = create(:project)
+      create(:award, award_type: create(:award_type, project: project))
+      create(:interest, project: project)
+
+      expect(project.stats[:interests]).to eq(3)
     end
   end
 end

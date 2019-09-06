@@ -329,6 +329,7 @@ const Contributor = styled.div`
 
   b {
     font-weight: 900;
+    margin-right: 0.5em;
   }
 
   @media (max-width: 1024px) {
@@ -461,18 +462,35 @@ class MyTask extends React.Component {
                 <b>{task.status} </b>
                 {task.updatedAt} ago
               </Status>
+
+              {task.expiresAt &&
+                <Status>
+                  <b>EXPIRES IN </b>
+                  {task.expiresAt}
+                </Status>
+              }
+
               <Type>
                 <b>TYPE </b>
                 {task.specialty || 'General'}
               </Type>
-              {task.contributor.name &&
+
+              {task.status !== 'ready' && task.contributor.name &&
                 <Contributor>
                   <Userpics pics={[task.contributor.image]} limit={1} />
                   {task.contributor.name}
                 </Contributor>
               }
 
-              {task.status === 'ready' &&
+              {task.status === 'ready' && task.contributor.name &&
+                <Contributor>
+                  <b>Invited By </b>
+                  <Userpics pics={[task.issuer.image]} limit={1} />
+                  {task.issuer.name}
+                </Contributor>
+              }
+
+              {task.status === 'ready' && !task.contributor.name &&
                 <ExperienceLevel>
                   <b>MINIMUM EXPERIENCE </b>
                   {task.experienceLevelName}

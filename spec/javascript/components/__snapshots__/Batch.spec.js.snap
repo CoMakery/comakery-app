@@ -7,6 +7,7 @@ exports[`Batch renders component correctly 1`] = `
       "diagramUrl": null,
     }
   }
+  editable={true}
 >
   <styled.div>
     <StyledComponent
@@ -50,10 +51,9 @@ exports[`Batch renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-gqjmRU",
                   "isStatic": false,
-                  "lastClassName": "hDGnim",
+                  "lastClassName": "dxJzXX",
                   "rules": Array [
                     "
-  border-right: 7px solid #f5a623;
   margin-left: auto;
   font-size: 13px;
   padding-right: 0.5em;
@@ -64,6 +64,14 @@ exports[`Batch renders component correctly 1`] = `
   line-height: normal;
   letter-spacing: normal;
   text-transform: uppercase;
+
+  ",
+                    [Function],
+                    "
+
+  ",
+                    [Function],
+                    "
 
   ",
                     [Function],
@@ -84,10 +92,8 @@ exports[`Batch renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-gqjmRU hDGnim"
-            >
-              not published
-            </div>
+              className="sc-gqjmRU dxJzXX"
+            />
           </StyledComponent>
         </styled.div>
         <styled.div>
@@ -200,7 +206,7 @@ exports[`Batch renders component correctly 1`] = `
                     </styled.div>
                     <CurrencyAmount
                       amount=""
-                      currency=""
+                      currency={null}
                       logoUrl=""
                     >
                       <styled.div>
@@ -271,42 +277,6 @@ exports[`Batch renders component correctly 1`] = `
                                 <div
                                   className="sc-ifAKCX gATvmT"
                                 />
-                              </StyledComponent>
-                            </styled.div>
-                            <styled.div>
-                              <StyledComponent
-                                forwardedComponent={
-                                  Object {
-                                    "$$typeof": Symbol(react.forward_ref),
-                                    "attrs": Array [],
-                                    "componentStyle": ComponentStyle {
-                                      "componentId": "sc-EHOje",
-                                      "isStatic": true,
-                                      "lastClassName": "etusMN",
-                                      "rules": Array [
-                                        "
-  margin-right: 0.5em;
-  text-transform: uppercase;
-",
-                                      ],
-                                    },
-                                    "displayName": "styled.div",
-                                    "foldedComponentIds": Array [],
-                                    "render": [Function],
-                                    "styledComponentId": "sc-EHOje",
-                                    "target": "div",
-                                    "toString": [Function],
-                                    "warnTooManyClasses": [Function],
-                                    "withComponent": [Function],
-                                  }
-                                }
-                                forwardedRef={null}
-                              >
-                                <div
-                                  className="sc-EHOje etusMN"
-                                >
-                                  (No Token)
-                                </div>
                               </StyledComponent>
                             </styled.div>
                           </div>
@@ -552,6 +522,205 @@ exports[`Batch renders component correctly 1`] = `
                                   className="sc-bwzfXH ekDaoc"
                                 >
                                   team members
+                                </div>
+                              </StyledComponent>
+                            </styled.div>
+                            <styled.div>
+                              <StyledComponent
+                                forwardedComponent={
+                                  Object {
+                                    "$$typeof": Symbol(react.forward_ref),
+                                    "attrs": Array [],
+                                    "componentStyle": ComponentStyle {
+                                      "componentId": "sc-htpNat",
+                                      "isStatic": true,
+                                      "lastClassName": "vZQMM",
+                                      "rules": Array [
+                                        "
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #4a4a4a;
+",
+                                      ],
+                                    },
+                                    "displayName": "styled.div",
+                                    "foldedComponentIds": Array [],
+                                    "render": [Function],
+                                    "styledComponentId": "sc-htpNat",
+                                    "target": "div",
+                                    "toString": [Function],
+                                    "warnTooManyClasses": [Function],
+                                    "withComponent": [Function],
+                                  }
+                                }
+                                forwardedRef={null}
+                              >
+                                <div
+                                  className="sc-htpNat vZQMM"
+                                >
+                                  <Userpics
+                                    limit={3}
+                                    pics={Array []}
+                                  >
+                                    <styled.div>
+                                      <StyledComponent
+                                        forwardedComponent={
+                                          Object {
+                                            "$$typeof": Symbol(react.forward_ref),
+                                            "attrs": Array [],
+                                            "componentStyle": ComponentStyle {
+                                              "componentId": "sc-gzVnrw",
+                                              "isStatic": true,
+                                              "lastClassName": "dDxFqh",
+                                              "rules": Array [
+                                                "
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+",
+                                              ],
+                                            },
+                                            "displayName": "styled.div",
+                                            "foldedComponentIds": Array [],
+                                            "render": [Function],
+                                            "styledComponentId": "sc-gzVnrw",
+                                            "target": "div",
+                                            "toString": [Function],
+                                            "warnTooManyClasses": [Function],
+                                            "withComponent": [Function],
+                                          }
+                                        }
+                                        forwardedRef={null}
+                                      >
+                                        <div
+                                          className="sc-gzVnrw dDxFqh"
+                                        >
+                                          <styled.div>
+                                            <StyledComponent
+                                              forwardedComponent={
+                                                Object {
+                                                  "$$typeof": Symbol(react.forward_ref),
+                                                  "attrs": Array [],
+                                                  "componentStyle": ComponentStyle {
+                                                    "componentId": "sc-htoDjs",
+                                                    "isStatic": true,
+                                                    "lastClassName": "jYtsma",
+                                                    "rules": Array [
+                                                      "
+  margin-right: 8px;
+",
+                                                    ],
+                                                  },
+                                                  "displayName": "styled.div",
+                                                  "foldedComponentIds": Array [],
+                                                  "render": [Function],
+                                                  "styledComponentId": "sc-htoDjs",
+                                                  "target": "div",
+                                                  "toString": [Function],
+                                                  "warnTooManyClasses": [Function],
+                                                  "withComponent": [Function],
+                                                }
+                                              }
+                                              forwardedRef={null}
+                                            >
+                                              <div
+                                                className="sc-htoDjs jYtsma"
+                                              />
+                                            </StyledComponent>
+                                          </styled.div>
+                                        </div>
+                                      </StyledComponent>
+                                    </styled.div>
+                                  </Userpics>
+                                </div>
+                              </StyledComponent>
+                            </styled.div>
+                          </div>
+                        </StyledComponent>
+                      </styled.div>
+                    </ContentElement>
+                    <ContentElement
+                      title="interested"
+                    >
+                      <styled.div>
+                        <StyledComponent
+                          forwardedComponent={
+                            Object {
+                              "$$typeof": Symbol(react.forward_ref),
+                              "attrs": Array [],
+                              "componentStyle": ComponentStyle {
+                                "componentId": "sc-bdVaJa",
+                                "isStatic": true,
+                                "lastClassName": "gPWqlF",
+                                "rules": Array [
+                                  "
+  display: flex;
+  flex-direction: column;
+  padding-right: 40px;
+",
+                                ],
+                              },
+                              "displayName": "styled.div",
+                              "foldedComponentIds": Array [],
+                              "render": [Function],
+                              "styledComponentId": "sc-bdVaJa",
+                              "target": "div",
+                              "toString": [Function],
+                              "warnTooManyClasses": [Function],
+                              "withComponent": [Function],
+                            }
+                          }
+                          forwardedRef={null}
+                        >
+                          <div
+                            className="sc-bdVaJa gPWqlF"
+                          >
+                            <styled.div>
+                              <StyledComponent
+                                forwardedComponent={
+                                  Object {
+                                    "$$typeof": Symbol(react.forward_ref),
+                                    "attrs": Array [],
+                                    "componentStyle": ComponentStyle {
+                                      "componentId": "sc-bwzfXH",
+                                      "isStatic": true,
+                                      "lastClassName": "ekDaoc",
+                                      "rules": Array [
+                                        "
+  font-family: Montserrat;
+  font-size: 10px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #3a3a3a;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+",
+                                      ],
+                                    },
+                                    "displayName": "styled.div",
+                                    "foldedComponentIds": Array [],
+                                    "render": [Function],
+                                    "styledComponentId": "sc-bwzfXH",
+                                    "target": "div",
+                                    "toString": [Function],
+                                    "warnTooManyClasses": [Function],
+                                    "withComponent": [Function],
+                                  }
+                                }
+                                forwardedRef={null}
+                              >
+                                <div
+                                  className="sc-bwzfXH ekDaoc"
+                                >
+                                  interested
                                 </div>
                               </StyledComponent>
                             </styled.div>

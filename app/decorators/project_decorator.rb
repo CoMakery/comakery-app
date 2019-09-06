@@ -1,6 +1,7 @@
 class ProjectDecorator < Draper::Decorator
   delegate_all
   include ActionView::Helpers::NumberHelper
+  include Rails.application.routes.url_helpers
 
   PAYMENT_DESCRIPTIONS = {
     'project_token' => 'Project Tokens'
@@ -95,6 +96,20 @@ class ProjectDecorator < Draper::Decorator
 
   def send_coins?
     token&.coin_type? && %w[eth btc ada qtum eos xtz].include?(token&.coin_type)
+  end
+
+  def header_props
+    {
+      title: title,
+      owner: legal_project_owner,
+      image_url: helpers.attachment_url(self, :panoramic_image, :fill, 1500, 300, fallback: 'defaul_project.jpg'),
+      settings_url: edit_project_path(self),
+      batches_url: project_award_types_path(self),
+      contributors_url: project_contributors_path(self),
+      awards_url: awards_project_path(self),
+      landing_url: project.unlisted? ? unlisted_project_path(long_id) : project_path(self),
+      present: true
+    }
   end
 
   private

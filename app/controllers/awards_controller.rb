@@ -1,26 +1,32 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
-  before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject]
+  before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
   before_action :authorize_award_show, only: %i[show]
   before_action :authorize_award_edit, only: %i[edit update]
+  before_action :authorize_award_assign, only: %i[assign]
   before_action :authorize_award_start, only: %i[start]
   before_action :authorize_award_submit, only: %i[submit]
   before_action :authorize_award_review, only: %i[accept reject]
   before_action :authorize_award_pay, only: %i[update_transaction_address]
-  before_action :clone_award_on_start, only: %i[start]
+  before_action :clone_award_on_start, only: %i[start assign]
   before_action :set_filter, only: %i[index]
+  before_action :set_default_project_filter, only: %i[index]
   before_action :set_project_filter, only: %i[index]
+  before_action :run_award_expiration, only: %i[index]
   before_action :set_awards, only: %i[index]
   before_action :set_page, only: %i[index]
   before_action :set_form_props, only: %i[new edit clone]
   before_action :set_show_props, only: %i[show]
   before_action :set_award_props, only: %i[award]
+  before_action :set_assignment_props, only: %i[assignment]
   before_action :set_index_props, only: %i[index]
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
   skip_before_action :require_login, only: %i[confirm]
   skip_after_action :verify_authorized, only: %i[confirm]
+  before_action :redirect_back, only: %i[index]
+  before_action :create_interest_from_session, only: %i[index]
 
   layout 'react'
 
@@ -83,9 +89,24 @@ class AwardsController < ApplicationController
     end
   end
 
+  def assignment
+    render component: 'TaskAssign', props: @props
+  end
+
+  def assign
+    account = Account.find(params[:account_id])
+
+    if account && @award.update(account: account, status: 'ready')
+      TaskMailer.with(award: @award).task_assigned.deliver_now
+      redirect_to project_award_types_path(@award.project), notice: 'Task has been assigned'
+    else
+      redirect_to project_award_types_path(@award.project), flash: { error: @award.errors&.full_messages&.join(', ') }
+    end
+  end
+
   def start
     if @award.update(account: current_account, status: 'started')
-      redirect_to my_tasks_path(filter: 'started'), notice: 'Task started'
+      redirect_to project_award_type_award_path(@project, @award_type, @award), notice: 'Task started'
     else
       redirect_to my_tasks_path(filter: 'ready'), flash: { error: @award.errors&.full_messages&.join(', ') }
     end
@@ -198,6 +219,10 @@ class AwardsController < ApplicationController
       authorize @award, :edit?
     end
 
+    def authorize_award_assign
+      authorize @award, :assign?
+    end
+
     def authorize_award_start
       if policy(@award).start?
         authorize @award, :start?
@@ -244,12 +269,24 @@ class AwardsController < ApplicationController
       @filter = params[:filter]&.downcase || 'ready'
     end
 
+    def set_default_project_filter
+      default_project_id = ENV['DEFAULT_PROJECT_ID']
+
+      if @filter == 'ready' && !params[:all] && current_account.experiences.empty? && default_project_id.present?
+        @project = Project.find_by(id: default_project_id)
+      end
+    end
+
     def set_project_filter
-      @project = Project.find_by(id: params[:project_id])
+      @project = (Project.find_by(id: params[:project_id]) || @project)
+    end
+
+    def run_award_expiration
+      policy_scope(Award).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
     end
 
     def set_awards
-      @awards = policy_scope(Award).filtered_for_view(@filter, current_account).order(updated_at: :desc)
+      @awards = policy_scope(Award).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
 
       if @project
         @awards = @awards.where(award_type: AwardType.where(project: @project))
@@ -274,7 +311,8 @@ class AwardsController < ApplicationController
         :number_of_assignments,
         :number_of_assignments_per_user,
         :specialty_id,
-        :proof_link
+        :proof_link,
+        :expires_in_days
       )
     end
 
@@ -318,7 +356,9 @@ class AwardsController < ApplicationController
         task: task_to_props(@award),
         task_allowed_to_start: policy(@award).start?,
         tasks_to_unlock: current_account.tasks_to_unlock(@award),
+        license_url: contribution_licenses_path(type: 'CP'),
         my_tasks_path: my_tasks_path,
+        account_name: current_account.decorate.name,
         csrf_token: form_authenticity_token
       }
     end
@@ -335,7 +375,31 @@ class AwardsController < ApplicationController
         form_url: project_award_type_award_send_award_path(@project, @award_type, @award),
         form_action: 'POST',
         url_on_success: project_award_types_path,
-        csrf_token: form_authenticity_token
+        csrf_token: form_authenticity_token,
+        project_for_header: @project.header_props,
+        mission_for_header: @project&.mission&.decorate&.header_props
+      }
+    end
+
+    def set_assignment_props
+      @props = {
+        task: @award.serializable_hash(only: %w[id name]),
+        batch: @award_type.serializable_hash(only: %w[id name]),
+        project: @project.serializable_hash(only: %w[id title], methods: :public?)&.merge({
+          url: unlisted_project_url(@project.long_id)
+        }),
+        interested: (@project.interested + @project.contributors).uniq.map do |a|
+          a.decorate.serializable_hash(
+            only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
+            include: :specialty,
+            methods: :image_url
+          )
+        end,
+        interested_select: (@project.interested + @project.contributors).uniq.map { |a| [a.decorate.name, a.id] }.unshift(['', nil]).to_h,
+        form_url: project_award_type_award_assign_path(@project, @award_type, @award),
+        csrf_token: form_authenticity_token,
+        project_for_header: @project.header_props,
+        mission_for_header: @project&.mission&.decorate&.header_props
       }
     end
 
@@ -352,7 +416,9 @@ class AwardsController < ApplicationController
         form_url: project_award_type_awards_path(@project, @award_type),
         form_action: 'POST',
         url_on_success: project_award_types_path,
-        csrf_token: form_authenticity_token
+        csrf_token: form_authenticity_token,
+        project_for_header: @project.header_props,
+        mission_for_header: @project&.mission&.decorate&.header_props
       }
     end
 

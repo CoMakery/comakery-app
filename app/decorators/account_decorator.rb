@@ -3,7 +3,6 @@ class AccountDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
 
   def name
-    return nickname if nickname.present?
     [first_name, last_name].reject(&:blank?).join(' ')
   end
 
@@ -43,5 +42,9 @@ class AccountDecorator < Draper::Decorator
 
   def can_send_awards?(project)
     project&.account == self && (project&.token&.ethereum_contract_address? || project&.token&.contract_address? || project.decorate.send_coins?)
+  end
+
+  def image_url(size = 100)
+    helpers.attachment_url(self, :image, :fill, size, size, fallback: 'default_account_image.jpg')
   end
 end

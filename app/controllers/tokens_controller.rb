@@ -133,7 +133,8 @@ class TokensController < ApplicationController
       :blockchain_network,
       :contract_address,
       :symbol,
-      :decimal_places
+      :decimal_places,
+      :unlisted
     )
   end
 end

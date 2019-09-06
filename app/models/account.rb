@@ -47,6 +47,7 @@ class Account < ApplicationRecord
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
   validates :first_name, :last_name, :country, :date_of_birth, :specialty, presence: true, if: :name_required
+  validates :nickname, uniqueness: true, allow_nil: true
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
@@ -56,8 +57,17 @@ class Account < ApplicationRecord
   validates :eos_wallet, eos_address: true # see EosAddressable
   validates :tezos_wallet, tezos_address: true # see TezosAddressable
   validates :email, format: { with: /\A[^@\s]+@([^@\s]+\.)+[^@\s]+\z/ }, allow_nil: true
-  validate :validate_age, on: :create
   validates :agreed_to_user_agreement, presence: { message: 'You must agree to the terms of the CoMakery User Agreement to sign up ' }, if: :agreement_required
+  validates :linkedin_url, format: { with: %r{\Ahttps:\/\/www.linkedin.com\/.*\z} }, allow_blank: true
+  validates :github_url, format: { with: %r{\Ahttps:\/\/github.com\/.*\z} }, allow_blank: true
+  validates :dribble_url, format: { with: %r{\Ahttps:\/\/dribbble.com\/.*\z} }, allow_blank: true
+  validates :behance_url, format: { with: %r{\Ahttps:\/\/www.behance.net\/.*\z} }, allow_blank: true
+
+  validates_each :linkedin_url, :github_url, :dribble_url, :behance_url, allow_blank: true do |record, attr, value|
+    record.errors.add(attr, 'is unsafe') if ApplicationController.helpers.sanitize(value) != value
+  end
+
+  validate :validate_age, on: :create
 
   class << self
     def order_by_award(project)
@@ -188,8 +198,12 @@ class Account < ApplicationRecord
 
   def accessable_awards
     Award.where(id:
-      awards_matching_experience.pluck(:id) |
+      (awards_matching_experience.pluck(:id) - awards_reached_maximum_assignments.pluck(:id)) |
       related_awards.pluck(:id))
+  end
+
+  def awards_reached_maximum_assignments
+    awards.select { |a| a.cloned? && a.cloned_from.reached_maximum_assignments_for?(self) }.map(&:cloned_from)
   end
 
   def experience_for(specialty)

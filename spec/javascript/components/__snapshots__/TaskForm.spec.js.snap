@@ -15,11 +15,13 @@ exports[`TaskForm renders correctly without props 1`] = `
   }
   formAction="POST"
   formUrl="/"
+  missionForHeader={null}
   project={
     Object {
       "default": "_",
     }
   }
+  projectForHeader={null}
   specialties={
     Object {
       "default": "_",
@@ -39,10 +41,11 @@ exports[`TaskForm renders correctly without props 1`] = `
 >
   <ProjectSetup
     className="task-form"
+    current="batches"
     hasBackButton={true}
-    projectId={null}
-    projectPage="batches"
-    projectTitle=""
+    missionForHeader={null}
+    owner={true}
+    projectForHeader={null}
     sidebar={
       <React.Fragment>
         <div
@@ -50,7 +53,7 @@ exports[`TaskForm renders correctly without props 1`] = `
         >
           <SidebarItem
             className="batch-index--sidebar--item batch-index--sidebar--item__form"
-            iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+            iconLeftName=""
             iconLeftUrl=""
             iconRightName=""
             notificationColor=""
@@ -93,13 +96,14 @@ exports[`TaskForm renders correctly without props 1`] = `
       className="project-setup task-form"
       customTitle={
         <ProjectSetupHeader
-          projectId={null}
-          projectOwner={true}
-          projectPage="batches"
-          projectTitle=""
+          current="batches"
+          expanded={false}
+          missionForHeader={null}
+          owner={true}
+          projectForHeader={null}
         />
       }
-      hasBackButton={true}
+      hasBackButton={false}
       sidebar={
         <React.Fragment>
           <div
@@ -107,7 +111,7 @@ exports[`TaskForm renders correctly without props 1`] = `
           >
             <SidebarItem
               className="batch-index--sidebar--item batch-index--sidebar--item__form"
-              iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+              iconLeftName=""
               iconLeftUrl=""
               iconRightName=""
               notificationColor=""
@@ -150,85 +154,186 @@ exports[`TaskForm renders correctly without props 1`] = `
         className="layout project-setup task-form"
       >
         <div
-          className="layout--back-button"
-        >
-          <Icon
-            className=""
-            name="iconCloseCopy.svg"
-            onClick={[Function]}
-          >
-            <img
-              className="icon icon__iconCloseCopy-svg"
-              onClick={[Function]}
-              src="test-file-stub"
-            />
-          </Icon>
-        </div>
-        <div
           className="layout--content"
         >
           <div
             className="layout--content--title"
           >
             <ProjectSetupHeader
-              projectId={null}
-              projectOwner={true}
-              projectPage="batches"
-              projectTitle=""
+              current="batches"
+              expanded={false}
+              missionForHeader={null}
+              owner={true}
+              projectForHeader={null}
             >
-              <div
-                className="layout--content--title--header"
-              />
-              <span
-                className="layout--content--title--nav"
+              <styled.div
+                backgroundImageUrl={null}
               >
-                <a
-                  href="#"
+                <StyledComponent
+                  backgroundImageUrl={null}
+                  forwardedComponent={
+                    Object {
+                      "$$typeof": Symbol(react.forward_ref),
+                      "attrs": Array [],
+                      "componentStyle": ComponentStyle {
+                        "componentId": "sc-bdVaJa",
+                        "isStatic": false,
+                        "lastClassName": "jKQScu",
+                        "rules": Array [
+                          "
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  cursor: default;
+  margin-bottom: 1em;
+  background-image: url(",
+                          [Function],
+                          ");
+  background-position-x: 50%;
+  background-position-y: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  text-shadow: 1px 1px 1px #3a3a3a;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+",
+                        ],
+                      },
+                      "displayName": "styled.div",
+                      "foldedComponentIds": Array [],
+                      "render": [Function],
+                      "styledComponentId": "sc-bdVaJa",
+                      "target": "div",
+                      "toString": [Function],
+                      "warnTooManyClasses": [Function],
+                      "withComponent": [Function],
+                    }
+                  }
+                  forwardedRef={null}
                 >
-                  project settings
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav__current"
-              >
-                <a
-                  href="#"
-                >
-                  batches & tasks
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  contributors
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  payments
-                </a>
-              </span>
-              <span
-                className="layout--content--title--nav"
-              >
-                <a
-                  href="#"
-                >
-                  overview
-                </a>
-              </span>
+                  <div
+                    className="sc-bdVaJa jKQScu"
+                  >
+                    <styled.div>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-bwzfXH",
+                              "isStatic": true,
+                              "lastClassName": "fFBqGW",
+                              "rules": Array [
+                                "
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0.7em;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-bwzfXH",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-bwzfXH fFBqGW"
+                        />
+                      </StyledComponent>
+                    </styled.div>
+                    <styled.div>
+                      <StyledComponent
+                        forwardedComponent={
+                          Object {
+                            "$$typeof": Symbol(react.forward_ref),
+                            "attrs": Array [],
+                            "componentStyle": ComponentStyle {
+                              "componentId": "sc-EHOje",
+                              "isStatic": true,
+                              "lastClassName": "gazehm",
+                              "rules": Array [
+                                "
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-grow: 2;
+  flex-direction: column;
+
+  img {
+    max-height: 150px;
+
+    margin-bottom: -50px;
+    margin-top: 25px;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+  }
+
+  h2 {
+    font-size: 18px;
+    text-transform: capitalize;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    margin-top: -75px;
+  }
+",
+                              ],
+                            },
+                            "displayName": "styled.div",
+                            "foldedComponentIds": Array [],
+                            "render": [Function],
+                            "styledComponentId": "sc-EHOje",
+                            "target": "div",
+                            "toString": [Function],
+                            "warnTooManyClasses": [Function],
+                            "withComponent": [Function],
+                          }
+                        }
+                        forwardedRef={null}
+                      >
+                        <div
+                          className="sc-EHOje gazehm"
+                        >
+                          <h1>
+                            New Project
+                          </h1>
+                        </div>
+                      </StyledComponent>
+                    </styled.div>
+                  </div>
+                </StyledComponent>
+              </styled.div>
             </ProjectSetupHeader>
           </div>
-          <hr
-            className="layout--content--hr"
-          />
           <div
             className="layout--content--wrapper"
           >
@@ -240,7 +345,7 @@ exports[`TaskForm renders correctly without props 1`] = `
               >
                 <SidebarItem
                   className="batch-index--sidebar--item batch-index--sidebar--item__form"
-                  iconLeftName="BATCH/ACTIVE.GRADIENT.svg"
+                  iconLeftName=""
                   iconLeftUrl=""
                   iconRightName=""
                   notificationColor=""
@@ -253,24 +358,18 @@ exports[`TaskForm renders correctly without props 1`] = `
                     <div
                       className="sidebar-item sidebar-item__selected batch-index--sidebar--item batch-index--sidebar--item__form"
                     >
-                      <span
-                        className="sidebar-item--icon-left"
+                      <div
+                        className="sidebar-item--content"
                       >
-                        <Icon
-                          className=""
-                          name="BATCH/ACTIVE.GRADIENT.svg"
+                        <div
+                          className="sidebar-item--text"
                         >
-                          <img
-                            className="icon icon__BATCH/ACTIVE-GRADIENT.svg"
-                            src="test-file-stub"
-                          />
-                        </Icon>
-                      </span>
-                      <span
-                        className="sidebar-item--text"
-                      >
-                        sidebar item
-                      </span>
+                          sidebar item
+                        </div>
+                        <div
+                          className="sidebar-item--subchild"
+                        />
+                      </div>
                       <div
                         className="sidebar-item--left-border"
                       />
@@ -386,19 +485,19 @@ exports[`TaskForm renders correctly without props 1`] = `
                     </div>
                   </InputField>
                 </InputFieldWhiteDark>
-                <InputFieldDescriptionMiddle
+                <InputFieldDescription
                   eventHandler={[Function]}
                   name="task[why]"
-                  placeholder="Let people know what will be the result of this task being completed (ex: When task is finished, the result will be xxxx)"
+                  placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                   required={true}
                   symbolLimit={500}
-                  title="why"
+                  title="WHAT IS THE EXPECTED BENEFIT"
                   value=""
                 >
                   <InputField
                     checkboxText=""
                     checked={false}
-                    className="input-field__description-middle"
+                    className="input-field__description"
                     copyOnClick={false}
                     disabled={false}
                     errorText=""
@@ -412,19 +511,19 @@ exports[`TaskForm renders correctly without props 1`] = `
                     min=""
                     name="task[why]"
                     pattern=".*"
-                    placeholder="Let people know what will be the result of this task being completed (ex: When task is finished, the result will be xxxx)"
+                    placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                     readOnly={false}
                     recommended={false}
                     required={true}
                     selectEntries={Array []}
                     step=""
                     symbolLimit={500}
-                    title="why"
+                    title="WHAT IS THE EXPECTED BENEFIT"
                     type="textarea"
                     value=""
                   >
                     <div
-                      className="input-field input-field__description-middle"
+                      className="input-field input-field__description"
                     >
                       <div
                         className="input-field--title"
@@ -432,7 +531,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--title"
                         >
-                          why
+                          WHAT IS THE EXPECTED BENEFIT
                         </span>
                         <span
                           className="input-field--title--required"
@@ -455,7 +554,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                           name="task[why]"
                           onChange={[Function]}
                           pattern=".*"
-                          placeholder="Let people know what will be the result of this task being completed (ex: When task is finished, the result will be xxxx)"
+                          placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                           readOnly={false}
                           required={true}
                           value=""
@@ -463,12 +562,89 @@ exports[`TaskForm renders correctly without props 1`] = `
                       </div>
                     </div>
                   </InputField>
-                </InputFieldDescriptionMiddle>
-                <InputFieldDescriptionMiddle
+                </InputFieldDescription>
+                <InputFieldDescriptionLarge
+                  eventHandler={[Function]}
+                  name="task[requirements]"
+                  placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
+                  required={true}
+                  symbolLimit={1000}
+                  title="acceptance requirements"
+                  value=""
+                >
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__description-large"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="task[requirements]"
+                    pattern=".*"
+                    placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step=""
+                    symbolLimit={1000}
+                    title="acceptance requirements"
+                    type="textarea"
+                    value=""
+                  >
+                    <div
+                      className="input-field input-field__description-large"
+                    >
+                      <div
+                        className="input-field--title"
+                      >
+                        <span
+                          className="input-field--title--title"
+                        >
+                          acceptance requirements
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                        <span
+                          className="input-field--title--counter"
+                        >
+                          0
+                          /
+                          1000
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
+                      >
+                        <textarea
+                          className="input-field--content__text"
+                          name="task[requirements]"
+                          onChange={[Function]}
+                          pattern=".*"
+                          placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
+                          readOnly={false}
+                          required={true}
+                          value=""
+                        />
+                      </div>
+                    </div>
+                  </InputField>
+                </InputFieldDescriptionLarge>
+                <InputFieldDescriptionLarge
                   eventHandler={[Function]}
                   name="task[description]"
                   placeholder="Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch"
-                  required={true}
                   symbolLimit={500}
                   title="description"
                   value=""
@@ -476,7 +652,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                   <InputField
                     checkboxText=""
                     checked={false}
-                    className="input-field__description-middle"
+                    className="input-field__description-large"
                     copyOnClick={false}
                     disabled={false}
                     errorText=""
@@ -493,7 +669,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     placeholder="Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch"
                     readOnly={false}
                     recommended={false}
-                    required={true}
+                    required={false}
                     selectEntries={Array []}
                     step=""
                     symbolLimit={500}
@@ -502,7 +678,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     value=""
                   >
                     <div
-                      className="input-field input-field__description-middle"
+                      className="input-field input-field__description-large"
                     >
                       <div
                         className="input-field--title"
@@ -515,7 +691,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--required"
                         >
-                          required
+                          optional
                         </span>
                         <span
                           className="input-field--title--counter"
@@ -535,13 +711,13 @@ exports[`TaskForm renders correctly without props 1`] = `
                           pattern=".*"
                           placeholder="Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch"
                           readOnly={false}
-                          required={true}
+                          required={false}
                           value=""
                         />
                       </div>
                     </div>
                   </InputField>
-                </InputFieldDescriptionMiddle>
+                </InputFieldDescriptionLarge>
                 <InputFieldUploadFile
                   imgPreviewDimensions="100x100"
                   name="task[image]"
@@ -610,84 +786,6 @@ exports[`TaskForm renders correctly without props 1`] = `
                     </div>
                   </InputField>
                 </InputFieldUploadFile>
-                <InputFieldDescription
-                  eventHandler={[Function]}
-                  name="task[requirements]"
-                  placeholder="This section is free text that allows for the use of markdown. Create bullets using an asterick and a space before each sentence. Make sure to list a bullet point for each acceptance criteria. These bullet points will be used by reviewers to verify the work."
-                  required={true}
-                  symbolLimit={750}
-                  title="acceptance requirements"
-                  value=""
-                >
-                  <InputField
-                    checkboxText=""
-                    checked={false}
-                    className="input-field__description"
-                    copyOnClick={false}
-                    disabled={false}
-                    errorText=""
-                    eventHandler={[Function]}
-                    imgInputRef={null}
-                    imgPreviewDimensions="40x40"
-                    imgPreviewUrl=""
-                    imgRequirements=""
-                    imgVerifier={[Function]}
-                    max=""
-                    min=""
-                    name="task[requirements]"
-                    pattern=".*"
-                    placeholder="This section is free text that allows for the use of markdown. Create bullets using an asterick and a space before each sentence. Make sure to list a bullet point for each acceptance criteria. These bullet points will be used by reviewers to verify the work."
-                    readOnly={false}
-                    recommended={false}
-                    required={true}
-                    selectEntries={Array []}
-                    step=""
-                    symbolLimit={750}
-                    title="acceptance requirements"
-                    type="textarea"
-                    value=""
-                  >
-                    <div
-                      className="input-field input-field__description"
-                    >
-                      <div
-                        className="input-field--title"
-                      >
-                        <span
-                          className="input-field--title--title"
-                        >
-                          acceptance requirements
-                        </span>
-                        <span
-                          className="input-field--title--required"
-                        >
-                          required
-                        </span>
-                        <span
-                          className="input-field--title--counter"
-                        >
-                          0
-                          /
-                          750
-                        </span>
-                      </div>
-                      <div
-                        className="input-field--content"
-                      >
-                        <textarea
-                          className="input-field--content__text"
-                          name="task[requirements]"
-                          onChange={[Function]}
-                          pattern=".*"
-                          placeholder="This section is free text that allows for the use of markdown. Create bullets using an asterick and a space before each sentence. Make sure to list a bullet point for each acceptance criteria. These bullet points will be used by reviewers to verify the work."
-                          readOnly={false}
-                          required={true}
-                          value=""
-                        />
-                      </div>
-                    </div>
-                  </InputField>
-                </InputFieldDescription>
                 <InputFieldDropdown
                   eventHandler={[Function]}
                   name="task[specialty_id]"
@@ -1105,9 +1203,86 @@ exports[`TaskForm renders correctly without props 1`] = `
                 </InputFieldWhiteDark>
                 <InputFieldWhiteDark
                   eventHandler={[Function]}
+                  min="1"
+                  name="task[expires_in_days]"
+                  placeholder="10"
+                  required={true}
+                  step="1"
+                  symbolLimit={0}
+                  title="days till task expires (after starting)"
+                  type="number"
+                  value={10}
+                >
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__white__dark"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min="1"
+                    name="task[expires_in_days]"
+                    pattern=".*"
+                    placeholder="10"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step="1"
+                    symbolLimit={0}
+                    title="days till task expires (after starting)"
+                    type="number"
+                    value={10}
+                  >
+                    <div
+                      className="input-field input-field__white__dark"
+                    >
+                      <div
+                        className="input-field--title"
+                      >
+                        <span
+                          className="input-field--title--title"
+                        >
+                          days till task expires (after starting)
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
+                      >
+                        <input
+                          className="input-field--content__text"
+                          max=""
+                          min="1"
+                          name="task[expires_in_days]"
+                          onChange={[Function]}
+                          onClick={null}
+                          placeholder="10"
+                          readOnly={false}
+                          required={true}
+                          step="1"
+                          type="number"
+                          value={10}
+                        />
+                      </div>
+                    </div>
+                  </InputField>
+                </InputFieldWhiteDark>
+                <InputFieldWhiteDark
+                  eventHandler={[Function]}
                   name="task[proof_link]"
                   placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
-                  required={true}
                   symbolLimit={150}
                   title="URL where to submit completed work"
                   value=""
@@ -1132,7 +1307,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
                     readOnly={false}
                     recommended={false}
-                    required={true}
+                    required={false}
                     selectEntries={Array []}
                     step=""
                     symbolLimit={150}
@@ -1154,7 +1329,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--required"
                         >
-                          required
+                          optional
                         </span>
                         <span
                           className="input-field--title--counter"
@@ -1175,7 +1350,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                           pattern=".*"
                           placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
                           readOnly={false}
-                          required={true}
+                          required={false}
                           type="text"
                           value=""
                         />

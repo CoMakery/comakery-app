@@ -1,35 +1,9 @@
 # CoMakery
 
-## Project Vision
+CoMakery helps coordinate blockchain missions, projects, tasks and payments.
 
-CoMakery helps coordinate blockchain missions, projects and token awards.
-
-## Current Implementation Status
-
-This project is in open beta. It is being actively developed by CoMakery.
-
-
-## Updated Schema
-
-**Summary of changes**
-
-* Add MISSIONS table
-* Add TOKENS table
-* Migrate token values currently stored in PROJECTS to TOKENS
-* AWARD_TYPES renamed to BATCHES and new fields added
-* AWARDS renamed to TASKS and new fields added
-* New tables TASK_SKILLS, SKILLS, and ACCEPTANCE_REQUIREMENTS added
-
-![new schema](doc/schema-with-batches/updated-schema.png)
-
-## Updated Skills & Interests Schema
-
-![new schema](doc/schema-with-batches/skill-interest-schema.png)
 
 ## Configuration
-
-We use Rails localization (i18n) for application-specific language.
-Every fork of this project will maintain their own `config/locales/app.yml`.
 
 We use environment variables for app "secrets", and values which vary between environments,
 eg staging and production.
@@ -74,27 +48,70 @@ bin/server
 ```
 ## React on Rails
 
-* Webpacker
-For development, run `bin/webpack-dev-server` command in a terminal separate from `bundle exec rails s` so that the changes made inside react components are updated real time.
+###  Webpacker
+
+For development, run `bin/webpack-dev-server` command in a terminal separate from `rails s` so that the changes made inside react components are updated real time.
 However for production, we will use precompiled react code so we don't need to run webpack-dev-server for production mode.
 And Webpacker hooks up a new webpacker:compile task to assets:precompile, which gets run whenever you run assets:precompile.
-So after running assets precompile, all react components will be working on production mode.
+So after running assets precompile, all react components will be working in production mode.
 
-* React_Rails
-All react components should be inside app/javascript/components. And you can just use `react_component` helper to render react component and that's all - <%= react_component "Account" %>.
+### React_Rails
+
+All react components should be inside `app/javascript/components`. 
+Use the `react_component` helper to render react component with `<%= react_component "Account" %>`.
+
 https://github.com/reactjs/react-rails
 
 ## Running tests
 
-A bit faster: `bin/rspec`
+Faster test runs with: `bin/rspec`
 
-More thorough (integrates views): `bin/rspect`
+More thorough test runs (integrates views): `bin/rspect`
 
 JS tests via Jest: `yarn test`
 
-## Pushing code to Github
+## Code Commit and Deployment Workflow
 
-To run your tests and git push your branch *only if tests pass*, run `bin/shipit`.
+* Develop your code locally in a git feature branch
+* `bin/shipit` to git push your branch to GitHub *only if tests and quality checks pass*. This runs the same checks that CircleCI will run after you push your code to GitHub.
+* On GitHub, create a pull request from your feature Branch to the `acceptance` branch
+* Get your code reviewed by at least one person
+* Merge your PR to `acceptance`
+* Code merged to `acceptance` is automatically deployed to `demo.comakery.com` on Heroku for QA
+* Once code is tested it is manually merged to `master`
+* If CI passes on master, master is manually deployed to `staging.comakery.com` on Heroku
+* If the code looks good on staging then it is manually deployed to `www.comakery.com` on Heroku
+
+## Deploying to Heroku Environments
+
+### `bin/deploy heroku-app [git-ref]`
+
+Example usage:
+```
+# deploy HEAD of current branch to staging
+bin/deploy comakery-staging
+
+# deploy the git ref called hot-fix-branch to staging
+bin/deploy comakery-staging hot-fix-branch
+
+# deploy HEAD of current branch to production
+bin/deploy comakery-production
+```
+
+The `bin/deploy` script does the following:
+1. Turn on the down for maintenance page
+2. Manually backup production
+3. Deploy the git code in the current local branch to the heroku app specified
+4. Run `rake db:migrate`
+5. Run `rake data:migrate` to migrate data
+6. Restart the apps with `heroku restart`
+7. Turn off the down for maintenance page 
+
+
+The old method of deploying that still can be used as a backup is:
+```
+citizen deploy production master comakery
+```
 
 ## Data migrations
 
@@ -104,7 +121,7 @@ Data migration scripts are located in `db/data_migrations`.
 
 If you need to migrate data or add static table data run
 ```
-bundle exec rake data:migrate
+rake data:migrate
 ```
 
 To generate a new data migration run
@@ -114,36 +131,6 @@ rails g data_migration add_this_to_that
 
 More documentation is [here](https://github.com/ilyakatz/data-migrate)
 
-## Deploying to heroku staging
-
-Once your heroku user has access to the applications, you can run any of:
-
-```
-citizen deploy staging master comakery
-```
-
-## Deploying to heroku production
-
-Show the down for mmaintainence page, backup the production db and confirm.
-
-```
-heroku maintenance:on
-heroku pg:backups:capture HEROKU_POSTGRESQL_BROWN --app comakery-production
-heroku pg:backups --app comakery-production
-```
-
-After you have your backup captured, deploy to production:
-```
-citizen deploy production master comakery
-```
-
-The deploy also runs `rake db:migrate` and `heroku maintenance:off --app comakery-poduction`
-
-**TODO:** Fix bin/deploy which calls citizen. It should take more intuitive arguments and give better instructions.
-```
-bin/deploy staging
-bin/deploy production
-```
 
 ## Basic Auth
 
@@ -152,6 +139,9 @@ Set an environment variable called `BASIC_AUTH` in the format
 that environment variable exists.
 
 ## Deploying to Heroku with app.json
+
+This is useful if you want to create a new environment.
+
 - [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
 - During setup update API keys and secrets according to environment
 - After deployment manually update formation and addons plans according to environment
@@ -167,11 +157,6 @@ Visit <COMAKERY_INSTANCE>/admin/sidekiq
 
 Username admin, password is in heroku app settings
 
-### Scheduled Jobs
-
-On staging and production, we use Heroku Scheduler to run `rails runner bin/patch_ethereum_awards`
-on a daily basis.  This task backfills "pending" ethereum awards, if they are no longer retired by Sidekiq.
-
 ### Clear and regenerate dead sidekiq jobs
 
 If you are getting an out of memory error for Redis. The processed queue can take up a lot of memory. It can be cleared with `Sidekiq::Stats.new.reset`
@@ -184,11 +169,6 @@ Sidekiq::RetrySet.new.clear
 Sidekiq::ScheduledSet.new.clear
 Sidekiq::Stats.new.reset
 Sidekiq::DeadSet.new.clear
-```
-
-You can regenerated the jobs manually with:
-```
-heroku run bundle exec rails runner bin/patch_ethereum_awards --app comakery-staging
 ```
 
 ### Redis Configuration On Heroku
@@ -230,30 +210,10 @@ To flush the old keys
 lab.redistogo.com:9968> flushdb
 ```
 
-## Github Importer
+## Skills & Interests Schema Overview
 
-To create an an award for each git commit in a github project, start by running this command:  
-```
-importer/git_importer.rb --help                             # local
-heroku run -r staging "importer/git_importer.rb --help"     # staging
-```
+![new schema](doc/schema-with-batches/skill-interest-schema.png)
 
-Study the options in help, then construct a command.
+## General Schema
 
-**Use only with great care on production!**
-If you mistype the project ID, you will import awards into the wrong project.
-
-A full sample command:
-```
-heroku run -r staging "importer/git_importer.rb --github-repo core-network/client --project-id 1 --ethereum"
-```
-
-## Deleting a project
-
-If you want to completely remove all traces of project `p` (be careful):
-
-```ruby
-p.award_types.each{|t| t.awards.destroy_all}
-p.award_types.destroy_all
-p.delete
-```
+![new schema](doc/schema-with-batches/updated-schema.png)

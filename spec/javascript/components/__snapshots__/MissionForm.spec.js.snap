@@ -66,9 +66,6 @@ exports[`MissionForm renders correctly without props 1`] = `
         >
           Create a New Mission
         </div>
-        <hr
-          className="layout--content--hr"
-        />
         <div
           className="layout--content--wrapper"
         >

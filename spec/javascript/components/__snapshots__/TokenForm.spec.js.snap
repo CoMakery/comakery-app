@@ -85,9 +85,6 @@ exports[`TokenForm renders correctly without props 1`] = `
         >
           Create a New Token
         </div>
-        <hr
-          className="layout--content--hr"
-        />
         <div
           className="layout--content--wrapper"
         >
@@ -191,6 +188,109 @@ exports[`TokenForm renders correctly without props 1`] = `
                           value="_"
                         >
                           default
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldDropdownHalfed>
+              <InputFieldDropdownHalfed
+                eventHandler={[Function]}
+                name="token[unlisted]"
+                required={true}
+                selectEntries={
+                  Array [
+                    Array [
+                      "Listed",
+                      "false",
+                    ],
+                    Array [
+                      "Unlisted",
+                      "true",
+                    ],
+                  ]
+                }
+                title="visibility"
+                value="false"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__dropdown--halfed"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="token[unlisted]"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={true}
+                  selectEntries={
+                    Array [
+                      Array [
+                        "Listed",
+                        "false",
+                      ],
+                      Array [
+                        "Unlisted",
+                        "true",
+                      ],
+                    ]
+                  }
+                  step=""
+                  symbolLimit={0}
+                  title="visibility"
+                  type="select"
+                  value="false"
+                >
+                  <div
+                    className="input-field input-field__dropdown--halfed"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        visibility
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <select
+                        className="input-field--content__select"
+                        disabled={false}
+                        name="token[unlisted]"
+                        onChange={[Function]}
+                        required={true}
+                        value="false"
+                      >
+                        <option
+                          key="false"
+                          value="false"
+                        >
+                          Listed
+                        </option>
+                        <option
+                          key="true"
+                          value="true"
+                        >
+                          Unlisted
                         </option>
                       </select>
                     </div>

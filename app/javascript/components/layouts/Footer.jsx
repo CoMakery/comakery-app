@@ -42,8 +42,8 @@ class Footer extends React.Component {
                 <a href="/">
                   Home
                 </a>
-                <a className="intercom" href="">
-                  Contact Us
+                <a target="_blank" href="https://info.comakery.com/about_us/">
+                  About Us
                 </a>
                 <a href="https://ledger.comakery.com" target="_blank">
                   Blog

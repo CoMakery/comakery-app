@@ -8,6 +8,7 @@ import Icon from './styleguide/Icon'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
+import Pluralize from 'react-pluralize'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -257,7 +258,6 @@ class TaskDetails extends React.Component {
                 <form action={task.submitUrl} encType="multipart/form-data" method="post">
                   <InputFieldWhiteDark
                     title="URL Where Completed Work Can Be Viewed"
-                    required
                     name="task[submission_url]"
                     value={this.state['task[submission_url]']}
                     eventHandler={this.handleFieldChange}
@@ -305,21 +305,25 @@ class TaskDetails extends React.Component {
               </Submission>
             }
 
-            {task.submissionUrl && task.submissionComment &&
+            {((task.status === 'submitted' && task.issuer.self) || task.submissionUrl || task.submissionComment || task.submissionImageUrl) &&
               <Review>
                 <SubHeader>
                   Submitted Work
                 </SubHeader>
 
-                <ContentBlock title="URL WHERE COMPLETED WORK CAN BE VIEWED">
-                  <a target="_blank" href={task.submissionUrl}>
-                    {task.submissionUrl}
-                  </a>
-                </ContentBlock>
+                {task.submissionUrl &&
+                  <ContentBlock title="URL WHERE COMPLETED WORK CAN BE VIEWED">
+                    <a target="_blank" href={task.submissionUrl}>
+                      {task.submissionUrl}
+                    </a>
+                  </ContentBlock>
+                }
 
-                <ContentBlock title="ADDITIONAL COMMENTS">
-                  {task.submissionComment}
-                </ContentBlock>
+                {task.submissionComment &&
+                  <ContentBlock title="ADDITIONAL COMMENTS">
+                    {task.submissionComment}
+                  </ContentBlock>
+                }
 
                 {task.submissionImageUrl &&
                   <ContentBlock title="ATTACHED IMAGE">
@@ -386,6 +390,16 @@ class TaskDetails extends React.Component {
                 <div dangerouslySetInnerHTML={{__html: task.requirementsHtml}} />
               </ContentBlock>
 
+              <ContentBlock title="days till task expires (after starting)">
+                <Pluralize singular="day" count={task.expiresInDays} />
+              </ContentBlock>
+
+              {task.proofLink &&
+                <ContentBlock title="URL where to submit completed work">
+                  <a href={task.proofLink} target="_blank">{task.proofLink}</a>
+                </ContentBlock>
+              }
+
               {task.project.channels.length > 0 &&
                 <ContentBlock title="chat with the project owner">
                   {task.project.channels.map(channel =>
@@ -400,24 +414,49 @@ class TaskDetails extends React.Component {
               {task.status === 'ready' &&
                 <React.Fragment>
                   {this.props.taskAllowedToStart &&
-                    <form action={task.startUrl} method="post">
-                      <input
-                        type="hidden"
-                        name="authenticity_token"
-                        value={this.props.csrfToken}
-                        readOnly
-                      />
+                    <React.Fragment>
+                      <ContentBlock title="terms & conditions">
+                        This is the Award Form referenced by this <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>.&nbsp;
+                        This agreement is made between {this.props.accountName} ("You", the "Contributor") and {task.project.legalProjectOwner} (the "Project Owner").&nbsp;
+                        Your contribution is {task.project.exclusiveContributions ? 'exclusive' : 'not exclusive'}.&nbsp;
+                        Project confidentiality and business confidentiality are {task.project.confidentiality ? 'required' : 'not required'}.&nbsp;
 
-                      <Button
-                        type="submit"
-                        value="start task"
-                      />
+                        {task.token.currency &&
+                          <React.Fragment>
+                            If this Task is accepted for use by the Project Owner, the Project Owner agrees to pay you {task.totalAmount} {task.token.currency}.&nbsp;
+                          </React.Fragment>
+                        }
 
-                      <ButtonBorderGray
-                        onClick={this.goBack}
-                        value="cancel"
-                      />
-                    </form>
+                        {!task.token.currency &&
+                          <React.Fragment>
+                            If this task is accepted for use by the Project Owner, You will not receive any payment for this task.&nbsp;
+                          </React.Fragment>
+                        }
+
+                        <br />
+                        <br />
+                        By starting this Task (clicking START), you confirm that you have read and agree to this <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>.&nbsp;
+                      </ContentBlock>
+
+                      <form action={task.startUrl} method="post">
+                        <input
+                          type="hidden"
+                          name="authenticity_token"
+                          value={this.props.csrfToken}
+                          readOnly
+                        />
+
+                        <Button
+                          type="submit"
+                          value="start task"
+                        />
+
+                        <ButtonBorderGray
+                          onClick={this.goBack}
+                          value="cancel"
+                        />
+                      </form>
+                    </React.Fragment>
                   }
 
                   {!this.props.taskAllowedToStart &&
@@ -443,6 +482,7 @@ TaskDetails.propTypes = {
   task              : PropTypes.object,
   taskAllowedToStart: PropTypes.bool,
   tasksToUnlock     : PropTypes.number,
+  licenseUrl        : PropTypes.string,
   myTasksPath       : PropTypes.string
 }
 TaskDetails.defaultProps = {
@@ -453,9 +493,12 @@ TaskDetails.defaultProps = {
       logo    : 'test'
     },
     project: {
-      name    : null,
-      url     : null,
-      channels: []
+      name                  : null,
+      legalProjectOwner     : null,
+      exclusiveContributions: null,
+      confidentiality       : null,
+      url                   : null,
+      channels              : []
     },
     mission: {
       name: null,
@@ -471,6 +514,8 @@ TaskDetails.defaultProps = {
   },
   taskAllowedToStart: true,
   tasksToUnlock     : 0,
+  accountName       : '',
+  licenseUrl        : '/',
   myTasksPath       : '/'
 }
 export default TaskDetails

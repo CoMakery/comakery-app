@@ -48,7 +48,7 @@ export default class Mission extends React.Component {
   }
 
   render() {
-    const { mission, leaders, tokens, projects, newProjectUrl, stats } = this.props
+    const { mission, leaders, tokens, projects, newProjectUrl } = this.props
     const { interests } = this.state
 
     return <div className="mission-container">
@@ -94,7 +94,7 @@ export default class Mission extends React.Component {
         <div className="mission-tokens__cards">
           {tokens.tokens.map(token => <div key={token.id} className="mission-tokens__card">
             {token.contractUrl && <a href={token.contractUrl} className="mission-tokens__card__header__link">
-              <Icon name="iconLink.svg" style={{width: 18}} />
+              <Icon name="iconLink.svg" />
             </a>}
             <div className="mission-tokens__card__header">
               <img className="mission-tokens__card__header__logo" src={token.logoUrl} />
@@ -114,49 +114,31 @@ export default class Mission extends React.Component {
       </div>
 
       <div className="mission-stats">
-        Mission Stats
+        <div className="mission-stats__heading">Mission Stats</div>
 
         <div className="mission-stats__container">
           <div className="mission-stats__kpis">
-            <div className="mission-stats__kpis__row">
-              <div className="mission-stats__kpi">
-                <Icon name="PROJECT/WHITE.svg" />
-                <Pluralize singular="project" count={stats.projects} />
-              </div>
-              <div className="mission-stats__kpi">
-                <Icon name="BATCH/WHITE.svg" />
-                <Pluralize singular="batch" plural="batches" count={stats.batches} />
-              </div>
-            </div>
 
-            <div className="mission-stats__kpis__row">
-              <div className="mission-stats__kpi">
-                <Icon name="TASK/WHITE.svg" />
-                <Pluralize singular="task" count={stats.tasks} />
-              </div>
-              <div className="mission-stats__kpi">
-                <div className="mission-stats__contributor" />
-                <Pluralize singular="person" plural="people" count={stats.interests} />&nbsp;INTERESTED
-              </div>
-            </div>
-
-            <div className="mission-stats__kpi mission-stats__kpi--desktop">
+            <div className="mission-stats__kpi">
               <Icon name="PROJECT/WHITE.svg" />
-              <Pluralize singular="project" count={stats.projects} />
-            </div>
-            <div className="mission-stats__kpi mission-stats__kpi--desktop">
-              <Icon name="BATCH/WHITE.svg" />
-              <Pluralize singular="batch" plural="batches" count={stats.batches} />
+              <Pluralize singular="project" count={mission.stats.projects} />
             </div>
 
-            <div className="mission-stats__kpi mission-stats__kpi--desktop">
+            <div className="mission-stats__kpi">
+              <Icon name="BATCH/WHITE.svg" />
+              <Pluralize singular="batch" plural="batches" count={mission.stats.batches} />
+            </div>
+
+            <div className="mission-stats__kpi">
               <Icon name="TASK/WHITE.svg" />
-              <Pluralize singular="task" count={stats.tasks} />
+              <Pluralize singular="task" count={mission.stats.tasks} />
             </div>
-            <div className="mission-stats__kpi mission-stats__kpi--desktop">
+
+            <div className="mission-stats__kpi">
               <div className="mission-stats__contributor" />
-              <Pluralize singular="person" plural="people" count={stats.interests} />&nbsp;INTERESTED
+              <Pluralize singular="person" plural="people" count={mission.stats.interests} />&nbsp;INTERESTED
             </div>
+
           </div>
         </div>
       </div>
@@ -220,14 +202,22 @@ export default class Mission extends React.Component {
                   <div className="mission-projects__single__card__info">
                     <span className="mission-projects__single__description--desktop">{project.projectData.description}</span>
                     <div className="mission-projects__single__card__info__stats">
+
                       <div className="mission-projects__single__card__info__row">
-                        <Pluralize singular="batch" plural="batches" count={project.batches} />
+                        <Pluralize singular="interested" plural="interested" count={project.stats.interests} />
+                        <Icon name="circleGray.svg" />
+                      </div>
+
+                      <div className="mission-projects__single__card__info__row">
+                        <Pluralize singular="batch" plural="batches" count={project.stats.batches} />
                         <Icon name="BATCH/GREY.svg" />
                       </div>
+
                       <div className="mission-projects__single__card__info__row">
-                        <Pluralize singular="task" count={project.tasks} />
+                        <Pluralize singular="task" count={project.stats.tasks} />
                         <Icon name="TASK/GRAY.svg" />
                       </div>
+
                     </div>
                   </div>
 
@@ -272,13 +262,11 @@ Mission.propTypes = {
   projects: PropTypes.array,
   leaders : PropTypes.array,
   tokens  : PropTypes.shape({}),
-  stats   : PropTypes.shape({})
 }
 
 Mission.defaultProps = {
-  mission : {},
+  mission : { stats: {} },
   projects: [],
   leaders : [],
   tokens  : { tokens: [] },
-  stats   : {}
 }

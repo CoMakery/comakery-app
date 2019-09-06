@@ -161,10 +161,11 @@ describe ProjectsController do
     let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project', mission_id: mission.id) }
     let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project', mission_id: mission.id) }
     let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project', mission_id: mission.id) }
+    let!(:interest) { create(:interest, account: account) }
 
     describe '#login' do
       it 'returns your private projects, and public projects that *do not* belong to you' do
-        expect(TopContributors).to receive(:call).exactly(3).times.and_return(double(success?: true, contributors: {}))
+        expect(TopContributors).to receive(:call).exactly(4).times.and_return(double(success?: true, contributors: {}))
         other_member_project.channels.create(team: team, channel_id: 'general')
 
         get :landing
@@ -172,6 +173,7 @@ describe ProjectsController do
         expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'unlisted project', 'member project'])
         expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
         expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
+        expect(assigns[:interested_projects].map(&:title)).to match_array([interest.project.title])
       end
     end
   describe 'logged out'
@@ -378,10 +380,12 @@ describe ProjectsController do
   end
 
   context 'with a project' do
+    let!(:token) { create(:token) }
+    let!(:token_unlisted) { create(:token, unlisted: true) }
     let!(:cat_project) { create(:project, title: 'Cats', description: 'Cats with lazers', account: account, mission_id: mission.id) }
     let!(:dog_project) { create(:project, title: 'Dogs', description: 'Dogs with donuts', account: account, mission_id: mission.id) }
     let!(:yak_project) { create(:project, title: 'Yaks', description: 'Yaks with parser generaters', account: account, mission_id: mission.id) }
-    let!(:fox_project) { create(:project, title: 'Foxes', description: 'Foxes with boxes', account: account, mission_id: mission.id) }
+    let!(:fox_project) { create(:project, token: token_unlisted, title: 'Foxes', description: 'Foxes with boxes', account: account, mission_id: mission.id) }
 
     describe '#index' do
       let!(:cat_project_award) { create(:award, account: create(:account), amount: 200, award_type: create(:award_type, project: cat_project), created_at: 2.days.ago, updated_at: 2.days.ago) }
@@ -393,6 +397,7 @@ describe ProjectsController do
       end
 
       include ActionView::Helpers::DateHelper
+
       it 'lists the projects ordered by most recently modify date' do
         get :index
 
@@ -437,6 +442,21 @@ describe ProjectsController do
 
         expect(response.status).to eq(200)
         expect(assigns[:project]).to eq(cat_project)
+      end
+
+      it 'doesnt include unlisted tokens' do
+        get :edit, params: { id: cat_project.to_param }
+
+        expect(response.status).to eq(200)
+        expect(assigns[:tokens][token.name]).to eq(token.id)
+        expect(assigns[:tokens][token_unlisted.name]).to be_nil
+      end
+
+      it 'includes unlisted token associated with project' do
+        get :edit, params: { id: fox_project.to_param }
+
+        expect(response.status).to eq(200)
+        expect(assigns[:tokens][token_unlisted.name]).to eq(token_unlisted.id)
       end
     end
 

@@ -6,6 +6,12 @@ describe 'my tasks page', :js do
   let!(:submitted_task) { create(:award, status: 'submitted') }
   let!(:accepted_task) { create(:award, status: 'accepted') }
   let!(:paid_task) { create(:award, status: 'paid') }
+  let!(:expired_task) { create(:award, status: 'started') }
+
+  before do
+    ENV['DEFAULT_PROJECT_ID'] = create(:project).id.to_s
+    create(:experience, account: ready_task.account)
+  end
 
   it 'has link to past awards' do
     login(ready_task.account)
@@ -72,5 +78,12 @@ describe 'my tasks page', :js do
     expect(page).to have_content accepted_task.status.upcase
     expect(page).to have_content accepted_task.project.title.upcase
     expect(page).to have_link(href: awards_project_path(accepted_task.project))
+  end
+
+  it 'expires expired tasks on render' do
+    expired_task.update(expires_at: 1.day.ago)
+    login(expired_task.account)
+    visit(my_tasks_path)
+    expect(expired_task.reload.ready?).to be_truthy
   end
 end

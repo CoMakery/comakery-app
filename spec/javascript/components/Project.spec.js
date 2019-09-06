@@ -8,7 +8,6 @@ describe('Project', () => {
 
     expect(wrapper).toMatchSnapshot()
     expect(wrapper.exists('.project-container')).toBe(true)
-    expect(wrapper.exists('.project-header')).toBe(true)
     expect(wrapper.exists('.project-award')).toBe(true)
     expect(wrapper.exists('.project-description')).toBe(true)
     expect(wrapper.exists('.project-interest')).toBe(true)
@@ -43,7 +42,8 @@ describe('Project', () => {
           {id: 3, firstName: 'Contributor 3', nickname: 'Nickname 3', imageUrl: 'contributor3.jpg', specialty: 'Researcher'},
           {id: 4, firstName: 'Contributor 4', nickname: 'Nickname 4', imageUrl: 'contributor4.jpg', specialty: 'Community Development'}
         ],
-        chartData: [4500, 2260, 1020, 100]
+        chartData: [4500, 2260, 1020, 100],
+        stats    : {}
       },
       missionData: {id: 1, name: 'First Mission', imageUrl: 'mission1.jpg', missionUrl: '/missions/1'},
       tokenData  : {
@@ -56,9 +56,6 @@ describe('Project', () => {
     }
     const wrapper = mount(<Project {...props} />)
 
-    expect(wrapper.find('.project-header__menu__back').text()).toBe('First Mission')
-    expect(wrapper.find('.project-header__name').text()).toBe(' Core Network ')
-    expect(wrapper.find('.project-header__owner').text()).toBe(' by Test User ')
     expect(wrapper.find('.project-award__token__left').text()).toBe('Ether (HOT)')
     expect(wrapper.find('.project-leader__info').text()).toBe('Team LeaderUser Leader ')
     expect(wrapper.find('.project-description__text').text()).toBe('The last social network.Test')

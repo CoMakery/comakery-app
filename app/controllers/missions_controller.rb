@@ -3,9 +3,9 @@ class MissionsController < ApplicationController
   skip_before_action :require_login, only: %i[show]
 
   before_action :find_mission_by_id, only: %i[show edit update update_status destroy]
-  before_action :set_generic_props, only: %i[new show edit]
-  before_action :set_missions_prop, only: %i[index]
-  before_action :set_detailed_props, only: %i[show]
+  before_action :set_form_props, only: %i[new edit]
+  before_action :set_mission_props, only: %i[show]
+  before_action :set_missions, only: %i[index rearrange]
 
   def index
     render component: 'MissionIndex', props: { csrf_token: form_authenticity_token, missions: @missions }
@@ -69,7 +69,6 @@ class MissionsController < ApplicationController
       mission.save
     end
 
-    set_missions_prop
     render json: { missions: @missions, message: 'Successfully updated.' }, status: :ok
   end
 
@@ -140,26 +139,21 @@ class MissionsController < ApplicationController
     }
   end
 
-  def set_detailed_props
+  def set_mission_props
     projects = @mission.public_projects
 
     @props = {
       mission: @mission&.serializable_hash&.merge(
         {
           logo_url: @mission&.logo&.present? ? Refile.attachment_url(@mission, :logo, :fill, 800, 800) : nil,
-          image_url: @mission&.image&.present? ? Refile.attachment_url(@mission, :image, :fill, 1200, 800) : nil
+          image_url: @mission&.image&.present? ? Refile.attachment_url(@mission, :image, :fill, 1200, 800) : nil,
+          stats: @mission.stats
         }
       ),
       leaders: project_leaders(@mission),
       tokens: project_tokens(@mission),
       new_project_url: new_project_path(mission_id: @mission.id),
       csrf_token: form_authenticity_token,
-      stats: {
-        projects: projects.size,
-        batches: projects.select('award_types.id').joins(:award_types).size,
-        tasks: projects.select('awards.id').joins(:awards).size,
-        interests: Interest.where(project_id: projects).select(:account_id).distinct.size
-      },
       projects: projects.map do |project|
         {
           project_url: project_url(project),
@@ -169,14 +163,13 @@ class MissionsController < ApplicationController
           token_data: project.token&.as_json(only: %i[name])&.merge(
             logo_url: project.token&.logo_image.present? ? Refile.attachment_url(project.token, :logo_image, :fill, 30, 30) : nil
           ),
-          batches: project.award_types.size,
-          tasks: project.awards.size
+          stats: project.stats
         }
       end
     }
   end
 
-  def set_generic_props
+  def set_form_props
     @props = {
       mission: @mission&.serializable_hash&.merge(
         {
@@ -191,7 +184,7 @@ class MissionsController < ApplicationController
     }
   end
 
-  def set_missions_prop
+  def set_missions
     @missions = policy_scope(Mission).map do |m|
       m.serialize.merge(
         projects: m.public_projects.as_json(only: %i[id title status])

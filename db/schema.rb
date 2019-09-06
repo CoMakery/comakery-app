@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190702153901) do
+ActiveRecord::Schema.define(version: 20190823125830) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 20190702153901) do
     t.string "diagram_content_size"
     t.string "diagram_content_type"
     t.boolean "published", default: false
+    t.integer "state", default: 0
     t.index ["project_id"], name: "index_award_types_on_project_id"
   end
 
@@ -157,6 +158,10 @@ ActiveRecord::Schema.define(version: 20190702153901) do
     t.integer "cloned_on_assignment_from_id"
     t.integer "number_of_assignments_per_user", default: 1
     t.bigint "specialty_id"
+    t.string "agreed_to_license_hash"
+    t.datetime "expires_at"
+    t.integer "expires_in_days", default: 10
+    t.datetime "notify_on_expiration_at"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
@@ -287,6 +292,8 @@ ActiveRecord::Schema.define(version: 20190702153901) do
     t.string "panoramic_image_filename"
     t.string "panoramic_image_content_size"
     t.string "panoramic_image_content_type"
+    t.boolean "confidentiality", default: true
+    t.string "agreed_to_license_hash"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
@@ -337,6 +344,7 @@ ActiveRecord::Schema.define(version: 20190702153901) do
     t.string "logo_image_content_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "unlisted", default: false
   end
 
   create_table "unsubscriptions", force: :cascade do |t|

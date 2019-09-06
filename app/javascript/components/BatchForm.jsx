@@ -10,6 +10,7 @@ import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
+import SidebarItem from './styleguide/SidebarItem'
 
 class BatchForm extends React.Component {
   constructor(props) {
@@ -22,11 +23,6 @@ class BatchForm extends React.Component {
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
 
-    let publishedValues = {
-      'Yes': 'true',
-      'No' : 'false'
-    }
-
     this.state = {
       flashMessages       : [],
       errors              : {},
@@ -34,8 +30,7 @@ class BatchForm extends React.Component {
       formAction          : this.props.formAction,
       formUrl             : this.props.formUrl,
       closeOnSuccess      : false,
-      publishedValues     : publishedValues,
-      'batch[published]'  : this.props.batch.published === true ? 'true' : 'false',
+      'batch[state]'      : this.props.batch.state,
       'batch[name]'       : this.props.batch.name || '',
       'batch[goal]'       : this.props.batch.goal || '',
       'batch[description]': this.props.batch.description || ''
@@ -152,11 +147,21 @@ class BatchForm extends React.Component {
       <React.Fragment>
         <ProjectSetup
           className="batch-form"
-          projectId={this.props.project.id}
-          projectTitle={this.props.project.title}
-          projectPage="batches"
+          projectForHeader={this.props.projectForHeader}
+          missionForHeader={this.props.missionForHeader}
+          owner
+          current="batches"
           sidebar={
-            <div className="batch-form--sidebar-placeholder" />
+            <React.Fragment>
+              <div className="batch-index--sidebar">
+                <SidebarItem
+                  className="batch-index--sidebar--item batch-index--sidebar--item__form"
+                  text={this.state['batch[name]'] || 'New Batch'}
+                  selected
+                />
+                <hr className="batch-index--sidebar--hr" />
+              </div>
+            </React.Fragment>
           }
           hasBackButton
           subfooter={
@@ -190,14 +195,14 @@ class BatchForm extends React.Component {
 
           <form className="batch-form--form" id="batch-form--form" onSubmit={this.handleSubmit}>
             <InputFieldDropdown
-              title="Published"
+              title="State"
               required
-              name="batch[published]"
-              value={this.state['batch[published]']}
-              errorText={this.state.errors['batch[published]']}
-              disabled={this.state.disabled['batch[published]']}
+              name="batch[state]"
+              value={this.state['batch[state]']}
+              errorText={this.state.errors['batch[state]']}
+              disabled={this.state.disabled['batch[state]']}
               eventHandler={this.handleFieldChange}
-              selectEntries={Object.entries(this.state.publishedValues)}
+              selectEntries={Object.entries(this.props.states)}
               symbolLimit={0}
             />
 
@@ -256,21 +261,27 @@ class BatchForm extends React.Component {
 }
 
 BatchForm.propTypes = {
-  batch       : PropTypes.object.isRequired,
-  project     : PropTypes.object.isRequired,
-  formUrl     : PropTypes.string.isRequired,
-  formAction  : PropTypes.string.isRequired,
-  urlOnSuccess: PropTypes.string.isRequired,
-  projectId   : PropTypes.number.isRequired,
-  csrfToken   : PropTypes.string.isRequired
+  batch           : PropTypes.object.isRequired,
+  states          : PropTypes.object.isRequired,
+  project         : PropTypes.object.isRequired,
+  formUrl         : PropTypes.string.isRequired,
+  formAction      : PropTypes.string.isRequired,
+  urlOnSuccess    : PropTypes.string.isRequired,
+  projectId       : PropTypes.number.isRequired,
+  csrfToken       : PropTypes.string.isRequired,
+  missionForHeader: PropTypes.object,
+  projectForHeader: PropTypes.object
 }
 BatchForm.defaultProps = {
-  batch       : {'default': '_'},
-  project     : {'default': '_'},
-  formUrl     : '/',
-  formAction  : 'POST',
-  urlOnSuccess: '/',
-  projectId   : 0,
-  csrfToken   : '00'
+  batch           : {'default': '_'},
+  states          : {'default': '_'},
+  project         : {'default': '_'},
+  formUrl         : '/',
+  formAction      : 'POST',
+  urlOnSuccess    : '/',
+  projectId       : 0,
+  csrfToken       : '00',
+  missionForHeader: null,
+  projectForHeader: null
 }
 export default BatchForm

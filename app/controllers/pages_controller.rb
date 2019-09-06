@@ -33,6 +33,21 @@ class PagesController < ApplicationController
     end
   end
 
+  def contribution_licenses
+    case params[:type]
+    when 'CP'
+      type = 'CP'
+    when 'RP'
+      type = 'RP'
+    else
+      return redirect_to('/404.html')
+    end
+
+    path = Rails.root.join('lib', 'assets', 'contribution_licenses', "#{type}-*.md")
+    license = Dir.glob(path).max_by { |f| File.mtime(f) }
+    @license_md = File.read(license)
+  end
+
   def styleguide
     return redirect_to :root unless Rails.env == 'development'
     render component: 'styleguide/Index'

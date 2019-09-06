@@ -1,0 +1,30 @@
+<p>
+  Hello <%= @account.name %>.
+</p>
+
+<p>
+  The <%= @award.project.title %> has requested you to work on the task: <%= @award.name %>
+</p>
+
+<p>
+  The project owner is <%= @award.project.legal_project_owner %>.
+</p>
+
+<p>
+  <a href="<%= project_award_type_award_url(@award.project, @award.award_type, @award) %>">Visit this link</a>
+  to accept their invitation to work on the task.
+</p>
+
+<p>
+  Thank you for being part of the CoMakery community!
+  Good luck.
+</p>
+
+<p>
+  If you ever have any questions, concerns, or compliments, please email us at
+  <a href="mailto:community@comakery.com">community@comakery.com</a>
+</p>
+
+<p>
+  Team CoMakery
+</p>

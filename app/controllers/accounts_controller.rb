@@ -90,7 +90,6 @@ class AccountsController < ApplicationController
       account.confirm!
       session[:account_id] = account.id
       flash.clear
-      flash[:notice] = 'Thank you for signing up. Now, let us know what projects you are interested in.'
       if session[:redeem]
         flash[:notice] = 'Please click the link in your email to claim your contributor token award!'
         session[:redeem] = nil
@@ -98,7 +97,7 @@ class AccountsController < ApplicationController
     else
       flash[:error] = 'Invalid token'
     end
-    redirect_to root_path
+    redirect_to my_tasks_path
   end
 
   def confirm_authentication

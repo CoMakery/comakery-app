@@ -28,6 +28,13 @@ describe Award do
       expect(award.assignments.size).to eq(2)
     end
 
+    it 'belongs to cloned_from' do
+      award = create(:award_ready)
+      award.clone_on_assignment
+
+      expect(award.assignments.first.cloned_from).to eq(award)
+    end
+
     it 'belongs to specialty' do
       expect(award.specialty).to eq(specialty)
     end
@@ -58,10 +65,30 @@ describe Award do
       end
     end
 
+    it '.in_progress returns all but rejected, paid, cancelled and unpublished awards' do
+      described_class.statuses.each_key do |status|
+        if %w[rejected paid cancelled unpublished].include? status
+          expect(described_class.in_progress.pluck(:status).include?(status)).to be_falsey
+        else
+          expect(described_class.in_progress.pluck(:status).include?(status)).to be_truthy
+        end
+      end
+    end
+
+    it '.contributed returns all but ready, cancelled and unpublished awards' do
+      described_class.statuses.each_key do |status|
+        if %w[ready cancelled unpublished].include? status
+          expect(described_class.contributed.pluck(:status).include?(status)).to be_falsey
+        else
+          expect(described_class.contributed.pluck(:status).include?(status)).to be_truthy
+        end
+      end
+    end
+
     describe '.filtered_for_view(filter, account)' do
       let!(:contributor) { create(:account) }
       let!(:project_owner) { create(:account) }
-      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed')), specialty: contributor.specialty) }
+      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed')), specialty: contributor.specialty, account: contributor) }
       let!(:started_award) { create(:award, status: 'started', issuer: project_owner, account: contributor) }
       let!(:submitted_award) { create(:award, status: 'submitted', issuer: project_owner, account: contributor) }
       let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
@@ -69,8 +96,8 @@ describe Award do
       let!(:rejected_award) { create(:award, status: 'rejected', issuer: project_owner, account: contributor) }
       let!(:paid_award_from_other_user) { create(:award, status: 'paid') }
 
-      it 'returns only ready awards' do
-        expect(described_class.filtered_for_view('ready', contributor)).to eq(described_class.ready)
+      it 'returns only ready awards without assigned account or assigned to you' do
+        expect(described_class.filtered_for_view('ready', contributor)).to include(award_ready)
       end
 
       it 'returns only started awards for a contributor' do
@@ -120,22 +147,22 @@ describe Award do
       end
     end
 
-    describe 'make_unpublished_if_award_type_is_unpublished' do
-      let!(:award_type_unpublished) { create(:award_type, published: false) }
-      let!(:award_ready_unpublished) { create(:award_ready, award_type: award_type_unpublished) }
-      let!(:award_done_unpublished) { create(:award, award_type: award_type_unpublished) }
+    describe 'make_unpublished_if_award_type_is_not_ready' do
+      let!(:award_type_draft) { create(:award_type, state: :draft) }
+      let!(:award_ready_draft) { create(:award_ready, award_type: award_type_draft) }
+      let!(:award_done_draft) { create(:award, award_type: award_type_draft) }
       let!(:award_ready) { create(:award_ready) }
 
-      it 'sets status to unpublished if award_type is unpublished and award is in ready state' do
-        expect(award_ready_unpublished.unpublished?).to be_truthy
+      it 'sets status to unpublished if award_type is not ready and award is in ready state' do
+        expect(award_ready_draft.unpublished?).to be_truthy
       end
 
-      it 'doesnt set status to unpublished if award_type is published' do
+      it 'doesnt set status to unpublished if award_type is ready' do
         expect(award_ready.unpublished?).to be_falsey
       end
 
       it 'doesnt set status to unpublished if award is not in ready state' do
-        expect(award_done_unpublished.unpublished?).to be_falsey
+        expect(award_done_draft.unpublished?).to be_falsey
       end
     end
 
@@ -156,6 +183,51 @@ describe Award do
         expect(award.specialty).to eq(Specialty.default)
       end
     end
+
+    describe 'set_expires_at' do
+      let!(:award) { create(:award, status: :started, expires_in_days: 1) }
+
+      it 'sets expires_at timestamp using expires_in_days value' do
+        expect(award.expires_at).to eq(award.expires_in_days.days.since(award.updated_at))
+      end
+
+      it 'sets notify_on_expiration_at timestamp using 3/4 of expires_in_days value' do
+        expect(award.notify_on_expiration_at).to eq((award.expires_in_days.days * 0.75).since(award.updated_at))
+      end
+    end
+
+    describe 'clear_expires_at' do
+      let!(:award) { create(:award, status: :started, expires_in_days: 1) }
+
+      before do
+        award.update(status: :submitted, submission_comment: 'dummy')
+        award.reload
+      end
+
+      it 'clears expires_at timestamp when status is submitted' do
+        expect(award.expires_at).to be_nil
+      end
+
+      it 'clears notify_on_expiaration_at timestamp when status is submitted' do
+        expect(award.notify_on_expiration_at).to be_nil
+      end
+    end
+
+    describe 'store_license_hash' do
+      let!(:project) { create(:project) }
+      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: project)) }
+      let!(:award_ready_w_license) { create(:award_ready, agreed_to_license_hash: 'present', award_type: create(:award_type, project: project)) }
+
+      it 'stores the hash of the project CP license when the task is started' do
+        award_ready.update(status: :started)
+        expect(award_ready.reload.agreed_to_license_hash).to eq(project.reload.agreed_to_license_hash)
+      end
+
+      it 'doesnt update the hash if its already present' do
+        award_ready_w_license.update(status: :started)
+        expect(award_ready_w_license.reload.agreed_to_license_hash).to eq('present')
+      end
+    end
   end
 
   describe 'validations' do
@@ -164,10 +236,7 @@ describe Award do
                                                                                                      "Award type can't be blank",
                                                                                                      "Name can't be blank",
                                                                                                      "Why can't be blank",
-                                                                                                     "Description can't be blank",
                                                                                                      "Requirements can't be blank",
-                                                                                                     "Proof link can't be blank",
-                                                                                                     'Proof link must include protocol (e.g. https://)',
                                                                                                      'Amount is not a number'
                                                                                                    ])
     end
@@ -181,6 +250,12 @@ describe Award do
     it 'requires number_of_assignments_per_user to be greater than 0' do
       a = create(:award_ready)
       a.update(number_of_assignments_per_user: 0)
+      expect(a).not_to be_valid
+    end
+
+    it 'requires expires_in_days to be greater than 0' do
+      a = create(:award_ready)
+      a.update(expires_in_days: 0)
       expect(a).not_to be_valid
     end
 
@@ -198,7 +273,7 @@ describe Award do
       a = create(:award_ready)
       a.update(status: 'submitted', account: create(:account))
       expect(a).not_to be_valid
-      expect(a.errors.full_messages).to eq(["Submission url can't be blank", "Submission comment can't be blank"])
+      expect(a.errors.full_messages).to eq(["Submission comment can't be blank"])
     end
 
     it 'cannot be assigned to a contributor having more than allowed number of started tasks' do
@@ -575,6 +650,20 @@ describe Award do
     end
   end
 
+  describe '.can_be_assigned?' do
+    it 'returns true if award is ready or unpublished' do
+      described_class.statuses.each_key do |status|
+        award = create(:award, status: status)
+
+        if status.in? %w[ready unpublished]
+          expect(award.can_be_assigned?).to be_truthy
+        else
+          expect(award.can_be_assigned?).to be_falsey
+        end
+      end
+    end
+  end
+
   describe '.cloned?' do
     let!(:award) { create(:award_ready) }
     let!(:award_cloned) { create(:award_ready, cloned_on_assignment_from_id: award.id) }
@@ -731,6 +820,62 @@ describe Award do
     it 'returns zero for cancelled or rejected tasks' do
       expect(award_cancelled.possible_total_amount).to eq(0)
       expect(award_rejected.possible_total_amount).to eq(0)
+    end
+  end
+
+  describe 'expire!' do
+    let!(:award_started) { create(:award, status: :started) }
+    let!(:cloned_award) { create(:award).clone_on_assignment }
+
+    it 'moves task back to ready state' do
+      award_started.expire!
+      award_started.reload
+      expect(award_started.ready?).to be_truthy
+      expect(award_started.expires_at.nil?).to be_truthy
+      expect(award_started.account.nil?).to be_truthy
+    end
+
+    it 'cancelles cloned task' do
+      cloned_award.expire!
+      cloned_award.reload
+      expect(cloned_award.cancelled?).to be_truthy
+    end
+  end
+
+  describe 'expiring_notification_sent' do
+    let!(:award_started) { create(:award, status: :started) }
+
+    it 'clears notify_on_expiration_at value' do
+      award_started.expiring_notification_sent
+      award_started.reload
+      expect(award_started.notify_on_expiration_at.nil?).to be_truthy
+    end
+  end
+
+  describe 'run_expiration' do
+    let!(:award) { create(:award, status: :started) }
+
+    before do
+      award.update(expires_at: 1.day.ago)
+      award.run_expiration
+    end
+
+    it 'expires task if it should be expired' do
+      expect(award.ready?).to be_truthy
+    end
+  end
+
+  describe 'run_expiring_notification' do
+    let!(:award) { create(:award, status: :started) }
+
+    before do
+      award.update(notify_on_expiration_at: 1.day.ago)
+      award.run_expiring_notification
+    end
+
+    it 'notifies about expiration if it should be notified' do
+      expect(award.started?).to be_truthy
+      expect(award.notify_on_expiration_at.nil?).to be_truthy
     end
   end
 end

@@ -7,7 +7,6 @@ import styled from 'styled-components'
 import logo from '../src/images/styleguide/icons/Logo-Footer.svg'
 import developersImg from '../src/images/featured/developers.png'
 import communityManagersImg from '../src/images/featured/community-managers.png'
-import chatImg from '../src/images/featured/chat.svg'
 
 const VideoHowItWorks = styled.div`
   flex-grow: 2;
@@ -73,11 +72,6 @@ export default class FeaturedMissions extends React.Component {
           <div className="grayed-page" />
         }
         <div className="featured-missions__header">
-          {this.props.isConfirmed &&
-            <div className="intercom intercom-button">
-              <img src={chatImg} />
-            </div>
-          }
           <div className="featured-missions__header_container">
 
             <VideoHowItWorks>

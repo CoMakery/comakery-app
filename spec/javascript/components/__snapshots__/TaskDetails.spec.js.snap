@@ -2,6 +2,8 @@
 
 exports[`TaskDetails renders component correctly 1`] = `
 <TaskDetails
+  accountName=""
+  licenseUrl="/"
   myTasksPath="/"
   task={
     Object {
@@ -18,6 +20,9 @@ exports[`TaskDetails renders component correctly 1`] = `
       },
       "project": Object {
         "channels": Array [],
+        "confidentiality": null,
+        "exclusiveContributions": null,
+        "legalProjectOwner": null,
         "name": null,
         "url": null,
       },
@@ -206,6 +211,9 @@ exports[`TaskDetails renders component correctly 1`] = `
                     },
                     "project": Object {
                       "channels": Array [],
+                      "confidentiality": null,
+                      "exclusiveContributions": null,
+                      "legalProjectOwner": null,
                       "name": null,
                       "url": null,
                     },
@@ -1144,7 +1152,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-eNQAEJ",
                                       "isStatic": true,
-                                      "lastClassName": "fWeLot",
+                                      "lastClassName": "bROoGx",
                                       "rules": Array [
                                         "
   font-family: Georgia;
@@ -1155,6 +1163,15 @@ exports[`TaskDetails renders component correctly 1`] = `
   line-height: normal;
   letter-spacing: normal;
   color: #4a4a4a;
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 ",
                                       ],
                                     },
@@ -1171,7 +1188,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                 forwardedRef={null}
                               >
                                 <div
-                                  className="sc-eNQAEJ fWeLot"
+                                  className="sc-eNQAEJ bROoGx"
                                 />
                               </StyledComponent>
                             </styled.div>
@@ -1266,7 +1283,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-eNQAEJ",
                                       "isStatic": true,
-                                      "lastClassName": "fWeLot",
+                                      "lastClassName": "bROoGx",
                                       "rules": Array [
                                         "
   font-family: Georgia;
@@ -1277,6 +1294,15 @@ exports[`TaskDetails renders component correctly 1`] = `
   line-height: normal;
   letter-spacing: normal;
   color: #4a4a4a;
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 ",
                                       ],
                                     },
@@ -1293,7 +1319,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                 forwardedRef={null}
                               >
                                 <div
-                                  className="sc-eNQAEJ fWeLot"
+                                  className="sc-eNQAEJ bROoGx"
                                 >
                                   <div
                                     dangerouslySetInnerHTML={
@@ -1396,7 +1422,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                     "componentStyle": ComponentStyle {
                                       "componentId": "sc-eNQAEJ",
                                       "isStatic": true,
-                                      "lastClassName": "fWeLot",
+                                      "lastClassName": "bROoGx",
                                       "rules": Array [
                                         "
   font-family: Georgia;
@@ -1407,6 +1433,15 @@ exports[`TaskDetails renders component correctly 1`] = `
   line-height: normal;
   letter-spacing: normal;
   color: #4a4a4a;
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 ",
                                       ],
                                     },
@@ -1423,7 +1458,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                 forwardedRef={null}
                               >
                                 <div
-                                  className="sc-eNQAEJ fWeLot"
+                                  className="sc-eNQAEJ bROoGx"
                                 >
                                   <div
                                     dangerouslySetInnerHTML={
@@ -1432,6 +1467,153 @@ exports[`TaskDetails renders component correctly 1`] = `
                                       }
                                     }
                                   />
+                                </div>
+                              </StyledComponent>
+                            </styled.div>
+                          </div>
+                        </StyledComponent>
+                      </styled.div>
+                    </ContentBlock>
+                    <ContentBlock
+                      title="days till task expires (after starting)"
+                    >
+                      <styled.div>
+                        <StyledComponent
+                          forwardedComponent={
+                            Object {
+                              "$$typeof": Symbol(react.forward_ref),
+                              "attrs": Array [],
+                              "componentStyle": ComponentStyle {
+                                "componentId": "sc-ckVGcZ",
+                                "isStatic": true,
+                                "lastClassName": "dZgUZs",
+                                "rules": Array [
+                                  "
+  margin-bottom: 25px;
+",
+                                ],
+                              },
+                              "displayName": "styled.div",
+                              "foldedComponentIds": Array [],
+                              "render": [Function],
+                              "styledComponentId": "sc-ckVGcZ",
+                              "target": "div",
+                              "toString": [Function],
+                              "warnTooManyClasses": [Function],
+                              "withComponent": [Function],
+                            }
+                          }
+                          forwardedRef={null}
+                        >
+                          <div
+                            className="sc-ckVGcZ dZgUZs"
+                          >
+                            <styled.div>
+                              <StyledComponent
+                                forwardedComponent={
+                                  Object {
+                                    "$$typeof": Symbol(react.forward_ref),
+                                    "attrs": Array [],
+                                    "componentStyle": ComponentStyle {
+                                      "componentId": "sc-jKJlTe",
+                                      "isStatic": true,
+                                      "lastClassName": "bnfczC",
+                                      "rules": Array [
+                                        "
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: bold;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #3a3a3a;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+",
+                                      ],
+                                    },
+                                    "displayName": "styled.div",
+                                    "foldedComponentIds": Array [],
+                                    "render": [Function],
+                                    "styledComponentId": "sc-jKJlTe",
+                                    "target": "div",
+                                    "toString": [Function],
+                                    "warnTooManyClasses": [Function],
+                                    "withComponent": [Function],
+                                  }
+                                }
+                                forwardedRef={null}
+                              >
+                                <div
+                                  className="sc-jKJlTe bnfczC"
+                                >
+                                  days till task expires (after starting)
+                                </div>
+                              </StyledComponent>
+                            </styled.div>
+                            <styled.div>
+                              <StyledComponent
+                                forwardedComponent={
+                                  Object {
+                                    "$$typeof": Symbol(react.forward_ref),
+                                    "attrs": Array [],
+                                    "componentStyle": ComponentStyle {
+                                      "componentId": "sc-eNQAEJ",
+                                      "isStatic": true,
+                                      "lastClassName": "bROoGx",
+                                      "rules": Array [
+                                        "
+  font-family: Georgia;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #4a4a4a;
+
+  a {
+    color: #0089f4;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+",
+                                      ],
+                                    },
+                                    "displayName": "styled.div",
+                                    "foldedComponentIds": Array [],
+                                    "render": [Function],
+                                    "styledComponentId": "sc-eNQAEJ",
+                                    "target": "div",
+                                    "toString": [Function],
+                                    "warnTooManyClasses": [Function],
+                                    "withComponent": [Function],
+                                  }
+                                }
+                                forwardedRef={null}
+                              >
+                                <div
+                                  className="sc-eNQAEJ bROoGx"
+                                >
+                                  <l
+                                    className={null}
+                                    count={1}
+                                    showCount={true}
+                                    singular="day"
+                                    style={Object {}}
+                                    zero={null}
+                                  >
+                                    <span
+                                      className={null}
+                                      style={Object {}}
+                                    >
+                                      1 day
+                                    </span>
+                                  </l>
                                 </div>
                               </StyledComponent>
                             </styled.div>

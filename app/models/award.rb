@@ -25,12 +25,13 @@ class Award < ApplicationRecord
   belongs_to :issuer, class_name: 'Account'
   belongs_to :channel, optional: true
   belongs_to :specialty
+  belongs_to :cloned_from, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
 
-  validates :proof_id, :award_type, :name, :why, :description, :requirements, :proof_link, presence: true
+  validates :proof_id, :award_type, :name, :why, :requirements, presence: true
   validates :amount, numericality: { greater_than: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
@@ -42,12 +43,13 @@ class Award < ApplicationRecord
   validates :why, length: { maximum: 500 }
   validates :description, length: { maximum: 500 }
   validates :message, length: { maximum: 150 }
-  validates :requirements, length: { maximum: 750 }
+  validates :requirements, length: { maximum: 1000 }
   validates :proof_link, length: { maximum: 150 }
   validates :proof_link, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
-  validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }
+  validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { proof_link.present? }
   validates :experience_level, inclusion: { in: EXPERIENCE_LEVELS.values }, allow_nil: true
-  validates :submission_url, :submission_comment, presence: true, if: -> { status == 'submitted' }
+  validates :submission_comment, presence: true, if: -> { status == 'submitted' }
+  validates :expires_in_days, presence: true, numericality: { greater_than: 0 }
 
   validate :total_amount_fits_into_project_budget
   validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }
@@ -56,17 +58,22 @@ class Award < ApplicationRecord
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
   before_validation :set_paid_status_if_project_has_no_token, if: -> { status == 'accepted' && !project.token }
-  before_validation :make_unpublished_if_award_type_is_unpublished, if: -> { status == 'ready' && !award_type&.published? }
+  before_validation :make_unpublished_if_award_type_is_not_ready, if: -> { status == 'ready' && !award_type&.ready? }
+  before_validation :store_license_hash, if: -> { status == 'started' && agreed_to_license_hash.nil? }
+  before_validation :set_expires_at, if: -> { status == 'started' && expires_at.nil? }
+  before_validation :clear_expires_at, if: -> { status == 'submitted' && expires_at.present? }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6,7)' }
+  scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
+  scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
 
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
-      where(status: :ready)
+      where(status: :ready, account: [nil, account])
     when 'started'
       where(status: :started).where(account: account)
     when 'submitted'
@@ -167,6 +174,10 @@ class Award < ApplicationRecord
     (ready? || unpublished?) && !cloned? && !any_clones?
   end
 
+  def can_be_assigned?
+    (ready? || unpublished?)
+  end
+
   def cloned?
     cloned_on_assignment_from_id.present?
   end
@@ -216,6 +227,43 @@ class Award < ApplicationRecord
     end
   end
 
+  def expire!
+    if cloned?
+      self.status = :cancelled
+    else
+      self.status = :ready
+      self.expires_at = nil
+      self.account = nil
+    end
+
+    save
+  end
+
+  def expiring_notification_sent
+    update(notify_on_expiration_at: nil)
+  end
+
+  def run_expiration
+    if started? && expires_at && (expires_at < Time.current)
+      begin
+        TaskMailer.with(award: self).task_expired_for_account.deliver_now
+        TaskMailer.with(award: self).task_expired_for_issuer.deliver_now
+      ensure
+        expire!
+      end
+    end
+  end
+
+  def run_expiring_notification
+    if started? && notify_on_expiration_at && (notify_on_expiration_at < Time.current)
+      begin
+        TaskMailer.with(award: self).task_expiring.deliver_now
+      ensure
+        expiring_notification_sent
+      end
+    end
+  end
+
   delegate :image, to: :team, prefix: true, allow_nil: true
 
   private
@@ -228,7 +276,7 @@ class Award < ApplicationRecord
       self.status = 'paid'
     end
 
-    def make_unpublished_if_award_type_is_unpublished
+    def make_unpublished_if_award_type_is_not_ready
       self.status = 'unpublished'
     end
 
@@ -261,5 +309,20 @@ class Award < ApplicationRecord
 
     def update_account_experience
       Experience.increment_for(account, specialty)
+    end
+
+    def store_license_hash
+      self.agreed_to_license_hash = project.agreed_to_license_hash
+    end
+
+    def set_expires_at
+      self.updated_at = Time.current
+      self.expires_at = expires_in_days.days.since(updated_at)
+      self.notify_on_expiration_at = (expires_in_days.days * 0.75).since(updated_at)
+    end
+
+    def clear_expires_at
+      self.expires_at = nil
+      self.notify_on_expiration_at = nil
     end
 end
