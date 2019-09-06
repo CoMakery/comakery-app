@@ -60,7 +60,7 @@ const FilterWrapper = styled.div`
 
 const TitleText = styled.div`
   margin-bottom: 3px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
 `
@@ -170,7 +170,7 @@ class BatchIndex extends React.Component {
 
   componentDidMount() {
     this.setState({
-      selectedBatch: this.props.batches.find(batch => String(batch.id) === Cookies.get('selectedBatchId'))
+      selectedBatch: this.props.batches.find(batch => String(batch.id) === Cookies.get('selectedBatchId')) || this.props.batches[0]
     })
   }
 
@@ -242,6 +242,10 @@ class BatchIndex extends React.Component {
                 {this.props.batches.length > 0 &&
                   <React.Fragment>
                     <hr className="batch-index--sidebar--hr" />
+
+                    <Title>
+                      <TitleText>batches</TitleText>
+                    </Title>
 
                     {this.props.batches.map((b, i) =>
                       <SidebarItem

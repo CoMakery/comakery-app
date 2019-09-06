@@ -185,8 +185,9 @@ describe ProjectDecorator do
   end
 
   describe 'header_props' do
-    let(:project) { create(:project) }
-    let(:unlisted_project) { create(:project, visibility: 'public_unlisted') }
+    let!(:project) { create(:project) }
+    let!(:award_type) { create(:award_type, project: project, state: :ready) }
+    let!(:unlisted_project) { create(:project, visibility: 'public_unlisted') }
 
     it 'includes required data for project header component' do
       props = project.decorate.header_props
@@ -195,6 +196,8 @@ describe ProjectDecorator do
       expect(props[:title]).to eq(project.title)
       expect(props[:owner]).to eq(project.legal_project_owner)
       expect(props[:present]).to be_truthy
+      expect(props[:show_batches]).to be_truthy
+      expect(props[:show_payments]).to be_truthy
       expect(props[:image_url]).to include('defaul_project')
       expect(props[:settings_url]).to include(project.id.to_s)
       expect(props[:batches_url]).to include(project.id.to_s)
