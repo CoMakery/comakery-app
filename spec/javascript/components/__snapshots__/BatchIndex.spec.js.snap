@@ -365,9 +365,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                         "$$typeof": Symbol(react.forward_ref),
                         "attrs": Array [],
                         "componentStyle": ComponentStyle {
-                          "componentId": "sc-cHGsZl",
+                          "componentId": "sc-kjoXOD",
                           "isStatic": true,
-                          "lastClassName": "cljqaU",
+                          "lastClassName": "fOppPq",
                           "rules": Array [
                             "
   margin: 1em 0;
@@ -378,7 +378,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                         "displayName": "styled.div",
                         "foldedComponentIds": Array [],
                         "render": [Function],
-                        "styledComponentId": "sc-cHGsZl",
+                        "styledComponentId": "sc-kjoXOD",
                         "target": "div",
                         "toString": [Function],
                         "warnTooManyClasses": [Function],
@@ -388,7 +388,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                     forwardedRef={null}
                   >
                     <div
-                      className="sc-cHGsZl cljqaU"
+                      className="sc-kjoXOD fOppPq"
                     >
                       <styled.div>
                         <StyledComponent
@@ -397,9 +397,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               "$$typeof": Symbol(react.forward_ref),
                               "attrs": Array [],
                               "componentStyle": ComponentStyle {
-                                "componentId": "sc-TOsTZ",
+                                "componentId": "sc-cHGsZl",
                                 "isStatic": true,
-                                "lastClassName": "hvKIGx",
+                                "lastClassName": "keqKYA",
                                 "rules": Array [
                                   "
   display: flex;
@@ -416,7 +416,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                               "displayName": "styled.div",
                               "foldedComponentIds": Array [],
                               "render": [Function],
-                              "styledComponentId": "sc-TOsTZ",
+                              "styledComponentId": "sc-cHGsZl",
                               "target": "div",
                               "toString": [Function],
                               "warnTooManyClasses": [Function],
@@ -426,7 +426,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                           forwardedRef={null}
                         >
                           <div
-                            className="sc-TOsTZ hvKIGx"
+                            className="sc-cHGsZl keqKYA"
                           >
                             <div>
                               allocated budget
@@ -528,9 +528,9 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "$$typeof": Symbol(react.forward_ref),
                       "attrs": Array [],
                       "componentStyle": ComponentStyle {
-                        "componentId": "sc-fBuWsC",
+                        "componentId": "sc-jhAzac",
                         "isStatic": true,
-                        "lastClassName": "gDntiF",
+                        "lastClassName": "jgHruR",
                         "rules": Array [
                           "
   font-family: Georgia;
@@ -560,7 +560,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "displayName": "styled.div",
                       "foldedComponentIds": Array [],
                       "render": [Function],
-                      "styledComponentId": "sc-fBuWsC",
+                      "styledComponentId": "sc-jhAzac",
                       "target": "div",
                       "toString": [Function],
                       "warnTooManyClasses": [Function],
@@ -570,7 +570,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-fBuWsC gDntiF"
+                    className="sc-jhAzac jgHruR"
                   >
                     <ul>
                       <li>
