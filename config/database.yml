@@ -19,7 +19,7 @@
 # Create db and seeds after checkout: `rails db:setup`
 #
 # Source: https://jordanhollinger.com/2014/07/30/rails-migration-etiquette/
-<% branch = `git symbolic-ref HEAD 2>/dev/null`.chomp.sub('refs/heads/', '') %>
+<% branch = `git symbolic-ref HEAD 2>/dev/null`.chomp.sub('refs/heads/', '').tr('*()[]:;,.$', '') %>
 
 default: &default
   adapter: postgresql
