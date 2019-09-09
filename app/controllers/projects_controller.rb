@@ -21,6 +21,7 @@ class ProjectsController < ApplicationController
       @team_projects = current_account.other_member_projects.unarchived.order(updated_at: :desc).limit(100).decorate
       @interested_projects = current_account.projects_interested.unarchived.order(updated_at: :desc).limit(100).decorate
     end
+
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
     @team_project_contributors = TopContributors.call(projects: @team_projects).contributors
     @interested_project_contributors = TopContributors.call(projects: @interested_projects).contributors
@@ -45,6 +46,10 @@ class ProjectsController < ApplicationController
     @projects = @projects.order(updated_at: :desc).includes(:account).page(params[:page]).per(9)
 
     @project_contributors = TopContributors.call(projects: @projects).contributors
+
+    @meta_title = 'CoMakery Projects - Work at the Cutting Edge'
+    @meta_desc = 'Projects from around the world are looking to achieve great things, often leveraging the blockchain to do so. At CoMakery, you can search and find projects to work on and earn tokens or USDC, or even start your own project.'
+    @meta_image = '/comakery-projects.jpg'
   end
 
   def new
@@ -81,6 +86,11 @@ class ProjectsController < ApplicationController
 
   def show
     authorize @project
+
+    @meta_title = 'CoMakery Project'
+    @meta_desc = "#{@project.title}: #{Comakery::Markdown.to_text(@project.description)}"
+    @meta_image = Refile.attachment_url(@project, :square_image)
+
     render component: 'Project', props: @props
   end
 

@@ -21,6 +21,11 @@ class MissionsController < ApplicationController
 
   def show
     authorize @mission
+
+    @meta_title = 'CoMakery Mission'
+    @meta_desc = "#{@mission.name}: #{@mission.description}"
+    @meta_image = Refile.attachment_url(@mission, :image)
+
     render component: 'Mission', props: @props
   end
 

@@ -1,0 +1,28 @@
+<% title = @meta_title ? @meta_title : 'CoMakery - Achieve Big Missions' %>
+<% description = @meta_desc ? @meta_desc : 'Built from a belief in the power of people, together. With CoMakery, you can gather or join a tribe and work to achieve big missions.' %>
+<% image = @meta_image ? @meta_image : '/comakery.jpg' %>
+<% url = url_for(only_path: false) %>
+
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' >
+<meta charset='utf-8' >
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name='robots' content='NOODP' >
+<meta name='theme-color' content='#ffffff' >
+<meta name='msapplication-TileColor' content='#ffffff' >
+<meta name='msapplication-TileImage' content='/assets/favicon/ms-icon-144x144.png' >
+
+<title><%= title %></title>
+<meta name="title" content="<%= title %>">
+<meta name="description" content="<%= description %>">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="<%= url %>">
+<meta property="og:title" content="<%= title %>">
+<meta property="og:description" content="<%= description %>">
+<meta property="og:image" content="<%= image %>">
+
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="<%= url %>">
+<meta property="twitter:title" content="<%= title %>">
+<meta property="twitter:description" content="<%= description %>">
+<meta property="twitter:image" content="<%= image %>">

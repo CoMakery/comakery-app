@@ -4,6 +4,8 @@ require 'refile/file_double'
 describe MissionsController do
   let!(:mission1) { create :mission, name: 'test1' }
   let!(:mission2) { create :mission, name: 'test2' }
+  let!(:public_project1) { create :project, mission: mission1, visibility: :public_listed }
+  let!(:public_award1) { create :award, award_type: create(:award_type, project: public_project1) }
   let!(:admin_account) { create :account, comakery_admin: true }
   let!(:account) { create :account }
 
@@ -34,7 +36,7 @@ describe MissionsController do
       it 'returns correct react component' do
         get :index
         expect(response.status).to eq(200)
-        expect(assigns[:missions].count).to eq(2)
+        expect(assigns[:missions].count).to eq(3)
       end
     end
   end
