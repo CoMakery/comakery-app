@@ -161,9 +161,11 @@ exports[`TaskShow renders correctly without props 1`] = `
             >
               <styled.div
                 backgroundImageUrl={null}
+                expanded={false}
               >
                 <StyledComponent
                   backgroundImageUrl={null}
+                  expanded={false}
                   forwardedComponent={
                     Object {
                       "$$typeof": Symbol(react.forward_ref),
@@ -171,7 +173,7 @@ exports[`TaskShow renders correctly without props 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-bdVaJa",
                         "isStatic": false,
-                        "lastClassName": "jKQScu",
+                        "lastClassName": "fxkRxk",
                         "rules": Array [
                           "
   font-size: 16px;
@@ -191,6 +193,10 @@ exports[`TaskShow renders correctly without props 1`] = `
   flex-direction: column;
   text-shadow: 1px 1px 1px #3a3a3a;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+
+  ",
+                          [Function],
+                          "
 ",
                         ],
                       },
@@ -207,7 +213,7 @@ exports[`TaskShow renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-bdVaJa jKQScu"
+                    className="sc-bdVaJa fxkRxk"
                   >
                     <styled.div>
                       <StyledComponent

@@ -10,6 +10,7 @@ import styled, { css } from 'styled-components'
 import * as Cookies from 'js-cookie'
 
 const Wrapper = styled.div`
+  margin-top: -20px;
 `
 
 const Text = styled.div`
@@ -48,6 +49,7 @@ const FilterWrapper = styled.div`
   align-items: center;
   margin-bottom: 7px;
   margin-top: 7px;
+  margin-right: -15px;
   background: none;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -60,7 +62,7 @@ const FilterWrapper = styled.div`
 
 const TitleText = styled.div`
   margin-bottom: 3px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
 `
@@ -170,7 +172,7 @@ class BatchIndex extends React.Component {
 
   componentDidMount() {
     this.setState({
-      selectedBatch: this.props.batches.find(batch => String(batch.id) === Cookies.get('selectedBatchId'))
+      selectedBatch: this.props.batches.find(batch => String(batch.id) === Cookies.get('selectedBatchId')) || this.props.batches[0]
     })
   }
 
@@ -243,6 +245,10 @@ class BatchIndex extends React.Component {
                   <React.Fragment>
                     <hr className="batch-index--sidebar--hr" />
 
+                    <Title>
+                      <TitleText>batches</TitleText>
+                    </Title>
+
                     {this.props.batches.map((b, i) =>
                       <SidebarItem
                         className="batch-index--sidebar--item"
@@ -294,7 +300,7 @@ class BatchIndex extends React.Component {
                 <Tasks>
                   {this.state.selectedBatch.tasks.length > 0 &&
                     <FilterWrapper>
-                      <Filter filter={this.state.selectedTaskFilter} selected={!this.state.selectedTaskFilter} onClick={(_) => this.setState({selectedTaskFilter: null})}>all tasks</Filter>
+                      <Filter filter={this.state.selectedTaskFilter} selected={!this.state.selectedTaskFilter} onClick={(_) => this.setState({selectedTaskFilter: null})}>all&nbsp;tasks</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'ready'} onClick={(_) => this.setState({selectedTaskFilter: 'ready'})}>ready</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'started'} onClick={(_) => this.setState({selectedTaskFilter: 'started'})}>started</Filter>
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'submitted'} onClick={(_) => this.setState({selectedTaskFilter: 'submitted'})}>submitted</Filter>

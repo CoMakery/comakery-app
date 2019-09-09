@@ -138,13 +138,22 @@ exports[`Batch renders component correctly 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-fjdhpX",
                         "isStatic": true,
-                        "lastClassName": "bVpSSP",
+                        "lastClassName": "fcVVVW",
                         "rules": Array [
                           "
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   padding-right: 15px;
+
+  & > div {
+    padding: 7px 15px 7px 15px;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    margin-bottom: 1em;
+  }
 ",
                         ],
                       },
@@ -161,7 +170,7 @@ exports[`Batch renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-fjdhpX bVpSSP"
+                    className="sc-fjdhpX fcVVVW"
                   >
                     <styled.div>
                       <StyledComponent
@@ -295,12 +304,20 @@ exports[`Batch renders component correctly 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-cSHVUG",
                         "isStatic": true,
-                        "lastClassName": "fAviEV",
+                        "lastClassName": "kvLtpp",
                         "rules": Array [
                           "
   display: flex;
   padding: 7px 15px 15px 15px;
   width: 100%;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+
+    & > div {
+      margin-bottom: 1em;
+    }
+  }
 ",
                         ],
                       },
@@ -317,7 +334,7 @@ exports[`Batch renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-cSHVUG fAviEV"
+                    className="sc-cSHVUG kvLtpp"
                   >
                     <ContentElement
                       title="progress"
@@ -852,7 +869,7 @@ exports[`Batch renders component correctly 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-kAzzGY",
                               "isStatic": true,
-                              "lastClassName": "hyUmFa",
+                              "lastClassName": "cYhmyz",
                               "rules": Array [
                                 "
   display: flex;
@@ -861,6 +878,10 @@ exports[`Batch renders component correctly 1`] = `
   margin-right: 30px;
   align-self: flex-end;
   margin-left: auto;
+
+  @media (max-width: 1024px) {
+    margin-bottom: 0;
+  }
 ",
                               ],
                             },
@@ -877,7 +898,7 @@ exports[`Batch renders component correctly 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-kAzzGY hyUmFa"
+                          className="sc-kAzzGY cYhmyz"
                         >
                           <a>
                             <Styled(Icon)

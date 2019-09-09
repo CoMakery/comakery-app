@@ -54,6 +54,15 @@ const Title = styled.div`
   align-items: baseline;
   justify-content: space-between;
   padding-right: 15px;
+
+  & > div {
+    padding: 7px 15px 7px 15px;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    margin-bottom: 1em;
+  }
 `
 
 const Name = styled.div`
@@ -72,6 +81,14 @@ const Details = styled.div`
   display: flex;
   padding: 7px 15px 15px 15px;
   width: 100%;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+
+    & > div {
+      margin-bottom: 1em;
+    }
+  }
 `
 
 const Buttons = styled.div`
@@ -81,6 +98,10 @@ const Buttons = styled.div`
   margin-right: 30px;
   align-self: flex-end;
   margin-left: auto;
+
+  @media (max-width: 1024px) {
+    margin-bottom: 0;
+  }
 `
 
 const StyledIcon = styled(Icon)`

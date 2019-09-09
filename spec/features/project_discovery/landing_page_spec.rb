@@ -30,7 +30,7 @@ describe 'landing page' do
     expect(page).to have_content 'interested'
     expect(page).to have_content /new project/i
 
-    expect(page.all('.project').size).to eq(14)
+    expect(page.all('.project').size).to eq(16)
 
     click_link 'Browse All'
 
