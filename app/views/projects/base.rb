@@ -64,6 +64,6 @@ class Views::Projects::Base < Views::Base
   end
 
   def project_image(project)
-    attachment_url(project, :image) || image_tag('default_project_image.png')
+    helpers.attachment_url(project, :image, fallback: 'default_project_image.png')
   end
 end
