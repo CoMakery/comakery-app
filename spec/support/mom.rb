@@ -156,7 +156,7 @@ class Mom
       message: 'Great work',
       quantity: 1,
       amount: 50,
-      submission_url: 'url',
+      submission_url: 'http://dummy',
       submission_comment: 'comment',
       issuer: create(:account)
     }.merge(attrs)

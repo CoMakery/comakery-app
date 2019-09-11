@@ -230,7 +230,7 @@ RSpec.describe AwardsController, type: :controller do
         award_type_id: award.award_type.to_param,
         award_id: award.to_param,
         task: {
-          submission_url: 'test',
+          submission_url: 'http://test',
           submission_comment: 'test'
         }
       }
@@ -239,17 +239,17 @@ RSpec.describe AwardsController, type: :controller do
       expect(award.reload.submitted?).to be true
     end
 
-    it 'redirects back to started tasks page with an error' do
+    it 'redirects back task details with an error' do
       post :submit, params: {
         project_id: award.project.to_param,
         award_type_id: award.award_type.to_param,
         award_id: award.to_param,
         task: {
-          submission_url: 'test',
+          submission_url: 'http://test',
           submission_comment: ' '
         }
       }
-      expect(response).to redirect_to(my_tasks_path(filter: 'started'))
+      expect(response).to redirect_to(project_award_type_award_path(award.project, award.award_type, award))
       expect(flash[:error]).to eq("Submission comment can't be blank")
       expect(award.reload.submitted?).to be false
     end
