@@ -22,3 +22,5 @@ Rails.start()
 let componentRequireContext = require.context('components', true)
 let ReactRailsUJS = require('react_ujs')
 ReactRailsUJS.useContext(componentRequireContext)
+
+import 'controllers'
