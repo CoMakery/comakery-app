@@ -117,7 +117,7 @@ class AwardsController < ApplicationController
       TaskMailer.with(award: @award).task_submitted.deliver_now
       redirect_to my_tasks_path(filter: 'submitted'), notice: 'Task submitted'
     else
-      redirect_to my_tasks_path(filter: 'started'), flash: { error: @award.errors&.full_messages&.join(', ') }
+      redirect_to project_award_type_award_path(@project, @award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
     end
   end
 

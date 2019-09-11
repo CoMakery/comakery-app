@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 const Wrapper = styled.div`
   font-size: 16px;
@@ -18,6 +18,18 @@ const Wrapper = styled.div`
   flex-direction: column;
   text-shadow: 1px 1px 1px #3a3a3a;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+
+  ${props => !props.expanded && css`
+    margin-left: -150px;
+    margin-right: -150px;
+    margin-top: -25px;
+    margin-bottom: 25px;
+
+    @media (max-width: 1024px) {
+      margin-left: -25px;
+      margin-right: -25px;
+    }
+  `}
 `
 
 const Navigation = styled.div`
@@ -120,7 +132,7 @@ class ProjectSetupHeader extends React.Component {
     const current = this.props.current
 
     return (
-      <Wrapper backgroundImageUrl={project && project.imageUrl}>
+      <Wrapper backgroundImageUrl={project && project.imageUrl} expanded={this.props.expanded}>
         <Navigation>
           {mission &&
             <MissionNav>
@@ -132,27 +144,33 @@ class ProjectSetupHeader extends React.Component {
 
           {project && project.title &&
             <ProjectNav>
+              <NavLink current={current === 'overview'} href={project.landingUrl}>
+                overview
+              </NavLink>
+
               {owner &&
                 <NavLink current={current === 'form'} href={project.settingsUrl}>
                   settings
                 </NavLink>
               }
 
-              <NavLink current={current === 'batches'} href={project.batchesUrl}>
-                batches & tasks
-              </NavLink>
+              {(owner || project.showBatches) &&
+                <NavLink current={current === 'batches'} href={project.batchesUrl}>
+                  batches & tasks
+                </NavLink>
+              }
 
-              <NavLink current={current === 'contributors'} href={project.contributorsUrl}>
-                contributors
-              </NavLink>
+              {(owner || project.showPayments) &&
+                <NavLink current={current === 'contributors'} href={project.contributorsUrl}>
+                  contributors
+                </NavLink>
+              }
 
-              <NavLink current={current === 'awards'} href={project.awardsUrl}>
-                payments
-              </NavLink>
-
-              <NavLink current={current === 'overview'} href={project.landingUrl}>
-                overview
-              </NavLink>
+              {(owner || project.showPayments) &&
+                <NavLink current={current === 'awards'} href={project.awardsUrl}>
+                  payments
+                </NavLink>
+              }
             </ProjectNav>
           }
         </Navigation>
@@ -198,6 +216,8 @@ ProjectSetupHeader.defaultProps = {
     imageUrl       : '',
     title          : '',
     owner          : '',
+    showBatches    : true,
+    showPayments   : true,
     present        : true
   },
   owner   : true,

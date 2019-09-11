@@ -158,6 +158,14 @@ a.header--nav--links--current {
   color: #e8eff7;
 }
 
+.footer--content--social img {
+  max-height: 20px;
+  padding-right: 2em;
+  filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feComponentTransfer color-interpolation-filters="sRGB"><feFuncR type="linear" slope="3" /><feFuncG type="linear" slope="3" /><feFuncB type="linear" slope="3" /></feComponentTransfer></filter></svg>#filter');
+  -webkit-filter: brightness(3);
+  filter: brightness(3);
+}
+
 .footer--content--nav--about,
 .footer--content--nav--join,
 .footer--content--nav--legal {

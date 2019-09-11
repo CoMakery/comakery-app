@@ -11,45 +11,36 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
-  height: 85px;
   margin-bottom: 10px;
-`
-
-const RightBorder = styled.div`
-  width: 2px;
-  height: 85px;
-  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .2);
-  background-color: #5037f7;
-  z-index: 10;
-  position: absolute;
-  margin-left: -1px;
+  border-left: 2px solid;
+  border-color: #5037f7;
 
   ${props => props.status === 'ready' && css`
-    background-color: #4a4a4a;
+    border-color: #4a4a4a;
   `}
 
   ${props => props.status === 'started' && css`
-    background-color: #008e9b;
+    border-color: #008e9b;
   `}
 
   ${props => props.status === 'submitted' && css`
-    background-color: #007ae7;
+    border-color: #007ae7;
   `}
 
   ${props => props.status === 'accepted' && css`
-    background-color: #5037f7;
+    border-color: #5037f7;
   `}
 
   ${props => props.status === 'paid' && css`
-    background-color: #fb40e5;
+    border-color: #fb40e5;
   `}
 
   ${props => props.status === 'rejected' && css`
-    background-color: #ff4d4d;
+    border-color: #ff4d4d;
   `}
 
   ${props => props.status === 'cancelled' && css`
-    background-color: #ff4d4d;
+    border-color: #ff4d4d;
   `}
 `
 
@@ -60,12 +51,17 @@ const Info = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `
 
 const Name = styled.div`
   font-family: Montserrat;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   font-style: normal;
   font-stretch: normal;
   line-height: normal;
@@ -76,7 +72,15 @@ const Name = styled.div`
 
 const StatusWrapper = styled.div`
   display: flex;
-  padding: 7px 20px;
+  padding: 7px 15px;
+
+  & > div {
+    margin-bottom: 1em;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 `
 
 const Status = styled.div`
@@ -158,10 +162,14 @@ const Contributor = styled.div`
 `
 
 const Title = styled.div`
-  padding: 7px 20px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  @media (max-width: 1024px) {
+    padding-bottom: 0;
+  }
 `
 
 const Details = styled.div`
@@ -171,6 +179,12 @@ const Details = styled.div`
   justify-content: space-between;
   padding-right: 15px;
   padding-top: 7px;
+
+  @media (max-width: 1024px) {
+    padding: 7px 15px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `
 
 const Amount = styled(CurrencyAmount)`
@@ -181,6 +195,10 @@ const Buttons = styled.div`
   justify-content: space-between;
   align-items: center;
   padding-top: 8px;
+
+  @media (max-width: 1024px) {
+    justify-content: flex-start;
+  }
 `
 
 const PaymentButton = styled.a`
@@ -199,12 +217,22 @@ const PaymentButton = styled.a`
   &:focus {
     text-decoration: underline;
   }
+
+  @media (max-width: 1024px) {
+    margin-left: 0px;
+    margin-right: 16px;
+  }
 `
 
 const StyledIcon = styled(Icon)`
   height: 15px;
   width: 15px;
   margin-left: 16px;
+
+  @media (max-width: 1024px) {
+    margin-left: 0px;
+    margin-right: 16px;
+  }
 `
 
 const IconPlaceholder = styled(Icon)`
@@ -213,6 +241,11 @@ const IconPlaceholder = styled(Icon)`
   margin-left: 16px;
   opacity: 0.3;
   cursor: not-allowed;
+
+  @media (max-width: 1024px) {
+    margin-left: 0px;
+    margin-right: 16px;
+  }
 `
 
 const TaskDetails = styled.a`
@@ -246,8 +279,7 @@ const TaskDetails = styled.a`
 
   @media (max-width: 1024px) {
     margin-left: initial;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    padding: 7px 15px;
   }
 `
 
@@ -271,6 +303,10 @@ const DetailsBox = styled.div`
 
 const BottomWrapper = styled.div`
   display: flex;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+  }
 `
 
 class Task extends React.Component {
@@ -285,8 +321,7 @@ class Task extends React.Component {
     let task = this.props.task
     return (
       <React.Fragment>
-        <Wrapper>
-          <RightBorder status={task.status} />
+        <Wrapper status={task.status}>
           <Info>
             <Title>
               <Name>

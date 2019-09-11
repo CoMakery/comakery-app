@@ -5,17 +5,7 @@ class Views::Layouts::Application < Views::Base
       head do
         render partial: 'layouts/google_tag_manager.html'
         render partial: 'shared/unbounce.html'
-        meta :content => 'text/html; charset=UTF-8', 'http-equiv' => 'Content-Type'
-        meta charset: 'utf-8'
-        meta name: 'viewport', content: 'width=device-width, initial-scale=1.0'
-        description = content_for?(:description) ? capture { yield(:description) } : I18n.t('project_description')
-        meta name: 'description', content: description
-        meta name: 'robots', content: 'NOODP' # don't use Open Director Project in search listing
-        meta name: 'theme-color', content: '#ffffff'
-        meta name: 'msapplication-TileColor', content: '#ffffff'
-        meta name: 'msapplication-TileImage', content: '/assets/favicon/ms-icon-144x144.png'
-
-        title content_for?(:title) ? capture { yield(:title) } : I18n.t('project_name')
+        render partial: 'shared/meta_tags'
 
         stylesheet_link_tag 'application', media: 'all'
         stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato|Slabo+27px'

@@ -276,6 +276,13 @@ describe Award do
       expect(a.errors.full_messages).to eq(["Submission comment can't be blank"])
     end
 
+    it 'requires submission_url to include protocol' do
+      a = create(:award_ready)
+      a.update(status: 'submitted', submission_comment: 'dummy', submission_url: 'github.com')
+      expect(a).not_to be_valid
+      expect(a.errors.full_messages).to eq(['Submission url must include protocol (e.g. https://)'])
+    end
+
     it 'cannot be assigned to a contributor having more than allowed number of started tasks' do
       a = create(:award)
       c = create(:account)

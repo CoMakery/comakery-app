@@ -402,7 +402,7 @@ a.header--nav--links--current {
 
 .layout--content--sidebar {
   max-width: 367px;
-  padding: 0px;
+  padding: 0px 15px 5px 0px;
 }
 
 .layout--content--content__sidebared {
@@ -613,8 +613,12 @@ a.header--nav--links--current {
 }
 
 .sidebar-item__bold .sidebar-item--icon-right {
-  padding-right: 12px;
-  padding-top: 4px;
+  margin-left: auto;
+  margin-right: 13px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
 }
 
 .styleguide-index--message {
@@ -1270,6 +1274,7 @@ select:disabled {
   font-family: Georgia,Times,Times New Roman,serif;
   font-weight: 500;
   color: var(--black);
+  word-break: break-all;
 }
 
 .token-index--view--link {
@@ -1290,18 +1295,12 @@ select:disabled {
 .token-index--sidebar--item,
 .styleguide-index--sidebar--item,
 .batch-index--sidebar--item {
-  margin: 5px 15px 5px 0px;
+  margin: 5px 0px 5px 0px;
   padding-right: 1em;
 }
 
 .batch-index--sidebar--item__form {
   margin-top: 15px;
-}
-
-.token-index--sidebar--item__bold,
-.styleguide-index--sidebar--item__bold,
-.batch-index--sidebar--item__bold {
-  margin: 0px 14px 4px 0;
 }
 
 .batch-index--sidebar--hr {

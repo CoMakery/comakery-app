@@ -47,6 +47,8 @@ class Award < ApplicationRecord
   validates :proof_link, length: { maximum: 150 }
   validates :proof_link, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
   validates :proof_link, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { proof_link.present? }
+  validates :submission_url, exclusion: { in: %w[http:// https://], message: 'is not valid URL' }
+  validates :submission_url, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { submission_url.present? }
   validates :experience_level, inclusion: { in: EXPERIENCE_LEVELS.values }, allow_nil: true
   validates :submission_comment, presence: true, if: -> { status == 'submitted' }
   validates :expires_in_days, presence: true, numericality: { greater_than: 0 }

@@ -79,7 +79,9 @@ class Mom
       long_id: SecureRandom.hex(20),
       maximum_tokens: 1_000_000_000,
       token: create(:token),
-      mission: create(:mission)
+      mission: create(:mission),
+      square_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
+      panoramic_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png')
     }
     Project.new(defaults.merge(attrs))
   end
@@ -87,7 +89,8 @@ class Mom
   def token(**attrs)
     defaults = {
       name: "Token-#{SecureRandom.hex(20)}",
-      symbol: "TKN#{SecureRandom.hex(20)}"
+      symbol: "TKN#{SecureRandom.hex(20)}",
+      logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png')
     }
     Token.new(defaults.merge(attrs))
   end
@@ -153,7 +156,7 @@ class Mom
       message: 'Great work',
       quantity: 1,
       amount: 50,
-      submission_url: 'url',
+      submission_url: 'http://dummy',
       submission_comment: 'comment',
       issuer: create(:account)
     }.merge(attrs)
