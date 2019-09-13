@@ -149,7 +149,7 @@ exports[`Project renders correctly without props 1`] = `
                     "componentStyle": ComponentStyle {
                       "componentId": "sc-VigVT",
                       "isStatic": true,
-                      "lastClassName": "cFSxLe",
+                      "lastClassName": "lRsYj",
                       "rules": Array [
                         "
   align-items: center;
@@ -160,9 +160,10 @@ exports[`Project renders correctly without props 1`] = `
 
   img {
     max-height: 150px;
-
     margin-bottom: -50px;
     margin-top: 25px;
+    border-radius: 2px;
+    box-shadow: 0 10px 20px 0 rgba(32,22,98,.1);
   }
 
   h1 {
@@ -204,7 +205,7 @@ exports[`Project renders correctly without props 1`] = `
                 forwardedRef={null}
               >
                 <div
-                  className="sc-VigVT cFSxLe"
+                  className="sc-VigVT lRsYj"
                 >
                   <h1>
                     New Project

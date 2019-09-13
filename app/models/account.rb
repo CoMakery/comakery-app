@@ -1,3 +1,6 @@
+# Allow usage of has_and_belongs_to_many to avoid creating a separate model for accounts_projects join table:
+# rubocop:disable Rails/HasAndBelongsToMany
+
 class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
@@ -10,6 +13,7 @@ class Account < ApplicationRecord
   include TezosAddressable
 
   has_many :projects
+  has_and_belongs_to_many :admin_projects, class_name: 'Project'
   has_many :awards, dependent: :destroy
   has_many :channels, through: :projects
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy

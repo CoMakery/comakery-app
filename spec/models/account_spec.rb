@@ -194,6 +194,7 @@ describe Account do
   describe 'associations' do
     let(:account) { create(:account) }
     let(:project) { create(:project, account: account) }
+    let(:admin_project) { create(:project) }
     let(:award_type) { create(:award_type, project: project) }
     let(:award) { create(:award, award_type: award_type, issuer: account) }
     let(:team) { create :team }
@@ -208,6 +209,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
+      admin_project.admins << account
     end
 
     it 'has many projects' do
@@ -232,6 +234,10 @@ describe Account do
 
     it 'has many team award types' do
       expect(account.team_award_types).to match_array([teammate_award_type])
+    end
+
+    it 'has and belongs to many admin_projects' do
+      expect(account.admin_projects).to match_array([admin_project])
     end
   end
 

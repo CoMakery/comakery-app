@@ -258,7 +258,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-EHOje",
                               "isStatic": true,
-                              "lastClassName": "gazehm",
+                              "lastClassName": "WkqbZ",
                               "rules": Array [
                                 "
   align-items: center;
@@ -269,9 +269,10 @@ exports[`BatchForm renders correctly without props 1`] = `
 
   img {
     max-height: 150px;
-
     margin-bottom: -50px;
     margin-top: 25px;
+    border-radius: 2px;
+    box-shadow: 0 10px 20px 0 rgba(32,22,98,.1);
   }
 
   h1 {
@@ -313,7 +314,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-EHOje gazehm"
+                          className="sc-EHOje WkqbZ"
                         >
                           <h1>
                             New Project

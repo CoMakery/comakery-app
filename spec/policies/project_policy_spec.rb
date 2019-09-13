@@ -174,9 +174,9 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#edit? #update?' do
+  describe 'edit? update? send_award? admins? add_admin? remove_admin?' do
     it 'only allows viewing of projects that are public or are owned by the current account' do
-      %i[edit? update?].each do |action|
+      %i[edit? update? send_award? admins? add_admin? remove_admin?].each do |action|
         expect(described_class.new(nil, my_public_project).send(action)).to be_falsey
         expect(described_class.new(nil, others_private_project).send(action)).to be_falsey
         expect(described_class.new(nil, my_archived_project).send(action)).to be_falsey

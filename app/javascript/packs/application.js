@@ -9,7 +9,7 @@
 
 import '../src/application.js'
 
-import '../src/application.css'
+import '../src/application.scss'
 
 import 'slick-carousel/slick/slick.css'
 
@@ -24,3 +24,5 @@ let ReactRailsUJS = require('react_ujs')
 ReactRailsUJS.useContext(componentRequireContext)
 
 import 'controllers'
+
+require.context('../src/images', true)

@@ -37,6 +37,9 @@ class ProjectPolicy < ApplicationPolicy
 
   alias update? edit?
   alias send_award? edit?
+  alias admins? edit?
+  alias add_admin? edit?
+  alias remove_admin? edit?
 
   def show_contributions?
     (project.public? && !project.require_confidentiality?) ||

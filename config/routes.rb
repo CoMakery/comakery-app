@@ -78,6 +78,9 @@ Rails.application.routes.draw do
     
     member do
       get :awards
+      get :admins
+      post :add_admin
+      delete :remove_admin
     end
     
     collection do
