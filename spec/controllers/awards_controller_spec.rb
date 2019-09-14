@@ -125,6 +125,43 @@ RSpec.describe AwardsController, type: :controller do
     end
   end
 
+  describe '#update' do
+    let!(:award) { create(:award_ready) }
+
+    before do
+      login(award.project.account)
+    end
+
+    it 'updates task' do
+      patch :update, params: {
+        project_id: award.project.to_param,
+        award_type_id: award.award_type.to_param,
+        id: award.to_param,
+        task: {
+          name: 'updated'
+        }
+      }
+      expect(response.status).to eq(200)
+      expect(response.content_type).to eq('application/json')
+
+      expect(award.reload.name).to eq('updated')
+      expect(award.reload.issuer).to eq award.project.account
+    end
+
+    it 'returns an error' do
+      patch :update, params: {
+        project_id: award.project.to_param,
+        award_type_id: award.award_type.to_param,
+        id: award.to_param,
+        task: {
+          name: ''
+        }
+      }
+      expect(response.status).to eq(422)
+      expect(response.content_type).to eq('application/json')
+    end
+  end
+
   describe '#destroy' do
     let!(:award) { create(:award_ready) }
 
@@ -183,7 +220,7 @@ RSpec.describe AwardsController, type: :controller do
     let!(:account) { create(:account) }
 
     it 'assignes task with selected account and redirects to batches page with notice' do
-      login(award.issuer)
+      login(award.project.account)
       post :assign, params: {
         project_id: award.project.to_param,
         award_type_id: award.award_type.to_param,
@@ -195,10 +232,11 @@ RSpec.describe AwardsController, type: :controller do
       expect(flash[:notice]).to eq('Task has been assigned')
       expect(award.reload.ready?).to be true
       expect(award.reload.account).to eq account
+      expect(award.reload.issuer).to eq award.project.account
     end
 
     it 'clones the task before assignement if it should be cloned' do
-      login(award_cloneable.issuer)
+      login(award_cloneable.project.account)
       post :assign, params: {
         project_id: award_cloneable.project.to_param,
         award_type_id: award_cloneable.award_type.to_param,
@@ -213,6 +251,7 @@ RSpec.describe AwardsController, type: :controller do
       expect(award_cloneable.reload.ready?).to be true
       expect(cloned_award.reload.ready?).to be true
       expect(cloned_award.reload.account).to eq account
+      expect(cloned_award.reload.issuer).to eq award_cloneable.project.account
     end
   end
 
@@ -259,7 +298,7 @@ RSpec.describe AwardsController, type: :controller do
     let!(:award) { create(:award) }
 
     before do
-      login(award.issuer)
+      login(award.project.account)
       award.update(status: 'submitted')
     end
 
@@ -279,7 +318,7 @@ RSpec.describe AwardsController, type: :controller do
     let!(:award) { create(:award) }
 
     before do
-      login(award.issuer)
+      login(award.project.account)
       award.update(status: 'submitted')
     end
 

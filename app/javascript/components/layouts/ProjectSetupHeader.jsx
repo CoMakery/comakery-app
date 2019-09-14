@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   color: white;
   cursor: default;
   margin-bottom: 1em;
+  background-color: #201662;
   background-image: url(${props => props.backgroundImageUrl});
   background-position-x: 50%;
   background-position-y: center;

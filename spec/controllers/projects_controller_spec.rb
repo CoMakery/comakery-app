@@ -238,11 +238,16 @@ describe ProjectsController do
 
   describe '#landing' do
     let!(:public_project) { create(:project, visibility: 'public_listed', title: 'public project', account: account, mission_id: mission.id) }
+    let!(:admin_project) { create(:project, visibility: 'public_listed', title: 'admin project', mission_id: mission.id) }
     let!(:archived_project) { create(:project, visibility: 'archived', title: 'archived project', account: account, mission_id: mission.id) }
     let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project', mission_id: mission.id) }
     let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project', mission_id: mission.id) }
     let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project', mission_id: mission.id) }
     let!(:interest) { create(:interest, account: account) }
+
+    before do
+      admin_project.admins << account
+    end
 
     describe '#login' do
       it 'returns your private projects, and public projects that *do not* belong to you' do
@@ -251,7 +256,7 @@ describe ProjectsController do
 
         get :landing
         expect(response.status).to eq(200)
-        expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'unlisted project', 'member project'])
+        expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'admin project', 'unlisted project', 'member project'])
         expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
         expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
         expect(assigns[:interested_projects].map(&:title)).to match_array([interest.project.title])

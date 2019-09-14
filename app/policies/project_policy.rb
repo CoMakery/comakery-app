@@ -32,7 +32,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def edit?
-    account.present? && project_owner?
+    account.present? && (project_owner? || project_admin?)
   end
 
   alias update? edit?
@@ -51,7 +51,11 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def project_owner?
-    account&.owned_project?(project)
+    account.present? && (project.account == account)
+  end
+
+  def project_admin?
+    account.present? && (project.admins.include? account)
   end
 
   def team_member?

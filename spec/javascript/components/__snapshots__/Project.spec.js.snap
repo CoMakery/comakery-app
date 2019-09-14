@@ -57,7 +57,7 @@ exports[`Project renders correctly without props 1`] = `
               "componentStyle": ComponentStyle {
                 "componentId": "sc-htoDjs",
                 "isStatic": false,
-                "lastClassName": "cOiAEQ",
+                "lastClassName": "imshEc",
                 "rules": Array [
                   "
   font-size: 16px;
@@ -65,6 +65,7 @@ exports[`Project renders correctly without props 1`] = `
   color: white;
   cursor: default;
   margin-bottom: 1em;
+  background-color: #201662;
   background-image: url(",
                   [Function],
                   ");
@@ -97,7 +98,7 @@ exports[`Project renders correctly without props 1`] = `
           forwardedRef={null}
         >
           <div
-            className="sc-htoDjs cOiAEQ"
+            className="sc-htoDjs imshEc"
           >
             <styled.div>
               <StyledComponent

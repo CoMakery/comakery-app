@@ -117,7 +117,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-bdVaJa",
                         "isStatic": false,
-                        "lastClassName": "fxkRxk",
+                        "lastClassName": "ezfsJd",
                         "rules": Array [
                           "
   font-size: 16px;
@@ -125,6 +125,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
   color: white;
   cursor: default;
   margin-bottom: 1em;
+  background-color: #201662;
   background-image: url(",
                           [Function],
                           ");
@@ -157,7 +158,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-bdVaJa fxkRxk"
+                    className="sc-bdVaJa ezfsJd"
                   >
                     <styled.div>
                       <StyledComponent

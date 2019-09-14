@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @my_projects = current_account.projects.unarchived.order(updated_at: :desc).limit(100).decorate
+      @my_projects = current_account.my_projects.unarchived.order(updated_at: :desc).limit(100).decorate
       @archived_projects = current_account.projects.archived.order(updated_at: :desc).limit(100).decorate
       @team_projects = current_account.other_member_projects.unarchived.order(updated_at: :desc).limit(100).decorate
       @interested_projects = current_account.projects_interested.unarchived.order(updated_at: :desc).limit(100).decorate

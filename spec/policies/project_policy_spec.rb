@@ -4,6 +4,7 @@ describe ProjectPolicy do
   let!(:team1) { create :team }
   let!(:team2) { create :team }
   let!(:project_account) { create :account }
+  let!(:project_admin) { create :account }
   let!(:authentication) { create(:authentication, account: project_account) }
 
   let!(:my_public_project) { create(:project, title: 'public mine', account: project_account, visibility: 'public_listed') }
@@ -28,6 +29,12 @@ describe ProjectPolicy do
   before do
     team1.build_authentication_team authentication
     team1.build_authentication_team other_team_member_auth
+
+    my_public_project.admins << project_admin
+    my_public_unlisted_project.admins << project_admin
+    my_private_project.admins << project_admin
+    my_public_project_business_confidential.admins << project_admin
+    my_archived_project.admins << project_admin
   end
 
   describe ProjectPolicy::Scope do
@@ -175,7 +182,7 @@ describe ProjectPolicy do
   end
 
   describe 'edit? update? send_award? admins? add_admin? remove_admin?' do
-    it 'only allows viewing of projects that are public or are owned by the current account' do
+    it 'only allows managing projects that are owned or administrated by the current account' do
       %i[edit? update? send_award? admins? add_admin? remove_admin?].each do |action|
         expect(described_class.new(nil, my_public_project).send(action)).to be_falsey
         expect(described_class.new(nil, others_private_project).send(action)).to be_falsey
@@ -184,6 +191,10 @@ describe ProjectPolicy do
         expect(described_class.new(project_account, my_public_project).send(action)).to be true
         expect(described_class.new(project_account, my_private_project).send(action)).to be true
         expect(described_class.new(project_account, my_archived_project).send(action)).to be true
+
+        expect(described_class.new(project_admin, my_public_project).send(action)).to be true
+        expect(described_class.new(project_admin, my_private_project).send(action)).to be true
+        expect(described_class.new(project_admin, my_archived_project).send(action)).to be true
 
         expect(described_class.new(project_account, others_public_project).send(action)).to be_falsey
         expect(described_class.new(project_account, others_private_project).send(action)).to be_falsey
@@ -206,6 +217,12 @@ describe ProjectPolicy do
 
     specify { expect(described_class).not_to permit(different_team_account, my_public_project) }
     specify { expect(described_class).not_to permit(nil, my_public_project) }
+  end
+
+  describe 'project_admin?' do
+    specify { expect(described_class.new(project_admin, my_public_project).project_admin?).to be_truthy }
+    specify { expect(described_class.new(different_team_account, my_public_project).project_admin?).to be_falsey }
+    specify { expect(described_class.new(nil, my_public_project).project_admin?).to be_falsey }
   end
 
   def authorized(*args, method)
