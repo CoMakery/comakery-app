@@ -330,7 +330,7 @@ class ProjectsController < ApplicationController
     award_data = GetContributorData.call(project: @project).award_data
     chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
 
-    project.as_json(only: %i[id title require_confidentiality]).merge(
+    project.as_json(only: %i[id title require_confidentiality display_team]).merge(
       description_header: project.description.split('.').first,
       description_html: Comakery::Markdown.to_html(project.description.split('.')[1..-1]&.join('.')),
       show_contributions: policy(project).show_contributions?,
@@ -343,6 +343,8 @@ class ProjectsController < ApplicationController
       awarded_tokens: project.total_awarded_pretty,
       team_leader: contributor_props(project.account),
       contributors_number: contributors_number,
+      leaders_number: project.leaders.size,
+      leaders: project.leaders.map { |leader| contributor_props(leader) },
       contributors: project.top_contributors.map { |contributor| contributor_props(contributor) },
       chart_data: chart_data,
       stats: project.stats

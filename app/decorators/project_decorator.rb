@@ -115,6 +115,10 @@ class ProjectDecorator < Draper::Decorator
     }
   end
 
+  def leaders
+    admins.first(5).to_a.unshift(account)
+  end
+
   private
 
   def self.pretty_number(*currency_methods)

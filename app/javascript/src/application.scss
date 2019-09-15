@@ -2743,7 +2743,7 @@ input.button--right-space {
   font-stretch: normal;
   line-height: normal;
   letter-spacing: normal;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .project-award__token__img {
@@ -2834,7 +2834,6 @@ input.button--right-space {
 
   .project-award__token {
     flex-direction: column;
-    margin-bottom: 60px;
   }
   
   .project-award__token__left {
@@ -3088,6 +3087,7 @@ input.button--right-space {
   width: 230px;
   height: 40px;
   font-size: 18px;
+  margin-right: 0;
 }
 
 .project-interest__text {
@@ -3316,8 +3316,7 @@ input.button--right-space {
 }
 
 .project-team {
-  background-color: #f8f8f8;
-  padding: 55px 345px;
+  padding: 1em;
 }
 
 .project-team__container {
@@ -3363,7 +3362,7 @@ input.button--right-space {
 }
 
 .project-team__contributors-container {
-  margin-bottom: 40px;
+  margin-bottom: 1em;
   font-family: Montserrat, sans-serif;
   font-size: 12px;
   font-weight: 500;
@@ -3382,7 +3381,7 @@ input.button--right-space {
 }
 
 .project-team__contributors {
-  margin-top: 16px;
+  margin-top: 0.5em;
   display: flex;
   width: 100%;
   align-items: center;
@@ -3401,7 +3400,6 @@ input.button--right-space {
 
 @media screen and (max-width: 1024px) {
   .project-team {
-    padding: 80px 154px;
   }
 
   .project-team__title {
@@ -3420,7 +3418,6 @@ input.button--right-space {
 
   .project-team__contributors-container {
     font-size: 16px;
-    margin-bottom: 10px;
   }
 
   .project-team__leader-name {
@@ -3430,7 +3427,6 @@ input.button--right-space {
 
 @media screen and (max-width: 650px) {
   .project-team {
-    padding: 60px 30px;
   }
 
   .project-team__subtitle {
@@ -3461,8 +3457,7 @@ input.button--right-space {
   position: relative;
   z-index: 1;
   box-sizing: border-box;
-  width: 48.5px;
-  height: 47.7px;
+  width: 48px;
   border-radius: 50%;
   border: solid 1px #8d9599;
   margin-left: -8px;
