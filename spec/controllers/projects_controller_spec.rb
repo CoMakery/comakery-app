@@ -29,6 +29,87 @@ describe ProjectsController do
     stub_slack_channel_list
   end
 
+  describe '#admins' do
+    let!(:project_admin) { create(:account) }
+
+    before do
+      project.admins << project_admin
+      login(project.account)
+    end
+
+    it 'shows admins for current project' do
+      get :admins, params: { id: project.to_param }
+
+      expect(response.status).to eq(200)
+      expect(assigns[:project]).to eq(project)
+      expect(assigns[:admins]).to match_array([project_admin])
+    end
+  end
+
+  describe '#add_admin' do
+    let!(:project_admin) { create(:account) }
+
+    before do
+      login(project.account)
+    end
+
+    it 'adds an admin by email to current project' do
+      post :add_admin, params: { id: project.to_param, email: project_admin.email }
+      project.reload
+
+      expect(response).to redirect_to(admins_project_path(project))
+      expect(flash[:notice]).not_to be_nil
+      expect(project.admins).to match_array([project_admin])
+    end
+
+    it 'returns an error if email is not found' do
+      post :add_admin, params: { id: project.to_param, email: 'dummy_email' }
+      project.reload
+
+      expect(response).to redirect_to(admins_project_path(project))
+      expect(flash[:error]).not_to be_nil
+      expect(project.admins).to match_array([])
+    end
+
+    it 'returns an error if account is already an admin' do
+      project.admins << project_admin
+      post :add_admin, params: { id: project.to_param, email: project_admin.email }
+      project.reload
+
+      expect(response).to redirect_to(admins_project_path(project))
+      expect(flash[:error]).not_to be_nil
+      expect(project.admins).to match_array([project_admin])
+    end
+  end
+
+  describe '#remove_admin' do
+    let!(:project_admin) { create(:account) }
+
+    before do
+      project.admins << project_admin
+      login(project.account)
+    end
+
+    it 'removes admin from current project' do
+      delete :remove_admin, params: { id: project.to_param, account_id: project_admin.id }
+      project.reload
+
+      expect(response).to redirect_to(admins_project_path(project))
+      expect(flash[:notice]).not_to be_nil
+      expect(project.admins).to match_array([])
+    end
+
+    it 'returns an error if account is not project admin' do
+      project.admins.delete(project_admin)
+      delete :remove_admin, params: { id: project.to_param, account_id: project_admin.id }
+      project.reload
+
+      expect(response).to redirect_to(admins_project_path(project))
+      expect(flash[:error]).not_to be_nil
+      expect(project.admins).to match_array([])
+    end
+  end
+
   describe '#awards' do
     let!(:award) { create(:award, award_type: create(:award_type, project: project), account: other_auth.account) }
     let!(:different_project_award) { create(:award, award_type: create(:award_type, project: create(:project)), account: other_auth.account) }
@@ -157,11 +238,16 @@ describe ProjectsController do
 
   describe '#landing' do
     let!(:public_project) { create(:project, visibility: 'public_listed', title: 'public project', account: account, mission_id: mission.id) }
+    let!(:admin_project) { create(:project, visibility: 'public_listed', title: 'admin project', mission_id: mission.id) }
     let!(:archived_project) { create(:project, visibility: 'archived', title: 'archived project', account: account, mission_id: mission.id) }
     let!(:unlisted_project) { create(:project, account: account, visibility: 'member_unlisted', title: 'unlisted project', mission_id: mission.id) }
     let!(:member_project) { create(:project, account: account, visibility: 'member', title: 'member project', mission_id: mission.id) }
     let!(:other_member_project) { create(:project, account: account1, visibility: 'member', title: 'other member project', mission_id: mission.id) }
     let!(:interest) { create(:interest, account: account) }
+
+    before do
+      admin_project.admins << account
+    end
 
     describe '#login' do
       it 'returns your private projects, and public projects that *do not* belong to you' do
@@ -170,7 +256,7 @@ describe ProjectsController do
 
         get :landing
         expect(response.status).to eq(200)
-        expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'unlisted project', 'member project'])
+        expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'admin project', 'unlisted project', 'member project'])
         expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
         expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
         expect(assigns[:interested_projects].map(&:title)).to match_array([interest.project.title])

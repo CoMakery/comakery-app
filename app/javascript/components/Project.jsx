@@ -297,32 +297,44 @@ export default class Project extends React.Component {
           </div>
         }
 
-        <div className="project-contributors">
-          <div className="project-leader">
-            <div className="project-leader__info">
-              <div className="project-leader__title">Team Leader</div>
-              {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
-            </div>
-          </div>
-          <div className="project-contributors__container">
-            <div className="project-contributor-container">
-              <img className="project-leader__avatar" src={projectData.teamLeader.imageUrl} />
-              <div className="project-contributor__modal">
-                <ProfileModal profile={projectData.teamLeader} />
-              </div>
-            </div>
-
-            {projectData.contributors.map((contributor, index) =>
-              <div key={contributor.id} className="project-contributor-container">
-                <img className="project-contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
-                <div className="project-contributor__modal">
-                  <ProfileModal profile={contributor} />
+        {projectData.displayTeam &&
+          <div className="project-team">
+            <div className="project-team__container">
+              <div className="project-team__contributors-container">
+                <div className="project-team__leader-name">Team Leaders</div>
+                <div className="project-team__contributors" >
+                  {projectData.leaders.map((contributor, index) =>
+                    <div key={contributor.id} className="project-team__contributor-container">
+                      <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
+                      <div className="project-team__contributor__modal">
+                        <ProfileModal profile={contributor} />
+                      </div>
+                    </div>
+                  )}
                 </div>
+                {projectData.leadersNumber > 5 && <div className="project-team__contributors__more">+{projectData.adminsNumber - 5}</div>}
               </div>
-            )}
+
+              {projectData.contributorsNumber > 0 &&
+                <div className="project-team__contributors-container">
+                  <div className="project-team__leader-name">Contributors</div>
+                  <div className="project-team__contributors" >
+                    {projectData.contributors.map((contributor, index) =>
+                      <div key={contributor.id} className="project-team__contributor-container">
+                        <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
+                        <div className="project-team__contributor__modal">
+                          <ProfileModal profile={contributor} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {projectData.contributorsNumber > 5 && <div className="project-team__contributors__more">+{projectData.contributorsNumber - 5}</div>}
+                </div>
+              }
+            </div>
           </div>
-          {projectData.contributorsNumber > 5 && <div className="project-contributors__more">+{projectData.contributorsNumber - 5}</div>}
-        </div>
+        }
+
       </div>
 
       <div className="project-description">
@@ -420,42 +432,52 @@ export default class Project extends React.Component {
         </div>
       }
 
-      <div className="project-team">
-        <div className="project-team__container">
-          <div className="project-team__title">The Team</div>
-          <div className="project-team__subtitle">Great projects are the result of dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
+      {projectData.displayTeam &&
+        <div className="project-team">
+          <div className="project-team__container">
+            <div className="project-team__title">The Team</div>
+            <div className="project-team__subtitle">Great projects are the result of dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
 
-          <div className="project-chart">
-            <div id="tooltip" className="tooltip-hidden">
-              <span id="value">100</span>
-            </div>
-          </div>
-
-          <div className="project-team__contributors-container">
-            <div className="project-team__leader-name">Team Leader</div>
-            {projectData.teamLeader.firstName} {projectData.teamLeader.lastName}
-
-            <div className="project-team__contributors" >
-              <div className="project-team__contributor-container">
-                <img className="project-team__leader-avatar" src={projectData.teamLeader.imageUrl} />
-                <div className="project-team__contributor__modal">
-                  <ProfileModal profile={projectData.teamLeader} />
-                </div>
+            <div className="project-chart">
+              <div id="tooltip" className="tooltip-hidden">
+                <span id="value">100</span>
               </div>
-
-              {projectData.contributors.map((contributor, index) =>
-                <div key={contributor.id} className="project-team__contributor-container">
-                  <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
-                  <div className="project-team__contributor__modal">
-                    <ProfileModal profile={contributor} />
-                  </div>
-                </div>
-              )}
             </div>
-            {projectData.contributorsNumber > 5 && <div className="project-team__contributors__more">+{projectData.contributorsNumber - 5}</div>}
+
+            <div className="project-team__contributors-container">
+              <div className="project-team__leader-name">Leaders</div>
+              <div className="project-team__contributors" >
+                {projectData.leaders.map((contributor, index) =>
+                  <div key={contributor.id} className="project-team__contributor-container">
+                    <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
+                    <div className="project-team__contributor__modal">
+                      <ProfileModal profile={contributor} />
+                    </div>
+                  </div>
+                )}
+              </div>
+              {projectData.leadersNumber > 5 && <div className="project-team__contributors__more">+{projectData.adminsNumber - 5}</div>}
+            </div>
+
+            {projectData.contributorsNumber > 0 &&
+              <div className="project-team__contributors-container">
+                <div className="project-team__leader-name">Contributors</div>
+                <div className="project-team__contributors" >
+                  {projectData.contributors.map((contributor, index) =>
+                    <div key={contributor.id} className="project-team__contributor-container">
+                      <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
+                      <div className="project-team__contributor__modal">
+                        <ProfileModal profile={contributor} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {projectData.contributorsNumber > 5 && <div className="project-team__contributors__more">+{projectData.contributorsNumber - 5}</div>}
+              </div>
+            }
           </div>
         </div>
-      </div>
+      }
 
       <div className="project-interest">
         <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
@@ -482,11 +504,15 @@ Project.propTypes = {
 Project.defaultProps = {
   tasksBySpecialty: [ [ null, [] ] ],
   projectData     : {
-    description : '',
-    teamLeader  : {},
-    contributors: [],
-    chartData   : [],
-    stats       : {}
+    description       : '',
+    teamLeader        : {},
+    contributors      : [],
+    leaders           : [],
+    contributorsNumber: 0,
+    leadersNumber     : 0,
+    chartData         : [],
+    stats             : {},
+    displayTeam       : true
   },
   missionData        : null,
   tokenData          : null,

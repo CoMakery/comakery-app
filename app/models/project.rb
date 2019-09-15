@@ -1,3 +1,6 @@
+# Allow usage of has_and_belongs_to_many to avoid creating a separate model for accounts_projects join table:
+# rubocop:disable Rails/HasAndBelongsToMany
+
 class Project < ApplicationRecord
   nilify_blanks
   attachment :image
@@ -6,6 +9,7 @@ class Project < ApplicationRecord
   attachment :panoramic_image, type: :image
 
   belongs_to :account
+  has_and_belongs_to_many :admins, class_name: 'Account'
   belongs_to :mission, optional: true
   belongs_to :token, optional: true
   has_many :interests

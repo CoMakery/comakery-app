@@ -81,7 +81,7 @@ class AwardTypesController < ApplicationController
     end
 
     def set_award_types
-      @award_types = AwardTypePolicy::Scope.new(current_user, @project.account, @project.award_types).resolve
+      @award_types = AwardTypePolicy::Scope.new(current_user, @project, @project.award_types).resolve
     end
 
     def set_index_props

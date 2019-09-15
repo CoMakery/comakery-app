@@ -1,0 +1,14 @@
+<div class="project_settings">
+  <%= react_component(
+    'layouts/ProjectSetupHeader',
+    project_for_header: @project.header_props,
+    mission_for_header: @project&.mission&.decorate&.header_props,
+    owner: current_account&.owned_project?(@project),
+    expanded: false,
+    current: project_page
+  ) %>
+
+  <div class="project_settings__content">
+    <%= yield %>
+  </div>
+</div>

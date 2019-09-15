@@ -1,3 +1,6 @@
+# Allow usage of has_and_belongs_to_many to avoid creating a separate model for accounts_projects join table:
+# rubocop:disable Rails/HasAndBelongsToMany
+
 class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
@@ -10,6 +13,7 @@ class Account < ApplicationRecord
   include TezosAddressable
 
   has_many :projects
+  has_and_belongs_to_many :admin_projects, class_name: 'Project'
   has_many :awards, dependent: :destroy
   has_many :channels, through: :projects
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
@@ -22,8 +26,10 @@ class Account < ApplicationRecord
   has_many :channel_projects, through: :channels, source: :project
   has_many :team_awards, through: :team_projects, source: :awards
   has_many :issued_awards, through: :projects, source: :awards
+  has_many :admin_awards, through: :admin_projects, source: :awards
   has_many :award_types, through: :projects
   has_many :team_award_types, through: :team_projects, source: :award_types
+  has_many :admin_award_types, through: :admin_projects, source: :award_types
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   # default_scope { includes(:slack_auth) }
   has_many :interests, dependent: :destroy
@@ -162,10 +168,17 @@ class Account < ApplicationRecord
            .where("((authentication_teams.account_id=#{id} and channels.id is not null) or a1.account_id=#{id}) and projects.account_id <> #{id}").distinct
   end
 
+  def my_projects
+    Project.where(id:
+      projects.pluck(:id) |
+      admin_projects.pluck(:id))
+  end
+
   def accessable_projects
     Project.where(id:
       Project.publics.pluck(:id) |
       projects.pluck(:id) |
+      admin_projects.pluck(:id) |
       team_projects.pluck(:id) |
       award_projects.pluck(:id) |
       channel_projects.pluck(:id))
@@ -175,6 +188,7 @@ class Account < ApplicationRecord
     AwardType.where(id:
       award_types.pluck(:id) |
       team_award_types.pluck(:id) |
+      admin_award_types.pluck(:id) |
       AwardType.where(project_id: accessable_projects.pluck(:id)).pluck(:id))
   end
 
@@ -193,6 +207,7 @@ class Account < ApplicationRecord
     Award.where(id:
       awards.pluck(:id) |
       issued_awards.pluck(:id) |
+      admin_awards.pluck(:id) |
       team_awards.pluck(:id))
   end
 

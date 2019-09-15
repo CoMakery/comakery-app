@@ -41,7 +41,7 @@ class AccountDecorator < Draper::Decorator
   end
 
   def can_send_awards?(project)
-    project&.account == self && (project&.token&.ethereum_contract_address? || project&.token&.contract_address? || project.decorate.send_coins?)
+    (project&.account == self || project.admins.include?(self)) && (project&.token&.ethereum_contract_address? || project&.token&.contract_address? || project.decorate.send_coins?)
   end
 
   def image_url(size = 100)

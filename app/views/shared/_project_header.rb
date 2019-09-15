@@ -1,11 +1,6 @@
 class Views::Shared::ProjectHeader < Views::Projects::Base
   needs :project, :current_account
 
-  def project_page
-    return 'contributors' if controller_name == 'contributors'
-    return 'awards' if controller_name == 'projects' && params[:action] == 'awards'
-  end
-
   def content
     div class: 'layout--content' do
       div class: 'layout--content--title' do

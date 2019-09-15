@@ -52,33 +52,14 @@ describe AwardPolicy do
   end
 
   describe 'create?' do
-    it 'returns true when the accounts belongs to a project, and the award belongs to a award_type that belongs to that project' do
-      expect(described_class.new(account, award_with_project).create?).to be true
+    let(:award_type) { create :award_type }
+
+    it 'returns true if project is editable by account' do
+      expect(described_class.new(award_type.project.account, award_type.awards.new).create?).to be true
     end
 
-    it 'returns false when no account' do
-      expect(described_class.new(nil, build(:award, award_type: award_type_with_project))).not_to be_create
-    end
-
-    it "returns false when the sending account doesn't own the project and award type is NOT community awardable" do
-      expect(described_class.new(different_team_authentication, build(:award, award_type: award_type_with_project, account: receiving_authentication.account))).not_to be_create
-    end
-
-    it 'returns true when the sending account is the owner or award type is community awardable and the issuer is NOT the receiver' do
-      expect(described_class.new(receiving_authentication.account, build(:award, award_type: community_award_type_with_project, account: receiving_authentication.account))).not_to be_create
-      expect(described_class.new(receiving_authentication.account, build(:award, award_type: community_award_type_with_project, account: account, issuer: receiving_authentication.account)).create?).to eq(true)
-    end
-
-    it "returns false when the receiving account doesn't belong to the project" do
-      expect(described_class.new(account, build(:award, award_type: award_type_with_project, account: other_authentication.account))).not_to be_create
-    end
-
-    it "returns false when award doesn't have a award_type" do
-      expect(described_class.new(account, build(:award, award_type: nil))).not_to be_create
-    end
-
-    it "returns false when the award_type on the award does not belong to the account's project" do
-      expect(described_class.new(account, award_for_unowned_project)).not_to be_create
+    it 'returns false if project is not editable by account' do
+      expect(described_class.new(create(:account), award_type.awards.new).create?).to be false
     end
   end
 
@@ -103,12 +84,16 @@ describe AwardPolicy do
     let!(:award_editable) { create(:award_ready) }
     let!(:award_non_editable) { create(:award) }
 
-    it 'returns true if award is editable' do
-      expect(described_class.new(award_editable.issuer, award_editable).edit?).to be true
+    it 'returns true if award is editable and project is editable by account' do
+      expect(described_class.new(award_editable.project.account, award_editable).edit?).to be true
+    end
+
+    it 'returns false if project is not editable by account' do
+      expect(described_class.new(create(:account), award_editable).edit?).to be false
     end
 
     it 'returns false if award is not editable' do
-      expect(described_class.new(award_non_editable.issuer, award_non_editable).edit?).to be false
+      expect(described_class.new(award_non_editable.project.account, award_non_editable).edit?).to be false
     end
   end
 
@@ -116,12 +101,16 @@ describe AwardPolicy do
     let!(:award_assignable) { create(:award_ready) }
     let!(:award_non_assignable) { create(:award) }
 
-    it 'returns true if award can be assigned' do
-      expect(described_class.new(award_assignable.issuer, award_assignable).assign?).to be true
+    it 'returns true if award can be assigned and project is editable by account' do
+      expect(described_class.new(award_assignable.project.account, award_assignable).assign?).to be true
+    end
+
+    it 'returns false if project is not editable by account' do
+      expect(described_class.new(create(:account), award_assignable).assign?).to be false
     end
 
     it 'returns false if award cannot be assigned' do
-      expect(described_class.new(award_non_assignable.issuer, award_non_assignable).assign?).to be false
+      expect(described_class.new(award_non_assignable.project.account, award_non_assignable).assign?).to be false
     end
   end
 
@@ -189,12 +178,12 @@ describe AwardPolicy do
   end
 
   describe 'review?' do
-    it 'returns true if award is submitted and issued by a given user' do
+    it 'returns true if award is submitted and project is editable by account' do
       a = create(:award, status: 'submitted')
-      expect(described_class.new(a.issuer, a).review?).to be true
+      expect(described_class.new(a.project.account, a).review?).to be true
     end
 
-    it 'returns false if award is not issued by a given user' do
+    it 'returns false if project is not editable by account' do
       a = create(:award, status: 'submitted')
       expect(described_class.new(create(:account), a).review?).to be false
     end
@@ -206,12 +195,12 @@ describe AwardPolicy do
   end
 
   describe 'pay?' do
-    it 'returns true if award is accepted and issued by a given user' do
+    it 'returns true if award is accepted and project is editable by account' do
       a = create(:award, status: 'accepted')
-      expect(described_class.new(a.issuer, a).pay?).to be true
+      expect(described_class.new(a.project.account, a).pay?).to be true
     end
 
-    it 'returns false if award is not issued by a given user' do
+    it 'returns false if project is not editable by account' do
       a = create(:award, status: 'accepted')
       expect(described_class.new(create(:account), a).pay?).to be false
     end
@@ -220,5 +209,20 @@ describe AwardPolicy do
       a = create(:award, status: 'started')
       expect(described_class.new(a.issuer, a).pay?).to be false
     end
+  end
+
+  describe 'project_editable?' do
+    let(:project_admin) { create :account }
+    let(:project) { create :project }
+    let(:award) { create :award, award_type: create(:award_type, project: project) }
+
+    before do
+      project.admins << project_admin
+    end
+
+    specify { expect(described_class.new(project_admin, award).project_editable?).to be_truthy }
+    specify { expect(described_class.new(project.account, award).project_editable?).to be_truthy }
+    specify { expect(described_class.new(create(:account), award).project_editable?).to be_falsey }
+    specify { expect(described_class.new(nil, award).project_editable?).to be_falsey }
   end
 end
