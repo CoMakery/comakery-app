@@ -3,6 +3,8 @@ class SlackController < ApplicationController
   before_action :skip_authorization
   protect_from_forgery with: :null_session
 
+  layout 'legacy'
+
   def command(*_args)
     render json: {
       response_type: 'in_channel',

@@ -29,8 +29,6 @@ class AwardsController < ApplicationController
   before_action :redirect_back, only: %i[index]
   before_action :create_interest_from_session, only: %i[index]
 
-  layout 'react'
-
   def index
     render component: 'MyTasks', props: @props
   end

@@ -1,4 +1,4 @@
-class Views::Layouts::Application < Views::Base
+class Views::Layouts::Legacy < Views::Base
   def content
     doctype!
     html(lang: 'en') do

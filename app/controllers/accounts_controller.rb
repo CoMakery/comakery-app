@@ -7,6 +7,8 @@ class AccountsController < ApplicationController
 
   before_action :redirect_if_signed_in, only: %i[new create]
 
+  layout 'legacy'
+
   def new
     @account = Account.new(email: params[:account_email])
   end

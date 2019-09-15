@@ -51,4 +51,7 @@ Rails.application.configure do
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
+
+  config.cache_store = nil
+  config.action_controller.perform_caching = false
 end

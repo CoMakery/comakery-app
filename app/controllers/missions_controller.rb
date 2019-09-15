@@ -1,5 +1,4 @@
 class MissionsController < ApplicationController
-  layout 'react'
   skip_before_action :require_login, only: %i[show]
 
   before_action :find_mission_by_id, only: %i[show edit update update_status destroy]

@@ -77,6 +77,8 @@ ActiveRecord::Schema.define(version: 20190911162041) do
   create_table "accounts_projects", id: false, force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "project_id", null: false
+    t.index ["account_id", "project_id"], name: "index_accounts_projects_on_account_id_and_project_id"
+    t.index ["project_id", "account_id"], name: "index_accounts_projects_on_project_id_and_account_id"
   end
 
   create_table "authentication_teams", force: :cascade do |t|

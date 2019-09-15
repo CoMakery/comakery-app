@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
   before_action :set_generic_props, only: %i[new edit]
   before_action :set_show_props, only: %i[show unlisted]
 
-  layout 'react', only: %i[show unlisted new edit admins]
+  layout 'legacy', except: %i[show unlisted new edit admins]
 
   def landing
     if current_account

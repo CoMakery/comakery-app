@@ -1,6 +1,8 @@
 class TeamsController < ApplicationController
   skip_after_action :verify_authorized, :verify_policy_scoped
 
+  layout 'legacy'
+
   def index
     @teams = current_account.manager_teams.where(provider: params[:provider])
     elem_id = params[:elem_id]
