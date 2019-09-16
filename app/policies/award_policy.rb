@@ -29,11 +29,11 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def edit?
-    (@award.issuer == @account) && @award.can_be_edited?
+    project_editable? && @award.can_be_edited?
   end
 
   def assign?
-    (@award.issuer == @account) && @award.can_be_assigned?
+    project_editable? && @award.can_be_assigned?
   end
 
   def start?
@@ -41,12 +41,11 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def create?
-    return false unless @award.issuer == @account
-    same_channel? && (@account == @project&.account || community?)
+    project_editable?
   end
 
   def review?
-    (@award.issuer == @account) && (@award.status == 'submitted')
+    project_editable? && (@award.status == 'submitted')
   end
 
   def submit?
@@ -54,16 +53,10 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def pay?
-    (@award.issuer == @account) && (@award.status == 'accepted')
+    project_editable? && (@award.status == 'accepted')
   end
 
-  def same_channel?
-    return true unless @award.channel
-    return true if @award.channel.in?(@project.channels) && @award.issuer.teams.include?(@award.team)
-    true
-  end
-
-  def community?
-    @award&.award_type&.community_awardable? && @account != @award&.account
+  def project_editable?
+    ProjectPolicy.new(@account, @project).edit?
   end
 end

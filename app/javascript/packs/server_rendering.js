@@ -1,6 +1,6 @@
 // By default, this pack is loaded for server-side rendering.
 
-import '../src/application.css'
+import '../src/application.scss'
 
 import 'slick-carousel/slick/slick.css'
 

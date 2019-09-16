@@ -6,4 +6,10 @@ module ApplicationHelper
   def project_image_url(obj, size)
     attachment_url(obj, :square_image, :fill, size, size, fallback: 'defaul_project.jpg')
   end
+
+  def project_page
+    return 'contributors' if controller_name == 'contributors'
+    return 'awards' if params[:action] == 'awards'
+    return 'admins' if params[:action] == 'admins'
+  end
 end

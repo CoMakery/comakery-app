@@ -1,6 +1,19 @@
 require 'rails_helper'
 
 describe Project do
+  describe 'associations' do
+    let!(:project) { create :project }
+    let!(:account) { create :account }
+
+    before do
+      project.admins << account
+    end
+
+    it 'has and belongs to many admins' do
+      expect(project.admins).to match_array([account])
+    end
+  end
+
   describe 'validations' do
     it 'requires attributes' do
       expect(described_class.new(payment_type: 'project_token').tap(&:valid?).errors.full_messages.sort)
