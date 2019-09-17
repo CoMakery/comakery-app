@@ -7,9 +7,6 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %>
 // to the appropriate layout file
 
-require("@rails/ujs").start()
-require("turbolinks").start()
-
 import '../src/application.js'
 
 import '../src/application.scss'
@@ -18,7 +15,8 @@ import 'slick-carousel/slick/slick.css'
 
 import 'slick-carousel/slick/slick-theme.css'
 
-import "animate.css"
+import Rails from 'rails-ujs'
+Rails.start()
 
 // Support component names relative to this directory:
 let componentRequireContext = require.context('components', true)
