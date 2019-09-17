@@ -194,6 +194,9 @@ describe Account do
   describe 'associations' do
     let(:account) { create(:account) }
     let(:project) { create(:project, account: account) }
+    let(:admin_project) { create(:project) }
+    let(:admin_award_type) { create(:award_type, project: admin_project) }
+    let(:admin_award) { create(:award, award_type: admin_award_type) }
     let(:award_type) { create(:award_type, project: project) }
     let(:award) { create(:award, award_type: award_type, issuer: account) }
     let(:team) { create :team }
@@ -208,6 +211,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
+      admin_project.admins << account
     end
 
     it 'has many projects' do
@@ -233,11 +237,26 @@ describe Account do
     it 'has many team award types' do
       expect(account.team_award_types).to match_array([teammate_award_type])
     end
+
+    it 'has and belongs to many admin_projects' do
+      expect(account.admin_projects).to match_array([admin_project])
+    end
+
+    it 'has many admin award_types' do
+      expect(account.admin_award_types).to match_array([admin_award_type])
+    end
+
+    it 'has many admin awards' do
+      expect(account.admin_awards).to match_array([admin_award])
+    end
   end
 
   describe '.accessable_award_types' do
     let!(:account) { create(:account) }
     let!(:project) { create(:project, account: account) }
+    let!(:admin_project) { create(:project) }
+    let!(:admin_award_type) { create(:award_type, project: admin_project) }
+    let!(:admin_award) { create(:award, award_type: admin_award_type) }
     let!(:award_type) { create(:award_type, project: project) }
     let!(:team) { create :team }
     let!(:teammate) { create :account }
@@ -250,6 +269,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
+      admin_project.admins << account
     end
 
     it 'returns own award types' do
@@ -258,6 +278,10 @@ describe Account do
 
     it 'returns team award types' do
       expect(account.accessable_award_types).to include(teammate_award_type)
+    end
+
+    it 'returns admin award types' do
+      expect(account.accessable_award_types).to include(admin_award_type)
     end
 
     it 'returns award types from accessable projects' do
@@ -271,6 +295,9 @@ describe Account do
   describe '.accessable_awards' do
     let!(:account) { create(:account) }
     let!(:project) { create(:project, account: account) }
+    let!(:admin_project) { create(:project) }
+    let!(:admin_award_type) { create(:award_type, project: admin_project) }
+    let!(:admin_award) { create(:award, award_type: admin_award_type) }
     let!(:award_type) { create(:award_type, project: project) }
     let!(:award) { create(:award, award_type: award_type, issuer: account) }
     let!(:received_award) { create(:award, award_type: award_type, account: account) }
@@ -290,6 +317,8 @@ describe Account do
       Award::EXPERIENCE_LEVELS['Demonstrated Skills'].times do
         create(:award, account: account, specialty: account.specialty)
       end
+
+      admin_project.admins << account
     end
 
     it 'returns received awards' do
@@ -302,6 +331,10 @@ describe Account do
 
     it 'returns team issued awards' do
       expect(account.accessable_awards).to include(teammate_award)
+    end
+
+    it 'returns admin awards' do
+      expect(account.accessable_awards).to include(admin_award)
     end
 
     it 'returns awards from accessable award types with ready state and matching experience' do
@@ -376,6 +409,9 @@ describe Account do
   describe '.related_awards' do
     let!(:account) { create(:account) }
     let!(:project) { create(:project, account: account) }
+    let!(:admin_project) { create(:project) }
+    let!(:admin_award_type) { create(:award_type, project: admin_project) }
+    let!(:admin_award) { create(:award, award_type: admin_award_type) }
     let!(:award_type) { create(:award_type, project: project) }
     let!(:award) { create(:award, award_type: award_type, issuer: account) }
     let!(:received_award) { create(:award, award_type: award_type, account: account) }
@@ -391,6 +427,7 @@ describe Account do
       team.build_authentication_team authentication
       team.build_authentication_team authentication_teammate
       create(:channel, team: team, project: teammate_project, channel_id: 'general')
+      admin_project.admins << account
     end
 
     it 'returns received awards' do
@@ -403,6 +440,10 @@ describe Account do
 
     it 'returns team issued awards' do
       expect(account.related_awards).to include(teammate_award)
+    end
+
+    it 'returns admin awards' do
+      expect(account.accessable_awards).to include(admin_award)
     end
   end
 
@@ -444,30 +485,36 @@ describe Account do
     let!(:project5) { create :project, account: account1, visibility: 'member', title: 'member project' }
     let!(:project6) { create :project, visibility: 'member', title: 'other team project' }
     let!(:project7) { create :project, visibility: 'member', title: 'award project' }
+    let!(:admin_project) { create(:project, title: 'admin project') }
     let!(:award_type) { create :award_type, project: project7 }
 
     before do
       team.build_authentication_team authentication
       team.build_authentication_team authentication1
+      admin_project.admins << account
     end
 
     it 'accessable prọjects include my own project' do
-      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project']
+      expect(account.accessable_projects.map(&:title)).to match_array ['admin project', 'my private project', 'my public project', 'archived project', 'unlisted project']
+    end
+
+    it 'accessable prọjects include admin project' do
+      expect(account.accessable_projects).to include(admin_project)
     end
 
     it 'accessable prọjects include other public project' do
       project6.public_listed!
-      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'other team project']
+      expect(account.accessable_projects.map(&:title)).to match_array ['admin project', 'my private project', 'my public project', 'archived project', 'unlisted project', 'other team project']
     end
 
     it 'accessable prọjects include team member project' do
       project5.channels.create(team: team, channel_id: 'general')
-      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'member project']
+      expect(account.accessable_projects.map(&:title)).to match_array ['admin project', 'my private project', 'my public project', 'archived project', 'unlisted project', 'member project']
     end
 
     it 'accessable prọjects include awarded project' do
       create :award, award_type: award_type, account: account
-      expect(account.accessable_projects.map(&:title)).to match_array ['my private project', 'my public project', 'archived project', 'unlisted project', 'award project']
+      expect(account.accessable_projects.map(&:title)).to match_array ['admin project', 'my private project', 'my public project', 'archived project', 'unlisted project', 'award project']
     end
 
     it '#other_member_projects' do

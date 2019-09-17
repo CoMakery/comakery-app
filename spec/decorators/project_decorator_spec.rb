@@ -202,6 +202,7 @@ describe ProjectDecorator do
       expect(props[:show_batches]).to be_truthy
       expect(props[:show_payments]).to be_truthy
       expect(props[:image_url]).to include('image.png')
+      expect(props[:admins_url]).to include(project.id.to_s)
       expect(props[:settings_url]).to include(project.id.to_s)
       expect(props[:batches_url]).to include(project.id.to_s)
       expect(props[:contributors_url]).to include(project.id.to_s)

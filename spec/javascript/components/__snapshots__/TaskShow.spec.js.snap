@@ -173,7 +173,7 @@ exports[`TaskShow renders correctly without props 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-bdVaJa",
                         "isStatic": false,
-                        "lastClassName": "fxkRxk",
+                        "lastClassName": "ezfsJd",
                         "rules": Array [
                           "
   font-size: 16px;
@@ -181,6 +181,7 @@ exports[`TaskShow renders correctly without props 1`] = `
   color: white;
   cursor: default;
   margin-bottom: 1em;
+  background-color: #201662;
   background-image: url(",
                           [Function],
                           ");
@@ -213,7 +214,7 @@ exports[`TaskShow renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-bdVaJa fxkRxk"
+                    className="sc-bdVaJa ezfsJd"
                   >
                     <styled.div>
                       <StyledComponent
@@ -265,7 +266,7 @@ exports[`TaskShow renders correctly without props 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-EHOje",
                               "isStatic": true,
-                              "lastClassName": "gImapQ",
+                              "lastClassName": "IBoeD",
                               "rules": Array [
                                 "
   align-items: center;
@@ -276,9 +277,10 @@ exports[`TaskShow renders correctly without props 1`] = `
 
   img {
     max-height: 150px;
-
     margin-bottom: -50px;
     margin-top: 25px;
+    border-radius: 2px;
+    box-shadow: 0 10px 20px 0 rgba(32,22,98,.1);
   }
 
   h1 {
@@ -320,7 +322,7 @@ exports[`TaskShow renders correctly without props 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-EHOje gImapQ"
+                          className="sc-EHOje IBoeD"
                         >
                           <h1>
                             New Project
