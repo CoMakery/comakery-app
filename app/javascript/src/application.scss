@@ -32,6 +32,7 @@ body {
   letter-spacing: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  hyphens: auto;
 }
 
 .body--overflow {
@@ -48,6 +49,9 @@ hr {
   margin-bottom: 0px;
 }
 
+a {
+  word-break: break-all;
+}
 label {
   display: flex;
   justify-content: space-between;
