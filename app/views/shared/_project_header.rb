@@ -8,7 +8,7 @@ class Views::Shared::ProjectHeader < Views::Projects::Base
           'layouts/ProjectSetupHeader',
           project_for_header: project.header_props,
           mission_for_header: project&.mission&.decorate&.header_props,
-          owner: current_account&.owned_project?(project),
+          owner: ProjectPolicy.new(current_account, project).edit?,
           current: project_page
         )
       end

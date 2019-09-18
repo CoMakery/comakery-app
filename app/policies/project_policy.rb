@@ -60,7 +60,7 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def team_member?
-    account&.same_team_or_owned_project?(project)
+    account&.same_team_or_owned_project?(project) || edit?
   end
 
   def update_status?
