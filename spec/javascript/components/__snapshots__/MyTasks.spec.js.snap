@@ -246,6 +246,7 @@ exports[`MyTasks renders component correctly 1`] = `
                   >
                     <styled.a
                       current={true}
+                      id=""
                       key="_"
                     >
                       <StyledComponent
@@ -303,9 +304,11 @@ exports[`MyTasks renders component correctly 1`] = `
                           }
                         }
                         forwardedRef={null}
+                        id=""
                       >
                         <a
                           className="sc-kkGfuU clTSfY"
+                          id=""
                         >
                           _
                           <br />

@@ -144,7 +144,6 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    @project = current_account.projects.find(params[:id])
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
 
