@@ -117,7 +117,7 @@ const ProjectInfo = styled.div`
     min-height: 100px;
     display: flex;
     align-items: center;
-    margin-top: -75px;
+    margin-top: -50px;
   }
 `
 

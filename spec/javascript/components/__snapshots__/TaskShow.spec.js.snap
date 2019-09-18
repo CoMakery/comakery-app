@@ -266,7 +266,7 @@ exports[`TaskShow renders correctly without props 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-EHOje",
                               "isStatic": true,
-                              "lastClassName": "WkqbZ",
+                              "lastClassName": "IBoeD",
                               "rules": Array [
                                 "
   align-items: center;
@@ -304,7 +304,7 @@ exports[`TaskShow renders correctly without props 1`] = `
     min-height: 100px;
     display: flex;
     align-items: center;
-    margin-top: -75px;
+    margin-top: -50px;
   }
 ",
                               ],
@@ -322,7 +322,7 @@ exports[`TaskShow renders correctly without props 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-EHOje WkqbZ"
+                          className="sc-EHOje IBoeD"
                         >
                           <h1>
                             New Project
