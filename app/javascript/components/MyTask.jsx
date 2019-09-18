@@ -347,17 +347,17 @@ class TaskActionComponent extends React.Component {
         <TaskAction
           componentStyle={this.props.componentStyle}
           href={
-            ((task.status === 'accepted' && task.issuer.self) && task.paymentUrl) ||
+            ((task.status === 'accepted' && task.policies.pay) && task.paymentUrl) ||
             ((task.status === 'paid') && task.paymentUrl) ||
-            ((task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) && '/account') ||
+            ((task.status === 'accepted' && !task.policies.pay && !task.contributor.walletPresent) && '/account') ||
             (task.detailsUrl)
           }
           actionAvailable={
             (task.status === 'ready') ||
             (task.status === 'started') ||
-            (task.status === 'submitted' && task.issuer.self) ||
-            (task.status === 'accepted' && !task.issuer.self && !task.contributor.walletPresent) ||
-            (task.status === 'accepted' && task.issuer.self && task.contributor.walletPresent)
+            (task.status === 'submitted' && task.policies.review) ||
+            (task.status === 'accepted' && !task.policies.pay && !task.contributor.walletPresent) ||
+            (task.status === 'accepted' && task.policies.pay && task.contributor.walletPresent)
           }
         >
           {task.status === 'ready' &&
@@ -440,7 +440,7 @@ class MyTask extends React.Component {
               {this.props.displayParents &&
                 <BlockWrapper>
                   <Project>
-                    PROJECT <a href={task.project.url}>{task.project.name}</a>
+                    PROJECT <a id="product-tour-my-tasks-step4" href={task.project.url}>{task.project.name}</a>
                     { this.props.displayFilters &&
                       <a href={location ? location.pathname + `?project_id=${task.project.id}` : ''}><Icon name="filter-2.svg" /></a>
                     }
@@ -453,7 +453,7 @@ class MyTask extends React.Component {
               }
 
               {this.props.displayActions &&
-                <TaskActionComponent componentStyle="link" task={task} filter={filter} />
+                <TaskActionComponent id="product-tour-my-tasks-step2" componentStyle="link" task={task} filter={filter} />
               }
             </SecondRow>
 
@@ -497,7 +497,7 @@ class MyTask extends React.Component {
                 </ExperienceLevel>
               }
 
-              <TaskDetails displayActions={this.props.displayActions} href={this.props.displayActions ? task.detailsUrl : null}>
+              <TaskDetails id="product-tour-my-tasks-step1" displayActions={this.props.displayActions} href={this.props.displayActions ? task.detailsUrl : null}>
                 View Task Details <Icon name="DROP_DOWN.svg" />
               </TaskDetails>
 
@@ -538,6 +538,12 @@ MyTask.defaultProps = {
     contributor: {
       name : null,
       image: null
+    },
+    policies: {
+      start : true,
+      submit: true,
+      review: true,
+      pay   : true
     },
     allowedToStart: true
   },

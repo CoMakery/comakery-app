@@ -17,6 +17,12 @@ exports[`MyTask renders component correctly 1`] = `
         "name": null,
         "url": null,
       },
+      "policies": Object {
+        "pay": true,
+        "review": true,
+        "start": true,
+        "submit": true,
+      },
       "project": Object {
         "name": null,
         "url": null,
@@ -543,6 +549,7 @@ exports[`MyTask renders component correctly 1`] = `
                                 PROJECT 
                                 <a
                                   href={null}
+                                  id="product-tour-my-tasks-step4"
                                 />
                               </div>
                             </StyledComponent>
@@ -553,6 +560,7 @@ exports[`MyTask renders component correctly 1`] = `
                     <TaskActionComponent
                       componentStyle="link"
                       filter=""
+                      id="product-tour-my-tasks-step2"
                       task={
                         Object {
                           "allowedToStart": true,
@@ -563,6 +571,12 @@ exports[`MyTask renders component correctly 1`] = `
                           "mission": Object {
                             "name": null,
                             "url": null,
+                          },
+                          "policies": Object {
+                            "pay": true,
+                            "review": true,
+                            "start": true,
+                            "submit": true,
                           },
                           "project": Object {
                             "name": null,
@@ -771,6 +785,7 @@ exports[`MyTask renders component correctly 1`] = `
                     </styled.div>
                     <styled.a
                       displayActions={true}
+                      id="product-tour-my-tasks-step1"
                     >
                       <StyledComponent
                         displayActions={true}
@@ -829,9 +844,11 @@ exports[`MyTask renders component correctly 1`] = `
                           }
                         }
                         forwardedRef={null}
+                        id="product-tour-my-tasks-step1"
                       >
                         <a
                           className="sc-chPdSV hQDLDr"
+                          id="product-tour-my-tasks-step1"
                         >
                           View Task Details 
                           <Icon
@@ -859,6 +876,12 @@ exports[`MyTask renders component correctly 1`] = `
                           "mission": Object {
                             "name": null,
                             "url": null,
+                          },
+                          "policies": Object {
+                            "pay": true,
+                            "review": true,
+                            "start": true,
+                            "submit": true,
                           },
                           "project": Object {
                             "name": null,
