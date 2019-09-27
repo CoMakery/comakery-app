@@ -51,4 +51,10 @@ Rails.application.configure do
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.raise = true
+    Bullet.unused_eager_loading_enable = false
+  end
 end

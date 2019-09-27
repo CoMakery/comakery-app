@@ -66,13 +66,10 @@ Rails.application.configure do
   config.action_view.raise_on_missing_translations = true
 
   config.after_initialize do
-    Bullet.enable = false # set to true to use bullet
-    Bullet.alert = true
-    Bullet.bullet_logger = true
-    Bullet.console = true
-
-    Bullet.rails_logger = true
+    Bullet.enable = true
     Bullet.add_footer = true
+    Bullet.rails_logger = true
+    Bullet.unused_eager_loading_enable = false
   end
 
   if ENV['NO_LOGS'].presence

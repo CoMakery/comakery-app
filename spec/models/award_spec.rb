@@ -25,7 +25,7 @@ describe Award do
       award = create(:award_ready)
       2.times { award.clone_on_assignment }
 
-      expect(award.assignments.size).to eq(2)
+      expect(award.reload.assignments.size).to eq(2)
     end
 
     it 'belongs to cloned_from' do
@@ -684,7 +684,7 @@ describe Award do
     end
 
     it 'returns false if task has clones' do
-      expect(award_cloneable.can_be_edited?).to be_falsey
+      expect(award_cloneable.reload.can_be_edited?).to be_falsey
     end
   end
 
@@ -724,7 +724,7 @@ describe Award do
     end
 
     it 'returns true if task has referenced assignments' do
-      expect(award_cloneable.any_clones?).to be_truthy
+      expect(award_cloneable.reload.any_clones?).to be_truthy
     end
 
     it 'returns false if task doesnt have referenced assignments' do
@@ -759,8 +759,8 @@ describe Award do
     end
 
     it 'returns false if current number of assignments plus one currently creating equal or greater than number_of_assignments allowed' do
-      expect(award_shouldnt_be_cloned_at_all.should_be_cloned?).to be_falsey
-      expect(award_has_been_cloned_already.should_be_cloned?).to be_falsey
+      expect(award_shouldnt_be_cloned_at_all.reload.should_be_cloned?).to be_falsey
+      expect(award_has_been_cloned_already.reload.should_be_cloned?).to be_falsey
     end
   end
 
@@ -852,7 +852,7 @@ describe Award do
 
     it 'returns total_amount multiplied by possible number_of_assignments minus current number of assignments for template tasks' do
       award_template.clone_on_assignment
-      expect(award_template.possible_total_amount).to eq(9)
+      expect(award_template.reload.possible_total_amount).to eq(9)
     end
 
     it 'returns zero for cancelled or rejected tasks' do

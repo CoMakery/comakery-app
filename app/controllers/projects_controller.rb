@@ -16,10 +16,10 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @my_projects = current_account.my_projects.unarchived.order(updated_at: :desc).limit(100).decorate
-      @archived_projects = current_account.projects.archived.order(updated_at: :desc).limit(100).decorate
-      @team_projects = current_account.other_member_projects.unarchived.order(updated_at: :desc).limit(100).decorate
-      @interested_projects = current_account.projects_interested.unarchived.order(updated_at: :desc).limit(100).decorate
+      @my_projects = current_account.my_projects.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @archived_projects = current_account.projects.includes(:account, :admins).archived.order(updated_at: :desc).limit(100).decorate
+      @team_projects = current_account.other_member_projects.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @interested_projects = current_account.projects_interested.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
     end
 
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
@@ -30,7 +30,7 @@ class ProjectsController < ApplicationController
 
   def awards
     authorize @project, :show_contributions?
-    @awards = @project.awards.completed
+    @awards = @project.awards.completed.includes(:token, :award_type, :account, :issuer)
     @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
     @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
 
@@ -38,7 +38,7 @@ class ProjectsController < ApplicationController
   end
 
   def index
-    @projects = policy_scope(Project)
+    @projects = policy_scope(Project).includes(:account, :admins)
 
     if params[:query].present?
       @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
@@ -193,7 +193,7 @@ class ProjectsController < ApplicationController
   end
 
   def set_teams
-    @teams = current_account&.authentication_teams&.map do |a_team|
+    @teams = current_account&.authentication_teams&.includes(:team, :authentication)&.map do |a_team|
       {
         team: "[#{a_team.team.provider}] #{a_team.team.name}",
         team_id: a_team.team.id.to_s,
