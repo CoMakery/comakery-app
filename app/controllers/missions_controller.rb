@@ -189,7 +189,7 @@ class MissionsController < ApplicationController
   end
 
   def set_missions
-    @missions = policy_scope(Mission).map do |m|
+    @missions = policy_scope(Mission).includes(:public_projects, :unarchived_projects).map do |m|
       m.serialize.merge(
         projects: m.public_projects.as_json(only: %i[id title status])
       )

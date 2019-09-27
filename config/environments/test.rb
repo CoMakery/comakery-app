@@ -52,6 +52,11 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.raise = true
+    Bullet.unused_eager_loading_enable = false
+  end
   config.cache_store = nil
   config.action_controller.perform_caching = false
 end

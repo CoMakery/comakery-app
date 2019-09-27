@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190911162041) do
+ActiveRecord::Schema.define(version: 20190926181739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -169,6 +169,7 @@ ActiveRecord::Schema.define(version: 20190911162041) do
     t.datetime "expires_at"
     t.integer "expires_in_days", default: 10
     t.datetime "notify_on_expiration_at"
+    t.integer "assignments_count", default: 0
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"

@@ -289,7 +289,7 @@ class AwardsController < ApplicationController
     end
 
     def set_awards
-      @awards = policy_scope(Award).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
+      @awards = policy_scope(Award).includes(:specialty, :issuer, :account, :award_type, project: %i[mission token channels]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
 
       if @project
         @awards = @awards.where(award_type: AwardType.where(project: @project))
@@ -391,7 +391,7 @@ class AwardsController < ApplicationController
         project: @project.serializable_hash(only: %w[id title], methods: :public?)&.merge({
           url: unlisted_project_url(@project.long_id)
         }),
-        interested: (@project.interested + @project.contributors).uniq.map do |a|
+        interested: (@project.interested.includes(:specialty) + @project.contributors.includes(:specialty)).uniq.map do |a|
           a.decorate.serializable_hash(
             only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
             include: :specialty,

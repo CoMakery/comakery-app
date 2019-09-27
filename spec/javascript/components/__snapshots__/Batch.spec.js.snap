@@ -626,10 +626,11 @@ exports[`Batch renders component correctly 1`] = `
                                                   "componentStyle": ComponentStyle {
                                                     "componentId": "sc-htoDjs",
                                                     "isStatic": true,
-                                                    "lastClassName": "jYtsma",
+                                                    "lastClassName": "hfeNrq",
                                                     "rules": Array [
                                                       "
   margin-right: 8px;
+  display: flex;
 ",
                                                     ],
                                                   },
@@ -646,7 +647,7 @@ exports[`Batch renders component correctly 1`] = `
                                               forwardedRef={null}
                                             >
                                               <div
-                                                className="sc-htoDjs jYtsma"
+                                                className="sc-htoDjs hfeNrq"
                                               />
                                             </StyledComponent>
                                           </styled.div>
@@ -825,10 +826,11 @@ exports[`Batch renders component correctly 1`] = `
                                                   "componentStyle": ComponentStyle {
                                                     "componentId": "sc-htoDjs",
                                                     "isStatic": true,
-                                                    "lastClassName": "jYtsma",
+                                                    "lastClassName": "hfeNrq",
                                                     "rules": Array [
                                                       "
   margin-right: 8px;
+  display: flex;
 ",
                                                     ],
                                                   },
@@ -845,7 +847,7 @@ exports[`Batch renders component correctly 1`] = `
                                               forwardedRef={null}
                                             >
                                               <div
-                                                className="sc-htoDjs jYtsma"
+                                                className="sc-htoDjs hfeNrq"
                                               />
                                             </StyledComponent>
                                           </styled.div>
