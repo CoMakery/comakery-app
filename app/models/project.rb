@@ -77,7 +77,7 @@ class Project < ApplicationRecord
       left join projects on award_types.project_id=projects.id")
            .where('projects.id=?', id)
            .group('accounts.id')
-           .order('total_awarded desc, last_awarded_at desc').first(5)
+           .order('total_awarded desc, last_awarded_at desc').includes(:specialty).first(5)
   end
 
   def total_month_awarded
@@ -141,7 +141,7 @@ class Project < ApplicationRecord
 
   def awards_for_chart(max: 1000)
     result = []
-    recents = awards.completed.limit(max).order('id desc')
+    recents = awards.completed.includes(:account).limit(max).order('id desc')
     date_groups = recents.group_by { |a| a.created_at.strftime('%Y-%m-%d') }
     if awards.completed.count > max
       date_groups.delete(recents.first.created_at.strftime('%Y-%m-%d'))
@@ -166,7 +166,7 @@ class Project < ApplicationRecord
   end
 
   def ready_tasks_by_specialty(limit_per_specialty = 5)
-    awards.ready.group_by(&:specialty).map { |specialty, awards| [specialty, awards.take(limit_per_specialty)] }.to_h
+    awards.ready.includes(:specialty, :project, :issuer, :account, :award_type).group_by(&:specialty).map { |specialty, awards| [specialty, awards.take(limit_per_specialty)] }.to_h
   end
 
   def stats

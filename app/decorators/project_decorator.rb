@@ -116,7 +116,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def leaders
-    admins.first(5).to_a.unshift(account)
+    admins.includes(:specialty).first(5).to_a.unshift(account)
   end
 
   private

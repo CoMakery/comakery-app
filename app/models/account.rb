@@ -218,7 +218,7 @@ class Account < ApplicationRecord
   end
 
   def awards_reached_maximum_assignments
-    awards.select { |a| a.cloned? && a.cloned_from.reached_maximum_assignments_for?(self) }.map(&:cloned_from)
+    awards.includes(:cloned_from).select { |a| a.cloned? && a.cloned_from.reached_maximum_assignments_for?(self) }.map(&:cloned_from)
   end
 
   def experience_for(specialty)

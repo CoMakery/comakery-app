@@ -10,12 +10,13 @@ const Wrapper = styled.div`
 
 const Users = styled.div`
   margin-right: 8px;
+  display: flex;
 `
 
 const Userpic = styled.img`
   border-radius: 50%;
-  width: 15px;
-  height: 15px;
+  max-width: 15px;
+  max-height: 15px;
   border: solid 1px #ffffff;
   margin-right: -5px;
 `

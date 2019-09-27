@@ -47,10 +47,11 @@ exports[`Userpics renders component correctly 1`] = `
                 "componentStyle": ComponentStyle {
                   "componentId": "sc-bwzfXH",
                   "isStatic": true,
-                  "lastClassName": "eHqjmb",
+                  "lastClassName": "mNJvu",
                   "rules": Array [
                     "
   margin-right: 8px;
+  display: flex;
 ",
                   ],
                 },
@@ -67,7 +68,7 @@ exports[`Userpics renders component correctly 1`] = `
             forwardedRef={null}
           >
             <div
-              className="sc-bwzfXH eHqjmb"
+              className="sc-bwzfXH mNJvu"
             />
           </StyledComponent>
         </styled.div>
