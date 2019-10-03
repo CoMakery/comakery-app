@@ -289,7 +289,7 @@ class AwardsController < ApplicationController
     end
 
     def set_awards
-      @awards = policy_scope(Award).includes(:specialty, :issuer, :account, :award_type, project: %i[mission token channels]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
+      @awards = policy_scope(Award).includes(:specialty, :issuer, :account, :award_type, project: [:mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
 
       if @project
         @awards = @awards.where(award_type: AwardType.where(project: @project))

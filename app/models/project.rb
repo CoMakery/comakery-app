@@ -8,10 +8,10 @@ class Project < ApplicationRecord
   attachment :square_image, type: :image
   attachment :panoramic_image, type: :image
 
-  belongs_to :account
+  belongs_to :account, touch: true
   has_and_belongs_to_many :admins, class_name: 'Account'
-  belongs_to :mission, optional: true
-  belongs_to :token, optional: true
+  belongs_to :mission, optional: true, touch: true
+  belongs_to :token, optional: true, touch: true
   has_many :interests
   has_many :interested, through: :interests, source: :account
 

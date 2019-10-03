@@ -124,6 +124,7 @@ describe AwardPolicy do
       award = create(
         :award_ready,
         experience_level: Award::EXPERIENCE_LEVELS['New Contributor'],
+        specialty: create(:specialty),
         award_type: create(
           :award_type,
           project: create(
@@ -132,6 +133,7 @@ describe AwardPolicy do
           )
         )
       )
+
       expect(described_class.new(create(:account), award).start?).to be true
     end
 
