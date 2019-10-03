@@ -175,50 +175,34 @@ class Account < ApplicationRecord
   end
 
   def accessable_projects
-    Project.where(id:
-      Project.publics.pluck(:id) |
-      projects.pluck(:id) |
-      admin_projects.pluck(:id) |
-      team_projects.pluck(:id) |
-      award_projects.pluck(:id) |
-      channel_projects.pluck(:id))
+    Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+  end
+
+  def related_projects
+    Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def accessable_award_types
-    AwardType.where(id:
-      award_types.pluck(:id) |
-      team_award_types.pluck(:id) |
-      admin_award_types.pluck(:id) |
-      AwardType.where(project_id: accessable_projects.pluck(:id)).pluck(:id))
+    AwardType.where(project: accessable_projects)
+  end
+
+  def related_award_types
+    AwardType.where(project: related_projects)
   end
 
   def awards_matching_experience
-    Award.ready.where(id:
-      Specialty.all.map do |specialty|
-        Award.where(
-          specialty_id: specialty.id,
-          experience_level: 0..experience_for(specialty),
-          award_type_id: accessable_award_types.pluck(:id)
-        ).pluck(:id)
-      end.flatten.uniq)
+    Award.ready
+         .where(award_type: accessable_award_types)
+         .where('awards.experience_level <= (CASE WHEN (SELECT MAX(id) FROM experiences WHERE (experiences.account_id = :id AND experiences.specialty_id = awards.specialty_id)) IS NULL THEN 0 ELSE (SELECT level FROM experiences WHERE (experiences.account_id = :id AND experiences.specialty_id = awards.specialty_id) LIMIT 1) END)', id: id)
+         .where('awards.number_of_assignments_per_user > (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
   end
 
   def related_awards
-    Award.where(id:
-      awards.pluck(:id) |
-      issued_awards.pluck(:id) |
-      admin_awards.pluck(:id) |
-      team_awards.pluck(:id))
+    Award.where(award_type: related_award_types).where.not('awards.status = 0 AND awards.number_of_assignments_per_user <= (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
   end
 
   def accessable_awards
-    Award.where(id:
-      (awards_matching_experience.pluck(:id) - awards_reached_maximum_assignments.pluck(:id)) |
-      related_awards.pluck(:id))
-  end
-
-  def awards_reached_maximum_assignments
-    awards.includes(:cloned_from).select { |a| a.cloned? && a.cloned_from.reached_maximum_assignments_for?(self) }.map(&:cloned_from)
+    awards_matching_experience.or(related_awards)
   end
 
   def experience_for(specialty)
@@ -277,7 +261,7 @@ class Account < ApplicationRecord
   def awards_csv
     Comakery::CSV.generate_multiplatform do |csv|
       csv << ['Project', 'Award Type', 'Total Amount', 'Issuer', 'Date']
-      awards.completed.order(:created_at).decorate.each do |award|
+      awards.completed.includes(:award_type, :issuer, project: [:token]).order(:created_at).decorate.each do |award|
         csv << [award.project.title, award.award_type.name, award.total_amount_pretty, award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]
       end
     end

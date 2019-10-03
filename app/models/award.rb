@@ -19,13 +19,13 @@ class Award < ApplicationRecord
 
   attribute :specialty_id, :integer, default: -> { Specialty.default.id }
 
-  belongs_to :account, optional: true
+  belongs_to :account, optional: true, touch: true
   belongs_to :authentication, optional: true
-  belongs_to :award_type
-  belongs_to :issuer, class_name: 'Account'
+  belongs_to :award_type, touch: true
+  belongs_to :issuer, class_name: 'Account', touch: true
   belongs_to :channel, optional: true
   belongs_to :specialty
-  belongs_to :cloned_from, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id', counter_cache: :assignments_count
+  belongs_to :cloned_from, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id', counter_cache: :assignments_count, touch: true
   has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_one :team, through: :channel
   has_one :project, through: :award_type
