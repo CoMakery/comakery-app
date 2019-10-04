@@ -8,9 +8,11 @@ describe 'viewing projects, creating and editing', :js do
     let!(:other_account) { create(:account) }
     let!(:other_account_auth) { create(:authentication, account: other_account) }
     let!(:project) { create(:project, visibility: 'public_listed', account: owner) }
+    let!(:project2) { create(:project, visibility: 'public_listed', account: owner) }
     let!(:award_type) { create(:award_type, project: project, community_awardable: false) }
     let!(:channel) { create(:channel, project: project, team: team) }
     let!(:community_award_type) { create(:award_type, project: project, community_awardable: true) }
+    let!(:community_award_type2) { create(:award_type, project: project2, community_awardable: true) }
     let!(:award) { create(:award, award_type: award_type, account: other_account, channel: channel, amount: 1000) }
     let!(:community_award) { create(:award, award_type: community_award_type, account: owner, amount: 10) }
 
@@ -42,20 +44,23 @@ describe 'viewing projects, creating and editing', :js do
         end
 
         it 'paginates when there are lots of awards' do
-          (305 - project.awards.count).times do
-            create(:award, award_type: community_award_type, issuer: other_account, account: owner, amount: 1000)
+          55.times do
+            create(:award, award_type: community_award_type2)
           end
 
-          visit awards_project_path(project)
+          visit awards_project_path(project2)
 
           expect(page.all('table.award-rows tr.award-row').size).to eq(50)
-          expect(page).to have_content '1 2 3 4 5 … › »'
+          expect(page).to have_content '1 2 › »'
 
           within(page.all('.pagination').first) do
             click_link '»'
           end
+
+          wait_for_turbolinks
+
           expect(page.all('table.award-rows tr.award-row').size).to eq(5)
-          expect(page).to have_content '« ‹ … 3 4 5 6 7'
+          expect(page).to have_content '« ‹ 1 2'
         end
       end
     end
