@@ -24,6 +24,8 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe Dashboard::TransfersController, type: :controller do
+  let(:project) { create(:project, visibility: :public_listed) }
+
   # This should return the minimal set of attributes required to create a valid
   # Dashboard::Transfer. As you add validations to Dashboard::Transfer, be sure to
   # adjust the attributes here as well.
@@ -41,9 +43,8 @@ RSpec.describe Dashboard::TransfersController, type: :controller do
   let(:valid_session) { {} }
 
   describe 'GET #index' do
-    xit 'returns a success response' do
-      Dashboard::Transfer.create! valid_attributes
-      get :index, params: {}, session: valid_session
+    it 'returns a success response' do
+      get :index, params: { project_id: project.to_param }
       expect(response).to be_successful
     end
   end

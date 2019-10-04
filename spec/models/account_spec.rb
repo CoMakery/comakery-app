@@ -599,4 +599,10 @@ describe Account do
     award = award.decorate
     expect(CSV.parse(account.awards_csv, col_sep: "\t", encoding: 'utf-16le')).to eq([["\uFEFFProject", 'Award Type', 'Total Amount', 'Issuer', 'Date'], ['Uber for Cats', 'Contribution', '50', award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]].map { |row| row.map { |cell| cell.encode 'utf-16le' } })
   end
+
+  describe '#verification' do
+    it 'returns unknown' do
+      expect(account.verification).to eq 'unknown'
+    end
+  end
 end

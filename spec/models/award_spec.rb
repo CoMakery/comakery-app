@@ -244,6 +244,20 @@ describe Award do
       end
     end
 
+    describe 'set_transferred_at' do
+      let!(:award) { create(:award) }
+
+      before do
+        award.update(status: :paid)
+        award.reload
+      end
+
+      it 'sets transferred_at when award becomes paid' do
+        expect(create(:award).transferred_at).to be_nil
+        expect(award.transferred_at).to eq award.updated_at
+      end
+    end
+
     describe 'store_license_hash' do
       let!(:project) { create(:project) }
       let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: project)) }

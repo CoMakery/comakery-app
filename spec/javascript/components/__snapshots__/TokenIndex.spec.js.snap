@@ -14,13 +14,16 @@ exports[`TokenIndex renders correctly without props 1`] = `
         <div
           className="token-index--sidebar"
         >
-          <SidebarItemBold
-            className="token-index--sidebar--item__bold"
-            iconLeftName="MARK-WHITE.svg"
-            iconRightName="PLUS.svg"
-            onClick={[Function]}
-            text="Create a Token"
-          />
+          <a
+            href="/tokens/new"
+          >
+            <SidebarItemBold
+              className="token-index--sidebar--item__bold"
+              iconLeftName="MARK-WHITE.svg"
+              iconRightName="PLUS.svg"
+              text="Create a Token"
+            />
+          </a>
         </div>
       </React.Fragment>
     }
@@ -47,82 +50,83 @@ exports[`TokenIndex renders correctly without props 1`] = `
             <div
               className="token-index--sidebar"
             >
-              <SidebarItemBold
-                className="token-index--sidebar--item__bold"
-                iconLeftName="MARK-WHITE.svg"
-                iconRightName="PLUS.svg"
-                onClick={[Function]}
-                text="Create a Token"
+              <a
+                href="/tokens/new"
               >
-                <SidebarItem
-                  className="sidebar-item__bold token-index--sidebar--item__bold"
+                <SidebarItemBold
+                  className="token-index--sidebar--item__bold"
                   iconLeftName="MARK-WHITE.svg"
-                  iconLeftUrl=""
                   iconRightName="PLUS.svg"
-                  notificationColor=""
-                  onClick={[Function]}
-                  selected={false}
                   text="Create a Token"
                 >
-                  <div
-                    className="sidebar-item--wrapper"
-                    onClick={[Function]}
+                  <SidebarItem
+                    className="sidebar-item__bold token-index--sidebar--item__bold"
+                    iconLeftName="MARK-WHITE.svg"
+                    iconLeftUrl=""
+                    iconRightName="PLUS.svg"
+                    notificationColor=""
+                    selected={false}
+                    text="Create a Token"
                   >
                     <div
-                      className="sidebar-item sidebar-item__bold token-index--sidebar--item__bold"
+                      className="sidebar-item--wrapper"
                     >
-                      <span
-                        className="sidebar-item--icon-left"
-                      >
-                        <Icon
-                          className=""
-                          name="MARK-WHITE.svg"
-                        >
-                          <img
-                            className="icon icon__MARK-WHITE-svg"
-                            src="test-file-stub"
-                          />
-                        </Icon>
-                      </span>
                       <div
-                        className="sidebar-item--content"
+                        className="sidebar-item sidebar-item__bold token-index--sidebar--item__bold"
                       >
-                        <div
-                          className="sidebar-item--text"
+                        <span
+                          className="sidebar-item--icon-left"
                         >
-                          Create a Token
-                        </div>
+                          <Icon
+                            className=""
+                            name="MARK-WHITE.svg"
+                          >
+                            <img
+                              className="icon icon__MARK-WHITE-svg"
+                              src="test-file-stub"
+                            />
+                          </Icon>
+                        </span>
                         <div
-                          className="sidebar-item--subchild"
+                          className="sidebar-item--content"
+                        >
+                          <div
+                            className="sidebar-item--text"
+                          >
+                            Create a Token
+                          </div>
+                          <div
+                            className="sidebar-item--subchild"
+                          />
+                        </div>
+                        <span
+                          className="sidebar-item--icon-right"
+                        >
+                          <Icon
+                            className=""
+                            name="PLUS.svg"
+                          >
+                            <img
+                              className="icon icon__PLUS-svg"
+                              src="test-file-stub"
+                            />
+                          </Icon>
+                        </span>
+                        <div
+                          className="sidebar-item--left-border"
+                        />
+                        <div
+                          className="sidebar-item--right-border sidebar-item--right-border__"
                         />
                       </div>
-                      <span
-                        className="sidebar-item--icon-right"
-                      >
-                        <Icon
-                          className=""
-                          name="PLUS.svg"
-                        >
-                          <img
-                            className="icon icon__PLUS-svg"
-                            src="test-file-stub"
-                          />
-                        </Icon>
-                      </span>
-                      <div
-                        className="sidebar-item--left-border"
-                      />
-                      <div
-                        className="sidebar-item--right-border sidebar-item--right-border__"
-                      />
                     </div>
-                  </div>
-                </SidebarItem>
-              </SidebarItemBold>
+                  </SidebarItem>
+                </SidebarItemBold>
+              </a>
             </div>
           </div>
           <div
-            className="layout--content--content__sidebared"
+            className="layout--content--content__sidebared animated fadeIn faster"
           />
         </div>
       </div>

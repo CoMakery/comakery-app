@@ -95,7 +95,7 @@ RSpec.describe AwardsController, type: :controller do
           expect(response.status).to eq(200)
           expect(response.content_type).to eq('application/json')
           expect(JSON.parse(response.body)['message']).to eq('Task created')
-          expect(JSON.parse(response.body)['id']).to eq(project.awards.last.id)
+          expect(JSON.parse(response.body)['id']).to eq(project.awards.reload.last.id)
         end.to change { project.awards.count }.by(1)
 
         award = project.awards.last
@@ -599,6 +599,7 @@ RSpec.describe AwardsController, type: :controller do
       }
       award.reload
       expect(award.ethereum_transaction_address).to eq transaction_address
+      expect(award.issuer).to eq issuer.account
       expect(award.status).to eq 'paid'
     end
 

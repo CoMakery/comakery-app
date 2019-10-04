@@ -200,7 +200,7 @@ describe ProjectDecorator do
       expect(props[:owner]).to eq(project.legal_project_owner)
       expect(props[:present]).to be_truthy
       expect(props[:show_batches]).to be_truthy
-      expect(props[:show_payments]).to be_truthy
+      expect(props[:show_transfers]).to be_truthy
       expect(props[:image_url]).to include('image.png')
       expect(props[:admins_url]).to include(project.id.to_s)
       expect(props[:settings_url]).to include(project.id.to_s)

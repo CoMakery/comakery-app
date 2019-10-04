@@ -1,2 +1,13 @@
 <%= render layout: 'projects/project_settings' do %>
+  <%= render partial: "filters" %>
+
+  <div class="transfers-table">
+    <%= render partial: "header" %>
+    <%= render partial: "summary" %>
+    <%= render partial: "transfer", collection: @transfers, as: :transfer, cached: true %>
+  </div>
+
+  <div class="transfers-pages">
+    <%= paginate(@transfers, window: 3) %>
+  </div>
 <% end %>

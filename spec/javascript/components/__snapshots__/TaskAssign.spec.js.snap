@@ -353,7 +353,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
               </div>
             </div>
             <div
-              className="layout--content--content__sidebared"
+              className="layout--content--content__sidebared animated fadeIn faster"
             >
               <styled.div>
                 <StyledComponent

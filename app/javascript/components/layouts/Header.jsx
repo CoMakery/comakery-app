@@ -63,7 +63,7 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
           Blog
         </a>
 
-        <a href="/account" className={currentPath.match(/account/) ? 'header--nav--links--current' : null} >
+        <a href="/account" className={currentPath.match(/\/account/) ? 'header--nav--links--current' : null} >
           My Account
         </a>
 

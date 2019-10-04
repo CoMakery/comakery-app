@@ -118,23 +118,25 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#show?' do
+  describe '#show? #transfers?' do
     it 'allows viewing of projects that are public_listed or owned by the current account' do
-      expect(described_class.new(nil, my_public_project).show?).to be true
-      expect(described_class.new(nil, others_private_project).show?).to be_falsey
-      expect(described_class.new(nil, others_archived_project).show?).to be_falsey
+      %i[show? transfers?].each do |action|
+        expect(described_class.new(nil, my_public_project).send(action)).to be true
+        expect(described_class.new(nil, others_private_project).send(action)).to be_falsey
+        expect(described_class.new(nil, others_archived_project).send(action)).to be_falsey
 
-      expect(described_class.new(project_account, my_public_project).show?).to be true
-      expect(described_class.new(project_account, my_private_project).show?).to be true
-      expect(described_class.new(project_account, my_archived_project).show?).to be true
-      expect(described_class.new(project_account, others_private_project).show?).to be false
-      expect(described_class.new(project_account, others_archived_project).show?).to be false
+        expect(described_class.new(project_account, my_public_project).send(action)).to be true
+        expect(described_class.new(project_account, my_private_project).send(action)).to be true
+        expect(described_class.new(project_account, my_archived_project).send(action)).to be true
+        expect(described_class.new(project_account, others_private_project).send(action)).to be false
+        expect(described_class.new(project_account, others_archived_project).send(action)).to be false
 
-      expect(described_class.new(other_team_member, others_public_project).show?).to be true
-      expect(described_class.new(other_team_member, my_private_project).show?).to be true
+        expect(described_class.new(other_team_member, others_public_project).send(action)).to be true
+        expect(described_class.new(other_team_member, my_private_project).send(action)).to be true
 
-      expect(described_class.new(different_team_account, my_public_project).show?).to be true
-      expect(described_class.new(different_team_account, my_private_project).show?).to be_falsey
+        expect(described_class.new(different_team_account, my_public_project).send(action)).to be true
+        expect(described_class.new(different_team_account, my_private_project).send(action)).to be_falsey
+      end
     end
   end
 

@@ -38,7 +38,7 @@ exports[`Project renders correctly without props 1`] = `
   tokenData={null}
 >
   <div
-    className="project-container"
+    className="project-container animated fadeIn faster"
   >
     <ProjectSetupHeader
       current="overview"

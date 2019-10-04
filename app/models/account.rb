@@ -25,13 +25,12 @@ class Account < ApplicationRecord
   has_many :award_projects, through: :awards, source: :project
   has_many :channel_projects, through: :channels, source: :project
   has_many :team_awards, through: :team_projects, source: :awards
-  has_many :issued_awards, through: :projects, source: :awards
+  has_many :issued_awards, class_name: 'Award', foreign_key: 'issuer_id'
   has_many :admin_awards, through: :admin_projects, source: :awards
   has_many :award_types, through: :projects
   has_many :team_award_types, through: :team_projects, source: :award_types
   has_many :admin_award_types, through: :admin_projects, source: :award_types
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
-  # default_scope { includes(:slack_auth) }
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
   has_many :experiences
@@ -169,9 +168,7 @@ class Account < ApplicationRecord
   end
 
   def my_projects
-    Project.where(id:
-      projects.pluck(:id) |
-      admin_projects.pluck(:id))
+    Project.left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def accessable_projects
@@ -268,6 +265,10 @@ class Account < ApplicationRecord
   end
 
   after_update :check_email_update
+
+  def verification
+    'unknown'
+  end
 
   private
 

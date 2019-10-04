@@ -14,7 +14,7 @@ class Footer extends React.Component {
 
     return (
       <React.Fragment>
-        <div className={classnames} {...other}>
+        <div className={classnames} {...other} data-turbolinks-permanent>
           <div className="footer--logo">
             <Icon name="Logo-Footer.svg" width="170px" />
           </div>

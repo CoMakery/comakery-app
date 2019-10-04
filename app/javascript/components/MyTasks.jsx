@@ -121,9 +121,8 @@ const FilterLink = styled.a`
 const SubHeader = styled.div`
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #d8d8d8;
-  margin-bottom: 35px;
-  padding: 10px 0;
+  margin: 0;
+  padding: 0;
 
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -228,14 +227,16 @@ class MyTasks extends React.Component {
               <Pagination dangerouslySetInnerHTML={{__html: this.props.paginationHtml}} />
             </SubHeader>
 
-            {this.props.tasks.map(task =>
-              <MyTask
-                key={task.id}
-                task={task}
-                filter={filter}
-                displayFilters={!this.props.project && filter === 'ready'}
-              />
-            )}
+            <div className="animated fadeIn faster">
+              {this.props.tasks.map(task =>
+                <MyTask
+                  key={task.id}
+                  task={task}
+                  filter={filter}
+                  displayFilters={!this.props.project && filter === 'ready'}
+                />
+              )}
+            </div>
           </Layout>
         </Wrapper>
       </React.Fragment>

@@ -62,9 +62,8 @@ class AwardDecorator < Draper::Decorator
   end
 
   def recipient_address
-    return nil unless token&.coin_type?
     blockchain_name = Token::BLOCKCHAIN_NAMES[token.coin_type.to_sym]
-    account&.send("#{blockchain_name}_wallet")
+    blockchain_name ? account&.send("#{blockchain_name}_wallet") : nil
   end
 
   def issuer_address
@@ -74,6 +73,16 @@ class AwardDecorator < Draper::Decorator
       issuer&.qtum_wallet
     elsif object.token&.coin_type_ada?
       issuer&.cardano_wallet
+    end
+  end
+
+  def issuer_address_url
+    if object.token&.coin_type_on_ethereum?
+      issuer&.decorate&.etherscan_address
+    elsif object.token&.coin_type_on_qtum?
+      issuer&.decorate&.qtum_wallet_url
+    elsif object.token&.coin_type_ada?
+      issuer&.decorate&.cardano_wallet_url
     end
   end
 

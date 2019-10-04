@@ -23,33 +23,31 @@ describe 'viewing projects, creating and editing', :js do
 
     context 'when logged out' do
       context 'viewing awards' do
-        xit 'lets people view awards' do
-          visit project_path(project)
+        it 'lets people view awards' do
+          visit awards_project_path(project)
 
-          click_link 'payments'
           expect(page).to have_css '#contributions-chart'
           expect(page).to have_css 'table.award-rows'
         end
 
-        xit 'show link to ethereum transaction' do
+        it 'show link to ethereum transaction' do
           stub_token_symbol
           project.token.update ethereum_enabled: true, ethereum_contract_address: '0x583cbbb8a8443b38abcc0c956bece47340ea1367', coin_type: 'erc20'
           award.update ethereum_transaction_address: '0xb808727d7968303cdd6486d5f0bdf7c0f690f59c1311458d63bc6a35adcacedb'
           login(owner)
-          visit project_path(project.token.reload)
+          project.token.reload
+          visit awards_project_path(project)
 
-          click_link 'payments'
           expect(page).to have_content 'Blockchain Transaction'
         end
 
-        xit 'paginates when there are lots of awards' do
+        it 'paginates when there are lots of awards' do
           (305 - project.awards.count).times do
             create(:award, award_type: community_award_type, issuer: other_account, account: owner, amount: 1000)
           end
 
-          visit project_path(project)
+          visit awards_project_path(project)
 
-          click_link 'payments'
           expect(page.all('table.award-rows tr.award-row').size).to eq(50)
           expect(page).to have_content '1 2 3 4 5 … › »'
 

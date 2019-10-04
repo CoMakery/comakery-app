@@ -1,0 +1,53 @@
+<% transfer = transfer.decorate %>
+
+<% if transfer.paid? %>
+  <% state = "transferred" %>
+<% elsif transfer.accepted? && transfer.recipient_address.blank? %>
+  <% state = "blocked" %>
+<% elsif transfer.accepted? && transfer.recipient_address.present? %>
+  <% state = "ready" %>
+<% end %>
+
+<div class="transfers-table__transfer <%= "transfers-table__transfer--#{state}" %>">
+  <div class="transfers-table__transfer__name">
+    <h3>
+      <%= link_to transfer.name, project_award_type_award_path(transfer.project, transfer.award_type, transfer) %>
+    </h3>
+  </div>
+
+  <div class="transfers-table__transfer__account">
+    <%= render partial: "account", locals: {account: transfer.account} %>
+  </div>
+
+  <div class="transfers-table__transfer__issuer">
+    <% if transfer.paid? %>
+      <%= render partial: "issuer", locals: {issuer: transfer.issuer, wallet: transfer.issuer_address, wallet_url: transfer.issuer_address_url} %>
+    <% else %>
+      –
+    <% end %>
+  </div>
+
+  <div class="transfers-table__transfer__amount">
+    <%= transfer.amount_pretty %>
+  </div>
+
+  <div class="transfers-table__transfer__quantity">
+    <%= transfer.quantity %>
+  </div>
+
+  <div class="transfers-table__transfer__total_amount">
+    <%= transfer.total_amount_pretty %>
+  </div>
+
+  <div class="transfers-table__transfer__button">
+    <%= render partial: "shared/transfer_button", locals: {transfer: transfer} %>
+  </div>
+
+  <div class="transfers-table__transfer__transferred_at">
+    <% if transfer.paid? %>
+      <%= transfer.transferred_at.strftime("%b %e, %Y") %>
+    <% else %>
+      –
+    <% end %>
+  </div>
+</div>

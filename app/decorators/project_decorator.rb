@@ -119,6 +119,10 @@ class ProjectDecorator < Draper::Decorator
     admins.includes(:specialty).first(5).to_a.unshift(account)
   end
 
+  def blockchain_name
+    Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
+  end
+
   private
 
   def self.pretty_number(*currency_methods)

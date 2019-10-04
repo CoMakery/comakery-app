@@ -52,6 +52,7 @@ hr {
 a {
   word-break: break-all;
 }
+
 label {
   display: flex;
   justify-content: space-between;
@@ -91,12 +92,10 @@ button {
   &:focus {
     text-decoration: underline;
   }
+}
 
-  &:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
+input::-webkit-search-decoration {
+  -webkit-appearance: textfield;
 }
 
 input[type="text"],
@@ -125,6 +124,7 @@ input[type="week"] {
   font-family: Georgia,Times,Times New Roman,serif;
   width: 100%;
   max-width: 556px;
+  appearance: textfield;
 
   &:placeholder {
     opacity: 0.8;
@@ -154,6 +154,12 @@ img {
 /* 3rd-party styling */
 /**/
 
+.turbolinks-progress-bar {
+  height: 2px;
+  background-color: #0089f4;
+  z-index: 4;
+}
+
 .loading-placeholder {
   background-color: white;
   min-height: 50vh;
@@ -165,6 +171,7 @@ img {
   text-transform: uppercase;
   display: flex;
   justify-content: flex-end;
+  margin-right: -8px;
 }
 
 .pagination .page,
@@ -174,7 +181,6 @@ img {
 .pagination .gap,
 .pagination .last {
   font-family: Montserrat, sans-serif;
-  border: solid 1px #d8d8d8;
   box-shadow: 0 5px 10px 0 rgba(0,0,0,0.1);
   font-size: 12px;
   font-weight: bold;
@@ -183,19 +189,19 @@ img {
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #0089f4;
+  color: #1560fa;
   margin-right: 5px;
   display: flex;
   width: 25px;
   height: 25px;
   justify-content: center;
   flex-direction: column;
+  border-radius: 3px;
 }
 
 .pagination .current {
-  background-color: #0089f4;
+  background-color: #1560fa;
   color: #ffffff;
-  border: 1px solid #0089f4;
 }
 
 .pagination .gap {
@@ -203,7 +209,7 @@ img {
 }
 
 .pagination a {
-  color: #0089f4;
+  color: #1560fa;
   text-decoration: none;
 }
 
@@ -267,6 +273,407 @@ form.form-with-submit-button {
   input[type="submit"] {
     margin: 15px 0;
     display: block;
+  }
+}
+
+.account-preview {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+
+  .account-preview__image {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+
+    img {
+      max-height: 40px;
+      max-width: 40px;
+      border-radius: 50%;
+      border: solid 1px #8d9599;
+    }
+  }
+
+  .account-preview__info {
+    display: flex;
+    flex-direction: column;
+    font-family: Montserrat, sans-serif;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    line-height: 1.17;
+    word-break: break-word;
+
+    .account-preview__info__nickname {
+      color: #7c7c7c;
+      font-weight: 300;
+      font-size: 10px;
+    }
+
+    .account-preview__info__name {
+      color: #1a1a1a;
+      font-weight: 500;
+      font-size: 12px;
+    }
+
+    .account-preview__info__wallet {
+      width: 8em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      margin-top: 0.3em;
+    }
+
+    .account-preview__info__verification {
+      text-transform: capitalize;
+      display: flex;
+      margin-top: 0.3em;
+
+      img {
+        margin-right: 0.5em;
+      }
+    }
+  }
+}
+
+.transfer-button {
+  text-transform: uppercase;
+  font-family: Montserrat, sans-serif;
+  font-size: 10px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--black);
+  border: solid 0.5px #efefef;
+  padding: 0.125em 0.5em;
+  display: flex;
+  font-weight: 600;
+  justify-content: center;
+  align-items: center;
+  width: intrinsic;
+  border-radius: 3px;
+  height: 14px;
+
+  .transfer-tokens-btn {
+    flex-direction: row;
+    display: flex;
+    text-decoration: none;
+    font-weight: 600;
+    justify-content: center;
+    align-items: center;
+    color: #1560fa;
+
+    .wallet-logo {
+      margin: 0.25em 0.5em 0 0;
+    }
+  }
+}
+
+.transfers-filters {
+  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 3em;
+
+  a {
+    color: #3a3a3a;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  h2 {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .transfers-filters--filter {
+    flex-direction: column;
+    display: flex;
+    min-width: 300px;
+    max-width: 100%;
+
+    h3 {
+      text-transform: capitalize;
+      font-weight: 600;
+      margin-bottom: 0.5em;
+    }
+
+    .transfers-filters--filter--form {
+      display: flex;
+
+      .transfers-filters--filter--form--submit {
+        border-radius: 6px;
+        border: solid 1px #e6e8ed;
+        height: 35px;
+        padding: 9px 16px 8px 15px;
+        box-shadow: none;
+        font-family: Montserrat, sans-serif;
+        font-size: 12px;
+        background-color: initial;
+        color: #3a3a3a;
+        font-weight: 300;
+        min-width: 5em;
+        margin-left: 0.5em;
+      }
+    }
+
+    .transfers-filters--filter--input {
+      border-radius: 6px;
+      border: solid 1px #e6e8ed;
+      height: 35px;
+      padding: 9px 16px 8px 15px;
+      box-shadow: none;
+      font-family: Montserrat, sans-serif;
+      font-size: 12px;
+    }
+
+    .transfers-filters--filter--options {
+      flex-wrap: wrap;
+      display: flex;
+
+      .transfers-filters--filter--options__active {
+        background-color: #e6e8ed;
+      }
+
+      .transfers-filters--filter--options--transferred__active {
+        background-color: #00cc17;
+      }
+
+      .transfers-filters--filter--options--ready__active {
+        background-color: #ffbf00;
+      }
+
+      .transfers-filters--filter--options--blocked__active {
+        background-color: #fe2d6c;
+      }
+
+      & > div {
+        border: solid 1px #e6e8ed;
+        border-radius: 0;
+        height: 35px;
+        padding: 9px 16px 8px 15px;
+        box-sizing: border-box;
+        text-transform: capitalize;
+        border-right: none;
+        display: flex;
+        align-items: center;
+
+        img {
+          margin-right: 0.3em;
+        }
+
+        &:last-child {
+          border-top-right-radius: 6px;
+          border-bottom-right-radius: 6px;
+          border-right: solid 1px #e6e8ed;
+        }
+
+        &:first-child {
+          border-top-left-radius: 6px;
+          border-bottom-left-radius: 6px;
+        }
+      }
+    }
+  }
+
+  .transfers-filters--clear {
+    align-self: flex-end;
+
+    input {
+      border-radius: 6px;
+      border: solid 1px #e6e8ed;
+      height: 35px;
+      padding: 9px 16px 8px 15px;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      font-family: Montserrat, sans-serif;
+      font-size: 12px;
+      background-color: #1560fa;
+      color: white;
+      font-weight: 600;
+      margin: 0;
+      margin-top: 2em;
+      box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
+
+      &:disabled {
+        background-color: #c7c7c7;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.transfers-pages {
+  margin-top: 2em;
+}
+
+.transfers-table {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-family: Montserrat, sans-serif;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  font-size: 12px;
+
+  a {
+    color: #1560fa;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .transfers-table__transfer--transferred {
+    border-left: 4px solid #00cc17;
+  }
+
+  .transfers-table__transfer--blocked {
+    border-left: 4px solid #fe2d6c;
+  }
+
+  .transfers-table__transfer--ready {
+    border-left: 4px solid #ffbf00;
+  }
+
+  .transfers-table__transfer--header {
+    height: 40px;
+    min-height: unset !important;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #7c7c7c;
+    font-size: 10px;
+    border-left: 4px solid transparent;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+
+    a {
+      color: #7c7c7c;
+    }
+
+    @media (max-width: 1280px) {
+      height: auto;
+    }
+  }
+
+  .transfers-table__transfer--summary {
+    height: 30px;
+    min-height: unset !important;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: #7c7c7c;
+    font-size: 10px;
+    border-left: 4px solid transparent;
+
+    @media (max-width: 1280px) {
+      height: auto;
+    }
+  }
+
+  .transfers-table__transfer {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    margin: 0 0 1px 0;
+    min-height: 80px;
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+
+    & > div {
+      box-sizing: border-box;
+      flex-grow: 1;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1em 0em 1em 2em;
+      word-break: break-all;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+    }
+
+    .transfers-table__transfer__name {
+      h3 {
+        margin: 0;
+        font-weight: 600;
+        line-height: 1.29;
+        letter-spacing: -0.04px;
+
+        a {
+          word-break: break-word;
+        }
+      }
+      min-width: 180px;
+    }
+
+    .transfers-table__transfer__account {
+      min-width: 180px;
+    }
+
+    .transfers-table__transfer__issuer {
+      min-width: 180px;
+    }
+
+    .transfers-table__transfer__amount {
+      min-width: 60px;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      align-self: center;
+    }
+
+    .transfers-table__transfer__quantity {
+      max-width: 60px;
+    }
+
+    .transfers-table__transfer__total_amount {
+      min-width: 60px;
+      font-weight: 600;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      align-self: center;
+    }
+
+    .transfers-table__transfer__button {
+      min-width: 60px;
+    }
+
+    .transfers-table__transfer__transferred_at {
+      min-width: 60px;
+    }
+
+    @media (max-width: 1280px) {
+      flex-direction: column;
+      padding: 1em 1em 1em 0;
+
+      & > div {
+        margin-bottom: 0.5em;
+        border-radius: 3px;
+      }
+    }
   }
 }
 
@@ -830,13 +1237,6 @@ a.header--nav--links--current {
 .button:hover,
 .button:focus {
   text-decoration: underline;
-}
-
-input[type="button"].button:disabled,
-input[type="submit"].button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  pointer-events: none;
 }
 
 input[readonly],

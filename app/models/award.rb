@@ -64,6 +64,7 @@ class Award < ApplicationRecord
   before_validation :store_license_hash, if: -> { status == 'started' && agreed_to_license_hash.nil? }
   before_validation :set_expires_at, if: -> { status == 'started' && expires_at.nil? }
   before_validation :clear_expires_at, if: -> { status == 'submitted' && expires_at.present? }
+  before_validation :set_transferred_at, if: -> { status == 'paid' && transferred_at.nil? }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
 
@@ -92,6 +93,7 @@ class Award < ApplicationRecord
   }
 
   enum status: %i[ready started submitted accepted rejected paid cancelled unpublished]
+  enum source: %i[earned bought]
 
   def self.total_awarded
     completed.sum(:total_amount)
@@ -326,5 +328,10 @@ class Award < ApplicationRecord
     def clear_expires_at
       self.expires_at = nil
       self.notify_on_expiration_at = nil
+    end
+
+    def set_transferred_at
+      self.updated_at = Time.current
+      self.transferred_at = updated_at
     end
 end

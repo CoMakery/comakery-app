@@ -176,7 +176,7 @@ class AwardsController < ApplicationController
   end
 
   def update_transaction_address
-    @award.update! ethereum_transaction_address: params[:tx], status: 'paid'
+    @award.update! ethereum_transaction_address: params[:tx], status: 'paid', issuer: current_account
     TaskMailer.with(award: @award).task_paid.deliver_now
     @award = @award.decorate
     render layout: false

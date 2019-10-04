@@ -20,13 +20,16 @@ exports[`BatchIndex renders correctly without props 1`] = `
         <div
           className="batch-index--sidebar"
         >
-          <SidebarItemBold
-            className="batch-index--sidebar--item__bold"
-            iconLeftName="BATCH/WHITE.svg"
-            iconRightName="PLUS.svg"
-            onClick={[Function]}
-            text="Create a New Batch"
-          />
+          <a
+            href=""
+          >
+            <SidebarItemBold
+              className="batch-index--sidebar--item__bold"
+              iconLeftName="BATCH/WHITE.svg"
+              iconRightName="PLUS.svg"
+              text="Create a New Batch"
+            />
+          </a>
           <ForwardRef(styled.div)>
             <ForwardRef(styled.div)>
               <div>
@@ -62,13 +65,16 @@ exports[`BatchIndex renders correctly without props 1`] = `
           <div
             className="batch-index--sidebar"
           >
-            <SidebarItemBold
-              className="batch-index--sidebar--item__bold"
-              iconLeftName="BATCH/WHITE.svg"
-              iconRightName="PLUS.svg"
-              onClick={[Function]}
-              text="Create a New Batch"
-            />
+            <a
+              href=""
+            >
+              <SidebarItemBold
+                className="batch-index--sidebar--item__bold"
+                iconLeftName="BATCH/WHITE.svg"
+                iconRightName="PLUS.svg"
+                text="Create a New Batch"
+              />
+            </a>
             <ForwardRef(styled.div)>
               <ForwardRef(styled.div)>
                 <div>
@@ -288,78 +294,79 @@ exports[`BatchIndex renders correctly without props 1`] = `
               <div
                 className="batch-index--sidebar"
               >
-                <SidebarItemBold
-                  className="batch-index--sidebar--item__bold"
-                  iconLeftName="BATCH/WHITE.svg"
-                  iconRightName="PLUS.svg"
-                  onClick={[Function]}
-                  text="Create a New Batch"
+                <a
+                  href=""
                 >
-                  <SidebarItem
-                    className="sidebar-item__bold batch-index--sidebar--item__bold"
+                  <SidebarItemBold
+                    className="batch-index--sidebar--item__bold"
                     iconLeftName="BATCH/WHITE.svg"
-                    iconLeftUrl=""
                     iconRightName="PLUS.svg"
-                    notificationColor=""
-                    onClick={[Function]}
-                    selected={false}
                     text="Create a New Batch"
                   >
-                    <div
-                      className="sidebar-item--wrapper"
-                      onClick={[Function]}
+                    <SidebarItem
+                      className="sidebar-item__bold batch-index--sidebar--item__bold"
+                      iconLeftName="BATCH/WHITE.svg"
+                      iconLeftUrl=""
+                      iconRightName="PLUS.svg"
+                      notificationColor=""
+                      selected={false}
+                      text="Create a New Batch"
                     >
                       <div
-                        className="sidebar-item sidebar-item__bold batch-index--sidebar--item__bold"
+                        className="sidebar-item--wrapper"
                       >
-                        <span
-                          className="sidebar-item--icon-left"
-                        >
-                          <Icon
-                            className=""
-                            name="BATCH/WHITE.svg"
-                          >
-                            <img
-                              className="icon icon__BATCH/WHITE-svg"
-                              src="test-file-stub"
-                            />
-                          </Icon>
-                        </span>
                         <div
-                          className="sidebar-item--content"
+                          className="sidebar-item sidebar-item__bold batch-index--sidebar--item__bold"
                         >
-                          <div
-                            className="sidebar-item--text"
+                          <span
+                            className="sidebar-item--icon-left"
                           >
-                            Create a New Batch
-                          </div>
+                            <Icon
+                              className=""
+                              name="BATCH/WHITE.svg"
+                            >
+                              <img
+                                className="icon icon__BATCH/WHITE-svg"
+                                src="test-file-stub"
+                              />
+                            </Icon>
+                          </span>
                           <div
-                            className="sidebar-item--subchild"
+                            className="sidebar-item--content"
+                          >
+                            <div
+                              className="sidebar-item--text"
+                            >
+                              Create a New Batch
+                            </div>
+                            <div
+                              className="sidebar-item--subchild"
+                            />
+                          </div>
+                          <span
+                            className="sidebar-item--icon-right"
+                          >
+                            <Icon
+                              className=""
+                              name="PLUS.svg"
+                            >
+                              <img
+                                className="icon icon__PLUS-svg"
+                                src="test-file-stub"
+                              />
+                            </Icon>
+                          </span>
+                          <div
+                            className="sidebar-item--left-border"
+                          />
+                          <div
+                            className="sidebar-item--right-border sidebar-item--right-border__"
                           />
                         </div>
-                        <span
-                          className="sidebar-item--icon-right"
-                        >
-                          <Icon
-                            className=""
-                            name="PLUS.svg"
-                          >
-                            <img
-                              className="icon icon__PLUS-svg"
-                              src="test-file-stub"
-                            />
-                          </Icon>
-                        </span>
-                        <div
-                          className="sidebar-item--left-border"
-                        />
-                        <div
-                          className="sidebar-item--right-border sidebar-item--right-border__"
-                        />
                       </div>
-                    </div>
-                  </SidebarItem>
-                </SidebarItemBold>
+                    </SidebarItem>
+                  </SidebarItemBold>
+                </a>
                 <styled.div>
                   <StyledComponent
                     forwardedComponent={
@@ -521,7 +528,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
               </div>
             </div>
             <div
-              className="layout--content--content__sidebared"
+              className="layout--content--content__sidebared animated fadeIn faster"
             >
               <styled.div>
                 <StyledComponent
