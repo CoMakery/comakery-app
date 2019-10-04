@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.4.4'
 
-gem 'airbrake'
+gem 'airbrake', '~> 9.4'
 gem 'awesome_print'
 gem 'bcrypt'
 gem 'bullet'
