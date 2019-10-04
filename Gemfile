@@ -113,7 +113,6 @@ gem 'possessive', '~> 1.0'
 
 gem 'omniauth-rails_csrf_protection', '~> 0.1.2'
 
-
 gem 'redis-rails', '~> 5.0'
 
 gem 'turbolinks', '~> 5.2'
