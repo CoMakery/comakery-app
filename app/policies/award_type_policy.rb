@@ -4,14 +4,14 @@ class AwardTypePolicy < ApplicationPolicy
   class Scope < Scope
     attr_reader :account, :scope
 
-    def initialize(account, project_owner, scope)
+    def initialize(account, project, scope)
       @account = account
-      @project_owner = project_owner
       @scope = scope
+      @project_editable = ProjectPolicy.new(account, project).edit?
     end
 
     def resolve
-      if @account == @project_owner
+      if @project_editable
         scope.all
       else
         scope.where.not(state: :draft)

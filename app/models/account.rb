@@ -1,3 +1,6 @@
+# Allow usage of has_and_belongs_to_many to avoid creating a separate model for accounts_projects join table:
+# rubocop:disable Rails/HasAndBelongsToMany
+
 class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
@@ -10,6 +13,7 @@ class Account < ApplicationRecord
   include TezosAddressable
 
   has_many :projects
+  has_and_belongs_to_many :admin_projects, class_name: 'Project'
   has_many :awards, dependent: :destroy
   has_many :channels, through: :projects
   has_many :authentications, -> { order(updated_at: :desc) }, dependent: :destroy
@@ -22,8 +26,10 @@ class Account < ApplicationRecord
   has_many :channel_projects, through: :channels, source: :project
   has_many :team_awards, through: :team_projects, source: :awards
   has_many :issued_awards, through: :projects, source: :awards
+  has_many :admin_awards, through: :admin_projects, source: :awards
   has_many :award_types, through: :projects
   has_many :team_award_types, through: :team_projects, source: :award_types
+  has_many :admin_award_types, through: :admin_projects, source: :award_types
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
   # default_scope { includes(:slack_auth) }
   has_many :interests, dependent: :destroy
@@ -47,7 +53,7 @@ class Account < ApplicationRecord
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
   validates :first_name, :last_name, :country, :date_of_birth, :specialty, presence: true, if: :name_required
-  validates :nickname, uniqueness: true, allow_nil: true
+  validates :nickname, uniqueness: true, if: -> { nickname.present? }
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
@@ -162,48 +168,41 @@ class Account < ApplicationRecord
            .where("((authentication_teams.account_id=#{id} and channels.id is not null) or a1.account_id=#{id}) and projects.account_id <> #{id}").distinct
   end
 
-  def accessable_projects
+  def my_projects
     Project.where(id:
-      Project.publics.pluck(:id) |
       projects.pluck(:id) |
-      team_projects.pluck(:id) |
-      award_projects.pluck(:id) |
-      channel_projects.pluck(:id))
+      admin_projects.pluck(:id))
+  end
+
+  def accessable_projects
+    Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+  end
+
+  def related_projects
+    Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def accessable_award_types
-    AwardType.where(id:
-      award_types.pluck(:id) |
-      team_award_types.pluck(:id) |
-      AwardType.where(project_id: accessable_projects.pluck(:id)).pluck(:id))
+    AwardType.where(project: accessable_projects)
+  end
+
+  def related_award_types
+    AwardType.where(project: related_projects)
   end
 
   def awards_matching_experience
-    Award.ready.where(id:
-      Specialty.all.map do |specialty|
-        Award.where(
-          specialty_id: specialty.id,
-          experience_level: 0..experience_for(specialty),
-          award_type_id: accessable_award_types.pluck(:id)
-        ).pluck(:id)
-      end.flatten.uniq)
+    Award.ready
+         .where(award_type: accessable_award_types)
+         .where('awards.experience_level <= (CASE WHEN (SELECT MAX(id) FROM experiences WHERE (experiences.account_id = :id AND experiences.specialty_id = awards.specialty_id)) IS NULL THEN 0 ELSE (SELECT level FROM experiences WHERE (experiences.account_id = :id AND experiences.specialty_id = awards.specialty_id) LIMIT 1) END)', id: id)
+         .where('awards.number_of_assignments_per_user > (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
   end
 
   def related_awards
-    Award.where(id:
-      awards.pluck(:id) |
-      issued_awards.pluck(:id) |
-      team_awards.pluck(:id))
+    Award.where(award_type: related_award_types).where.not('awards.status = 0 AND awards.number_of_assignments_per_user <= (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
   end
 
   def accessable_awards
-    Award.where(id:
-      (awards_matching_experience.pluck(:id) - awards_reached_maximum_assignments.pluck(:id)) |
-      related_awards.pluck(:id))
-  end
-
-  def awards_reached_maximum_assignments
-    awards.select { |a| a.cloned? && a.cloned_from.reached_maximum_assignments_for?(self) }.map(&:cloned_from)
+    awards_matching_experience.or(related_awards)
   end
 
   def experience_for(specialty)
@@ -262,7 +261,7 @@ class Account < ApplicationRecord
   def awards_csv
     Comakery::CSV.generate_multiplatform do |csv|
       csv << ['Project', 'Award Type', 'Total Amount', 'Issuer', 'Date']
-      awards.completed.order(:created_at).decorate.each do |award|
+      awards.completed.includes(:award_type, :issuer, project: [:token]).order(:created_at).decorate.each do |award|
         csv << [award.project.title, award.award_type.name, award.total_amount_pretty, award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]
       end
     end

@@ -19,13 +19,13 @@ class Award < ApplicationRecord
 
   attribute :specialty_id, :integer, default: -> { Specialty.default.id }
 
-  belongs_to :account, optional: true
+  belongs_to :account, optional: true, touch: true
   belongs_to :authentication, optional: true
-  belongs_to :award_type
-  belongs_to :issuer, class_name: 'Account'
+  belongs_to :award_type, touch: true
+  belongs_to :issuer, class_name: 'Account', touch: true
   belongs_to :channel, optional: true
   belongs_to :specialty
-  belongs_to :cloned_from, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
+  belongs_to :cloned_from, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id', counter_cache: :assignments_count, touch: true
   has_many :assignments, class_name: 'Award', foreign_key: 'cloned_on_assignment_from_id'
   has_one :team, through: :channel
   has_one :project, through: :award_type
@@ -81,11 +81,11 @@ class Award < ApplicationRecord
     when 'submitted'
       where(status: %i[submitted accepted], account: account)
     when 'to review'
-      where(status: :submitted).where(issuer: account)
+      where(status: :submitted).where(award_type: account.admin_award_types + account.award_types)
     when 'to pay'
-      where(status: :accepted).where(issuer: account)
+      where(status: :accepted).where(award_type: account.admin_award_types + account.award_types)
     when 'done'
-      where(status: %i[paid rejected], account: account).or(where(status: %i[paid rejected], issuer: account))
+      where(status: %i[paid rejected], account: account).or(where(status: %i[paid rejected], award_type: account.admin_award_types + account.award_types))
     else
       none
     end

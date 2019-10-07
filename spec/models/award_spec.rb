@@ -25,7 +25,7 @@ describe Award do
       award = create(:award_ready)
       2.times { award.clone_on_assignment }
 
-      expect(award.assignments.size).to eq(2)
+      expect(award.reload.assignments.size).to eq(2)
     end
 
     it 'belongs to cloned_from' do
@@ -86,43 +86,74 @@ describe Award do
     end
 
     describe '.filtered_for_view(filter, account)' do
-      let!(:contributor) { create(:account) }
-      let!(:project_owner) { create(:account) }
-      let!(:award_ready) { create(:award_ready, award_type: create(:award_type, project: create(:project, visibility: 'public_listed')), specialty: contributor.specialty, account: contributor) }
-      let!(:started_award) { create(:award, status: 'started', issuer: project_owner, account: contributor) }
-      let!(:submitted_award) { create(:award, status: 'submitted', issuer: project_owner, account: contributor) }
-      let!(:accepted_award) { create(:award, status: 'accepted', issuer: project_owner, account: contributor) }
-      let!(:paid_award) { create(:award, status: 'paid', issuer: project_owner, account: contributor) }
-      let!(:rejected_award) { create(:award, status: 'rejected', issuer: project_owner, account: contributor) }
-      let!(:paid_award_from_other_user) { create(:award, status: 'paid') }
+      let(:award_type) { create(:award_type) }
+      let(:award_ready_w_account) { create :award_ready, award_type: award_type }
+      let(:award_ready_wo_account) { create :award_ready, award_type: award_type }
+      let(:award_started) { create :award, status: :started, award_type: award_type }
+      let(:award_submitted) { create :award, status: :submitted, award_type: award_type }
+      let(:award_accepted) { create :award, status: :accepted, award_type: award_type }
+      let(:award_paid) { create :award, status: :paid, award_type: award_type }
+      let(:award_rejected) { create :award, status: :rejected, award_type: award_type }
+
+      before do
+        award_ready_wo_account.update(account: nil)
+        award_type.project.admins << create(:account)
+      end
 
       it 'returns only ready awards without assigned account or assigned to you' do
-        expect(described_class.filtered_for_view('ready', contributor)).to include(award_ready)
+        expect(described_class.filtered_for_view('ready', create(:account))).to include(award_ready_wo_account)
+        expect(described_class.filtered_for_view('ready', award_ready_w_account.account)).to include(award_ready_w_account)
+
+        expect(described_class.filtered_for_view('ready', create(:account))).not_to include(award_ready_w_account)
       end
 
       it 'returns only started awards for a contributor' do
-        expect(described_class.filtered_for_view('started', contributor)).to eq(described_class.started.where(account: contributor))
+        expect(described_class.filtered_for_view('started', award_started.account)).to include(award_started)
+
+        expect(described_class.filtered_for_view('started', create(:account))).not_to include(award_started)
+        expect(described_class.filtered_for_view('started', award_ready_w_account.account)).not_to include(award_ready_w_account)
       end
 
       it 'returns only submitted or accepted awards for a contributor' do
-        expect(described_class.filtered_for_view('submitted', contributor)).to eq(described_class.where(status: %i[submitted accepted], account: contributor))
+        expect(described_class.filtered_for_view('submitted', award_submitted.account)).to include(award_submitted)
+        expect(described_class.filtered_for_view('submitted', award_accepted.account)).to include(award_accepted)
+
+        expect(described_class.filtered_for_view('submitted', create(:account))).not_to include(award_submitted)
+        expect(described_class.filtered_for_view('submitted', award_ready_w_account.account)).not_to include(award_ready_w_account)
+        expect(described_class.filtered_for_view('submitted', award_started.account)).not_to include(award_started)
       end
 
-      it 'returns only awards available for review for a project owner' do
-        expect(described_class.filtered_for_view('to review', project_owner)).to eq(described_class.submitted.where(issuer: project_owner))
+      it 'returns only awards available for review for project admin/owner' do
+        expect(described_class.filtered_for_view('to review', award_submitted.project.account)).to include(award_submitted)
+        expect(described_class.filtered_for_view('to review', award_submitted.project.admins.first)).to include(award_submitted)
+
+        expect(described_class.filtered_for_view('to review', award_submitted.account)).not_to include(award_submitted)
+        expect(described_class.filtered_for_view('to review', create(:account))).not_to include(award_submitted)
       end
 
-      it 'returns only awards available for payment for a project owner' do
-        expect(described_class.filtered_for_view('to pay', project_owner)).to eq(described_class.accepted.where(issuer: project_owner))
+      it 'returns only awards available for payment for a project admin/owner' do
+        expect(described_class.filtered_for_view('to pay', award_accepted.project.account)).to include(award_accepted)
+        expect(described_class.filtered_for_view('to pay', award_accepted.project.admins.first)).to include(award_accepted)
+
+        expect(described_class.filtered_for_view('to pay', award_accepted.account)).not_to include(award_accepted)
+        expect(described_class.filtered_for_view('to pay', create(:account))).not_to include(award_accepted)
+        expect(described_class.filtered_for_view('to pay', award_submitted.project.account)).not_to include(award_submitted)
       end
 
       it 'returns only paid or rejected awards' do
-        expect(described_class.filtered_for_view('done', contributor)).to eq(described_class.where(status: %i[paid rejected], account: contributor).or(described_class.where(status: %i[paid rejected], issuer: contributor)))
-        expect(described_class.filtered_for_view('done', project_owner)).to eq(described_class.where(status: %i[paid rejected], account: project_owner).or(described_class.where(status: %i[paid rejected], issuer: project_owner)))
+        expect(described_class.filtered_for_view('done', award_paid.account)).to include(award_paid)
+        expect(described_class.filtered_for_view('done', award_paid.project.account)).to include(award_paid)
+        expect(described_class.filtered_for_view('done', award_rejected.account)).to include(award_rejected)
+        expect(described_class.filtered_for_view('done', award_rejected.project.account)).to include(award_rejected)
+
+        expect(described_class.filtered_for_view('done', create(:account))).not_to include(award_paid)
+        expect(described_class.filtered_for_view('done', create(:account))).not_to include(award_rejected)
+        expect(described_class.filtered_for_view('to pay', award_accepted.account)).not_to include(award_accepted)
+        expect(described_class.filtered_for_view('to pay', award_submitted.project.account)).not_to include(award_submitted)
       end
 
       it 'returns no awards for an unknown filter' do
-        expect(described_class.filtered_for_view('not finished', contributor)).to eq([])
+        expect(described_class.filtered_for_view('not finished', award_paid.account)).to eq([])
       end
     end
   end
@@ -653,7 +684,7 @@ describe Award do
     end
 
     it 'returns false if task has clones' do
-      expect(award_cloneable.can_be_edited?).to be_falsey
+      expect(award_cloneable.reload.can_be_edited?).to be_falsey
     end
   end
 
@@ -693,7 +724,7 @@ describe Award do
     end
 
     it 'returns true if task has referenced assignments' do
-      expect(award_cloneable.any_clones?).to be_truthy
+      expect(award_cloneable.reload.any_clones?).to be_truthy
     end
 
     it 'returns false if task doesnt have referenced assignments' do
@@ -728,8 +759,8 @@ describe Award do
     end
 
     it 'returns false if current number of assignments plus one currently creating equal or greater than number_of_assignments allowed' do
-      expect(award_shouldnt_be_cloned_at_all.should_be_cloned?).to be_falsey
-      expect(award_has_been_cloned_already.should_be_cloned?).to be_falsey
+      expect(award_shouldnt_be_cloned_at_all.reload.should_be_cloned?).to be_falsey
+      expect(award_has_been_cloned_already.reload.should_be_cloned?).to be_falsey
     end
   end
 
@@ -821,7 +852,7 @@ describe Award do
 
     it 'returns total_amount multiplied by possible number_of_assignments minus current number of assignments for template tasks' do
       award_template.clone_on_assignment
-      expect(award_template.possible_total_amount).to eq(9)
+      expect(award_template.reload.possible_total_amount).to eq(9)
     end
 
     it 'returns zero for cancelled or rejected tasks' do

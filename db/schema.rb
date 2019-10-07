@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190823125830) do
+ActiveRecord::Schema.define(version: 20190926181739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,13 @@ ActiveRecord::Schema.define(version: 20190823125830) do
     t.index ["public_address"], name: "index_accounts_on_public_address"
     t.index ["remember_me_token"], name: "index_accounts_on_remember_me_token"
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token"
+  end
+
+  create_table "accounts_projects", id: false, force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "project_id", null: false
+    t.index ["account_id", "project_id"], name: "index_accounts_projects_on_account_id_and_project_id"
+    t.index ["project_id", "account_id"], name: "index_accounts_projects_on_project_id_and_account_id"
   end
 
   create_table "authentication_teams", force: :cascade do |t|
@@ -162,6 +169,7 @@ ActiveRecord::Schema.define(version: 20190823125830) do
     t.datetime "expires_at"
     t.integer "expires_in_days", default: 10
     t.datetime "notify_on_expiration_at"
+    t.integer "assignments_count", default: 0
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
@@ -294,6 +302,7 @@ ActiveRecord::Schema.define(version: 20190823125830) do
     t.string "panoramic_image_content_type"
     t.boolean "confidentiality", default: true
     t.string "agreed_to_license_hash"
+    t.boolean "display_team", default: true
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"

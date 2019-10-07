@@ -81,13 +81,13 @@ class AwardTypesController < ApplicationController
     end
 
     def set_award_types
-      @award_types = AwardTypePolicy::Scope.new(current_user, @project.account, @project.award_types).resolve
+      @award_types = AwardTypePolicy::Scope.new(current_user, @project, @project.award_types).resolve
     end
 
     def set_index_props
       @props = {
         editable: policy(@project).edit?,
-        batches: @award_types&.map do |batch|
+        batches: @award_types&.includes(awards: %i[account project assignments])&.map do |batch|
           batch.serializable_hash.merge(
             diagram_url: Refile.attachment_url(batch ? batch : @project.award_types.new, :diagram, :fill, 300, 300),
             completed_tasks: batch.awards.completed&.size,

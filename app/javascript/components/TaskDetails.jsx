@@ -305,7 +305,7 @@ class TaskDetails extends React.Component {
               </Submission>
             }
 
-            {((task.status === 'submitted' && task.issuer.self) || task.submissionUrl || task.submissionComment || task.submissionImageUrl) &&
+            {((task.status === 'submitted' && task.policies.review) || task.submissionUrl || task.submissionComment || task.submissionImageUrl) &&
               <Review>
                 <SubHeader>
                   Submitted Work
@@ -333,7 +333,7 @@ class TaskDetails extends React.Component {
                   </ContentBlock>
                 }
 
-                {task.status === 'submitted' && task.issuer.self &&
+                {task.status === 'submitted' && task.policies.review &&
                   <React.Fragment>
                     <form action={task.acceptUrl} method="post">
                       <input
@@ -510,7 +510,13 @@ TaskDetails.defaultProps = {
     contributor: {
       name : null,
       image: null
-    }
+    },
+    policies: {
+      start : true,
+      submit: true,
+      review: true,
+      pay   : true
+    },
   },
   taskAllowedToStart: true,
   tasksToUnlock     : 0,

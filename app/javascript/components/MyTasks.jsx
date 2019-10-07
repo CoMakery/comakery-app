@@ -205,7 +205,7 @@ class MyTasks extends React.Component {
 
             <Filter>
               {this.props.filters.map(filter =>
-                <FilterLink key={filter.name} href={filter.url} current={filter.current}>
+                <FilterLink id={filter.name === 'started' ? 'product-tour-my-tasks-step3' : ''} key={filter.name} href={filter.url} current={filter.current}>
                   {filter.name}
                   <br />
                   {filter.count}

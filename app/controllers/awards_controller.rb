@@ -3,6 +3,7 @@ class AwardsController < ApplicationController
   before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
+  before_action :authorize_award_create, only: %i[create new]
   before_action :authorize_award_show, only: %i[show]
   before_action :authorize_award_edit, only: %i[edit update]
   before_action :authorize_award_assign, only: %i[assign]
@@ -80,7 +81,7 @@ class AwardsController < ApplicationController
   end
 
   def update
-    if @award.update(award_params)
+    if @award.update(award_params) && @award.update(issuer: current_account)
       set_ok_response
       render json: @ok_response, status: :ok
     else
@@ -96,7 +97,7 @@ class AwardsController < ApplicationController
   def assign
     account = Account.find(params[:account_id])
 
-    if account && @award.update(account: account, status: 'ready')
+    if account && @award.update(account: account, issuer: current_account, status: 'ready')
       TaskMailer.with(award: @award).task_assigned.deliver_now
       redirect_to project_award_types_path(@award.project), notice: 'Task has been assigned'
     else
@@ -211,6 +212,10 @@ class AwardsController < ApplicationController
       authorize @project, :edit?
     end
 
+    def authorize_award_create
+      authorize (@award || @award_type.awards.new), :create?
+    end
+
     def authorize_award_show
       authorize @award, :show?
     end
@@ -286,7 +291,7 @@ class AwardsController < ApplicationController
     end
 
     def set_awards
-      @awards = policy_scope(Award).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
+      @awards = policy_scope(Award).includes(:specialty, :issuer, :account, :award_type, project: [:mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
 
       if @project
         @awards = @awards.where(award_type: AwardType.where(project: @project))
@@ -388,7 +393,7 @@ class AwardsController < ApplicationController
         project: @project.serializable_hash(only: %w[id title], methods: :public?)&.merge({
           url: unlisted_project_url(@project.long_id)
         }),
-        interested: (@project.interested + @project.contributors).uniq.map do |a|
+        interested: (@project.interested.includes(:specialty) + @project.contributors.includes(:specialty)).uniq.map do |a|
           a.decorate.serializable_hash(
             only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
             include: :specialty,

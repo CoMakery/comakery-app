@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   skip_before_action :require_login, except: %i[new edit create update update_status landing]
   skip_after_action :verify_authorized, only: %i[teams landing]
   before_action :assign_current_account
-  before_action :assign_project, only: %i[edit show update awards]
+  before_action :assign_project, only: %i[edit admins add_admin remove_admin show update awards]
   before_action :assign_project_by_long_id, only: %i[unlisted]
   before_action :set_award, only: %i[show unlisted]
   before_action :set_tokens, only: %i[new edit]
@@ -12,14 +12,14 @@ class ProjectsController < ApplicationController
   before_action :set_generic_props, only: %i[new edit]
   before_action :set_show_props, only: %i[show unlisted]
 
-  layout 'react', only: %i[show unlisted new edit]
+  layout 'react', only: %i[show unlisted new edit admins]
 
   def landing
     if current_account
-      @my_projects = current_account.projects.unarchived.order(updated_at: :desc).limit(100).decorate
-      @archived_projects = current_account.projects.archived.order(updated_at: :desc).limit(100).decorate
-      @team_projects = current_account.other_member_projects.unarchived.order(updated_at: :desc).limit(100).decorate
-      @interested_projects = current_account.projects_interested.unarchived.order(updated_at: :desc).limit(100).decorate
+      @my_projects = current_account.my_projects.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @archived_projects = current_account.projects.includes(:account, :admins).archived.order(updated_at: :desc).limit(100).decorate
+      @team_projects = current_account.other_member_projects.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @interested_projects = current_account.projects_interested.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
     end
 
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
@@ -30,7 +30,7 @@ class ProjectsController < ApplicationController
 
   def awards
     authorize @project, :show_contributions?
-    @awards = @project.awards.completed
+    @awards = @project.awards.completed.includes(:token, :award_type, :account, :issuer)
     @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
     @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
 
@@ -43,7 +43,7 @@ class ProjectsController < ApplicationController
     if params[:query].present?
       @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
     end
-    @projects = @projects.order(updated_at: :desc).includes(:account).page(params[:page]).per(9)
+    @projects = @projects.order(updated_at: :desc).includes(:account, :admins).page(params[:page]).per(9)
 
     @project_contributors = TopContributors.call(projects: @projects).contributors
 
@@ -110,8 +110,40 @@ class ProjectsController < ApplicationController
     render component: 'ProjectForm', props: @props
   end
 
+  def admins
+    authorize @project
+    @admins = @project.admins
+  end
+
+  def add_admin
+    authorize @project
+
+    account = Account.find_by(email: params[:email])
+
+    if account && !@project.admins.include?(account)
+      @project.admins << account
+      redirect_to admins_project_path(@project), notice: "#{account.decorate.name} added as a project admin"
+    elsif @project.admins.include?(account)
+      redirect_to admins_project_path(@project), flash: { error: "#{account.decorate.name} is already a project admin" }
+    else
+      redirect_to admins_project_path(@project), flash: { error: 'Account is not found on Comakery' }
+    end
+  end
+
+  def remove_admin
+    authorize @project
+
+    account = Account.find_by(id: params[:account_id])
+
+    if account && @project.admins.include?(account)
+      @project.admins.delete(account)
+      redirect_to admins_project_path(@project), notice: "#{account.decorate.name} removed from project admins"
+    else
+      redirect_to admins_project_path(@project), flash: { error: 'Project admin is not found' }
+    end
+  end
+
   def update
-    @project = current_account.projects.find(params[:id])
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
 
@@ -160,7 +192,7 @@ class ProjectsController < ApplicationController
   end
 
   def set_teams
-    @teams = current_account&.authentication_teams&.map do |a_team|
+    @teams = current_account&.authentication_teams&.includes(:team, :authentication)&.map do |a_team|
       {
         team: "[#{a_team.team.provider}] #{a_team.team.name}",
         team_id: a_team.team.id.to_s,
@@ -258,6 +290,7 @@ class ProjectsController < ApplicationController
       :license_finalized,
       :visibility,
       :status,
+      :display_team,
       channels_attributes: %i[
         _destroy
         id
@@ -296,7 +329,7 @@ class ProjectsController < ApplicationController
     award_data = GetContributorData.call(project: @project).award_data
     chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
 
-    project.as_json(only: %i[id title require_confidentiality]).merge(
+    project.as_json(only: %i[id title require_confidentiality display_team]).merge(
       description_header: project.description.split('.').first,
       description_html: Comakery::Markdown.to_html(project.description.split('.')[1..-1]&.join('.')),
       show_contributions: policy(project).show_contributions?,
@@ -309,6 +342,8 @@ class ProjectsController < ApplicationController
       awarded_tokens: project.total_awarded_pretty,
       team_leader: contributor_props(project.account),
       contributors_number: contributors_number,
+      leaders_number: project.leaders.size,
+      leaders: project.leaders.map { |leader| contributor_props(leader) },
       contributors: project.top_contributors.map { |contributor| contributor_props(contributor) },
       chart_data: chart_data,
       stats: project.stats

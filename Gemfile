@@ -4,6 +4,7 @@ ruby '2.4.4'
 gem 'airbrake'
 gem 'awesome_print'
 gem 'bcrypt'
+gem 'bullet'
 gem 'coffee-rails'
 gem 'compass-rails'
 gem 'countries', require: 'countries/global'
@@ -75,7 +76,6 @@ end
 
 group(:development) do
   gem 'better_errors'
-  gem 'bullet'
   gem 'git-storyid'
   # gem 'html2fortitude'  # requires old ruby_parser, try global "gem install html2fortitude" instead
   gem 'letter_opener'
@@ -112,3 +112,5 @@ gem 'mini_racer', '~> 0.2.4'
 gem 'possessive', '~> 1.0'
 
 gem 'omniauth-rails_csrf_protection', '~> 0.1.2'
+
+gem 'barnes', '~> 0.0.7'

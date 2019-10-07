@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   color: white;
   cursor: default;
   margin-bottom: 1em;
+  background-color: #201662;
   background-image: url(${props => props.backgroundImageUrl});
   background-position-x: 50%;
   background-position-y: center;
@@ -66,11 +67,6 @@ const MissionNav = styled.div`
   a {
     display: flex;
   }
-
-  a::before {
-    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 17"><g fill="#FFF" fill-rule="nonzero"><path d="M9.243.507a.75.75 0 0 1 0 1.061L1.818 8.993a.75.75 0 1 1-1.06-1.06L8.181.506a.75.75 0 0 1 1.06 0z"/><path d="M.757 8.007a.75.75 0 0 0 0 1.061l7.425 7.425a.75.75 0 1 0 1.06-1.06L1.819 8.006a.75.75 0 0 0-1.06 0z"/></g></svg>');
-    margin-right: 0.5em;
-  }
 `
 
 const ProjectNav = styled.div`
@@ -94,9 +90,10 @@ const ProjectInfo = styled.div`
 
   img {
     max-height: 150px;
-
     margin-bottom: -50px;
     margin-top: 25px;
+    border-radius: 2px;
+    box-shadow: 0 10px 20px 0 rgba(32,22,98,.1);
   }
 
   h1 {
@@ -120,7 +117,7 @@ const ProjectInfo = styled.div`
     min-height: 100px;
     display: flex;
     align-items: center;
-    margin-top: -75px;
+    margin-top: -50px;
   }
 `
 
@@ -137,7 +134,7 @@ class ProjectSetupHeader extends React.Component {
           {mission &&
             <MissionNav>
               <NavLink href={mission.url}>
-                {mission.name}
+                ← {mission.name}
               </NavLink>
             </MissionNav>
           }
@@ -151,6 +148,12 @@ class ProjectSetupHeader extends React.Component {
               {owner &&
                 <NavLink current={current === 'form'} href={project.settingsUrl}>
                   settings
+                </NavLink>
+              }
+
+              {owner &&
+                <NavLink current={current === 'admins'} href={project.adminsUrl}>
+                  admins
                 </NavLink>
               }
 
@@ -209,6 +212,7 @@ ProjectSetupHeader.defaultProps = {
   },
   projectForHeader: {
     settingsUrl    : '',
+    adminsUrl      : '',
     batchesUrl     : '',
     contributorsUrl: '',
     awardsUrl      : '',

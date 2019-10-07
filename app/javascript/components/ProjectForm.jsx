@@ -84,6 +84,7 @@ class ProjectForm extends React.Component {
       'project[legal_project_owner]'    : this.props.project.legalProjectOwner || '',
       'project[exclusive_contributions]': this.props.project.exclusiveContributions ? 'true' : 'false',
       'project[confidentiality]'        : this.props.project.confidentiality ? 'true' : 'false',
+      'project[display_team]'           : this.props.project.displayTeam ? 'true' : 'false',
       'project[channels]'               : this.props.project.channels || []
     }
   }
@@ -398,6 +399,18 @@ class ProjectForm extends React.Component {
               disabled={this.state.disabled['project[require_confidentiality]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.state.awardVisibilitiesPretty)}
+              symbolLimit={0}
+            />
+
+            <InputFieldDropdown
+              title="display team on project page"
+              required
+              name="project[display_team]"
+              value={this.state['project[display_team]']}
+              errorText={this.state.errors['project[displayTeam]']}
+              disabled={this.state.disabled['project[display_team]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries({'Yes': 'true', 'No': 'false'})}
               symbolLimit={0}
             />
 

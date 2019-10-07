@@ -1,0 +1,11 @@
+<div class="paragraph">
+  <% if defined? title %>
+    <div class="paragraph__title">
+      <%= title %>
+    </div>
+  <% end %>
+
+  <div class="paragraph__content">
+    <%= yield %>
+  </div>
+</div>

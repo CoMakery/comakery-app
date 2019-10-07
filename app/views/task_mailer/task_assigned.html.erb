@@ -3,11 +3,7 @@
 </p>
 
 <p>
-  The <%= @award.project.title %> has requested you to work on the task: <%= @award.name %>
-</p>
-
-<p>
-  The project owner is <%= @award.project.legal_project_owner %>.
+  <%= @award.issuer.decorate.name %> from <%= @award.project.title %> project has requested you to work on the task: <%= @award.name %>
 </p>
 
 <p>
