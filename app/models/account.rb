@@ -168,18 +168,16 @@ class Account < ApplicationRecord
            .where("((authentication_teams.account_id=#{id} and channels.id is not null) or a1.account_id=#{id}) and projects.account_id <> #{id}").distinct
   end
 
-  def my_projects
-    Project.where(id:
-      projects.pluck(:id) |
-      admin_projects.pluck(:id))
-  end
-
   def accessable_projects
     Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def related_projects
     Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+  end
+
+  def my_projects
+    Project.left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def accessable_award_types

@@ -301,36 +301,18 @@ export default class Project extends React.Component {
           <div className="project-team">
             <div className="project-team__container">
               <div className="project-team__contributors-container">
-                <div className="project-team__leader-name">Team Leaders</div>
                 <div className="project-team__contributors" >
-                  {projectData.leaders.map((contributor, index) =>
+                  {projectData.team.map((contributor, index) =>
                     <div key={contributor.id} className="project-team__contributor-container">
-                      <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
+                      <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 10 - index}} src={contributor.imageUrl} />
                       <div className="project-team__contributor__modal">
                         <ProfileModal profile={contributor} />
                       </div>
                     </div>
                   )}
                 </div>
-                {projectData.leadersNumber > 5 && <div className="project-team__contributors__more">+{projectData.adminsNumber - 5}</div>}
+                {projectData.teamSize > 10 && <div className="project-team__contributors__more">+{projectData.teamSize - 10}</div>}
               </div>
-
-              {projectData.contributorsNumber > 0 &&
-                <div className="project-team__contributors-container">
-                  <div className="project-team__leader-name">Contributors</div>
-                  <div className="project-team__contributors" >
-                    {projectData.contributors.map((contributor, index) =>
-                      <div key={contributor.id} className="project-team__contributor-container">
-                        <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
-                        <div className="project-team__contributor__modal">
-                          <ProfileModal profile={contributor} />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  {projectData.contributorsNumber > 5 && <div className="project-team__contributors__more">+{projectData.contributorsNumber - 5}</div>}
-                </div>
-              }
             </div>
           </div>
         }
@@ -445,36 +427,18 @@ export default class Project extends React.Component {
             </div>
 
             <div className="project-team__contributors-container">
-              <div className="project-team__leader-name">Leaders</div>
               <div className="project-team__contributors" >
-                {projectData.leaders.map((contributor, index) =>
+                {projectData.team.map((contributor, index) =>
                   <div key={contributor.id} className="project-team__contributor-container">
-                    <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
+                    <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 10 - index}} src={contributor.imageUrl} />
                     <div className="project-team__contributor__modal">
                       <ProfileModal profile={contributor} />
                     </div>
                   </div>
                 )}
               </div>
-              {projectData.leadersNumber > 5 && <div className="project-team__contributors__more">+{projectData.adminsNumber - 5}</div>}
+              {projectData.teamSize > 10 && <div className="project-team__contributors__more">+{projectData.teamSize - 10}</div>}
             </div>
-
-            {projectData.contributorsNumber > 0 &&
-              <div className="project-team__contributors-container">
-                <div className="project-team__leader-name">Contributors</div>
-                <div className="project-team__contributors" >
-                  {projectData.contributors.map((contributor, index) =>
-                    <div key={contributor.id} className="project-team__contributor-container">
-                      <img className="project-team__contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
-                      <div className="project-team__contributor__modal">
-                        <ProfileModal profile={contributor} />
-                      </div>
-                    </div>
-                  )}
-                </div>
-                {projectData.contributorsNumber > 5 && <div className="project-team__contributors__more">+{projectData.contributorsNumber - 5}</div>}
-              </div>
-            }
           </div>
         </div>
       }
@@ -504,15 +468,12 @@ Project.propTypes = {
 Project.defaultProps = {
   tasksBySpecialty: [ [ null, [] ] ],
   projectData     : {
-    description       : '',
-    teamLeader        : {},
-    contributors      : [],
-    leaders           : [],
-    contributorsNumber: 0,
-    leadersNumber     : 0,
-    chartData         : [],
-    stats             : {},
-    displayTeam       : true
+    description: '',
+    team       : [],
+    teamSize   : 0,
+    chartData  : [],
+    stats      : {},
+    displayTeam: true
   },
   missionData        : null,
   tokenData          : null,

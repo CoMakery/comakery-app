@@ -6,9 +6,9 @@ const Modal = styled.div`
   display: flex;
   position: absolute;
   box-sizing: border-box;
-  z-index: 9;
-  left: -108px;
-  bottom: 52px;
+  z-index: 11;
+  left: -100px;
+  bottom: 45px;
   width: 250px;
   padding: 12px;
   border-radius: 2px;
@@ -29,25 +29,6 @@ const Modal = styled.div`
     box-shadow: none;
     padding: 20px 0;
   `}
-
-  &::after {
-    position: absolute;
-    display: block;
-    content: '';
-    z-index: 9;
-    left: 50%;
-    bottom: -8px;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 8px solid #ffffff;
-
-    ${props => props.inline && css`
-      display: none;
-    `}
-  }
 `
 
 const Image = styled.img`

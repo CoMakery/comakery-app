@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
+import ProfileModal from '../components/ProfileModal'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import Pluralize from 'react-pluralize'
 
@@ -160,32 +161,22 @@ export default class Mission extends React.Component {
                 </div>
 
                 <div className="mission-projects__single__contributors">
-                  <div className="project-contributors">
-                    <div className="project-leader">
-                      <div className="project-leader__info">
-                        <div className="project-leader__title">Team Leader</div>
-                        {project.projectData.teamLeader.firstName} {project.projectData.teamLeader.lastName}
-                      </div>
-                      <img className="project-leader__avatar" src={project.projectData.teamLeader.imageUrl} />
-                    </div>
-                    <div className="project-contributors__container">
-                      <img className="project-leader__avatar project-leader__avatar--mobile" src={project.projectData.teamLeader.imageUrl} />
-                      {project.projectData.contributors.map((contributor, index) =>
-                        <div key={contributor.id} className="project-contributor-container project-contributor-container--desktop">
-                          <img className="project-contributor__avatar" style={{zIndex: 5 - index}} src={contributor.imageUrl} />
-                          <div className="project-contributor__modal">
-                            <img className="project-contributor__modal-avatar" src={contributor.imageUrl} />
-                            <div className="project-contributor__modal__info">
-                              <div className="project-contributor__modal-nickname">{contributor.nickname && contributor.nickname}</div>
-                              <div className="project-contributor__modal-name">{contributor.firstName} {contributor.lastName}</div>
-                              <div className="project-contributor__modal-specialty">{contributor.specialty}</div>
+                  <div className="project-team">
+                    <div className="project-team__container">
+                      <div className="project-team__contributors-container">
+                        <div className="project-team__contributors" >
+                          {project.projectData.team && project.projectData.team.map((contributor, index) =>
+                            <div key={contributor.id} className="project-team__contributor-container">
+                              <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 10 - index}} src={contributor.imageUrl} />
+                              <div className="project-team__contributor__modal">
+                                <ProfileModal profile={contributor} />
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
-                      )}
+                        {project.projectData.teamSize > 10 && <div className="project-team__contributors__more">+{project.projectData.teamSize - 10}</div>}
+                      </div>
                     </div>
-                    {project.projectData.contributorsNumber > 5 && <div className="project-contributors__more">+{project.projectData.contributorsNumber - 5}</div>}
-                    {project.projectData.contributorsNumber > 1 && <div className="project-contributors__more project-contributors__more--mobile">+{project.projectData.contributorsNumber - 1}</div>}
                   </div>
                 </div>
               </div>
