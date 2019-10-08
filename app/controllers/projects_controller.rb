@@ -325,7 +325,7 @@ class ProjectsController < ApplicationController
     )
 
     if project.account == account || project.admins.include?(account)
-      a['specialty']['name'] = 'Team Leader'
+      a['specialty'] && a['specialty']['name'] = 'Team Leader'
     end
 
     a
