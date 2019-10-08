@@ -115,8 +115,12 @@ class ProjectDecorator < Draper::Decorator
     }
   end
 
-  def leaders
-    admins.includes(:specialty).first(5).to_a.unshift(account)
+  def team_top
+    (admins.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
+  end
+
+  def team_size
+    project.contributors_distinct.size + project.admins.size + 1
   end
 
   private

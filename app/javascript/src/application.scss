@@ -3387,6 +3387,7 @@ input.button--right-space {
 .project-team__contributors {
   margin-top: 0.5em;
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -3455,16 +3456,23 @@ input.button--right-space {
 .project-team__contributor-container {
   position: relative;
   box-sizing: border-box;
+  margin-left: -8px;
 }
 
-.project-team__contributor__avatar {
+.project-team__contributor__avatar,
+.project-team__contributor__avatar--team-leader {
   position: relative;
   z-index: 1;
   box-sizing: border-box;
-  width: 48px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   border: solid 1px #8d9599;
-  margin-left: -8px;
+}
+
+.project-team__contributor__avatar--team-leader {
+  width: 55px;
+  height: 55px;
 }
 
 .project-team__contributor-container:hover .project-team__contributor__avatar {

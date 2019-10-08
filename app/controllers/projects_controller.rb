@@ -317,18 +317,21 @@ class ProjectsController < ApplicationController
     @project.unlisted? ? unlisted_project_path(@project.long_id) : project_path(@project)
   end
 
-  def contributor_props(account)
-    account.as_json(only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url]).merge(
-      image_url: helpers.account_image_url(account, 68),
-      specialty: account.specialty&.name
+  def contributor_props(account, project)
+    a = account.decorate.serializable_hash(
+      only: %i[id nickname first_name last_name linkedin_url github_url dribble_url behance_url],
+      include: :specialty,
+      methods: :image_url
     )
+
+    if project.account == account || project.admins.include?(account)
+      a['specialty']['name'] = 'Team Leader'
+    end
+
+    a
   end
 
   def project_props(project)
-    contributors_number = @project.contributors_by_award_amount.size
-    award_data = GetContributorData.call(project: @project).award_data
-    chart_data = award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a }
-
     project.as_json(only: %i[id title require_confidentiality display_team]).merge(
       description_header: project.description.split('.').first,
       description_html: Comakery::Markdown.to_html(project.description.split('.')[1..-1]&.join('.')),
@@ -336,16 +339,12 @@ class ProjectsController < ApplicationController
       square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
       panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),
       video_id: project.video_id,
-      owner: project.account.decorate.name,
       token_percentage: project.percent_awarded_pretty,
       maximum_tokens: project.maximum_tokens,
       awarded_tokens: project.total_awarded_pretty,
-      team_leader: contributor_props(project.account),
-      contributors_number: contributors_number,
-      leaders_number: project.leaders.size,
-      leaders: project.leaders.map { |leader| contributor_props(leader) },
-      contributors: project.top_contributors.map { |contributor| contributor_props(contributor) },
-      chart_data: chart_data,
+      team_size: project.team_size,
+      team: project.team_top.map { |contributor| contributor_props(contributor, project) },
+      chart_data: GetContributorData.call(project: @project).award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a },
       stats: project.stats
     )
   end
