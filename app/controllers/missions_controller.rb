@@ -141,7 +141,7 @@ class MissionsController < ApplicationController
   end
 
   def set_mission_props
-    projects = @mission.public_projects
+    projects = @mission.public_projects.includes(:token, :interested, :award_types, :ready_award_types, :account, admins: [:specialty], contributors_distinct: [:specialty])
 
     @props = {
       mission: @mission&.serializable_hash&.merge(
@@ -159,7 +159,7 @@ class MissionsController < ApplicationController
         {
           project_url: project_url(project),
           editable: current_account&.id == project.account_id,
-          interested: Interest.exists?(account_id: current_account&.id, project_id: project.id),
+          interested: project.interested.include?(current_account),
           project_data: project_props(project.decorate),
           token_data: project.token&.as_json(only: %i[name])&.merge(
             logo_url: project.token&.logo_image.present? ? Refile.attachment_url(project.token, :logo_image, :fill, 30, 30) : nil
