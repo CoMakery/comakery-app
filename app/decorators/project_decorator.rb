@@ -116,11 +116,11 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def team_top
-    (admins.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
+    (admins.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a + interested.includes(:specialty).first(5)).uniq
   end
 
   def team_size
-    project.contributors_distinct.size + project.admins.size + 1
+    contributors_distinct.size + admins.size + interested.size + 1
   end
 
   private
