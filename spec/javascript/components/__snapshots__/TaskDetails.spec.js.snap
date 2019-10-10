@@ -18,6 +18,12 @@ exports[`TaskDetails renders component correctly 1`] = `
         "name": null,
         "url": null,
       },
+      "policies": Object {
+        "pay": true,
+        "review": true,
+        "start": true,
+        "submit": true,
+      },
       "project": Object {
         "channels": Array [],
         "confidentiality": null,
@@ -208,6 +214,12 @@ exports[`TaskDetails renders component correctly 1`] = `
                     "mission": Object {
                       "name": null,
                       "url": null,
+                    },
+                    "policies": Object {
+                      "pay": true,
+                      "review": true,
+                      "start": true,
+                      "submit": true,
                     },
                     "project": Object {
                       "channels": Array [],
@@ -738,6 +750,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                               PROJECT 
                                               <a
                                                 href={null}
+                                                id="product-tour-my-tasks-step4"
                                               />
                                             </div>
                                           </StyledComponent>
@@ -887,6 +900,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                   <styled.a
                                     displayActions={false}
                                     href={null}
+                                    id="product-tour-my-tasks-step1"
                                   >
                                     <StyledComponent
                                       displayActions={false}
@@ -946,10 +960,12 @@ exports[`TaskDetails renders component correctly 1`] = `
                                       }
                                       forwardedRef={null}
                                       href={null}
+                                      id="product-tour-my-tasks-step1"
                                     >
                                       <a
                                         className="sc-chPdSV eUxnGC"
                                         href={null}
+                                        id="product-tour-my-tasks-step1"
                                       >
                                         View Task Details 
                                         <Icon

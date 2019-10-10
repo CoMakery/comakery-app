@@ -173,13 +173,18 @@ class ApplicationController < ActionController::Base
       },
       issuer: {
         name: task.issuer&.decorate&.name,
-        image: helpers.account_image_url(task.issuer, 100),
-        self: task.issuer == current_account
+        image: helpers.account_image_url(task.issuer, 100)
       },
       contributor: {
         name: task.account&.decorate&.name,
         image: helpers.account_image_url(task.account, 100),
         wallet_present: task.account&.decorate&.can_receive_awards?(task.project)
+      },
+      policies: {
+        start: policy(task).start?,
+        submit: policy(task).submit?,
+        review: policy(task).review?,
+        pay: policy(task).pay?
       },
       allowedToStart: true,
       experience_level_name: Award::EXPERIENCE_LEVELS.key(task.experience_level),

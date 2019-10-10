@@ -144,7 +144,6 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    @project = current_account.projects.find(params[:id])
     @project.long_id ||= params[:long_id] || SecureRandom.hex(20)
     authorize @project
 
@@ -326,7 +325,7 @@ class ProjectsController < ApplicationController
     )
 
     if project.account == account || project.admins.include?(account)
-      a['specialty']['name'] = 'Team Leader'
+      a['specialty'] && a['specialty']['name'] = 'Team Leader'
     end
 
     a
