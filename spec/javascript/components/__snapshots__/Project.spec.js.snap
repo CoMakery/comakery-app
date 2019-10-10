@@ -610,13 +610,7 @@ exports[`Project renders correctly without props 1`] = `
           <div
             className="tooltip-hidden"
             id="tooltip"
-          >
-            <span
-              id="value"
-            >
-              100
-            </span>
-          </div>
+          />
         </div>
         <div
           className="project-team__contributors-container"

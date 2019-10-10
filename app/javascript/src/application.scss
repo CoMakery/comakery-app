@@ -3320,7 +3320,7 @@ input.button--right-space {
 }
 
 .project-team {
-  padding: 1em;
+  padding: 1em 0.5em;
 }
 
 .project-team__container {
@@ -3457,6 +3457,10 @@ input.button--right-space {
   position: relative;
   box-sizing: border-box;
   margin-left: -8px;
+
+  &:hover {
+    z-index: 20;
+  }
 }
 
 .project-team__contributor__avatar,
@@ -3819,10 +3823,8 @@ input.button--right-space {
 .mission-tokens {
   box-sizing: border-box;
   width: 100%;
-  max-width: 1440px;
   margin: auto;
   margin-top: 80px;
-  padding: 0 140px;
   font-family: Georgia, sans-serif;
   font-size: 24px;
   font-weight: normal;
@@ -3840,7 +3842,7 @@ input.button--right-space {
   height: 126px;
   display: flex;
   position: relative;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-wrap: nowrap;
   overflow: hidden;
   -webkit-overflow-scrolling: touch;
@@ -3959,21 +3961,8 @@ input.button--right-space {
   line-height: normal;
   letter-spacing: normal;
   text-align: right;
-  color: var(--azure);
-}
-
-@media screen and (max-width: 1439px) {
-  .mission-tokens {
-    padding-left: 50px;
-    padding-right: 50px;
-  }
-}
-
-@media screen and (max-width: 650px) {
-  .mission-tokens {
-    padding-left: 30px;
-    padding-right: 30px;
-  }
+  display: flex;
+  align-items: center;
 }
 
 .mission-stats {
@@ -4125,7 +4114,7 @@ input.button--right-space {
 }
 
 .mission-projects__single__header {
-  padding: 15px 40px 22px;
+  padding: 3em 1em 0em 1em;
 }
 
 .mission-projects__single__token {
@@ -4143,7 +4132,7 @@ input.button--right-space {
 
 .mission-projects__single__token img {
   height: 14px;
-  margin-right: 0.5em;
+  margin-left: 0.5em;
 }
 
 .mission-projects__single__token__name {
@@ -4155,7 +4144,8 @@ input.button--right-space {
 .mission-projects__single__title-wrapper {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  flex-direction: column;
 }
 
 .mission-projects__single__title {
@@ -4303,6 +4293,10 @@ input.button--right-space {
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .project-contributors__more--mobile {
@@ -4380,22 +4374,8 @@ input.button--right-space {
 }
 
 .tooltip-hidden {
-  background: white;
-  min-width: 100px;
-  color: var(--black);
   opacity: 0;
-  position: absolute;
-  padding: 8px;
-  font-size: 14px;
-  font-family: Georgia, 'Times New Roman', Times, serif;
   transform: translate(8px, 8px);
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-  -mox-box-shadow: 4px 4px 4px 10px rgba(0, 0, 0, 0.4);
-  box-shadow: 4px 4px 10px rbga(0, 0, 0, 0.4);
-  pointer-events: none;
 }
 
 .sidebar-item__selected .sidebar-item--icon-left img {

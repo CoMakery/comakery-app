@@ -94,8 +94,12 @@ class MissionsController < ApplicationController
       methods: :image_url
     )
 
+    a['specialty'] ||= {}
+
     if project.account == account || project.admins.include?(account)
       a['specialty']['name'] = 'Team Leader'
+    elsif !project.contributors_distinct.include?(account)
+      a['specialty']['name'] = 'Interested'
     end
 
     a

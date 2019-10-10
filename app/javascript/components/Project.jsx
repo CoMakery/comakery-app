@@ -174,7 +174,7 @@ export default class Project extends React.Component {
   }
 
   arcTween(arc, centerEle, outerRadius, delay, changeText) {
-    const contributors = this.props.projectData.contributors
+    const contributors = this.props.projectData.team
     return function(d) {
       const { layerX, layerY } = d3.event
       if (changeText) {
@@ -183,8 +183,7 @@ export default class Project extends React.Component {
           .style('left', layerX + 'px')
           .style('top', layerY + 'px')
           .style('opacity', 1)
-          .select('#value')
-          .text(contributors[d.data.index].nickname || `${contributors[d.data.index].firstName || ''} ${contributors[d.data.index].lastName || ''}`)
+        this.setState({tooltipContributor: contributors[d.data.index]})
       } else {
         d3.select('#tooltip')
           .style('opacity', 0)
@@ -194,7 +193,7 @@ export default class Project extends React.Component {
         const i = d3.interpolate(d.outerRadius, outerRadius)
         return function(t) { d.outerRadius = i(t); return arc(d) }
       })
-    }
+    }.bind(this)
   }
 
   addInterest(projectId, specialtyId = null) { // protocol = mission name
@@ -304,14 +303,14 @@ export default class Project extends React.Component {
                 <div className="project-team__contributors" >
                   {projectData.team.map((contributor, index) =>
                     <div key={contributor.id} className="project-team__contributor-container">
-                      <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 10 - index}} src={contributor.imageUrl} />
+                      <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 15 - index}} src={contributor.imageUrl} />
                       <div className="project-team__contributor__modal">
                         <ProfileModal profile={contributor} />
                       </div>
                     </div>
                   )}
                 </div>
-                {projectData.teamSize > 10 && <div className="project-team__contributors__more">+{projectData.teamSize - 10}</div>}
+                {projectData.teamSize > 15 && <div className="project-team__contributors__more">+{projectData.teamSize - 15}</div>}
               </div>
             </div>
           </div>
@@ -422,7 +421,9 @@ export default class Project extends React.Component {
 
             <div className="project-chart">
               <div id="tooltip" className="tooltip-hidden">
-                <span id="value">100</span>
+                {this.state.tooltipContributor &&
+                  <ProfileModal profile={this.state.tooltipContributor} />
+                }
               </div>
             </div>
 
@@ -430,14 +431,14 @@ export default class Project extends React.Component {
               <div className="project-team__contributors" >
                 {projectData.team.map((contributor, index) =>
                   <div key={contributor.id} className="project-team__contributor-container">
-                    <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 10 - index}} src={contributor.imageUrl} />
+                    <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 15 - index}} src={contributor.imageUrl} />
                     <div className="project-team__contributor__modal">
                       <ProfileModal profile={contributor} />
                     </div>
                   </div>
                 )}
               </div>
-              {projectData.teamSize > 10 && <div className="project-team__contributors__more">+{projectData.teamSize - 10}</div>}
+              {projectData.teamSize > 15 && <div className="project-team__contributors__more">+{projectData.teamSize - 15}</div>}
             </div>
           </div>
         </div>

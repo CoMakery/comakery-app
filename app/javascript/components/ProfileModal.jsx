@@ -6,7 +6,7 @@ const Modal = styled.div`
   display: flex;
   position: absolute;
   box-sizing: border-box;
-  z-index: 11;
+  z-index: 100;
   left: -100px;
   bottom: 45px;
   width: 250px;

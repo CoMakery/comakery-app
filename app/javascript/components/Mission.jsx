@@ -109,9 +109,10 @@ export default class Mission extends React.Component {
               <Pluralize singular="project" count={token.count} />
             </div>
           </div>)}
+
+          {tokens.tokenCount > 4 && <div className="mission-tokens__more">+{tokens.tokenCount - 4} more</div>}
         </div>
 
-        {tokens.tokenCount > 4 && <div className="mission-tokens__more">+{tokens.tokenCount - 4} more</div>}
       </div>
 
       <div className="mission-stats">
@@ -151,8 +152,9 @@ export default class Mission extends React.Component {
           {projects.map(project => <div key={project.projectData.id} className="mission-projects__single">
             <div className="mission-projects__single__header">
               {project.tokenData && <div className="mission-projects__single__token">
-                <img src={project.tokenData.logoUrl} /> Paid in&nbsp;
+                Paid in&nbsp;
                 <span className="mission-projects__single__token__name">{project.tokenData.name}</span>
+                <img src={project.tokenData.logoUrl} />
               </div>}
 
               <div className="mission-projects__single__title-wrapper">
@@ -167,14 +169,14 @@ export default class Mission extends React.Component {
                         <div className="project-team__contributors" >
                           {project.projectData.team && project.projectData.team.map((contributor, index) =>
                             <div key={contributor.id} className="project-team__contributor-container">
-                              <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 10 - index}} src={contributor.imageUrl} />
+                              <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 15 - index}} src={contributor.imageUrl} />
                               <div className="project-team__contributor__modal">
                                 <ProfileModal profile={contributor} />
                               </div>
                             </div>
                           )}
                         </div>
-                        {project.projectData.teamSize > 10 && <div className="project-team__contributors__more">+{project.projectData.teamSize - 10}</div>}
+                        {project.projectData.teamSize > 15 && <div className="project-team__contributors__more">+{project.projectData.teamSize - 15}</div>}
                       </div>
                     </div>
                   </div>
