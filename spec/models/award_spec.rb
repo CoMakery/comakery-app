@@ -207,6 +207,21 @@ describe Award do
       end
     end
 
+    describe 'add_account_as_interested' do
+      let(:project) { create(:project) }
+      let(:award) { create(:award_ready, award_type: create(:award_type, project: project)) }
+
+      before do
+        award.update(status: :started, account: create(:account))
+
+        project.reload
+      end
+
+      it 'adds account as interested in project after award is started' do
+        expect(project.interested).to include(award.account)
+      end
+    end
+
     describe 'set_default_specialty' do
       let!(:award) { create(:award_ready) }
 

@@ -19,7 +19,7 @@ class ProjectsController < ApplicationController
       @my_projects = current_account.my_projects.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
       @archived_projects = current_account.projects.includes(:account, :admins).archived.order(updated_at: :desc).limit(100).decorate
       @team_projects = current_account.other_member_projects.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @interested_projects = current_account.projects_interested.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @interested_projects = current_account.projects_interested.includes(:account, :admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
     end
 
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
@@ -122,6 +122,7 @@ class ProjectsController < ApplicationController
 
     if account && !@project.admins.include?(account)
       @project.admins << account
+      @project.interested << account unless account.interested?(@project.id)
       redirect_to admins_project_path(@project), notice: "#{account.decorate.name} added as a project admin"
     elsif @project.admins.include?(account)
       redirect_to admins_project_path(@project), flash: { error: "#{account.decorate.name} is already a project admin" }

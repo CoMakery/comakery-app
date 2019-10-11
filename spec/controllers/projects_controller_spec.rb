@@ -60,6 +60,7 @@ describe ProjectsController do
       expect(response).to redirect_to(admins_project_path(project))
       expect(flash[:notice]).not_to be_nil
       expect(project.admins).to match_array([project_admin])
+      expect(project.interested).to include(project_admin)
     end
 
     it 'returns an error if email is not found' do
@@ -259,7 +260,7 @@ describe ProjectsController do
         expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'admin project', 'unlisted project', 'member project'])
         expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
         expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
-        expect(assigns[:interested_projects].map(&:title)).to match_array([interest.project.title])
+        expect(assigns[:interested_projects].map(&:title)).to match_array(['Uber for Cats', 'member project', 'public project', 'unlisted project'])
       end
     end
   describe 'logged out'

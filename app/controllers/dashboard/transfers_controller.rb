@@ -18,6 +18,7 @@ class Dashboard::TransfersController < ApplicationController
 
     @transfer = @award_type.awards.new(transfer_params)
     @transfer.name = @transfer.source.capitalize
+    @transfer.account_id = params[:award][:account_id]
     @transfer.issuer = current_account
     @transfer.status = :accepted
 
@@ -48,8 +49,7 @@ class Dashboard::TransfersController < ApplicationController
         :source,
         :why,
         :description,
-        :requirements,
-        :account_id
+        :requirements
       )
     end
 end

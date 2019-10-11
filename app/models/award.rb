@@ -68,6 +68,7 @@ class Award < ApplicationRecord
   before_validation :set_transferred_at, if: -> { status == 'paid' && transferred_at.nil? }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
+  after_save :add_account_as_interested, if: -> { started? }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6,7)' }
@@ -314,6 +315,10 @@ class Award < ApplicationRecord
 
     def update_account_experience
       Experience.increment_for(account, specialty)
+    end
+
+    def add_account_as_interested
+      project.interested << account unless account.interested?(project.id)
     end
 
     def store_license_hash

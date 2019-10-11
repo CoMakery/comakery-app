@@ -46,6 +46,7 @@ class Project < ApplicationRecord
 
   before_validation :store_license_hash, unless: -> { terms_readonly? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
+  after_create :add_owner_as_interested
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -225,6 +226,10 @@ class Project < ApplicationRecord
 
   def udpate_awards_if_token_was_added
     awards.paid.each { |a| a.update(status: :accepted) }
+  end
+
+  def add_owner_as_interested
+    interested << account unless account.interested?(id)
   end
 
   def store_license_hash

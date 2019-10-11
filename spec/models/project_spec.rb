@@ -204,6 +204,14 @@ describe Project do
         expect(project_finalized.reload.agreed_to_license_hash).to eq('test')
       end
     end
+
+    describe 'add_owner_as_interested' do
+      let(:project) { create(:project) }
+
+      it 'adds project owner as interested' do
+        expect(project.interested).to include(project.account)
+      end
+    end
   end
 
   describe 'scopes' do
