@@ -260,7 +260,7 @@ describe ProjectsController do
         expect(assigns[:my_projects].map(&:title)).to match_array(['public project', 'admin project', 'unlisted project', 'member project'])
         expect(assigns[:archived_projects].map(&:title)).to match_array(['archived project'])
         expect(assigns[:team_projects].map(&:title)).to match_array(['other member project'])
-        expect(assigns[:interested_projects].map(&:title)).to match_array(['Uber for Cats', 'member project', 'public project', 'unlisted project'])
+        expect(assigns[:interested_projects].map(&:title)).to match_array(['Uber for Cats'])
       end
     end
   describe 'logged out'
