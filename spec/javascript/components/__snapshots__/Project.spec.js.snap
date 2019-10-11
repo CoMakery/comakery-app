@@ -15,14 +15,11 @@ exports[`Project renders correctly without props 1`] = `
   projectData={
     Object {
       "chartData": Array [],
-      "contributors": Array [],
-      "contributorsNumber": 0,
       "description": "",
       "displayTeam": true,
-      "leaders": Array [],
-      "leadersNumber": 0,
       "stats": Object {},
-      "teamLeader": Object {},
+      "team": Array [],
+      "teamSize": 0,
     }
   }
   projectForHeader={null}
@@ -234,11 +231,6 @@ exports[`Project renders correctly without props 1`] = `
           <div
             className="project-team__contributors-container"
           >
-            <div
-              className="project-team__leader-name"
-            >
-              Team Leaders
-            </div>
             <div
               className="project-team__contributors"
             />
@@ -618,22 +610,11 @@ exports[`Project renders correctly without props 1`] = `
           <div
             className="tooltip-hidden"
             id="tooltip"
-          >
-            <span
-              id="value"
-            >
-              100
-            </span>
-          </div>
+          />
         </div>
         <div
           className="project-team__contributors-container"
         >
-          <div
-            className="project-team__leader-name"
-          >
-            Leaders
-          </div>
           <div
             className="project-team__contributors"
           />

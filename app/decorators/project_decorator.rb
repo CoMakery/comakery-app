@@ -115,8 +115,12 @@ class ProjectDecorator < Draper::Decorator
     }
   end
 
-  def leaders
-    admins.includes(:specialty).first(5).to_a.unshift(account)
+  def team_top
+    (admins.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a + interested.includes(:specialty).first(5)).uniq
+  end
+
+  def team_size
+    contributors_distinct.size + admins.size + interested.size + 1
   end
 
   def blockchain_name
