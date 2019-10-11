@@ -179,6 +179,10 @@ class Account < ApplicationRecord
     Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
+  def my_projects
+    Project.left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
+  end
+
   def accessable_award_types
     AwardType.where(project: accessable_projects)
   end

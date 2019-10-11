@@ -105,16 +105,16 @@ describe('Mission', () => {
             interests: 0
           },
           projectData: {
-            contributors      : [],
-            contributorsNumber: 0,
-            defaultImageUrl   : 'defaultImg',
-            description       : 'yes',
-            id                : 60,
-            imageUrl          : 'testimage',
-            owner             : 'Test User',
-            squareUrl         : 'test image',
-            title             : 'test live call',
-            teamLeader        : {
+            team           : [],
+            teamSize       : 0,
+            defaultImageUrl: 'defaultImg',
+            description    : 'yes',
+            id             : 60,
+            imageUrl       : 'testimage',
+            owner          : 'Test User',
+            squareUrl      : 'test image',
+            title          : 'test live call',
+            teamLeader     : {
               firstName: 'Test user',
               id       : 1,
               imageUrl : '/attachments/test.jpg',
@@ -136,16 +136,16 @@ describe('Mission', () => {
             interests: 0
           },
           projectData: {
-            contributors      : [],
-            contributorsNumber: 0,
-            defaultImageUrl   : 'defaultImg',
-            description       : 'yes',
-            id                : 61,
-            imageUrl          : 'testimage',
-            owner             : 'Test User',
-            squareUrl         : 'test image',
-            title             : 'test live call',
-            teamLeader        : {
+            team           : [],
+            teamSize       : 0,
+            defaultImageUrl: 'defaultImg',
+            description    : 'yes',
+            id             : 61,
+            imageUrl       : 'testimage',
+            owner          : 'Test User',
+            squareUrl      : 'test image',
+            title          : 'test live call',
+            teamLeader     : {
               firstName: 'Test user',
               id       : 1,
               imageUrl : '/attachments/test.jpg',

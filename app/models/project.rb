@@ -175,9 +175,10 @@ class Project < ApplicationRecord
       tasks: published_awards.in_progress.size,
       interests: (
         [account_id] |
+        admins.pluck(:id) |
         interests.pluck(:account_id) |
-        published_awards.pluck(:account_id)
-      ).compact.size
+        contributors_distinct.pluck(:id)
+      ).compact.uniq.size
     }
   end
 
