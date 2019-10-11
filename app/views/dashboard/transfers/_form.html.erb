@@ -1,0 +1,37 @@
+<%= form_with model: Award.new, url: project_dashboard_transfers_path(@project), class: 'transfers-table__form' do |f| %>
+  <div class="transfers-table__transfer transfers-table__transfer--new" data-target="transfer-form.form" data-transfer-form-decimals="<%= @project.token ? @project.token.decimal_places : 0 %>">
+    <div class="transfers-table__transfer__name">
+      <%= f.select(:source, [['Contributor Transfer', 'earned'], ['Investor Transfer', 'bought']], include_blank: 'Transfer Type ↓', required: true) %>
+    </div>
+
+    <div class="transfers-table__transfer__account">
+      <%= f.select(:account_id, @project.interested.collect { |a| [ a.decorate.name_with_nickname, a.id ] }, include_blank: 'Recipient ↓', required: true) %>
+    </div>
+
+    <div class="transfers-table__transfer__issuer">
+    </div>
+
+    <div class="transfers-table__transfer__amount">
+      <%= f.number_field(:amount, required: true, placeholder: 'Amount', min: @project.step_for_amount_input, step: @project.step_for_amount_input, data: {target: "transfer-form.amount", action: "keyup->transfer-form#calculateTotal change->transfer-form#calculateTotal"}) %>
+    </div>
+
+    <div class="transfers-table__transfer__quantity">
+      <%= f.number_field(:quantity, required: true, placeholder: 'Quantity', min: 1, step: @project.step_for_quantity_input, data: {target: "transfer-form.quantity", action: "keyup->transfer-form#calculateTotal change->transfer-form#calculateTotal"}) %>
+    </div>
+
+    <div class="transfers-table__transfer__total_amount" data-target="transfer-form.total">
+      0
+    </div>
+
+    <div class="transfers-table__transfer__button">
+    </div>
+
+    <div class="transfers-table__transfer__transferred_at">
+      <%= f.hidden_field(:why, value: '—') %>
+      <%= f.hidden_field(:description, value: '—') %>
+      <%= f.hidden_field(:requirements, value: '—') %>
+      <%= f.submit('create', data: {confirm: 'Create a transfer?'}) %>
+      <%= button_tag "cancel", type: 'button', data: {action: 'transfer-form#hideForm'} %>
+    </div>
+  </div>
+<% end %>

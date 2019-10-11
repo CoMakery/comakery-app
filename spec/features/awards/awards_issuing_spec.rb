@@ -39,7 +39,7 @@ describe 'awards issuing', js: true do
     fill_in 'task[amount]', with: '1'
     fill_in 'task[proof_link]', with: 'http://test'
     find_button('create').click
-    expect(page).to have_content 'TASK CREATED'
+    expect(page).to have_content 'Task created'
     expect(Award.last.name).to eq 'test name'
     expect(Award.last.why).to eq 'test why'
     expect(Award.last.description).to eq 'test description'
@@ -57,7 +57,7 @@ describe 'awards issuing', js: true do
     expect(page).to have_content 'Create A New Task'
     fill_in 'task[name]', with: 'test name cloned'
     find_button('create').click
-    expect(page).to have_content 'TASK CREATED'
+    expect(page).to have_content 'Task created'
     expect(Award.last.name).to eq 'test name cloned'
     expect(Award.last.why).to eq award1.why
     expect(Award.last.description).to eq award1.description
@@ -73,7 +73,7 @@ describe 'awards issuing', js: true do
     expect(page).to have_content 'Edit Task'
     fill_in 'task[name]', with: 'test name updated'
     find_button('save').click
-    expect(page).to have_content 'TASK UPDATED'
+    expect(page).to have_content 'Task updated'
     expect(award1.reload.name).to eq 'test name updated'
   end
 
@@ -81,7 +81,7 @@ describe 'awards issuing', js: true do
     visit project_award_types_path(project1)
     find('.batch-index--sidebar--item', text: award_type1.name.capitalize).click
     find("a[data-method='delete'][href='#{project_award_type_award_path(project1, award_type1, award2)}']").click
-    expect(page).to have_content 'TASK CANCELLED'
+    expect(page).to have_content 'Task cancelled'
   end
 
   it 'allows to send award when recipient wallet address is present' do
@@ -90,7 +90,7 @@ describe 'awards issuing', js: true do
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
     expect(page).to have_content '0x583cbBb8a8443B38aBcC0c956beCe47340ea1367'
     find_button('issue award').click
-    expect(page).to have_content 'TASK HAS BEEN ACCEPTED.'
+    expect(page).to have_content 'task has been accepted'
   end
 
   it 'allows to send award to a selected channel user' do
@@ -101,7 +101,7 @@ describe 'awards issuing', js: true do
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
     expect(page).to have_content awardee_auth2.account.ethereum_wallet
     find_button('issue award').click
-    expect(page).to have_content 'TASK HAS BEEN ACCEPTED.'
+    expect(page).to have_content 'task has been accepted'
   end
 
   it "allows to send award when recipient wallet address isn't present" do
@@ -112,7 +112,7 @@ describe 'awards issuing', js: true do
     find('.task-award-form--form--field--title', text: 'RECIPIENT ADDRESS')
     expect(page).to have_content 'The recipient must register their address before they can accept the award.'
     find_button('issue award').click
-    expect(page).to have_content "The award recipient hasn't entered a blockchain address for us to send the award to. When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page.".upcase
+    expect(page).to have_content "The award recipient hasn't entered a blockchain address for us to send the award to. When the recipient enters their blockchain address you will be able to approve the token transfer on the awards page"
   end
 
   it 'limit send award with project maximum token' do
@@ -121,7 +121,7 @@ describe 'awards issuing', js: true do
     find_button('proceed').click
     find_button('issue award').click
     find('.flash-message-container')
-    expect(page).to have_content "SORRY, YOU CAN'T EXCEED THE PROJECT'S BUDGET"
+    expect(page).to have_content "Sorry, you can't exceed the project's budget"
   end
 
   it "doesn't allow to edit award after sending" do

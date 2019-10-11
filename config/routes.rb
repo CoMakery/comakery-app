@@ -77,7 +77,7 @@ Rails.application.routes.draw do
     resources :contributors, only: [:index]
 
     namespace :dashboard do
-      resources :transfers, only: [:index, :create, :update]
+      resources :transfers, only: [:index, :create]
     end
     
     member do

@@ -24,6 +24,12 @@ describe AccountDecorator do
     end
   end
 
+  describe '#name_with_nickname' do
+    it 'combines name and nickname' do
+      expect(build(:account, first_name: 'Bob', last_name: 'Johnson', nickname: 'bobjon').decorate.name_with_nickname).to eq('Bob Johnson (bobjon)')
+    end
+  end
+
   describe '#can_send_awards?' do
     let!(:project_owner) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
 

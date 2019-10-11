@@ -123,6 +123,14 @@ class ProjectDecorator < Draper::Decorator
     Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
   end
 
+  def step_for_amount_input
+    token ? (1.0 / 10**token.decimal_places) : 1
+  end
+
+  def step_for_quantity_input
+    token ? 0.1 : 1
+  end
+
   private
 
   def self.pretty_number(*currency_methods)

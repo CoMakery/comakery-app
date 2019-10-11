@@ -111,7 +111,8 @@ input[type="search"],
 input[type="tel"],
 input[type="time"],
 input[type="url"],
-input[type="week"] {
+input[type="week"],
+select {
   font-size: 14px;
   height: 35px;
   padding: 9px 16px 8px 15px;
@@ -518,6 +519,26 @@ form.form-with-submit-button {
   margin-top: 2em;
 }
 
+button.transfers-create {
+  margin: 0;
+  margin-bottom: 3em;
+  border-radius: 6px;
+  border: solid 1px #e6e8ed;
+  height: 35px;
+  padding: 9px 16px 8px 15px;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  background-color: #1560fa;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
+
+  &:disabled {
+    background-color: #c7c7c7;
+    cursor: not-allowed;
+  }
+}
+
 .transfers-table {
   display: flex;
   flex-direction: column;
@@ -583,6 +604,84 @@ form.form-with-submit-button {
 
     @media (max-width: 1280px) {
       height: auto;
+    }
+  }
+
+  .transfers-table__form {
+    .transfers-table__transfer--new {
+      opacity: 1;
+      pointer-events: auto;
+      display: none;
+    }
+
+    .transfers-table__transfer__transferred_at {
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+    }
+
+    .transfers-table__transfer__quantity:before {
+      content: 'x';
+      position: absolute;
+      margin-left: -1.2em;
+      font-weight: bold;
+    }
+
+    .transfers-table__transfer__total_amount:before {
+      content: '=';
+      position: absolute;
+      margin-left: -1.2em;
+      font-weight: bold;
+    }
+
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+
+    input[type=number],
+    select {
+      border-radius: 6px;
+      border: solid 1px #e6e8ed;
+      height: 35px;
+      padding: 9px 16px 8px 15px;
+      box-shadow: none;
+      font-family: Montserrat, sans-serif;
+      font-size: 12px;
+      width: 100%;
+      padding: 0.5em;
+      min-width: initial;
+      font-weight: 500;
+    }
+
+    select {
+      width: initial;
+    }
+
+    input[type=submit],
+    button {
+      border-radius: 6px;
+      border: none;
+      height: 35px;
+      padding: 9px 16px 8px 15px;
+      box-shadow: none;
+      font-family: Montserrat, sans-serif;
+      font-size: 12px;
+      background-color: white;
+      color: #1560fa;
+      font-weight: 600;
+      margin: 0;
+      box-shadow: none;
+      text-align: left;
+
+      &:disabled {
+        opacity: 0.1;
+        cursor: not-allowed;
+      }
+    }
+
+    button {
+      color: #fe2d6c;
     }
   }
 
@@ -690,7 +789,6 @@ form.form-with-submit-button {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  position: relative;
 }
 
 .header-mobile {
@@ -2891,6 +2989,7 @@ input.button--right-space {
   z-index: 99;  
   top: 20px;
   right: 20px;
+  z-index: 1000;
 }
 
 .flash-message {
@@ -2900,18 +2999,18 @@ input.button--right-space {
   align-items: center;
   width: 550px;
   padding: 20px 20px 20px 20px;
-  box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
+  box-shadow: 0 10px 20px 0 rgba(74, 74, 74, .2);
   border: 1px solid rgba(74, 74, 74, .2);
   background-color: #ffffff;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
-  font-weight: bold;
   font-style: normal;
   font-stretch: normal;
   line-height: normal;
   letter-spacing: normal;
   color: var(--black);
-  text-transform: uppercase;
+  font-weight: 500;
+  border-radius: 6px;
 }
 
 .flash-message__icon {

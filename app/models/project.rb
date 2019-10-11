@@ -185,6 +185,10 @@ class Project < ApplicationRecord
     awards.contributed.any?
   end
 
+  def default_award_type
+    award_types.find_or_create_by(name: 'Transfers', goal: '—', description: '—')
+  end
+
   private
 
   def valid_tracker_url

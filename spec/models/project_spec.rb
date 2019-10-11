@@ -404,4 +404,22 @@ describe Project do
       expect(project.stats[:interests]).to eq(3)
     end
   end
+
+  describe 'default_award_type' do
+    let(:project_w_default_award_type) { create :project }
+    let(:project_wo_default_award_type) { create :project }
+
+    before do
+      project_w_default_award_type.award_types.create(name: 'Transfers', goal: '—', description: '—')
+      project_w_default_award_type.reload
+    end
+
+    it 'creates default award type for project and returns it' do
+      expect(project_wo_default_award_type.default_award_type).to be_instance_of(AwardType)
+    end
+
+    it 'returns default award type if its already present' do
+      expect(project_w_default_award_type.default_award_type).to be_instance_of(AwardType)
+    end
+  end
 end
