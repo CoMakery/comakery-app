@@ -207,6 +207,7 @@ describe ProjectDecorator do
       expect(props[:batches_url]).to include(project.id.to_s)
       expect(props[:contributors_url]).to include(project.id.to_s)
       expect(props[:transfers_url]).to include(project.id.to_s)
+      expect(props[:accounts_url]).to include(project.id.to_s)
       expect(props[:landing_url]).to include(project.id.to_s)
       expect(props_unlisted[:landing_url]).to include(unlisted_project.long_id.to_s)
       expect(props_wo_image[:image_url]).to include('defaul_project')

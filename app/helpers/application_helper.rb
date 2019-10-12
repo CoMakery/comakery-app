@@ -10,6 +10,7 @@ module ApplicationHelper
   def project_page
     return 'contributors' if controller_name == 'contributors'
     return 'transfers' if controller_name == 'transfers'
+    return 'accounts' if controller_name == 'accounts'
     return 'admins' if params[:action] == 'admins'
   end
 end

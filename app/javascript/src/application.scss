@@ -449,14 +449,29 @@ form.form-with-submit-button {
 
       .transfers-filters--filter--options--transferred__active {
         background-color: #00cc17;
+
+        a {
+          color: white;
+          font-weight: 500;
+        }
       }
 
       .transfers-filters--filter--options--ready__active {
         background-color: #ffbf00;
+
+        a {
+          color: white;
+          font-weight: 500;
+        }
       }
 
       .transfers-filters--filter--options--blocked__active {
         background-color: #fe2d6c;
+
+        a {
+          color: white;
+          font-weight: 500;
+        }
       }
 
       & > div {
@@ -766,6 +781,25 @@ button.transfers-create {
     }
 
     .transfers-table__transfer__transferred_at {
+      min-width: 60px;
+    }
+
+    .transfers-table__transfer__aml-kyc {
+      min-width: 60px;
+      max-width: 120px;
+    }
+
+    .transfers-table__transfer__address {
+      min-width: 60px;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      align-self: center;
+      text-transform: uppercase;
+    }
+
+    .transfers-table__transfer__max-investment {
       min-width: 60px;
     }
 

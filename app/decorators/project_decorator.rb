@@ -108,6 +108,7 @@ class ProjectDecorator < Draper::Decorator
       batches_url: project_award_types_path(self),
       contributors_url: project_contributors_path(self),
       transfers_url: project_dashboard_transfers_path(self),
+      accounts_url: project_dashboard_accounts_path(self),
       landing_url: unlisted? ? unlisted_project_path(long_id) : project_path(self),
       show_batches: award_types.where.not(state: :draft).any?,
       show_transfers: !require_confidentiality?,

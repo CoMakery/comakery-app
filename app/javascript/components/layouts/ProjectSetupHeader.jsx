@@ -174,6 +174,12 @@ class ProjectSetupHeader extends React.Component {
                   transfers
                 </NavLink>
               }
+
+              {(owner || project.showTransfers) &&
+                <NavLink current={current === 'accounts'} href={project.accountsUrl}>
+                  accounts
+                </NavLink>
+              }
             </ProjectNav>
           }
         </Navigation>
@@ -216,6 +222,7 @@ ProjectSetupHeader.defaultProps = {
     batchesUrl     : '',
     contributorsUrl: '',
     transfersUrl   : '',
+    accountsUrl    : '',
     landingUrl     : '',
     imageUrl       : '',
     title          : '',

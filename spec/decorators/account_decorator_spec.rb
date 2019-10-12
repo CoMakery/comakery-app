@@ -140,4 +140,21 @@ describe AccountDecorator do
       expect(account_wo_image.decorate.image_url).to include('default_account_image')
     end
   end
+
+  describe 'wallet_address_link_for' do
+    let!(:account_w_wallet) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
+    let!(:account_wo_wallet) { create(:account) }
+    let!(:project_w_token) { build :project, token: create(:token, coin_type: 'eth') }
+    let!(:project_wo_token) { build :project, token: nil }
+
+    it 'returns link for wallet address if account has address for project token' do
+      expect(account_w_wallet.decorate.wallet_address_link_for(project_w_token)).to include(account_w_wallet.ethereum_wallet)
+    end
+
+    it 'returns placeholder if account doesnt have address for project token' do
+      expect(account_w_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('–')
+      expect(account_wo_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('–')
+      expect(account_wo_wallet.decorate.wallet_address_link_for(project_w_token)).to eq('–')
+    end
+  end
 end

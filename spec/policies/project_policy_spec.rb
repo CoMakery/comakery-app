@@ -118,9 +118,9 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#show? #transfers?' do
+  describe '#show? #transfers? #accounts?' do
     it 'allows viewing of projects that are public_listed or owned by the current account' do
-      %i[show? transfers?].each do |action|
+      %i[show? transfers? accounts?].each do |action|
         expect(described_class.new(nil, my_public_project).send(action)).to be true
         expect(described_class.new(nil, others_private_project).send(action)).to be_falsey
         expect(described_class.new(nil, others_archived_project).send(action)).to be_falsey

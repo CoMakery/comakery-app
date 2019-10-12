@@ -78,6 +78,7 @@ Rails.application.routes.draw do
 
     namespace :dashboard do
       resources :transfers, only: [:index, :create]
+      resources :accounts, only: [:index]
     end
     
     member do

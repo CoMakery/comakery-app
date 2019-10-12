@@ -1,0 +1,19 @@
+<% account = account.decorate %>
+
+<div class="transfers-table__transfer">
+  <div class="transfers-table__transfer__aml-kyc">
+    –
+  </div>
+
+  <div class="transfers-table__transfer__account">
+    <%= render partial: "dashboard/transfers/account", locals: {account: account} %>
+  </div>
+
+  <div class="transfers-table__transfer__address">
+    <%= account.wallet_address_link_for(@project) %>
+  </div>
+
+  <div class="transfers-table__transfer__max-investment">
+    –
+  </div>
+</div>

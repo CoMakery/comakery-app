@@ -30,12 +30,27 @@ class AccountDecorator < Draper::Decorator
     UtilitiesService.get_wallet_url('tezos_mainnet', tezos_wallet)
   end
 
+  def ethereum_wallet_url
+    "https://etherscan.io/address/#{ethereum_wallet}"
+  end
+
   def etherscan_address
     "https://etherscan.io/address/#{ethereum_wallet}"
   end
 
   def qtum_wallet_url
     UtilitiesService.get_wallet_url('qtum_mainnet', qtum_wallet)
+  end
+
+  def wallet_address_link_for(project)
+    project = project.decorate
+    address = project.blockchain_name.present? && send("#{project.blockchain_name}_wallet")
+
+    if address.present?
+      h.link_to(address, send("#{project.blockchain_name}_wallet_url"), target: '_blank')
+    else
+      '–'
+    end
   end
 
   def can_receive_awards?(project)
