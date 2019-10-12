@@ -1,14 +1,23 @@
+# Allow increased cyclomatic complexity for the migration:
+# rubocop:disable Metrics/CyclomaticComplexity
+
 class PopulateInterests < ActiveRecord::DataMigration
   def up
     Project.includes(:account, :admins, :interested, awards: [:account]).find_each do |project|
-      project.interested << project.account unless project.interested.include?(project.account)
+      if project.account && !project.interested.include?(project.account)
+        project.interested << project.account
+      end
 
       project.admins.each do |admin|
-        project.interested << admin unless project.interested.include?(admin)
+        if admin && !project.interested.include?(admin)
+          project.interested << admin
+        end
       end
 
       project.awards.where.not(account: nil) do |award|
-        project.interested << award.account unless project.interested.include?(award.account)
+        if award.account && !project.interested.include?(award.account)
+          project.interested << award.account
+        end
       end
     end
   end

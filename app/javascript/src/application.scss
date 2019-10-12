@@ -744,6 +744,11 @@ button.transfers-create {
 
     .transfers-table__transfer__quantity {
       max-width: 60px;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      align-self: center;
     }
 
     .transfers-table__transfer__total_amount {

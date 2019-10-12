@@ -16,7 +16,13 @@
   </div>
 
   <div class="transfers-table__transfer__account">
-    <%= render partial: "account", locals: {account: transfer.account} %>
+    <% if transfer.account %>
+      <%= render partial: "account", locals: {account: transfer.account} %>
+    <% elsif transfer.email %>
+      <%= transfer.email %>
+    <% else %>
+      –
+    <% end %>
   </div>
 
   <div class="transfers-table__transfer__issuer">
@@ -44,7 +50,7 @@
   </div>
 
   <div class="transfers-table__transfer__transferred_at">
-    <% if transfer.paid? %>
+    <% if transfer.paid? && transfer.transferred_at %>
       <%= transfer.transferred_at.strftime("%b %e, %Y") %>
     <% else %>
       –
