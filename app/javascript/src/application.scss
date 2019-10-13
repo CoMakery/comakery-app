@@ -4198,17 +4198,20 @@ input.button--right-space {
 
 .mission-projects__single__card__img {
   position: relative;
-  width: 105px;
-  height: 105px;
+  width: 100%;
+  height: 100%;
   margin-right: 28px;
+  
+  img {
+    max-width: 105px;
+    max-height: 105px;
+  }
 }
 
 .mission-projects__single__card__img__mask {
   position: absolute;
   top: 0;
   left: 0;
-  width: 105px;
-  height: 105px;
 }
 
 .mission-projects__single__card__info {
