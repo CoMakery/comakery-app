@@ -34,7 +34,8 @@ class Dashboard::TransfersController < ApplicationController
     def set_transfers
       @page = (params[:page] || 1).to_i
       @q = @project.awards.completed.ransack(params[:q])
-      @transfers = @q.result.includes(:account, :issuer, :project, :award_type, :token).page(@page).per(10)
+      @transfers_all = @q.result.includes(:issuer, :project, :award_type, :token, account: [:verifications])
+      @transfers = @transfers_all.page(@page).per(10)
       redirect_to '/404.html' if (@page > 1) && @transfers.out_of_range?
     end
 

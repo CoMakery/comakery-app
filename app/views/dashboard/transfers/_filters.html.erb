@@ -19,11 +19,11 @@
       </div>
 
       <div class="<%= request.params[:q]&.fetch("account_#{@project.blockchain_name}_wallet_present", nil) == '1' ? 'transfers-filters--filter--options--ready__active' : nil %>">
-        <%= link_to 'ready', request.params.merge(q: (request.params[:q] || {}).except("account_#{@project.blockchain_name}_wallet_blank").merge(status_eq: 3).merge((@project.blockchain_name ? "account_#{@project.blockchain_name}_wallet_present" : nil) => 1)) %>
+        <%= link_to 'ready', request.params.merge(q: (request.params[:q] || {}).except("account_#{@project.blockchain_name}_wallet_blank").merge(status_eq: 3).merge((@project.blockchain_name ? "account_#{@project.blockchain_name}_wallet_present" : '') => 1)) %>
       </div>
 
       <div class="<%= request.params[:q]&.fetch("account_#{@project.blockchain_name}_wallet_blank", nil) == '1' ? 'transfers-filters--filter--options--blocked__active' : nil %>">
-        <%= link_to 'blocked', request.params.merge(q: (request.params[:q] || {}).except("account_#{@project.blockchain_name}_wallet_present").merge(status_eq: 3).merge((@project.blockchain_name ? "account_#{@project.blockchain_name}_wallet_blank" : nil) => 1)) %>
+        <%= link_to 'blocked', request.params.merge(q: (request.params[:q] || {}).except("account_#{@project.blockchain_name}_wallet_present").merge(status_eq: 3).merge((@project.blockchain_name ? "account_#{@project.blockchain_name}_wallet_blank" : '') => 1)) %>
       </div>
     </div>
   </div>

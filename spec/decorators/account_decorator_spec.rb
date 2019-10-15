@@ -157,4 +157,24 @@ describe AccountDecorator do
       expect(account_wo_wallet.decorate.wallet_address_link_for(project_w_token)).to eq('–')
     end
   end
+
+  describe 'verification_state' do
+    let!(:passed_account) { create(:account) }
+    let!(:failed_account) { create(:account) }
+    let!(:unknown_account) { create(:account) }
+
+    it 'returns passed for passed_account' do
+      create(:verification, account: passed_account, passed: true)
+      expect(passed_account.reload.decorate.verification_state).to eq('passed')
+    end
+
+    it 'returns failed for failed_account' do
+      create(:verification, account: failed_account, passed: false)
+      expect(failed_account.reload.decorate.verification_state).to eq('failed')
+    end
+
+    it 'returns unknown for unknown_account' do
+      expect(unknown_account.reload.decorate.verification_state).to eq('unknown')
+    end
+  end
 end

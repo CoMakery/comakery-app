@@ -66,4 +66,15 @@ class AccountDecorator < Draper::Decorator
   def image_url(size = 100)
     helpers.attachment_url(self, :image, :fill, size, size, fallback: 'default_account_image.jpg')
   end
+
+  def verification_state
+    case latest_verification&.passed?
+    when true
+      'passed'
+    when false
+      'failed'
+    else
+      'unknown'
+    end
+  end
 end

@@ -10,6 +10,27 @@
     <% end %>
   </div>
 
+  <div class="transfers-filters--filter">
+    <h3>AML/KYC</h3>
+
+    <div class="transfers-filters--filter--options">
+      <div class="<%= request.params[:q]&.fetch(:latest_verification_passed_true, nil) == '1' ? 'transfers-filters--filter--options__active' : nil %>">
+        <%= image_pack_tag "media/src/images/styleguide/icons/verification-passed.svg", size: "12x12" %>
+        <%= link_to 'passed', request.params.merge(q: (request.params[:q] || {}).except(:latest_verification_passed_false, :latest_verification_passed_null).merge(latest_verification_passed_true: 1)) %>
+      </div>
+
+      <div class="<%= request.params[:q]&.fetch(:latest_verification_passed_false, nil) == '1' ? 'transfers-filters--filter--options__active' : nil %>">
+        <%= image_pack_tag "media/src/images/styleguide/icons/verification-failed.svg", size: "12x12" %>
+        <%= link_to 'failed', request.params.merge(q: (request.params[:q] || {}).except(:latest_verification_passed_true, :latest_verification_passed_null).merge(latest_verification_passed_false: 1)) %>
+      </div>
+
+      <div class="<%= request.params[:q]&.fetch(:latest_verification_passed_null, nil) == '1' ? 'transfers-filters--filter--options__active' : nil %>">
+        <%= image_pack_tag "media/src/images/styleguide/icons/verification-unknown.svg", size: "12x12" %>
+        <%= link_to 'unknown', request.params.merge(q: (request.params[:q] || {}).except(:latest_verification_passed_false, :latest_verification_passed_true).merge(latest_verification_passed_null: 1)) %>
+      </div>
+    </div>
+  </div>
+
   <div class="transfers-filters--clear">
     <%= button_to "clear filters ⌫", project_dashboard_accounts_path, method: :get, disabled: request.params[:q].nil? %>
   </div>

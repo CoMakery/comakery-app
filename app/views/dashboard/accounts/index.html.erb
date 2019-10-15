@@ -4,7 +4,7 @@
     <div class="transfers-table">
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
-      <%= render partial: "account", collection: @accounts, as: :account, cached: true %>
+      <%= render partial: "account", collection: @accounts, as: :account, cached: false %>
     </div>
 
     <div class="transfers-pages">

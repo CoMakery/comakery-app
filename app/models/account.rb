@@ -34,6 +34,9 @@ class Account < ApplicationRecord
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
   has_many :experiences
+  has_many :verifications
+  has_many :provided_verifications, class_name: 'Verification', foreign_key: 'provider_id'
+  belongs_to :latest_verification, class_name: 'Verification'
 
   belongs_to :specialty
 
@@ -265,10 +268,6 @@ class Account < ApplicationRecord
   end
 
   after_update :check_email_update
-
-  def verification
-    'unknown'
-  end
 
   private
 
