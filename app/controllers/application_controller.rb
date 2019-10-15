@@ -162,7 +162,7 @@ class ApplicationController < ActionController::Base
         exclusive_contributions: task.project&.exclusive_contributions,
         confidentiality: task.project&.confidentiality,
         url: task.project && (task.project.unlisted? ? unlisted_project_path(task.project.long_id) : project_path(task.project)),
-        channels: task.project.channels.map do |channel|
+        channels: task.project.channels.includes(:team).map do |channel|
           {
             type: channel.provider,
             name: channel.name,
