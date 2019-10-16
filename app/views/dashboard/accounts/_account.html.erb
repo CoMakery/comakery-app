@@ -6,22 +6,34 @@
   </div>
 
   <div class="transfers-table__transfer__aml-kyc">
-    <% if account.verification %>
-      <%= account.verification.created_at.strftime("%b %e, %Y") %>
+    <label>AML/KYC Date</label>
+
+    <% if account.latest_verification %>
+      <%= account.latest_verification.created_at.strftime("%b %e, %Y") %>
     <% else %>
       –
     <% end %>
   </div>
 
   <div class="transfers-table__transfer__max-investment">
-    <% if account.verification %>
-      <%= number_to_currency(account.verification.max_investment_usd) %>
+    <label>Max Investment</label>
+
+    <% if account.latest_verification %>
+      <%= number_to_currency(account.latest_verification.max_investment_usd) %>
     <% else %>
       –
     <% end %>
   </div>
 
+  <div class="transfers-table__transfer__tokens">
+    <label>tokens <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
+
+    <%= account.total_awards_earned(@project) %>
+  </div>
+
   <div class="transfers-table__transfer__address">
+    <label>Address</label>
+
     <%= account.wallet_address_link_for(@project) %>
   </div>
 </div>

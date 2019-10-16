@@ -106,7 +106,6 @@ class ProjectDecorator < Draper::Decorator
       settings_url: edit_project_path(self),
       admins_url: admins_project_path(self),
       batches_url: project_award_types_path(self),
-      contributors_url: project_contributors_path(self),
       transfers_url: project_dashboard_transfers_path(self),
       accounts_url: project_dashboard_accounts_path(self),
       landing_url: unlisted? ? unlisted_project_path(long_id) : project_path(self),

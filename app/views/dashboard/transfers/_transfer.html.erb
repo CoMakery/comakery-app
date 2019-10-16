@@ -16,6 +16,8 @@
   </div>
 
   <div class="transfers-table__transfer__account">
+    <label>account</label>
+
     <% if transfer.account %>
       <%= render partial: "account", locals: {account: transfer.account} %>
     <% elsif transfer.email %>
@@ -26,6 +28,8 @@
   </div>
 
   <div class="transfers-table__transfer__issuer">
+    <label>admin</label>
+
     <% if transfer.paid? %>
       <%= render partial: "issuer", locals: {issuer: transfer.issuer, wallet: transfer.issuer_address, wallet_url: transfer.issuer_address_url} %>
     <% else %>
@@ -34,22 +38,32 @@
   </div>
 
   <div class="transfers-table__transfer__amount">
+    <label>amount</label>
+
     <%= transfer.amount_pretty %>
   </div>
 
   <div class="transfers-table__transfer__quantity">
+    <label>quantity</label>
+
     <%= transfer.quantity %>
   </div>
 
   <div class="transfers-table__transfer__total_amount">
+    <label>total amount</label>
+
     <%= transfer.total_amount_pretty %>
   </div>
 
   <div class="transfers-table__transfer__button">
+    <label>transfer</label>
+
     <%= render partial: "shared/transfer_button", locals: {transfer: transfer} %>
   </div>
 
   <div class="transfers-table__transfer__transferred_at">
+    <label>transferred at</label>
+
     <% if transfer.paid? && transfer.transferred_at %>
       <%= transfer.transferred_at.strftime("%b %e, %Y") %>
     <% else %>

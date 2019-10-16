@@ -1,4 +1,6 @@
 <div class="transfers-table__transfer transfers-table__transfer--header">
+  <label>sort by</label>
+
   <div class="transfers-table__transfer__account">
     <%= sort_link(@q, :first_name, [:first_name, :last_name], 'account') %>
   </div>
@@ -9,6 +11,10 @@
 
   <div class="transfers-table__transfer__max-investment">
     <%= sort_link(@q, :verifications_max_investment_usd, 'max investment') %>
+  </div>
+
+  <div class="transfers-table__transfer__tokens">
+    tokens <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %>
   </div>
 
   <div class="transfers-table__transfer__address">

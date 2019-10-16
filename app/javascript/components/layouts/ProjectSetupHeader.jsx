@@ -164,12 +164,6 @@ class ProjectSetupHeader extends React.Component {
               }
 
               {(owner || project.showTransfers) &&
-                <NavLink current={current === 'contributors'} href={project.contributorsUrl}>
-                  contributors
-                </NavLink>
-              }
-
-              {(owner || project.showTransfers) &&
                 <NavLink current={current === 'transfers'} href={project.transfersUrl}>
                   transfers
                 </NavLink>

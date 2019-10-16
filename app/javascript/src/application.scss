@@ -576,6 +576,15 @@ button.transfers-create {
     }
   }
 
+  label {
+    margin-right: initial;
+    display: none;
+
+    @media (max-width: 1280px) {
+      display: block;
+    }
+  }
+
   .transfers-table__transfer--transferred {
     border-left: 4px solid #00cc17;
   }
@@ -603,6 +612,10 @@ button.transfers-create {
       color: #7c7c7c;
     }
 
+    & > label {
+      margin: 1.5em;
+    }
+
     @media (max-width: 1280px) {
       height: auto;
     }
@@ -617,6 +630,10 @@ button.transfers-create {
     font-size: 10px;
     border-left: 4px solid transparent;
 
+    & > label {
+      margin: 1.5em;
+    }
+
     @media (max-width: 1280px) {
       height: auto;
     }
@@ -627,25 +644,40 @@ button.transfers-create {
       opacity: 1;
       pointer-events: auto;
       display: none;
+
+      & > label {
+        margin: 1.5em;
+      }
     }
 
     .transfers-table__transfer__transferred_at {
       flex-wrap: nowrap;
       justify-content: flex-end;
+
+      @media (max-width: 1280px) {
+        align-items: flex-end;
+      }
     }
 
     .transfers-table__transfer__quantity:before {
       content: 'x';
-      position: absolute;
-      margin-left: -1.2em;
+      margin-left: -1.7em;
       font-weight: bold;
+
+      @media (max-width: 1280px) {
+        display: none;
+      }
     }
 
     .transfers-table__transfer__total_amount:before {
       content: '=';
-      position: absolute;
-      margin-left: -1.2em;
+      margin-left: -1.7em;
+      margin-right: 0.5em;
       font-weight: bold;
+
+      @media (max-width: 1280px) {
+        display: none;
+      }
     }
 
     input[type=number]::-webkit-inner-spin-button, 
@@ -671,6 +703,10 @@ button.transfers-create {
 
     select {
       width: initial;
+
+      @media (max-width: 1280px) {
+        width: 100%;
+      }
     }
 
     input[type=submit],
@@ -719,6 +755,12 @@ button.transfers-create {
       justify-content: flex-start;
       padding: 1em 0em 1em 2em;
       word-break: break-all;
+
+      @media (max-width: 1280px) {
+        margin-bottom: 0.5em;
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
 
     &:last-child {
@@ -764,6 +806,11 @@ button.transfers-create {
       overflow: hidden;
       text-overflow: ellipsis;
       align-self: center;
+
+      @media (max-width: 1280px) {
+        max-width: initial;
+        align-self: initial;
+      }
     }
 
     .transfers-table__transfer__total_amount {
@@ -786,7 +833,6 @@ button.transfers-create {
 
     .transfers-table__transfer__aml-kyc {
       min-width: 60px;
-      max-width: 120px;
     }
 
     .transfers-table__transfer__address {
@@ -799,6 +845,10 @@ button.transfers-create {
       text-transform: uppercase;
     }
 
+    .transfers-table__transfer__tokens {
+      min-width: 60px;
+    }
+
     .transfers-table__transfer__max-investment {
       min-width: 60px;
     }
@@ -806,11 +856,8 @@ button.transfers-create {
     @media (max-width: 1280px) {
       flex-direction: column;
       padding: 1em 1em 1em 0;
-
-      & > div {
-        margin-bottom: 0.5em;
-        border-radius: 3px;
-      }
+      margin-bottom: 1em;
+      border-radius: 6px;
     }
   }
 }

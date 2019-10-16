@@ -205,7 +205,6 @@ describe ProjectDecorator do
       expect(props[:admins_url]).to include(project.id.to_s)
       expect(props[:settings_url]).to include(project.id.to_s)
       expect(props[:batches_url]).to include(project.id.to_s)
-      expect(props[:contributors_url]).to include(project.id.to_s)
       expect(props[:transfers_url]).to include(project.id.to_s)
       expect(props[:accounts_url]).to include(project.id.to_s)
       expect(props[:landing_url]).to include(project.id.to_s)
