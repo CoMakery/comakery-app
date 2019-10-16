@@ -4198,17 +4198,21 @@ input.button--right-space {
 
 .mission-projects__single__card__img {
   position: relative;
-  width: 105px;
-  height: 105px;
+  width: 100%;
+  height: 100%;
+  max-width: 105px;
   margin-right: 28px;
+  
+  img {
+    border-radius: 3px;
+  }
 }
 
 .mission-projects__single__card__img__mask {
   position: absolute;
   top: 0;
   left: 0;
-  width: 105px;
-  height: 105px;
+  display: none;
 }
 
 .mission-projects__single__card__info {
@@ -4228,7 +4232,6 @@ input.button--right-space {
 }
 
 .mission-projects__single__card__info__stats {
-  margin-left: 40px;
   display: flex;
   flex-direction: column;
   justify-content: right;

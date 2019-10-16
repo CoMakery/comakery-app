@@ -187,7 +187,7 @@ export default class Mission extends React.Component {
             <div className="mission-projects__single__card">
               <div className="mission-projects__single__desktop">
                 <a href={project.projectUrl} className="mission-projects__single__card__img">
-                  <img style={{width: '100%', height: '100%'}} src={project.projectData.squareUrl || project.projectData.defaultImageUrl} />
+                  <img src={project.projectData.squareUrl || project.projectData.defaultImageUrl} />
                   <Icon className="mission-projects__single__card__img__mask" name="PROJECT/MASK.svg" />
                 </a>
 
