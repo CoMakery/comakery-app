@@ -843,6 +843,17 @@ button.transfers-create {
       text-overflow: ellipsis;
       align-self: center;
       text-transform: uppercase;
+      margin-right: 1em;
+
+      .transfers-table__transfer__address__button {
+        font-size: 10px;
+        color: #3a3a3a;
+        border: solid 0.5px #efefef;
+        padding: 0.125em 0.5em;
+        font-weight: 600;
+        border-radius: 3px;
+        height: 14px;
+      }
     }
 
     .transfers-table__transfer__tokens {

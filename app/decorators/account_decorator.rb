@@ -49,7 +49,7 @@ class AccountDecorator < Draper::Decorator
     if address.present?
       h.link_to(address, send("#{project.blockchain_name}_wallet_url"), target: '_blank')
     else
-      '–'
+      'needs wallet'
     end
   end
 
