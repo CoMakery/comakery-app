@@ -152,9 +152,9 @@ describe AccountDecorator do
     end
 
     it 'returns placeholder if account doesnt have address for project token' do
-      expect(account_w_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('–')
-      expect(account_wo_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('–')
-      expect(account_wo_wallet.decorate.wallet_address_link_for(project_w_token)).to eq('–')
+      expect(account_w_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('needs wallet')
+      expect(account_wo_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('needs wallet')
+      expect(account_wo_wallet.decorate.wallet_address_link_for(project_w_token)).to eq('needs wallet')
     end
   end
 
