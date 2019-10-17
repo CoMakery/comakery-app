@@ -4200,11 +4200,11 @@ input.button--right-space {
   position: relative;
   width: 100%;
   height: 100%;
+  max-width: 105px;
   margin-right: 28px;
   
   img {
-    max-width: 105px;
-    max-height: 105px;
+    border-radius: 3px;
   }
 }
 
@@ -4212,6 +4212,7 @@ input.button--right-space {
   position: absolute;
   top: 0;
   left: 0;
+  display: none;
 }
 
 .mission-projects__single__card__info {
@@ -4231,7 +4232,6 @@ input.button--right-space {
 }
 
 .mission-projects__single__card__info__stats {
-  margin-left: 40px;
   display: flex;
   flex-direction: column;
   justify-content: right;
