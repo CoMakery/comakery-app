@@ -26,14 +26,14 @@ describe 'project channels', js: true do
     find('.project-form--form--channels--add').click
     expect(page).to have_selector('.project-form--form--channels--channel')
     find_button('create').click
-    expect(page).to have_content 'PROJECT CREATED'
+    expect(page).to have_content 'Project Created'
 
     visit current_path
     expect(page).to have_selector('.project-form--form--channels--channel')
     find('.project-form--form--channels--channel--del').click
     expect(page).not_to have_selector('.project-form--form--channels--channel')
     find_button('save').click
-    expect(page).to have_content 'PROJECT UPDATED'
+    expect(page).to have_content 'Project Updated'
 
     visit current_path
     expect(page).not_to have_selector('.project-form--form--channels--channel')

@@ -1,0 +1,23 @@
+<% issuer = issuer.decorate %>
+
+<div class="account-preview">
+  <div class="account-preview__image">
+    <%= image_tag account_image_url(issuer, 100) %>
+  </div>
+
+  <div class="account-preview__info">
+    <div class="account-preview__info__nickname">
+      <%= issuer.nickname %>
+    </div>
+
+    <div class="account-preview__info__name">
+      <%= issuer.name %>
+    </div>
+
+    <% if wallet %> 
+      <div class="account-preview__info__wallet">
+        <%= link_to(wallet, wallet_url, target: '_blank') %>
+      </div>
+    <% end %>
+  </div>
+</div>

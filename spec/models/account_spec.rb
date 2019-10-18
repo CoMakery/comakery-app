@@ -192,20 +192,23 @@ describe Account do
   end
 
   describe 'associations' do
-    let(:account) { create(:account) }
-    let(:project) { create(:project, account: account) }
-    let(:admin_project) { create(:project) }
-    let(:admin_award_type) { create(:award_type, project: admin_project) }
-    let(:admin_award) { create(:award, award_type: admin_award_type) }
-    let(:award_type) { create(:award_type, project: project) }
-    let(:award) { create(:award, award_type: award_type, issuer: account) }
-    let(:team) { create :team }
-    let(:teammate) { create :account }
-    let(:authentication) { create :authentication, account: account }
-    let(:authentication_teammate) { create :authentication, account: teammate }
-    let(:teammate_project) { create(:project, account: teammate) }
-    let(:teammate_award_type) { create(:award_type, project: teammate_project) }
-    let(:teammate_award) { create(:award, award_type: teammate_award_type, issuer: teammate) }
+    let!(:account) { create(:account) }
+    let!(:project) { create(:project, account: account) }
+    let!(:admin_project) { create(:project) }
+    let!(:admin_award_type) { create(:award_type, project: admin_project) }
+    let!(:admin_award) { create(:award, award_type: admin_award_type) }
+    let!(:award_type) { create(:award_type, project: project) }
+    let!(:award) { create(:award, award_type: award_type, issuer: account) }
+    let!(:team) { create :team }
+    let!(:teammate) { create :account }
+    let!(:authentication) { create :authentication, account: account }
+    let!(:authentication_teammate) { create :authentication, account: teammate }
+    let!(:teammate_project) { create(:project, account: teammate) }
+    let!(:teammate_award_type) { create(:award_type, project: teammate_project) }
+    let!(:teammate_award) { create(:award, award_type: teammate_award_type, issuer: teammate) }
+    let!(:verification) { create(:verification, account: account) }
+    let!(:verification2) { create(:verification, account: account) }
+    let!(:provided_verification) { create(:verification, provider: account) }
 
     before do
       team.build_authentication_team authentication
@@ -248,6 +251,18 @@ describe Account do
 
     it 'has many admin awards' do
       expect(account.admin_awards).to match_array([admin_award])
+    end
+
+    it 'has many verifications' do
+      expect(account.verifications).to match_array([verification, verification2])
+    end
+
+    it 'belongs to latest verification' do
+      expect(account.latest_verification).to eq(verification2)
+    end
+
+    it 'has many provided verifications' do
+      expect(account.provided_verifications).to match_array([provided_verification])
     end
   end
 

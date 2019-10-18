@@ -24,6 +24,12 @@ describe AccountDecorator do
     end
   end
 
+  describe '#name_with_nickname' do
+    it 'combines name and nickname' do
+      expect(build(:account, first_name: 'Bob', last_name: 'Johnson', nickname: 'bobjon').decorate.name_with_nickname).to eq('Bob Johnson (bobjon)')
+    end
+  end
+
   describe '#can_send_awards?' do
     let!(:project_owner) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
 
@@ -132,6 +138,43 @@ describe AccountDecorator do
 
     it 'returns default image' do
       expect(account_wo_image.decorate.image_url).to include('default_account_image')
+    end
+  end
+
+  describe 'wallet_address_link_for' do
+    let!(:account_w_wallet) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
+    let!(:account_wo_wallet) { create(:account) }
+    let!(:project_w_token) { build :project, token: create(:token, coin_type: 'eth') }
+    let!(:project_wo_token) { build :project, token: nil }
+
+    it 'returns link for wallet address if account has address for project token' do
+      expect(account_w_wallet.decorate.wallet_address_link_for(project_w_token)).to include(account_w_wallet.ethereum_wallet)
+    end
+
+    it 'returns placeholder if account doesnt have address for project token' do
+      expect(account_w_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('needs wallet')
+      expect(account_wo_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('needs wallet')
+      expect(account_wo_wallet.decorate.wallet_address_link_for(project_w_token)).to eq('needs wallet')
+    end
+  end
+
+  describe 'verification_state' do
+    let!(:passed_account) { create(:account) }
+    let!(:failed_account) { create(:account) }
+    let!(:unknown_account) { create(:account) }
+
+    it 'returns passed for passed_account' do
+      create(:verification, account: passed_account, passed: true)
+      expect(passed_account.reload.decorate.verification_state).to eq('passed')
+    end
+
+    it 'returns failed for failed_account' do
+      create(:verification, account: failed_account, passed: false)
+      expect(failed_account.reload.decorate.verification_state).to eq('failed')
+    end
+
+    it 'returns unknown for unknown_account' do
+      expect(unknown_account.reload.decorate.verification_state).to eq('unknown')
     end
   end
 end

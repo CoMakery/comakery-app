@@ -121,6 +121,11 @@ def click_remove(award_type_row)
   award_type_row.find('a[data-mark-and-hide]').click
 end
 
+def wait_for_turbolinks
+  has_css?('.turbolinks-progress-bar', visible: true)
+  has_no_css?('.turbolinks-progress-bar')
+end
+
 include SlackStubs
 
 Shoulda::Matchers.configure do |config|

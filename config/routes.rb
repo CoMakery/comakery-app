@@ -75,6 +75,11 @@ Rails.application.routes.draw do
       end
     end
     resources :contributors, only: [:index]
+
+    namespace :dashboard do
+      resources :transfers, only: [:index, :create]
+      resources :accounts, only: [:index]
+    end
     
     member do
       get :awards

@@ -57,4 +57,6 @@ Rails.application.configure do
     Bullet.raise = true
     Bullet.unused_eager_loading_enable = false
   end
+  config.cache_store = nil
+  config.action_controller.perform_caching = false
 end

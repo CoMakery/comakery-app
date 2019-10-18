@@ -15,13 +15,16 @@ exports[`MissionIndex renders correctly without props 1`] = `
         <div
           className="mission-index--sidebar"
         >
-          <SidebarItemBold
-            className="mission-index--sidebar--item__bold"
-            iconLeftName="MISSION/WHITE.svg"
-            iconRightName="PLUS.svg"
-            onClick={[Function]}
-            text="Create a Mission"
-          />
+          <a
+            href="/missions/new"
+          >
+            <SidebarItemBold
+              className="mission-index--sidebar--item__bold"
+              iconLeftName="MISSION/WHITE.svg"
+              iconRightName="PLUS.svg"
+              text="Create a Mission"
+            />
+          </a>
         </div>
       </React.Fragment>
     }
@@ -53,82 +56,83 @@ exports[`MissionIndex renders correctly without props 1`] = `
             <div
               className="mission-index--sidebar"
             >
-              <SidebarItemBold
-                className="mission-index--sidebar--item__bold"
-                iconLeftName="MISSION/WHITE.svg"
-                iconRightName="PLUS.svg"
-                onClick={[Function]}
-                text="Create a Mission"
+              <a
+                href="/missions/new"
               >
-                <SidebarItem
-                  className="sidebar-item__bold mission-index--sidebar--item__bold"
+                <SidebarItemBold
+                  className="mission-index--sidebar--item__bold"
                   iconLeftName="MISSION/WHITE.svg"
-                  iconLeftUrl=""
                   iconRightName="PLUS.svg"
-                  notificationColor=""
-                  onClick={[Function]}
-                  selected={false}
                   text="Create a Mission"
                 >
-                  <div
-                    className="sidebar-item--wrapper"
-                    onClick={[Function]}
+                  <SidebarItem
+                    className="sidebar-item__bold mission-index--sidebar--item__bold"
+                    iconLeftName="MISSION/WHITE.svg"
+                    iconLeftUrl=""
+                    iconRightName="PLUS.svg"
+                    notificationColor=""
+                    selected={false}
+                    text="Create a Mission"
                   >
                     <div
-                      className="sidebar-item sidebar-item__bold mission-index--sidebar--item__bold"
+                      className="sidebar-item--wrapper"
                     >
-                      <span
-                        className="sidebar-item--icon-left"
-                      >
-                        <Icon
-                          className=""
-                          name="MISSION/WHITE.svg"
-                        >
-                          <img
-                            className="icon icon__MISSION/WHITE-svg"
-                            src="test-file-stub"
-                          />
-                        </Icon>
-                      </span>
                       <div
-                        className="sidebar-item--content"
+                        className="sidebar-item sidebar-item__bold mission-index--sidebar--item__bold"
                       >
-                        <div
-                          className="sidebar-item--text"
+                        <span
+                          className="sidebar-item--icon-left"
                         >
-                          Create a Mission
-                        </div>
+                          <Icon
+                            className=""
+                            name="MISSION/WHITE.svg"
+                          >
+                            <img
+                              className="icon icon__MISSION/WHITE-svg"
+                              src="test-file-stub"
+                            />
+                          </Icon>
+                        </span>
                         <div
-                          className="sidebar-item--subchild"
+                          className="sidebar-item--content"
+                        >
+                          <div
+                            className="sidebar-item--text"
+                          >
+                            Create a Mission
+                          </div>
+                          <div
+                            className="sidebar-item--subchild"
+                          />
+                        </div>
+                        <span
+                          className="sidebar-item--icon-right"
+                        >
+                          <Icon
+                            className=""
+                            name="PLUS.svg"
+                          >
+                            <img
+                              className="icon icon__PLUS-svg"
+                              src="test-file-stub"
+                            />
+                          </Icon>
+                        </span>
+                        <div
+                          className="sidebar-item--left-border"
+                        />
+                        <div
+                          className="sidebar-item--right-border sidebar-item--right-border__"
                         />
                       </div>
-                      <span
-                        className="sidebar-item--icon-right"
-                      >
-                        <Icon
-                          className=""
-                          name="PLUS.svg"
-                        >
-                          <img
-                            className="icon icon__PLUS-svg"
-                            src="test-file-stub"
-                          />
-                        </Icon>
-                      </span>
-                      <div
-                        className="sidebar-item--left-border"
-                      />
-                      <div
-                        className="sidebar-item--right-border sidebar-item--right-border__"
-                      />
                     </div>
-                  </div>
-                </SidebarItem>
-              </SidebarItemBold>
+                  </SidebarItem>
+                </SidebarItemBold>
+              </a>
             </div>
           </div>
           <div
-            className="layout--content--content__sidebared"
+            className="layout--content--content__sidebared animated fadeIn faster"
           />
         </div>
       </div>

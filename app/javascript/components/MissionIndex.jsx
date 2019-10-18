@@ -157,13 +157,14 @@ export default class MissionIndex extends React.Component {
           sidebar={
             <React.Fragment>
               <div className="mission-index--sidebar">
-                <SidebarItemBold
-                  className="mission-index--sidebar--item__bold"
-                  iconLeftName="MISSION/WHITE.svg"
-                  iconRightName="PLUS.svg"
-                  text="Create a Mission"
-                  onClick={(_) => window.location = '/missions/new'}
-                />
+                <a href="/missions/new">
+                  <SidebarItemBold
+                    className="mission-index--sidebar--item__bold"
+                    iconLeftName="MISSION/WHITE.svg"
+                    iconRightName="PLUS.svg"
+                    text="Create a Mission"
+                  />
+                </a>
 
                 { missions.length > 0 &&
                   <React.Fragment>

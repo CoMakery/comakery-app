@@ -104,6 +104,7 @@ feature 'my account', js: true do
     login(account)
     visit root_path
     first('.header--nav--links').click_link 'My Account'
+    wait_for_turbolinks
     expect(page).to have_content('jason')
   end
 end

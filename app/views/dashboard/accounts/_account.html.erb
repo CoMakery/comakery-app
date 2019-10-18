@@ -1,0 +1,39 @@
+<% account = account.decorate %>
+
+<div class="transfers-table__transfer">
+  <div class="transfers-table__transfer__account">
+    <%= render partial: "dashboard/transfers/account", locals: {account: account} %>
+  </div>
+
+  <div class="transfers-table__transfer__aml-kyc">
+    <label>AML/KYC Date</label>
+
+    <% if account.latest_verification %>
+      <%= account.latest_verification.created_at.strftime("%b %e, %Y") %>
+    <% else %>
+      –
+    <% end %>
+  </div>
+
+  <div class="transfers-table__transfer__max-investment">
+    <label>Max Investment</label>
+
+    <% if account.latest_verification %>
+      <%= number_to_currency(account.latest_verification.max_investment_usd) %>
+    <% else %>
+      –
+    <% end %>
+  </div>
+
+  <div class="transfers-table__transfer__tokens">
+    <label>tokens <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
+
+    <%= account.total_awards_earned(@project) %>
+  </div>
+
+  <div class="transfers-table__transfer__address">
+    <label>Address</label>
+
+    <span class="transfers-table__transfer__address__button"><%= account.wallet_address_link_for(@project) %></span>
+  </div>
+</div>

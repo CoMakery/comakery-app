@@ -40,12 +40,12 @@ describe 'viewing projects, creating and editing', :js do
     attach_file 'project[square_image]', Rails.root.join('spec', 'fixtures', '1200.png')
     attach_file 'project[panoramic_image]', Rails.root.join('spec', 'fixtures', '1500.png')
     find_button('create').click
-    expect(page).to have_content 'PROJECT CREATED'
+    expect(page).to have_content 'Project Created'
 
     fill_in 'project[title]', with: 'This is an edited project'
     fill_in 'project[description]', with: 'This is an edited project description which is very informative'
     find_button('save').click
-    expect(page).to have_content 'PROJECT UPDATED'
+    expect(page).to have_content 'Project Updated'
     visit('/projects')
     expect(page).to have_content 'This is an edited project'
 

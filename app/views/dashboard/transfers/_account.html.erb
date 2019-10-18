@@ -1,0 +1,22 @@
+<% account = account.decorate %>
+
+<div class="account-preview">
+  <div class="account-preview__image">
+    <%= image_tag account_image_url(account, 100) %>
+  </div>
+
+  <div class="account-preview__info">
+    <div class="account-preview__info__nickname">
+      <%= account.nickname %>
+    </div>
+
+    <div class="account-preview__info__name">
+      <%= account.name %>
+    </div>
+
+    <div class="account-preview__info__verification">
+      <%= image_pack_tag "media/src/images/styleguide/icons/verification-#{account.verification_state}.svg", size: "15x15" %>
+      <%= account.verification_state %>
+    </div>
+  </div>
+</div>

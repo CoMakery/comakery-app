@@ -10,11 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190926181739) do
+ActiveRecord::Schema.define(version: 20191014175653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
 
   create_table "accounts", id: :serial, force: :cascade do |t|
     t.string "email"
@@ -66,6 +65,7 @@ ActiveRecord::Schema.define(version: 20190926181739) do
     t.string "behance_url"
     t.string "tezos_wallet"
     t.integer "specialty_id"
+    t.bigint "latest_verification_id"
     t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
@@ -170,6 +170,8 @@ ActiveRecord::Schema.define(version: 20190926181739) do
     t.integer "expires_in_days", default: 10
     t.datetime "notify_on_expiration_at"
     t.integer "assignments_count", default: 0
+    t.datetime "transferred_at"
+    t.integer "source", default: 0
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
@@ -363,9 +365,21 @@ ActiveRecord::Schema.define(version: 20190926181739) do
     t.index ["email"], name: "index_unsubscriptions_on_email", unique: true
   end
 
+  create_table "verifications", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "provider_id"
+    t.boolean "passed"
+    t.bigint "max_investment_usd"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_verifications_on_account_id"
+    t.index ["provider_id"], name: "index_verifications_on_provider_id"
+  end
+
   add_foreign_key "awards", "specialties"
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"
   add_foreign_key "projects", "tokens"
+  add_foreign_key "verifications", "accounts"
 end

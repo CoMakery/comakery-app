@@ -107,14 +107,14 @@ describe 'my account', js: true do
     login(unconfirmed_account)
     visit '/projects'
     expect(page).to have_current_path(root_path)
-    expect(page).to have_content('PLEASE CONFIRM YOUR EMAIL ADDRESS TO CONTINUE')
+    expect(page).to have_content('Please confirm your email address to continue')
   end
 
   scenario 'my projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects/mine'
     expect(page).to have_current_path(root_path)
-    expect(page).to have_content('PLEASE CONFIRM YOUR EMAIL ADDRESS TO CONTINUE')
+    expect(page).to have_content('Please confirm your email address to continue')
   end
 
   scenario 'account gets confirmed after visiting confirmation link' do

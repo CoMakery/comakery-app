@@ -106,11 +106,11 @@ class ProjectDecorator < Draper::Decorator
       settings_url: edit_project_path(self),
       admins_url: admins_project_path(self),
       batches_url: project_award_types_path(self),
-      contributors_url: project_contributors_path(self),
-      awards_url: awards_project_path(self),
+      transfers_url: project_dashboard_transfers_path(self),
+      accounts_url: project_dashboard_accounts_path(self),
       landing_url: unlisted? ? unlisted_project_path(long_id) : project_path(self),
       show_batches: award_types.where.not(state: :draft).any?,
-      show_payments: !require_confidentiality?,
+      show_transfers: !require_confidentiality?,
       present: true
     }
   end
@@ -121,6 +121,18 @@ class ProjectDecorator < Draper::Decorator
 
   def team_size
     contributors_distinct.size + admins.size + interested.size + 1
+  end
+
+  def blockchain_name
+    Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
+  end
+
+  def step_for_amount_input
+    token ? (1.0 / 10**token.decimal_places) : 1
+  end
+
+  def step_for_quantity_input
+    token ? 0.1 : 1
   end
 
   private

@@ -204,6 +204,14 @@ describe Project do
         expect(project_finalized.reload.agreed_to_license_hash).to eq('test')
       end
     end
+
+    describe 'add_owner_as_interested' do
+      let(:project) { create(:project) }
+
+      it 'adds project owner as interested' do
+        expect(project.interested).to include(project.account)
+      end
+    end
   end
 
   describe 'scopes' do
@@ -402,6 +410,24 @@ describe Project do
       create(:interest, project: project)
 
       expect(project.stats[:interests]).to eq(3)
+    end
+  end
+
+  describe 'default_award_type' do
+    let(:project_w_default_award_type) { create :project }
+    let(:project_wo_default_award_type) { create :project }
+
+    before do
+      project_w_default_award_type.award_types.create(name: 'Transfers', goal: '—', description: '—')
+      project_w_default_award_type.reload
+    end
+
+    it 'creates default award type for project and returns it' do
+      expect(project_wo_default_award_type.default_award_type).to be_instance_of(AwardType)
+    end
+
+    it 'returns default award type if its already present' do
+      expect(project_w_default_award_type.default_award_type).to be_instance_of(AwardType)
     end
   end
 end

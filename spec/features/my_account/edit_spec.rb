@@ -5,8 +5,7 @@ describe 'my account', js: true do
 
   before do
     login account
-    visit root_path
-    first('.header--nav--links').click_link 'My Account'
+    visit account_path
     expect(page).to have_content 'Account Details'
 
     within('.view-ethereum-wallet') do

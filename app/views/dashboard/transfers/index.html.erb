@@ -1,0 +1,20 @@
+<%= render layout: 'projects/project_settings' do %>
+  <div data-controller="transfer-form">
+    <%= render partial: "filters" %>
+
+    <% if policy(@project).create_transfer? %>
+      <%= button_tag "create a transfer ＋", type: 'button', class: 'transfers-create', data: {target: 'transfer-form.create', action: 'transfer-form#showForm'} %>
+    <% end %>
+
+    <div class="transfers-table">
+      <%= render partial: "header" %>
+      <%= render partial: "summary" %>
+      <%= render partial: "form" %>
+      <%= render partial: "transfer", collection: @transfers, as: :transfer, cached: true %>
+    </div>
+
+    <div class="transfers-pages">
+      <%= paginate(@transfers, window: 3) %>
+    </div>
+  </div>
+<% end %>

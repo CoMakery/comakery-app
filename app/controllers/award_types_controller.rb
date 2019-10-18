@@ -9,8 +9,6 @@ class AwardTypesController < ApplicationController
   skip_after_action :verify_policy_scoped, only: %i[index]
   skip_before_action :require_login, only: %i[index]
 
-  layout 'react'
-
   def index
     render component: 'BatchIndex', props: @props
   end

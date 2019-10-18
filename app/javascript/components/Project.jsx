@@ -244,7 +244,7 @@ export default class Project extends React.Component {
     }
     const skillIds = [5, 6, 8, 2, 3, 1, 7, 4]
 
-    return <div className="project-container">
+    return <div className="project-container animated fadeIn faster">
       <ProjectSetupHeader
         projectForHeader={this.props.projectForHeader}
         missionForHeader={this.props.missionForHeader}

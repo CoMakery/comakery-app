@@ -40,6 +40,9 @@ class ProjectPolicy < ApplicationPolicy
   alias admins? edit?
   alias add_admin? edit?
   alias remove_admin? edit?
+  alias create_transfer? edit?
+  alias transfers? show?
+  alias accounts? show?
 
   def show_contributions?
     (project.public? && !project.require_confidentiality?) ||

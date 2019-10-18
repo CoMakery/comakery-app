@@ -28,13 +28,14 @@ class TokenIndex extends React.Component {
           sidebar={
             <React.Fragment>
               <div className="token-index--sidebar">
-                <SidebarItemBold
-                  className="token-index--sidebar--item__bold"
-                  iconLeftName="MARK-WHITE.svg"
-                  iconRightName="PLUS.svg"
-                  text="Create a Token"
-                  onClick={(_) => window.location = '/tokens/new'}
-                />
+                <a href="/tokens/new">
+                  <SidebarItemBold
+                    className="token-index--sidebar--item__bold"
+                    iconLeftName="MARK-WHITE.svg"
+                    iconRightName="PLUS.svg"
+                    text="Create a Token"
+                  />
+                </a>
 
                 { this.props.tokens.length > 0 &&
                   <React.Fragment>

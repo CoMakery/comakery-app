@@ -1,0 +1,37 @@
+<div class="transfers-table__transfer transfers-table__transfer--summary">
+  <label>summary</label>
+
+  <div class="transfers-table__transfer__account">
+    <label>total</label>
+
+    <%= pluralize(@accounts_all.size, 'account', 'accounts') %>
+  </div>
+
+  <div class="transfers-table__transfer__aml-kyc">
+    <label>aml/kyc vetted</label>
+
+    <%= pluralize(@accounts_all.where.not(latest_verification_id: nil).size, 'account', 'accounts') %>
+  </div>
+
+  <div class="transfers-table__transfer__max-investment">
+    <label>max investment</label>
+
+    <% cache @accounts_all.map(&:latest_verification) do %>
+      <%= number_to_currency(@accounts_all.map(&:latest_verification).compact.sum(&:max_investment_usd)) || '–' %>
+    <% end %>
+  </div>
+
+  <div class="transfers-table__transfer__tokens">
+    <label>tokens <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
+
+    <% cache @project.awards do %>
+        <%= @accounts_all.sum { |a| a.total_awards_earned(@project) } %>
+    <% end %>
+  </div>
+
+  <div class="transfers-table__transfer__address">
+    <label>address</label>
+
+    <%= pluralize(@project.blockchain_name.present? ? @accounts_all.map(&:"#{@project.blockchain_name}_wallet").compact.size : 0, 'account', 'accounts') %>
+  </div>
+</div>
