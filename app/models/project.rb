@@ -63,13 +63,6 @@ class Project < ApplicationRecord
   delegate :populate_token?, to: :token, allow_nil: true
   delegate :total_awarded, to: :awards, allow_nil: true
 
-  def self.with_last_activity_at
-    select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
-      .joins('left join award_types on projects.id = award_types.project_id')
-      .joins('left join awards on award_types.id = awards.award_type_id')
-      .group('projects.id')
-      .order('max(awards.created_at) desc nulls last, projects.created_at desc nulls last')
-  end
 
   def top_contributors
     Account.select('accounts.*, sum(a1.total_amount) as total_awarded, max(a1.created_at) as last_awarded_at').joins("
