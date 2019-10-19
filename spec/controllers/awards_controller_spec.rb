@@ -93,7 +93,7 @@ RSpec.describe AwardsController, type: :controller do
             }
           }
           expect(response.status).to eq(200)
-          expect(response.content_type).to eq('application/json')
+          expect(response.media_type).to eq('application/json')
           expect(JSON.parse(response.body)['message']).to eq('Task created')
           expect(JSON.parse(response.body)['id']).to eq(project.awards.reload.last.id)
         end.to change { project.awards.count }.by(1)
@@ -118,7 +118,7 @@ RSpec.describe AwardsController, type: :controller do
             }
           }
           expect(response.status).to eq(422)
-          expect(response.content_type).to eq('application/json')
+          expect(response.media_type).to eq('application/json')
           expect(JSON.parse(response.body)['message']).to eq("Name can't be blank")
         end.not_to change { project.awards.count }
       end
@@ -142,7 +142,7 @@ RSpec.describe AwardsController, type: :controller do
         }
       }
       expect(response.status).to eq(200)
-      expect(response.content_type).to eq('application/json')
+      expect(response.media_type).to eq('application/json')
 
       expect(award.reload.name).to eq('updated')
       expect(award.reload.issuer).to eq award.project.account
@@ -158,7 +158,7 @@ RSpec.describe AwardsController, type: :controller do
         }
       }
       expect(response.status).to eq(422)
-      expect(response.content_type).to eq('application/json')
+      expect(response.media_type).to eq('application/json')
     end
   end
 
@@ -631,7 +631,7 @@ RSpec.describe AwardsController, type: :controller do
         email: 'test2@comakery.com'
       }
       expect(response.status).to eq(200)
-      expect(response.content_type).to eq('application/json')
+      expect(response.media_type).to eq('application/json')
       expect(JSON.parse(response.body)['address']).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa47')
 
       project.token.update(coin_type: 'qrc20')
@@ -644,7 +644,7 @@ RSpec.describe AwardsController, type: :controller do
         email: 'test2@comakery.com'
       }
       expect(response.status).to eq(200)
-      expect(response.content_type).to eq('application/json')
+      expect(response.media_type).to eq('application/json')
       expect(JSON.parse(response.body)['address']).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
     end
 
@@ -673,7 +673,7 @@ RSpec.describe AwardsController, type: :controller do
         channel_id: project.channels.first.id
       }
       expect(response.status).to eq(200)
-      expect(response.content_type).to eq('application/json')
+      expect(response.media_type).to eq('application/json')
       expect(JSON.parse(response.body)['address']).to eq('0xaBe4449277c893B3e881c29B17FC737ff527Fa48')
     end
   end

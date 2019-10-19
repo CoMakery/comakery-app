@@ -4,13 +4,13 @@ jobs:
     parallelism: 1
     working_directory: ~/CoMakery/comakery-app
     docker:
-      - image: circleci/ruby:2.4.4-stretch-browsers
+      - image: circleci/ruby:2.6.5-stretch-browsers
         environment:
           NODE_VER: 10.13.0
           YARN_VER: 1.12.3
           ARCH: x64
           BUNDLER_VERSION: 2.0.1
-      - image: circleci/postgres:9.6.2-alpine
+      - image: circleci/postgres:10.10-alpine
     steps:
       - run: wget "https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo tar -xJf "node-v$NODE_VER-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner && rm "node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
       - run: wget "https://yarnpkg.com/downloads/$YARN_VER/yarn-v$YARN_VER.tar.gz" && sudo mkdir -p /opt && sudo tar -xzf yarn-v$YARN_VER.tar.gz -C /opt/ && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarn /usr/local/bin/yarn && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarnpkg /usr/local/bin/yarnpkg && rm yarn-v$YARN_VER.tar.gz

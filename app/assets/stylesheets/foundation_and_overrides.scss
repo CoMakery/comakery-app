@@ -1,9 +1,9 @@
 @charset 'utf-8';
 
-// Framework
+@import 'settings';
 @import 'foundation';
 @import 'foundation-icons';
-@import 'compass';
+// @import 'compass';
 // @import 'motion-ui/motion-ui';
 
 // @import 'settings_default';  // From Foundation
@@ -33,7 +33,7 @@
 // @include foundation-drilldown-menu;
 // @include foundation-dropdown;
 // @include foundation-dropdown-menu;
-@include foundation-flex-video;
+// @include foundation-flex-video;
 // @include foundation-media-object;
 // @include foundation-off-canvas;
 // @include foundation-orbit;

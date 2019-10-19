@@ -66,7 +66,7 @@ describe TokensController do
             }
           }
           expect(response).to have_http_status(:ok)
-          expect(response.content_type).to eq('application/json')
+          expect(response.media_type).to eq('application/json')
         end.to change { Token.count }.by(1)
 
         token = Token.last
@@ -84,7 +84,7 @@ describe TokensController do
             }
           }
           expect(response).to have_http_status(:unprocessable_entity)
-          expect(response.content_type).to eq('application/json')
+          expect(response.media_type).to eq('application/json')
         end.not_to(change { Token.count })
 
         token = assigns[:token]
@@ -119,7 +119,7 @@ describe TokensController do
         stub_qtum_fetch
         post :fetch_contract_details, params: { address: '2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc', network: 'qtum_testnet' }
         expect(response.status).to eq(200)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
         expect(assigns[:symbol]).to eq('BIG')
         expect(assigns[:symbol]).not_to eq(nil)
       end
@@ -128,7 +128,7 @@ describe TokensController do
         stub_web3_fetch
         post :fetch_contract_details, params: { address: '0x6c6ee5e31d828de241282b9606c8e98ea48526e2', network: 'main' }
         expect(response.status).to eq(200)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
         expect(assigns[:symbol]).to eq('HOT')
         expect(assigns[:symbol]).not_to eq(nil)
       end
@@ -254,7 +254,7 @@ describe TokensController do
               }
             }
             expect(response).to have_http_status(:ok)
-            expect(response.content_type).to eq('application/json')
+            expect(response.media_type).to eq('application/json')
           end.not_to(change { Token.count })
 
           cat_token.reload
@@ -270,7 +270,7 @@ describe TokensController do
               }
             }
             expect(response).to have_http_status(:unprocessable_entity)
-            expect(response.content_type).to eq('application/json')
+            expect(response.media_type).to eq('application/json')
           end.not_to(change { Token.count })
 
           cat_token.reload
