@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails/all'
 
@@ -23,7 +23,7 @@ module Comakery
 
     # all translations from config/locales/*.rb,yml are auto loaded.
     config.i18n.default_locale = :app
-    config.i18n.fallbacks =[:en]
+    config.i18n.fallbacks = [:en]
 
     config.allow_signup = true
     config.project_slug = Dir.pwd.split(File::SEPARATOR).last.underscore

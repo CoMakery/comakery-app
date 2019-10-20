@@ -18,11 +18,11 @@ window.transferEthers = function(award) { // award in JSON
             }
           } else if (err) {
             console.log(err)
-            alertMsg('#metamaskModal1', 'Errors occurred, please click on REJECT button. Please transfer ethers on the blockchain with MetaMask on the awards page. Please make sure that gas fee is greater than 0 before clicking on CONFIRM button on MetaMask popup')
+            alert('Errors occurred, please click on REJECT button. Please transfer ethers on the blockchain with MetaMask on the awards page. Please make sure that gas fee is greater than 0 before clicking on CONFIRM button on MetaMask popup')
           }
         })
       } else {
-        alertMsg('#metamaskModal1', "You don't have sufficient Tokens to send")
+        alert("You don't have sufficient Tokens to send")
       }
     })
   }

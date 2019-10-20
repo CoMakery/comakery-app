@@ -18,6 +18,7 @@
 # = require underscore
 # = require chart_colors
 # = require cookie_consent
+# = require foundation
 # = require_tree .
 
 window.foundationCmd = (el, cmd) ->
@@ -199,3 +200,6 @@ window.initializeAccountPage = () ->
     document.execCommand('Copy')
   $('.fake-link').click ->
     window.location.href = $(@).data("href")
+
+() ->
+  $(document).foundation()

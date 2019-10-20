@@ -16,5 +16,7 @@
     <div class="transfers-pages">
       <%= paginate(@transfers, window: 3) %>
     </div>
+
+    <%= render partial: "shared/wallets" %>
   </div>
 <% end %>

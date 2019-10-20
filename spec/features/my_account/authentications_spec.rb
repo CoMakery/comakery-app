@@ -30,7 +30,7 @@ feature 'my account', js: true do
 
     # visit account_path(history: true)
     # Now we dont have refresh -> instead we should click radio button on React component
-    visit account_path
+    visit show_account_path
     choose 'History'
 
     expect(page).to have_content 'Swarmbot'
@@ -41,8 +41,7 @@ feature 'my account', js: true do
 
   scenario 'editing, and adding an ethereum address' do
     login(auth.account)
-    visit root_path
-    first('.header--nav--links').click_link 'My Account'
+    visit show_account_path
 
     within('.view-ethereum-wallet') do
       first(:link).click
@@ -56,8 +55,7 @@ feature 'my account', js: true do
 
   scenario 'editing, and adding an qtum address' do
     login(auth.account)
-    visit root_path
-    first('.header--nav--links').click_link 'My Account'
+    visit show_account_path
 
     within('.view-ethereum-wallet') do
       first(:link).click
@@ -71,8 +69,7 @@ feature 'my account', js: true do
 
   scenario 'adding an ethereum address sends ethereum tokens, for awards' do
     login(auth.account)
-    visit root_path
-    first('.header--nav--links').click_link 'My Account'
+    visit show_account_path
 
     within('.view-ethereum-wallet') do
       first(:link).click
@@ -95,16 +92,15 @@ feature 'my account', js: true do
     account.image = Refile::FileDouble.new('dummy', 'avatar.png', content_type: 'image/png')
     account.save
     login(account)
-    visit root_path
-    first('.header--nav--links').click_link 'My Account'
+    visit show_account_path
+
     expect(page).to have_css("img[src*='avatar.png']")
   end
 
   scenario 'show account name' do
     login(account)
-    visit root_path
-    first('.header--nav--links').click_link 'My Account'
-    wait_for_turbolinks
+    visit show_account_path
+
     expect(page).to have_content('jason')
   end
 end

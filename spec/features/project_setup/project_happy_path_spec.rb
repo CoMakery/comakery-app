@@ -39,12 +39,12 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'project[legal_project_owner]', with: 'Mindful Inc'
     attach_file 'project[square_image]', Rails.root.join('spec', 'fixtures', '1200.png')
     attach_file 'project[panoramic_image]', Rails.root.join('spec', 'fixtures', '1500.png')
-    find_button('create').click
+    find_button('create', class: 'button__border').click
     expect(page).to have_content 'Project Created'
 
     fill_in 'project[title]', with: 'This is an edited project'
     fill_in 'project[description]', with: 'This is an edited project description which is very informative'
-    find_button('save').click
+    find_button('save', class: 'button__border').click
     expect(page).to have_content 'Project Updated'
     visit('/projects')
     expect(page).to have_content 'This is an edited project'
