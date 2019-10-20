@@ -22,7 +22,6 @@ jobs:
         key: comakery-yarn-{{ checksum "yarn.lock" }}
 
       - run: sudo gem update --system --no-document
-      - run: sudo gem install bundler
       - run: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
       - run: bin/yarn install
 
