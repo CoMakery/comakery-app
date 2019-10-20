@@ -43,6 +43,7 @@ gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile.gi
 gem 'refile-mini_magick', github: 'refile/refile-mini_magick'
 gem 'refile-s3', github: 'refile/refile-s3'
 gem 'responders'
+gem 'rest-client'
 gem 'rubyzip'
 gem 'sass-rails'
 gem 'schmooze'
