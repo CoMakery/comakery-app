@@ -41,15 +41,17 @@ class Mom
   end
 
   def reg_group(**attrs)
+    token = attrs[:token] || create(:token, coin_type: :comakery)
+
     defaults = {
-      token: create(:token, coin_type: :comakery),
+      token: token,
       name: "RegGroup #{SecureRandom.hex(20)}"
     }
     RegGroup.new(defaults.merge(attrs))
   end
 
   def transfer_rule(**attrs)
-    token = create(:token, coin_type: :comakery)
+    token = attrs[:token] || create(:token, coin_type: :comakery)
 
     defaults = {
       token: token,
@@ -61,10 +63,12 @@ class Mom
   end
 
   def account_token_record(**attrs)
+    token = attrs[:token] || create(:token, coin_type: :comakery)
+
     defaults = {
       account: create(:account),
-      token: create(:token, coin_type: :comakery),
-      reg_group: create(:reg_group),
+      token: token,
+      reg_group: create(:reg_group, token: token),
       max_balance: 100000,
       account_frozen: false,
       lockup_until: 1.day.ago

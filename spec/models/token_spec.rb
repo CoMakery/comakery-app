@@ -243,7 +243,7 @@ describe Token do
     end
 
     it 'has many reg_groups' do
-      expect(token.reg_groups).to match_array([reg_group])
+      expect(token.reg_groups).to include(reg_group)
     end
 
     it 'has many transfer_rules' do
@@ -317,5 +317,18 @@ describe Token do
     stub_token_symbol
     token = create :token, symbol: 'AAA', ethereum_contract_address: contract_address
     expect token.symbol = 'AAA'
+  end
+
+  describe 'abi' do
+    let!(:comakery_token) { create(:token, coin_type: :comakery) }
+    let!(:token) { create(:token) }
+
+    it 'returns correct abi for Comakery Token' do
+      expect(comakery_token.abi[0]['stateMutability']).to eq('nonpayable')
+    end
+
+    it 'returns nil for other tokens' do
+      expect(token.abi).to be_nil
+    end
   end
 end
