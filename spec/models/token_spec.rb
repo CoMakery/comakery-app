@@ -227,6 +227,30 @@ describe Token do
     end
   end
 
+  describe 'associations' do
+    let!(:token) { create(:token, coin_type: :comakery) }
+    let!(:project) { create(:project, token: token) }
+    let!(:account_token_record) { create(:account_token_record, token: token) }
+    let!(:reg_group) { create(:reg_group, token: token) }
+    let!(:transfer_rule) { create(:transfer_rule, token: token) }
+
+    it 'has many projects' do
+      expect(token.projects).to match_array([project])
+    end
+
+    it 'has many account_token_records' do
+      expect(token.account_token_records).to match_array([account_token_record])
+    end
+
+    it 'has many reg_groups' do
+      expect(token.reg_groups).to match_array([reg_group])
+    end
+
+    it 'has many transfer_rules' do
+      expect(token.transfer_rules).to match_array([transfer_rule])
+    end
+  end
+
   it 'enum of denominations should contain the platform wide currencies' do
     expect(described_class.denominations.map { |x, _| x }.sort).to eq(Comakery::Currency::DENOMINATIONS.keys.sort)
   end

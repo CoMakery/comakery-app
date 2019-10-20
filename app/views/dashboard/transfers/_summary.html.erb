@@ -37,11 +37,13 @@
     <%= @transfers_all.sum(:total_amount) %>
   </div>
 
-  <div class="transfers-table__transfer__button">
-    <label>transfer</label>
+  <% if @project.token %>
+    <div class="transfers-table__transfer__button">
+      <label>transfer</label>
 
-    –
-  </div>
+      –
+    </div>
+  <% end %>
 
   <div class="transfers-table__transfer__transferred_at">
     <label>transferred at</label>

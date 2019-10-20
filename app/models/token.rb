@@ -5,6 +5,7 @@ class Token < ApplicationRecord
   BLOCKCHAIN_NAMES = {
     erc20: 'ethereum',
     eth: 'ethereum',
+    comakery: 'ethereum',
     qrc20: 'qtum',
     qtum: 'qtum',
     ada: 'cardano',
@@ -35,6 +36,9 @@ class Token < ApplicationRecord
   attachment :logo_image, type: :image
 
   has_many :projects
+  has_many :account_token_records
+  has_many :reg_groups
+  has_many :transfer_rules
 
   # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
   # has_many :batches
@@ -51,7 +55,8 @@ class Token < ApplicationRecord
     ada: 'ADA',
     btc: 'BTC',
     eos: 'EOS',
-    xtz: 'XTZ'
+    xtz: 'XTZ',
+    comakery: 'Comakery Security Token'
   }, _prefix: :coin_type
 
   enum denomination: {
@@ -98,11 +103,11 @@ class Token < ApplicationRecord
   before_save :enable_ethereum
 
   def coin_type_token?
-    coin_type_erc20? || coin_type_qrc20?
+    coin_type_erc20? || coin_type_qrc20? || coin_type_comakery?
   end
 
   def coin_type_on_ethereum?
-    coin_type_erc20? || coin_type_eth?
+    coin_type_erc20? || coin_type_eth? || coin_type_comakery?
   end
 
   def coin_type_on_qtum?
@@ -121,11 +126,19 @@ class Token < ApplicationRecord
     ethereum_contract_address.present? && (symbol.blank? || decimal_places.blank?)
   end
 
+  def abi
+    if coin_type_comakery?
+      JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'comakery.json')))
+    end
+  end
+
   private
 
   def check_coin_type
     check_coin_type_blockchain_network
     if coin_type_erc20?
+      self.contract_address = nil
+    elsif coin_type_comakery?
       self.contract_address = nil
     elsif coin_type_qrc20?
       self.ethereum_contract_address = nil

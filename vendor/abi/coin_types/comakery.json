@@ -1,0 +1,219 @@
+{
+  "inputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "constructor"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "ALL_TRANSFERS_PAUSED",
+  "outputs": [
+    {
+      "internalType": "uint8",
+      "name": "",
+      "type": "uint8"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "DO_NOT_SEND_TO_EMPTY_ADDRESS",
+  "outputs": [
+    {
+      "internalType": "uint8",
+      "name": "",
+      "type": "uint8"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "DO_NOT_SEND_TO_TOKEN_CONTRACT",
+  "outputs": [
+    {
+      "internalType": "uint8",
+      "name": "",
+      "type": "uint8"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "GREATER_THAN_RECIPIENT_MAX_BALANCE",
+  "outputs": [
+    {
+      "internalType": "uint8",
+      "name": "",
+      "type": "uint8"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "SENDER_ADDRESS_FROZEN",
+  "outputs": [
+    {
+      "internalType": "uint8",
+      "name": "",
+      "type": "uint8"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "SENDER_TOKENS_TIME_LOCKED",
+  "outputs": [
+    {
+      "internalType": "uint8",
+      "name": "",
+      "type": "uint8"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "SUCCESS",
+  "outputs": [
+    {
+      "internalType": "uint8",
+      "name": "",
+      "type": "uint8"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "TRANSFER_GROUP_NOT_ALLOWED_UNTIL_LATER",
+  "outputs": [
+    {
+      "internalType": "uint8",
+      "name": "",
+      "type": "uint8"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "TRANSFER_GROUP_NOT_APPROVED",
+  "outputs": [
+    {
+      "internalType": "uint8",
+      "name": "",
+      "type": "uint8"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [
+    {
+      "internalType": "address",
+      "name": "_token",
+      "type": "address"
+    },
+    {
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    },
+    {
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    }
+  ],
+  "name": "detectTransferRestriction",
+  "outputs": [
+    {
+      "internalType": "uint8",
+      "name": "",
+      "type": "uint8"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [
+    {
+      "internalType": "uint8",
+      "name": "restrictionCode",
+      "type": "uint8"
+    }
+  ],
+  "name": "messageForTransferRestriction",
+  "outputs": [
+    {
+      "internalType": "string",
+      "name": "",
+      "type": "string"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [
+    {
+      "internalType": "uint8",
+      "name": "restrictionCode",
+      "type": "uint8"
+    }
+  ],
+  "name": "checkSuccess",
+  "outputs": [
+    {
+      "internalType": "bool",
+      "name": "isSuccess",
+      "type": "bool"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}

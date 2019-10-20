@@ -10,10 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191014175653) do
+ActiveRecord::Schema.define(version: 20191017191214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "account_token_records", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "token_id"
+    t.bigint "reg_group_id"
+    t.bigint "max_balance"
+    t.boolean "account_frozen"
+    t.datetime "lockup_until"
+    t.datetime "synced_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_token_records_on_account_id"
+    t.index ["reg_group_id"], name: "index_account_token_records_on_reg_group_id"
+    t.index ["token_id"], name: "index_account_token_records_on_token_id"
+  end
 
   create_table "accounts", id: :serial, force: :cascade do |t|
     t.string "email"
@@ -311,6 +326,14 @@ ActiveRecord::Schema.define(version: 20191014175653) do
     t.index ["token_id"], name: "index_projects_on_token_id"
   end
 
+  create_table "reg_groups", force: :cascade do |t|
+    t.bigint "token_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token_id"], name: "index_reg_groups_on_token_id"
+  end
+
   create_table "revenues", id: :serial, force: :cascade do |t|
     t.integer "project_id"
     t.string "currency"
@@ -356,6 +379,19 @@ ActiveRecord::Schema.define(version: 20191014175653) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "unlisted", default: false
+    t.boolean "token_frozen", default: false
+    t.datetime "synced_at"
+  end
+
+  create_table "transfer_rules", force: :cascade do |t|
+    t.bigint "token_id"
+    t.bigint "sending_group_id"
+    t.bigint "receiving_group_id"
+    t.datetime "lockup_until"
+    t.datetime "synced_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token_id"], name: "index_transfer_rules_on_token_id"
   end
 
   create_table "unsubscriptions", force: :cascade do |t|
@@ -376,10 +412,15 @@ ActiveRecord::Schema.define(version: 20191014175653) do
     t.index ["provider_id"], name: "index_verifications_on_provider_id"
   end
 
+  add_foreign_key "account_token_records", "accounts"
+  add_foreign_key "account_token_records", "reg_groups"
+  add_foreign_key "account_token_records", "tokens"
   add_foreign_key "awards", "specialties"
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"
   add_foreign_key "projects", "tokens"
+  add_foreign_key "reg_groups", "tokens"
+  add_foreign_key "transfer_rules", "tokens"
   add_foreign_key "verifications", "accounts"
 end
