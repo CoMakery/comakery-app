@@ -18,7 +18,7 @@ const transferXtzCoins = async function(award) { // award in JSON
     }
   } catch (err) {
     console.error(err)
-    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
+    alert( err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
 }
@@ -32,7 +32,7 @@ const submitTransaction = async function(award, network, to, amount) {
   if (model !== 'T') {
     throw new Error('The Trezor is not supported')
   }
-  window.alertMsg('#metamaskModal1', 'Waiting...')
+  alert( 'Waiting...')
   const publicKey = await getPublicKey(path)
   const fromAddress = await getFirstTezosAddress(path)
   const balance = await window.eztz.rpc.getBalance(fromAddress)
@@ -74,7 +74,7 @@ const submitTransaction = async function(award, network, to, amount) {
     error => {
       console.error('transaction failed', error)
       utils.showMessageWhenTransactionFailed(award)
-      window.alertMsg('#metamaskModal1', error.message || 'The transaction failed')
+      alert( error.message || 'The transaction failed')
     }
   )
 }

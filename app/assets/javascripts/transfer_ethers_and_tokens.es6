@@ -4,7 +4,7 @@ async function transferAwardOnEthereum(award) { // award in JSON
     window.web3 = new Web3(ethereum);
   }
   if (!window.web3) {
-    alertMsg($('#metamaskModal1'), 'Please unlock your MetaMask Accounts');
+    alert('Please unlock your MetaMask Accounts');
     return;
   }
   if (!web3) {
@@ -17,7 +17,7 @@ async function transferAwardOnEthereum(award) { // award in JSON
     await(ethereum.enable());
   }
   if (!web3.eth.coinbase) {
-    alertMsg($('#metamaskModal1'), 'Please unlock your MetaMask Accounts');
+    alert('Please unlock your MetaMask Accounts');
     return;
   }
   if (award.token.coin_type === 'erc20') {

@@ -93,7 +93,7 @@ class Views::Shared::Awards < Views::Base
     elsif project.token.coin_type_qtum?
       image_tag 'ledger.png', alt: 'Ledger'
     elsif project.token.coin_type_ada? || project.token.coin_type_btc?
-      image_tag'trezor.png', alt: 'Trezor'
+      image_tag 'trezor.png', alt: 'Trezor'
     elsif project.token.coin_type_eos?
       image_tag 'eos.png', alt: 'Eos'
     elsif project.token.coin_type_xtz?

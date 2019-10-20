@@ -63,7 +63,6 @@ class Project < ApplicationRecord
   delegate :populate_token?, to: :token, allow_nil: true
   delegate :total_awarded, to: :awards, allow_nil: true
 
-
   def top_contributors
     Account.select('accounts.*, sum(a1.total_amount) as total_awarded, max(a1.created_at) as last_awarded_at').joins("
       left join awards a1 on a1.account_id=accounts.id and a1.status in(3,5)

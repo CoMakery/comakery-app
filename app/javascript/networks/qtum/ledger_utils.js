@@ -18,12 +18,12 @@ const transferQtumCoins = async function(award) { // award in JSON
     const networkType = network === 'mainnet' ? 'prod' : 'testnet'
     const addressValid = caValidator.validate(recipientAddress, 'QTUM', networkType)
     if (addressValid) {
-      window.alertMsg('#metamaskModal1', 'Waiting...')
+      alert( 'Waiting...')
       txHash = await submitTransaction(network, recipientAddress, amount, fee)
     }
   } catch (err) {
     console.log(err)
-    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
+    alert( err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
   if (txHash) {

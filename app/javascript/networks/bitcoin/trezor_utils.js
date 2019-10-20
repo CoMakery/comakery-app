@@ -19,12 +19,12 @@ const transferBtcCoins = async function(award) { // award in JSON
   let txHash
   try {
     if (addressValid) {
-      window.alertMsg('#metamaskModal1', 'Waiting...')
+      alert( 'Waiting...')
       txHash = await submitTransaction(network, recipientAddress, amount)
     }
   } catch (err) {
     console.log(err)
-    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
+    alert( err.message || 'The transaction failed')
     helpers.showMessageWhenTransactionFailed(award)
   }
   if (txHash) {
