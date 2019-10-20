@@ -10,7 +10,20 @@ jobs:
           YARN_VER: 1.12.3
           ARCH: x64
           BUNDLER_VERSION: 2.0.1
+          RACK_ENV: production
+          RAILS_ENV: production
+          NODE_ENV: production
+          APP_NAME: production
+          AIRBRAKE_API_KEY: dummy
+          AIRBRAKE_PROJECT_ID: dummy
+          SECRET_KEY_BASE: dummy
+          AWS_API_KEY: dummy
+          AWS_API_SECRET: dummy
+          REFILE_S3_REGION: dummy
+          REFILE_S3_BUCKET: dummy
+          DATABASE_URL: postgres://localhost:5432/production
       - image: circleci/postgres:10.10-alpine
+      - image: circleci/redis:5.0.6-alpine
     steps:
       - run: wget "https://nodejs.org/dist/v$NODE_VER/node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo tar -xJf "node-v$NODE_VER-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner && rm "node-v$NODE_VER-linux-$ARCH.tar.xz" && sudo ln -s /usr/local/bin/node /usr/local/bin/nodejs
       - run: wget "https://yarnpkg.com/downloads/$YARN_VER/yarn-v$YARN_VER.tar.gz" && sudo mkdir -p /opt && sudo tar -xzf yarn-v$YARN_VER.tar.gz -C /opt/ && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarn /usr/local/bin/yarn && sudo ln -s /opt/yarn-v$YARN_VER/bin/yarnpkg /usr/local/bin/yarnpkg && rm yarn-v$YARN_VER.tar.gz
