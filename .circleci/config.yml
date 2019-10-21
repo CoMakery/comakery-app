@@ -37,7 +37,7 @@ jobs:
       - run: echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
       - run: source $BASH_ENV
       - run: gem install bundler
-      - run: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs=4 --retry=3
+      - run: bundle install --path=vendor/bundle --jobs=4 --retry=3
       - run: bin/yarn install
 
       - type: cache-save
@@ -49,13 +49,16 @@ jobs:
         paths:
           - node_modules
 
-      - run: yarn test
+      - run: yarn lint
       - run: yarn stylelint
-      - run: bundle exec rake assets:precompile
+      - run: yarn test
 
+      - run: bin/rubocop
+      - run: bundle exec brakeman --exit-on-warn --quiet
+      - run: bundle exec rake assets:precompile
       - run: bundle exec rake db:setup
       - run: bundle exec rake data:migrate
-      - run: bundle exec citizen checks
+      - run: RAILS_ENV="test" bundle exec rspec --format documentation
 
       - type: store_artifacts
         path: ./tmp/capybara
