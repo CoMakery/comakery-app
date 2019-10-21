@@ -58,7 +58,7 @@ jobs:
       - run: bundle exec rake assets:precompile
       - run: bundle exec rake db:setup
       - run: bundle exec rake data:migrate
-      - run: RAILS_ENV="test" bundle exec rspec --format documentation
+      - run: env RAILS_ENV=test RACK_ENV=test bundle exec rspec --format documentation
 
       - type: store_artifacts
         path: ./tmp/capybara
