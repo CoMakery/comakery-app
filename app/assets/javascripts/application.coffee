@@ -13,7 +13,6 @@
 # = require jquery
 # = require jquery-ui
 # = require d3
-# = require foundation
 # = require moment
 # = require underscore
 # = require chart_colors

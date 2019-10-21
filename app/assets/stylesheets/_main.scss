@@ -68,14 +68,12 @@ body {
 }
 
 .top-bar-right ul li > a {
-	@extend %chunko-text;
 	text-align: right;
 	padding-right: 15px;
 }
 
 a .button,
 a .button.take-action {
-	@extend %chunko-text;
 	color: $snow;
 }
 
