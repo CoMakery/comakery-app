@@ -39,6 +39,7 @@ gem 'rails-data-migrations'
 gem 'rails-html-sanitizer'
 gem 'react-rails'
 gem 'redcarpet'
+gem 'redis', '~> 4.0'
 gem 'refile', require: 'refile/rails', git: 'https://github.com/refile/refile.git' # remove git path when version > refile gem > 0.6.2 is released (0.6.2 requires old conflicting rack)
 gem 'refile-mini_magick', github: 'refile/refile-mini_magick'
 gem 'refile-s3', github: 'refile/refile-s3'
@@ -112,8 +113,6 @@ gem 'mini_racer', '~> 0.2.4'
 gem 'possessive', '~> 1.0'
 
 gem 'omniauth-rails_csrf_protection', '~> 0.1.2'
-
-gem 'redis-rails', '~> 5.0'
 
 gem 'turbolinks', '~> 5.2'
 

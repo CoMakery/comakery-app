@@ -1,18 +1,12 @@
 @charset 'utf-8';
 
-@import 'settings';
 @import 'foundation';
 @import 'foundation-icons';
-// @import 'compass';
-// @import 'motion-ui/motion-ui';
-
-// @import 'settings_default';  // From Foundation
-@import 'settings_custom';       // CoMakery
+@import 'settings_custom';
 
 // Foundation components
 @include foundation-global-styles;
 @include foundation-grid;
-// @include foundation-flex-grid;  // see http://www.sitepoint.com/foundation-6-the-new-flex-grid
 @include foundation-typography;
 @include foundation-button;
 @include foundation-forms;
@@ -25,32 +19,10 @@
 @include foundation-top-bar;
 @include foundation-callout;
 @include foundation-close-button;
-// @include foundation-accordion;
-// @include foundation-accordion-menu;
-// @include foundation-badge;
-// @include foundation-breadcrumbs;
-// @include foundation-button-group;
-// @include foundation-drilldown-menu;
-// @include foundation-dropdown;
-// @include foundation-dropdown-menu;
-// @include foundation-flex-video;
-// @include foundation-media-object;
-// @include foundation-off-canvas;
-// @include foundation-orbit;
-// @include foundation-pagination;
 @include foundation-progress-bar;
-// @include foundation-slider;
-// @include foundation-sticky;
 @include foundation-reveal;
-// @include foundation-switch;
 @include foundation-table;
-// @include foundation-tabs;
-// @include foundation-title-bar;
 
-// If you'd like to include motion-ui the foundation-rails gem comes prepackaged with it, uncomment the 3 @imports, if you are not using the gem you need to install the motion-ui sass package.
-// @include motion-ui-transitions;
-// @include motion-ui-animations;
-// CoMakery custom styles
 @import 'main';
 
 html, body{
