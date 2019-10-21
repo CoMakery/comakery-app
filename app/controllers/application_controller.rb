@@ -223,7 +223,7 @@ class ApplicationController < ActionController::Base
 
   def compare_all(*pairs)
     pairs.map do |a, b|
-      ActiveSupport::SecurityUtils.variable_size_secure_compare(a, b)
+      ActiveSupport::SecurityUtils.secure_compare(a, b)
     end.reduce(:&)
   end
 end
