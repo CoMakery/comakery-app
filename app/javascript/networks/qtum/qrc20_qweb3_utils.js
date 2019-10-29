@@ -44,7 +44,6 @@ const transferQrc20Tokens = async function(award) { // award in JSON
       senderAddress: window.qrypto.account.address,
     })
     if (rs && rs.txid) {
-      alert( 'Waiting...')
     }
   } catch (err) {
     console.error(err)

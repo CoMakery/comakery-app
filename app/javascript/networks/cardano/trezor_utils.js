@@ -21,7 +21,6 @@ const transferAdaCoins = async function(award) { // award in JSON
   let txHash
   try {
     if (!addressValidator.validationError && !coins.validationError) {
-      alert( 'Waiting...')
       txHash = await submitTransaction(network, recipientAddress, coins)
     }
   } catch (err) {
