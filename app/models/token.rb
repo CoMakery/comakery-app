@@ -36,6 +36,7 @@ class Token < ApplicationRecord
   attachment :logo_image, type: :image
 
   has_many :projects
+  has_many :accounts, through: :projects, source: :interested
   has_many :account_token_records
   has_many :reg_groups
   has_many :transfer_rules
@@ -123,7 +124,7 @@ class Token < ApplicationRecord
   end
 
   def populate_token?
-    ethereum_contract_address.present? && (symbol.blank? || decimal_places.blank?)
+    coin_type_on_ethereum? && ethereum_network.present? && ethereum_contract_address.present? && (symbol.blank? || decimal_places.blank?)
   end
 
   def abi
@@ -168,7 +169,8 @@ class Token < ApplicationRecord
 
   def populate_token_symbol
     if populate_token?
-      symbol, decimals = Comakery::Ethereum.token_symbol(ethereum_contract_address, self)
+      web3 = Comakery::Web3.new(ethereum_network)
+      symbol, decimals = web3.fetch_symbol_and_decimals(ethereum_contract_address)
       self.symbol = symbol if symbol.blank?
       self.decimal_places = decimals if decimal_places.blank?
       ethereum_contract_address_exist_on_network?(symbol)

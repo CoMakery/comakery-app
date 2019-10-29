@@ -17,7 +17,7 @@ describe Token do
     it 'raises error if not found Ethereum address' do
       stub_const('Comakery::Ethereum::ADDRESS', {})
       expect(Comakery::Ethereum::ADDRESS['account']).to be_nil
-      stub_token_symbol
+      stub_web3_fetch
       expect { described_class.create(ethereum_contract_address: '111') }.to raise_error(ArgumentError)
     end
 
@@ -179,31 +179,31 @@ describe Token do
       let(:address) { '0x' + 'a' * 40 }
 
       it 'validates with a valid ethereum address' do
-        stub_token_symbol
+        stub_web3_fetch
         expect(build(:token, ethereum_contract_address: nil)).to be_valid
         expect(build(:token, ethereum_contract_address: "0x#{'a' * 40}")).to be_valid
-        stub_token_symbol
+        stub_web3_fetch
         expect(build(:token, ethereum_contract_address: "0x#{'A' * 40}")).to be_valid
       end
 
       it 'does not validate with an invalid ethereum address' do
         expected_error_message = "Ethereum contract address should start with '0x', followed by a 40 character ethereum address"
-        stub_token_symbol
+        stub_web3_fetch
         expect(build(:token, ethereum_contract_address: 'foo').tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_token_symbol
+        stub_web3_fetch
         expect(build(:token, ethereum_contract_address: '0x').tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_token_symbol
+        stub_web3_fetch
         expect(build(:token, ethereum_contract_address: "0x#{'a' * 39}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_token_symbol
+        stub_web3_fetch
         expect(build(:token, ethereum_contract_address: "0x#{'a' * 41}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
-        stub_token_symbol
+        stub_web3_fetch
         expect(build(:token, ethereum_contract_address: "0x#{'g' * 40}").tap(&:valid?).errors.full_messages).to eq([expected_error_message])
       end
 
       it { expect(token.ethereum_contract_address).to eq(nil) }
 
       it 'can be set' do
-        stub_token_symbol
+        stub_web3_fetch
         token.ethereum_contract_address = address
         token.save!
         token.reload
@@ -214,12 +214,12 @@ describe Token do
       # it 'once has tasks associated cannot be set to another value' do
       #   create :task, token: token
 
-      # stub_token_symbol
+      # stub_web3_fetch
       # token.ethereum_contract_address = address
       # token.save!
       # token.reload
       # token.ethereum_contract_address = 'c' * 40
-      # stub_token_symbol
+      # stub_web3_fetch
       # expect(token).not_to be_valid
       # expect(token.errors.full_messages.to_sentence).to match \
       #   /cannot be changed if has associated tasks/
@@ -275,7 +275,7 @@ describe Token do
     end
 
     it 'is false if an existing token with an account is transitioned from ethereum_enabled = false to true' do
-      stub_token_symbol
+      stub_web3_fetch
       token = create(:token, ethereum_enabled: false, ethereum_contract_address: '0x' + '7' * 40)
       token.update!(ethereum_enabled: true)
       expect(token.transitioned_to_ethereum_enabled?).to eq(false)
@@ -284,7 +284,7 @@ describe Token do
 
   it 'populate_token_symbol' do
     contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
-    stub_token_symbol
+    stub_web3_fetch
     token = create :token, symbol: nil, ethereum_contract_address: contract_address
     expect token.symbol = 'FCBB'
   end
@@ -314,7 +314,7 @@ describe Token do
 
   it 'can manual input symbol' do
     contract_address = '0xa8112e56eb96bd3da7741cfea0e3cbd841fc009d'
-    stub_token_symbol
+    stub_web3_fetch
     token = create :token, symbol: 'AAA', ethereum_contract_address: contract_address
     expect token.symbol = 'AAA'
   end

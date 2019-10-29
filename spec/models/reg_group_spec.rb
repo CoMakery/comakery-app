@@ -32,9 +32,9 @@ describe RegGroup do
       expect(reg_group).not_to be_valid
     end
 
-    it 'requires name to be present' do
+    it 'requires blockchain_id to be present' do
       reg_group = create(:reg_group)
-      reg_group.name = nil
+      reg_group.blockchain_id = nil
       expect(reg_group).not_to be_valid
     end
 
@@ -44,6 +44,29 @@ describe RegGroup do
       reg_group2 = build(:reg_group, token: reg_group.token, name: reg_group.name)
 
       expect(reg_group2).not_to be_valid
+    end
+
+    it 'requires blockchain_id to be unique per token' do
+      reg_group = create(:reg_group)
+      create(:reg_group, blockchain_id: reg_group.blockchain_id)
+      reg_group2 = build(:reg_group, token: reg_group.token, blockchain_id: reg_group.blockchain_id)
+
+      expect(reg_group2).not_to be_valid
+    end
+  end
+
+  describe 'hooks' do
+    let!(:reg_group) { build(:reg_group) }
+    let!(:reg_group_w_name) { create(:reg_group, name: 'test') }
+
+    before do
+      reg_group.name = nil
+      reg_group.save
+    end
+
+    it 'runs set_name before validation' do
+      expect(reg_group.name).to eq(reg_group.blockchain_id.to_s)
+      expect(reg_group_w_name.name).to eq('test')
     end
   end
 end
