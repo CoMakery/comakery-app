@@ -108,7 +108,7 @@ class ApplicationController < ActionController::Base
       @account = current_account
       @skip_validation = true
       flash[:error] = "Please complete your profile info for #{current_account.errors.keys.join(', ').humanize.titleize}"
-      render 'accounts/build_profile', layout: 'application'
+      render 'accounts/build_profile', layout: 'legacy'
     end
   end
 
@@ -190,7 +190,7 @@ class ApplicationController < ActionController::Base
       experience_level_name: Award::EXPERIENCE_LEVELS.key(task.experience_level),
       image_url: helpers.attachment_url(task, :image),
       submission_image_url: helpers.attachment_url(task, :submission_image),
-      payment_url: awards_project_path(task.project),
+      payment_url: project_dashboard_transfers_path(task.project),
       details_url: project_award_type_award_path(task.project, task.award_type, task),
       start_url: project_award_type_award_start_path(task.project, task.award_type, task),
       submit_url: project_award_type_award_submit_path(task.project, task.award_type, task),

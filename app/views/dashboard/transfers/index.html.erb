@@ -1,9 +1,9 @@
 <%= render layout: 'projects/project_settings' do %>
-  <div data-controller="transfer-form">
+  <div data-controller="transfer-form" data-transfer-form-decimals="<%= @project.token ? @project.token.decimal_places : 0 %>">
     <%= render partial: "filters" %>
 
     <% if policy(@project).create_transfer? %>
-      <%= button_tag "create a transfer ＋", type: 'button', class: 'transfers-create', data: {target: 'transfer-form.create', action: 'transfer-form#showForm'} %>
+      <%= button_tag "create a transfer ＋", type: 'button', class: 'transfers-create', data: { target: 'transfer-form.create', action: 'transfer-form#showForm' } %>
     <% end %>
 
     <div class="transfers-table">

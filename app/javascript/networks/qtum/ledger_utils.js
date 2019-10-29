@@ -18,7 +18,6 @@ const transferQtumCoins = async function(award) { // award in JSON
     const networkType = network === 'mainnet' ? 'prod' : 'testnet'
     const addressValid = caValidator.validate(recipientAddress, 'QTUM', networkType)
     if (addressValid) {
-      alert( 'Waiting...')
       txHash = await submitTransaction(network, recipientAddress, amount, fee)
     }
   } catch (err) {

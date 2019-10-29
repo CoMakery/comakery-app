@@ -212,12 +212,12 @@ describe Award do
       let(:award) { create(:award_ready, award_type: create(:award_type, project: project)) }
 
       before do
-        award.update(status: :started, account: create(:account))
+        award.update(account: create(:account))
 
         project.reload
       end
 
-      it 'adds account as interested in project after award is started' do
+      it 'adds account as interested in project after account is assigned' do
         expect(project.interested).to include(award.account)
       end
     end

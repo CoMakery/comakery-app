@@ -43,7 +43,7 @@ class TaskShow extends React.Component {
         detailsFetched: false,
       })
     } else {
-      typeof window === 'undefined' ? null : window.location = document.referrer
+      typeof window === 'undefined' ? null : window.history.back()
     }
   }
 

@@ -259,7 +259,7 @@ class ProjectForm extends React.Component {
   }
 
   goBack() {
-    typeof window === 'undefined' ? null : window.location = '/projects'
+    typeof window === 'undefined' ? null : window.history.back()
   }
 
   render() {

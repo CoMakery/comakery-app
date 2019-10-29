@@ -32,7 +32,6 @@ const submitTransaction = async function(award, network, to, amount) {
   if (model !== 'T') {
     throw new Error('The Trezor is not supported')
   }
-  alert( 'Waiting...')
   const publicKey = await getPublicKey(path)
   const fromAddress = await getFirstTezosAddress(path)
   const balance = await window.eztz.rpc.getBalance(fromAddress)

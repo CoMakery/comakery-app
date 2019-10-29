@@ -60,7 +60,8 @@ module Comakery
     config.middleware.use OliveBranch::Middleware, inflection: 'camel'
 
     # Use Redis for Cache Store
-    redis_url = ENV.fetch("REDIS_PROVIDER") { "redis://localhost:6379/1" }
+    redis_provider = ENV.fetch("REDIS_PROVIDER") { "REDIS_URL" }
+    redis_url = ENV.fetch(redis_provider) { "redis://localhost:6379/1" }
     config.cache_store = :redis_cache_store, { url: redis_url, expires_in: 1.hour }
     config.action_controller.perform_caching = true
   end
