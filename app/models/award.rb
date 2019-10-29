@@ -68,7 +68,7 @@ class Award < ApplicationRecord
   before_validation :set_transferred_at, if: -> { status == 'paid' && transferred_at.nil? }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
-  after_save :add_account_as_interested, if: -> { started? }
+  after_save :add_account_as_interested, if: -> { account }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6,7)' }
