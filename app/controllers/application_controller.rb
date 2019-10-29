@@ -108,7 +108,7 @@ class ApplicationController < ActionController::Base
       @account = current_account
       @skip_validation = true
       flash[:error] = "Please complete your profile info for #{current_account.errors.keys.join(', ').humanize.titleize}"
-      render 'accounts/build_profile', layout: 'application'
+      render 'accounts/build_profile', layout: 'legacy'
     end
   end
 
