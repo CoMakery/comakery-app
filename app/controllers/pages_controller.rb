@@ -4,7 +4,7 @@ class PagesController < ApplicationController
 
   skip_after_action :verify_authorized
 
-  layout 'react', only: %i[styleguide featured]
+  layout 'legacy', except: %i[styleguide featured]
 
   def featured
     top_missions = Mission.active.first(4)

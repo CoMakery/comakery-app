@@ -207,6 +207,21 @@ describe Award do
       end
     end
 
+    describe 'add_account_as_interested' do
+      let(:project) { create(:project) }
+      let(:award) { create(:award_ready, award_type: create(:award_type, project: project)) }
+
+      before do
+        award.update(account: create(:account))
+
+        project.reload
+      end
+
+      it 'adds account as interested in project after account is assigned' do
+        expect(project.interested).to include(award.account)
+      end
+    end
+
     describe 'set_default_specialty' do
       let!(:award) { create(:award_ready) }
 
@@ -241,6 +256,20 @@ describe Award do
 
       it 'clears notify_on_expiaration_at timestamp when status is submitted' do
         expect(award.notify_on_expiration_at).to be_nil
+      end
+    end
+
+    describe 'set_transferred_at' do
+      let!(:award) { create(:award) }
+
+      before do
+        award.update(status: :paid)
+        award.reload
+      end
+
+      it 'sets transferred_at when award becomes paid' do
+        expect(create(:award).transferred_at).to be_nil
+        expect(award.transferred_at).to eq award.updated_at
       end
     end
 

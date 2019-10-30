@@ -1,0 +1,49 @@
+<%= form_with model: Award.new, url: project_dashboard_transfers_path(@project), class: 'transfers-table__form' do |f| %>
+  <div class="transfers-table__transfer transfers-table__transfer--new" data-target="transfer-form.form">
+    <label>create transfer</label>
+
+    <div class="transfers-table__transfer__name">
+      <label>type</label>
+
+      <%= f.select(:source, [['Contributor Transfer', 'earned'], ['Investor Transfer', 'bought']], required: true) %>
+    </div>
+
+    <div class="transfers-table__transfer__account">
+      <label>recipient</label>
+
+      <%= f.select(:account_id, @project.interested.collect { |a| [ a.decorate.name_with_nickname, a.id ] }, include_blank: 'Choose Recipient', required: true) %>
+    </div>
+
+    <div class="transfers-table__transfer__issuer">
+    </div>
+
+    <div class="transfers-table__transfer__amount">
+      <label>amount <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
+
+      <%= f.number_field(:amount, required: true, placeholder: '0', min: @project.step_for_amount_input, step: @project.step_for_amount_input, data: {target: "transfer-form.amount", action: "keyup->transfer-form#calculateTotal change->transfer-form#calculateTotal"}) %>
+    </div>
+
+    <div class="transfers-table__transfer__quantity">
+      <label>quantity</label>
+
+      <%= f.number_field(:quantity, required: true, placeholder: 'Qty', min: 1, step: @project.step_for_quantity_input, data: {target: "transfer-form.quantity", action: "keyup->transfer-form#calculateTotal change->transfer-form#calculateTotal"}) %>
+    </div>
+
+    <div class="transfers-table__transfer__total_amount">
+      <label>total <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
+
+      <span data-target="transfer-form.total">0</span>
+    </div>
+
+    <div class="transfers-table__transfer__button">
+    </div>
+
+    <div class="transfers-table__transfer__transferred_at">
+      <%= f.hidden_field(:why, value: '—') %>
+      <%= f.hidden_field(:description, value: '—') %>
+      <%= f.hidden_field(:requirements, value: '—') %>
+      <%= f.submit('create', data: {confirm: "Create a transfer?\nTransfer can be paid later."}) %>
+      <%= button_tag "cancel", type: 'button', data: {action: 'transfer-form#hideForm'} %>
+    </div>
+  </div>
+<% end %>

@@ -11,16 +11,15 @@ window.transferTokens = function(award) { // award in JSON
         contractIns.transfer(toAddress, web3.toWei(amount, 'wei'), { gasPrice: web3.toWei(1, 'gwei') }, function(err, tx) {
           if (tx) {
             $.post(`/projects/${award.project.id}/batches/${award.award_type.id}/tasks/${award.id}/update_transaction_address`, {tx})
-            if ($('body.projects-show').length > 0) {
-              $('.flash-msg').html(`Successfully sent award to ${award.recipient_display_name}`)
-            }
+            alert(`Successfully sent award to ${award.recipient_display_name}`)
+            location.reload()
           } else if (err) {
             console.log(err)
-            alertMsg('#metamaskModal1', 'Errors occurred, please click on REJECT button. Please transfer ethers on the blockchain with MetaMask on the awards page. Please make sure that gas fee is greater than 0 before clicking on CONFIRM button on MetaMask popup')
+            alert( 'Errors occurred, please click on REJECT button. Please transfer ethers on the blockchain with MetaMask on the awards page. Please make sure that gas fee is greater than 0 before clicking on CONFIRM button on MetaMask popup')
           }
         })
       } else {
-        alertMsg('#metamaskModal1', "You don't have sufficient Tokens to send")
+        alert( "You don't have sufficient Tokens to send")
       }
     })
   }

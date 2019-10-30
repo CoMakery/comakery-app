@@ -297,7 +297,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
             className="layout--content--wrapper"
           >
             <div
-              className="layout--content--content"
+              className="layout--content--content animated fadeIn faster"
             >
               <Flash
                 className=""

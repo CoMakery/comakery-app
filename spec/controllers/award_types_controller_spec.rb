@@ -58,7 +58,7 @@ RSpec.describe AwardTypesController, type: :controller do
             batch: valid_attributes
           }
           expect(response.status).to eq(200)
-          expect(response.content_type).to eq('application/json')
+          expect(response.media_type).to eq('application/json')
           expect(JSON.parse(response.body)['message']).to eq('Batch created')
           expect(JSON.parse(response.body)['id']).to eq(project.award_types.last.id)
         end.to change(AwardType, :count).by(1)
@@ -73,7 +73,7 @@ RSpec.describe AwardTypesController, type: :controller do
             batch: invalid_attributes
           }
           expect(response.status).to eq(422)
-          expect(response.content_type).to eq('application/json')
+          expect(response.media_type).to eq('application/json')
           expect(JSON.parse(response.body)['message']).to eq('Name is too long (maximum is 100 characters)')
         end.not_to change(AwardType, :count)
       end
@@ -96,7 +96,7 @@ RSpec.describe AwardTypesController, type: :controller do
             batch: new_attributes
           }
           expect(response.status).to eq(200)
-          expect(response.content_type).to eq('application/json')
+          expect(response.media_type).to eq('application/json')
           expect(JSON.parse(response.body)['message']).to eq('Batch updated')
           expect(JSON.parse(response.body)['id']).to eq(project.award_types.last.id)
         award_type.reload
@@ -113,7 +113,7 @@ RSpec.describe AwardTypesController, type: :controller do
           batch: invalid_attributes
         }
         expect(response.status).to eq(422)
-        expect(response.content_type).to eq('application/json')
+        expect(response.media_type).to eq('application/json')
         expect(JSON.parse(response.body)['message']).to eq('Name is too long (maximum is 100 characters)')
       end
     end

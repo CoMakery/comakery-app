@@ -200,16 +200,48 @@ describe ProjectDecorator do
       expect(props[:owner]).to eq(project.legal_project_owner)
       expect(props[:present]).to be_truthy
       expect(props[:show_batches]).to be_truthy
-      expect(props[:show_payments]).to be_truthy
+      expect(props[:show_transfers]).to be_truthy
       expect(props[:image_url]).to include('image.png')
       expect(props[:admins_url]).to include(project.id.to_s)
       expect(props[:settings_url]).to include(project.id.to_s)
       expect(props[:batches_url]).to include(project.id.to_s)
-      expect(props[:contributors_url]).to include(project.id.to_s)
-      expect(props[:awards_url]).to include(project.id.to_s)
+      expect(props[:transfers_url]).to include(project.id.to_s)
+      expect(props[:accounts_url]).to include(project.id.to_s)
       expect(props[:landing_url]).to include(project.id.to_s)
       expect(props_unlisted[:landing_url]).to include(unlisted_project.long_id.to_s)
       expect(props_wo_image[:image_url]).to include('defaul_project')
+    end
+  end
+
+  describe 'step_for_amount_input' do
+    let(:token) { create(:token, decimal_places: 2) }
+    let(:project) { create(:project, token: token) }
+
+    it 'returns minimal step for amount input field based on decimal places of token' do
+      expect(project.decorate.step_for_amount_input).to eq(0.01)
+    end
+
+    it 'returns 1 as a step for amount input field when token is not present' do
+      project.update(token: nil)
+      project.reload
+
+      expect(project.decorate.step_for_amount_input).to eq(1)
+    end
+  end
+
+  describe 'step_for_quantity_input' do
+    let(:token) { create(:token, decimal_places: 2) }
+    let(:project) { create(:project, token: token) }
+
+    it 'returns 0.1 as a step for amount input field' do
+      expect(project.decorate.step_for_quantity_input).to eq(0.1)
+    end
+
+    it 'returns 1 as a step for amount input field when token is not present' do
+      project.update(token: nil)
+      project.reload
+
+      expect(project.decorate.step_for_quantity_input).to eq(1)
     end
   end
 end

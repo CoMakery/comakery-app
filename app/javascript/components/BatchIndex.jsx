@@ -210,13 +210,14 @@ class BatchIndex extends React.Component {
               <div className="batch-index--sidebar">
 
                 {this.props.editable &&
-                  <SidebarItemBold
-                    className="batch-index--sidebar--item__bold"
-                    iconLeftName="BATCH/WHITE.svg"
-                    iconRightName="PLUS.svg"
-                    text="Create a New Batch"
-                    onClick={(_) => window.location = this.props.newBatchPath}
-                  />
+                  <a href={this.props.newBatchPath}>
+                    <SidebarItemBold
+                      className="batch-index--sidebar--item__bold"
+                      iconLeftName="BATCH/WHITE.svg"
+                      iconRightName="PLUS.svg"
+                      text="Create a New Batch"
+                    />
+                  </a>
                 }
 
                 <ProjectBudget>

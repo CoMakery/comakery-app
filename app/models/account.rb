@@ -25,16 +25,18 @@ class Account < ApplicationRecord
   has_many :award_projects, through: :awards, source: :project
   has_many :channel_projects, through: :channels, source: :project
   has_many :team_awards, through: :team_projects, source: :awards
-  has_many :issued_awards, through: :projects, source: :awards
+  has_many :issued_awards, class_name: 'Award', foreign_key: 'issuer_id'
   has_many :admin_awards, through: :admin_projects, source: :awards
   has_many :award_types, through: :projects
   has_many :team_award_types, through: :team_projects, source: :award_types
   has_many :admin_award_types, through: :admin_projects, source: :award_types
   has_one :slack_auth, -> { where(provider: 'slack').order('updated_at desc').limit(1) }, class_name: 'Authentication'
-  # default_scope { includes(:slack_auth) }
   has_many :interests, dependent: :destroy
   has_many :projects_interested, through: :interests, source: :project
   has_many :experiences
+  has_many :verifications
+  has_many :provided_verifications, class_name: 'Verification', foreign_key: 'provider_id'
+  belongs_to :latest_verification, class_name: 'Verification'
 
   belongs_to :specialty
 
@@ -168,16 +170,16 @@ class Account < ApplicationRecord
            .where("((authentication_teams.account_id=#{id} and channels.id is not null) or a1.account_id=#{id}) and projects.account_id <> #{id}").distinct
   end
 
+  def my_projects
+    Project.left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
+  end
+
   def accessable_projects
     Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def related_projects
     Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
-  end
-
-  def my_projects
-    Project.left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def accessable_award_types

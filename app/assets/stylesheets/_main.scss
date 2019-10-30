@@ -40,7 +40,6 @@ body {
 
 .app-aside {
 	@include grid-column($columns: 12);
-	@include padding-leader(.5);
 	background: darken($vapor, 15);
 }
 
@@ -69,14 +68,12 @@ body {
 }
 
 .top-bar-right ul li > a {
-	@extend %chunko-text;
 	text-align: right;
 	padding-right: 15px;
 }
 
 a .button,
 a .button.take-action {
-	@extend %chunko-text;
 	color: $snow;
 }
 
@@ -195,6 +192,7 @@ form.take-action-form p.notice {
 .avatar-img {
 	max-width: 27px;
 	margin-right: 5px;
+  border-radius: 3px;
 }
 
 @mixin aspect-ratio($width, $height) {
@@ -246,7 +244,7 @@ form.take-action-form p.notice {
 		}
 	}
 
-	@include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.12));
+	box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.12);
 }
 
 ul {
@@ -300,7 +298,7 @@ ul {
 		margin-bottom: 0px;
 	}
 
-	@include box-shadow(0px 1px 2px 1px rgba(0, 0, 0, 0.12));
+	box-shadow: 0px 1px 2px 1px rgba(0, 0, 0, 0.12);
 }
 
 .award-rows {

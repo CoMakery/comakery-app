@@ -4,6 +4,7 @@ exports[`Footer renders correctly without props 1`] = `
 <Fragment>
   <div
     className="footer"
+    data-turbolinks-permanent={true}
   >
     <div
       className="footer--logo"

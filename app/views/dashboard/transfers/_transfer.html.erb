@@ -1,0 +1,73 @@
+<% transfer = transfer.decorate %>
+
+<% if transfer.paid? %>
+  <% state = "transferred" %>
+<% elsif transfer.accepted? && transfer.recipient_address.blank? %>
+  <% state = "blocked" %>
+<% elsif transfer.accepted? && transfer.recipient_address.present? %>
+  <% state = "ready" %>
+<% end %>
+
+<div class="transfers-table__transfer <%= "transfers-table__transfer--#{state}" %>">
+  <div class="transfers-table__transfer__name">
+    <h3>
+      <%= link_to transfer.name, project_award_type_award_path(transfer.project, transfer.award_type, transfer) %>
+    </h3>
+  </div>
+
+  <div class="transfers-table__transfer__account">
+    <label>account</label>
+
+    <% if transfer.account %>
+      <%= render partial: "account", locals: {account: transfer.account} %>
+    <% elsif transfer.email %>
+      <%= transfer.email %>
+    <% else %>
+      –
+    <% end %>
+  </div>
+
+  <div class="transfers-table__transfer__issuer">
+    <label>admin</label>
+
+    <% if transfer.paid? %>
+      <%= render partial: "issuer", locals: {issuer: transfer.issuer, wallet: transfer.issuer_address, wallet_url: transfer.issuer_address_url} %>
+    <% else %>
+      –
+    <% end %>
+  </div>
+
+  <div class="transfers-table__transfer__amount">
+    <label>amount</label>
+
+    <%= transfer.amount_pretty %>
+  </div>
+
+  <div class="transfers-table__transfer__quantity">
+    <label>quantity</label>
+
+    <%= transfer.quantity %>
+  </div>
+
+  <div class="transfers-table__transfer__total_amount">
+    <label>total amount</label>
+
+    <%= transfer.total_amount_pretty %>
+  </div>
+
+  <div class="transfers-table__transfer__button">
+    <label>transfer</label>
+
+    <%= render partial: "shared/transfer_button", locals: {transfer: transfer} %>
+  </div>
+
+  <div class="transfers-table__transfer__transferred_at">
+    <label>transferred at</label>
+
+    <% if transfer.paid? && transfer.transferred_at %>
+      <%= transfer.transferred_at.strftime("%b %e, %Y") %>
+    <% else %>
+      –
+    <% end %>
+  </div>
+</div>

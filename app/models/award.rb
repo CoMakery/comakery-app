@@ -51,6 +51,7 @@ class Award < ApplicationRecord
   validates :submission_url, format: { with: URI.regexp(%w[http https]), message: 'must include protocol (e.g. https://)' }, if: -> { submission_url.present? }
   validates :experience_level, inclusion: { in: EXPERIENCE_LEVELS.values }, allow_nil: true
   validates :submission_comment, presence: true, if: -> { status == 'submitted' }
+  validates :account, presence: true, if: -> { status == 'accepted' && email.blank? }
   validates :expires_in_days, presence: true, numericality: { greater_than: 0 }
 
   validate :total_amount_fits_into_project_budget
@@ -64,8 +65,10 @@ class Award < ApplicationRecord
   before_validation :store_license_hash, if: -> { status == 'started' && agreed_to_license_hash.nil? }
   before_validation :set_expires_at, if: -> { status == 'started' && expires_at.nil? }
   before_validation :clear_expires_at, if: -> { status == 'submitted' && expires_at.present? }
+  before_validation :set_transferred_at, if: -> { status == 'paid' && transferred_at.nil? }
   before_destroy :abort_destroy
   after_save :update_account_experience, if: -> { completed? }
+  after_save :add_account_as_interested, if: -> { account }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
   scope :listed, -> { where 'awards.status not in(6,7)' }
@@ -92,6 +95,7 @@ class Award < ApplicationRecord
   }
 
   enum status: %i[ready started submitted accepted rejected paid cancelled unpublished]
+  enum source: %i[earned bought]
 
   def self.total_awarded
     completed.sum(:total_amount)
@@ -313,6 +317,10 @@ class Award < ApplicationRecord
       Experience.increment_for(account, specialty)
     end
 
+    def add_account_as_interested
+      project.interested << account unless account.interested?(project.id)
+    end
+
     def store_license_hash
       self.agreed_to_license_hash = project.agreed_to_license_hash
     end
@@ -326,5 +334,10 @@ class Award < ApplicationRecord
     def clear_expires_at
       self.expires_at = nil
       self.notify_on_expiration_at = nil
+    end
+
+    def set_transferred_at
+      self.updated_at = Time.current
+      self.transferred_at = updated_at
     end
 end

@@ -5,7 +5,7 @@ import Icon from './../styleguide/Icon'
 
 class Layout extends React.Component {
   goBack() {
-    typeof window === 'undefined' ? null : window.location = document.referrer
+    typeof window === 'undefined' ? null : window.history.back()
   }
 
   render() {
@@ -53,7 +53,7 @@ class Layout extends React.Component {
                 </div>
               }
 
-              <div className={sidebar ? 'layout--content--content__sidebared' : 'layout--content--content'}>
+              <div className={sidebar ? 'layout--content--content__sidebared animated fadeIn faster' : 'layout--content--content animated fadeIn faster'}>
                 {children}
               </div>
             </div>

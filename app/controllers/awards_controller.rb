@@ -29,8 +29,6 @@ class AwardsController < ApplicationController
   before_action :redirect_back, only: %i[index]
   before_action :create_interest_from_session, only: %i[index]
 
-  layout 'react'
-
   def index
     render component: 'MyTasks', props: @props
   end
@@ -178,7 +176,7 @@ class AwardsController < ApplicationController
   end
 
   def update_transaction_address
-    @award.update! ethereum_transaction_address: params[:tx], status: 'paid'
+    @award.update! ethereum_transaction_address: params[:tx], status: 'paid', issuer: current_account
     TaskMailer.with(award: @award).task_paid.deliver_now
     @award = @award.decorate
     render layout: false

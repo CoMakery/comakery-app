@@ -21,12 +21,11 @@ const transferAdaCoins = async function(award) { // award in JSON
   let txHash
   try {
     if (!addressValidator.validationError && !coins.validationError) {
-      window.alertMsg('#metamaskModal1', 'Waiting...')
       txHash = await submitTransaction(network, recipientAddress, coins)
     }
   } catch (err) {
     console.error(err)
-    window.alertMsg('#metamaskModal1', err.message || 'The transaction failed')
+    alert( err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
   if (txHash) {

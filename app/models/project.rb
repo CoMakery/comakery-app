@@ -46,6 +46,7 @@ class Project < ApplicationRecord
 
   before_validation :store_license_hash, unless: -> { terms_readonly? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
+  after_create :add_owner_as_interested
 
   scope :featured, -> { order :featured }
   scope :unlisted, -> { where 'projects.visibility in(2,3)' }
@@ -61,14 +62,6 @@ class Project < ApplicationRecord
   delegate :decimal_places_value, to: :token, allow_nil: true
   delegate :populate_token?, to: :token, allow_nil: true
   delegate :total_awarded, to: :awards, allow_nil: true
-
-  def self.with_last_activity_at
-    select(Project.column_names.map { |c| "projects.#{c}" }.<<('max(awards.created_at) as last_award_created_at').join(','))
-      .joins('left join award_types on projects.id = award_types.project_id')
-      .joins('left join awards on award_types.id = awards.award_type_id')
-      .group('projects.id')
-      .order('max(awards.created_at) desc nulls last, projects.created_at desc nulls last')
-  end
 
   def top_contributors
     Account.select('accounts.*, sum(a1.total_amount) as total_awarded, max(a1.created_at) as last_awarded_at').joins("
@@ -186,6 +179,10 @@ class Project < ApplicationRecord
     awards.contributed.any?
   end
 
+  def default_award_type
+    award_types.find_or_create_by(name: 'Transfers', goal: '—', description: '—')
+  end
+
   private
 
   def valid_tracker_url
@@ -222,6 +219,10 @@ class Project < ApplicationRecord
 
   def udpate_awards_if_token_was_added
     awards.paid.each { |a| a.update(status: :accepted) }
+  end
+
+  def add_owner_as_interested
+    interested << account unless account.interested?(id)
   end
 
   def store_license_hash

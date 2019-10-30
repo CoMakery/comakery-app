@@ -30,6 +30,16 @@ class Mom
     Experience.new(defaults.merge(attrs))
   end
 
+  def verification(**attrs)
+    defaults = {
+      account: create(:account),
+      provider: create(:account),
+      passed: true,
+      max_investment_usd: 1000000
+    }
+    Verification.new(defaults.merge(attrs))
+  end
+
   def account_with_auth(**attrs)
     account(**attrs).tap { |a| create(:authentication, account: a) }
   end

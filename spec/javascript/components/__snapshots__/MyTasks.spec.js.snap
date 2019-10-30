@@ -327,14 +327,13 @@ exports[`MyTasks renders component correctly 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-iAyFgw",
                         "isStatic": true,
-                        "lastClassName": "UTBMq",
+                        "lastClassName": "dxtFAG",
                         "rules": Array [
                           "
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #d8d8d8;
-  margin-bottom: 35px;
-  padding: 10px 0;
+  margin: 0;
+  padding: 0;
 
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -355,7 +354,7 @@ exports[`MyTasks renders component correctly 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-iAyFgw UTBMq"
+                    className="sc-iAyFgw dxtFAG"
                   >
                     <styled.div
                       dangerouslySetInnerHTML={
@@ -411,6 +410,9 @@ exports[`MyTasks renders component correctly 1`] = `
                   </div>
                 </StyledComponent>
               </styled.div>
+              <div
+                className="animated fadeIn faster"
+              />
             </div>
           </StyledComponent>
         </styled.div>

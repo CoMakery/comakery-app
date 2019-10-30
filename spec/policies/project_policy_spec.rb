@@ -76,29 +76,31 @@ describe ProjectPolicy do
     end
   end
 
-  describe '#show_contributions?' do
-    specify do
-      authorized(nil, my_public_project, :show_contributions?)
-      not_authorized(nil, my_public_project_business_confidential, :show_contributions?)
-      not_authorized(nil, my_private_project, :show_contributions?)
-    end
+  describe '#show_contributions? #transfers? #accounts?' do
+    %i[show_contributions? transfers? accounts?].each do |action|
+      specify do
+        authorized(nil, my_public_project, action)
+        not_authorized(nil, my_public_project_business_confidential, action)
+        not_authorized(nil, my_private_project, action)
+      end
 
-    specify do
-      authorized(project_account, my_public_project, :show_contributions?)
-      authorized(project_account, my_public_project_business_confidential, :show_contributions?)
-      authorized(project_account, my_private_project, :show_contributions?)
-    end
+      specify do
+        authorized(project_account, my_public_project, action)
+        authorized(project_account, my_public_project_business_confidential, action)
+        authorized(project_account, my_private_project, action)
+      end
 
-    specify do
-      authorized(other_team_member, my_public_project, :show_contributions?)
-      authorized(other_team_member, my_public_project_business_confidential, :show_contributions?)
-      authorized(other_team_member, my_private_project, :show_contributions?)
-    end
+      specify do
+        authorized(other_team_member, my_public_project, action)
+        authorized(other_team_member, my_public_project_business_confidential, action)
+        authorized(other_team_member, my_private_project, action)
+      end
 
-    specify do
-      authorized(different_team_account, my_public_project, :show_contributions?)
-      not_authorized(different_team_account, my_public_project_business_confidential, :show_contributions?)
-      not_authorized(different_team_account, my_private_project, :show_contributions?)
+      specify do
+        authorized(different_team_account, my_public_project, action)
+        not_authorized(different_team_account, my_public_project_business_confidential, action)
+        not_authorized(different_team_account, my_private_project, action)
+      end
     end
   end
 
@@ -120,21 +122,23 @@ describe ProjectPolicy do
 
   describe '#show?' do
     it 'allows viewing of projects that are public_listed or owned by the current account' do
-      expect(described_class.new(nil, my_public_project).show?).to be true
-      expect(described_class.new(nil, others_private_project).show?).to be_falsey
-      expect(described_class.new(nil, others_archived_project).show?).to be_falsey
+      %i[show?].each do |action|
+        expect(described_class.new(nil, my_public_project).send(action)).to be true
+        expect(described_class.new(nil, others_private_project).send(action)).to be_falsey
+        expect(described_class.new(nil, others_archived_project).send(action)).to be_falsey
 
-      expect(described_class.new(project_account, my_public_project).show?).to be true
-      expect(described_class.new(project_account, my_private_project).show?).to be true
-      expect(described_class.new(project_account, my_archived_project).show?).to be true
-      expect(described_class.new(project_account, others_private_project).show?).to be false
-      expect(described_class.new(project_account, others_archived_project).show?).to be false
+        expect(described_class.new(project_account, my_public_project).send(action)).to be true
+        expect(described_class.new(project_account, my_private_project).send(action)).to be true
+        expect(described_class.new(project_account, my_archived_project).send(action)).to be true
+        expect(described_class.new(project_account, others_private_project).send(action)).to be false
+        expect(described_class.new(project_account, others_archived_project).send(action)).to be false
 
-      expect(described_class.new(other_team_member, others_public_project).show?).to be true
-      expect(described_class.new(other_team_member, my_private_project).show?).to be true
+        expect(described_class.new(other_team_member, others_public_project).send(action)).to be true
+        expect(described_class.new(other_team_member, my_private_project).send(action)).to be true
 
-      expect(described_class.new(different_team_account, my_public_project).show?).to be true
-      expect(described_class.new(different_team_account, my_private_project).show?).to be_falsey
+        expect(described_class.new(different_team_account, my_public_project).send(action)).to be true
+        expect(described_class.new(different_team_account, my_private_project).send(action)).to be_falsey
+      end
     end
   end
 
@@ -181,9 +185,9 @@ describe ProjectPolicy do
     end
   end
 
-  describe 'edit? update? send_award? admins? add_admin? remove_admin?' do
+  describe 'edit? update? send_award? admins? add_admin? remove_admin? create_transfer?' do
     it 'only allows managing projects that are owned or administrated by the current account' do
-      %i[edit? update? send_award? admins? add_admin? remove_admin?].each do |action|
+      %i[edit? update? send_award? admins? add_admin? remove_admin? create_transfer?].each do |action|
         expect(described_class.new(nil, my_public_project).send(action)).to be_falsey
         expect(described_class.new(nil, others_private_project).send(action)).to be_falsey
         expect(described_class.new(nil, my_archived_project).send(action)).to be_falsey

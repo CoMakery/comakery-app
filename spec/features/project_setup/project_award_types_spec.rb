@@ -20,7 +20,7 @@ describe 'project award_types', js: true do
     fill_in 'batch[goal]', with: 'test goal'
     fill_in 'batch[description]', with: 'test description'
     find_button('create').click
-    expect(page).to have_content 'BATCH CREATED'
+    expect(page).to have_content 'Batch created'
     expect(AwardType.last.name).to eq 'test name'
     expect(AwardType.last.goal).to eq 'test goal'
     expect(AwardType.last.description).to eq 'test description'
@@ -33,7 +33,7 @@ describe 'project award_types', js: true do
     expect(page).to have_content 'Edit Batch'
     fill_in 'batch[name]', with: 'test name updated'
     find_button('save').click
-    expect(page).to have_content 'BATCH UPDATED'
+    expect(page).to have_content 'Batch updated'
     expect(award_type1.reload.name).to eq 'test name updated'
   end
 
@@ -41,13 +41,13 @@ describe 'project award_types', js: true do
     visit project_award_types_path(project1)
     find('.batch-index--sidebar--item', text: award_type2.name.capitalize).click
     find("a[data-method='delete'][href='#{project_award_type_path(project1, award_type2)}']").click
-    expect(page).to have_content 'BATCH DESTROYED'
+    expect(page).to have_content 'Batch destroyed'
   end
 
   it "doesn't allow to delete award_type if it has any awards" do
     visit project_award_types_path(project1)
     find('.batch-index--sidebar--item', text: award_type3.name.capitalize).click
     find("a[data-method='delete'][href='#{project_award_type_path(project1, award_type3)}']").click
-    expect(page).to have_content 'CANNOT DELETE RECORD BECAUSE DEPENDENT AWARDS EXIST'
+    expect(page).to have_content 'Cannot delete record because dependent awards exist'
   end
 end

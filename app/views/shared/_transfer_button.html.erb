@@ -1,0 +1,18 @@
+<div class='transfer-button'>
+  <% if transfer.project.token&.coin_type? %>
+    <% if transfer.ethereum_transaction_explorer_url %>
+      <%= link_to transfer.ethereum_transaction_address_short, transfer.ethereum_transaction_explorer_url, target: '_blank' %>
+    <% elsif transfer.recipient_address.blank? && current_account == transfer.account %>
+      <%= link_to '(needs wallet)', account_path  %>
+    <% elsif transfer.recipient_address.blank? %>
+      needs wallet
+    <% elsif current_account&.decorate&.can_send_awards?(transfer.project) %>
+      <%= link_to 'javascript:void(0)', class: 'metamask-transfer-btn transfer-tokens-btn', 'data-id': transfer.id, 'data-info': transfer.json_for_sending_awards do %>
+        <%= render partial: "shared/wallet_logo", locals: {project: transfer.project, size: 12} %>
+        <span>Send</span>
+      <% end %>
+    <% else %>
+      pending
+    <% end %>
+  <% end %>
+</div>

@@ -204,33 +204,17 @@ describe Project do
         expect(project_finalized.reload.agreed_to_license_hash).to eq('test')
       end
     end
+
+    describe 'add_owner_as_interested' do
+      let(:project) { create(:project) }
+
+      it 'adds project owner as interested' do
+        expect(project.interested).to include(project.account)
+      end
+    end
   end
 
   describe 'scopes' do
-    describe '.with_last_activity_at' do
-      it 'returns projects ordered by when the most recent award created_at, then by project created_at' do
-        p1_8 = create(:project, title: 'p1_8', created_at: 8.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 1.day.ago) } }
-        p2_3 = create(:project, title: 'p2_3', created_at: 3.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 2.days.ago) } }
-        p3_6 = create(:project, title: 'p3_6', created_at: 6.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
-        p3_5 = create(:project, title: 'p3_5', created_at: 5.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
-        p3_4 = create(:project, title: 'p3_4', created_at: 4.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
-
-        expect(described_class.count).to eq(5)
-        expect(described_class.with_last_activity_at.all.map(&:title)).to eq(%w[p1_8 p2_3 p3_4 p3_5 p3_6])
-      end
-
-      it '.featured overrides last activity' do
-        p1_8 = create(:project, title: 'p1_8', created_at: 8.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 1.day.ago) } }
-        p2_3 = create(:project, title: 'p2_3', created_at: 3.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 2.days.ago) } }
-        p3_6 = create(:project, title: 'p3_6', created_at: 6.days.ago).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
-        p3_5 = create(:project, title: 'p3_5', created_at: 5.days.ago, featured: 1).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
-        p3_4 = create(:project, title: 'p3_4', created_at: 4.days.ago, featured: 0).tap { |p| create(:award_type, project: p).tap { |at| create(:award, award_type: at, created_at: 3.days.ago) } }
-
-        expect(described_class.count).to eq(5)
-        expect(described_class.featured.with_last_activity_at.all.map(&:title)).to eq(%w[p3_4 p3_5 p1_8 p2_3 p3_6])
-      end
-    end
-
     describe '#community_award_types' do
       it 'returns all award types with community_awardable? == true' do
         project = create(:project)
@@ -402,6 +386,24 @@ describe Project do
       create(:interest, project: project)
 
       expect(project.stats[:interests]).to eq(3)
+    end
+  end
+
+  describe 'default_award_type' do
+    let(:project_w_default_award_type) { create :project }
+    let(:project_wo_default_award_type) { create :project }
+
+    before do
+      project_w_default_award_type.award_types.create(name: 'Transfers', goal: '—', description: '—')
+      project_w_default_award_type.reload
+    end
+
+    it 'creates default award type for project and returns it' do
+      expect(project_wo_default_award_type.default_award_type).to be_instance_of(AwardType)
+    end
+
+    it 'returns default award type if its already present' do
+      expect(project_w_default_award_type.default_award_type).to be_instance_of(AwardType)
     end
   end
 end

@@ -6,8 +6,6 @@ class TokensController < ApplicationController
   before_action :set_blockchain_networks, only: %i[new show edit]
   before_action :set_generic_props, only: %i[new show edit]
 
-  layout 'react'
-
   def index
     @tokens = policy_scope(Token).map do |t|
       t.serializable_hash.merge(

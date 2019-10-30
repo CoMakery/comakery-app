@@ -7,6 +7,8 @@ class SessionsController < ApplicationController
   before_action :redirect_if_signed_in, only: %i[create sign_in new]
   before_action :check_discord_oauth, only: %i[create]
 
+  layout 'legacy'
+
   def oauth_failure
     flash[:error] = "Sorry, logging in failed... please try again, or email us at #{I18n.t('tech_support_email')}"
     redirect_to root_path

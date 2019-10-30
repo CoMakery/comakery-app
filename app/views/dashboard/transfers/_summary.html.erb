@@ -1,0 +1,51 @@
+<div class="transfers-table__transfer transfers-table__transfer--summary">
+  <label>summary</label>
+
+  <div class="transfers-table__transfer__name">
+    <label>total</label>
+
+    <%= pluralize(@transfers_all.size, 'transfer', 'transfers') %>
+  </div>
+
+  <div class="transfers-table__transfer__account">
+    <label>accounts</label>
+
+    <%= pluralize(@transfers_all.pluck(:account_id).uniq.size, 'account', 'accounts') %>
+  </div>
+
+  <div class="transfers-table__transfer__issuer">
+    <label>admins</label>
+
+    <%= pluralize(@transfers_all.paid.pluck(:issuer_id).uniq.size, 'admin', 'admins') %>
+  </div>
+
+  <div class="transfers-table__transfer__amount">
+    <label>amount</label>
+
+    –
+  </div>
+
+  <div class="transfers-table__transfer__quantity">
+    <label>quantity</label>
+
+    <%= @transfers_all.sum(:quantity) %>
+  </div>
+
+  <div class="transfers-table__transfer__total_amount">
+    <label>total amount</label>
+
+    <%= @transfers_all.sum(:total_amount) %>
+  </div>
+
+  <div class="transfers-table__transfer__button">
+    <label>transfer</label>
+
+    –
+  </div>
+
+  <div class="transfers-table__transfer__transferred_at">
+    <label>transferred at</label>
+
+    –
+  </div>
+</div>

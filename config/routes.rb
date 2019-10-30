@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'pages#featured'
 
   resources :tokens, only: [:index, :new, :create, :show, :edit, :update] do
@@ -75,6 +76,11 @@ Rails.application.routes.draw do
       end
     end
     resources :contributors, only: [:index]
+
+    namespace :dashboard do
+      resources :transfers, only: [:index, :create]
+      resources :accounts, only: [:index]
+    end
     
     member do
       get :awards
