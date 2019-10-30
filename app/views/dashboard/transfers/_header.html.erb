@@ -25,9 +25,11 @@
     <%= sort_link(@q, :total_amount, @project.token&.symbol ? "total (#{@project.token&.symbol})" : 'total') %>
   </div>
 
-  <div class="transfers-table__transfer__button">
-    transaction
-  </div>
+  <% if @project.token %>
+    <div class="transfers-table__transfer__button">
+      transaction
+    </div>
+  <% end %>
 
   <div class="transfers-table__transfer__transferred_at">
     <%= sort_link(@q, :transferred_at, 'transferred at') %>

@@ -55,11 +55,13 @@
     <%= transfer.total_amount_pretty %>
   </div>
 
-  <div class="transfers-table__transfer__button">
-    <label>transfer</label>
+  <% if @project.token %>
+    <div class="transfers-table__transfer__button">
+      <label>transfer</label>
 
-    <%= render partial: "shared/transfer_button", locals: {transfer: transfer} %>
-  </div>
+      <%= render partial: "shared/transfer_button", locals: {transfer: transfer} %>
+    </div>
+  <% end %>
 
   <div class="transfers-table__transfer__transferred_at">
     <label>transferred at</label>

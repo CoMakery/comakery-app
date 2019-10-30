@@ -209,6 +209,7 @@ describe Account do
     let!(:verification) { create(:verification, account: account) }
     let!(:verification2) { create(:verification, account: account) }
     let!(:provided_verification) { create(:verification, provider: account) }
+    let!(:account_token_record) { create(:account_token_record, account: account) }
 
     before do
       team.build_authentication_team authentication
@@ -263,6 +264,10 @@ describe Account do
 
     it 'has many provided verifications' do
       expect(account.provided_verifications).to match_array([provided_verification])
+    end
+
+    it 'has many account_token_records' do
+      expect(account.account_token_records).to match_array([account_token_record])
     end
   end
 

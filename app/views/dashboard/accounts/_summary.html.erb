@@ -29,9 +29,12 @@
     <% end %>
   </div>
 
-  <div class="transfers-table__transfer__address">
-    <label>address</label>
 
-    <%= pluralize(@project.blockchain_name.present? ? @accounts_all.map(&:"#{@project.blockchain_name}_wallet").compact.size : 0, 'account', 'accounts') %>
-  </div>
+  <% if @project.token %>
+    <div class="transfers-table__transfer__address">
+      <label>address</label>
+
+      <%= pluralize(@project.blockchain_name.present? ? @accounts_all.map(&:"#{@project.blockchain_name}_wallet").compact.size : 0, 'account', 'accounts') %>
+    </div>
+  <% end %>
 </div>

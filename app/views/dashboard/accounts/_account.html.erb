@@ -31,9 +31,11 @@
     <%= account.total_awards_earned(@project) %>
   </div>
 
-  <div class="transfers-table__transfer__address">
-    <label>Address</label>
+  <% if @project.token %>
+    <div class="transfers-table__transfer__address">
+      <label>Address</label>
 
-    <span class="transfers-table__transfer__address__button"><%= account.wallet_address_link_for(@project) %></span>
-  </div>
+      <span class="transfers-table__transfer__address__button"><%= account.wallet_address_link_for(@project) %></span>
+    </div>
+  <% end %>
 </div>
