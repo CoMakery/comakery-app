@@ -493,18 +493,11 @@ describe ProjectsController do
         expect(assigns[:project_contributors].keys).to eq([cat_project, dog_project, yak_project])
       end
 
-      it 'allows querying based on the title of the project, ignoring case' do
-        get :index, params: { query: 'cats' }
+      it 'allows searching' do
+        get :index, params: { q: { title_or_description_or_token_name_or_mission_name_cont: 'cats' } }
 
         expect(response.status).to eq(200)
         expect(assigns[:projects].map(&:title)).to eq(['Cats'])
-      end
-
-      it 'allows querying based on the title or description of the project, ignoring case' do
-        get :index, params: { query: 'o' }
-
-        expect(response.status).to eq(200)
-        expect(assigns[:projects].map(&:title)).to eq(%w[Dogs Foxes])
       end
 
       it 'only show public projects for not login user' do
