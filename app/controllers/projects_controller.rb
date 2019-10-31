@@ -4,6 +4,7 @@ class ProjectsController < ApplicationController
   before_action :assign_current_account
   before_action :assign_project, only: %i[edit admins add_admin remove_admin show update awards]
   before_action :assign_project_by_long_id, only: %i[unlisted]
+  before_action :set_projects, only: %i[index]
   before_action :set_award, only: %i[show unlisted]
   before_action :set_tokens, only: %i[new edit]
   before_action :set_missions, only: %i[new edit]
@@ -38,15 +39,7 @@ class ProjectsController < ApplicationController
   end
 
   def index
-    @projects = policy_scope(Project)
-
-    if params[:query].present?
-      @projects = @projects.where(['projects.title ilike :query OR projects.description ilike :query', query: "%#{params[:query]}%"])
-    end
-    @projects = @projects.order(updated_at: :desc).includes(:account, :admins).page(params[:page]).per(9)
-
     @project_contributors = TopContributors.call(projects: @projects).contributors
-
     @meta_title = 'CoMakery Projects - Work at the Cutting Edge'
     @meta_desc = 'Projects from around the world are looking to achieve great things, often leveraging the blockchain to do so. At CoMakery, you can search and find projects to work on and earn tokens or USDC, or even start your own project.'
     @meta_image = '/comakery-projects.jpg'
@@ -178,6 +171,18 @@ class ProjectsController < ApplicationController
 
     return redirect_to('/404.html') unless @project
     return redirect_to(project_path(@project)) unless @project.unlisted?
+  end
+
+  def set_projects
+    @page = (params[:page] || 1).to_i
+
+    @q = policy_scope(Project).ransack(params[:q])
+    @q.sorts = 'updated_at desc' if @q.sorts.empty?
+
+    @projects_all = @q.result.includes(:token, :mission, :account, :admins)
+    @projects = @projects_all.page(@page).per(9)
+
+    redirect_to '/404.html' if (@page > 1) && @projects.out_of_range?
   end
 
   def set_tokens

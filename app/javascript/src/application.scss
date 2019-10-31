@@ -157,7 +157,7 @@ img {
 
 .turbolinks-progress-bar {
   height: 2px;
-  background-color: #0089f4;
+  background-color: var(--primary-blue);
   z-index: 4;
 }
 
@@ -221,6 +221,43 @@ img {
 /**/
 /* Current Erb/Stimulus styling */
 /**/
+
+form.project_search {
+  input[type="search"] {
+    position: absolute;
+    z-index: 101;
+    top: 28px;
+    left: 240px;
+    width: 190px;
+    max-width: 100%;
+    box-shadow: none;
+    font-family: Montserrat, sans-serif;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: width 0.05s ease-in-out;
+    font-size: 12px;
+
+    @media (max-width: 1024px) {
+      display: none;
+    }
+
+    &:focus {
+      width: calc(100% - 260px);
+    }
+  }
+}
+
+.icon__Logo-Header-svg {
+  transition: width 0.25s ease-in-out;
+
+  &:hover {
+    width: 195px;
+  }
+
+  &:active {
+    width: 200px;
+  }
+}
 
 .project_settings {
   padding: 25px 150px 25px 150px;
@@ -897,6 +934,10 @@ button.transfers-create {
   padding: 20px;
 }
 
+.header--nav {
+  padding: 0 10px;
+}
+
 .header--nav--links {
   display: flex;
   flex-wrap: wrap;
@@ -909,10 +950,8 @@ button.transfers-create {
   text-transform: uppercase;
   text-align: center;
   color: var(--greyish-brown);
-  padding: 39px 25px 36px 25px;
-  border-left: 1px solid rgba(237, 241, 242, 0.5);
+  padding: 36px 15px 36px 15px;
   display: inline-block;
-  min-width: 58px;
 }
 
 a.header--nav--links--current {
