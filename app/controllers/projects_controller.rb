@@ -177,7 +177,7 @@ class ProjectsController < ApplicationController
     @page = (params[:page] || 1).to_i
 
     @q = policy_scope(Project).ransack(params[:q])
-    @q.sorts = 'updated_at desc' if @q.sorts.empty?
+    @q.sorts = 'interests_count DESC' if @q.sorts.empty?
 
     @projects_all = @q.result.includes(:token, :mission, :account, :admins)
     @projects = @projects_all.page(@page).per(9)

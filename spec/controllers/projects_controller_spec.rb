@@ -489,7 +489,7 @@ describe ProjectsController do
         get :index
 
         expect(response.status).to eq(200)
-        expect(assigns[:projects].map(&:title)).to eq(%w[Yaks Dogs Cats Foxes])
+        expect(assigns[:projects].map(&:title)).to eq(%w[Cats Dogs Yaks Foxes])
         expect(assigns[:project_contributors].keys).to eq([cat_project, dog_project, yak_project])
       end
 

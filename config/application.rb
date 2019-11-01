@@ -64,5 +64,7 @@ module Comakery
     redis_url = ENV.fetch(redis_provider) { "redis://localhost:6379/1" }
     config.cache_store = :redis_cache_store, { url: redis_url, expires_in: 1.hour }
     config.action_controller.perform_caching = true
+    
+    config.active_job.queue_adapter = :sidekiq
   end
 end
