@@ -11,7 +11,11 @@ class AccountDecorator < Draper::Decorator
   end
 
   def name_with_nickname
-    "#{name} (#{nick})"
+    if nick
+      "#{name} (#{nick})"
+    else
+      name
+    end
   end
 
   def bitcoin_wallet_url

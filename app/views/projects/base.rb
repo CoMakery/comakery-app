@@ -49,13 +49,19 @@ class Views::Projects::Base < Views::Base
 
         p(class: 'description no-last-award') { text project.description_text }
 
-        div(class: 'contributors') do
-          owner = project.account
+        div(class: 'details') do
+          div(class: 'details__interested') do
+            span "#{pluralize(project.interests.size, 'person', plural: 'people')} interested"
+          end
 
-          ([owner].compact + Array.wrap(contributors)).uniq(&:id).each do |contributor|
-            contributor = contributor.decorate
-            tooltip(contributor.name) do
-              img(src: account_image_url(contributor, 34), class: 'contributor avatar-img')
+          div(class: 'contributors') do
+            owner = project.account
+
+            ([owner].compact + Array.wrap(contributors)).uniq(&:id).each do |contributor|
+              contributor = contributor.decorate
+              tooltip(contributor.name) do
+                img(src: account_image_url(contributor, 34), class: 'contributor avatar-img')
+              end
             end
           end
         end
