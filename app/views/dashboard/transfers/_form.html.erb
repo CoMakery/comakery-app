@@ -1,5 +1,5 @@
 <%= form_with model: Award.new, url: project_dashboard_transfers_path(@project), class: 'transfers-table__form' do |f| %>
-  <div class="transfers-table__transfer transfers-table__transfer--new" data-target="transfer-form.form" data-transfer-form-decimals="<%= @project.token ? @project.token.decimal_places : 0 %>">
+  <div class="transfers-table__transfer transfers-table__transfer--new" data-target="transfer-form.form">
     <label>create transfer</label>
 
     <div class="transfers-table__transfer__name">

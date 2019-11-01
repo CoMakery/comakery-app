@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 
 class BackButton extends React.Component {
   goBack() {
-    typeof window === 'undefined' ? null : window.location = document.referrer
+    typeof window === 'undefined' ? null : window.history.back()
   }
 
   render() {

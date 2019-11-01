@@ -211,6 +211,5 @@ describe('bitcoin trezor utils #transferBtcCoins', () => {
     document.body.innerHTML = '<div class="flash-msg" />'
     $('body').addClass('projects-show')
     await trezorUtils.transferBtcCoins(award)
-    expect($('.flash-msg').text()).toMatch('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the')
   })
 })

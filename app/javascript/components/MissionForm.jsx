@@ -190,7 +190,7 @@ export default class MissionForm extends React.Component {
   }
 
   goBack() {
-    window.location = '/missions'
+    typeof window === 'undefined' ? null : window.history.back()
   }
 
   render() {

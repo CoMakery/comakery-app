@@ -19,7 +19,6 @@ const transferBtcCoins = async function(award) { // award in JSON
   let txHash
   try {
     if (addressValid) {
-      alert( 'Waiting...')
       txHash = await submitTransaction(network, recipientAddress, amount)
     }
   } catch (err) {

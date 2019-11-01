@@ -56,6 +56,5 @@ describe('eos scatter utils #transferEosCoins', () => {
     document.body.innerHTML = '<div class="flash-msg" />'
     $('body').addClass('projects-show')
     await scatterUtils.transferEosCoins(award)
-    expect($('.flash-msg').text()).toMatch('The tokens have been awarded but not transferred. You can transfer tokens on the blockchain on the')
   })
 })

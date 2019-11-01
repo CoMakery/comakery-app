@@ -408,7 +408,7 @@ class TaskActionComponent extends React.Component {
 
 class MyTask extends React.Component {
   goBack() {
-    typeof window === 'undefined' ? null : window.location = document.referrer
+    typeof window === 'undefined' ? null : window.history.back()
   }
 
   render() {
