@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
   def create_interest_from_session
     if current_account&.valid? && current_account&.confirmed? && session[:interested_in_project]
       project = Project.find(session[:interested_in_project].to_i)
-      current_user.interests.create!(project: project, protocol: project.mission.name)
+      current_user.interests.create!(project: project)
 
       session.delete(:interested_in_project)
     end

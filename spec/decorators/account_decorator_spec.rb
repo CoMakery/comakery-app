@@ -28,6 +28,10 @@ describe AccountDecorator do
     it 'combines name and nickname' do
       expect(build(:account, first_name: 'Bob', last_name: 'Johnson', nickname: 'bobjon').decorate.name_with_nickname).to eq('Bob Johnson (bobjon)')
     end
+
+    it 'returns only name if nickname is not present' do
+      expect(build(:account, first_name: 'Bob', last_name: 'Johnson').decorate.name_with_nickname).to eq('Bob Johnson')
+    end
   end
 
   describe '#can_send_awards?' do

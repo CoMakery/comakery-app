@@ -12,11 +12,11 @@ class TransferRule < ApplicationRecord
   private
 
     def groups_belong_to_same_token
-      if sending_group.token != token
+      if sending_group&.token != token
         errors.add(:sending_group, "should belong to #{token.name} token")
       end
 
-      if receiving_group.token != token
+      if receiving_group&.token != token
         errors.add(:receiving_group, "should belong to #{token.name} token")
       end
     end

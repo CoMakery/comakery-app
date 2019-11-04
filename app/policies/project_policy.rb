@@ -39,6 +39,14 @@ class ProjectPolicy < ApplicationPolicy
     (project.public? && !project.require_confidentiality?) || (team_member? && project.unarchived?) || edit?
   end
 
+  def show_award_types?
+    show? || unlisted?
+  end
+
+  def show_transfer_rules?
+    show_contributions? && project.supports_transfer_rules?
+  end
+
   alias update? edit?
   alias send_award? edit?
   alias admins? edit?
@@ -47,10 +55,8 @@ class ProjectPolicy < ApplicationPolicy
   alias create_transfer? edit?
   alias transfers? show_contributions?
   alias accounts? show_contributions?
-
-  def show_award_types?
-    show? || unlisted?
-  end
+  alias edit_reg_groups? edit?
+  alias edit_transfer_rules? edit?
 
   def project_owner?
     account.present? && (project.account == account)

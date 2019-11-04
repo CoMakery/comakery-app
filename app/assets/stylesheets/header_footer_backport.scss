@@ -66,7 +66,7 @@ form.project_search {
     font-family: Montserrat, sans-serif;
     border-radius: 6px;
     font-weight: 500;
-    transition: width 0.05s ease-in-out;
+    transition: width 0.05s ease-out;
     font-size: 12px;
     height: 35px;
     padding: 9px 16px 8px 15px;
@@ -92,7 +92,7 @@ form.project_search {
   }
 
   &:active {
-    width: 200px;
+    filter: brightness(150%);
   }
 }
 
