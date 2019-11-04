@@ -80,6 +80,8 @@ Rails.application.routes.draw do
     namespace :dashboard do
       resources :transfers, only: [:index, :create]
       resources :accounts, only: [:index]
+      resources :reg_groups, only: [:create, :destroy]
+      resources :transfer_rules, only: [:create, :destroy, :index]
     end
     
     member do

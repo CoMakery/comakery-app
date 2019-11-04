@@ -1,0 +1,10 @@
+<div class="reg-groups__groups__group">
+  <h4><%= reg_group.name %></h4>
+  <span>ID:<%= reg_group.blockchain_id %></span>
+
+  <% if policy(@project).edit_reg_groups? %>
+    <%= link_to(project_dashboard_reg_group_path(project_id: @project.id, id: reg_group.id), method: :delete, data: {confirm: "Remove #{reg_group.name} group?"} ) do %>
+      <%= image_pack_tag 'media/src/images/styleguide/icons/iconTrash.svg', size: "14x14", alt: "remove group" %>
+    <% end %>
+  <% end %>
+</div>

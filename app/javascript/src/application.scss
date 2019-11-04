@@ -51,6 +51,15 @@ hr {
 
 a {
   word-break: break-all;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:active {
+    filter: brightness(150%);
+  }
 }
 
 label {
@@ -91,6 +100,10 @@ button {
   &:hover,
   &:focus {
     text-decoration: underline;
+  }
+
+  &:active {
+    filter: brightness(150%);
   }
 }
 
@@ -234,7 +247,7 @@ form.project_search {
     font-family: Montserrat, sans-serif;
     border-radius: 6px;
     font-weight: 500;
-    transition: width 0.05s ease-in-out;
+    transition: width 0.05s ease-out;
     font-size: 12px;
 
     @media (max-width: 1024px) {
@@ -255,7 +268,7 @@ form.project_search {
   }
 
   &:active {
-    width: 200px;
+    filter: brightness(150%);
   }
 }
 
@@ -566,6 +579,110 @@ form.form-with-submit-button {
     }
   }
 }
+
+.reg-groups {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    text-transform: uppercase;
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    border-radius: 6px;
+    border: solid 1px #e6e8ed;
+    height: 35px;
+    padding: 9px 16px 8px 15px;
+    box-shadow: none;
+    font-family: Montserrat, sans-serif;
+    font-size: 12px;
+    width: 100%;
+    min-width: initial;
+    font-weight: 500;
+    max-width: 20em;
+    margin: 0.25em;
+    margin-right: 0.5em;
+  }
+
+  input[type="number"] {
+    max-width: 7em;
+  }
+
+  button,
+  input[type="submit"] {
+    margin-bottom: 3em;
+    border-radius: 6px;
+    border: none;
+    height: 35px;
+    padding: 9px 16px 8px 15px;
+    font-family: Montserrat, sans-serif;
+    font-size: 12px;
+    background-color: transparent;
+    color: #1560fa;
+    font-weight: 600;
+    box-shadow: none;
+    text-align: left;
+    padding: 0;
+    margin: 0.25em;
+    margin-left: 0;
+    margin-right: 0.5em;
+    min-width: 0;
+  }
+
+  .reg-groups__form {
+    display: none;
+    align-items: center;
+    flex-wrap: wrap;
+
+    img {
+      margin-right: 1em;
+      cursor: pointer;
+    }
+  }
+
+  .reg-groups__groups {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: baseline;
+    line-height: 0.5em;
+
+    .reg-groups__groups__group {
+      margin-right: 3em;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+
+      h4 {
+        margin-right: 0.5em;
+        font-weight: bold;
+        text-transform: capitalize;
+      }
+
+      span {
+        margin-right: 0.5em;
+        font-weight: bold;
+        opacity: 0.7;
+      }
+
+      img {
+        filter: grayscale(100%);
+
+        &:hover {
+          filter: none;
+        }
+
+        &:active {
+          filter: brightness(200%);
+        }
+      }
+    }
+  }
+} 
 
 .transfers-pages {
   margin-top: 2em;

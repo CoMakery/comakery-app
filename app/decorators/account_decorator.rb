@@ -11,8 +11,8 @@ class AccountDecorator < Draper::Decorator
   end
 
   def name_with_nickname
-    if nick
-      "#{name} (#{nick})"
+    if nickname.present?
+      "#{name} (#{nickname})"
     else
       name
     end

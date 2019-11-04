@@ -189,24 +189,29 @@ describe ProjectDecorator do
     let!(:award_type) { create(:award_type, project: project, state: :ready) }
     let!(:unlisted_project) { create(:project, visibility: 'public_unlisted') }
     let!(:project_wo_image) { create(:project) }
+    let!(:project_comakery_token) { create(:project, token: create(:token, coin_type: :comakery)) }
 
     it 'includes required data for project header component' do
       props = project.decorate.header_props
       props_unlisted = unlisted_project.decorate.header_props
       project_wo_image.update(panoramic_image_id: nil)
       props_wo_image = project_wo_image.decorate.header_props
+      props_w_comakery = project_comakery_token.decorate.header_props
 
       expect(props[:title]).to eq(project.title)
       expect(props[:owner]).to eq(project.legal_project_owner)
       expect(props[:present]).to be_truthy
       expect(props[:show_batches]).to be_truthy
       expect(props[:show_transfers]).to be_truthy
+      expect(props[:supports_transfer_rules]).to be_falsey
+      expect(props_w_comakery[:supports_transfer_rules]).to be_truthy
       expect(props[:image_url]).to include('image.png')
       expect(props[:admins_url]).to include(project.id.to_s)
       expect(props[:settings_url]).to include(project.id.to_s)
       expect(props[:batches_url]).to include(project.id.to_s)
       expect(props[:transfers_url]).to include(project.id.to_s)
       expect(props[:accounts_url]).to include(project.id.to_s)
+      expect(props[:transfer_rules_url]).to include(project.id.to_s)
       expect(props[:landing_url]).to include(project.id.to_s)
       expect(props_unlisted[:landing_url]).to include(unlisted_project.long_id.to_s)
       expect(props_wo_image[:image_url]).to include('defaul_project')

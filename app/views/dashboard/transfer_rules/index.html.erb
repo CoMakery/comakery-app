@@ -1,0 +1,15 @@
+<%= render layout: 'projects/project_settings' do %>
+  <div class="reg-groups animated fadeIn faster" data-controller="reg-group-form">
+    <h2>groups</h2>
+    
+    <div class="reg-groups__groups">
+      <%= render partial: "reg_group", collection: @reg_groups, as: :reg_group, cached: true %>
+    </div>
+
+    <%= render partial: "form_reg_group" %>
+
+    <% if policy(@project).edit_reg_groups? %>
+      <%= button_tag "create new group", type: 'button', class: 'reg-groups-create', data: { target: 'reg-group-form.create', action: 'reg-group-form#showForm' } %>
+    <% end %>
+  </div>
+<% end %>

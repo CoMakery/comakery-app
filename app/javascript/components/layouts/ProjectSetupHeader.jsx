@@ -174,6 +174,12 @@ class ProjectSetupHeader extends React.Component {
                   accounts
                 </NavLink>
               }
+
+              {(owner || project.showTransfers) && project.supportsTransferRules &&
+                <NavLink current={current === 'transfer_rules'} href={project.transferRulesUrl}>
+                  transfer rules
+                </NavLink>
+              }
             </ProjectNav>
           }
         </Navigation>
