@@ -68,18 +68,20 @@ form.project_search {
     font-weight: 500;
     transition: width 0.05s ease-out;
     font-size: 12px;
-    height: 35px;
-    padding: 9px 16px 8px 15px;
-    color: #4a4a4a;
-    background-color: #ffffff;
-    border: 1px solid rgba(74, 74, 74, .2);
-
-    @media (max-width: 1024px) {
-      display: none;
-    }
 
     &:focus {
       width: calc(100% - 260px);
+    }
+
+    @media (max-width: 1024px) {
+      z-index: 1000;
+      width: 8em;
+      top: 12px;
+      left: 160px;
+
+      &:focus {
+        width: calc(100% - 220px);
+      }
     }
   }
 }
@@ -87,12 +89,8 @@ form.project_search {
 .icon__Logo-Header-svg {
   transition: width 0.25s ease-in-out;
 
-  &:hover {
-    width: 195px;
-  }
-
-  &:active {
-    filter: brightness(150%);
+  @media (max-width: 1024px) {
+    width: 130px;
   }
 }
 
@@ -304,6 +302,15 @@ a.header--nav--links--current {
 @media screen and (max-width: 1024px) {
   .header {
     display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 100vh;
+  }
+
+  .header--nav {
+    width: 100%;
+    padding: 0;
   }
 
   .header-mobile {
@@ -409,9 +416,8 @@ a.header--nav--links--current {
     align-items: center;
     box-sizing: border-box;
     width: 100%;
-    height: 60px;
-    padding: 0 15px;
-    font-size: 18px;
+    padding: 15px;
+    font-size: 14px;
     font-weight: 400;
     font-style: normal;
     font-stretch: normal;

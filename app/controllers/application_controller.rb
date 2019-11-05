@@ -190,7 +190,7 @@ class ApplicationController < ActionController::Base
       experience_level_name: Award::EXPERIENCE_LEVELS.key(task.experience_level),
       image_url: helpers.attachment_url(task, :image),
       submission_image_url: helpers.attachment_url(task, :submission_image),
-      payment_url: project_dashboard_transfers_path(task.project),
+      payment_url: project_dashboard_transfers_path(task.project, q: { id_eq: task.id }),
       details_url: project_award_type_award_path(task.project, task.award_type, task),
       start_url: project_award_type_award_start_path(task.project, task.award_type, task),
       submit_url: project_award_type_award_submit_path(task.project, task.award_type, task),
