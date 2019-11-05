@@ -183,6 +183,10 @@ class Project < ApplicationRecord
     award_types.find_or_create_by(name: 'Transfers', goal: '—', description: '—')
   end
 
+  def supports_transfer_rules?
+    token&.coin_type_comakery?
+  end
+
   private
 
   def valid_tracker_url

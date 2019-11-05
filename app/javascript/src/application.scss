@@ -51,6 +51,15 @@ hr {
 
 a {
   word-break: break-all;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:active {
+    filter: brightness(150%);
+  }
 }
 
 label {
@@ -91,6 +100,10 @@ button {
   &:hover,
   &:focus {
     text-decoration: underline;
+  }
+
+  &:active {
+    filter: brightness(150%);
   }
 }
 
@@ -157,7 +170,7 @@ img {
 
 .turbolinks-progress-bar {
   height: 2px;
-  background-color: #0089f4;
+  background-color: var(--primary-blue);
   z-index: 4;
 }
 
@@ -221,6 +234,43 @@ img {
 /**/
 /* Current Erb/Stimulus styling */
 /**/
+
+form.project_search {
+  input[type="search"] {
+    position: absolute;
+    z-index: 101;
+    top: 28px;
+    left: 240px;
+    width: 190px;
+    max-width: 100%;
+    box-shadow: none;
+    font-family: Montserrat, sans-serif;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: width 0.05s ease-out;
+    font-size: 12px;
+
+    @media (max-width: 1024px) {
+      display: none;
+    }
+
+    &:focus {
+      width: calc(100% - 260px);
+    }
+  }
+}
+
+.icon__Logo-Header-svg {
+  transition: width 0.25s ease-in-out;
+
+  &:hover {
+    width: 195px;
+  }
+
+  &:active {
+    filter: brightness(150%);
+  }
+}
 
 .project_settings {
   padding: 25px 150px 25px 150px;
@@ -529,6 +579,110 @@ form.form-with-submit-button {
     }
   }
 }
+
+.reg-groups {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    text-transform: uppercase;
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    border-radius: 6px;
+    border: solid 1px #e6e8ed;
+    height: 35px;
+    padding: 9px 16px 8px 15px;
+    box-shadow: none;
+    font-family: Montserrat, sans-serif;
+    font-size: 12px;
+    width: 100%;
+    min-width: initial;
+    font-weight: 500;
+    max-width: 20em;
+    margin: 0.25em;
+    margin-right: 0.5em;
+  }
+
+  input[type="number"] {
+    max-width: 7em;
+  }
+
+  button,
+  input[type="submit"] {
+    margin-bottom: 3em;
+    border-radius: 6px;
+    border: none;
+    height: 35px;
+    padding: 9px 16px 8px 15px;
+    font-family: Montserrat, sans-serif;
+    font-size: 12px;
+    background-color: transparent;
+    color: #1560fa;
+    font-weight: 600;
+    box-shadow: none;
+    text-align: left;
+    padding: 0;
+    margin: 0.25em;
+    margin-left: 0;
+    margin-right: 0.5em;
+    min-width: 0;
+  }
+
+  .reg-groups__form {
+    display: none;
+    align-items: center;
+    flex-wrap: wrap;
+
+    img {
+      margin-right: 1em;
+      cursor: pointer;
+    }
+  }
+
+  .reg-groups__groups {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: baseline;
+    line-height: 0.5em;
+
+    .reg-groups__groups__group {
+      margin-right: 3em;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+
+      h4 {
+        margin-right: 0.5em;
+        font-weight: bold;
+        text-transform: capitalize;
+      }
+
+      span {
+        margin-right: 0.5em;
+        font-weight: bold;
+        opacity: 0.7;
+      }
+
+      img {
+        filter: grayscale(100%);
+
+        &:hover {
+          filter: none;
+        }
+
+        &:active {
+          filter: brightness(200%);
+        }
+      }
+    }
+  }
+} 
 
 .transfers-pages {
   margin-top: 2em;
@@ -897,6 +1051,10 @@ button.transfers-create {
   padding: 20px;
 }
 
+.header--nav {
+  padding: 0 10px;
+}
+
 .header--nav--links {
   display: flex;
   flex-wrap: wrap;
@@ -909,10 +1067,8 @@ button.transfers-create {
   text-transform: uppercase;
   text-align: center;
   color: var(--greyish-brown);
-  padding: 39px 25px 36px 25px;
-  border-left: 1px solid rgba(237, 241, 242, 0.5);
+  padding: 36px 15px 36px 15px;
   display: inline-block;
-  min-width: 58px;
 }
 
 a.header--nav--links--current {

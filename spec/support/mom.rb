@@ -40,6 +40,43 @@ class Mom
     Verification.new(defaults.merge(attrs))
   end
 
+  def reg_group(**attrs)
+    token = attrs[:token] || create(:token, coin_type: :comakery)
+
+    defaults = {
+      token: token,
+      name: "RegGroup #{SecureRandom.hex(20)}",
+      blockchain_id: RegGroup.maximum(:id).to_i + 1000
+    }
+    RegGroup.new(defaults.merge(attrs))
+  end
+
+  def transfer_rule(**attrs)
+    token = attrs[:token] || create(:token, coin_type: :comakery)
+
+    defaults = {
+      token: token,
+      sending_group: create(:reg_group, token: token),
+      receiving_group: create(:reg_group, token: token),
+      lockup_until: 1.day.ago
+    }
+    TransferRule.new(defaults.merge(attrs))
+  end
+
+  def account_token_record(**attrs)
+    token = attrs[:token] || create(:token, coin_type: :comakery)
+
+    defaults = {
+      account: create(:account),
+      token: token,
+      reg_group: create(:reg_group, token: token),
+      max_balance: 100000,
+      account_frozen: false,
+      lockup_until: 1.day.ago
+    }
+    AccountTokenRecord.new(defaults.merge(attrs))
+  end
+
   def account_with_auth(**attrs)
     account(**attrs).tap { |a| create(:authentication, account: a) }
   end

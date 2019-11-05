@@ -37,6 +37,7 @@ class Account < ApplicationRecord
   has_many :verifications
   has_many :provided_verifications, class_name: 'Verification', foreign_key: 'provider_id'
   belongs_to :latest_verification, class_name: 'Verification'
+  has_many :account_token_records
 
   belongs_to :specialty
 

@@ -56,6 +56,8 @@ class Views::Layouts::Legacy < Views::Base
           prerender: true
         )
 
+        render partial: 'layouts/project_search_form'
+
         div(class: "app-container row#{' home' if current_account && action_name == 'join_us'}") do
           message
           content_for?(:pre_body) ? yield(:pre_body) : ''

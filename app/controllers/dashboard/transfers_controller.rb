@@ -6,7 +6,7 @@ class Dashboard::TransfersController < ApplicationController
   skip_after_action :verify_policy_scoped, only: [:index]
 
   fragment_cache_key do
-    current_user
+    current_user || 'v1'
   end
 
   def index

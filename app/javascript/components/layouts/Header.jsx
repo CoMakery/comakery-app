@@ -19,6 +19,10 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
           Blog
         </a>
 
+        <a target="_blank" href="https://info.comakery.com/pricing/">
+          Pricing
+        </a>
+
         <a target="_blank" href="https://info.comakery.com/about_us/">
           About Us
         </a>

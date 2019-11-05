@@ -85,6 +85,18 @@ exports[`Footer renders correctly without props 1`] = `
           >
             Blog
           </a>
+          <a
+            href="https://info.comakery.com/pricing/"
+            target="_blank"
+          >
+            Pricing
+          </a>
+          <a
+            href="https://info.comakery.com/security-token-launches/"
+            target="_blank"
+          >
+            Restricted Tokens
+          </a>
         </div>
         <div
           className="footer--content--nav--join"

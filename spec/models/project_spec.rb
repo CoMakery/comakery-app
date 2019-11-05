@@ -406,4 +406,17 @@ describe Project do
       expect(project_w_default_award_type.default_award_type).to be_instance_of(AwardType)
     end
   end
+
+  describe 'supports_transfer_rules?' do
+    let(:project) { create :project }
+    let(:project_w_comakery_token) { create :project, token: create(:token, coin_type: :comakery) }
+
+    it 'returns true for projects with comakery token' do
+      expect(project_w_comakery_token.supports_transfer_rules?).to be_truthy
+    end
+
+    it 'returns false for projects without comakery token' do
+      expect(project.supports_transfer_rules?).to be_falsey
+    end
+  end
 end

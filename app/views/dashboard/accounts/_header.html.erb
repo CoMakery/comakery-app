@@ -17,7 +17,9 @@
     tokens <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %>
   </div>
 
-  <div class="transfers-table__transfer__address">
-    address
-  </div>
+  <% if @project.token %>
+    <div class="transfers-table__transfer__address">
+      address
+    </div>
+  <% end %>
 </div>

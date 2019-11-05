@@ -21,13 +21,25 @@
     color: #aaa;
   }
   .info {
-    padding-bottom: 2.3em;
     position: relative;
     @media screen and (min-width: 40em) and (max-width: 63.9375em) {
       min-height: 100px;
     }
     @media #{$large-up} {
       min-height: 100px;
+    }
+
+    .details {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 0.5em;
+
+      .details__interested {
+        padding: 0 1em;
+        font-size: 13px;
+        text-transform: capitalize;
+      }
     }
 
     .text-overlay {

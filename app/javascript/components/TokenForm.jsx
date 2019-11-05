@@ -310,7 +310,7 @@ class TokenForm extends React.Component {
               })}
             />
 
-            {this.state['token[coin_type]'].match(/erc20|qrc20/) &&
+            {this.state['token[coin_type]'].match(/erc20|qrc20|comakery/) &&
               <InputFieldHalfed
                 title="token name"
                 required
@@ -338,7 +338,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[coin_type]'] === 'erc20' &&
+            {this.state['token[coin_type]'].match(/erc20|comakery/) &&
               <InputFieldHalfed
                 title="contract address"
                 required
@@ -353,7 +353,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[coin_type]'].match(/qrc20|erc20/) &&
+            {this.state['token[coin_type]'].match(/qrc20|erc20|comakery/) &&
               <InputFieldHalfed
                 title="token symbol"
                 required
@@ -367,7 +367,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[coin_type]'].match(/qrc20|erc20/) &&
+            {this.state['token[coin_type]'].match(/qrc20|erc20|comakery/) &&
               <InputFieldHalfed
                 title="decimal places"
                 required
@@ -395,7 +395,7 @@ class TokenForm extends React.Component {
               />
             }
 
-            {this.state['token[coin_type]'].match(/eth|erc20/) &&
+            {this.state['token[coin_type]'].match(/eth|erc20|comakery/) &&
               <InputFieldDropdownHalfed
                 title="blockchain network"
                 required

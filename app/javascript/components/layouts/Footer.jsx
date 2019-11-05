@@ -39,14 +39,25 @@ class Footer extends React.Component {
                 <div className="footer--content--nav--about--header">
                   About CoMakery
                 </div>
+
                 <a href="/">
                   Home
                 </a>
+
                 <a target="_blank" href="https://info.comakery.com/about_us/">
                   About Us
                 </a>
+
                 <a href="https://ledger.comakery.com" target="_blank">
                   Blog
+                </a>
+
+                <a href="https://info.comakery.com/pricing/" target="_blank">
+                  Pricing
+                </a>
+
+                <a href="https://info.comakery.com/security-token-launches/" target="_blank">
+                  Restricted Tokens
                 </a>
               </div>
 

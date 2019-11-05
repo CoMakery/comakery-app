@@ -2,18 +2,33 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `rails
+# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191014175653) do
+ActiveRecord::Schema.define(version: 2019_11_01_123439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "account_token_records", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "token_id"
+    t.bigint "reg_group_id"
+    t.bigint "max_balance"
+    t.boolean "account_frozen"
+    t.datetime "lockup_until"
+    t.datetime "synced_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_token_records_on_account_id"
+    t.index ["reg_group_id"], name: "index_account_token_records_on_reg_group_id"
+    t.index ["token_id"], name: "index_account_token_records_on_token_id"
+  end
 
   create_table "accounts", id: :serial, force: :cascade do |t|
     t.string "email"
@@ -305,10 +320,21 @@ ActiveRecord::Schema.define(version: 20191014175653) do
     t.boolean "confidentiality", default: true
     t.string "agreed_to_license_hash"
     t.boolean "display_team", default: true
+    t.bigint "interests_count"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"
     t.index ["token_id"], name: "index_projects_on_token_id"
+  end
+
+  create_table "reg_groups", force: :cascade do |t|
+    t.bigint "token_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "blockchain_id"
+    t.index ["blockchain_id"], name: "index_reg_groups_on_blockchain_id"
+    t.index ["token_id"], name: "index_reg_groups_on_token_id"
   end
 
   create_table "revenues", id: :serial, force: :cascade do |t|
@@ -356,6 +382,19 @@ ActiveRecord::Schema.define(version: 20191014175653) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "unlisted", default: false
+    t.boolean "token_frozen", default: false
+    t.datetime "synced_at"
+  end
+
+  create_table "transfer_rules", force: :cascade do |t|
+    t.bigint "token_id"
+    t.bigint "sending_group_id"
+    t.bigint "receiving_group_id"
+    t.datetime "lockup_until"
+    t.datetime "synced_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token_id"], name: "index_transfer_rules_on_token_id"
   end
 
   create_table "unsubscriptions", force: :cascade do |t|
@@ -376,10 +415,15 @@ ActiveRecord::Schema.define(version: 20191014175653) do
     t.index ["provider_id"], name: "index_verifications_on_provider_id"
   end
 
+  add_foreign_key "account_token_records", "accounts"
+  add_foreign_key "account_token_records", "reg_groups"
+  add_foreign_key "account_token_records", "tokens"
   add_foreign_key "awards", "specialties"
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"
   add_foreign_key "projects", "tokens"
+  add_foreign_key "reg_groups", "tokens"
+  add_foreign_key "transfer_rules", "tokens"
   add_foreign_key "verifications", "accounts"
 end

@@ -62,7 +62,7 @@ class AwardDecorator < Draper::Decorator
   end
 
   def recipient_address
-    blockchain_name = Token::BLOCKCHAIN_NAMES[token.coin_type.to_sym]
+    blockchain_name = Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
     blockchain_name ? account&.send("#{blockchain_name}_wallet") : nil
   end
 
