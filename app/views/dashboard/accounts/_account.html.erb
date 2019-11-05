@@ -1,4 +1,5 @@
 <% account = account.decorate %>
+<% record = account.account_token_records.find_by(token: @project.token) %>
 
 <div class="transfers-table__transfer">
   <div class="transfers-table__transfer__account">
@@ -35,7 +36,47 @@
     <div class="transfers-table__transfer__address">
       <label>Address</label>
 
-      <span class="transfers-table__transfer__address__button"><%= account.wallet_address_link_for(@project) %></span>
+      <span class="transfers-table__transfer__address__button">
+        <%= account.wallet_address_link_for(@project) %>
+      </span>
+    </div>
+  <% end %>
+
+  <% if @project.supports_transfer_rules? %>
+    <div class="transfers-table__transfer__max_balance">
+      <label>max balance</label>
+
+      <% if record&.max_balance&.to_i > 0 %>
+        <%= number_to_currency(record&.max_balance, unit: '', precision: 0) %>
+      <% else %>
+        –
+      <% end %>
+    </div>
+
+    <div class="transfers-table__transfer__lockup_until">
+      <label>lockup until</label>
+
+      <% if record&.lockup_until && record&.lockup_until > Time.current %>
+        <%= record&.lockup_until&.strftime("%b %e, %Y") %>
+      <% else %>
+        –
+      <% end %>
+    </div>
+
+    <div class="transfers-table__transfer__reg_group">
+      <label>reg group</label>
+
+      <%= record&.reg_group&.name || – %>
+    </div>
+
+    <div class="transfers-table__transfer__frozen">
+      <label>frozen</label>
+
+      <% if record&.account_frozen? %>
+        <span class="transfers-table__transfer__frozen--yes">Yes</span>
+      <% else %>
+        <span class="transfers-table__transfer__frozen--no">No</span>
+      <% end %>
     </div>
   <% end %>
 </div>

@@ -31,6 +31,45 @@
     </div>
   </div>
 
+
+  <% if @project.supports_transfer_rules? %>
+    <div class="transfers-filters--filter">
+      <h3>frozen</h3>
+
+      <div class="transfers-filters--filter--options">
+        <div class="<%= request.params[:q]&.fetch(:account_token_records_account_frozen_true, nil) == '1' ? 'transfers-filters--filter--options__active' : nil %>">
+          <%= link_to 'yes', request.params.merge(q: (request.params[:q] || {}).except(:account_token_records_account_frozen_false).merge(account_token_records_account_frozen_true: 1).merge(account_token_records_token_id_eq: @project.token&.id)) %>
+        </div>
+
+        <div class="<%= request.params[:q]&.fetch(:account_token_records_account_frozen_false, nil) == '1' ? 'transfers-filters--filter--options__active' : nil %>">
+          <%= link_to 'no', request.params.merge(q: (request.params[:q] || {}).except(:account_token_records_account_frozen_true).merge(account_token_records_account_frozen_false: 1).merge(account_token_records_token_id_eq: @project.token&.id)) %>
+        </div>
+      </div>
+    </div>
+
+    <div class="transfers-filters--filter">
+      <h3>regulatory groups</h3>
+
+      <div class="transfers-filters--filter--options">
+        <% @project.token.reg_groups.each do |group| %>
+          <div class="<%= request.params[:q]&.fetch(:account_token_records_reg_group_id_eq, nil) == group.id.to_s ? 'transfers-filters--filter--options__active' : nil %>">
+            <%= link_to group.name, request.params.merge(q: (request.params[:q] || {}).except(:account_token_records_reg_group_id_eq).merge(account_token_records_reg_group_id_eq: group.id).merge(account_token_records_token_id_eq: @project.token&.id)) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="transfers-filters--filter">
+      <h3>lockup ends before</h3>
+
+      <%= search_form_for @q, url: project_dashboard_accounts_path, method: :get, html: {class: 'transfers-filters--filter--form'} do |f| %>
+        <%= f.date_field :account_token_records_lockup_until_lt, class: 'transfers-filters--filter--input', placeholder: 'dd.mm.yyyy' %>
+        <%= f.hidden_field :account_token_records_token_id_eq, value: @project.token&.id %>
+        <%= f.submit 'ok', class: 'transfers-filters--filter--form--submit' %>
+      <% end %>
+    </div>
+  <% end %>
+
   <div class="transfers-filters--clear">
     <%= button_to "clear filters ⌫", project_dashboard_accounts_path, method: :get, disabled: request.params[:q].nil? %>
   </div>

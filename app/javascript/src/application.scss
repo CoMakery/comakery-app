@@ -156,6 +156,10 @@ select {
   }
 }
 
+input[type="date"] {
+  max-width: 10em;
+}
+
 input[type="file"] {
   height: auto;
 }
@@ -1016,6 +1020,17 @@ button.transfers-create {
 
     .transfers-table__transfer__max-investment {
       min-width: 60px;
+    }
+
+    .transfers-table__transfer__max_balance {
+      min-width: 140px;
+    }
+
+    .transfers-table__transfer__frozen {
+      .transfers-table__transfer__frozen--yes {
+        font-weight: bold;
+        color: #fe2d6c;
+      }
     }
 
     @media (max-width: 1280px) {

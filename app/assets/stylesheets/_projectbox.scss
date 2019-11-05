@@ -2,6 +2,12 @@
   margin: .2em 0em 2.5em .2em;
   border-radius: 3px;
   box-shadow: 0 10px 20px 0 rgba(32, 22, 98, .1);
+  width: 100%;
+  transition: box-shadow 0.25s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 10px 20px 0 rgba(32, 22, 98, .2);
+  }
 
   .image-block {
     display: block;
@@ -45,7 +51,8 @@
     .text-overlay {
       min-height: 60px;
       position: absolute;
-      background-color: #444;
+      -webkit-backdrop-filter: blur(50px);
+      backdrop-filter: blur(50px);
       width: 100%;
       padding: 6px 5px 0px 14px;
       top: -75px;
