@@ -7,6 +7,10 @@ class Verification < ApplicationRecord
 
   after_create :set_account_latest_verification
 
+  def failed?
+    !passed?
+  end
+
   private
 
     def set_account_latest_verification

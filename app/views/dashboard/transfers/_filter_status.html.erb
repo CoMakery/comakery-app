@@ -1,0 +1,64 @@
+<% filters = [
+  {
+    name: 'transferred',
+    class_name: 'transfers-filters--filter--options--transferred__active',
+    query: { status_eq: 5 }
+  }
+] %>
+
+<% if @project.blockchain_name %>
+  <% filters += [
+    {
+      name: 'ready',
+      class_name: 'transfers-filters--filter--options--ready__active',
+      query: {
+        :status_eq => 3,
+        "account_#{@project.blockchain_name}_wallet_present" => 1,
+        "account_account_token_records_account_frozen_false" => 1,
+        "account_latest_verification_passed_true" => 1
+      }
+    },
+    {
+      name: 'needs wallet',
+      class_name: 'transfers-filters--filter--options--blocked__active',
+      query: {:status_eq => 3, "account_#{@project.blockchain_name}_wallet_blank" => 1}
+    }
+  ] %>
+<% end %>
+
+<% filters += [
+  {
+    name: 'AML/KYC failed',
+    class_name: 'transfers-filters--filter--options--blocked__active',
+    query: {:status_eq => 3, "account_latest_verification_passed_false" => 1}
+  },
+  {
+    name: 'AML/KYC unknown',
+    class_name: 'transfers-filters--filter--options--blocked__active',
+    query: {:status_eq => 3, "account_latest_verification_passed_null" => 1}
+  } 
+] %>
+
+<% if @project.supports_transfer_rules? %>
+  <% filters += [
+    {
+      name: 'account frozen',
+      class_name: 'transfers-filters--filter--options--blocked__active',
+      query: {:status_eq => 3, "account_account_token_records_account_frozen_true" => 1, "account_account_token_records_token_id_eq" => @project.token&.id}
+    }
+  ] %>
+<% end %>
+
+<% all_queries = filters.map { |f| f[:query].keys }.flatten %>
+
+<h3>status</h3>
+
+<div class="transfers-filters--filter--options">
+  <% filters.each do |f| %>
+
+    <div class="<%= f[:query].all? { |k, v| request.params[:q]&.fetch(k, nil) == v.to_s } ? f[:class_name] : nil %>">
+      <%= link_to f[:name], request.params.merge(q: (request.params[:q] || {}).except(*all_queries).merge(f[:query])) %>
+    </div>
+
+  <% end %>
+</div>

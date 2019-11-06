@@ -2,10 +2,10 @@
 
 <% if transfer.paid? %>
   <% state = "transferred" %>
-<% elsif transfer.accepted? && transfer.recipient_address.blank? %>
-  <% state = "blocked" %>
-<% elsif transfer.accepted? && transfer.recipient_address.present? %>
+<% elsif !transfer.payment_blocked? %>
   <% state = "ready" %>
+<% else %>
+  <% state = "blocked" %>
 <% end %>
 
 <div class="transfers-table__transfer <%= "transfers-table__transfer--#{state}" %>">

@@ -52,63 +52,6 @@ describe AwardDecorator do
     end
   end
 
-  describe '#recipient_address' do
-    let!(:recipient) { create(:account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
-    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, coin_type: 'eth') }
-    let!(:award_type) { create :award_type, project: project }
-    let!(:award) { create :award, account: recipient, award_type: award_type }
-
-    context 'on ethereum network' do
-      it 'returns the recipient address' do
-        expect(award.decorate.recipient_address).to eq('0xD8655aFe58B540D8372faaFe48441AeEc3bec423')
-      end
-    end
-
-    context 'on bitcoin network' do
-      before do
-        award.account.bitcoin_wallet = 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
-        award.token.update coin_type: 'btc'
-      end
-
-      it 'returns the recipient address' do
-        expect(award.decorate.recipient_address).to eq('msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps')
-      end
-    end
-
-    context 'on cardano network' do
-      before do
-        award.account.cardano_wallet = 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
-        award.token.update coin_type: 'ada'
-      end
-
-      it 'returns the recipient address' do
-        expect(award.decorate.recipient_address).to eq('Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp')
-      end
-    end
-
-    context 'on qtum network' do
-      before do
-        award.account.qtum_wallet = 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM'
-        award.token.update coin_type: 'qrc20'
-      end
-
-      it 'returns the recipient address' do
-        expect(award.decorate.recipient_address).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
-      end
-    end
-
-    context 'on eos network' do
-      before do
-        award.account.eos_wallet = 'aaatestnet11'
-        award.token.update coin_type: 'eos'
-      end
-
-      it 'returns the recipient address' do
-        expect(award.decorate.recipient_address).to eq('aaatestnet11')
-      end
-    end
-  end
-
   context 'recipient names' do
     let!(:recipient) { create(:account, first_name: 'Betty', last_name: 'Ross', ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
     let!(:project) { create :project, token: create(:token, coin_type: 'erc20') }

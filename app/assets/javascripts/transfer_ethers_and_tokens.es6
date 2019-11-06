@@ -20,7 +20,7 @@ async function transferAwardOnEthereum(award) { // award in JSON
     alert('Please unlock your MetaMask Accounts');
     return;
   }
-  if (award.token.coin_type === 'erc20') {
+  if ((award.token.coin_type === 'erc20') || (award.token.coin_type === 'comakery')) {
     transferTokens(award);
   } else if (award.token.coin_type === 'eth') {
     transferEthers(award);
