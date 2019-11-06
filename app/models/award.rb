@@ -270,6 +270,35 @@ class Award < ApplicationRecord
     end
   end
 
+  def recipient_address
+    blockchain_name = Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
+    blockchain_name ? account&.send("#{blockchain_name}_wallet") : nil
+  end
+
+  def needs_wallet?
+    recipient_address.blank?
+  end
+
+  def account_frozen?
+    account.account_token_records.find_by(token: token)&.account_frozen?
+  end
+
+  def account_verification_unknown?
+    account.latest_verification.nil?
+  end
+
+  def account_verification_failed?
+    if account.latest_verification
+      account.latest_verification.failed?
+    else
+      false
+    end
+  end
+
+  def payment_blocked?
+    !accepted? || needs_wallet? || account_frozen? || account_verification_unknown? || account_verification_failed?
+  end
+
   delegate :image, to: :team, prefix: true, allow_nil: true
 
   private

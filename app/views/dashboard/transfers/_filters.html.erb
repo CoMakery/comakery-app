@@ -16,30 +16,7 @@
   <% else %>
 
     <div class="transfers-filters--filter">
-      <h3>account</h3>
-
-      <%= search_form_for @q, url: project_dashboard_transfers_path, method: :get, html: {class: 'transfers-filters--filter--form'} do |f| %>
-        <%= f.search_field :account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont, class: 'transfers-filters--filter--input', placeholder: 'Type name or email', autofocus: true %>
-        <%= f.submit 'ok', class: 'transfers-filters--filter--form--submit' %>
-      <% end %>
-    </div>
-
-    <div class="transfers-filters--filter">
-      <h3>status</h3>
-      
-      <div class="transfers-filters--filter--options">
-        <div class="<%= request.params[:q]&.fetch(:status_eq, nil) == '5' ? 'transfers-filters--filter--options--transferred__active' : nil %>">
-          <%= link_to 'transferred', request.params.merge(q: (request.params[:q] || {}).except("account_#{@project.blockchain_name}_wallet_blank", "account_#{@project.blockchain_name}_wallet_present").merge(status_eq: 5)) %>
-        </div>
-
-        <div class="<%= request.params[:q]&.fetch("account_#{@project.blockchain_name}_wallet_present", nil) == '1' ? 'transfers-filters--filter--options--ready__active' : nil %>">
-          <%= link_to 'ready', request.params.merge(q: (request.params[:q] || {}).except("account_#{@project.blockchain_name}_wallet_blank").merge(status_eq: 3).merge((@project.blockchain_name ? "account_#{@project.blockchain_name}_wallet_present" : '') => 1)) %>
-        </div>
-
-        <div class="<%= request.params[:q]&.fetch("account_#{@project.blockchain_name}_wallet_blank", nil) == '1' ? 'transfers-filters--filter--options--blocked__active' : nil %>">
-          <%= link_to 'blocked', request.params.merge(q: (request.params[:q] || {}).except("account_#{@project.blockchain_name}_wallet_present").merge(status_eq: 3).merge((@project.blockchain_name ? "account_#{@project.blockchain_name}_wallet_blank" : '') => 1)) %>
-        </div>
-      </div>
+      <%= render partial: "filter_status" %>
     </div>
 
     <div class="transfers-filters--filter">
@@ -56,6 +33,15 @@
           <%= link_to 'earned', request.params.merge(q: (request.params[:q] || {}).except(:source_eq).merge(source_eq: 0)) %>
         </div>
       </div>
+    </div>
+
+    <div class="transfers-filters--filter">
+      <h3>account</h3>
+
+      <%= search_form_for @q, url: project_dashboard_transfers_path, method: :get, html: {class: 'transfers-filters--filter--form'} do |f| %>
+        <%= f.search_field :account_first_name_or_account_last_name_or_account_nickname_or_account_email_cont, class: 'transfers-filters--filter--input', placeholder: 'Type name or email', autofocus: true %>
+        <%= f.submit 'ok', class: 'transfers-filters--filter--form--submit' %>
+      <% end %>
     </div>
     
   <% end %>
