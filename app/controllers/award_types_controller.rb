@@ -122,7 +122,7 @@ class AwardTypesController < ApplicationController
         currency_logo: batch.project.token ? Refile.attachment_url(batch.project.token, :logo_image, :fill, 100, 100) : nil,
         assign_path: project_award_type_award_assignment_path(@project, batch, task),
         award_path: project_award_type_award_award_path(@project, batch, task),
-        pay_path: project_dashboard_transfers_path(@project),
+        pay_path: project_dashboard_transfers_path(@project, q: { id_eq: task.id }),
         clone_path: project_award_type_award_clone_path(@project, batch, task),
         edit_path: task.can_be_edited? && edit_project_award_type_award_path(@project, batch, task),
         destroy_path: task.can_be_edited? && project_award_type_award_path(@project, batch, task),

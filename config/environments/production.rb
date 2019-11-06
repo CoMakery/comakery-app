@@ -126,4 +126,6 @@ Rails.application.configure do
     Bullet.rails_logger = true
     Bullet.unused_eager_loading_enable = false
   end
+
+  config.active_job.queue_adapter = :sidekiq
 end

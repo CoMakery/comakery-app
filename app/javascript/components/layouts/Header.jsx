@@ -27,11 +27,11 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
           About Us
         </a>
 
-        <a href="/session/new" className={currentPath.match(/session\/new/) ? 'header--nav--links--current header--nav--links--sign' : 'header--nav--links--sign'} >
+        <a href="/session/new" className={currentPath.match(/session\/new/) ? 'header--nav--links--current header--nav--links--sign' : null} >
           Sign In
         </a>
 
-        <a href="/accounts/new" className={currentPath.match(/accounts\/new/) ? 'header--nav--links--current header--nav--links--sign' : 'header--nav--links--sign'} >
+        <a href="/accounts/new" className={currentPath.match(/accounts\/new/) ? 'header--nav--links--current header--nav--links--sign' : null} >
           Sign Up
         </a>
       </div>
@@ -71,7 +71,7 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
           My Account
         </a>
 
-        <a rel="nofollow" href="/session" data-method="delete" className="header--nav--links--sign">
+        <a rel="nofollow" href="/session" data-method="delete">
           Sign out
         </a>
       </div>
@@ -122,24 +122,6 @@ class Header extends React.Component {
           { mobileMenuActive &&
             <div className="header-mobile__menu">
               {nav}
-              <div className="header-mobile__menu__sign">
-                {isLoggedIn &&
-                  <a rel="nofollow" href="/session" data-method="delete">
-                    Sign out
-                  </a>
-                }
-                {!isLoggedIn &&
-                  <React.Fragment>
-                    <a href="/session/new" className={currentPath.match(/session\/new/) ? 'header--nav--links--current' : null} >
-                      Sign In
-                    </a>
-
-                    <a href="/accounts/new" className={currentPath.match(/accounts\/new/) ? 'header--nav--links--current' : null} >
-                      Sign Up
-                    </a>
-                  </React.Fragment>
-                }
-              </div>
             </div>
           }
         </div>
