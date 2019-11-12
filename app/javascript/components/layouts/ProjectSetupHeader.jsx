@@ -185,17 +185,7 @@ class ProjectSetupHeader extends React.Component {
         </Navigation>
 
         <ProjectInfo>
-          {this.props.expanded && mission &&
-            <a href={mission.url}>
-              <img src={mission.imageUrl} alt="mission logo" />
-            </a>
-          }
-
           <h1>{project && project.title || 'New Project'}</h1>
-
-          {this.props.expanded && project &&
-            <h2>{'by ' + project.owner}</h2>
-          }
         </ProjectInfo>
       </Wrapper>
     )

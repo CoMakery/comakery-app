@@ -6,7 +6,7 @@ GIT
     citizen-scripts (1.2.0)
 
 GIT
-  remote: https://github.com/ducle/omniauth-discord.git
+  remote: https://github.com/CoMakery/omniauth-discord
   revision: a0fffd1a07cdb58ebb56750aa64c93710d1c12a2
   specs:
     omniauth-discord (0.1.5)
@@ -289,7 +289,7 @@ GEM
     listen (3.2.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.3.0)
+    loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.13)
@@ -310,7 +310,7 @@ GEM
     mini_portile2 (2.4.0)
     mini_racer (0.2.6)
       libv8 (>= 6.9.411)
-    minitest (5.12.2)
+    minitest (5.13.0)
     modernizr-rails (2.7.1)
     momentjs-rails (2.20.1)
       railties (>= 3.1)
@@ -325,7 +325,7 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     nio4r (2.5.2)
-    nokogiri (1.10.4)
+    nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
     nokogiri-happymapper (0.8.1)
       nokogiri (~> 1.5)
@@ -617,7 +617,7 @@ GEM
     websocket-extensions (0.1.4)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.2.0)
+    zeitwerk (2.2.1)
 
 PLATFORMS
   ruby

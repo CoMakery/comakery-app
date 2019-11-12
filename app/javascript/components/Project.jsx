@@ -264,8 +264,9 @@ export default class Project extends React.Component {
               <div className="project-award__token__type">
                 {tokenData.coinType}
                 <div className="project-award__token__address">
-                  <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
-                  <a target="_blank" className="project-award__token__address__link" href={tokenData.contractUrl}>Smart Contract</a>
+                  <a target="_blank" className="project-award__token__address__link" href={tokenData.contractUrl}>
+                    <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
+                  </a>
                 </div>
               </div>
             }
@@ -369,7 +370,7 @@ export default class Project extends React.Component {
           {this.props.tasksBySpecialty.map(specialty =>
             <TasksSpecialty key={specialty[0]}>
               <h3>
-                <img src={require(`src/images/specialties/${specialty[0]}.svg`)} />
+                <img src={require(`src/images/specialties/${specialty[0].toLowerCase()}.svg`)} />
                 {specialty[0]}
               </h3>
 
