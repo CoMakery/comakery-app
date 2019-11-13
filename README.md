@@ -69,6 +69,10 @@ Faster test runs with: `bin/rspec`
 More thorough test runs (integrates views): `bin/rspect`
 
 JS tests via Jest: `yarn test`
+Run the linters with: `yarn lint`
+Update JS test fixtures with: `yarn test -u`
+
+Run Rubocop Ruby code metrics with: `bin/rubocop`
 
 ## Code Commit and Deployment Workflow
 

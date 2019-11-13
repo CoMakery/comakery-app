@@ -370,7 +370,7 @@ export default class Project extends React.Component {
           {this.props.tasksBySpecialty.map(specialty =>
             <TasksSpecialty key={specialty[0]}>
               <h3>
-                <img src={require(`src/images/specialties/${specialty[0].toLowerCase()}.svg`)} />
+                <img src={require(`src/images/specialties/${specialty[0]}.svg`)} />
                 {specialty[0]}
               </h3>
 
