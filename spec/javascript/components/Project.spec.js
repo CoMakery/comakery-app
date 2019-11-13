@@ -57,6 +57,5 @@ describe('Project', () => {
     const wrapper = mount(<Project {...props} />)
 
     expect(wrapper.find('.project-award__token__left').text()).toBe('Ether (HOT)')
-    expect(wrapper.find('.project-description__text').text()).toBe('The last social network.Test')
   })
 })

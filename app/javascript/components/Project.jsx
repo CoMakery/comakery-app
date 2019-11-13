@@ -264,8 +264,9 @@ export default class Project extends React.Component {
               <div className="project-award__token__type">
                 {tokenData.coinType}
                 <div className="project-award__token__address">
-                  <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
-                  <a target="_blank" className="project-award__token__address__link" href={tokenData.contractUrl}>Smart Contract</a>
+                  <a target="_blank" className="project-award__token__address__link" href={tokenData.contractUrl}>
+                    <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
+                  </a>
                 </div>
               </div>
             }
@@ -328,7 +329,6 @@ export default class Project extends React.Component {
           }
         </div>
         <div className="project-description__text">
-          <div className="project-description__text--first">{projectData.descriptionHeader}.</div>
           <div dangerouslySetInnerHTML={{__html: projectData.descriptionHtml}} />
         </div>
       </div>
