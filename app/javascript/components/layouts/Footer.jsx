@@ -55,7 +55,11 @@ class Footer extends React.Component {
                 <a href="https://info.comakery.com/pricing/" target="_blank">
                   Pricing
                 </a>
-
+                
+                <a href="http://support.comakery.com" target="_blank">
+                  FAQ & Support
+                </a>
+                
                 <a href="https://info.comakery.com/security-token-launches/" target="_blank">
                   Restricted Tokens
                 </a>

@@ -329,7 +329,6 @@ export default class Project extends React.Component {
           }
         </div>
         <div className="project-description__text">
-          <div className="project-description__text--first">{projectData.descriptionHeader}.</div>
           <div dangerouslySetInnerHTML={{__html: projectData.descriptionHtml}} />
         </div>
       </div>
