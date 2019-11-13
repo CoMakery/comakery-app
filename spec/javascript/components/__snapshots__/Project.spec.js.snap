@@ -252,11 +252,6 @@ exports[`Project renders correctly without props 1`] = `
         className="project-description__text"
       >
         <div
-          className="project-description__text--first"
-        >
-          .
-        </div>
-        <div
           dangerouslySetInnerHTML={
             Object {
               "__html": undefined,

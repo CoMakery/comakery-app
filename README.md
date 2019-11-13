@@ -70,7 +70,7 @@ More thorough test runs (integrates views): `bin/rspect`
 
 JS tests via Jest: `yarn test`
 Run the linters with: `yarn lint`
-Update JS test fixtures with: `yarn test -u`
+Update JS test fixtures with: `yarn jest --updateSnapshot`
 
 Run Rubocop Ruby code metrics with: `bin/rubocop`
 
