@@ -46,6 +46,7 @@ const TasksTitle = styled.div`
 
 const TasksSpecialty = styled.div`
   margin-top: 40px;
+  margin-bottom: 60px;
 
   h3 {
     font-family: Montserrat;
@@ -82,7 +83,7 @@ const AllTasks = styled.a`
   color: #0089f4;
   display: block;
   text-align: right;
-  margin-top: 60px;
+  margin-top: 20px;
   margin-bottom: 10px;
 
   &:hover {
@@ -370,6 +371,7 @@ export default class Project extends React.Component {
             <TasksSpecialty key={specialty[0]}>
               <h3>
                 <img src={require(`src/images/specialties/${specialty[0]}.svg`)} />
+
                 {specialty[0]}
               </h3>
 
