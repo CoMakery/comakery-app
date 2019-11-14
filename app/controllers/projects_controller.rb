@@ -256,7 +256,7 @@ class ProjectsController < ApplicationController
   def set_show_props
     @props = {
       tasks_by_specialty: @project.ready_tasks_by_specialty.map do |specialty, awards|
-        [specialty&.name || 'General', awards.map { |task| task_to_props(task).merge(allowed_to_start: policy(task).start?) }]
+        [specialty&.name&.downcase || 'general', awards.map { |task| task_to_props(task).merge(allowed_to_start: policy(task).start?) }]
       end,
       interested: current_account&.interested?(@project.id),
       specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },
@@ -343,8 +343,7 @@ class ProjectsController < ApplicationController
 
   def project_props(project)
     project.as_json(only: %i[id title require_confidentiality display_team]).merge(
-      description_header: project.description.split('.').first,
-      description_html: Comakery::Markdown.to_html(project.description.split('.')[1..-1]&.join('.')),
+      description_html: Comakery::Markdown.to_html(project.description),
       show_contributions: policy(project).show_contributions?,
       square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
       panoramic_image_url: Refile.attachment_url(project, :panoramic_image) || helpers.image_url('defaul_project.jpg'),

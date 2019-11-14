@@ -252,11 +252,6 @@ exports[`Project renders correctly without props 1`] = `
         className="project-description__text"
       >
         <div
-          className="project-description__text--first"
-        >
-          .
-        </div>
-        <div
           dangerouslySetInnerHTML={
             Object {
               "__html": undefined,
@@ -478,10 +473,11 @@ exports[`Project renders correctly without props 1`] = `
                   "componentStyle": ComponentStyle {
                     "componentId": "sc-iRbamj",
                     "isStatic": true,
-                    "lastClassName": "iznpoR",
+                    "lastClassName": "gibNVz",
                     "rules": Array [
                       "
   margin-top: 40px;
+  margin-bottom: 60px;
 
   h3 {
     font-family: Montserrat;
@@ -519,13 +515,9 @@ exports[`Project renders correctly without props 1`] = `
               forwardedRef={null}
             >
               <div
-                className="sc-iRbamj iznpoR"
+                className="sc-iRbamj gibNVz"
               >
-                <h3>
-                  <img
-                    src="test-file-stub"
-                  />
-                </h3>
+                <h3 />
               </div>
             </StyledComponent>
           </styled.div>
@@ -540,7 +532,7 @@ exports[`Project renders correctly without props 1`] = `
                   "componentStyle": ComponentStyle {
                     "componentId": "sc-jlyJG",
                     "isStatic": true,
-                    "lastClassName": "lnRskf",
+                    "lastClassName": "Rhqti",
                     "rules": Array [
                       "
   font-family: Montserrat;
@@ -555,7 +547,7 @@ exports[`Project renders correctly without props 1`] = `
   color: #0089f4;
   display: block;
   text-align: right;
-  margin-top: 60px;
+  margin-top: 20px;
   margin-bottom: 10px;
 
   &:hover {
@@ -578,7 +570,7 @@ exports[`Project renders correctly without props 1`] = `
               href=""
             >
               <a
-                className="sc-jlyJG lnRskf"
+                className="sc-jlyJG Rhqti"
                 href=""
               >
                 see all available tasks

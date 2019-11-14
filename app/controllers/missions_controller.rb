@@ -105,7 +105,8 @@ class MissionsController < ApplicationController
   end
 
   def project_props(project)
-    project.as_json(only: %i[id title description]).merge(
+    project.as_json(only: %i[id title]).merge(
+      description: Comakery::Markdown.to_html(project.description),
       image_url: project.panoramic_image.present? ? Refile.attachment_url(project, :panoramic_image) : nil,
       square_url: project.square_image.present? ? Refile.attachment_url(project, :square_image, :fill, 800, 800) : nil,
       default_image_url: helpers.image_url('defaul_project.jpg'),

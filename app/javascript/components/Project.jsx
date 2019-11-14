@@ -46,6 +46,7 @@ const TasksTitle = styled.div`
 
 const TasksSpecialty = styled.div`
   margin-top: 40px;
+  margin-bottom: 60px;
 
   h3 {
     font-family: Montserrat;
@@ -82,7 +83,7 @@ const AllTasks = styled.a`
   color: #0089f4;
   display: block;
   text-align: right;
-  margin-top: 60px;
+  margin-top: 20px;
   margin-bottom: 10px;
 
   &:hover {
@@ -264,8 +265,9 @@ export default class Project extends React.Component {
               <div className="project-award__token__type">
                 {tokenData.coinType}
                 <div className="project-award__token__address">
-                  <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
-                  <a target="_blank" className="project-award__token__address__link" href={tokenData.contractUrl}>Smart Contract</a>
+                  <a target="_blank" className="project-award__token__address__link" href={tokenData.contractUrl}>
+                    <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
+                  </a>
                 </div>
               </div>
             }
@@ -328,7 +330,6 @@ export default class Project extends React.Component {
           }
         </div>
         <div className="project-description__text">
-          <div className="project-description__text--first">{projectData.descriptionHeader}.</div>
           <div dangerouslySetInnerHTML={{__html: projectData.descriptionHtml}} />
         </div>
       </div>
@@ -369,7 +370,8 @@ export default class Project extends React.Component {
           {this.props.tasksBySpecialty.map(specialty =>
             <TasksSpecialty key={specialty[0]}>
               <h3>
-                <img src={require(`src/images/specialties/${specialty[0]}.svg`)} />
+                {/* <img src={require(`src/images/specialties/${specialty[0]}.svg`)} /> */}
+
                 {specialty[0]}
               </h3>
 
