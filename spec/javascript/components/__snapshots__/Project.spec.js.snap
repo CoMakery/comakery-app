@@ -517,11 +517,7 @@ exports[`Project renders correctly without props 1`] = `
               <div
                 className="sc-iRbamj gibNVz"
               >
-                <h3>
-                  <img
-                    src="test-file-stub"
-                  />
-                </h3>
+                <h3 />
               </div>
             </StyledComponent>
           </styled.div>
