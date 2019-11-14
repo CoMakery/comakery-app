@@ -66,6 +66,9 @@ class AwardsController < ApplicationController
       source_award = Award.find(params[:task][:image_from_id].to_i)
       if policy(source_award.project).edit?
         @award.image_id = source_award.image_id
+        @award.image_filename = source_award.image_filename
+        @award.image_content_size = source_award.image_content_size
+        @award.image_content_type = source_award.image_content_type
       end
     end
 

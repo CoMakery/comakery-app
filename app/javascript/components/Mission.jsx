@@ -193,7 +193,9 @@ export default class Mission extends React.Component {
 
                 <div className="mission-column__wrapper">
                   <div className="mission-projects__single__card__info">
-                    <span className="mission-projects__single__description--desktop">{project.projectData.description}</span>
+                    <span className="mission-projects__single__description--desktop" >
+                      <div dangerouslySetInnerHTML={{__html:project.projectData.description}}></div>
+                    </span>
                     <div className="mission-projects__single__card__info__stats">
 
                       <div className="mission-projects__single__card__info__row">
@@ -229,7 +231,7 @@ export default class Mission extends React.Component {
               </div>
 
               <div className="mission-projects__single__mobile">
-                {project.projectData.description}
+                <div dangerouslySetInnerHTML={{__html: project.projectData.description}} />
                 <div className="mission-projects__single__card__info__interest mission-projects__single__card__info__interest--mobile">
                   {project.editable && <a className="mission-projects__single__card__info__interest__link" href={`/projects/${project.projectData.id}/edit`}>EDIT PROJECT</a>}
                   {!project.editable && interests[project.projectData.id] && <div className="mission-projects__single__card__info__interest__link" style={{opacity: 0.2}}>Request sent</div>}

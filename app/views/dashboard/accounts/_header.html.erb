@@ -22,4 +22,22 @@
       address
     </div>
   <% end %>
+
+  <% if @project.supports_transfer_rules? %>
+    <div class="transfers-table__transfer__max_balance">
+      <%= sort_link(@q, :account_token_records_max_balance, @project.token&.symbol ? "max balance (#{@project.token&.symbol})" : 'max balance') %>
+    </div>
+
+    <div class="transfers-table__transfer__lockup_until">
+      <%= sort_link(@q, :account_token_records_lockup_until, 'lockup until') %>
+    </div>
+
+    <div class="transfers-table__transfer__reg_group">
+      <%= sort_link(@q, :account_token_records_reg_group_id, 'reg group') %>
+    </div>
+
+    <div class="transfers-table__transfer__frozen">
+      frozen
+    </div>
+  <% end %>
 </div>

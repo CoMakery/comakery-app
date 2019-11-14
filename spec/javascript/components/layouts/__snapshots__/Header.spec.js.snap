@@ -55,7 +55,6 @@ exports[`Header renders correctly without props 1`] = `
           My Account
         </a>
         <a
-          className="header--nav--links--sign"
           data-method="delete"
           href="/session"
           rel="nofollow"

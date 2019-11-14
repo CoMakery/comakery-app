@@ -61,11 +61,6 @@ class AwardDecorator < Draper::Decorator
     recipient_auth_team&.name || account.decorate.name
   end
 
-  def recipient_address
-    blockchain_name = Token::BLOCKCHAIN_NAMES[token&.coin_type&.to_sym]
-    blockchain_name ? account&.send("#{blockchain_name}_wallet") : nil
-  end
-
   def issuer_address
     if object.token&.coin_type_on_ethereum?
       issuer&.ethereum_wallet

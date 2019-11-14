@@ -25,16 +25,43 @@
     <label>tokens <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
 
     <% cache @project.awards do %>
-        <%= @accounts_all.sum { |a| a.total_awards_earned(@project) } %>
+      <%= @accounts_all.sum { |a| a.total_awards_earned(@project) } %>
     <% end %>
   </div>
-
 
   <% if @project.token %>
     <div class="transfers-table__transfer__address">
       <label>address</label>
 
       <%= pluralize(@project.blockchain_name.present? ? @accounts_all.map(&:"#{@project.blockchain_name}_wallet").compact.size : 0, 'account', 'accounts') %>
+    </div>
+  <% end %>
+
+  <% if @project.supports_transfer_rules? %>
+    <div class="transfers-table__transfer__max_balance">
+      <label>max balance</label>
+
+      <% cache @project.awards do %>
+        <%= @accounts_all.map{ |a| a.account_token_records.find_by(token: @project.token) }&.compact&.sum(&:max_balance) %>
+      <% end %>
+    </div>
+
+    <div class="transfers-table__transfer__lockup_until">
+      <label>lockup until</label>
+
+      –
+    </div>
+
+    <div class="transfers-table__transfer__reg_group">
+      <label>reg group</label>
+
+      –
+    </div>
+
+    <div class="transfers-table__transfer__frozen">
+      <label>frozen</label>
+
+      –
     </div>
   <% end %>
 </div>

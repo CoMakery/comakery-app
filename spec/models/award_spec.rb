@@ -945,4 +945,135 @@ describe Award do
       expect(award.notify_on_expiration_at.nil?).to be_truthy
     end
   end
+
+  describe '#recipient_address' do
+    let!(:recipient) { create(:account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
+    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, coin_type: 'eth') }
+    let!(:award_type) { create :award_type, project: project }
+    let!(:award) { create :award, account: recipient, award_type: award_type }
+
+    context 'on ethereum network' do
+      it 'returns the recipient address' do
+        expect(award.recipient_address).to eq('0xD8655aFe58B540D8372faaFe48441AeEc3bec423')
+      end
+    end
+
+    context 'on bitcoin network' do
+      before do
+        award.account.bitcoin_wallet = 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps'
+        award.token.update coin_type: 'btc'
+      end
+
+      it 'returns the recipient address' do
+        expect(award.recipient_address).to eq('msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps')
+      end
+    end
+
+    context 'on cardano network' do
+      before do
+        award.account.cardano_wallet = 'Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp'
+        award.token.update coin_type: 'ada'
+      end
+
+      it 'returns the recipient address' do
+        expect(award.recipient_address).to eq('Ae2tdPwUPEZ3uaf7wJVf7ces9aPrc6Cjiz5eG3gbbBeY3rBvUjyfKwEaswp')
+      end
+    end
+
+    context 'on qtum network' do
+      before do
+        award.account.qtum_wallet = 'qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM'
+        award.token.update coin_type: 'qrc20'
+      end
+
+      it 'returns the recipient address' do
+        expect(award.recipient_address).to eq('qSf62RfH28cins3EyiL3BQrGmbqaJUHDfM')
+      end
+    end
+
+    context 'on eos network' do
+      before do
+        award.account.eos_wallet = 'aaatestnet11'
+        award.token.update coin_type: 'eos'
+      end
+
+      it 'returns the recipient address' do
+        expect(award.recipient_address).to eq('aaatestnet11')
+      end
+    end
+  end
+
+  describe 'needs_wallet?' do
+    let!(:recipient) { create(:account, ethereum_wallet: '0xD8655aFe58B540D8372faaFe48441AeEc3bec423') }
+    let!(:project) { create :project, payment_type: 'project_token', token: create(:token, coin_type: 'eth') }
+    let!(:award_type) { create :award_type, project: project }
+    let!(:award_w_recepient_address) { create :award, account: recipient, award_type: award_type }
+
+    it 'returns true if recipient_address blank' do
+      expect(create(:award).needs_wallet?).to be_truthy
+    end
+
+    it 'returns false if recipient_address present' do
+      expect(award_w_recepient_address.needs_wallet?).to be_falsey
+    end
+  end
+
+  describe 'account_frozen?' do
+    let!(:record) { create(:account_token_record) }
+    let!(:frozen_record) { create(:account_token_record, account_frozen: true, token: record.token) }
+    let!(:project) { create :project, payment_type: 'project_token', token: record.token }
+    let!(:award_type) { create :award_type, project: project }
+    let!(:award) { create(:award, account: record.account, award_type: award_type) }
+    let!(:frozen_award) { create(:award, account: frozen_record.account, award_type: award_type) }
+
+    it 'returns true if account token record is frozen' do
+      expect(frozen_award.account_frozen?).to be_truthy
+    end
+
+    it 'returns false if account token record is not frozen' do
+      expect(award.account_frozen?).to be_falsey
+    end
+
+    it 'returns false if account token record is not present' do
+      expect(create(:award).account_frozen?).to be_falsey
+    end
+  end
+
+  describe 'account_verification_unknown?' do
+    let!(:verification) { create(:verification) }
+    let!(:award) { create(:award, account: verification.account) }
+
+    it 'returns true if account latest_verification is nil' do
+      expect(create(:award).account_verification_unknown?).to be_truthy
+    end
+
+    it 'returns false if account latest_verification is not nil' do
+      expect(award.account_verification_unknown?).to be_falsey
+    end
+  end
+
+  describe 'account_verification_failed?' do
+    let!(:verification) { create(:verification) }
+    let!(:award) { create(:award, account: verification.account) }
+    let!(:verification_failed) { create(:verification, passed: false) }
+    let!(:award_failed) { create(:award, account: verification_failed.account) }
+
+    it 'returns true if account latest_verification is not passed' do
+      expect(award_failed.account_verification_failed?).to be_truthy
+    end
+
+    it 'returns false if account latest_verification is passed' do
+      expect(award.account_verification_failed?).to be_falsey
+    end
+
+    it 'returns false if account latest_verification is nil' do
+      expect(create(:award).account_verification_failed?).to be_falsey
+    end
+  end
+
+  describe 'payment_blocked?' do
+    it 'returns true if any of the blocking conditions above are met' do
+      expect(create(:award).payment_blocked?).to be_truthy
+    end
+  end
 end

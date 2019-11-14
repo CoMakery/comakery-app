@@ -156,6 +156,10 @@ select {
   }
 }
 
+input[type="date"] {
+  max-width: 12em;
+}
+
 input[type="file"] {
   height: auto;
 }
@@ -250,12 +254,19 @@ form.project_search {
     transition: width 0.05s ease-out;
     font-size: 12px;
 
-    @media (max-width: 1024px) {
-      display: none;
-    }
-
     &:focus {
       width: calc(100% - 260px);
+    }
+
+    @media (max-width: 1024px) {
+      z-index: 1000;
+      width: 8em;
+      top: 12px;
+      left: 160px;
+
+      &:focus {
+        width: calc(100% - 220px);
+      }
     }
   }
 }
@@ -263,12 +274,8 @@ form.project_search {
 .icon__Logo-Header-svg {
   transition: width 0.25s ease-in-out;
 
-  &:hover {
-    width: 195px;
-  }
-
-  &:active {
-    filter: brightness(150%);
+  @media (max-width: 1024px) {
+    width: 130px;
   }
 }
 
@@ -451,7 +458,6 @@ form.form-with-submit-button {
   .transfers-filters--filter {
     flex-direction: column;
     display: flex;
-    min-width: 300px;
     max-width: 100%;
 
     h3 {
@@ -1018,6 +1024,17 @@ button.transfers-create {
       min-width: 60px;
     }
 
+    .transfers-table__transfer__max_balance {
+      min-width: 140px;
+    }
+
+    .transfers-table__transfer__frozen {
+      .transfers-table__transfer__frozen--yes {
+        font-weight: bold;
+        color: #fe2d6c;
+      }
+    }
+
     @media (max-width: 1280px) {
       flex-direction: column;
       padding: 1em 1em 1em 0;
@@ -1080,6 +1097,15 @@ a.header--nav--links--current {
 @media screen and (max-width: 1024px) {
   .header {
     display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 100vh;
+  }
+
+  .header--nav {
+    width: 100%;
+    padding: 0;
   }
 
   .header-mobile {
@@ -1184,9 +1210,8 @@ a.header--nav--links--current {
     align-items: center;
     box-sizing: border-box;
     width: 100%;
-    height: 60px;
-    padding: 0 15px;
-    font-size: 18px;
+    padding: 15px;
+    font-size: 14px;
     font-weight: 400;
     font-style: normal;
     font-stretch: normal;
@@ -4293,7 +4318,7 @@ input.button--right-space {
   bottom: -32px;
   transform: translateX(-50%);
   width: 202px;
-  height: 226px;
+  height: 202px;
   background: white;
   padding: 12px;
   box-shadow: 0 10px 20px 0 rgba(32, 22, 98, 0.2);
@@ -4376,7 +4401,7 @@ input.button--right-space {
 }
 
 .mission-details__subtitle {
-  font-family: Georgia, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: 36px;
   font-weight: normal;
   font-style: normal;
@@ -4439,7 +4464,7 @@ input.button--right-space {
 }
 
 .mission-leaders {
-  font-family: Georgia, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: 24px;
   font-weight: normal;
   font-style: normal;
@@ -4517,7 +4542,7 @@ input.button--right-space {
 }
 
 .mission-leaders__individual__info__name {
-  font-family: Georgia, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-weight: normal;
   font-style: normal;
@@ -4548,7 +4573,7 @@ input.button--right-space {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-family: Georgia, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: 36px;
   font-weight: bold;
   font-style: normal;
@@ -4577,7 +4602,7 @@ input.button--right-space {
   width: 100%;
   margin: auto;
   margin-top: 80px;
-  font-family: Georgia, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: 24px;
   font-weight: normal;
   font-style: normal;
@@ -4644,7 +4669,7 @@ input.button--right-space {
   width: 100%;
   display: flex;
   align-items: center;
-  font-family: Georgia, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: 18px;
   font-weight: normal;
   font-style: normal;
@@ -4719,7 +4744,7 @@ input.button--right-space {
 
 .mission-stats {
   margin-top: 25px;
-  font-family: Georgia, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: 24px;
   font-weight: normal;
   font-style: normal;
@@ -4846,7 +4871,7 @@ input.button--right-space {
 
 .mission-projects__heading {
   box-sizing: border-box;
-  font-family: Georgia, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: 24px;
   font-weight: normal;
   font-style: normal;
@@ -4915,7 +4940,7 @@ input.button--right-space {
 }
 
 .mission-projects__single__title__heading {
-  font-family: Georgia, sans-serif;
+  font-family: Montserrat, sans-serif;
   font-size: 24px;
   font-weight: bold;
   font-style: normal;

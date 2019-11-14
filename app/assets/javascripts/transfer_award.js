@@ -27,7 +27,7 @@ const transferAwardOnTezos = award => // award in JSON
   tezosTrezor.transferXtzCoins(award)
 
 window.transferAward = function(award) { // award in JSON
-  if ((award.token.coin_type === 'erc20') || (award.token.coin_type === 'eth')) {
+  if ((award.token.coin_type === 'erc20') || (award.token.coin_type === 'eth') || (award.token.coin_type === 'comakery')) {
     transferAwardOnEthereum(award)
   } else if ((award.token.coin_type === 'qrc20') || (award.token.coin_type === 'qtum')) {
     transferAwardOnQtum(award)
