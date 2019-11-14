@@ -193,8 +193,10 @@ export default class Mission extends React.Component {
 
                 <div className="mission-column__wrapper">
                   <div className="mission-projects__single__card__info">
-                    <span className="mission-projects__single__description--desktop"
-                      dangerouslySetInnerHTML={{__html: project.projectData.description}} />
+                    <span className="mission-projects__single__description--desktop" >
+                      <div dangerouslySetInnerHTML={{__html:project.projectData.description}}></div>
+                    </span>
+                    {/* <span className="mission-projects__single__description--desktop">{project.projectData.description}</span> */}
                     <div className="mission-projects__single__card__info__stats">
 
                       <div className="mission-projects__single__card__info__row">
