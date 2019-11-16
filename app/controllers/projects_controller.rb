@@ -221,11 +221,12 @@ class ProjectsController < ApplicationController
           panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
           mission_id: @project&.mission&.id,
           token_id: @project&.token&.id,
-          channels: @project&.channels&.map do |channel|
+          channels: @project&.channels&.includes(:team)&.map do |channel|
             {
               channel_id: channel&.channel_id&.to_s,
               team_id: channel&.team&.id&.to_s,
-              id: channel&.id
+              id: channel&.id,
+              name_with_provider: channel&.name_with_provider
             }
           end,
           url: unlisted_project_url(@project.long_id)
