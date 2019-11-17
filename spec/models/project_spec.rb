@@ -419,4 +419,60 @@ describe Project do
       expect(project.supports_transfer_rules?).to be_falsey
     end
   end
+
+  describe '.set_project_owner_from_email' do
+    let(:previous_owner) { create(:account_with_auth) }
+    let(:project) { create :project, previous_owner }
+    let(:next_owner) { create(:account_with_auth) }
+
+    it 'sets preconditions properly' do
+      expect(project.account).to eq(previous_owner)
+      expect(project.admins).not_to include(previous_owner)
+      expect(project.interested).to include(previous_owner)
+    end
+
+    describe 'happy path' do
+      before do
+        described_class.set_project_owner_from_email(project, next_owner.email)
+        project.reload
+      end
+
+      it { expect(project.account).to eq(next_owner) }
+      it { expect(project.admins).not_to include(next_owner) }
+      it { expect(project.admins).to include(previous_owner) }
+      it { expect(project.interested).to include(next_owner) }
+      it { expect(project.interested).to include(previous_owner) }
+    end
+
+    it 'does not double add interested' do
+      project.interested << next_owner
+
+      expect(project.interested.length).to eq(2)
+
+      described_class.set_project_owner_from_email(project, next_owner.email)
+
+      expect(project.interested.length).to eq(2)
+      expect(project.interested).to contain_exactly(next_owner, previous_owner)
+    end
+
+    it 'does not double add admins' do
+      expect(project.admins.length).to eq(0)
+
+      described_class.set_project_owner_from_email(project, next_owner.email)
+      expect(project.admins.length).to eq(1)
+
+      described_class.set_project_owner_from_email(project, next_owner.email)
+      expect(project.admins.length).to eq(1)
+    end
+
+    it 'raises an error if an account was not found by email' do
+      expect { described_class.set_project_owner_from_email(project, 'invalid@example.com') }
+        .to raise_error(ArgumentError, 'Could not find an Account with that email address')
+    end
+
+    it 'gets called with self as the project when called with the instance method #set_project_owner_from_email' do
+      expect(described_class).to receive(:set_project_owner_from_email).with(project, previous_owner.email)
+      project.set_project_owner_from_email(previous_owner.email)
+    end
+  end
 end

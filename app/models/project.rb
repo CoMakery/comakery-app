@@ -63,6 +63,21 @@ class Project < ApplicationRecord
   delegate :populate_token?, to: :token, allow_nil: true
   delegate :total_awarded, to: :awards, allow_nil: true
 
+  def self.set_project_owner_from_email(project, email)
+    account = Account.find_by(email: email)
+    raise ArgumentError, 'Could not find an Account with that email address' if account.blank?
+    previous_account = project.account
+    project.admins << previous_account unless project.admins.exists?(previous_account.id)
+    project.account_id = account.id
+    project.admins.delete(account)
+    project.interested << account unless account.interested?(project.id)
+    project.save!
+  end
+
+  def set_project_owner_from_email(email)
+    self.class.set_project_owner_from_email(self, email)
+  end
+
   def top_contributors
     Account.select('accounts.*, sum(a1.total_amount) as total_awarded, max(a1.created_at) as last_awarded_at').joins("
       left join awards a1 on a1.account_id=accounts.id and a1.status in(3,5)
@@ -88,10 +103,6 @@ class Project < ApplicationRecord
   def invalid_channel(attributes)
     Channel.invalid_params(attributes)
   end
-
-  # def owner_slack_user_name
-  #   account.authentications.find_by(slack_team_id: slack_team_id)&.display_name
-  # end
 
   def video_id
     # taken from http://stackoverflow.com/questions/5909121/converting-a-regular-youtube-link-into-an-embedded-video
