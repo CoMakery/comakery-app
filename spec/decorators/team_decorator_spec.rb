@@ -15,7 +15,7 @@ describe TeamDecorator do
 
   describe 'display' do
     it 'list channels' do
-      expect(discord_team.decorate.channels).to eq [{ 'parent_id' => nil, 'id' => 'parent_id', 'name' => 'Text Channels' }, { 'parent_id' => 'parent_id', 'id' => 'channel_id', 'name' => 'general' }]
+      expect(discord_team.decorate.channels).to eq [{ 'parent_id' => nil, 'id' => 'parent_id', 'name' => 'Text Channels', 'type' => 0 }, { 'parent_id' => 'parent_id', 'id' => 'channel_id', 'name' => 'general', 'type' => 0 }]
     end
 
     it 'channel_name' do

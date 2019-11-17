@@ -256,6 +256,7 @@ form.project_search {
 
     &:focus {
       width: calc(100% - 260px);
+      box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
     }
 
     @media (max-width: 1024px) {
@@ -2381,7 +2382,6 @@ input.button--right-space {
   height: 20px;
   object-fit: contain;
   margin-top: 7px;
-  box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
 }
 
 .project-form--form--channels--add,

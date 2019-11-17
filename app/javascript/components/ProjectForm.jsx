@@ -462,7 +462,25 @@ class ProjectForm extends React.Component {
                   value={c.new ? '' : c.id}
                 />
 
-                {!c.destroy &&
+                {!c.destroy && !c.new &&
+                  <React.Fragment>
+                    <InputFieldWhiteDark
+                      required
+                      disabled
+                      className="project-form--form--channels--channel--select"
+                      title="channel"
+                      name={`project[channels_attributes][${c.id}][channel_id]`}
+                      value={c.nameWithProvider}
+                      symbolLimit={0}
+                      style={{'opacity': '0.7', 'cursor': 'not-allowed'}}
+                    />
+                    <div className="project-form--form--channels--channel--del" onClick={(e) => this.destroyChannel(e, i)}>
+                      <Icon name="iconTrash.svg" />
+                    </div>
+                  </React.Fragment>
+                }
+
+                {!c.destroy && c.new &&
                   <React.Fragment>
                     <InputFieldDropdownHalfed
                       required
