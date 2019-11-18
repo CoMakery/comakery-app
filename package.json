@@ -29,6 +29,7 @@
     "babel-preset-react": "^6.24.1",
     "bip39": "^2.5.0",
     "borc": "^2.0.4",
+    "caniuse-lite": "^1.0.30001010",
     "cardano-crypto.js": "^5.0.0",
     "classnames": "^2.2.6",
     "coffeescript": "1.12.7",
