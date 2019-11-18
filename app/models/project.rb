@@ -65,20 +65,29 @@ class Project < ApplicationRecord
 
   def self.assign_project_owner_from(project_or_project_id, email)
     project = project_or_project_id.is_a?(Integer) ? Project.find(project_or_project_id) : project_or_project_id
-
     raise ArgumentError, 'Project data is invalid' if project.invalid?
-    account = Account.find_by(email: email)
-    raise ArgumentError, 'Could not find an Account with that email address' if account.blank?
-    previous_account = project.account
-    project.admins << previous_account unless project.admins.exists?(previous_account.id)
-    project.account_id = account.id
-    project.admins.delete(account)
-    project.interested << account unless account.interested?(project.id)
+
+    new_owner = Account.find_by(email: email)
+    raise ArgumentError, 'Could not find an Account with that email address' if new_owner.blank?
+
+    previous_owner = project.account
+    project.safe_add_admin(previous_owner)
+    project.account_id = new_owner.id
+    project.admins.delete(new_owner)
+    project.safe_add_interested(new_owner)
     project.save!
   end
 
   def assign_project_owner_from(email)
     self.class.assign_project_owner_from(self, email)
+  end
+
+  def safe_add_admin(new_admin)
+    admins << new_admin unless admins.exists?(new_admin.id)
+  end
+
+  def safe_add_interested(interested_account)
+    interested << interested_account unless interested_account.interested?(id)
   end
 
   def top_contributors
