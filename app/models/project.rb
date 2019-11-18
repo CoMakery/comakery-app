@@ -63,7 +63,9 @@ class Project < ApplicationRecord
   delegate :populate_token?, to: :token, allow_nil: true
   delegate :total_awarded, to: :awards, allow_nil: true
 
-  def self.assign_project_owner_from(project, email)
+  def self.assign_project_owner_from(project_or_project_id, email)
+    project = project_or_project_id.is_a?(Integer) ? Project.find(project_or_project_id) : project_or_project_id
+
     raise ArgumentError, 'Project data is invalid' if project.invalid?
     account = Account.find_by(email: email)
     raise ArgumentError, 'Could not find an Account with that email address' if account.blank?

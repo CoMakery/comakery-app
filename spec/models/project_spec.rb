@@ -431,9 +431,22 @@ describe Project do
       expect(project.interested).to include(previous_owner)
     end
 
-    describe 'happy path' do
+    describe 'happy path with project object' do
       before do
         described_class.assign_project_owner_from(project, next_owner.email)
+        project.reload
+      end
+
+      it { expect(project.account).to eq(next_owner) }
+      it { expect(project.admins).not_to include(next_owner) }
+      it { expect(project.admins).to include(previous_owner) }
+      it { expect(project.interested).to include(next_owner) }
+      it { expect(project.interested).to include(previous_owner) }
+    end
+
+    describe 'happy path with just project id' do
+      before do
+        described_class.assign_project_owner_from(project.id, next_owner.email)
         project.reload
       end
 
