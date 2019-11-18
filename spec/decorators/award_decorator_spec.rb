@@ -137,4 +137,28 @@ describe AwardDecorator do
     award = create :award, award_type: award_type, quantity: 1, channel: channel
     expect(award.decorate.communication_channel).to eq channel.name_with_provider
   end
+
+  describe 'pay_data' do
+    let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :erc20)))) }
+    let!(:other_award) { create(:award) }
+
+    it 'returns data for ethereum_controller.js' do
+      data = eth_award.decorate.pay_data
+      expect(data['controller']).not_to be_nil
+      expect(data['target']).not_to be_nil
+      expect(data['action']).not_to be_nil
+      expect(data['ethereum-payment-type']).not_to be_nil
+      expect(data['ethereum-amount']).not_to be_nil
+      expect(data['ethereum-contract-address']).not_to be_nil
+      expect(data['ethereum-contract-abi']).not_to be_nil
+      expect(data['ethereum-update-transaction-path']).not_to be_nil
+      expect(data['info']).not_to be_nil
+    end
+
+    it 'returns data for legacy payment logic' do
+      data = other_award.decorate.pay_data
+      expect(data[:id]).not_to be_nil
+      expect(data[:info]).not_to be_nil
+    end
+  end
 end

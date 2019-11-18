@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_01_123439) do
+ActiveRecord::Schema.define(version: 2019_11_17_074605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -187,6 +187,8 @@ ActiveRecord::Schema.define(version: 2019_11_01_123439) do
     t.integer "assignments_count", default: 0
     t.datetime "transferred_at"
     t.integer "source", default: 0
+    t.boolean "ethereum_transaction_success"
+    t.string "ethereum_transaction_error"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"

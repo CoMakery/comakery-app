@@ -168,6 +168,34 @@ img {
   max-width: 100%;
 }
 
+.in-progress--metamask {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.7;
+  background-image: repeating-linear-gradient(-45deg, white, white 10px, #f68c24 10px, #f68c24 20px);
+  animation: in-progress 1.5s linear infinite;
+  border: 1px solid #f68c24 !important;
+
+  a {
+    color: #7c7c7c !important;
+  }
+}
+
+.in-progress--metamask__paid {
+  background-image: repeating-linear-gradient(-45deg, white, white 10px, #00cc17 10px, #00cc17 20px);
+  animation: in-progress 1.5s linear infinite;
+  border: 1px solid #00cc17 !important;
+}
+
+@keyframes in-progress{
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -75px 0px;
+  }
+} 
+
 /**/
 /* 3rd-party styling */
 /**/
@@ -383,6 +411,8 @@ form.form-with-submit-button {
       text-overflow: ellipsis;
       text-transform: uppercase;
       margin-top: 0.3em;
+      font-weight: 500;
+      font-size: 10px;
     }
 
     .account-preview__info__verification {
