@@ -474,5 +474,19 @@ describe Project do
       expect(described_class).to receive(:set_project_owner_from_email).with(project, previous_owner.email)
       project.set_project_owner_from_email(previous_owner.email)
     end
+
+    it 'rolls back the db changes if the account could not be saved' do
+      invalid_data_for_title = nil
+      project.title = invalid_data_for_title
+      expect(project.valid?).to eq(false)
+
+      expect do
+        described_class.set_project_owner_from_email(project, next_owner.email)
+      end.to raise_error(ArgumentError, 'Project data is invalid')
+
+      expect(project.account).to eq(previous_owner)
+      expect(project.admins).not_to include(previous_owner)
+      expect(project.interested).to include(previous_owner)
+    end
   end
 end

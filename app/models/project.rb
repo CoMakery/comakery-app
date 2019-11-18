@@ -64,14 +64,15 @@ class Project < ApplicationRecord
   delegate :total_awarded, to: :awards, allow_nil: true
 
   def self.set_project_owner_from_email(project, email)
-    account = Account.find_by(email: email)
-    raise ArgumentError, 'Could not find an Account with that email address' if account.blank?
-    previous_account = project.account
-    project.admins << previous_account unless project.admins.exists?(previous_account.id)
-    project.account_id = account.id
-    project.admins.delete(account)
-    project.interested << account unless account.interested?(project.id)
-    project.save!
+    raise ArgumentError, 'Project data is invalid' if project.invalid?
+      account = Account.find_by(email: email)
+      raise ArgumentError, 'Could not find an Account with that email address' if account.blank?
+      previous_account = project.account
+      project.admins << previous_account unless project.admins.exists?(previous_account.id)
+      project.account_id = account.id
+      project.admins.delete(account)
+      project.interested << account unless account.interested?(project.id)
+      project.save!
   end
 
   def set_project_owner_from_email(email)
