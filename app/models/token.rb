@@ -130,6 +130,8 @@ class Token < ApplicationRecord
   def abi
     if coin_type_comakery?
       JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'comakery.json')))
+    else
+      JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'default.json')))
     end
   end
 

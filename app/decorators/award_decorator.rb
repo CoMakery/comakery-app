@@ -1,6 +1,7 @@
 class AwardDecorator < Draper::Decorator
   delegate_all
   include ActionView::Helpers::NumberHelper
+  include Rails.application.routes.url_helpers
 
   def ethereum_transaction_address_short
     if object.ethereum_transaction_address
@@ -94,6 +95,29 @@ class AwardDecorator < Draper::Decorator
       channel.name_with_provider
     else
       'Email'
+    end
+  end
+
+  def pay_data
+    case project.token&.coin_type
+    when 'erc20', 'eth', 'comakery'
+      {
+        'controller' => 'ethereum',
+        'target' => 'ethereum.button',
+        'action' => 'click->ethereum#pay',
+        'ethereum-payment-type' => project.token&.coin_type,
+        'ethereum-address' => account.ethereum_wallet,
+        'ethereum-amount' => total_amount,
+        'ethereum-contract-address' => project.token&.ethereum_contract_address,
+        'ethereum-contract-abi' => project.token&.abi&.to_json,
+        'ethereum-update-transaction-path' => project_award_type_award_update_transaction_address_path(project, award_type, self),
+        'info' => json_for_sending_awards
+      }
+    else
+      {
+        id: id,
+        info: json_for_sending_awards
+      }
     end
   end
 end
