@@ -98,6 +98,10 @@ class AwardDecorator < Draper::Decorator
     end
   end
 
+  def total_amount_wei
+    BigDecimal(10.pow(project.token&.decimal_places || 0) * total_amount)&.to_s&.to_i
+  end
+
   def pay_data
     case project.token&.coin_type
     when 'erc20', 'eth', 'comakery'
@@ -107,7 +111,7 @@ class AwardDecorator < Draper::Decorator
         'action' => 'click->ethereum#pay',
         'ethereum-payment-type' => project.token&.coin_type,
         'ethereum-address' => account.ethereum_wallet,
-        'ethereum-amount' => total_amount,
+        'ethereum-amount' => total_amount_wei,
         'ethereum-contract-address' => project.token&.ethereum_contract_address,
         'ethereum-contract-abi' => project.token&.abi&.to_json,
         'ethereum-update-transaction-path' => project_award_type_award_update_transaction_address_path(project, award_type, self),

@@ -10,12 +10,10 @@ export default class extends Controller {
     await this._initialize()
 
     if (this.isContract) {
-      const amount = this.web3.utils.toWei(this.amount, 'wei')
-      const data = this.contract.methods.transfer(this.address, amount).encodeABI()
+      const data = this.contract.methods.transfer(this.address, this.amount).encodeABI()
       this._sendTransaction(this.contractAddress, null, data)
     } else {
-      const amount = this.web3.utils.toWei(this.amount, 'ether')
-      this._sendTransaction(this.address, amount, null)
+      this._sendTransaction(this.address, this.amount, null)
     }
   }
 

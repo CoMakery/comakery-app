@@ -4,16 +4,14 @@ export default class extends EthereumController {
   async mint() {
     await this._initialize()
 
-    const amount = this.web3.utils.toWei(this.amount, 'wei')
-    const data = this.contract.methods.mint(this.address, amount).encodeABI()
+    const data = this.contract.methods.mint(this.address, this.amount).encodeABI()
     this._sendTransaction(this.contractAddress, null, data)
   }
 
   async burn() {
     await this._initialize()
 
-    const amount = this.web3.utils.toWei(this.amount, 'wei')
-    const data = this.contract.methods.burn(this.address, amount).encodeABI()
+    const data = this.contract.methods.burn(this.address, this.amount).encodeABI()
     this._sendTransaction(this.contractAddress, null, data)
   }
 
