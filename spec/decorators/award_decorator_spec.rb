@@ -138,6 +138,28 @@ describe AwardDecorator do
     expect(award.decorate.communication_channel).to eq channel.name_with_provider
   end
 
+  describe 'total_amount_wei' do
+    let!(:amount) { 2 }
+    let!(:award_18_decimals) { create(:award, status: :ready, amount: amount) }
+    let!(:award_2_decimals) { create(:award, status: :ready, amount: amount) }
+    let!(:award_0_decimals) { create(:award, status: :ready, amount: amount) }
+    let!(:award_no_token) { create(:award, status: :ready, amount: amount) }
+
+    before do
+      award_18_decimals.project.token.update(decimal_places: 18)
+      award_2_decimals.project.token.update(decimal_places: 2)
+      award_0_decimals.project.token.update(decimal_places: 0)
+      award_no_token.project.update(token: nil)
+    end
+
+    it 'returns total_amount in Wei based on token decimals' do
+      expect(award_18_decimals.decorate.total_amount_wei).to eq(2000000000000000000)
+      expect(award_2_decimals.decorate.total_amount_wei).to eq(200)
+      expect(award_0_decimals.decorate.total_amount_wei).to eq(2)
+      expect(award_no_token.decorate.total_amount_wei).to eq(2)
+    end
+  end
+
   describe 'pay_data' do
     let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :erc20)))) }
     let!(:other_award) { create(:award) }
