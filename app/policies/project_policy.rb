@@ -16,7 +16,7 @@ class ProjectPolicy < ApplicationPolicy
 
     def resolve
       if @account
-        account.accessable_projects
+        account.accessable_projects(scope)
       else
         scope.publics
       end

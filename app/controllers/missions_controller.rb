@@ -1,6 +1,7 @@
 class MissionsController < ApplicationController
   skip_before_action :require_login, only: %i[show]
 
+  before_action :unavailable_for_whitelabel
   before_action :find_mission_by_id, only: %i[show edit update update_status destroy]
   before_action :set_form_props, only: %i[new edit]
   before_action :set_mission_props, only: %i[show]
@@ -79,7 +80,18 @@ class MissionsController < ApplicationController
   private
 
   def mission_params
-    params.require(:mission).permit(:name, :subtitle, :description, :logo, :image, :status)
+    params.require(:mission).permit(
+      :name,
+      :subtitle,
+      :description,
+      :logo,
+      :image,
+      :status,
+      :whitelabel,
+      :whitelabel_domain,
+      :whitelabel_logo,
+      :whitelabel_logo_dark
+    )
   end
 
   def find_mission_by_id

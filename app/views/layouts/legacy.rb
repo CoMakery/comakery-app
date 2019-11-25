@@ -1,4 +1,7 @@
 class Views::Layouts::Legacy < Views::Base
+  use_instance_variables_for_assigns true
+  needs :whitelabel_mission
+
   def content
     doctype!
     html(lang: 'en') do
@@ -51,12 +54,14 @@ class Views::Layouts::Legacy < Views::Base
           {
             is_admin: current_account&.comakery_admin?,
             is_logged_in: (current_account ? true : false),
+            is_whitelabel: @whitelabel_mission.present?,
+            whitelabel_logo: attachment_url(@whitelabel_mission, :whitelabel_logo),
             current_path: request.fullpath
           },
           prerender: true
         )
 
-        render partial: 'layouts/project_search_form'
+        render partial: 'layouts/project_search_form' unless @whitelabel_mission
 
         div(class: "app-container row#{' home' if current_account && action_name == 'join_us'}") do
           message
@@ -68,12 +73,15 @@ class Views::Layouts::Legacy < Views::Base
           end
         end
 
-        text react_component('IntercomButton')
+        text react_component('IntercomButton') unless @whitelabel_mission
 
         text react_component(
           'layouts/Footer',
           {
-            is_logged_in: (current_account ? true : false)
+            is_logged_in: (current_account ? true : false),
+            is_whitelabel: @whitelabel_mission.present?,
+            whitelabel_logo: attachment_url(@whitelabel_mission, :whitelabel_logo),
+            whitelabel_logo_dark: attachment_url(@whitelabel_mission, :whitelabel_logo_dark)
           },
           prerender: true
         )

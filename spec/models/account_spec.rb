@@ -514,6 +514,14 @@ describe Account do
       admin_project.admins << account
     end
 
+    it 'applies scope' do
+      scope = Project.where.not(title: project2.title).where.not(title: project6.title)
+
+      expect(account.accessable_projects(scope)).not_to include(project2)
+      expect(account.my_projects(scope)).not_to include(project2)
+      expect(account.other_member_projects(scope)).not_to include(project6)
+    end
+
     it 'accessable prọjects include my own project' do
       expect(account.accessable_projects.map(&:title)).to match_array ['admin project', 'my private project', 'my public project', 'archived project', 'unlisted project']
     end

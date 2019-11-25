@@ -1,5 +1,6 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
+  before_action :unavailable_for_whitelabel, only: %i[index]
   before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
@@ -212,7 +213,7 @@ class AwardsController < ApplicationController
   private
 
     def set_project
-      @project = Project.find(params[:project_id])&.decorate
+      @project = @project_scope.find(params[:project_id])&.decorate
       redirect_to('/404.html') unless @project
     end
 

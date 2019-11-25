@@ -513,6 +513,372 @@ exports[`MissionForm renders correctly without props 1`] = `
                   </div>
                 </InputField>
               </InputFieldUploadFile>
+              <InputFieldDropdown
+                eventHandler={[Function]}
+                name="whitelabel"
+                required={true}
+                selectEntries={
+                  Array [
+                    Array [
+                      "Enabled",
+                      "true",
+                    ],
+                    Array [
+                      "Disabled",
+                      "false",
+                    ],
+                  ]
+                }
+                symbolLimit={0}
+                title="Whitelabel"
+                value="false"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__dropdown"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="whitelabel"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={true}
+                  selectEntries={
+                    Array [
+                      Array [
+                        "Enabled",
+                        "true",
+                      ],
+                      Array [
+                        "Disabled",
+                        "false",
+                      ],
+                    ]
+                  }
+                  step=""
+                  symbolLimit={0}
+                  title="Whitelabel"
+                  type="select"
+                  value="false"
+                >
+                  <div
+                    className="input-field input-field__dropdown"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Whitelabel
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        required
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <select
+                        className="input-field--content__select"
+                        disabled={false}
+                        name="whitelabel"
+                        onChange={[Function]}
+                        required={true}
+                        value="false"
+                      >
+                        <option
+                          key="true"
+                          value="true"
+                        >
+                          Enabled
+                        </option>
+                        <option
+                          key="false"
+                          value="false"
+                        >
+                          Disabled
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldDropdown>
+              <InputFieldWhiteDark
+                eventHandler={[Function]}
+                name="whitelabelDomain"
+                symbolLimit={140}
+                title="Whitelabel Domain"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__white__dark"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="whitelabelDomain"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={false}
+                  selectEntries={Array []}
+                  step=""
+                  symbolLimit={140}
+                  title="Whitelabel Domain"
+                  type="text"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__white__dark"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Whitelabel Domain
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        optional
+                      </span>
+                      <span
+                        className="input-field--title--counter"
+                      >
+                        0
+                        /
+                        140
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        className="input-field--content__text"
+                        name="whitelabelDomain"
+                        onChange={[Function]}
+                        onClick={null}
+                        pattern=".*"
+                        placeholder="Please enter value"
+                        readOnly={false}
+                        required={false}
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldWhiteDark>
+              <InputFieldUploadFile
+                eventHandler={[Function]}
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="whitelabelLogo"
+                      type="file"
+                    />,
+                  }
+                }
+                imgPreviewDimensions="150x100"
+                imgRequirements="Image should be at least 1000px x 200px"
+                imgVerifier={[Function]}
+                name="whitelabelLogo"
+                title="Mission Whitelabel Logo"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__upload-file"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="whitelabelLogo"
+                        type="file"
+                      />,
+                    }
+                  }
+                  imgPreviewDimensions="150x100"
+                  imgPreviewUrl=""
+                  imgRequirements="Image should be at least 1000px x 200px"
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="whitelabelLogo"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={false}
+                  selectEntries={Array []}
+                  step=""
+                  symbolLimit={0}
+                  title="Mission Whitelabel Logo"
+                  type="file"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__upload-file"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Mission Whitelabel Logo
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        optional
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        accept="image/*"
+                        className="input-field--content__file"
+                        name="whitelabelLogo"
+                        onChange={[Function]}
+                        required={false}
+                        type="file"
+                      />
+                      <span
+                        className="input-field--content__file--requirements"
+                      >
+                        Image should be at least 1000px x 200px
+                      </span>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldUploadFile>
+              <InputFieldUploadFile
+                eventHandler={[Function]}
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="whitelabelLogoDark"
+                      type="file"
+                    />,
+                  }
+                }
+                imgPreviewDimensions="150x100"
+                imgRequirements="Image should be at least 1000px x 200px"
+                imgVerifier={[Function]}
+                name="whitelabelLogoDark"
+                title="Mission Whitelabel Logo Dark"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__upload-file"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="whitelabelLogoDark"
+                        type="file"
+                      />,
+                    }
+                  }
+                  imgPreviewDimensions="150x100"
+                  imgPreviewUrl=""
+                  imgRequirements="Image should be at least 1000px x 200px"
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="whitelabelLogoDark"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={false}
+                  selectEntries={Array []}
+                  step=""
+                  symbolLimit={0}
+                  title="Mission Whitelabel Logo Dark"
+                  type="file"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__upload-file"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Mission Whitelabel Logo Dark
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        optional
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        accept="image/*"
+                        className="input-field--content__file"
+                        name="whitelabelLogoDark"
+                        onChange={[Function]}
+                        required={false}
+                        type="file"
+                      />
+                      <span
+                        className="input-field--content__file--requirements"
+                      >
+                        Image should be at least 1000px x 200px
+                      </span>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldUploadFile>
             </form>
           </div>
         </div>

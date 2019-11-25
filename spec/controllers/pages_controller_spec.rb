@@ -74,4 +74,11 @@ RSpec.describe PagesController, type: :controller do
     Rails.env = env_backup
     expect(response.status).to eq(200)
   end
+
+  it 'is unavailable_for_whitelabel' do
+    create :active_whitelabel_mission
+
+    get :featured
+    expect(response).to redirect_to(new_session_url)
+  end
 end

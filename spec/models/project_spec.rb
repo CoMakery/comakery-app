@@ -205,6 +205,17 @@ describe Project do
       end
     end
 
+    describe 'set_whitelabel' do
+      let!(:whitelabel_mission) { create(:mission, whitelabel: true) }
+      let!(:whitelabel_project) { create(:project, mission: whitelabel_mission) }
+      let!(:project) { create(:project) }
+
+      it 'sets whitelabel value based on mission' do
+        expect(whitelabel_project.whitelabel).to be_truthy
+        expect(project.whitelabel).to be_falsey
+      end
+    end
+
     describe 'add_owner_as_interested' do
       let(:project) { create(:project) }
 

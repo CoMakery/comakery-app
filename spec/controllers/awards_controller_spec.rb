@@ -67,6 +67,13 @@ RSpec.describe AwardsController, type: :controller do
       expect(response.status).to eq(200)
       expect(assigns[:project]).to eq(project)
     end
+
+    it 'is unavailable_for_whitelabel' do
+      create :active_whitelabel_mission
+
+      get :index
+      expect(response).to redirect_to(new_session_url)
+    end
   end
 
   describe '#create' do

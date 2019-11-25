@@ -242,6 +242,10 @@ class Mom
     }
     Mission.new(defaults.merge(attrs))
   end
+
+  def active_whitelabel_mission
+    create(:mission, whitelabel: true, whitelabel_domain: 'test.host')
+  end
 end
 
 def mom

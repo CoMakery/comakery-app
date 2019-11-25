@@ -161,22 +161,22 @@ class Account < ApplicationRecord
     project.awards.completed.where(account: self).sum(:total_amount)
   end
 
-  def other_member_projects
-    Project.joins("
+  def other_member_projects(scope = Project)
+    scope.joins("
       left join award_types at1 on at1.project_id=projects.id
       left join awards a1 on a1.award_type_id=at1.id
       left join channels on channels.project_id=projects.id
       left join teams on teams.id=channels.team_id
       left join authentication_teams on authentication_teams.team_id=teams.id")
-           .where("((authentication_teams.account_id=#{id} and channels.id is not null) or a1.account_id=#{id}) and projects.account_id <> #{id}").distinct
+         .where("((authentication_teams.account_id=#{id} and channels.id is not null) or a1.account_id=#{id}) and projects.account_id <> #{id}").distinct
   end
 
-  def my_projects
-    Project.left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
+  def my_projects(scope = Project)
+    scope.left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
-  def accessable_projects
-    Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+  def accessable_projects(scope = Project)
+    scope.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def related_projects
