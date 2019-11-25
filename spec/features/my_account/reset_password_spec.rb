@@ -5,7 +5,7 @@ describe 'reset password' do
 
   scenario 'send reset password request' do
     visit new_session_path
-    click_link 'Forgot?'
+    click_link 'Forgot Password?'
     fill_in 'email', with: 'invalid@test.st'
     click_on 'Reset my password!'
     expect(page).to have_content 'Could not found account with given email'

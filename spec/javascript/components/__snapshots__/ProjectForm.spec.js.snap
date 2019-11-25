@@ -7,6 +7,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
   discordBotUrl={null}
   formAction="POST"
   formUrl="/"
+  isWhitelabel={false}
   licenseUrl="/"
   missionForHeader={null}
   missions={
