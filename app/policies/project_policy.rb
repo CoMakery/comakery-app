@@ -35,8 +35,16 @@ class ProjectPolicy < ApplicationPolicy
     account.present? && (project_owner? || project_admin?)
   end
 
+  def show_contributions_to_everyone?
+    project.public? && !project.require_confidentiality?
+  end
+
+  def show_contributions_to_team?
+    team_member? && project.unarchived? && !project.require_confidentiality?
+  end
+
   def show_contributions?
-    (project.public? && !project.require_confidentiality?) || (team_member? && project.unarchived?) || edit?
+    show_contributions_to_everyone? || show_contributions_to_team? || edit?
   end
 
   def show_award_types?

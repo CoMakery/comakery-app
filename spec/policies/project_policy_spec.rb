@@ -92,7 +92,7 @@ describe ProjectPolicy do
 
       specify do
         authorized(other_team_member, my_public_project, action)
-        authorized(other_team_member, my_public_project_business_confidential, action)
+        not_authorized(other_team_member, my_public_project_business_confidential, action)
         authorized(other_team_member, my_private_project, action)
       end
 
