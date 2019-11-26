@@ -12,7 +12,7 @@ class AwardsController < ApplicationController
   before_action :authorize_award_submit, only: %i[submit]
   before_action :authorize_award_review, only: %i[accept reject]
   before_action :authorize_award_pay, only: %i[update_transaction_address]
-  before_action :clone_award_on_start, only: %i[start assign]
+  before_action :clone_award_on_start, only: %i[start]
   before_action :set_filter, only: %i[index]
   before_action :set_default_project_filter, only: %i[index]
   before_action :set_project_filter, only: %i[index]
@@ -98,6 +98,10 @@ class AwardsController < ApplicationController
 
   def assign
     account = Account.find(params[:account_id])
+
+    if @award.should_be_cloned? && @award.can_be_cloned_for?(account)
+      @award = @award.clone_on_assignment
+    end
 
     if account && @award.update(account: account, issuer: current_account, status: 'ready')
       TaskMailer.with(award: @award).task_assigned.deliver_now
