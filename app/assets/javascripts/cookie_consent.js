@@ -2,18 +2,18 @@ window.addEventListener("load", function(){
 window.cookieconsent.initialise({
   "palette": {
     "popup": {
-      "background": "#0089f4"
+      "background": "#3a3a3a"
     },
     "button": {
-      "background": "#fb40e5",
+      "background": "#1560fa",
       "text": "#ffffff"
     }
   },
   "theme": "edgeless",
   "content": {
-    "message": "CoMakery uses cookies to ensure you get the best experience on our website. ",
+    "message": "We are using cookies to ensure you get the best experience on our website.",
     "dismiss": "Got It!",
     "deny": "No Thanks",
-    "href": "https://www.comakery.com/privacy-policy"
+    "href": "/privacy-policy"
   }
 })});

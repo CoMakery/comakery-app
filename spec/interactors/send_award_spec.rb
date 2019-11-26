@@ -11,6 +11,7 @@ describe SendAward do
   let!(:other_project) { create(:project, account: create(:account)) }
   let!(:award_type) { create(:award_type, project: project) }
   let!(:award) { create(:award, award_type: award_type) }
+  let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
 
   let(:recipient) { create(:account, email: 'glenn@example.com') }
   let(:recipient_authentication) { create(:authentication, account: recipient) }
@@ -41,6 +42,17 @@ describe SendAward do
       )
       expect(result.award.valid?).to eq(false)
       expect(result.award.errors.full_messages).to eq(['Email is invalid'])
+    end
+  end
+
+  context 'when award should be cloned' do
+    it 'clones the award' do
+      result = described_class.call(
+        award: award_cloneable,
+        email: create(:account).email
+      )
+
+      expect(result.award.cloned_on_assignment_from_id).to eq(award_cloneable.id)
     end
   end
 

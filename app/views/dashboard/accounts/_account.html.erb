@@ -46,8 +46,8 @@
     <div class="transfers-table__transfer__max_balance">
       <label>max balance</label>
 
-      <% if record&.max_balance&.to_i > 0 %>
-        <%= number_to_currency(record&.max_balance, unit: '', precision: 0) %>
+      <% if record&.max_balance && record.max_balance > 0 %>
+        <%= number_to_currency(record.max_balance, unit: '', precision: 0) %>
       <% else %>
         –
       <% end %>

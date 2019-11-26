@@ -15,6 +15,8 @@ class Mission < ApplicationRecord
   has_many :ready_award_types, -> { where state: :ready }, through: :unarchived_projects, source: :award_types, class_name: 'AwardType'
   has_many :published_awards, through: :ready_award_types, source: :awards, class_name: 'Award'
   has_many :awards, through: :award_types
+  has_many :interests, through: :public_projects
+
   enum status: %i[active passive]
 
   after_create :assign_display_order
@@ -36,11 +38,7 @@ class Mission < ApplicationRecord
       projects: unarchived_projects.size,
       batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
-      interests: (
-        Interest.where(project_id: unarchived_projects).pluck(:account_id) |
-        unarchived_projects.pluck(:account_id) |
-        published_awards.pluck(:account_id)
-      ).compact.size
+      interests: interests.size
     }
   end
 

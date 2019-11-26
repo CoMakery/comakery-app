@@ -20,6 +20,7 @@ exports[`Project renders correctly without props 1`] = `
       "stats": Object {},
       "team": Array [],
       "teamSize": 0,
+      "teamTopLimit": 0,
     }
   }
   projectForHeader={null}

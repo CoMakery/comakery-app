@@ -169,14 +169,14 @@ export default class Mission extends React.Component {
                         <div className="project-team__contributors" >
                           {project.projectData.team && project.projectData.team.map((contributor, index) =>
                             <div key={contributor.id} className="project-team__contributor-container">
-                              <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 15 - index}} src={contributor.imageUrl} />
+                              <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: project.projectData.teamTopLimit - index}} src={contributor.imageUrl} />
                               <div className="project-team__contributor__modal">
                                 <ProfileModal profile={contributor} />
                               </div>
                             </div>
                           )}
                         </div>
-                        {project.projectData.teamSize > 15 && <div className="project-team__contributors__more">+{project.projectData.teamSize - 15}</div>}
+                        {project.projectData.teamSize > project.projectData.teamTopLimit && <div className="project-team__contributors__more">+{project.projectData.teamSize - project.projectData.teamTopLimit}</div>}
                       </div>
                     </div>
                   </div>

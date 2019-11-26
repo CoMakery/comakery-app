@@ -108,7 +108,7 @@ class AwardTypesController < ApplicationController
           allocated_budget: @project.awards.sum(&:possible_total_amount)
         ),
         project_for_header: @project.header_props,
-        mission_for_header: @project&.mission&.decorate&.header_props
+        mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
 
@@ -151,7 +151,7 @@ class AwardTypesController < ApplicationController
         project_id: @project.id,
         csrf_token: form_authenticity_token,
         project_for_header: @project.header_props,
-        mission_for_header: @project&.mission&.decorate&.header_props
+        mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
 

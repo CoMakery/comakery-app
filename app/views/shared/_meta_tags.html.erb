@@ -1,7 +1,14 @@
-<% title = @meta_title ? @meta_title : 'CoMakery - Achieve Big Missions' %>
-<% description = @meta_desc ? @meta_desc : 'Built from a belief in the power of people, together. With CoMakery, you can gather or join a tribe and work to achieve big missions.' %>
-<% image = @meta_image ? @meta_image : '/comakery.jpg' %>
-<% url = url_for(only_path: false) %>
+<% if @whitelabel_mission %>
+  <% title = @meta_title ? @meta_title : @whitelabel_mission.name %>
+  <% description = @meta_desc ? @meta_desc : nil %>
+  <% image = @meta_image ? @meta_image : nil %>
+  <% url = url_for(only_path: false) %>
+<% else %>
+  <% title = @meta_title ? @meta_title : 'CoMakery - Achieve Big Missions' %>
+  <% description = @meta_desc ? @meta_desc : 'Built from a belief in the power of people, together. With CoMakery, you can gather or join a tribe and work to achieve big missions.' %>
+  <% image = @meta_image ? @meta_image : '/comakery.jpg' %>
+  <% url = url_for(only_path: false) %>
+<% end %>
 
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' >
 <meta charset='utf-8' >

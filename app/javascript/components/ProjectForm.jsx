@@ -268,7 +268,7 @@ class ProjectForm extends React.Component {
         <ProjectSetup
           className="project-form"
           projectForHeader={this.props.projectForHeader}
-          missionForHeader={this.props.missionForHeader}
+          missionForHeader={!this.props.isWhitelabel && this.props.missionForHeader}
           owner
           current="form"
           subfooter={

@@ -8,6 +8,8 @@ class SendAward
     account = find_or_create_account
     email, confirm_token = account ? [nil, nil] : [context.email, SecureRandom.hex]
 
+    clone_if_should_be_cloned_for(account)
+
     unless context.award.update(
       account: account,
       email: email,
@@ -29,5 +31,11 @@ class SendAward
     return unless account
     context.fail!(message: errors) if errors.present?
     account
+  end
+
+  def clone_if_should_be_cloned_for(account)
+    if context.award.should_be_cloned? && context.award.can_be_cloned_for?(account)
+      context.award = context.award.clone_on_assignment
+    end
   end
 end
