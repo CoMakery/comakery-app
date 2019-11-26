@@ -167,12 +167,7 @@ class Project < ApplicationRecord
     {
       batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
-      interests: (
-        [account_id] |
-        admins.pluck(:id) |
-        interests.pluck(:account_id) |
-        contributors_distinct.pluck(:id)
-      ).compact.uniq.size
+      interests: interests.size
     }
   end
 

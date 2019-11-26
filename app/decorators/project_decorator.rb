@@ -117,12 +117,22 @@ class ProjectDecorator < Draper::Decorator
     }
   end
 
+  def team_top_limit
+    15
+  end
+
   def team_top
-    (admins.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a + interested.includes(:specialty).first(5)).uniq
+    team = (admins.includes(:specialty).first(4).to_a.unshift(account) + top_contributors.to_a).uniq
+
+    if team.size < team_top_limit
+      team += interested.includes(:specialty).where.not(id: team.pluck(:id)).first(team_top_limit - team.size)
+    end
+
+    team
   end
 
   def team_size
-    contributors_distinct.size + admins.size + interested.size + 1
+    interested.size
   end
 
   def blockchain_name
