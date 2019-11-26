@@ -2,7 +2,7 @@
   <%= react_component(
     'layouts/ProjectSetupHeader',
     project_for_header: @project.header_props,
-    mission_for_header: @project&.mission&.decorate&.header_props,
+    mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props,
     owner: ProjectPolicy.new(current_account, @project).edit?,
     expanded: false,
     current: project_page

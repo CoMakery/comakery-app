@@ -53,7 +53,7 @@ class ProjectsController < ApplicationController
     authorize @project
 
     @props[:project] = @project.serializable_hash.merge(
-      url: "https://www.comakery.com/p/#{@project.long_id}",
+      url: "https://#{current_domain}/p/#{@project.long_id}",
       mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
     )
     render component: 'ProjectForm', props: @props
@@ -270,7 +270,7 @@ class ProjectsController < ApplicationController
       my_tasks_path: my_tasks_path(project_id: @project.id),
       editable: policy(@project).edit?,
       project_for_header: @project.decorate.header_props,
-      mission_for_header: @project&.mission&.decorate&.header_props
+      mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
     }
   end
 

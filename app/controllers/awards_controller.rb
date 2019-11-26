@@ -391,7 +391,7 @@ class AwardsController < ApplicationController
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token,
         project_for_header: @project.header_props,
-        mission_for_header: @project&.mission&.decorate&.header_props
+        mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
 
@@ -413,7 +413,7 @@ class AwardsController < ApplicationController
         form_url: project_award_type_award_assign_path(@project, @award_type, @award),
         csrf_token: form_authenticity_token,
         project_for_header: @project.header_props,
-        mission_for_header: @project&.mission&.decorate&.header_props
+        mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
 
@@ -432,7 +432,7 @@ class AwardsController < ApplicationController
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token,
         project_for_header: @project.header_props,
-        mission_for_header: @project&.mission&.decorate&.header_props
+        mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
 

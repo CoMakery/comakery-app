@@ -41,7 +41,7 @@ module Comakery
     cloudfront_host = ENV['CLOUDFRONT_HOST']
     if cloudfront_host.present?
       config.action_controller.asset_host = cloudfront_host
-      config.font_assets.origin = "http://#{ENV['APP_HOST']}"
+      config.font_assets.origin = "*"
     end
 
     config.allow_missing_ethereum_bridge = false
