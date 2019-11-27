@@ -123,7 +123,6 @@ class MissionsController < ApplicationController
       square_url: project.square_image.present? ? Refile.attachment_url(project, :square_image, :fill, 800, 800) : nil,
       default_image_url: helpers.image_url('defaul_project.jpg'),
       team_size: project.team_size,
-      team_limit: project.team_top_limit,
       team: project.team_top.map { |contributor| contributor_props(contributor, project) }
     )
   end

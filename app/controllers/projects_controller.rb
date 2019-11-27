@@ -356,7 +356,6 @@ class ProjectsController < ApplicationController
       maximum_tokens: project.maximum_tokens,
       awarded_tokens: project.total_awarded_pretty,
       team_size: project.team_size,
-      team_limit: project.team_top_limit,
       team: project.team_top.map { |contributor| contributor_props(contributor, project) },
       chart_data: GetContributorData.call(project: @project).award_data[:contributions_summary_pie_chart].map { |award| award[:net_amount] }.sort { |a, b| b <=> a },
       stats: project.stats
