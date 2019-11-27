@@ -619,5 +619,33 @@ describe ProjectsController do
         end
       end
     end
+
+    describe 'redirect_for_whitelabel' do
+      let!(:mission) { create(:active_whitelabel_mission) }
+      let!(:project) { create(:project, mission: mission, visibility: :public_listed) }
+      let!(:project_unlisted) { create(:project, mission: mission, visibility: :public_unlisted) }
+      let!(:project_confidential) { create(:project, mission: mission, visibility: :public_listed, require_confidentiality: true) }
+      let!(:project_unlisted_confidential) { create(:project, mission: mission, visibility: :public_unlisted, require_confidentiality: true) }
+
+      it 'redirects #show to transfers' do
+        get :show, params: { id: project.to_param }
+        expect(response).to redirect_to(project_dashboard_transfers_path(project))
+      end
+
+      it 'redirects #unlisted to transfers' do
+        get :unlisted, params: { long_id: project_unlisted.long_id }
+        expect(response).to redirect_to(project_dashboard_transfers_path(project_unlisted))
+      end
+
+      it 'redirects #show to batches ' do
+        get :show, params: { id: project_confidential.to_param }
+        expect(response).to redirect_to(project_award_types_path(project_confidential))
+      end
+
+      it 'redirects #unlisted to batches ' do
+        get :unlisted, params: { long_id: project_unlisted_confidential.long_id }
+        expect(response).to redirect_to(project_award_types_path(project_unlisted_confidential))
+      end
+    end
   end
 end

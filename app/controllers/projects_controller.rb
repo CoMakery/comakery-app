@@ -1,9 +1,11 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: %i[new edit create update update_status landing]
   skip_after_action :verify_authorized, only: %i[teams landing]
+
   before_action :assign_current_account
   before_action :assign_project, only: %i[edit admins add_admin remove_admin show update awards]
   before_action :assign_project_by_long_id, only: %i[unlisted]
+  before_action :redirect_for_whitelabel, only: %i[show unlisted]
   before_action :set_projects, only: %i[index]
   before_action :set_award, only: %i[show unlisted]
   before_action :set_tokens, only: %i[new edit]
@@ -346,7 +348,7 @@ class ProjectsController < ApplicationController
   end
 
   def project_props(project)
-    project.as_json(only: %i[id title require_confidentiality display_team]).merge(
+    project.as_json(only: %i[id title require_confidentiality display_team whitelabel]).merge(
       description_html: Comakery::Markdown.to_html(project.description),
       show_contributions: policy(project).show_contributions?,
       square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
@@ -377,6 +379,16 @@ class ProjectsController < ApplicationController
         logo_url: mission.image.present? ? Refile.attachment_url(mission, :logo, :fill, 100, 100) : nil,
         mission_url: mission_path(mission)
       )
+    end
+  end
+
+  def redirect_for_whitelabel
+    if @whitelabel_mission
+      if policy(@project).show_contributions?
+        redirect_to project_dashboard_transfers_path(@project)
+      else
+        redirect_to project_award_types_path(@project)
+      end
     end
   end
 end
