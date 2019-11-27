@@ -168,9 +168,13 @@ class AwardsController < ApplicationController
       uid: send_award_params[:uid],
       email: send_award_params[:email]
     )
+
     if result.success?
+      @award = result.award
+
       TaskMailer.with(award: @award).task_accepted_direct.deliver_now
       @award.send_award_notifications
+
       if @award.account&.decorate&.can_receive_awards?(@project)
         session[:last_award_id] = @award.id
         @award.account&.update new_award_notice: true
