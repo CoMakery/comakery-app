@@ -161,49 +161,49 @@ class Account < ApplicationRecord
     project.awards.completed.where(account: self).sum(:total_amount)
   end
 
-  def other_member_projects(scope = Project)
-    scope.joins("
+  def other_member_projects(scope = nil)
+    (scope || Project).joins("
       left join award_types at1 on at1.project_id=projects.id
       left join awards a1 on a1.award_type_id=at1.id
       left join channels on channels.project_id=projects.id
       left join teams on teams.id=channels.team_id
       left join authentication_teams on authentication_teams.team_id=teams.id")
-         .where("((authentication_teams.account_id=#{id} and channels.id is not null) or a1.account_id=#{id}) and projects.account_id <> #{id}").distinct
+                      .where("((authentication_teams.account_id=#{id} and channels.id is not null) or a1.account_id=#{id}) and projects.account_id <> #{id}").distinct
   end
 
-  def my_projects(scope = Project)
-    scope.left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
+  def my_projects(scope = nil)
+    (scope || Project).left_outer_joins(:admins).distinct.where('projects.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
-  def accessable_projects(scope = Project)
-    scope.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+  def accessable_projects(scope = nil)
+    (scope || Project).left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
-  def related_projects
-    Project.left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+  def related_projects(scope = nil)
+    (scope || Project).left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
-  def accessable_award_types
-    AwardType.where(project: accessable_projects)
+  def accessable_award_types(project_scope = nil)
+    AwardType.where(project: accessable_projects(project_scope))
   end
 
-  def related_award_types
-    AwardType.where(project: related_projects)
+  def related_award_types(project_scope = nil)
+    AwardType.where(project: related_projects(project_scope))
   end
 
-  def awards_matching_experience
+  def awards_matching_experience(project_scope = nil)
     Award.ready
-         .where(award_type: accessable_award_types)
+         .where(award_type: accessable_award_types(project_scope))
          .where('awards.experience_level <= (CASE WHEN (SELECT MAX(id) FROM experiences WHERE (experiences.account_id = :id AND experiences.specialty_id = awards.specialty_id)) IS NULL THEN 0 ELSE (SELECT level FROM experiences WHERE (experiences.account_id = :id AND experiences.specialty_id = awards.specialty_id) LIMIT 1) END)', id: id)
          .where('awards.number_of_assignments_per_user > (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
   end
 
-  def related_awards
-    Award.where(award_type: related_award_types).where.not('awards.status = 0 AND awards.number_of_assignments_per_user <= (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
+  def related_awards(project_scope = nil)
+    Award.where(award_type: related_award_types(project_scope)).where.not('awards.status = 0 AND awards.number_of_assignments_per_user <= (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
   end
 
-  def accessable_awards
-    awards_matching_experience.or(related_awards)
+  def accessable_awards(project_scope = nil)
+    awards_matching_experience(project_scope).or(related_awards(project_scope))
   end
 
   def experience_for(specialty)
