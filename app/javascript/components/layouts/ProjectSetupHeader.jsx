@@ -131,7 +131,7 @@ class ProjectSetupHeader extends React.Component {
     return (
       <Wrapper backgroundImageUrl={project && project.imageUrl} expanded={this.props.expanded}>
         <Navigation>
-          {mission &&
+          {mission && !project.whitelabel &&
             <MissionNav>
               <NavLink href={mission.url}>
                 ← {mission.name}
@@ -141,9 +141,11 @@ class ProjectSetupHeader extends React.Component {
 
           {project && project.title &&
             <ProjectNav>
-              <NavLink current={current === 'overview'} href={project.landingUrl}>
-                overview
-              </NavLink>
+              {!project.whitelabel &&
+                <NavLink current={current === 'overview'} href={project.landingUrl}>
+                  overview
+                </NavLink>
+              }
 
               {owner &&
                 <NavLink current={current === 'form'} href={project.settingsUrl}>

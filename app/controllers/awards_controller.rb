@@ -27,6 +27,7 @@ class AwardsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
   skip_before_action :require_login, only: %i[confirm]
   skip_after_action :verify_authorized, only: %i[confirm]
+  skip_after_action :verify_policy_scoped, only: %(index)
   before_action :redirect_back, only: %i[index]
   before_action :create_interest_from_session, only: %i[index]
 
@@ -168,9 +169,13 @@ class AwardsController < ApplicationController
       uid: send_award_params[:uid],
       email: send_award_params[:email]
     )
+
     if result.success?
+      @award = result.award
+
       TaskMailer.with(award: @award).task_accepted_direct.deliver_now
       @award.send_award_notifications
+
       if @award.account&.decorate&.can_receive_awards?(@project)
         session[:last_award_id] = @award.id
         @award.account&.update new_award_notice: true
@@ -300,11 +305,11 @@ class AwardsController < ApplicationController
     end
 
     def run_award_expiration
-      policy_scope(Award).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
+      current_account.accessable_awards(@project_scope).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
     end
 
     def set_awards
-      @awards = policy_scope(Award).includes(:specialty, :issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
+      @awards = current_account.accessable_awards(@project_scope).includes(:specialty, :issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
 
       if @project
         @awards = @awards.where(award_type: AwardType.where(project: @project))
@@ -360,7 +365,7 @@ class AwardsController < ApplicationController
           {
             name: filter,
             current: filter == @filter,
-            count: policy_scope(Award).filtered_for_view(filter, current_account).size,
+            count: current_account.accessable_awards(@project_scope).filtered_for_view(filter, current_account).size,
             url: my_tasks_path(filter: filter)
           }
         end,

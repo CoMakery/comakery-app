@@ -74,6 +74,14 @@ RSpec.describe AwardsController, type: :controller do
       get :index
       expect(response).to redirect_to(new_session_url)
     end
+
+    it 'doesnt include whitelabel tasks' do
+      whitelabel_task = create(:award_ready, account: issuer.account)
+      whitelabel_task.project.mission.update(whitelabel: true)
+
+      get :index
+      expect(assigns[:awards]).not_to include(whitelabel_task)
+    end
   end
 
   describe '#create' do

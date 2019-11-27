@@ -113,6 +113,7 @@ class ProjectDecorator < Draper::Decorator
       show_batches: award_types.where.not(state: :draft).any?,
       show_transfers: !require_confidentiality?,
       supports_transfer_rules: supports_transfer_rules?,
+      whitelabel: whitelabel,
       present: true
     }
   end

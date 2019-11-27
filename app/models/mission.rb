@@ -20,6 +20,8 @@ class Mission < ApplicationRecord
   enum status: %i[active passive]
 
   after_create :assign_display_order
+  after_save :set_whitelabel_for_projects
+
   validates :name, :subtitle, :description, :logo, :image, presence: true
   validates :name, length: { maximum: 100 }
   validates :subtitle, length: { maximum: 140 }
@@ -47,5 +49,9 @@ class Mission < ApplicationRecord
   def assign_display_order
     self.display_order = id
     save
+  end
+
+  def set_whitelabel_for_projects
+    projects.update(whitelabel: whitelabel)
   end
 end
