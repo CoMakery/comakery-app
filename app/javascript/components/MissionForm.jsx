@@ -23,11 +23,15 @@ export default class MissionForm extends React.Component {
     this.handleSaveMission = this.handleSaveMission.bind(this)
     this.verifyImageRes = this.verifyImageRes.bind(this)
     this.verifyLogoRes = this.verifyLogoRes.bind(this)
+    this.verifyWhitelableLogoRes = this.verifyWhitelableLogoRes.bind(this)
+    this.verifyWhitelableLogoDarkRes = this.verifyWhitelableLogoDarkRes.bind(this)
+    this.verifyWhitelabelFaviconRes = this.verifyWhitelabelFaviconRes.bind(this)
 
     this.imageInputRef = React.createRef()
     this.logoInputRef = React.createRef()
     this.whitelabelLogoInputRef = React.createRef()
     this.whitelabelLogoDarkInputRef = React.createRef()
+    this.whitelabelFaviconInputRef = React.createRef()
 
     this.state = {
       errors                   : {}, // error hash for account form
@@ -47,8 +51,10 @@ export default class MissionForm extends React.Component {
       imagePreview             : props.mission.imageUrl,
       whitelabelLogo           : null,
       whitelabelLogoDark       : null,
+      whitelabelFavicon        : null,
       whitelabelLogoPreview    : props.mission.whitelabelLogoUrl,
-      whitelabelLogoDarkPreview: props.mission.whitelabelLogoDarkUrl
+      whitelabelLogoDarkPreview: props.mission.whitelabelLogoDarkUrl,
+      whitelabelFaviconPreview : props.mission.whitelabelFaviconUrl,
     }
     this.mounted = false
   }
@@ -98,7 +104,7 @@ export default class MissionForm extends React.Component {
     }
 
     let formData = new FormData()
-    const {name, subtitle, description, whitelabel, whitelabelDomain, logo, image, whitelabelLogo, whitelabelLogoDark} = this.state
+    const {name, subtitle, description, whitelabel, whitelabelDomain, logo, image, whitelabelLogo, whitelabelLogoDark, whitelabelFavicon} = this.state
     formData.append('mission[name]', name)
     formData.append('mission[subtitle]', subtitle)
     formData.append('mission[description]', description)
@@ -113,6 +119,9 @@ export default class MissionForm extends React.Component {
     }
     if (whitelabelLogoDark) {
       formData.append('mission[whitelabel_logo_dark]', whitelabelLogoDark)
+    }
+    if (whitelabelFavicon) {
+      formData.append('mission[whitelabel_favicon]', whitelabelFavicon)
     }
     if (image) {
       formData.append('mission[image]', image)
@@ -194,6 +203,15 @@ export default class MissionForm extends React.Component {
     }
   }
 
+  verifyWhitelabelFaviconRes(img) {
+    if ((img.naturalWidth < 64) || (img.naturalHeight < 64) || (img.naturalWidth / img.naturalHeight !== 1)) {
+      this.logoInputRef.current.value = ''
+      this.errorAdd('whitelabelFavicon', 'invalid resolution')
+    } else {
+      this.errorRemove('whitelabelFavicon')
+    }
+  }
+
   errorAdd(n, e) {
     this.setState({
       errors: Object.assign({}, this.state.errors, {[n]: e})
@@ -229,7 +247,7 @@ export default class MissionForm extends React.Component {
   }
 
   render() {
-    const {name, subtitle, description, whitelabel, whitelabelDomain, logoPreview, imagePreview, whitelabelLogoPreview, whitelabelLogoDarkPreview, errors} = this.state
+    const {name, subtitle, description, whitelabel, whitelabelDomain, logoPreview, imagePreview, whitelabelLogoPreview, whitelabelLogoDarkPreview, whitelabelFaviconPreview, errors} = this.state
 
     return <React.Fragment>
       <Layout
@@ -348,6 +366,18 @@ export default class MissionForm extends React.Component {
             imgInputRef={this.whitelabelLogoDarkInputRef}
             eventHandler={this.handleChangeFormData}
             errorText={errors.whitelabelLogoDark}
+          />
+
+          <InputFieldUploadFile
+            name="whitelabelFavicon"
+            title="Mission Whitelabel Favicon"
+            imgPreviewDimensions="100x100"
+            imgPreviewUrl={whitelabelFaviconPreview}
+            imgRequirements="Image should be at least 64px x 64px"
+            imgVerifier={this.verifyWhitelabelFaviconRes}
+            imgInputRef={this.whitelabelFaviconInputRef}
+            eventHandler={this.handleChangeFormData}
+            errorText={errors.whitelabelFavicon}
           />
         </form>
       </Layout>

@@ -879,6 +879,98 @@ exports[`MissionForm renders correctly without props 1`] = `
                   </div>
                 </InputField>
               </InputFieldUploadFile>
+              <InputFieldUploadFile
+                eventHandler={[Function]}
+                imgInputRef={
+                  Object {
+                    "current": <input
+                      accept="image/*"
+                      class="input-field--content__file"
+                      name="whitelabelFavicon"
+                      type="file"
+                    />,
+                  }
+                }
+                imgPreviewDimensions="100x100"
+                imgRequirements="Image should be at least 64px x 64px"
+                imgVerifier={[Function]}
+                name="whitelabelFavicon"
+                title="Mission Whitelabel Favicon"
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__upload-file"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={
+                    Object {
+                      "current": <input
+                        accept="image/*"
+                        class="input-field--content__file"
+                        name="whitelabelFavicon"
+                        type="file"
+                      />,
+                    }
+                  }
+                  imgPreviewDimensions="100x100"
+                  imgPreviewUrl=""
+                  imgRequirements="Image should be at least 64px x 64px"
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="whitelabelFavicon"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={false}
+                  selectEntries={Array []}
+                  step=""
+                  symbolLimit={0}
+                  title="Mission Whitelabel Favicon"
+                  type="file"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__upload-file"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Mission Whitelabel Favicon
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        optional
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        accept="image/*"
+                        className="input-field--content__file"
+                        name="whitelabelFavicon"
+                        onChange={[Function]}
+                        required={false}
+                        type="file"
+                      />
+                      <span
+                        className="input-field--content__file--requirements"
+                      >
+                        Image should be at least 64px x 64px
+                      </span>
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldUploadFile>
             </form>
           </div>
         </div>

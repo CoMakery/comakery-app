@@ -90,7 +90,8 @@ class MissionsController < ApplicationController
       :whitelabel,
       :whitelabel_domain,
       :whitelabel_logo,
-      :whitelabel_logo_dark
+      :whitelabel_logo_dark,
+      :whitelabel_favicon
     )
   end
 
@@ -160,13 +161,7 @@ class MissionsController < ApplicationController
     projects = @mission.public_projects.order('interests_count DESC').includes(:token, :interested, :award_types, :ready_award_types, :account, admins: [:specialty], contributors_distinct: [:specialty])
 
     @props = {
-      mission: @mission&.serializable_hash&.merge(
-        {
-          logo_url: @mission&.logo&.present? ? Refile.attachment_url(@mission, :logo, :fill, 800, 800) : nil,
-          image_url: @mission&.image&.present? ? Refile.attachment_url(@mission, :image, :fill, 1200, 800) : nil,
-          stats: @mission.stats
-        }
-      ),
+      mission: @mission&.serializable_hash&.merge(mission_images)&.merge(@mission.stats),
       leaders: project_leaders(@mission),
       tokens: project_tokens(@mission),
       new_project_url: new_project_path(mission_id: @mission.id),
@@ -188,16 +183,21 @@ class MissionsController < ApplicationController
 
   def set_form_props
     @props = {
-      mission: @mission&.serializable_hash&.merge(
-        {
-          logo_url: @mission&.logo&.present? ? Refile.attachment_url(@mission, :logo, :fill, 800, 800) : nil,
-          image_url: @mission&.image&.present? ? Refile.attachment_url(@mission, :image, :fill, 1200, 800) : nil
-        }
-      ),
+      mission: @mission&.serializable_hash&.merge(mission_images),
       form_url: missions_path,
       form_action: 'POST',
       url_on_success: missions_path,
       csrf_token: form_authenticity_token
+    }
+  end
+
+  def mission_images
+    {
+      logo_url: Refile.attachment_url(@mission, :logo, :fill, 800, 800),
+      image_url: Refile.attachment_url(@mission, :image, :fill, 1200, 800),
+      whitelabel_logo_url: @mission&.whitelabel_logo&.present? ? Refile.attachment_url(@mission, :whitelabel_logo, :fill, 1000, 200) : nil,
+      whitelabel_logo_dark_url: @mission&.whitelabel_logo_dark&.present? ? Refile.attachment_url(@mission, :whitelabel_logo_dark, :fill, 1000, 200) : nil,
+      whitelabel_favicon_url: @mission&.whitelabel_favicon&.present? ? Refile.attachment_url(@mission, :whitelabel_favicon, :fill, 64, 64) : nil
     }
   end
 
