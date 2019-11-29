@@ -5,6 +5,7 @@ class Mission < ApplicationRecord
   attachment :image
   attachment :whitelabel_logo
   attachment :whitelabel_logo_dark
+  attachment :whitelabel_favicon
 
   has_many :projects, inverse_of: :mission
   has_many :unarchived_projects, -> { where.not visibility: :archived }, source: :projects, class_name: 'Project'
