@@ -188,6 +188,7 @@ describe Project do
     describe 'store_license_hash' do
       let!(:project) { create(:project) }
       let!(:project_finalized) { create(:project) }
+      let!(:project_whitelabel) { create(:project, mission: create(:mission, whitelabel: true)) }
 
       before do
         create(:award, award_type: create(:award_type, project: project_finalized))
@@ -202,6 +203,11 @@ describe Project do
       it 'doesnt update the hash if the terms are finalized' do
         project_finalized.save
         expect(project_finalized.reload.agreed_to_license_hash).to eq('test')
+      end
+
+      it 'doesnt update the hash for whitelabel project' do
+        project_whitelabel.save
+        expect(project_whitelabel.reload.agreed_to_license_hash).to be_nil
       end
     end
 

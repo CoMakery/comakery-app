@@ -563,41 +563,46 @@ class ProjectForm extends React.Component {
                 placeholder="Provide a legal entity or individual owner's name"
                 eventHandler={this.handleFieldChange}
               />
-              ("You", the "Project Owner") agree to the <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>
-              <br />
 
-              You agree that for this Project, Contributions are <InputFieldDropdownInline
-                required
-                disabled={this.props.termsReadonly}
-                name="project[exclusive_contributions]"
-                value={this.state['project[exclusive_contributions]']}
-                errorText={this.state.errors['project[exclusiveContributions]']}
-                eventHandler={this.handleFieldChange}
-                selectEntries={Object.entries({
-                  'Exclusive'    : 'true',
-                  'Not Exclusive': 'false'
-                })}
-              />
-              <br />
+              { !this.props.isWhitelabel &&
+                <React.Fragment>
+                  ("You", the "Project Owner") agree to the <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>
+                  <br />
 
-              Project confidentiality and business confidentiality are <InputFieldDropdownInline
-                required
-                disabled={this.props.termsReadonly}
-                name="project[confidentiality]"
-                value={this.state['project[confidentiality]']}
-                errorText={this.state.errors['project[confidentiality]']}
-                eventHandler={this.handleFieldChange}
-                selectEntries={Object.entries({
-                  'Required'    : 'true',
-                  'Not Required': 'false'
-                })}
-              /> and at the time that you indicate a Task is complete you agree to pay the Contributor the Award for the Task.
-              <br />
+                  You agree that for this Project, Contributions are <InputFieldDropdownInline
+                    required
+                    disabled={this.props.termsReadonly}
+                    name="project[exclusive_contributions]"
+                    value={this.state['project[exclusive_contributions]']}
+                    errorText={this.state.errors['project[exclusiveContributions]']}
+                    eventHandler={this.handleFieldChange}
+                    selectEntries={Object.entries({
+                      'Exclusive'    : 'true',
+                      'Not Exclusive': 'false'
+                    })}
+                  />
+                  <br />
 
-              By {this.state.formAction === 'POST' ? 'creating this Project (clicking CREATE & CLOSE or CREATE)' : 'updating this Project (clicking SAVE & CLOSE or SAVE)'}, you agree to these Terms & Conditions.
-              <br />
+                  Project confidentiality and business confidentiality are <InputFieldDropdownInline
+                    required
+                    disabled={this.props.termsReadonly}
+                    name="project[confidentiality]"
+                    value={this.state['project[confidentiality]']}
+                    errorText={this.state.errors['project[confidentiality]']}
+                    eventHandler={this.handleFieldChange}
+                    selectEntries={Object.entries({
+                      'Required'    : 'true',
+                      'Not Required': 'false'
+                    })}
+                  /> and at the time that you indicate a Task is complete you agree to pay the Contributor the Award for the Task.
+                  <br />
 
-              You may modify these Terms & Conditions until the first Project Task has been started by a Contributor.
+                  By {this.state.formAction === 'POST' ? 'creating this Project (clicking CREATE & CLOSE or CREATE)' : 'updating this Project (clicking SAVE & CLOSE or SAVE)'}, you agree to these Terms & Conditions.
+                  <br />
+
+                  You may modify these Terms & Conditions until the first Project Task has been started by a Contributor.
+                </React.Fragment>
+              }
             </div>
 
           </form>
