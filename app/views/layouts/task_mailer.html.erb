@@ -5,16 +5,19 @@
     <hr/>
     <div style="font-size: 14px; opacity: 0.5;">
       <p>
-        You received this email because you signed up or you were sent a notification from a user on CoMakery.com.<br/>
-        If you believe this email is being sent as spam, please contact us immediately at <a href="mailto:support@comakery.com">support@comakery.com</a> and we will address the issue.<br/>
+        You received this email because you signed up or you were sent a notification from a user on <%= @brand_name %>.<br/>
+        If you believe this email is being sent as spam, please contact us immediately at <a href="mailto:<%= @contact_email %>"><%= @contact_email %></a> and we will address the issue.<br/>
       </p>
       <p>
-        If you would no longer like to receive emails from CoMakery, you can <a href="<%= unsubscription_url(email: @to, signature: signature(@to)) %>">unsubscribe following this link</a>.
+        If you would no longer like to receive emails from <%= @brand_name %>, you can <a href="<%= unsubscription_url(email: @to, signature: signature(@to), host: @host) %>">unsubscribe following this link</a>.
       </p>
-      <p>
-        CoMakery, Inc.<br/>
-        San Francisco, California
-      </p>
+
+      <% if !@whitelabel_mission %>
+        <p>
+          CoMakery, Inc.<br/>
+          San Francisco, California
+        </p>
+      <% end %>
     </div>
   </body>
 </html>

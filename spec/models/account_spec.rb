@@ -606,7 +606,7 @@ describe Account do
   end
 
   it 'send send_reset_password_request' do
-    account.send_reset_password_request
+    account.send_reset_password_request(nil)
     expect(account.reset_password_token).not_to be_nil
   end
 

@@ -242,9 +242,9 @@ class Account < ApplicationRecord
     owned_project?(project) || same_team_project?(project) || award_projects.include?(project)
   end
 
-  def send_reset_password_request
+  def send_reset_password_request(whitelabel_mission)
     update reset_password_token: SecureRandom.hex
-    UserMailer.reset_password(self).deliver_now
+    UserMailer.with(whitelabel_mission: whitelabel_mission).reset_password(self).deliver_now
   end
 
   def age

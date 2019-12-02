@@ -8,15 +8,15 @@
 
 <% if @award.token %>
   <p>
-    Click <a href="<%= show_account_url %>">here</a> to see your account balance.
+    Click <a href="<%= show_account_url(host: @host) %>">here</a> to see your account balance.
   </p>
 <% end %>
 
 <p>
   If you ever have any questions, concerns, or compliments, please email us at
-  <a href="mailto:community@comakery.com">community@comakery.com</a>
+  <a href="mailto:<%= @contact_email %>"><%= @contact_email %></a>
 </p>
 
 <p>
-  Congrats from the team at CoMakery. Thank you for being part of the community.
+  Congrats from the team at <%= @brand_name %>. Thank you for being part of the community.
 </p>

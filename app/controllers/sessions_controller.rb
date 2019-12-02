@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
       session[:account_id] = authentication.account_id
     elsif authentication
       redirect_to_the_build_profile_accounts_page(authentication) && return
-      UserMailer.confirm_authentication(authentication).deliver
+      UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_authentication(authentication).deliver
       flash[:error] = 'Please check your email for confirmation instruction'
       @path = my_tasks_path
     else
