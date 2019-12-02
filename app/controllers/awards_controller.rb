@@ -105,7 +105,7 @@ class AwardsController < ApplicationController
     end
 
     if account && @award.update(account: account, issuer: current_account, status: 'ready')
-      TaskMailer.with(award: @award).task_assigned.deliver_now
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_assigned.deliver_now
       redirect_to project_award_types_path(@award.project), notice: 'Task has been assigned'
     else
       redirect_to project_award_types_path(@award.project), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -122,7 +122,7 @@ class AwardsController < ApplicationController
 
   def submit
     if @award.update(submit_params.merge(status: 'submitted'))
-      TaskMailer.with(award: @award).task_submitted.deliver_now
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_submitted.deliver_now
       redirect_to my_tasks_path(filter: 'submitted'), notice: 'Task submitted'
     else
       redirect_to project_award_type_award_path(@project, @award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -131,7 +131,7 @@ class AwardsController < ApplicationController
 
   def accept
     if @award.update(status: 'accepted')
-      TaskMailer.with(award: @award).task_accepted.deliver_now
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_accepted.deliver_now
       redirect_to my_tasks_path(filter: 'to pay'), notice: 'Task accepted'
     else
       redirect_to my_tasks_path(filter: 'to review'), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -140,7 +140,7 @@ class AwardsController < ApplicationController
 
   def reject
     if @award.update(status: 'rejected')
-      TaskMailer.with(award: @award).task_rejected.deliver_now
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_rejected.deliver_now
       redirect_to my_tasks_path(filter: 'done'), notice: 'Task rejected'
     else
       redirect_to my_tasks_path(filter: 'to review'), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -173,7 +173,7 @@ class AwardsController < ApplicationController
     if result.success?
       @award = result.award
 
-      TaskMailer.with(award: @award).task_accepted_direct.deliver_now
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_accepted_direct.deliver_now
       @award.send_award_notifications
 
       if @award.account&.decorate&.can_receive_awards?(@project)
@@ -191,7 +191,7 @@ class AwardsController < ApplicationController
   def update_transaction_address
     if params[:tx]
       @award.handle_tx_hash(params[:tx], current_account)
-      TaskMailer.with(award: @award).task_paid.deliver_now
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_paid.deliver_now
     elsif params[:receipt]
       @award.handle_tx_receipt(params[:receipt])
     elsif params[:error]

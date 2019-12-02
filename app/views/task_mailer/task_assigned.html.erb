@@ -7,20 +7,20 @@
 </p>
 
 <p>
-  <a href="<%= project_award_type_award_url(@award.project, @award.award_type, @award) %>">Visit this link</a>
+  <a href="<%= project_award_type_award_url(@award.project, @award.award_type, @award, host: @host) %>">Visit this link</a>
   to accept their invitation to work on the task.
 </p>
 
 <p>
-  Thank you for being part of the CoMakery community!
+  Thank you for being part of the <%= @brand_name %> community!
   Good luck.
 </p>
 
 <p>
   If you ever have any questions, concerns, or compliments, please email us at
-  <a href="mailto:community@comakery.com">community@comakery.com</a>
+  <a href="mailto:<%= @contact_email %>"><%= @contact_email %></a>
 </p>
 
 <p>
-  Team CoMakery
+  Team <%= @brand_name %>
 </p>

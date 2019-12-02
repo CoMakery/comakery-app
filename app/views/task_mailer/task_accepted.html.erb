@@ -19,15 +19,15 @@
   <p>
     <b>To take ownership of the payment, you will have to register a wallet on your account.</b>
     You need to enter your payment information to receive payment.
-    Click <a href="<%= show_account_url %>">here</a>
-    to enter your <%= @award.token.coin_type %> wallet address in your CoMakery account.
+    Click <a href="<%= show_account_url(host: @host) %>">here</a>
+    to enter your <%= @award.token.coin_type %> wallet address in your <%= @brand_name %> account.
   </p>
 <% else %>
   <p>
-    Click <a href="<%= my_tasks_url %>">here</a> to see what tasks are ready for you to work on now.
+    Click <a href="<%= my_tasks_url(host: @host) %>">here</a> to see what tasks are ready for you to work on now.
   </p>
 <% end %>
 
 <p>
-  Team CoMakery
+  Team <%= @brand_name %>
 </p>

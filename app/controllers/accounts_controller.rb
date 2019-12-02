@@ -51,7 +51,7 @@ class AccountsController < ApplicationController
     end
     if @account.save
       session[:account_id] = @account.id
-      UserMailer.confirm_email(@account).deliver
+      UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
       redirect_to build_profile_accounts_path
     else
       @account.agreed_to_user_agreement = params[:account][:agreed_to_user_agreement]
@@ -172,7 +172,7 @@ class AccountsController < ApplicationController
 
   def check_date(old_age)
     if @current_account.age >= 18
-      UserMailer.underage_alert(@current_account, old_age).deliver_now
+      UserMailer.with(whitelabel_mission: @whitelabel_mission).underage_alert(@current_account, old_age).deliver_now
     end
   end
 

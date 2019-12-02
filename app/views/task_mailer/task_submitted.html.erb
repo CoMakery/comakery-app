@@ -7,14 +7,14 @@
 </p>
 
 <p>
-  <a href="<%= project_award_type_award_url(@award.project, @award.award_type, @award) %>">Visit this link</a>
+  <a href="<%= project_award_type_award_url(@award.project, @award.award_type, @award, host: @host) %>">Visit this link</a>
   to accept or reject the submitted work.
 </p>
 
 <p>
-  Thank you for using CoMakery!
+  Thank you for using <%= @brand_name %>!
 </p>
 
 <p>
-  Team CoMakery
+  Team <%= @brand_name %>
 </p>

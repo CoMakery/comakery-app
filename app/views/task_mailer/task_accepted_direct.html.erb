@@ -18,31 +18,31 @@
   <p>
     <b>To take ownership of the payment, you will have to register a wallet on your account.</b>
     You need to enter your payment information to receive payment.
-    Click <a href="<%= show_account_url %>">here</a>
-    to enter your <%= @award.token.coin_type %> wallet address in your CoMakery account.
+    Click <a href="<%= show_account_url(host: @host) %>">here</a>
+    to enter your <%= @award.token.coin_type %> wallet address in your <%= @brand_name %> account.
   </p>
 <% end %>
 
 <% if !@account %>
   <p>
-    To claim your award, you will need to sign up on CoMakery
-    <a href="<%= new_account_url(account_email: @award.email) %>">here</a>.
+    To claim your award, you will need to sign up on <%= @brand_name %>
+    <a href="<%= new_account_url(account_email: @award.email, host: @host) %>">here</a>.
   </p>
 
   <% if @award.token %>
     <p>
       <b>Once registered to take ownership of the payment, you will have to register a wallet on your account.</b>
-      Click <a href="<%= show_account_url %>">here</a>
-      to enter your <%= @award.token.coin_type %> wallet address in your CoMakery account.
+      Click <a href="<%= show_account_url(host: @host) %>">here</a>
+      to enter your <%= @award.token.coin_type %> wallet address in your <%= @brand_name %> account.
     </p>
   <% end %>
 <% end %>
 
 <p>
   If you ever have any questions, concerns, or compliments, please email us at
-  <a href="mailto:community@comakery.com">community@comakery.com</a>
+  <a href="mailto:<%= @contact_email %>"><%= @contact_email %></a>
 </p>
 
 <p>
-  Congrats from the team at CoMakery. Thank you for being part of the community.
+  Congrats from the team at <%= @brand_name %>. Thank you for being part of the community.
 </p>
