@@ -41,11 +41,9 @@ const navContent = (isLoggedIn, isAdmin, isWhitelabel, currentPath) => {
           Sign In
         </a>
 
-        { !isWhitelabel &&
-          <a href="/accounts/new" className={currentPath.match(/accounts\/new/) ? 'header--nav--links--current header--nav--links--sign' : null} >
-            Sign Up
-          </a>
-        }
+        <a href="/accounts/new" className={currentPath.match(/accounts\/new/) ? 'header--nav--links--current header--nav--links--sign' : null} >
+          Sign Up
+        </a>
       </div>
     }
 

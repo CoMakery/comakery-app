@@ -4,7 +4,7 @@ class Views::Sessions::New < Views::Base
 
   def content
     row do
-      column(%i[small-12 medium-8 large-6], class: 'large-centered', style: 'min-width: 543px') do
+      column(%i[small-12 medium-8 large-6], class: 'large-centered') do
         if whitelabel_mission
           h1("Sign In To #{whitelabel_mission.name} Platform", style: 'text-align: center')
         else

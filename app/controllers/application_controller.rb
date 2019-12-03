@@ -102,7 +102,7 @@ class ApplicationController < ActionController::Base
 
   def require_email_confirmation
     if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
-      redirect_to root_path, flash: { warning: 'Please confirm your email address to continue' }
+      redirect_to show_account_path, flash: { warning: 'Please confirm your email address to continue' }
     end
   end
 
