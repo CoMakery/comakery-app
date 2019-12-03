@@ -11,8 +11,7 @@ class Views::Accounts::New < Views::Base
             column('large-12') do
               with_errors(account, :email) do
                 label do
-                  text 'E-mail: *'
-                  f.email_field :email
+                  f.text_field :email, tabindex: 1, type: 'email', placeholder: 'Email'
                 end
               end
             end
@@ -20,8 +19,7 @@ class Views::Accounts::New < Views::Base
             column('large-12') do
               with_errors(account, :password) do
                 label do
-                  text 'Password: *'
-                  f.password_field :password
+                  f.password_field :password, tabindex: 2, placeholder: 'Password'
                 end
               end
             end

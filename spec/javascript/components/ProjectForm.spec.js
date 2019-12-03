@@ -145,7 +145,7 @@ describe('ProjectForm', () => {
       ['Logged in team member via unlisted URL', 'member_unlisted'],
       ['Logged in team members', 'member'],
       ['Archived (visible only to me)', 'archived'],
-      ['Publicly listed in CoMakery searches', 'public_listed'],
+      ['Public', 'public_listed'],
       ['Unlisted URL (no login required)', 'public_unlisted']
     ])
   })

@@ -45,7 +45,7 @@ class ProjectForm extends React.Component {
           visibilitiesPretty['Logged in team members'] = v
           break
         case 'public_listed':
-          visibilitiesPretty['Publicly listed in CoMakery searches'] = v
+          visibilitiesPretty.Public = v
           break
         case 'member_unlisted':
           visibilitiesPretty['Logged in team member via unlisted URL'] = v
