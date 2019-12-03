@@ -291,7 +291,7 @@ describe ProjectsController do
         login account1
         get :new
         expect(response.status).to eq(302)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(show_account_url)
       end
     end
 

@@ -166,7 +166,16 @@ class AccountsController < ApplicationController
 
   def account_params
     result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :cardano_wallet, :bitcoin_wallet, :eos_wallet, :tezos_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password, :specialty_id, :occupation, :linkedin_url, :github_url, :dribble_url, :behance_url)
-    result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y') if result[:date_of_birth].present?
+
+    if result[:date_of_birth].present?
+      begin
+        result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y')
+      rescue StandardError => e
+        Rails.logger.error(e)
+        result[:date_of_birth] = nil
+      end
+    end
+
     result
   end
 
