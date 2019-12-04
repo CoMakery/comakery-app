@@ -55,7 +55,8 @@ class Account < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
-  validates :first_name, :last_name, :country, :date_of_birth, :specialty, presence: true, if: :name_required
+  validates :first_name, :last_name, :country, :specialty, presence: true, if: :name_required
+  validates :date_of_birth, presence: { message: 'should be present in correct format (MM/DD/YYYY)' }, if: :name_required
   validates :nickname, uniqueness: true, if: -> { nickname.present? }
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
