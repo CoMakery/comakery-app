@@ -21,8 +21,8 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def set_contact_email
-    @contact_email = if @whitelabel_mission
-      "community@#{@whitelabel_mission.whitelabel_domain}"
+    @contact_email = if @whitelabel_mission&.whitelabel_contact_email
+      @whitelabel_mission.whitelabel_contact_email
     else
       'community@comakery.com'
     end
@@ -37,8 +37,8 @@ class ApplicationMailer < ActionMailer::Base
   end
 
   def set_from
-    @from = if @whitelabel_mission
-      "info@#{@whitelabel_mission.whitelabel_domain}"
+    @from = if @whitelabel_mission&.whitelabel_contact_email
+      @whitelabel_mission.whitelabel_contact_email
     else
       'CoMakery@comakery.com'
     end

@@ -38,10 +38,12 @@
   <% end %>
 <% end %>
 
-<p>
-  If you ever have any questions, concerns, or compliments, please email us at
-  <a href="mailto:<%= @contact_email %>"><%= @contact_email %></a>
-</p>
+<% unless @whitelabel_mission %>
+  <p>
+    If you ever have any questions, concerns, or compliments, please email us at
+    <a href="mailto:<%= @contact_email %>"><%= @contact_email %></a>
+  </p>
+<% end %>
 
 <p>
   Congrats from the team at <%= @brand_name %>. Thank you for being part of the community.
