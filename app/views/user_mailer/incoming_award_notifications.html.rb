@@ -14,12 +14,16 @@ class Views::UserMailer::IncomingAwardNotifications < Views::Base
           text ' to see your account balance.'
         end
       end
-      p do
-        text 'We always knew you had it in you. Look at those tokens adding up!'
+
+      if brand_name == 'CoMakery'
+        p do
+          text 'We always knew you had it in you. Look at those tokens adding up!'
+        end
+        p do
+          text "If you ever have any questions, concerns, or compliments, please email us directly at #{@contact_email}"
+        end
       end
-      p do
-        text "If you ever have any questions, concerns, or compliments, please email us directly at #{@contact_email}"
-      end
+
       p do
         text "Congrats from the team at #{@brand_name}. Thank you for being a part of the community!"
       end

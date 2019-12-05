@@ -43,12 +43,14 @@ class AccountsController < ApplicationController
     @account.email_confirm_token = SecureRandom.hex
     @account.password_required = true
     @account.name_required = false
-    @account.agreement_required = true
+    @account.agreement_required = @whitelabel_mission ? false : true
+
     @account.agreed_to_user_agreement = if params[:account][:agreed_to_user_agreement] == '0'
       nil
     else
       Date.current
     end
+
     if @account.save
       session[:account_id] = @account.id
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
@@ -121,6 +123,10 @@ class AccountsController < ApplicationController
     authorize @current_account
     respond_to do |format|
       if @current_account.update(account_params.merge(name_required: true))
+        if @current_account.email_confirm_token
+          UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@current_account).deliver
+        end
+
         check_date(old_age) if old_age < 18
         format.html { redirect_to account_url, notice: 'Your account details have been updated.' }
         format.json do

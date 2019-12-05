@@ -52,12 +52,12 @@ describe 'my account', js: true do
   scenario 'user gets redirected to build profile page after signup' do
     visit root_path
     first('.header--nav--links').click_link 'Sign Up'
-    click_on 'CREATE YOUR ACCOUNT'
+    click_on 'Create Your Account'
     expect(page).to have_content("can't be blank", count: 1)
     fill_in 'account[email]', with: 'test@test.st'
     fill_in 'Password', with: '12345678'
     page.check('account_agreed_to_user_agreement')
-    click_on 'CREATE YOUR ACCOUNT'
+    click_on 'Create Your Account'
     expect(page).to have_content('Build Your Profile')
   end
 
