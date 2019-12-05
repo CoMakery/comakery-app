@@ -288,7 +288,6 @@ class Account < ApplicationRecord
     if saved_change_to_email?
       # rubocop:disable SkipsModelValidations
       update_column :email_confirm_token, SecureRandom.hex
-      UserMailer.confirm_email(self).deliver
     end
   end
 end

@@ -15,9 +15,9 @@ class ApplicationController < ActionController::Base
 
   # require account logins for all pages by default
   # (public pages use skip_before_action :require_login)
+  before_action :set_whitelabel_mission
   before_action :require_login, :require_email_confirmation, :check_age, :require_build_profile
   before_action :basic_auth
-  before_action :set_whitelabel_mission
   before_action :set_project_scope
 
   def basic_auth
