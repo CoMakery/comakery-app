@@ -19,11 +19,10 @@ export default class extends Controller {
 
   showForm() {
     this.formTarget.style.display = 'flex'
-    this.formTarget.scrollIntoView(false)
     this.createTarget.disabled = true
 
     this.transfers.forEach((transfer) => {
-      transfer.style.opacity = 0.3
+      transfer.style.opacity = 0.9
       transfer.style.pointerEvents = 'none'
     })
   }

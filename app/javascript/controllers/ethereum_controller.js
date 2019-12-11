@@ -42,7 +42,7 @@ export default class extends Controller {
 
   _markButtonAsPaid() {
     this.buttonTarget.parentElement.classList.add('in-progress--metamask__paid')
-    this.buttonTarget.getElementsByTagName('span')[0].textContent = 'syncing'
+    this.buttonTarget.getElementsByTagName('span')[0].textContent = 'sync'
   }
 
   _sendTransaction(to, value, data) {
@@ -126,7 +126,7 @@ export default class extends Controller {
   // https://gist.github.com/rekmarks/d318677c8fc89e5f7a2f526e00a0768a
   async _startDapp() {
     if (typeof window.ethereum === 'undefined') {
-      this._showError('You need a Dapp browser to proceed with the payment. Consider installing MetaMask.')
+      this._showError('You need a Dapp browser to proceed with the transaction. Consider installing MetaMask.')
       this._enableButton()
     } else {
       await window.ethereum.enable()
