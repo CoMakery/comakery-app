@@ -41,7 +41,7 @@ window.transferAward = function(award) { // award in JSON
 }
 
 $(() =>
-  $(document).on('click', '.transfer-tokens-btn', function() {
+  $(document).on('click', '.transfer-tokens-btn:not(.transfer-tokens-btn-skip-legacy)', function() {
     const award = JSON.parse($(this).attr('data-info'))
     transferAward(award)
   })

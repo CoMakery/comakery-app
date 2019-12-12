@@ -63,6 +63,7 @@ class ProjectPolicy < ApplicationPolicy
   alias create_transfer? edit?
   alias transfers? show_contributions?
   alias accounts? show_contributions?
+  alias edit_accounts? edit?
   alias edit_reg_groups? edit?
   alias edit_transfer_rules? edit?
 
