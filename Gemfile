@@ -122,4 +122,4 @@ gem 'barnes', '~> 0.0.7'
 
 gem 'bootsnap', '~> 1.4'
 
-gem "sentry-raven", "~> 2.12"
+gem 'sentry-raven', '~> 2.12'
