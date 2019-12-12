@@ -11,8 +11,7 @@ module Blockchain
 
         @contract = Comakery::Web3.new(@token.ethereum_network).contract(@token.ethereum_contract_address, @token.abi)
 
-        sync
-        save
+        save if sync
       end
 
       def sync; end
