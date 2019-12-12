@@ -535,6 +535,8 @@ GEM
       rubyzip (>= 1.2.2)
     sendgrid-ruby (6.0.0)
       ruby_http_client (~> 3.3.0)
+    sentry-raven (2.12.3)
+      faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
     shoulda-matchers (4.1.2)
       activesupport (>= 4.2.0)
@@ -702,6 +704,7 @@ DEPENDENCIES
   sdoc
   selenium-webdriver
   sendgrid-ruby
+  sentry-raven (~> 2.12)
   shoulda-matchers
   sidekiq
   sidekiq-failures
