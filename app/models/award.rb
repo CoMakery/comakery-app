@@ -95,7 +95,7 @@ class Award < ApplicationRecord
   }
 
   enum status: %i[ready started submitted accepted rejected paid cancelled unpublished]
-  enum source: %i[earned bought]
+  enum source: %i[earned bought mint burn]
 
   def self.total_awarded
     completed.sum(:total_amount)

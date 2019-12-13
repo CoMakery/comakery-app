@@ -160,20 +160,63 @@ describe AwardDecorator do
     end
   end
 
+  describe 'transfer_button_text' do
+    let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :erc20)))) }
+    let!(:mint_award) { create(:award, status: :accepted, source: :mint, award_type: create(:award_type, project: create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :erc20)))) }
+    let!(:burn_award) { create(:award, status: :accepted, source: :burn, award_type: create(:award_type, project: create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :erc20)))) }
+
+    it 'returns text based on award source' do
+      expect(eth_award.decorate.transfer_button_text).to eq('Pay')
+      expect(mint_award.decorate.transfer_button_text).to eq('Mint')
+      expect(burn_award.decorate.transfer_button_text).to eq('Burn')
+    end
+  end
+
   describe 'pay_data' do
     let!(:eth_award) { create(:award, status: :accepted, award_type: create(:award_type, project: create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :erc20)))) }
+    let!(:mint_award) { create(:award, status: :accepted, source: :mint, award_type: create(:award_type, project: create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :erc20)))) }
+    let!(:burn_award) { create(:award, status: :accepted, source: :burn, award_type: create(:award_type, project: create(:project, token: create(:token, ethereum_contract_address: '0x8023214bf21b1467be550d9b889eca672355c005', coin_type: :erc20)))) }
     let!(:other_award) { create(:award) }
 
-    it 'returns data for ethereum_controller.js' do
+    it 'returns payment data for ethereum_controller.js' do
       data = eth_award.decorate.pay_data
-      expect(data['controller']).not_to be_nil
-      expect(data['target']).not_to be_nil
-      expect(data['action']).not_to be_nil
-      expect(data['ethereum-payment-type']).not_to be_nil
-      expect(data['ethereum-amount']).not_to be_nil
-      expect(data['ethereum-contract-address']).not_to be_nil
-      expect(data['ethereum-contract-abi']).not_to be_nil
-      expect(data['ethereum-update-transaction-path']).not_to be_nil
+      expect(data['controller']).to eq('ethereum')
+      expect(data['target']).to eq('ethereum.button')
+      expect(data['action']).to eq('click->ethereum#pay')
+      expect(data['ethereum-payment-type']).to eq(eth_award.token.coin_type)
+      expect(data['ethereum-address']).to eq(eth_award.account.ethereum_wallet)
+      expect(data['ethereum-amount']).to eq(eth_award.decorate.total_amount_wei)
+      expect(data['ethereum-contract-address']).to eq(eth_award.project.token&.ethereum_contract_address)
+      expect(data['ethereum-contract-abi']).to eq(eth_award.project.token&.abi&.to_json)
+      expect(data['ethereum-update-transaction-path']).to include(eth_award.id.to_s)
+      expect(data['info']).not_to be_nil
+    end
+
+    it 'returns mint data for comakery-security-token_controller.js' do
+      data = mint_award.decorate.pay_data
+      expect(data['controller']).to eq('comakery-security-token')
+      expect(data['target']).to eq('comakery-security-token.button')
+      expect(data['action']).to eq('click->comakery-security-token#mint')
+      expect(data['comakery-security-token-payment-type']).to eq(mint_award.token.coin_type)
+      expect(data['comakery-security-token-address']).to eq(mint_award.account.ethereum_wallet)
+      expect(data['comakery-security-token-amount']).to eq(mint_award.decorate.total_amount_wei)
+      expect(data['comakery-security-token-contract-address']).to eq(mint_award.project.token&.ethereum_contract_address)
+      expect(data['comakery-security-token-contract-abi']).to eq(mint_award.project.token&.abi&.to_json)
+      expect(data['comakery-security-token-update-transaction-path']).to include(mint_award.id.to_s)
+      expect(data['info']).not_to be_nil
+    end
+
+    it 'returns burn data for comakery-security-token_controller.js' do
+      data = burn_award.decorate.pay_data
+      expect(data['controller']).to eq('comakery-security-token')
+      expect(data['target']).to eq('comakery-security-token.button')
+      expect(data['action']).to eq('click->comakery-security-token#burn')
+      expect(data['comakery-security-token-payment-type']).to eq(burn_award.token.coin_type)
+      expect(data['comakery-security-token-address']).to eq(burn_award.account.ethereum_wallet)
+      expect(data['comakery-security-token-amount']).to eq(burn_award.decorate.total_amount_wei)
+      expect(data['comakery-security-token-contract-address']).to eq(burn_award.project.token&.ethereum_contract_address)
+      expect(data['comakery-security-token-contract-abi']).to eq(burn_award.project.token&.abi&.to_json)
+      expect(data['comakery-security-token-update-transaction-path']).to include(burn_award.id.to_s)
       expect(data['info']).not_to be_nil
     end
 
