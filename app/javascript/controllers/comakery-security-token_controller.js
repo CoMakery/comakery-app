@@ -96,7 +96,7 @@ export default class extends EthereumController {
   }
 
   get addressFrozen() {
-    return this.data.get('addressFrozen')
+    return this.data.get('addressFrozen') === 'true'
   }
 
   get ruleFromGroupId() {

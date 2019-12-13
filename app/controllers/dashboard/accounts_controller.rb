@@ -18,7 +18,7 @@ class Dashboard::AccountsController < ApplicationController
 
     if @account.update(account_params)
       Blockchain::ComakerySecurityToken::AccountSyncJob.perform_later(@account)
-      redirect_to project_dashboard_accounts_path(@project, page: @page), notice: 'Account udpated'
+      redirect_to project_dashboard_accounts_path(@project, page: @page), notice: 'Account updated'
     else
       redirect_to project_dashboard_accounts_path(@project, page: @page), flash: { error: @account.errors.full_messages.join(', ') }
     end

@@ -13,6 +13,18 @@
       </div>
     </div>
 
+  <% elsif request.params[:q] && request.params[:q][:account_id_eq] %>
+
+    <div class="transfers-filters--filter">
+      <h3>account id</h3>
+
+      <div class="transfers-filters--filter--options">
+        <div class="transfers-filters--filter--options__active">
+          #<%= request.params[:q][:account_id_eq] %>
+        </div>
+      </div>
+    </div>
+
   <% else %>
 
     <div class="transfers-filters--filter">

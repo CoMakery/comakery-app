@@ -19,7 +19,7 @@ class AccountsController < ApplicationController
     @projects_count = @projects.total_count
     @awards_count = @awards.total_count
 
-    @projects = @projects.map { |project| project_decorate(project) }
+    @projects = @projects.map { |project| project_decorate(project, nil) }
     @awards = @awards.map do |award|
       next unless award.project
       award.as_json(only: %i[id]).merge(
@@ -27,7 +27,7 @@ class AccountsController < ApplicationController
         created_at: award.created_at.strftime('%b %d, %Y'),
         ethereum_transaction_explorer_url: award.decorate.ethereum_transaction_explorer_url,
         ethereum_transaction_address_short: award.decorate.ethereum_transaction_address_short,
-        project: project_decorate(award.project)
+        project: project_decorate(award.project, award)
       )
     end
     respond_to do |format|
@@ -191,9 +191,10 @@ class AccountsController < ApplicationController
     end
   end
 
-  def project_decorate(project)
+  def project_decorate(project, award = nil)
     project.as_json(only: %i[id title token_symbol ethereum_contract_address]).merge(
-      awards_path: awards_project_path(project.id, mine: true),
+      awards_path: project_dashboard_transfers_path(project, q: { account_id_eq: current_account.id }),
+      award_path: project_dashboard_transfers_path(project, q: { id_eq: award&.id }),
       total_awarded: project.decorate.total_awarded_to_user(current_account),
       ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url,
       token: project.token ? project.token.serializable_hash : {}
