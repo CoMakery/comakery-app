@@ -5,13 +5,19 @@
     <div class="transfers-table__transfer__name">
       <label>type</label>
 
-      <%= f.select(:source, [['Contributor Transfer', 'earned'], ['Investor Transfer', 'bought']], required: true) %>
+      <% if @project.supports_transfer_rules? %>
+        <% options = [['Contributor Transfer', 'earned'], ['Investor Transfer', 'bought'], ['Mint Tokens To', 'mint'], ['Burn Tokens From', 'burn']] %>
+      <% else %>
+        <% options = [['Contributor Transfer', 'earned'], ['Investor Transfer', 'bought']] %>
+      <% end %>
+
+      <%= f.select(:source, options, required: true) %>
     </div>
 
     <div class="transfers-table__transfer__account">
-      <label>recipient</label>
+      <label>Account</label>
 
-      <%= f.select(:account_id, @project.interested.collect { |a| [ a.decorate.name_with_nickname, a.id ] }, include_blank: 'Choose Recipient', required: true) %>
+      <%= f.select(:account_id, @project.interested.collect { |a| [ a.decorate.name_with_nickname, a.id ] }, include_blank: 'Choose Account', required: true) %>
     </div>
 
     <div class="transfers-table__transfer__issuer">
@@ -42,7 +48,7 @@
       <%= f.hidden_field(:why, value: '—') %>
       <%= f.hidden_field(:description, value: '—') %>
       <%= f.hidden_field(:requirements, value: '—') %>
-      <%= f.submit('create', data: {confirm: "Create a transfer?\nTransfer can be paid later."}) %>
+      <%= f.submit('create', data: {confirm: "Create a transfer?\nTransfer can be processed later."}) %>
       <%= button_tag "cancel", type: 'button', data: {action: 'transfer-form#hideForm'} %>
     </div>
   </div>

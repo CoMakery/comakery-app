@@ -188,7 +188,7 @@ img {
 }
 
 .hidden {
-	display: none !important;
+  display: none !important;
 }
 
 @keyframes in-progress{
@@ -835,16 +835,16 @@ button.transfers-create {
   }
 
   .transfers-table__form {
-		z-index: 50;
-		
+    z-index: 50;
+    
     .transfers-table__transfer--new {
       opacity: 1;
       pointer-events: auto;
       display: none;
-			box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
-			transform: scale(1.01);
-			transition: all 0.1s ease-in-out;
-			border-radius: 6px;
+      box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
+      transform: scale(1.01);
+      transition: all 0.1s ease-in-out;
+      border-radius: 6px;
 
       & > label {
         margin: 1.5em;
@@ -936,10 +936,10 @@ button.transfers-create {
       color: #fe2d6c;
     }
   }
-	
-	.account-form {
-		input,
-		select {
+  
+  .account-form {
+    input,
+    select {
       border-radius: 6px;
       border: solid 1px #e6e8ed;
       height: 35px;
@@ -947,41 +947,49 @@ button.transfers-create {
       box-shadow: none;
       font-family: Montserrat, sans-serif;
       font-size: 12px;
-		}
-	}
-	
-	.account-form--active {
-		box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
-		transform: scale(1.01);
-		transition: all 0.1s ease-in-out;
-	}
-	
-	img.transfers-table--edit-icon {
-		position: absolute;
-		margin-left: -2.5em;
-		margin-top: 2.5em;
-		width: 1.5em;
-		min-width: 0px;
-		padding: 0px;
-		cursor: pointer;
-	}
-	
-	.transfers-table--edit-save {
-		min-height: 60px;
-		background-color: #ffffff;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: flex-end;
-		margin-top: -1px;
-		padding-right: 1em;
-	}
+    }
+  }
+  
+  .account-form--active {
+    box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
+    transform: scale(1.01);
+    transition: all 0.1s ease-in-out;
+  }
+  
+  img.transfers-table--edit-icon {
+    position: absolute;
+    margin-left: -2.5em;
+    margin-top: 2.5em;
+    width: 1.5em;
+    min-width: 0px;
+    padding: 0px;
+    cursor: pointer;
+
+    @media (max-width: 1280px) {
+      margin-left: 20em;
+    }
+  }
+  
+  .transfers-table--edit-save {
+    min-height: 60px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: -1px;
+    padding-right: 1em;
+
+    @media (max-width: 1280px) {
+      margin-top: -15px;
+    }
+  }
 
   .transfers-table__transfer {
     display: flex;
     flex-direction: row;
     padding: 0;
-		padding-right: 1em;
+    padding-right: 1em;
     margin: 0 0 1px 0;
     min-height: 80px;
     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
@@ -1109,19 +1117,19 @@ button.transfers-create {
     .transfers-table__transfer__max_balance {
       min-width: 140px;
     }
-		
-		.transfers-table__transfer__reg_group {
-			display: block;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			align-self: center;
-			
-			& > div {
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-		}
+    
+    .transfers-table__transfer__reg_group {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      align-self: center;
+      
+      & > div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
 
     .transfers-table__transfer__frozen {
       .transfers-table__transfer__frozen--yes {
