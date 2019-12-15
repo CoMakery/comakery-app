@@ -464,6 +464,14 @@ form.form-with-submit-button {
       margin: 0.25em 0.5em 0 0;
     }
   }
+
+  &:hover {
+    background-color: #efefef;
+
+    a {
+      text-decoration: none;
+    }
+  }
 }
 
 .transfers-filters {
@@ -621,7 +629,8 @@ form.form-with-submit-button {
   }
 }
 
-.reg-groups {
+.reg-groups,
+.frozen-status {
   font-size: 12px;
   display: flex;
   flex-direction: column;
@@ -630,6 +639,10 @@ form.form-with-submit-button {
     text-transform: uppercase;
     font-size: 16px;
     margin-bottom: 0;
+  }
+
+  h3 {
+    opacity: 0.7;
   }
 
   input[type="text"],
@@ -724,6 +737,28 @@ form.form-with-submit-button {
     }
   }
 } 
+
+.freeze-token {
+  display: flex;
+
+  .transfer-button {
+    padding: 0.75em;
+    border: 1px solid #fe2d6c;
+    min-width: 10em;
+
+    a {
+      color: #fe2d6c;
+    }
+
+    &:hover {
+      background-color: #fe2d6c;
+
+      a {
+        color: white;
+      }
+    }
+  }
+}
 
 .transfers-pages {
   margin-top: 2em;

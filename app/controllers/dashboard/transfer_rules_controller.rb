@@ -36,6 +36,28 @@ class Dashboard::TransferRulesController < ApplicationController
     end
   end
 
+  def pause
+    authorize @project, :freeze_token?
+
+    if @project.token.update(token_frozen: true)
+      Blockchain::ComakerySecurityToken::TokenSyncJob.perform_later(@project.token)
+      redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Token tranfers are frozen'
+    else
+      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @project.token.errors.full_messages.join(', ') }
+    end
+  end
+
+  def unpause
+    authorize @project, :freeze_token?
+
+    if @project.token.update(token_frozen: false)
+      Blockchain::ComakerySecurityToken::TokenSyncJob.perform_later(@project.token)
+      redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Token tranfers are unfrozen'
+    else
+      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @project.token.errors.full_messages.join(', ') }
+    end
+  end
+
   private
 
     def set_reg_groups

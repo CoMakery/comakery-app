@@ -106,9 +106,15 @@
 	
 	<div class="transfers-table--edit-save hidden" data-target="account-form.inputs">
 		<div class='transfer-button'>
-      <%= link_to 'javascript:void(0)', data: {action: 'account-form#save', target: 'account-form.button account-form.inputs'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy hidden' do %>
-        <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
-        <span>Save</span>
+      <% if @project.token&.token_frozen? %>
+        frozen
+
+      <% else %>
+        <%= link_to 'javascript:void(0)', data: {action: 'account-form#save', target: 'account-form.button account-form.inputs'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy hidden' do %>
+          <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
+          <span>Save</span>
+        <% end %>
+
       <% end %>
 		</div>
 	</div>

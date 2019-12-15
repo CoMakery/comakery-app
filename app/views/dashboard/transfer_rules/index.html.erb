@@ -1,5 +1,5 @@
 <%= render layout: 'projects/project_settings' do %>
-  <div class="reg-groups animated fadeIn faster" data-controller="reg-group-form">
+  <div class="reg-groups" data-controller="reg-group-form comakery-security-token">
     <h2>groups</h2>
     
     <div class="reg-groups__groups">
@@ -10,6 +10,16 @@
 
     <% if policy(@project).edit_reg_groups? %>
       <%= button_tag "create new group", type: 'button', class: 'reg-groups-create', data: { target: 'reg-group-form.create', action: 'reg-group-form#showForm' } %>
+    <% end %>
+  </div>
+
+  <div class="frozen-status" data-controller="comakery-security-token">
+    <h2>token transfer status</h2>
+
+    <h3><%= @project.token&.token_frozen ? 'Frozen' : 'Not Frozen' %></h3>
+      
+    <% if policy(@project).freeze_token? %>
+      <%= render partial: "freeze_token" %>
     <% end %>
   </div>
 <% end %>
