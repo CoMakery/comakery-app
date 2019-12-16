@@ -1,6 +1,7 @@
 class Dashboard::AccountsController < ApplicationController
   before_action :assign_project
   before_action :set_accounts, only: [:index]
+  before_action :create_token_records, only: [:index]
   before_action :set_account, only: [:update]
   skip_before_action :require_login, only: [:index]
   skip_after_action :verify_policy_scoped, only: [:index]
@@ -32,6 +33,12 @@ class Dashboard::AccountsController < ApplicationController
       @accounts_all = @q.result.includes(:verifications, :awards, :latest_verification, :account_token_records)
       @accounts = @accounts_all.page(@page).per(10)
       redirect_to '/404.html' if (@page > 1) && @accounts.out_of_range?
+    end
+
+    def create_token_records
+      if @project.token&.coin_type_comakery?
+        @accounts.each { |a| a.account_token_records.find_or_create_by!(token: @project.token) }
+      end
     end
 
     def set_account

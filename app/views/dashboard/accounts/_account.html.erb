@@ -1,9 +1,11 @@
 <% account = account.decorate %>
-<% record = account.account_token_records.find_or_create_by(token: @project.token) %>
+<% record = account.account_token_records.find_by(token: @project.token) %>
+<% form_url = record ? project_dashboard_account_path(@project, record) : root_path %>
+<% form_data = record ? { controller: "account-form", target: "account-form.form", 'account-form-address' => account.ethereum_wallet }.merge(@project.token.decorate.eth_data('account-form')) : nil %>
 
-<%= form_with model: record, url: project_dashboard_account_path(@project, record), data: {controller: "account-form", target: "account-form.form", 'account-form-address' => account.ethereum_wallet}.merge(@project.token.decorate.eth_data('account-form')), class: 'account-form' do |f| %>
+<%= form_with model: record, url: form_url, data: form_data, class: 'account-form' do |f| %>
 	
-	<% if policy(@project).edit_accounts? && account.ethereum_wallet %>
+	<% if policy(@project).edit_accounts? && record && account.ethereum_wallet %>
 		<%= image_tag 'pencil.svg', data: {action: 'click->account-form#showForm', target: 'account-form.outputs'}, class: 'transfers-table--edit-icon transfers-table--edit-icon__pencil' %>
 		<%= image_tag 'iconCloseDark.svg', data: {action: 'click->account-form#hideForm', target: 'account-form.inputs'}, class: 'transfers-table--edit-icon hidden' %>
   <% end %>
@@ -104,18 +106,20 @@
 		<% end %>
 	</div>
 	
-	<div class="transfers-table--edit-save hidden" data-target="account-form.inputs">
-		<div class='transfer-button'>
-      <% if @project.token&.token_frozen? %>
-        frozen
+  <% if policy(@project).edit_accounts? && record && account.ethereum_wallet %>
+  	<div class="transfers-table--edit-save hidden" data-target="account-form.inputs">
+  		<div class='transfer-button'>
+        <% if @project.token&.token_frozen? %>
+          frozen
 
-      <% else %>
-        <%= link_to 'javascript:void(0)', data: {action: 'account-form#save', target: 'account-form.button account-form.inputs'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy hidden' do %>
-          <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
-          <span>Save</span>
+        <% else %>
+          <%= link_to 'javascript:void(0)', data: {action: 'account-form#save', target: 'account-form.button account-form.inputs'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy hidden' do %>
+            <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
+            <span>Save</span>
+          <% end %>
+
         <% end %>
-
-      <% end %>
-		</div>
-	</div>
+  		</div>
+  	</div>
+  <% end %>
 <% end %>
