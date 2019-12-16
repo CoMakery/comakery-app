@@ -5,9 +5,16 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
   let(:account) { create(:account_token_record, token: project.token, max_balance: 2) }
 
   describe 'GET #index' do
-    it 'returns a success response' do
-      get :index, params: { project_id: project.to_param }
-      expect(response).to be_successful
+    context 'with comakery token' do
+      it 'returns a success response' do
+        get :index, params: { project_id: project.to_param }
+        expect(response).to be_successful
+      end
+
+      it 'creates token records for accounts' do
+        get :index, params: { project_id: project.to_param }
+        expect(project.account.account_token_records.find_by(token: project.token)).not_to be_nil
+      end
     end
   end
 

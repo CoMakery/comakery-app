@@ -62,4 +62,28 @@ RSpec.describe Dashboard::TransferRulesController, type: :controller do
       expect(response).to be_successful
     end
   end
+
+  describe 'POST #pause' do
+    context 'with valid params' do
+      it 'pauses token' do
+        project.token.update(token_frozen: false)
+
+        post :pause, params: { project_id: project.to_param }
+        expect(response).to redirect_to(project_dashboard_transfer_rules_path(project))
+        expect(project.token.reload.token_frozen?).to be_truthy
+      end
+    end
+  end
+
+  describe 'POST #unpause' do
+    context 'with valid params' do
+      it 'unpauses token' do
+        project.token.update(token_frozen: true)
+
+        post :unpause, params: { project_id: project.to_param }
+        expect(response).to redirect_to(project_dashboard_transfer_rules_path(project))
+        expect(project.token.reload.token_frozen?).to be_falsey
+      end
+    end
+  end
 end

@@ -1,0 +1,17 @@
+<div class="reg-groups" data-controller="reg-group-form">
+  <h2>regulatory groups</h2>
+
+  <h3><%= pluralize(@reg_groups.size, 'Group', 'Groups') %></h3>
+
+  <div class="reg-groups__create">
+    <% if policy(@project).edit_reg_groups? %>
+      <%= button_tag "create reg group ＋", type: 'button', class: 'reg-groups-create', data: { target: 'reg-group-form.create', action: 'reg-group-form#showForm' } %>
+    <% end %>
+  </div>
+  
+  <div class="reg-groups__groups">
+    <%= render partial: "reg_group", collection: @reg_groups, as: :reg_group, cached: true %>
+  </div>
+
+  <%= render partial: "form_reg_group" %>
+</div>

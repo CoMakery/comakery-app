@@ -67,6 +67,7 @@ export default class extends Controller {
       .on('error', (error) => {
         this._submitError(error)
         this._showError(error.message)
+        this._enableButton()
       })
       .then((receipt) => {
         this._submitReceipt(receipt)

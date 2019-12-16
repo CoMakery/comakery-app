@@ -5,11 +5,11 @@ export default class extends Controller {
 
   showForm() {
     this.formTarget.style.display = 'flex'
-    this.createTarget.style.display = 'none'
+    this.createTarget.disabled = true
   }
 
   hideForm() {
     this.formTarget.style.display = 'none'
-    this.createTarget.style.display = 'block'
+    this.createTarget.disabled = false
   }
 }

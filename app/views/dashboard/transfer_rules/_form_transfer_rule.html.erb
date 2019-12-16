@@ -1,0 +1,47 @@
+<%= form_with model: TransferRule.new, url: project_dashboard_transfer_rules_path(@project), data: {controller: "transfer-rule-form", target: "transfer-rule-form.form transfer-rules.form"}.merge(@project.token.decorate.eth_data('transfer-rule-form')), class: 'transfer-rule-form hidden' do |f| %>
+
+  <%= image_tag 'iconCloseDark.svg', data: {action: 'click->transfer-rules#hideForm'}, class: 'transfers-table--edit-icon' %>
+
+  <div class="transfers-table__transfer">
+    <div class="transfers-table__transfer__sending_group">
+      <label>sending group</label>
+
+      <%= f.select(:sending_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: 'Select Group' }, { required: true, data: {target: "transfer-rule-form.ruleFromGroupId"} }) %>
+    </div>
+
+    <div class="transfers-table__transfer__sending_group_id">
+    </div>
+
+    <div class="transfers-table__transfer__receiving_group">
+      <label>receiving group</label>
+
+      <%= f.select(:receiving_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: 'Select Group' }, { required: true, data: {target: "transfer-rule-form.ruleToGroupId"} }) %>
+    </div>
+
+    <div class="transfers-table__transfer__receiving_group_id">
+    </div>
+
+    <div class="transfers-table__transfer__lockup_until">
+      <label>allowed after date</label>
+
+      <%= f.date_field(:lockup_until, required: false, placeholder: 'dd.mm.yyyy', data: {target: "transfer-rule-form.ruleLockupUntil"}) %>
+    </div>
+
+    <% if policy(@project).edit_transfer_rules? %>
+      <div class="transfers-table__transfer__action">
+        <div class='transfer-button'>
+          <% if @project.token&.token_frozen? %>
+            frozen
+
+          <% else %>
+            <%= link_to 'javascript:void(0)', data: {action: 'transfer-rule-form#create', target: 'transfer-rule-form.button'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy' do %>
+              <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
+              <span>Create</span>
+            <% end %>
+
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
