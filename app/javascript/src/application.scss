@@ -630,19 +630,21 @@ form.form-with-submit-button {
 }
 
 .reg-groups,
-.frozen-status {
+.frozen-status,
+.transfer-rules {
   font-size: 12px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 2em;
 
   h2 {
     text-transform: uppercase;
     font-size: 16px;
-    margin-bottom: 0;
   }
 
   h3 {
     opacity: 0.7;
+    margin-top: 0;
   }
 
   input[type="text"],
@@ -764,9 +766,10 @@ form.form-with-submit-button {
   margin-top: 2em;
 }
 
-button.transfers-create {
-  margin: 0;
-  margin-bottom: 3em;
+button.transfers-create,
+button.transfer-rule-create,
+button.reg-groups-create {
+  margin-bottom: 1.5em;
   border-radius: 6px;
   border: solid 1px #e6e8ed;
   height: 35px;
@@ -972,7 +975,8 @@ button.transfers-create {
     }
   }
   
-  .account-form {
+  .account-form,
+  .transfer-rule-form {
     input,
     select {
       border-radius: 6px;
@@ -985,7 +989,8 @@ button.transfers-create {
     }
   }
   
-  .account-form--active {
+  .account-form--active,
+  .transfer-rule-form--active {
     box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
     transform: scale(1.01);
     transition: all 0.1s ease-in-out;
@@ -1170,6 +1175,28 @@ button.transfers-create {
       .transfers-table__transfer__frozen--yes {
         font-weight: bold;
         color: #fe2d6c;
+      }
+    }
+
+    .transfers-table__transfer__action {
+      justify-content: center;
+    }
+
+    .transfers-table__transfer__action--warn {
+      .transfer-button {
+        border: 1px solid #fe2d6c;
+
+        a {
+          color: #fe2d6c;
+        }
+
+        &:hover {
+          background-color: #fe2d6c;
+
+          a {
+            color: white;
+          }
+        }
       }
     }
 
