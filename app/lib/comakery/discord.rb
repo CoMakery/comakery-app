@@ -53,7 +53,7 @@ class Comakery::Discord
   def create_invite(channel_id)
     @path = "/channels/#{channel_id}/invites"
     @data = { max_age: Channel::DISCORD_INVITE_MAX_AGE_SECONDS }.to_json
-    post_result
+    post_result&.fetch('code', nil)
   end
 
   private

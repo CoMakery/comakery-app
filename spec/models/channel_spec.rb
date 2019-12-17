@@ -94,30 +94,53 @@ RSpec.describe Channel, type: :model do
     end
   end
 
-  describe '.discord_invite' do
+  describe '.discord_invite_valid?' do
+    let!(:discord_channel_w_valid_invite) { create(:channel, team: discord_team, discord_invite_code: '1', discord_invite_created_at: Time.current) }
+    let!(:discord_channel_wo_invite) { create(:channel, team: discord_team) }
+    let!(:discord_channel_w_expired_invite) { create(:channel, team: discord_team, discord_invite_code: '1', discord_invite_created_at: 100.years.ago) }
+
+    it 'is truthy if invite is present and fresh' do
+      expect(discord_channel_w_valid_invite.discord_invite_valid?).to be_truthy
+    end
+
+    it 'is falsey if invite is not present' do
+      expect(discord_channel_wo_invite.discord_invite_valid?).to be_falsey
+    end
+
+    it 'is falsey if invite is expired' do
+      expect(discord_channel_w_expired_invite.discord_invite_valid?).to be_falsey
+    end
+  end
+
+  describe '.fetch_discord_invite' do
     let!(:discord_channel) { create(:channel, team: discord_team) }
 
     before do
       stub_discord_create_invite
+      discord_channel.fetch_discord_invite
     end
 
     it 'creates new invite' do
-      expect(discord_channel.discord_invite).to include('invite_code')
+      expect(discord_channel.discord_invite_code).to include('invite_code')
     end
 
     it 'caches invite' do
-      invite_created_at = discord_channel.discord_invite && discord_channel.discord_invite_created_at
+      invite_created_at = discord_channel.discord_invite_created_at
 
       travel_to(1.hour.ago) do
-        expect(discord_channel.discord_invite && discord_channel.discord_invite_created_at).to eq invite_created_at
+        discord_channel.fetch_discord_invite
+
+        expect(discord_channel.discord_invite_created_at).to eq invite_created_at
       end
     end
 
     it 'udpates cached invite' do
-      invite_created_at = discord_channel.discord_invite && discord_channel.discord_invite_created_at
+      invite_created_at = discord_channel.discord_invite_created_at
 
       travel_to((Channel::DISCORD_INVITE_MAX_AGE_SECONDS + 10).seconds.from_now) do
-        expect(discord_channel.discord_invite && discord_channel.discord_invite_created_at).not_to eq invite_created_at
+        discord_channel.fetch_discord_invite
+
+        expect(discord_channel.discord_invite_created_at).not_to eq invite_created_at
       end
     end
   end
