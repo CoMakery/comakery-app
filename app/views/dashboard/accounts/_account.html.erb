@@ -70,7 +70,7 @@
 	      <label>lockup until</label>
 
 				<div data-target="account-form.outputs">
-		      <% if record&.lockup_until && record&.lockup_until > Time.current %>
+		      <% if record&.lockup_until %>
 		        <%= record&.lockup_until&.strftime("%b %e, %Y") %>
 		      <% else %>
 		        –

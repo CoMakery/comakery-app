@@ -61,9 +61,9 @@ describe Comakery::Discord do
       stub_discord_create_invite
     end
 
-    it 'returns hash with invite data' do
+    it 'returns invite code' do
       response = discord_client.create_invite(channel.channel_id)
-      expect(response['code']).to include('invite_code')
+      expect(response).to include('invite_code')
     end
   end
 end

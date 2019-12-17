@@ -7,7 +7,7 @@ class Channel < ApplicationRecord
   attr_accessor :channels
   delegate :provider, to: :team, allow_nil: true
 
-  DISCORD_INVITE_MAX_AGE_SECONDS = 3600
+  DISCORD_INVITE_MAX_AGE_SECONDS = 60 * 60 * 24
 
   def name_with_provider
     return name unless team
@@ -54,19 +54,24 @@ class Channel < ApplicationRecord
     when 'slack'
       "https://#{team.domain}.slack.com/messages/#{channel_id}"
     when 'discord'
-      "https://discord.gg/#{discord_invite}"
+      fetch_discord_invite
+
+      discord_invite_valid? ? "https://discord.gg/#{discord_invite_code}" : nil
     end
   end
 
-  def discord_invite
-    if discord_invite_created_at.nil? || (Time.zone.now - discord_invite_created_at >= DISCORD_INVITE_MAX_AGE_SECONDS)
-      update(
-        discord_invite_code: Comakery::Discord.new.create_invite(channel_id)&.fetch('code'),
-        discord_invite_created_at: Time.zone.now
-      )
-    end
+  def discord_invite_valid?
+    discord_invite_code.present? && discord_invite_created_at.present? && (Time.current - discord_invite_created_at <= DISCORD_INVITE_MAX_AGE_SECONDS)
+  end
 
-    discord_invite_code
+  def fetch_discord_invite
+    unless discord_invite_valid?
+      code = Comakery::Discord.new.create_invite(channel_id)
+
+      if code
+        update(discord_invite_code: code, discord_invite_created_at: Time.current)
+      end
+    end
   end
 
   before_save :assign_name

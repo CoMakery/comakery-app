@@ -7,7 +7,7 @@ class Dashboard::AccountsController < ApplicationController
   skip_after_action :verify_policy_scoped, only: [:index]
 
   fragment_cache_key do
-    "#{current_user&.id}/#{@project.id}"
+    "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
   end
 
   def index
