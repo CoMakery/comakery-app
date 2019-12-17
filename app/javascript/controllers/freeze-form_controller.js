@@ -22,11 +22,11 @@ export default class extends ComakerySecurityTokenController {
   }
 
   _submitConfirmation(_) {
-    this.formTarget.submit()
+    // do nothing
   }
 
   _submitReceipt(_) {
-    // do nothing
+    this.formTarget.submit()
   }
 
   _submitError(_) {

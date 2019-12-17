@@ -3,7 +3,7 @@ class Dashboard::RegGroupsController < ApplicationController
   before_action :set_reg_group, only: [:destroy]
 
   fragment_cache_key do
-    current_user
+    "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
   end
 
   def create
