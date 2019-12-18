@@ -126,10 +126,10 @@ describe SessionsController do
         expect(session[:account_id]).to be_nil
     end
 
-    it 'redirects to root_path if user already signed in' do
+    it 'redirects to my_project_path if user already signed in' do
       login(account)
       get :create
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to my_project_path
     end
   end
 
@@ -188,10 +188,10 @@ describe SessionsController do
       expect(response).to redirect_to my_tasks_path
     end
 
-    it 'redirects to root_path if user already signed in' do
+    it 'redirects to my_project_path if user already signed in' do
       login(account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to my_project_path
     end
 
     context 'on Qtum network' do

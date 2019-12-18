@@ -11,7 +11,8 @@ RSpec.describe Blockchain::ComakerySecurityToken::AccountSyncJob, type: :job do
     expect(record.reload.synced_at).not_to be_nil
   end
 
-  it 'raises an error if account doesnt have ethereum wallet' do
-    expect { described_class.perform_now(invalid_record) }.to raise_error(RuntimeError, 'Wallet is not present')
+  it 'returns if account doesnt have ethereum wallet' do
+    described_class.perform_now(invalid_record)
+    expect(invalid_record.reload.synced_at).to be_nil
   end
 end

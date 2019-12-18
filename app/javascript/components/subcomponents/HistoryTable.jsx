@@ -21,7 +21,7 @@ export default class HistoryTable extends React.Component {
                 {this.props.awards.map(award =>
                   <tr className="award-row" key={award.id}>
                     <td className="small-3">
-                      <a href={award.project.awardsPath}>
+                      <a href={award.project.awardPath}>
                         {award.project.title}
                       </a>
                     </td>

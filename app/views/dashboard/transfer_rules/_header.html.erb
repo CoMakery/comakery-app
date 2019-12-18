@@ -1,0 +1,28 @@
+<div class="transfers-table__transfer transfers-table__transfer--header">
+  <label>sort by</label>
+
+  <div class="transfers-table__transfer__sending_group">
+    <%= sort_link(@q, :sending_group_name, 'sending group') %>
+  </div>
+
+  <div class="transfers-table__transfer__sending_group_id">
+    <%= sort_link(@q, :sending_group_blockchain_id, 'id') %>
+  </div>
+
+  <div class="transfers-table__transfer__receiving_group">
+    <%= sort_link(@q, :receiving_group_name, 'receiving group') %>
+  </div>
+
+  <div class="transfers-table__transfer__receiving_group_id">
+    <%= sort_link(@q, :receiving_group_blockchain_id, 'id') %>
+  </div>
+
+  <div class="transfers-table__transfer__lockup_until">
+    <%= sort_link(@q, :lockup_until, 'allowed after date') %>
+  </div>
+
+  <% if policy(@project).edit_transfer_rules? %>
+    <div class="transfers-table__transfer__action">
+    </div>
+  <% end %>
+</div>

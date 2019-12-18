@@ -169,6 +169,22 @@ a.header--nav--links--current {
   height: 40px;
 }
 
+.footer--logo__whitelabel {
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+
+  .footer--logo__whitelabel--comakery {
+    display: flex;
+    align-items: center;
+    margin-top: 1.5em;
+
+    img {
+      margin-left: 0.5em;
+    }
+  }
+}
+
 .footer--content {
   margin-top: 29px;
   display: flex;

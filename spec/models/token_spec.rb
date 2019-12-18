@@ -324,11 +324,11 @@ describe Token do
     let!(:token) { create(:token) }
 
     it 'returns correct abi for Comakery Token' do
-      expect(comakery_token.abi[0]['stateMutability']).to eq('nonpayable')
+      expect(comakery_token.abi.last['name']).to eq('safeApprove')
     end
 
-    it 'returns nil for other tokens' do
-      expect(token.abi).to be_nil
+    it 'returns default abi for other tokens' do
+      expect(token.abi.last['name']).to eq('Transfer')
     end
   end
 end

@@ -11,7 +11,7 @@
 </p>
 
 <p>
-  <a href="<%= project_award_types_url(@award.project) %>">Visit this link</a> to manage the task.
+  <a href="<%= project_award_types_url(@award.project, host: @host) %>">Visit this link</a> to manage the task.
   You can wait another contributor to work on it, cancel it, or directly assign it to someone interested in your project.
 </p>
 
@@ -20,5 +20,5 @@
 </p>
 
 <p>
-  Team CoMakery
+  Team <%= @brand_name %>
 </p>

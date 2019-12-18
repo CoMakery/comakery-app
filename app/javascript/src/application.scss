@@ -168,6 +168,38 @@ img {
   max-width: 100%;
 }
 
+.in-progress--metamask {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.7;
+  background-image: repeating-linear-gradient(-45deg, white, white 10px, #f68c24 10px, #f68c24 20px);
+  animation: in-progress 1.5s linear infinite;
+  border: 1px solid #f68c24 !important;
+
+  a {
+    color: #7c7c7c !important;
+  }
+}
+
+.in-progress--metamask__paid {
+  background-image: repeating-linear-gradient(-45deg, white, white 10px, #00cc17 10px, #00cc17 20px);
+  animation: in-progress 1.5s linear infinite;
+  border: 1px solid #00cc17 !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@keyframes in-progress{
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -75px 0px;
+  }
+} 
+
 /**/
 /* 3rd-party styling */
 /**/
@@ -256,6 +288,7 @@ form.project_search {
 
     &:focus {
       width: calc(100% - 260px);
+      box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
     }
 
     @media (max-width: 1024px) {
@@ -382,6 +415,8 @@ form.form-with-submit-button {
       text-overflow: ellipsis;
       text-transform: uppercase;
       margin-top: 0.3em;
+      font-weight: 500;
+      font-size: 10px;
     }
 
     .account-preview__info__verification {
@@ -427,6 +462,14 @@ form.form-with-submit-button {
 
     .wallet-logo {
       margin: 0.25em 0.5em 0 0;
+    }
+  }
+
+  &:hover {
+    background-color: #efefef;
+
+    a {
+      text-decoration: none;
     }
   }
 }
@@ -586,15 +629,22 @@ form.form-with-submit-button {
   }
 }
 
-.reg-groups {
+.reg-groups,
+.frozen-status,
+.transfer-rules {
   font-size: 12px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 2em;
 
   h2 {
     text-transform: uppercase;
     font-size: 16px;
-    margin-bottom: 0;
+  }
+
+  h3 {
+    opacity: 0.7;
+    margin-top: 0;
   }
 
   input[type="text"],
@@ -690,13 +740,36 @@ form.form-with-submit-button {
   }
 } 
 
+.freeze-token {
+  display: flex;
+
+  .transfer-button {
+    padding: 0.75em;
+    border: 1px solid #fe2d6c;
+    min-width: 10em;
+
+    a {
+      color: #fe2d6c;
+    }
+
+    &:hover {
+      background-color: #fe2d6c;
+
+      a {
+        color: white;
+      }
+    }
+  }
+}
+
 .transfers-pages {
   margin-top: 2em;
 }
 
-button.transfers-create {
-  margin: 0;
-  margin-bottom: 3em;
+button.transfers-create,
+button.transfer-rule-create,
+button.reg-groups-create {
+  margin-bottom: 1.5em;
   border-radius: 6px;
   border: solid 1px #e6e8ed;
   height: 35px;
@@ -800,10 +873,16 @@ button.transfers-create {
   }
 
   .transfers-table__form {
+    z-index: 50;
+    
     .transfers-table__transfer--new {
       opacity: 1;
       pointer-events: auto;
       display: none;
+      box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
+      transform: scale(1.01);
+      transition: all 0.1s ease-in-out;
+      border-radius: 6px;
 
       & > label {
         margin: 1.5em;
@@ -895,11 +974,62 @@ button.transfers-create {
       color: #fe2d6c;
     }
   }
+  
+  .account-form,
+  .transfer-rule-form {
+    input,
+    select {
+      border-radius: 6px;
+      border: solid 1px #e6e8ed;
+      height: 35px;
+      padding: 9px 16px 8px 15px;
+      box-shadow: none;
+      font-family: Montserrat, sans-serif;
+      font-size: 12px;
+    }
+  }
+  
+  .account-form--active,
+  .transfer-rule-form--active {
+    box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
+    transform: scale(1.01);
+    transition: all 0.1s ease-in-out;
+  }
+  
+  img.transfers-table--edit-icon {
+    position: absolute;
+    margin-left: -2.5em;
+    margin-top: 2.5em;
+    width: 1.5em;
+    min-width: 0px;
+    padding: 0px;
+    cursor: pointer;
+
+    @media (max-width: 1280px) {
+      margin-left: 20em;
+    }
+  }
+  
+  .transfers-table--edit-save {
+    min-height: 60px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: -1px;
+    padding-right: 1em;
+
+    @media (max-width: 1280px) {
+      margin-top: -15px;
+    }
+  }
 
   .transfers-table__transfer {
     display: flex;
     flex-direction: row;
     padding: 0;
+    padding-right: 1em;
     margin: 0 0 1px 0;
     min-height: 80px;
     box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
@@ -1027,11 +1157,46 @@ button.transfers-create {
     .transfers-table__transfer__max_balance {
       min-width: 140px;
     }
+    
+    .transfers-table__transfer__reg_group {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      align-self: center;
+      
+      & > div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
 
     .transfers-table__transfer__frozen {
       .transfers-table__transfer__frozen--yes {
         font-weight: bold;
         color: #fe2d6c;
+      }
+    }
+
+    .transfers-table__transfer__action {
+      justify-content: center;
+    }
+
+    .transfers-table__transfer__action--warn {
+      .transfer-button {
+        border: 1px solid #fe2d6c;
+
+        a {
+          color: #fe2d6c;
+        }
+
+        &:hover {
+          background-color: #fe2d6c;
+
+          a {
+            color: white;
+          }
+        }
       }
     }
 
@@ -1379,6 +1544,22 @@ a.header--nav--links--current {
   height: 40px;
 }
 
+.footer--logo__whitelabel {
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+
+  .footer--logo__whitelabel--comakery {
+    display: flex;
+    align-items: center;
+    margin-top: 1.5em;
+
+    img {
+      margin-left: 0.5em;
+    }
+  }
+}
+
 .footer--content {
   margin-top: 29px;
   display: flex;
@@ -1587,27 +1768,19 @@ a.header--nav--links--current {
 }
 
 .button {
-  height: 30px;
-  padding: 6px 12px;
-  margin-right: 15px;
-  min-width: 90px;
-  color: white;
-  background-color: var(--primary-blue);
-  box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
+  border-radius: 6px;
+  border: solid 1px #e6e8ed;
+  height: 35px;
+  padding: 9px 16px 8px 15px;
+  box-shadow: none;
   font-family: Montserrat, sans-serif;
-  font-size: 14px;
-  font-weight: bold;
-  text-transform: uppercase;
-  outline: none;
-  border: none;
-  border-radius: 0;
-  -webkit-transition: none;
-  transition: none;
-  cursor: pointer;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  font-size: 12px;
+  background-color: #1560fa;
+  color: white;
+  font-weight: 600;
+  margin: 0;
+  margin-top: 2em;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
 }
 
 .button:hover,
@@ -2381,7 +2554,6 @@ input.button--right-space {
   height: 20px;
   object-fit: contain;
   margin-top: 7px;
-  box-shadow: 0 5px 10px 0 rgba(32, 22, 98, .1);
 }
 
 .project-form--form--channels--add,

@@ -1,5 +1,6 @@
 class AwardsController < ApplicationController
   before_action :set_project, except: %i[index confirm]
+  before_action :unavailable_for_whitelabel, only: %i[index]
   before_action :authorize_project_edit, except: %i[index show confirm start submit accept reject assign]
   before_action :set_award_type, except: %i[index confirm]
   before_action :set_award, except: %i[index new create confirm]
@@ -11,7 +12,7 @@ class AwardsController < ApplicationController
   before_action :authorize_award_submit, only: %i[submit]
   before_action :authorize_award_review, only: %i[accept reject]
   before_action :authorize_award_pay, only: %i[update_transaction_address]
-  before_action :clone_award_on_start, only: %i[start assign]
+  before_action :clone_award_on_start, only: %i[start]
   before_action :set_filter, only: %i[index]
   before_action :set_default_project_filter, only: %i[index]
   before_action :set_project_filter, only: %i[index]
@@ -26,6 +27,7 @@ class AwardsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
   skip_before_action :require_login, only: %i[confirm]
   skip_after_action :verify_authorized, only: %i[confirm]
+  skip_after_action :verify_policy_scoped, only: %(index)
   before_action :redirect_back, only: %i[index]
   before_action :create_interest_from_session, only: %i[index]
 
@@ -98,8 +100,12 @@ class AwardsController < ApplicationController
   def assign
     account = Account.find(params[:account_id])
 
+    if @award.should_be_cloned? && @award.can_be_cloned_for?(account)
+      @award = @award.clone_on_assignment
+    end
+
     if account && @award.update(account: account, issuer: current_account, status: 'ready')
-      TaskMailer.with(award: @award).task_assigned.deliver_now
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_assigned.deliver_now
       redirect_to project_award_types_path(@award.project), notice: 'Task has been assigned'
     else
       redirect_to project_award_types_path(@award.project), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -116,7 +122,7 @@ class AwardsController < ApplicationController
 
   def submit
     if @award.update(submit_params.merge(status: 'submitted'))
-      TaskMailer.with(award: @award).task_submitted.deliver_now
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_submitted.deliver_now
       redirect_to my_tasks_path(filter: 'submitted'), notice: 'Task submitted'
     else
       redirect_to project_award_type_award_path(@project, @award_type, @award), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -125,7 +131,7 @@ class AwardsController < ApplicationController
 
   def accept
     if @award.update(status: 'accepted')
-      TaskMailer.with(award: @award).task_accepted.deliver_now
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_accepted.deliver_now
       redirect_to my_tasks_path(filter: 'to pay'), notice: 'Task accepted'
     else
       redirect_to my_tasks_path(filter: 'to review'), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -134,7 +140,7 @@ class AwardsController < ApplicationController
 
   def reject
     if @award.update(status: 'rejected')
-      TaskMailer.with(award: @award).task_rejected.deliver_now
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_rejected.deliver_now
       redirect_to my_tasks_path(filter: 'done'), notice: 'Task rejected'
     else
       redirect_to my_tasks_path(filter: 'to review'), flash: { error: @award.errors&.full_messages&.join(', ') }
@@ -163,9 +169,13 @@ class AwardsController < ApplicationController
       uid: send_award_params[:uid],
       email: send_award_params[:email]
     )
+
     if result.success?
-      TaskMailer.with(award: @award).task_accepted_direct.deliver_now
+      @award = result.award
+
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_accepted_direct.deliver_now
       @award.send_award_notifications
+
       if @award.account&.decorate&.can_receive_awards?(@project)
         session[:last_award_id] = @award.id
         @award.account&.update new_award_notice: true
@@ -179,8 +189,15 @@ class AwardsController < ApplicationController
   end
 
   def update_transaction_address
-    @award.update! ethereum_transaction_address: params[:tx], status: 'paid', issuer: current_account
-    TaskMailer.with(award: @award).task_paid.deliver_now
+    if params[:tx]
+      @award.handle_tx_hash(params[:tx], current_account)
+      TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_paid.deliver_now
+    elsif params[:receipt]
+      @award.handle_tx_receipt(params[:receipt])
+    elsif params[:error]
+      @award.handle_tx_error(params[:error])
+    end
+
     @award = @award.decorate
     render layout: false
   end
@@ -205,7 +222,7 @@ class AwardsController < ApplicationController
   private
 
     def set_project
-      @project = Project.find(params[:project_id])&.decorate
+      @project = @project_scope.find(params[:project_id])&.decorate
       redirect_to('/404.html') unless @project
     end
 
@@ -288,11 +305,11 @@ class AwardsController < ApplicationController
     end
 
     def run_award_expiration
-      policy_scope(Award).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
+      current_account.accessable_awards(@project_scope).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
     end
 
     def set_awards
-      @awards = policy_scope(Award).includes(:specialty, :issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
+      @awards = current_account.accessable_awards(@project_scope).includes(:specialty, :issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
 
       if @project
         @awards = @awards.where(award_type: AwardType.where(project: @project))
@@ -348,7 +365,7 @@ class AwardsController < ApplicationController
           {
             name: filter,
             current: filter == @filter,
-            count: policy_scope(Award).filtered_for_view(filter, current_account).size,
+            count: current_account.accessable_awards(@project_scope).filtered_for_view(filter, current_account).size,
             url: my_tasks_path(filter: filter)
           }
         end,
@@ -375,15 +392,15 @@ class AwardsController < ApplicationController
         batch: @award_type.serializable_hash,
         project: @project.serializable_hash,
         token: @project.token ? @project.token.serializable_hash : {},
-        channels: (@project.channels + [Channel.new(name: 'Email')]).map { |c| [c.name || c.channel_id, c.id.to_s] }.to_h,
-        members: @project.channels.map { |c| [c.id.to_s, c.members.to_h] }.to_h,
+        channels: (@project.channels.includes(:team) + [Channel.new(name: 'Email')]).map { |c| [c.name || c.channel_id, c.id.to_s] }.to_h,
+        members: @project.channels.includes(:team).map { |c| [c.id.to_s, c.members.to_h] }.to_h,
         recipient_address_url: project_award_type_award_recipient_address_path(@project, @award_type, @award),
         form_url: project_award_type_award_send_award_path(@project, @award_type, @award),
         form_action: 'POST',
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token,
         project_for_header: @project.header_props,
-        mission_for_header: @project&.mission&.decorate&.header_props
+        mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
 
@@ -405,7 +422,7 @@ class AwardsController < ApplicationController
         form_url: project_award_type_award_assign_path(@project, @award_type, @award),
         csrf_token: form_authenticity_token,
         project_for_header: @project.header_props,
-        mission_for_header: @project&.mission&.decorate&.header_props
+        mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
 
@@ -424,7 +441,7 @@ class AwardsController < ApplicationController
         url_on_success: project_award_types_path,
         csrf_token: form_authenticity_token,
         project_for_header: @project.header_props,
-        mission_for_header: @project&.mission&.decorate&.header_props
+        mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
       }
     end
 

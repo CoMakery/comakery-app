@@ -3,6 +3,9 @@ class Mission < ApplicationRecord
 
   attachment :logo
   attachment :image
+  attachment :whitelabel_logo
+  attachment :whitelabel_logo_dark
+  attachment :whitelabel_favicon
 
   has_many :projects, inverse_of: :mission
   has_many :unarchived_projects, -> { where.not visibility: :archived }, source: :projects, class_name: 'Project'
@@ -13,9 +16,13 @@ class Mission < ApplicationRecord
   has_many :ready_award_types, -> { where state: :ready }, through: :unarchived_projects, source: :award_types, class_name: 'AwardType'
   has_many :published_awards, through: :ready_award_types, source: :awards, class_name: 'Award'
   has_many :awards, through: :award_types
+  has_many :interests, through: :public_projects
+
   enum status: %i[active passive]
 
   after_create :assign_display_order
+  after_save :set_whitelabel_for_projects
+
   validates :name, :subtitle, :description, :logo, :image, presence: true
   validates :name, length: { maximum: 100 }
   validates :subtitle, length: { maximum: 140 }
@@ -34,11 +41,7 @@ class Mission < ApplicationRecord
       projects: unarchived_projects.size,
       batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
-      interests: (
-        Interest.where(project_id: unarchived_projects).pluck(:account_id) |
-        unarchived_projects.pluck(:account_id) |
-        published_awards.pluck(:account_id)
-      ).compact.size
+      interests: interests.size
     }
   end
 
@@ -47,5 +50,9 @@ class Mission < ApplicationRecord
   def assign_display_order
     self.display_order = id
     save
+  end
+
+  def set_whitelabel_for_projects
+    projects.update(whitelabel: whitelabel)
   end
 end

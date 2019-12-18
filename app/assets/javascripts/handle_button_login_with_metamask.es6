@@ -13,14 +13,14 @@ loginWithMetaMask.handleClick = async function() {
   if (!web3) {
     web3 = new Web3(window.web3.currentProvider);
   }
-  if (!web3.eth.coinbase && window.ethereum) {
+  if (!window.web3.currentProvider.selectedAddress && window.ethereum) {
     await(ethereum.enable());
   }
-  if (!web3.eth.coinbase) {
+  if (!window.web3.currentProvider.selectedAddress) {
     $('#metamaskModal1').foundation('open');
     return;
   }
-  publicAddress = web3.eth.coinbase.toLowerCase();
+  publicAddress = window.web3.currentProvider.selectedAddress.toLowerCase();
   $target.find('span').text('Loading ...');
   fetch('/api/accounts/find_by_public_address?public_address=' + publicAddress).then(function(response) {
     return response.json();

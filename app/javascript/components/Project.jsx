@@ -305,14 +305,14 @@ export default class Project extends React.Component {
                 <div className="project-team__contributors" >
                   {projectData.team.map((contributor, index) =>
                     <div key={contributor.id} className="project-team__contributor-container">
-                      <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 15 - index}} src={contributor.imageUrl} />
+                      <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: projectData.team.length - index}} src={contributor.imageUrl} />
                       <div className="project-team__contributor__modal">
                         <ProfileModal profile={contributor} />
                       </div>
                     </div>
                   )}
                 </div>
-                {projectData.teamSize > 15 && <div className="project-team__contributors__more">+{projectData.teamSize - 15}</div>}
+                {projectData.teamSize > projectData.team.length && <div className="project-team__contributors__more">+{projectData.teamSize - projectData.team.length}</div>}
               </div>
             </div>
           </div>
@@ -433,14 +433,14 @@ export default class Project extends React.Component {
               <div className="project-team__contributors" >
                 {projectData.team.map((contributor, index) =>
                   <div key={contributor.id} className="project-team__contributor-container">
-                    <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 15 - index}} src={contributor.imageUrl} />
+                    <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: projectData.team.length - index}} src={contributor.imageUrl} />
                     <div className="project-team__contributor__modal">
                       <ProfileModal profile={contributor} />
                     </div>
                   </div>
                 )}
               </div>
-              {projectData.teamSize > 15 && <div className="project-team__contributors__more">+{projectData.teamSize - 15}</div>}
+              {projectData.teamSize > projectData.team.length && <div className="project-team__contributors__more">+{projectData.teamSize - projectData.team.length}</div>}
             </div>
           </div>
         </div>

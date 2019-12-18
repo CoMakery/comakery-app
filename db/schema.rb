@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_01_123439) do
+ActiveRecord::Schema.define(version: 2019_12_05_172240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -187,6 +187,8 @@ ActiveRecord::Schema.define(version: 2019_11_01_123439) do
     t.integer "assignments_count", default: 0
     t.datetime "transferred_at"
     t.integer "source", default: 0
+    t.boolean "ethereum_transaction_success"
+    t.string "ethereum_transaction_error"
     t.index ["account_id"], name: "index_awards_on_account_id"
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
@@ -247,6 +249,21 @@ ActiveRecord::Schema.define(version: 2019_11_01_123439) do
     t.bigint "token_id"
     t.integer "status", default: 0
     t.integer "display_order"
+    t.boolean "whitelabel"
+    t.string "whitelabel_domain"
+    t.string "whitelabel_logo_id"
+    t.string "whitelabel_logo_filename"
+    t.string "whitelabel_logo_content_size"
+    t.string "whitelabel_logo_content_type"
+    t.string "whitelabel_logo_dark_id"
+    t.string "whitelabel_logo_dark_filename"
+    t.string "whitelabel_logo_dark_content_size"
+    t.string "whitelabel_logo_dark_content_type"
+    t.string "whitelabel_favicon_id"
+    t.string "whitelabel_favicon_filename"
+    t.string "whitelabel_favicon_content_size"
+    t.string "whitelabel_favicon_content_type"
+    t.string "whitelabel_contact_email"
     t.index ["token_id"], name: "index_missions_on_token_id"
   end
 
@@ -321,6 +338,7 @@ ActiveRecord::Schema.define(version: 2019_11_01_123439) do
     t.string "agreed_to_license_hash"
     t.boolean "display_team", default: true
     t.bigint "interests_count"
+    t.boolean "whitelabel"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"

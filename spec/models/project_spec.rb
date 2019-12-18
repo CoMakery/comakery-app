@@ -188,6 +188,7 @@ describe Project do
     describe 'store_license_hash' do
       let!(:project) { create(:project) }
       let!(:project_finalized) { create(:project) }
+      let!(:project_whitelabel) { create(:project, mission: create(:mission, whitelabel: true)) }
 
       before do
         create(:award, award_type: create(:award_type, project: project_finalized))
@@ -202,6 +203,22 @@ describe Project do
       it 'doesnt update the hash if the terms are finalized' do
         project_finalized.save
         expect(project_finalized.reload.agreed_to_license_hash).to eq('test')
+      end
+
+      it 'doesnt update the hash for whitelabel project' do
+        project_whitelabel.save
+        expect(project_whitelabel.reload.agreed_to_license_hash).to be_nil
+      end
+    end
+
+    describe 'set_whitelabel' do
+      let!(:whitelabel_mission) { create(:mission, whitelabel: true) }
+      let!(:whitelabel_project) { create(:project, mission: whitelabel_mission) }
+      let!(:project) { create(:project) }
+
+      it 'sets whitelabel value based on mission' do
+        expect(whitelabel_project.whitelabel).to be_truthy
+        expect(project.whitelabel).to be_falsey
       end
     end
 
@@ -385,7 +402,7 @@ describe Project do
       create(:award, award_type: create(:award_type, project: project))
       create(:interest, project: project)
 
-      expect(project.stats[:interests]).to eq(3)
+      expect(project.reload.stats[:interests]).to eq(3)
     end
   end
 
@@ -417,6 +434,89 @@ describe Project do
 
     it 'returns false for projects without comakery token' do
       expect(project.supports_transfer_rules?).to be_falsey
+    end
+  end
+
+  describe '.assign_project_owner_from' do
+    let(:previous_owner) { create(:account_with_auth) }
+    let(:project) { create :project, previous_owner }
+    let(:next_owner) { create(:account_with_auth) }
+
+    it 'sets preconditions properly' do
+      expect(project.account).to eq(previous_owner)
+      expect(project.admins).not_to include(previous_owner)
+      expect(project.interested).to include(previous_owner)
+    end
+
+    describe 'happy path with project object' do
+      before do
+        described_class.assign_project_owner_from(project, next_owner.email)
+        project.reload
+      end
+
+      it { expect(project.account).to eq(next_owner) }
+      it { expect(project.admins).not_to include(next_owner) }
+      it { expect(project.admins).to include(previous_owner) }
+      it { expect(project.interested).to include(next_owner) }
+      it { expect(project.interested).to include(previous_owner) }
+    end
+
+    describe 'happy path with just project id' do
+      before do
+        described_class.assign_project_owner_from(project.id, next_owner.email)
+        project.reload
+      end
+
+      it { expect(project.account).to eq(next_owner) }
+      it { expect(project.admins).not_to include(next_owner) }
+      it { expect(project.admins).to include(previous_owner) }
+      it { expect(project.interested).to include(next_owner) }
+      it { expect(project.interested).to include(previous_owner) }
+    end
+
+    it 'does not double add interested' do
+      project.interested << next_owner
+
+      expect(project.interested.length).to eq(2)
+
+      described_class.assign_project_owner_from(project, next_owner.email)
+
+      expect(project.interested.length).to eq(2)
+      expect(project.interested).to contain_exactly(next_owner, previous_owner)
+    end
+
+    it 'does not double add admins' do
+      expect(project.admins.length).to eq(0)
+
+      described_class.assign_project_owner_from(project, next_owner.email)
+      expect(project.admins.length).to eq(1)
+
+      described_class.assign_project_owner_from(project, next_owner.email)
+      expect(project.admins.length).to eq(1)
+    end
+
+    it 'raises an error if an account was not found by email' do
+      expect { described_class.assign_project_owner_from(project, 'invalid@example.com') }
+        .to raise_error(ArgumentError, 'Could not find an Account with that email address')
+    end
+
+    it 'gets called with self as the project when called with the instance method #assign_project_owner_from' do
+      expect(described_class).to receive(:assign_project_owner_from).with(project, previous_owner.email)
+      project.assign_project_owner_from(previous_owner.email)
+    end
+
+    it 'rolls back the db changes if the account could not be saved' do
+      invalid_data_for_title = nil
+      project.title = invalid_data_for_title
+      expect(project.valid?).to eq(false)
+
+      expect do
+        described_class.assign_project_owner_from(project, next_owner.email)
+      end.to raise_error(ArgumentError, 'Project data is invalid')
+
+      expect(project.account).to eq(previous_owner)
+      expect(project.admins).not_to include(previous_owner)
+      expect(project.interested).to include(previous_owner)
     end
   end
 end

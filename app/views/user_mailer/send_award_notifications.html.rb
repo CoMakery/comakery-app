@@ -1,5 +1,7 @@
 class Views::UserMailer::SendAwardNotifications < Views::Base
-  needs :url, :owner, :award
+  use_instance_variables_for_assigns true
+
+  needs :url, :owner, :award, :contact_email, :brand_name
   def content
     row do
       p do
@@ -12,14 +14,18 @@ class Views::UserMailer::SendAwardNotifications < Views::Base
           text ' to receive your award.'
         end
       end
-      p do
-        text 'We always knew you had it in you. Look at those tokens adding up!'
+
+      if brand_name == 'CoMakery'
+        p do
+          text 'We always knew you had it in you. Look at those tokens adding up!'
+        end
+        p do
+          text "If you ever have any questions, concerns, or compliments, please email us directly at #{@contact_email}"
+        end
       end
+
       p do
-        text 'If you ever have any questions, concerns, or compliments, please email us directly at community@comakery.com'
-      end
-      p do
-        text 'Congrats from the team at CoMakery. Thank you for being a part of the community!'
+        text "Congrats from the team at #{@brand_name}. Thank you for being a part of the community!"
       end
     end
   end

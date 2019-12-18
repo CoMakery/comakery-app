@@ -1,6 +1,7 @@
 class AwardDecorator < Draper::Decorator
   delegate_all
   include ActionView::Helpers::NumberHelper
+  include Rails.application.routes.url_helpers
 
   def ethereum_transaction_address_short
     if object.ethereum_transaction_address
@@ -94,6 +95,55 @@ class AwardDecorator < Draper::Decorator
       channel.name_with_provider
     else
       'Email'
+    end
+  end
+
+  def total_amount_wei
+    BigDecimal(10.pow(project.token&.decimal_places || 0) * total_amount)&.to_s&.to_i
+  end
+
+  def stimulus_data(controller_name, action)
+    case project.token&.coin_type
+    when 'erc20', 'eth', 'comakery'
+      {
+        'controller' => controller_name,
+        'target' => "#{controller_name}.button",
+        'action' => "click->#{controller_name}##{action}",
+        "#{controller_name}-payment-type" => project.token&.coin_type,
+        "#{controller_name}-address" => account.ethereum_wallet,
+        "#{controller_name}-amount" => total_amount_wei,
+        "#{controller_name}-contract-address" => project.token&.ethereum_contract_address,
+        "#{controller_name}-contract-abi" => project.token&.abi&.to_json,
+        "#{controller_name}-update-transaction-path" => project_award_type_award_update_transaction_address_path(project, award_type, self),
+        'info' => json_for_sending_awards
+      }
+    else
+      {
+        id: id,
+        info: json_for_sending_awards
+      }
+    end
+  end
+
+  def transfer_button_text
+    case source
+    when 'mint'
+      'Mint'
+    when 'burn'
+      'Burn'
+    else
+      'Pay'
+    end
+  end
+
+  def pay_data
+    case source
+    when 'mint'
+      stimulus_data('comakery-security-token', 'mint')
+    when 'burn'
+      stimulus_data('comakery-security-token', 'burn')
+    else
+      stimulus_data('ethereum', 'pay')
     end
   end
 end

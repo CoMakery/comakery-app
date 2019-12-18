@@ -1,0 +1,21 @@
+<div class="transfer-rules" data-controller="transfer-rules">
+  <h2>transfer rules</h2>
+
+  <h3><%= pluralize(@transfer_rules_all.size, 'Rule', 'Rules') %></h3>
+
+  <div class="transfer-rules__create">
+    <% if policy(@project).edit_transfer_rules? %>
+      <%= button_tag "create transfer rule ＋", type: 'button', class: 'transfer-rule-create', data: { target: 'transfer-rules.button', action: 'transfer-rules#showForm' } %>
+    <% end %>
+  </div>
+
+  <div class="transfer-rules__table transfers-table">
+    <%= render partial: "header" %>
+    <%= render partial: "form_transfer_rule" %>
+    <%= render partial: "transfer_rule", collection: @transfer_rules, as: :transfer_rule, cached: true %>
+  </div>
+
+  <div class="transfers-pages">
+    <%= paginate(@transfer_rules, window: 3) %>
+  </div>
+</div>

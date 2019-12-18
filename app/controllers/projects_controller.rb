@@ -1,9 +1,11 @@
 class ProjectsController < ApplicationController
   skip_before_action :require_login, except: %i[new edit create update update_status landing]
   skip_after_action :verify_authorized, only: %i[teams landing]
+
   before_action :assign_current_account
   before_action :assign_project, only: %i[edit admins add_admin remove_admin show update awards]
   before_action :assign_project_by_long_id, only: %i[unlisted]
+  before_action :redirect_for_whitelabel, only: %i[show unlisted]
   before_action :set_projects, only: %i[index]
   before_action :set_award, only: %i[show unlisted]
   before_action :set_tokens, only: %i[new edit]
@@ -17,10 +19,10 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @my_projects = current_account.my_projects.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @archived_projects = current_account.projects.includes(:account, :admins).archived.order(updated_at: :desc).limit(100).decorate
-      @team_projects = current_account.other_member_projects.includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @interested_projects = current_account.projects_interested.includes(:account, :admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
+      @my_projects = current_account.my_projects(@project_scope).includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @team_projects = current_account.other_member_projects(@project_scope).includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @archived_projects = @whitelabel_mission ? [] : current_account.projects.includes(:account, :admins).archived.order(updated_at: :desc).limit(100).decorate
+      @interested_projects = @whitelabel_mission ? [] : current_account.projects_interested.includes(:account, :admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
     end
 
     @my_project_contributors = TopContributors.call(projects: @my_projects).contributors
@@ -53,7 +55,7 @@ class ProjectsController < ApplicationController
     authorize @project
 
     @props[:project] = @project.serializable_hash.merge(
-      url: "https://www.comakery.com/p/#{@project.long_id}",
+      url: "https://#{current_domain}/p/#{@project.long_id}",
       mission_id: params[:mission_id] ? Mission.find(params[:mission_id])&.id : nil
     )
     render component: 'ProjectForm', props: @props
@@ -63,6 +65,8 @@ class ProjectsController < ApplicationController
     @project = current_account.projects.build project_params
     @project.public = false
     @project.long_id ||= SecureRandom.hex(20)
+
+    @project.mission = @whitelabel_mission if @whitelabel_mission
 
     authorize @project
 
@@ -167,7 +171,7 @@ class ProjectsController < ApplicationController
   private
 
   def assign_project_by_long_id
-    @project = Project.find_by(long_id: params[:long_id])&.decorate
+    @project = @project_scope.find_by(long_id: params[:long_id])&.decorate
 
     return redirect_to('/404.html') unless @project
     return redirect_to(project_path(@project)) unless @project.unlisted?
@@ -176,7 +180,7 @@ class ProjectsController < ApplicationController
   def set_projects
     @page = (params[:page] || 1).to_i
 
-    @q = policy_scope(Project).ransack(params[:q])
+    @q = policy_scope(@project_scope).ransack(params[:q])
     @q.sorts = 'interests_count DESC' if @q.sorts.empty?
 
     @projects_all = @q.result.includes(:token, :mission, :account, :admins)
@@ -221,11 +225,12 @@ class ProjectsController < ApplicationController
           panoramic_image_url: @project&.panoramic_image&.present? ? Refile.attachment_url(@project, :panoramic_image, :fill, 1500, 300) : nil,
           mission_id: @project&.mission&.id,
           token_id: @project&.token&.id,
-          channels: @project&.channels&.map do |channel|
+          channels: @project&.channels&.includes(:team)&.map do |channel|
             {
               channel_id: channel&.channel_id&.to_s,
               team_id: channel&.team&.id&.to_s,
-              id: channel&.id
+              id: channel&.id,
+              name_with_provider: channel&.name_with_provider
             }
           end,
           url: unlisted_project_url(@project.long_id)
@@ -245,7 +250,8 @@ class ProjectsController < ApplicationController
       form_action: 'POST',
       csrf_token: form_authenticity_token,
       project_for_header: project_header,
-      mission_for_header: @project&.mission&.decorate&.header_props
+      mission_for_header: @project&.mission&.decorate&.header_props,
+      is_whitelabel: @whitelabel_mission.present?
     }
   end
 
@@ -266,7 +272,7 @@ class ProjectsController < ApplicationController
       my_tasks_path: my_tasks_path(project_id: @project.id),
       editable: policy(@project).edit?,
       project_for_header: @project.decorate.header_props,
-      mission_for_header: @project&.mission&.decorate&.header_props
+      mission_for_header: @whitelabel_mission ? nil : @project&.mission&.decorate&.header_props
     }
   end
 
@@ -342,7 +348,7 @@ class ProjectsController < ApplicationController
   end
 
   def project_props(project)
-    project.as_json(only: %i[id title require_confidentiality display_team]).merge(
+    project.as_json(only: %i[id title require_confidentiality display_team whitelabel]).merge(
       description_html: Comakery::Markdown.to_html(project.description),
       show_contributions: policy(project).show_contributions?,
       square_image_url: Refile.attachment_url(project, :square_image) || helpers.image_url('defaul_project.jpg'),
@@ -373,6 +379,16 @@ class ProjectsController < ApplicationController
         logo_url: mission.image.present? ? Refile.attachment_url(mission, :logo, :fill, 100, 100) : nil,
         mission_url: mission_path(mission)
       )
+    end
+  end
+
+  def redirect_for_whitelabel
+    if @whitelabel_mission
+      if policy(@project).show_contributions?
+        redirect_to project_dashboard_transfers_path(@project)
+      else
+        redirect_to project_award_types_path(@project)
+      end
     end
   end
 end

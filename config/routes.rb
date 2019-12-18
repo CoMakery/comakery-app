@@ -79,9 +79,14 @@ Rails.application.routes.draw do
 
     namespace :dashboard do
       resources :transfers, only: [:index, :create]
-      resources :accounts, only: [:index]
+      resources :accounts, only: [:index, :update]
       resources :reg_groups, only: [:create, :destroy]
-      resources :transfer_rules, only: [:create, :destroy, :index]
+      resources :transfer_rules, only: [:create, :destroy, :index] do
+        collection do
+          post :pause
+          post :unpause
+        end
+      end
     end
     
     member do

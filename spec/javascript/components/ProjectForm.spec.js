@@ -145,7 +145,7 @@ describe('ProjectForm', () => {
       ['Logged in team member via unlisted URL', 'member_unlisted'],
       ['Logged in team members', 'member'],
       ['Archived (visible only to me)', 'archived'],
-      ['Publicly listed in CoMakery searches', 'public_listed'],
+      ['Public', 'public_listed'],
       ['Unlisted URL (no login required)', 'public_unlisted']
     ])
   })
@@ -358,37 +358,13 @@ describe('ProjectForm', () => {
       'input[type="hidden"][name="project[channels_attributes][1][id]"]'
     ).props().value).toBe(1)
 
-    expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][1][team_id]"]'
-    ).props().value).toBe('team1Id')
-
-    expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="channel"][required][name="project[channels_attributes][1][channel_id]"]'
-    ).props().value).toBe('ch1Id')
-
-    expect(wrapper.find(
-      'input[type="hidden"][name="project[channels_attributes][2][id]"]'
-    ).props().value).toBe(2)
-
-    expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][2][team_id]"]'
-    ).props().value).toBe('team1Id')
-
-    expect(wrapper.find(
-      'InputFieldDropdownHalfed[title="channel"][required][name="project[channels_attributes][2][channel_id]"]'
-    ).props().value).toBe('ch2Id')
-
     wrapper.find('.project-form--form--channels--channel--del').at(0).simulate('click')
     expect(wrapper.find(
       'input[type="hidden"][name="project[channels_attributes][1][_destroy]"]'
     ).props().value).toBe('1')
     expect(wrapper.exists('input[type="hidden"][name="project[channels_attributes][1][id]"]')).toBe(true)
-    expect(wrapper.exists('InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][1][team_id]"]')).toBe(false)
-    expect(wrapper.exists('InputFieldDropdownHalfed[title="channel"][required][name="project[channels_attributes][1][channel_id]"]')).toBe(false)
 
     expect(wrapper.exists('input[type="hidden"][name="project[channels_attributes][2][id]"]')).toBe(true)
-    expect(wrapper.exists('InputFieldDropdownHalfed[title="team or guild"][required][name="project[channels_attributes][2][team_id]"]')).toBe(true)
-    expect(wrapper.exists('InputFieldDropdownHalfed[title="channel"][required][name="project[channels_attributes][2][channel_id]"]')).toBe(true)
   })
 
   it('renders correctly with csrfToken', () => {

@@ -39,6 +39,13 @@ describe MissionsController do
         expect(assigns[:missions].count).to eq(3)
       end
     end
+
+    it 'is unavailable_for_whitelabel' do
+      create :active_whitelabel_mission
+
+      get :index
+      expect(response).to redirect_to(new_session_url)
+    end
   end
 
   describe '#new' do

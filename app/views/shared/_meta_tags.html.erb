@@ -1,7 +1,14 @@
-<% title = @meta_title ? @meta_title : 'CoMakery - Achieve Big Missions' %>
-<% description = @meta_desc ? @meta_desc : 'Built from a belief in the power of people, together. With CoMakery, you can gather or join a tribe and work to achieve big missions.' %>
-<% image = @meta_image ? @meta_image : '/comakery.jpg' %>
-<% url = url_for(only_path: false) %>
+<% if @whitelabel_mission %>
+  <% title = @meta_title ? @meta_title : @whitelabel_mission.name %>
+  <% description = @meta_desc ? @meta_desc : nil %>
+  <% image = @meta_image ? @meta_image : nil %>
+  <% url = url_for(only_path: false) %>
+<% else %>
+  <% title = @meta_title ? @meta_title : 'CoMakery - Achieve Big Missions' %>
+  <% description = @meta_desc ? @meta_desc : 'Built from a belief in the power of people, together. With CoMakery, you can gather or join a tribe and work to achieve big missions.' %>
+  <% image = @meta_image ? @meta_image : '/comakery.jpg' %>
+  <% url = url_for(only_path: false) %>
+<% end %>
 
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' >
 <meta charset='utf-8' >
@@ -28,3 +35,25 @@
 <meta property="twitter:image" content="<%= image %>">
 
 <meta name="turbolinks-cache-control" content="no-preview">
+
+<% if @whitelabel_mission && @whitelabel_mission&.whitelabel_favicon %>
+  <% cache @whitelabel_mission do %>
+    <link rel="shortcut icon" type="image/png" href="<%= Refile.attachment_url(@whitelabel_mission, :whitelabel_favicon, :fill, 64, 64) %>">
+  <% end %>
+<% else %>
+  <%= favicon_link_tag 'favicon/favicon.ico', defer: true %>
+  <%= favicon_link_tag 'favicon/apple-icon-57x57.png', rel: 'apple-touch-icon', sizes: '57x57', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/apple-icon-60x60.png', rel: 'apple-touch-icon', sizes: '60x60', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/apple-icon-72x72.png', rel: 'apple-touch-icon', sizes: '72x72', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/apple-icon-76x76.png', rel: 'apple-touch-icon', sizes: '76x76', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/apple-icon-114x114.png', rel: 'apple-touch-icon', sizes: '114x114', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/apple-icon-120x120.png', rel: 'apple-touch-icon', sizes: '120x120', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/apple-icon-144x144.png', rel: 'apple-touch-icon', sizes: '144x144', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/apple-icon-152x152.png', rel: 'apple-touch-icon', sizes: '152x152', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/apple-icon-180x180.png', rel: 'apple-touch-icon', sizes: '180x180', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/android-icon-192x192.png', rel: 'icon', sizes: '192x192', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/favicon-32x32.png', rel: 'icon', sizes: '32x32', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/favicon-96x96.png', rel: 'icon', sizes: '96x96', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/favicon-16x16.png', rel: 'icon', sizes: '16x16', type: 'image/png', defer: true %>
+  <%= favicon_link_tag 'favicon/manifest.json', rel: 'manifest', type: 'application/json', defer: true %>
+<% end %>

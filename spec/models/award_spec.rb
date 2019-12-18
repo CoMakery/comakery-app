@@ -1076,4 +1076,56 @@ describe Award do
       expect(create(:award).payment_blocked?).to be_truthy
     end
   end
+
+  describe 'handle_tx_hash' do
+    let!(:award) { create(:award, status: :accepted) }
+    let!(:account) { create(:account) }
+
+    before do
+      award.handle_tx_hash('0xTEST', account)
+      award.reload
+    end
+
+    it 'sets tx address, issuer and marks award as paid' do
+      expect(award.ethereum_transaction_address).to eq('0xTEST')
+      expect(award.paid?).to be_truthy
+      expect(award.issuer).to eq(account)
+    end
+  end
+
+  describe 'handle_tx_receipt' do
+    let!(:award_succeed) { create(:award, status: :accepted) }
+    let!(:award_failed) { create(:award, status: :accepted) }
+
+    before do
+      award_succeed.handle_tx_receipt('{"status": true}')
+      award_failed.handle_tx_receipt('{"status": false}')
+      award_succeed.reload
+      award_failed.reload
+    end
+
+    it 'sets tx success and marks award as paid' do
+      expect(award_succeed.ethereum_transaction_success).to be_truthy
+      expect(award_succeed.paid?).to be_truthy
+    end
+
+    it 'sets tx success and marks award as accepted' do
+      expect(award_failed.ethereum_transaction_success).to be_falsey
+      expect(award_failed.accepted?).to be_truthy
+    end
+  end
+
+  describe 'handle_tx_error' do
+    let!(:award_failed) { create(:award, status: :accepted) }
+
+    before do
+      award_failed.handle_tx_error('test error')
+      award_failed.reload
+    end
+
+    it 'sets tx error and marks award as accepted' do
+      expect(award_failed.ethereum_transaction_error).to eq('test error')
+      expect(award_failed.accepted?).to be_truthy
+    end
+  end
 end

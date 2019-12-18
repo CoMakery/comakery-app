@@ -11,7 +11,7 @@ class PasswordResetsController < ApplicationController
   def create
     @account = Account.find_by(email: params[:email])
     if @account
-      @account.send_reset_password_request
+      @account.send_reset_password_request(@whitelabel_mission)
       flash[:notice] = 'please check your email for reset password instructions'
       redirect_to root_path
     else

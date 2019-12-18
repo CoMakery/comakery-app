@@ -52,12 +52,12 @@ describe 'my account', js: true do
   scenario 'user gets redirected to build profile page after signup' do
     visit root_path
     first('.header--nav--links').click_link 'Sign Up'
-    click_on 'CREATE YOUR ACCOUNT'
+    click_on 'Create Your Account'
     expect(page).to have_content("can't be blank", count: 1)
     fill_in 'account[email]', with: 'test@test.st'
     fill_in 'Password', with: '12345678'
     page.check('account_agreed_to_user_agreement')
-    click_on 'CREATE YOUR ACCOUNT'
+    click_on 'Create Your Account'
     expect(page).to have_content('Build Your Profile')
   end
 
@@ -106,14 +106,14 @@ describe 'my account', js: true do
   scenario 'projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects'
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(show_account_path)
     expect(page).to have_content('Please confirm your email address to continue')
   end
 
   scenario 'my projects page is unavailable after signup' do
     login(unconfirmed_account)
     visit '/projects/mine'
-    expect(page).to have_current_path(root_path)
+    expect(page).to have_current_path(show_account_path)
     expect(page).to have_content('Please confirm your email address to continue')
   end
 

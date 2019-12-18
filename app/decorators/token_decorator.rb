@@ -15,4 +15,16 @@ class TokenDecorator < Draper::Decorator
   def currency_denomination
     Comakery::Currency::DENOMINATIONS[token.denomination]
   end
+
+  def eth_data(controller_name = 'ethereum')
+    case coin_type
+    when 'erc20', 'eth', 'comakery'
+      {
+        "#{controller_name}-payment-type" => coin_type,
+        "#{controller_name}-amount" => 0,
+        "#{controller_name}-contract-address" => ethereum_contract_address,
+        "#{controller_name}-contract-abi" => abi&.to_json
+      }
+    end
+  end
 end

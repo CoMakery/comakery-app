@@ -1,0 +1,51 @@
+<%= form_with model: transfer_rule, method: :delete, url: project_dashboard_transfer_rule_path(@project, transfer_rule), data: {controller: "transfer-rule-form", target: "transfer-rule-form.form"}.merge(transfer_rule.decorate.eth_data).merge(@project.token.decorate.eth_data('transfer-rule-form')), class: 'transfer-rule-form' do |f| %>
+
+  <div class="transfers-table__transfer">
+    <div class="transfers-table__transfer__sending_group">
+      <label>sending group</label>
+
+      <%= transfer_rule.sending_group.name %>
+    </div>
+
+    <div class="transfers-table__transfer__sending_group_id">
+      <label>sending group id</label>
+
+      <%= transfer_rule.sending_group.blockchain_id %>
+    </div>
+
+    <div class="transfers-table__transfer__receiving_group">
+      <label>receiving group</label>
+
+      <%= transfer_rule.receiving_group.name %>
+    </div>
+
+    <div class="transfers-table__transfer__receiving_group_id">
+      <label>receiving group id</label>
+
+      <%= transfer_rule.receiving_group.blockchain_id %>
+    </div>
+
+    <div class="transfers-table__transfer__lockup_until">
+      <label>allowed after date</label>
+
+      <%= transfer_rule.lockup_until.strftime("%b %e, %Y") %>
+    </div>
+
+    <% if policy(@project).edit_transfer_rules? %>
+      <div class="transfers-table__transfer__action transfers-table__transfer__action--warn">
+        <div class='transfer-button'>
+          <% if @project.token&.token_frozen? %>
+            frozen
+
+          <% else %>
+            <%= link_to 'javascript:void(0)', data: {action: 'transfer-rule-form#delete', target: 'transfer-rule-form.button'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy' do %>
+              <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
+              <span>Delete</span>
+            <% end %>
+
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

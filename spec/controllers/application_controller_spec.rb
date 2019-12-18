@@ -119,6 +119,48 @@ describe ApplicationController do
     end
   end
 
+  describe 'current_domain' do
+    it 'returds request domain including all subdomains' do
+      expect(controller.current_domain).to eq('test.host')
+    end
+  end
+
+  describe 'set_whitelabel_mission' do
+    let!(:whitelabel_mission) { create(:mission, whitelabel: true) }
+
+    it 'assigns whitelabel mission which matches current_domain' do
+      whitelabel_mission.update(whitelabel_domain: 'test.host')
+
+      get :index
+      expect(assigns[:whitelabel_mission]).to eq(whitelabel_mission)
+    end
+
+    it 'doesnt assign whitelabel mission' do
+      get :index
+      expect(assigns[:whitelabel_mission]).to be_nil
+    end
+  end
+
+  describe 'set_project_scope' do
+    let!(:whitelabel_mission) { create(:mission, whitelabel: true) }
+    let!(:whitelabel_project) { create(:project, mission: whitelabel_mission) }
+    let!(:project) { create(:project) }
+
+    it 'sets project scope to whitelabel_mission projects' do
+      whitelabel_mission.update(whitelabel_domain: 'test.host')
+
+      get :index
+      expect(assigns[:project_scope].all).to include(whitelabel_project)
+      expect(assigns[:project_scope].all).not_to include(project)
+    end
+
+    it 'sets project scope to all projects excluding whitelabel ones' do
+      get :index
+      expect(assigns[:project_scope].all).not_to include(whitelabel_project)
+      expect(assigns[:project_scope].all).to include(project)
+    end
+  end
+
   describe 'errors' do
     describe 'ActiveRecord::RecordNotFound' do
       it 'redirects to 404 page' do

@@ -27,9 +27,7 @@ const transferAwardOnTezos = award => // award in JSON
   tezosTrezor.transferXtzCoins(award)
 
 window.transferAward = function(award) { // award in JSON
-  if ((award.token.coin_type === 'erc20') || (award.token.coin_type === 'eth') || (award.token.coin_type === 'comakery')) {
-    transferAwardOnEthereum(award)
-  } else if ((award.token.coin_type === 'qrc20') || (award.token.coin_type === 'qtum')) {
+  if ((award.token.coin_type === 'qrc20') || (award.token.coin_type === 'qtum')) {
     transferAwardOnQtum(award)
   } else if (award.token.coin_type === 'ada') {
     transferAwardOnCardano(award)
@@ -43,7 +41,7 @@ window.transferAward = function(award) { // award in JSON
 }
 
 $(() =>
-  $(document).on('click', '.transfer-tokens-btn', function() {
+  $(document).on('click', '.transfer-tokens-btn:not(.transfer-tokens-btn-skip-legacy)', function() {
     const award = JSON.parse($(this).attr('data-info'))
     transferAward(award)
   })

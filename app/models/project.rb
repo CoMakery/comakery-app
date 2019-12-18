@@ -44,7 +44,8 @@ class Project < ApplicationRecord
   validate :token_changeable, if: -> { token_id_changed? && token_id_was.present? }
   validate :terms_should_be_readonly, if: -> { legal_project_owner_changed? || exclusive_contributions_changed? || confidentiality_changed? }
 
-  before_validation :store_license_hash, unless: -> { terms_readonly? }
+  before_validation :set_whitelabel, if: -> { mission }
+  before_validation :store_license_hash, if: -> { !terms_readonly? && !whitelabel? }
   after_save :udpate_awards_if_token_was_added, if: -> { saved_change_to_token_id? && token_id_before_last_save.nil? }
   after_create :add_owner_as_interested
 
@@ -62,6 +63,33 @@ class Project < ApplicationRecord
   delegate :decimal_places_value, to: :token, allow_nil: true
   delegate :populate_token?, to: :token, allow_nil: true
   delegate :total_awarded, to: :awards, allow_nil: true
+
+  def self.assign_project_owner_from(project_or_project_id, email)
+    project = project_or_project_id.is_a?(Integer) ? Project.find(project_or_project_id) : project_or_project_id
+    raise ArgumentError, 'Project data is invalid' if project.invalid?
+
+    new_owner = Account.find_by(email: email)
+    raise ArgumentError, 'Could not find an Account with that email address' if new_owner.blank?
+
+    previous_owner = project.account
+    project.safe_add_admin(previous_owner)
+    project.account_id = new_owner.id
+    project.admins.delete(new_owner)
+    project.safe_add_interested(new_owner)
+    project.save!
+  end
+
+  def assign_project_owner_from(email)
+    self.class.assign_project_owner_from(self, email)
+  end
+
+  def safe_add_admin(new_admin)
+    admins << new_admin unless admins.exists?(new_admin.id)
+  end
+
+  def safe_add_interested(interested_account)
+    interested << interested_account unless interested_account.interested?(id)
+  end
 
   def top_contributors
     Account.select('accounts.*, sum(a1.total_amount) as total_awarded, max(a1.created_at) as last_awarded_at').joins("
@@ -88,10 +116,6 @@ class Project < ApplicationRecord
   def invalid_channel(attributes)
     Channel.invalid_params(attributes)
   end
-
-  # def owner_slack_user_name
-  #   account.authentications.find_by(slack_team_id: slack_team_id)&.display_name
-  # end
 
   def video_id
     # taken from http://stackoverflow.com/questions/5909121/converting-a-regular-youtube-link-into-an-embedded-video
@@ -166,12 +190,7 @@ class Project < ApplicationRecord
     {
       batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
-      interests: (
-        [account_id] |
-        admins.pluck(:id) |
-        interests.pluck(:account_id) |
-        contributors_distinct.pluck(:id)
-      ).compact.uniq.size
+      interests: interests.size
     }
   end
 
@@ -231,5 +250,9 @@ class Project < ApplicationRecord
 
   def store_license_hash
     self.agreed_to_license_hash = Digest::SHA256.hexdigest(File.read(Dir.glob(Rails.root.join('lib', 'assets', 'contribution_licenses', 'CP-*.md')).max_by { |f| File.mtime(f) }))
+  end
+
+  def set_whitelabel
+    self.whitelabel = mission&.whitelabel
   end
 end

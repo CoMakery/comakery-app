@@ -67,6 +67,21 @@ RSpec.describe AwardsController, type: :controller do
       expect(response.status).to eq(200)
       expect(assigns[:project]).to eq(project)
     end
+
+    it 'is unavailable_for_whitelabel' do
+      create :active_whitelabel_mission
+
+      get :index
+      expect(response).to redirect_to(new_session_url)
+    end
+
+    it 'doesnt include whitelabel tasks' do
+      whitelabel_task = create(:award_ready, account: issuer.account)
+      whitelabel_task.project.mission.update(whitelabel: true)
+
+      get :index
+      expect(assigns[:awards]).not_to include(whitelabel_task)
+    end
   end
 
   describe '#create' do
@@ -587,9 +602,9 @@ RSpec.describe AwardsController, type: :controller do
   describe '#update_transaction_address' do
     let(:transaction_address) { '0xdb6f4aad1b0de83284855aafafc1b0a4961f4864b8a627b5e2009f5a6b2346cd' }
     let(:award_type) { create(:award_type, project: project) }
-    let!(:award) { create(:award, award_type: award_type, issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '1234') }
+    let!(:award) { create(:award, status: :accepted, award_type: award_type, issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '1234') }
 
-    it 'success' do
+    it 'handles tx address' do
       login issuer.account
       post :update_transaction_address, format: 'js', params: {
         project_id: project.to_param,
@@ -603,7 +618,31 @@ RSpec.describe AwardsController, type: :controller do
       expect(award.status).to eq 'paid'
     end
 
-    it 'failure' do
+    it 'handles tx receipt' do
+      login issuer.account
+      post :update_transaction_address, format: 'js', params: {
+        project_id: project.to_param,
+        award_type_id: award_type.to_param,
+        award_id: award.id,
+        receipt: '{"status": true}'
+      }
+      award.reload
+      expect(award.ethereum_transaction_success).to be_truthy
+    end
+
+    it 'handles tx error' do
+      login issuer.account
+      post :update_transaction_address, format: 'js', params: {
+        project_id: project.to_param,
+        award_type_id: award_type.to_param,
+        award_id: award.id,
+        error: 'test error'
+      }
+      award.reload
+      expect(award.ethereum_transaction_error).to eq 'test error'
+    end
+
+    it 'fails' do
       post :update_transaction_address, format: 'js', params: {
         project_id: project.to_param,
         award_type_id: award_type.to_param,

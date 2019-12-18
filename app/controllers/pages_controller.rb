@@ -1,4 +1,6 @@
 class PagesController < ApplicationController
+  before_action :unavailable_for_whitelabel
+
   skip_before_action :require_login, except: %i[add_interest]
   skip_before_action :require_email_confirmation, except: %i[add_interest]
 

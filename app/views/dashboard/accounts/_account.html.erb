@@ -1,82 +1,125 @@
 <% account = account.decorate %>
 <% record = account.account_token_records.find_by(token: @project.token) %>
+<% form_url = record ? project_dashboard_account_path(@project, record) : root_path %>
+<% form_data = record ? { controller: "account-form", target: "account-form.form", 'account-form-address' => account.ethereum_wallet }.merge(@project.token.decorate.eth_data('account-form')) : nil %>
 
-<div class="transfers-table__transfer">
-  <div class="transfers-table__transfer__account">
-    <%= render partial: "dashboard/transfers/account", locals: {account: account} %>
-  </div>
-
-  <div class="transfers-table__transfer__aml-kyc">
-    <label>AML/KYC Date</label>
-
-    <% if account.latest_verification %>
-      <%= account.latest_verification.created_at.strftime("%b %e, %Y") %>
-    <% else %>
-      –
-    <% end %>
-  </div>
-
-  <div class="transfers-table__transfer__max-investment">
-    <label>Max Investment</label>
-
-    <% if account.latest_verification %>
-      <%= number_to_currency(account.latest_verification.max_investment_usd) %>
-    <% else %>
-      –
-    <% end %>
-  </div>
-
-  <div class="transfers-table__transfer__tokens">
-    <label>tokens <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
-
-    <%= account.total_awards_earned(@project) %>
-  </div>
-
-  <% if @project.token %>
-    <div class="transfers-table__transfer__address">
-      <label>Address</label>
-
-      <span class="transfers-table__transfer__address__button">
-        <%= account.wallet_address_link_for(@project) %>
-      </span>
-    </div>
+<%= form_with model: record, url: form_url, data: form_data, class: 'account-form' do |f| %>
+	
+	<% if policy(@project).edit_accounts? && record && account.ethereum_wallet %>
+		<%= image_tag 'pencil.svg', data: {action: 'click->account-form#showForm', target: 'account-form.outputs'}, class: 'transfers-table--edit-icon transfers-table--edit-icon__pencil' %>
+		<%= image_tag 'iconCloseDark.svg', data: {action: 'click->account-form#hideForm', target: 'account-form.inputs'}, class: 'transfers-table--edit-icon hidden' %>
   <% end %>
+	
+	<div class="transfers-table__transfer">		
+	  <div class="transfers-table__transfer__account">
+	    <%= render partial: "dashboard/transfers/account", locals: {account: account} %>
+	  </div>
 
-  <% if @project.supports_transfer_rules? %>
-    <div class="transfers-table__transfer__max_balance">
-      <label>max balance</label>
+	  <div class="transfers-table__transfer__aml-kyc">
+	    <label>AML/KYC Date</label>
 
-      <% if record&.max_balance&.to_i > 0 %>
-        <%= number_to_currency(record&.max_balance, unit: '', precision: 0) %>
-      <% else %>
-        –
-      <% end %>
-    </div>
+	    <% if account.latest_verification %>
+	      <%= account.latest_verification.created_at.strftime("%b %e, %Y") %>
+	    <% else %>
+	      –
+	    <% end %>
+	  </div>
 
-    <div class="transfers-table__transfer__lockup_until">
-      <label>lockup until</label>
+	  <div class="transfers-table__transfer__max-investment">
+	    <label>Max Investment</label>
 
-      <% if record&.lockup_until && record&.lockup_until > Time.current %>
-        <%= record&.lockup_until&.strftime("%b %e, %Y") %>
-      <% else %>
-        –
-      <% end %>
-    </div>
+	    <% if account.latest_verification %>
+	      <%= number_to_currency(account.latest_verification.max_investment_usd) %>
+	    <% else %>
+	      –
+	    <% end %>
+	  </div>
 
-    <div class="transfers-table__transfer__reg_group">
-      <label>reg group</label>
+	  <div class="transfers-table__transfer__tokens">
+	    <label>tokens <%= @project.token&.symbol ? "(#{@project.token&.symbol})" : '' %></label>
 
-      <%= record&.reg_group&.name || – %>
-    </div>
+	    <%= account.total_awards_earned(@project) %>
+	  </div>
 
-    <div class="transfers-table__transfer__frozen">
-      <label>frozen</label>
+	  <% if @project.token %>
+	    <div class="transfers-table__transfer__address">
+	      <label>Address</label>
 
-      <% if record&.account_frozen? %>
-        <span class="transfers-table__transfer__frozen--yes">Yes</span>
-      <% else %>
-        <span class="transfers-table__transfer__frozen--no">No</span>
-      <% end %>
-    </div>
+	      <span class="transfers-table__transfer__address__button">
+	        <%= account.wallet_address_link_for(@project) %>
+	      </span>
+	    </div>
+	  <% end %>
+
+	  <% if @project.supports_transfer_rules? %>
+			<div class="transfers-table__transfer__max_balance">
+	      <label>max balance</label>
+
+				<div data-target="account-form.outputs">
+		      <% if record&.max_balance && record.max_balance > 0 %>
+		        <%= number_to_currency(record.max_balance, unit: '', precision: 0) %>
+		      <% else %>
+		        –
+		      <% end %>
+				</div>
+			
+	      <%= f.number_field(:max_balance, required: false, placeholder: '0', min: 0, step: 1, data: {target: "account-form.addressMaxBalance account-form.inputs"}, class: 'hidden') %>
+	    </div>
+
+	    <div class="transfers-table__transfer__lockup_until">
+	      <label>lockup until</label>
+
+				<div data-target="account-form.outputs">
+		      <% if record&.lockup_until %>
+		        <%= record&.lockup_until&.strftime("%b %e, %Y") %>
+		      <% else %>
+		        –
+		      <% end %>
+				</div>
+			
+	      <%= f.date_field(:lockup_until, required: false, placeholder: 'dd.mm.yyyy', data: {target: "account-form.addressLockupUntil account-form.inputs"}, class: 'hidden') %>
+	    </div>
+
+	    <div class="transfers-table__transfer__reg_group">
+	      <label>reg group</label>
+
+				<div data-target="account-form.outputs">
+	      	<%= record&.reg_group ? "#{record.reg_group.name} (#{record.reg_group.blockchain_id})" : "–" %>
+				</div>
+			
+	    	<%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: '–' }, { required: false, class: 'hidden', data: {target: "account-form.addressGroupId account-form.inputs"} }) %>
+			</div>
+
+	    <div class="transfers-table__transfer__frozen">
+	      <label>frozen</label>
+
+				<div data-target="account-form.outputs">
+		      <% if record&.account_frozen? %>
+		        <span class="transfers-table__transfer__frozen--yes">Yes</span>
+		      <% else %>
+		        <span class="transfers-table__transfer__frozen--no">No</span>
+		      <% end %>
+				</div>
+			
+	    	<%= f.select(:account_frozen, [['Yes', true], ['No', false]], { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressFrozen account-form.inputs"} }) %>
+	    </div>
+		<% end %>
+	</div>
+	
+  <% if policy(@project).edit_accounts? && record && account.ethereum_wallet %>
+  	<div class="transfers-table--edit-save hidden" data-target="account-form.inputs">
+  		<div class='transfer-button'>
+        <% if @project.token&.token_frozen? %>
+          frozen
+
+        <% else %>
+          <%= link_to 'javascript:void(0)', data: {action: 'account-form#save', target: 'account-form.button account-form.inputs'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy hidden' do %>
+            <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
+            <span>Save</span>
+          <% end %>
+
+        <% end %>
+  		</div>
+  	</div>
   <% end %>
-</div>
+<% end %>

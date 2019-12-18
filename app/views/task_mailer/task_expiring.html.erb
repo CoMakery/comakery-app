@@ -7,7 +7,7 @@
 </p>
 
 <p>
-  You can do this! <a href="<%= project_award_type_award_url(@award.project, @award.award_type, @award) %>">Visit this link</a> to submit the work when finished.
+  You can do this! <a href="<%= project_award_type_award_url(@award.project, @award.award_type, @award, host: @host) %>">Visit this link</a> to submit the work when finished.
   There's
   <% if @award.token %>
     <b><%= @award.total_amount %></b> of <%= @award.token.name %>
@@ -22,5 +22,5 @@
 </p>
 
 <p>
-  Team CoMakery
+  Team <%= @brand_name %>
 </p>

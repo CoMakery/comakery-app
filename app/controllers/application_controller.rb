@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   include Pundit
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
+  after_action :set_whitelabel_cors
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -14,8 +15,10 @@ class ApplicationController < ActionController::Base
 
   # require account logins for all pages by default
   # (public pages use skip_before_action :require_login)
+  before_action :set_whitelabel_mission
   before_action :require_login, :require_email_confirmation, :check_age, :require_build_profile
   before_action :basic_auth
+  before_action :set_project_scope
 
   def basic_auth
     return unless ENV.key?('BASIC_AUTH')
@@ -99,7 +102,7 @@ class ApplicationController < ActionController::Base
 
   def require_email_confirmation
     if current_account && !current_account&.confirmed? && !current_account&.valid_and_underage?
-      redirect_to root_path, flash: { warning: 'Please confirm your email address to continue' }
+      redirect_to show_account_path, flash: { warning: 'Please confirm your email address to continue' }
     end
   end
 
@@ -113,7 +116,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_if_signed_in
-    return redirect_to root_path if current_account
+    return redirect_to my_project_path if current_account
   end
 
   def check_age
@@ -139,7 +142,8 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def assign_project
-    @project = Project.find_by(id: params[:project_id] || params[:id])&.decorate
+    @project = @project_scope.find_by(id: params[:project_id] || params[:id])&.decorate
+    return redirect_to '/404.html' unless @project
   end
 
   def task_to_props(task)
@@ -219,11 +223,36 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_domain
+    [request.subdomains, request.domain].flatten.join('.')
+  end
+
+  def unavailable_for_whitelabel
+    return redirect_to new_session_url if @whitelabel_mission
+  end
+
   private
 
   def compare_all(*pairs)
     pairs.map do |a, b|
       ActiveSupport::SecurityUtils.secure_compare(a, b)
     end.reduce(:&)
+  end
+
+  def set_whitelabel_mission
+    @whitelabel_mission = Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
+  end
+
+  def set_project_scope
+    @project_scope = @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: [false, nil])
+  end
+
+  def set_whitelabel_cors
+    if @whitelabel_mission
+      headers['Access-Control-Allow-Origin'] = 'https://' + ENV['APP_HOST']
+      headers['Access-Control-Allow-Credentials'] = 'true'
+      headers['Access-Control-Allow-Methods'] = '*'
+      headers['Access-Control-Allow-Headers'] = '*'
+    end
   end
 end

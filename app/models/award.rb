@@ -95,7 +95,7 @@ class Award < ApplicationRecord
   }
 
   enum status: %i[ready started submitted accepted rejected paid cancelled unpublished]
-  enum source: %i[earned bought]
+  enum source: %i[earned bought mint burn]
 
   def self.total_awarded
     completed.sum(:total_amount)
@@ -297,6 +297,22 @@ class Award < ApplicationRecord
 
   def payment_blocked?
     !accepted? || needs_wallet? || account_frozen? || account_verification_unknown? || account_verification_failed?
+  end
+
+  def handle_tx_hash(hash, issuer)
+    update!(ethereum_transaction_address: hash, status: :paid, issuer: issuer)
+  end
+
+  def handle_tx_receipt(receipt)
+    receipt = JSON.parse(receipt)
+    success = receipt['status']
+    status = success ? :paid : :accepted
+
+    update!(ethereum_transaction_success: success, status: status)
+  end
+
+  def handle_tx_error(error)
+    update!(ethereum_transaction_error: error, status: :accepted)
   end
 
   delegate :image, to: :team, prefix: true, allow_nil: true

@@ -169,14 +169,14 @@ export default class Mission extends React.Component {
                         <div className="project-team__contributors" >
                           {project.projectData.team && project.projectData.team.map((contributor, index) =>
                             <div key={contributor.id} className="project-team__contributor-container">
-                              <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: 15 - index}} src={contributor.imageUrl} />
+                              <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: project.projectData.team.length - index}} src={contributor.imageUrl} />
                               <div className="project-team__contributor__modal">
                                 <ProfileModal profile={contributor} />
                               </div>
                             </div>
                           )}
                         </div>
-                        {project.projectData.teamSize > 15 && <div className="project-team__contributors__more">+{project.projectData.teamSize - 15}</div>}
+                        {project.projectData.teamSize > project.projectData.team.length && <div className="project-team__contributors__more">+{project.projectData.teamSize - project.projectData.team.length}</div>}
                       </div>
                     </div>
                   </div>
@@ -194,7 +194,7 @@ export default class Mission extends React.Component {
                 <div className="mission-column__wrapper">
                   <div className="mission-projects__single__card__info">
                     <span className="mission-projects__single__description--desktop" >
-                      <div dangerouslySetInnerHTML={{__html:project.projectData.description}}></div>
+                      <div dangerouslySetInnerHTML={{__html: project.projectData.description}} />
                     </span>
                     <div className="mission-projects__single__card__info__stats">
 

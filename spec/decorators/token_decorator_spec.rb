@@ -44,4 +44,17 @@ describe TokenDecorator do
       expect(token.currency_denomination).to eq('Ξ')
     end
   end
+
+  describe 'eth_data' do
+    let!(:token) { create(:token, coin_type: :comakery) }
+
+    it 'returns data for ethereum_controller.js' do
+      data = token.decorate.eth_data
+
+      expect(data['ethereum-payment-type']).to eq(token.coin_type)
+      expect(data['ethereum-amount']).to eq(0)
+      expect(data['ethereum-contract-address']).to eq(token.contract_address)
+      expect(data['ethereum-contract-abi']).to eq(token.abi&.to_json)
+    end
+  end
 end

@@ -3,29 +3,39 @@ import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import Icon from './../styleguide/Icon'
 
-const navContent = (isLoggedIn, currentPath, isAdmin) => {
+const navContent = (isLoggedIn, isAdmin, isWhitelabel, currentPath) => {
   return <React.Fragment>
     { !isLoggedIn &&
       <div className="header--nav--links">
-        <a href="/" className={(currentPath === '/') ? 'header--nav--links--current' : null}>
-          Missions
-        </a>
+        { !isWhitelabel &&
+          <a href="/" className={(currentPath === '/') ? 'header--nav--links--current' : null}>
+            Missions
+          </a>
+        }
 
-        <a href="/projects" className={(currentPath === '/projects') ? 'header--nav--links--current' : null}>
-          Projects
-        </a>
+        { !isWhitelabel &&
+          <a href="/projects" className={(currentPath === '/projects') ? 'header--nav--links--current' : null}>
+            Projects
+          </a>
+        }
 
-        <a href="https://ledger.comakery.com" target="_blank">
-          Blog
-        </a>
+        { !isWhitelabel &&
+          <a href="https://ledger.comakery.com" target="_blank">
+            Blog
+          </a>
+        }
 
-        <a target="_blank" href="https://info.comakery.com/pricing/">
-          Pricing
-        </a>
+        { !isWhitelabel &&
+          <a target="_blank" href="https://info.comakery.com/pricing/">
+            Pricing
+          </a>
+        }
 
-        <a target="_blank" href="https://info.comakery.com/about_us/">
-          About Us
-        </a>
+        { !isWhitelabel &&
+          <a target="_blank" href="https://info.comakery.com/about_us/">
+            About Us
+          </a>
+        }
 
         <a href="/session/new" className={currentPath.match(/session\/new/) ? 'header--nav--links--current header--nav--links--sign' : null} >
           Sign In
@@ -39,11 +49,13 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
 
     { isLoggedIn &&
       <div className="header--nav--links">
-        <a href="/" className={(currentPath === '/') ? 'header--nav--links--current' : null}>
-          Missions
-        </a>
+        { !isWhitelabel &&
+          <a href="/" className={(currentPath === '/') ? 'header--nav--links--current' : null}>
+            Missions
+          </a>
+        }
 
-        { isAdmin &&
+        { !isWhitelabel && isAdmin &&
           <React.Fragment>
             <a href="/missions" className={currentPath.match(/missions/) ? 'header--nav--links--current' : null}>
               Missions Admin
@@ -59,13 +71,17 @@ const navContent = (isLoggedIn, currentPath, isAdmin) => {
           My Projects
         </a>
 
-        <a href="/tasks" className={currentPath.match(/\/tasks/) ? 'header--nav--links--current' : null}>
-          My Tasks
-        </a>
+        { !isWhitelabel &&
+          <a href="/tasks" className={currentPath.match(/\/tasks/) ? 'header--nav--links--current' : null}>
+            My Tasks
+          </a>
+        }
 
-        <a href="https://ledger.comakery.com" target="_blank">
-          Blog
-        </a>
+        { !isWhitelabel &&
+          <a href="https://ledger.comakery.com" target="_blank">
+            Blog
+          </a>
+        }
 
         <a href="/account" className={currentPath.match(/\/account$/) ? 'header--nav--links--current' : null} >
           My Account
@@ -85,7 +101,7 @@ class Header extends React.Component {
     this.state = { mobileMenuActive: false }
   }
   render() {
-    const {className, isAdmin, isLoggedIn, currentPath, ...other} = this.props
+    const {className, isAdmin, isLoggedIn, isWhitelabel, whitelabelLogo, currentPath, ...other} = this.props
 
     const classnames = classNames(
       'header',
@@ -93,14 +109,20 @@ class Header extends React.Component {
     )
 
     const {mobileMenuActive} = this.state
-    const nav = navContent(isLoggedIn, currentPath, isAdmin)
+    const nav = navContent(isLoggedIn, isAdmin, isWhitelabel, currentPath)
 
     return (
       <React.Fragment>
         <div className={classnames} {...other}>
           <div className="header--logo">
             <a href="/">
-              <Icon name="Logo-Header.svg" width="200px" />
+              { !isWhitelabel &&
+                <Icon name="Logo-Header.svg" width="200px" />
+              }
+
+              { isWhitelabel &&
+                <img src={whitelabelLogo} width="200px" />
+              }
             </a>
           </div>
 
@@ -110,7 +132,13 @@ class Header extends React.Component {
         </div>
 
         <div className="header-mobile">
-          <Icon name="Logo-Header.svg" width="162px" />
+          { !isWhitelabel &&
+            <Icon name="Logo-Header.svg" width="162px" />
+          }
+
+          { isWhitelabel &&
+            <img src={whitelabelLogo} width="162px" />
+          }
 
           <div className="header-mobile__menu-icon" onClick={() => {
             this.setState({mobileMenuActive: !mobileMenuActive})

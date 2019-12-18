@@ -16,7 +16,7 @@ class ProjectPolicy < ApplicationPolicy
 
     def resolve
       if @account
-        account.accessable_projects
+        account.accessable_projects(scope)
       else
         scope.publics
       end
@@ -35,8 +35,16 @@ class ProjectPolicy < ApplicationPolicy
     account.present? && (project_owner? || project_admin?)
   end
 
+  def show_contributions_to_everyone?
+    project.public? && !project.require_confidentiality?
+  end
+
+  def show_contributions_to_team?
+    team_member? && project.unarchived? && !project.require_confidentiality?
+  end
+
   def show_contributions?
-    (project.public? && !project.require_confidentiality?) || (team_member? && project.unarchived?) || edit?
+    show_contributions_to_everyone? || show_contributions_to_team? || edit?
   end
 
   def show_award_types?
@@ -55,8 +63,10 @@ class ProjectPolicy < ApplicationPolicy
   alias create_transfer? edit?
   alias transfers? show_contributions?
   alias accounts? show_contributions?
+  alias edit_accounts? edit?
   alias edit_reg_groups? edit?
   alias edit_transfer_rules? edit?
+  alias freeze_token? edit?
 
   def project_owner?
     account.present? && (project.account == account)

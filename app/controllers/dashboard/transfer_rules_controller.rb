@@ -7,7 +7,7 @@ class Dashboard::TransferRulesController < ApplicationController
   skip_after_action :verify_policy_scoped, only: [:index]
 
   fragment_cache_key do
-    current_user
+    "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
   end
 
   def index
@@ -33,6 +33,28 @@ class Dashboard::TransferRulesController < ApplicationController
       redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Transfer rule destroyed'
     else
       redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @transfer_rule.errors.full_messages.join(', ') }
+    end
+  end
+
+  def pause
+    authorize @project, :freeze_token?
+
+    if @project.token.update(token_frozen: true)
+      Blockchain::ComakerySecurityToken::TokenSyncJob.perform_later(@project.token)
+      redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Token tranfers are frozen'
+    else
+      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @project.token.errors.full_messages.join(', ') }
+    end
+  end
+
+  def unpause
+    authorize @project, :freeze_token?
+
+    if @project.token.update(token_frozen: false)
+      Blockchain::ComakerySecurityToken::TokenSyncJob.perform_later(@project.token)
+      redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Token tranfers are unfrozen'
+    else
+      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @project.token.errors.full_messages.join(', ') }
     end
   end
 

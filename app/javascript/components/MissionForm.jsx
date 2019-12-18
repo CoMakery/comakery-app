@@ -4,6 +4,7 @@ import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
+import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import Button from './styleguide/Button'
 import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
@@ -22,24 +23,39 @@ export default class MissionForm extends React.Component {
     this.handleSaveMission = this.handleSaveMission.bind(this)
     this.verifyImageRes = this.verifyImageRes.bind(this)
     this.verifyLogoRes = this.verifyLogoRes.bind(this)
+    this.verifyWhitelableLogoRes = this.verifyWhitelableLogoRes.bind(this)
+    this.verifyWhitelableLogoDarkRes = this.verifyWhitelableLogoDarkRes.bind(this)
+    this.verifyWhitelabelFaviconRes = this.verifyWhitelabelFaviconRes.bind(this)
 
     this.imageInputRef = React.createRef()
     this.logoInputRef = React.createRef()
+    this.whitelabelLogoInputRef = React.createRef()
+    this.whitelabelLogoDarkInputRef = React.createRef()
+    this.whitelabelFaviconInputRef = React.createRef()
 
     this.state = {
-      errors        : {}, // error hash for account form
-      disabled      : {}, // disabled hash
-      flashMessages : [],
-      formAction    : this.props.formAction,
-      formUrl       : this.props.formUrl,
-      closeOnSuccess: false,
-      name          : props.mission.name || '',
-      subtitle      : props.mission.subtitle || '',
-      description   : props.mission.description || '',
-      logoPreview   : props.mission.logoUrl,
-      imagePreview  : props.mission.imageUrl,
-      logo          : null,
-      image         : null
+      errors                   : {}, // error hash for account form
+      disabled                 : {}, // disabled hash
+      flashMessages            : [],
+      formAction               : this.props.formAction,
+      formUrl                  : this.props.formUrl,
+      closeOnSuccess           : false,
+      name                     : props.mission.name || '',
+      subtitle                 : props.mission.subtitle || '',
+      description              : props.mission.description || '',
+      whitelabel               : props.mission.whitelabel ? 'true' : 'false',
+      whitelabelDomain         : props.mission.whitelabelDomain || '',
+      whitelabelContactEmail   : props.mission.whitelabelContactEmail || '',
+      logo                     : null,
+      image                    : null,
+      logoPreview              : props.mission.logoUrl,
+      imagePreview             : props.mission.imageUrl,
+      whitelabelLogo           : null,
+      whitelabelLogoDark       : null,
+      whitelabelFavicon        : null,
+      whitelabelLogoPreview    : props.mission.whitelabelLogoUrl,
+      whitelabelLogoDarkPreview: props.mission.whitelabelLogoDarkUrl,
+      whitelabelFaviconPreview : props.mission.whitelabelFaviconUrl,
     }
     this.mounted = false
   }
@@ -89,13 +105,25 @@ export default class MissionForm extends React.Component {
     }
 
     let formData = new FormData()
-    const {name, subtitle, description, logo, image} = this.state
+    const {name, subtitle, description, whitelabel, whitelabelDomain, whitelabelContactEmail, logo, image, whitelabelLogo, whitelabelLogoDark, whitelabelFavicon} = this.state
     formData.append('mission[name]', name)
     formData.append('mission[subtitle]', subtitle)
     formData.append('mission[description]', description)
+    formData.append('mission[whitelabel]', whitelabel)
+    formData.append('mission[whitelabel_domain]', whitelabelDomain)
+    formData.append('mission[whitelabel_contact_email]', whitelabelContactEmail)
     formData.append('authenticity_token', this.props.csrfToken)
     if (logo) {
       formData.append('mission[logo]', logo)
+    }
+    if (whitelabelLogo) {
+      formData.append('mission[whitelabel_logo]', whitelabelLogo)
+    }
+    if (whitelabelLogoDark) {
+      formData.append('mission[whitelabel_logo_dark]', whitelabelLogoDark)
+    }
+    if (whitelabelFavicon) {
+      formData.append('mission[whitelabel_favicon]', whitelabelFavicon)
     }
     if (image) {
       formData.append('mission[image]', image)
@@ -159,6 +187,33 @@ export default class MissionForm extends React.Component {
     }
   }
 
+  verifyWhitelableLogoRes(img) {
+    if ((img.naturalWidth < 1000) || (img.naturalHeight < 200) || (img.naturalWidth / img.naturalHeight !== 5)) {
+      this.logoInputRef.current.value = ''
+      this.errorAdd('whitelabelLogo', 'invalid resolution')
+    } else {
+      this.errorRemove('whitelabelLogo')
+    }
+  }
+
+  verifyWhitelableLogoDarkRes(img) {
+    if ((img.naturalWidth < 1000) || (img.naturalHeight < 200) || (img.naturalWidth / img.naturalHeight !== 5)) {
+      this.logoInputRef.current.value = ''
+      this.errorAdd('whitelabelLogoDark', 'invalid resolution')
+    } else {
+      this.errorRemove('whitelabelLogoDark')
+    }
+  }
+
+  verifyWhitelabelFaviconRes(img) {
+    if ((img.naturalWidth < 64) || (img.naturalHeight < 64) || (img.naturalWidth / img.naturalHeight !== 1)) {
+      this.logoInputRef.current.value = ''
+      this.errorAdd('whitelabelFavicon', 'invalid resolution')
+    } else {
+      this.errorRemove('whitelabelFavicon')
+    }
+  }
+
   errorAdd(n, e) {
     this.setState({
       errors: Object.assign({}, this.state.errors, {[n]: e})
@@ -194,7 +249,7 @@ export default class MissionForm extends React.Component {
   }
 
   render() {
-    const {name, subtitle, description, logoPreview, imagePreview, errors} = this.state
+    const {name, subtitle, description, whitelabel, whitelabelDomain, whitelabelContactEmail, logoPreview, imagePreview, whitelabelLogoPreview, whitelabelLogoDarkPreview, whitelabelFaviconPreview, errors} = this.state
 
     return <React.Fragment>
       <Layout
@@ -250,16 +305,20 @@ export default class MissionForm extends React.Component {
           />
 
           <InputFieldUploadFile
-            name="logo" title="Mission Logo" required
+            name="logo" title="Mission Logo"
+            required
             imgPreviewDimensions="100x100"
             imgPreviewUrl={logoPreview}
             imgRequirements="Image should be at least 800px x 800px"
             imgVerifier={this.verifyLogoRes}
             imgInputRef={this.logoInputRef}
             eventHandler={this.handleChangeFormData}
-            errorText={errors.logo} />
+            errorText={errors.logo}
+          />
+
           <InputFieldUploadFile
-            name="image" title="Mission Image" required
+            name="image" title="Mission Image"
+            required
             imgPreviewDimensions="150x100"
             imgPreviewUrl={imagePreview}
             imgRequirements="Image should be at least 1200px x 800px"
@@ -267,6 +326,68 @@ export default class MissionForm extends React.Component {
             imgInputRef={this.imageInputRef}
             eventHandler={this.handleChangeFormData}
             errorText={errors.image}
+          />
+
+          <InputFieldDropdown
+            title="Whitelabel"
+            required
+            name="whitelabel"
+            value={whitelabel}
+            eventHandler={this.handleChangeFormData}
+            selectEntries={Object.entries({'Enabled': 'true', 'Disabled': 'false'})}
+            symbolLimit={0}
+          />
+
+          <InputFieldWhiteDark
+            name="whitelabelDomain"
+            title="Whitelabel Domain"
+            symbolLimit={140}
+            value={whitelabelDomain}
+            eventHandler={this.handleChangeFormData}
+          />
+
+          <InputFieldWhiteDark
+            name="whitelabelContactEmail"
+            title="Whitelabel Contact Email"
+            symbolLimit={140}
+            value={whitelabelContactEmail}
+            eventHandler={this.handleChangeFormData}
+          />
+
+          <InputFieldUploadFile
+            name="whitelabelLogo"
+            title="Mission Whitelabel Logo"
+            imgPreviewDimensions="150x100"
+            imgPreviewUrl={whitelabelLogoPreview}
+            imgRequirements="Image should be at least 1000px x 200px"
+            imgVerifier={this.verifyWhitelableLogoRes}
+            imgInputRef={this.whitelabelLogoInputRef}
+            eventHandler={this.handleChangeFormData}
+            errorText={errors.whitelabelLogo}
+          />
+
+          <InputFieldUploadFile
+            name="whitelabelLogoDark"
+            title="Mission Whitelabel Logo Dark"
+            imgPreviewDimensions="150x100"
+            imgPreviewUrl={whitelabelLogoDarkPreview}
+            imgRequirements="Image should be at least 1000px x 200px"
+            imgVerifier={this.verifyWhitelableLogoDarkRes}
+            imgInputRef={this.whitelabelLogoDarkInputRef}
+            eventHandler={this.handleChangeFormData}
+            errorText={errors.whitelabelLogoDark}
+          />
+
+          <InputFieldUploadFile
+            name="whitelabelFavicon"
+            title="Mission Whitelabel Favicon"
+            imgPreviewDimensions="100x100"
+            imgPreviewUrl={whitelabelFaviconPreview}
+            imgRequirements="Image should be at least 64px x 64px"
+            imgVerifier={this.verifyWhitelabelFaviconRes}
+            imgInputRef={this.whitelabelFaviconInputRef}
+            eventHandler={this.handleChangeFormData}
+            errorText={errors.whitelabelFavicon}
           />
         </form>
       </Layout>

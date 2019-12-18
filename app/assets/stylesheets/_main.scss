@@ -77,6 +77,37 @@ a .button.take-action {
 	color: $snow;
 }
 
+.button {
+  border-radius: 6px;
+  border: solid 1px #e6e8ed;
+  height: 35px;
+  padding: 9px 16px 8px 15px;
+  box-shadow: none;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  background-color: #1560fa;
+  color: white;
+  font-weight: 600;
+  margin: 0;
+  margin-top: 2em;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
+}
+
+input[type="email"],
+input[type="password"] {
+  border-radius: 6px;
+  border: solid 1px #e6e8ed;
+  height: 35px;
+  padding: 9px 16px 8px 15px;
+  box-shadow: none;
+  font-family: Montserrat, sans-serif;
+  font-size: 12px;
+  width: 100%;
+  min-width: initial;
+  font-weight: 500;
+  margin-right: 0.5em;
+}
+
 .fake-link {
 	cursor: pointer;
 }

@@ -7,9 +7,9 @@ module Views
             h2('Forgot your password?')
             form_tag password_resets_path, method: :post do
               label do
-                text 'Email '
-                text_field_tag :email
+                text_field_tag :email, nil, tabindex: 1, type: 'email', placeholder: 'Email'
               end
+
               submit_tag 'Reset my password!', class: buttonish(:small, :expand)
             end
           end

@@ -19,7 +19,7 @@ class AccountsController < ApplicationController
     @projects_count = @projects.total_count
     @awards_count = @awards.total_count
 
-    @projects = @projects.map { |project| project_decorate(project) }
+    @projects = @projects.map { |project| project_decorate(project, nil) }
     @awards = @awards.map do |award|
       next unless award.project
       award.as_json(only: %i[id]).merge(
@@ -27,7 +27,7 @@ class AccountsController < ApplicationController
         created_at: award.created_at.strftime('%b %d, %Y'),
         ethereum_transaction_explorer_url: award.decorate.ethereum_transaction_explorer_url,
         ethereum_transaction_address_short: award.decorate.ethereum_transaction_address_short,
-        project: project_decorate(award.project)
+        project: project_decorate(award.project, award)
       )
     end
     respond_to do |format|
@@ -43,15 +43,17 @@ class AccountsController < ApplicationController
     @account.email_confirm_token = SecureRandom.hex
     @account.password_required = true
     @account.name_required = false
-    @account.agreement_required = true
+    @account.agreement_required = @whitelabel_mission ? false : true
+
     @account.agreed_to_user_agreement = if params[:account][:agreed_to_user_agreement] == '0'
       nil
     else
       Date.current
     end
+
     if @account.save
       session[:account_id] = @account.id
-      UserMailer.confirm_email(@account).deliver
+      UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
       redirect_to build_profile_accounts_path
     else
       @account.agreed_to_user_agreement = params[:account][:agreed_to_user_agreement]
@@ -121,6 +123,10 @@ class AccountsController < ApplicationController
     authorize @current_account
     respond_to do |format|
       if @current_account.update(account_params.merge(name_required: true))
+        if @current_account.email_confirm_token
+          UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@current_account).deliver
+        end
+
         check_date(old_age) if old_age < 18
         format.html { redirect_to account_url, notice: 'Your account details have been updated.' }
         format.json do
@@ -166,19 +172,29 @@ class AccountsController < ApplicationController
 
   def account_params
     result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :cardano_wallet, :bitcoin_wallet, :eos_wallet, :tezos_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password, :specialty_id, :occupation, :linkedin_url, :github_url, :dribble_url, :behance_url)
-    result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y') if result[:date_of_birth].present?
+
+    if result[:date_of_birth].present?
+      begin
+        result[:date_of_birth] = DateTime.strptime(result[:date_of_birth], '%m/%d/%Y')
+      rescue StandardError => e
+        Rails.logger.error(e)
+        result[:date_of_birth] = nil
+      end
+    end
+
     result
   end
 
   def check_date(old_age)
     if @current_account.age >= 18
-      UserMailer.underage_alert(@current_account, old_age).deliver_now
+      UserMailer.with(whitelabel_mission: @whitelabel_mission).underage_alert(@current_account, old_age).deliver_now
     end
   end
 
-  def project_decorate(project)
+  def project_decorate(project, award = nil)
     project.as_json(only: %i[id title token_symbol ethereum_contract_address]).merge(
-      awards_path: awards_project_path(project.id, mine: true),
+      awards_path: project_dashboard_transfers_path(project, q: { account_id_eq: current_account.id }),
+      award_path: project_dashboard_transfers_path(project, q: { id_eq: award&.id }),
       total_awarded: project.decorate.total_awarded_to_user(current_account),
       ethereum_contract_explorer_url: project.decorate.ethereum_contract_explorer_url,
       token: project.token ? project.token.serializable_hash : {}
