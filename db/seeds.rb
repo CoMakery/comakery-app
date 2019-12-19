@@ -1,5 +1,4 @@
 require 'refile/file_double'
-require_relative '../spec/support/mom.rb'
 
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
@@ -55,8 +54,4 @@ if Rails.env == 'development'
     mission: Mission.last,
     account: Account.last
   )
-
-  create(:award_ready, name: 'award 1', status: 'ready', project: create(:project, title: 'Proj 1', visibility: :public_listed, mission: Mission.last))
-  create(:award_ready, name: 'award 2', status: 'ready', project: create(:project, title: 'Proj 2', visibility: :public_listed, mission: Mission.last))
-  create(:award_ready, name: 'award 3', status: 'ready', project: create(:project, title: 'Proj 3', visibility: :public_listed, mission: Mission.last))
 end

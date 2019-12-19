@@ -184,9 +184,9 @@ class Mom
       amount: 50
     }.merge(attrs)
 
-    params[:project] ||= create(:project)
-    params[:award_type] ||= create(:award_type, project: params[:project])
+    params[:award_type] ||= create(:award_type)
     params[:issuer] ||= create(:account)
+    params[:account] ||= create(:account)
 
     Award.new(params)
   end
@@ -208,8 +208,7 @@ class Mom
       issuer: create(:account)
     }.merge(attrs)
 
-    params[:project] ||= create(:project, account: params[:issuer])
-    params[:award_type] ||= create(:award_type, project: params[:project])
+    params[:award_type] ||= create(:award_type, project: create(:project, account: params[:issuer]))
     params[:account] ||= create(:account)
 
     Award.new(params)
