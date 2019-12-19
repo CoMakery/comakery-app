@@ -73,6 +73,7 @@ group(:development, :test) do
   gem 'pry-rails'
   gem 'rubocop', '~>0.49.1', require: false
   gem 'rubocop-rspec', '~>1.15.0'
+  gem 'jaro_winkler'
 end
 
 group(:development) do
