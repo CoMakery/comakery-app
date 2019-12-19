@@ -19,8 +19,8 @@ class ProjectsController < ApplicationController
 
   def landing
     if current_account
-      @my_projects = current_account.my_projects(project_scope).includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
-      @team_projects = current_account.other_member_projects(project_scope).includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @my_projects = current_account.my_projects(@project_scope).includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
+      @team_projects = current_account.other_member_projects(@project_scope).includes(:account, :admins).unarchived.order(updated_at: :desc).limit(100).decorate
       @archived_projects = @whitelabel_mission ? [] : current_account.projects.includes(:account, :admins).archived.order(updated_at: :desc).limit(100).decorate
       @interested_projects = @whitelabel_mission ? [] : current_account.projects_interested.includes(:account, :admins).where.not(id: @my_projects.pluck(:id)).unarchived.order(updated_at: :desc).limit(100).decorate
     end
@@ -171,7 +171,7 @@ class ProjectsController < ApplicationController
   private
 
   def assign_project_by_long_id
-    @project = project_scope.find_by(long_id: params[:long_id])&.decorate
+    @project = @project_scope.find_by(long_id: params[:long_id])&.decorate
 
     return redirect_to('/404.html') unless @project
     return redirect_to(project_path(@project)) unless @project.unlisted?
@@ -180,7 +180,7 @@ class ProjectsController < ApplicationController
   def set_projects
     @page = (params[:page] || 1).to_i
 
-    @q = policy_scope(project_scope).ransack(params[:q])
+    @q = policy_scope(@project_scope).ransack(params[:q])
     @q.sorts = 'interests_count DESC' if @q.sorts.empty?
 
     @projects_all = @q.result.includes(:token, :mission, :account, :admins)

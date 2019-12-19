@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   before_action :whitelabel_mission
   before_action :require_login, :require_email_confirmation, :check_age, :require_build_profile
   before_action :basic_auth
-  before_action :project_scope
+  before_action :set_project_scope
 
   def basic_auth
     return unless ENV.key?('BASIC_AUTH')
@@ -142,7 +142,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def assign_project
-    @project = project_scope.find_by(id: params[:project_id] || params[:id])&.decorate
+    @project = @project_scope.find_by(id: params[:project_id] || params[:id])&.decorate
     return redirect_to '/404.html' unless @project
   end
 
@@ -243,7 +243,7 @@ class ApplicationController < ActionController::Base
     @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
   end
 
-  def project_scope
+  def set_project_scope
     @project_scope ||= whitelabel_mission ? whitelabel_mission.projects : Project.where(whitelabel: [false, nil])
   end
 
