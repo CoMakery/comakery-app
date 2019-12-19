@@ -131,6 +131,14 @@ class Account < ApplicationRecord
   end
   before_save :downcase_email
 
+  def whitelabel_interested_projects(whitelabel_mission)
+    if whitelabel_mission.present?
+      projects_interested.where(mission: whitelabel_mission)
+    else
+      projects_interested.includes(:mission).where('missions.whitelabel' => [false, nil])
+    end
+  end
+
   def create_authentication_and_build_team(uid, channel)
     auth = authentications.create(provider: channel.team.provider, uid: uid)
     channel.team.build_authentication_team auth if auth.valid?

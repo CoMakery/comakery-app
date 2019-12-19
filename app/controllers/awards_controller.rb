@@ -222,7 +222,7 @@ class AwardsController < ApplicationController
   private
 
     def set_project
-      @project = @project_scope.find(params[:project_id])&.decorate
+      @project = projects_interested.find(params[:project_id])&.decorate
       redirect_to('/404.html') unless @project
     end
 
@@ -305,11 +305,15 @@ class AwardsController < ApplicationController
     end
 
     def run_award_expiration
-      current_account.accessable_awards(@project_scope).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
+      current_account.accessable_awards(projects_interested).includes(:issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).started.where(expires_at: Time.zone.at(0)..Time.current).each(&:run_expiration)
+    end
+
+    def projects_interested
+      current_user.whitelabel_interested_projects(whitelabel_mission)
     end
 
     def set_awards
-      @awards = current_account.accessable_awards(@project_scope).includes(:specialty, :issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
+      @awards = current_account.accessable_awards(projects_interested).includes(:specialty, :issuer, :account, :award_type, :cloned_from, project: [:account, :mission, :token, :admins, channels: [:team]]).filtered_for_view(@filter, current_account).order(expires_at: :asc, updated_at: :desc)
 
       if @project
         @awards = @awards.where(award_type: AwardType.where(project: @project))
@@ -365,7 +369,7 @@ class AwardsController < ApplicationController
           {
             name: filter,
             current: filter == @filter,
-            count: current_account.accessable_awards(@project_scope).filtered_for_view(filter, current_account).size,
+            count: current_account.accessable_awards(projects_interested).filtered_for_view(filter, current_account).size,
             url: my_tasks_path(filter: filter)
           }
         end,

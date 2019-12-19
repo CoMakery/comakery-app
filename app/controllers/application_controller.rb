@@ -15,10 +15,10 @@ class ApplicationController < ActionController::Base
 
   # require account logins for all pages by default
   # (public pages use skip_before_action :require_login)
-  before_action :set_whitelabel_mission
+  before_action :whitelabel_mission
   before_action :require_login, :require_email_confirmation, :check_age, :require_build_profile
   before_action :basic_auth
-  before_action :set_project_scope
+  before_action :project_scope
 
   def basic_auth
     return unless ENV.key?('BASIC_AUTH')
@@ -142,7 +142,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def assign_project
-    @project = @project_scope.find_by(id: params[:project_id] || params[:id])&.decorate
+    @project = project_scope.find_by(id: params[:project_id] || params[:id])&.decorate
     return redirect_to '/404.html' unless @project
   end
 
@@ -228,7 +228,7 @@ class ApplicationController < ActionController::Base
   end
 
   def unavailable_for_whitelabel
-    return redirect_to new_session_url if @whitelabel_mission
+    return redirect_to new_session_url if whitelabel_mission
   end
 
   private
@@ -239,16 +239,16 @@ class ApplicationController < ActionController::Base
     end.reduce(:&)
   end
 
-  def set_whitelabel_mission
-    @whitelabel_mission = Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
+  def whitelabel_mission
+    @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
   end
 
-  def set_project_scope
-    @project_scope = @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: [false, nil])
+  def project_scope
+    @project_scope ||= whitelabel_mission ? whitelabel_mission.projects : Project.where(whitelabel: [false, nil])
   end
 
   def set_whitelabel_cors
-    if @whitelabel_mission
+    if whitelabel_mission
       headers['Access-Control-Allow-Origin'] = 'https://' + ENV['APP_HOST']
       headers['Access-Control-Allow-Credentials'] = 'true'
       headers['Access-Control-Allow-Methods'] = '*'
