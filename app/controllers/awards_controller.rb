@@ -309,7 +309,7 @@ class AwardsController < ApplicationController
     end
 
     def projects_interested
-      current_user.whitelabel_interested_projects(whitelabel_mission)
+      current_user.whitelabel_interested_projects(@whitelabel_mission)
     end
 
     def set_awards

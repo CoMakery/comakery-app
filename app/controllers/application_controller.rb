@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
 
   # require account logins for all pages by default
   # (public pages use skip_before_action :require_login)
-  before_action :whitelabel_mission
+  before_action :set_whitelabel_mission
   before_action :require_login, :require_email_confirmation, :check_age, :require_build_profile
   before_action :basic_auth
   before_action :set_project_scope
@@ -228,7 +228,7 @@ class ApplicationController < ActionController::Base
   end
 
   def unavailable_for_whitelabel
-    return redirect_to new_session_url if whitelabel_mission
+    return redirect_to new_session_url if @whitelabel_mission
   end
 
   private
@@ -239,16 +239,16 @@ class ApplicationController < ActionController::Base
     end.reduce(:&)
   end
 
-  def whitelabel_mission
+  def set_whitelabel_mission
     @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
   end
 
   def set_project_scope
-    @project_scope ||= whitelabel_mission ? whitelabel_mission.projects : Project.where(whitelabel: [false, nil])
+    @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: [false, nil])
   end
 
   def set_whitelabel_cors
-    if whitelabel_mission
+    if @whitelabel_mission
       headers['Access-Control-Allow-Origin'] = 'https://' + ENV['APP_HOST']
       headers['Access-Control-Allow-Credentials'] = 'true'
       headers['Access-Control-Allow-Methods'] = '*'
