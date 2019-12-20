@@ -93,7 +93,7 @@ describe 'my account', js: true do
     find('.featured-mission__project__interest').click
     sleep 2
     expect(confirmed_account.interests.count).to be > 0
-    expect(page).to have_content('REQUEST SENT')
+    expect(page).to have_content('Following')
   end
 
   scenario 'account page is available after signup' do
