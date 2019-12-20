@@ -244,7 +244,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_project_scope
-    @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: [false, nil])
+    @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: false)
   end
 
   def set_whitelabel_cors

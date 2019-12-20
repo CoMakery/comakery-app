@@ -135,7 +135,7 @@ class Account < ApplicationRecord
     if whitelabel_mission.present?
       projects_interested.where(mission: whitelabel_mission)
     else
-      projects_interested.where(whitelabel: [false, nil])
+      projects_interested.where(whitelabel: false)
     end
   end
 
