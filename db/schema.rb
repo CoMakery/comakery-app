@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_20_004516) do
+ActiveRecord::Schema.define(version: 2019_12_20_034156) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -339,6 +339,7 @@ ActiveRecord::Schema.define(version: 2019_12_20_004516) do
     t.boolean "display_team", default: true
     t.bigint "interests_count"
     t.boolean "whitelabel", default: false, null: false
+    t.boolean "auto_add_interest", default: false, null: false
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"

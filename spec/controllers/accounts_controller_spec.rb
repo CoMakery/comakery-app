@@ -121,6 +121,9 @@ describe AccountsController do
       expect(response).to redirect_to build_profile_accounts_path
     end
 
+    it 'adds default project interest' do
+    end
+
     it 'renders errors if email has already been taken' do
       Account.create(email: 'user@test.st', password: '12345678')
       expect do

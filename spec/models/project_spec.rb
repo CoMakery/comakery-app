@@ -14,6 +14,10 @@ describe Project do
     end
   end
 
+  it 'initializes auto_add_interest to false' do
+    expect(described_class.new.auto_add_interest).to be(false)
+  end
+
   describe 'validations' do
     it 'requires attributes' do
       expect(described_class.new(payment_type: 'project_token').tap(&:valid?).errors.full_messages.sort)
