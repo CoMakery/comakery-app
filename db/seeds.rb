@@ -55,24 +55,24 @@ if Rails.env == 'development'
     mission: dummy_mission,
     account: Account.last
   )
-  create(:project_with_ready_task, 
+  create(:project_with_ready_task,
     name: 'award 1',
     status: 'ready',
     project: dummy_project)
-  
+
   create(:project_with_ready_task,
     name: 'award 2',
     status: 'ready',
     project: create(:project,
-    title: 'Proj 2',
-    visibility: :public_listed,
-    mission: dummy_mission))
-  
+      title: 'Proj 2',
+      visibility: :public_listed,
+      mission: dummy_mission))
+
   create(:project_with_ready_task,
     name: 'award 3',
     status: 'ready',
     project: create(:project,
-    title: 'Proj 3',
-    visibility: :public_listed,
-    mission: dummy_mission))
+      title: 'Proj 3',
+      visibility: :public_listed,
+      mission: dummy_mission))
 end
