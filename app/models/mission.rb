@@ -17,6 +17,7 @@ class Mission < ApplicationRecord
   has_many :published_awards, through: :ready_award_types, source: :awards, class_name: 'Award'
   has_many :awards, through: :award_types
   has_many :interests, through: :public_projects
+  has_many :interested, -> { distinct }, through: :public_projects
 
   enum status: %i[active passive]
 
@@ -41,7 +42,7 @@ class Mission < ApplicationRecord
       projects: unarchived_projects.size,
       batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
-      interests: interests.size
+      interests: interested.size
     }
   end
 
