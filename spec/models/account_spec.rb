@@ -663,4 +663,18 @@ describe Account do
       expect(account.whitelabel_interested_projects(whitelabel_mission)).to eq([whitelabel_interested_project])
     end
   end
+
+  describe '.make_everyone_interested' do
+    let!(:project) { create :project }
+    let!(:users) do
+      10.times { create(:account) }
+      described_class.all
+    end
+
+    it 'loops through all users in batch sizes of 500 and makes them all interested in a project' do
+      expect(project.interested).to contain_exactly(project.account)
+      described_class.make_everyone_interested(project)
+      expect(project.interested.to_a).to contain_exactly(*users)
+    end
+  end
 end
