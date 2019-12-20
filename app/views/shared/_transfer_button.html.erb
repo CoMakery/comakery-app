@@ -1,11 +1,11 @@
 <div class='transfer-button'>
   <% if transfer.project.token&.coin_type? %>
-    <% if transfer.project.token&.token_frozen? %>
-      frozen
-
-    <% elsif transfer.paid? && transfer.ethereum_transaction_explorer_url %>
+    <% if transfer.paid? && transfer.ethereum_transaction_explorer_url %>
       <%= link_to transfer.ethereum_transaction_address_short, transfer.ethereum_transaction_explorer_url, target: '_blank' %>
     
+    <% elsif transfer.project.token&.token_frozen? %>
+      frozen
+
     <% elsif transfer.recipient_address.blank? && current_account == transfer.account %>
       <%= link_to 'needs wallet', account_path  %>
     

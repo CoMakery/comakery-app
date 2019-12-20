@@ -119,7 +119,7 @@ class ProjectDecorator < Draper::Decorator
   end
 
   def team_top_limit
-    15
+    8
   end
 
   def team_top

@@ -46,10 +46,11 @@ describe Mission do
       expect(mission.stats[:tasks]).to eq(1)
     end
 
-    it 'returns number of accounts which have interest, started a task or created a project' do
+    it 'returns number of uniq accounts which have interest, started a task or created a project' do
       mission = create(:mission)
       project = create(:project, mission: mission, visibility: :public_listed)
       create(:award, award_type: create(:award_type, project: project))
+      create(:interest, project: project, account: project.account)
       create(:interest, project: project)
 
       expect(mission.stats[:interests]).to eq(3)
