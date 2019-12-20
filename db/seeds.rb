@@ -1,4 +1,5 @@
 require 'refile/file_double'
+require_relative '../spec/support/mom.rb'
 
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
@@ -30,7 +31,7 @@ if Rails.env == 'development'
     logo_image: Refile::FileDouble.new('dummy_logo_image', 'logo_image.png', content_type: 'image/png')
   )
 
-  Mission.create(
+  dummy_mission = Mission.create(
     name: 'Dummy Mission',
     subtitle: 'Fake',
     description: 'Created for development',
@@ -38,20 +39,40 @@ if Rails.env == 'development'
     logo: Refile::FileDouble.new('dummy_logo', 'logo.png', content_type: 'image/png')
   )
 
-  Project.create(
+  dummy_project = Project.create(
     title: 'Dummy Project',
     description: 'Created for development',
     tracker: 'https://github.com/CoMakery/comakery-app',
     legal_project_owner: 'Dummy Inc',
     require_confidentiality: false,
     exclusive_contributions: false,
-    visibility: 'member',
+    visibility: :public_listed,
     long_id: SecureRandom.hex(20),
     maximum_tokens: 10_000_000,
     square_image: Refile::FileDouble.new('dummy_square_image', 'image.png', content_type: 'image/png'),
     panoramic_image: Refile::FileDouble.new('dummy_panoramic_image', 'image.png', content_type: 'image/png'),
     token: Token.last,
-    mission: Mission.last,
+    mission: dummy_mission,
     account: Account.last
   )
+  create(:project_with_ready_task, 
+    name: 'award 1',
+    status: 'ready',
+    project: dummy_project)
+  
+  create(:project_with_ready_task,
+    name: 'award 2',
+    status: 'ready',
+    project: create(:project,
+    title: 'Proj 2',
+    visibility: :public_listed,
+    mission: dummy_mission))
+  
+  create(:project_with_ready_task,
+    name: 'award 3',
+    status: 'ready',
+    project: create(:project,
+    title: 'Proj 3',
+    visibility: :public_listed,
+    mission: dummy_mission))
 end

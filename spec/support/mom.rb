@@ -191,6 +191,25 @@ class Mom
     Award.new(params)
   end
 
+  def project_with_ready_task(**attrs)
+    params = {
+      name: 'none',
+      description: 'none',
+      why: 'none',
+      requirements: 'none',
+      amount: 50
+    }.merge(attrs)
+
+    params[:project] ||= create(:project, account: create(:account))
+    project = params.delete(:project)
+    params[:issuer] ||= create(:account)
+    params[:award_type] ||= create(:award_type, project: project)
+
+    award = Award.new(params)
+    award.save!
+    project
+  end
+
   def award(**attrs)
     params = {
       name: 'none',
