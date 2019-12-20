@@ -357,7 +357,7 @@ export default class Project extends React.Component {
         <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
 
         {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
-        {interested && <button className="button project-interest__button" disabled>Request Sent</button>}
+        {interested && <button className="button project-interest__button" disabled>Following</button>}
       </div>
 
       {this.props.tasksBySpecialty.length > 0 &&
@@ -408,7 +408,7 @@ export default class Project extends React.Component {
               </div>
               <div className="project-skill__interest">
                 {!specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button" onClick={() => this.addInterest(projectData.id, skillIds[index])}>I'm Interested</div>}
-                {specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button">Request Sent</div>}
+                {specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button">Following</div>}
               </div>
             </div>
           )}
@@ -449,7 +449,7 @@ export default class Project extends React.Component {
       <div className="project-interest">
         <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
         {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
-        {interested && <button className="button project-interest__button" disabled>Request Sent</button>}
+        {interested && <button className="button project-interest__button" disabled>Following</button>}
       </div>
     </div>
   }

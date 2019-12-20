@@ -240,11 +240,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_whitelabel_mission
-    @whitelabel_mission = Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
+    @whitelabel_mission ||= Mission.where(whitelabel: true).find_by(whitelabel_domain: current_domain)
   end
 
   def set_project_scope
-    @project_scope = @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: [false, nil])
+    @project_scope ||= @whitelabel_mission ? @whitelabel_mission.projects : Project.where(whitelabel: false)
   end
 
   def set_whitelabel_cors

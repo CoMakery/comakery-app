@@ -55,7 +55,7 @@ export default class FeaturedMission extends React.Component {
           <div className="featured-mission__description">{description}</div>
           {projects.map(project => <div key={project.id} className="featured-mission__project">
             <a href={`/projects/${project.id}`} className="featured-mission__project__title">{project.title}</a>
-            {project.interested && <div className="featured-mission__project__interest featured-mission__project__interest--sent">Request Sent</div>}
+            {project.interested && <div className="featured-mission__project__interest featured-mission__project__interest--sent">Following</div>}
             {!project.interested &&
             <div className="featured-mission__project__interest" onClick={() => { this.addInterest(project.id) }}>I’m interested</div>
             }

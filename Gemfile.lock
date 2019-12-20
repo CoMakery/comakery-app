@@ -256,6 +256,7 @@ GEM
     interactor (3.1.1)
     intercom-rails (0.4.1)
       activesupport (> 3.0)
+    jaro_winkler (1.5.4)
     jira-ruby (1.6.0)
       activesupport
       multipart-post
@@ -654,6 +655,7 @@ DEPENDENCIES
   httparty
   interactor
   intercom-rails
+  jaro_winkler
   jquery-rails
   jquery-ui-rails
   kaminari

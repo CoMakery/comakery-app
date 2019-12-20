@@ -218,7 +218,7 @@ export default class Mission extends React.Component {
 
                   <div className="mission-projects__single__card__info__interest">
                     {project.editable && <a className="mission-projects__single__card__info__interest__link" href={`/projects/${project.projectData.id}/edit`}>EDIT PROJECT</a>}
-                    {!project.editable && interests[project.projectData.id] && <div className="mission-projects__single__card__info__interest__link" style={{opacity: 0.2}}>Request sent</div>}
+                    {!project.editable && interests[project.projectData.id] && <div className="mission-projects__single__card__info__interest__link" style={{opacity: 0.2}}>Following</div>}
                     {!project.editable && !interests[project.projectData.id] &&
                     <div
                       className="mission-projects__single__card__info__interest__link"
@@ -234,7 +234,7 @@ export default class Mission extends React.Component {
                 <div dangerouslySetInnerHTML={{__html: project.projectData.description}} />
                 <div className="mission-projects__single__card__info__interest mission-projects__single__card__info__interest--mobile">
                   {project.editable && <a className="mission-projects__single__card__info__interest__link" href={`/projects/${project.projectData.id}/edit`}>EDIT PROJECT</a>}
-                  {!project.editable && interests[project.projectData.id] && <div className="mission-projects__single__card__info__interest__link" style={{opacity: 0.2}}>Request sent</div>}
+                  {!project.editable && interests[project.projectData.id] && <div className="mission-projects__single__card__info__interest__link" style={{opacity: 0.2}}>Following</div>}
                   {!project.editable && !interests[project.projectData.id] &&
                     <div
                       className="mission-projects__single__card__info__interest__link"
