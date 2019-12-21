@@ -90,10 +90,11 @@ describe 'my account', js: true do
     expect(page.current_url).to have_content '/'
     expect(page).to have_content('Discover Missions With Cutting Edge Projects')
     stub_airtable
+    expect(page).to have_selector('.featured-mission__project__interest')
     find('.featured-mission__project__interest').click
     sleep 2
     expect(confirmed_account.interests.count).to be > 0
-    expect(page).to have_content('REQUEST SENT')
+    expect(page).to have_content('FOLLOWING')
   end
 
   scenario 'account page is available after signup' do

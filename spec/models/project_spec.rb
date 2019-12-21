@@ -14,6 +14,10 @@ describe Project do
     end
   end
 
+  it 'initializes auto_add_interest to false' do
+    expect(described_class.new.auto_add_interest).to be(false)
+  end
+
   describe 'validations' do
     it 'requires attributes' do
       expect(described_class.new(payment_type: 'project_token').tap(&:valid?).errors.full_messages.sort)
@@ -397,9 +401,10 @@ describe Project do
       expect(project.stats[:tasks]).to eq(1)
     end
 
-    it 'returns number of accounts which have interest, started a task or created this project' do
+    it 'returns number of uniq accounts which have interest, started a task or created this project' do
       project = create(:project)
       create(:award, award_type: create(:award_type, project: project))
+      create(:interest, project: project, account: project.account)
       create(:interest, project: project)
 
       expect(project.reload.stats[:interests]).to eq(3)

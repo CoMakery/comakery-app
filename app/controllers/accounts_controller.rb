@@ -54,6 +54,10 @@ class AccountsController < ApplicationController
     if @account.save
       session[:account_id] = @account.id
       UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
+      Project.where(auto_add_interest: true).each do |auto_interest_project|
+        auto_interest_project.safe_add_interested(@account)
+      end
+
       redirect_to build_profile_accounts_path
     else
       @account.agreed_to_user_agreement = params[:account][:agreed_to_user_agreement]

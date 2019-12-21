@@ -13,7 +13,7 @@ class Project < ApplicationRecord
   belongs_to :mission, optional: true, touch: true
   belongs_to :token, optional: true, touch: true
   has_many :interests
-  has_many :interested, through: :interests, source: :account
+  has_many :interested, -> { distinct }, through: :interests, source: :account
 
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :ready_award_types, -> { where state: :ready }, source: :award_types, class_name: 'AwardType'
@@ -190,7 +190,7 @@ class Project < ApplicationRecord
     {
       batches: ready_award_types.size,
       tasks: published_awards.in_progress.size,
-      interests: interests.size
+      interests: interested.size
     }
   end
 
