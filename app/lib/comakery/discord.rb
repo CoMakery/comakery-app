@@ -20,7 +20,7 @@ class Comakery::Discord
   end
 
   def members(team)
-    @path = "/guilds/#{team.team_id}/members"
+    @path = "/guilds/#{team.team_id}/members?limit=1000"
     result
   end
 

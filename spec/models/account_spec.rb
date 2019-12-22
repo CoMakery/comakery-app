@@ -627,4 +627,54 @@ describe Account do
     award = award.decorate
     expect(CSV.parse(account.awards_csv, col_sep: "\t", encoding: 'utf-16le')).to eq([["\uFEFFProject", 'Award Type', 'Total Amount', 'Issuer', 'Date'], ['Uber for Cats', 'Contribution', '50', award.issuer_display_name, award.created_at.strftime('%b %d, %Y')]].map { |row| row.map { |cell| cell.encode 'utf-16le' } })
   end
+
+  describe 'whitelabel_interested_projects' do
+    let(:account) { create(:account) }
+    let(:whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'NOT.test.host') }
+
+    let!(:whitelabel_interested_project) do
+      project = create(:project, title: 'Whitelabel Interested Project', mission: whitelabel_mission)
+      # project.mission.update(whitelabel: true, whitelabel_domain: 'NOT.test.host')
+      create(:interest, project: project, account: account)
+      project
+    end
+
+    let!(:whitelabel_uninterested_project) do
+      project = create(:project, title: 'Whiitelabel Uninterested Project', mission: whitelabel_mission)
+      # project.mission.update(whitelabel: true, whitelabel_domain: 'NOT.test.host')
+      project
+    end
+
+    let!(:non_whitelabel_interested_project) do
+      project = create(:project, title: 'Non Whitelabel Interested Project')
+      create(:interest, project: project, account: account)
+      project
+    end
+
+    let!(:non_whitelabel_uninterested_project) do
+      project = create(:project, title: 'Non Whitelabel Uninterested Project')
+    end
+
+    it 'shows just the non-whitelabel interested task with no whitelabel' do
+      expect(account.whitelabel_interested_projects(nil)).to eq([non_whitelabel_interested_project])
+    end
+
+    it 'shows just the whitelabel interested task with whitelabel' do
+      expect(account.whitelabel_interested_projects(whitelabel_mission)).to eq([whitelabel_interested_project])
+    end
+  end
+
+  describe '.make_everyone_interested' do
+    let!(:project) { create :project }
+    let!(:users) do
+      10.times { create(:account) }
+      described_class.all
+    end
+
+    it 'loops through all users in batch sizes of 500 and makes them all interested in a project' do
+      expect(project.interested).to contain_exactly(project.account)
+      described_class.make_everyone_interested(project)
+      expect(project.interested.to_a).to contain_exactly(*users)
+    end
+  end
 end

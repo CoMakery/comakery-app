@@ -69,6 +69,7 @@ group(:development, :test) do
   gem 'brakeman', require: false
   gem 'citizen-scripts', git: 'https://github.com/CoMakery/citizen-scripts.git', ref: 'dev', require: false
   gem 'dotenv-rails'
+  gem 'jaro_winkler'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rubocop', '~>0.49.1', require: false

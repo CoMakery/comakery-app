@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_05_172240) do
+ActiveRecord::Schema.define(version: 2019_12_20_034156) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -249,7 +249,7 @@ ActiveRecord::Schema.define(version: 2019_12_05_172240) do
     t.bigint "token_id"
     t.integer "status", default: 0
     t.integer "display_order"
-    t.boolean "whitelabel"
+    t.boolean "whitelabel", default: false, null: false
     t.string "whitelabel_domain"
     t.string "whitelabel_logo_id"
     t.string "whitelabel_logo_filename"
@@ -338,7 +338,8 @@ ActiveRecord::Schema.define(version: 2019_12_05_172240) do
     t.string "agreed_to_license_hash"
     t.boolean "display_team", default: true
     t.bigint "interests_count"
-    t.boolean "whitelabel"
+    t.boolean "whitelabel", default: false, null: false
+    t.boolean "auto_add_interest", default: false, null: false
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"

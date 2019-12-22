@@ -128,8 +128,22 @@ class Account < ApplicationRecord
     def discord_info(uid)
       @discord_info = Comakery::Discord.new.user_info(uid)
     end
+
+    def make_everyone_interested(project)
+      find_each(batch_size: 500) do |account|
+        project.safe_add_interested(account)
+      end
+    end
   end
   before_save :downcase_email
+
+  def whitelabel_interested_projects(whitelabel_mission)
+    if whitelabel_mission.present?
+      projects_interested.where(mission: whitelabel_mission)
+    else
+      projects_interested.where(whitelabel: false)
+    end
+  end
 
   def create_authentication_and_build_team(uid, channel)
     auth = authentications.create(provider: channel.team.provider, uid: uid)

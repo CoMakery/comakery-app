@@ -256,6 +256,7 @@ GEM
     interactor (3.1.1)
     intercom-rails (0.4.1)
       activesupport (> 3.0)
+    jaro_winkler (1.5.4)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
     jira-ruby (1.6.0)
@@ -389,11 +390,11 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.1)
-    puma (4.2.1)
+    puma (4.3.1)
       nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
-    rack (2.0.7)
+    rack (2.0.8)
     rack-contrib (2.1.0)
       rack (~> 2.0)
     rack-protection (2.0.7)
@@ -661,6 +662,7 @@ DEPENDENCIES
   httparty
   interactor
   intercom-rails
+  jaro_winkler
   jbuilder (~> 2.9)
   jquery-rails
   jquery-ui-rails

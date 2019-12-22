@@ -19,7 +19,7 @@ feature 'pages' do
     visit root_path
     expect(page).not_to have_content 'default project 8344'
     expect(page).to have_content 'featured project 9934'
-    expect(page).to have_content 'Request Sent'
+    expect(page).to have_content 'Following'
     expect(page).to have_content 'test1'
     expect(page).to have_content 'test2'
     expect(page).to have_content 'test3'
