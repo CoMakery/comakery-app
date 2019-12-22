@@ -81,4 +81,12 @@ class AccountDecorator < Draper::Decorator
       'unknown'
     end
   end
+
+  def verification_date
+    latest_verification&.created_at
+  end
+
+  def verification_max_investment_usd
+    latest_verification&.max_investment_usd
+  end
 end

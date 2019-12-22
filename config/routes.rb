@@ -130,6 +130,10 @@ Rails.application.routes.draw do
         post :auth
       end
     end
+
+    namespace :v1 do
+      resources :accounts, only: [:show, :update]
+    end
   end
 
   unless Rails.env.development? || Rails.env.test?

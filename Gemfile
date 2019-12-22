@@ -123,3 +123,7 @@ gem 'barnes', '~> 0.0.7'
 gem 'bootsnap', '~> 1.4'
 
 gem 'sentry-raven', '~> 2.12'
+
+gem 'jbuilder', '~> 2.9'
+
+gem 'rspec_api_documentation', '~> 6.1'

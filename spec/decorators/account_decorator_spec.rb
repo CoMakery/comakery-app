@@ -181,4 +181,34 @@ describe AccountDecorator do
       expect(unknown_account.reload.decorate.verification_state).to eq('unknown')
     end
   end
+
+  describe 'verification_date' do
+    let!(:passed_account) { create(:account) }
+    let!(:unknown_account) { create(:account) }
+
+    it 'returns date for passed_account' do
+      create(:verification, account: passed_account, passed: true)
+      expect(passed_account.reload.decorate.verification_date).not_to be_nil
+    end
+
+    it 'returns nil for unknown_account' do
+      expect(unknown_account.reload.decorate.verification_date).to be_nil
+    end
+  end
+
+  describe 'verification_max_investment_usd' do
+    let!(:passed_account) { create(:account) }
+    let!(:unknown_account) { create(:account) }
+
+    it 'returns max_investment_usd for passed_account' do
+      max_investment_usd = 100
+
+      create(:verification, account: passed_account, passed: true, max_investment_usd: max_investment_usd)
+      expect(passed_account.reload.decorate.verification_max_investment_usd).to eq(max_investment_usd)
+    end
+
+    it 'returns nil for unknown_account' do
+      expect(unknown_account.reload.decorate.verification_max_investment_usd).to be_nil
+    end
+  end
 end

@@ -221,3 +221,15 @@ lab.redistogo.com:9968> flushdb
 ## General Schema
 
 ![new schema](doc/schema-with-batches/updated-schema.png)
+
+## API documentaion
+
+API documentaion is generated with `rspec_api_documentation` gem from `spec/acceptance/*` specs
+
+See `config/initializers/rspec_api.rb` for configuration
+
+Generated HTML is located in `/public/doc/api` directory and accessible on `https://www.comakery.com/doc/api/index.html` 
+
+```
+rails docs:generate
+```
