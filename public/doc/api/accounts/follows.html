@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Comakery Whitelabel API</title>
-  <meta charset="utf-8">
-  <style>
-    
+  <head>
+    <title>Accounts API</title>
+    <meta charset="utf-8">
+    <style>
+      
 body {
   font-family: Helvetica,Arial,sans-serif;
   font-size: 13px;
@@ -39,7 +39,7 @@ pre {
 
 td.required .name:after {
   float: right;
-  content: &quot;required&quot;;
+  content: "required";
   font-weight: normal;
   color: #F08080;
 }
@@ -102,58 +102,59 @@ table th, table td {
   text-align: left;
 }
 
-  </style>
-</head>
-<body>
-<div class="container">
-  <h1>Comakery Whitelabel API</h1>
-  
-    Parameter inflection can be managed via `Key-Inflection` HTTP header with values of `camel`, `dash`, `snake` or `pascal`.
-    By default requests use snake case, responses use camel case. 
-  
-  <div class="article">
-    <h2>Accounts</h2>
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Accounts API</h1>
 
-      <p class="explanation">Retrieve and manage account data, follow and unfollow projects</p>
+        <p class="explanation">Retrieve and manage account data, follow and unfollow projects</p>
 
-    <ul>
-      <li>
-        <a href="accounts/get.html">GET</a>
-      </li>
-      <li>
-        <a href="accounts/update.html">UPDATE</a>
-      </li>
-      <li>
-        <a href="accounts/update_–_error.html">UPDATE – ERROR</a>
-      </li>
-      <li>
-        <a href="accounts/follows.html">FOLLOWS</a>
-      </li>
-      <li>
-        <a href="accounts/follow.html">FOLLOW</a>
-      </li>
-      <li>
-        <a href="accounts/follow_–_error.html">FOLLOW – ERROR</a>
-      </li>
-      <li>
-        <a href="accounts/unfollow.html">UNFOLLOW</a>
-      </li>
-    </ul>
-  </div>
-  <div class="article">
-    <h2>Projects</h2>
+      <div class="article">
+        <h2>FOLLOWS</h2>
+        <h3>GET /api/v1/accounts/:id/follows</h3>
+          <p class="explanation">
+            Returns an array of project ids
+          </p>
 
-      <p class="explanation">Retrieve projects data</p>
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="required">
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">account id or email</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-    <ul>
-      <li>
-        <a href="projects/index.html">INDEX</a>
-      </li>
-      <li>
-        <a href="projects/get.html">GET</a>
-      </li>
-    </ul>
-  </div>
-</div>
-</body>
+
+          <h3>Request</h3>
+
+
+          <h4>Route</h4>
+          <pre class="request route highlight">GET /api/v1/accounts/13/follows</pre>
+
+
+
+
+            <h3>Response</h3>
+            <h4>Status</h4>
+            <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">[
+  4
+]</pre>
+      </div>
+    </div>
+  </body>
 </html>

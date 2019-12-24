@@ -39,7 +39,7 @@ RspecApiDocumentation.configure do |config|
 
   # By default examples and resources are ordered by description. Set to true keep
   # the source order.
-  config.keep_source_order = false
+  config.keep_source_order = true
 
   # Change the name of the API on index pages
   config.api_name = "Comakery Whitelabel API"
@@ -70,12 +70,12 @@ RspecApiDocumentation.configure do |config|
 
   # Change how the post body is formatted by default, you can still override by `raw_post`
   # Can be :json, :xml, or a proc that will be passed the params
-  config.request_body_formatter = Proc.new { |params| params }
+  # config.request_body_formatter = Proc.new { |params| params }
 
   # Change how the response body is formatted by default
   # Is proc that will be called with the response_content_type & response_body
   # by default response_content_type of `application/json` are pretty formated.
-  config.response_body_formatter = Proc.new { |response_content_type, response_body| response_body }
+  # config.response_body_formatter = Proc.new { |response_content_type, response_body| response_body }
 
   # Change the embedded style for HTML output. This file will not be processed by
   # RspecApiDocumentation and should be plain CSS.

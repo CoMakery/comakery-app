@@ -278,3 +278,7 @@ end
 def create(thing, *args)
   mom.send(thing, *args).tap(&:save!)
 end
+
+def dummy_image
+  Refile::FileDouble.new('dummy_image', 'dummy_image.png', content_type: 'image/png')
+end

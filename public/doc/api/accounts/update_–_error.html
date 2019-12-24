@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>accounts API</title>
+    <title>Accounts API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,13 +106,16 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>accounts API</h1>
+      <h1>Accounts API</h1>
 
-        <p class="explanation">retrieve and manage account data</p>
+        <p class="explanation">Retrieve and manage account data, follow and unfollow projects</p>
 
       <div class="article">
-        <h2>update account data – failure</h2>
+        <h2>UPDATE – ERROR</h2>
         <h3>PUT /api/v1/accounts/:id</h3>
+          <p class="explanation">
+            Returns an array of errors
+          </p>
 
           <h3>Parameters</h3>
           <table class="parameters table table-striped table-bordered table-condensed">
@@ -224,7 +227,7 @@ table th, table td {
                     <span class="name">account[tezos_wallet]</span>
                 </td>
                 <td>
-                  <span class="description">rezos wallet</span>
+                  <span class="description">tezos wallet</span>
                 </td>
               </tr>
             </tbody>
@@ -254,7 +257,7 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">PUT /api/v1/accounts/7</pre>
+          <pre class="request route highlight">PUT /api/v1/accounts/9</pre>
 
 
             <h4>Body</h4>
@@ -265,7 +268,13 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
-              <pre class="response body">{&quot;errors&quot;:{&quot;ethereumWallet&quot;:[&quot;should start with &#39;0x&#39;, followed by a 40 character ethereum address&quot;]}}</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;ethereumWallet&quot;: [
+      &quot;should start with &#39;0x&#39;, followed by a 40 character ethereum address&quot;
+    ]
+  }
+}</pre>
       </div>
     </div>
   </body>
