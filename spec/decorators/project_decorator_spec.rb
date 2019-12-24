@@ -249,4 +249,17 @@ describe ProjectDecorator do
       expect(project.decorate.step_for_quantity_input).to eq(1)
     end
   end
+
+  describe 'image_url' do
+    let!(:project) { create :project }
+
+    it 'returns image_url if present' do
+      expect(project.decorate.image_url).to include('image.png')
+    end
+
+    it 'returns default image' do
+      project.update(square_image: nil)
+      expect(project.reload.decorate.image_url).to include('defaul_project')
+    end
+  end
 end

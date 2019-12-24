@@ -148,6 +148,10 @@ class ProjectDecorator < Draper::Decorator
     token ? 0.1 : 1
   end
 
+  def image_url(size = 1000)
+    helpers.attachment_url(self, :square_image, :fill, size, size, fallback: 'defaul_project.jpg')
+  end
+
   private
 
   def self.pretty_number(*currency_methods)

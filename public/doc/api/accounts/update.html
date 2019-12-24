@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>accounts API</title>
+    <title>Accounts API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,13 +106,16 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>accounts API</h1>
+      <h1>Accounts API</h1>
 
-        <p class="explanation">retrieve and manage account data</p>
+        <p class="explanation">Retrieve and manage account data, follow and unfollow projects</p>
 
       <div class="article">
-        <h2>get account data</h2>
-        <h3>GET /api/v1/accounts/:id</h3>
+        <h2>UPDATE</h2>
+        <h3>PUT /api/v1/accounts/:id</h3>
+          <p class="explanation">
+            Redirects to account data
+          </p>
 
           <h3>Parameters</h3>
           <table class="parameters table table-striped table-bordered table-condensed">
@@ -131,6 +134,102 @@ table th, table td {
                   <span class="description">account id or email</span>
                 </td>
               </tr>
+              <tr>
+                <td>
+                    <span class="name">account[first_name]</span>
+                </td>
+                <td>
+                  <span class="description">first name</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[last_name]</span>
+                </td>
+                <td>
+                  <span class="description">last name</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[nickname]</span>
+                </td>
+                <td>
+                  <span class="description">nickname</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[image]</span>
+                </td>
+                <td>
+                  <span class="description">image</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[country]</span>
+                </td>
+                <td>
+                  <span class="description">counry</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[date_of_birth]</span>
+                </td>
+                <td>
+                  <span class="description">date of birth</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[ethereum_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">ethereum wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[qtum_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">qtum wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[cardano_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">cardano wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[bitcoin_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">bitcoin wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[eos_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">eos wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[tezos_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">tezos wallet</span>
+                </td>
+              </tr>
             </tbody>
           </table>
 
@@ -145,154 +244,10 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">id</span>
+                    <span class="name">errors</span>
                 </td>
                 <td>
-                  <span class="description">id</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">email</span>
-                </td>
-                <td>
-                  <span class="description">email</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">firstName</span>
-                </td>
-                <td>
-                  <span class="description">first name</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">lastName</span>
-                </td>
-                <td>
-                  <span class="description">last name</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">nickname</span>
-                </td>
-                <td>
-                  <span class="description">nickname</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">imageUrl</span>
-                </td>
-                <td>
-                  <span class="description">image url</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">country</span>
-                </td>
-                <td>
-                  <span class="description">country</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">dateOfBirth</span>
-                </td>
-                <td>
-                  <span class="description">date of birth</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">ethereumWallet</span>
-                </td>
-                <td>
-                  <span class="description">ethereum wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">qtumWallet</span>
-                </td>
-                <td>
-                  <span class="description">qtum Wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">cardanoWallet</span>
-                </td>
-                <td>
-                  <span class="description">cardano wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">bitcoinWallet</span>
-                </td>
-                <td>
-                  <span class="description">bitcoin wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">eosWallet</span>
-                </td>
-                <td>
-                  <span class="description">eos wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">tezosWallet</span>
-                </td>
-                <td>
-                  <span class="description">tezos wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">createdAt</span>
-                </td>
-                <td>
-                  <span class="description">account creation timestamp</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">updatedAt</span>
-                </td>
-                <td>
-                  <span class="description">account update timestamp</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">verificationState</span>
-                </td>
-                <td>
-                  <span class="description">result of latest AML/KYC verification (passed | failed | unknown)</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">verificationDate</span>
-                </td>
-                <td>
-                  <span class="description">date of latest AML/KYC verification</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">verificationMaxInvestmentUsd</span>
-                </td>
-                <td>
-                  <span class="description">max investment approved during latest AML/KYC verification</span>
+                  <span class="description">array of errors</span>
                 </td>
               </tr>
             </tbody>
@@ -302,16 +257,18 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/1</pre>
+          <pre class="request route highlight">PUT /api/v1/accounts/5</pre>
 
 
+            <h4>Body</h4>
+            <pre class="request body">account[first_name]=Alex</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
-            <pre class="response status">200 OK</pre>
+            <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">{&quot;id&quot;:1,&quot;email&quot;:&quot;me+fe9f2a8a9cedf42fe55778dd3a10fce2d8c9d04c@example.com&quot;,&quot;firstName&quot;:&quot;Account&quot;,&quot;lastName&quot;:&quot;96173956ef343b843cbdde94c4160b850f47acd3&quot;,&quot;nickname&quot;:null,&quot;imageUrl&quot;:&quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,&quot;country&quot;:&quot;United States of America&quot;,&quot;dateOfBirth&quot;:&quot;1990-01-01&quot;,&quot;ethereumWallet&quot;:null,&quot;qtumWallet&quot;:null,&quot;cardanoWallet&quot;:null,&quot;bitcoinWallet&quot;:null,&quot;eosWallet&quot;:null,&quot;tezosWallet&quot;:null,&quot;createdAt&quot;:&quot;2019-12-22T17:10:27.315Z&quot;,&quot;updatedAt&quot;:&quot;2019-12-22T17:10:27.362Z&quot;,&quot;verificationState&quot;:&quot;passed&quot;,&quot;verificationDate&quot;:&quot;2019-12-22T17:10:27.355Z&quot;,&quot;verificationMaxInvestmentUsd&quot;:1000000}</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/5&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>

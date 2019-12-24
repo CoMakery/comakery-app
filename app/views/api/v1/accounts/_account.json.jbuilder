@@ -1,5 +1,5 @@
 json.call(
-  account,
+  account.decorate,
   :id,
   :email,
   :first_name,
@@ -14,12 +14,9 @@ json.call(
   :bitcoin_wallet,
   :eos_wallet,
   :tezos_wallet,
+  :verification_state,
+  :verification_date,
+  :verification_max_investment_usd,
   :created_at,
   :updated_at
 )
-
-json.image_url account.decorate.image_url
-
-json.verification_state account.decorate.verification_state
-json.verification_date account.decorate.verification_date
-json.verification_max_investment_usd account.decorate.verification_max_investment_usd
