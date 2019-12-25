@@ -128,3 +128,7 @@ gem 'sentry-raven', '~> 2.12'
 gem 'jbuilder', '~> 2.9'
 
 gem 'rspec_api_documentation', '~> 6.1'
+
+gem 'api-pagination', '~> 4.8'
+
+gem 'rack-attack', '~> 6.2'

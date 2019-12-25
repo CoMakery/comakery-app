@@ -9,8 +9,9 @@ resource 'Accounts' do
   let!(:account) { create(:account) }
   let!(:verification) { create(:verification, account: account) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
+  let!(:project2) { create(:project, mission: active_whitelabel_mission) }
 
-  explanation 'Retrieve and manage account data, follow and unfollow projects'
+  explanation 'Retrieve and manage account data, follow and unfollow projects.'
 
   get '/api/v1/accounts/:id' do
     with_options with_example: true do
@@ -100,13 +101,16 @@ resource 'Accounts' do
   get '/api/v1/accounts/:id/follows' do
     with_options with_example: true do
       parameter :id, 'account id or email', required: true, type: :integer
+      parameter :page, 'page number', type: :integer
     end
 
     context '200' do
       let!(:id) { account.id }
+      let!(:page) { 1 }
 
       before do
         project.interests.create(account: account, specialty: account.specialty)
+        project2.interests.create(account: account, specialty: account.specialty)
       end
 
       example_request 'FOLLOWS' do

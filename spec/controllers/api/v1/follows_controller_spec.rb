@@ -12,6 +12,12 @@ RSpec.describe Api::V1::FollowsController, type: :controller do
       get :index, params: { account_id: account.id, format: :json }, session: valid_session
       expect(response).to be_successful
     end
+
+    it 'applies pagination' do
+      get :index, params: { account_id: account.id, format: :json, page: 9999 }, session: valid_session
+      expect(response).to be_successful
+      expect(assigns[:follows]).to eq([])
+    end
   end
 
   describe 'POST #create' do

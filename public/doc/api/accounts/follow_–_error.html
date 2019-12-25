@@ -108,7 +108,7 @@ table th, table td {
     <div class="container">
       <h1>Accounts API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects</p>
+        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
 
       <div class="article">
         <h2>FOLLOW – ERROR</h2>
@@ -169,11 +169,11 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/21/follows</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/26/follows</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">project_id=6</pre>
+            <pre class="request body">project_id=11</pre>
 
 
             <h3>Response</h3>
@@ -183,7 +183,7 @@ table th, table td {
               <pre class="response body">{
   &quot;errors&quot;: {
     &quot;projectId&quot;: [
-      &quot;has already been taken&quot;
+      &quot;has already been followed&quot;
     ]
   }
 }</pre>

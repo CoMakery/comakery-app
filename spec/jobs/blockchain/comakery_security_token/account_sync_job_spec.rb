@@ -4,7 +4,7 @@ RSpec.describe Blockchain::ComakerySecurityToken::AccountSyncJob, type: :job do
   let!(:account) { create(:account, ethereum_wallet: '0x0000000000000000000000000000000000000000') }
   let!(:token) { stub_blockchain_sync && create(:token, coin_type: :comakery, ethereum_network: 'main', ethereum_contract_address: '0x0000000000000000000000000000000000000000') }
   let!(:record) { create(:account_token_record, account: account, token: token) }
-  let!(:invalid_record) { create(:account_token_record, account: create(:account), token: token) }
+  let!(:invalid_record) { create(:account_token_record, account: create(:account, ethereum_wallet: nil), token: token) }
 
   it 'updates account_token_record' do
     described_class.perform_now(record)

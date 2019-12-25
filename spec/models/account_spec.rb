@@ -67,6 +67,7 @@ describe Account do
     end
 
     it 'requires #ethereum_wallet to be a valid ethereum address' do
+      account.update(ethereum_wallet: nil)
       expect(account.ethereum_wallet).to be_blank
       expect(account).to be_valid
 

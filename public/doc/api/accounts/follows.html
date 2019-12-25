@@ -108,7 +108,7 @@ table th, table td {
     <div class="container">
       <h1>Accounts API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects</p>
+        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
 
       <div class="article">
         <h2>FOLLOWS</h2>
@@ -134,6 +134,14 @@ table th, table td {
                   <span class="description">account id or email</span>
                 </td>
               </tr>
+              <tr>
+                <td>
+                    <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
+                </td>
+              </tr>
             </tbody>
           </table>
 
@@ -142,17 +150,25 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/13/follows</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/16/follows?page=1</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">page: 1</pre>
 
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 2
+ETag: W/&quot;44701e55ec315ed451cba606db18eaa3&quot;
+Last-Modified: Wed, 25 Dec 2019 16:03:07 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">[
-  4
+  8,
+  7
 ]</pre>
       </div>
     </div>

@@ -108,7 +108,7 @@ table th, table td {
     <div class="container">
       <h1>Projects API</h1>
 
-        <p class="explanation">Retrieve projects data</p>
+        <p class="explanation">Retrieve projects data.</p>
 
       <div class="article">
         <h2>INDEX</h2>
@@ -117,43 +117,94 @@ table th, table td {
             Returns an array of projects. See GET for response fields description.
           </p>
 
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
 
           <h3>Request</h3>
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects</pre>
+          <pre class="request route highlight">GET /api/v1/projects?page=1</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">page: 1</pre>
 
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 2
+ETag: W/&quot;073b32b114123c7e03a17325dc75e238&quot;
+Last-Modified: Wed, 25 Dec 2019 16:03:08 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">[
   {
-    &quot;id&quot;: 8,
+    &quot;id&quot;: 16,
     &quot;title&quot;: &quot;Uber for Cats&quot;,
     &quot;description&quot;: &quot;We are going to build amazing&quot;,
-    &quot;imageUrl&quot;: &quot;/attachments/b238cfcd29e68bc50104dc0eb67ea8287e960da5/store/fill/1000/1000/536c64d5daeda259be4b29be6ebe927357a53eb5a304e384670cd15df48c/image.png&quot;,
-    &quot;accountId&quot;: 29,
-    &quot;createdAt&quot;: &quot;2019-12-24T17:37:01.409Z&quot;,
-    &quot;updatedAt&quot;: &quot;2019-12-24T17:37:01.409Z&quot;,
+    &quot;imageUrl&quot;: &quot;/attachments/e1f7f3b88048394282b57cb3d646ed92870e3fbb/store/fill/1000/1000/4ee4196824ebff3e32d259d066465995da391e63ea606b0719cfb67d25a8/image.png&quot;,
+    &quot;accountId&quot;: 37,
+    &quot;createdAt&quot;: &quot;2019-12-25T16:03:08.788Z&quot;,
+    &quot;updatedAt&quot;: &quot;2019-12-25T16:03:08.788Z&quot;,
     &quot;adminIds&quot;: [
 
     ],
     &quot;token&quot;: {
-      &quot;id&quot;: 8,
-      &quot;name&quot;: &quot;Token-00feab8a6e4a0532d40441262a3359863ef5f4fd&quot;,
-      &quot;symbol&quot;: &quot;TKNa28b73bde8b5d8d13bc3483b5f936ba800d8fcd7&quot;,
-      &quot;network&quot;: null,
-      &quot;contractAddress&quot;: null,
-      &quot;decimalPlaces&quot;: null,
-      &quot;logoUrl&quot;: &quot;/attachments/02290eded7059fa767fd806ac546d17573439be4/store/fill/100/100/ce8347713b721f0c40f59036f19046edecebc6934d62b7b6a1a84780b0e2/image.png&quot;,
-      &quot;createdAt&quot;: &quot;2019-12-24T17:37:01.383Z&quot;,
-      &quot;updatedAt&quot;: &quot;2019-12-24T17:37:01.417Z&quot;
+      &quot;id&quot;: 17,
+      &quot;name&quot;: &quot;ComakeryToken-b254afe69dd0a69a41558983fee469246a4148fe&quot;,
+      &quot;symbol&quot;: &quot;XYZ1e0ef2e01e21a457f6eed6e876a4e0bba0932c8a&quot;,
+      &quot;network&quot;: &quot;ropsten&quot;,
+      &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimalPlaces&quot;: 18,
+      &quot;logoUrl&quot;: &quot;/attachments/4506da7963f7453ff17f73db855202d6f5a0651b/store/fill/100/100/d0cf95d8a95f74247bacdf5400dffb201db921e7719fe932c84febf32d84/dummy_image.png&quot;,
+      &quot;createdAt&quot;: &quot;2019-12-25T16:03:08.747Z&quot;,
+      &quot;updatedAt&quot;: &quot;2019-12-25T16:03:08.794Z&quot;
+    }
+  },
+  {
+    &quot;id&quot;: 15,
+    &quot;title&quot;: &quot;Uber for Cats&quot;,
+    &quot;description&quot;: &quot;We are going to build amazing&quot;,
+    &quot;imageUrl&quot;: &quot;/attachments/df35e31b2c948312b9e5e3612f4e0b7858dbd989/store/fill/1000/1000/63c218400f912ef5184d5cf3a27598930a8376be384f6abcbd9c7f28190d/image.png&quot;,
+    &quot;accountId&quot;: 36,
+    &quot;createdAt&quot;: &quot;2019-12-25T16:03:08.722Z&quot;,
+    &quot;updatedAt&quot;: &quot;2019-12-25T16:03:08.722Z&quot;,
+    &quot;adminIds&quot;: [
+      38,
+      39,
+      40
+    ],
+    &quot;token&quot;: {
+      &quot;id&quot;: 15,
+      &quot;name&quot;: &quot;ComakeryToken-151347a94d78d0a1a9773b99b76082371cd2d03f&quot;,
+      &quot;symbol&quot;: &quot;XYZ8d7272cc1350fcb7ce5affc2f688ec0157d840be&quot;,
+      &quot;network&quot;: &quot;ropsten&quot;,
+      &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimalPlaces&quot;: 18,
+      &quot;logoUrl&quot;: &quot;/attachments/19086da6916db31441315fa2dd907114df70c24e/store/fill/100/100/b4a94e413c252acd246ee00adc0b8a2e68f893c8a0ee91e2578b128088d5/dummy_image.png&quot;,
+      &quot;createdAt&quot;: &quot;2019-12-25T16:03:08.677Z&quot;,
+      &quot;updatedAt&quot;: &quot;2019-12-25T16:03:08.728Z&quot;
     }
   }
 ]</pre>

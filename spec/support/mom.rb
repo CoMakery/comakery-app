@@ -4,10 +4,12 @@ class Mom
   def account(**attrs)
     defaults = {
       email: "me+#{SecureRandom.hex(20)}@example.com",
-      first_name: 'Account',
-      last_name: SecureRandom.hex(20),
+      first_name: 'Eva',
+      last_name: 'Smith',
+      nickname: "hunter-#{SecureRandom.hex(20)}",
       date_of_birth: '1990/01/01',
       country: 'United States of America',
+      ethereum_wallet: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B',
       specialty: create(:specialty),
       password: valid_password
     }
@@ -138,6 +140,19 @@ class Mom
       name: "Token-#{SecureRandom.hex(20)}",
       symbol: "TKN#{SecureRandom.hex(20)}",
       logo_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png')
+    }
+    Token.new(defaults.merge(attrs))
+  end
+
+  def comakery_token(**attrs)
+    defaults = {
+      name: "ComakeryToken-#{SecureRandom.hex(20)}",
+      symbol: "XYZ#{SecureRandom.hex(20)}",
+      logo_image: dummy_image,
+      coin_type: :comakery,
+      decimal_places: 18,
+      ethereum_network: :ropsten,
+      ethereum_contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
     }
     Token.new(defaults.merge(attrs))
   end

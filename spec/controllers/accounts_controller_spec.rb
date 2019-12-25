@@ -10,7 +10,7 @@ describe AccountsController do
       expect do
         put :update, params: { account: { ethereum_wallet: "0x#{'a' * 40}" } }
         expect(response.status).to eq(302)
-      end.to change { account.reload.ethereum_wallet }.from(nil).to("0x#{'a' * 40}")
+      end.to change { account.reload.ethereum_wallet }.to("0x#{'a' * 40}")
 
       expect(response).to redirect_to account_url
       expect(flash[:notice]).to eq('Your account details have been updated.')
