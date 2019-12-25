@@ -11,7 +11,13 @@ resource 'Projects' do
   explanation 'Retrieve projects data'
 
   get '/api/v1/projects' do
+    with_options with_example: true do
+      parameter :page, 'page number', type: :integer
+    end
+
     context '200' do
+      let!(:page) { 1 }
+
       example_request 'INDEX' do
         explanation 'Returns an array of projects. See GET for response fields description.'
 

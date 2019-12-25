@@ -1,7 +1,7 @@
 class Api::V1::FollowsController < Api::V1::ApiController
   # GET /api/v1/accounts/1/follows
   def index
-    fresh_when follows
+    fresh_when follows, public: true
   end
 
   # POST /api/v1/accounts/1/follows
@@ -35,7 +35,7 @@ class Api::V1::FollowsController < Api::V1::ApiController
     end
 
     def follows
-      @follows ||= account.projects_interested.where(mission: whitelabel_mission)
+      @follows ||= paginate(account.projects_interested.where(mission: whitelabel_mission))
     end
 
     def follow

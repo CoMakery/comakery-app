@@ -1,7 +1,7 @@
 class Api::V1::AccountsController < Api::V1::ApiController
   # GET /api/v1/accounts/1
   def show
-    fresh_when account
+    fresh_when account, public: true
   end
 
   # PATCH/PUT /api/v1/accounts/1

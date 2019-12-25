@@ -1,4 +1,6 @@
 class Api::V1::ApiController < ActionController::Base
+  include Rails::Pagination
+
   before_action :allow_only_whitelabel
 
   def allow_only_whitelabel

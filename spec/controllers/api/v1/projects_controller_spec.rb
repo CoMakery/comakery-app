@@ -11,6 +11,12 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       get :index, params: { format: :json }, session: valid_session
       expect(response).to be_successful
     end
+
+    it 'applies pagination' do
+      get :index, params: { format: :json, page: 9999 }, session: valid_session
+      expect(response).to be_successful
+      expect(assigns[:projects]).to eq([])
+    end
   end
 
   describe 'GET #show' do

@@ -100,10 +100,12 @@ resource 'Accounts' do
   get '/api/v1/accounts/:id/follows' do
     with_options with_example: true do
       parameter :id, 'account id or email', required: true, type: :integer
+      parameter :page, 'page number', type: :integer
     end
 
     context '200' do
       let!(:id) { account.id }
+      let!(:page) { 1 }
 
       before do
         project.interests.create(account: account, specialty: account.specialty)

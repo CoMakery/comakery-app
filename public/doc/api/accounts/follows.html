@@ -134,6 +134,14 @@ table th, table td {
                   <span class="description">account id or email</span>
                 </td>
               </tr>
+              <tr>
+                <td>
+                    <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
+                </td>
+              </tr>
             </tbody>
           </table>
 
@@ -142,12 +150,17 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/13/follows</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/13/follows?page=1</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">page: 1</pre>
 
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 1</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>

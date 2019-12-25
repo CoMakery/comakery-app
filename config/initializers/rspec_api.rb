@@ -35,7 +35,7 @@ RspecApiDocumentation.configure do |config|
   # which is sometimes too chatty. Setting the parameters to an
   # array of headers will render *only* those headers.
   config.request_headers_to_include = []
-  config.response_headers_to_include = []
+  config.response_headers_to_include = ['link', 'total', 'per-page']
 
   # By default examples and resources are ordered by description. Set to true keep
   # the source order.
@@ -46,8 +46,10 @@ RspecApiDocumentation.configure do |config|
   
   # Change the description of the API on index pages
   config.api_explanation = """
-    Parameter inflection can be managed via `Key-Inflection` HTTP header with values of `camel`, `dash`, `snake` or `pascal`.
-    By default requests use snake case, responses use camel case. 
+    Inflection is managed via `Key-Inflection` client HTTP header with values of `camel`, `dash`, `snake` or `pascal`.
+    By default requests use snake case, responses use camel case.
+
+    Pagination is implemented according RFC-8288 (`Page` request parameter; `Link`, `Total`, `Per-Page` server HTTP headers).
   """
 
   # Redefine what method the DSL thinks is the client
