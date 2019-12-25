@@ -35,7 +35,7 @@ RspecApiDocumentation.configure do |config|
   # which is sometimes too chatty. Setting the parameters to an
   # array of headers will render *only* those headers.
   config.request_headers_to_include = []
-  config.response_headers_to_include = ['link', 'total', 'per-page']
+  config.response_headers_to_include = ['link', 'total', 'per-page', 'etag', 'last-modified']
 
   # By default examples and resources are ordered by description. Set to true keep
   # the source order.
@@ -48,10 +48,15 @@ RspecApiDocumentation.configure do |config|
   config.api_explanation = """
     All of the endpoints below are only accessible via a whitelabel domain, with data scoped to the according instance.
 
-    Inflection is managed via `Key-Inflection` client HTTP header with values of `camel`, `dash`, `snake` or `pascal`.
+    Responses include weak `ETag` and `Last-Modified` headers and will return HTTP 304 if request is fresh.
+
+    Requests are throttled to 1000rpm per origin to avoid service interruption.
+    On exceeding the limit server will return HTTP 429 with `Retry-After` header.
+
+    Inflection is managed via `Key-Inflection` request header with values of `camel`, `dash`, `snake` or `pascal`.
     By default requests use snake case, responses use camel case.
 
-    Pagination is implemented according RFC-8288 (`Page` request parameter; `Link`, `Total`, `Per-Page` server HTTP headers).
+    Pagination is implemented according RFC-8288 (`Page` request parameter; `Link`, `Total`, `Per-Page` response headers).
   """
 
   # Redefine what method the DSL thinks is the client

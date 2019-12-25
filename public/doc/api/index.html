@@ -110,10 +110,15 @@ table th, table td {
   
     All of the endpoints below are only accessible via a whitelabel domain, with data scoped to the according instance.
 
-    Inflection is managed via `Key-Inflection` client HTTP header with values of `camel`, `dash`, `snake` or `pascal`.
+    Responses include weak `ETag` and `Last-Modified` headers and will return HTTP 304 if request is fresh.
+
+    Requests are throttled to 1000rpm per origin to avoid service interruption.
+    On exceeding the limit server will return HTTP 429 with `Retry-After` header.
+
+    Inflection is managed via `Key-Inflection` request header with values of `camel`, `dash`, `snake` or `pascal`.
     By default requests use snake case, responses use camel case.
 
-    Pagination is implemented according RFC-8288 (`Page` request parameter; `Link`, `Total`, `Per-Page` server HTTP headers).
+    Pagination is implemented according RFC-8288 (`Page` request parameter; `Link`, `Total`, `Per-Page` response headers).
   
   <div class="article">
     <h2>Accounts</h2>
