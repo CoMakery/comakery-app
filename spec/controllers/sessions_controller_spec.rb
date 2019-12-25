@@ -173,7 +173,7 @@ describe SessionsController do
     end
 
     it 'notice to update ethereum_wallet' do
-      account.update new_award_notice: true
+      account.update new_award_notice: true, ethereum_wallet: nil
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your <a href="/account">account page</a> to receive your tokens.'

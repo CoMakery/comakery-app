@@ -17,9 +17,9 @@ describe AccountDecorator do
 
   describe '#nick' do
     it 'returns the nickname and falls back to the name' do
-      expect(build(:account, first_name: 'Bob', last_name: 'Johnson').decorate.nick).to eq('Bob Johnson')
-      expect(build(:account, first_name: nil, last_name: 'Johnson').decorate.nick).to eq('Johnson')
-      expect(build(:account, first_name: 'Bob', last_name: '').decorate.nick).to eq('Bob')
+      expect(build(:account, first_name: 'Bob', last_name: 'Johnson', nickname: nil).decorate.nick).to eq('Bob Johnson')
+      expect(build(:account, first_name: nil, last_name: 'Johnson', nickname: nil).decorate.nick).to eq('Johnson')
+      expect(build(:account, first_name: 'Bob', last_name: '', nickname: nil).decorate.nick).to eq('Bob')
       expect(build(:account, first_name: 'Bob', last_name: 'Johnson', nickname: 'bobjon').decorate.nick).to eq('bobjon')
     end
   end
@@ -30,7 +30,7 @@ describe AccountDecorator do
     end
 
     it 'returns only name if nickname is not present' do
-      expect(build(:account, first_name: 'Bob', last_name: 'Johnson').decorate.name_with_nickname).to eq('Bob Johnson')
+      expect(build(:account, first_name: 'Bob', last_name: 'Johnson', nickname: nil).decorate.name_with_nickname).to eq('Bob Johnson')
     end
   end
 
@@ -147,7 +147,7 @@ describe AccountDecorator do
 
   describe 'wallet_address_link_for' do
     let!(:account_w_wallet) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
-    let!(:account_wo_wallet) { create(:account) }
+    let!(:account_wo_wallet) { create(:account, ethereum_wallet: nil) }
     let!(:project_w_token) { build :project, token: create(:token, coin_type: 'eth') }
     let!(:project_wo_token) { build :project, token: nil }
 
