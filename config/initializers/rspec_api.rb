@@ -46,6 +46,8 @@ RspecApiDocumentation.configure do |config|
   
   # Change the description of the API on index pages
   config.api_explanation = """
+    All of the endpoints below are only accessible via a whitelabel domain, with data scoped to the according instance.
+
     Inflection is managed via `Key-Inflection` client HTTP header with values of `camel`, `dash`, `snake` or `pascal`.
     By default requests use snake case, responses use camel case.
 

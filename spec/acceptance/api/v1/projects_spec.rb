@@ -6,9 +6,14 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Projects' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org') }
-  let!(:project) { create(:project, mission: active_whitelabel_mission) }
+  let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token)) }
+  let!(:project2) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token)) }
 
-  explanation 'Retrieve projects data'
+  before do
+    3.times { project.admins << create(:account) }
+  end
+
+  explanation 'Retrieve projects data.'
 
   get '/api/v1/projects' do
     with_options with_example: true do
@@ -45,7 +50,7 @@ resource 'Projects' do
       response_field 'token[id]', 'token id', type: :integer
       response_field 'token[name]', 'token name', type: :string
       response_field 'token[symbol]', 'token symbol', type: :string
-      response_field 'token[network]', 'token network', type: :string
+      response_field 'token[network]', 'token network ( main | ropsten | kovan | rinkeby )', type: :string
       response_field 'token[contractAddress]', 'token contract address', type: :string
       response_field 'token[decimalPlaces]', 'token decimal places', type: :integer
       response_field 'token[logoUrl]', 'token logo url', type: :string
