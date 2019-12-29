@@ -15,6 +15,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
 
     award.name = award.source.capitalize
     award.issuer = project.account
+    award.account_id = params[:transfer][:account_id]
     award.status = :accepted
 
     award.why = '—'
@@ -60,8 +61,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
         :amount,
         :quantity,
         :source,
-        :description,
-        :account_id
+        :description
       )
     end
 end
