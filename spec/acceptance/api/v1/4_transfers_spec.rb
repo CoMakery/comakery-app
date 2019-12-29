@@ -4,7 +4,7 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Transfers' do
+resource 'IV. Transfers' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org') }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
   let!(:transfer_accepted) { create(:transfer, source: :earned, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type) }

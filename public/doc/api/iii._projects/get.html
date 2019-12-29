@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accounts API</title>
+    <title>III. Projects API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Accounts API</h1>
+      <h1>III. Projects API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Retrieve projects data.</p>
 
       <div class="article">
         <h2>GET</h2>
-        <h3>GET /api/v1/accounts/:id</h3>
+        <h3>GET /api/v1/projects/:id</h3>
           <p class="explanation">
-            Returns account data
+            Returns data for a single project.
           </p>
 
           <h3>Parameters</h3>
@@ -131,7 +131,7 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">account id or email</span>
+                  <span class="description">project id</span>
                 </td>
               </tr>
             </tbody>
@@ -151,39 +151,23 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">id</span>
+                  <span class="description">project id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">email</span>
+                    <span class="name">title</span>
                 </td>
                 <td>
-                  <span class="description">email</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">firstName</span>
-                </td>
-                <td>
-                  <span class="description">first name</span>
+                  <span class="description">project title</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">lastName</span>
+                    <span class="name">description</span>
                 </td>
                 <td>
-                  <span class="description">last name</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">nickname</span>
-                </td>
-                <td>
-                  <span class="description">nickname</span>
+                  <span class="description">proect description</span>
                 </td>
               </tr>
               <tr>
@@ -191,71 +175,15 @@ table th, table td {
                     <span class="name">imageUrl</span>
                 </td>
                 <td>
-                  <span class="description">image url</span>
+                  <span class="description">project image url</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">country</span>
+                    <span class="name">accountId</span>
                 </td>
                 <td>
-                  <span class="description">country</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">dateOfBirth</span>
-                </td>
-                <td>
-                  <span class="description">date of birth</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">ethereumWallet</span>
-                </td>
-                <td>
-                  <span class="description">ethereum wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">qtumWallet</span>
-                </td>
-                <td>
-                  <span class="description">qtum Wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">cardanoWallet</span>
-                </td>
-                <td>
-                  <span class="description">cardano wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">bitcoinWallet</span>
-                </td>
-                <td>
-                  <span class="description">bitcoin wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">eosWallet</span>
-                </td>
-                <td>
-                  <span class="description">eos wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">tezosWallet</span>
-                </td>
-                <td>
-                  <span class="description">tezos wallet</span>
+                  <span class="description">project owner account id</span>
                 </td>
               </tr>
               <tr>
@@ -263,7 +191,7 @@ table th, table td {
                     <span class="name">createdAt</span>
                 </td>
                 <td>
-                  <span class="description">account creation timestamp</span>
+                  <span class="description">project creation timestamp</span>
                 </td>
               </tr>
               <tr>
@@ -271,31 +199,87 @@ table th, table td {
                     <span class="name">updatedAt</span>
                 </td>
                 <td>
-                  <span class="description">account update timestamp</span>
+                  <span class="description">project update timestamp</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">verificationState</span>
+                    <span class="name">adminIds</span>
                 </td>
                 <td>
-                  <span class="description">result of latest AML/KYC verification (passed | failed | unknown)</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">verificationDate</span>
-                </td>
-                <td>
-                  <span class="description">date of latest AML/KYC verification</span>
+                  <span class="description">array of admin account ids</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">verificationMaxInvestmentUsd</span>
+                    <span class="name">token[id]</span>
                 </td>
                 <td>
-                  <span class="description">max investment approved during latest AML/KYC verification</span>
+                  <span class="description">token id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[name]</span>
+                </td>
+                <td>
+                  <span class="description">token name</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[symbol]</span>
+                </td>
+                <td>
+                  <span class="description">token symbol</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[network]</span>
+                </td>
+                <td>
+                  <span class="description">token network ( main | ropsten | kovan | rinkeby )</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[contractAddress]</span>
+                </td>
+                <td>
+                  <span class="description">token contract address</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[decimalPlaces]</span>
+                </td>
+                <td>
+                  <span class="description">token decimal places</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[logoUrl]</span>
+                </td>
+                <td>
+                  <span class="description">token logo url</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[createdAt]</span>
+                </td>
+                <td>
+                  <span class="description">token creation timestamp</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[updatedAt]</span>
+                </td>
+                <td>
+                  <span class="description">token update timestamp</span>
                 </td>
               </tr>
             </tbody>
@@ -305,38 +289,44 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/1</pre>
+          <pre class="request route highlight">GET /api/v1/projects/21</pre>
 
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;b15337528db46d63821bb41b035fda37&quot;
-Last-Modified: Sun, 29 Dec 2019 16:31:28 GMT</pre>
+              <pre class="response headers">Per-Page: 25
+Total: 2
+ETag: W/&quot;ddd29124e9e781bb845f4e1d53f1d385&quot;
+Last-Modified: Sun, 29 Dec 2019 17:57:16 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;id&quot;: 1,
-  &quot;email&quot;: &quot;me+f4d118bbd889cce42d13347ab9053676bbc85779@example.com&quot;,
-  &quot;firstName&quot;: &quot;Eva&quot;,
-  &quot;lastName&quot;: &quot;Smith&quot;,
-  &quot;nickname&quot;: &quot;hunter-f49e857497fe6c2da0233651c547d34eb9d7e881&quot;,
-  &quot;imageUrl&quot;: &quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,
-  &quot;country&quot;: &quot;United States of America&quot;,
-  &quot;dateOfBirth&quot;: &quot;1990-01-01&quot;,
-  &quot;ethereumWallet&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
-  &quot;qtumWallet&quot;: null,
-  &quot;cardanoWallet&quot;: null,
-  &quot;bitcoinWallet&quot;: null,
-  &quot;eosWallet&quot;: null,
-  &quot;tezosWallet&quot;: null,
-  &quot;verificationState&quot;: &quot;passed&quot;,
-  &quot;verificationDate&quot;: &quot;2019-12-29T16:31:28.017Z&quot;,
-  &quot;verificationMaxInvestmentUsd&quot;: 1000000,
-  &quot;createdAt&quot;: &quot;2019-12-29T16:31:27.969Z&quot;,
-  &quot;updatedAt&quot;: &quot;2019-12-29T16:31:28.026Z&quot;
+  &quot;id&quot;: 21,
+  &quot;title&quot;: &quot;Uber for Cats&quot;,
+  &quot;description&quot;: &quot;We are going to build amazing&quot;,
+  &quot;imageUrl&quot;: &quot;/attachments/ee6c242a0c5d8b652b4a84fc32b82d33eb5bf3bd/store/fill/1000/1000/ad1375f60c26ef3d762024372754556df6bc6da3f125e6f2a880c67c6b3b/image.png&quot;,
+  &quot;accountId&quot;: 45,
+  &quot;createdAt&quot;: &quot;2019-12-29T17:57:16.727Z&quot;,
+  &quot;updatedAt&quot;: &quot;2019-12-29T17:57:16.727Z&quot;,
+  &quot;adminIds&quot;: [
+    47,
+    48,
+    49
+  ],
+  &quot;token&quot;: {
+    &quot;id&quot;: 27,
+    &quot;name&quot;: &quot;ComakeryToken-d38f79d62a7802646ae2181c4645c269000bbb64&quot;,
+    &quot;symbol&quot;: &quot;XYZ5df26f0628760f3e013e13332619ab388487883a&quot;,
+    &quot;network&quot;: &quot;ropsten&quot;,
+    &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+    &quot;decimalPlaces&quot;: 18,
+    &quot;logoUrl&quot;: &quot;/attachments/20f1911f222a0b6be9b87505258f1a6a5e1d0701/store/fill/100/100/d7273fefa5d1a5f62bd4adc43476f1f24aeac4ef03982165765379c2b251/dummy_image.png&quot;,
+    &quot;createdAt&quot;: &quot;2019-12-29T17:57:16.682Z&quot;,
+    &quot;updatedAt&quot;: &quot;2019-12-29T17:57:16.732Z&quot;
+  }
 }</pre>
       </div>
     </div>

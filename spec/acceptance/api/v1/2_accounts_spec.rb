@@ -4,7 +4,7 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Accounts' do
+resource 'II. Accounts' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org') }
   let!(:account) { create(:account) }
   let!(:verification) { create(:verification, account: account) }

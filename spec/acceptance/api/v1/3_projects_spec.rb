@@ -4,7 +4,7 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Projects' do
+resource 'III. Projects' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org') }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token)) }
   let!(:project2) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token)) }

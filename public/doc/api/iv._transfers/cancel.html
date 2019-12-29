@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Transfers API</title>
+    <title>IV. Transfers API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Transfers API</h1>
+      <h1>IV. Transfers API</h1>
 
         <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
 
       <div class="article">
-        <h2>INDEX</h2>
-        <h3>GET /api/v1/projects/:project_id/transfers</h3>
+        <h2>CANCEL</h2>
+        <h3>DELETE /api/v1/projects/:project_id/transfers/:id</h3>
           <p class="explanation">
-            Returns an array of transfers. See GET for response fields description.
+            Redirects to cancelled transfer
           </p>
 
           <h3>Parameters</h3>
@@ -128,88 +128,57 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">transfer id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
                     <span class="name">project_id</span>
                 </td>
                 <td>
                   <span class="description">project id</span>
                 </td>
               </tr>
+            </tbody>
+          </table>
+
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
               <tr>
                 <td>
-                    <span class="name">page</span>
+                    <span class="name">errors</span>
                 </td>
                 <td>
-                  <span class="description">page number</span>
+                  <span class="description">array of errors</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-
           <h3>Request</h3>
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/19/transfers?page=1</pre>
+          <pre class="request route highlight">DELETE /api/v1/projects/27/transfers/14</pre>
 
-            <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">page: 1</pre>
 
 
 
             <h3>Response</h3>
-              <h4>Headers</h4>
-              <pre class="response headers">Per-Page: 50
-Total: 3
-ETag: W/&quot;2b75fd46824263a616ee14ca20c11140&quot;
-Last-Modified: Sun, 29 Dec 2019 16:31:31 GMT</pre>
             <h4>Status</h4>
-            <pre class="response status">200 OK</pre>
+            <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">[
-  {
-    &quot;id&quot;: 3,
-    &quot;source&quot;: &quot;bought&quot;,
-    &quot;amount&quot;: &quot;50.0&quot;,
-    &quot;quantity&quot;: &quot;1.0&quot;,
-    &quot;totalAmount&quot;: &quot;50.0&quot;,
-    &quot;description&quot;: &quot;Investment&quot;,
-    &quot;accountId&quot;: 52,
-    &quot;ethereumTransactionAddress&quot;: null,
-    &quot;ethereumTransactionError&quot;: &quot;MetaMask Tx Signature: User denied transaction signature.&quot;,
-    &quot;status&quot;: &quot;cancelled&quot;,
-    &quot;createdAt&quot;: &quot;2019-12-29T16:31:31.288Z&quot;,
-    &quot;updatedAt&quot;: &quot;2019-12-29T16:31:31.288Z&quot;
-  },
-  {
-    &quot;id&quot;: 2,
-    &quot;source&quot;: &quot;bought&quot;,
-    &quot;amount&quot;: &quot;50.0&quot;,
-    &quot;quantity&quot;: &quot;1.0&quot;,
-    &quot;totalAmount&quot;: &quot;50.0&quot;,
-    &quot;description&quot;: &quot;Investment&quot;,
-    &quot;accountId&quot;: 50,
-    &quot;ethereumTransactionAddress&quot;: &quot;0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c&quot;,
-    &quot;ethereumTransactionError&quot;: null,
-    &quot;status&quot;: &quot;paid&quot;,
-    &quot;createdAt&quot;: &quot;2019-12-29T16:31:31.197Z&quot;,
-    &quot;updatedAt&quot;: &quot;2019-12-29T16:31:31.184Z&quot;
-  },
-  {
-    &quot;id&quot;: 1,
-    &quot;source&quot;: &quot;earned&quot;,
-    &quot;amount&quot;: &quot;1000.0&quot;,
-    &quot;quantity&quot;: &quot;2.0&quot;,
-    &quot;totalAmount&quot;: &quot;2000.0&quot;,
-    &quot;description&quot;: &quot;Award to a team member&quot;,
-    &quot;accountId&quot;: 48,
-    &quot;ethereumTransactionAddress&quot;: null,
-    &quot;ethereumTransactionError&quot;: null,
-    &quot;status&quot;: &quot;accepted&quot;,
-    &quot;createdAt&quot;: &quot;2019-12-29T16:31:31.085Z&quot;,
-    &quot;updatedAt&quot;: &quot;2019-12-29T16:31:31.085Z&quot;
-  }
-]</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/projects/27/transfers/14&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>

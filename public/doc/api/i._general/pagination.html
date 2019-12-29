@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accounts API</title>
+    <title>I. General API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Accounts API</h1>
+      <h1>I. General API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Details on caching, throttling, inflection and pagination.</p>
 
       <div class="article">
-        <h2>FOLLOW</h2>
-        <h3>POST /api/v1/accounts/:id/follows</h3>
+        <h2>PAGINATION</h2>
+        <h3>GET /api/v1/projects</h3>
           <p class="explanation">
-            Redirects to account follows
+            Pagination is implemented according RFC-8288 (`Page` request parameter; `Link`, `Total`, `Per-Page` response headers).
           </p>
 
           <h3>Parameters</h3>
@@ -127,60 +127,62 @@ table th, table td {
             </thead>
             <tbody>
               <tr>
-                <td class="required">
-                    <span class="name">id</span>
+                <td>
+                    <span class="name">page</span>
                 </td>
                 <td>
-                  <span class="description">account id or email</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">project_id</span>
-                </td>
-                <td>
-                  <span class="description">project id to follow</span>
+                  <span class="description">page number</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">errors</span>
-                </td>
-                <td>
-                  <span class="description">array of errors</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/21/follows</pre>
+          <pre class="request route highlight">GET /api/v1/projects?page=1</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">page: 1</pre>
 
-            <h4>Body</h4>
-            <pre class="request body">project_id=9</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;a3fcb781470cf7eb9546129e4befdc36&quot;
+Last-Modified: Sun, 29 Dec 2019 17:57:14 GMT</pre>
             <h4>Status</h4>
-            <pre class="response status">302 Found</pre>
+            <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/21/follows&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 4,
+    &quot;title&quot;: &quot;Uber for Cats&quot;,
+    &quot;description&quot;: &quot;We are going to build amazing&quot;,
+    &quot;imageUrl&quot;: &quot;/attachments/2bbe6aa1cb6101c54eb6aa76a17613b4c8e1269f/store/fill/1000/1000/b0c2cbf5f3b2b144eff96d8c5dfc563ffd9bde81fda5b7f9b07be0823509/image.png&quot;,
+    &quot;accountId&quot;: 4,
+    &quot;createdAt&quot;: &quot;2019-12-29T17:57:14.599Z&quot;,
+    &quot;updatedAt&quot;: &quot;2019-12-29T17:57:14.599Z&quot;,
+    &quot;adminIds&quot;: [
+
+    ],
+    &quot;token&quot;: {
+      &quot;id&quot;: 7,
+      &quot;name&quot;: &quot;ComakeryToken-ee485c1e4a884c298205f16032a98438626c3a32&quot;,
+      &quot;symbol&quot;: &quot;XYZfdd924edf16aefb37023d5f1436e385ce9d6a9cc&quot;,
+      &quot;network&quot;: &quot;ropsten&quot;,
+      &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimalPlaces&quot;: 18,
+      &quot;logoUrl&quot;: &quot;/attachments/d3f92c6164bb69ac4b841012dae8f1040ff46f39/store/fill/100/100/8a88e26d7b4c279d3814510dd840dc09806ceceff373a83b0751c5550b40/dummy_image.png&quot;,
+      &quot;createdAt&quot;: &quot;2019-12-29T17:57:14.553Z&quot;,
+      &quot;updatedAt&quot;: &quot;2019-12-29T17:57:14.605Z&quot;
+    }
+  }
+]</pre>
       </div>
     </div>
   </body>

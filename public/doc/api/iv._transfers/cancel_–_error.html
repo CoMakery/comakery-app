@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Transfers API</title>
+    <title>IV. Transfers API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Transfers API</h1>
+      <h1>IV. Transfers API</h1>
 
         <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
 
       <div class="article">
-        <h2>CREATE</h2>
-        <h3>POST /api/v1/projects/:project_id/transfers</h3>
+        <h2>CANCEL – ERROR</h2>
+        <h3>DELETE /api/v1/projects/:project_id/transfers/:id</h3>
           <p class="explanation">
-            Redirects to created transfer
+            Returns an array of errors
           </p>
 
           <h3>Parameters</h3>
@@ -128,50 +128,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">transfer id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
                     <span class="name">project_id</span>
                 </td>
                 <td>
                   <span class="description">project id</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">transfer[source]</span>
-                </td>
-                <td>
-                  <span class="description">transfer source ( earned bought mint burn ), defaults to earned</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">transfer[amount]</span>
-                </td>
-                <td>
-                  <span class="description">transfer amount</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">transfer[quantity]</span>
-                </td>
-                <td>
-                  <span class="description">transfer quantity, defaults to 1</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">transfer[account_id]</span>
-                </td>
-                <td>
-                  <span class="description">transfer account id</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">transfer[description]</span>
-                </td>
-                <td>
-                  <span class="description">transfer description</span>
                 </td>
               </tr>
             </tbody>
@@ -201,18 +169,22 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/21/transfers</pre>
+          <pre class="request route highlight">DELETE /api/v1/projects/28/transfers/18</pre>
 
 
-            <h4>Body</h4>
-            <pre class="request body">transfer[source]=bought&transfer[amount]=1000&transfer[quantity]=2&transfer[account_id]=67&transfer[description]=investor</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
-            <pre class="response status">302 Found</pre>
+            <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/projects/21/transfers/10&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;base&quot;: [
+      &quot;Paid task/transfer can&#39;t be cancelled&quot;
+    ]
+  }
+}</pre>
       </div>
     </div>
   </body>

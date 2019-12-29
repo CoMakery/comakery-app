@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accounts API</title>
+    <title>II. Accounts API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Accounts API</h1>
+      <h1>II. Accounts API</h1>
 
         <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
 
       <div class="article">
-        <h2>UNFOLLOW</h2>
-        <h3>DELETE /api/v1/accounts/:id/follows/:project_id</h3>
+        <h2>FOLLOW – ERROR</h2>
+        <h3>POST /api/v1/accounts/:id/follows</h3>
           <p class="explanation">
-            Redirects to account follows
+            Returns an array of errors
           </p>
 
           <h3>Parameters</h3>
@@ -139,27 +139,54 @@ table th, table td {
                     <span class="name">project_id</span>
                 </td>
                 <td>
-                  <span class="description">project id to unfollow</span>
+                  <span class="description">project id to follow</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">errors</span>
+                </td>
+                <td>
+                  <span class="description">array of errors</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
           <h3>Request</h3>
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/v1/accounts/31/follows/13</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/30/follows</pre>
 
 
+            <h4>Body</h4>
+            <pre class="request body">project_id=15</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
-            <pre class="response status">302 Found</pre>
+            <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/31/follows&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;projectId&quot;: [
+      &quot;has already been followed&quot;
+    ]
+  }
+}</pre>
       </div>
     </div>
   </body>

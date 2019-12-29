@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accounts API</title>
+    <title>IV. Transfers API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,13 +106,13 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Accounts API</h1>
+      <h1>IV. Transfers API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
 
       <div class="article">
-        <h2>FOLLOW – ERROR</h2>
-        <h3>POST /api/v1/accounts/:id/follows</h3>
+        <h2>CREATE – ERROR</h2>
+        <h3>POST /api/v1/projects/:project_id/transfers</h3>
           <p class="explanation">
             Returns an array of errors
           </p>
@@ -128,18 +128,50 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">id</span>
+                    <span class="name">project_id</span>
                 </td>
                 <td>
-                  <span class="description">account id or email</span>
+                  <span class="description">project id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">transfer[source]</span>
+                </td>
+                <td>
+                  <span class="description">transfer source ( earned bought mint burn ), defaults to earned</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">transfer[amount]</span>
                 </td>
                 <td>
-                  <span class="description">project id to follow</span>
+                  <span class="description">transfer amount</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">transfer[quantity]</span>
+                </td>
+                <td>
+                  <span class="description">transfer quantity, defaults to 1</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transfer[account_id]</span>
+                </td>
+                <td>
+                  <span class="description">transfer account id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">transfer[description]</span>
+                </td>
+                <td>
+                  <span class="description">transfer description</span>
                 </td>
               </tr>
             </tbody>
@@ -169,11 +201,11 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/26/follows</pre>
+          <pre class="request route highlight">POST /api/v1/projects/26/transfers</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">project_id=11</pre>
+            <pre class="request body">transfer[amount]=-1</pre>
 
 
             <h3>Response</h3>
@@ -182,8 +214,11 @@ table th, table td {
               <h4>Body</h4>
               <pre class="response body">{
   &quot;errors&quot;: {
-    &quot;projectId&quot;: [
-      &quot;has already been followed&quot;
+    &quot;amount&quot;: [
+      &quot;must be greater than 0&quot;
+    ],
+    &quot;account&quot;: [
+      &quot;can&#39;t be blank&quot;
     ]
   }
 }</pre>

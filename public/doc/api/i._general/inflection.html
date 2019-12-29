@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accounts API</title>
+    <title>I. General API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,69 +106,63 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Accounts API</h1>
+      <h1>I. General API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Details on caching, throttling, inflection and pagination.</p>
 
       <div class="article">
-        <h2>FOLLOWS</h2>
-        <h3>GET /api/v1/accounts/:id/follows</h3>
+        <h2>INFLECTION</h2>
+        <h3>GET /api/v1/projects</h3>
           <p class="explanation">
-            Returns an array of project ids
+            Inflection is managed via `Key-Inflection` request header with values of `camel`, `dash`, `snake` or `pascal`. By default requests use snake case, responses use camel case.
           </p>
 
-          <h3>Parameters</h3>
-          <table class="parameters table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="required">
-                    <span class="name">id</span>
-                </td>
-                <td>
-                  <span class="description">account id or email</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">page</span>
-                </td>
-                <td>
-                  <span class="description">page number</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
 
           <h3>Request</h3>
 
+            <h4>Headers</h4>
+            <pre class="request headers">Key-Inflection: dash</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/16/follows?page=1</pre>
+          <pre class="request route highlight">GET /api/v1/projects</pre>
 
-            <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">page: 1</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
-Total: 2
-ETag: W/&quot;6bee4df198ad2baaec8684a867daf471&quot;
-Last-Modified: Sun, 29 Dec 2019 16:31:29 GMT</pre>
+Total: 1
+ETag: W/&quot;625f4c2b452c84278505739760b29107&quot;
+Last-Modified: Sun, 29 Dec 2019 17:57:14 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">[
-  8,
-  7
+  {
+    &quot;id&quot;: 3,
+    &quot;title&quot;: &quot;Uber for Cats&quot;,
+    &quot;description&quot;: &quot;We are going to build amazing&quot;,
+    &quot;image-url&quot;: &quot;/attachments/e1f408e427398383210893c0924a2e20cff3ebb8/store/fill/1000/1000/80e5541ec703ece42e32a293a893a7c5b419212693d5d4549ca9870d7371/image.png&quot;,
+    &quot;account-id&quot;: 3,
+    &quot;created-at&quot;: &quot;2019-12-29T17:57:14.462Z&quot;,
+    &quot;updated-at&quot;: &quot;2019-12-29T17:57:14.462Z&quot;,
+    &quot;admin-ids&quot;: [
+
+    ],
+    &quot;token&quot;: {
+      &quot;id&quot;: 5,
+      &quot;name&quot;: &quot;ComakeryToken-62b7735592d17fec386c30edcf5e3b46ccbee1ce&quot;,
+      &quot;symbol&quot;: &quot;XYZ34398f311abea35e115bca351bf07c68a586f32d&quot;,
+      &quot;network&quot;: &quot;ropsten&quot;,
+      &quot;contract-address&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimal-places&quot;: 18,
+      &quot;logo-url&quot;: &quot;/attachments/3451887ca8252a71b56e84e38db98c05612b785a/store/fill/100/100/e2f7c722ea414f4ad13ef1e433cc75cc88e2f4eaadddff9bbaae5c068661/dummy_image.png&quot;,
+      &quot;created-at&quot;: &quot;2019-12-29T17:57:14.417Z&quot;,
+      &quot;updated-at&quot;: &quot;2019-12-29T17:57:14.467Z&quot;
+    }
+  }
 ]</pre>
       </div>
     </div>
