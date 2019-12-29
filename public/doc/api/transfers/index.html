@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accounts API</title>
+    <title>Transfers API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Accounts API</h1>
+      <h1>Transfers API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
 
       <div class="article">
-        <h2>FOLLOWS</h2>
-        <h3>GET /api/v1/accounts/:id/follows</h3>
+        <h2>INDEX</h2>
+        <h3>GET /api/v1/projects/:project_id/transfers</h3>
           <p class="explanation">
-            Returns an array of project ids
+            Returns an array of transfers. See GET for response fields description.
           </p>
 
           <h3>Parameters</h3>
@@ -128,10 +128,10 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">id</span>
+                    <span class="name">project_id</span>
                 </td>
                 <td>
-                  <span class="description">account id or email</span>
+                  <span class="description">project id</span>
                 </td>
               </tr>
               <tr>
@@ -150,7 +150,7 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/16/follows?page=1</pre>
+          <pre class="request route highlight">GET /api/v1/projects/19/transfers?page=1</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1</pre>
@@ -159,16 +159,56 @@ table th, table td {
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">Per-Page: 25
-Total: 2
-ETag: W/&quot;6bee4df198ad2baaec8684a867daf471&quot;
-Last-Modified: Sun, 29 Dec 2019 16:31:29 GMT</pre>
+              <pre class="response headers">Per-Page: 50
+Total: 3
+ETag: W/&quot;2b75fd46824263a616ee14ca20c11140&quot;
+Last-Modified: Sun, 29 Dec 2019 16:31:31 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">[
-  8,
-  7
+  {
+    &quot;id&quot;: 3,
+    &quot;source&quot;: &quot;bought&quot;,
+    &quot;amount&quot;: &quot;50.0&quot;,
+    &quot;quantity&quot;: &quot;1.0&quot;,
+    &quot;totalAmount&quot;: &quot;50.0&quot;,
+    &quot;description&quot;: &quot;Investment&quot;,
+    &quot;accountId&quot;: 52,
+    &quot;ethereumTransactionAddress&quot;: null,
+    &quot;ethereumTransactionError&quot;: &quot;MetaMask Tx Signature: User denied transaction signature.&quot;,
+    &quot;status&quot;: &quot;cancelled&quot;,
+    &quot;createdAt&quot;: &quot;2019-12-29T16:31:31.288Z&quot;,
+    &quot;updatedAt&quot;: &quot;2019-12-29T16:31:31.288Z&quot;
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;source&quot;: &quot;bought&quot;,
+    &quot;amount&quot;: &quot;50.0&quot;,
+    &quot;quantity&quot;: &quot;1.0&quot;,
+    &quot;totalAmount&quot;: &quot;50.0&quot;,
+    &quot;description&quot;: &quot;Investment&quot;,
+    &quot;accountId&quot;: 50,
+    &quot;ethereumTransactionAddress&quot;: &quot;0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c&quot;,
+    &quot;ethereumTransactionError&quot;: null,
+    &quot;status&quot;: &quot;paid&quot;,
+    &quot;createdAt&quot;: &quot;2019-12-29T16:31:31.197Z&quot;,
+    &quot;updatedAt&quot;: &quot;2019-12-29T16:31:31.184Z&quot;
+  },
+  {
+    &quot;id&quot;: 1,
+    &quot;source&quot;: &quot;earned&quot;,
+    &quot;amount&quot;: &quot;1000.0&quot;,
+    &quot;quantity&quot;: &quot;2.0&quot;,
+    &quot;totalAmount&quot;: &quot;2000.0&quot;,
+    &quot;description&quot;: &quot;Award to a team member&quot;,
+    &quot;accountId&quot;: 48,
+    &quot;ethereumTransactionAddress&quot;: null,
+    &quot;ethereumTransactionError&quot;: null,
+    &quot;status&quot;: &quot;accepted&quot;,
+    &quot;createdAt&quot;: &quot;2019-12-29T16:31:31.085Z&quot;,
+    &quot;updatedAt&quot;: &quot;2019-12-29T16:31:31.085Z&quot;
+  }
 ]</pre>
       </div>
     </div>

@@ -39,6 +39,6 @@ class Api::V1::FollowsController < Api::V1::ApiController
     end
 
     def follow
-      @follow ||= follows.find(params[:id])
+      @follow ||= account.projects_interested.where(mission: whitelabel_mission).find(params[:id])
     end
 end

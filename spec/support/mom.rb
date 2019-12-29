@@ -248,6 +248,25 @@ class Mom
     Award.new(params)
   end
 
+  def transfer(**attrs)
+    params = {
+      name: 'Bought',
+      source: :bought,
+      description: 'Investment',
+      why: '–',
+      requirements: '–',
+      status: :accepted,
+      quantity: 1,
+      amount: 50,
+      issuer: create(:account),
+      account: create(:account)
+    }.merge(attrs)
+
+    params[:award_type] ||= create(:project, account: params[:issuer]).default_award_type
+
+    Award.new(params)
+  end
+
   def slack(authentication = create(:authentication))
     Comakery::Slack.new(authentication)
   end
