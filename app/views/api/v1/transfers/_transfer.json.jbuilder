@@ -1,0 +1,15 @@
+json.call(
+  transfer.decorate,
+  :id,
+  :source,
+  :amount,
+  :quantity,
+  :total_amount,
+  :description,
+  :account_id,
+  :ethereum_transaction_address,
+  :ethereum_transaction_error,
+  :status,
+  :created_at,
+  :updated_at
+)

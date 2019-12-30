@@ -378,6 +378,13 @@ describe Award do
       end
     end
 
+    it 'doesnt allow to cancel paid award' do
+      award_paid = create(:award, status: :paid)
+      award_paid.status = :cancelled
+      expect(award_paid).not_to be_valid
+      expect(award_paid.errors.full_messages.first).to eq("Paid task/transfer can't be cancelled")
+    end
+
     describe 'awards amounts must be > 0' do
       let(:award) { build :award }
 

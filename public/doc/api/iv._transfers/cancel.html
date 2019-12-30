@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accounts API</title>
+    <title>IV. Transfers API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Accounts API</h1>
+      <h1>IV. Transfers API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
 
       <div class="article">
-        <h2>FOLLOW</h2>
-        <h3>POST /api/v1/accounts/:id/follows</h3>
+        <h2>CANCEL</h2>
+        <h3>DELETE /api/v1/projects/:project_id/transfers/:id</h3>
           <p class="explanation">
-            Redirects to account follows
+            Redirects to cancelled transfer
           </p>
 
           <h3>Parameters</h3>
@@ -131,7 +131,7 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">account id or email</span>
+                  <span class="description">transfer id</span>
                 </td>
               </tr>
               <tr>
@@ -139,7 +139,7 @@ table th, table td {
                     <span class="name">project_id</span>
                 </td>
                 <td>
-                  <span class="description">project id to follow</span>
+                  <span class="description">project id</span>
                 </td>
               </tr>
             </tbody>
@@ -169,18 +169,16 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/21/follows</pre>
+          <pre class="request route highlight">DELETE /api/v1/projects/27/transfers/14</pre>
 
 
-            <h4>Body</h4>
-            <pre class="request body">project_id=9</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/21/follows&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/projects/27/transfers/14&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>

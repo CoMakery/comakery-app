@@ -57,6 +57,7 @@ class Award < ApplicationRecord
   validate :total_amount_fits_into_project_budget
   validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }
   validate :contributor_doesnt_reach_maximum_assignments, if: -> { status == 'started' }
+  validate :cancellation, if: -> { status_changed? && status_was.in?(%w[rejected paid cancelled]) && status == 'cancelled' }
 
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
@@ -71,6 +72,7 @@ class Award < ApplicationRecord
   after_save :add_account_as_interested, if: -> { account }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
+  scope :completed_or_cancelled, -> { where 'awards.status in(3,5,6)' }
   scope :listed, -> { where 'awards.status not in(6,7)' }
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
@@ -384,5 +386,9 @@ class Award < ApplicationRecord
     def set_transferred_at
       self.updated_at = Time.current
       self.transferred_at = updated_at
+    end
+
+    def cancellation
+      errors.add(:base, "#{status_was.capitalize} task/transfer can't be cancelled")
     end
 end

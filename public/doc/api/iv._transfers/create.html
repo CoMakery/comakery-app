@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accounts API</title>
+    <title>IV. Transfers API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Accounts API</h1>
+      <h1>IV. Transfers API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
 
       <div class="article">
-        <h2>UPDATE – ERROR</h2>
-        <h3>PUT /api/v1/accounts/:id</h3>
+        <h2>CREATE</h2>
+        <h3>POST /api/v1/projects/:project_id/transfers</h3>
           <p class="explanation">
-            Returns an array of errors
+            Redirects to created transfer
           </p>
 
           <h3>Parameters</h3>
@@ -128,106 +128,50 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">id</span>
+                    <span class="name">project_id</span>
                 </td>
                 <td>
-                  <span class="description">account id or email</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[first_name]</span>
-                </td>
-                <td>
-                  <span class="description">first name</span>
+                  <span class="description">project id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">account[last_name]</span>
+                    <span class="name">transfer[source]</span>
                 </td>
                 <td>
-                  <span class="description">last name</span>
+                  <span class="description">transfer source ( earned bought mint burn ), defaults to earned</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transfer[amount]</span>
+                </td>
+                <td>
+                  <span class="description">transfer amount</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">account[nickname]</span>
+                    <span class="name">transfer[quantity]</span>
                 </td>
                 <td>
-                  <span class="description">nickname</span>
+                  <span class="description">transfer quantity, defaults to 1</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transfer[account_id]</span>
+                </td>
+                <td>
+                  <span class="description">transfer account id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">account[image]</span>
+                    <span class="name">transfer[description]</span>
                 </td>
                 <td>
-                  <span class="description">image</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[country]</span>
-                </td>
-                <td>
-                  <span class="description">counry</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[date_of_birth]</span>
-                </td>
-                <td>
-                  <span class="description">date of birth</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[ethereum_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">ethereum wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[qtum_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">qtum wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[cardano_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">cardano wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[bitcoin_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">bitcoin wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[eos_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">eos wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[tezos_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">tezos wallet</span>
+                  <span class="description">transfer description</span>
                 </td>
               </tr>
             </tbody>
@@ -257,24 +201,18 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">PUT /api/v1/accounts/11</pre>
+          <pre class="request route highlight">POST /api/v1/projects/25/transfers</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">account[ethereum_wallet]=0x</pre>
+            <pre class="request body">transfer[source]=bought&transfer[amount]=1000&transfer[quantity]=2&transfer[account_id]=71&transfer[description]=investor</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
-            <pre class="response status">400 Bad Request</pre>
+            <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;errors&quot;: {
-    &quot;ethereumWallet&quot;: [
-      &quot;should start with &#39;0x&#39;, followed by a 40 character ethereum address&quot;
-    ]
-  }
-}</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/projects/25/transfers/10&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>

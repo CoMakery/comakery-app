@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accounts API</title>
+    <title>II. Accounts API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>Accounts API</h1>
+      <h1>II. Accounts API</h1>
 
         <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
 
       <div class="article">
-        <h2>FOLLOW – ERROR</h2>
-        <h3>POST /api/v1/accounts/:id/follows</h3>
+        <h2>FOLLOWS</h2>
+        <h3>GET /api/v1/accounts/:id/follows</h3>
           <p class="explanation">
-            Returns an array of errors
+            Returns an array of project ids
           </p>
 
           <h3>Parameters</h3>
@@ -135,58 +135,41 @@ table th, table td {
                 </td>
               </tr>
               <tr>
-                <td class="required">
-                    <span class="name">project_id</span>
+                <td>
+                    <span class="name">page</span>
                 </td>
                 <td>
-                  <span class="description">project id to follow</span>
+                  <span class="description">page number</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">errors</span>
-                </td>
-                <td>
-                  <span class="description">array of errors</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/26/follows</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/20/follows?page=1</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">page: 1</pre>
 
-            <h4>Body</h4>
-            <pre class="request body">project_id=11</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 2
+ETag: W/&quot;990d84dfdd1ce69f94e3d2e8a7b58da7&quot;
+Last-Modified: Sun, 29 Dec 2019 17:57:15 GMT</pre>
             <h4>Status</h4>
-            <pre class="response status">400 Bad Request</pre>
+            <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;errors&quot;: {
-    &quot;projectId&quot;: [
-      &quot;has already been followed&quot;
-    ]
-  }
-}</pre>
+              <pre class="response body">[
+  12,
+  11
+]</pre>
       </div>
     </div>
   </body>

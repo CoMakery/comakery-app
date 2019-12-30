@@ -136,7 +136,9 @@ Rails.application.routes.draw do
         resources :follows, only: [:index, :create, :destroy]
       end
 
-      resources :projects, only: [:show, :index]
+      resources :projects, only: [:show, :index] do
+        resources :transfers, only: [:index, :show, :create, :destroy]
+      end
     end
   end
 
