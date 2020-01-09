@@ -158,7 +158,7 @@ exports[`Footer renders correctly without props 1`] = `
       className="footer--copyright"
     >
       © 
-      2019
+      2020
        CoMakery, Inc. All rights reserved.
     </div>
   </div>
