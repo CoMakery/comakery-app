@@ -31,7 +31,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
   private
 
     def account
-      @account ||= @whitabel_mission.managed_accounts.find_by!(managed_account_id: params[:id])
+      @account ||= whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:id])
     end
 
     def account_params
