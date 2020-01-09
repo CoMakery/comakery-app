@@ -13,7 +13,7 @@ class Api::V1::FollowsController < Api::V1::ApiController
     )
 
     if interest.save
-      redirect_to api_v1_account_follows_path(account)
+      redirect_to api_v1_account_follows_path(account.managed_account_id)
     else
       @errors = interest.errors
 
@@ -25,13 +25,13 @@ class Api::V1::FollowsController < Api::V1::ApiController
   def destroy
     follow.interests.find_by!(account: account).destroy
 
-    redirect_to api_v1_account_follows_path(account)
+    redirect_to api_v1_account_follows_path(account.managed_account_id)
   end
 
   private
 
     def account
-      @account ||= whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:id])
+      @account ||= whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:account_id])
     end
 
     def follows

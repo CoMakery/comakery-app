@@ -17,7 +17,8 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
 
   let(:invalid_attributes) do
     {
-      amount: -1
+      amount: -1,
+      account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id
     }
   end
 

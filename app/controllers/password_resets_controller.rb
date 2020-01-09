@@ -9,7 +9,12 @@ class PasswordResetsController < ApplicationController
   def new; end
 
   def create
-    @account = Account.find_by(email: params[:email])
+    @account = if @whitelabel_mission
+      @whitelabel_mission.managed_accounts.find_by email: params[:email]
+    else
+      Account.find_by(email: params[:email], managed_mission_id: nil)
+    end
+
     if @account
       @account.send_reset_password_request(@whitelabel_mission)
       flash[:notice] = 'please check your email for reset password instructions'

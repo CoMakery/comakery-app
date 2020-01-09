@@ -9,7 +9,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
     account = @whitabel_mission.managed_accounts.create(account_params)
 
     if account.save
-      redirect_to api_v1_account_path(account)
+      redirect_to api_v1_account_path(id: account.managed_account_id)
     else
       @errors = account.errors
 
@@ -20,7 +20,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
   # PATCH/PUT /api/v1/accounts/1
   def update
     if account.update(account_params)
-      redirect_to api_v1_account_path(account)
+      redirect_to api_v1_account_path(id: account.managed_account_id)
     else
       @errors = account.errors
 
