@@ -13,4 +13,4 @@ json.call(
   :updated_at
 )
 
-json.account_id transfer.account_id.managed_account_id
+json.account_id transfer.account.managed_account_id

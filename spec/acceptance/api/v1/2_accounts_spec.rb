@@ -6,7 +6,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'II. Accounts' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org') }
-  let!(:account) { create(:account) }
+  let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
   let!(:verification) { create(:verification, account: account) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
   let!(:project2) { create(:project, mission: active_whitelabel_mission) }
@@ -15,11 +15,11 @@ resource 'II. Accounts' do
 
   get '/api/v1/accounts/:id' do
     with_options with_example: true do
-      parameter :id, 'account id or email', required: true, type: :integer
+      parameter :id, 'account id', required: true, type: :string
     end
 
     with_options with_example: true do
-      response_field :id, 'id', type: :integer
+      response_field :managed_account_id, 'id', type: :string
       response_field :email, 'email', type: :string
       response_field :firstName, 'first name', type: :string
       response_field :lastName, 'last name', type: :string
@@ -41,7 +41,7 @@ resource 'II. Accounts' do
     end
 
     context '200' do
-      let!(:id) { account.id }
+      let!(:id) { account.managed_account_id }
 
       example_request 'GET' do
         explanation 'Returns account data'
@@ -51,12 +51,65 @@ resource 'II. Accounts' do
     end
   end
 
+  post '/api/v1/accounts' do
+    with_options scope: :account, with_example: true do
+      parameter :managed_account_id, 'id', type: :string
+      parameter :email, 'email', type: :string, required: true
+      parameter :first_name, 'first name', type: :string, required: true
+      parameter :last_name, 'last name', type: :string, required: true
+      parameter :nickname, 'nickname', type: :string
+      parameter :image, 'image', type: :string
+      parameter :country, 'counry', type: :string, required: true
+      parameter :date_of_birth, 'date of birth', type: :string, required: true
+      parameter :ethereum_wallet, 'ethereum wallet', type: :string
+      parameter :qtum_wallet, 'qtum wallet', type: :string
+      parameter :cardano_wallet, 'cardano wallet', type: :string
+      parameter :bitcoin_wallet, 'bitcoin wallet', type: :string
+      parameter :eos_wallet, 'eos wallet', type: :string
+      parameter :tezos_wallet, 'tezos wallet', type: :string
+    end
+
+    with_options with_example: true do
+      response_field :errors, 'array of errors'
+    end
+
+    context '302' do
+      let!(:managed_account_id) { SecureRandom.uuid }
+      let!(:email) { "me+#{SecureRandom.hex(20)}@example.com" }
+      let!(:first_name) { 'Eva' }
+      let!(:last_name) { 'Smith' }
+      let!(:nickname) { "hunter-#{SecureRandom.hex(20)}" }
+      let!(:country) { 'United States of America' }
+      let!(:date_of_birth) { '1990/01/01' }
+
+      example_request 'CREATE' do
+        explanation 'Redirects to account data'
+
+        expect(status).to eq(302)
+      end
+    end
+
+    context '400' do
+      let!(:project_id) { project.id }
+
+      let!(:managed_account_id) { SecureRandom.uuid }
+
+      example_request 'CREATE – ERROR' do
+        explanation 'Returns an array of errors'
+
+        expect(status).to eq(400)
+      end
+    end
+  end
+
   put '/api/v1/accounts/:id' do
     with_options with_example: true do
-      parameter :id, 'account id or email', required: true, type: :integer
+      parameter :id, 'id', required: true, type: :string
     end
 
     with_options scope: :account, with_example: true do
+      parameter :managed_account_id, 'id', type: :string
+      parameter :email, 'email', type: :string
       parameter :first_name, 'first name', type: :string
       parameter :last_name, 'last name', type: :string
       parameter :nickname, 'nickname', type: :string
@@ -76,7 +129,7 @@ resource 'II. Accounts' do
     end
 
     context '302' do
-      let!(:id) { account.id }
+      let!(:id) { account.managed_account_id }
       let!(:first_name) { 'Alex' }
 
       example_request 'UPDATE' do
@@ -87,7 +140,7 @@ resource 'II. Accounts' do
     end
 
     context '400' do
-      let!(:id) { account.id }
+      let!(:id) { account.managed_account_id }
       let!(:ethereum_wallet) { '0x' }
 
       example_request 'UPDATE – ERROR' do
@@ -100,12 +153,12 @@ resource 'II. Accounts' do
 
   get '/api/v1/accounts/:id/follows' do
     with_options with_example: true do
-      parameter :id, 'account id or email', required: true, type: :integer
+      parameter :id, 'account id', required: true, type: :string
       parameter :page, 'page number', type: :integer
     end
 
     context '200' do
-      let!(:id) { account.id }
+      let!(:id) { account.managed_account_id }
       let!(:page) { 1 }
 
       before do
@@ -123,7 +176,7 @@ resource 'II. Accounts' do
 
   post '/api/v1/accounts/:id/follows' do
     with_options with_example: true do
-      parameter :id, 'account id or email', required: true, type: :integer
+      parameter :id, 'account id', required: true, type: :string
       parameter :project_id, 'project id to follow', required: true, type: :integer
     end
 
@@ -132,7 +185,7 @@ resource 'II. Accounts' do
     end
 
     context '302' do
-      let!(:id) { account.id }
+      let!(:id) { account.managed_account_id }
       let!(:project_id) { project.id }
 
       example_request 'FOLLOW' do
@@ -143,7 +196,7 @@ resource 'II. Accounts' do
     end
 
     context '400' do
-      let!(:id) { account.id }
+      let!(:id) { account.managed_account_id }
       let!(:project_id) { project.id }
 
       before do
@@ -160,12 +213,12 @@ resource 'II. Accounts' do
 
   delete '/api/v1/accounts/:id/follows/:project_id' do
     with_options with_example: true do
-      parameter :id, 'account id or email', required: true, type: :integer
+      parameter :id, 'account id', required: true, type: :string
       parameter :project_id, 'project id to unfollow', required: true, type: :integer
     end
 
     context '302' do
-      let!(:id) { account.id }
+      let!(:id) { account.managed_account_id }
       let!(:project_id) { project.id }
 
       before do

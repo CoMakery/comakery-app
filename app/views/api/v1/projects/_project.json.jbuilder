@@ -8,7 +8,7 @@ json.call(
   :updated_at
 )
 
-json.account_id project.account_id.managed_account_id
+json.account_id project.account.managed_account_id
 json.admin_ids project.admins.pluck(:managed_account_id)
 
 json.token do

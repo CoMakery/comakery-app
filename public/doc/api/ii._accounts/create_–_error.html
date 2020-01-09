@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>IV. Transfers API</title>
+    <title>II. Accounts API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>IV. Transfers API</h1>
+      <h1>II. Accounts API</h1>
 
-        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
+        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
 
       <div class="article">
-        <h2>GET</h2>
-        <h3>GET /api/v1/projects/:project_id/transfers/:id</h3>
+        <h2>CREATE – ERROR</h2>
+        <h3>POST /api/v1/accounts</h3>
           <p class="explanation">
-            Returns data for a single transfer.
+            Returns an array of errors
           </p>
 
           <h3>Parameters</h3>
@@ -127,19 +127,115 @@ table th, table td {
             </thead>
             <tbody>
               <tr>
-                <td class="required">
-                    <span class="name">project_id</span>
+                <td>
+                    <span class="name">account[managed_account_id]</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">id</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">id</span>
+                    <span class="name">account[email]</span>
                 </td>
                 <td>
-                  <span class="description">transfer id</span>
+                  <span class="description">email</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">account[first_name]</span>
+                </td>
+                <td>
+                  <span class="description">first name</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">account[last_name]</span>
+                </td>
+                <td>
+                  <span class="description">last name</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[nickname]</span>
+                </td>
+                <td>
+                  <span class="description">nickname</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[image]</span>
+                </td>
+                <td>
+                  <span class="description">image</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">account[country]</span>
+                </td>
+                <td>
+                  <span class="description">counry</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">account[date_of_birth]</span>
+                </td>
+                <td>
+                  <span class="description">date of birth</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[ethereum_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">ethereum wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[qtum_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">qtum wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[cardano_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">cardano wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[bitcoin_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">bitcoin wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[eos_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">eos wallet</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account[tezos_wallet]</span>
+                </td>
+                <td>
+                  <span class="description">tezos wallet</span>
                 </td>
               </tr>
             </tbody>
@@ -156,98 +252,10 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">id</span>
+                    <span class="name">errors</span>
                 </td>
                 <td>
-                  <span class="description">transfer id</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">source</span>
-                </td>
-                <td>
-                  <span class="description">transfer source (earned bought mint burn)</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">amount</span>
-                </td>
-                <td>
-                  <span class="description">transfer amount</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">quantity</span>
-                </td>
-                <td>
-                  <span class="description">transfer quantity</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">totalAmount</span>
-                </td>
-                <td>
-                  <span class="description">transfer total amount</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">description</span>
-                </td>
-                <td>
-                  <span class="description">transfer description</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">accountId</span>
-                </td>
-                <td>
-                  <span class="description">transfer account id</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">ethereumTransactionAddress</span>
-                </td>
-                <td>
-                  <span class="description">transfer ethereum transaction address</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">ethereumTransactionError</span>
-                </td>
-                <td>
-                  <span class="description">latest recieved transaction error (returned from DApp on unsuccessful transaction)</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">status</span>
-                </td>
-                <td>
-                  <span class="description">transfer status (accepted paid cancelled)</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">createdAt</span>
-                </td>
-                <td>
-                  <span class="description">transfer creation timestamp</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">updatedAt</span>
-                </td>
-                <td>
-                  <span class="description">transfer update timestamp</span>
+                  <span class="description">array of errors</span>
                 </td>
               </tr>
             </tbody>
@@ -257,31 +265,35 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/28/transfers/5</pre>
+          <pre class="request route highlight">POST /api/v1/accounts</pre>
 
 
+            <h4>Body</h4>
+            <pre class="request body">account[managed_account_id]=04018de2-99f5-4e23-8be1-afa062779d7b</pre>
 
 
             <h3>Response</h3>
-              <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;5b3cfe73a85fd6f43ec042ce4b5a11ce&quot;
-Last-Modified: Thu, 09 Jan 2020 19:32:23 GMT</pre>
             <h4>Status</h4>
-            <pre class="response status">200 OK</pre>
+            <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;id&quot;: 5,
-  &quot;source&quot;: &quot;bought&quot;,
-  &quot;amount&quot;: &quot;50.0&quot;,
-  &quot;quantity&quot;: &quot;1.0&quot;,
-  &quot;totalAmount&quot;: &quot;50.0&quot;,
-  &quot;description&quot;: &quot;Investment&quot;,
-  &quot;ethereumTransactionAddress&quot;: &quot;0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c&quot;,
-  &quot;ethereumTransactionError&quot;: null,
-  &quot;status&quot;: &quot;paid&quot;,
-  &quot;createdAt&quot;: &quot;2020-01-09T19:32:23.763Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-01-09T19:32:23.751Z&quot;,
-  &quot;accountId&quot;: &quot;fcb8684b-e183-4612-b1f8-086bcb67ac95&quot;
+  &quot;errors&quot;: {
+    &quot;email&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;firstName&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;lastName&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;country&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;dateOfBirth&quot;: [
+      &quot;should be present in correct format (MM/DD/YYYY)&quot;
+    ]
+  }
 }</pre>
       </div>
     </div>
