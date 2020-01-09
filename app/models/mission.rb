@@ -18,6 +18,7 @@ class Mission < ApplicationRecord
   has_many :awards, through: :award_types
   has_many :interests, through: :public_projects
   has_many :interested, -> { distinct }, through: :public_projects
+  has_many :managed_accounts, class_name: 'Account', foreign_key: 'managed_mission_id'
 
   enum status: %i[active passive]
 

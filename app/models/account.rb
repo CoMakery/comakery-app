@@ -40,6 +40,7 @@ class Account < ApplicationRecord
   has_many :account_token_records
 
   belongs_to :specialty
+  belongs_to :managed_mission, class_name: 'Mission'
 
   enum deprecated_specialty: {
     audio_video_production: 'Audio Or Video Production',
@@ -52,12 +53,13 @@ class Account < ApplicationRecord
     research: 'Research'
   }
 
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: { scope: %i[managed_mission], case_sensitive: false }
   attr_accessor :password_required, :name_required, :agreement_required
   validates :password, length: { minimum: 8 }, if: :password_required
   validates :first_name, :last_name, :country, :specialty, presence: true, if: :name_required
   validates :date_of_birth, presence: { message: 'should be present in correct format (MM/DD/YYYY)' }, if: :name_required
   validates :nickname, uniqueness: true, if: -> { nickname.present? }
+  validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
@@ -78,6 +80,8 @@ class Account < ApplicationRecord
   end
 
   validate :validate_age, on: :create
+
+  before_validation :populate_managed_account_id, if: -> { managed_mission.present? }
 
   class << self
     def order_by_award(project)
@@ -303,5 +307,9 @@ class Account < ApplicationRecord
       # rubocop:disable SkipsModelValidations
       update_column :email_confirm_token, SecureRandom.hex
     end
+  end
+
+  def populate_managed_account_id
+    self.managed_account_id ||= SecureRandom.uuid
   end
 end

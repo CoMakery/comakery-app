@@ -31,7 +31,7 @@ class Api::V1::FollowsController < Api::V1::ApiController
   private
 
     def account
-      @account ||= (Account.find_by(id: params[:account_id]) || Account.find_by!(email: params[:account_id]))
+      @account ||= @whitabel_mission.managed_accounts.find_by!(managed_account_id: params[:id])
     end
 
     def follows

@@ -56,4 +56,13 @@ describe Mission do
       expect(mission.stats[:interests]).to eq(3)
     end
   end
+
+  describe 'managed_accounts' do
+    let!(:mission) { create(:mission) }
+    let!(:account) { create(:account, managed_mission: mission) }
+
+    it 'has many managed_accounts' do
+      expect(mission.managed_accounts).to eq([account])
+    end
+  end
 end

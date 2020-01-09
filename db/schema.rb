@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_20_034156) do
+ActiveRecord::Schema.define(version: 2020_01_09_172145) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,9 +81,11 @@ ActiveRecord::Schema.define(version: 2019_12_20_034156) do
     t.string "tezos_wallet"
     t.integer "specialty_id"
     t.bigint "latest_verification_id"
-    t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
-    t.index ["email"], name: "index_accounts_on_email", unique: true
+    t.string "managed_account_id", limit: 256
+    t.bigint "managed_mission_id"
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
+    t.index ["managed_mission_id", "managed_account_id"], name: "index_accounts_on_managed_mission_id_and_managed_account_id", unique: true
+    t.index ["managed_mission_id"], name: "index_accounts_on_managed_mission_id"
     t.index ["public_address"], name: "index_accounts_on_public_address"
     t.index ["remember_me_token"], name: "index_accounts_on_remember_me_token"
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token"
@@ -437,6 +439,7 @@ ActiveRecord::Schema.define(version: 2019_12_20_034156) do
   add_foreign_key "account_token_records", "accounts"
   add_foreign_key "account_token_records", "reg_groups"
   add_foreign_key "account_token_records", "tokens"
+  add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "awards", "specialties"
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"

@@ -39,7 +39,12 @@ class AccountsController < ApplicationController
   end
 
   def create
-    @account = Account.new account_params
+    @account = if @whitelabel_mission
+      @whitelabel_mission.managed_accounts.new(account_params)
+    else
+      Account.new(account_params)
+    end
+
     @account.email_confirm_token = SecureRandom.hex
     @account.password_required = true
     @account.name_required = false
