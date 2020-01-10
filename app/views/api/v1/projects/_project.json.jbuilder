@@ -4,12 +4,12 @@ json.call(
   :title,
   :description,
   :image_url,
-  :account_id,
   :created_at,
   :updated_at
 )
 
-json.admin_ids project.admins.pluck(:id)
+json.account_id project.account.managed_account_id
+json.admin_ids project.admins.pluck(:managed_account_id)
 
 json.token do
   json.partial! 'api/v1/tokens/token', token: project.token if project.token

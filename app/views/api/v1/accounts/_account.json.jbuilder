@@ -1,7 +1,7 @@
 json.call(
   account.decorate,
-  :id,
   :email,
+  :managed_account_id,
   :first_name,
   :last_name,
   :nickname,

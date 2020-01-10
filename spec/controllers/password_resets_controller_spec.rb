@@ -16,11 +16,38 @@ describe PasswordResetsController do
       expect(account.reset_password_token).to be nil
       expect(flash[:error]).to eq 'Could not found account with given email'
     end
+
     it 'create reset password token for account' do
       post :create, params: { email: 'user@test.st' }
-      expect(account.reload.reset_password_token).not_to be nil
+      expect(account.reload.reset_password_token).not_to be_nil
       expect(flash[:notice]).to eq 'please check your email for reset password instructions'
       expect(response).to redirect_to root_path
+    end
+
+    it 'create reset password token for managed account on whitelabel' do
+      active_whitelabel_mission = create(:active_whitelabel_mission)
+      managed_account = create(:account, managed_mission: active_whitelabel_mission)
+
+      post :create, params: { email: managed_account.email }
+      expect(managed_account.reload.reset_password_token).not_to be_nil
+      expect(flash[:notice]).to eq 'please check your email for reset password instructions'
+      expect(response).to redirect_to root_path
+    end
+
+    it 'doesnt create reset password token for comakery account on whitelabel' do
+      create(:active_whitelabel_mission)
+
+      post :create, params: { email: 'user@test.st' }
+      expect(account.reset_password_token).to be nil
+      expect(flash[:error]).to eq 'Could not found account with given email'
+    end
+
+    it 'doesnt create reset password token for managed account on comakery' do
+      managed_account = create(:account, managed_mission: create(:mission))
+
+      post :create, params: { email: managed_account.email }
+      expect(managed_account.reset_password_token).to be nil
+      expect(flash[:error]).to eq 'Could not found account with given email'
     end
   end
 

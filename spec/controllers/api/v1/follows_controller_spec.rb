@@ -1,20 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::FollowsController, type: :controller do
-  let!(:account) { create(:account) }
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
+  let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
 
   let(:valid_session) { {} }
 
   describe 'GET #index' do
     it 'returns account follows' do
-      get :index, params: { account_id: account.id, format: :json }, session: valid_session
+      get :index, params: { account_id: account.managed_account_id, format: :json }, session: valid_session
       expect(response).to be_successful
     end
 
     it 'applies pagination' do
-      get :index, params: { account_id: account.id, format: :json, page: 9999 }, session: valid_session
+      get :index, params: { account_id: account.managed_account_id, format: :json, page: 9999 }, session: valid_session
       expect(response).to be_successful
       expect(assigns[:follows]).to eq([])
     end
@@ -23,13 +23,13 @@ RSpec.describe Api::V1::FollowsController, type: :controller do
   describe 'POST #create' do
     context 'with valid params' do
       it 'follows the requested project' do
-        post :create, params: { account_id: account.to_param, project_id: project.id }, session: valid_session
+        post :create, params: { account_id: account.managed_account_id, project_id: project.id }, session: valid_session
         project.reload
         expect(project.interested).to include(account)
       end
 
       it 'redirects to the api_v1_account_follows' do
-        post :create, params: { account_id: account.to_param, project_id: project.id }, session: valid_session
+        post :create, params: { account_id: account.managed_account_id, project_id: project.id }, session: valid_session
         expect(response).to redirect_to(api_v1_account_follows_path)
       end
     end
@@ -40,7 +40,7 @@ RSpec.describe Api::V1::FollowsController, type: :controller do
       end
 
       it 'renders an error' do
-        post :create, params: { account_id: account.to_param, project_id: project.id }, session: valid_session
+        post :create, params: { account_id: account.managed_account_id, project_id: project.id }, session: valid_session
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
@@ -54,13 +54,13 @@ RSpec.describe Api::V1::FollowsController, type: :controller do
       end
 
       it 'unfollows the requested project' do
-        delete :destroy, params: { account_id: account.to_param, id: project.id }, session: valid_session
+        delete :destroy, params: { account_id: account.managed_account_id, id: project.id }, session: valid_session
         project.reload
         expect(project.interested).not_to include(account)
       end
 
       it 'redirects to the api_v1_account_follows' do
-        delete :destroy, params: { account_id: account.to_param, id: project.id }, session: valid_session
+        delete :destroy, params: { account_id: account.managed_account_id, id: project.id }, session: valid_session
         expect(response).to redirect_to(api_v1_account_follows_path)
       end
     end

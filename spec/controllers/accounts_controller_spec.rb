@@ -118,6 +118,33 @@ describe AccountsController do
         }
         expect(response.status).to eq(302)
       end.to change { Account.count }.by(1)
+
+      expect(Account.last.managed_mission_id).to be_nil
+      expect(Account.last.managed_account_id).to be_nil
+
+      expect(response).to redirect_to build_profile_accounts_path
+    end
+
+    it 'sets managed_mission_id and managed_account_id when accessed from whitelabel domain' do
+      active_whitelabel_mission = create(:active_whitelabel_mission)
+
+      expect do
+        post :create, params: {
+          account: {
+            email: 'user@test.st',
+            first_name: 'User',
+            last_name: 'Tester',
+            date_of_birth: '01/01/2000',
+            country: 'America',
+            password: '12345678'
+          }
+        }
+        expect(response.status).to eq(302)
+      end.to change { Account.count }.by(1)
+
+      expect(Account.last.managed_mission_id).to eq(active_whitelabel_mission.id)
+      expect(Account.last.managed_account_id).not_to be_nil
+
       expect(response).to redirect_to build_profile_accounts_path
     end
 

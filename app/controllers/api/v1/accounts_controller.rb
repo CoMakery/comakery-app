@@ -4,10 +4,25 @@ class Api::V1::AccountsController < Api::V1::ApiController
     fresh_when account, public: true
   end
 
+  # POST /api/v1/accounts
+  def create
+    account = whitelabel_mission.managed_accounts.create(account_params)
+    account.name_required = true
+    account.specialty = Specialty.default
+
+    if account.save
+      redirect_to api_v1_account_path(id: account.managed_account_id)
+    else
+      @errors = account.errors
+
+      render 'api/v1/error.json', status: 400
+    end
+  end
+
   # PATCH/PUT /api/v1/accounts/1
   def update
     if account.update(account_params)
-      redirect_to api_v1_account_path(account)
+      redirect_to api_v1_account_path(id: account.managed_account_id)
     else
       @errors = account.errors
 
@@ -18,11 +33,13 @@ class Api::V1::AccountsController < Api::V1::ApiController
   private
 
     def account
-      @account ||= (Account.find_by(id: params[:id]) || Account.find_by!(email: params[:id]))
+      @account ||= whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:id])
     end
 
     def account_params
       params.fetch(:account, {}).permit(
+        :email,
+        :managed_account_id,
         :first_name,
         :last_name,
         :nickname,

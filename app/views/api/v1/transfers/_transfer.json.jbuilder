@@ -6,10 +6,11 @@ json.call(
   :quantity,
   :total_amount,
   :description,
-  :account_id,
   :ethereum_transaction_address,
   :ethereum_transaction_error,
   :status,
   :created_at,
   :updated_at
 )
+
+json.account_id transfer.account.managed_account_id

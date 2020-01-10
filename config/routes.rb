@@ -132,7 +132,7 @@ Rails.application.routes.draw do
     end
 
     namespace :v1 do
-      resources :accounts, only: [:show, :update] do
+      resources :accounts, only: [:show, :update, :create] do
         resources :follows, only: [:index, :create, :destroy]
       end
 

@@ -201,11 +201,11 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/26/transfers</pre>
+          <pre class="request route highlight">POST /api/v1/projects/30/transfers</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">transfer[amount]=-1</pre>
+            <pre class="request body">transfer[amount]=-1&transfer[account_id]=ab7ca10d-ed20-4d5e-afdc-6346141fc922</pre>
 
 
             <h3>Response</h3>
@@ -216,9 +216,6 @@ table th, table td {
   &quot;errors&quot;: {
     &quot;amount&quot;: [
       &quot;must be greater than 0&quot;
-    ],
-    &quot;account&quot;: [
-      &quot;can&#39;t be blank&quot;
     ]
   }
 }</pre>

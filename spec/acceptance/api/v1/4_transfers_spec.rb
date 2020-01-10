@@ -7,9 +7,9 @@ require 'rspec_api_documentation/dsl'
 resource 'IV. Transfers' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org') }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
-  let!(:transfer_accepted) { create(:transfer, source: :earned, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type) }
-  let!(:transfer_paid) { create(:transfer, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type) }
-  let!(:transfer_cancelled) { create(:transfer, status: :cancelled, ethereum_transaction_error: 'MetaMask Tx Signature: User denied transaction signature.', award_type: project.default_award_type) }
+  let!(:transfer_accepted) { create(:transfer, source: :earned, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
+  let!(:transfer_paid) { create(:transfer, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
+  let!(:transfer_cancelled) { create(:transfer, status: :cancelled, ethereum_transaction_error: 'MetaMask Tx Signature: User denied transaction signature.', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
 
   explanation 'Create and cancel transfers, retrieve transfer data.'
 
@@ -44,7 +44,7 @@ resource 'IV. Transfers' do
       response_field :quantity, 'transfer quantity', type: :string
       response_field :totalAmount, 'transfer total amount', type: :string
       response_field :description, 'transfer description', type: :string
-      response_field :accountId, 'transfer account id', type: :integer
+      response_field :accountId, 'transfer account id', type: :string
       response_field :ethereumTransactionAddress, 'transfer ethereum transaction address', type: :string
       response_field :ethereumTransactionError, 'latest recieved transaction error (returned from DApp on unsuccessful transaction)', type: :string
       response_field :status, 'transfer status (accepted paid cancelled)', type: :string
@@ -77,7 +77,7 @@ resource 'IV. Transfers' do
       parameter :source, 'transfer source ( earned bought mint burn ), defaults to earned', type: :string
       parameter :amount, 'transfer amount', required: true, type: :string
       parameter :quantity, 'transfer quantity, defaults to 1', type: :string
-      parameter :account_id, 'transfer account id', required: true, type: :integer
+      parameter :account_id, 'transfer account id', required: true, type: :string
       parameter :description, 'transfer description', type: :string
     end
 
@@ -87,7 +87,7 @@ resource 'IV. Transfers' do
       let!(:source) { 'bought' }
       let!(:amount) { '1000' }
       let!(:quantity) { '2' }
-      let!(:account_id) { create(:account).id }
+      let!(:account_id) { create(:account, managed_mission: active_whitelabel_mission).managed_account_id }
       let!(:description) { 'investor' }
 
       example_request 'CREATE' do
@@ -101,6 +101,7 @@ resource 'IV. Transfers' do
       let!(:project_id) { project.id }
 
       let!(:amount) { '-1' }
+      let!(:account_id) { create(:account, managed_mission: active_whitelabel_mission).managed_account_id }
 
       example_request 'CREATE – ERROR' do
         explanation 'Returns an array of errors'

@@ -60,6 +60,42 @@ describe Account do
         account.behance_url = 'https://www.behance.net/<script>alert(1)</script>'
         expect(account).not_to be_valid
       end
+
+      it 'doesnt allow non-unique emails on Comakery' do
+        account2 = build(:account, email: account.email)
+
+        expect(account2).not_to be_valid
+      end
+
+      it 'doesnt allow non-unique emails on a whitelabel' do
+        managed_account = create(:account, managed_mission: create(:mission))
+        managed_account2 = build(:account, managed_mission: managed_account.managed_mission, email: managed_account.email)
+
+        expect(managed_account2).not_to be_valid
+      end
+
+      it 'allows non-unique emails between whitelabels and Comakery' do
+        managed_account = create(:account, managed_mission: create(:mission), email: account.email)
+        managed_account2 = create(:account, managed_mission: create(:mission), email: account.email)
+
+        expect(managed_account).to be_valid
+        expect(managed_account2).to be_valid
+      end
+
+      it 'doesnt allow non-unique managed_account_id on a whitelabel' do
+        managed_account = create(:account, managed_mission: create(:mission))
+        managed_account2 = build(:account, managed_mission: managed_account.managed_mission, managed_account_id: managed_account.managed_account_id)
+
+        expect(managed_account2).not_to be_valid
+      end
+
+      it 'allows non-unique managed_account_id between whitelabels' do
+        managed_account = create(:account, managed_mission: create(:mission))
+        managed_account2 = create(:account, managed_mission: create(:mission), managed_account_id: managed_account.managed_account_id)
+
+        expect(managed_account).to be_valid
+        expect(managed_account2).to be_valid
+      end
     end
 
     it 'requires many attributes' do
@@ -142,7 +178,7 @@ describe Account do
 
   it 'enforces unique emails, case-insensitively' do
     create :account, email: 'alice@example.com'
-    expect { create :account, email: 'Alice@example.com' }.to raise_error(ActiveRecord::RecordNotUnique)
+    expect { create :account, email: 'Alice@example.com' }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   # this is kind of unfortunate --
@@ -211,6 +247,7 @@ describe Account do
     let!(:verification2) { create(:verification, account: account) }
     let!(:provided_verification) { create(:verification, provider: account) }
     let!(:account_token_record) { create(:account_token_record, account: account) }
+    let!(:managed_account) { create(:account, managed_mission: create(:mission)) }
 
     before do
       team.build_authentication_team authentication
@@ -269,6 +306,10 @@ describe Account do
 
     it 'has many account_token_records' do
       expect(account.account_token_records).to match_array([account_token_record])
+    end
+
+    it 'belongs to managed_mission' do
+      expect(managed_account.managed_mission).not_to be_nil
     end
   end
 
@@ -676,6 +717,19 @@ describe Account do
       expect(project.interested).to contain_exactly(project.account)
       described_class.make_everyone_interested(project)
       expect(project.interested.to_a).to contain_exactly(*users)
+    end
+  end
+
+  describe 'populate_managed_account_id' do
+    let!(:account) { create(:account) }
+    let!(:managed_account) { create(:account, managed_mission: create(:mission)) }
+
+    it 'populates managed_account_id if account is managed' do
+      expect(managed_account.managed_account_id).not_to be_nil
+    end
+
+    it 'doesnt populate managed_account_id if account is not managed' do
+      expect(account.managed_account_id).to be_nil
     end
   end
 end

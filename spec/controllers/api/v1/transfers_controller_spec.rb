@@ -11,13 +11,14 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
       quantity: 1,
       source: 'bought',
       description: 'investor',
-      account_id: create(:account).id
+      account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id
     }
   end
 
   let(:invalid_attributes) do
     {
-      amount: -1
+      amount: -1,
+      account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id
     }
   end
 
