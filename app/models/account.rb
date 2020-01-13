@@ -83,6 +83,8 @@ class Account < ApplicationRecord
 
   before_validation :populate_managed_account_id, if: -> { managed_mission.present? }
 
+  before_save :reset_latest_verification, if: -> { will_save_change_to_first_name? || will_save_change_to_last_name? || will_save_change_to_date_of_birth? || will_save_change_to_country? }
+
   class << self
     def order_by_award(project)
       award_types = project.award_types.map(&:id).join(',')
@@ -311,5 +313,9 @@ class Account < ApplicationRecord
 
   def populate_managed_account_id
     self.managed_account_id ||= SecureRandom.uuid
+  end
+
+  def reset_latest_verification
+    self.latest_verification = nil
   end
 end

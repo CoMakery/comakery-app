@@ -232,4 +232,76 @@ resource 'II. Accounts' do
       end
     end
   end
+
+  get '/api/v1/accounts/:id/verifications' do
+    with_options with_example: true do
+      parameter :id, 'account id', required: true, type: :string
+      parameter :page, 'page number', type: :integer
+    end
+
+    with_options with_example: true do
+      response_field :passed, 'verification result', type: :bool
+      response_field :verification_type, 'verification type ( aml-kyc accreditation valid-identity ), defaults to aml-kyc', type: :string
+      response_field :maxInvestmentUsd, 'maximum investment in us dollars', type: :integer
+      response_field :createdAt, 'timestamp', type: :string
+    end
+
+    context '200' do
+      let!(:id) { account.managed_account_id }
+      let!(:page) { 1 }
+
+      before do
+        account.verifications.create(passed: false, max_investment_usd: 100000)
+        account.verifications.create(passed: true, max_investment_usd: 10000)
+      end
+
+      example_request 'VERIFICATIONS' do
+        explanation 'Returns an array of verifications'
+
+        expect(status).to eq(200)
+      end
+    end
+  end
+
+  post '/api/v1/accounts/:id/verifications' do
+    with_options with_example: true do
+      parameter :id, 'account id', required: true, type: :string
+    end
+
+    with_options scope: :verification, with_example: true do
+      parameter :passed, 'verification result', required: true, type: :bool
+      parameter :verification_type, 'verification type ( aml-kyc accreditation valid-identity ), defaults to aml-kyc', type: :string
+      parameter :max_investment_usd, 'maximum investment in us dollars', required: true, type: :integer
+      parameter :created_at, 'timestamp', type: :string
+    end
+
+    with_options with_example: true do
+      response_field :errors, 'array of errors'
+    end
+
+    context '302' do
+      let!(:id) { account.managed_account_id }
+      let!(:passed) { true }
+      let!(:verification_type) { 'aml-kyc' }
+      let!(:max_investment_usd) { 10000 }
+      let!(:created_at) { 3.days.ago }
+
+      example_request 'CREATE VERIFICATION' do
+        explanation 'Redirects to account verifications'
+
+        expect(status).to eq(302)
+      end
+    end
+
+    context '400' do
+      let!(:id) { account.managed_account_id }
+      let!(:max_investment_usd) { 0 }
+
+      example_request 'CREATE VERIFICATION – ERROR' do
+        explanation 'Returns an array of errors'
+
+        expect(status).to eq(400)
+      end
+    end
+  end
 end

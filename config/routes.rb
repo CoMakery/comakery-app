@@ -134,6 +134,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :accounts, only: [:show, :update, :create] do
         resources :follows, only: [:index, :create, :destroy]
+        resources :verifications, only: [:index, :create]
       end
 
       resources :projects, only: [:show, :index] do

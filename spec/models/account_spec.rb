@@ -732,4 +732,19 @@ describe Account do
       expect(account.managed_account_id).to be_nil
     end
   end
+
+  describe 'reset_latest_verification' do
+    let!(:account) { create(:account) }
+    let!(:verification) { create(:verification, account: account) }
+
+    it 'resets latest verification if sensitive info is updated' do
+      account.update(first_name: 'new first name')
+      expect(account.reload.latest_verification).to be_nil
+    end
+
+    it 'doesnt reset latest verification if non-sensitive info is updated' do
+      account.update(nickname: 'new nickname')
+      expect(account.reload.latest_verification).not_to be_nil
+    end
+  end
 end

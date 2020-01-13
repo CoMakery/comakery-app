@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>IV. Transfers API</title>
+    <title>II. Accounts API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>IV. Transfers API</h1>
+      <h1>II. Accounts API</h1>
 
-        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
+        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
 
       <div class="article">
-        <h2>INDEX</h2>
-        <h3>GET /api/v1/projects/:project_id/transfers</h3>
+        <h2>VERIFICATIONS</h2>
+        <h3>GET /api/v1/accounts/:id/verifications</h3>
           <p class="explanation">
-            Returns an array of transfers. See GET for response fields description.
+            Returns an array of verifications
           </p>
 
           <h3>Parameters</h3>
@@ -128,10 +128,10 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">project_id</span>
+                    <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">project id</span>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
@@ -145,12 +145,55 @@ table th, table td {
             </tbody>
           </table>
 
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">passed</span>
+                </td>
+                <td>
+                  <span class="description">verification result</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">verification_type</span>
+                </td>
+                <td>
+                  <span class="description">verification type ( aml-kyc accreditation valid-identity ), defaults to aml-kyc</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">maxInvestmentUsd</span>
+                </td>
+                <td>
+                  <span class="description">maximum investment in us dollars</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">createdAt</span>
+                </td>
+                <td>
+                  <span class="description">timestamp</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
           <h3>Request</h3>
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/33/transfers?page=1</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/77c67aea-162e-4522-ade4-f13dc4d9ed6c/verifications?page=1</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1</pre>
@@ -159,55 +202,34 @@ table th, table td {
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">Per-Page: 50
+              <pre class="response headers">Per-Page: 25
 Total: 3
-ETag: W/&quot;cbcd62239cfd072fe5f775fe58ccec8b&quot;
-Last-Modified: Mon, 13 Jan 2020 16:50:33 GMT</pre>
+ETag: W/&quot;f4280965c80ee5aa2f025b3f998fd748&quot;
+Last-Modified: Mon, 13 Jan 2020 16:50:31 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">[
   {
-    &quot;id&quot;: 3,
-    &quot;source&quot;: &quot;bought&quot;,
-    &quot;amount&quot;: &quot;50.0&quot;,
-    &quot;quantity&quot;: &quot;1.0&quot;,
-    &quot;totalAmount&quot;: &quot;50.0&quot;,
-    &quot;description&quot;: &quot;Investment&quot;,
-    &quot;ethereumTransactionAddress&quot;: null,
-    &quot;ethereumTransactionError&quot;: &quot;MetaMask Tx Signature: User denied transaction signature.&quot;,
-    &quot;status&quot;: &quot;cancelled&quot;,
-    &quot;createdAt&quot;: &quot;2020-01-13T16:50:33.206Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-13T16:50:33.206Z&quot;,
-    &quot;accountId&quot;: &quot;f25d0eb2-00c9-4de0-be2f-54ec58804a02&quot;
+    &quot;passed&quot;: true,
+    &quot;verificationType&quot;: &quot;aml-kyc&quot;,
+    &quot;maxInvestmentUsd&quot;: 1000000,
+    &quot;createdAt&quot;: &quot;2020-01-13T16:50:31.515Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-13T16:50:31.515Z&quot;
   },
   {
-    &quot;id&quot;: 2,
-    &quot;source&quot;: &quot;bought&quot;,
-    &quot;amount&quot;: &quot;50.0&quot;,
-    &quot;quantity&quot;: &quot;1.0&quot;,
-    &quot;totalAmount&quot;: &quot;50.0&quot;,
-    &quot;description&quot;: &quot;Investment&quot;,
-    &quot;ethereumTransactionAddress&quot;: &quot;0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c&quot;,
-    &quot;ethereumTransactionError&quot;: null,
-    &quot;status&quot;: &quot;paid&quot;,
-    &quot;createdAt&quot;: &quot;2020-01-13T16:50:33.115Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-13T16:50:33.104Z&quot;,
-    &quot;accountId&quot;: &quot;b8901686-d5b0-44a4-8b51-b57b2edf27fd&quot;
+    &quot;passed&quot;: false,
+    &quot;verificationType&quot;: &quot;aml-kyc&quot;,
+    &quot;maxInvestmentUsd&quot;: 100000,
+    &quot;createdAt&quot;: &quot;2020-01-13T16:50:31.663Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-13T16:50:31.663Z&quot;
   },
   {
-    &quot;id&quot;: 1,
-    &quot;source&quot;: &quot;earned&quot;,
-    &quot;amount&quot;: &quot;1000.0&quot;,
-    &quot;quantity&quot;: &quot;2.0&quot;,
-    &quot;totalAmount&quot;: &quot;2000.0&quot;,
-    &quot;description&quot;: &quot;Award to a team member&quot;,
-    &quot;ethereumTransactionAddress&quot;: null,
-    &quot;ethereumTransactionError&quot;: null,
-    &quot;status&quot;: &quot;accepted&quot;,
-    &quot;createdAt&quot;: &quot;2020-01-13T16:50:33.005Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-13T16:50:33.005Z&quot;,
-    &quot;accountId&quot;: &quot;d7f813f7-a9d4-4a81-8996-db3abe99559f&quot;
+    &quot;passed&quot;: true,
+    &quot;verificationType&quot;: &quot;aml-kyc&quot;,
+    &quot;maxInvestmentUsd&quot;: 10000,
+    &quot;createdAt&quot;: &quot;2020-01-13T16:50:31.676Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-13T16:50:31.676Z&quot;
   }
 ]</pre>
       </div>
