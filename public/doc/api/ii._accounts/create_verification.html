@@ -111,10 +111,10 @@ table th, table td {
         <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
 
       <div class="article">
-        <h2>CREATE</h2>
-        <h3>POST /api/v1/accounts</h3>
+        <h2>CREATE VERIFICATION</h2>
+        <h3>POST /api/v1/accounts/:id/verifications</h3>
           <p class="explanation">
-            Redirects to account data
+            Redirects to account verifications
           </p>
 
           <h3>Parameters</h3>
@@ -127,115 +127,43 @@ table th, table td {
             </thead>
             <tbody>
               <tr>
-                <td>
-                    <span class="name">account[managed_account_id]</span>
+                <td class="required">
+                    <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">id</span>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">account[email]</span>
+                    <span class="name">verification[passed]</span>
                 </td>
                 <td>
-                  <span class="description">email</span>
+                  <span class="description">verification result</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">verification[verification_type]</span>
+                </td>
+                <td>
+                  <span class="description">verification type ( aml-kyc accreditation valid-identity ), defaults to aml-kyc</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">account[first_name]</span>
+                    <span class="name">verification[max_investment_usd]</span>
                 </td>
                 <td>
-                  <span class="description">first name</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">account[last_name]</span>
-                </td>
-                <td>
-                  <span class="description">last name</span>
+                  <span class="description">maximum investment in us dollars</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">account[nickname]</span>
+                    <span class="name">verification[created_at]</span>
                 </td>
                 <td>
-                  <span class="description">nickname</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[image]</span>
-                </td>
-                <td>
-                  <span class="description">image</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">account[country]</span>
-                </td>
-                <td>
-                  <span class="description">counry</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">account[date_of_birth]</span>
-                </td>
-                <td>
-                  <span class="description">date of birth</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[ethereum_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">ethereum wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[qtum_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">qtum wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[cardano_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">cardano wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[bitcoin_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">bitcoin wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[eos_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">eos wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">account[tezos_wallet]</span>
-                </td>
-                <td>
-                  <span class="description">tezos wallet</span>
+                  <span class="description">timestamp</span>
                 </td>
               </tr>
             </tbody>
@@ -265,18 +193,18 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/57a5edf9-6a7e-4e42-afb5-7c95d505149f/verifications</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">account[managed_account_id]=83a936a7-3ae3-4a24-8329-6354f91b8afa&account[email]=me%2B1315031995978441016ad7029f2cdcb104d81231%40example.com&account[first_name]=Eva&account[last_name]=Smith&account[nickname]=hunter-f16638b59572464d7b830363ffa479834c661beb&account[country]=United+States+of+America&account[date_of_birth]=1990%2F01%2F01</pre>
+            <pre class="request body">verification[passed]=true&verification[verification_type]=aml-kyc&verification[max_investment_usd]=10000&verification[created_at]=2020-01-10+16%3A50%3A31+UTC</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/83a936a7-3ae3-4a24-8329-6354f91b8afa&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/57a5edf9-6a7e-4e42-afb5-7c95d505149f/verifications&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>
