@@ -4,6 +4,11 @@ class Api::V1::AccountsController < Api::V1::ApiController
     fresh_when account, public: true
   end
 
+  # GET /api/v1/accounts/1/token_balances
+  def token_balances
+    account
+  end
+
   # POST /api/v1/accounts
   def create
     account = whitelabel_mission.managed_accounts.create(account_params)
@@ -33,7 +38,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
   private
 
     def account
-      @account ||= whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:id])
+      @account ||= (whitelabel_mission.managed_accounts.find_by(managed_account_id: params[:id]) || whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:account_id]))
     end
 
     def account_params
