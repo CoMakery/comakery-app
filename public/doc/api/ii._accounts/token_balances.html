@@ -111,10 +111,10 @@ table th, table td {
         <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
 
       <div class="article">
-        <h2>GET</h2>
-        <h3>GET /api/v1/accounts/:id</h3>
+        <h2>TOKEN BALANCES</h2>
+        <h3>GET /api/v1/accounts/:id/token_balances</h3>
           <p class="explanation">
-            Returns account data
+            Returns an array of token balances
           </p>
 
           <h3>Parameters</h3>
@@ -148,154 +148,122 @@ table th, table td {
             <tbody>
               <tr>
                 <td>
-                    <span class="name">managed_account_id</span>
+                    <span class="name">total_received</span>
                 </td>
                 <td>
-                  <span class="description">id</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">email</span>
-                </td>
-                <td>
-                  <span class="description">email</span>
+                  <span class="description">total received on platform</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">firstName</span>
+                    <span class="name">blockchain[address]</span>
                 </td>
                 <td>
-                  <span class="description">first name</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">lastName</span>
-                </td>
-                <td>
-                  <span class="description">last name</span>
+                  <span class="description">blockchain address</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">nickname</span>
+                    <span class="name">blockchain[balance]</span>
                 </td>
                 <td>
-                  <span class="description">nickname</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">imageUrl</span>
-                </td>
-                <td>
-                  <span class="description">image url</span>
+                  <span class="description">blockchain balance</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">country</span>
+                    <span class="name">blockchain[maxBalance]</span>
                 </td>
                 <td>
-                  <span class="description">country</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">dateOfBirth</span>
-                </td>
-                <td>
-                  <span class="description">date of birth</span>
+                  <span class="description">blockchain max balance</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">ethereumWallet</span>
+                    <span class="name">blockchain[lockupUntil]</span>
                 </td>
                 <td>
-                  <span class="description">ethereum wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">qtumWallet</span>
-                </td>
-                <td>
-                  <span class="description">qtum Wallet</span>
+                  <span class="description">blockchain lockup until</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">cardanoWallet</span>
+                    <span class="name">blockchain[accountFrozen]</span>
                 </td>
                 <td>
-                  <span class="description">cardano wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">bitcoinWallet</span>
-                </td>
-                <td>
-                  <span class="description">bitcoin wallet</span>
+                  <span class="description">blockchain account frozen status</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">eosWallet</span>
+                    <span class="name">token[id]</span>
                 </td>
                 <td>
-                  <span class="description">eos wallet</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">tezosWallet</span>
-                </td>
-                <td>
-                  <span class="description">tezos wallet</span>
+                  <span class="description">token id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">createdAt</span>
+                    <span class="name">token[name]</span>
                 </td>
                 <td>
-                  <span class="description">account creation timestamp</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">updatedAt</span>
-                </td>
-                <td>
-                  <span class="description">account update timestamp</span>
+                  <span class="description">token name</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">verificationState</span>
+                    <span class="name">token[symbol]</span>
                 </td>
                 <td>
-                  <span class="description">result of latest AML/KYC verification (passed | failed | unknown)</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">verificationDate</span>
-                </td>
-                <td>
-                  <span class="description">date of latest AML/KYC verification</span>
+                  <span class="description">token symbol</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">verificationMaxInvestmentUsd</span>
+                    <span class="name">token[network]</span>
                 </td>
                 <td>
-                  <span class="description">max investment approved during latest AML/KYC verification</span>
+                  <span class="description">token network ( main | ropsten | kovan | rinkeby )</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[contractAddress]</span>
+                </td>
+                <td>
+                  <span class="description">token contract address</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[decimalPlaces]</span>
+                </td>
+                <td>
+                  <span class="description">token decimal places</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[logoUrl]</span>
+                </td>
+                <td>
+                  <span class="description">token logo url</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[createdAt]</span>
+                </td>
+                <td>
+                  <span class="description">token creation timestamp</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[updatedAt]</span>
+                </td>
+                <td>
+                  <span class="description">token update timestamp</span>
                 </td>
               </tr>
             </tbody>
@@ -305,39 +273,61 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/3463449b-5d59-4168-b090-efa9f1d58f8f</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/f9b99129-191d-46f3-ae98-e4d1c7127bb5/token_balances</pre>
 
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;8e6c6c9186be7c3009db75a814e57998&quot;
-Last-Modified: Tue, 14 Jan 2020 17:45:50 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;506653f3467e4769f02cddc4b0a9ab47&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{
-  &quot;email&quot;: &quot;me+7bf0f2e8db3d29ef764e96454aaf57cff5d84772@example.com&quot;,
-  &quot;managedAccountId&quot;: &quot;3463449b-5d59-4168-b090-efa9f1d58f8f&quot;,
-  &quot;firstName&quot;: &quot;Eva&quot;,
-  &quot;lastName&quot;: &quot;Smith&quot;,
-  &quot;nickname&quot;: &quot;hunter-2e4cf78d2ab0904feb75052ccf19ddb0a57f81da&quot;,
-  &quot;imageUrl&quot;: &quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,
-  &quot;country&quot;: &quot;United States of America&quot;,
-  &quot;dateOfBirth&quot;: &quot;1990-01-01&quot;,
-  &quot;ethereumWallet&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
-  &quot;qtumWallet&quot;: null,
-  &quot;cardanoWallet&quot;: null,
-  &quot;bitcoinWallet&quot;: null,
-  &quot;eosWallet&quot;: null,
-  &quot;tezosWallet&quot;: null,
-  &quot;verificationState&quot;: &quot;passed&quot;,
-  &quot;verificationDate&quot;: &quot;2020-01-14T17:45:50.082Z&quot;,
-  &quot;verificationMaxInvestmentUsd&quot;: 1000000,
-  &quot;createdAt&quot;: &quot;2020-01-14T17:45:50.040Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-01-14T17:45:50.093Z&quot;
-}</pre>
+              <pre class="response body">[
+  {
+    &quot;token&quot;: {
+      &quot;id&quot;: 35,
+      &quot;name&quot;: &quot;Token-caf27bbdac8808812fd898b04cf5bd9bb18e6597&quot;,
+      &quot;symbol&quot;: &quot;TKNa62a5c69c1a561174024db3ee638d6745ddc6f67&quot;,
+      &quot;network&quot;: null,
+      &quot;contractAddress&quot;: null,
+      &quot;decimalPlaces&quot;: null,
+      &quot;logoUrl&quot;: &quot;/attachments/23d2c0db74c55f95a76d890a83a138ed770ba31e/store/fill/100/100/98a102c85089f8e992fb54339005e82ec658b6957aab76c678c1144fb907/image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-01-14T17:45:53.166Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-01-14T17:45:53.685Z&quot;
+    },
+    &quot;blockchain&quot;: {
+      &quot;address&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
+      &quot;balance&quot;: &quot;200.0&quot;,
+      &quot;maxBalance&quot;: 100000,
+      &quot;lockupUntil&quot;: &quot;2020-01-13T17:45:53.214Z&quot;,
+      &quot;accountFrozen&quot;: false
+    },
+    &quot;totalReceived&quot;: &quot;3.0&quot;
+  },
+  {
+    &quot;token&quot;: {
+      &quot;id&quot;: 36,
+      &quot;name&quot;: &quot;Token-e8dd796e9cb4c77721e4e3f30b0782850d1dba5f&quot;,
+      &quot;symbol&quot;: &quot;TKNea9fe8e8282830a116cde5a42c8b65a8d9daef3a&quot;,
+      &quot;network&quot;: null,
+      &quot;contractAddress&quot;: null,
+      &quot;decimalPlaces&quot;: null,
+      &quot;logoUrl&quot;: &quot;/attachments/c574057f747961655584370fab2b29b2a37baa0c/store/fill/100/100/0f49f85f3d2e2bf6f102ad0c4136b51be5c4d2016a567593e4f6f49130a8/image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-01-14T17:45:53.172Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-01-14T17:45:53.746Z&quot;
+    },
+    &quot;blockchain&quot;: {
+      &quot;address&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
+      &quot;balance&quot;: &quot;200.0&quot;,
+      &quot;maxBalance&quot;: 100000,
+      &quot;lockupUntil&quot;: &quot;2020-01-13T17:45:53.262Z&quot;,
+      &quot;accountFrozen&quot;: false
+    },
+    &quot;totalReceived&quot;: &quot;8.0&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>

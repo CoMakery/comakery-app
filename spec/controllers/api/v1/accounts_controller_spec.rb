@@ -76,4 +76,11 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       end
     end
   end
+
+  describe 'GET #token_balances' do
+    it 'returns token_balances by managed_account_id' do
+      get :token_balances, params: { account_id: account.managed_account_id, format: :json }, session: valid_session
+      expect(response).to be_successful
+    end
+  end
 end

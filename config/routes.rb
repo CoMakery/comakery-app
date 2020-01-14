@@ -135,6 +135,7 @@ Rails.application.routes.draw do
       resources :accounts, only: [:show, :update, :create] do
         resources :follows, only: [:index, :create, :destroy]
         resources :verifications, only: [:index, :create]
+        get :token_balances
       end
 
       resources :projects, only: [:show, :index] do

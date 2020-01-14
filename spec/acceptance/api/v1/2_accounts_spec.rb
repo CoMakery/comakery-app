@@ -304,4 +304,50 @@ resource 'II. Accounts' do
       end
     end
   end
+
+  get '/api/v1/accounts/:id/token_balances' do
+    with_options with_example: true do
+      parameter :id, 'account id', required: true, type: :string
+    end
+
+    with_options with_example: true do
+      response_field 'total_received', 'total received on platform', type: :integer
+      response_field 'blockchain[address]', 'blockchain address', type: :string
+      response_field 'blockchain[balance]', 'blockchain balance', type: :string
+      response_field 'blockchain[maxBalance]', 'blockchain max balance', type: :integer
+      response_field 'blockchain[lockupUntil]', 'blockchain lockup until', type: :string
+      response_field 'blockchain[accountFrozen]', 'blockchain account frozen status', type: :bool
+      response_field 'token[id]', 'token id', type: :integer
+      response_field 'token[name]', 'token name', type: :string
+      response_field 'token[symbol]', 'token symbol', type: :string
+      response_field 'token[network]', 'token network ( main | ropsten | kovan | rinkeby )', type: :string
+      response_field 'token[contractAddress]', 'token contract address', type: :string
+      response_field 'token[decimalPlaces]', 'token decimal places', type: :integer
+      response_field 'token[logoUrl]', 'token logo url', type: :string
+      response_field 'token[createdAt]', 'token creation timestamp', type: :string
+      response_field 'token[updatedAt]', 'token update timestamp', type: :string
+    end
+
+    context '200' do
+      let!(:id) { account.managed_account_id }
+      let!(:token) { create(:token, coin_type: :comakery) }
+      let!(:token2) { create(:token, coin_type: :comakery) }
+      let!(:account_token_record) { create(:account_token_record, account: account, token: token) }
+      let!(:account_token_record2) { create(:account_token_record, account: account, token: token2) }
+      let!(:award_type) { create(:award_type, project: create(:project, token: token)) }
+      let!(:award_type2) { create(:award_type, project: create(:project, token: token2)) }
+
+      before do
+        create(:award, account: account, status: :paid, amount: 1, award_type: award_type)
+        create(:award, account: account, status: :paid, amount: 2, award_type: award_type)
+        create(:award, account: account, status: :paid, amount: 8, award_type: award_type2)
+      end
+
+      example_request 'TOKEN BALANCES' do
+        explanation 'Returns an array of token balances'
+
+        expect(status).to eq(200)
+      end
+    end
+  end
 end

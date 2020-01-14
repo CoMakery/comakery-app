@@ -13,5 +13,9 @@ RSpec.describe Api::V1::AccountsController, type: :routing do
     it 'routes to #update via PATCH' do
       expect(patch: '/api/v1/accounts/1').to route_to('api/v1/accounts#update', id: '1', format: :json)
     end
+
+    it 'routes to #token_balances' do
+      expect(get: '/api/v1/accounts/1/token_balances').to route_to('api/v1/accounts#token_balances', account_id: '1', format: :json)
+    end
   end
 end

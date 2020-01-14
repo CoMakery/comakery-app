@@ -73,6 +73,7 @@ class Mom
       token: token,
       reg_group: create(:reg_group, token: token),
       max_balance: 100000,
+      balance: 200,
       account_frozen: false,
       lockup_until: 1.day.ago
     }
