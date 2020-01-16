@@ -31,7 +31,7 @@ class Award < ApplicationRecord
   has_one :project, through: :award_type
   has_one :token, through: :project
 
-  validates :proof_id, :award_type, :name, :why, :requirements, presence: true
+  validates :proof_id, :award_type, :name, presence: true
   validates :amount, numericality: { greater_than: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
