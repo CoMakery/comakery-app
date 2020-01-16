@@ -295,8 +295,6 @@ describe Award do
       expect(described_class.new(quantity: nil).tap(&:valid?).errors.full_messages).to match_array([
                                                                                                      "Award type can't be blank",
                                                                                                      "Name can't be blank",
-                                                                                                     "Why can't be blank",
-                                                                                                     "Requirements can't be blank",
                                                                                                      'Amount is not a number'
                                                                                                    ])
     end

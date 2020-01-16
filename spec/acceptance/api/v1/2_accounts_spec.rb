@@ -11,7 +11,7 @@ resource 'II. Accounts' do
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
   let!(:project2) { create(:project, mission: active_whitelabel_mission) }
 
-  explanation 'Retrieve and manage account data, follow and unfollow projects.'
+  explanation 'Retrieve and manage account data, balances, interests.'
 
   get '/api/v1/accounts/:id' do
     with_options with_example: true do
@@ -151,7 +151,7 @@ resource 'II. Accounts' do
     end
   end
 
-  get '/api/v1/accounts/:id/follows' do
+  get '/api/v1/accounts/:id/interests' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string
       parameter :page, 'page number', type: :integer
@@ -166,7 +166,7 @@ resource 'II. Accounts' do
         project2.interests.create(account: account, specialty: account.specialty)
       end
 
-      example_request 'FOLLOWS' do
+      example_request 'INTERESTS' do
         explanation 'Returns an array of project ids'
 
         expect(status).to eq(200)
@@ -174,10 +174,10 @@ resource 'II. Accounts' do
     end
   end
 
-  post '/api/v1/accounts/:id/follows' do
+  post '/api/v1/accounts/:id/interests' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string
-      parameter :project_id, 'project id to follow', required: true, type: :integer
+      parameter :project_id, 'project id to interest', required: true, type: :integer
     end
 
     with_options with_example: true do
@@ -188,8 +188,8 @@ resource 'II. Accounts' do
       let!(:id) { account.managed_account_id }
       let!(:project_id) { project.id }
 
-      example_request 'FOLLOW' do
-        explanation 'Redirects to account follows'
+      example_request 'CREATE INTEREST' do
+        explanation 'Redirects to account interests'
 
         expect(status).to eq(302)
       end
@@ -203,7 +203,7 @@ resource 'II. Accounts' do
         project.interests.create(account: account, specialty: account.specialty)
       end
 
-      example_request 'FOLLOW – ERROR' do
+      example_request 'CREATE INTEREST – ERROR' do
         explanation 'Returns an array of errors'
 
         expect(status).to eq(400)
@@ -211,10 +211,10 @@ resource 'II. Accounts' do
     end
   end
 
-  delete '/api/v1/accounts/:id/follows/:project_id' do
+  delete '/api/v1/accounts/:id/interests/:project_id' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string
-      parameter :project_id, 'project id to unfollow', required: true, type: :integer
+      parameter :project_id, 'project id to uninterest', required: true, type: :integer
     end
 
     context '302' do
@@ -225,8 +225,8 @@ resource 'II. Accounts' do
         project.interests.create(account: account, specialty: account.specialty)
       end
 
-      example_request 'UNFOLLOW' do
-        explanation 'Redirects to account follows'
+      example_request 'REMOVE INTEREST' do
+        explanation 'Redirects to account interests'
 
         expect(status).to eq(302)
       end

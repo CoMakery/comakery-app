@@ -497,7 +497,6 @@ exports[`TaskForm renders correctly without props 1`] = `
                   eventHandler={[Function]}
                   name="task[why]"
                   placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
-                  required={true}
                   symbolLimit={500}
                   title="WHAT IS THE EXPECTED BENEFIT"
                   value=""
@@ -522,7 +521,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                     readOnly={false}
                     recommended={false}
-                    required={true}
+                    required={false}
                     selectEntries={Array []}
                     step=""
                     symbolLimit={500}
@@ -544,7 +543,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--required"
                         >
-                          required
+                          optional
                         </span>
                         <span
                           className="input-field--title--counter"
@@ -564,7 +563,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                           pattern=".*"
                           placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                           readOnly={false}
-                          required={true}
+                          required={false}
                           value=""
                         />
                       </div>
@@ -575,7 +574,6 @@ exports[`TaskForm renders correctly without props 1`] = `
                   eventHandler={[Function]}
                   name="task[requirements]"
                   placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
-                  required={true}
                   symbolLimit={1000}
                   title="acceptance requirements"
                   value=""
@@ -600,7 +598,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
                     readOnly={false}
                     recommended={false}
-                    required={true}
+                    required={false}
                     selectEntries={Array []}
                     step=""
                     symbolLimit={1000}
@@ -622,7 +620,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--required"
                         >
-                          required
+                          optional
                         </span>
                         <span
                           className="input-field--title--counter"
@@ -642,7 +640,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                           pattern=".*"
                           placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
                           readOnly={false}
-                          required={true}
+                          required={false}
                           value=""
                         />
                       </div>

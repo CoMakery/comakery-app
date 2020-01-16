@@ -108,7 +108,7 @@ table th, table td {
     <div class="container">
       <h1>II. Accounts API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Retrieve and manage account data, balances, interests.</p>
 
       <div class="article">
         <h2>CREATE VERIFICATION</h2>
@@ -193,18 +193,18 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/cfbee9d5-8601-4edf-a2ff-92c72e1cf6ce/verifications</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/9f181aba-69aa-4b07-9ba8-a286e768d6f9/verifications</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">verification[passed]=true&verification[verification_type]=aml-kyc&verification[max_investment_usd]=10000&verification[created_at]=2020-01-11+17%3A45%3A52+UTC</pre>
+            <pre class="request body">verification[passed]=true&verification[verification_type]=aml-kyc&verification[max_investment_usd]=10000&verification[created_at]=2020-01-13+17%3A15%3A15+UTC</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/cfbee9d5-8601-4edf-a2ff-92c72e1cf6ce/verifications&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/9f181aba-69aa-4b07-9ba8-a286e768d6f9/verifications&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>

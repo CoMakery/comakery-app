@@ -108,7 +108,7 @@ table th, table td {
     <div class="container">
       <h1>II. Accounts API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Retrieve and manage account data, balances, interests.</p>
 
       <div class="article">
         <h2>VERIFICATIONS</h2>
@@ -193,7 +193,7 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/74c9ade1-5b01-46d7-b719-d9534f3c7aae/verifications?page=1</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/64c526c0-2467-48d8-9c01-2795aac8e600/verifications?page=1</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1</pre>
@@ -204,8 +204,8 @@ table th, table td {
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 3
-ETag: W/&quot;d5878df6bbec3cfb7864b1ba20478191&quot;
-Last-Modified: Tue, 14 Jan 2020 17:45:52 GMT</pre>
+ETag: W/&quot;8fd8e0589d8f22fedacae97766a4ede7&quot;
+Last-Modified: Thu, 16 Jan 2020 17:15:15 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -214,22 +214,22 @@ Last-Modified: Tue, 14 Jan 2020 17:45:52 GMT</pre>
     &quot;passed&quot;: true,
     &quot;verificationType&quot;: &quot;aml-kyc&quot;,
     &quot;maxInvestmentUsd&quot;: 1000000,
-    &quot;createdAt&quot;: &quot;2020-01-14T17:45:52.292Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-14T17:45:52.292Z&quot;
+    &quot;createdAt&quot;: &quot;2020-01-16T17:15:14.902Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-16T17:15:14.902Z&quot;
   },
   {
     &quot;passed&quot;: false,
     &quot;verificationType&quot;: &quot;aml-kyc&quot;,
     &quot;maxInvestmentUsd&quot;: 100000,
-    &quot;createdAt&quot;: &quot;2020-01-14T17:45:52.442Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-14T17:45:52.442Z&quot;
+    &quot;createdAt&quot;: &quot;2020-01-16T17:15:15.045Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-16T17:15:15.045Z&quot;
   },
   {
     &quot;passed&quot;: true,
     &quot;verificationType&quot;: &quot;aml-kyc&quot;,
     &quot;maxInvestmentUsd&quot;: 10000,
-    &quot;createdAt&quot;: &quot;2020-01-14T17:45:52.455Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-14T17:45:52.455Z&quot;
+    &quot;createdAt&quot;: &quot;2020-01-16T17:15:15.059Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-16T17:15:15.059Z&quot;
   }
 ]</pre>
       </div>
