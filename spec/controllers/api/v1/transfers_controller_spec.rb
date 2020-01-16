@@ -2,13 +2,14 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::TransfersController, type: :controller do
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
-  let!(:project) { create(:project, mission: active_whitelabel_mission) }
+  let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:token, decimal_places: 2)) }
   let!(:transfer) { create(:transfer, award_type: project.default_award_type) }
 
   let(:valid_attributes) do
     {
-      amount: 1,
-      quantity: 1,
+      amount: '10.00',
+      quantity: '2.00',
+      total_amount: '20.00',
       source: 'bought',
       description: 'investor',
       account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id
@@ -17,7 +18,7 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
 
   let(:invalid_attributes) do
     {
-      amount: -1,
+      amount: -1.00,
       account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id
     }
   end
@@ -63,6 +64,38 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
         post :create, params: { project_id: project.id, transfer: invalid_attributes }, session: valid_session
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
+      end
+    end
+
+    context 'with invalid amount precision' do
+      it 'renders an error' do
+        post :create, params: { project_id: project.id, transfer: valid_attributes.merge(amount: '1') }, session: valid_session
+        expect(response).not_to be_successful
+        expect(assigns[:errors].messages).to include(amount: ['has incorrect precision (should be 2)'])
+      end
+    end
+
+    context 'with invalid quantity precision' do
+      it 'renders an error' do
+        post :create, params: { project_id: project.id, transfer: valid_attributes.merge(quantity: '1.0124141') }, session: valid_session
+        expect(response).not_to be_successful
+        expect(assigns[:errors].messages).to include(quantity: ['has incorrect precision (should be 2)'])
+      end
+    end
+
+    context 'with invalid total_amount precision' do
+      it 'renders an error' do
+        post :create, params: { project_id: project.id, transfer: valid_attributes.merge(total_amount: '20') }, session: valid_session
+        expect(response).not_to be_successful
+        expect(assigns[:errors].messages).to include(total_amount: ['has incorrect precision (should be 2)'])
+      end
+    end
+
+    context 'with invalid total_amount value' do
+      it 'renders an error' do
+        post :create, params: { project_id: project.id, transfer: valid_attributes.merge(total_amount: '21.00') }, session: valid_session
+        expect(response).not_to be_successful
+        expect(assigns[:errors].messages).to include(total_amount: ["doesn't equal quantity times amount, possible multiplication error"])
       end
     end
   end

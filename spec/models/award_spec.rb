@@ -399,11 +399,11 @@ describe Award do
       end
     end
 
-    describe 'total_amount calculation' do
+    describe 'calculate_total_amount' do
       let(:award_w_quantity) { create :award, amount: 100, quantity: 2 }
-      let(:award_template) { create :award, amount: 100, number_of_assignments: 3 }
+      let(:award_w_total_amount) { build :award, amount: 100, quantity: 2, total_amount: 300 }
 
-      it 'multiplies amount by quantity' do
+      it 'calculates total_amount multiplying amount by quantity' do
         expect(award_w_quantity.total_amount).to eq(200)
       end
     end
