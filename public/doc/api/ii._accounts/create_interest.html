@@ -108,13 +108,13 @@ table th, table td {
     <div class="container">
       <h1>II. Accounts API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Retrieve and manage account data, balances, interests.</p>
 
       <div class="article">
-        <h2>FOLLOW</h2>
-        <h3>POST /api/v1/accounts/:id/follows</h3>
+        <h2>CREATE INTEREST</h2>
+        <h3>POST /api/v1/accounts/:id/interests</h3>
           <p class="explanation">
-            Redirects to account follows
+            Redirects to account interests
           </p>
 
           <h3>Parameters</h3>
@@ -139,7 +139,7 @@ table th, table td {
                     <span class="name">project_id</span>
                 </td>
                 <td>
-                  <span class="description">project id to follow</span>
+                  <span class="description">project id to interest</span>
                 </td>
               </tr>
             </tbody>
@@ -169,7 +169,7 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/7cd1ac01-4089-4a29-99b0-e3f1a8827fda/follows</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/93dfc9db-1d25-45f4-babd-8bce1865c387/interests</pre>
 
 
             <h4>Body</h4>
@@ -180,7 +180,7 @@ table th, table td {
             <h4>Status</h4>
             <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/7cd1ac01-4089-4a29-99b0-e3f1a8827fda/follows&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/93dfc9db-1d25-45f4-babd-8bce1865c387/interests&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>

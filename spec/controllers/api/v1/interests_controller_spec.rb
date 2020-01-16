@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V1::FollowsController, type: :controller do
+RSpec.describe Api::V1::InterestsController, type: :controller do
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
@@ -8,7 +8,7 @@ RSpec.describe Api::V1::FollowsController, type: :controller do
   let(:valid_session) { {} }
 
   describe 'GET #index' do
-    it 'returns account follows' do
+    it 'returns account interests' do
       get :index, params: { account_id: account.managed_account_id, format: :json }, session: valid_session
       expect(response).to be_successful
     end
@@ -16,21 +16,21 @@ RSpec.describe Api::V1::FollowsController, type: :controller do
     it 'applies pagination' do
       get :index, params: { account_id: account.managed_account_id, format: :json, page: 9999 }, session: valid_session
       expect(response).to be_successful
-      expect(assigns[:follows]).to eq([])
+      expect(assigns[:interests]).to eq([])
     end
   end
 
   describe 'POST #create' do
     context 'with valid params' do
-      it 'follows the requested project' do
+      it 'interests the requested project' do
         post :create, params: { account_id: account.managed_account_id, project_id: project.id }, session: valid_session
         project.reload
         expect(project.interested).to include(account)
       end
 
-      it 'redirects to the api_v1_account_follows' do
+      it 'redirects to the api_v1_account_interests' do
         post :create, params: { account_id: account.managed_account_id, project_id: project.id }, session: valid_session
-        expect(response).to redirect_to(api_v1_account_follows_path)
+        expect(response).to redirect_to(api_v1_account_interests_path)
       end
     end
 
@@ -53,15 +53,15 @@ RSpec.describe Api::V1::FollowsController, type: :controller do
         project.interests.create(account: account, specialty: account.specialty)
       end
 
-      it 'unfollows the requested project' do
+      it 'uninterests the requested project' do
         delete :destroy, params: { account_id: account.managed_account_id, id: project.id }, session: valid_session
         project.reload
         expect(project.interested).not_to include(account)
       end
 
-      it 'redirects to the api_v1_account_follows' do
+      it 'redirects to the api_v1_account_interests' do
         delete :destroy, params: { account_id: account.managed_account_id, id: project.id }, session: valid_session
-        expect(response).to redirect_to(api_v1_account_follows_path)
+        expect(response).to redirect_to(api_v1_account_interests_path)
       end
     end
   end

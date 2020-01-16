@@ -108,13 +108,13 @@ table th, table td {
     <div class="container">
       <h1>II. Accounts API</h1>
 
-        <p class="explanation">Retrieve and manage account data, follow and unfollow projects.</p>
+        <p class="explanation">Retrieve and manage account data, balances, interests.</p>
 
       <div class="article">
-        <h2>FOLLOWS</h2>
-        <h3>GET /api/v1/accounts/:id/follows</h3>
+        <h2>REMOVE INTEREST</h2>
+        <h3>DELETE /api/v1/accounts/:id/interests/:project_id</h3>
           <p class="explanation">
-            Returns an array of project ids
+            Redirects to account interests
           </p>
 
           <h3>Parameters</h3>
@@ -135,11 +135,11 @@ table th, table td {
                 </td>
               </tr>
               <tr>
-                <td>
-                    <span class="name">page</span>
+                <td class="required">
+                    <span class="name">project_id</span>
                 </td>
                 <td>
-                  <span class="description">page number</span>
+                  <span class="description">project id to uninterest</span>
                 </td>
               </tr>
             </tbody>
@@ -150,26 +150,16 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/187bc8af-1795-4443-81c9-8318279c31e6/follows?page=1</pre>
+          <pre class="request route highlight">DELETE /api/v1/accounts/9e6a114c-6a08-4ce8-a19f-770ccfdd7820/interests/21</pre>
 
-            <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">page: 1</pre>
 
 
 
             <h3>Response</h3>
-              <h4>Headers</h4>
-              <pre class="response headers">Per-Page: 25
-Total: 2
-ETag: W/&quot;770ceee891def34e25f9242efa6c84c7&quot;
-Last-Modified: Tue, 14 Jan 2020 17:45:51 GMT</pre>
             <h4>Status</h4>
-            <pre class="response status">200 OK</pre>
+            <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">[
-  16,
-  15
-]</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/9e6a114c-6a08-4ce8-a19f-770ccfdd7820/interests&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>
