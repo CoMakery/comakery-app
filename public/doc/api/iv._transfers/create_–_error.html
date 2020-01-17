@@ -147,15 +147,23 @@ table th, table td {
                     <span class="name">transfer[amount]</span>
                 </td>
                 <td>
-                  <span class="description">transfer amount</span>
+                  <span class="description">transfer amount (same decimals as token)</span>
                 </td>
               </tr>
               <tr>
-                <td>
+                <td class="required">
                     <span class="name">transfer[quantity]</span>
                 </td>
                 <td>
-                  <span class="description">transfer quantity, defaults to 1</span>
+                  <span class="description">transfer quantity (2 decimals)</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transfer[total_amount]</span>
+                </td>
+                <td>
+                  <span class="description">transfer total_amount (amount times quantity, same decimals as token)</span>
                 </td>
               </tr>
               <tr>
@@ -205,7 +213,7 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">transfer[amount]=-1&transfer[account_id]=d6efa71a-e6a1-48fb-84b3-c904bf0ad715</pre>
+            <pre class="request body">transfer[amount]=1000.00&transfer[quantity]=2&transfer[total_amount]=2000.0001&transfer[account_id]=b90703de-7933-48bb-8b92-0aeec18d9f57</pre>
 
 
             <h3>Response</h3>
@@ -215,7 +223,13 @@ table th, table td {
               <pre class="response body">{
   &quot;errors&quot;: {
     &quot;amount&quot;: [
-      &quot;must be greater than 0&quot;
+      &quot;has incorrect precision (should be 8)&quot;
+    ],
+    &quot;totalAmount&quot;: [
+      &quot;has incorrect precision (should be 8)&quot;
+    ],
+    &quot;quantity&quot;: [
+      &quot;has incorrect precision (should be 2)&quot;
     ]
   }
 }</pre>

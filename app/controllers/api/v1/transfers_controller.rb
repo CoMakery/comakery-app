@@ -1,4 +1,7 @@
 class Api::V1::TransfersController < Api::V1::ApiController
+  before_action :verify_decimal_params_precision, only: :create
+  before_action :verify_total_amount, only: :create
+
   # GET /api/v1/projects/1/transfers
   def index
     fresh_when transfers, public: true
@@ -60,8 +63,46 @@ class Api::V1::TransfersController < Api::V1::ApiController
       params.fetch(:transfer, {}).permit(
         :amount,
         :quantity,
+        :total_amount,
         :source,
         :description
       )
+    end
+
+    def verify_decimal_params_precision
+      a = Award.new
+
+      if params[:transfer][:amount] != helpers.number_with_precision(params[:transfer][:amount], precision: project.token&.decimal_places.to_i)
+        a.errors[:amount] << "has incorrect precision (should be #{project.token&.decimal_places.to_i})"
+      end
+
+      if params[:transfer][:total_amount] != helpers.number_with_precision(params[:transfer][:total_amount], precision: project.token&.decimal_places.to_i)
+        a.errors[:total_amount] << "has incorrect precision (should be #{project.token&.decimal_places.to_i})"
+      end
+
+      if params[:transfer][:quantity] != helpers.number_with_precision(params[:transfer][:quantity], precision: Award::QUANTITY_PRECISION)
+        a.errors[:quantity] << "has incorrect precision (should be #{Award::QUANTITY_PRECISION})"
+      end
+
+      unless a.errors.empty?
+        @errors = a.errors
+
+        return render 'api/v1/error.json', status: 400
+      end
+    end
+
+    def verify_total_amount
+      a = Award.new
+      calculated_total_amount = (BigDecimal(params[:transfer][:amount] || 0) * BigDecimal(params[:transfer][:quantity] || 0)).to_s
+
+      if params[:transfer][:total_amount] != helpers.number_with_precision(calculated_total_amount, precision: project.token&.decimal_places.to_i)
+        a.errors[:total_amount] << "doesn't equal quantity times amount, possible multiplication error"
+      end
+
+      unless a.errors.empty?
+        @errors = a.errors
+
+        return render 'api/v1/error.json', status: 400
+      end
     end
 end

@@ -13,6 +13,7 @@ class Award < ApplicationRecord
   }.freeze
 
   STARTED_TASKS_PER_CONTRIBUTOR = 5
+  QUANTITY_PRECISION = 2
 
   attachment :image, type: :image
   attachment :submission_image, type: :image
