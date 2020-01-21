@@ -25,7 +25,6 @@
         font-family: monospace;
       }
 
-      textarea#public-key,
       textarea#private-key {
         min-height: 2em;
       }
@@ -49,15 +48,19 @@
         function sign() {
           let privateKey = buffer.from(document.getElementById('private-key').value, 'base64')
           let request = JSON.parse(document.getElementById('request').value)
+          
+          request.body.nonce = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+          request.body.timestamp = Math.round(new Date() / 1000)
+          
           let signature = nacl.sign.detached(
-            new TextEncoder("utf-8").encode(request.body),
+            new TextEncoder("utf-8").encode(JSON.stringify(request.body)),
             privateKey
           )
-          request.body.nonce = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-          request.body.timestamp = new Date().getTime()
+          let publicKey = nacl.sign.keyPair.fromSecretKey(privateKey).publicKey
+
           request.proof = {
             "type": "Ed25519Signature2018",
-            "verificationMethod": document.getElementById('public-key').value,
+            "verificationMethod": buffer.from(publicKey).toString('base64'),
             "signature": buffer.from(signature).toString('base64')
           }
           document.getElementById('signed-request').value = JSON.stringify(request, null, 2)
@@ -81,8 +84,7 @@
     <h2>Signature Tool</h2>
     <p><span style="color: crimson">Warning: </span>The tool is provided only for testing purposes. <br>Security of private key is not guaranteed.</p>
 
-    <textarea id="public-key" placeholder="Public Key (eg: iKiiDoRs0r53LEV+CIOeJ3kn1ciwCiYpQ46eTjCA8zcuwG4V9GyupFs5npBCSuvPPb/7El0fEbpe/OVgTrq/Nw==)"></textarea>
-    <textarea id="private-key" placeholder="Private Key (eg: KZD96oLXN+cZGf8LQ78ILNfUUSBnK1X2OHPZYi+I+rmH7vo5Bl6+bmiXJlJzvljMQBojlIMiEa4bnMvMtbtWAw==)"></textarea>
+    <textarea id="private-key" placeholder="Private Key (eg: eodjQfDLTyNCBnz+MORHW0lOKWZnCTyPDTFcwAdVRyQ7vNMfjEecPWNEqF4FOuk03bgWDV10vwMcqL/OBUJWkA==)"></textarea>
     <textarea id="request" placeholder='Request (eg: {"body": {"data": {}}})'></textarea>
     <textarea id="signed-request" placeholder="Signed Request" readonly="true"></textarea>
 

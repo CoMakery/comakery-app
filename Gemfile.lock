@@ -195,6 +195,7 @@ GEM
       activesupport (>= 5.0)
       request_store (>= 1.0)
     easy_shell (0.0.1)
+    ed25519 (1.2.4)
     erubi (1.9.0)
     execjs (2.7.0)
     faraday (0.17.0)
@@ -655,6 +656,7 @@ DEPENDENCIES
   dotenv-rails
   draper
   easy_shell
+  ed25519 (~> 1.2)
   font-awesome-rails
   font_assets
   fortitude
