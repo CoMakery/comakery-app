@@ -92,7 +92,8 @@ class MissionsController < ApplicationController
       :whitelabel_logo,
       :whitelabel_logo_dark,
       :whitelabel_favicon,
-      :whitelabel_contact_email
+      :whitelabel_contact_email,
+      :whitelabel_api_public_key
     )
   end
 

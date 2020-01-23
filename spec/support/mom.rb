@@ -298,7 +298,23 @@ class Mom
   end
 
   def active_whitelabel_mission
-    create(:mission, whitelabel: true, whitelabel_domain: 'test.host')
+    create(:mission, whitelabel: true, whitelabel_domain: 'test.host', whitelabel_api_public_key: build(:api_public_key))
+  end
+
+  def api_public_key
+    'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA='
+  end
+
+  def api_private_key
+    'eodjQfDLTyNCBnz+MORHW0lOKWZnCTyPDTFcwAdVRyQ7vNMfjEecPWNEqF4FOuk03bgWDV10vwMcqL/OBUJWkA=='
+  end
+
+  def api_signed_request(data, path, method)
+    Comakery::APISignature.new('body' => {
+      'data' => data,
+      'url' => "http://test.host#{path}",
+      'method' => method
+    }).sign(build(:api_private_key))
   end
 end
 

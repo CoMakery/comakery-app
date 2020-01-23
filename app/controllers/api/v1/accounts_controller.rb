@@ -42,7 +42,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
     end
 
     def account_params
-      params.fetch(:account, {}).permit(
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:account, {}).permit(
         :email,
         :managed_account_id,
         :first_name,

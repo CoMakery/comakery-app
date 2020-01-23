@@ -14,7 +14,7 @@ describe Api::V1::ApiController do
     it 'available for whitelabel requests' do
       create(:active_whitelabel_mission)
 
-      get :index
+      get :index, params: build(:api_signed_request, '', '/dummy_api', 'GET')
       expect(response.status).to eq(200)
     end
 
@@ -24,8 +24,30 @@ describe Api::V1::ApiController do
     end
   end
 
+  describe 'verify_signature' do
+    it 'denies requests with incorrect signature' do
+      create(:active_whitelabel_mission)
+
+      params = build(:api_signed_request, '', '/dummy_api', 'GET')
+      params['proof']['signature'] = 'wrong'
+
+      get :index, params: params
+      expect(response.status).to eq(401)
+    end
+
+    it 'denies requests with non-unique nonce' do
+      mission = create(:active_whitelabel_mission)
+
+      params = build(:api_signed_request, '', '/dummy_api', 'GET')
+      Rails.cache.write("api::v1::nonce_history:#{mission.id}:#{params['body']['nonce']}", true, expires_in: 1.day)
+
+      get :index, params: params
+      expect(response.status).to eq(401)
+    end
+  end
+
   describe 'current_domain' do
-    it 'returds request domain including all subdomains' do
+    it 'returns request domain including all subdomains' do
       expect(controller.current_domain).to eq('test.host')
     end
   end
@@ -50,9 +72,9 @@ describe Api::V1::ApiController do
     let!(:project) { create(:project) }
 
     it 'sets project scope to whitelabel_mission projects' do
-      whitelabel_mission.update(whitelabel_domain: 'test.host')
+      whitelabel_mission.update(whitelabel_domain: 'test.host', whitelabel_api_public_key: build(:api_public_key))
 
-      get :index
+      get :index, params: build(:api_signed_request, '', '/dummy_api', 'GET')
       expect(assigns[:project_scope].all).to include(whitelabel_project)
       expect(assigns[:project_scope].all).not_to include(project)
     end

@@ -50,7 +50,7 @@
           let request = JSON.parse(document.getElementById('request').value)
           
           request.body.nonce = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-          request.body.timestamp = Math.round(new Date() / 1000)
+          request.body.timestamp = Math.round(new Date() / 1000).toString()
           
           let signature = nacl.sign.detached(
             new TextEncoder("utf-8").encode(JSON.stringify(request.body)),

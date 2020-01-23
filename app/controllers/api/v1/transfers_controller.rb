@@ -18,7 +18,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
 
     award.name = award.source.capitalize
     award.issuer = project.account
-    award.account = whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:transfer][:account_id])
+    award.account = whitelabel_mission.managed_accounts.find_by!(managed_account_id: transfer_params[:account_id])
     award.status = :accepted
 
     award.why = '—'
@@ -60,7 +60,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
     end
 
     def transfer_params
-      params.fetch(:transfer, {}).permit(
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:transfer, {}).permit(
         :amount,
         :quantity,
         :total_amount,
@@ -72,15 +72,15 @@ class Api::V1::TransfersController < Api::V1::ApiController
     def verify_decimal_params_precision
       a = Award.new
 
-      if params[:transfer][:amount] != helpers.number_with_precision(params[:transfer][:amount], precision: project.token&.decimal_places.to_i)
+      if transfer_params[:amount] != helpers.number_with_precision(transfer_params[:amount], precision: project.token&.decimal_places.to_i)
         a.errors[:amount] << "has incorrect precision (should be #{project.token&.decimal_places.to_i})"
       end
 
-      if params[:transfer][:total_amount] != helpers.number_with_precision(params[:transfer][:total_amount], precision: project.token&.decimal_places.to_i)
+      if transfer_params[:total_amount] != helpers.number_with_precision(transfer_params[:total_amount], precision: project.token&.decimal_places.to_i)
         a.errors[:total_amount] << "has incorrect precision (should be #{project.token&.decimal_places.to_i})"
       end
 
-      if params[:transfer][:quantity] != helpers.number_with_precision(params[:transfer][:quantity], precision: Award::QUANTITY_PRECISION)
+      if transfer_params[:quantity] != helpers.number_with_precision(transfer_params[:quantity], precision: Award::QUANTITY_PRECISION)
         a.errors[:quantity] << "has incorrect precision (should be #{Award::QUANTITY_PRECISION})"
       end
 
@@ -93,9 +93,9 @@ class Api::V1::TransfersController < Api::V1::ApiController
 
     def verify_total_amount
       a = Award.new
-      calculated_total_amount = (BigDecimal(params[:transfer][:amount] || 0) * BigDecimal(params[:transfer][:quantity] || 0)).to_s
+      calculated_total_amount = (BigDecimal(transfer_params[:amount] || 0) * BigDecimal(transfer_params[:quantity] || 0)).to_s
 
-      if params[:transfer][:total_amount] != helpers.number_with_precision(calculated_total_amount, precision: project.token&.decimal_places.to_i)
+      if transfer_params[:total_amount] != helpers.number_with_precision(calculated_total_amount, precision: project.token&.decimal_places.to_i)
         a.errors[:total_amount] << "doesn't equal quantity times amount, possible multiplication error"
       end
 

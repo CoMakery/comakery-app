@@ -98,11 +98,10 @@ describe Comakery::APISignature do
 
     context 'with invalid nonce' do
       it 'raises according exception' do
-        nonce_history = ['nonce123']
-        valid_signed_request['body']['nonce'] = nonce_history.first
+        is_nonce_unique = ->(_) { false }
 
         expect do
-          described_class.new(valid_signed_request, stubbed_url, stubbed_method, nonce_history).verify(public_key)
+          described_class.new(valid_signed_request, stubbed_url, stubbed_method, is_nonce_unique).verify(public_key)
         end.to raise_error(Comakery::APISignatureError, 'Invalid nonce')
       end
     end

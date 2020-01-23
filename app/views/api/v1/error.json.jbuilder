@@ -1,1 +1,1 @@
-json.errors @errors.messages
+json.errors @errors.is_a?(Hash) ? @errors : @errors.messages
