@@ -1,11 +1,12 @@
 # Rubocop gives false positives on empty example groups with rspec_api_documentation DSL
-# rubocop:disable RSpec/EmptyExampleGroup
 
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'IV. Transfers' do
-  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org') }
+  include Rails.application.routes.url_helpers
+
+  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key)) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:token, decimal_places: 8)) }
   let!(:transfer_accepted) { create(:transfer, source: :earned, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
   let!(:transfer_paid) { create(:transfer, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
@@ -23,9 +24,11 @@ resource 'IV. Transfers' do
       let!(:project_id) { project.id }
       let!(:page) { 1 }
 
-      example_request 'INDEX' do
+      example 'INDEX' do
         explanation 'Returns an array of transfers. See GET for response fields description.'
 
+        request = build(:api_signed_request, '', api_v1_project_transfers_path(project_id: project.id), 'GET', 'example.org')
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -56,9 +59,11 @@ resource 'IV. Transfers' do
       let!(:project_id) { project.id }
       let!(:id) { transfer_paid.id }
 
-      example_request 'GET' do
+      example 'GET' do
         explanation 'Returns data for a single transfer.'
 
+        request = build(:api_signed_request, '', api_v1_project_transfer_path(id: transfer_paid.id, project_id: project.id), 'GET', 'example.org')
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -85,16 +90,22 @@ resource 'IV. Transfers' do
     context '302' do
       let!(:project_id) { project.id }
 
-      let!(:source) { 'bought' }
-      let!(:amount) { '1000.00000000' }
-      let!(:quantity) { '2.00' }
-      let!(:total_amount) { '2000.00000000' }
-      let!(:account_id) { create(:account, managed_mission: active_whitelabel_mission).managed_account_id }
-      let!(:description) { 'investor' }
+      let!(:transfer) do
+        {
+          amount: '1000.00000000',
+          quantity: '2.00',
+          total_amount: '2000.00000000',
+          source: 'bought',
+          description: 'investor',
+          account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id.to_s
+        }
+      end
 
-      example_request 'CREATE' do
+      example 'CREATE' do
         explanation 'Redirects to created transfer'
 
+        request = build(:api_signed_request, { transfer: transfer }, api_v1_project_transfers_path(project_id: project.id), 'POST', 'example.org')
+        do_request(request)
         expect(status).to eq(302)
       end
     end
@@ -102,14 +113,18 @@ resource 'IV. Transfers' do
     context '400' do
       let!(:project_id) { project.id }
 
-      let!(:amount) { '1000.00' }
-      let!(:quantity) { '2' }
-      let!(:total_amount) { '2000.0001' }
-      let!(:account_id) { create(:account, managed_mission: active_whitelabel_mission).managed_account_id }
+      let!(:transfer) do
+        {
+          amount: '-1.00',
+          account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id.to_s
+        }
+      end
 
-      example_request 'CREATE – ERROR' do
+      example 'CREATE – ERROR' do
         explanation 'Returns an array of errors'
 
+        request = build(:api_signed_request, { transfer: transfer }, api_v1_project_transfers_path(project_id: project.id), 'POST', 'example.org')
+        do_request(request)
         expect(status).to eq(400)
       end
     end
@@ -129,9 +144,11 @@ resource 'IV. Transfers' do
       let!(:id) { transfer_accepted.id }
       let!(:project_id) { project.id }
 
-      example_request 'CANCEL' do
+      example 'CANCEL' do
         explanation 'Redirects to cancelled transfer'
 
+        request = build(:api_signed_request, '', api_v1_project_transfer_path(id: transfer_accepted.id, project_id: project.id), 'DELETE', 'example.org')
+        do_request(request)
         expect(status).to eq(302)
       end
     end
@@ -140,9 +157,11 @@ resource 'IV. Transfers' do
       let!(:id) { transfer_paid.id }
       let!(:project_id) { project.id }
 
-      example_request 'CANCEL – ERROR' do
+      example 'CANCEL – ERROR' do
         explanation 'Returns an array of errors'
 
+        request = build(:api_signed_request, '', api_v1_project_transfer_path(id: transfer_paid.id, project_id: project.id), 'DELETE', 'example.org')
+        do_request(request)
         expect(status).to eq(400)
       end
     end

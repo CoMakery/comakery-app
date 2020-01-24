@@ -26,8 +26,9 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
 
   describe 'GET #show' do
     it 'returns account info by managed_account_id' do
-      params = build(:api_signed_request, '', api_v1_accounts_path, 'GET')
-      params.merge! { id: account.managed_account_id, format: :json }
+      params = build(:api_signed_request, '', api_v1_account_path(id: account.managed_account_id), 'GET')
+      params[:id] = account.managed_account_id
+      params[:format] = :json
 
       get :show, params: params, session: valid_session
       expect(response).to be_successful
@@ -66,8 +67,8 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
   describe 'PUT #update' do
     context 'with valid params' do
       it 'updates the requested account' do
-        params = build(:api_signed_request, { account: valid_attributes }, api_v1_account_path(id: account.managed_account_id), 'POST')
-        params.merge! { id: account.managed_account_id }
+        params = build(:api_signed_request, { account: valid_attributes }, api_v1_account_path(id: account.managed_account_id), 'PUT')
+        params[:id] = account.managed_account_id
 
         put :update, params: params, session: valid_session
         account.reload
@@ -75,8 +76,8 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
       end
 
       it 'redirects to the api_v1_account_path' do
-        params = build(:api_signed_request, { account: valid_attributes }, api_v1_account_path(id: account.managed_account_id), 'POST')
-        params.merge! { id: account.managed_account_id }
+        params = build(:api_signed_request, { account: valid_attributes }, api_v1_account_path(id: account.managed_account_id), 'PUT')
+        params[:id] = account.managed_account_id
 
         put :update, params: params, session: valid_session
         expect(response).to redirect_to(api_v1_account_path)
@@ -85,8 +86,8 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
 
     context 'with invalid params' do
       it 'renders an error' do
-        params = build(:api_signed_request, { account: invalid_attributes }, api_v1_account_path(id: account.managed_account_id), 'POST')
-        params.merge! { id: account.managed_account_id }
+        params = build(:api_signed_request, { account: invalid_attributes }, api_v1_account_path(id: account.managed_account_id), 'PUT')
+        params[:id] = account.managed_account_id
 
         put :update, params: params, session: valid_session
         expect(response).not_to be_successful
@@ -97,8 +98,9 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
 
   describe 'GET #token_balances' do
     it 'returns token_balances by managed_account_id' do
-      params = build(:api_signed_request, '', api_v1_account_token_balances_path, 'GET')
-      params.merge! { account_id: account.managed_account_id, format: :json }
+      params = build(:api_signed_request, '', api_v1_account_token_balances_path(account_id: account.managed_account_id), 'GET')
+      params[:account_id] = account.managed_account_id
+      params[:format] = :json
 
       get :token_balances, params: params, session: valid_session
       expect(response).to be_successful

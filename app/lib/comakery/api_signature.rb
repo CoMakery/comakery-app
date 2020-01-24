@@ -120,8 +120,6 @@ module Comakery
         signing_key.sign(@request['body'].to_json_c14n)
       )
 
-      p @request['body'].to_json_c14n
-
       @request
     end
 
@@ -182,10 +180,6 @@ module Comakery
       end
 
       def verify_signature(public_key)
-        p @request
-        p @request.fetch('body', {}).to_json_c14n
-        p @request.fetch('proof', {}).fetch('signature', '')
-
         Ed25519::VerifyKey.new(
           Base64.strict_decode64(public_key)
         ).verify(

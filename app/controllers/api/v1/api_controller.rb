@@ -29,10 +29,9 @@ class Api::V1::ApiController < ActionController::Base
       params.as_json,
       request.base_url + request.path,
       request.method,
-      ->(nonce) { is_nonce_unique(nonce) }
+      ->(nonce) { nonce_unique?(nonce) }
     ).verify(@whitelabel_mission.whitelabel_api_public_key)
   rescue Comakery::APISignatureError => e
-    p e.message
     @errors = { authentication: e.message }
 
     return render 'api/v1/error.json', status: 401
@@ -40,7 +39,7 @@ class Api::V1::ApiController < ActionController::Base
 
   private
 
-    def is_nonce_unique(nonce)
+    def nonce_unique?(nonce)
       key = "api::v1::nonce_history:#{@whitelabel_mission.id}:#{nonce}"
 
       if Rails.cache.exist?(key)

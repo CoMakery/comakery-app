@@ -142,10 +142,12 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects?page=1</pre>
+          <pre class="request route highlight">GET /api/v1/projects?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=b5ec43df149d34db46204ae5f5cf39f3&amp;body[timestamp]=1579886384&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=TfcQRVwoy2M%2FvL0SFLcCPXy70%2BTe2Vpeuw%2Bp5BRkKo4VOvARW%2FBHV2%2Fsn46CrQLEh9aOxELTf9tgETjOwXhyBg%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">page: 1</pre>
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;b5ec43df149d34db46204ae5f5cf39f3&quot;, &quot;timestamp&quot;=&gt;&quot;1579886384&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;TfcQRVwoy2M/vL0SFLcCPXy70+Te2Vpeuw+p5BRkKo4VOvARW/BHV2/sn46CrQLEh9aOxELTf9tgETjOwXhyBg==&quot;}</pre>
 
 
 
@@ -153,8 +155,8 @@ table th, table td {
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 1
-ETag: W/&quot;73738cec3be120d306df40f646a82838&quot;
-Last-Modified: Thu, 16 Jan 2020 22:02:49 GMT</pre>
+ETag: W/&quot;7353a5a97e5b455f77c9df446040681c&quot;
+Last-Modified: Fri, 24 Jan 2020 17:19:44 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -163,23 +165,23 @@ Last-Modified: Thu, 16 Jan 2020 22:02:49 GMT</pre>
     &quot;id&quot;: 4,
     &quot;title&quot;: &quot;Uber for Cats&quot;,
     &quot;description&quot;: &quot;We are going to build amazing&quot;,
-    &quot;imageUrl&quot;: &quot;/attachments/9e925d019ff04edf504811dd2a2a4763037b688e/store/fill/1000/1000/da96a5c594a52a6c6982403707d16b15162e2a4778c777ebc38a71f03e20/image.png&quot;,
-    &quot;createdAt&quot;: &quot;2020-01-16T22:02:49.426Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-16T22:02:49.426Z&quot;,
+    &quot;imageUrl&quot;: &quot;/attachments/0395c9282ad78b1167ebdb119a2b7aebd196ea5a/store/fill/1000/1000/1071baf76b07649b7ddecbab700c2fc5c7856afa37f6ad8a0e13e43e2252/image.png&quot;,
+    &quot;createdAt&quot;: &quot;2020-01-24T17:19:44.563Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-24T17:19:44.563Z&quot;,
     &quot;accountId&quot;: null,
     &quot;adminIds&quot;: [
 
     ],
     &quot;token&quot;: {
       &quot;id&quot;: 7,
-      &quot;name&quot;: &quot;ComakeryToken-53b7d195bbe74cc8cb68119670db9068d98866e1&quot;,
-      &quot;symbol&quot;: &quot;XYZ28d00ed3cef7f46aafcf0a01989757ccab0805b0&quot;,
+      &quot;name&quot;: &quot;ComakeryToken-848fe4fa327e4780b7d6254fb6bd3a0fcb615436&quot;,
+      &quot;symbol&quot;: &quot;XYZ4f8789e18b2f5a7d430dc3ea2e100cd9eda1fe75&quot;,
       &quot;network&quot;: &quot;ropsten&quot;,
       &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
       &quot;decimalPlaces&quot;: 18,
-      &quot;logoUrl&quot;: &quot;/attachments/de4d47bc121eed37f15f3b5f10ce9e87932e31fe/store/fill/100/100/443ccc325e192583c42e75d7bc2662a98a411725fd44e7a53664bb3aa3c9/dummy_image.png&quot;,
-      &quot;createdAt&quot;: &quot;2020-01-16T22:02:49.380Z&quot;,
-      &quot;updatedAt&quot;: &quot;2020-01-16T22:02:49.431Z&quot;
+      &quot;logoUrl&quot;: &quot;/attachments/916424d13fe4320c18a1fd86ee5af55f573dcaa5/store/fill/100/100/551636fa360d60ce7e472a0b2aee00f85ee6ea0997929c2af1c84857d3fd/dummy_image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-01-24T17:19:44.519Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-01-24T17:19:44.569Z&quot;
     }
   }
 ]</pre>

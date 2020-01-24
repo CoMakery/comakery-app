@@ -5,7 +5,9 @@ require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'II. Accounts' do
-  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org') }
+  include Rails.application.routes.url_helpers
+
+  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key)) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
   let!(:verification) { create(:verification, account: account) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
@@ -43,9 +45,11 @@ resource 'II. Accounts' do
     context '200' do
       let!(:id) { account.managed_account_id }
 
-      example_request 'GET' do
+      example 'GET' do
         explanation 'Returns account data'
 
+        request = build(:api_signed_request, '', api_v1_account_path(id: account.managed_account_id), 'GET', 'example.org')
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -74,29 +78,40 @@ resource 'II. Accounts' do
     end
 
     context '302' do
-      let!(:managed_account_id) { SecureRandom.uuid }
-      let!(:email) { "me+#{SecureRandom.hex(20)}@example.com" }
-      let!(:first_name) { 'Eva' }
-      let!(:last_name) { 'Smith' }
-      let!(:nickname) { "hunter-#{SecureRandom.hex(20)}" }
-      let!(:country) { 'United States of America' }
-      let!(:date_of_birth) { '1990/01/01' }
+      let!(:account_params) do
+        {
+          managed_account_id: SecureRandom.uuid,
+          email: "me+#{SecureRandom.hex(20)}@example.com",
+          first_name: 'Eva',
+          last_name: 'Smith',
+          nickname: "hunter-#{SecureRandom.hex(20)}",
+          date_of_birth: '1990/01/01',
+          country: 'United States of America',
+          ethereum_wallet: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B'
+        }
+      end
 
-      example_request 'CREATE' do
+      example 'CREATE' do
         explanation 'Redirects to account data'
 
+        request = build(:api_signed_request, { account: account_params }, api_v1_accounts_path, 'POST', 'example.org')
+        do_request(request)
         expect(status).to eq(302)
       end
     end
 
     context '400' do
-      let!(:project_id) { project.id }
+      let!(:account_params) do
+        {
+          managed_account_id: SecureRandom.uuid
+        }
+      end
 
-      let!(:managed_account_id) { SecureRandom.uuid }
-
-      example_request 'CREATE – ERROR' do
+      example 'CREATE – ERROR' do
         explanation 'Returns an array of errors'
 
+        request = build(:api_signed_request, { account: account_params }, api_v1_accounts_path, 'POST', 'example.org')
+        do_request(request)
         expect(status).to eq(400)
       end
     end
@@ -130,22 +145,34 @@ resource 'II. Accounts' do
 
     context '302' do
       let!(:id) { account.managed_account_id }
-      let!(:first_name) { 'Alex' }
+      let!(:account_params) do
+        {
+          first_name: 'Alex'
+        }
+      end
 
       example_request 'UPDATE' do
         explanation 'Redirects to account data'
 
+        request = build(:api_signed_request, { account: account_params }, api_v1_account_path(id: account.managed_account_id), 'PUT', 'example.org')
+        do_request(request)
         expect(status).to eq(302)
       end
     end
 
     context '400' do
       let!(:id) { account.managed_account_id }
-      let!(:ethereum_wallet) { '0x' }
+      let!(:account_params) do
+        {
+          ethereum_wallet: '0x'
+        }
+      end
 
-      example_request 'UPDATE – ERROR' do
+      example 'UPDATE – ERROR' do
         explanation 'Returns an array of errors'
 
+        request = build(:api_signed_request, { account: account_params }, api_v1_account_path(id: account.managed_account_id), 'PUT', 'example.org')
+        do_request(request)
         expect(status).to eq(400)
       end
     end
@@ -166,9 +193,11 @@ resource 'II. Accounts' do
         project2.interests.create(account: account, specialty: account.specialty)
       end
 
-      example_request 'INTERESTS' do
+      example 'INTERESTS' do
         explanation 'Returns an array of project ids'
 
+        request = build(:api_signed_request, '', api_v1_account_interests_path(account_id: account.managed_account_id), 'GET', 'example.org')
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -177,7 +206,7 @@ resource 'II. Accounts' do
   post '/api/v1/accounts/:id/interests' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string
-      parameter :project_id, 'project id to interest', required: true, type: :integer
+      parameter :project_id, 'project id to interest', required: true, type: :string
     end
 
     with_options with_example: true do
@@ -188,9 +217,11 @@ resource 'II. Accounts' do
       let!(:id) { account.managed_account_id }
       let!(:project_id) { project.id }
 
-      example_request 'CREATE INTEREST' do
+      example 'CREATE INTEREST' do
         explanation 'Redirects to account interests'
 
+        request = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        do_request(request)
         expect(status).to eq(302)
       end
     end
@@ -203,9 +234,11 @@ resource 'II. Accounts' do
         project.interests.create(account: account, specialty: account.specialty)
       end
 
-      example_request 'CREATE INTEREST – ERROR' do
+      example 'CREATE INTEREST – ERROR' do
         explanation 'Returns an array of errors'
 
+        request = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        do_request(request)
         expect(status).to eq(400)
       end
     end
@@ -214,7 +247,7 @@ resource 'II. Accounts' do
   delete '/api/v1/accounts/:id/interests/:project_id' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string
-      parameter :project_id, 'project id to uninterest', required: true, type: :integer
+      parameter :project_id, 'project id to uninterest', required: true, type: :string
     end
 
     context '302' do
@@ -225,9 +258,11 @@ resource 'II. Accounts' do
         project.interests.create(account: account, specialty: account.specialty)
       end
 
-      example_request 'REMOVE INTEREST' do
+      example 'REMOVE INTEREST' do
         explanation 'Redirects to account interests'
 
+        request = build(:api_signed_request, '', api_v1_account_interest_path(account_id: account.managed_account_id, id: project.id), 'DELETE', 'example.org')
+        do_request(request)
         expect(status).to eq(302)
       end
     end
@@ -255,9 +290,11 @@ resource 'II. Accounts' do
         account.verifications.create(passed: true, max_investment_usd: 10000)
       end
 
-      example_request 'VERIFICATIONS' do
+      example 'VERIFICATIONS' do
         explanation 'Returns an array of verifications'
 
+        request = build(:api_signed_request, '', api_v1_account_verifications_path(account_id: account.managed_account_id), 'GET', 'example.org')
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -281,25 +318,39 @@ resource 'II. Accounts' do
 
     context '302' do
       let!(:id) { account.managed_account_id }
-      let!(:passed) { true }
-      let!(:verification_type) { 'aml-kyc' }
-      let!(:max_investment_usd) { 10000 }
-      let!(:created_at) { 3.days.ago }
 
-      example_request 'CREATE VERIFICATION' do
+      let!(:verification) do
+        {
+          passed: 'true',
+          max_investment_usd: '10000',
+          verification_type: 'aml-kyc',
+          created_at: 3.days.ago.to_s
+        }
+      end
+
+      example 'CREATE VERIFICATION' do
         explanation 'Redirects to account verifications'
 
+        request = build(:api_signed_request, { verification: verification }, api_v1_account_verifications_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        do_request(request)
         expect(status).to eq(302)
       end
     end
 
     context '400' do
       let!(:id) { account.managed_account_id }
-      let!(:max_investment_usd) { 0 }
 
-      example_request 'CREATE VERIFICATION – ERROR' do
+      let!(:verification) do
+        {
+          max_investment_usd: '0'
+        }
+      end
+
+      example 'CREATE VERIFICATION – ERROR' do
         explanation 'Returns an array of errors'
 
+        request = build(:api_signed_request, { verification: verification }, api_v1_account_verifications_path(account_id: account.managed_account_id), 'POST', 'example.org')
+        do_request(request)
         expect(status).to eq(400)
       end
     end
@@ -343,9 +394,11 @@ resource 'II. Accounts' do
         create(:award, account: account, status: :paid, amount: 8, award_type: award_type2)
       end
 
-      example_request 'TOKEN BALANCES' do
+      example 'TOKEN BALANCES' do
         explanation 'Returns an array of token balances'
 
+        request = build(:api_signed_request, '', api_v1_account_token_balances_path(account_id: account.managed_account_id), 'GET', 'example.org')
+        do_request(request)
         expect(status).to eq(200)
       end
     end

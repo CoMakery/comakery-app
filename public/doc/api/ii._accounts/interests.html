@@ -150,10 +150,12 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/122557a8-b9de-4a59-b3ee-83c98d4e112f/interests?page=1</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/a39bfc6d-3d7e-48b4-a226-32f665bd254b/interests?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Fa39bfc6d-3d7e-48b4-a226-32f665bd254b%2Finterests&amp;body[method]=GET&amp;body[nonce]=75f339d04a11619d33052145a9b60e17&amp;body[timestamp]=1579886386&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=eynUxperFZRe2qX7ltfjWPFVIDMy%2FdH49ONjnSSOoCFxx1CFF8suWH%2Fmqd2lQ7lzI8l6qDLDbFVWjy0kA58XCA%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">page: 1</pre>
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/a39bfc6d-3d7e-48b4-a226-32f665bd254b/interests&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;75f339d04a11619d33052145a9b60e17&quot;, &quot;timestamp&quot;=&gt;&quot;1579886386&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;eynUxperFZRe2qX7ltfjWPFVIDMy/dH49ONjnSSOoCFxx1CFF8suWH/mqd2lQ7lzI8l6qDLDbFVWjy0kA58XCA==&quot;}</pre>
 
 
 
@@ -161,8 +163,8 @@ table th, table td {
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 2
-ETag: W/&quot;ac1d4302616ee56f9081dccc075b4592&quot;
-Last-Modified: Thu, 16 Jan 2020 22:02:50 GMT</pre>
+ETag: W/&quot;7bb71fc64e28426d2bbad770e152fa9b&quot;
+Last-Modified: Fri, 24 Jan 2020 17:19:46 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>

@@ -18,7 +18,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
 
     award.name = award.source.capitalize
     award.issuer = project.account
-    award.account = whitelabel_mission.managed_accounts.find_by!(managed_account_id: transfer_params[:account_id])
+    award.account = whitelabel_mission.managed_accounts.find_by!(managed_account_id: params.fetch(:body, {}).fetch(:data, {}).fetch(:transfer, {}).fetch(:account_id, {}))
     award.status = :accepted
 
     award.why = '—'

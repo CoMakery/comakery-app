@@ -12,14 +12,14 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
       total_amount: '20.00',
       source: 'bought',
       description: 'investor',
-      account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id
+      account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id.to_s
     }
   end
 
   let(:invalid_attributes) do
     {
-      amount: -1.00,
-      account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id
+      amount: '-1.00',
+      account_id: create(:account, managed_mission: active_whitelabel_mission).managed_account_id.to_s
     }
   end
 
@@ -27,12 +27,19 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
 
   describe 'GET #index' do
     it 'returns project transfers' do
-      get :index, params: { project_id: project.id, format: :json }, session: valid_session
+      params = build(:api_signed_request, '', api_v1_project_transfers_path(project_id: project.id), 'GET')
+      params[:project_id] = project.id
+      params[:format] = :json
+
+      get :index, params: params, session: valid_session
       expect(response).to be_successful
     end
 
     it 'applies pagination' do
-      get :index, params: { project_id: project.id, format: :json, page: 9999 }, session: valid_session
+      params = build(:api_signed_request, '', api_v1_project_transfers_path(project_id: project.id), 'GET')
+      params.merge!(project_id: project.id, format: :json, page: 9999)
+
+      get :index, params: params, session: valid_session
       expect(response).to be_successful
       expect(assigns[:transfers]).to eq([])
     end
@@ -40,7 +47,10 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
 
   describe 'GET #show' do
     it 'returns a success response' do
-      get :show, params: { project_id: project.id, id: transfer.id, format: :json }, session: valid_session
+      params = build(:api_signed_request, '', api_v1_project_transfer_path(id: transfer.id, project_id: project.id), 'GET')
+      params.merge!(project_id: project.id, id: transfer.id, format: :json)
+
+      get :show, params: params, session: valid_session
       expect(response).to be_successful
     end
   end
@@ -49,19 +59,28 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
     context 'with valid params' do
       it 'creates a new transfer' do
         expect do
-          post :create, params: { project_id: project.id, transfer: valid_attributes }, session: valid_session
+          params = build(:api_signed_request, { transfer: valid_attributes }, api_v1_project_transfers_path(project_id: project.id), 'POST')
+          params[:project_id] = project.id
+
+          post :create, params: params, session: valid_session
         end.to change(project.awards.completed, :count).by(1)
       end
 
       it 'redirects to the created transfer' do
-        post :create, params: { project_id: project.id, transfer: valid_attributes }, session: valid_session
+        params = build(:api_signed_request, { transfer: valid_attributes }, api_v1_project_transfers_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params, session: valid_session
         expect(response).to redirect_to(api_v1_project_transfer_path(project, project.awards.completed.last))
       end
     end
 
     context 'with invalid params' do
       it 'renders an error' do
-        post :create, params: { project_id: project.id, transfer: invalid_attributes }, session: valid_session
+        params = build(:api_signed_request, { transfer: invalid_attributes }, api_v1_project_transfers_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params, session: valid_session
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
@@ -69,7 +88,10 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
 
     context 'with invalid amount precision' do
       it 'renders an error' do
-        post :create, params: { project_id: project.id, transfer: valid_attributes.merge(amount: '1') }, session: valid_session
+        params = build(:api_signed_request, { transfer: valid_attributes.merge(amount: '1') }, api_v1_project_transfers_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params, session: valid_session
         expect(response).not_to be_successful
         expect(assigns[:errors].messages).to include(amount: ['has incorrect precision (should be 2)'])
       end
@@ -77,7 +99,10 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
 
     context 'with invalid quantity precision' do
       it 'renders an error' do
-        post :create, params: { project_id: project.id, transfer: valid_attributes.merge(quantity: '1.0124141') }, session: valid_session
+        params = build(:api_signed_request, { transfer: valid_attributes.merge(quantity: '1.0124141') }, api_v1_project_transfers_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params, session: valid_session
         expect(response).not_to be_successful
         expect(assigns[:errors].messages).to include(quantity: ['has incorrect precision (should be 2)'])
       end
@@ -85,7 +110,10 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
 
     context 'with invalid total_amount precision' do
       it 'renders an error' do
-        post :create, params: { project_id: project.id, transfer: valid_attributes.merge(total_amount: '20') }, session: valid_session
+        params = build(:api_signed_request, { transfer: valid_attributes.merge(total_amount: '20') }, api_v1_project_transfers_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params, session: valid_session
         expect(response).not_to be_successful
         expect(assigns[:errors].messages).to include(total_amount: ['has incorrect precision (should be 2)'])
       end
@@ -93,7 +121,10 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
 
     context 'with invalid total_amount value' do
       it 'renders an error' do
-        post :create, params: { project_id: project.id, transfer: valid_attributes.merge(total_amount: '21.00') }, session: valid_session
+        params = build(:api_signed_request, { transfer: valid_attributes.merge(total_amount: '21.00') }, api_v1_project_transfers_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params, session: valid_session
         expect(response).not_to be_successful
         expect(assigns[:errors].messages).to include(total_amount: ["doesn't equal quantity times amount, possible multiplication error"])
       end
@@ -103,14 +134,22 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
   describe 'DELETE #destroy' do
     it 'cancels the requested transfer' do
       expect do
-        delete :destroy, params: { project_id: project.id, id: transfer.id }, session: valid_session
+        params = build(:api_signed_request, '', api_v1_project_transfer_path(project_id: project.id, id: transfer.id), 'DELETE')
+        params[:project_id] = project.id
+        params[:id] = transfer.id
+
+        delete :destroy, params: params, session: valid_session
       end.to change(project.awards.where(status: :cancelled), :count).by(1)
 
       expect(transfer.reload.cancelled?).to be_truthy
     end
 
     it 'redirects to the cancelled transfer' do
-      delete :destroy, params: { project_id: project.id, id: transfer.id }, session: valid_session
+      params = build(:api_signed_request, '', api_v1_project_transfer_path(project_id: project.id, id: transfer.id), 'DELETE')
+      params[:project_id] = project.id
+      params[:id] = transfer.id
+
+      delete :destroy, params: params, session: valid_session
       expect(response).to redirect_to(api_v1_project_transfer_path(project, transfer))
     end
   end

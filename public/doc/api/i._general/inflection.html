@@ -125,8 +125,11 @@ table th, table td {
             <pre class="request headers">Key-Inflection: dash</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects</pre>
+          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=cf57504c06c7c331ec3e8e0f6214635d&amp;body[timestamp]=1579886384&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=ZuwwcSGPiDtACzQpIag%2FMcLQt%2B2o3CdHvFxUr0D3IMg0qGisDOX78U7d3sx%2FD3gP9mzcPFB%2Bol%2FNEFk%2FyqPkCQ%3D%3D</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;cf57504c06c7c331ec3e8e0f6214635d&quot;, &quot;timestamp&quot;=&gt;&quot;1579886384&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;ZuwwcSGPiDtACzQpIag/McLQt+2o3CdHvFxUr0D3IMg0qGisDOX78U7d3sx/D3gP9mzcPFB+ol/NEFk/yqPkCQ==&quot;}</pre>
 
 
 
@@ -134,8 +137,8 @@ table th, table td {
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 1
-ETag: W/&quot;bd4ca77929ec68da348332763a4cbbc6&quot;
-Last-Modified: Thu, 16 Jan 2020 22:02:49 GMT</pre>
+ETag: W/&quot;c42cdb399bbeeec631420fd446ba2eb7&quot;
+Last-Modified: Fri, 24 Jan 2020 17:19:44 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -144,23 +147,23 @@ Last-Modified: Thu, 16 Jan 2020 22:02:49 GMT</pre>
     &quot;id&quot;: 3,
     &quot;title&quot;: &quot;Uber for Cats&quot;,
     &quot;description&quot;: &quot;We are going to build amazing&quot;,
-    &quot;image-url&quot;: &quot;/attachments/91dad58071ab28da875932d813a2616f6c634a43/store/fill/1000/1000/d4c544a46144538e7fca873d3724c64988148a0846e1f741148d0d8868f6/image.png&quot;,
-    &quot;created-at&quot;: &quot;2020-01-16T22:02:49.288Z&quot;,
-    &quot;updated-at&quot;: &quot;2020-01-16T22:02:49.288Z&quot;,
+    &quot;image-url&quot;: &quot;/attachments/b74fdff19bfd10c39263425ea1473605d195184d/store/fill/1000/1000/b38fff2b43748b5f9dfa66b29c9928c6ffccc2b5b17a1d7253857a29d945/image.png&quot;,
+    &quot;created-at&quot;: &quot;2020-01-24T17:19:44.421Z&quot;,
+    &quot;updated-at&quot;: &quot;2020-01-24T17:19:44.421Z&quot;,
     &quot;account-id&quot;: null,
     &quot;admin-ids&quot;: [
 
     ],
     &quot;token&quot;: {
       &quot;id&quot;: 5,
-      &quot;name&quot;: &quot;ComakeryToken-7a4624abcd95842de1efeffb2529b1610a31d0ab&quot;,
-      &quot;symbol&quot;: &quot;XYZ7f7122b92a1905bdaafecdd0675bb28bb65107eb&quot;,
+      &quot;name&quot;: &quot;ComakeryToken-3465e66a3af1ea7fdc3b4b49ef87bdd719707588&quot;,
+      &quot;symbol&quot;: &quot;XYZ39707add3f9946c3a23a138797f0abc0838cdac6&quot;,
       &quot;network&quot;: &quot;ropsten&quot;,
       &quot;contract-address&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
       &quot;decimal-places&quot;: 18,
-      &quot;logo-url&quot;: &quot;/attachments/95a5b360f9656e2afac8e592144c0926d795b454/store/fill/100/100/11e5837fa8487fa1262058cc14cb4774f44822e8410bbc301ab08cc3bdaa/dummy_image.png&quot;,
-      &quot;created-at&quot;: &quot;2020-01-16T22:02:49.243Z&quot;,
-      &quot;updated-at&quot;: &quot;2020-01-16T22:02:49.293Z&quot;
+      &quot;logo-url&quot;: &quot;/attachments/7c168829efe329511e9bdd9f649bd6430e32da2d/store/fill/100/100/24abf8adb24e1e12b52b3f1e6635e5e6063ecb00fa14caa076f5ed8eb47a/dummy_image.png&quot;,
+      &quot;created-at&quot;: &quot;2020-01-24T17:19:44.378Z&quot;,
+      &quot;updated-at&quot;: &quot;2020-01-24T17:19:44.426Z&quot;
     }
   }
 ]</pre>

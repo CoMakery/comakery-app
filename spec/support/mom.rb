@@ -309,10 +309,10 @@ class Mom
     'eodjQfDLTyNCBnz+MORHW0lOKWZnCTyPDTFcwAdVRyQ7vNMfjEecPWNEqF4FOuk03bgWDV10vwMcqL/OBUJWkA=='
   end
 
-  def api_signed_request(data, path, method)
+  def api_signed_request(data, path, method, host = 'test.host')
     Comakery::APISignature.new('body' => {
-      'data' => data,
-      'url' => "http://test.host#{path}",
+      'data' => data.is_a?(Hash) ? data.deep_stringify_keys : data,
+      'url' => "http://#{host}#{path}",
       'method' => method
     }).sign(build(:api_private_key))
   end
