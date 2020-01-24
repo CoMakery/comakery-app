@@ -134,3 +134,5 @@ gem 'api-pagination', '~> 4.8'
 gem 'rack-attack', '~> 6.2'
 
 gem 'ed25519', '~> 1.2'
+
+gem 'json-canonicalization', '~> 0.2.0'

@@ -28,7 +28,7 @@ class Api::V1::VerificationsController < Api::V1::ApiController
     end
 
     def verification_params
-      params.fetch(:verification, {}).permit(
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:verification, {}).permit(
         :passed,
         :verification_type,
         :max_investment_usd,

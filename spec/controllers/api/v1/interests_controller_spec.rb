@@ -9,12 +9,19 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
 
   describe 'GET #index' do
     it 'returns account interests' do
-      get :index, params: { account_id: account.managed_account_id, format: :json }, session: valid_session
+      params = build(:api_signed_request, '', api_v1_account_interests_path(account_id: account.managed_account_id), 'GET')
+      params[:account_id] = account.managed_account_id
+      params[:format] = :json
+
+      get :index, params: params, session: valid_session
       expect(response).to be_successful
     end
 
     it 'applies pagination' do
-      get :index, params: { account_id: account.managed_account_id, format: :json, page: 9999 }, session: valid_session
+      params = build(:api_signed_request, '', api_v1_account_interests_path(account_id: account.managed_account_id), 'GET')
+      params.merge!(account_id: account.managed_account_id, format: :json, page: 9999)
+
+      get :index, params: params, session: valid_session
       expect(response).to be_successful
       expect(assigns[:interests]).to eq([])
     end
@@ -23,13 +30,19 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
   describe 'POST #create' do
     context 'with valid params' do
       it 'interests the requested project' do
-        post :create, params: { account_id: account.managed_account_id, project_id: project.id }, session: valid_session
+        params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST')
+        params[:account_id] = account.managed_account_id
+
+        post :create, params: params, session: valid_session
         project.reload
         expect(project.interested).to include(account)
       end
 
       it 'redirects to the api_v1_account_interests' do
-        post :create, params: { account_id: account.managed_account_id, project_id: project.id }, session: valid_session
+        params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST')
+        params[:account_id] = account.managed_account_id
+
+        post :create, params: params, session: valid_session
         expect(response).to redirect_to(api_v1_account_interests_path)
       end
     end
@@ -40,7 +53,10 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
       end
 
       it 'renders an error' do
-        post :create, params: { account_id: account.managed_account_id, project_id: project.id }, session: valid_session
+        params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST')
+        params[:account_id] = account.managed_account_id
+
+        post :create, params: params, session: valid_session
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
@@ -54,13 +70,21 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
       end
 
       it 'uninterests the requested project' do
-        delete :destroy, params: { account_id: account.managed_account_id, id: project.id }, session: valid_session
+        params = build(:api_signed_request, '', api_v1_account_interest_path(account_id: account.managed_account_id, id: project.id), 'DELETE')
+        params[:account_id] = account.managed_account_id
+        params[:id] = project.id
+
+        delete :destroy, params: params, session: valid_session
         project.reload
         expect(project.interested).not_to include(account)
       end
 
       it 'redirects to the api_v1_account_interests' do
-        delete :destroy, params: { account_id: account.managed_account_id, id: project.id }, session: valid_session
+        params = build(:api_signed_request, '', api_v1_account_interest_path(account_id: account.managed_account_id, id: project.id), 'DELETE')
+        params[:account_id] = account.managed_account_id
+        params[:id] = project.id
+
+        delete :destroy, params: params, session: valid_session
         expect(response).to redirect_to(api_v1_account_interests_path)
       end
     end

@@ -273,6 +273,7 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.2.0)
+    json-canonicalization (0.2.0)
     jwt (2.2.1)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
@@ -672,6 +673,7 @@ DEPENDENCIES
   jbuilder (~> 2.9)
   jquery-rails
   jquery-ui-rails
+  json-canonicalization (~> 0.2.0)
   kaminari
   letter_opener
   loofah (>= 2.2.3)

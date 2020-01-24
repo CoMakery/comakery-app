@@ -289,8 +289,11 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/35</pre>
+          <pre class="request route highlight">GET /api/v1/projects/35?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F35&amp;body[method]=GET&amp;body[nonce]=3260e9fd746a46809cee941144395689&amp;body[timestamp]=1579886389&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=HlY1ehzYMj9cl3lMGgqdlzM2JN%2FwjgdUER2lYhB9eXdFsvDJb6xMkZ28utn937Z40llx4ayFQDM1lnwpCMy4BA%3D%3D</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/35&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;3260e9fd746a46809cee941144395689&quot;, &quot;timestamp&quot;=&gt;&quot;1579886389&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;HlY1ehzYMj9cl3lMGgqdlzM2JN/wjgdUER2lYhB9eXdFsvDJb6xMkZ28utn937Z40llx4ayFQDM1lnwpCMy4BA==&quot;}</pre>
 
 
 
@@ -298,8 +301,8 @@ table th, table td {
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 2
-ETag: W/&quot;3bfc8b251ffcd6511b5533780c951a0d&quot;
-Last-Modified: Thu, 16 Jan 2020 22:02:54 GMT</pre>
+ETag: W/&quot;4121b3d0f2e1ce2d6527380af960e5ac&quot;
+Last-Modified: Fri, 24 Jan 2020 17:19:48 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -307,25 +310,25 @@ Last-Modified: Thu, 16 Jan 2020 22:02:54 GMT</pre>
   &quot;id&quot;: 35,
   &quot;title&quot;: &quot;Uber for Cats&quot;,
   &quot;description&quot;: &quot;We are going to build amazing&quot;,
-  &quot;imageUrl&quot;: &quot;/attachments/f459336cfb9a8ccd0ff56d7b732a894129df572b/store/fill/1000/1000/befcaaac01a98b1fdc3d48f2cc0254ad52c4c025e777999be211b3e8d21a/image.png&quot;,
-  &quot;createdAt&quot;: &quot;2020-01-16T22:02:54.088Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-01-16T22:02:54.088Z&quot;,
-  &quot;accountId&quot;: &quot;2c5c005b-40a0-4a02-bc84-3b295d8b83cd&quot;,
+  &quot;imageUrl&quot;: &quot;/attachments/e6998cd75ce027976abbb8efac65370b9d0b0a82/store/fill/1000/1000/92fe593d39a308134fc959d4f1f75c44ce40fbc61f3f12f28570bbcce75e/image.png&quot;,
+  &quot;createdAt&quot;: &quot;2020-01-24T17:19:48.874Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-01-24T17:19:48.874Z&quot;,
+  &quot;accountId&quot;: &quot;d7bf302b-bb71-496e-8ff0-39477c28dc2a&quot;,
   &quot;adminIds&quot;: [
-    &quot;1d25abba-4164-4813-85e9-a5113410a9ba&quot;,
-    &quot;8324279e-6f51-4029-b620-5c588ada67c6&quot;,
-    &quot;36156f29-169d-489c-8047-d05c2959342e&quot;
+    &quot;6df00863-0629-413d-acf5-a772a4162b6c&quot;,
+    &quot;ea3f0f6d-5459-4674-a6f1-f5db0b31e8a5&quot;,
+    &quot;75851fb7-7124-4a3a-95db-358fca29bb57&quot;
   ],
   &quot;token&quot;: {
     &quot;id&quot;: 43,
-    &quot;name&quot;: &quot;ComakeryToken-d9ff13beece258b372cb4dc9b8a7278f4ee3f895&quot;,
-    &quot;symbol&quot;: &quot;XYZf91711f71d2081e7af8c4ec5da032c9125cf3148&quot;,
+    &quot;name&quot;: &quot;ComakeryToken-8c4472c8b356bf626dcd45a69ffbd50a06608afa&quot;,
+    &quot;symbol&quot;: &quot;XYZ932049b10eede8617dc8cf645ddb9ac33ae25f8a&quot;,
     &quot;network&quot;: &quot;ropsten&quot;,
     &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
     &quot;decimalPlaces&quot;: 18,
-    &quot;logoUrl&quot;: &quot;/attachments/a1ccd2e788e3eabd5fa6d79fe6514c1a607ebc0e/store/fill/100/100/8c45218ef5fbec0f58b236ed0b7cd9a349ca951ac6e42dbbd37b8d65ed9d/dummy_image.png&quot;,
-    &quot;createdAt&quot;: &quot;2020-01-16T22:02:54.022Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-16T22:02:54.094Z&quot;
+    &quot;logoUrl&quot;: &quot;/attachments/aa2c50ffbeada8437f6e644468c6f7485ea8c926/store/fill/100/100/335b1f69f4ed3e3a5039cb94d0803ec66627a3be6d90ab41dadce3bf6045/dummy_image.png&quot;,
+    &quot;createdAt&quot;: &quot;2020-01-24T17:19:48.811Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-24T17:19:48.879Z&quot;
   }
 }</pre>
       </div>

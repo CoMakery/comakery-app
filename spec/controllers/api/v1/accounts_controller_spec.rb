@@ -26,7 +26,11 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
 
   describe 'GET #show' do
     it 'returns account info by managed_account_id' do
-      get :show, params: { id: account.managed_account_id, format: :json }, session: valid_session
+      params = build(:api_signed_request, '', api_v1_account_path(id: account.managed_account_id), 'GET')
+      params[:id] = account.managed_account_id
+      params[:format] = :json
+
+      get :show, params: params, session: valid_session
       expect(response).to be_successful
     end
   end
@@ -35,19 +39,25 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
     context 'with valid params' do
       it 'creates a new managed account' do
         expect do
-          post :create, params: { account: valid_attributes }, session: valid_session
+          params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
+
+          post :create, params: params, session: valid_session
         end.to change(active_whitelabel_mission.managed_accounts, :count).by(1)
       end
 
       it 'redirects to the created account' do
-        post :create, params: { account: valid_attributes }, session: valid_session
+        params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
+
+        post :create, params: params, session: valid_session
         expect(response).to redirect_to(api_v1_account_path(id: Account.last.managed_account_id))
       end
     end
 
     context 'with invalid params' do
       it 'renders an error' do
-        post :create, params: { account: invalid_attributes }, session: valid_session
+        params = build(:api_signed_request, { account: invalid_attributes }, api_v1_accounts_path, 'POST')
+
+        post :create, params: params, session: valid_session
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
@@ -57,20 +67,29 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
   describe 'PUT #update' do
     context 'with valid params' do
       it 'updates the requested account' do
-        put :update, params: { id: account.managed_account_id, account: valid_attributes }, session: valid_session
+        params = build(:api_signed_request, { account: valid_attributes }, api_v1_account_path(id: account.managed_account_id), 'PUT')
+        params[:id] = account.managed_account_id
+
+        put :update, params: params, session: valid_session
         account.reload
         expect(account.first_name).to eq(valid_attributes[:first_name])
       end
 
       it 'redirects to the api_v1_account_path' do
-        put :update, params: { id: account.managed_account_id, account: valid_attributes }, session: valid_session
+        params = build(:api_signed_request, { account: valid_attributes }, api_v1_account_path(id: account.managed_account_id), 'PUT')
+        params[:id] = account.managed_account_id
+
+        put :update, params: params, session: valid_session
         expect(response).to redirect_to(api_v1_account_path)
       end
     end
 
     context 'with invalid params' do
       it 'renders an error' do
-        put :update, params: { id: account.managed_account_id, account: invalid_attributes }, session: valid_session
+        params = build(:api_signed_request, { account: invalid_attributes }, api_v1_account_path(id: account.managed_account_id), 'PUT')
+        params[:id] = account.managed_account_id
+
+        put :update, params: params, session: valid_session
         expect(response).not_to be_successful
         expect(assigns[:errors]).not_to be_nil
       end
@@ -79,7 +98,11 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
 
   describe 'GET #token_balances' do
     it 'returns token_balances by managed_account_id' do
-      get :token_balances, params: { account_id: account.managed_account_id, format: :json }, session: valid_session
+      params = build(:api_signed_request, '', api_v1_account_token_balances_path(account_id: account.managed_account_id), 'GET')
+      params[:account_id] = account.managed_account_id
+      params[:format] = :json
+
+      get :token_balances, params: params, session: valid_session
       expect(response).to be_successful
     end
   end

@@ -122,11 +122,14 @@ table th, table td {
           <h3>Request</h3>
 
             <h4>Headers</h4>
-            <pre class="request headers">If-Modified-Since: Thu, 16 Jan 2020 22:02:48 GMT</pre>
+            <pre class="request headers">If-Modified-Since: Fri, 24 Jan 2020 17:19:44 GMT</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects</pre>
+          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=7ae4d1b3ac9aa7256cb8fb0963419045&amp;body[timestamp]=1579886384&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=KO4Qu%2FeDPI9xZdLF1%2FxhOsmiXX9VMDVa7%2BS60NXmni2ChixOV4xbusJGx26VExT3Qge9uwzL0TxCq0UY%2BRTRDQ%3D%3D</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;7ae4d1b3ac9aa7256cb8fb0963419045&quot;, &quot;timestamp&quot;=&gt;&quot;1579886384&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;KO4Qu/eDPI9xZdLF1/xhOsmiXX9VMDVa7+S60NXmni2ChixOV4xbusJGx26VExT3Qge9uwzL0TxCq0UY+RTRDQ==&quot;}</pre>
 
 
 
@@ -134,8 +137,8 @@ table th, table td {
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 1
-ETag: W/&quot;038498f0c0929512b97e5938bb9c22c0&quot;
-Last-Modified: Thu, 16 Jan 2020 22:02:48 GMT</pre>
+ETag: W/&quot;7a84c1ac15fe5d754572017a7c4216bf&quot;
+Last-Modified: Fri, 24 Jan 2020 17:19:44 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">304 Not Modified</pre>
       </div>

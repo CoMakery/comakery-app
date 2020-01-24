@@ -193,10 +193,12 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/bc96bdf1-5404-448d-9e96-2ecc5b2f97ba/verifications?page=1</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/3cab3842-9708-4610-9bc4-6da5f068fe2b/verifications?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F3cab3842-9708-4610-9bc4-6da5f068fe2b%2Fverifications&amp;body[method]=GET&amp;body[nonce]=287512b86038dc03854b2d9eb7ef80da&amp;body[timestamp]=1579886387&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=pdFzEndi50gCgaq1poOMuRyQf8mp1jBW%2BKgchAunoFXGpckQJo8jbKzY6h3oDDN4TacuEkCQQKXEV6mkz4IRBA%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">page: 1</pre>
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/3cab3842-9708-4610-9bc4-6da5f068fe2b/verifications&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;287512b86038dc03854b2d9eb7ef80da&quot;, &quot;timestamp&quot;=&gt;&quot;1579886387&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;pdFzEndi50gCgaq1poOMuRyQf8mp1jBW+KgchAunoFXGpckQJo8jbKzY6h3oDDN4TacuEkCQQKXEV6mkz4IRBA==&quot;}</pre>
 
 
 
@@ -204,8 +206,8 @@ table th, table td {
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 3
-ETag: W/&quot;f53501a5daec685330a086a08af23d86&quot;
-Last-Modified: Thu, 16 Jan 2020 22:02:51 GMT</pre>
+ETag: W/&quot;528e3e6b7492ef94437f0e0f3ac221d6&quot;
+Last-Modified: Fri, 24 Jan 2020 17:19:47 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
@@ -214,22 +216,22 @@ Last-Modified: Thu, 16 Jan 2020 22:02:51 GMT</pre>
     &quot;passed&quot;: true,
     &quot;verificationType&quot;: &quot;aml-kyc&quot;,
     &quot;maxInvestmentUsd&quot;: 1000000,
-    &quot;createdAt&quot;: &quot;2020-01-16T22:02:51.834Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-16T22:02:51.834Z&quot;
+    &quot;createdAt&quot;: &quot;2020-01-24T17:19:47.047Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-24T17:19:47.047Z&quot;
   },
   {
     &quot;passed&quot;: false,
     &quot;verificationType&quot;: &quot;aml-kyc&quot;,
     &quot;maxInvestmentUsd&quot;: 100000,
-    &quot;createdAt&quot;: &quot;2020-01-16T22:02:51.983Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-16T22:02:51.983Z&quot;
+    &quot;createdAt&quot;: &quot;2020-01-24T17:19:47.191Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-24T17:19:47.191Z&quot;
   },
   {
     &quot;passed&quot;: true,
     &quot;verificationType&quot;: &quot;aml-kyc&quot;,
     &quot;maxInvestmentUsd&quot;: 10000,
-    &quot;createdAt&quot;: &quot;2020-01-16T22:02:51.997Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-16T22:02:51.997Z&quot;
+    &quot;createdAt&quot;: &quot;2020-01-24T17:19:47.204Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-24T17:19:47.204Z&quot;
   }
 ]</pre>
       </div>

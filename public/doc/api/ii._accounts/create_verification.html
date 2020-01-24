@@ -193,18 +193,18 @@ table th, table td {
 
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/382d87b2-b8dc-45ae-b943-247047c555de/verifications</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/a5c24016-5287-419e-ae5f-67a8a7f743bb/verifications</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">verification[passed]=true&verification[verification_type]=aml-kyc&verification[max_investment_usd]=10000&verification[created_at]=2020-01-13+22%3A02%3A52+UTC</pre>
+            <pre class="request body">body[data][verification][passed]=true&body[data][verification][max_investment_usd]=10000&body[data][verification][verification_type]=aml-kyc&body[data][verification][created_at]=2020-01-21+17%3A19%3A47+UTC&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Fa5c24016-5287-419e-ae5f-67a8a7f743bb%2Fverifications&body[method]=POST&body[nonce]=0ab25824354945ac93b4943c7f8afdda&body[timestamp]=1579886387&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=JZy8qcSmPBPcCJXACSvapK%2Fp%2BGZZoNGtN5aueAfiN74uN0gqJ4ajtE2wr8XdultQ5T78Zn70x3rtV8nWzj0zDg%3D%3D</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/382d87b2-b8dc-45ae-b943-247047c555de/verifications&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/a5c24016-5287-419e-ae5f-67a8a7f743bb/verifications&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>

@@ -9,7 +9,7 @@ class Api::V1::InterestsController < Api::V1::ApiController
     interest = Interest.create(
       account: account,
       specialty: account.specialty,
-      project: project_scope.find(params[:project_id])
+      project: project_scope.find(params.fetch(:body, {}).fetch(:data, {}).fetch(:project_id, nil))
     )
 
     if interest.save

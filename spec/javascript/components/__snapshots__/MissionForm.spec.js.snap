@@ -773,6 +773,84 @@ exports[`MissionForm renders correctly without props 1`] = `
                   </div>
                 </InputField>
               </InputFieldWhiteDark>
+              <InputFieldWhiteDark
+                eventHandler={[Function]}
+                name="whitelabelApiPublicKey"
+                symbolLimit={140}
+                title="Whitelabel API Public Key"
+                value=""
+              >
+                <InputField
+                  checkboxText=""
+                  checked={false}
+                  className="input-field__white__dark"
+                  copyOnClick={false}
+                  disabled={false}
+                  errorText=""
+                  eventHandler={[Function]}
+                  imgInputRef={null}
+                  imgPreviewDimensions="40x40"
+                  imgPreviewUrl=""
+                  imgRequirements=""
+                  imgVerifier={[Function]}
+                  max=""
+                  min=""
+                  name="whitelabelApiPublicKey"
+                  pattern=".*"
+                  placeholder="Please enter value"
+                  readOnly={false}
+                  recommended={false}
+                  required={false}
+                  selectEntries={Array []}
+                  step=""
+                  symbolLimit={140}
+                  title="Whitelabel API Public Key"
+                  type="text"
+                  value=""
+                >
+                  <div
+                    className="input-field input-field__white__dark"
+                  >
+                    <div
+                      className="input-field--title"
+                    >
+                      <span
+                        className="input-field--title--title"
+                      >
+                        Whitelabel API Public Key
+                      </span>
+                      <span
+                        className="input-field--title--required"
+                      >
+                        optional
+                      </span>
+                      <span
+                        className="input-field--title--counter"
+                      >
+                        0
+                        /
+                        140
+                      </span>
+                    </div>
+                    <div
+                      className="input-field--content"
+                    >
+                      <input
+                        className="input-field--content__text"
+                        name="whitelabelApiPublicKey"
+                        onChange={[Function]}
+                        onClick={null}
+                        pattern=".*"
+                        placeholder="Please enter value"
+                        readOnly={false}
+                        required={false}
+                        type="text"
+                        value=""
+                      />
+                    </div>
+                  </div>
+                </InputField>
+              </InputFieldWhiteDark>
               <InputFieldUploadFile
                 eventHandler={[Function]}
                 imgInputRef={

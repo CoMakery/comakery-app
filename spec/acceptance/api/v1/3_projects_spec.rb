@@ -1,11 +1,12 @@
 # Rubocop gives false positives on empty example groups with rspec_api_documentation DSL
-# rubocop:disable RSpec/EmptyExampleGroup
 
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'III. Projects' do
-  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org') }
+  include Rails.application.routes.url_helpers
+
+  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key)) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token), account: create(:account, managed_mission: active_whitelabel_mission)) }
   let!(:project2) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token), account: create(:account, managed_mission: active_whitelabel_mission)) }
 
@@ -23,9 +24,11 @@ resource 'III. Projects' do
     context '200' do
       let!(:page) { 1 }
 
-      example_request 'INDEX' do
+      example 'INDEX' do
         explanation 'Returns an array of projects. See GET for response fields description.'
 
+        request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
+        do_request(request)
         expect(status).to eq(200)
       end
     end
@@ -61,9 +64,11 @@ resource 'III. Projects' do
     context '200' do
       let!(:id) { project.id }
 
-      example_request 'GET' do
+      example 'GET' do
         explanation 'Returns data for a single project.'
 
+        request = build(:api_signed_request, '', api_v1_project_path(id: project.id), 'GET', 'example.org')
+        do_request(request)
         expect(status).to eq(200)
       end
     end
