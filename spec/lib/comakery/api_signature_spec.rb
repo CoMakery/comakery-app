@@ -5,7 +5,7 @@ describe Comakery::APISignature do
   let(:public_key) { 'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=' }
   let(:stubbed_time) { 1579619468 }
   let(:stubbed_nonce) { '7a8e8481d2c99e6fac9a1a21b181f4b6' }
-  let(:stubbed_sign) { 'hib/qYOz8HgH+mzQC4SrZ4WgFcPCqEpg55FSnNGKElB9lFaM84wsVDOuhFx5guXdgGcxMkhLqDgynkTsAscCAA==' }
+  let(:stubbed_sign) { 'WVsm4LkQIXurcPeFkhI3RWcgHWecys5vTA/RP5S+2bSyvs1g60FQfMr220dwoss0dUM5hFvJha9U3Gt3tGkRAg==' }
   let(:stubbed_url) { 'https://example.org/' }
   let(:stubbed_method) { 'GET' }
 
@@ -26,7 +26,7 @@ describe Comakery::APISignature do
         'url' => stubbed_url,
         'method' => stubbed_method,
         'nonce' => stubbed_nonce,
-        'timestamp' => stubbed_time
+        'timestamp' => stubbed_time.to_s
       },
       'proof' => {
         'type' => 'Ed25519Signature2018',
@@ -49,7 +49,7 @@ describe Comakery::APISignature do
     end
 
     it 'appends timestamp' do
-      expect(signed_request['body']['timestamp']).to eq(stubbed_time)
+      expect(signed_request['body']['timestamp']).to eq(stubbed_time.to_s)
     end
 
     it 'creates proof with correct signature' do
