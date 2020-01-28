@@ -2,6 +2,7 @@ class Api::V1::ApiController < ActionController::Base
   include Rails::Pagination
 
   before_action :allow_only_whitelabel
+  before_action :verify_public_key
   before_action :verify_signature
 
   def allow_only_whitelabel
@@ -22,6 +23,14 @@ class Api::V1::ApiController < ActionController::Base
 
   def project_scope
     @project_scope ||= (whitelabel_mission ? whitelabel_mission.projects : nil)
+  end
+
+  def verify_public_key
+    if @whitelabel_mission.whitelabel_api_public_key != request.headers['API-Public-Key']
+      @errors = { authentication: 'Invalid public key' }
+
+      render 'api/v1/error.json', status: 401
+    end
   end
 
   def verify_signature

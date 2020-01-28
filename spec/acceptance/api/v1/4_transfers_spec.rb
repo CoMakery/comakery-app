@@ -14,6 +14,8 @@ resource 'IV. Transfers' do
 
   explanation 'Create and cancel transfers, retrieve transfer data.'
 
+  header 'API-Public-Key', build(:api_public_key)
+
   get '/api/v1/projects/:project_id/transfers' do
     with_options with_example: true do
       parameter :project_id, 'project id', required: true, type: :integer

@@ -10,6 +10,22 @@ describe Api::V1::ApiController do
     end
   end
 
+  let(:valid_headers) do
+    {
+      'API-Public-Key' => build(:api_public_key)
+    }
+  end
+
+  let(:invalid_headers) do
+    {
+      'API-Public-Key' => '12345'
+    }
+  end
+
+  before do
+    request.headers.merge! valid_headers
+  end
+
   describe 'allow_only_whitelabel' do
     it 'available for whitelabel requests' do
       create(:active_whitelabel_mission)
@@ -21,6 +37,16 @@ describe Api::V1::ApiController do
     it 'unavailable for non-whitelabel requests' do
       get :index
       expect(response.status).to eq(404)
+    end
+  end
+
+  describe 'verify_public_key' do
+    it 'denies requests with incorrect public key' do
+      create(:active_whitelabel_mission)
+      request.headers.merge! invalid_headers
+
+      get :index, params: build(:api_signed_request, '', '/dummy_api', 'GET')
+      expect(response.status).to eq(401)
     end
   end
 

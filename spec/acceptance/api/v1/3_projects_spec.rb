@@ -16,6 +16,8 @@ resource 'III. Projects' do
 
   explanation 'Retrieve projects data.'
 
+  header 'API-Public-Key', build(:api_public_key)
+
   get '/api/v1/projects' do
     with_options with_example: true do
       parameter :page, 'page number', type: :integer

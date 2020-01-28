@@ -111,10 +111,10 @@ table th, table td {
         <p class="explanation">Details on authentication, caching, throttling, inflection and pagination.</p>
 
       <div class="article">
-        <h2>THROTTLING</h2>
+        <h2>AUTHENTICATION – INCORRECT PUBLIC KEY HEADER</h2>
         <h3>GET /api/v1/projects</h3>
           <p class="explanation">
-            Requests are throttled to 1000rpm per origin to avoid service interruption. On exceeding the limit server will return HTTP 429.
+            Requests with incorrect public key header will be denied.
           </p>
 
 
@@ -122,23 +122,26 @@ table th, table td {
           <h3>Request</h3>
 
             <h4>Headers</h4>
-            <pre class="request headers">Api-Public-Key: O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=</pre>
+            <pre class="request headers">Api-Public-Key: 12345</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=5adde60fa0d3ed21886c6acede2077c2&amp;body[timestamp]=1580231479&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=kkmW3zCEYfvR9WQgFoGOnDQd8DSNv8UpBYXOLackMg3NSUQBK4vvz2QZtuLk1H7YpdsV5DhI%2BnuKn3EGJqFfDQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=b3e86407ecf4739b5c7a27237cf67a77&amp;body[timestamp]=1580231479&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=zu0H6ADXlmVB5%2Fl94nGUXCy3%2BGWCdJZJBe6DxqvbyCw0CsWrCoR6gBb1YYEkFMzt0pCnXXrU5DciXaMA%2BpOVAQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;5adde60fa0d3ed21886c6acede2077c2&quot;, &quot;timestamp&quot;=&gt;&quot;1580231479&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;kkmW3zCEYfvR9WQgFoGOnDQd8DSNv8UpBYXOLackMg3NSUQBK4vvz2QZtuLk1H7YpdsV5DhI+nuKn3EGJqFfDQ==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;b3e86407ecf4739b5c7a27237cf67a77&quot;, &quot;timestamp&quot;=&gt;&quot;1580231479&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;zu0H6ADXlmVB5/l94nGUXCy3+GWCdJZJBe6DxqvbyCw0CsWrCoR6gBb1YYEkFMzt0pCnXXrU5DciXaMA+pOVAQ==&quot;}</pre>
 
 
 
             <h3>Response</h3>
             <h4>Status</h4>
-            <pre class="response status">429 Too Many Requests</pre>
+            <pre class="response status">401 Unauthorized</pre>
               <h4>Body</h4>
-              <pre class="response body">Retry later
-</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;authentication&quot;: &quot;Invalid public key&quot;
+  }
+}</pre>
       </div>
     </div>
   </body>

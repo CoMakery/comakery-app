@@ -15,6 +15,8 @@ resource 'II. Accounts' do
 
   explanation 'Retrieve and manage account data, balances, interests.'
 
+  header 'API-Public-Key', build(:api_public_key)
+
   get '/api/v1/accounts/:id' do
     with_options with_example: true do
       parameter :id, 'account id', required: true, type: :string

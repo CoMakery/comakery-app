@@ -6,6 +6,22 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
 
   let(:valid_session) { {} }
 
+  let(:valid_headers) do
+    {
+      'API-Public-Key' => build(:api_public_key)
+    }
+  end
+
+  let(:invalid_headers) do
+    {
+      'API-Public-Key' => '12345'
+    }
+  end
+
+  before do
+    request.headers.merge! valid_headers
+  end
+
   describe 'GET #index' do
     it 'returns a success response' do
       params = build(:api_signed_request, '', api_v1_projects_path, 'GET')
