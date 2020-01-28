@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>I. General API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>I. General API</h1>
+
+        <p class="explanation">Details on authentication, caching, throttling, inflection and pagination.</p>
+
+      <div class="article">
+        <h2>AUTHENTICATION</h2>
+        <h3>GET /api/v1/projects</h3>
+          <p class="explanation">
+            Requests should include `API-Public-Key` header and a correct proof based on `Ed25519Signature2018` in the format described below. All values should be strings. Note: When calculating the signature, request data should be serialized according JSON Canonicalization Scheme.
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="required">
+                    <span class="name">body[data]</span>
+                </td>
+                <td>
+                  <span class="description">request data</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">body[url]</span>
+                </td>
+                <td>
+                  <span class="description">request url</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">body[method]</span>
+                </td>
+                <td>
+                  <span class="description">request http method</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">body[nonce]</span>
+                </td>
+                <td>
+                  <span class="description">request nonce (rotated every 24h)</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">body[timestamp]</span>
+                </td>
+                <td>
+                  <span class="description">request timestamp (expires in 60 seconds)</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">proof[type]</span>
+                </td>
+                <td>
+                  <span class="description">Ed25519Signature2018</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">proof[verificationMethod]</span>
+                </td>
+                <td>
+                  <span class="description">public key</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">proof[signature]</span>
+                </td>
+                <td>
+                  <span class="description">request signature</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Public-Key: O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">GET /api/v1/projects?body[method]=GET&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[nonce]=d1dfb3fa21fd6926bf8b7f8963709814&amp;body[timestamp]=1580231479&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=lKAf0Zl5JNd3i480efvol5tboVUN%2F3puIlMJzc3i1Dft5jqMq3q0Q7HLtdR4FaLoXEkykL2MI%2BNp2WT%2B9v7oAA%3D%3D</pre>
+
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">body: {&quot;method&quot;=&gt;&quot;GET&quot;, &quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;nonce&quot;=&gt;&quot;d1dfb3fa21fd6926bf8b7f8963709814&quot;, &quot;timestamp&quot;=&gt;&quot;1580231479&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;lKAf0Zl5JNd3i480efvol5tboVUN/3puIlMJzc3i1Dft5jqMq3q0Q7HLtdR4FaLoXEkykL2MI+Np2WT+9v7oAA==&quot;}</pre>
+
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;d3b2ffd796ab72a2de01ded33d8e6f76&quot;
+Last-Modified: Tue, 28 Jan 2020 17:11:18 GMT</pre>
+            <h4>Status</h4>
+            <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 1,
+    &quot;title&quot;: &quot;Uber for Cats&quot;,
+    &quot;description&quot;: &quot;We are going to build amazing&quot;,
+    &quot;imageUrl&quot;: &quot;/attachments/f272a4c77d7272e1507c9616608fa91e96be2710/store/fill/1000/1000/d5373377108547f55ad8881af40581d934bba6ded55d9209d7a21d1eb72a/image.png&quot;,
+    &quot;createdAt&quot;: &quot;2020-01-28T17:11:18.974Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-28T17:11:18.974Z&quot;,
+    &quot;accountId&quot;: null,
+    &quot;adminIds&quot;: [
+
+    ],
+    &quot;token&quot;: {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;ComakeryToken-f1c3bd40a0ef0bd9074a456a35d5942ee4f5285a&quot;,
+      &quot;symbol&quot;: &quot;XYZfc4f5860c8c27866c20719fc6101e8feb7896873&quot;,
+      &quot;network&quot;: &quot;ropsten&quot;,
+      &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimalPlaces&quot;: 18,
+      &quot;logoUrl&quot;: &quot;/attachments/e874a7e83e194882232022b5a7cbd1a7fb49aa50/store/fill/100/100/1456b5b7a1a64896e4044d705eb53f80e03cad04eca9a01902a8aa7b1ee9/dummy_image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-01-28T17:11:18.617Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-01-28T17:11:18.980Z&quot;
+    }
+  }
+]</pre>
+      </div>
+    </div>
+  </body>
+</html>

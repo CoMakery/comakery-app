@@ -9,7 +9,61 @@ resource 'I. General' do
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key)) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token)) }
 
-  explanation 'Details on caching, throttling, inflection and pagination.'
+  explanation 'Details on authentication, caching, throttling, inflection and pagination.'
+
+  header 'API-Public-Key', build(:api_public_key)
+
+  get '/api/v1/projects' do
+    with_options scope: :body, with_example: true do
+      parameter :data, 'request data', required: true
+      parameter :url, 'request url', required: true
+      parameter :method, 'request http method', required: true
+      parameter :nonce, 'request nonce (rotated every 24h)', required: true
+      parameter :timestamp, 'request timestamp (expires in 60 seconds)', required: true
+    end
+
+    with_options scope: :proof, with_example: true do
+      parameter :type, 'Ed25519Signature2018', required: true
+      parameter :verificationMethod, 'public key', required: true
+      parameter :signature, 'request signature', required: true
+    end
+
+    context '200' do
+      example 'AUTHENTICATION' do
+        explanation 'Requests should include `API-Public-Key` header and a correct proof based on `Ed25519Signature2018` in the format described below. All values should be strings. Note: When calculating the signature, request data should be serialized according JSON Canonicalization Scheme.'
+
+        request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
+        do_request(request)
+        expect(status).to eq(200)
+      end
+    end
+  end
+
+  get '/api/v1/projects' do
+    header 'API-Public-Key', '12345'
+
+    context '401' do
+      example 'AUTHENTICATION – INCORRECT PUBLIC KEY HEADER' do
+        explanation 'Requests with incorrect public key header will be denied.'
+
+        request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example.org')
+        do_request(request)
+        expect(status).to eq(401)
+      end
+    end
+  end
+
+  get '/api/v1/projects' do
+    context '401' do
+      example 'AUTHENTICATION – INCORRECT PROOF' do
+        explanation 'Requests with incorrect proof, url, method, timestamp or nonce will be denied.'
+
+        request = build(:api_signed_request, '', api_v1_projects_path, 'GET', 'example1.org')
+        do_request(request)
+        expect(status).to eq(401)
+      end
+    end
+  end
 
   get '/api/v1/projects' do
     header 'If-Modified-Since', :if_modified

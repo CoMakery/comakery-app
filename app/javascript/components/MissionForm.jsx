@@ -361,6 +361,7 @@ export default class MissionForm extends React.Component {
             title="Whitelabel API Public Key"
             symbolLimit={140}
             value={whitelabelApiPublicKey}
+            readOnly={whitelabelApiPublicKey !== ''}
             eventHandler={this.handleChangeFormData}
           />
 

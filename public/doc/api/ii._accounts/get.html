@@ -303,29 +303,31 @@ table th, table td {
 
           <h3>Request</h3>
 
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Public-Key: O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/6cf59c43-edba-445d-8ccb-25e55d28f9d0?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F6cf59c43-edba-445d-8ccb-25e55d28f9d0&amp;body[method]=GET&amp;body[nonce]=9e2fcfeb1b3f98f2c0b9f82548db7d8d&amp;body[timestamp]=1579886384&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=e0Hi7jvbdTmev1Cu%2BpkHxfNNNmxOFMFc6PyfpJYwUoZn72zq%2Bh4yidqfKgkfzH7ViX1pzi2jmzMwXgDc5RnLAA%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/87379bb9-a28d-4b11-b279-34d1a4d4aadd?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F87379bb9-a28d-4b11-b279-34d1a4d4aadd&amp;body[method]=GET&amp;body[nonce]=9ea8fdbe6b42c501c970f95fbfb6163a&amp;body[timestamp]=1580231480&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=CcKQxiHb3xrChjrzBX3XrojdJl7W%2BJsxpNZaveOm%2FQP4FZ%2Fgk9MFhy%2FL4sKEhuNE%2BfYPaAV0NHsilaBNYF5rDA%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/6cf59c43-edba-445d-8ccb-25e55d28f9d0&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;9e2fcfeb1b3f98f2c0b9f82548db7d8d&quot;, &quot;timestamp&quot;=&gt;&quot;1579886384&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;e0Hi7jvbdTmev1Cu+pkHxfNNNmxOFMFc6PyfpJYwUoZn72zq+h4yidqfKgkfzH7ViX1pzi2jmzMwXgDc5RnLAA==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/87379bb9-a28d-4b11-b279-34d1a4d4aadd&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;9ea8fdbe6b42c501c970f95fbfb6163a&quot;, &quot;timestamp&quot;=&gt;&quot;1580231480&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;CcKQxiHb3xrChjrzBX3XrojdJl7W+JsxpNZaveOm/QP4FZ/gk9MFhy/L4sKEhuNE+fYPaAV0NHsilaBNYF5rDA==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;655cda5f71996a5a4437e3765df5f494&quot;
-Last-Modified: Fri, 24 Jan 2020 17:19:44 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;cac9b160395daa63dc79e1412e35cbf9&quot;
+Last-Modified: Tue, 28 Jan 2020 17:11:19 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;email&quot;: &quot;me+a0186be18dcd1d6a56df40d66679dde1df172ee9@example.com&quot;,
-  &quot;managedAccountId&quot;: &quot;6cf59c43-edba-445d-8ccb-25e55d28f9d0&quot;,
+  &quot;email&quot;: &quot;me+f6f724c41e3fdd115e0866e90790f56c8246ec8d@example.com&quot;,
+  &quot;managedAccountId&quot;: &quot;87379bb9-a28d-4b11-b279-34d1a4d4aadd&quot;,
   &quot;firstName&quot;: &quot;Eva&quot;,
   &quot;lastName&quot;: &quot;Smith&quot;,
-  &quot;nickname&quot;: &quot;hunter-e710fe895bdff8648b915e6e558007a4ced713d0&quot;,
+  &quot;nickname&quot;: &quot;hunter-8a89ed51173f41189c9d1e8c174caadf99825bb4&quot;,
   &quot;imageUrl&quot;: &quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,
   &quot;country&quot;: &quot;United States of America&quot;,
   &quot;dateOfBirth&quot;: &quot;1990-01-01&quot;,
@@ -336,10 +338,10 @@ Last-Modified: Fri, 24 Jan 2020 17:19:44 GMT</pre>
   &quot;eosWallet&quot;: null,
   &quot;tezosWallet&quot;: null,
   &quot;verificationState&quot;: &quot;passed&quot;,
-  &quot;verificationDate&quot;: &quot;2020-01-24T17:19:44.693Z&quot;,
+  &quot;verificationDate&quot;: &quot;2020-01-28T17:11:19.971Z&quot;,
   &quot;verificationMaxInvestmentUsd&quot;: 1000000,
-  &quot;createdAt&quot;: &quot;2020-01-24T17:19:44.650Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-01-24T17:19:44.704Z&quot;
+  &quot;createdAt&quot;: &quot;2020-01-28T17:11:19.928Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-01-28T17:11:19.982Z&quot;
 }</pre>
       </div>
     </div>

@@ -25,6 +25,22 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
 
   let(:valid_session) { {} }
 
+  let(:valid_headers) do
+    {
+      'API-Public-Key' => build(:api_public_key)
+    }
+  end
+
+  let(:invalid_headers) do
+    {
+      'API-Public-Key' => '12345'
+    }
+  end
+
+  before do
+    request.headers.merge! valid_headers
+  end
+
   describe 'GET #index' do
     it 'returns project transfers' do
       params = build(:api_signed_request, '', api_v1_project_transfers_path(project_id: project.id), 'GET')

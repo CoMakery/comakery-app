@@ -108,7 +108,7 @@ table th, table td {
     <div class="container">
       <h1>I. General API</h1>
 
-        <p class="explanation">Details on caching, throttling, inflection and pagination.</p>
+        <p class="explanation">Details on authentication, caching, throttling, inflection and pagination.</p>
 
       <div class="article">
         <h2>PAGINATION</h2>
@@ -140,14 +140,16 @@ table th, table td {
 
           <h3>Request</h3>
 
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Public-Key: O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=b5ec43df149d34db46204ae5f5cf39f3&amp;body[timestamp]=1579886384&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=TfcQRVwoy2M%2FvL0SFLcCPXy70%2BTe2Vpeuw%2Bp5BRkKo4VOvARW%2FBHV2%2Fsn46CrQLEh9aOxELTf9tgETjOwXhyBg%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=27f6731f711ab36dfdb9136e97071796&amp;body[timestamp]=1580231479&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=sujJ2hbIKba0ywznGxB6cr5wl%2FvKWak3VvPAxLIHnjttaOVGat4p28ENmDe7DaCsAQlmhUj0jG%2FmGKrDiAitDQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">page: 1
-body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;b5ec43df149d34db46204ae5f5cf39f3&quot;, &quot;timestamp&quot;=&gt;&quot;1579886384&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;TfcQRVwoy2M/vL0SFLcCPXy70+Te2Vpeuw+p5BRkKo4VOvARW/BHV2/sn46CrQLEh9aOxELTf9tgETjOwXhyBg==&quot;}</pre>
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;27f6731f711ab36dfdb9136e97071796&quot;, &quot;timestamp&quot;=&gt;&quot;1580231479&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;sujJ2hbIKba0ywznGxB6cr5wl/vKWak3VvPAxLIHnjttaOVGat4p28ENmDe7DaCsAQlmhUj0jG/mGKrDiAitDQ==&quot;}</pre>
 
 
 
@@ -155,33 +157,33 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 1
-ETag: W/&quot;7353a5a97e5b455f77c9df446040681c&quot;
-Last-Modified: Fri, 24 Jan 2020 17:19:44 GMT</pre>
+ETag: W/&quot;525f61ab27e4e4626471d7957122d7b3&quot;
+Last-Modified: Tue, 28 Jan 2020 17:11:19 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">[
   {
-    &quot;id&quot;: 4,
+    &quot;id&quot;: 7,
     &quot;title&quot;: &quot;Uber for Cats&quot;,
     &quot;description&quot;: &quot;We are going to build amazing&quot;,
-    &quot;imageUrl&quot;: &quot;/attachments/0395c9282ad78b1167ebdb119a2b7aebd196ea5a/store/fill/1000/1000/1071baf76b07649b7ddecbab700c2fc5c7856afa37f6ad8a0e13e43e2252/image.png&quot;,
-    &quot;createdAt&quot;: &quot;2020-01-24T17:19:44.563Z&quot;,
-    &quot;updatedAt&quot;: &quot;2020-01-24T17:19:44.563Z&quot;,
+    &quot;imageUrl&quot;: &quot;/attachments/bfbff69bf1a2c5d1f060718a2938cbf2da2a2487/store/fill/1000/1000/62fb6dc4ce1a42862efecd538fcbc5664c0ae7d368f8f4b608451967c1bc/image.png&quot;,
+    &quot;createdAt&quot;: &quot;2020-01-28T17:11:19.809Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-01-28T17:11:19.809Z&quot;,
     &quot;accountId&quot;: null,
     &quot;adminIds&quot;: [
 
     ],
     &quot;token&quot;: {
-      &quot;id&quot;: 7,
-      &quot;name&quot;: &quot;ComakeryToken-848fe4fa327e4780b7d6254fb6bd3a0fcb615436&quot;,
-      &quot;symbol&quot;: &quot;XYZ4f8789e18b2f5a7d430dc3ea2e100cd9eda1fe75&quot;,
+      &quot;id&quot;: 13,
+      &quot;name&quot;: &quot;ComakeryToken-cd18199083457ef8a75d587cb9972d52897ef0af&quot;,
+      &quot;symbol&quot;: &quot;XYZb8be887d27e9b6bfc37fdb6b2f9cb7d3767f4d96&quot;,
       &quot;network&quot;: &quot;ropsten&quot;,
       &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
       &quot;decimalPlaces&quot;: 18,
-      &quot;logoUrl&quot;: &quot;/attachments/916424d13fe4320c18a1fd86ee5af55f573dcaa5/store/fill/100/100/551636fa360d60ce7e472a0b2aee00f85ee6ea0997929c2af1c84857d3fd/dummy_image.png&quot;,
-      &quot;createdAt&quot;: &quot;2020-01-24T17:19:44.519Z&quot;,
-      &quot;updatedAt&quot;: &quot;2020-01-24T17:19:44.569Z&quot;
+      &quot;logoUrl&quot;: &quot;/attachments/92abc61ba138cfc491acedb01dd9e0b6268d0000/store/fill/100/100/e1f7f503a27dbebc4f136929cad1637b3373d4f2bdc8597a0487a696e0e2/dummy_image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-01-28T17:11:19.763Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-01-28T17:11:19.814Z&quot;
     }
   }
 ]</pre>

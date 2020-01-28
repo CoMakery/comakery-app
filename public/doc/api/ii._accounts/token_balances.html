@@ -271,61 +271,63 @@ table th, table td {
 
           <h3>Request</h3>
 
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Public-Key: O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/accounts/db251cf3-0ee6-4f09-addf-7e0f76e760e4/token_balances?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2Fdb251cf3-0ee6-4f09-addf-7e0f76e760e4%2Ftoken_balances&amp;body[method]=GET&amp;body[nonce]=cc4cfbde9a0b38a7a21f980110a8b20e&amp;body[timestamp]=1579886388&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=ClHN42xnXdQDXo%2FhqXt8j3QVm37mmlwnsblOOoKiOGmSsr0Z7LAJOURBx8XBRLUcad5LDeRkVfkR32zyDxaCAw%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/accounts/16d54641-beea-4362-be8f-dc3d62d23f96/token_balances?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F16d54641-beea-4362-be8f-dc3d62d23f96%2Ftoken_balances&amp;body[method]=GET&amp;body[nonce]=3f237d32fa1b8703992f96fd9e9b0980&amp;body[timestamp]=1580231483&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=PIm8gfdd134COF6zAKAacHHGK5TtYwoYShPthoQe7JcNlBQ7vtIpS5Vx%2F8bQdtFUbY5yYdpN1jsvXjnEM1U6Ag%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/db251cf3-0ee6-4f09-addf-7e0f76e760e4/token_balances&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;cc4cfbde9a0b38a7a21f980110a8b20e&quot;, &quot;timestamp&quot;=&gt;&quot;1579886388&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;ClHN42xnXdQDXo/hqXt8j3QVm37mmlwnsblOOoKiOGmSsr0Z7LAJOURBx8XBRLUcad5LDeRkVfkR32zyDxaCAw==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/16d54641-beea-4362-be8f-dc3d62d23f96/token_balances&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;3f237d32fa1b8703992f96fd9e9b0980&quot;, &quot;timestamp&quot;=&gt;&quot;1580231483&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;PIm8gfdd134COF6zAKAacHHGK5TtYwoYShPthoQe7JcNlBQ7vtIpS5Vx/8bQdtFUbY5yYdpN1jsvXjnEM1U6Ag==&quot;}</pre>
 
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;21bbc6bd5ff1ab000dd793eb040cae4b&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;f02ffba7903c9ba1b2a43b58be8ae92e&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">[
   {
     &quot;token&quot;: {
-      &quot;id&quot;: 35,
-      &quot;name&quot;: &quot;Token-3d71889909d9007c717a746e51148f94dda3953a&quot;,
-      &quot;symbol&quot;: &quot;TKNd1c5aeaa5969922041fac41593489ad2299a32f2&quot;,
+      &quot;id&quot;: 41,
+      &quot;name&quot;: &quot;Token-b1f53f00844e5868a008bb34d7274f38caccb206&quot;,
+      &quot;symbol&quot;: &quot;TKNd83b46a85b4cd5b21b6d822be5be0738cc9b8d0d&quot;,
       &quot;network&quot;: null,
       &quot;contractAddress&quot;: null,
       &quot;decimalPlaces&quot;: null,
-      &quot;logoUrl&quot;: &quot;/attachments/375cb762b5c6f84aee3de8bcfd4783910867062a/store/fill/100/100/986b2aed1d8c091dbb09055e855c9f3e607c1d36f92bcfbf2dd30937cd98/image.png&quot;,
-      &quot;createdAt&quot;: &quot;2020-01-24T17:19:47.867Z&quot;,
-      &quot;updatedAt&quot;: &quot;2020-01-24T17:19:48.351Z&quot;
+      &quot;logoUrl&quot;: &quot;/attachments/69821b8b5f64444cc28dcc48756552cb3956f028/store/fill/100/100/424bacfa500c4783d88ed659e4a3a6b8338b71c0ebb28b1b142387a8bb82/image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-01-28T17:11:23.038Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-01-28T17:11:23.550Z&quot;
     },
     &quot;blockchain&quot;: {
       &quot;address&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
       &quot;balance&quot;: &quot;200.0&quot;,
       &quot;maxBalance&quot;: &quot;100000&quot;,
-      &quot;lockupUntil&quot;: &quot;2020-01-23T17:19:47.915Z&quot;,
+      &quot;lockupUntil&quot;: &quot;2020-01-27T17:11:23.086Z&quot;,
       &quot;accountFrozen&quot;: false
     },
     &quot;totalReceived&quot;: &quot;3.0&quot;
   },
   {
     &quot;token&quot;: {
-      &quot;id&quot;: 36,
-      &quot;name&quot;: &quot;Token-9249e5ff8ef18909664e522a30182545d7375fe1&quot;,
-      &quot;symbol&quot;: &quot;TKN0a8fa8b4faa98b31599d0cc5ccacb9f6469f4f98&quot;,
+      &quot;id&quot;: 42,
+      &quot;name&quot;: &quot;Token-7e838e200c72013514a00ff45e834c24c6e21bcf&quot;,
+      &quot;symbol&quot;: &quot;TKN1398e7c04d53d150780e12b377fb4e1419cf0da3&quot;,
       &quot;network&quot;: null,
       &quot;contractAddress&quot;: null,
       &quot;decimalPlaces&quot;: null,
-      &quot;logoUrl&quot;: &quot;/attachments/ba202995c42bbfc5ecc95a0e1545c13e4e9b0eff/store/fill/100/100/18c35e5d4ccc16064ab45882dc879f8a447c17f55827047a986b129806b5/image.png&quot;,
-      &quot;createdAt&quot;: &quot;2020-01-24T17:19:47.873Z&quot;,
-      &quot;updatedAt&quot;: &quot;2020-01-24T17:19:48.410Z&quot;
+      &quot;logoUrl&quot;: &quot;/attachments/0af6c6e1f5855cdc52d2756d1801efebe65a0507/store/fill/100/100/3b33c3eecf1a97d55589ca0de9418ea0a42e2cd05c9b87cfb66ebf355989/image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-01-28T17:11:23.043Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-01-28T17:11:23.610Z&quot;
     },
     &quot;blockchain&quot;: {
       &quot;address&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
       &quot;balance&quot;: &quot;200.0&quot;,
       &quot;maxBalance&quot;: &quot;100000&quot;,
-      &quot;lockupUntil&quot;: &quot;2020-01-23T17:19:47.966Z&quot;,
+      &quot;lockupUntil&quot;: &quot;2020-01-27T17:11:23.138Z&quot;,
       &quot;accountFrozen&quot;: false
     },
     &quot;totalReceived&quot;: &quot;8.0&quot;

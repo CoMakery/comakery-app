@@ -108,7 +108,7 @@ table th, table td {
     <div class="container">
       <h1>I. General API</h1>
 
-        <p class="explanation">Details on caching, throttling, inflection and pagination.</p>
+        <p class="explanation">Details on authentication, caching, throttling, inflection and pagination.</p>
 
       <div class="article">
         <h2>CACHING</h2>
@@ -122,14 +122,15 @@ table th, table td {
           <h3>Request</h3>
 
             <h4>Headers</h4>
-            <pre class="request headers">If-Modified-Since: Fri, 24 Jan 2020 17:19:44 GMT</pre>
+            <pre class="request headers">Api-Public-Key: O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=
+If-Modified-Since: Tue, 28 Jan 2020 17:11:19 GMT</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=7ae4d1b3ac9aa7256cb8fb0963419045&amp;body[timestamp]=1579886384&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=KO4Qu%2FeDPI9xZdLF1%2FxhOsmiXX9VMDVa7%2BS60NXmni2ChixOV4xbusJGx26VExT3Qge9uwzL0TxCq0UY%2BRTRDQ%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=aecddd3abe825615cabc4d1ca5d9cc4c&amp;body[timestamp]=1580231479&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=dcjo052PWIAqtw2qqyV4UyY267HADR8SPk9cxRVGfvTv4Vpa8%2B6S5IpHmsUwURRjjuMUTTwoVkn9n%2BD2I0dgBQ%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;7ae4d1b3ac9aa7256cb8fb0963419045&quot;, &quot;timestamp&quot;=&gt;&quot;1579886384&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;KO4Qu/eDPI9xZdLF1/xhOsmiXX9VMDVa7+S60NXmni2ChixOV4xbusJGx26VExT3Qge9uwzL0TxCq0UY+RTRDQ==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;aecddd3abe825615cabc4d1ca5d9cc4c&quot;, &quot;timestamp&quot;=&gt;&quot;1580231479&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;dcjo052PWIAqtw2qqyV4UyY267HADR8SPk9cxRVGfvTv4Vpa8+6S5IpHmsUwURRjjuMUTTwoVkn9n+D2I0dgBQ==&quot;}</pre>
 
 
 
@@ -137,8 +138,8 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 1
-ETag: W/&quot;7a84c1ac15fe5d754572017a7c4216bf&quot;
-Last-Modified: Fri, 24 Jan 2020 17:19:44 GMT</pre>
+ETag: W/&quot;34c56be2ea502b0b3b2b5ee5400eb620&quot;
+Last-Modified: Tue, 28 Jan 2020 17:11:19 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">304 Not Modified</pre>
       </div>

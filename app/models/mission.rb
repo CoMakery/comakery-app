@@ -29,6 +29,7 @@ class Mission < ApplicationRecord
   validates :name, length: { maximum: 100 }
   validates :subtitle, length: { maximum: 140 }
   validates :description, length: { maximum: 500 }
+  validate :whitelabel_api_public_key_cannot_be_overwritten, if: -> { whitelabel_api_public_key_changed? && whitelabel_api_public_key_was.present? }
 
   def serialize
     as_json(only: %i[id name token_id subtitle description status display_order]).merge(
@@ -56,5 +57,9 @@ class Mission < ApplicationRecord
 
   def set_whitelabel_for_projects
     projects.update(whitelabel: whitelabel)
+  end
+
+  def whitelabel_api_public_key_cannot_be_overwritten
+    errors.add(:whitelabel_api_public_key, 'cannot be overwritten')
   end
 end
