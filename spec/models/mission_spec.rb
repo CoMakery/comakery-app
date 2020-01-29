@@ -76,4 +76,17 @@ describe Mission do
       expect(mission.managed_accounts).to eq([account])
     end
   end
+
+  describe 'populate_api_key' do
+    let!(:mission_wo_key) { create(:mission, whitelabel: true) }
+    let!(:mission_w_key) { create(:mission, whitelabel: true, whitelabel_api_key: '12345') }
+
+    it 'populates whitelabel_api_key for whitelabel missions' do
+      expect(mission_wo_key.whitelabel_api_key).not_to be_nil
+    end
+
+    it 'doesnt populate whitelabel_api_key for whitelabel missions if its present' do
+      expect(mission_w_key.whitelabel_api_key).to eq('12345')
+    end
+  end
 end

@@ -27,13 +27,13 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
 
   let(:valid_headers) do
     {
-      'API-Public-Key' => build(:api_public_key)
+      'API-Key' => build(:api_key)
     }
   end
 
   let(:invalid_headers) do
     {
-      'API-Public-Key' => '12345'
+      'API-Key' => '12345'
     }
   end
 

@@ -6,12 +6,12 @@ require 'rspec_api_documentation/dsl'
 resource 'I. General' do
   include Rails.application.routes.url_helpers
 
-  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key)) }
+  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:comakery_token)) }
 
   explanation 'Details on authentication, caching, throttling, inflection and pagination.'
 
-  header 'API-Public-Key', build(:api_public_key)
+  header 'API-Key', build(:api_key)
 
   get '/api/v1/projects' do
     with_options scope: :body, with_example: true do
@@ -40,7 +40,7 @@ resource 'I. General' do
   end
 
   get '/api/v1/projects' do
-    header 'API-Public-Key', '12345'
+    header 'API-Key', '12345'
 
     context '401' do
       example 'AUTHENTICATION – INCORRECT PUBLIC KEY HEADER' do

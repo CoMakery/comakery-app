@@ -264,21 +264,21 @@ table th, table td {
           <h3>Request</h3>
 
             <h4>Headers</h4>
-            <pre class="request headers">Api-Public-Key: O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=</pre>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
           <pre class="request route highlight">POST /api/v1/accounts</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">body[data][account][managed_account_id]=b210f716-e4b5-469c-a321-058dc4aa1ae1&body[data][account][email]=me%2B33577537dda7976de6094008e9b866cc9d97210d%40example.com&body[data][account][first_name]=Eva&body[data][account][last_name]=Smith&body[data][account][nickname]=hunter-1a191798c4b6841fe596ba7dd009f05889efbb16&body[data][account][date_of_birth]=1990%2F01%2F01&body[data][account][country]=United+States+of+America&body[data][account][ethereum_wallet]=0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts&body[method]=POST&body[nonce]=f890d501df757dcfc9b96aeec2bfa2ab&body[timestamp]=1580231480&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=dQk96UrSibX19pPlNrnRsK7i29Bm1EyQ0p1osrGlH%2FOZruDfPxiqwRfyfonpx7E4j4tKOnrF%2FrcBdH3fi5ZtDg%3D%3D</pre>
+            <pre class="request body">{"body":{"data":{"account":{"country":"United States of America","date_of_birth":"1990/01/01","email":"me+e82aed2965480e2d4d521efd3ed03a10e7d5d54d@example.com","ethereum_wallet":"0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B","first_name":"Eva","last_name":"Smith","managed_account_id":"a633abd7-8a3d-4d4c-8306-89d43ed8771e","nickname":"hunter-df7f12079f79bde489db8b7c4d6c5e5e68b0983a"}},"method":"POST","nonce":"afaf2814fc9be8ace540df2b5d5b9fbc","timestamp":"1580315846","url":"http://example.org/api/v1/accounts"},"proof":{"signature":"giOSoK+gW4ZkYGxCgob8m9gYS/iJm/unbVdLCmTlKL9X9HGyVE9evHA9aYwYCjdCP8FzCc2+0hUsB9jGaA55Cg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/b210f716-e4b5-469c-a321-058dc4aa1ae1&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/a633abd7-8a3d-4d4c-8306-89d43ed8771e&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>

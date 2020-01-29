@@ -6,7 +6,7 @@ require 'rspec_api_documentation/dsl'
 resource 'IV. Transfers' do
   include Rails.application.routes.url_helpers
 
-  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key)) }
+  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: create(:token, decimal_places: 8)) }
   let!(:transfer_accepted) { create(:transfer, source: :earned, description: 'Award to a team member', amount: 1000, quantity: 2, award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
   let!(:transfer_paid) { create(:transfer, status: :paid, ethereum_transaction_address: '0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c', award_type: project.default_award_type, account: create(:account, managed_mission: active_whitelabel_mission)) }
@@ -14,7 +14,8 @@ resource 'IV. Transfers' do
 
   explanation 'Create and cancel transfers, retrieve transfer data.'
 
-  header 'API-Public-Key', build(:api_public_key)
+  header 'API-Key', build(:api_key)
+  header 'Content-Type', 'application/json'
 
   get '/api/v1/projects/:project_id/transfers' do
     with_options with_example: true do

@@ -31,6 +31,8 @@ class Mission < ApplicationRecord
   validates :description, length: { maximum: 500 }
   validate :whitelabel_api_public_key_cannot_be_overwritten, if: -> { whitelabel_api_public_key_changed? && whitelabel_api_public_key_was.present? }
 
+  before_save :populate_api_key, if: -> { whitelabel }
+
   def serialize
     as_json(only: %i[id name token_id subtitle description status display_order]).merge(
       logo_preview: logo.present? ? Refile.attachment_url(self, :logo, :fill, 150, 100) : nil,
@@ -61,5 +63,11 @@ class Mission < ApplicationRecord
 
   def whitelabel_api_public_key_cannot_be_overwritten
     errors.add(:whitelabel_api_public_key, 'cannot be overwritten')
+  end
+
+  def populate_api_key
+    # 24 bytes = 32 characters base64 string
+
+    self.whitelabel_api_key ||= SecureRandom.base64(24)
   end
 end

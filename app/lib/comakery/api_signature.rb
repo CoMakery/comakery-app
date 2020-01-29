@@ -176,7 +176,7 @@ module Comakery
       end
 
       def verify_method(public_key)
-        raise Comakery::APISignatureError, 'Invalid proof verificationMethod' unless @request.fetch('proof', {}).fetch('verificationMethod', '') == public_key
+        raise Comakery::APISignatureError, 'Invalid proof verificationMethod' unless (@request.fetch('proof', {}).fetch('verificationMethod', nil) || @request.fetch('proof', {}).fetch('verification_method', nil)) == public_key
       end
 
       def verify_signature(public_key)

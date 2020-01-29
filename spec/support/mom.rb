@@ -298,7 +298,7 @@ class Mom
   end
 
   def active_whitelabel_mission
-    create(:mission, whitelabel: true, whitelabel_domain: 'test.host', whitelabel_api_public_key: build(:api_public_key))
+    create(:mission, whitelabel: true, whitelabel_domain: 'test.host', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key))
   end
 
   def api_public_key
@@ -307,6 +307,10 @@ class Mom
 
   def api_private_key
     'eodjQfDLTyNCBnz+MORHW0lOKWZnCTyPDTFcwAdVRyQ7vNMfjEecPWNEqF4FOuk03bgWDV10vwMcqL/OBUJWkA=='
+  end
+
+  def api_key
+    '28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO'
   end
 
   def api_signed_request(data, path, method, host = 'test.host')

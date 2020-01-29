@@ -26,8 +26,8 @@ class Api::V1::ApiController < ActionController::Base
   end
 
   def verify_public_key
-    if @whitelabel_mission.whitelabel_api_public_key != request.headers['API-Public-Key']
-      @errors = { authentication: 'Invalid public key' }
+    if @whitelabel_mission.whitelabel_api_key != request.headers['API-Key']
+      @errors = { authentication: 'Invalid API key' }
 
       render 'api/v1/error.json', status: 401
     end
