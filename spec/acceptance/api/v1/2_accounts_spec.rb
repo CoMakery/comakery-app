@@ -7,7 +7,7 @@ require 'rspec_api_documentation/dsl'
 resource 'II. Accounts' do
   include Rails.application.routes.url_helpers
 
-  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key)) }
+  let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:account) { create(:account, managed_mission: active_whitelabel_mission) }
   let!(:verification) { create(:verification, account: account) }
   let!(:project) { create(:project, mission: active_whitelabel_mission) }
@@ -15,7 +15,7 @@ resource 'II. Accounts' do
 
   explanation 'Retrieve and manage account data, balances, interests.'
 
-  header 'API-Public-Key', build(:api_public_key)
+  header 'API-Key', build(:api_key)
 
   get '/api/v1/accounts/:id' do
     with_options with_example: true do

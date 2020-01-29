@@ -34,7 +34,7 @@ RspecApiDocumentation.configure do |config|
   # By default, when these settings are nil, all headers are shown,
   # which is sometimes too chatty. Setting the parameters to an
   # array of headers will render *only* those headers.
-  config.request_headers_to_include = ['if-modified-since', 'key-inflection', 'api-public-key']
+  config.request_headers_to_include = ['if-modified-since', 'key-inflection', 'api-key']
   config.response_headers_to_include = ['link', 'total', 'per-page', 'etag', 'last-modified']
 
   # By default examples and resources are ordered by description. Set to true keep

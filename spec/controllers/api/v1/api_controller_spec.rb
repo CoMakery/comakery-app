@@ -12,13 +12,13 @@ describe Api::V1::ApiController do
 
   let(:valid_headers) do
     {
-      'API-Public-Key' => build(:api_public_key)
+      'API-Key' => build(:api_key)
     }
   end
 
   let(:invalid_headers) do
     {
-      'API-Public-Key' => '12345'
+      'API-Key' => '12345'
     }
   end
 
@@ -98,7 +98,7 @@ describe Api::V1::ApiController do
     let!(:project) { create(:project) }
 
     it 'sets project scope to whitelabel_mission projects' do
-      whitelabel_mission.update(whitelabel_domain: 'test.host', whitelabel_api_public_key: build(:api_public_key))
+      whitelabel_mission.update(whitelabel_domain: 'test.host', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key))
 
       get :index, params: build(:api_signed_request, '', '/dummy_api', 'GET')
       expect(assigns[:project_scope].all).to include(whitelabel_project)

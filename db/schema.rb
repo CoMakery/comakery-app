@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_22_220921) do
+ActiveRecord::Schema.define(version: 2020_01_29_152309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -268,6 +268,7 @@ ActiveRecord::Schema.define(version: 2020_01_22_220921) do
     t.string "whitelabel_favicon_content_type"
     t.string "whitelabel_contact_email"
     t.string "whitelabel_api_public_key"
+    t.string "whitelabel_api_key"
     t.index ["token_id"], name: "index_missions_on_token_id"
   end
 
