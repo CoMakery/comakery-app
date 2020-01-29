@@ -776,7 +776,6 @@ exports[`MissionForm renders correctly without props 1`] = `
               <InputFieldWhiteDark
                 eventHandler={[Function]}
                 name="whitelabelApiPublicKey"
-                readOnly={false}
                 symbolLimit={140}
                 title="Whitelabel API Public Key"
                 value=""
