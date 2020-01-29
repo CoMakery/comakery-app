@@ -69,7 +69,7 @@ RspecApiDocumentation.configure do |config|
 
   # Change how the post body is formatted by default, you can still override by `raw_post`
   # Can be :json, :xml, or a proc that will be passed the params
-  # config.request_body_formatter = Proc.new { |params| params }
+  config.request_body_formatter = Proc.new { |params| params.to_json_c14n }
 
   # Change how the response body is formatted by default
   # Is proc that will be called with the response_content_type & response_body

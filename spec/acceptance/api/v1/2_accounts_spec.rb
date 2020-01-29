@@ -16,6 +16,7 @@ resource 'II. Accounts' do
   explanation 'Retrieve and manage account data, balances, interests.'
 
   header 'API-Key', build(:api_key)
+  header 'Content-Type', 'application/json'
 
   get '/api/v1/accounts/:id' do
     with_options with_example: true do

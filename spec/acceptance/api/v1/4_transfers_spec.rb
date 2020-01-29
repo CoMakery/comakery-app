@@ -15,6 +15,7 @@ resource 'IV. Transfers' do
   explanation 'Create and cancel transfers, retrieve transfer data.'
 
   header 'API-Key', build(:api_key)
+  header 'Content-Type', 'application/json'
 
   get '/api/v1/projects/:project_id/transfers' do
     with_options with_example: true do

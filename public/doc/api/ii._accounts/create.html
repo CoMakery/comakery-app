@@ -271,14 +271,14 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">body[data][account][managed_account_id]=57fd1ec7-4eb6-4ccb-9003-8770555d0bd4&body[data][account][email]=me%2B7dd811cc8b7b0be9a4e816de58a56e706ab5f3e6%40example.com&body[data][account][first_name]=Eva&body[data][account][last_name]=Smith&body[data][account][nickname]=hunter-a66e984e7e49d013c2cf19fa5d8e6863050af24a&body[data][account][date_of_birth]=1990%2F01%2F01&body[data][account][country]=United+States+of+America&body[data][account][ethereum_wallet]=0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts&body[method]=POST&body[nonce]=667e7eacfd14ee7a96cbdeab2d4a49d1&body[timestamp]=1580314600&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=JeHuCnQQ7CQvmeiEhIM6sjgLg05aFA1d6u73WWpuM8Oi3Rm3lqL8x5Q%2FtfS5ocd14RsKODPGcxwlJCK60ZO3Bw%3D%3D</pre>
+            <pre class="request body">{"body":{"data":{"account":{"country":"United States of America","date_of_birth":"1990/01/01","email":"me+e82aed2965480e2d4d521efd3ed03a10e7d5d54d@example.com","ethereum_wallet":"0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B","first_name":"Eva","last_name":"Smith","managed_account_id":"a633abd7-8a3d-4d4c-8306-89d43ed8771e","nickname":"hunter-df7f12079f79bde489db8b7c4d6c5e5e68b0983a"}},"method":"POST","nonce":"afaf2814fc9be8ace540df2b5d5b9fbc","timestamp":"1580315846","url":"http://example.org/api/v1/accounts"},"proof":{"signature":"giOSoK+gW4ZkYGxCgob8m9gYS/iJm/unbVdLCmTlKL9X9HGyVE9evHA9aYwYCjdCP8FzCc2+0hUsB9jGaA55Cg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/57fd1ec7-4eb6-4ccb-9003-8770555d0bd4&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/a633abd7-8a3d-4d4c-8306-89d43ed8771e&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>

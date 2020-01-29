@@ -195,18 +195,18 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/863eaa31-9cf6-4993-9130-b962a7dd8885/verifications</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/1b461924-3bf0-4078-ae0a-c3be704d0adf/verifications</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">body[data][verification][passed]=true&body[data][verification][max_investment_usd]=10000&body[data][verification][verification_type]=aml-kyc&body[data][verification][created_at]=2020-01-26+16%3A16%3A42+UTC&body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F863eaa31-9cf6-4993-9130-b962a7dd8885%2Fverifications&body[method]=POST&body[nonce]=46cd881f3fd1f8ade5602bd7336f5893&body[timestamp]=1580314602&proof[type]=Ed25519Signature2018&proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&proof[signature]=8L5TaQ9oGEhROkBevUHDNGXq%2F4Ul3CB9V%2FboWgnByqRlNDZ91lLowfxMg1oZSD7B0628Lk99YPxJpcHsSxVhBA%3D%3D</pre>
+            <pre class="request body">{"body":{"data":{"verification":{"created_at":"2020-01-26 16:37:28 UTC","max_investment_usd":"10000","passed":"true","verification_type":"aml-kyc"}},"method":"POST","nonce":"32f547d31e200cdcd9848e63575b5b4e","timestamp":"1580315848","url":"http://example.org/api/v1/accounts/1b461924-3bf0-4078-ae0a-c3be704d0adf/verifications"},"proof":{"signature":"PtLDZuB6Au6F8NlLGdhiLVetpeCOWlgEqsTE/k2w8O+ttkqQa7Fm7gEFVE5XYqAnfWJQOVzDvyywkg8UlEI1DQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">302 Found</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/863eaa31-9cf6-4993-9130-b962a7dd8885/verifications&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/1b461924-3bf0-4078-ae0a-c3be704d0adf/verifications&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
       </div>
     </div>
   </body>
