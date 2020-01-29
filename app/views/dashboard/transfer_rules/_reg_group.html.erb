@@ -1,9 +1,18 @@
-<div class="reg-groups__groups__group">
-  <h4><%= reg_group.name %></h4>
-  <span>ID:<%= reg_group.blockchain_id %></span>
+<div class="reg-groups__groups__group" data-controller="reg-group-edit-form">
+  <h4 data-target="reg-group-edit-form.show"><%= reg_group.name %></h4>
+  <span data-target="reg-group-edit-form.show">ID:<%= reg_group.blockchain_id %></span>
 
   <% if policy(@project).edit_reg_groups? %>
-    <%= link_to(project_dashboard_reg_group_path(project_id: @project.id, id: reg_group.id), method: :delete, data: {confirm: "Remove #{reg_group.name} group?"} ) do %>
+    <%= image_tag 'pencil.svg', size: "14x14", alt: "edit group", data: {target: 'reg-group-edit-form.show', action: 'click->reg-group-edit-form#showForm'} %>
+
+    <%= form_with model: reg_group, url: project_dashboard_reg_group_path(project_id: @project.id, id: reg_group.id), class: 'reg-groups__form reg-groups__form--edit hidden', data: { target: 'reg-group-edit-form.form' } do |f| %>
+      <%= f.text_field(:name, required: true, placeholder: 'Group Name') %>
+      <%= f.number_field(:blockchain_id, required: true, placeholder: 'ID', min: 0) %>
+      <%= f.submit('save', data: {confirm: 'Update group?'}) %>
+      <%= button_tag "cancel", type: 'button', data: {action: 'reg-group-edit-form#hideForm'} %>
+    <% end %>
+
+    <%= link_to(project_dashboard_reg_group_path(project_id: @project.id, id: reg_group.id), method: :delete, data: {confirm: "Remove #{reg_group.name} group?", target: 'reg-group-edit-form.show'} ) do %>
       <%= image_pack_tag 'media/src/images/styleguide/icons/iconTrash.svg', size: "14x14", alt: "remove group" %>
     <% end %>
   <% end %>

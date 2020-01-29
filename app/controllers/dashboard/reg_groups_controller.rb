@@ -1,6 +1,6 @@
 class Dashboard::RegGroupsController < ApplicationController
   before_action :assign_project
-  before_action :set_reg_group, only: [:destroy]
+  before_action :set_reg_group, only: %i[update destroy]
 
   fragment_cache_key do
     "#{current_user&.id}/#{@project.id}/#{@project.token&.updated_at}"
@@ -13,6 +13,16 @@ class Dashboard::RegGroupsController < ApplicationController
 
     if @reg_group.save
       redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Group created'
+    else
+      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @reg_group.errors.full_messages.join(', ') }
+    end
+  end
+
+  def update
+    authorize @project, :edit_reg_groups?
+
+    if @reg_group.update(reg_group_params)
+      redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Group updated'
     else
       redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @reg_group.errors.full_messages.join(', ') }
     end
