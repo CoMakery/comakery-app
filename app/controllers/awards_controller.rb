@@ -222,7 +222,7 @@ class AwardsController < ApplicationController
   private
 
     def set_project
-      @project = projects_interested.find(params[:project_id])&.decorate
+      @project = Project.find(params[:project_id])&.decorate
       redirect_to('/404.html') unless @project
     end
 
