@@ -244,7 +244,7 @@ export default class Account extends React.Component {
                 <label>Image</label>
               </div>
               <div className="columns small-9">
-                <input type="file" name="image" ref={this.fileInput} />
+                <input type="file" name="image" accept="image/*" ref={this.fileInput} />
               </div>
               <div className="columns small-12 text-right">
                 <input type="submit" value="Save" className="button" />

@@ -1,5 +1,4 @@
 # Rubocop gives false positives on empty example groups with rspec_api_documentation DSL
-# rubocop:disable RSpec/EmptyExampleGroup
 
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
@@ -154,7 +153,7 @@ resource 'II. Accounts' do
         }
       end
 
-      example_request 'UPDATE' do
+      example 'UPDATE' do
         explanation 'Redirects to account data'
 
         request = build(:api_signed_request, { account: account_params }, api_v1_account_path(id: account.managed_account_id), 'PUT', 'example.org')
