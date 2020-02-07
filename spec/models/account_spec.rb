@@ -582,11 +582,6 @@ describe Account do
       expect(account.accessable_projects.map(&:title)).to match_array ['admin project', 'my private project', 'my public project', 'archived project', 'unlisted project', 'member project']
     end
 
-    it 'accessable prọjects include awarded project' do
-      create :award, award_type: award_type, account: account
-      expect(account.accessable_projects.map(&:title)).to match_array ['admin project', 'my private project', 'my public project', 'archived project', 'unlisted project', 'award project']
-    end
-
     it '#other_member_projects' do
       project5.channels.create(team: team, channel_id: 'general')
       expect(account.other_member_projects.map(&:title)).to match_array ['member project']
