@@ -382,6 +382,7 @@ class AwardsController < ApplicationController
       @props = {
         task: task_to_props(@award),
         task_allowed_to_start: policy(@award).start?,
+        task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
         tasks_to_unlock: current_account.tasks_to_unlock(@award),
         license_url: contribution_licenses_path(type: 'CP'),
         my_tasks_path: my_tasks_path,

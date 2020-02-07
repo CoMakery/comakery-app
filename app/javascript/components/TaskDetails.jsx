@@ -459,12 +459,22 @@ class TaskDetails extends React.Component {
                     </React.Fragment>
                   }
 
-                  {!this.props.taskAllowedToStart &&
+                  {!this.props.taskAllowedToStart && !this.props.taskReachedMaximumAssignments &&
                     <LockedMessage>
                       <Icon name="NO-SKILLS.svg" />
                       <div>
                         This task has experince level requirement – {task.experienceLevelName}.
+                        <br />
                         Unlock access by completing <b>{this.props.tasksToUnlock}</b> more {task.specialty || 'General'} {this.props.tasksToUnlock === 1 ? 'task' : 'tasks'} available to you in <a href={this.props.myTasksPath}>My Tasks</a>.
+                      </div>
+                    </LockedMessage>
+                  }
+
+                  {!this.props.taskAllowedToStart && this.props.taskReachedMaximumAssignments &&
+                    <LockedMessage>
+                      <Icon name="NO-SKILLS.svg" />
+                      <div>
+                        You already completed this task maximum number of times allowed.
                       </div>
                     </LockedMessage>
                   }
