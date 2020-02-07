@@ -262,7 +262,15 @@ class ProjectsController < ApplicationController
   def set_show_props
     @props = {
       tasks_by_specialty: @project.ready_tasks_by_specialty.map do |specialty, awards|
-        [specialty&.name&.downcase || 'general', awards.map { |task| task_to_props(task).merge(allowed_to_start: policy(task).start?) }]
+        [
+          specialty&.name&.downcase || 'general',
+          awards.map do |task|
+            task_to_props(task).merge(
+              allowed_to_start: policy(task).start?,
+              reached_maximum_assignments: task.reached_maximum_assignments_for?(current_account)
+            )
+          end
+        ]
       end,
       interested: current_account&.interested?(@project.id),
       specialty_interested: [*1..8].map { |specialty_id| current_account&.specialty_interested?(@project.id, specialty_id) },

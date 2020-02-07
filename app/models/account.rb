@@ -4,7 +4,7 @@
 class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
-  attachment :image
+  attachment :image, type: :image
   include BitcoinAddressable
   include EthereumAddressable
   include QtumAddressable
@@ -197,11 +197,11 @@ class Account < ApplicationRecord
   end
 
   def accessable_projects(scope = nil)
-    (scope || Project).left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+    (scope || Project).left_outer_joins(:admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def related_projects(scope = nil)
-    (scope || Project).left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR (awards.status IN(3,5) AND awards.account_id = :id) OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+    (scope || Project).left_outer_joins(:admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def accessable_award_types(project_scope = nil)
