@@ -79,7 +79,7 @@ resource 'II. Accounts' do
       response_field :errors, 'array of errors'
     end
 
-    context '302' do
+    context '201' do
       let!(:account_params) do
         {
           managed_account_id: SecureRandom.uuid,
@@ -94,11 +94,11 @@ resource 'II. Accounts' do
       end
 
       example 'CREATE' do
-        explanation 'Redirects to account data'
+        explanation 'Returns created account data (See GET for response details)'
 
         request = build(:api_signed_request, { account: account_params }, api_v1_accounts_path, 'POST', 'example.org')
         do_request(request)
-        expect(status).to eq(302)
+        expect(status).to eq(201)
       end
     end
 
@@ -145,7 +145,7 @@ resource 'II. Accounts' do
       response_field :errors, 'array of errors'
     end
 
-    context '302' do
+    context '200' do
       let!(:id) { account.managed_account_id }
       let!(:account_params) do
         {
@@ -154,11 +154,11 @@ resource 'II. Accounts' do
       end
 
       example 'UPDATE' do
-        explanation 'Redirects to account data'
+        explanation 'Returns updated account data (See GET for response details)'
 
         request = build(:api_signed_request, { account: account_params }, api_v1_account_path(id: account.managed_account_id), 'PUT', 'example.org')
         do_request(request)
-        expect(status).to eq(302)
+        expect(status).to eq(200)
       end
     end
 
@@ -215,16 +215,16 @@ resource 'II. Accounts' do
       response_field :errors, 'array of errors'
     end
 
-    context '302' do
+    context '201' do
       let!(:id) { account.managed_account_id }
       let!(:project_id) { project.id }
 
       example 'CREATE INTEREST' do
-        explanation 'Redirects to account interests'
+        explanation 'Returns account interests (See INTERESTS for response details)'
 
         request = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
-        expect(status).to eq(302)
+        expect(status).to eq(201)
       end
     end
 
@@ -252,7 +252,7 @@ resource 'II. Accounts' do
       parameter :project_id, 'project id to uninterest', required: true, type: :string
     end
 
-    context '302' do
+    context '200' do
       let!(:id) { account.managed_account_id }
       let!(:project_id) { project.id }
 
@@ -261,11 +261,11 @@ resource 'II. Accounts' do
       end
 
       example 'REMOVE INTEREST' do
-        explanation 'Redirects to account interests'
+        explanation 'Returns account interests (See INTERESTS for response details)'
 
         request = build(:api_signed_request, '', api_v1_account_interest_path(account_id: account.managed_account_id, id: project.id), 'DELETE', 'example.org')
         do_request(request)
-        expect(status).to eq(302)
+        expect(status).to eq(200)
       end
     end
   end
@@ -318,7 +318,7 @@ resource 'II. Accounts' do
       response_field :errors, 'array of errors'
     end
 
-    context '302' do
+    context '201' do
       let!(:id) { account.managed_account_id }
 
       let!(:verification) do
@@ -331,11 +331,11 @@ resource 'II. Accounts' do
       end
 
       example 'CREATE VERIFICATION' do
-        explanation 'Redirects to account verifications'
+        explanation 'Returns account verifications (See VERIFICATIONS for response details)'
 
         request = build(:api_signed_request, { verification: verification }, api_v1_account_verifications_path(account_id: account.managed_account_id), 'POST', 'example.org')
         do_request(request)
-        expect(status).to eq(302)
+        expect(status).to eq(201)
       end
     end
 

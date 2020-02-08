@@ -114,7 +114,7 @@ table th, table td {
         <h2>CREATE</h2>
         <h3>POST /api/v1/projects/:project_id/transfers</h3>
           <p class="explanation">
-            Redirects to created transfer
+            Returns created transfer details (See GET for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -215,14 +215,29 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transfer":{"account_id":"81a2d6d8-71e1-421f-a36c-c32a08952c6f","amount":"1000.00000000","description":"investor","quantity":"2.00","source":"bought","total_amount":"2000.00000000"}},"method":"POST","nonce":"bd798390f509db2f0920ec5cabdd2631","timestamp":"1580751842","url":"http://example.org/api/v1/projects/42/transfers"},"proof":{"signature":"4dki6bd4cb7Sq/gjl5uB+AUHaqNpWGagiFcSwgaQ7vUxLi++RdQaHxajlqLkIl6LGLOZkH0KcM34uz8O8loOAQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"transfer":{"account_id":"8f09db5b-d65f-4b40-9b85-043060cdbe8a","amount":"1000.00000000","description":"investor","quantity":"2.00","source":"bought","total_amount":"2000.00000000"}},"method":"POST","nonce":"61a135ee1e841a0c875a25a76e188a3b","timestamp":"1581170496","url":"http://example.org/api/v1/projects/42/transfers"},"proof":{"signature":"Dm6uElsqRZYSdN72bOiZwXOWUnV2iRxrNuygRWuBQfN5ztuDQDNM3+ZfmLbL0If2HP2BjvNtrp3hZgR91uv6BA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;63be2a98d0a5693538b77791401e8be2&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">302 Found</pre>
+            <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/projects/42/transfers/13&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 13,
+  &quot;source&quot;: &quot;bought&quot;,
+  &quot;amount&quot;: &quot;1000.0&quot;,
+  &quot;quantity&quot;: &quot;2.0&quot;,
+  &quot;totalAmount&quot;: &quot;2000.0&quot;,
+  &quot;description&quot;: &quot;investor&quot;,
+  &quot;ethereumTransactionAddress&quot;: null,
+  &quot;ethereumTransactionError&quot;: null,
+  &quot;status&quot;: &quot;accepted&quot;,
+  &quot;createdAt&quot;: &quot;2020-02-08T14:01:37.050Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-02-08T14:01:37.050Z&quot;,
+  &quot;accountId&quot;: &quot;8f09db5b-d65f-4b40-9b85-043060cdbe8a&quot;
+}</pre>
       </div>
     </div>
   </body>

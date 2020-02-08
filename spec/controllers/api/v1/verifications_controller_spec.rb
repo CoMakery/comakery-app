@@ -54,12 +54,12 @@ RSpec.describe Api::V1::VerificationsController, type: :controller do
         end.to change(account.verifications, :count).by(1)
       end
 
-      it 'redirects to the api_v1_account_verifications' do
+      it 'returns account verifications' do
         params = build(:api_signed_request, { verification: { passed: 'true', max_investment_usd: '1' } }, api_v1_account_verifications_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
         post :create, params: params, session: valid_session
-        expect(response).to redirect_to(api_v1_account_verifications_path)
+        expect(response).to have_http_status(:created)
       end
     end
 

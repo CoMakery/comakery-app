@@ -114,7 +114,7 @@ table th, table td {
         <h2>CANCEL</h2>
         <h3>DELETE /api/v1/projects/:project_id/transfers/:id</h3>
           <p class="explanation">
-            Redirects to cancelled transfer
+            Returns cancelled transfer details (See GET for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -175,14 +175,29 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"6d9f0fd25243d99ec807e6addc1a8d51","timestamp":"1580751843","url":"http://example.org/api/v1/projects/44/transfers/17"},"proof":{"signature":"PmQ5NFlKQqNVqd4qsOEzqIsB5j2eDf4y/cQdDcsve02TNiIJefbtHD0w8uMYLeZPnD20kv1GrASUNV2fs3NNCw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"ccdb5e71808b331dca82d79815c4b020","timestamp":"1581170498","url":"http://example.org/api/v1/projects/44/transfers/17"},"proof":{"signature":"ICkyFWCMjGbi+95Ea6mOUMTNyk+XryJAdPmb0WUKFcAIuYBoJLP4OF6ATFQHJVZ4xU0nenihel4HSw3JJ/6OCQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;3a755a1d2a82a5ed7f67a0fafd0f1fca&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">302 Found</pre>
+            <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/projects/44/transfers/17&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 17,
+  &quot;source&quot;: &quot;earned&quot;,
+  &quot;amount&quot;: &quot;1000.0&quot;,
+  &quot;quantity&quot;: &quot;2.0&quot;,
+  &quot;totalAmount&quot;: &quot;2000.0&quot;,
+  &quot;description&quot;: &quot;Award to a team member&quot;,
+  &quot;ethereumTransactionAddress&quot;: null,
+  &quot;ethereumTransactionError&quot;: null,
+  &quot;status&quot;: &quot;cancelled&quot;,
+  &quot;createdAt&quot;: &quot;2020-02-08T14:01:37.838Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-02-08T14:01:38.157Z&quot;,
+  &quot;accountId&quot;: &quot;a8fbc547-d9aa-421a-8a57-f75ad7ad2c8c&quot;
+}</pre>
       </div>
     </div>
   </body>

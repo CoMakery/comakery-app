@@ -9,7 +9,9 @@ class Api::V1::VerificationsController < Api::V1::ApiController
     verification = account.verifications.new(verification_params)
 
     if verification.save
-      redirect_to api_v1_account_verifications_path(account.managed_account_id)
+      verifications
+
+      render 'index.json', status: 201
     else
       @errors = verification.errors
 

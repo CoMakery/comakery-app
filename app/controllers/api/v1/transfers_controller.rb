@@ -26,7 +26,9 @@ class Api::V1::TransfersController < Api::V1::ApiController
     award.description ||= '—'
 
     if award.save
-      redirect_to api_v1_project_transfer_path(project, award)
+      @transfer = award
+
+      render 'show.json', status: 201
     else
       @errors = award.errors
 
@@ -37,7 +39,7 @@ class Api::V1::TransfersController < Api::V1::ApiController
   # DELETE /api/v1/accounts/1/follows/1
   def destroy
     if transfer.update(status: :cancelled)
-      redirect_to api_v1_project_transfer_path(project, transfer)
+      render 'show.json', status: 200
     else
       @errors = transfer.errors
 

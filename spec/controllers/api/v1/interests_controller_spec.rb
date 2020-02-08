@@ -54,12 +54,12 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
         expect(project.interested).to include(account)
       end
 
-      it 'redirects to the api_v1_account_interests' do
+      it 'returns list of account interests' do
         params = build(:api_signed_request, { project_id: project.id.to_s }, api_v1_account_interests_path(account_id: account.managed_account_id), 'POST')
         params[:account_id] = account.managed_account_id
 
         post :create, params: params, session: valid_session
-        expect(response).to redirect_to(api_v1_account_interests_path)
+        expect(response).to have_http_status(:created)
       end
     end
 
@@ -95,13 +95,13 @@ RSpec.describe Api::V1::InterestsController, type: :controller do
         expect(project.interested).not_to include(account)
       end
 
-      it 'redirects to the api_v1_account_interests' do
+      it 'returns list of account interests' do
         params = build(:api_signed_request, '', api_v1_account_interest_path(account_id: account.managed_account_id, id: project.id), 'DELETE')
         params[:account_id] = account.managed_account_id
         params[:id] = project.id
 
         delete :destroy, params: params, session: valid_session
-        expect(response).to redirect_to(api_v1_account_interests_path)
+        expect(response).to have_http_status(:ok)
       end
     end
   end

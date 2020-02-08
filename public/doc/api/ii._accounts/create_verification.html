@@ -114,7 +114,7 @@ table th, table td {
         <h2>CREATE VERIFICATION</h2>
         <h3>POST /api/v1/accounts/:id/verifications</h3>
           <p class="explanation">
-            Redirects to account verifications
+            Returns account verifications (See VERIFICATIONS for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -195,18 +195,30 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/0af9b89e-ce0c-43d3-a554-2f1afce93a0e/verifications</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/34427032-846a-4301-9b4e-07ac0e12d270/verifications</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"verification":{"created_at":"2020-01-31 17:43:59 UTC","max_investment_usd":"10000","passed":"true","verification_type":"aml-kyc"}},"method":"POST","nonce":"0c89539dfe63ab1a381a7b3bfab86447","timestamp":"1580751839","url":"http://example.org/api/v1/accounts/0af9b89e-ce0c-43d3-a554-2f1afce93a0e/verifications"},"proof":{"signature":"siTeDl+752qxrPVN44iiAYsRNcGerg2ZpAUH1jUQozo8hC9TatljCb0fXWDehFN2u7dBxMrf2hS7E6VJ2EpMDg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"verification":{"created_at":"2020-02-05 14:01:32 UTC","max_investment_usd":"10000","passed":"true","verification_type":"aml-kyc"}},"method":"POST","nonce":"24cde9064d8c88435ce95411312e6c39","timestamp":"1581170492","url":"http://example.org/api/v1/accounts/34427032-846a-4301-9b4e-07ac0e12d270/verifications"},"proof":{"signature":"uedbNxYjJJAfPn8pYtXMhgHCygq+fHsg889WBxLLm9hSp2/edgtVA4NwCskycoMkjY2Jo8xKRmJY4e5bmb8lCA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;9b086132e5452eb90aae644260466b15&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">302 Found</pre>
+            <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/0af9b89e-ce0c-43d3-a554-2f1afce93a0e/verifications&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">[
+  {
+    &quot;passed&quot;: true,
+    &quot;verificationType&quot;: &quot;aml-kyc&quot;,
+    &quot;maxInvestmentUsd&quot;: 10000,
+    &quot;createdAt&quot;: &quot;2020-02-05T14:01:32.000Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-02-08T14:01:32.995Z&quot;
+  }
+]</pre>
       </div>
     </div>
   </body>
