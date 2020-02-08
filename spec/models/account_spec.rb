@@ -362,6 +362,7 @@ describe Account do
     let!(:admin_award) { create(:award, award_type: admin_award_type) }
     let!(:award_type) { create(:award_type, project: project) }
     let!(:award) { create(:award, award_type: award_type, issuer: account) }
+    let!(:started_award) { create(:award, status: :started, account: account) }
     let!(:received_award) { create(:award, award_type: award_type, account: account) }
     let!(:team) { create :team }
     let!(:teammate) { create :account }
@@ -381,6 +382,10 @@ describe Account do
       end
 
       admin_project.admins << account
+    end
+
+    it 'returns started awards' do
+      expect(account.accessable_awards).to include(started_award)
     end
 
     it 'returns received awards' do

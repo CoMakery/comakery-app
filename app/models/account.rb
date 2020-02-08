@@ -224,7 +224,7 @@ class Account < ApplicationRecord
   end
 
   def accessable_awards(project_scope = nil)
-    awards_matching_experience(project_scope).or(related_awards(project_scope))
+    awards_matching_experience(project_scope).or(related_awards(project_scope)).or(awards)
   end
 
   def experience_for(specialty)
