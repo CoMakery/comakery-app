@@ -53,8 +53,12 @@ class Account < ApplicationRecord
     research: 'Research'
   }
 
-  validates :email, presence: true, uniqueness: { scope: %i[managed_mission], case_sensitive: false }
+  scope :sort_by_max_investment_usd_asc, -> { left_outer_joins(:latest_verification).order('max_investment_usd ASC') }
+  scope :sort_by_max_investment_usd_desc, -> { left_outer_joins(:latest_verification).order('max_investment_usd DESC') }
+
   attr_accessor :password_required, :name_required, :agreement_required
+
+  validates :email, presence: true, uniqueness: { scope: %i[managed_mission], case_sensitive: false }
   validates :password, length: { minimum: 8 }, if: :password_required
   validates :first_name, :last_name, :country, :specialty, presence: true, if: :name_required
   validates :date_of_birth, presence: { message: 'should be present in correct format (MM/DD/YYYY)' }, if: :name_required

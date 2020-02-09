@@ -77,7 +77,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     it 'doesnt include whitelabel tasks' do
-      whitelabel_task = create(:award_ready, name: 'Task not visible because of white label', account: issuer.account)
+      whitelabel_task = create(:award_ready, name: 'Task not visible because of white label')
       whitelabel_task.project.mission.update(whitelabel: true, whitelabel_domain: 'NOT.test.host')
       whitelabel_task.save!
 
