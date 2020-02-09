@@ -24,11 +24,11 @@ const StateFlag = styled.div`
   letter-spacing: normal;
   text-transform: uppercase;
 
-  ${props => props.state === 'ready' && css`
+  ${props => props.state === 'public' && css`
     border-right: 7px solid #00be00;
  `}
 
-  ${props => props.state === 'pending' && css`
+  ${props => props.state === 'invite only' && css`
     border-right: 7px solid #f5a623;
  `}
 

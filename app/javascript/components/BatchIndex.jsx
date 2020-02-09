@@ -185,9 +185,9 @@ class BatchIndex extends React.Component {
 
   notificationColor(batch) {
     switch (batch.state) {
-      case 'ready':
+      case 'public':
         return 'green'
-      case 'pending':
+      case 'invite only':
         return 'orange'
       case 'draft':
         return 'gray'

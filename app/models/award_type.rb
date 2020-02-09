@@ -12,15 +12,15 @@ class AwardType < ApplicationRecord
   after_create :switch_tasks_publicity
   after_save :switch_tasks_publicity, if: -> { saved_change_to_state? }
 
-  enum state: %i[draft pending ready]
+  enum state: ['draft', 'invite only', 'public'], _suffix: true
 
   private
 
     def switch_tasks_publicity
       case state
-      when 'draft', 'pending'
+      when 'draft', 'invite only'
         awards.ready.where(account: nil).find_each { |a| a.update(status: :unpublished) }
-      when 'ready'
+      when 'public'
         awards.unpublished.each { |a| a.update(status: :ready) }
       end
     end
