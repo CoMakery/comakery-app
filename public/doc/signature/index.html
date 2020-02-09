@@ -28,6 +28,10 @@
       textarea#private-key {
         min-height: 2em;
       }
+
+      textarea#signed-request-url {
+        min-height: 5em;
+      }
     </style>
 
     <!-- https://wzrd.in/bundle/tweetnacl@latest -->
@@ -76,16 +80,20 @@
             "signature": buffer.from(signature).toString('base64')
           }
           document.getElementById('signed-request').value = JSON.stringify(request, null, 2)
-          document.getElementById('signed-request-url').value = '?' + $.param(request)
+          document.getElementById('signed-request-url').value = request.body.url + '?' + $.param(request)
         }
 
         function copy() {
+          sign()
+
           document.getElementById('signed-request').select()
           document.getElementById('signed-request').setSelectionRange(0, 99999)
           document.execCommand("copy")
         }
 
         function copyUrl() {
+          sign()
+
           document.getElementById('signed-request-url').select()
           document.getElementById('signed-request-url').setSelectionRange(0, 99999)
           document.execCommand("copy")
@@ -107,7 +115,7 @@
     <textarea id="private-key" placeholder="Private Key (eg: eodjQfDLTyNCBnz+MORHW0lOKWZnCTyPDTFcwAdVRyQ7vNMfjEecPWNEqF4FOuk03bgWDV10vwMcqL/OBUJWkA==)"></textarea>
     <textarea id="request" placeholder='Request (eg: {"body": {"data": ""}})'></textarea>
     
-    <textarea id="signed-request" placeholder="Signed Request" readonly="true"></textarea>
+    <textarea id="signed-request" placeholder="Signed Request JSON" readonly="true"></textarea>
     <button id="copy-signed-request">Sign and Copy</button>
     
     <textarea id="signed-request-url" placeholder="Signed Request URL" readonly="true"></textarea>

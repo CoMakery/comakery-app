@@ -29,15 +29,15 @@ class Dashboard::AccountsController < ApplicationController
 
     def set_accounts
       @page = (params[:page] || 1).to_i
-      @q = @project.interested.ransack(params[:q])
-      @accounts_all = @q.result.includes(:verifications, :awards, :latest_verification, :account_token_records)
+      @q = @project.interested.includes(:verifications, :awards, :latest_verification, :account_token_records).ransack(params[:q])
+      @accounts_all = @q.result
       @accounts = @accounts_all.page(@page).per(10)
       redirect_to '/404.html' if (@page > 1) && @accounts.out_of_range?
     end
 
     def create_token_records
       if @project.token&.coin_type_comakery?
-        @accounts.each { |a| a.account_token_records.find_or_create_by!(token: @project.token) }
+        @project.interested.each { |a| a.account_token_records.find_or_create_by!(token: @project.token) }
       end
     end
 

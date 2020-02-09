@@ -61,11 +61,11 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         end.to change(active_whitelabel_mission.managed_accounts, :count).by(1)
       end
 
-      it 'redirects to the created account' do
+      it 'returns created account' do
         params = build(:api_signed_request, { account: valid_attributes }, api_v1_accounts_path, 'POST')
 
         post :create, params: params, session: valid_session
-        expect(response).to redirect_to(api_v1_account_path(id: Account.last.managed_account_id))
+        expect(response).to have_http_status(:created)
       end
     end
 
@@ -91,12 +91,12 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
         expect(account.first_name).to eq(valid_attributes[:first_name])
       end
 
-      it 'redirects to the api_v1_account_path' do
+      it 'returns updated account' do
         params = build(:api_signed_request, { account: valid_attributes }, api_v1_account_path(id: account.managed_account_id), 'PUT')
         params[:id] = account.managed_account_id
 
         put :update, params: params, session: valid_session
-        expect(response).to redirect_to(api_v1_account_path)
+        expect(response).to have_http_status(:ok)
       end
     end
 

@@ -82,12 +82,12 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
         end.to change(project.awards.completed, :count).by(1)
       end
 
-      it 'redirects to the created transfer' do
+      it 'returns created transfer' do
         params = build(:api_signed_request, { transfer: valid_attributes }, api_v1_project_transfers_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
 
         post :create, params: params, session: valid_session
-        expect(response).to redirect_to(api_v1_project_transfer_path(project, project.awards.completed.last))
+        expect(response).to have_http_status(:created)
       end
     end
 
@@ -160,13 +160,13 @@ RSpec.describe Api::V1::TransfersController, type: :controller do
       expect(transfer.reload.cancelled?).to be_truthy
     end
 
-    it 'redirects to the cancelled transfer' do
+    it 'returns cancelled transfer' do
       params = build(:api_signed_request, '', api_v1_project_transfer_path(project_id: project.id, id: transfer.id), 'DELETE')
       params[:project_id] = project.id
       params[:id] = transfer.id
 
       delete :destroy, params: params, session: valid_session
-      expect(response).to redirect_to(api_v1_project_transfer_path(project, transfer))
+      expect(response).to have_http_status(:ok)
     end
   end
 end

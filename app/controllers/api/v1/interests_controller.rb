@@ -13,7 +13,9 @@ class Api::V1::InterestsController < Api::V1::ApiController
     )
 
     if interest.save
-      redirect_to api_v1_account_interests_path(account.managed_account_id)
+      interests
+
+      render 'index.json', status: 201
     else
       @errors = interest.errors
 
@@ -24,8 +26,9 @@ class Api::V1::InterestsController < Api::V1::ApiController
   # DELETE /api/v1/accounts/1/interests/1
   def destroy
     interest.interests.find_by!(account: account).destroy
+    interests
 
-    redirect_to api_v1_account_interests_path(account.managed_account_id)
+    render 'index.json', status: 200
   end
 
   private

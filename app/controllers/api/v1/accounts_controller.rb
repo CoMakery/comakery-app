@@ -16,7 +16,9 @@ class Api::V1::AccountsController < Api::V1::ApiController
     account.specialty = Specialty.default
 
     if account.save
-      redirect_to api_v1_account_path(id: account.managed_account_id)
+      @account = account
+
+      render 'show.json', status: 201
     else
       @errors = account.errors
 
@@ -27,7 +29,7 @@ class Api::V1::AccountsController < Api::V1::ApiController
   # PATCH/PUT /api/v1/accounts/1
   def update
     if account.update(account_params)
-      redirect_to api_v1_account_path(id: account.managed_account_id)
+      render 'show.json', status: 200
     else
       @errors = account.errors
 

@@ -114,7 +114,7 @@ table th, table td {
         <h2>CREATE INTEREST</h2>
         <h3>POST /api/v1/accounts/:id/interests</h3>
           <p class="explanation">
-            Redirects to account interests
+            Returns account interests (See INTERESTS for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -171,18 +171,24 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/accounts/ad93ee99-13d9-4c52-a351-83663a754280/interests</pre>
+          <pre class="request route highlight">POST /api/v1/accounts/ac71a160-379e-4049-8c11-2e45e5c46d20/interests</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"project_id":"20"},"method":"POST","nonce":"e4b75cd3b5353c646ea2c6025577d0ea","timestamp":"1580751838","url":"http://example.org/api/v1/accounts/ad93ee99-13d9-4c52-a351-83663a754280/interests"},"project_id":20,"proof":{"signature":"TSG8GgeZOQbk0q7FPhXVwC/TcjMt95e90ACJ7K+mrEuOlmylhXqtISJmwcyP3UIMwAVefJgVZ+/eV6WMZHZkDg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"project_id":"20"},"method":"POST","nonce":"1d4d4a561630ef8f1ccce5044e75cb18","timestamp":"1581170491","url":"http://example.org/api/v1/accounts/ac71a160-379e-4049-8c11-2e45e5c46d20/interests"},"project_id":20,"proof":{"signature":"MAJtzszwzIeH2O/7tMrGHqCuSfOuyCyqb3ZefnanCQbNjWYkOXKuD3oRwzuuBVeozziByjyXIyWORmsg6CEhAg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;49e165525ebdb26f765e7bbab7689c47&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">302 Found</pre>
+            <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">&lt;html&gt;&lt;body&gt;You are being &lt;a href=&quot;http://example.org/api/v1/accounts/ad93ee99-13d9-4c52-a351-83663a754280/interests&quot;&gt;redirected&lt;/a&gt;.&lt;/body&gt;&lt;/html&gt;</pre>
+              <pre class="response body">[
+  20
+]</pre>
       </div>
     </div>
   </body>

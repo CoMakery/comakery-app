@@ -90,7 +90,7 @@ resource 'IV. Transfers' do
       parameter :description, 'transfer description', type: :string
     end
 
-    context '302' do
+    context '201' do
       let!(:project_id) { project.id }
 
       let!(:transfer) do
@@ -105,11 +105,11 @@ resource 'IV. Transfers' do
       end
 
       example 'CREATE' do
-        explanation 'Redirects to created transfer'
+        explanation 'Returns created transfer details (See GET for response details)'
 
         request = build(:api_signed_request, { transfer: transfer }, api_v1_project_transfers_path(project_id: project.id), 'POST', 'example.org')
         do_request(request)
-        expect(status).to eq(302)
+        expect(status).to eq(201)
       end
     end
 
@@ -143,16 +143,16 @@ resource 'IV. Transfers' do
       response_field :errors, 'array of errors'
     end
 
-    context '302' do
+    context '200' do
       let!(:id) { transfer_accepted.id }
       let!(:project_id) { project.id }
 
       example 'CANCEL' do
-        explanation 'Redirects to cancelled transfer'
+        explanation 'Returns cancelled transfer details (See GET for response details)'
 
         request = build(:api_signed_request, '', api_v1_project_transfer_path(id: transfer_accepted.id, project_id: project.id), 'DELETE', 'example.org')
         do_request(request)
-        expect(status).to eq(302)
+        expect(status).to eq(200)
       end
     end
 
