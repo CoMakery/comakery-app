@@ -53,8 +53,8 @@ class Account < ApplicationRecord
     research: 'Research'
   }
 
-  scope :sort_by_max_investment_usd_asc, -> { left_outer_joins(:latest_verification).order('max_investment_usd ASC') }
-  scope :sort_by_max_investment_usd_desc, -> { left_outer_joins(:latest_verification).order('max_investment_usd DESC') }
+  scope :sort_by_max_investment_usd_asc, -> { includes(:latest_verification).order('max_investment_usd ASC') }
+  scope :sort_by_max_investment_usd_desc, -> { includes(:latest_verification).order('max_investment_usd DESC') }
 
   attr_accessor :password_required, :name_required, :agreement_required
 
