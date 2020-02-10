@@ -166,7 +166,7 @@ class BatchIndex extends React.Component {
     this.handleListClick = this.handleListClick.bind(this)
     this.state = {
       selectedBatch     : null,
-      selectedTaskFilter: null
+      selectedTaskFilter: 'ready'
     }
   }
 
@@ -185,9 +185,9 @@ class BatchIndex extends React.Component {
 
   notificationColor(batch) {
     switch (batch.state) {
-      case 'ready':
+      case 'public':
         return 'green'
-      case 'pending':
+      case 'invite only':
         return 'orange'
       case 'draft':
         return 'gray'

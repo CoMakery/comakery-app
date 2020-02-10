@@ -277,19 +277,20 @@ export default class Project extends React.Component {
         {tokenData && projectData.awardedTokens > 0 &&
           <div className="project-award__progress">
             <div className="project-award__progress__stats">
-              Tokens awarded
-              {projectData.maximumTokens &&
+              {projectData.maximumTokens > 0 &&
                 <div>
-                  <strong className="project-award__percent">{projectData.tokenPercentage}</strong> - {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}
+                  Tokens awarded:
+                  <strong className="project-award__percent"> {projectData.tokenPercentage}</strong> — {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}
                 </div>
               }
               {!projectData.maximumTokens &&
                 <div>
-                  {projectData.awardedTokens} {tokenData.symbol}
+                  Tokens awarded:
+                  <strong className="project-award__percent"> {projectData.awardedTokens} {tokenData.symbol}</strong>
                 </div>
               }
             </div>
-            {projectData.maximumTokens &&
+            {projectData.maximumTokens > 0 &&
               <div className="project-award__progress__bar-container">
                 <div className="project-award__progress__bar-line" />
                 <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}`}} />

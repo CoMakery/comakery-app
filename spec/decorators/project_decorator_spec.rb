@@ -186,7 +186,7 @@ describe ProjectDecorator do
 
   describe 'header_props' do
     let!(:project) { create(:project) }
-    let!(:award_type) { create(:award_type, project: project, state: :ready) }
+    let!(:award_type) { create(:award_type, project: project, state: 'public') }
     let!(:unlisted_project) { create(:project, visibility: 'public_unlisted') }
     let!(:project_wo_image) { create(:project) }
     let!(:project_comakery_token) { create(:project, token: create(:token, coin_type: :comakery)) }

@@ -3,9 +3,9 @@ require 'rails_helper'
 describe AwardTypePolicy do
   let!(:project) { create(:project) }
   let!(:project_admin) { create(:account) }
-  let!(:award_type_draft) { create(:award_type, project: project, state: :draft) }
-  let!(:award_type_pending) { create(:award_type, project: project, state: :pending) }
-  let!(:award_type_ready) { create(:award_type, project: project, state: :ready) }
+  let!(:award_type_draft) { create(:award_type, project: project, state: 'draft') }
+  let!(:award_type_pending) { create(:award_type, project: project, state: 'invite only') }
+  let!(:award_type_ready) { create(:award_type, project: project, state: 'public') }
 
   describe AwardTypePolicy::Scope do
     context 'project owner' do
