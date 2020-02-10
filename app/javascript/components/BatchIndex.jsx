@@ -166,7 +166,7 @@ class BatchIndex extends React.Component {
     this.handleListClick = this.handleListClick.bind(this)
     this.state = {
       selectedBatch     : null,
-      selectedTaskFilter: null
+      selectedTaskFilter: 'ready'
     }
   }
 
