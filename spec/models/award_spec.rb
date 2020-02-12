@@ -89,6 +89,8 @@ describe Award do
       let(:award_type) { create(:award_type) }
       let(:award_ready_w_account) { create :award_ready, award_type: award_type }
       let(:award_ready_wo_account) { create :award_ready, award_type: award_type }
+      let(:award_unpublished_w_account) { create :award, status: :unpublished, award_type: award_type }
+      let(:award_unpublished_wo_account) { create :award, status: :unpublished, award_type: award_type }
       let(:award_started) { create :award, status: :started, award_type: award_type }
       let(:award_submitted) { create :award, status: :submitted, award_type: award_type }
       let(:award_accepted) { create :award, status: :accepted, award_type: award_type }
@@ -97,6 +99,7 @@ describe Award do
 
       before do
         award_ready_wo_account.update(account: nil)
+        award_unpublished_wo_account.update(account: nil)
         award_type.project.admins << create(:account)
       end
 
@@ -105,6 +108,12 @@ describe Award do
         expect(described_class.filtered_for_view('ready', award_ready_w_account.account)).to include(award_ready_w_account)
 
         expect(described_class.filtered_for_view('ready', create(:account))).not_to include(award_ready_w_account)
+      end
+
+      it 'returns unpublished awards assigned to you' do
+        expect(described_class.filtered_for_view('ready', award_unpublished_w_account.account)).to include(award_unpublished_w_account)
+        expect(described_class.filtered_for_view('ready', create(:account))).not_to include(award_unpublished_w_account)
+        expect(described_class.filtered_for_view('ready', create(:account))).not_to include(award_unpublished_wo_account)
       end
 
       it 'returns only started awards for a contributor' do

@@ -81,7 +81,7 @@ class Award < ApplicationRecord
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
-      where(status: :ready, account: [nil, account])
+      where(status: :ready, account: [nil, account]).or(where(status: :unpublished, account: account))
     when 'started'
       where(status: :started).where(account: account)
     when 'submitted'

@@ -411,7 +411,7 @@ class TaskDetails extends React.Component {
                 </ContentBlock>
               }
 
-              {task.status === 'ready' &&
+              {(task.status === 'ready' || task.status === 'unpublished') &&
                 <React.Fragment>
                   {this.props.taskAllowedToStart &&
                     <React.Fragment>
