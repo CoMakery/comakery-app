@@ -19,6 +19,17 @@ describe Mission do
       expect(errors).to include('Subtitle is too long (maximum is 140 characters)')
       expect(errors).to include('Description is too long (maximum is 500 characters)')
     end
+
+    it 'doesnt allow to overwrite whitelabel_api_public_key' do
+      mission_w_public_key = create(:mission, whitelabel_api_public_key: build(:api_public_key))
+      mission_wo_public_key = create(:mission)
+
+      mission_w_public_key.whitelabel_api_public_key = 'updated'
+      mission_wo_public_key.whitelabel_api_public_key = 'updated'
+
+      expect(mission_w_public_key).not_to be_valid
+      expect(mission_wo_public_key).to be_valid
+    end
   end
 
   describe '#stats' do
@@ -54,6 +65,28 @@ describe Mission do
       create(:interest, project: project)
 
       expect(mission.stats[:interests]).to eq(3)
+    end
+  end
+
+  describe 'managed_accounts' do
+    let!(:mission) { create(:mission) }
+    let!(:account) { create(:account, managed_mission: mission) }
+
+    it 'has many managed_accounts' do
+      expect(mission.managed_accounts).to eq([account])
+    end
+  end
+
+  describe 'populate_api_key' do
+    let!(:mission_wo_key) { create(:mission, whitelabel: true) }
+    let!(:mission_w_key) { create(:mission, whitelabel: true, whitelabel_api_key: '12345') }
+
+    it 'populates whitelabel_api_key for whitelabel missions' do
+      expect(mission_wo_key.whitelabel_api_key).not_to be_nil
+    end
+
+    it 'doesnt populate whitelabel_api_key for whitelabel missions if its present' do
+      expect(mission_w_key.whitelabel_api_key).to eq('12345')
     end
   end
 end

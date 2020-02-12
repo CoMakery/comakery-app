@@ -117,7 +117,7 @@ describe AwardPolicy do
   describe 'start?' do
     it 'returns true if award is ready, and related to account' do
       a = create(:award, status: 'ready')
-      expect(described_class.new(a.account, a).start?).to be true
+      expect(described_class.new(a.project.account, a).start?).to be true
     end
 
     it 'returns true if award is ready, has matching experience and accessable for a given user' do

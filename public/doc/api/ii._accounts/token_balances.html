@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>II. Accounts API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>II. Accounts API</h1>
+
+        <p class="explanation">Retrieve and manage account data, balances, interests.</p>
+
+      <div class="article">
+        <h2>TOKEN BALANCES</h2>
+        <h3>GET /api/v1/accounts/:id/token_balances</h3>
+          <p class="explanation">
+            Returns an array of token balances
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="required">
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">account id</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">total_received</span>
+                </td>
+                <td>
+                  <span class="description">total received on platform</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">blockchain[address]</span>
+                </td>
+                <td>
+                  <span class="description">blockchain address</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">blockchain[balance]</span>
+                </td>
+                <td>
+                  <span class="description">blockchain balance</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">blockchain[maxBalance]</span>
+                </td>
+                <td>
+                  <span class="description">blockchain max balance</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">blockchain[lockupUntil]</span>
+                </td>
+                <td>
+                  <span class="description">blockchain lockup until</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">blockchain[accountFrozen]</span>
+                </td>
+                <td>
+                  <span class="description">blockchain account frozen status</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[id]</span>
+                </td>
+                <td>
+                  <span class="description">token id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[name]</span>
+                </td>
+                <td>
+                  <span class="description">token name</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[symbol]</span>
+                </td>
+                <td>
+                  <span class="description">token symbol</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[network]</span>
+                </td>
+                <td>
+                  <span class="description">token network ( main | ropsten | kovan | rinkeby )</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[contractAddress]</span>
+                </td>
+                <td>
+                  <span class="description">token contract address</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[decimalPlaces]</span>
+                </td>
+                <td>
+                  <span class="description">token decimal places</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[logoUrl]</span>
+                </td>
+                <td>
+                  <span class="description">token logo url</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[createdAt]</span>
+                </td>
+                <td>
+                  <span class="description">token creation timestamp</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[updatedAt]</span>
+                </td>
+                <td>
+                  <span class="description">token update timestamp</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">GET /api/v1/accounts/59fa030f-8d69-4168-adef-d7c678bcc3a1/token_balances?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Faccounts%2F59fa030f-8d69-4168-adef-d7c678bcc3a1%2Ftoken_balances&amp;body[method]=GET&amp;body[nonce]=f30e16dddede0899ac74cb5f7ba1ef54&amp;body[timestamp]=1581170494&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=lJi1StbRF4nKrNVMhx3EqULubVM56A511mvbJj%2BOiwk%2BOLm9IcgHPNMAm1nvc8znniIpylopUDwzyRacX9yIDA%3D%3D</pre>
+
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/accounts/59fa030f-8d69-4168-adef-d7c678bcc3a1/token_balances&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;f30e16dddede0899ac74cb5f7ba1ef54&quot;, &quot;timestamp&quot;=&gt;&quot;1581170494&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;lJi1StbRF4nKrNVMhx3EqULubVM56A511mvbJj+Oiwk+OLm9IcgHPNMAm1nvc8znniIpylopUDwzyRacX9yIDA==&quot;}</pre>
+
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;e24c8b6a5cb28203434a98213e806229&quot;</pre>
+            <h4>Status</h4>
+            <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">[
+  {
+    &quot;token&quot;: {
+      &quot;id&quot;: 41,
+      &quot;name&quot;: &quot;Token-162e27815fd1fef5c9e0c4c08662681a04f9f24d&quot;,
+      &quot;symbol&quot;: &quot;TKN52b0d63520d0cc30f50e41b5b672b84908e3785a&quot;,
+      &quot;network&quot;: null,
+      &quot;contractAddress&quot;: null,
+      &quot;decimalPlaces&quot;: null,
+      &quot;logoUrl&quot;: &quot;/attachments/32f7389fce1412944ae77d6866d7a2437328999d/store/fill/100/100/35bd893dfc3554973c715fca7499e636f7e72ecc6e86523e4bfa6a5add41/image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-02-08T14:01:33.478Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-02-08T14:01:34.094Z&quot;
+    },
+    &quot;blockchain&quot;: {
+      &quot;address&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
+      &quot;balance&quot;: &quot;200.0&quot;,
+      &quot;maxBalance&quot;: &quot;100000&quot;,
+      &quot;lockupUntil&quot;: &quot;2020-02-07T14:01:33.535Z&quot;,
+      &quot;accountFrozen&quot;: false
+    },
+    &quot;totalReceived&quot;: &quot;3.0&quot;
+  },
+  {
+    &quot;token&quot;: {
+      &quot;id&quot;: 42,
+      &quot;name&quot;: &quot;Token-d4af2bb954dfca12d5cffe36245008c96ed9d07b&quot;,
+      &quot;symbol&quot;: &quot;TKNb59d75243d0c36746269b1d35cdaf72fbbd0fee7&quot;,
+      &quot;network&quot;: null,
+      &quot;contractAddress&quot;: null,
+      &quot;decimalPlaces&quot;: null,
+      &quot;logoUrl&quot;: &quot;/attachments/f14891a36c0a0cc7d751154acfa4dcbce95cd263/store/fill/100/100/888fd75a253ee7aac3838c7f0f3b0666b9406b690cd6d93e7bfca4b13fb1/image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-02-08T14:01:33.484Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-02-08T14:01:34.170Z&quot;
+    },
+    &quot;blockchain&quot;: {
+      &quot;address&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
+      &quot;balance&quot;: &quot;200.0&quot;,
+      &quot;maxBalance&quot;: &quot;100000&quot;,
+      &quot;lockupUntil&quot;: &quot;2020-02-07T14:01:33.596Z&quot;,
+      &quot;accountFrozen&quot;: false
+    },
+    &quot;totalReceived&quot;: &quot;8.0&quot;
+  }
+]</pre>
+      </div>
+    </div>
+  </body>
+</html>

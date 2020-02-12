@@ -13,11 +13,12 @@ class Mission < ApplicationRecord
   has_many :leaders, through: :public_projects, source: :account
   has_many :tokens, through: :public_projects, source: :token
   has_many :award_types, through: :projects
-  has_many :ready_award_types, -> { where state: :ready }, through: :unarchived_projects, source: :award_types, class_name: 'AwardType'
+  has_many :ready_award_types, -> { where state: 'public' }, through: :unarchived_projects, source: :award_types, class_name: 'AwardType'
   has_many :published_awards, through: :ready_award_types, source: :awards, class_name: 'Award'
   has_many :awards, through: :award_types
   has_many :interests, through: :public_projects
   has_many :interested, -> { distinct }, through: :public_projects
+  has_many :managed_accounts, class_name: 'Account', foreign_key: 'managed_mission_id'
 
   enum status: %i[active passive]
 
@@ -28,6 +29,9 @@ class Mission < ApplicationRecord
   validates :name, length: { maximum: 100 }
   validates :subtitle, length: { maximum: 140 }
   validates :description, length: { maximum: 500 }
+  validate :whitelabel_api_public_key_cannot_be_overwritten, if: -> { whitelabel_api_public_key_changed? && whitelabel_api_public_key_was.present? }
+
+  before_save :populate_api_key, if: -> { whitelabel }
 
   def serialize
     as_json(only: %i[id name token_id subtitle description status display_order]).merge(
@@ -55,5 +59,15 @@ class Mission < ApplicationRecord
 
   def set_whitelabel_for_projects
     projects.update(whitelabel: whitelabel)
+  end
+
+  def whitelabel_api_public_key_cannot_be_overwritten
+    errors.add(:whitelabel_api_public_key, 'cannot be overwritten')
+  end
+
+  def populate_api_key
+    # 24 bytes = 32 characters base64 string
+
+    self.whitelabel_api_key ||= SecureRandom.base64(24)
   end
 end

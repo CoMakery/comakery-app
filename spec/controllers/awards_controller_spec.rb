@@ -10,7 +10,8 @@ RSpec.describe AwardsController, type: :controller do
   let!(:other_auth) { create(:authentication) }
   let!(:different_team_account) { create(:authentication) }
 
-  let(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+  let!(:project) { create(:project, account: issuer.account, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
+  let!(:award_type) { create(:award_type, project: project) }
 
   before do
     stub_discord_channels
@@ -24,7 +25,7 @@ RSpec.describe AwardsController, type: :controller do
 
   describe '#index' do
     before do
-      21.times { create(:award, account: issuer.account) }
+      21.times { create(:award, award_type: award_type, account: issuer.account) }
       login(issuer.account)
     end
 
@@ -76,7 +77,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     it 'doesnt include whitelabel tasks' do
-      whitelabel_task = create(:award_ready, name: 'Task not visible because of white label', account: issuer.account)
+      whitelabel_task = create(:award_ready, name: 'Task not visible because of white label')
       whitelabel_task.project.mission.update(whitelabel: true, whitelabel_domain: 'NOT.test.host')
       whitelabel_task.save!
 
@@ -202,7 +203,8 @@ RSpec.describe AwardsController, type: :controller do
     let!(:award_cloneable) { create(:award_ready, number_of_assignments: 2) }
 
     it 'starts the task, associating it with current user and redirects to task details page with notice' do
-      login(award.account)
+      login(award.project.account)
+
       post :start, params: {
         project_id: award.project.to_param,
         award_type_id: award.award_type.to_param,
@@ -215,7 +217,7 @@ RSpec.describe AwardsController, type: :controller do
     end
 
     it 'clones the task before start if it should be cloned' do
-      login(award_cloneable.account)
+      login(award_cloneable.project.account)
       post :start, params: {
         project_id: award_cloneable.project.to_param,
         award_type_id: award_cloneable.award_type.to_param,

@@ -4,10 +4,12 @@ class Mom
   def account(**attrs)
     defaults = {
       email: "me+#{SecureRandom.hex(20)}@example.com",
-      first_name: 'Account',
-      last_name: SecureRandom.hex(20),
+      first_name: 'Eva',
+      last_name: 'Smith',
+      nickname: "hunter-#{SecureRandom.hex(20)}",
       date_of_birth: '1990/01/01',
       country: 'United States of America',
+      ethereum_wallet: '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B',
       specialty: create(:specialty),
       password: valid_password
     }
@@ -71,6 +73,7 @@ class Mom
       token: token,
       reg_group: create(:reg_group, token: token),
       max_balance: 100000,
+      balance: 200,
       account_frozen: false,
       lockup_until: 1.day.ago
     }
@@ -142,6 +145,19 @@ class Mom
     Token.new(defaults.merge(attrs))
   end
 
+  def comakery_token(**attrs)
+    defaults = {
+      name: "ComakeryToken-#{SecureRandom.hex(20)}",
+      symbol: "XYZ#{SecureRandom.hex(20)}",
+      logo_image: dummy_image,
+      coin_type: :comakery,
+      decimal_places: 18,
+      ethereum_network: :ropsten,
+      ethereum_contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
+    }
+    Token.new(defaults.merge(attrs))
+  end
+
   def interest(**attrs)
     params = {
       protocol: 'Moms protocol',
@@ -168,7 +184,7 @@ class Mom
       name: 'Contribution',
       goal: 'none',
       description: 'none',
-      state: :ready
+      state: 'public'
     }
     attrs[:project] = create(:project) unless attrs[:project]
     AwardType.new(defaults.merge(attrs))
@@ -233,6 +249,25 @@ class Mom
     Award.new(params)
   end
 
+  def transfer(**attrs)
+    params = {
+      name: 'Bought',
+      source: :bought,
+      description: 'Investment',
+      why: '–',
+      requirements: '–',
+      status: :accepted,
+      quantity: 1,
+      amount: 50,
+      issuer: create(:account),
+      account: create(:account)
+    }.merge(attrs)
+
+    params[:award_type] ||= create(:project, account: params[:issuer]).default_award_type
+
+    Award.new(params)
+  end
+
   def slack(authentication = create(:authentication))
     Comakery::Slack.new(authentication)
   end
@@ -263,7 +298,27 @@ class Mom
   end
 
   def active_whitelabel_mission
-    create(:mission, whitelabel: true, whitelabel_domain: 'test.host')
+    create(:mission, whitelabel: true, whitelabel_domain: 'test.host', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key))
+  end
+
+  def api_public_key
+    'O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA='
+  end
+
+  def api_private_key
+    'eodjQfDLTyNCBnz+MORHW0lOKWZnCTyPDTFcwAdVRyQ7vNMfjEecPWNEqF4FOuk03bgWDV10vwMcqL/OBUJWkA=='
+  end
+
+  def api_key
+    '28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO'
+  end
+
+  def api_signed_request(data, path, method, host = 'test.host')
+    Comakery::APISignature.new('body' => {
+      'data' => data.is_a?(Hash) ? data.deep_stringify_keys : data,
+      'url' => "http://#{host}#{path}",
+      'method' => method
+    }).sign(build(:api_private_key))
   end
 end
 
@@ -277,4 +332,8 @@ end
 
 def create(thing, *args)
   mom.send(thing, *args).tap(&:save!)
+end
+
+def dummy_image
+  Refile::FileDouble.new('dummy_image', 'dummy_image.png', content_type: 'image/png')
 end

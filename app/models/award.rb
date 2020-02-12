@@ -13,6 +13,7 @@ class Award < ApplicationRecord
   }.freeze
 
   STARTED_TASKS_PER_CONTRIBUTOR = 5
+  QUANTITY_PRECISION = 2
 
   attachment :image, type: :image
   attachment :submission_image, type: :image
@@ -31,7 +32,7 @@ class Award < ApplicationRecord
   has_one :project, through: :award_type
   has_one :token, through: :project
 
-  validates :proof_id, :award_type, :name, :why, :requirements, presence: true
+  validates :proof_id, :award_type, :name, presence: true
   validates :amount, numericality: { greater_than: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
@@ -57,11 +58,12 @@ class Award < ApplicationRecord
   validate :total_amount_fits_into_project_budget
   validate :contributor_doesnt_have_too_many_started_tasks, if: -> { status == 'started' }
   validate :contributor_doesnt_reach_maximum_assignments, if: -> { status == 'started' }
+  validate :cancellation, if: -> { status_changed? && status_was.in?(%w[rejected paid cancelled]) && status == 'cancelled' }
 
   before_validation :ensure_proof_id_exists
   before_validation :calculate_total_amount
   before_validation :set_paid_status_if_project_has_no_token, if: -> { status == 'accepted' && !project.token }
-  before_validation :make_unpublished_if_award_type_is_not_ready, if: -> { status == 'ready' && !award_type&.ready? }
+  before_validation :make_unpublished_if_award_type_is_not_ready, if: -> { status == 'ready' && !award_type&.public_state? }
   before_validation :store_license_hash, if: -> { status == 'started' && agreed_to_license_hash.nil? }
   before_validation :set_expires_at, if: -> { status == 'started' && expires_at.nil? }
   before_validation :clear_expires_at, if: -> { status == 'submitted' && expires_at.present? }
@@ -71,6 +73,7 @@ class Award < ApplicationRecord
   after_save :add_account_as_interested, if: -> { account }
 
   scope :completed, -> { where 'awards.status in(3,5)' }
+  scope :completed_or_cancelled, -> { where 'awards.status in(3,5,6)' }
   scope :listed, -> { where 'awards.status not in(6,7)' }
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
@@ -78,7 +81,7 @@ class Award < ApplicationRecord
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
-      where(status: :ready, account: [nil, account])
+      where(status: :ready, account: [nil, account]).or(where(status: :unpublished, account: account))
     when 'started'
       where(status: :started).where(account: account)
     when 'submitted'
@@ -384,5 +387,9 @@ class Award < ApplicationRecord
     def set_transferred_at
       self.updated_at = Time.current
       self.transferred_at = updated_at
+    end
+
+    def cancellation
+      errors.add(:base, "#{status_was.capitalize} task/transfer can't be cancelled")
     end
 end

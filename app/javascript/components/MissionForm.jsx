@@ -46,6 +46,7 @@ export default class MissionForm extends React.Component {
       whitelabel               : props.mission.whitelabel ? 'true' : 'false',
       whitelabelDomain         : props.mission.whitelabelDomain || '',
       whitelabelContactEmail   : props.mission.whitelabelContactEmail || '',
+      whitelabelApiPublicKey   : props.mission.whitelabelApiPublicKey || '',
       logo                     : null,
       image                    : null,
       logoPreview              : props.mission.logoUrl,
@@ -105,13 +106,14 @@ export default class MissionForm extends React.Component {
     }
 
     let formData = new FormData()
-    const {name, subtitle, description, whitelabel, whitelabelDomain, whitelabelContactEmail, logo, image, whitelabelLogo, whitelabelLogoDark, whitelabelFavicon} = this.state
+    const {name, subtitle, description, whitelabel, whitelabelDomain, whitelabelContactEmail, whitelabelApiPublicKey, logo, image, whitelabelLogo, whitelabelLogoDark, whitelabelFavicon} = this.state
     formData.append('mission[name]', name)
     formData.append('mission[subtitle]', subtitle)
     formData.append('mission[description]', description)
     formData.append('mission[whitelabel]', whitelabel)
     formData.append('mission[whitelabel_domain]', whitelabelDomain)
     formData.append('mission[whitelabel_contact_email]', whitelabelContactEmail)
+    formData.append('mission[whitelabel_api_public_key]', whitelabelApiPublicKey)
     formData.append('authenticity_token', this.props.csrfToken)
     if (logo) {
       formData.append('mission[logo]', logo)
@@ -249,7 +251,7 @@ export default class MissionForm extends React.Component {
   }
 
   render() {
-    const {name, subtitle, description, whitelabel, whitelabelDomain, whitelabelContactEmail, logoPreview, imagePreview, whitelabelLogoPreview, whitelabelLogoDarkPreview, whitelabelFaviconPreview, errors} = this.state
+    const {name, subtitle, description, whitelabel, whitelabelDomain, whitelabelContactEmail, whitelabelApiPublicKey, logoPreview, imagePreview, whitelabelLogoPreview, whitelabelLogoDarkPreview, whitelabelFaviconPreview, errors} = this.state
 
     return <React.Fragment>
       <Layout
@@ -351,6 +353,15 @@ export default class MissionForm extends React.Component {
             title="Whitelabel Contact Email"
             symbolLimit={140}
             value={whitelabelContactEmail}
+            eventHandler={this.handleChangeFormData}
+          />
+
+          <InputFieldWhiteDark
+            name="whitelabelApiPublicKey"
+            title="Whitelabel API Public Key"
+            symbolLimit={140}
+            value={whitelabelApiPublicKey}
+            readOnly={this.props.mission.whitelabelApiPublicKey}
             eventHandler={this.handleChangeFormData}
           />
 

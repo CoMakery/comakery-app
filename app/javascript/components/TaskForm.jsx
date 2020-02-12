@@ -218,7 +218,6 @@ class TaskForm extends React.Component {
 
             <InputFieldDescription
               title="WHAT IS THE EXPECTED BENEFIT"
-              required
               name="task[why]"
               value={this.state['task[why]']}
               errorText={this.state.errors['task[why]']}
@@ -229,7 +228,6 @@ class TaskForm extends React.Component {
 
             <InputFieldDescriptionLarge
               title="acceptance requirements"
-              required
               name="task[requirements]"
               value={this.state['task[requirements]']}
               errorText={this.state.errors['task[requirements]']}

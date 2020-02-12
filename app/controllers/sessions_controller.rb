@@ -31,7 +31,12 @@ class SessionsController < ApplicationController
   end
 
   def sign_in
-    @account = Account.find_by email: params[:email]
+    @account = if @whitelabel_mission
+      @whitelabel_mission.managed_accounts.find_by email: params[:email]
+    else
+      Account.find_by(email: params[:email], managed_mission_id: nil)
+    end
+
     if @account && @account.password_digest && @account.authenticate(params[:password])
       session[:account_id] = @account.id
       redirect_to redirect_path

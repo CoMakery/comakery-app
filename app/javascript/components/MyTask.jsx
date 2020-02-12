@@ -392,6 +392,16 @@ class TaskActionComponent extends React.Component {
           }
         </TaskAction>
       )
+    } else if (task.reachedMaximumAssignments) {
+      return (
+        <TaskAction
+          componentStyle={this.props.componentStyle}
+          href={task.detailsUrl}
+          actionAvailable
+        >
+          <React.Fragment>Task Completed</React.Fragment>
+        </TaskAction>
+      )
     } else {
       return (
         <TaskAction

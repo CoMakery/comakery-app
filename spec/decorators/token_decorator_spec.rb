@@ -57,4 +57,43 @@ describe TokenDecorator do
       expect(data['ethereum-contract-abi']).to eq(token.abi&.to_json)
     end
   end
+
+  describe 'logo_url' do
+    let!(:token) { create :token }
+
+    it 'returns image_url if present' do
+      token.update(logo_image: dummy_image)
+      expect(token.decorate.logo_url).to include('dummy_image')
+    end
+
+    it 'returns default image' do
+      expect(token.reload.decorate.logo_url).to include('image.png')
+    end
+  end
+
+  describe 'network' do
+    let!(:token_eth) { create(:token, coin_type: :eth) }
+    let!(:token_btc) { create(:token, coin_type: :btc) }
+
+    it 'returns ethereum_network' do
+      expect(token_eth.decorate.network).to eq(token_eth.ethereum_network)
+    end
+
+    it 'returns blockchain_network' do
+      expect(token_btc.decorate.network).to eq(token_btc.blockchain_network)
+    end
+  end
+
+  describe 'contract_address' do
+    let!(:token_eth) { create(:token, coin_type: :eth) }
+    let!(:token_btc) { create(:token, coin_type: :btc) }
+
+    it 'returns ethereum_contract_address' do
+      expect(token_eth.decorate.contract_address).to eq(token_eth.ethereum_contract_address)
+    end
+
+    it 'returns contract_address' do
+      expect(token_btc.decorate.contract_address).to eq(token_btc.contract_address)
+    end
+  end
 end

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>III. Projects API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>III. Projects API</h1>
+
+        <p class="explanation">Retrieve projects data.</p>
+
+      <div class="article">
+        <h2>GET</h2>
+        <h3>GET /api/v1/projects/:id</h3>
+          <p class="explanation">
+            Returns data for a single project.
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="required">
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">project id</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">project id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">title</span>
+                </td>
+                <td>
+                  <span class="description">project title</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">description</span>
+                </td>
+                <td>
+                  <span class="description">proect description</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">imageUrl</span>
+                </td>
+                <td>
+                  <span class="description">project image url</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">accountId</span>
+                </td>
+                <td>
+                  <span class="description">project owner account id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">createdAt</span>
+                </td>
+                <td>
+                  <span class="description">project creation timestamp</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">updatedAt</span>
+                </td>
+                <td>
+                  <span class="description">project update timestamp</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">adminIds</span>
+                </td>
+                <td>
+                  <span class="description">array of admin account ids</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[id]</span>
+                </td>
+                <td>
+                  <span class="description">token id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[name]</span>
+                </td>
+                <td>
+                  <span class="description">token name</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[symbol]</span>
+                </td>
+                <td>
+                  <span class="description">token symbol</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[network]</span>
+                </td>
+                <td>
+                  <span class="description">token network ( main | ropsten | kovan | rinkeby )</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[contractAddress]</span>
+                </td>
+                <td>
+                  <span class="description">token contract address</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[decimalPlaces]</span>
+                </td>
+                <td>
+                  <span class="description">token decimal places</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[logoUrl]</span>
+                </td>
+                <td>
+                  <span class="description">token logo url</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[createdAt]</span>
+                </td>
+                <td>
+                  <span class="description">token creation timestamp</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">token[updatedAt]</span>
+                </td>
+                <td>
+                  <span class="description">token update timestamp</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">GET /api/v1/projects/38?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F38&amp;body[method]=GET&amp;body[nonce]=66649f46ffaee258ab075343124dc187&amp;body[timestamp]=1581170494&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=iYQQyNIyk%2BGxl%2B%2FXgq%2FCg1xE1Q1B4NpZBzaTnt2nNinXdRg3L%2B%2F01io2D6PuL1yShTUsa5Q6d3E%2BfF8GWZP6DQ%3D%3D</pre>
+
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/38&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;66649f46ffaee258ab075343124dc187&quot;, &quot;timestamp&quot;=&gt;&quot;1581170494&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;iYQQyNIyk+Gxl+/Xgq/Cg1xE1Q1B4NpZBzaTnt2nNinXdRg3L+/01io2D6PuL1yShTUsa5Q6d3E+fF8GWZP6DQ==&quot;}</pre>
+
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 2
+ETag: W/&quot;ec75853b0e57ab26e7fff38bd23b1a00&quot;
+Last-Modified: Sat, 08 Feb 2020 14:01:34 GMT</pre>
+            <h4>Status</h4>
+            <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">{
+  &quot;id&quot;: 38,
+  &quot;title&quot;: &quot;Uber for Cats&quot;,
+  &quot;description&quot;: &quot;We are going to build amazing&quot;,
+  &quot;imageUrl&quot;: &quot;/attachments/138051ef50ccdff1e24a33c8346b8625f980ac22/store/fill/1000/1000/b39baab983e95ce7e25e2e8b6516c9873d65d254b3b8c694b19900e89ff1/image.png&quot;,
+  &quot;createdAt&quot;: &quot;2020-02-08T14:01:34.698Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-02-08T14:01:34.698Z&quot;,
+  &quot;accountId&quot;: &quot;3aec7486-700a-416e-80fb-3cc5b7c3c024&quot;,
+  &quot;adminIds&quot;: [
+    &quot;e06263fe-1563-4aaf-aaad-e2d1cb97d7fd&quot;,
+    &quot;bf55ea6d-1b75-4500-9d80-856e5f451ad1&quot;,
+    &quot;04e7b37a-5b30-476f-9824-2e0d3ef34ca8&quot;
+  ],
+  &quot;token&quot;: {
+    &quot;id&quot;: 49,
+    &quot;name&quot;: &quot;ComakeryToken-c45d2c660057a0cf84fd2cb660c886c41df9de33&quot;,
+    &quot;symbol&quot;: &quot;XYZbac07cc9654c6dc7a7fe2f8d2efe12746349a883&quot;,
+    &quot;network&quot;: &quot;ropsten&quot;,
+    &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+    &quot;decimalPlaces&quot;: 18,
+    &quot;logoUrl&quot;: &quot;/attachments/cbfc88ea9b37e7837c10249fb1d2ba25703798b7/store/fill/100/100/75a615d830669f174a9008878c0dea6e0748d66ad498b1758e6794248f33/dummy_image.png&quot;,
+    &quot;createdAt&quot;: &quot;2020-02-08T14:01:34.619Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-02-08T14:01:34.704Z&quot;
+  }
+}</pre>
+      </div>
+    </div>
+  </body>
+</html>

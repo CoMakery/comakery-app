@@ -1,0 +1,64 @@
+class Api::V1::AccountsController < Api::V1::ApiController
+  # GET /api/v1/accounts/1
+  def show
+    fresh_when account, public: true
+  end
+
+  # GET /api/v1/accounts/1/token_balances
+  def token_balances
+    account
+  end
+
+  # POST /api/v1/accounts
+  def create
+    account = whitelabel_mission.managed_accounts.create(account_params)
+    account.name_required = true
+    account.specialty = Specialty.default
+
+    if account.save
+      @account = account
+
+      render 'show.json', status: 201
+    else
+      @errors = account.errors
+
+      render 'api/v1/error.json', status: 400
+    end
+  end
+
+  # PATCH/PUT /api/v1/accounts/1
+  def update
+    if account.update(account_params)
+      render 'show.json', status: 200
+    else
+      @errors = account.errors
+
+      render 'api/v1/error.json', status: 400
+    end
+  end
+
+  private
+
+    def account
+      @account ||= (whitelabel_mission.managed_accounts.find_by(managed_account_id: params[:id]) || whitelabel_mission.managed_accounts.find_by!(managed_account_id: params[:account_id]))
+    end
+
+    def account_params
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:account, {}).permit(
+        :email,
+        :managed_account_id,
+        :first_name,
+        :last_name,
+        :nickname,
+        :image,
+        :country,
+        :date_of_birth,
+        :ethereum_wallet,
+        :qtum_wallet,
+        :cardano_wallet,
+        :bitcoin_wallet,
+        :eos_wallet,
+        :tezos_wallet
+      )
+    end
+end

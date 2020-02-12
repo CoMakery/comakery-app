@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_20_034156) do
+ActiveRecord::Schema.define(version: 2020_01_29_152309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 2019_12_20_034156) do
     t.datetime "synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "balance"
     t.index ["account_id"], name: "index_account_token_records_on_account_id"
     t.index ["reg_group_id"], name: "index_account_token_records_on_reg_group_id"
     t.index ["token_id"], name: "index_account_token_records_on_token_id"
@@ -81,9 +82,11 @@ ActiveRecord::Schema.define(version: 2019_12_20_034156) do
     t.string "tezos_wallet"
     t.integer "specialty_id"
     t.bigint "latest_verification_id"
-    t.index "lower((email)::text)", name: "index_accounts_on_lowercase_email", unique: true
-    t.index ["email"], name: "index_accounts_on_email", unique: true
+    t.string "managed_account_id", limit: 256
+    t.bigint "managed_mission_id"
     t.index ["last_logout_at", "last_activity_at"], name: "index_accounts_on_last_logout_at_and_last_activity_at"
+    t.index ["managed_mission_id", "managed_account_id"], name: "index_accounts_on_managed_mission_id_and_managed_account_id", unique: true
+    t.index ["managed_mission_id"], name: "index_accounts_on_managed_mission_id"
     t.index ["public_address"], name: "index_accounts_on_public_address"
     t.index ["remember_me_token"], name: "index_accounts_on_remember_me_token"
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token"
@@ -264,6 +267,8 @@ ActiveRecord::Schema.define(version: 2019_12_20_034156) do
     t.string "whitelabel_favicon_content_size"
     t.string "whitelabel_favicon_content_type"
     t.string "whitelabel_contact_email"
+    t.string "whitelabel_api_public_key"
+    t.string "whitelabel_api_key"
     t.index ["token_id"], name: "index_missions_on_token_id"
   end
 
@@ -430,6 +435,7 @@ ActiveRecord::Schema.define(version: 2019_12_20_034156) do
     t.bigint "max_investment_usd"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "verification_type", default: 0, null: false
     t.index ["account_id"], name: "index_verifications_on_account_id"
     t.index ["provider_id"], name: "index_verifications_on_provider_id"
   end
@@ -437,6 +443,7 @@ ActiveRecord::Schema.define(version: 2019_12_20_034156) do
   add_foreign_key "account_token_records", "accounts"
   add_foreign_key "account_token_records", "reg_groups"
   add_foreign_key "account_token_records", "tokens"
+  add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "awards", "specialties"
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"

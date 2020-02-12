@@ -17,9 +17,9 @@ describe AccountDecorator do
 
   describe '#nick' do
     it 'returns the nickname and falls back to the name' do
-      expect(build(:account, first_name: 'Bob', last_name: 'Johnson').decorate.nick).to eq('Bob Johnson')
-      expect(build(:account, first_name: nil, last_name: 'Johnson').decorate.nick).to eq('Johnson')
-      expect(build(:account, first_name: 'Bob', last_name: '').decorate.nick).to eq('Bob')
+      expect(build(:account, first_name: 'Bob', last_name: 'Johnson', nickname: nil).decorate.nick).to eq('Bob Johnson')
+      expect(build(:account, first_name: nil, last_name: 'Johnson', nickname: nil).decorate.nick).to eq('Johnson')
+      expect(build(:account, first_name: 'Bob', last_name: '', nickname: nil).decorate.nick).to eq('Bob')
       expect(build(:account, first_name: 'Bob', last_name: 'Johnson', nickname: 'bobjon').decorate.nick).to eq('bobjon')
     end
   end
@@ -30,7 +30,7 @@ describe AccountDecorator do
     end
 
     it 'returns only name if nickname is not present' do
-      expect(build(:account, first_name: 'Bob', last_name: 'Johnson').decorate.name_with_nickname).to eq('Bob Johnson')
+      expect(build(:account, first_name: 'Bob', last_name: 'Johnson', nickname: nil).decorate.name_with_nickname).to eq('Bob Johnson')
     end
   end
 
@@ -147,7 +147,7 @@ describe AccountDecorator do
 
   describe 'wallet_address_link_for' do
     let!(:account_w_wallet) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
-    let!(:account_wo_wallet) { create(:account) }
+    let!(:account_wo_wallet) { create(:account, ethereum_wallet: nil) }
     let!(:project_w_token) { build :project, token: create(:token, coin_type: 'eth') }
     let!(:project_wo_token) { build :project, token: nil }
 
@@ -179,6 +179,55 @@ describe AccountDecorator do
 
     it 'returns unknown for unknown_account' do
       expect(unknown_account.reload.decorate.verification_state).to eq('unknown')
+    end
+  end
+
+  describe 'verification_date' do
+    let!(:passed_account) { create(:account) }
+    let!(:unknown_account) { create(:account) }
+
+    it 'returns date for passed_account' do
+      create(:verification, account: passed_account, passed: true)
+      expect(passed_account.reload.decorate.verification_date).not_to be_nil
+    end
+
+    it 'returns nil for unknown_account' do
+      expect(unknown_account.reload.decorate.verification_date).to be_nil
+    end
+  end
+
+  describe 'verification_max_investment_usd' do
+    let!(:passed_account) { create(:account) }
+    let!(:unknown_account) { create(:account) }
+
+    it 'returns max_investment_usd for passed_account' do
+      max_investment_usd = 100
+
+      create(:verification, account: passed_account, passed: true, max_investment_usd: max_investment_usd)
+      expect(passed_account.reload.decorate.verification_max_investment_usd).to eq(max_investment_usd)
+    end
+
+    it 'returns nil for unknown_account' do
+      expect(unknown_account.reload.decorate.verification_max_investment_usd).to be_nil
+    end
+  end
+
+  describe 'total_received_in' do
+    let!(:account) { create(:account) }
+    let!(:token) { create(:token) }
+    let!(:token2) { create(:token) }
+    let!(:award_type) { create(:award_type, project: create(:project, token: token)) }
+    let!(:award_type2) { create(:award_type, project: create(:project, token: token2)) }
+
+    before do
+      create(:award, account: account, status: :paid, amount: 1, award_type: award_type)
+      create(:award, account: account, status: :paid, amount: 2, award_type: award_type)
+      create(:award, account: account, status: :rejected, amount: 4, award_type: award_type)
+      create(:award, account: account, status: :paid, amount: 8, award_type: award_type2)
+    end
+
+    it 'sums up total_amounts of account paid tasks from projects using given token' do
+      expect(account.decorate.total_received_in(token)).to eq(3)
     end
   end
 end

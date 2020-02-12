@@ -148,6 +148,41 @@ describe SessionsController do
     let!(:account2) { create(:account, email: 'user2@example.com', password: nil) }
     let(:project) { create(:project, account: account1, public: false, maximum_tokens: 100_000_000, token: create(:token, coin_type: 'erc20')) }
 
+    it 'allows to login with managed account on according whitelabel instance' do
+      active_whitelabel_mission = create(:active_whitelabel_mission)
+      account = create(:account, managed_mission: active_whitelabel_mission, password: '12345678')
+
+      post :sign_in, params: { email: account.email, password: '12345678' }
+      expect(response).not_to redirect_to new_session_path
+    end
+
+    it 'doesnt allow to login with managed account on a different whitelabel instance' do
+      create(:active_whitelabel_mission)
+      whitelabel_mission = create(:mission, whitelabel: true, whitelabel_domain: 'dummy')
+      account = create(:account, managed_mission: whitelabel_mission, password: '12345678')
+
+      post :sign_in, params: { email: account.email, password: '12345678' }
+      expect(flash[:error]).to eq 'Invalid email or password'
+      expect(response).to redirect_to new_session_path
+    end
+
+    it 'doesnt allow to login with managed account on comakery' do
+      whitelabel_mission = create(:mission, whitelabel: true, whitelabel_domain: 'dummy')
+      account = create(:account, managed_mission: whitelabel_mission, password: '12345678')
+
+      post :sign_in, params: { email: account.email, password: '12345678' }
+      expect(flash[:error]).to eq 'Invalid email or password'
+      expect(response).to redirect_to new_session_path
+    end
+
+    it 'doesnt allow to login with comakery account on a whitelabel instance' do
+      create(:active_whitelabel_mission)
+
+      post :sign_in, params: { email: 'user@example.com', password: 'invalid' }
+      expect(flash[:error]).to eq 'Invalid email or password'
+      expect(response).to redirect_to new_session_path
+    end
+
     it 'prevent login with wrong password' do
       post :sign_in, params: { email: 'user@example.com', password: 'invalid' }
       expect(flash[:error]).to eq 'Invalid email or password'
@@ -173,7 +208,7 @@ describe SessionsController do
     end
 
     it 'notice to update ethereum_wallet' do
-      account.update new_award_notice: true
+      account.update new_award_notice: true, ethereum_wallet: nil
       create(:award, award_type: create(:award_type, project: project), account: account)
       post :sign_in, params: { email: 'user@example.com', password: '12345678' }
       expect(flash[:notice]).to eq 'Congratulations, you just claimed your award! Be sure to enter your Ethereum Address on your <a href="/account">account page</a> to receive your tokens.'

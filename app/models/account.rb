@@ -4,7 +4,7 @@
 class Account < ApplicationRecord
   paginates_per 50
   has_secure_password validations: false
-  attachment :image
+  attachment :image, type: :image
   include BitcoinAddressable
   include EthereumAddressable
   include QtumAddressable
@@ -40,6 +40,7 @@ class Account < ApplicationRecord
   has_many :account_token_records
 
   belongs_to :specialty
+  belongs_to :managed_mission, class_name: 'Mission'
 
   enum deprecated_specialty: {
     audio_video_production: 'Audio Or Video Production',
@@ -52,12 +53,17 @@ class Account < ApplicationRecord
     research: 'Research'
   }
 
-  validates :email, presence: true, uniqueness: true
+  scope :sort_by_max_investment_usd_asc, -> { includes(:latest_verification).order('max_investment_usd ASC') }
+  scope :sort_by_max_investment_usd_desc, -> { includes(:latest_verification).order('max_investment_usd DESC') }
+
   attr_accessor :password_required, :name_required, :agreement_required
+
+  validates :email, presence: true, uniqueness: { scope: %i[managed_mission], case_sensitive: false }
   validates :password, length: { minimum: 8 }, if: :password_required
   validates :first_name, :last_name, :country, :specialty, presence: true, if: :name_required
   validates :date_of_birth, presence: { message: 'should be present in correct format (MM/DD/YYYY)' }, if: :name_required
   validates :nickname, uniqueness: true, if: -> { nickname.present? }
+  validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
@@ -78,6 +84,10 @@ class Account < ApplicationRecord
   end
 
   validate :validate_age, on: :create
+
+  before_validation :populate_managed_account_id, if: -> { managed_mission.present? }
+
+  before_save :reset_latest_verification, if: -> { will_save_change_to_first_name? || will_save_change_to_last_name? || will_save_change_to_date_of_birth? || will_save_change_to_country? }
 
   class << self
     def order_by_award(project)
@@ -191,11 +201,11 @@ class Account < ApplicationRecord
   end
 
   def accessable_projects(scope = nil)
-    (scope || Project).left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+    (scope || Project).left_outer_joins(:admins, channels: [team: [:authentication_teams]]).distinct.where('projects.visibility in(1) OR projects.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def related_projects(scope = nil)
-    (scope || Project).left_outer_joins(:awards, :admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR awards.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+    (scope || Project).left_outer_joins(:admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
   end
 
   def accessable_award_types(project_scope = nil)
@@ -218,7 +228,7 @@ class Account < ApplicationRecord
   end
 
   def accessable_awards(project_scope = nil)
-    awards_matching_experience(project_scope).or(related_awards(project_scope))
+    awards_matching_experience(project_scope).or(related_awards(project_scope)).or(awards)
   end
 
   def experience_for(specialty)
@@ -303,5 +313,13 @@ class Account < ApplicationRecord
       # rubocop:disable SkipsModelValidations
       update_column :email_confirm_token, SecureRandom.hex
     end
+  end
+
+  def populate_managed_account_id
+    self.managed_account_id ||= SecureRandom.uuid
+  end
+
+  def reset_latest_verification
+    self.latest_verification = nil
   end
 end

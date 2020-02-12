@@ -60,6 +60,42 @@ describe Account do
         account.behance_url = 'https://www.behance.net/<script>alert(1)</script>'
         expect(account).not_to be_valid
       end
+
+      it 'doesnt allow non-unique emails on Comakery' do
+        account2 = build(:account, email: account.email)
+
+        expect(account2).not_to be_valid
+      end
+
+      it 'doesnt allow non-unique emails on a whitelabel' do
+        managed_account = create(:account, managed_mission: create(:mission))
+        managed_account2 = build(:account, managed_mission: managed_account.managed_mission, email: managed_account.email)
+
+        expect(managed_account2).not_to be_valid
+      end
+
+      it 'allows non-unique emails between whitelabels and Comakery' do
+        managed_account = create(:account, managed_mission: create(:mission), email: account.email)
+        managed_account2 = create(:account, managed_mission: create(:mission), email: account.email)
+
+        expect(managed_account).to be_valid
+        expect(managed_account2).to be_valid
+      end
+
+      it 'doesnt allow non-unique managed_account_id on a whitelabel' do
+        managed_account = create(:account, managed_mission: create(:mission))
+        managed_account2 = build(:account, managed_mission: managed_account.managed_mission, managed_account_id: managed_account.managed_account_id)
+
+        expect(managed_account2).not_to be_valid
+      end
+
+      it 'allows non-unique managed_account_id between whitelabels' do
+        managed_account = create(:account, managed_mission: create(:mission))
+        managed_account2 = create(:account, managed_mission: create(:mission), managed_account_id: managed_account.managed_account_id)
+
+        expect(managed_account).to be_valid
+        expect(managed_account2).to be_valid
+      end
     end
 
     it 'requires many attributes' do
@@ -67,6 +103,7 @@ describe Account do
     end
 
     it 'requires #ethereum_wallet to be a valid ethereum address' do
+      account.update(ethereum_wallet: nil)
       expect(account.ethereum_wallet).to be_blank
       expect(account).to be_valid
 
@@ -141,7 +178,7 @@ describe Account do
 
   it 'enforces unique emails, case-insensitively' do
     create :account, email: 'alice@example.com'
-    expect { create :account, email: 'Alice@example.com' }.to raise_error(ActiveRecord::RecordNotUnique)
+    expect { create :account, email: 'Alice@example.com' }.to raise_error(ActiveRecord::RecordInvalid)
   end
 
   # this is kind of unfortunate --
@@ -210,6 +247,7 @@ describe Account do
     let!(:verification2) { create(:verification, account: account) }
     let!(:provided_verification) { create(:verification, provider: account) }
     let!(:account_token_record) { create(:account_token_record, account: account) }
+    let!(:managed_account) { create(:account, managed_mission: create(:mission)) }
 
     before do
       team.build_authentication_team authentication
@@ -269,6 +307,10 @@ describe Account do
     it 'has many account_token_records' do
       expect(account.account_token_records).to match_array([account_token_record])
     end
+
+    it 'belongs to managed_mission' do
+      expect(managed_account.managed_mission).not_to be_nil
+    end
   end
 
   describe '.accessable_award_types' do
@@ -320,6 +362,7 @@ describe Account do
     let!(:admin_award) { create(:award, award_type: admin_award_type) }
     let!(:award_type) { create(:award_type, project: project) }
     let!(:award) { create(:award, award_type: award_type, issuer: account) }
+    let!(:started_award) { create(:award, status: :started, account: account) }
     let!(:received_award) { create(:award, award_type: award_type, account: account) }
     let!(:team) { create :team }
     let!(:teammate) { create :account }
@@ -339,6 +382,10 @@ describe Account do
       end
 
       admin_project.admins << account
+    end
+
+    it 'returns started awards' do
+      expect(account.accessable_awards).to include(started_award)
     end
 
     it 'returns received awards' do
@@ -540,11 +587,6 @@ describe Account do
       expect(account.accessable_projects.map(&:title)).to match_array ['admin project', 'my private project', 'my public project', 'archived project', 'unlisted project', 'member project']
     end
 
-    it 'accessable prọjects include awarded project' do
-      create :award, award_type: award_type, account: account
-      expect(account.accessable_projects.map(&:title)).to match_array ['admin project', 'my private project', 'my public project', 'archived project', 'unlisted project', 'award project']
-    end
-
     it '#other_member_projects' do
       project5.channels.create(team: team, channel_id: 'general')
       expect(account.other_member_projects.map(&:title)).to match_array ['member project']
@@ -675,6 +717,34 @@ describe Account do
       expect(project.interested).to contain_exactly(project.account)
       described_class.make_everyone_interested(project)
       expect(project.interested.to_a).to contain_exactly(*users)
+    end
+  end
+
+  describe 'populate_managed_account_id' do
+    let!(:account) { create(:account) }
+    let!(:managed_account) { create(:account, managed_mission: create(:mission)) }
+
+    it 'populates managed_account_id if account is managed' do
+      expect(managed_account.managed_account_id).not_to be_nil
+    end
+
+    it 'doesnt populate managed_account_id if account is not managed' do
+      expect(account.managed_account_id).to be_nil
+    end
+  end
+
+  describe 'reset_latest_verification' do
+    let!(:account) { create(:account) }
+    let!(:verification) { create(:verification, account: account) }
+
+    it 'resets latest verification if sensitive info is updated' do
+      account.update(first_name: 'new first name')
+      expect(account.reload.latest_verification).to be_nil
+    end
+
+    it 'doesnt reset latest verification if non-sensitive info is updated' do
+      account.update(nickname: 'new nickname')
+      expect(account.reload.latest_verification).not_to be_nil
     end
   end
 end

@@ -186,7 +186,7 @@ describe ProjectDecorator do
 
   describe 'header_props' do
     let!(:project) { create(:project) }
-    let!(:award_type) { create(:award_type, project: project, state: :ready) }
+    let!(:award_type) { create(:award_type, project: project, state: 'public') }
     let!(:unlisted_project) { create(:project, visibility: 'public_unlisted') }
     let!(:project_wo_image) { create(:project) }
     let!(:project_comakery_token) { create(:project, token: create(:token, coin_type: :comakery)) }
@@ -247,6 +247,19 @@ describe ProjectDecorator do
       project.reload
 
       expect(project.decorate.step_for_quantity_input).to eq(1)
+    end
+  end
+
+  describe 'image_url' do
+    let!(:project) { create :project }
+
+    it 'returns image_url if present' do
+      expect(project.decorate.image_url).to include('image.png')
+    end
+
+    it 'returns default image' do
+      project.update(square_image: nil)
+      expect(project.reload.decorate.image_url).to include('defaul_project')
     end
   end
 end

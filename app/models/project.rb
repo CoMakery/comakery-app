@@ -16,7 +16,7 @@ class Project < ApplicationRecord
   has_many :interested, -> { distinct }, through: :interests, source: :account
 
   has_many :award_types, inverse_of: :project, dependent: :destroy
-  has_many :ready_award_types, -> { where state: :ready }, source: :award_types, class_name: 'AwardType'
+  has_many :ready_award_types, -> { where state: 'public' }, source: :award_types, class_name: 'AwardType'
   has_many :awards, through: :award_types, dependent: :destroy
   has_many :published_awards, through: :ready_award_types, source: :awards, class_name: 'Award'
   has_many :completed_awards, -> { where.not ethereum_transaction_address: nil }, through: :award_types, source: :awards

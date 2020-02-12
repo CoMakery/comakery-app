@@ -27,4 +27,16 @@ class TokenDecorator < Draper::Decorator
       }
     end
   end
+
+  def network
+    coin_type_on_ethereum? ? ethereum_network : blockchain_network
+  end
+
+  def contract_address
+    coin_type_on_ethereum? ? ethereum_contract_address : token.contract_address
+  end
+
+  def logo_url(size = 100)
+    helpers.attachment_url(self, :logo_image, :fill, size, size, fallback: 'defaul_project.jpg')
+  end
 end

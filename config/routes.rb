@@ -80,7 +80,7 @@ Rails.application.routes.draw do
     namespace :dashboard do
       resources :transfers, only: [:index, :create]
       resources :accounts, only: [:index, :update]
-      resources :reg_groups, only: [:create, :destroy]
+      resources :reg_groups, only: [:create, :update, :destroy]
       resources :transfer_rules, only: [:create, :destroy, :index] do
         collection do
           post :pause
@@ -128,6 +128,18 @@ Rails.application.routes.draw do
       collection do
         get :find_by_public_address
         post :auth
+      end
+    end
+
+    namespace :v1 do
+      resources :accounts, only: [:show, :update, :create] do
+        resources :interests, only: [:index, :create, :destroy]
+        resources :verifications, only: [:index, :create]
+        get :token_balances
+      end
+
+      resources :projects, only: [:show, :index] do
+        resources :transfers, only: [:index, :show, :create, :destroy]
       end
     end
   end

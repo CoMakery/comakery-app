@@ -1,0 +1,22 @@
+json.call(
+  account.decorate,
+  :email,
+  :managed_account_id,
+  :first_name,
+  :last_name,
+  :nickname,
+  :image_url,
+  :country,
+  :date_of_birth,
+  :ethereum_wallet,
+  :qtum_wallet,
+  :cardano_wallet,
+  :bitcoin_wallet,
+  :eos_wallet,
+  :tezos_wallet,
+  :verification_state,
+  :verification_date,
+  :verification_max_investment_usd,
+  :created_at,
+  :updated_at
+)

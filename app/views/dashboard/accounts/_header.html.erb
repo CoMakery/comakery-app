@@ -6,11 +6,11 @@
   </div>
 
   <div class="transfers-table__transfer__aml-kyc">
-    <%= sort_link(@q, :verifications_created_at, 'aml/kyc date') %>
+    <%= sort_link(@q, :latest_verification_id, 'aml/kyc date') %>
   </div>
 
   <div class="transfers-table__transfer__max-investment">
-    <%= sort_link(@q, :verifications_max_investment_usd, 'max investment') %>
+    <%= 'max investment' %>
   </div>
 
   <div class="transfers-table__transfer__tokens">
@@ -25,15 +25,15 @@
 
   <% if @project.supports_transfer_rules? %>
     <div class="transfers-table__transfer__max_balance">
-      <%= sort_link(@q, :account_token_records_max_balance, @project.token&.symbol ? "max balance (#{@project.token&.symbol})" : 'max balance') %>
+      <%= @project.token&.symbol ? "max balance (#{@project.token&.symbol})" : 'max balance' %>
     </div>
 
     <div class="transfers-table__transfer__lockup_until">
-      <%= sort_link(@q, :account_token_records_lockup_until, 'lockup until') %>
+      <%= 'lockup until' %>
     </div>
 
     <div class="transfers-table__transfer__reg_group">
-      <%= sort_link(@q, :account_token_records_reg_group_id, 'reg group') %>
+      <%= 'reg group' %>
     </div>
 
     <div class="transfers-table__transfer__frozen">

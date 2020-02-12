@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Comakery Whitelabel API</title>
+  <meta charset="utf-8">
+  <style>
+    
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: &quot;required&quot;;
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Comakery Whitelabel API</h1>
+  
+    All of the endpoints below are only accessible via a whitelabel domain, with data scoped to the according instance.
+  
+  <div class="article">
+    <h2>I. General</h2>
+
+      <p class="explanation">Details on authentication, caching, throttling, inflection and pagination.</p>
+
+    <ul>
+      <li>
+        <a href="i._general/authentication.html">AUTHENTICATION</a>
+      </li>
+      <li>
+        <a href="i._general/authentication_–_incorrect_public_key_header.html">AUTHENTICATION – INCORRECT PUBLIC KEY HEADER</a>
+      </li>
+      <li>
+        <a href="i._general/authentication_–_incorrect_proof.html">AUTHENTICATION – INCORRECT PROOF</a>
+      </li>
+      <li>
+        <a href="i._general/caching.html">CACHING</a>
+      </li>
+      <li>
+        <a href="i._general/throttling.html">THROTTLING</a>
+      </li>
+      <li>
+        <a href="i._general/inflection.html">INFLECTION</a>
+      </li>
+      <li>
+        <a href="i._general/pagination.html">PAGINATION</a>
+      </li>
+    </ul>
+  </div>
+  <div class="article">
+    <h2>II. Accounts</h2>
+
+      <p class="explanation">Retrieve and manage account data, balances, interests.</p>
+
+    <ul>
+      <li>
+        <a href="ii._accounts/get.html">GET</a>
+      </li>
+      <li>
+        <a href="ii._accounts/create.html">CREATE</a>
+      </li>
+      <li>
+        <a href="ii._accounts/create_–_error.html">CREATE – ERROR</a>
+      </li>
+      <li>
+        <a href="ii._accounts/update.html">UPDATE</a>
+      </li>
+      <li>
+        <a href="ii._accounts/update_–_error.html">UPDATE – ERROR</a>
+      </li>
+      <li>
+        <a href="ii._accounts/interests.html">INTERESTS</a>
+      </li>
+      <li>
+        <a href="ii._accounts/create_interest.html">CREATE INTEREST</a>
+      </li>
+      <li>
+        <a href="ii._accounts/create_interest_–_error.html">CREATE INTEREST – ERROR</a>
+      </li>
+      <li>
+        <a href="ii._accounts/remove_interest.html">REMOVE INTEREST</a>
+      </li>
+      <li>
+        <a href="ii._accounts/verifications.html">VERIFICATIONS</a>
+      </li>
+      <li>
+        <a href="ii._accounts/create_verification.html">CREATE VERIFICATION</a>
+      </li>
+      <li>
+        <a href="ii._accounts/create_verification_–_error.html">CREATE VERIFICATION – ERROR</a>
+      </li>
+      <li>
+        <a href="ii._accounts/token_balances.html">TOKEN BALANCES</a>
+      </li>
+    </ul>
+  </div>
+  <div class="article">
+    <h2>III. Projects</h2>
+
+      <p class="explanation">Retrieve projects data.</p>
+
+    <ul>
+      <li>
+        <a href="iii._projects/index.html">INDEX</a>
+      </li>
+      <li>
+        <a href="iii._projects/get.html">GET</a>
+      </li>
+    </ul>
+  </div>
+  <div class="article">
+    <h2>IV. Transfers</h2>
+
+      <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
+
+    <ul>
+      <li>
+        <a href="iv._transfers/index.html">INDEX</a>
+      </li>
+      <li>
+        <a href="iv._transfers/get.html">GET</a>
+      </li>
+      <li>
+        <a href="iv._transfers/create.html">CREATE</a>
+      </li>
+      <li>
+        <a href="iv._transfers/create_–_error.html">CREATE – ERROR</a>
+      </li>
+      <li>
+        <a href="iv._transfers/cancel.html">CANCEL</a>
+      </li>
+      <li>
+        <a href="iv._transfers/cancel_–_error.html">CANCEL – ERROR</a>
+      </li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

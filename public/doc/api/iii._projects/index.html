@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>III. Projects API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>III. Projects API</h1>
+
+        <p class="explanation">Retrieve projects data.</p>
+
+      <div class="article">
+        <h2>INDEX</h2>
+        <h3>GET /api/v1/projects</h3>
+          <p class="explanation">
+            Returns an array of projects. See GET for response fields description.
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">GET /api/v1/projects?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=cbb16ce0082c731a4795c08d6f3d3944&amp;body[timestamp]=1581170494&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=R9Ko0fvGnINBaCaz%2FbRq%2BaMWISJ6Z%2B0YJeyR9SpRLAnxiFPre9uDseoLw1g6yxG26vNXBhOs9QdWJLi6cS2ZBg%3D%3D</pre>
+
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;cbb16ce0082c731a4795c08d6f3d3944&quot;, &quot;timestamp&quot;=&gt;&quot;1581170494&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;R9Ko0fvGnINBaCaz/bRq+aMWISJ6Z+0YJeyR9SpRLAnxiFPre9uDseoLw1g6yxG26vNXBhOs9QdWJLi6cS2ZBg==&quot;}</pre>
+
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 2
+ETag: W/&quot;d7f75ef9ea292c7e7f70561ac46cd156&quot;
+Last-Modified: Sat, 08 Feb 2020 14:01:34 GMT</pre>
+            <h4>Status</h4>
+            <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 37,
+    &quot;title&quot;: &quot;Uber for Cats&quot;,
+    &quot;description&quot;: &quot;We are going to build amazing&quot;,
+    &quot;imageUrl&quot;: &quot;/attachments/a7860b15beab3886cbab8a543b1c5631a399efbf/store/fill/1000/1000/2b729b1ad3f712414610d4ae20af34fbfbba98cdf9cc0253ba47392420f0/image.png&quot;,
+    &quot;createdAt&quot;: &quot;2020-02-08T14:01:34.438Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-02-08T14:01:34.438Z&quot;,
+    &quot;accountId&quot;: &quot;25dead27-6341-4420-99a8-6e033e771d0b&quot;,
+    &quot;adminIds&quot;: [
+
+    ],
+    &quot;token&quot;: {
+      &quot;id&quot;: 47,
+      &quot;name&quot;: &quot;ComakeryToken-a06a8bdd72585e7986929880cc6c33bd1277650a&quot;,
+      &quot;symbol&quot;: &quot;XYZ1836988d40ee7ed35de1442433f4d12e17fc3820&quot;,
+      &quot;network&quot;: &quot;ropsten&quot;,
+      &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimalPlaces&quot;: 18,
+      &quot;logoUrl&quot;: &quot;/attachments/04130598e9ddbd1d8731a86d1ecd9a3fb3c5f76a/store/fill/100/100/4f922ede0ff040c970fd08545eb282ba2c0209e3d3e9a9f5da9f894eaf7a/dummy_image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-02-08T14:01:34.363Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-02-08T14:01:34.445Z&quot;
+    }
+  },
+  {
+    &quot;id&quot;: 36,
+    &quot;title&quot;: &quot;Uber for Cats&quot;,
+    &quot;description&quot;: &quot;We are going to build amazing&quot;,
+    &quot;imageUrl&quot;: &quot;/attachments/4f19e2e68b738c09a9b92ac3ecc2aa6db058f767/store/fill/1000/1000/6da7942d27db1297a26fbe4e3b5912c11ceaeaa1cff72b8816d216e277be/image.png&quot;,
+    &quot;createdAt&quot;: &quot;2020-02-08T14:01:34.331Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-02-08T14:01:34.331Z&quot;,
+    &quot;accountId&quot;: &quot;c53fb2e9-49ec-423a-ac6e-0167fa60c79a&quot;,
+    &quot;adminIds&quot;: [
+      &quot;ef53cf0c-6a7a-46a9-ba01-360e9c761ed4&quot;,
+      &quot;ba41cb71-94f3-4b4a-9484-b986abe4faf7&quot;,
+      &quot;d33c7918-493f-4c70-806d-29043b4d2137&quot;
+    ],
+    &quot;token&quot;: {
+      &quot;id&quot;: 45,
+      &quot;name&quot;: &quot;ComakeryToken-d973062be2ee369e11840b9688b9b9271ec1f8df&quot;,
+      &quot;symbol&quot;: &quot;XYZ7d2d8f1580d24e814ece18ba3954756cfa565098&quot;,
+      &quot;network&quot;: &quot;ropsten&quot;,
+      &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimalPlaces&quot;: 18,
+      &quot;logoUrl&quot;: &quot;/attachments/2432ffa167425e71ab8e4cb89858e93dd59f89fd/store/fill/100/100/d7b9b5681a004bd5b900d5967bd1b4a2cfe303d328fbcc82164ea1fbc693/dummy_image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-02-08T14:01:34.256Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-02-08T14:01:34.337Z&quot;
+    }
+  }
+]</pre>
+      </div>
+    </div>
+  </body>
+</html>

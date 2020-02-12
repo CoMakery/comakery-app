@@ -89,6 +89,8 @@ describe Award do
       let(:award_type) { create(:award_type) }
       let(:award_ready_w_account) { create :award_ready, award_type: award_type }
       let(:award_ready_wo_account) { create :award_ready, award_type: award_type }
+      let(:award_unpublished_w_account) { create :award, status: :unpublished, award_type: award_type }
+      let(:award_unpublished_wo_account) { create :award, status: :unpublished, award_type: award_type }
       let(:award_started) { create :award, status: :started, award_type: award_type }
       let(:award_submitted) { create :award, status: :submitted, award_type: award_type }
       let(:award_accepted) { create :award, status: :accepted, award_type: award_type }
@@ -97,6 +99,7 @@ describe Award do
 
       before do
         award_ready_wo_account.update(account: nil)
+        award_unpublished_wo_account.update(account: nil)
         award_type.project.admins << create(:account)
       end
 
@@ -105,6 +108,12 @@ describe Award do
         expect(described_class.filtered_for_view('ready', award_ready_w_account.account)).to include(award_ready_w_account)
 
         expect(described_class.filtered_for_view('ready', create(:account))).not_to include(award_ready_w_account)
+      end
+
+      it 'returns unpublished awards assigned to you' do
+        expect(described_class.filtered_for_view('ready', award_unpublished_w_account.account)).to include(award_unpublished_w_account)
+        expect(described_class.filtered_for_view('ready', create(:account))).not_to include(award_unpublished_w_account)
+        expect(described_class.filtered_for_view('ready', create(:account))).not_to include(award_unpublished_wo_account)
       end
 
       it 'returns only started awards for a contributor' do
@@ -295,8 +304,6 @@ describe Award do
       expect(described_class.new(quantity: nil).tap(&:valid?).errors.full_messages).to match_array([
                                                                                                      "Award type can't be blank",
                                                                                                      "Name can't be blank",
-                                                                                                     "Why can't be blank",
-                                                                                                     "Requirements can't be blank",
                                                                                                      'Amount is not a number'
                                                                                                    ])
     end
@@ -378,6 +385,13 @@ describe Award do
       end
     end
 
+    it 'doesnt allow to cancel paid award' do
+      award_paid = create(:award, status: :paid)
+      award_paid.status = :cancelled
+      expect(award_paid).not_to be_valid
+      expect(award_paid.errors.full_messages.first).to eq("Paid task/transfer can't be cancelled")
+    end
+
     describe 'awards amounts must be > 0' do
       let(:award) { build :award }
 
@@ -394,11 +408,11 @@ describe Award do
       end
     end
 
-    describe 'total_amount calculation' do
+    describe 'calculate_total_amount' do
       let(:award_w_quantity) { create :award, amount: 100, quantity: 2 }
-      let(:award_template) { create :award, amount: 100, number_of_assignments: 3 }
+      let(:award_w_total_amount) { build :award, amount: 100, quantity: 2, total_amount: 300 }
 
-      it 'multiplies amount by quantity' do
+      it 'calculates total_amount multiplying amount by quantity' do
         expect(award_w_quantity.total_amount).to eq(200)
       end
     end

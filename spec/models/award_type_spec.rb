@@ -25,28 +25,28 @@ describe AwardType do
   end
 
   describe 'switch_tasks_publicity' do
-    let!(:award_type_ready) { create(:award_type, state: :ready) }
+    let!(:award_type_ready) { create(:award_type, state: 'public') }
     let!(:award_published_ready) { create(:award_ready, award_type: award_type_ready) }
-    let!(:award_type_draft) { create(:award_type, state: :draft) }
-    let!(:award_type_pending) { create(:award_type, state: :pending) }
+    let!(:award_type_draft) { create(:award_type, state: 'draft') }
+    let!(:award_type_pending) { create(:award_type, state: 'invite only') }
     let!(:award_unpublished_draft) { create(:award, award_type: award_type_draft, status: :unpublished) }
     let!(:award_unpublished_pending) { create(:award, award_type: award_type_pending, status: :unpublished) }
 
     it 'switches ready awards to unpublished if state becomes draft' do
       award_published_ready.update(account: nil)
-      award_type_ready.update(state: :draft)
+      award_type_ready.update(state: 'draft')
       expect(award_published_ready.reload.unpublished?).to be_truthy
     end
 
     it 'switches ready awards to unpublished if state becomes pending' do
       award_published_ready.update(account: nil)
-      award_type_ready.update(state: :pending)
+      award_type_ready.update(state: 'invite only')
       expect(award_published_ready.reload.unpublished?).to be_truthy
     end
 
     it 'switches unpublished awards to ready if state becomes ready' do
-      award_type_draft.update(state: :ready)
-      award_type_pending.update(state: :ready)
+      award_type_draft.update(state: 'public')
+      award_type_pending.update(state: 'public')
       expect(award_unpublished_draft.reload.ready?).to be_truthy
       expect(award_unpublished_pending.reload.ready?).to be_truthy
     end

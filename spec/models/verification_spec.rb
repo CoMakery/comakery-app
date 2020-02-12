@@ -19,7 +19,7 @@ describe Verification do
     it 'requires attributes to be present' do
       verification = described_class.new
       expect(verification).not_to be_valid
-      expect(verification.errors.full_messages).to eq(['Passed is not included in the list', 'Max investment usd is not a number'])
+      expect(verification.errors.full_messages).to eq(['Passed is not boolean', 'Max investment usd is not a number'])
     end
 
     it 'requires max_investment_usd to be greater than 0' do
