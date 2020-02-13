@@ -15,7 +15,7 @@ class Comakery::Web3
         open_timeout: 20,
         read_timeout: 140,
         use_ssl: true,
-        rpc_path: "/v3/#{ENV.fetch('INFURA_PROJECT_ID')}"
+        rpc_path: ENV['INFURA_PROJECT_ID'] ? "/v3/#{ENV.fetch('INFURA_PROJECT_ID')}" : nil
       }
     )
   end
