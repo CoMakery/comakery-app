@@ -14,7 +14,8 @@ class Comakery::Web3
       connect_options: {
         open_timeout: 20,
         read_timeout: 140,
-        use_ssl: true
+        use_ssl: true,
+        rpc_path: "/v3/#{ENV.fetch('INFURA_PROJECT_ID')}"
       }
     )
   end
