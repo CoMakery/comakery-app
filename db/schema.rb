@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_29_152309) do
+ActiveRecord::Schema.define(version: 2020_02_13_144611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -410,6 +410,30 @@ ActiveRecord::Schema.define(version: 2020_01_29_152309) do
     t.datetime "synced_at"
   end
 
+  create_table "transaction_states", force: :cascade do |t|
+    t.bigint "transaction_id"
+    t.integer "status", default: 0
+    t.string "status_message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["transaction_id"], name: "index_transaction_states_on_transaction_id"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.bigint "award_id"
+    t.decimal "amount"
+    t.string "source"
+    t.string "destination"
+    t.string "nonce"
+    t.string "contract_address"
+    t.integer "network"
+    t.string "hash"
+    t.string "raw"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["award_id"], name: "index_transactions_on_award_id"
+  end
+
   create_table "transfer_rules", force: :cascade do |t|
     t.bigint "token_id"
     t.bigint "sending_group_id"
@@ -450,6 +474,8 @@ ActiveRecord::Schema.define(version: 2020_01_29_152309) do
   add_foreign_key "interests", "accounts"
   add_foreign_key "projects", "tokens"
   add_foreign_key "reg_groups", "tokens"
+  add_foreign_key "transaction_states", "transactions"
+  add_foreign_key "transactions", "awards"
   add_foreign_key "transfer_rules", "tokens"
   add_foreign_key "verifications", "accounts"
 end

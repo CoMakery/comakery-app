@@ -62,6 +62,16 @@ class AwardDecorator < Draper::Decorator
     recipient_auth_team&.name || account.decorate.name
   end
 
+  def recipient_address
+    if object.token&.coin_type_on_ethereum?
+      account&.ethereum_wallet
+    elsif object.token&.coin_type_on_qtum?
+      account&.qtum_wallet
+    elsif object.token&.coin_type_ada?
+      account&.cardano_wallet
+    end
+  end
+
   def issuer_address
     if object.token&.coin_type_on_ethereum?
       issuer&.ethereum_wallet
