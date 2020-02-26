@@ -140,7 +140,7 @@ Rails.application.routes.draw do
 
       resources :projects, only: [:show, :index] do
         resources :transfers, only: [:index, :show, :create, :destroy]
-        resources :transactions, only: [:create, :update, :destroy]
+        resources :blockchain_transactions, only: [:create, :update, :destroy]
       end
     end
   end

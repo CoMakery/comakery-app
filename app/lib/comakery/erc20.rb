@@ -1,37 +1,44 @@
 class Comakery::Erc20
+  attr_reader :nonce, :client, :contract
+
   def initialize(contract_address, abi, network, nonce)
     @nonce = nonce
+    @client = Ethereum::HttpClient.new(
+      "https://#{network.to_s == 'main' ? 'mainnet' : network}.infura.io/v3/#{ENV.fetch('INFURA_PROJECT_ID', '')}"
+    )
     @contract = Ethereum::Contract.create(
-      name: 'ERC20 Contract',
+      name: 'Contract',
       address: contract_address,
       abi: abi,
-      client: Ethereum::HttpClient.new(
-        "https://#{network == 'main' ? 'mainnet' : network}.infura.io/v3/#{ENV.fetch('INFURA_PROJECT_ID')}"
-      )
+      client: @client
     )
-  end
-
-  def functions
-    @functions ||= Ethereum::Abi.parse_abi(@contract.abi)[1]
+    @functions = Ethereum::Abi.parse_abi(@contract.abi)[1]
   end
 
   def method_missing(method_name, *args)
-    tx(
-      @contract.call_payload(
-        functions.find { |f| f.name == method_name },
-        args
-      )
-    )
+    function = @functions.find { |f| f.name.casecmp?(method_name.to_s) }
+
+    if function
+      tx(@contract.call_payload(function, args))
+    else
+      super
+    end
+  end
+
+  def respond_to_missing?(method_name, *args)
+    @functions.any? { |f| f.name.casecmp?(method_name.to_s) } || super
   end
 
   private
 
     def tx(data)
-      Eth::Tx.new(data: data,
-                  gas_limit: 21_000_000,
-                  gas_price: 3_141_592,
-                  nonce: @nonce,
-                  to: @contract.address,
-                  value: 0)
+      Eth::Tx.new(
+        data: data,
+        gas_limit: 100000,
+        gas_price: 10000,
+        nonce: @nonce,
+        to: @contract.address,
+        value: 0
+      )
     end
 end

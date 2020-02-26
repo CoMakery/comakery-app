@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>IV. Transfers API</title>
+    <title>V. Blockchain Transactions API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>IV. Transfers API</h1>
+      <h1>V. Blockchain Transactions API</h1>
 
-        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
+        <p class="explanation">Generate blockchain transactions for project to process and submit to blockchain.</p>
 
       <div class="article">
-        <h2>CANCEL</h2>
-        <h3>DELETE /api/v1/projects/:project_id/transfers/:id</h3>
+        <h2>SUBMIT TRANSACTION</h2>
+        <h3>PUT /api/v1/projects/:project_id/blockchain_transactions/:id</h3>
           <p class="explanation">
-            Returns cancelled transfer details (See GET for response details)
+            Marks transaction as pending and returns transaction details, see GENERATE TRANSACTION for response fields
           </p>
 
           <h3>Parameters</h3>
@@ -128,42 +128,31 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
-                    <span class="name">id</span>
-                </td>
-                <td>
-                  <span class="description">transfer id</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
                     <span class="name">project_id</span>
                 </td>
                 <td>
                   <span class="description">project id</span>
                 </td>
               </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">transaction id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transaction[tx_hash]</span>
+                </td>
+                <td>
+                  <span class="description">transaction hash</span>
+                </td>
+              </tr>
             </tbody>
           </table>
 
-          <h3>Response Fields</h3>
-          <table class="response-fields table table-striped table-bordered table-condensed">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                    <span class="name">errors</span>
-                </td>
-                <td>
-                  <span class="description">array of errors</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <h3>Request</h3>
 
@@ -171,32 +160,34 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/v1/projects/44/transfers/17</pre>
+          <pre class="request route highlight">PUT /api/v1/projects/48/blockchain_transactions/4</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"d4b5bca85eb84a9ce91289e37c87adf9","timestamp":"1582736554","url":"http://example.org/api/v1/projects/44/transfers/17"},"proof":{"signature":"XQrU6eViON+AVKfrd8MfAFSEr/yECOwyliWGdpiHIUSX7zPAjcOIkivrEefm2J1ce1MoB37tne9p8Q3LmyEODQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"transaction":{"tx_hash":"0x7c2841fa94d2fa5f71cb5975e07f18e8268a142831f0d4fd8022e3378745eb73"}},"method":"PUT","nonce":"60aa275e9bdcb332e9cac8ba7b6bc90b","timestamp":"1582736558","url":"http://example.org/api/v1/projects/48/blockchain_transactions/4"},"proof":{"signature":"phgVHw13KOFPY5wVX2tu6HXQYqgLgZp6c7IF/aOQkvyvZMMWkiw2be+zW4EZoLIQ9OXBsgGNvsYmRM2jOC/LAQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;e3b967ea7898dfefc4f6f78623c6f76a&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;844a9a60ba40dc703fa9d62767352e2b&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;id&quot;: 17,
-  &quot;source&quot;: &quot;earned&quot;,
-  &quot;amount&quot;: &quot;1000.0&quot;,
-  &quot;quantity&quot;: &quot;2.0&quot;,
-  &quot;totalAmount&quot;: &quot;2000.0&quot;,
-  &quot;description&quot;: &quot;Award to a team member&quot;,
-  &quot;ethereumTransactionAddress&quot;: null,
-  &quot;ethereumTransactionError&quot;: null,
-  &quot;status&quot;: &quot;cancelled&quot;,
-  &quot;createdAt&quot;: &quot;2020-02-26T17:02:34.517Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-02-26T17:02:34.761Z&quot;,
-  &quot;accountId&quot;: &quot;d75f06ac-0861-4e99-8702-33847b654494&quot;
+  &quot;id&quot;: 4,
+  &quot;awardId&quot;: 26,
+  &quot;destination&quot;: &quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;,
+  &quot;source&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
+  &quot;amount&quot;: &quot;1.0&quot;,
+  &quot;nonce&quot;: 77712,
+  &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+  &quot;network&quot;: &quot;ropsten&quot;,
+  &quot;txHash&quot;: &quot;0x7c2841fa94d2fa5f71cb5975e07f18e8268a142831f0d4fd8022e3378745eb73&quot;,
+  &quot;txRaw&quot;: &quot;0xf86a83012f90822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb000000000000000000000000b4252b39f8506a711205b0b1c4170f0034065b460000000000000000000000000000000000000000000000000de0b6b3a7640000808080&quot;,
+  &quot;status&quot;: &quot;pending&quot;,
+  &quot;statusMessage&quot;: null,
+  &quot;createdAt&quot;: &quot;2020-02-26T17:02:38.286Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-02-26T17:02:38.388Z&quot;
 }</pre>
       </div>
     </div>

@@ -627,6 +627,7 @@ GEM
     unicode-display_width (1.6.0)
     unicode_utils (1.4.0)
     uniform_notifier (1.13.0)
+    vcr (5.1.0)
     web-console (4.0.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -756,6 +757,7 @@ DEPENDENCIES
   turbolinks (~> 5.2)
   uglifier
   underscore-rails
+  vcr (~> 5.1)
   web-console
   web3-eth
   webmock

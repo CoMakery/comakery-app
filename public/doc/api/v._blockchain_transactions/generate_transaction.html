@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>IV. Transfers API</title>
+    <title>V. Blockchain Transactions API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>IV. Transfers API</h1>
+      <h1>V. Blockchain Transactions API</h1>
 
-        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
+        <p class="explanation">Generate blockchain transactions for project to process and submit to blockchain.</p>
 
       <div class="article">
-        <h2>GET</h2>
-        <h3>GET /api/v1/projects/:project_id/transfers/:id</h3>
+        <h2>GENERATE TRANSACTION</h2>
+        <h3>POST /api/v1/projects/:project_id/blockchain_transactions</h3>
           <p class="explanation">
-            Returns data for a single transfer.
+            Generates a new blockchain transaction for a transfer and locks the transfer for 10 minutes
           </p>
 
           <h3>Parameters</h3>
@@ -136,10 +136,18 @@ table th, table td {
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">id</span>
+                    <span class="name">transaction[source]</span>
                 </td>
                 <td>
-                  <span class="description">transfer id</span>
+                  <span class="description">transaction source wallet address</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transaction[nonce]</span>
+                </td>
+                <td>
+                  <span class="description">transaction nonce</span>
                 </td>
               </tr>
             </tbody>
@@ -159,15 +167,15 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">transfer id</span>
+                  <span class="description">transaction id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">source</span>
+                    <span class="name">award_id</span>
                 </td>
                 <td>
-                  <span class="description">transfer source (earned bought mint burn)</span>
+                  <span class="description">transfer id</span>
                 </td>
               </tr>
               <tr>
@@ -175,55 +183,63 @@ table th, table td {
                     <span class="name">amount</span>
                 </td>
                 <td>
-                  <span class="description">transfer amount</span>
+                  <span class="description">transaction amount</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">quantity</span>
+                    <span class="name">destination</span>
                 </td>
                 <td>
-                  <span class="description">transfer quantity</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">totalAmount</span>
-                </td>
-                <td>
-                  <span class="description">transfer total amount</span>
+                  <span class="description">transaction destination</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">description</span>
+                    <span class="name">source</span>
                 </td>
                 <td>
-                  <span class="description">transfer description</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">accountId</span>
-                </td>
-                <td>
-                  <span class="description">transfer account id</span>
+                  <span class="description">transaction source</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">ethereumTransactionAddress</span>
+                    <span class="name">nonce</span>
                 </td>
                 <td>
-                  <span class="description">transfer ethereum transaction address</span>
+                  <span class="description">transaction nonce</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">ethereumTransactionError</span>
+                    <span class="name">contract_address</span>
                 </td>
                 <td>
-                  <span class="description">latest recieved transaction error (returned from DApp on unsuccessful transaction)</span>
+                  <span class="description">token contract address</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">network</span>
+                </td>
+                <td>
+                  <span class="description">token network</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tx_hash</span>
+                </td>
+                <td>
+                  <span class="description">transaction hash</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">tx_raw</span>
+                </td>
+                <td>
+                  <span class="description">transaction in HEX</span>
                 </td>
               </tr>
               <tr>
@@ -231,7 +247,15 @@ table th, table td {
                     <span class="name">status</span>
                 </td>
                 <td>
-                  <span class="description">transfer status (accepted paid cancelled)</span>
+                  <span class="description">transaction status (created pending cancelled succeed failed)</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">status_message</span>
+                </td>
+                <td>
+                  <span class="description">transaction status message</span>
                 </td>
               </tr>
               <tr>
@@ -239,7 +263,7 @@ table th, table td {
                     <span class="name">createdAt</span>
                 </td>
                 <td>
-                  <span class="description">transfer creation timestamp</span>
+                  <span class="description">transaction creation timestamp</span>
                 </td>
               </tr>
               <tr>
@@ -247,7 +271,7 @@ table th, table td {
                     <span class="name">updatedAt</span>
                 </td>
                 <td>
-                  <span class="description">transfer update timestamp</span>
+                  <span class="description">transaction update timestamp</span>
                 </td>
               </tr>
             </tbody>
@@ -259,34 +283,34 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/41/transfers/8?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F41%2Ftransfers%2F8&amp;body[method]=GET&amp;body[nonce]=b89086c810a148704dae9fc53ac5d118&amp;body[timestamp]=1582736553&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=xWx5el1AtnEShVmvriOug9Owu9SM9Ee7GRkMNwflmT6WJeExr4sKo%2FKsGUEjAtEI3BLj657WRqjQkHLs%2BS2vAw%3D%3D</pre>
+          <pre class="request route highlight">POST /api/v1/projects/46/blockchain_transactions</pre>
 
-            <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/41/transfers/8&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;b89086c810a148704dae9fc53ac5d118&quot;, &quot;timestamp&quot;=&gt;&quot;1582736553&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;xWx5el1AtnEShVmvriOug9Owu9SM9Ee7GRkMNwflmT6WJeExr4sKo/KsGUEjAtEI3BLj657WRqjQkHLs+S2vAw==&quot;}</pre>
 
+            <h4>Body</h4>
+            <pre class="request body">{"body":{"data":{"transaction":{"nonce":1,"source":"0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB"}},"method":"POST","nonce":"752954a116789a44d90544c0d6b17837","timestamp":"1582736556","url":"http://example.org/api/v1/projects/46/blockchain_transactions"},"proof":{"signature":"ZDwrPqUwAijJw5lez7BRKBpvPFnY3BaczZcI5z9siZYu/cShabA1ma4KoL6vPDnGw4TKocC7cjPdgiU+BLMBBQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;e88dca22c94f89f67624e88745442cb1&quot;
-Last-Modified: Wed, 26 Feb 2020 17:02:33 GMT</pre>
+              <pre class="response headers">ETag: W/&quot;da7d6c4563d0ad17c103ed64173ffe2b&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">200 OK</pre>
+            <pre class="response status">201 Created</pre>
               <h4>Body</h4>
               <pre class="response body">{
-  &quot;id&quot;: 8,
-  &quot;source&quot;: &quot;bought&quot;,
+  &quot;id&quot;: 2,
+  &quot;awardId&quot;: 24,
+  &quot;destination&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
+  &quot;source&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
   &quot;amount&quot;: &quot;50.0&quot;,
-  &quot;quantity&quot;: &quot;1.0&quot;,
-  &quot;totalAmount&quot;: &quot;50.0&quot;,
-  &quot;description&quot;: &quot;Investment&quot;,
-  &quot;ethereumTransactionAddress&quot;: &quot;0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c&quot;,
-  &quot;ethereumTransactionError&quot;: null,
-  &quot;status&quot;: &quot;paid&quot;,
-  &quot;createdAt&quot;: &quot;2020-02-26T17:02:33.117Z&quot;,
-  &quot;updatedAt&quot;: &quot;2020-02-26T17:02:33.107Z&quot;,
-  &quot;accountId&quot;: &quot;0414592b-2e47-4804-ab15-19c02cd4f35c&quot;
+  &quot;nonce&quot;: 1,
+  &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+  &quot;network&quot;: &quot;ropsten&quot;,
+  &quot;txHash&quot;: &quot;0xa58131a0487550d0abd4a76db853d005c2e34f89bb5ed95a07a2aa0ddd7983be&quot;,
+  &quot;txRaw&quot;: &quot;0xf86701822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb000000000000000000000000ab5801a7d398351b8be11c439e05c5b3259aec9b000000000000000000000000000000000000000000000002b5e3af16b1880000808080&quot;,
+  &quot;status&quot;: &quot;created&quot;,
+  &quot;statusMessage&quot;: null,
+  &quot;createdAt&quot;: &quot;2020-02-26T17:02:36.726Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-02-26T17:02:36.726Z&quot;
 }</pre>
       </div>
     </div>

@@ -140,3 +140,5 @@ gem 'json-canonicalization', '~> 0.2.0'
 gem 'ethereum.rb', '~> 2.3'
 
 gem 'eth', '~> 0.4.10'
+
+gem 'vcr', '~> 5.1'
