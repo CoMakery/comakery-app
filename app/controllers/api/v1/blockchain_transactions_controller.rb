@@ -23,6 +23,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
   # PATCH/PUT /api/v1/projects/1/blockchain_transactions/1
   def update
     transaction.update_status(:pending)
+    Blockchain::BlockchainTransactionSyncJob.perform_later(transaction)
 
     render 'show.json', status: 200
   end
