@@ -52,7 +52,7 @@ describe BlockchainTransaction do
 
     it 'populates transaction data from award and token' do
       expect(blockchain_transaction.amount).to eq(blockchain_transaction.award.amount)
-      expect(blockchain_transaction.destination).to eq(blockchain_transaction.award.decorate.recipient_address)
+      expect(blockchain_transaction.destination).to eq(blockchain_transaction.award.recipient_address)
       expect(blockchain_transaction.network).to eq(blockchain_transaction.token.ethereum_network)
       expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.ethereum_contract_address)
     end

@@ -38,7 +38,7 @@ class BlockchainTransaction < ApplicationRecord
 
     def populate_data
       self.amount = award.total_amount
-      self.destination = award.decorate.recipient_address
+      self.destination = award.recipient_address
       self.network = token.ethereum_network
       self.contract_address = token.ethereum_contract_address
     end
