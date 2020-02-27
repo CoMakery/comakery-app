@@ -30,16 +30,13 @@ class Comakery::Erc20
   end
 
   def tx_status(tx_hash, number_of_confirmations = 1)
-    tx = @client.eth_get_transaction_by_hash(tx_hash)
-
-    block_number = tx&.fetch('result', nil)&.fetch('blockNumber', nil)
-    status = tx&.fetch('result', nil)&.fetch('status', nil)
+    tx = @client.eth_get_transaction_receipt(tx_hash)
+    current_block = @client.eth_block_number&.fetch('result', nil)&.to_i(16)
+    block_number = tx&.fetch('result', nil)&.fetch('blockNumber', nil)&.to_i(16)
+    status = tx&.fetch('result', nil)&.fetch('status', nil)&.to_i(16)
 
     return nil unless block_number && status
-
-    unless @client.eth_block_number - block_number >= number_of_confirmations
-      return nil
-    end
+    return nil unless current_block - block_number >= number_of_confirmations
 
     status
   end

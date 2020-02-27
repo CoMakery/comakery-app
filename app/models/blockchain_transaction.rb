@@ -25,9 +25,9 @@ class BlockchainTransaction < ApplicationRecord
 
   def sync
     case contract.tx_status(tx_hash, NUMBER_OF_CONFIRMATIONS)
-    when '0x0'
+    when 0
       update_status(:failed)
-    when '0x1'
+    when 1
       update_status(:succeed)
     else
       false

@@ -95,7 +95,7 @@ module SlackStubs
   end
 
   def stub_web3_fetch(host = 'mainnet.infura.io')
-    stub_request(:post, "https://#{host}/" + (ENV['INFURA_PROJECT_ID'] ? "v3/#{ENV.fetch('INFURA_PROJECT_ID')}" : nil)).to_return(
+    stub_request(:post, "https://#{host}/" + (ENV['INFURA_PROJECT_ID'] ? "v3/#{ENV.fetch('INFURA_PROJECT_ID')}" : '')).to_return(
       status: 200,
       body: '{"jsonrpc":"2.0","id":"2197121","result":"0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000003484f540000000000000000000000000000000000000000000000000000000000"}',
       headers: {}
@@ -103,7 +103,7 @@ module SlackStubs
   end
 
   def stub_web3_fetch_failure(host = 'mainnet.infura.io')
-    stub_request(:post, "https://#{host}/" + (ENV['INFURA_PROJECT_ID'] ? "v3/#{ENV.fetch('INFURA_PROJECT_ID')}" : nil)).to_return(
+    stub_request(:post, "https://#{host}/" + (ENV['INFURA_PROJECT_ID'] ? "v3/#{ENV.fetch('INFURA_PROJECT_ID')}" : '')).to_return(
       status: 200,
       body: '{}',
       headers: {}
@@ -127,7 +127,7 @@ module SlackStubs
   end
 
   def stub_blockchain_sync(host = 'mainnet.infura.io')
-    stub_request(:post, "https://#{host}/" + (ENV['INFURA_PROJECT_ID'] ? "v3/#{ENV.fetch('INFURA_PROJECT_ID')}" : nil)).to_return(
+    stub_request(:post, "https://#{host}/" + (ENV['INFURA_PROJECT_ID'] ? "v3/#{ENV.fetch('INFURA_PROJECT_ID')}" : '')).to_return(
       status: 200,
       body: '{"jsonrpc":"2.0","id":"2197121","result":"0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000003484f540000000000000000000000000000000000000000000000000000000000"}',
       headers: {}

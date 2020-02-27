@@ -1,0 +1,2 @@
+spec/vcr/**/* -diff
+public/doc/api/**/* -diff

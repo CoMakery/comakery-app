@@ -111,4 +111,26 @@ describe BlockchainTransaction do
       expect(blockchain_transaction.award.status).to eq('paid')
     end
   end
+
+  describe 'sync', :vcr do
+    let!(:succeed_blockchain_transaction) { create(:blockchain_transaction, nonce: 1, tx_hash: '0x2d5ca80d84f67b5f60322a68d2b6ceff49030961dde74b6465573bcb6f1a2abd') }
+    let!(:failed_blockchain_transaction) { create(:blockchain_transaction, nonce: 1, tx_hash: '0x94f00ce58c31913178e1aeab790967f7f62545126de118a064249a883c4159d4') }
+    let!(:unconfirmed_blockchain_transaction) { create(:blockchain_transaction, nonce: 1, tx_hash: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff') }
+
+    it 'udpates status to succeed for successfull transaction' do
+      succeed_blockchain_transaction.sync
+
+      expect(succeed_blockchain_transaction.reload.status).to eq('succeed')
+    end
+
+    it 'udpates status to failed for failed transaction' do
+      failed_blockchain_transaction.sync
+
+      expect(failed_blockchain_transaction.reload.status).to eq('failed')
+    end
+
+    it 'returns false for unconfirmed transaction' do
+      expect(unconfirmed_blockchain_transaction.sync).to be_falsey
+    end
+  end
 end
