@@ -1,0 +1,77 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params":["0x94f00ce58c31913178e1aeab790967f7f62545126de118a064249a883c4159d4"],"id":1}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - ropsten.infura.io
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 28 Feb 2020 16:27:56 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '980'
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x45dd815654d1c37294df4405557222d9e5d0905ebde1a591986518eae5cbe4b7","blockNumber":"0x703c6d","contractAddress":null,"cumulativeGasUsed":"0x57a8","from":"0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b","gasUsed":"0x57a8","logs":[],"logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","status":"0x0","to":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","transactionHash":"0x94f00ce58c31913178e1aeab790967f7f62545126de118a064249a883c4159d4","transactionIndex":"0x0"}}'
+    http_version: null
+  recorded_at: Fri, 28 Feb 2020 16:27:56 GMT
+- request:
+    method: post
+    uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - ropsten.infura.io
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 28 Feb 2020 16:27:56 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '44'
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x713a9f"}'
+    http_version: null
+  recorded_at: Fri, 28 Feb 2020 16:27:56 GMT
+recorded_with: VCR 5.1.0
