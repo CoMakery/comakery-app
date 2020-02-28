@@ -331,4 +331,12 @@ describe Token do
       expect(token.abi.last['name']).to eq('Transfer')
     end
   end
+
+  describe 'to_base_unit' do
+    it 'converts an amount into base unit based on token decimals' do
+      expect(create(:token, decimal_places: 18).to_base_unit(BigDecimal(1) + 0.1)).to eq(1100000000000000000)
+      expect(create(:token, decimal_places: 2).to_base_unit(BigDecimal(1) + 0.1)).to eq(110)
+      expect(create(:token, decimal_places: 0).to_base_unit(BigDecimal(1) + 0.1)).to eq(1)
+    end
+  end
 end

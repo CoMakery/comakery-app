@@ -209,7 +209,7 @@ ActiveRecord::Schema.define(version: 2020_02_13_144611) do
 
   create_table "blockchain_transactions", force: :cascade do |t|
     t.bigint "award_id"
-    t.decimal "amount"
+    t.integer "amount"
     t.string "source"
     t.string "destination"
     t.integer "nonce"

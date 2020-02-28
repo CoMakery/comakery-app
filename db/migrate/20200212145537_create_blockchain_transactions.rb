@@ -2,7 +2,7 @@ class CreateBlockchainTransactions < ActiveRecord::Migration[6.0]
   def change
     create_table :blockchain_transactions do |t|
       t.belongs_to :award, foreign_key: true
-      t.decimal :amount
+      t.integer :amount
       t.string :source
       t.string :destination
       t.integer :nonce

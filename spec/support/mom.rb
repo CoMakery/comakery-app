@@ -87,7 +87,7 @@ class Mom
       ethereum_network: :ropsten,
       ethereum_contract_address: build(:ethereum_contract_address),
       symbol: 'DUM',
-      decimal_places: 0
+      decimal_places: 2
     )
 
     award = attrs[:award] || create(

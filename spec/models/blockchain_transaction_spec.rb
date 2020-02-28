@@ -51,7 +51,7 @@ describe BlockchainTransaction do
     end
 
     it 'populates transaction data from award and token' do
-      expect(blockchain_transaction.amount).to eq(blockchain_transaction.award.amount)
+      expect(blockchain_transaction.amount).to eq(blockchain_transaction.token.to_base_unit(blockchain_transaction.award.amount))
       expect(blockchain_transaction.destination).to eq(blockchain_transaction.award.recipient_address)
       expect(blockchain_transaction.network).to eq(blockchain_transaction.token.ethereum_network)
       expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.ethereum_contract_address)
@@ -60,7 +60,7 @@ describe BlockchainTransaction do
     it 'generates blockchain transaction data' do
       tx = contract.transfer(
         blockchain_transaction.destination,
-        Ethereum::Formatter.new.to_wei(blockchain_transaction.amount)
+        blockchain_transaction.amount
       )
 
       expect(blockchain_transaction.tx_hash).to eq(tx.hash)
@@ -70,7 +70,7 @@ describe BlockchainTransaction do
     it 'generates blockchain transaction data for mint' do
       tx = contract.mint(
         blockchain_transaction_mint.destination,
-        Ethereum::Formatter.new.to_wei(blockchain_transaction_mint.amount)
+        blockchain_transaction_mint.amount
       )
 
       expect(blockchain_transaction_mint.tx_hash).to eq(tx.hash)
@@ -80,7 +80,7 @@ describe BlockchainTransaction do
     it 'generates blockchain transaction data for burn' do
       tx = contract.burn(
         blockchain_transaction_burn.destination,
-        Ethereum::Formatter.new.to_wei(blockchain_transaction_burn.amount)
+        blockchain_transaction_burn.amount
       )
 
       expect(blockchain_transaction_burn.tx_hash).to eq(tx.hash)

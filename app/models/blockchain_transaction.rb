@@ -37,7 +37,7 @@ class BlockchainTransaction < ApplicationRecord
   private
 
     def populate_data
-      self.amount = award.total_amount
+      self.amount = token.to_base_unit(award.total_amount)
       self.destination = award.recipient_address
       self.network = token.ethereum_network
       self.contract_address = token.ethereum_contract_address
@@ -48,15 +48,13 @@ class BlockchainTransaction < ApplicationRecord
     end
 
     def tx
-      f = Ethereum::Formatter.new
-
       @tx ||= case award.source
               when 'mint'
-                contract.mint(destination, f.to_wei(amount))
+                contract.mint(destination, amount)
               when 'burn'
-                contract.burn(destination, f.to_wei(amount))
+                contract.burn(destination, amount)
               else
-                contract.transfer(destination, f.to_wei(amount))
+                contract.transfer(destination, amount)
       end
     end
 
