@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_29_152309) do
+ActiveRecord::Schema.define(version: 2020_02_13_144611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -196,6 +196,32 @@ ActiveRecord::Schema.define(version: 2020_01_29_152309) do
     t.index ["award_type_id"], name: "index_awards_on_award_type_id"
     t.index ["issuer_id"], name: "index_awards_on_issuer_id"
     t.index ["specialty_id"], name: "index_awards_on_specialty_id"
+  end
+
+  create_table "blockchain_transaction_updates", force: :cascade do |t|
+    t.bigint "blockchain_transaction_id"
+    t.integer "status", default: 0
+    t.string "status_message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["blockchain_transaction_id"], name: "index_blockchain_tx_updates_on_blockchain_tx_id"
+  end
+
+  create_table "blockchain_transactions", force: :cascade do |t|
+    t.bigint "award_id"
+    t.integer "amount"
+    t.string "source"
+    t.string "destination"
+    t.integer "nonce"
+    t.string "contract_address"
+    t.integer "network"
+    t.string "tx_hash"
+    t.string "tx_raw"
+    t.integer "status", default: 0
+    t.string "status_message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["award_id"], name: "index_blockchain_transactions_on_award_id"
   end
 
   create_table "channels", force: :cascade do |t|
@@ -445,6 +471,8 @@ ActiveRecord::Schema.define(version: 2020_01_29_152309) do
   add_foreign_key "account_token_records", "tokens"
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "awards", "specialties"
+  add_foreign_key "blockchain_transaction_updates", "blockchain_transactions"
+  add_foreign_key "blockchain_transactions", "awards"
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"

@@ -80,6 +80,57 @@ class Mom
     AccountTokenRecord.new(defaults.merge(attrs))
   end
 
+  def blockchain_transaction(**attrs)
+    token = attrs[:token] || create(
+      :token,
+      coin_type: :comakery,
+      ethereum_network: :ropsten,
+      ethereum_contract_address: build(:ethereum_contract_address),
+      symbol: 'DUM',
+      decimal_places: 2
+    )
+
+    award = attrs[:award] || create(
+      :award,
+      amount: 1,
+      status: :accepted,
+      account: create(
+        :account,
+        ethereum_wallet: build(:ethereum_address_2)
+      ),
+      award_type: create(
+        :award_type,
+        project: create(
+          :project,
+          token: token
+        )
+      )
+    )
+
+    defaults = {
+      award: award,
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: rand(1_000_000),
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
+      BlockchainTransaction.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_update(**attrs)
+    defaults = {
+      blockchain_transaction: create(:blockchain_transaction),
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    BlockchainTransactionUpdate.new(defaults.merge(attrs))
+  end
+
   def account_with_auth(**attrs)
     account(**attrs).tap { |a| create(:authentication, account: a) }
   end
@@ -319,6 +370,43 @@ class Mom
       'url' => "http://#{host}#{path}",
       'method' => method
     }).sign(build(:api_private_key))
+  end
+
+  def ethereum_address_1
+    '0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB'
+  end
+
+  def ethereum_address_2
+    '0xB4252b39f8506A711205B0b1C4170f0034065b46'
+  end
+
+  def ethereum_contract_address
+    '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
+  end
+
+  def erc20_contract(**attrs)
+    token = create(
+      :token,
+      coin_type: :comakery,
+      ethereum_network: :ropsten,
+      ethereum_contract_address: build(:ethereum_contract_address),
+      symbol: 'DUM',
+      decimal_places: 0
+    )
+
+    contract_address = attrs[:contract_address] || token.ethereum_contract_address
+    abi = attrs[:abi] || token.abi
+    network = attrs[:network] || token.ethereum_network
+    nonce = attrs[:nonce] || rand(1_000_000)
+
+    VCR.use_cassette("infura/#{network}/#{contract_address}/contract_init") do
+      Comakery::Erc20.new(
+        contract_address,
+        abi,
+        network,
+        nonce
+      )
+    end
   end
 end
 

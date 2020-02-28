@@ -135,6 +135,10 @@ class Token < ApplicationRecord
     end
   end
 
+  def to_base_unit(amount)
+    BigDecimal(10.pow(decimal_places || 0) * amount)&.to_s&.to_i
+  end
+
   private
 
   def check_coin_type

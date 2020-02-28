@@ -31,6 +31,8 @@ class Award < ApplicationRecord
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
+  has_many :blockchain_transactions
+  has_one :latest_blockchain_transaction, -> { order created_at: :desc }, class_name: 'BlockchainTransaction', foreign_key: :award_id
 
   validates :proof_id, :award_type, :name, presence: true
   validates :amount, numericality: { greater_than: 0 }
@@ -77,6 +79,12 @@ class Award < ApplicationRecord
   scope :listed, -> { where 'awards.status not in(6,7)' }
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
+  scope :ready_for_blockchain_transaction, lambda {
+    accepted
+      .left_outer_joins(:latest_blockchain_transaction)
+      .distinct
+      .where('(blockchain_transactions.id IS NULL) OR (blockchain_transactions.status = 2) OR (blockchain_transactions.status = 0 AND blockchain_transactions.created_at < :timestamp)', timestamp: 10.minutes.ago)
+  }
 
   scope :filtered_for_view, lambda { |filter, account|
     case filter

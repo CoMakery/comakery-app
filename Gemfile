@@ -136,3 +136,9 @@ gem 'rack-attack', '~> 6.2'
 gem 'ed25519', '~> 1.2'
 
 gem 'json-canonicalization', '~> 0.2.0'
+
+gem 'ethereum.rb', '~> 2.3'
+
+gem 'eth', '~> 0.4.10'
+
+gem 'vcr', '~> 5.1'
