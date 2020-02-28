@@ -21,6 +21,7 @@ jobs:
           REFILE_S3_REGION: dummy
           REFILE_S3_BUCKET: dummy
           DATABASE_URL: postgres://postgres@localhost:5432/production
+          INFURA_PROJECT_ID: 39f6ad316c5a4b87a0f90956333c3666
       - image: circleci/postgres:10.10-alpine
       - image: circleci/redis:5.0.6-alpine
     steps:
