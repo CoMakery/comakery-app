@@ -9,6 +9,14 @@ class TransferRule < ApplicationRecord
 
   validate :groups_belong_to_same_token
 
+  def lockup_until
+    Time.zone.at(super)
+  end
+
+  def lockup_until=(time)
+    super(time.to_i)
+  end
+
   private
 
     def groups_belong_to_same_token

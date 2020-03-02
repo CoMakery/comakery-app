@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_13_144611) do
+ActiveRecord::Schema.define(version: 2020_03_01_172421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,13 +19,13 @@ ActiveRecord::Schema.define(version: 2020_02_13_144611) do
     t.bigint "account_id"
     t.bigint "token_id"
     t.bigint "reg_group_id"
-    t.bigint "max_balance"
+    t.decimal "max_balance", precision: 78
     t.boolean "account_frozen"
-    t.datetime "lockup_until"
+    t.decimal "lockup_until", precision: 78
     t.datetime "synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "balance"
+    t.decimal "balance", precision: 78
     t.index ["account_id"], name: "index_account_token_records_on_account_id"
     t.index ["reg_group_id"], name: "index_account_token_records_on_reg_group_id"
     t.index ["token_id"], name: "index_account_token_records_on_token_id"
@@ -382,7 +382,7 @@ ActiveRecord::Schema.define(version: 2020_02_13_144611) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "blockchain_id"
+    t.decimal "blockchain_id", precision: 78
     t.index ["blockchain_id"], name: "index_reg_groups_on_blockchain_id"
     t.index ["token_id"], name: "index_reg_groups_on_token_id"
   end
@@ -440,7 +440,7 @@ ActiveRecord::Schema.define(version: 2020_02_13_144611) do
     t.bigint "token_id"
     t.bigint "sending_group_id"
     t.bigint "receiving_group_id"
-    t.datetime "lockup_until"
+    t.decimal "lockup_until", precision: 78
     t.datetime "synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

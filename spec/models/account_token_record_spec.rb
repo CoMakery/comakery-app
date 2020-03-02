@@ -35,4 +35,16 @@ describe AccountTokenRecord do
       expect(account_token_record2).not_to be_valid
     end
   end
+
+  describe 'lockup_until' do
+    let!(:transfer_rule) { create(:transfer_rule) }
+    let!(:max_uint256) { 115792089237316195423570985008687907853269984665640564039458 }
+
+    it 'stores Time as a high precision decimal (which able to fit uint256) and returns Time object initialized from decimal' do
+      transfer_rule.lockup_until = Time.zone.at(max_uint256)
+      transfer_rule.save!
+
+      expect(transfer_rule.reload.lockup_until).to eq(Time.zone.at(max_uint256))
+    end
+  end
 end
