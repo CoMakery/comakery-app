@@ -8,6 +8,14 @@ class AccountTokenRecord < ApplicationRecord
 
   before_save :touch_account
 
+  def lockup_until
+    Time.zone.at(super)
+  end
+
+  def lockup_until=(time)
+    super(time.to_i)
+  end
+
   private
 
   def touch_account
