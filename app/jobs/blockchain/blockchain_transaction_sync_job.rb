@@ -6,7 +6,8 @@ module Blockchain
       @record = record
 
       return unless @record.pending?
-      reschedule unless @record.sync
+      return reschedule if @record.waiting_till_next_sync_is_allowed?
+      return reschedule unless @record.sync
     end
 
     private

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_01_172421) do
+ActiveRecord::Schema.define(version: 2020_03_02_223438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -221,6 +221,8 @@ ActiveRecord::Schema.define(version: 2020_03_01_172421) do
     t.string "status_message"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "synced_at"
+    t.integer "number_of_syncs", default: 0
     t.index ["award_id"], name: "index_blockchain_transactions_on_award_id"
   end
 

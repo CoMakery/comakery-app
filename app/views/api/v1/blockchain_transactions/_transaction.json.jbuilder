@@ -13,5 +13,6 @@ json.call(
   :status,
   :status_message,
   :created_at,
-  :updated_at
+  :updated_at,
+  :synced_at
 )

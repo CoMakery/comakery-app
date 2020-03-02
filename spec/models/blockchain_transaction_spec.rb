@@ -132,5 +132,103 @@ describe BlockchainTransaction do
     it 'returns false for unconfirmed transaction' do
       expect(unconfirmed_blockchain_transaction.sync).to be_falsey
     end
+
+    it 'calls update_number_of_syncs' do
+      succeed_blockchain_transaction.sync
+
+      expect(succeed_blockchain_transaction.reload.number_of_syncs).to eq(1)
+    end
+  end
+
+  describe 'number_of_confirmations' do
+    it 'gets value from ENV' do
+      ENV['BLOCKCHAIN_TX__NUMBER_OF_CONFIRMATIONS'] = '1'
+      expect(described_class.number_of_confirmations).to eq(1)
+      ENV['BLOCKCHAIN_TX__NUMBER_OF_CONFIRMATIONS'] = nil
+    end
+
+    it 'has default value' do
+      expect(described_class.number_of_confirmations).to eq(3)
+    end
+  end
+
+  describe 'seconds_to_wait_between_syncs' do
+    it 'gets value from ENV' do
+      ENV['BLOCKCHAIN_TX__SECONDS_TO_WAIT_BETWEEN_SYNCS'] = '1'
+      expect(described_class.seconds_to_wait_between_syncs).to eq(1)
+      ENV['BLOCKCHAIN_TX__SECONDS_TO_WAIT_BETWEEN_SYNCS'] = nil
+    end
+
+    it 'has default value' do
+      expect(described_class.seconds_to_wait_between_syncs).to eq(10)
+    end
+  end
+
+  describe 'max_syncs' do
+    it 'gets value from ENV' do
+      ENV['BLOCKCHAIN_TX__MAX_SYNCS'] = '1'
+      expect(described_class.max_syncs).to eq(1)
+      ENV['BLOCKCHAIN_TX__MAX_SYNCS'] = nil
+    end
+
+    it 'has default value' do
+      expect(described_class.max_syncs).to eq(60)
+    end
+  end
+
+  describe 'reached_max_syncs?' do
+    let!(:blockchain_transaction) { create(:blockchain_transaction) }
+
+    it 'returns true if number_of_syncs is equal or greater than max_syncs' do
+      blockchain_transaction.update(number_of_syncs: described_class.max_syncs)
+      blockchain_transaction.reload
+
+      expect(blockchain_transaction.reached_max_syncs?).to be_truthy
+    end
+
+    it 'returns false if number_of_syncs is less than max_syncs' do
+      blockchain_transaction.update(number_of_syncs: described_class.max_syncs - 1)
+      blockchain_transaction.reload
+
+      expect(blockchain_transaction.reached_max_syncs?).to be_falsey
+    end
+  end
+
+  describe 'waiting_till_next_sync_is_allowed?' do
+    let!(:blockchain_transaction) { create(:blockchain_transaction) }
+
+    it 'returns true if synced_at less than seconds_to_wait_between_syncs ago' do
+      blockchain_transaction.update(synced_at: 1.year.from_now + described_class.seconds_to_wait_between_syncs)
+      blockchain_transaction.reload
+
+      expect(blockchain_transaction.waiting_till_next_sync_is_allowed?).to be_truthy
+    end
+
+    it 'returns false if synced_at greater than seconds_to_wait_between_syncs ago' do
+      blockchain_transaction.update(synced_at: 1.year.ago - described_class.seconds_to_wait_between_syncs)
+      blockchain_transaction.reload
+
+      expect(blockchain_transaction.waiting_till_next_sync_is_allowed?).to be_falsey
+    end
+  end
+
+  describe 'update_number_of_syncs' do
+    let!(:blockchain_transaction) { create(:blockchain_transaction) }
+
+    it 'increments number_of_syncs and updates synced_at' do
+      blockchain_transaction.update_number_of_syncs
+      blockchain_transaction.reload
+
+      expect(blockchain_transaction.number_of_syncs).to eq(1)
+      expect(blockchain_transaction.synced_at).not_to be_nil
+    end
+
+    it 'updates status to failed if max_syncs is reached' do
+      blockchain_transaction.update(status: :pending, number_of_syncs: described_class.max_syncs - 1)
+      blockchain_transaction.update_number_of_syncs
+      blockchain_transaction.reload
+
+      expect(blockchain_transaction.status).to eq('failed')
+    end
   end
 end

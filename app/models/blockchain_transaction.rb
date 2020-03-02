@@ -13,7 +13,17 @@ class BlockchainTransaction < ApplicationRecord
   enum network: %i[main ropsten kovan rinkeby]
   enum status: %i[created pending cancelled succeed failed]
 
-  NUMBER_OF_CONFIRMATIONS = 3
+  def self.number_of_confirmations
+    ENV.fetch('BLOCKCHAIN_TX__NUMBER_OF_CONFIRMATIONS', 3).to_i
+  end
+
+  def self.seconds_to_wait_between_syncs
+    ENV.fetch('BLOCKCHAIN_TX__SECONDS_TO_WAIT_BETWEEN_SYNCS', 10).to_i
+  end
+
+  def self.max_syncs
+    ENV.fetch('BLOCKCHAIN_TX__MAX_SYNCS', 60).to_i
+  end
 
   def update_status(new_status, new_message = nil)
     if update!(status: new_status, status_message: new_message)
@@ -24,7 +34,7 @@ class BlockchainTransaction < ApplicationRecord
   end
 
   def sync
-    case contract.tx_status(tx_hash, NUMBER_OF_CONFIRMATIONS)
+    case contract.tx_status(tx_hash, self.class.number_of_confirmations)
     when 0
       update_status(:failed)
     when 1
@@ -32,6 +42,21 @@ class BlockchainTransaction < ApplicationRecord
     else
       false
     end
+  ensure
+    update_number_of_syncs
+  end
+
+  def reached_max_syncs?
+    number_of_syncs >= self.class.max_syncs
+  end
+
+  def waiting_till_next_sync_is_allowed?
+    synced_at && (synced_at + self.class.seconds_to_wait_between_syncs > Time.current)
+  end
+
+  def update_number_of_syncs
+    update(number_of_syncs: number_of_syncs + 1, synced_at: Time.current)
+    update_status(:failed, 'max_syncs') if pending? && reached_max_syncs?
   end
 
   private
