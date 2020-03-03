@@ -4,6 +4,7 @@ RSpec.describe Blockchain::BlockchainTransactionSyncJob, type: :job, vcr: true d
   let!(:created_blockchain_transaction) { create(:blockchain_transaction) }
   let!(:succeed_blockchain_transaction) { create(:blockchain_transaction, status: :pending, nonce: 1, tx_hash: '0x2d5ca80d84f67b5f60322a68d2b6ceff49030961dde74b6465573bcb6f1a2abd') }
   let!(:unconfirmed_blockchain_transaction) { create(:blockchain_transaction, status: :pending, nonce: 1, tx_hash: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff') }
+  let!(:waiting_blockchain_transaction) { create(:blockchain_transaction, status: :pending) }
 
   it 'doesnt sync non-pending record' do
     described_class.perform_now(created_blockchain_transaction)
@@ -18,5 +19,11 @@ RSpec.describe Blockchain::BlockchainTransactionSyncJob, type: :job, vcr: true d
   it 'reschedules itself on failed sync' do
     ActiveJob::Base.queue_adapter = :test
     expect { described_class.perform_now(unconfirmed_blockchain_transaction) }.to have_enqueued_job(Blockchain::BlockchainTransactionSyncJob)
+  end
+
+  it 'reschedules itself on a record waiting sync' do
+    waiting_blockchain_transaction.update(synced_at: 1.year.from_now)
+    ActiveJob::Base.queue_adapter = :test
+    expect { described_class.perform_now(waiting_blockchain_transaction) }.to have_enqueued_job(Blockchain::BlockchainTransactionSyncJob)
   end
 end
