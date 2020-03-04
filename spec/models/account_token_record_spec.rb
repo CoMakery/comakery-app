@@ -20,6 +20,14 @@ describe AccountTokenRecord do
     end
   end
 
+  describe 'callbacks' do
+    it 'sets default values' do
+      account_token_record = described_class.new
+
+      expect(account_token_record.lockup_until).not_to be_nil
+    end
+  end
+
   describe 'validations' do
     it 'requires comakery token' do
       account_token_record = create(:account_token_record)
