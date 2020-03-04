@@ -11,7 +11,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
                    &.blockchain_transactions
                    &.create(transaction_create_params)
 
-    if @transaction
+    if @transaction&.persisted?
       render 'show.json', status: 201
     else
       @errors = { blockchain_transaction: 'No transfers available' }
