@@ -27,7 +27,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
     request.headers.merge! valid_headers
   end
 
-  describe 'POST #create' do
+  describe 'POST #create', vcr: true do
     context 'with transfers available for transaction' do
       let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
 
@@ -36,9 +36,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
         params[:project_id] = project.id
 
         expect do
-          VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
-            post :create, params: params, session: valid_session
-          end
+          post :create, params: params, session: valid_session
         end.to change(project.blockchain_transactions, :count).by(1)
       end
 
@@ -46,9 +44,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
         params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
 
-        VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
-          post :create, params: params, session: valid_session
-        end
+        post :create, params: params, session: valid_session
         expect(response).to have_http_status(:created)
       end
     end
@@ -58,9 +54,21 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
         params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
 
-        VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
-          post :create, params: params, session: valid_session
-        end
+        post :create, params: params, session: valid_session
+        expect(response).to have_http_status(:no_content)
+      end
+    end
+
+    context 'with invalid token' do
+      let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
+
+      it 'returns an error' do
+        project.token.update(coin_type: :eth)
+
+        params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params, session: valid_session
         expect(response).to have_http_status(:no_content)
       end
     end
