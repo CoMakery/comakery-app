@@ -3,13 +3,15 @@ class AccountTokenRecord < ApplicationRecord
   belongs_to :token
   belongs_to :reg_group, optional: true
 
+  after_initialize :set_defaults
+
   validates_with ComakeryTokenValidator
   validates :account, uniqueness: { scope: :token_id }
 
   before_save :touch_account
 
   def lockup_until
-    Time.zone.at(super)
+    super && Time.zone.at(super)
   end
 
   def lockup_until=(time)
@@ -18,7 +20,11 @@ class AccountTokenRecord < ApplicationRecord
 
   private
 
-  def touch_account
-    account.touch # rubocop:disable Rails/SkipsModelValidations
-  end
+    def set_defaults
+      self.lockup_until ||= Time.current
+    end
+
+    def touch_account
+      account.touch # rubocop:disable Rails/SkipsModelValidations
+    end
 end
