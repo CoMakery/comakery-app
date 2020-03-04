@@ -346,7 +346,7 @@ GEM
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
     nio4r (2.5.2)
-    nokogiri (1.10.5)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     nokogiri-happymapper (0.8.1)
       nokogiri (~> 1.5)
