@@ -15,7 +15,7 @@ class AccountTokenRecord < ApplicationRecord
   end
 
   def lockup_until=(time)
-    super(time.to_i)
+    super(time.to_i.to_d)
   end
 
   private
