@@ -18,40 +18,54 @@ class AccountDecorator < Draper::Decorator
     end
   end
 
-  def bitcoin_wallet_url
-    UtilitiesService.get_wallet_url('bitcoin_mainnet', bitcoin_wallet)
+  def bitcoin_wallet_url(network = 'bitcoin_mainnet')
+    UtilitiesService.get_wallet_url(network, bitcoin_wallet)
   end
 
-  def cardano_wallet_url
-    UtilitiesService.get_wallet_url('cardano_mainnet', cardano_wallet)
+  def cardano_wallet_url(network = 'cardano_mainnet')
+    UtilitiesService.get_wallet_url(network, cardano_wallet)
   end
 
-  def eos_wallet_url
-    UtilitiesService.get_wallet_url('eos_mainnet', eos_wallet)
+  def eos_wallet_url(network = 'eos_mainnet')
+    UtilitiesService.get_wallet_url(network, eos_wallet)
   end
 
-  def tezos_wallet_url
-    UtilitiesService.get_wallet_url('tezos_mainnet', tezos_wallet)
+  def tezos_wallet_url(network = 'tezos_mainnet')
+    UtilitiesService.get_wallet_url(network, tezos_wallet)
   end
 
-  def ethereum_wallet_url
-    "https://etherscan.io/address/#{ethereum_wallet}"
+  def ethereum_wallet_url(network = 'main')
+    UtilitiesService.get_wallet_url(network, ethereum_wallet)
   end
 
-  def etherscan_address
-    "https://etherscan.io/address/#{ethereum_wallet}"
+  def etherscan_address(network = 'main')
+    UtilitiesService.get_wallet_url(network, ethereum_wallet)
   end
 
-  def qtum_wallet_url
-    UtilitiesService.get_wallet_url('qtum_mainnet', qtum_wallet)
+  def qtum_wallet_url(network = 'qtum_mainnet')
+    UtilitiesService.get_wallet_url(network, qtum_wallet)
+  end
+
+  def wallet_address_for(project)
+    blockchain_name = project.decorate.blockchain_name
+    blockchain_name && send("#{blockchain_name}_wallet")
+  end
+
+  def wallet_address_url_for(project)
+    address = wallet_address_for(project)
+    network = project.token&.coin_type_on_ethereum? ? project.token&.ethereum_network : project.token&.blockchain_network
+
+    if address.present? && network.present?
+      UtilitiesService.get_wallet_url(network, address)
+    end
   end
 
   def wallet_address_link_for(project)
-    project = project.decorate
-    address = project.blockchain_name.present? && send("#{project.blockchain_name}_wallet")
+    address = wallet_address_for(project)
+    url = wallet_address_url_for(project)
 
-    if address.present?
-      h.link_to(address, send("#{project.blockchain_name}_wallet_url"), target: '_blank')
+    if url
+      h.link_to(address, url, target: '_blank')
     else
       'needs wallet'
     end

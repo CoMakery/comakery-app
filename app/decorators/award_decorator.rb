@@ -72,16 +72,6 @@ class AwardDecorator < Draper::Decorator
     end
   end
 
-  def issuer_address_url
-    if object.token&.coin_type_on_ethereum?
-      issuer&.decorate&.etherscan_address
-    elsif object.token&.coin_type_on_qtum?
-      issuer&.decorate&.qtum_wallet_url
-    elsif object.token&.coin_type_ada?
-      issuer&.decorate&.cardano_wallet_url
-    end
-  end
-
   def issuer_display_name
     issuer&.decorate&.name
   end
