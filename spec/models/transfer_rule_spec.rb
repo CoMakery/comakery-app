@@ -55,6 +55,16 @@ describe TransferRule do
       transfer_rule = build(:transfer_rule, receiving_group: receiving_group)
       expect(transfer_rule).not_to be_valid
     end
+
+    it 'requires lockup_until to be not less than min value' do
+      transfer_rule = build(:transfer_rule, lockup_until: described_class::LOCKUP_UNTIL_MIN - 1)
+      expect(transfer_rule).not_to be_valid
+    end
+
+    it 'requires lockup_until to be not greater than max value' do
+      transfer_rule = build(:transfer_rule, lockup_until: described_class::LOCKUP_UNTIL_MAX + 1)
+      expect(transfer_rule).not_to be_valid
+    end
   end
 
   describe 'lockup_until' do

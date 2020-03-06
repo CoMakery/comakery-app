@@ -31,7 +31,7 @@
     <label>admin</label>
 
     <% if transfer.paid? %>
-      <%= render partial: "issuer", locals: {issuer: transfer.issuer, wallet: transfer.issuer_address, wallet_url: transfer.issuer_address_url} %>
+      <%= render partial: "issuer", locals: {issuer: transfer.issuer, wallet: transfer.issuer&.decorate&.wallet_address_for(transfer.project), wallet_url: transfer.issuer&.decorate&.wallet_address_url_for(transfer.project)} %>
     <% else %>
       –
     <% end %>

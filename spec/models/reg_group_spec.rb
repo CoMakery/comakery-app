@@ -53,6 +53,16 @@ describe RegGroup do
 
       expect(reg_group2).not_to be_valid
     end
+
+    it 'requires blockchain_id to be not less than min value' do
+      reg_group = build(:reg_group, blockchain_id: described_class::BLOCKCHAIN_ID_MIN - 1)
+      expect(reg_group).not_to be_valid
+    end
+
+    it 'requires blockchain_id to be not greater than max value' do
+      reg_group = build(:reg_group, blockchain_id: described_class::BLOCKCHAIN_ID_MAX + 1)
+      expect(reg_group).not_to be_valid
+    end
   end
 
   describe 'hooks' do

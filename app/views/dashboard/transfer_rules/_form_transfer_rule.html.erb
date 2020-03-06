@@ -24,7 +24,7 @@
     <div class="transfers-table__transfer__lockup_until">
       <label>allowed after date</label>
 
-      <%= f.date_field(:lockup_until, required: false, placeholder: 'dd.mm.yyyy', data: {target: "transfer-rule-form.ruleLockupUntil"}) %>
+      <%= f.date_field(:lockup_until, required: true, placeholder: 'dd.mm.yyyy', data: {target: "transfer-rule-form.ruleLockupUntil"}) %>
     </div>
 
     <% if policy(@project).edit_transfer_rules? %>
