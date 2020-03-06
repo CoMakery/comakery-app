@@ -13,8 +13,8 @@ class AccountTokenRecord < ApplicationRecord
   validates_with ComakeryTokenValidator
   validates :account, uniqueness: { scope: :token_id }
   validates :lockup_until, inclusion: { in: LOCKUP_UNTIL_MIN..LOCKUP_UNTIL_MAX }
-  validates :balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }
-  validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }
+  validates :balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
+  validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
 
   before_save :touch_account
 
