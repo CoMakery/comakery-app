@@ -5,10 +5,13 @@ class TransferRule < ApplicationRecord
 
   after_initialize :set_defaults
 
+  LOCKUP_UNTIL_MAX = Time.zone.at(2.pow(256) - 1)
+  LOCKUP_UNTIL_MIN = Time.zone.at(0)
+
   validates_with ComakeryTokenValidator
   validates :sending_group, uniqueness: { scope: %i[receiving_group] }
   validates :receiving_group, uniqueness: { scope: %i[sending_group] }
-
+  validates :lockup_until, inclusion: { in: LOCKUP_UNTIL_MIN..LOCKUP_UNTIL_MAX }
   validate :groups_belong_to_same_token
 
   def lockup_until
