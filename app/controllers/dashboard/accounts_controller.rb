@@ -17,7 +17,11 @@ class Dashboard::AccountsController < ApplicationController
   def update
     authorize @project, :edit_accounts?
 
-    if @account.update(account_params)
+    if @account.update(
+      account_params.merge(
+        lockup_until: Date.parse(account_params[:lockup_until])&.in_time_zone
+      )
+    )
       Blockchain::ComakerySecurityToken::AccountSyncJob.perform_later(@account)
       redirect_to project_dashboard_accounts_path(@project, page: @page), notice: 'Account updated'
     else
