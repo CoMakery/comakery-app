@@ -19,9 +19,9 @@ class AwardType < ApplicationRecord
     def switch_tasks_publicity
       case state
       when 'draft', 'invite only'
-        awards.ready.where(account: nil).find_each { |a| a.update(status: :unpublished) }
+        awards.ready.where(account: nil).find_each { |a| a.update(status: :invite_ready) }
       when 'public'
-        awards.unpublished.each { |a| a.update(status: :ready) }
+        awards.invite_ready.each { |a| a.update(status: :ready) }
       end
     end
 end

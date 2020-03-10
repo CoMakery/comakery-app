@@ -24,7 +24,7 @@ exports[`Task renders component correctly 1`] = `
           "componentStyle": ComponentStyle {
             "componentId": "sc-gZMcBi",
             "isStatic": false,
-            "lastClassName": "eOXZlu",
+            "lastClassName": "jYKSCx",
             "rules": Array [
               "
   display: flex;
@@ -33,6 +33,10 @@ exports[`Task renders component correctly 1`] = `
   margin-bottom: 10px;
   border-left: 2px solid;
   border-color: #5037f7;
+
+  ",
+              [Function],
+              "
 
   ",
               [Function],
@@ -78,7 +82,7 @@ exports[`Task renders component correctly 1`] = `
       status={null}
     >
       <div
-        className="sc-gZMcBi eOXZlu"
+        className="sc-gZMcBi jYKSCx"
       >
         <styled.div>
           <StyledComponent
@@ -691,7 +695,7 @@ exports[`Task renders component correctly 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-fjdhpX",
                               "isStatic": false,
-                              "lastClassName": "lhSCMh",
+                              "lastClassName": "dhgnez",
                               "rules": Array [
                                 "
   font-family: Montserrat;
@@ -703,6 +707,10 @@ exports[`Task renders component correctly 1`] = `
   letter-spacing: normal;
   text-transform: uppercase;
   margin-right: 2em;
+
+  ",
+                                [Function],
+                                "
 
   ",
                                 [Function],
@@ -748,7 +756,7 @@ exports[`Task renders component correctly 1`] = `
                         status={null}
                       >
                         <div
-                          className="sc-fjdhpX lhSCMh"
+                          className="sc-fjdhpX dhgnez"
                         />
                       </StyledComponent>
                     </styled.div>

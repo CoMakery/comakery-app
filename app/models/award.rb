@@ -89,7 +89,7 @@ class Award < ApplicationRecord
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
-      where(status: :ready, account: [nil, account]).or(where(status: :unpublished, account: account))
+      where(status: :ready, account: [nil, account]).or(where(status: :invite_ready, account: account))
     when 'started'
       where(status: :started).where(account: account)
     when 'submitted'
@@ -105,7 +105,7 @@ class Award < ApplicationRecord
     end
   }
 
-  enum status: %i[ready started submitted accepted rejected paid cancelled unpublished]
+  enum status: %i[ready started submitted accepted rejected paid cancelled invite_ready]
   enum source: %i[earned bought mint burn]
 
   def self.total_awarded
@@ -188,11 +188,11 @@ class Award < ApplicationRecord
   end
 
   def can_be_edited?
-    (ready? || unpublished?) && !cloned? && !any_clones?
+    (ready? || invite_ready?) && !cloned? && !any_clones?
   end
 
   def can_be_assigned?
-    (ready? || unpublished?)
+    (ready? || invite_ready?)
   end
 
   def cloned?
@@ -339,7 +339,7 @@ class Award < ApplicationRecord
     end
 
     def make_unpublished_if_award_type_is_not_ready
-      self.status = 'unpublished'
+      self.status = 'invite_ready'
     end
 
     def total_amount_fits_into_project_budget
