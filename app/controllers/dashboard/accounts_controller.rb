@@ -19,7 +19,7 @@ class Dashboard::AccountsController < ApplicationController
 
     if @account.update(
       account_params.merge(
-        lockup_until: Date.parse(account_params[:lockup_until])&.in_time_zone
+        lockup_until: account_params[:lockup_until] ? Date.parse(account_params[:lockup_until])&.in_time_zone : nil
       )
     )
       Blockchain::ComakerySecurityToken::AccountSyncJob.perform_later(@account)
