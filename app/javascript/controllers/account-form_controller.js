@@ -4,22 +4,15 @@ export default class extends ComakerySecurityTokenController {
   static targets = [ 'form', 'button', 'inputs', 'outputs', 'addressMaxBalance', 'addressLockupUntil', 'addressGroupId', 'addressFrozen' ]
 
   async save() {
-    if (this.setData()) {
-      await this.setAddressPermissions()
-    }
+    this.setData()
+    await this.setAddressPermissions()
   }
 
   setData() {
-    if (Number.isNaN((new Date(this.addressLockupUntilTarget.value).getTime()))) {
-      this._showError('Lockup Until field is required')
-      return false
-    } else {
-      this.data.set('addressGroupId', parseInt(this.addressGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
-      this.data.set('addressLockupUntil', (new Date(this.addressLockupUntilTarget.value).getTime() / 1000) || 0)
-      this.data.set('addressMaxBalance', parseInt(this.addressMaxBalanceTarget.value || 0))
-      this.data.set('addressFrozen', this.addressFrozenTarget.value)
-      return true
-    }
+    this.data.set('addressGroupId', parseInt(this.addressGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
+    this.data.set('addressLockupUntil', (new Date(this.addressLockupUntilTarget.value).getTime() / 1000) || 0)
+    this.data.set('addressMaxBalance', parseInt(this.addressMaxBalanceTarget.value || 0))
+    this.data.set('addressFrozen', this.addressFrozenTarget.value)
   }
 
   showForm() {
