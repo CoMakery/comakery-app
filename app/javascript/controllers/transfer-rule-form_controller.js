@@ -4,8 +4,9 @@ export default class extends ComakerySecurityTokenController {
   static targets = [ 'form', 'button', 'ruleFromGroupId', 'ruleToGroupId', 'ruleLockupUntil' ]
 
   async create() {
-    this.setData()
-    await this.setAllowGroupTransfer()
+    if (this.setData()) {
+      await this.setAllowGroupTransfer()
+    }
   }
 
   async delete() {
@@ -13,9 +14,15 @@ export default class extends ComakerySecurityTokenController {
   }
 
   setData() {
-    this.data.set('ruleFromGroupId', parseInt(this.ruleFromGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
-    this.data.set('ruleToGroupId', parseInt(this.ruleToGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
-    this.data.set('ruleLockupUntil', (new Date(this.ruleLockupUntilTarget.value).getTime() / 1000) || 0)
+    if (Number.isNaN((new Date(this.ruleLockupUntilTarget.value).getTime()))) {
+      this._showError('Allowed After Date field is required')
+      return false
+    } else {
+      this.data.set('ruleFromGroupId', parseInt(this.ruleFromGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
+      this.data.set('ruleToGroupId', parseInt(this.ruleToGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
+      this.data.set('ruleLockupUntil', (new Date(this.ruleLockupUntilTarget.value).getTime() / 1000) || 0)
+      return true
+    }
   }
 
   showForm() {

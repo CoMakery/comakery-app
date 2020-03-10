@@ -19,6 +19,10 @@ const Wrapper = styled.div`
     border-color: #4a4a4a;
   `}
 
+  ${props => props.status === 'invite ready' && css`
+    border-color: #4a4a4a;
+  `}
+
   ${props => props.status === 'started' && css`
     border-color: #008e9b;
   `}
@@ -95,6 +99,10 @@ const Status = styled.div`
   margin-right: 2em;
 
   ${props => props.status === 'ready' && css`
+    color: #4a4a4a;
+  `}
+
+  ${props => props.status === 'invite ready' && css`
     color: #4a4a4a;
   `}
 
@@ -338,7 +346,7 @@ class Task extends React.Component {
 
               {this.props.editable &&
                 <Buttons>
-                  {task.status === 'ready' &&
+                  {(task.status === 'ready' || task.status === 'invite ready') &&
                     <PaymentButton href={task.awardPath}>
                         issue award
                     </PaymentButton>
@@ -350,13 +358,13 @@ class Task extends React.Component {
                     </PaymentButton>
                   }
 
-                  {(task.status === 'ready' || task.status === 'unpublished') &&
+                  {(task.status === 'ready' || task.status === 'invite ready') &&
                     <a href={task.assignPath}>
                       <StyledIcon name="INVITE_USER.svg" />
                     </a>
                   }
 
-                  {!(task.status === 'ready' || task.status === 'unpublished') &&
+                  {!(task.status === 'ready' || task.status === 'invite ready') &&
                     <IconPlaceholder name="INVITE_USER.svg" />
                   }
 

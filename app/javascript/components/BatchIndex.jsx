@@ -311,7 +311,7 @@ class BatchIndex extends React.Component {
                       <Filter filter={this.state.selectedTaskFilter} selected={this.state.selectedTaskFilter === 'cancelled'} onClick={(_) => this.setState({selectedTaskFilter: 'cancelled'})}>cancelled</Filter>
                     </FilterWrapper>
                   }
-                  {this.state.selectedBatch.tasks.filter(task => !this.state.selectedTaskFilter || task.status === this.state.selectedTaskFilter).map((t, i) =>
+                  {this.state.selectedBatch.tasks.filter(task => !this.state.selectedTaskFilter || task.status === this.state.selectedTaskFilter || (this.state.selectedTaskFilter === 'ready' && task.status === 'invite ready')).map((t, i) =>
                     <Task editable={this.props.editable} key={i} task={t} />
                   )}
                 </Tasks>

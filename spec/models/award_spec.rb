@@ -65,9 +65,9 @@ describe Award do
       end
     end
 
-    it '.listed returns all but cancelled and unpublished awards' do
+    it '.listed returns all but cancelled and invite_ready awards' do
       described_class.statuses.each_key do |status|
-        if %w[cancelled unpublished].include? status
+        if %w[cancelled invite_ready].include? status
           expect(described_class.listed.pluck(:status).include?(status)).to be_falsey
         else
           expect(described_class.listed.pluck(:status).include?(status)).to be_truthy
@@ -75,9 +75,9 @@ describe Award do
       end
     end
 
-    it '.in_progress returns all but rejected, paid, cancelled and unpublished awards' do
+    it '.in_progress returns all but rejected, paid, cancelled and invite_ready awards' do
       described_class.statuses.each_key do |status|
-        if %w[rejected paid cancelled unpublished].include? status
+        if %w[rejected paid cancelled invite_ready].include? status
           expect(described_class.in_progress.pluck(:status).include?(status)).to be_falsey
         else
           expect(described_class.in_progress.pluck(:status).include?(status)).to be_truthy
@@ -85,9 +85,9 @@ describe Award do
       end
     end
 
-    it '.contributed returns all but ready, cancelled and unpublished awards' do
+    it '.contributed returns all but ready, cancelled and invite_ready awards' do
       described_class.statuses.each_key do |status|
-        if %w[ready cancelled unpublished].include? status
+        if %w[ready cancelled invite_ready].include? status
           expect(described_class.contributed.pluck(:status).include?(status)).to be_falsey
         else
           expect(described_class.contributed.pluck(:status).include?(status)).to be_truthy
@@ -99,8 +99,8 @@ describe Award do
       let(:award_type) { create(:award_type) }
       let(:award_ready_w_account) { create :award_ready, award_type: award_type }
       let(:award_ready_wo_account) { create :award_ready, award_type: award_type }
-      let(:award_unpublished_w_account) { create :award, status: :unpublished, award_type: award_type }
-      let(:award_unpublished_wo_account) { create :award, status: :unpublished, award_type: award_type }
+      let(:award_unpublished_w_account) { create :award, status: :invite_ready, award_type: award_type }
+      let(:award_unpublished_wo_account) { create :award, status: :invite_ready, award_type: award_type }
       let(:award_started) { create :award, status: :started, award_type: award_type }
       let(:award_submitted) { create :award, status: :submitted, award_type: award_type }
       let(:award_accepted) { create :award, status: :accepted, award_type: award_type }
@@ -120,7 +120,7 @@ describe Award do
         expect(described_class.filtered_for_view('ready', create(:account))).not_to include(award_ready_w_account)
       end
 
-      it 'returns unpublished awards assigned to you' do
+      it 'returns invite_ready awards assigned to you' do
         expect(described_class.filtered_for_view('ready', award_unpublished_w_account.account)).to include(award_unpublished_w_account)
         expect(described_class.filtered_for_view('ready', create(:account))).not_to include(award_unpublished_w_account)
         expect(described_class.filtered_for_view('ready', create(:account))).not_to include(award_unpublished_wo_account)
@@ -203,16 +203,16 @@ describe Award do
       let!(:award_done_draft) { create(:award, award_type: award_type_draft) }
       let!(:award_ready) { create(:award_ready) }
 
-      it 'sets status to unpublished if award_type is not ready and award is in ready state' do
-        expect(award_ready_draft.unpublished?).to be_truthy
+      it 'sets status to invite_ready if award_type is not ready and award is in ready state' do
+        expect(award_ready_draft.invite_ready?).to be_truthy
       end
 
-      it 'doesnt set status to unpublished if award_type is ready' do
-        expect(award_ready.unpublished?).to be_falsey
+      it 'doesnt set status to invite_ready if award_type is ready' do
+        expect(award_ready.invite_ready?).to be_falsey
       end
 
-      it 'doesnt set status to unpublished if award is not in ready state' do
-        expect(award_done_draft.unpublished?).to be_falsey
+      it 'doesnt set status to invite_ready if award is not in ready state' do
+        expect(award_done_draft.invite_ready?).to be_falsey
       end
     end
 
@@ -369,11 +369,11 @@ describe Award do
       expect(a.errors.full_messages).to eq(["Sorry, you can't start more than #{Award::STARTED_TASKS_PER_CONTRIBUTOR} tasks"])
     end
 
-    it 'cannot be destroyed unless in ready or unpublished status' do
+    it 'cannot be destroyed unless in ready or invite_ready status' do
       described_class.statuses.keys.each do |status|
         a = create(:award)
         a.update(status: status)
-        if %w[ready unpublished].include? status
+        if %w[ready invite_ready].include? status
           expect { a.destroy }.to(change { described_class.count }.by(-1))
         else
           expect { a.destroy }.not_to(change { described_class.count })
@@ -742,11 +742,11 @@ describe Award do
   end
 
   describe '.can_be_assigned?' do
-    it 'returns true if award is ready or unpublished' do
+    it 'returns true if award is ready or invite_ready' do
       described_class.statuses.each_key do |status|
         award = create(:award, status: status)
 
-        if status.in? %w[ready unpublished]
+        if status.in? %w[ready invite_ready]
           expect(award.can_be_assigned?).to be_truthy
         else
           expect(award.can_be_assigned?).to be_falsey
