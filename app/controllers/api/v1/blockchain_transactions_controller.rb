@@ -1,15 +1,19 @@
 class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
   skip_before_action :verify_signature
+  skip_before_action :verify_public_key
+  skip_before_action :allow_only_whitelabel
+  before_action :verify_public_key_or_policy
   before_action :verify_hash, only: %i[update destroy]
 
   # POST /api/v1/projects/1/blockchain_transactions
   def create
-    @transaction = project
-                   .awards
-                   .ready_for_blockchain_transaction
-                   .first
-                   &.blockchain_transactions
-                   &.create(transaction_create_params)
+    award = if transaction_create_params[:award_id]
+      project.awards.find(transaction_create_params[:award_id])
+    else
+      project.awards.ready_for_blockchain_transaction.first
+    end
+
+    @transaction = award&.blockchain_transactions&.create(transaction_create_params)
 
     if @transaction&.persisted?
       render 'show.json', status: 201
@@ -48,7 +52,8 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     def transaction_create_params
       params.fetch(:body, {}).fetch(:data, {}).fetch(:transaction, {}).permit(
         :source,
-        :nonce
+        :nonce,
+        :award_id
       )
     end
 
@@ -60,7 +65,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     end
 
     def verify_hash
-      if transaction.tx_hash != transaction_update_params[:tx_hash]
+      if transaction.tx_hash && transaction.tx_hash != transaction_update_params[:tx_hash]
         transaction.errors[:hash] << 'mismatch'
         @errors = transaction.errors
 

@@ -99,12 +99,13 @@ class AwardDecorator < Draper::Decorator
         'controller' => controller_name,
         'target' => "#{controller_name}.button",
         'action' => "click->#{controller_name}##{action}",
+        "#{controller_name}-id" => id,
         "#{controller_name}-payment-type" => project.token&.coin_type,
         "#{controller_name}-address" => account.ethereum_wallet,
         "#{controller_name}-amount" => total_amount_wei,
         "#{controller_name}-contract-address" => project.token&.ethereum_contract_address,
         "#{controller_name}-contract-abi" => project.token&.abi&.to_json,
-        "#{controller_name}-update-transaction-path" => project_award_type_award_update_transaction_address_path(project, award_type, self),
+        "#{controller_name}-transactions-path" => api_v1_project_blockchain_transactions_path(project_id: project.id),
         'info' => json_for_sending_awards
       }
     else
