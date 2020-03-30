@@ -8,7 +8,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
   # POST /api/v1/projects/1/blockchain_transactions
   def create
     award = if transaction_create_params[:award_id]
-      project.awards.find(transaction_create_params[:award_id])
+      project.awards.ready_for_blockchain_transaction.find(transaction_create_params[:award_id])
     else
       project.awards.ready_for_blockchain_transaction.first
     end

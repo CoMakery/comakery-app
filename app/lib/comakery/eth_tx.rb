@@ -61,14 +61,14 @@ class Comakery::EthTx
     true
   end
 
-  def valid_block?(time)
+  def valid_block_time?(time)
     return false if block_time < time
     true
   end
 
   def valid?(source, destination, amount, time)
     return false unless valid_data?(source, destination, amount)
-    return false unless valid_block?(time)
+    return false unless valid_block_time?(time)
     true
   end
 end

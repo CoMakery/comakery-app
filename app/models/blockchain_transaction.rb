@@ -36,11 +36,9 @@ class BlockchainTransaction < ApplicationRecord
   end
 
   def sync
-    eth_tx = Comakery::EthTx.new(network, tx_hash)
+    return false unless confirmed_on_chain?
 
-    return false unless eth_tx.confirmed?(self.class.number_of_confirmations)
-
-    if eth_tx.valid?(source, destination, amount, created_at)
+    if valid_on_chain?
       update_status(:succeed)
     else
       update_status(:failed)
@@ -60,6 +58,34 @@ class BlockchainTransaction < ApplicationRecord
   def update_number_of_syncs
     update(number_of_syncs: number_of_syncs + 1, synced_at: Time.current)
     update_status(:failed, 'max_syncs') if pending? && reached_max_syncs?
+  end
+
+  def on_chain
+    @on_chain ||= if token.coin_type_token?
+      case award.source
+      when 'mint'
+        Comakery::Erc20Mint.new(network, tx_hash)
+      when 'burn'
+        Comakery::Erc20Burn.new(network, tx_hash)
+      else
+        Comakery::Erc20Transfer.new(network, tx_hash)
+      end
+    else
+      Comakery::EthTx.new(network, tx_hash)
+    end
+  end
+
+  def confirmed_on_chain?
+    on_chain.confirmed?(self.class.number_of_confirmations)
+  end
+
+  def valid_on_chain?
+    case on_chain.class
+    when Comakery::EthTx
+      on_chain.valid?(source, destination, amount, created_at)
+    when Comakery::Erc20Mint, Comakery::Erc20Burn, Comakery::Erc20Transfer
+      on_chain.valid?(source, contract_address, destination, amount, created_at)
+    end
   end
 
   private
