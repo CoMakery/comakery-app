@@ -8,7 +8,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
   # POST /api/v1/projects/1/blockchain_transactions
   def create
     award = if transaction_create_params[:award_id]
-      project.awards.ready_for_blockchain_transaction.find(transaction_create_params[:award_id])
+      project.awards.ready_for_manual_blockchain_transaction.find(transaction_create_params[:award_id])
     else
       project.awards.ready_for_blockchain_transaction.first
     end
@@ -26,8 +26,10 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
   # PATCH/PUT /api/v1/projects/1/blockchain_transactions/1
   def update
-    transaction.update_status(:pending)
-    Blockchain::BlockchainTransactionSyncJob.perform_later(transaction)
+    if transaction.update(transaction_update_params)
+      transaction.update_status(:pending)
+      Blockchain::BlockchainTransactionSyncJob.perform_later(transaction)
+    end
 
     render 'show.json', status: 200
   end
@@ -46,7 +48,7 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
     end
 
     def transaction
-      @transaction ||= project.blockchain_transactions.created.find(params[:id])
+      @transaction ||= project.blockchain_transactions.find(params[:id])
     end
 
     def transaction_create_params

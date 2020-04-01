@@ -3,20 +3,22 @@ class AwardDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
   include Rails.application.routes.url_helpers
 
+  def ethereum_transaction_address
+    object.ethereum_transaction_address || object.latest_blockchain_transaction&.tx_hash
+  end
+
   def ethereum_transaction_address_short
-    if object.ethereum_transaction_address
-      "#{object.ethereum_transaction_address[0...10]}..."
-    end
+    "#{ethereum_transaction_address[0...10]}..." if ethereum_transaction_address
   end
 
   def ethereum_transaction_explorer_url
-    if object.ethereum_transaction_address
+    if ethereum_transaction_address
       if (network = object.token&.blockchain_network).present?
-        UtilitiesService.get_transaction_url(network, object.ethereum_transaction_address)
+        UtilitiesService.get_transaction_url(network, ethereum_transaction_address)
       else
         site = object.token&.ethereum_network? ? "#{object.token&.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
         site = 'etherscan.io' if site == 'main.etherscan.io'
-        "https://#{site}/tx/#{object.ethereum_transaction_address}"
+        "https://#{site}/tx/#{ethereum_transaction_address}"
       end
     end
   end

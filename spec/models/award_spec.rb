@@ -1203,4 +1203,55 @@ describe Award do
       expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.award)
     end
   end
+
+  describe 'ready_for_manual_blockchain_transaction scope' do
+    let!(:award_accepted) { create(:award, status: :accepted) }
+    let!(:award_paid) { create(:award, status: :paid) }
+    let!(:blockchain_transaction) { create(:blockchain_transaction) }
+
+    it 'returns only accepted awards' do
+      expect(described_class.ready_for_manual_blockchain_transaction).to include(award_accepted)
+      expect(described_class.ready_for_manual_blockchain_transaction).not_to include(award_paid)
+    end
+
+    it 'returns awards without blockchain_transaction' do
+      expect(described_class.ready_for_manual_blockchain_transaction).to include(award_accepted)
+    end
+
+    it 'returns awards with latest blockchain_transaction Cancelled' do
+      create(:blockchain_transaction, status: :cancelled, award: blockchain_transaction.award)
+
+      expect(described_class.ready_for_manual_blockchain_transaction).to include(blockchain_transaction.award)
+    end
+
+    it 'returns awards with latest blockchain_transaction Created more than 10 minutes ago' do
+      create(:blockchain_transaction, award: blockchain_transaction.award, created_at: 20.minutes.ago)
+
+      expect(described_class.ready_for_manual_blockchain_transaction).to include(blockchain_transaction.award)
+    end
+
+    it 'returns awards with latest blockchain_transaction Failed' do
+      create(:blockchain_transaction, status: :failed, award: blockchain_transaction.award)
+
+      expect(described_class.ready_for_manual_blockchain_transaction).to include(blockchain_transaction.award)
+    end
+
+    it 'doesnt return awards with lates blockchain_transaction Created less than 10 minutes ago' do
+      create(:blockchain_transaction, award: blockchain_transaction.award, created_at: 1.second.ago)
+
+      expect(described_class.ready_for_manual_blockchain_transaction).not_to include(blockchain_transaction.award)
+    end
+
+    it 'doesnt return awards with latest blockchain_transaction Pending' do
+      create(:blockchain_transaction, status: :pending, award: blockchain_transaction.award)
+
+      expect(described_class.ready_for_manual_blockchain_transaction).not_to include(blockchain_transaction.award)
+    end
+
+    it 'doesnt return awards with latest blockchain_transaction Succeed' do
+      create(:blockchain_transaction, status: :succeed, award: blockchain_transaction.award)
+
+      expect(described_class.ready_for_manual_blockchain_transaction).not_to include(blockchain_transaction.award)
+    end
+  end
 end

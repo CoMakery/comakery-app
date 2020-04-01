@@ -43,7 +43,7 @@ export default class extends Controller {
 
   _markButtonAsPending() {
     this.buttonTarget.parentElement.classList.add('in-progress--metamask__paid')
-    this.buttonTarget.getElementsByTagName('span')[0].textContent = 'pending'
+    this.buttonTarget.getElementsByTagName('span')[0].textContent = 'processing'
   }
 
   _createTransaction() {
@@ -55,22 +55,22 @@ export default class extends Controller {
           data: {
             transaction: {
               'award_id': this.id,
-              'source': this.coinBase
+              'source'  : this.coinBase
             }
           }
         }
       }),
-      headers    : {
+      headers: {
         'Content-Type': 'application/json'
       }
     }).then(response => {
       if (response.status === 201) {
         response.json().then(r => {
-          this.data.set(transactionId, r.id)
-          this.data.set(address, r.destination)
-          this.data.set(amount, r.amount)
-          this.data.set(contractAddress, r.contractAddress)
-          this.data.set(network, r.network)
+          this.data.set('transactionId', r.id)
+          this.data.set('address', r.destination)
+          this.data.set('amount', r.amount)
+          this.data.set('contractAddress', r.contractAddress)
+          this.data.set('network', r.network)
         })
 
         if (this.isContract) {
@@ -102,7 +102,7 @@ export default class extends Controller {
           }
         }
       }),
-      headers    : {
+      headers: {
         'Content-Type': 'application/json'
       }
     }).then(response => {
@@ -122,12 +122,13 @@ export default class extends Controller {
         body: {
           data: {
             transaction: {
-              'status_message': message
+              'status_message': message,
+              'tx_hash': this.hash
             }
           }
         }
       }),
-      headers    : {
+      headers: {
         'Content-Type': 'application/json'
       }
     }).then(response => {
@@ -148,6 +149,7 @@ export default class extends Controller {
       gasPrice: this.gasPrice
     })
       .once('transactionHash', (transactionHash) => {
+        this.data.set('hash', transactionHash)
         this._submitTransaction(transactionHash)
       })
       .once('receipt', (receipt) => {
@@ -158,12 +160,12 @@ export default class extends Controller {
         this._submitReceipt(receipt)
       })
       .on('error', (error) => {
-        this._cancelTransaction(error.message)
+        this._cancelTransaction('Cancelled by Metamask')
         this._showError(error.message)
       })
   }
 
-  _submitReceipt(receipt) {
+  _submitReceipt(_receipt) {
     // do nothing
   }
 
@@ -243,6 +245,10 @@ export default class extends Controller {
 
   get id() {
     return this.data.get('id')
+  }
+
+  get hash() {
+    return this.data.get('hash')
   }
 
   get transactionId() {
