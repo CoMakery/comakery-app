@@ -3,20 +3,22 @@ class AwardDecorator < Draper::Decorator
   include ActionView::Helpers::NumberHelper
   include Rails.application.routes.url_helpers
 
+  def ethereum_transaction_address
+    object.ethereum_transaction_address || object.latest_blockchain_transaction&.tx_hash
+  end
+
   def ethereum_transaction_address_short
-    if object.ethereum_transaction_address
-      "#{object.ethereum_transaction_address[0...10]}..."
-    end
+    "#{ethereum_transaction_address[0...10]}..." if ethereum_transaction_address
   end
 
   def ethereum_transaction_explorer_url
-    if object.ethereum_transaction_address
+    if ethereum_transaction_address
       if (network = object.token&.blockchain_network).present?
-        UtilitiesService.get_transaction_url(network, object.ethereum_transaction_address)
+        UtilitiesService.get_transaction_url(network, ethereum_transaction_address)
       else
         site = object.token&.ethereum_network? ? "#{object.token&.ethereum_network}.etherscan.io" : Rails.application.config.ethereum_explorer_site
         site = 'etherscan.io' if site == 'main.etherscan.io'
-        "https://#{site}/tx/#{object.ethereum_transaction_address}"
+        "https://#{site}/tx/#{ethereum_transaction_address}"
       end
     end
   end
@@ -99,12 +101,13 @@ class AwardDecorator < Draper::Decorator
         'controller' => controller_name,
         'target' => "#{controller_name}.button",
         'action' => "click->#{controller_name}##{action}",
+        "#{controller_name}-id" => id,
         "#{controller_name}-payment-type" => project.token&.coin_type,
         "#{controller_name}-address" => account.ethereum_wallet,
         "#{controller_name}-amount" => total_amount_wei,
         "#{controller_name}-contract-address" => project.token&.ethereum_contract_address,
         "#{controller_name}-contract-abi" => project.token&.abi&.to_json,
-        "#{controller_name}-update-transaction-path" => project_award_type_award_update_transaction_address_path(project, award_type, self),
+        "#{controller_name}-transactions-path" => api_v1_project_blockchain_transactions_path(project_id: project.id),
         'info' => json_for_sending_awards
       }
     else

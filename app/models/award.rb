@@ -85,6 +85,12 @@ class Award < ApplicationRecord
       .distinct
       .where('(blockchain_transactions.id IS NULL) OR (blockchain_transactions.status = 2) OR (blockchain_transactions.status = 0 AND blockchain_transactions.created_at < :timestamp)', timestamp: 10.minutes.ago)
   }
+  scope :ready_for_manual_blockchain_transaction, lambda {
+    accepted
+      .joins('LEFT JOIN blockchain_transactions ON blockchain_transactions.award_id = awards.id AND blockchain_transactions.id = (SELECT MAX(id) FROM blockchain_transactions WHERE blockchain_transactions.award_id = awards.id)')
+      .distinct
+      .where('(blockchain_transactions.id IS NULL) OR (blockchain_transactions.status = 2) OR (blockchain_transactions.status = 4) OR (blockchain_transactions.status = 0 AND blockchain_transactions.created_at < :timestamp)', timestamp: 10.minutes.ago)
+  }
 
   scope :filtered_for_view, lambda { |filter, account|
     case filter

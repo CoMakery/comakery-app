@@ -36,7 +36,7 @@ export default class extends EthereumController {
       this.address,
       this.addressGroupId,
       this.addressLockupUntil,
-      this.addressMaxBalance,
+      this.web3.utils.toHex(parseInt(this.addressMaxBalance)),
       this.addressFrozen
     ).encodeABI()
 

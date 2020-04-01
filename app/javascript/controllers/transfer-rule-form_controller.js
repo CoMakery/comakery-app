@@ -4,7 +4,7 @@ export default class extends ComakerySecurityTokenController {
   static targets = [ 'form', 'button', 'ruleFromGroupId', 'ruleToGroupId', 'ruleLockupUntil' ]
 
   async create() {
-    if (this.setData()) {
+    if (this._setData()) {
       await this.setAllowGroupTransfer()
     }
   }
@@ -13,7 +13,7 @@ export default class extends ComakerySecurityTokenController {
     await this.resetAllowGroupTransfer()
   }
 
-  setData() {
+  _setData() {
     if (Number.isNaN((new Date(this.ruleLockupUntilTarget.value).getTime()))) {
       this._showError('Allowed After Date field is required')
       return false
@@ -43,8 +43,14 @@ export default class extends ComakerySecurityTokenController {
     // do nothing
   }
 
-  _submitReceipt(_) {
-    this.formTarget.submit()
+  _cancelTransaction(_) {
+    this._markButtonAsReady()
+  }
+
+  _submitReceipt(receipt) {
+    if (receipt.status) {
+      this.formTarget.submit()
+    }
   }
 
   _submitError(_) {

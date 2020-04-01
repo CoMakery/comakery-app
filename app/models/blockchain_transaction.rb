@@ -6,9 +6,11 @@ class BlockchainTransaction < ApplicationRecord
   before_validation :populate_data
   before_validation :generate_transaction
 
-  attr_readonly :amount, :source, :destination, :tx_raw, :tx_hash, :nonce, :network, :contract_address
-  validates :amount, :source, :destination, :tx_raw, :tx_hash, :nonce, :network, :contract_address, :status, presence: true
-  validates_with ComakeryTokenValidator
+  attr_readonly :amount, :source, :destination, :network, :contract_address
+  validates_with EthereumTokenValidator
+  validates :amount, :source, :destination, :network, :status, presence: true
+  validates :contract_address, presence: true, if: -> { token.coin_type_token? }
+  validates :tx_raw, :tx_hash, presence: true, if: -> { token.coin_type_comakery? && nonce.present? }
 
   enum network: %i[main ropsten kovan rinkeby]
   enum status: %i[created pending cancelled succeed failed]
@@ -34,13 +36,12 @@ class BlockchainTransaction < ApplicationRecord
   end
 
   def sync
-    case contract.tx_status(tx_hash, self.class.number_of_confirmations)
-    when 0
-      update_status(:failed)
-    when 1
+    return false unless confirmed_on_chain?
+
+    if valid_on_chain?
       update_status(:succeed)
     else
-      false
+      update_status(:failed)
     end
   ensure
     update_number_of_syncs
@@ -57,6 +58,34 @@ class BlockchainTransaction < ApplicationRecord
   def update_number_of_syncs
     update(number_of_syncs: number_of_syncs + 1, synced_at: Time.current)
     update_status(:failed, 'max_syncs') if pending? && reached_max_syncs?
+  end
+
+  def on_chain
+    @on_chain ||= if token.coin_type_token?
+      case award.source
+      when 'mint'
+        Comakery::Erc20Mint.new(network, tx_hash)
+      when 'burn'
+        Comakery::Erc20Burn.new(network, tx_hash)
+      else
+        Comakery::Erc20Transfer.new(network, tx_hash)
+      end
+    else
+      Comakery::EthTx.new(network, tx_hash)
+    end
+  end
+
+  def confirmed_on_chain?
+    on_chain.confirmed?(self.class.number_of_confirmations)
+  end
+
+  def valid_on_chain?
+    case on_chain
+    when Comakery::Erc20Mint, Comakery::Erc20Burn, Comakery::Erc20Transfer
+      on_chain.valid?(source, contract_address, destination, amount, created_at)
+    when Comakery::EthTx
+      on_chain.valid?(source, destination, amount, created_at)
+    end
   end
 
   private
@@ -84,7 +113,9 @@ class BlockchainTransaction < ApplicationRecord
     end
 
     def generate_transaction
-      self.tx_raw ||= tx.hex
-      self.tx_hash ||= tx.hash
+      if token.coin_type_comakery? && nonce.present?
+        self.tx_raw ||= tx.hex
+        self.tx_hash ||= tx.hash
+      end
     end
 end
