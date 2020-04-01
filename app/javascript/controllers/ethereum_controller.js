@@ -123,7 +123,7 @@ export default class extends Controller {
           data: {
             transaction: {
               'status_message': message,
-              'tx_hash': this.hash
+              'tx_hash'       : this.hash
             }
           }
         }

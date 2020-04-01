@@ -25,8 +25,14 @@ export default class extends ComakerySecurityTokenController {
     // do nothing
   }
 
-  _submitReceipt(_) {
-    this.formTarget.submit()
+  _cancelTransaction(_) {
+    this._markButtonAsReady()
+  }
+
+  _submitReceipt(receipt) {
+    if (receipt.status) {
+      this.formTarget.submit()
+    }
   }
 
   _submitError(_) {
