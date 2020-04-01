@@ -55,8 +55,8 @@ class Comakery::EthTx
 
   def valid_data?(source, destination, amount)
     return false if status != 1
-    return false if from != source
-    return false if to != destination
+    return false if from != source.downcase
+    return false if to != destination.downcase
     return false if value != amount
     true
   end

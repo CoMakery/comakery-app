@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://mainnet.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
+    uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
     body:
       encoding: UTF-8
       string: '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
@@ -16,14 +16,14 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - mainnet.infura.io
+      - ropsten.infura.io
   response:
     status:
       code: 200
       message: OK
     headers:
       Date:
-      - Sun, 29 Mar 2020 21:29:58 GMT
+      - Tue, 31 Mar 2020 23:43:42 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -34,7 +34,7 @@ http_interactions:
       - Origin
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x951009"}'
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x746904"}'
     http_version: null
-  recorded_at: Sun, 29 Mar 2020 21:29:58 GMT
+  recorded_at: Tue, 31 Mar 2020 23:43:42 GMT
 recorded_with: VCR 5.1.0

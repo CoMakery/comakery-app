@@ -10,7 +10,7 @@ class BlockchainTransaction < ApplicationRecord
   validates_with EthereumTokenValidator
   validates :amount, :source, :destination, :network, :status, presence: true
   validates :contract_address, presence: true, if: -> { token.coin_type_token? }
-  validates :tx_raw, :tx_hash, presence: true, if: -> { nonce.present? }
+  validates :tx_raw, :tx_hash, presence: true, if: -> { token.coin_type_comakery? && nonce.present? }
 
   enum network: %i[main ropsten kovan rinkeby]
   enum status: %i[created pending cancelled succeed failed]
@@ -80,11 +80,11 @@ class BlockchainTransaction < ApplicationRecord
   end
 
   def valid_on_chain?
-    case on_chain.class
-    when Comakery::EthTx
-      on_chain.valid?(source, destination, amount, created_at)
+    case on_chain
     when Comakery::Erc20Mint, Comakery::Erc20Burn, Comakery::Erc20Transfer
       on_chain.valid?(source, contract_address, destination, amount, created_at)
+    when Comakery::EthTx
+      on_chain.valid?(source, destination, amount, created_at)
     end
   end
 

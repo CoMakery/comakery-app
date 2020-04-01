@@ -23,7 +23,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Mon, 30 Mar 2020 16:37:48 GMT
+      - Tue, 31 Mar 2020 19:27:42 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -36,7 +36,7 @@ http_interactions:
       encoding: UTF-8
       string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x45dd815654d1c37294df4405557222d9e5d0905ebde1a591986518eae5cbe4b7","blockNumber":"0x703c6d","from":"0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b","gas":"0x73f79b","gasPrice":"0x3b9aca00","hash":"0x94f00ce58c31913178e1aeab790967f7f62545126de118a064249a883c4159d4","input":"0x8456cb59","nonce":"0x144","r":"0xd23f2ec98345661ba0c57c735b207824342ff679ee807c2ec69dd28f0a10344d","s":"0x57f04006c9a2229a47702d5e9206dfb87188df3b047ee3546f55c08fa205c1f4","to":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","transactionIndex":"0x0","v":"0x29","value":"0x0"}}'
     http_version: null
-  recorded_at: Mon, 30 Mar 2020 16:37:48 GMT
+  recorded_at: Tue, 31 Mar 2020 19:27:42 GMT
 - request:
     method: post
     uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
@@ -60,7 +60,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Mon, 30 Mar 2020 16:37:48 GMT
+      - Tue, 31 Mar 2020 19:27:42 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -71,7 +71,44 @@ http_interactions:
       - Origin
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x7446f6"}'
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x746416"}'
     http_version: null
-  recorded_at: Mon, 30 Mar 2020 16:37:48 GMT
+  recorded_at: Tue, 31 Mar 2020 19:27:42 GMT
+- request:
+    method: post
+    uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params":["0x94f00ce58c31913178e1aeab790967f7f62545126de118a064249a883c4159d4"],"id":1}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - ropsten.infura.io
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 31 Mar 2020 19:27:42 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '980'
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x45dd815654d1c37294df4405557222d9e5d0905ebde1a591986518eae5cbe4b7","blockNumber":"0x703c6d","contractAddress":null,"cumulativeGasUsed":"0x57a8","from":"0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b","gasUsed":"0x57a8","logs":[],"logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","status":"0x0","to":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","transactionHash":"0x94f00ce58c31913178e1aeab790967f7f62545126de118a064249a883c4159d4","transactionIndex":"0x0"}}'
+    http_version: null
+  recorded_at: Tue, 31 Mar 2020 19:27:42 GMT
 recorded_with: VCR 5.1.0

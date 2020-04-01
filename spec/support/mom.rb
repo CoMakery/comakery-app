@@ -87,28 +87,11 @@ class Mom
       ethereum_network: :ropsten,
       ethereum_contract_address: build(:ethereum_contract_address),
       symbol: 'DUM',
-      decimal_places: 2
+      decimal_places: 0
     )
-
     attrs.delete(:token)
 
-    award = attrs[:award] || create(
-      :award,
-      amount: 1,
-      status: :accepted,
-      account: create(
-        :account,
-        ethereum_wallet: build(:ethereum_address_2)
-      ),
-      award_type: create(
-        :award_type,
-        project: create(
-          :project,
-          token: token
-        )
-      )
-    )
-
+    award = blockchain_transaction_award(attrs.merge(token: token))
     attrs.delete(:award)
 
     defaults = {
@@ -123,6 +106,25 @@ class Mom
     VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
       BlockchainTransaction.create!(defaults.merge(attrs))
     end
+  end
+
+  def blockchain_transaction_award(**attrs)
+    attrs[:award] || create(
+      :award,
+      amount: attrs[:amount] || 1,
+      status: :accepted,
+      account: create(
+        :account,
+        ethereum_wallet: attrs[:destination] || build(:ethereum_address_2)
+      ),
+      award_type: create(
+        :award_type,
+        project: create(
+          :project,
+          token: attrs[:token]
+        )
+      )
+    )
   end
 
   def blockchain_transaction_update(**attrs)

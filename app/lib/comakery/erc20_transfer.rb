@@ -13,7 +13,7 @@ class Comakery::Erc20Transfer < Comakery::EthTx
 
   def valid?(source, token_contract_address, destination, amount, time)
     return false unless super(source, token_contract_address, 0, time)
-    return false if method_arg_1 != destination
+    return false if method_arg_1 != destination.downcase
     return false if method_arg_2 != amount
     true
   end

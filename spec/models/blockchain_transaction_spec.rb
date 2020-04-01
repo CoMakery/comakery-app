@@ -89,7 +89,7 @@ describe BlockchainTransaction do
       end
     end
 
-    context 'without nonce provided' do
+    context 'without comakery security token' do
       let!(:blockchain_transaction) do
         build(
           :blockchain_transaction,
@@ -181,7 +181,7 @@ describe BlockchainTransaction do
             ethereum_network: :ropsten
           )
         )
-        
+
         expect(blockchain_transaction.on_chain).to be_an(Comakery::EthTx)
       end
     end
@@ -198,7 +198,7 @@ describe BlockchainTransaction do
       it 'returns Comakery::Erc20Mint' do
         blockchain_transaction = build(:blockchain_transaction)
         blockchain_transaction.award.update(source: :mint)
-        
+
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Erc20Mint)
       end
     end
@@ -207,7 +207,7 @@ describe BlockchainTransaction do
       it 'returns Comakery::Erc20Burn' do
         blockchain_transaction = build(:blockchain_transaction)
         blockchain_transaction.award.update(source: :burn)
-        
+
         expect(blockchain_transaction.on_chain).to be_an(Comakery::Erc20Burn)
       end
     end
@@ -218,15 +218,7 @@ describe BlockchainTransaction do
       let!(:blockchain_transaction) { build(:blockchain_transaction, tx_hash: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff') }
 
       it 'returns false' do
-        expect(blockchain_transaction.confirmed?).to be_falsey
-      end
-    end
-
-    context 'for confirmed transaction with less than required confirmations' do
-      let!(:blockchain_transaction) { build(:blockchain_transaction, tx_hash: '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d') }
-
-      it 'returns false' do
-        expect(blockchain_transaction.confirmed?(500000)).to be_falsey
+        expect(blockchain_transaction.confirmed_on_chain?).to be_falsey
       end
     end
 
@@ -234,7 +226,7 @@ describe BlockchainTransaction do
       let!(:blockchain_transaction) { build(:blockchain_transaction, tx_hash: '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d') }
 
       it 'returns true' do
-        expect(blockchain_transaction.confirmed?).to be_truthy
+        expect(blockchain_transaction.confirmed_on_chain?).to be_truthy
       end
     end
   end
@@ -247,10 +239,27 @@ describe BlockchainTransaction do
           coin_type: :eth,
           ethereum_network: :ropsten
         )
-      )
-      
-      let!(:valid_eth_tx) { build(:blockchain_transaction, token: token, tx_hash: '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d') }
-      let!(:invalid_eth_tx) { build(:blockchain_transaction, token: token, tx_hash: '0x1bcda0a705a6d79935b77c8f05ab852102b1bc6aa90a508ac0c23a35d182289f') }
+      end
+
+      let!(:valid_eth_tx) do
+        build(
+          :blockchain_transaction,
+          token: token,
+          tx_hash: '0xd6aecf2ea1af6f4e8a04537f222dee7e5813e7b1c85f425906343cb0d4eb82f8',
+          destination: '0xbbc7e3ee37977ca508f63230471d1001d22bfdd5',
+          source: '0x81b7e08f65bdf5648606c89998a9cc8164397647',
+          amount: 1,
+          created_at: Time.zone.at(0)
+        )
+      end
+
+      let!(:invalid_eth_tx) do
+        build(
+          :blockchain_transaction,
+          token: token,
+          tx_hash: '0x1bcda0a705a6d79935b77c8f05ab852102b1bc6aa90a508ac0c23a35d182289f'
+        )
+      end
 
       it 'returns true for valid transaction' do
         expect(valid_eth_tx.valid_on_chain?).to be_truthy
@@ -262,15 +271,30 @@ describe BlockchainTransaction do
     end
 
     context 'with erc20 transfer' do
-      let!(:valid_erc20_transfer) { build(:blockchain_transaction, tx_hash: '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d') }
-      let!(:invalid_erc20_transfer) { build(:blockchain_transaction, tx_hash: '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d') }
+      let!(:valid_erc20_transfer) do
+        build(
+          :blockchain_transaction,
+          tx_hash: '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d',
+          destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+          source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
+          amount: 100,
+          created_at: Time.zone.at(0)
+        )
+      end
+
+      let!(:invalid_erc20_transfer) do
+        build(
+          :blockchain_transaction,
+          tx_hash: '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
+        )
+      end
 
       it 'returns true for valid transaction' do
         expect(valid_erc20_transfer.valid_on_chain?).to be_truthy
       end
 
       it 'returns false for invalid transaction' do
-        expect(invalid_erc20_transfer.valid_on_chain?).to be_truthy
+        expect(invalid_erc20_transfer.valid_on_chain?).to be_falsey
       end
     end
   end
