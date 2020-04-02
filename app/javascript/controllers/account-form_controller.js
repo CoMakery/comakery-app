@@ -19,12 +19,14 @@ export default class extends ComakerySecurityTokenController {
   _disableEditing() {
     this.inputsTargets.forEach((e) => {
       e.readOnly = true
+      e.style.pointerEvents = 'none'
     })
   }
 
   _enableEditing() {
     this.inputsTargets.forEach((e) => {
       e.readOnly = false
+      e.style.pointerEvents = null
     })
   }
 

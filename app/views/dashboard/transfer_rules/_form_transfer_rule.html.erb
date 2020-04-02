@@ -6,7 +6,7 @@
     <div class="transfers-table__transfer__sending_group">
       <label>sending group</label>
 
-      <%= f.select(:sending_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: 'Select Group' }, { required: true, data: {target: "transfer-rule-form.ruleFromGroupId"} }) %>
+      <%= f.select(:sending_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: 'Select Group' }, { required: true, data: {target: "transfer-rule-form.ruleFromGroupId transfer-rule-form.inputs"} }) %>
     </div>
 
     <div class="transfers-table__transfer__sending_group_id">
@@ -15,7 +15,7 @@
     <div class="transfers-table__transfer__receiving_group">
       <label>receiving group</label>
 
-      <%= f.select(:receiving_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: 'Select Group' }, { required: true, data: {target: "transfer-rule-form.ruleToGroupId"} }) %>
+      <%= f.select(:receiving_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: 'Select Group' }, { required: true, data: {target: "transfer-rule-form.ruleToGroupId transfer-rule-form.inputs"} }) %>
     </div>
 
     <div class="transfers-table__transfer__receiving_group_id">
@@ -24,7 +24,7 @@
     <div class="transfers-table__transfer__lockup_until">
       <label>allowed after date</label>
 
-      <%= f.date_field(:lockup_until, required: true, placeholder: 'dd.mm.yyyy', data: {target: "transfer-rule-form.ruleLockupUntil"}) %>
+      <%= f.date_field(:lockup_until, required: true, placeholder: 'dd.mm.yyyy', data: {target: "transfer-rule-form.ruleLockupUntil transfer-rule-form.inputs"}) %>
     </div>
 
     <% if policy(@project).edit_transfer_rules? %>

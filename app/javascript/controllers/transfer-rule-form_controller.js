@@ -1,10 +1,11 @@
 import ComakerySecurityTokenController from './comakery-security-token_controller'
 
 export default class extends ComakerySecurityTokenController {
-  static targets = [ 'form', 'button', 'ruleFromGroupId', 'ruleToGroupId', 'ruleLockupUntil' ]
+  static targets = [ 'form', 'button', 'ruleFromGroupId', 'ruleToGroupId', 'ruleLockupUntil', 'inputs' ]
 
   async create() {
     if (this._setData()) {
+      this._disableEditing()
       await this.setAllowGroupTransfer()
     }
   }
@@ -23,6 +24,20 @@ export default class extends ComakerySecurityTokenController {
       this.data.set('ruleLockupUntil', (new Date(this.ruleLockupUntilTarget.value).getTime() / 1000) || 0)
       return true
     }
+  }
+
+  _disableEditing() {
+    this.inputsTargets.forEach((e) => {
+      e.readOnly = true
+      e.style.pointerEvents = 'none'
+    })
+  }
+
+  _enableEditing() {
+    this.inputsTargets.forEach((e) => {
+      e.readOnly = false
+      e.style.pointerEvents = null
+    })
   }
 
   showForm() {
@@ -45,6 +60,7 @@ export default class extends ComakerySecurityTokenController {
 
   _cancelTransaction(_) {
     this._markButtonAsReady()
+    this._enableEditing()
   }
 
   _submitReceipt(receipt) {
