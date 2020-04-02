@@ -12,7 +12,7 @@ export default class extends ComakerySecurityTokenController {
   _setData() {
     this.data.set('addressGroupId', parseInt(this.addressGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
     this.data.set('addressLockupUntil', (new Date(this.addressLockupUntilTarget.value).getTime() / 1000) || 0)
-    this.data.set('addressMaxBalance', parseInt(this.addressMaxBalanceTarget.value || 0))
+    this.data.set('addressMaxBalance', this.addressMaxBalanceTarget.value || 0)
     this.data.set('addressFrozen', this.addressFrozenTarget.value)
   }
 
