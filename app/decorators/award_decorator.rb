@@ -139,4 +139,13 @@ class AwardDecorator < Draper::Decorator
       stimulus_data('ethereum', 'pay')
     end
   end
+
+  def transfer_button_state_class
+    case latest_blockchain_transaction&.status
+    when 'created'
+      'in-progress--metamask' if latest_blockchain_transaction&.waiting_in_created?
+    when 'pending'
+      'in-progress--metamask in-progress--metamask__paid'
+    end
+  end
 end

@@ -229,4 +229,27 @@ describe AwardDecorator do
       expect(data[:info]).not_to be_nil
     end
   end
+
+  describe 'transfer_button_state_class' do
+    let!(:award_created_not_expired) { create(:blockchain_transaction, status: :created, created_at: 1.year.from_now).award }
+    let!(:award_pending) { create(:blockchain_transaction, status: :pending).award }
+    let!(:award_created_expired) { create(:blockchain_transaction, status: :created, created_at: 1.year.ago).award }
+    let!(:award) { create(:award) }
+
+    it 'returns css class for award with created blockchain_transaction' do
+      expect(award_created_not_expired.decorate.transfer_button_state_class).to eq('in-progress--metamask')
+    end
+
+    it 'returns css class for award with pending blockchain_transaction' do
+      expect(award_pending.decorate.transfer_button_state_class).to eq('in-progress--metamask in-progress--metamask__paid')
+    end
+
+    it 'returns nil for award with created and expired blockchain_transaction' do
+      expect(award_created_expired.decorate.transfer_button_state_class).to be_nil
+    end
+
+    it 'returns nil for award without blockchain_transaction' do
+      expect(award.decorate.transfer_button_state_class).to be_nil
+    end
+  end
 end
