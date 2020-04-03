@@ -154,9 +154,8 @@ export default class extends Controller {
       .once('receipt', (receipt) => {
         this._submitReceipt(receipt)
       })
-      .on('confirmation', (confNumber, receipt) => {
+      .on('confirmation', (confNumber, _receipt) => {
         this._submitConfirmation(confNumber)
-        this._submitReceipt(receipt)
       })
       .on('error', (error) => {
         this._cancelTransaction('Cancelled by Metamask')
