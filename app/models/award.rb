@@ -79,12 +79,23 @@ class Award < ApplicationRecord
   scope :listed, -> { where 'awards.status not in(6,7)' }
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
+
+  # Return accepted awards matching at least one of the following conditions:
+  # – Doesn't have any blockchain transactions yet
+  # – Latest blockchain transaction state is "cancelled"
+  # – Latest blockchain transaction state is "created" and transaction is created more than 10 minutes ago
   scope :ready_for_blockchain_transaction, lambda {
     accepted
       .joins('LEFT JOIN blockchain_transactions ON blockchain_transactions.award_id = awards.id AND blockchain_transactions.id = (SELECT MAX(id) FROM blockchain_transactions WHERE blockchain_transactions.award_id = awards.id)')
       .distinct
       .where('(blockchain_transactions.id IS NULL) OR (blockchain_transactions.status = 2) OR (blockchain_transactions.status = 0 AND blockchain_transactions.created_at < :timestamp)', timestamp: 10.minutes.ago)
   }
+
+  # Return accepted awards matching at least one of the following conditions:
+  # – Doesn't have any blockchain transactions yet
+  # – Latest blockchain transaction state is "cancelled"
+  # – Latest blockchain transaction state is "failed"
+  # – Latest blockchain transaction state is "created" and transaction is created more than 10 minutes ago
   scope :ready_for_manual_blockchain_transaction, lambda {
     accepted
       .joins('LEFT JOIN blockchain_transactions ON blockchain_transactions.award_id = awards.id AND blockchain_transactions.id = (SELECT MAX(id) FROM blockchain_transactions WHERE blockchain_transactions.award_id = awards.id)')
