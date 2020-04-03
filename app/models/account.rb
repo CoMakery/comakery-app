@@ -89,6 +89,8 @@ class Account < ApplicationRecord
 
   before_save :reset_latest_verification, if: -> { will_save_change_to_first_name? || will_save_change_to_last_name? || will_save_change_to_date_of_birth? || will_save_change_to_country? }
 
+  after_create :populate_awards
+
   class << self
     def order_by_award(project)
       award_types = project.award_types.map(&:id).join(',')
@@ -321,5 +323,11 @@ class Account < ApplicationRecord
 
   def reset_latest_verification
     self.latest_verification = nil
+  end
+
+  def populate_awards
+    Award.accepted.where(email: email, account_id: nil).find_each do |a|
+      a.update(account: self, email: nil)
+    end
   end
 end

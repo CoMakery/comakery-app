@@ -176,6 +176,21 @@ describe Account do
     end
   end
 
+  describe 'callbacks' do
+    describe 'populate_awards' do
+      context 'on account creation' do
+        let!(:email) { 'test_populate_awards@comakery.com' }
+        let!(:award) { create(:award, status: :accepted, email: email) }
+        let!(:account) { create(:account, email: email) }
+
+        it 'associates awards issued to account email address' do
+          expect(account.reload.awards).to include(award)
+          expect(award.reload.account).to eq(account)
+        end
+      end
+    end
+  end
+
   it 'enforces unique emails, case-insensitively' do
     create :account, email: 'alice@example.com'
     expect { create :account, email: 'Alice@example.com' }.to raise_error(ActiveRecord::RecordInvalid)

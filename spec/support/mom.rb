@@ -301,7 +301,7 @@ class Mom
     }.merge(attrs)
 
     params[:award_type] ||= create(:award_type, project: create(:project, account: params[:issuer]))
-    params[:account] ||= create(:account)
+    params[:account] ||= params[:email] ? nil : create(:account)
 
     Award.new(params)
   end
