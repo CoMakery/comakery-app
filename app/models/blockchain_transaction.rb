@@ -23,6 +23,10 @@ class BlockchainTransaction < ApplicationRecord
     ENV.fetch('BLOCKCHAIN_TX__SECONDS_TO_WAIT_BETWEEN_SYNCS', 10).to_i
   end
 
+  def self.seconds_to_wait_in_created
+    ENV.fetch('BLOCKCHAIN_TX__SECONDS_TO_WAIT_IN_CREATED', 600).to_i
+  end
+
   def self.max_syncs
     ENV.fetch('BLOCKCHAIN_TX__MAX_SYNCS', 60).to_i
   end
@@ -51,13 +55,17 @@ class BlockchainTransaction < ApplicationRecord
     number_of_syncs >= self.class.max_syncs
   end
 
+  def waiting_in_created?
+    created? && (created_at + self.class.seconds_to_wait_in_created > Time.current)
+  end
+
   def waiting_till_next_sync_is_allowed?
     synced_at && (synced_at + self.class.seconds_to_wait_between_syncs > Time.current)
   end
 
   def update_number_of_syncs
     update(number_of_syncs: number_of_syncs + 1, synced_at: Time.current)
-    update_status(:failed, 'max_syncs') if pending? && reached_max_syncs?
+    update_status(:cancelled, 'max_syncs') if pending? && reached_max_syncs?
   end
 
   def on_chain

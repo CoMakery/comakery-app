@@ -24,13 +24,12 @@ export default class extends Controller {
   }
 
   _markButtonAsCreating() {
-    this._buttonTargetText = this.buttonTarget.getElementsByTagName('span')[0].textContent
     this.buttonTarget.parentElement.classList.add('in-progress--metamask')
     this.buttonTarget.getElementsByTagName('span')[0].textContent = 'creating'
   }
 
   _markButtonAsReady() {
-    this.buttonTarget.getElementsByTagName('span')[0].textContent = this._buttonTargetText
+    this.buttonTarget.getElementsByTagName('span')[0].textContent = 'retry'
     this.buttonTarget.parentElement.classList.remove('in-progress--metamask')
     this.buttonTarget.parentElement.classList.remove('in-progress--metamask__created')
     this.buttonTarget.parentElement.classList.remove('in-progress--metamask__paid')
@@ -155,9 +154,8 @@ export default class extends Controller {
       .once('receipt', (receipt) => {
         this._submitReceipt(receipt)
       })
-      .on('confirmation', (confNumber, receipt) => {
+      .on('confirmation', (confNumber, _receipt) => {
         this._submitConfirmation(confNumber)
-        this._submitReceipt(receipt)
       })
       .on('error', (error) => {
         this._cancelTransaction('Cancelled by Metamask')

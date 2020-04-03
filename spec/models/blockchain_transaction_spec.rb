@@ -323,6 +323,18 @@ describe BlockchainTransaction do
     end
   end
 
+  describe 'seconds_to_wait_in_created' do
+    it 'gets value from ENV' do
+      ENV['BLOCKCHAIN_TX__SECONDS_TO_WAIT_IN_CREATED'] = '1'
+      expect(described_class.seconds_to_wait_in_created).to eq(1)
+      ENV['BLOCKCHAIN_TX__SECONDS_TO_WAIT_IN_CREATED'] = nil
+    end
+
+    it 'has default value' do
+      expect(described_class.seconds_to_wait_in_created).to eq(600)
+    end
+  end
+
   describe 'max_syncs' do
     it 'gets value from ENV' do
       ENV['BLOCKCHAIN_TX__MAX_SYNCS'] = '1'
@@ -350,6 +362,31 @@ describe BlockchainTransaction do
       blockchain_transaction.reload
 
       expect(blockchain_transaction.reached_max_syncs?).to be_falsey
+    end
+  end
+
+  describe 'waiting_in_created?' do
+    let!(:blockchain_transaction) { create(:blockchain_transaction) }
+
+    it 'returns true if created_at less than seconds_to_wait_in_created ago' do
+      blockchain_transaction.update(created_at: 1.year.from_now)
+      blockchain_transaction.reload
+
+      expect(blockchain_transaction.waiting_in_created?).to be_truthy
+    end
+
+    it 'returns false if created_at greater than seconds_to_wait_in_created ago' do
+      blockchain_transaction.update(created_at: 1.year.ago)
+      blockchain_transaction.reload
+
+      expect(blockchain_transaction.waiting_in_created?).to be_falsey
+    end
+
+    it 'returns false if not in created state' do
+      blockchain_transaction.update(status: :failed)
+      blockchain_transaction.reload
+
+      expect(blockchain_transaction.waiting_in_created?).to be_falsey
     end
   end
 
@@ -382,12 +419,12 @@ describe BlockchainTransaction do
       expect(blockchain_transaction.synced_at).not_to be_nil
     end
 
-    it 'updates status to failed if max_syncs is reached' do
+    it 'updates status to cancelled if max_syncs is reached' do
       blockchain_transaction.update(status: :pending, number_of_syncs: described_class.max_syncs - 1)
       blockchain_transaction.update_number_of_syncs
       blockchain_transaction.reload
 
-      expect(blockchain_transaction.status).to eq('failed')
+      expect(blockchain_transaction.status).to eq('cancelled')
     end
   end
 end

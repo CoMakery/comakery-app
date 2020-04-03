@@ -28,13 +28,13 @@
   <div class="transfers-table__transfer__quantity">
     <label>quantity</label>
 
-    <%= @transfers_all.sum(:quantity) %>
+    <%= @transfers_all.sum(&:quantity) %>
   </div>
 
   <div class="transfers-table__transfer__total_amount">
     <label>total amount</label>
 
-    <%= @transfers_all.sum(:total_amount) %>
+    <%= @transfers_all.sum(&:total_amount) %>
   </div>
 
   <% if @project.token %>

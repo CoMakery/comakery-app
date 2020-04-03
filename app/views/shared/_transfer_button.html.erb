@@ -1,4 +1,4 @@
-<div class="transfer-button <%= transfer.latest_blockchain_transaction&.pending? ? 'in-progress--metamask in-progress--metamask__paid' : nil %> <%= transfer.latest_blockchain_transaction&.created? ? 'in-progress--metamask' : nil %>">
+<div class="transfer-button <%= transfer.decorate.transfer_button_state_class %>">
   <% if transfer.project.token&.coin_type? %>
     <% if transfer.paid? && transfer.ethereum_transaction_explorer_url %>
       <%= link_to transfer.ethereum_transaction_address_short, transfer.ethereum_transaction_explorer_url, target: '_blank' %>
@@ -18,7 +18,11 @@
 
         <% case transfer.latest_blockchain_transaction&.status %>
         <% when 'created' %>
-          <span>processing</span>
+          <% if transfer.latest_blockchain_transaction&.waiting_in_created? %>
+            <span>processing</span>
+          <% else %>
+            <span><%= transfer.decorate.transfer_button_text %></span>
+          <% end %>
         <% when 'pending' %>
           <span>processing</span>
         <% when 'cancelled', 'failed' %>

@@ -10,8 +10,8 @@ class TransferRuleDecorator < Draper::Decorator
   end
 
   def lockup_until_pretty
-    if lockup_until.to_i >= TransferRule::LOCKUP_UNTIL_MAX.to_i
-      '∞'
+    if lockup_until.to_i > 100.years.from_now.to_i
+      '> 100 years'
     elsif lockup_until.to_i == TransferRule::LOCKUP_UNTIL_MIN.to_i
       '∞'
     elsif lockup_until.to_i == TransferRule::LOCKUP_UNTIL_MIN.to_i + 1
