@@ -606,7 +606,7 @@ RSpec.describe AwardsController, type: :controller do
   describe '#update_transaction_address' do
     let(:transaction_address) { '0xdb6f4aad1b0de83284855aafafc1b0a4961f4864b8a627b5e2009f5a6b2346cd' }
     let(:award_type) { create(:award_type, project: project) }
-    let!(:award) { create(:award, status: :accepted, award_type: award_type, issuer: issuer.account, account: nil, email: 'receiver@test.st', confirm_token: '1234') }
+    let!(:award) { create(:award, status: :accepted, award_type: award_type, issuer: issuer.account, confirm_token: '1234') }
 
     it 'handles tx address' do
       login issuer.account
