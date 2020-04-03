@@ -14,13 +14,13 @@ RSpec.describe TransferRuleDecorator do
   end
 
   describe 'lockup_until_pretty' do
-    let!(:transfer_rule_max_lockup) { create(:transfer_rule, lockup_until: TransferRule::LOCKUP_UNTIL_MAX) }
+    let!(:transfer_rule_max_lockup) { create(:transfer_rule, lockup_until: 101.years.from_now) }
     let!(:transfer_rule_min_lockup) { create(:transfer_rule, lockup_until: TransferRule::LOCKUP_UNTIL_MIN) }
     let!(:transfer_rule_min_plus_one_lockup) { create(:transfer_rule, lockup_until: TransferRule::LOCKUP_UNTIL_MIN + 1) }
     let!(:transfer_rule) { create(:transfer_rule) }
 
-    it 'returns "∞" if value is max' do
-      expect(transfer_rule_max_lockup.decorate.lockup_until_pretty).to eq('∞')
+    it 'returns "> 100 years" if value is more than 100 years from now' do
+      expect(transfer_rule_max_lockup.decorate.lockup_until_pretty).to eq('> 100 years')
     end
 
     it 'returns "∞" if value is min' do

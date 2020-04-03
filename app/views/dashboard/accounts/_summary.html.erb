@@ -41,9 +41,7 @@
     <div class="transfers-table__transfer__max_balance">
       <label>max balance</label>
 
-      <% cache @project.awards do %>
-        <%= @accounts_all.map{ |a| a.account_token_records.find_by(token: @project.token) }&.compact&.sum{ |x| x.max_balance || 0 } %>
-      <% end %>
+      –
     </div>
 
     <div class="transfers-table__transfer__lockup_until">
