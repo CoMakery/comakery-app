@@ -38,7 +38,7 @@ export default class extends Controller {
   }
 
   get decimalPlaces() {
-    return parseFloat(this.data.get('decimalPlaces'))
+    return new Decimal(this.data.get('decimalPlaces')).toNumber()
   }
 
   get transfers() {
