@@ -120,6 +120,11 @@ describe AwardPolicy do
       expect(described_class.new(a.project.account, a).start?).to be true
     end
 
+    it 'returns true if award is invite_ready, and related to account' do
+      a = create(:award, status: 'invite_ready')
+      expect(described_class.new(a.project.account, a).start?).to be true
+    end
+
     it 'returns true if award is ready, has matching experience and accessable for a given user' do
       award = create(
         :award_ready,

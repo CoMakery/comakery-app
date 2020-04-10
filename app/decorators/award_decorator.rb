@@ -105,6 +105,7 @@ class AwardDecorator < Draper::Decorator
         "#{controller_name}-payment-type" => project.token&.coin_type,
         "#{controller_name}-address" => account.ethereum_wallet,
         "#{controller_name}-amount" => total_amount_wei,
+        "#{controller_name}-decimal-places" => project.token&.decimal_places&.to_i,
         "#{controller_name}-contract-address" => project.token&.ethereum_contract_address,
         "#{controller_name}-contract-abi" => project.token&.abi&.to_json,
         "#{controller_name}-transactions-path" => api_v1_project_blockchain_transactions_path(project_id: project.id),
