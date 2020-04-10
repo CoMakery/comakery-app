@@ -37,7 +37,7 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def start?
-    @account && @account.accessable_awards.where(id: @award.id, status: 'ready').exists?
+    @account && @account.accessable_awards.where(id: @award.id, status: %w[ready invite_ready]).exists?
   end
 
   def create?

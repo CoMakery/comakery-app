@@ -226,7 +226,7 @@ class Account < ApplicationRecord
   end
 
   def related_awards(project_scope = nil)
-    Award.where(award_type: related_award_types(project_scope)).where.not('awards.status = 0 AND awards.number_of_assignments_per_user <= (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
+    Award.where(award_type: related_award_types(project_scope)).where.not('awards.status IN (0, 7) AND awards.number_of_assignments_per_user <= (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
   end
 
   def accessable_awards(project_scope = nil)
