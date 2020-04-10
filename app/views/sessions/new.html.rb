@@ -32,11 +32,13 @@ class Views::Sessions::New < Views::Base
             h3(style: 'font-size: 26px;') { text 'Or You Can' }
           end
 
-          column('large-12 no-h-pad', style: 'margin-top: 5px') do
-            link_to 'javascript:void(0)', class: 'auth-button metamask signin-with-metamask' do
-              span 'Sign in with MetaMask'
-            end
-          end
+          # NOTE: Disable until security issue is fixed
+          #
+          # column('large-12 no-h-pad', style: 'margin-top: 5px') do
+          #   link_to 'javascript:void(0)', class: 'auth-button metamask signin-with-metamask' do
+          #     span 'Sign in with MetaMask'
+          #   end
+          # end
 
           column('large-12 no-h-pad', style: 'margin-top: 20px') do
             link_to '/auth/slack', method: :post, class: 'auth-button slack' do

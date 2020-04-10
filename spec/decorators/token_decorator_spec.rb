@@ -53,6 +53,7 @@ describe TokenDecorator do
 
       expect(data['ethereum-payment-type']).to eq(token.coin_type)
       expect(data['ethereum-amount']).to eq(0)
+      expect(data['ethereum-decimal-places']).to eq(token.decimal_places&.to_i)
       expect(data['ethereum-contract-address']).to eq(token.contract_address)
       expect(data['ethereum-contract-abi']).to eq(token.abi&.to_json)
     end

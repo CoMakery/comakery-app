@@ -4,15 +4,13 @@ export default class extends EthereumController {
   async mint() {
     await this._initialize()
 
-    const data = this.contract.methods.mint(this.address, this.amount).encodeABI()
-    this._sendTransaction(this.contractAddress, null, data)
+    this._createTransaction('mint')
   }
 
   async burn() {
     await this._initialize()
 
-    const data = this.contract.methods.burn(this.address, this.amount).encodeABI()
-    this._sendTransaction(this.contractAddress, null, data)
+    this._createTransaction('burn')
   }
 
   async pause() {
@@ -36,7 +34,7 @@ export default class extends EthereumController {
       this.address,
       this.addressGroupId,
       this.addressLockupUntil,
-      this.addressMaxBalance,
+      this._convertToBaseUnit(this.addressMaxBalance),
       this.addressFrozen
     ).encodeABI()
 

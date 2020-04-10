@@ -2,6 +2,7 @@ import { Controller } from 'stimulus'
 import Web3 from 'web3'
 import Turbolinks from 'turbolinks'
 import { fetch } from 'whatwg-fetch'
+import { Decimal } from 'decimal.js'
 
 export default class extends Controller {
   static targets = [ 'button' ]
@@ -45,7 +46,7 @@ export default class extends Controller {
     this.buttonTarget.getElementsByTagName('span')[0].textContent = 'processing'
   }
 
-  _createTransaction() {
+  _createTransaction(transactionType = 'transfer') {
     fetch(this.transactionsPath, {
       credentials: 'same-origin',
       method     : 'POST',
@@ -73,7 +74,17 @@ export default class extends Controller {
         })
 
         if (this.isContract) {
-          const data = this.contract.methods.transfer(this.address, this.amount).encodeABI()
+          let data = null
+          switch (transactionType) {
+            case 'mint':
+              data = this.contract.methods.mint(this.address, this.amount).encodeABI()
+              break
+            case 'burn':
+              data = this.contract.methods.burn(this.address, this.amount).encodeABI()
+              break
+            default:
+              data = this.contract.methods.transfer(this.address, this.amount).encodeABI()
+          }
           this._sendTransaction(this.contractAddress, null, data)
         } else {
           this._sendTransaction(this.address, this.amount, null)
@@ -205,6 +216,14 @@ export default class extends Controller {
     }
   }
 
+  forceInputPrecision(event) {
+    event.target.value = new Decimal(event.target.value).toDecimalPlaces(this.decimalPlaces, Decimal.ROUND_DOWN).toString()
+  }
+
+  _convertToBaseUnit(amount) {
+    return Decimal.mul(Decimal.pow(10, this.decimalPlaces), new Decimal(amount)).toFixed()
+  }
+
   get web3() {
     if (typeof this._web3 === 'undefined') {
       this._web3 = new Web3(window.web3.currentProvider)
@@ -267,6 +286,10 @@ export default class extends Controller {
 
   get amount() {
     return this.data.get('amount')
+  }
+
+  get decimalPlaces() {
+    return new Decimal(this.data.get('decimalPlaces')).toNumber()
   }
 
   get contractAddress() {

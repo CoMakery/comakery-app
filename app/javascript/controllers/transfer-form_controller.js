@@ -9,10 +9,10 @@ export default class extends Controller {
       this.amountTarget.value || 0,
       parseFloat(this.quantityTarget.value)
     ).toDecimalPlaces(
-      parseFloat(this.data.get('decimals')) || 0,
+      this.decimalPlaces,
       Decimal.ROUND_DOWN
     ).toFixed(
-      parseFloat(this.data.get('decimals')) || 0,
+      this.decimalPlaces,
       Decimal.ROUND_DOWN
     )
   }
@@ -35,6 +35,10 @@ export default class extends Controller {
       transfer.style.opacity = 1
       transfer.style.pointerEvents = 'initial'
     })
+  }
+
+  get decimalPlaces() {
+    return parseFloat(this.data.get('decimalPlaces'))
   }
 
   get transfers() {

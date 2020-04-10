@@ -1,4 +1,7 @@
 class Api::AccountsController < Api::ApiController
+  # NOTE: Disable controller until security issue is fixed
+  before_action { head 503 }
+
   def create
     render(json: { failed: true }) && return if params[:public_address].blank?
     @account = Account.new(public_address: params[:public_address])

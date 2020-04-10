@@ -22,6 +22,7 @@ class TokenDecorator < Draper::Decorator
       {
         "#{controller_name}-payment-type" => coin_type,
         "#{controller_name}-amount" => 0,
+        "#{controller_name}-decimal-places" => decimal_places&.to_i,
         "#{controller_name}-contract-address" => ethereum_contract_address,
         "#{controller_name}-contract-abi" => abi&.to_json
       }
