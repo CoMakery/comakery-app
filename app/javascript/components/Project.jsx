@@ -276,34 +276,6 @@ export default class Project extends React.Component {
             </div>
           </div>
         }
-
-        {tokenData && projectData.awardedTokens > 0 &&
-        <div className="project-award__progress">
-          {projectData.maximumTokens > 0 &&
-            <div className="project-award__progress__stats">
-              {projectData.maximumTokens > 0 &&
-                <div>
-                  Tokens awarded:
-                  <strong className="project-award__percent"> {projectData.tokenPercentage}</strong> — {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}
-                </div>
-              }
-              {!projectData.maximumTokens &&
-                <div>
-                  Tokens awarded:
-                  <strong className="project-award__percent"> {projectData.awardedTokens} {tokenData.symbol}</strong>
-                </div>
-              }
-            </div>
-          }
-          {projectData.maximumTokens > 0 &&
-          <div className="project-award__progress__bar-container">
-            <div className="project-award__progress__bar-line" />
-            <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}`}} />
-          </div>
-          }
-        </div>
-        }
-
       </div>
 
       <div className="project-description">
@@ -320,10 +292,26 @@ export default class Project extends React.Component {
         </div>
       </div>
 
+      <div className="project-award">
+      {tokenData && projectData.awardedTokens > 0 && projectData.maximumTokens > 0 &&
+        <div className="project-award__progress">
+          <div className="project-award__progress__stats">
+            <div>
+              Tokens awarded:
+              <strong className="project-award__percent"> {projectData.tokenPercentage}</strong> — {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}
+            </div>
+          </div>
+          <div className="project-award__progress__bar-container">
+            <div className="project-award__progress__bar-line" />
+            <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}`}} />
+          </div>
+        </div>
+        }
+      </div>
       {this.props.tasksBySpecialty.length > 0 &&
         <Tasks>
           <TasksTitle>
-            <h2>Available Tasks</h2>
+            <h2>Tasks</h2>
             <p>Find a task that’s right for your talents, review the details, and get to work!</p>
           </TasksTitle>
 
