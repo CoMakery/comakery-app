@@ -255,50 +255,8 @@ export default class Project extends React.Component {
       />
 
       <div className="project-award">
-        {tokenData &&
-          <div className="project-award__token">
-            <div className="project-award__token__left">
-              <img className="project-award__token__img" src={tokenData.imageUrl} />
-              {tokenData.name} ({tokenData.symbol})
-            </div>
-            {tokenData.contractUrl &&
-              <div className="project-award__token__type">
-                {tokenData.coinType}
-                <div className="project-award__token__address">
-                  <a target="_blank" className="project-award__token__address__link" href={tokenData.contractUrl}>
-                    <Icon name="iconLink.svg" style={{width: 18, marginRight: 6}} />
-                  </a>
-                </div>
-              </div>
-            }
-          </div>
-        }
-
-        {tokenData && projectData.awardedTokens > 0 &&
-          <div className="project-award__progress">
-            <div className="project-award__progress__stats">
-              {projectData.maximumTokens > 0 &&
-                <div>
-                  Tokens awarded:
-                  <strong className="project-award__percent"> {projectData.tokenPercentage}</strong> — {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}
-                </div>
-              }
-              {!projectData.maximumTokens &&
-                <div>
-                  Tokens awarded:
-                  <strong className="project-award__percent"> {projectData.awardedTokens} {tokenData.symbol}</strong>
-                </div>
-              }
-            </div>
-            {projectData.maximumTokens > 0 &&
-              <div className="project-award__progress__bar-container">
-                <div className="project-award__progress__bar-line" />
-                <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}`}} />
-              </div>
-            }
-          </div>
-        }
-
+        {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
+        {interested && <button className="button project-interest__button" disabled>Following</button>}
         {projectData.displayTeam &&
           <div className="project-team">
             <div className="project-team__container">
@@ -318,7 +276,6 @@ export default class Project extends React.Component {
             </div>
           </div>
         }
-
       </div>
 
       <div className="project-description">
@@ -335,36 +292,26 @@ export default class Project extends React.Component {
         </div>
       </div>
 
-      <div className="project-interest">
-        <div className="project-stats__container">
-          <div className="mission-stats__kpis">
-            <div className="mission-stats__kpi">
-              <Icon name="BATCH/WHITE.svg" />
-              <Pluralize singular="batch" plural="batches" count={projectData.stats.batches} />
-            </div>
-
-            <div className="mission-stats__kpi">
-              <Icon name="TASK/WHITE.svg" />
-              <Pluralize singular="task" count={projectData.stats.tasks} />
-            </div>
-
-            <div className="mission-stats__kpi">
-              <div className="mission-stats__contributor" />
-              <Pluralize singular="person" plural="people" count={projectData.stats.interests} />&nbsp;INTERESTED
+      <div className="project-award">
+      {tokenData && projectData.awardedTokens > 0 && projectData.maximumTokens > 0 &&
+        <div className="project-award__progress">
+          <div className="project-award__progress__stats">
+            <div>
+              Tokens awarded:
+              <strong className="project-award__percent"> {projectData.tokenPercentage}</strong> — {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}
             </div>
           </div>
+          <div className="project-award__progress__bar-container">
+            <div className="project-award__progress__bar-line" />
+            <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}`}} />
+          </div>
         </div>
-
-        <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
-
-        {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
-        {interested && <button className="button project-interest__button" disabled>Following</button>}
+        }
       </div>
-
       {this.props.tasksBySpecialty.length > 0 &&
         <Tasks>
           <TasksTitle>
-            <h2>Available Tasks</h2>
+            <h2>Tasks</h2>
             <p>Find a task that’s right for your talents, review the details, and get to work!</p>
           </TasksTitle>
 

@@ -198,7 +198,7 @@ img {
   100% {
     background-position: -75px 0px;
   }
-} 
+}
 
 /**/
 /* 3rd-party styling */
@@ -755,7 +755,7 @@ form.form-with-submit-button {
       }
     }
   }
-} 
+}
 
 .freeze-token {
   display: flex;
@@ -891,7 +891,7 @@ button.reg-groups-create {
 
   .transfers-table__form {
     z-index: 50;
-    
+
     .transfers-table__transfer--new {
       opacity: 1;
       pointer-events: auto;
@@ -936,10 +936,10 @@ button.reg-groups-create {
       }
     }
 
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-      -webkit-appearance: none; 
-      margin: 0; 
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     input[type=number],
@@ -991,7 +991,7 @@ button.reg-groups-create {
       color: #fe2d6c;
     }
   }
-  
+
   .account-form,
   .transfer-rule-form {
     input,
@@ -1005,14 +1005,14 @@ button.reg-groups-create {
       font-size: 12px;
     }
   }
-  
+
   .account-form--active,
   .transfer-rule-form--active {
     box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
     transform: scale(1.01);
     transition: all 0.1s ease-in-out;
   }
-  
+
   img.transfers-table--edit-icon {
     position: absolute;
     margin-left: -2.5em;
@@ -1026,7 +1026,7 @@ button.reg-groups-create {
       margin-left: 20em;
     }
   }
-  
+
   .transfers-table--edit-save {
     min-height: 60px;
     background-color: #ffffff;
@@ -1174,14 +1174,14 @@ button.reg-groups-create {
     .transfers-table__transfer__max_balance {
       min-width: 140px;
     }
-    
+
     .transfers-table__transfer__reg_group {
       display: block;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       align-self: center;
-      
+
       & > div {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -1414,7 +1414,7 @@ a.header--nav--links--current {
   }
 
   .header-mobile__menu__sign {
-    position: absolute; 
+    position: absolute;
     box-sizing: border-box;
     bottom: 0;
     left: 0;
@@ -1796,7 +1796,7 @@ a.header--nav--links--current {
   color: white;
   font-weight: 600;
   margin: 0;
-  margin-top: 2em;
+  margin-top: 1em;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
 }
 
@@ -2005,7 +2005,7 @@ input.button--right-space {
 
 .input-field__description-large textarea {
   height: 300px;
-  resize: none; 
+  resize: none;
 }
 
 .input-field--content__defined {
@@ -3453,7 +3453,7 @@ input.button--right-space {
 
 .flash-message-container {
   position: fixed;
-  z-index: 99;  
+  z-index: 99;
   top: 20px;
   right: 20px;
   z-index: 1000;
@@ -3691,14 +3691,14 @@ input.button--right-space {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 150px;
+  padding: 0px 150px;
   color: var(--black);
   text-align: center;
 }
 
 @media screen and (max-width: 1024px) {
   .project-award {
-    padding: 30px 75px;
+    padding: 0px 75px;
   }
 }
 
@@ -3760,7 +3760,6 @@ input.button--right-space {
   font-stretch: normal;
   line-height: normal;
   letter-spacing: normal;
-  margin-bottom: 15px;
   color: var(--black);
 }
 
@@ -3779,7 +3778,6 @@ input.button--right-space {
   box-shadow: inset 0 1px 5px 0 rgba(0, 0, 0, 0.5);
   background-color: #ffffff;
   overflow: hidden;
-  margin-bottom: 28px;
 }
 
 .project-award__progress__bar-gradient {
@@ -3799,13 +3797,13 @@ input.button--right-space {
 
 @media screen and (max-width: 650px) {
   .project-award {
-    padding: 30px 30px;
+    padding: 0px 30px;
   }
 
   .project-award__token {
     flex-direction: column;
   }
-  
+
   .project-award__token__left {
     margin-bottom: 8px;
   }
@@ -3816,7 +3814,7 @@ input.button--right-space {
   }
 
   .project-award__progress__bar-container {
-    margin-bottom: 60px;
+    margin-bottom: 10px;
   }
 }
 
@@ -3952,7 +3950,6 @@ input.button--right-space {
   width: 50%;
   padding: 10px 35px 10px 0;
   border-radius: 1.5px;
-  margin-top: 38px;
 }
 
 .project-description__video__iframe {
@@ -4273,7 +4270,7 @@ input.button--right-space {
     padding: 18px;
     font-size: 18px;
   }
-  
+
   .skill-icon {
     width: 25px;
     height: 25px;
@@ -5168,7 +5165,7 @@ input.button--right-space {
   height: 100%;
   max-width: 105px;
   margin-right: 28px;
-  
+
   img {
     border-radius: 3px;
   }

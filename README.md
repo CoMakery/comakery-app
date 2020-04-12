@@ -41,6 +41,15 @@ Run server:
 rails server
 ```
 
+If you need development seed data - DO NOT RUN ON PRODUCTION:
+```
+rake db:seed
+```
+
+And sign in with:
+login: dev@dev.dev
+password: dev
+
 or if you want to run with delayed jobs:
 
 ```sh
@@ -214,13 +223,11 @@ To flush the old keys
 lab.redistogo.com:9968> flushdb
 ```
 
-## Skills & Interests Schema Overview
+## Schema Overview
+
+Mostly up to date partial overview of table relationships.
 
 ![new schema](doc/schema-with-batches/skill-interest-schema.png)
-
-## General Schema
-
-![new schema](doc/schema-with-batches/updated-schema.png)
 
 ## API documentaion
 
