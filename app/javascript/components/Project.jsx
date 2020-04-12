@@ -293,7 +293,7 @@ export default class Project extends React.Component {
       </div>
 
       <div className="project-award">
-      {tokenData && projectData.awardedTokens > 0 && projectData.maximumTokens > 0 &&
+        {tokenData && projectData.awardedTokens > 0 && projectData.maximumTokens > 0 &&
         <div className="project-award__progress">
           <div className="project-award__progress__stats">
             <div>
