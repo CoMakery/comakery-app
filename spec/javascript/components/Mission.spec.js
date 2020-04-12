@@ -11,7 +11,6 @@ describe('Mission', () => {
     expect(wrapper.exists('.mission-header')).toBe(true)
     expect(wrapper.exists('.mission-details')).toBe(true)
     expect(wrapper.exists('.mission-leaders')).toBe(true)
-    expect(wrapper.exists('.mission-tokens')).toBe(true)
     expect(wrapper.exists('.mission-stats')).toBe(true)
     expect(wrapper.exists('.mission-projects')).toBe(true)
   })
@@ -173,8 +172,7 @@ describe('Mission', () => {
     expect(wrapper.contains(<div className="mission-leaders__individual__info__name">User2 Last2</div>)).toEqual(true)
     expect(wrapper.contains(<div className="mission-leaders__individual__info__name">User3 Last3</div>)).toEqual(true)
 
-    expect(wrapper.find('.mission-tokens__card')).toHaveLength(4)
-    expect(wrapper.find('.mission-stats__kpi')).toHaveLength(4)
+    expect(wrapper.find('.mission-stats__kpi')).toHaveLength(3)
     expect(wrapper.find('.mission-projects__single')).toHaveLength(2)
   })
 })

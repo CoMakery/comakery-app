@@ -63,7 +63,6 @@ exports[`Mission renders correctly without props 1`] = `
     <div
       className="mission-leaders"
     >
-      Featured Project Leaders
       <div
         className="mission-leaders__wrapper"
       >
@@ -80,21 +79,8 @@ exports[`Mission renders correctly without props 1`] = `
       </div>
     </div>
     <div
-      className="mission-tokens"
-    >
-      Tokens Used In The Mission
-      <div
-        className="mission-tokens__cards"
-      />
-    </div>
-    <div
       className="mission-stats"
     >
-      <div
-        className="mission-stats__heading"
-      >
-        Mission Stats
-      </div>
       <div
         className="mission-stats__container"
       >
@@ -126,35 +112,6 @@ exports[`Mission renders correctly without props 1`] = `
                 style={Object {}}
               >
                 1 project
-              </span>
-            </l>
-          </div>
-          <div
-            className="mission-stats__kpi"
-          >
-            <Icon
-              className=""
-              name="BATCH/WHITE.svg"
-            >
-              <img
-                className="icon icon__BATCH/WHITE-svg"
-                src="test-file-stub"
-              />
-            </Icon>
-            <l
-              className={null}
-              count={1}
-              plural="batches"
-              showCount={true}
-              singular="batch"
-              style={Object {}}
-              zero={null}
-            >
-              <span
-                className={null}
-                style={Object {}}
-              >
-                1 batch
               </span>
             </l>
           </div>
@@ -222,7 +179,9 @@ exports[`Mission renders correctly without props 1`] = `
         <div
           className="mission-projects__heading"
         >
-          Featured Projects
+          <h2>
+            Featured Projects
+          </h2>
         </div>
       </div>
     </div>
