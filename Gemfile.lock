@@ -613,6 +613,9 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.10)
     trollop (2.9.9)
+    truncato (0.7.11)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.7.0, <= 2.0)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -754,6 +757,7 @@ DEPENDENCIES
   spring-commands-rspec
   sprockets (= 3.7.2)
   trollop
+  truncato (~> 0.7.11)
   turbolinks (~> 5.2)
   uglifier
   underscore-rails

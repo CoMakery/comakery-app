@@ -87,6 +87,53 @@ RSpec.describe AwardsController, type: :controller do
     end
   end
 
+  describe '#show' do
+    let(:award) { create(:award) }
+    let(:project) do
+      pj = award.project
+      pj.public_listed!
+      pj
+    end
+
+    let(:account) { project.account.decorate }
+
+    it 'shows member tasks to logged in members' do
+      login(account)
+      award.project.member!
+      get :show, params: { id: award.to_param, project_id: award.project.to_param, award_type_id: award.award_type.to_param }
+      expect(response.status).to eq(200)
+      expect(assigns[:props][:account_name]).to eq(account.name)
+    end
+
+    it 'hides member tasks to logged in non members' do
+      login(create(:account))
+      award.project.member!
+      get :show, params: { id: award.to_param, project_id: award.project.to_param, award_type_id: award.award_type.to_param }
+      expect(response.status).to eq(302)
+    end
+
+    it 'shows public tasks to logged in users' do
+      login(account)
+      get :show, params: { id: award.to_param, project_id: award.project.to_param, award_type_id: award.award_type.to_param }
+      expect(response.status).to eq(200)
+      expect(assigns[:props][:account_name]).to eq(account.name)
+    end
+
+    it 'shows public tasks to not logged in users' do
+      logout
+      get :show, params: { id: award.to_param, project_id: award.project.to_param, award_type_id: award.award_type.to_param }
+      expect(response.status).to eq(200)
+      expect(assigns[:props][:account_name]).to eq(nil)
+    end
+
+    it 'does not show private tasks to not logged in users' do
+      logout
+      award.project.member!
+      get :show, params: { id: award.to_param, project_id: award.project.to_param, award_type_id: award.award_type.to_param }
+      expect(response.status).to eq(302)
+    end
+  end
+
   describe '#create' do
     let(:award_type) { create(:award_type, project: project) }
 

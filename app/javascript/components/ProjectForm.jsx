@@ -340,7 +340,7 @@ class ProjectForm extends React.Component {
               errorText={this.state.errors['project[description]']}
               placeholder="Explain the outline and goal of the project, and why people should be excited about helping to execute the vision"
               eventHandler={this.handleFieldChange}
-              symbolLimit={800}
+              symbolLimit={20000}
             />
 
             <InputFieldWhiteDark
