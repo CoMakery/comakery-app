@@ -340,7 +340,7 @@ export default class Project extends React.Component {
       {this.props.tasksBySpecialty.length === 0 &&
         <div className="project-skills">
           <div className="project-skills__title">SKILLS NEEDED</div>
-          <div className="project-skills__subtitle">Take a challenge to demonstrate your skills. You will be invited to complete tasks that match your skill level for this and other projects</div>
+          <div className="project-skills__subtitle">Which of your skills are you interesed in contributing?</div>
 
           {Object.keys(skills).map((skill, index) =>
             <div key={skill} className="project-skill-container">
