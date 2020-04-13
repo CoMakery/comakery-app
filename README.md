@@ -55,6 +55,13 @@ If you need development seed data - DO NOT RUN ON PRODUCTION:
 rake db:seed
 ```
 
+If you are having trouble with emails not finding the correct host set the `APP_HOST` variable in your `.env` file.
+
+For example in development you will probably want to set it to:
+```
+APP_HOST=localhost:3000
+```
+
 And sign in with:
 login: dev@dev.dev
 password: dev
