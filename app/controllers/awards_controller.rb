@@ -379,27 +379,27 @@ class AwardsController < ApplicationController
     end
 
   def set_show_props
-    if current_account
-      @props = {
-          task: task_to_props(@award),
-          task_allowed_to_start: policy(@award).start?,
-          task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
-          tasks_to_unlock: current_account.tasks_to_unlock(@award),
-          license_url: contribution_licenses_path(type: 'CP'),
-          my_tasks_path: my_tasks_path,
-          account_name: current_account.decorate.name,
-          csrf_token: form_authenticity_token
+    @props = if current_account
+      {
+        task: task_to_props(@award),
+        task_allowed_to_start: policy(@award).start?,
+        task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
+        tasks_to_unlock: current_account.tasks_to_unlock(@award),
+        license_url: contribution_licenses_path(type: 'CP'),
+        my_tasks_path: my_tasks_path,
+        account_name: current_account.decorate.name,
+        csrf_token: form_authenticity_token
       }
     else
-      @props = {
-          task: task_to_props(@award),
-          task_allowed_to_start: false,
-          task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
-          tasks_to_unlock: nil,
-          license_url: contribution_licenses_path(type: 'CP'),
-          my_tasks_path: my_tasks_path,
-          account_name: nil,
-          csrf_token: form_authenticity_token
+      {
+        task: task_to_props(@award),
+        task_allowed_to_start: false,
+        task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
+        tasks_to_unlock: nil,
+        license_url: contribution_licenses_path(type: 'CP'),
+        my_tasks_path: my_tasks_path,
+        account_name: nil,
+        csrf_token: form_authenticity_token
       }
     end
   end
