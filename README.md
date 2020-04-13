@@ -45,6 +45,11 @@ Run server:
 rails server
 ```
 
+To render css and js assets faster run:
+```
+bin/webpack-dev-server 
+```
+
 If you need development seed data - DO NOT RUN ON PRODUCTION:
 ```
 rake db:seed
