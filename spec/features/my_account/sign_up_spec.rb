@@ -34,9 +34,16 @@ describe 'my account', js: true do
     expect(page.current_url).to include('/session/new')
   end
 
-  scenario 'user gets redirected to sign in when accessing Task Details' do
-    visit '/projects/1/batches/1/tasks/1'
-    expect(page.current_url).to include('/session/new')
+  scenario 'logged out user can see Taks Details for a public project' do
+    logout
+    award = create(:award)
+    award.project.member!
+    award.project.save!
+    login(award.project.account)
+    url = "/projects/#{award.project.id}/batches/#{award.award_type.id}/tasks/#{award.id}"
+    visit url
+    expect(page.current_url).to include(url)
+    expect(page).to have_content('TASK DETAILS')
   end
 
   scenario 'user gets redirected to root when accessing Batches for a private project' do
