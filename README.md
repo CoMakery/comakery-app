@@ -16,7 +16,11 @@ Prerequisites:
 - Redis (if you want to run delayed jobs)
 - Bundler
 - Yarn
-- Chrome and Chromedriver ([Reference setup](https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/ruby/images/2.4.4-stretch/browsers/Dockerfile))
+- Chrome and [Chromedriver](https://chromedriver.chromium.org/)
+
+To insall chromedriver on OS X use: `brew cask install chromedriver`. Rspec specs will fail if you have an earlier or mismatched version.
+
+Here's a complicated but possibly useful chromedriver reference setup. [Reference setup](https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/ruby/images/2.4.4-stretch/browsers/Dockerfile)
 
 Set up .env:
 
@@ -39,6 +43,11 @@ Run server:
 
 ```sh
 rails server
+```
+
+To render css and js assets faster run:
+```
+bin/webpack-dev-server 
 ```
 
 If you need development seed data - DO NOT RUN ON PRODUCTION:

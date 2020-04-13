@@ -35,7 +35,7 @@ class Award < ApplicationRecord
   has_one :latest_blockchain_transaction, -> { order created_at: :desc }, class_name: 'BlockchainTransaction', foreign_key: :award_id
 
   validates :proof_id, :award_type, :name, presence: true
-  validates :amount, numericality: { greater_than: 0 }
+  validates :amount, numericality: { greater_than_or_equal_to: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
   validates :number_of_assignments_per_user, numericality: { less_than_or_equal_to: :number_of_assignments }

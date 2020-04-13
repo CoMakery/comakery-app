@@ -402,19 +402,34 @@ describe Award do
       expect(award_paid.errors.full_messages.first).to eq("Paid task/transfer can't be cancelled")
     end
 
-    describe 'awards amounts must be > 0' do
+    describe 'awards amount must be greater than or equal to 0' do
       let(:award) { build :award }
 
       specify do
-        award.quantity = -1
-        expect(award.valid?).to eq(false)
-        expect(award.errors[:quantity]).to eq(['must be greater than 0'])
+        award.amount = 0
+        expect(award.valid?).to eq(true)
       end
 
       specify do
         award.amount = -1
         expect(award.valid?).to eq(false)
-        expect(award.errors[:amount]).to eq(['must be greater than 0'])
+        expect(award.errors[:amount]).to eq(['must be greater than or equal to 0'])
+      end
+    end
+
+    describe 'awards quantity must be greater than 0' do
+      let(:award) { build :award }
+
+      specify do
+        award.quantity = 0
+        expect(award.valid?).to eq(false)
+        expect(award.errors[:quantity]).to eq(['must be greater than 0'])
+      end
+
+      specify do
+        award.quantity = -1
+        expect(award.valid?).to eq(false)
+        expect(award.errors[:quantity]).to eq(['must be greater than 0'])
       end
     end
 

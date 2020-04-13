@@ -303,7 +303,7 @@ describe ProjectsController do
 
         expect(response.status).to eq(200)
         expect(assigns[:project]).to be_a_new_record
-        expect(assigns[:project]).not_to be_public
+        expect(assigns[:project]).to be_public
       end
     end
   end
