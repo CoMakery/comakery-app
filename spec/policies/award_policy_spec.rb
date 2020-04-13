@@ -78,6 +78,20 @@ describe AwardPolicy do
     it 'returns false if award is not included in account accessable awards and project is not visible for user' do
       expect(described_class.new(create(:account), create(:award)).show?).to be false
     end
+
+    it 'returns true for a public_listed project and unassociated user' do
+      award = create(:award)
+      award.project.public_listed!
+      non_logged_in_user = create(:account)
+      expect(described_class.new(non_logged_in_user, award).show?).to be true
+    end
+
+    it 'returns true for a public_listed project and null user' do
+      award = create(:award)
+      award.project.public_listed!
+      nil_user = nil
+      expect(described_class.new(nil_user, award).show?).to be true
+    end
   end
 
   describe 'edit?' do

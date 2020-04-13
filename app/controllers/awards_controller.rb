@@ -25,7 +25,7 @@ class AwardsController < ApplicationController
   before_action :set_assignment_props, only: %i[assignment]
   before_action :set_index_props, only: %i[index]
   skip_before_action :verify_authenticity_token, only: %i[update_transaction_address]
-  skip_before_action :require_login, only: %i[confirm]
+  skip_before_action :require_login, only: %i[confirm show]
   skip_after_action :verify_authorized, only: %i[confirm]
   skip_after_action :verify_policy_scoped, only: %(index)
   before_action :redirect_back, only: %i[index]
@@ -378,18 +378,31 @@ class AwardsController < ApplicationController
       }
     end
 
-    def set_show_props
+  def set_show_props
+    if current_account
       @props = {
-        task: task_to_props(@award),
-        task_allowed_to_start: policy(@award).start?,
-        task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
-        tasks_to_unlock: current_account.tasks_to_unlock(@award),
-        license_url: contribution_licenses_path(type: 'CP'),
-        my_tasks_path: my_tasks_path,
-        account_name: current_account.decorate.name,
-        csrf_token: form_authenticity_token
+          task: task_to_props(@award),
+          task_allowed_to_start: policy(@award).start?,
+          task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
+          tasks_to_unlock: current_account.tasks_to_unlock(@award),
+          license_url: contribution_licenses_path(type: 'CP'),
+          my_tasks_path: my_tasks_path,
+          account_name: current_account.decorate.name,
+          csrf_token: form_authenticity_token
+      }
+    else
+      @props = {
+          task: task_to_props(@award),
+          task_allowed_to_start: false,
+          task_reached_maximum_assignments: @award.reached_maximum_assignments_for?(current_account),
+          tasks_to_unlock: nil,
+          license_url: contribution_licenses_path(type: 'CP'),
+          my_tasks_path: my_tasks_path,
+          account_name: nil,
+          csrf_token: form_authenticity_token
       }
     end
+  end
 
     def set_award_props
       @props = {
