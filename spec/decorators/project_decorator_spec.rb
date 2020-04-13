@@ -20,8 +20,8 @@ describe ProjectDecorator do
   describe '#description_html_truncated' do
     let(:project) do
       create(:project,
-             description: 'a' * 1000)
-          .decorate
+        description: 'a' * 1000)
+        .decorate
     end
 
     specify do
@@ -36,19 +36,19 @@ describe ProjectDecorator do
       expect(truncated_description[start_of_end, last_char]).to eq('a...')
     end
 
-    it "outputs the content of the html without links" do
+    it 'outputs the content of the html without links' do
       string_with_html = ('a' * 499) + "<a href='#'>1234</a>"
       project_with_html_description = create(:project, description: string_with_html).decorate
 
       truncated_description = project_with_html_description.description_html_truncated
       last_char = truncated_description.length
       start_of_end = last_char - 4
-      expect(truncated_description[start_of_end, last_char]).to eq("1...")
+      expect(truncated_description[start_of_end, last_char]).to eq('1...')
       expect(truncated_description.size).to eq(503)
     end
 
-    it "can pass in a max length" do
-      expect(project.description_html_truncated(8)).to eq("aaaaaaaa...")
+    it 'can pass in a max length' do
+      expect(project.description_html_truncated(8)).to eq('aaaaaaaa...')
     end
 
     it 'can use a length longer than the string length' do

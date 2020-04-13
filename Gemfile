@@ -143,4 +143,4 @@ gem 'eth', '~> 0.4.10'
 
 gem 'vcr', '~> 5.1'
 
-gem "truncato", "~> 0.7.11"
+gem 'truncato', '~> 0.7.11'
