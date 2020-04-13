@@ -25,7 +25,7 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def show?
-    ProjectPolicy.new(@account, @project).show? || @account.related_awards.where(id: @award.id).exists?
+    ProjectPolicy.new(@account, @project).show? || (@account && @account.related_awards.where(id: @award.id).exists?)
   end
 
   def edit?
