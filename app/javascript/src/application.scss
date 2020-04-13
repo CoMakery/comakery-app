@@ -830,7 +830,7 @@ button.reg-groups-create {
     margin-right: initial;
     display: none;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       display: block;
     }
   }
@@ -866,7 +866,7 @@ button.reg-groups-create {
       margin: 1.5em;
     }
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       height: auto;
     }
   }
@@ -884,7 +884,7 @@ button.reg-groups-create {
       margin: 1.5em;
     }
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       height: auto;
     }
   }
@@ -910,7 +910,7 @@ button.reg-groups-create {
       flex-wrap: nowrap;
       justify-content: flex-end;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         align-items: flex-end;
       }
     }
@@ -920,7 +920,7 @@ button.reg-groups-create {
       margin-left: -1.7em;
       font-weight: bold;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         display: none;
       }
     }
@@ -931,7 +931,7 @@ button.reg-groups-create {
       margin-right: 0.5em;
       font-weight: bold;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         display: none;
       }
     }
@@ -960,7 +960,7 @@ button.reg-groups-create {
     select {
       width: initial;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         width: 100%;
       }
     }
@@ -1022,7 +1022,7 @@ button.reg-groups-create {
     padding: 0px;
     cursor: pointer;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       margin-left: 20em;
     }
   }
@@ -1037,7 +1037,7 @@ button.reg-groups-create {
     margin-top: -1px;
     padding-right: 1em;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       margin-top: -15px;
     }
   }
@@ -1063,7 +1063,7 @@ button.reg-groups-create {
       padding: 1em 0em 1em 2em;
       word-break: break-all;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         margin-bottom: 0.5em;
         flex-direction: column;
         align-items: flex-start;
@@ -1114,7 +1114,7 @@ button.reg-groups-create {
       text-overflow: ellipsis;
       align-self: center;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         max-width: initial;
         align-self: initial;
       }
@@ -1217,7 +1217,7 @@ button.reg-groups-create {
       }
     }
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       flex-direction: column;
       padding: 1em 1em 1em 0;
       margin-bottom: 1em;
