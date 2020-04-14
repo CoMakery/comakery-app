@@ -83,7 +83,7 @@
 	      	<%= record&.reg_group ? "#{record.reg_group.name} (#{record.reg_group.blockchain_id})" : "–" %>
 				</div>
 			
-	    	<%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: 'Default (0)' }, { required: false, class: 'hidden', data: {target: "account-form.addressGroupId account-form.inputs"} }) %>
+	    	<%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressGroupId account-form.inputs"} }) %>
 			</div>
 
 	    <div class="transfers-table__transfer__frozen">

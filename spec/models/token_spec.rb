@@ -339,4 +339,10 @@ describe Token do
       expect(create(:token, decimal_places: 0).to_base_unit(BigDecimal(1) + 0.1)).to eq(1)
     end
   end
+
+  describe 'default_reg_group' do
+    it 'returns default reg group for token' do
+      expect(create(:token, coin_type: :comakery).default_reg_group).to be_a(RegGroup)
+    end
+  end
 end

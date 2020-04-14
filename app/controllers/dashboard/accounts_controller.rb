@@ -33,7 +33,7 @@ class Dashboard::AccountsController < ApplicationController
 
     def set_accounts
       @page = (params[:page] || 1).to_i
-      @q = @project.interested.includes(:verifications, :awards, :latest_verification, :account_token_records).ransack(params[:q])
+      @q = @project.interested.includes(:verifications, :awards, :latest_verification, account_token_records: [:reg_group]).ransack(params[:q])
       @accounts_all = @q.result
       @accounts = @accounts_all.page(@page).per(10)
       redirect_to '/404.html' if (@page > 1) && @accounts.out_of_range?
