@@ -1,7 +1,7 @@
 class AccountTokenRecord < ApplicationRecord
   belongs_to :account
   belongs_to :token
-  belongs_to :reg_group, optional: true
+  belongs_to :reg_group
 
   after_initialize :set_defaults
 
@@ -30,6 +30,7 @@ class AccountTokenRecord < ApplicationRecord
 
     def set_defaults
       self.lockup_until ||= Time.current
+      self.reg_group ||= RegGroup.default_for(token)
     end
 
     def touch_account

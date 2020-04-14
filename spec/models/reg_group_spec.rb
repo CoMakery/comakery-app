@@ -79,4 +79,10 @@ describe RegGroup do
       expect(reg_group_w_name.name).to eq('test')
     end
   end
+
+  describe 'default_for' do
+    it 'returns default reg group for token' do
+      expect(described_class.default_for(create(:token, coin_type: :comakery))).to be_a(described_class)
+    end
+  end
 end
