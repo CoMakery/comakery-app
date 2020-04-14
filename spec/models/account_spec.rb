@@ -656,9 +656,12 @@ describe Account do
     end
     it 'check if a project in same team or self owned' do
       other_project = create :project
+      awarded_project = create(:award, account: account).project
+
       expect(account.same_team_or_owned_project?(project)).to be_truthy
       expect(account.same_team_or_owned_project?(other_project)).to be_falsey
       expect(account.same_team_or_owned_project?(team_project)).to be_truthy
+      expect(account.same_team_or_owned_project?(awarded_project)).to be_truthy
     end
   end
 

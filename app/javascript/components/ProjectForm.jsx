@@ -42,7 +42,7 @@ class ProjectForm extends React.Component {
     this.props.visibilities.forEach(v => {
       switch (v) {
         case 'member':
-          visibilitiesPretty['Logged in team members'] = v
+          visibilitiesPretty['Logged In Team Members (Project Slack/Discord channels, Admins, Emailed Award Recipients)'] = v
           break
         case 'public_listed':
           visibilitiesPretty.Public = v

@@ -5,6 +5,8 @@ describe ProjectPolicy do
   let!(:team2) { create :team }
   let!(:project_account) { create :account }
   let!(:project_admin) { create :account }
+  let!(:project_contributor) { create :account }
+  let!(:project_interested) { create :account }
   let!(:authentication) { create(:authentication, account: project_account) }
 
   let!(:my_public_project) { create(:project, title: 'public mine', account: project_account, visibility: 'public_listed') }
@@ -30,11 +32,11 @@ describe ProjectPolicy do
     team1.build_authentication_team authentication
     team1.build_authentication_team other_team_member_auth
 
-    my_public_project.admins << project_admin
-    my_public_unlisted_project.admins << project_admin
-    my_private_project.admins << project_admin
-    my_public_project_business_confidential.admins << project_admin
-    my_archived_project.admins << project_admin
+    [my_public_project, my_public_unlisted_project, my_public_project_business_confidential, my_private_project, my_archived_project].each do |pr|
+      pr.admins << project_admin
+      create(:award, award_type: create(:award_type, project: pr), account: project_contributor)
+      create(:interest, project: pr, account: project_interested)
+    end
   end
 
   describe ProjectPolicy::Scope do
@@ -110,22 +112,6 @@ describe ProjectPolicy do
     it 'returns true for projects with truthy show_contributions supporting transfer rules' do
       authorized(nil, my_public_project_w_comakery_token, :show_transfer_rules?)
       not_authorized(nil, my_public_project, :show_transfer_rules?)
-    end
-  end
-
-  describe '#send_community_award?' do
-    it 'returns true if an account belongs to the project' do
-      expect(described_class.new(nil, my_public_project).send_community_award?).to be_falsey
-      expect(described_class.new(nil, my_private_project).send_community_award?).to be_falsey
-
-      expect(described_class.new(project_account, my_public_project).send_community_award?).to be true
-      expect(described_class.new(project_account, my_private_project).send_community_award?).to be true
-
-      expect(described_class.new(other_team_member, my_public_project).send_community_award?).to be true
-      expect(described_class.new(other_team_member, my_private_project).send_community_award?).to be true
-
-      expect(described_class.new(different_team_account, my_public_project).send_community_award?).to be_falsey
-      expect(described_class.new(different_team_account, my_private_project).send_community_award?).to be_falsey
     end
   end
 
@@ -224,11 +210,14 @@ describe ProjectPolicy do
     end
   end
 
-  permissions :team_member?, :send_community_award? do
+  permissions :team_member? do
     specify { expect(described_class).to permit(project_account, my_public_project) }
+    specify { expect(described_class).to permit(project_admin, my_public_project) }
+    specify { expect(described_class).to permit(project_contributor, my_public_project) }
     specify { expect(described_class).to permit(other_team_member, my_public_project) }
 
     specify { expect(described_class).not_to permit(different_team_account, my_public_project) }
+    specify { expect(described_class).not_to permit(project_interested, my_public_project) }
     specify { expect(described_class).not_to permit(nil, my_public_project) }
   end
 
