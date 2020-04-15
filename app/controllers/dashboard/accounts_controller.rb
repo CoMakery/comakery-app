@@ -17,7 +17,11 @@ class Dashboard::AccountsController < ApplicationController
   def update
     authorize @project, :edit_accounts?
 
-    if @account.update(account_params)
+    if @account.update(
+      account_params.merge(
+        lockup_until: account_params[:lockup_until] ? Date.parse(account_params[:lockup_until])&.in_time_zone : nil
+      )
+    )
       Blockchain::ComakerySecurityToken::AccountSyncJob.perform_later(@account)
       redirect_to project_dashboard_accounts_path(@project, page: @page), notice: 'Account updated'
     else
@@ -29,7 +33,7 @@ class Dashboard::AccountsController < ApplicationController
 
     def set_accounts
       @page = (params[:page] || 1).to_i
-      @q = @project.interested.includes(:verifications, :awards, :latest_verification, :account_token_records).ransack(params[:q])
+      @q = @project.interested.includes(:verifications, :awards, :latest_verification, account_token_records: [:reg_group]).ransack(params[:q])
       @accounts_all = @q.result
       @accounts = @accounts_all.page(@page).per(10)
       redirect_to '/404.html' if (@page > 1) && @accounts.out_of_range?

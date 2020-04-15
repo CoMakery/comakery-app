@@ -56,6 +56,8 @@ describe('Project', () => {
     }
     const wrapper = mount(<Project {...props} />)
 
-    expect(wrapper.find('.project-award__token__left').text()).toBe('Ether (HOT)')
+    console.log(wrapper.html())
+
+    expect(wrapper.find('.project-interest__button').first().text()).toBe('Following')
   })
 })

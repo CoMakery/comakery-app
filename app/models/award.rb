@@ -31,9 +31,11 @@ class Award < ApplicationRecord
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
+  has_many :blockchain_transactions
+  has_one :latest_blockchain_transaction, -> { order created_at: :desc }, class_name: 'BlockchainTransaction', foreign_key: :award_id
 
   validates :proof_id, :award_type, :name, presence: true
-  validates :amount, numericality: { greater_than: 0 }
+  validates :amount, numericality: { greater_than_or_equal_to: 0 }
   validates :quantity, numericality: { greater_than: 0 }, allow_nil: true
   validates :number_of_assignments, :number_of_assignments_per_user, numericality: { greater_than: 0 }
   validates :number_of_assignments_per_user, numericality: { less_than_or_equal_to: :number_of_assignments }
@@ -78,10 +80,33 @@ class Award < ApplicationRecord
   scope :in_progress, -> { where 'awards.status in(0,1,2,3)' }
   scope :contributed, -> { where 'awards.status in(1,2,3,4,5)' }
 
+  # Return accepted awards matching at least one of the following conditions:
+  # – Doesn't have any blockchain transactions yet
+  # – Latest blockchain transaction state is "cancelled"
+  # – Latest blockchain transaction state is "created" and transaction is created more than 10 minutes ago
+  scope :ready_for_blockchain_transaction, lambda {
+    accepted
+      .joins('LEFT JOIN blockchain_transactions ON blockchain_transactions.award_id = awards.id AND blockchain_transactions.id = (SELECT MAX(id) FROM blockchain_transactions WHERE blockchain_transactions.award_id = awards.id)')
+      .distinct
+      .where('(blockchain_transactions.id IS NULL) OR (blockchain_transactions.status = 2) OR (blockchain_transactions.status = 0 AND blockchain_transactions.created_at < :timestamp)', timestamp: 10.minutes.ago)
+  }
+
+  # Return accepted awards matching at least one of the following conditions:
+  # – Doesn't have any blockchain transactions yet
+  # – Latest blockchain transaction state is "cancelled"
+  # – Latest blockchain transaction state is "failed"
+  # – Latest blockchain transaction state is "created" and transaction is created more than 10 minutes ago
+  scope :ready_for_manual_blockchain_transaction, lambda {
+    accepted
+      .joins('LEFT JOIN blockchain_transactions ON blockchain_transactions.award_id = awards.id AND blockchain_transactions.id = (SELECT MAX(id) FROM blockchain_transactions WHERE blockchain_transactions.award_id = awards.id)')
+      .distinct
+      .where('(blockchain_transactions.id IS NULL) OR (blockchain_transactions.status = 2) OR (blockchain_transactions.status = 4) OR (blockchain_transactions.status = 0 AND blockchain_transactions.created_at < :timestamp)', timestamp: 10.minutes.ago)
+  }
+
   scope :filtered_for_view, lambda { |filter, account|
     case filter
     when 'ready'
-      where(status: :ready, account: [nil, account]).or(where(status: :unpublished, account: account))
+      where(status: :ready, account: [nil, account]).or(where(status: :invite_ready, account: account))
     when 'started'
       where(status: :started).where(account: account)
     when 'submitted'
@@ -97,7 +122,7 @@ class Award < ApplicationRecord
     end
   }
 
-  enum status: %i[ready started submitted accepted rejected paid cancelled unpublished]
+  enum status: %i[ready started submitted accepted rejected paid cancelled invite_ready]
   enum source: %i[earned bought mint burn]
 
   def self.total_awarded
@@ -180,11 +205,11 @@ class Award < ApplicationRecord
   end
 
   def can_be_edited?
-    (ready? || unpublished?) && !cloned? && !any_clones?
+    (ready? || invite_ready?) && !cloned? && !any_clones?
   end
 
   def can_be_assigned?
-    (ready? || unpublished?)
+    (ready? || invite_ready?)
   end
 
   def cloned?
@@ -331,7 +356,7 @@ class Award < ApplicationRecord
     end
 
     def make_unpublished_if_award_type_is_not_ready
-      self.status = 'unpublished'
+      self.status = 'invite_ready'
     end
 
     def total_amount_fits_into_project_budget

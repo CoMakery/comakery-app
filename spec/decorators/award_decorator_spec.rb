@@ -183,12 +183,14 @@ describe AwardDecorator do
       expect(data['controller']).to eq('ethereum')
       expect(data['target']).to eq('ethereum.button')
       expect(data['action']).to eq('click->ethereum#pay')
+      expect(data['ethereum-id']).to eq(eth_award.id)
       expect(data['ethereum-payment-type']).to eq(eth_award.token.coin_type)
       expect(data['ethereum-address']).to eq(eth_award.account.ethereum_wallet)
       expect(data['ethereum-amount']).to eq(eth_award.decorate.total_amount_wei)
+      expect(data['ethereum-decimal-places']).to eq(eth_award.project.token&.decimal_places&.to_i)
       expect(data['ethereum-contract-address']).to eq(eth_award.project.token&.ethereum_contract_address)
       expect(data['ethereum-contract-abi']).to eq(eth_award.project.token&.abi&.to_json)
-      expect(data['ethereum-update-transaction-path']).to include(eth_award.id.to_s)
+      expect(data['ethereum-transactions-path']).to include(eth_award.project.id.to_s)
       expect(data['info']).not_to be_nil
     end
 
@@ -197,12 +199,14 @@ describe AwardDecorator do
       expect(data['controller']).to eq('comakery-security-token')
       expect(data['target']).to eq('comakery-security-token.button')
       expect(data['action']).to eq('click->comakery-security-token#mint')
+      expect(data['comakery-security-token-id']).to eq(mint_award.id)
       expect(data['comakery-security-token-payment-type']).to eq(mint_award.token.coin_type)
       expect(data['comakery-security-token-address']).to eq(mint_award.account.ethereum_wallet)
       expect(data['comakery-security-token-amount']).to eq(mint_award.decorate.total_amount_wei)
+      expect(data['comakery-security-token-decimal-places']).to eq(mint_award.project.token&.decimal_places&.to_i)
       expect(data['comakery-security-token-contract-address']).to eq(mint_award.project.token&.ethereum_contract_address)
       expect(data['comakery-security-token-contract-abi']).to eq(mint_award.project.token&.abi&.to_json)
-      expect(data['comakery-security-token-update-transaction-path']).to include(mint_award.id.to_s)
+      expect(data['comakery-security-token-transactions-path']).to include(mint_award.project.id.to_s)
       expect(data['info']).not_to be_nil
     end
 
@@ -211,12 +215,14 @@ describe AwardDecorator do
       expect(data['controller']).to eq('comakery-security-token')
       expect(data['target']).to eq('comakery-security-token.button')
       expect(data['action']).to eq('click->comakery-security-token#burn')
+      expect(data['comakery-security-token-id']).to eq(burn_award.id)
       expect(data['comakery-security-token-payment-type']).to eq(burn_award.token.coin_type)
       expect(data['comakery-security-token-address']).to eq(burn_award.account.ethereum_wallet)
       expect(data['comakery-security-token-amount']).to eq(burn_award.decorate.total_amount_wei)
+      expect(data['comakery-security-token-decimal-places']).to eq(burn_award.project.token&.decimal_places&.to_i)
       expect(data['comakery-security-token-contract-address']).to eq(burn_award.project.token&.ethereum_contract_address)
       expect(data['comakery-security-token-contract-abi']).to eq(burn_award.project.token&.abi&.to_json)
-      expect(data['comakery-security-token-update-transaction-path']).to include(burn_award.id.to_s)
+      expect(data['comakery-security-token-transactions-path']).to include(burn_award.project.id.to_s)
       expect(data['info']).not_to be_nil
     end
 
@@ -224,6 +230,29 @@ describe AwardDecorator do
       data = other_award.decorate.pay_data
       expect(data[:id]).not_to be_nil
       expect(data[:info]).not_to be_nil
+    end
+  end
+
+  describe 'transfer_button_state_class' do
+    let!(:award_created_not_expired) { create(:blockchain_transaction, status: :created, created_at: 1.year.from_now).award }
+    let!(:award_pending) { create(:blockchain_transaction, status: :pending).award }
+    let!(:award_created_expired) { create(:blockchain_transaction, status: :created, created_at: 1.year.ago).award }
+    let!(:award) { create(:award) }
+
+    it 'returns css class for award with created blockchain_transaction' do
+      expect(award_created_not_expired.decorate.transfer_button_state_class).to eq('in-progress--metamask')
+    end
+
+    it 'returns css class for award with pending blockchain_transaction' do
+      expect(award_pending.decorate.transfer_button_state_class).to eq('in-progress--metamask in-progress--metamask__paid')
+    end
+
+    it 'returns nil for award with created and expired blockchain_transaction' do
+      expect(award_created_expired.decorate.transfer_button_state_class).to be_nil
+    end
+
+    it 'returns nil for award without blockchain_transaction' do
+      expect(award.decorate.transfer_button_state_class).to be_nil
     end
   end
 end

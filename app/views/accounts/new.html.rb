@@ -52,11 +52,13 @@ class Views::Accounts::New < Views::Base
             h3 'Or Sign Up With'
           end
 
-          column('large-12 no-h-pad', style: 'margin-top: 10px') do
-            link_to 'javascript:void(0)', class: 'auth-button metamask signin-with-metamask' do
-              span 'MetaMask'
-            end
-          end
+          # NOTE: Disable until security issue is fixed
+          #
+          # column('large-12 no-h-pad', style: 'margin-top: 10px') do
+          #   link_to 'javascript:void(0)', class: 'auth-button metamask signin-with-metamask' do
+          #     span 'MetaMask'
+          #   end
+          # end
 
           column('large-12 no-h-pad', style: 'margin-top: 10px') do
             link_to '/auth/slack', method: :post, class: 'auth-button slack' do

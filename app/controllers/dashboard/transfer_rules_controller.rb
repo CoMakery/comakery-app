@@ -17,7 +17,11 @@ class Dashboard::TransferRulesController < ApplicationController
   def create
     authorize @project, :edit_transfer_rules?
 
-    @transfer_rule = @project.token.transfer_rules.new(transfer_rule_params)
+    @transfer_rule = @project.token.transfer_rules.new(
+      transfer_rule_params.merge(
+        lockup_until: Date.parse(transfer_rule_params[:lockup_until])&.in_time_zone
+      )
+    )
 
     if @transfer_rule.save
       redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Transfer rule created'

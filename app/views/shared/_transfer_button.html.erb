@@ -1,4 +1,4 @@
-<div class='transfer-button'>
+<div class="transfer-button <%= transfer.decorate.transfer_button_state_class %>">
   <% if transfer.project.token&.coin_type? %>
     <% if transfer.paid? && transfer.ethereum_transaction_explorer_url %>
       <%= link_to transfer.ethereum_transaction_address_short, transfer.ethereum_transaction_explorer_url, target: '_blank' %>
@@ -12,12 +12,21 @@
     <% elsif transfer.recipient_address.blank? %>
       needs wallet
     
-    <% elsif current_account&.decorate&.can_send_awards?(transfer.project) %>
-      <%= link_to 'javascript:void(0)', class: 'transfer-tokens-btn', data: transfer.decorate.pay_data do %>
+    <% elsif current_account&.decorate&.can_send_awards?(transfer.project) && transfer.accepted? %>
+      <%= link_to 'javascript:void(0)', class: "transfer-tokens-btn", data: transfer.decorate.pay_data do %>
         <%= render partial: "shared/wallet_logo", locals: { project: transfer.project, size: 12 } %>
-        
-        <% if transfer.accepted? && transfer.ethereum_transaction_error.present? %>
-          <span title="Last Failure: <%= transfer.ethereum_transaction_error %>">Retry</span>
+
+        <% case transfer.latest_blockchain_transaction&.status %>
+        <% when 'created' %>
+          <% if transfer.latest_blockchain_transaction&.waiting_in_created? %>
+            <span>processing</span>
+          <% else %>
+            <span><%= transfer.decorate.transfer_button_text %></span>
+          <% end %>
+        <% when 'pending' %>
+          <span>processing</span>
+        <% when 'cancelled', 'failed' %>
+          <span title="Last Failure: <%= transfer.latest_blockchain_transaction&.status_message %>">retry</span>
         <% else %>
           <span><%= transfer.decorate.transfer_button_text %></span>
         <% end %>

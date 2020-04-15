@@ -17,6 +17,46 @@ describe ProjectDecorator do
     end
   end
 
+  describe '#description_html_truncated' do
+    let(:project) do
+      create(:project,
+        description: 'a' * 1000)
+        .decorate
+    end
+
+    specify do
+      length_including_dots = 503
+      expect(project.description_html_truncated(500).length).to eq(length_including_dots)
+    end
+
+    specify do
+      truncated_description = project.description_html_truncated
+      last_char = truncated_description.length
+      start_of_end = last_char - 4
+      expect(truncated_description[start_of_end, last_char]).to eq('a...')
+    end
+
+    it 'outputs the content of the html without links' do
+      string_with_html = ('a' * 499) + "<a href='#'>1234</a>"
+      project_with_html_description = create(:project, description: string_with_html).decorate
+
+      truncated_description = project_with_html_description.description_html_truncated
+      last_char = truncated_description.length
+      start_of_end = last_char - 4
+      expect(truncated_description[start_of_end, last_char]).to eq('1...')
+      expect(truncated_description.size).to eq(503)
+    end
+
+    it 'can pass in a max length' do
+      expect(project.description_html_truncated(8)).to eq('aaaaaaaa...')
+    end
+
+    it 'can use a length longer than the string length' do
+      project = create(:project, description: 'hola').decorate
+      expect(project.description_html_truncated(100)).to eq('hola')
+    end
+  end
+
   describe 'with ethereum contract' do
     let(:project) do
       build(
@@ -162,8 +202,8 @@ describe ProjectDecorator do
   end
 
   it '#description_text' do
-    expect(project.decorate.description_text(12)).to eq 'We are go...'
-    expect(project.decorate.description_text(4)).to eq 'W...'
+    expect(project.decorate.description_html_truncated(12)).to eq 'We are going...'
+    expect(project.decorate.description_html_truncated(4)).to eq 'We a...'
   end
 
   it '#contributors_by_award_amount' do

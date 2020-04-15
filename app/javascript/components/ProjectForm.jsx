@@ -42,7 +42,7 @@ class ProjectForm extends React.Component {
     this.props.visibilities.forEach(v => {
       switch (v) {
         case 'member':
-          visibilitiesPretty['Logged in team members'] = v
+          visibilitiesPretty['Logged In Team Members (Project Slack/Discord channels, Admins, Emailed Award Recipients)'] = v
           break
         case 'public_listed':
           visibilitiesPretty.Public = v
@@ -340,7 +340,7 @@ class ProjectForm extends React.Component {
               errorText={this.state.errors['project[description]']}
               placeholder="Explain the outline and goal of the project, and why people should be excited about helping to execute the vision"
               eventHandler={this.handleFieldChange}
-              symbolLimit={800}
+              symbolLimit={20000}
             />
 
             <InputFieldWhiteDark

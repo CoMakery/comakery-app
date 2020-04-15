@@ -1,21 +1,43 @@
 import ComakerySecurityTokenController from './comakery-security-token_controller'
 
 export default class extends ComakerySecurityTokenController {
-  static targets = [ 'form', 'button', 'ruleFromGroupId', 'ruleToGroupId', 'ruleLockupUntil' ]
+  static targets = [ 'form', 'button', 'ruleFromGroupId', 'ruleToGroupId', 'ruleLockupUntil', 'inputs' ]
 
   async create() {
-    this.setData()
-    await this.setAllowGroupTransfer()
+    if (this._setData()) {
+      this._disableEditing()
+      await this.setAllowGroupTransfer()
+    }
   }
 
   async delete() {
     await this.resetAllowGroupTransfer()
   }
 
-  setData() {
-    this.data.set('ruleFromGroupId', parseInt(this.ruleFromGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
-    this.data.set('ruleToGroupId', parseInt(this.ruleToGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
-    this.data.set('ruleLockupUntil', (new Date(this.ruleLockupUntilTarget.value).getTime() / 1000) || 0)
+  _setData() {
+    if (Number.isNaN((new Date(this.ruleLockupUntilTarget.value).getTime()))) {
+      this._showError('Allowed After Date field is required')
+      return false
+    } else {
+      this.data.set('ruleFromGroupId', parseInt(this.ruleFromGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
+      this.data.set('ruleToGroupId', parseInt(this.ruleToGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
+      this.data.set('ruleLockupUntil', (new Date(this.ruleLockupUntilTarget.value).getTime() / 1000) || 0)
+      return true
+    }
+  }
+
+  _disableEditing() {
+    this.inputsTargets.forEach((e) => {
+      e.readOnly = true
+      e.style.pointerEvents = 'none'
+    })
+  }
+
+  _enableEditing() {
+    this.inputsTargets.forEach((e) => {
+      e.readOnly = false
+      e.style.pointerEvents = null
+    })
   }
 
   showForm() {
@@ -36,8 +58,15 @@ export default class extends ComakerySecurityTokenController {
     // do nothing
   }
 
-  _submitReceipt(_) {
-    this.formTarget.submit()
+  _cancelTransaction(_) {
+    this._markButtonAsReady()
+    this._enableEditing()
+  }
+
+  _submitReceipt(receipt) {
+    if (receipt.status) {
+      this.formTarget.submit()
+    }
   }
 
   _submitError(_) {

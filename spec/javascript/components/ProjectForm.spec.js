@@ -143,7 +143,7 @@ describe('ProjectForm', () => {
       'InputFieldDropdown[title="project visibility"][required][name="project[visibility]"]'
     ).props().selectEntries).toEqual([
       ['Logged in team member via unlisted URL', 'member_unlisted'],
-      ['Logged in team members', 'member'],
+      ['Logged In Team Members (Project Slack/Discord channels, Admins, Emailed Award Recipients)', 'member'],
       ['Archived (visible only to me)', 'archived'],
       ['Public', 'public_listed'],
       ['Unlisted URL (no login required)', 'public_unlisted']

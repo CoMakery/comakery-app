@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_29_152309) do
+ActiveRecord::Schema.define(version: 2020_04_12_205158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,13 +19,13 @@ ActiveRecord::Schema.define(version: 2020_01_29_152309) do
     t.bigint "account_id"
     t.bigint "token_id"
     t.bigint "reg_group_id"
-    t.bigint "max_balance"
+    t.decimal "max_balance", precision: 78
     t.boolean "account_frozen"
-    t.datetime "lockup_until"
+    t.decimal "lockup_until", precision: 78
     t.datetime "synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "balance"
+    t.decimal "balance", precision: 78
     t.index ["account_id"], name: "index_account_token_records_on_account_id"
     t.index ["reg_group_id"], name: "index_account_token_records_on_reg_group_id"
     t.index ["token_id"], name: "index_account_token_records_on_token_id"
@@ -198,6 +198,34 @@ ActiveRecord::Schema.define(version: 2020_01_29_152309) do
     t.index ["specialty_id"], name: "index_awards_on_specialty_id"
   end
 
+  create_table "blockchain_transaction_updates", force: :cascade do |t|
+    t.bigint "blockchain_transaction_id"
+    t.integer "status", default: 0
+    t.string "status_message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["blockchain_transaction_id"], name: "index_blockchain_tx_updates_on_blockchain_tx_id"
+  end
+
+  create_table "blockchain_transactions", force: :cascade do |t|
+    t.bigint "award_id"
+    t.decimal "amount", precision: 78
+    t.string "source"
+    t.string "destination"
+    t.integer "nonce"
+    t.string "contract_address"
+    t.integer "network"
+    t.string "tx_hash"
+    t.string "tx_raw"
+    t.integer "status", default: 0
+    t.string "status_message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "synced_at"
+    t.integer "number_of_syncs", default: 0
+    t.index ["award_id"], name: "index_blockchain_transactions_on_award_id"
+  end
+
   create_table "channels", force: :cascade do |t|
     t.integer "project_id"
     t.integer "team_id"
@@ -321,7 +349,7 @@ ActiveRecord::Schema.define(version: 2020_01_29_152309) do
     t.string "image_content_size"
     t.string "image_content_type"
     t.string "long_id"
-    t.integer "visibility", default: 0
+    t.integer "visibility", default: 1
     t.string "token_symbol"
     t.string "ethereum_network"
     t.integer "decimal_places"
@@ -356,7 +384,7 @@ ActiveRecord::Schema.define(version: 2020_01_29_152309) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "blockchain_id"
+    t.decimal "blockchain_id", precision: 78
     t.index ["blockchain_id"], name: "index_reg_groups_on_blockchain_id"
     t.index ["token_id"], name: "index_reg_groups_on_token_id"
   end
@@ -414,7 +442,7 @@ ActiveRecord::Schema.define(version: 2020_01_29_152309) do
     t.bigint "token_id"
     t.bigint "sending_group_id"
     t.bigint "receiving_group_id"
-    t.datetime "lockup_until"
+    t.decimal "lockup_until", precision: 78
     t.datetime "synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -445,6 +473,8 @@ ActiveRecord::Schema.define(version: 2020_01_29_152309) do
   add_foreign_key "account_token_records", "tokens"
   add_foreign_key "accounts", "missions", column: "managed_mission_id"
   add_foreign_key "awards", "specialties"
+  add_foreign_key "blockchain_transaction_updates", "blockchain_transactions"
+  add_foreign_key "blockchain_transactions", "awards"
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"

@@ -1,5 +1,5 @@
 <%= render layout: 'projects/project_settings' do %>
-  <div data-controller="transfer-form" data-transfer-form-decimals="<%= @project.token ? @project.token.decimal_places : 0 %>">
+  <div data-controller="transfer-form" data-transfer-form-decimal-places="<%= @project.token ? @project.token.decimal_places : 0 %>">
     <%= render partial: "filters" %>
 
     <% if policy(@project).create_transfer? %>
@@ -10,7 +10,7 @@
       <%= render partial: "header" %>
       <%= render partial: "summary" %>
       <%= render partial: "form" %>
-      <%= render partial: "transfer", collection: @transfers, as: :transfer, cached: true %>
+      <%= render partial: "transfer", collection: @transfers, as: :transfer, cached: false %>
     </div>
 
     <div class="transfers-pages">

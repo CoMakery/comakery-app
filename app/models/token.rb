@@ -102,6 +102,7 @@ class Token < ApplicationRecord
   before_validation :set_predefined_values
   before_save :set_transitioned_to_ethereum_enabled
   before_save :enable_ethereum
+  after_create :default_reg_group, if: -> { coin_type_comakery? }
 
   def coin_type_token?
     coin_type_erc20? || coin_type_qrc20? || coin_type_comakery?
@@ -133,6 +134,14 @@ class Token < ApplicationRecord
     else
       JSON.parse(File.read(Rails.root.join('vendor', 'abi', 'coin_types', 'default.json')))
     end
+  end
+
+  def to_base_unit(amount)
+    BigDecimal(10.pow(decimal_places || 0) * amount)&.to_s&.to_i
+  end
+
+  def default_reg_group
+    RegGroup.default_for(self)
   end
 
   private

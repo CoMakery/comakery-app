@@ -198,7 +198,7 @@ img {
   100% {
     background-position: -75px 0px;
   }
-} 
+}
 
 /**/
 /* 3rd-party styling */
@@ -755,7 +755,7 @@ form.form-with-submit-button {
       }
     }
   }
-} 
+}
 
 .freeze-token {
   display: flex;
@@ -891,7 +891,7 @@ button.reg-groups-create {
 
   .transfers-table__form {
     z-index: 50;
-    
+
     .transfers-table__transfer--new {
       opacity: 1;
       pointer-events: auto;
@@ -936,10 +936,10 @@ button.reg-groups-create {
       }
     }
 
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-      -webkit-appearance: none; 
-      margin: 0; 
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     input[type=number],
@@ -991,7 +991,7 @@ button.reg-groups-create {
       color: #fe2d6c;
     }
   }
-  
+
   .account-form,
   .transfer-rule-form {
     input,
@@ -1005,14 +1005,14 @@ button.reg-groups-create {
       font-size: 12px;
     }
   }
-  
+
   .account-form--active,
   .transfer-rule-form--active {
     box-shadow: 0 10px 20px 10px rgba(0, 0, 0, .1);
     transform: scale(1.01);
     transition: all 0.1s ease-in-out;
   }
-  
+
   img.transfers-table--edit-icon {
     position: absolute;
     margin-left: -2.5em;
@@ -1026,7 +1026,7 @@ button.reg-groups-create {
       margin-left: 20em;
     }
   }
-  
+
   .transfers-table--edit-save {
     min-height: 60px;
     background-color: #ffffff;
@@ -1174,14 +1174,14 @@ button.reg-groups-create {
     .transfers-table__transfer__max_balance {
       min-width: 140px;
     }
-    
+
     .transfers-table__transfer__reg_group {
       display: block;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       align-self: center;
-      
+
       & > div {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -1414,7 +1414,7 @@ a.header--nav--links--current {
   }
 
   .header-mobile__menu__sign {
-    position: absolute; 
+    position: absolute;
     box-sizing: border-box;
     bottom: 0;
     left: 0;
@@ -1796,7 +1796,7 @@ a.header--nav--links--current {
   color: white;
   font-weight: 600;
   margin: 0;
-  margin-top: 2em;
+  margin-top: 1em;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
 }
 
@@ -1994,7 +1994,7 @@ input.button--right-space {
 }
 
 .input-field__description .input-field--content__text {
-  height: 115px;
+  height: 400px;
   resize: none;
 }
 
@@ -2005,7 +2005,7 @@ input.button--right-space {
 
 .input-field__description-large textarea {
   height: 300px;
-  resize: none; 
+  resize: none;
 }
 
 .input-field--content__defined {
@@ -3453,7 +3453,7 @@ input.button--right-space {
 
 .flash-message-container {
   position: fixed;
-  z-index: 99;  
+  z-index: 99;
   top: 20px;
   right: 20px;
   z-index: 1000;
@@ -3691,14 +3691,14 @@ input.button--right-space {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px 150px;
+  padding: 0px 150px;
   color: var(--black);
   text-align: center;
 }
 
 @media screen and (max-width: 1024px) {
   .project-award {
-    padding: 30px 75px;
+    padding: 0px 75px;
   }
 }
 
@@ -3760,7 +3760,6 @@ input.button--right-space {
   font-stretch: normal;
   line-height: normal;
   letter-spacing: normal;
-  margin-bottom: 15px;
   color: var(--black);
 }
 
@@ -3779,7 +3778,6 @@ input.button--right-space {
   box-shadow: inset 0 1px 5px 0 rgba(0, 0, 0, 0.5);
   background-color: #ffffff;
   overflow: hidden;
-  margin-bottom: 28px;
 }
 
 .project-award__progress__bar-gradient {
@@ -3799,13 +3797,13 @@ input.button--right-space {
 
 @media screen and (max-width: 650px) {
   .project-award {
-    padding: 30px 30px;
+    padding: 0px 30px;
   }
 
   .project-award__token {
     flex-direction: column;
   }
-  
+
   .project-award__token__left {
     margin-bottom: 8px;
   }
@@ -3816,7 +3814,7 @@ input.button--right-space {
   }
 
   .project-award__progress__bar-container {
-    margin-bottom: 60px;
+    margin-bottom: 10px;
   }
 }
 
@@ -3940,31 +3938,22 @@ input.button--right-space {
 
 .project-description {
   box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1440px;
+  display: block;
   margin: auto;
-  padding: 30px 150px;
-}
-
-.project-description__video {
-  width: 50%;
-  padding: 10px 35px 10px 0;
-  border-radius: 1.5px;
-  margin-top: 38px;
-}
-
-.project-description__video__iframe {
+  clear:both;
   width: 100%;
-  height: 300px;
+  margin: auto;
+  text-align: center;
+  padding: 0px 35px;
 }
 
 .project-description__text {
-  width: 50%;
-  padding: 38px 0 38px 35px;
+  margin: auto;
+  max-width: 680px;
+  text-align: left;
+  padding: 0px 0px 38px 0px;
   font-family: Georgia, sans-serif;
-  font-size: 16px;
+  font-size: 21px;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -3973,69 +3962,49 @@ input.button--right-space {
   color: var(--greyish-brown);
 }
 
+.project-description__video {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  //padding: 10px 35px 10px 0;
+  padding: 0px 0 38px 0px;
+  border-radius: 1.5px;
+
+  img {
+    max-width: 640px;
+  }
+}
+
+.project-description__video__iframe {
+  margin: auto;
+  width: 640px;
+  height: 360px;
+}
+
+@media screen and (max-width: 815px) {
+  .project-description__video__iframe {
+    width: 426px;
+    height: 240px;
+  }
+}
+
+@media screen and (max-width: 610px) {
+  .project-description__video__iframe {
+    width: 320px;
+    height: 180px;
+  }
+}
+
 .project-description__text a {
   color: var(--primary-blue);
 }
 
-.project-description__text--first {
-  font-family: Montserrat, sans-serif;
-  font-size: 30px;
-  font-weight: 500;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: var(--primary-blue);
-  margin-bottom: 30px;
-}
-
-
-@media screen and (max-width: 1024px) {
-  .project-description {
-    padding: 30px 75px;
-  }
-
-  .project-description__text {
-    font-size: 12px;
-  }
-
-  .project-description__text--first {
-    font-size: 20px;
-  }
-
-  .project-description__video__iframe {
-    height: 177px;
-  }
-}
-
 @media screen and (max-width: 650px) {
-  .project-description {
-    padding: 30px 30px;
-    flex-direction: column;
-  }
-
-  .project-description__video {
-    width: 100%;
-    border: none;
-    padding: 0;
-    margin-bottom: 25px;
-  }
-
-  .project-description__video__iframe {
-    height: 186px;
-  }
-
   .project-description__text {
     width: 100%;
     padding: 0;
     font-size: 16px;
     margin-bottom: 20px;
-  }
-
-  .project-description__text--first {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 25px;
   }
 }
 
@@ -4131,7 +4100,7 @@ input.button--right-space {
 .project-skill-container {
   margin-top: 40px;
   box-sizing: border-box;
-  width: 100%;
+  max-width: 680px;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
   overflow: hidden;
@@ -4140,12 +4109,13 @@ input.button--right-space {
 .project-skill__background {
   position: relative;
   width: 100%;
+  //width: 680px;
   height: auto;
 }
 
 .project-skill__background__img {
   width: 100%;
-  height: 115px;
+  //height: 115px;
 }
 
 .project-skill__background__title {
@@ -4208,7 +4178,7 @@ input.button--right-space {
 
 @media screen and (max-width: 1024px) {
   .project-skills {
-    padding: 80px 75px;
+    //padding: 80px 75px;
   }
 
   .project-skills__title {
@@ -4221,7 +4191,7 @@ input.button--right-space {
   }
 
   .project-skill__background__img {
-    height: 80px;
+    //height: 80px;
   }
 
   .project-skill__background__title {
@@ -4245,9 +4215,9 @@ input.button--right-space {
 }
 
 @media screen and (max-width: 650px) {
-  .project-skills {
-    padding: 80px 30px 60px 30px;
-  }
+  //.project-skills {
+  //  padding: 80px 30px 60px 30px;
+  //}
 
   .project-skills__subtitle {
     font-size: 16px;
@@ -4256,7 +4226,7 @@ input.button--right-space {
   }
 
   .project-skill__background__img {
-    height: 125px;
+    //height: 125px;
   }
 
   .project-skill__background__title {
@@ -4270,10 +4240,10 @@ input.button--right-space {
   }
 
   .project-skill__interest {
-    padding: 18px;
+    //padding: 18px;
     font-size: 18px;
   }
-  
+
   .skill-icon {
     width: 25px;
     height: 25px;
@@ -4321,6 +4291,8 @@ input.button--right-space {
   text-align: center;
   color: var(--greyish-brown);
   margin-bottom: 57px;
+  margin: auto;
+  max-width: 680px;
 }
 
 .project-chart {
@@ -5168,7 +5140,7 @@ input.button--right-space {
   height: 100%;
   max-width: 105px;
   margin-right: 28px;
-  
+
   img {
     border-radius: 3px;
   }

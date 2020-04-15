@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
 
   def awards
     authorize @project, :show_contributions?
-    @awards = @project.awards.completed.includes(:token, :award_type, :account, :issuer)
+    @awards = @project.awards.completed.includes(:token, :award_type, :account, :issuer, :latest_blockchain_transaction)
     @awards = @awards.where(account_id: current_account.id) if current_account && params[:mine] == 'true'
     @awards = @awards.order(created_at: :desc).page(params[:page]).decorate
 

@@ -12,7 +12,7 @@
   <div class="transfer-rules__table transfers-table">
     <%= render partial: "header" %>
     <%= render partial: "form_transfer_rule" %>
-    <%= render partial: "transfer_rule", collection: @transfer_rules, as: :transfer_rule, cached: true %>
+    <%= render partial: "transfer_rule", collection: @transfer_rules, as: :transfer_rule, cached: false %>
   </div>
 
   <div class="transfers-pages">

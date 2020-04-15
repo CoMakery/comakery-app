@@ -80,6 +80,63 @@ class Mom
     AccountTokenRecord.new(defaults.merge(attrs))
   end
 
+  def blockchain_transaction(**attrs)
+    token = attrs[:token] || create(
+      :token,
+      coin_type: :comakery,
+      ethereum_network: :ropsten,
+      ethereum_contract_address: build(:ethereum_contract_address),
+      symbol: 'DUM',
+      decimal_places: 0
+    )
+    attrs.delete(:token)
+
+    award = blockchain_transaction_award(attrs.merge(token: token))
+    attrs.delete(:award)
+
+    defaults = {
+      award: award,
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token.coin_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
+      BlockchainTransaction.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_award(**attrs)
+    attrs[:award] || create(
+      :award,
+      amount: attrs[:amount] || 1,
+      status: :accepted,
+      account: create(
+        :account,
+        ethereum_wallet: attrs[:destination] || build(:ethereum_address_2)
+      ),
+      award_type: create(
+        :award_type,
+        project: create(
+          :project,
+          token: attrs[:token]
+        )
+      )
+    )
+  end
+
+  def blockchain_transaction_update(**attrs)
+    defaults = {
+      blockchain_transaction: create(:blockchain_transaction),
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    BlockchainTransactionUpdate.new(defaults.merge(attrs))
+  end
+
   def account_with_auth(**attrs)
     account(**attrs).tap { |a| create(:authentication, account: a) }
   end
@@ -244,7 +301,7 @@ class Mom
     }.merge(attrs)
 
     params[:award_type] ||= create(:award_type, project: create(:project, account: params[:issuer]))
-    params[:account] ||= create(:account)
+    params[:account] ||= params[:email] ? nil : create(:account)
 
     Award.new(params)
   end
@@ -319,6 +376,91 @@ class Mom
       'url' => "http://#{host}#{path}",
       'method' => method
     }).sign(build(:api_private_key))
+  end
+
+  def ethereum_address_1
+    '0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB'
+  end
+
+  def ethereum_address_2
+    '0xB4252b39f8506A711205B0b1C4170f0034065b46'
+  end
+
+  def ethereum_contract_address
+    '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
+  end
+
+  def eth_client(**attrs)
+    network = attrs[:network] || :ropsten
+
+    Comakery::Eth.new(
+      network
+    )
+  end
+
+  def eth_tx(**attrs)
+    network = attrs[:network] || :ropsten
+    hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
+
+    Comakery::EthTx.new(
+      network,
+      hash
+    )
+  end
+
+  def erc20_transfer(**attrs)
+    network = attrs[:network] || :ropsten
+    hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
+
+    Comakery::Erc20Transfer.new(
+      network,
+      hash
+    )
+  end
+
+  def erc20_mint(**attrs)
+    network = attrs[:network] || :ropsten
+    hash = attrs[:hash] || '0x02286b586b53784715e7eda288744e1c14a5f2d691d43160d4e3c4d5f8825ad0'
+
+    Comakery::Erc20Mint.new(
+      network,
+      hash
+    )
+  end
+
+  def erc20_burn(**attrs)
+    network = attrs[:network] || :ropsten
+    hash = attrs[:hash] || '0x1007e9116efab368169683b81ae576bd48e168bef2be1fea5ef096ccc9e5dcc0'
+
+    Comakery::Erc20Burn.new(
+      network,
+      hash
+    )
+  end
+
+  def erc20_contract(**attrs)
+    token = create(
+      :token,
+      coin_type: :comakery,
+      ethereum_network: :ropsten,
+      ethereum_contract_address: build(:ethereum_contract_address),
+      symbol: 'DUM',
+      decimal_places: 0
+    )
+
+    contract_address = attrs[:contract_address] || token.ethereum_contract_address
+    abi = attrs[:abi] || token.abi
+    network = attrs[:network] || token.ethereum_network
+    nonce = attrs[:nonce] || rand(1_000_000)
+
+    VCR.use_cassette("infura/#{network}/#{contract_address}/contract_init") do
+      Comakery::Erc20.new(
+        contract_address,
+        abi,
+        network,
+        nonce
+      )
+    end
   end
 end
 

@@ -176,6 +176,21 @@ describe Account do
     end
   end
 
+  describe 'callbacks' do
+    describe 'populate_awards' do
+      context 'on account creation' do
+        let!(:email) { 'test_populate_awards@comakery.com' }
+        let!(:award) { create(:award, status: :accepted, email: email) }
+        let!(:account) { create(:account, email: email) }
+
+        it 'associates awards issued to account email address' do
+          expect(account.reload.awards).to include(award)
+          expect(award.reload.account).to eq(account)
+        end
+      end
+    end
+  end
+
   it 'enforces unique emails, case-insensitively' do
     create :account, email: 'alice@example.com'
     expect { create :account, email: 'Alice@example.com' }.to raise_error(ActiveRecord::RecordInvalid)
@@ -489,6 +504,8 @@ describe Account do
     let!(:teammate_project) { create(:project, account: teammate) }
     let!(:teammate_award_type) { create(:award_type, project: teammate_project) }
     let!(:teammate_award) { create(:award, award_type: teammate_award_type, issuer: teammate) }
+    let!(:awarded_project) { create(:award, account: account).project }
+    let!(:award_from_awarded_project) { create(:award, award_type: create(:award_type, project: awarded_project)) }
 
     before do
       team.build_authentication_team authentication
@@ -511,6 +528,10 @@ describe Account do
 
     it 'returns admin awards' do
       expect(account.accessable_awards).to include(admin_award)
+    end
+
+    it 'returns awards from awarded projects' do
+      expect(account.accessable_awards).to include(award_from_awarded_project)
     end
   end
 
@@ -641,9 +662,12 @@ describe Account do
     end
     it 'check if a project in same team or self owned' do
       other_project = create :project
+      awarded_project = create(:award, account: account).project
+
       expect(account.same_team_or_owned_project?(project)).to be_truthy
       expect(account.same_team_or_owned_project?(other_project)).to be_falsey
       expect(account.same_team_or_owned_project?(team_project)).to be_truthy
+      expect(account.same_team_or_owned_project?(awarded_project)).to be_truthy
     end
   end
 

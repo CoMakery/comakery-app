@@ -222,6 +222,12 @@ exports[`Project renders correctly without props 1`] = `
     <div
       className="project-award"
     >
+      <button
+        className="button project-interest__button"
+        onClick={[Function]}
+      >
+        I’m Interested
+      </button>
       <div
         className="project-team"
       >
@@ -261,109 +267,8 @@ exports[`Project renders correctly without props 1`] = `
       </div>
     </div>
     <div
-      className="project-interest"
-    >
-      <div
-        className="project-stats__container"
-      >
-        <div
-          className="mission-stats__kpis"
-        >
-          <div
-            className="mission-stats__kpi"
-          >
-            <Icon
-              className=""
-              name="BATCH/WHITE.svg"
-            >
-              <img
-                className="icon icon__BATCH/WHITE-svg"
-                src="test-file-stub"
-              />
-            </Icon>
-            <l
-              className={null}
-              count={1}
-              plural="batches"
-              showCount={true}
-              singular="batch"
-              style={Object {}}
-              zero={null}
-            >
-              <span
-                className={null}
-                style={Object {}}
-              >
-                1 batch
-              </span>
-            </l>
-          </div>
-          <div
-            className="mission-stats__kpi"
-          >
-            <Icon
-              className=""
-              name="TASK/WHITE.svg"
-            >
-              <img
-                className="icon icon__TASK/WHITE-svg"
-                src="test-file-stub"
-              />
-            </Icon>
-            <l
-              className={null}
-              count={1}
-              showCount={true}
-              singular="task"
-              style={Object {}}
-              zero={null}
-            >
-              <span
-                className={null}
-                style={Object {}}
-              >
-                1 task
-              </span>
-            </l>
-          </div>
-          <div
-            className="mission-stats__kpi"
-          >
-            <div
-              className="mission-stats__contributor"
-            />
-            <l
-              className={null}
-              count={1}
-              plural="people"
-              showCount={true}
-              singular="person"
-              style={Object {}}
-              zero={null}
-            >
-              <span
-                className={null}
-                style={Object {}}
-              >
-                1 person
-              </span>
-            </l>
-             INTERESTED
-          </div>
-        </div>
-      </div>
-      <p
-        className="project-interest__text"
-      >
-        Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.
-      </p>
-      <button
-        className="button project-interest__button"
-        onClick={[Function]}
-      >
-        I’m Interested
-      </button>
-    </div>
+      className="project-award"
+    />
     <styled.div>
       <StyledComponent
         forwardedComponent={
@@ -454,7 +359,7 @@ exports[`Project renders correctly without props 1`] = `
                 className="sc-gPEVay glPcoY"
               >
                 <h2>
-                  Available Tasks
+                  Tasks
                 </h2>
                 <p>
                   Find a task that’s right for your talents, review the details, and get to work!

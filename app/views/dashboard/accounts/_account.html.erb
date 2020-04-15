@@ -63,18 +63,14 @@
 		      <% end %>
 				</div>
 			
-	      <%= f.number_field(:max_balance, required: false, placeholder: '0', min: 0, step: 1, data: {target: "account-form.addressMaxBalance account-form.inputs"}, class: 'hidden') %>
+	      <%= f.number_field(:max_balance, required: false, placeholder: '0', min: @project.step_for_amount_input, step: @project.step_for_amount_input, data: {target: "account-form.addressMaxBalance account-form.inputs", action: "change->account-form#forceInputPrecision"}, class: 'hidden') %>
 	    </div>
 
 	    <div class="transfers-table__transfer__lockup_until">
 	      <label>lockup until</label>
 
 				<div data-target="account-form.outputs">
-		      <% if record&.lockup_until %>
-		        <%= record&.lockup_until&.strftime("%b %e, %Y") %>
-		      <% else %>
-		        –
-		      <% end %>
+		      <%= record&.decorate&.lockup_until_pretty %>
 				</div>
 			
 	      <%= f.date_field(:lockup_until, required: false, placeholder: 'dd.mm.yyyy', data: {target: "account-form.addressLockupUntil account-form.inputs"}, class: 'hidden') %>
@@ -87,7 +83,7 @@
 	      	<%= record&.reg_group ? "#{record.reg_group.name} (#{record.reg_group.blockchain_id})" : "–" %>
 				</div>
 			
-	    	<%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: '–' }, { required: false, class: 'hidden', data: {target: "account-form.addressGroupId account-form.inputs"} }) %>
+	    	<%= f.select(:reg_group_id, @project.token.reg_groups.collect { |g| [ "#{g.name} (#{g.blockchain_id})", g.id ] }, { include_blank: false }, { required: false, class: 'hidden', data: {target: "account-form.addressGroupId account-form.inputs"} }) %>
 			</div>
 
 	    <div class="transfers-table__transfer__frozen">

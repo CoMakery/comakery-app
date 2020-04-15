@@ -47,13 +47,9 @@ class Views::Projects::Base < Views::Base
           end
         end
 
-        p(class: 'description no-last-award') { text project.description_text }
+        p(class: 'description no-last-award') { text project.description_html_truncated(60) }
 
         div(class: 'details') do
-          div(class: 'details__interested') do
-            span "#{pluralize(project.interests.size, 'person', plural: 'people')} interested"
-          end
-
           div(class: 'contributors') do
             owner = project.account
 

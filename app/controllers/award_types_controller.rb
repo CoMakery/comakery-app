@@ -133,7 +133,8 @@ class AwardTypesController < ApplicationController
         },
         cloneable: task.cloneable?,
         cloned: task.cloned?,
-        number_of_clones: task.assignments.size
+        number_of_clones: task.assignments.size,
+        status: task.status.humanize.downcase
       )
     end
 

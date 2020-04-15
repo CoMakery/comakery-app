@@ -53,6 +53,16 @@ describe RegGroup do
 
       expect(reg_group2).not_to be_valid
     end
+
+    it 'requires blockchain_id to be not less than min value' do
+      reg_group = build(:reg_group, blockchain_id: described_class::BLOCKCHAIN_ID_MIN - 1)
+      expect(reg_group).not_to be_valid
+    end
+
+    it 'requires blockchain_id to be not greater than max value' do
+      reg_group = build(:reg_group, blockchain_id: described_class::BLOCKCHAIN_ID_MAX + 1)
+      expect(reg_group).not_to be_valid
+    end
   end
 
   describe 'hooks' do
@@ -67,6 +77,12 @@ describe RegGroup do
     it 'runs set_name before validation' do
       expect(reg_group.name).to eq(reg_group.blockchain_id.to_s)
       expect(reg_group_w_name.name).to eq('test')
+    end
+  end
+
+  describe 'default_for' do
+    it 'returns default reg group for token' do
+      expect(described_class.default_for(create(:token, coin_type: :comakery))).to be_a(described_class)
     end
   end
 end

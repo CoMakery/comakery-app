@@ -28,7 +28,7 @@
     <div class="transfers-table__transfer__lockup_until">
       <label>allowed after date</label>
 
-      <%= transfer_rule.lockup_until.strftime("%b %e, %Y") %>
+      <%= transfer_rule.decorate.lockup_until_pretty %>
     </div>
 
     <% if policy(@project).edit_transfer_rules? %>

@@ -354,6 +354,7 @@ class TaskActionComponent extends React.Component {
           }
           actionAvailable={
             (task.status === 'ready') ||
+            (task.status === 'invite ready') ||
             (task.status === 'started') ||
             (task.status === 'submitted' && task.policies.review) ||
             (task.status === 'accepted' && !task.policies.pay && !task.contributor.walletPresent) ||
@@ -361,6 +362,9 @@ class TaskActionComponent extends React.Component {
           }
         >
           {task.status === 'ready' &&
+            <React.Fragment>Start Task</React.Fragment>
+          }
+          {task.status === 'invite ready' &&
             <React.Fragment>Start Task</React.Fragment>
           }
           {task.status === 'started' &&

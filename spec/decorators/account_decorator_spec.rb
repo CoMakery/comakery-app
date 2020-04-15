@@ -146,10 +146,12 @@ describe AccountDecorator do
   end
 
   describe 'wallet_address_link_for' do
-    let!(:account_w_wallet) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e') }
+    let!(:account_w_wallet) { create(:account, ethereum_wallet: '0x3551cd3a70e07b3484f20d9480e677243870d67e', bitcoin_wallet: 'msb86hf6ssyYkAJ8xqKUjmBEkbW3cWCdps') }
     let!(:account_wo_wallet) { create(:account, ethereum_wallet: nil) }
-    let!(:project_w_token) { build :project, token: create(:token, coin_type: 'eth') }
-    let!(:project_wo_token) { build :project, token: nil }
+    let!(:project_w_token) { create :project, token: create(:token, coin_type: 'eth', ethereum_network: :main) }
+    let!(:project_wo_token) { create :project, token: nil }
+    let!(:project_w_token_on_ropsten) { create :project, token: create(:token, coin_type: :comakery, ethereum_network: :ropsten) }
+    let!(:project_w_token_on_bitcoin_testnet) { create :project, token: create(:token, coin_type: :btc, blockchain_network: :bitcoin_testnet) }
 
     it 'returns link for wallet address if account has address for project token' do
       expect(account_w_wallet.decorate.wallet_address_link_for(project_w_token)).to include(account_w_wallet.ethereum_wallet)
@@ -159,6 +161,11 @@ describe AccountDecorator do
       expect(account_w_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('needs wallet')
       expect(account_wo_wallet.decorate.wallet_address_link_for(project_wo_token)).to eq('needs wallet')
       expect(account_wo_wallet.decorate.wallet_address_link_for(project_w_token)).to eq('needs wallet')
+    end
+
+    it 'returns link with correct network' do
+      expect(account_w_wallet.decorate.wallet_address_link_for(project_w_token_on_ropsten)).to include('ropsten')
+      expect(account_w_wallet.decorate.wallet_address_link_for(project_w_token_on_bitcoin_testnet)).to include('btc-testnet')
     end
   end
 

@@ -37,6 +37,7 @@ describe 'viewing projects, creating and editing', :js do
     fill_in 'project[maximum_tokens]', with: '1000'
     fill_in 'project[video_url]', with: 'https://www.youtube.com/watch?v=Dn3ZMhmmzK0'
     fill_in 'project[legal_project_owner]', with: 'Mindful Inc'
+    select 'Logged In Team Members (Project Slack/Discord channels, Admins, Emailed Award Recipients)', from: 'project[visibility]'
     attach_file 'project[square_image]', Rails.root.join('spec', 'fixtures', '1200.png')
     attach_file 'project[panoramic_image]', Rails.root.join('spec', 'fixtures', '1500.png')
     find_button('create', class: 'button__border').click

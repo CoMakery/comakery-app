@@ -8,4 +8,16 @@ class TransferRuleDecorator < Draper::Decorator
       "#{controller}-rule-lockup-until" => lockup_until.strftime('%b %e, %Y')
     }
   end
+
+  def lockup_until_pretty
+    if lockup_until.to_i > 100.years.from_now.to_i
+      '> 100 years'
+    elsif lockup_until.to_i == TransferRule::LOCKUP_UNTIL_MIN.to_i
+      '∞'
+    elsif lockup_until.to_i == TransferRule::LOCKUP_UNTIL_MIN.to_i + 1
+      'None'
+    else
+      lockup_until&.strftime('%b %e, %Y')
+    end
+  end
 end

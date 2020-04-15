@@ -25,7 +25,7 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def show?
-    ProjectPolicy.new(@account, @project).show? || @account.related_awards.where(id: @award.id).exists?
+    ProjectPolicy.new(@account, @project).show? || (@account && @account.related_awards.where(id: @award.id).exists?)
   end
 
   def edit?
@@ -37,7 +37,7 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def start?
-    @account && @account.accessable_awards.where(id: @award.id, status: 'ready').exists?
+    @award.status.in?(%w[ready invite_ready]) && (project_team_member? || @account&.accessable_awards&.where(id: @award.id)&.exists?)
   end
 
   def create?
@@ -58,5 +58,9 @@ class AwardPolicy < ApplicationPolicy
 
   def project_editable?
     ProjectPolicy.new(@account, @project).edit?
+  end
+
+  def project_team_member?
+    ProjectPolicy.new(@account, @project).team_member?
   end
 end

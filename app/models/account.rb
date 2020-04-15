@@ -89,6 +89,8 @@ class Account < ApplicationRecord
 
   before_save :reset_latest_verification, if: -> { will_save_change_to_first_name? || will_save_change_to_last_name? || will_save_change_to_date_of_birth? || will_save_change_to_country? }
 
+  after_create :populate_awards
+
   class << self
     def order_by_award(project)
       award_types = project.award_types.map(&:id).join(',')
@@ -213,7 +215,7 @@ class Account < ApplicationRecord
   end
 
   def related_award_types(project_scope = nil)
-    AwardType.where(project: related_projects(project_scope))
+    AwardType.where(project: related_projects(project_scope)).or(AwardType.where(project: award_projects))
   end
 
   def awards_matching_experience(project_scope = nil)
@@ -224,7 +226,7 @@ class Account < ApplicationRecord
   end
 
   def related_awards(project_scope = nil)
-    Award.where(award_type: related_award_types(project_scope)).where.not('awards.status = 0 AND awards.number_of_assignments_per_user <= (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
+    Award.where(award_type: related_award_types(project_scope)).where.not('awards.status IN (0, 7) AND awards.number_of_assignments_per_user <= (SELECT COUNT(*) FROM awards AS assignments WHERE (assignments.cloned_on_assignment_from_id = awards.id AND assignments.account_id = :id))', id: id)
   end
 
   def accessable_awards(project_scope = nil)
@@ -321,5 +323,11 @@ class Account < ApplicationRecord
 
   def reset_latest_verification
     self.latest_verification = nil
+  end
+
+  def populate_awards
+    Award.accepted.where(email: email, account_id: nil).find_each do |a|
+      a.update(account: self, email: nil)
+    end
   end
 end
