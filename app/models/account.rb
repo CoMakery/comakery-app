@@ -215,7 +215,7 @@ class Account < ApplicationRecord
   end
 
   def related_award_types(project_scope = nil)
-    AwardType.where(project: related_projects(project_scope))
+    AwardType.where(project: related_projects(project_scope)).or(AwardType.where(project: award_projects))
   end
 
   def awards_matching_experience(project_scope = nil)
