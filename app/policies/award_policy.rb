@@ -37,7 +37,7 @@ class AwardPolicy < ApplicationPolicy
   end
 
   def start?
-    @account && @account.accessable_awards.where(id: @award.id, status: %w[ready invite_ready]).exists?
+    @award.status.in?(%w[ready invite_ready]) && (project_team_member? || @account&.accessable_awards&.where(id: @award.id)&.exists?)
   end
 
   def create?
@@ -58,5 +58,9 @@ class AwardPolicy < ApplicationPolicy
 
   def project_editable?
     ProjectPolicy.new(@account, @project).edit?
+  end
+
+  def project_team_member?
+    ProjectPolicy.new(@account, @project).team_member?
   end
 end

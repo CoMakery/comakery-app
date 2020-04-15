@@ -246,4 +246,20 @@ describe AwardPolicy do
     specify { expect(described_class.new(create(:account), award).project_editable?).to be_falsey }
     specify { expect(described_class.new(nil, award).project_editable?).to be_falsey }
   end
+
+  describe 'project_team_member?' do
+    let!(:award) { create(:award) }
+
+    context 'for a team member' do
+      it 'returns true' do
+        expect(described_class.new(award.project.account, award).project_team_member?).to be_truthy
+      end
+    end
+
+    context 'for a non team member' do
+      it 'returns false' do
+        expect(described_class.new(nil, award).project_team_member?).to be_falsey
+      end
+    end
+  end
 end
