@@ -504,6 +504,8 @@ describe Account do
     let!(:teammate_project) { create(:project, account: teammate) }
     let!(:teammate_award_type) { create(:award_type, project: teammate_project) }
     let!(:teammate_award) { create(:award, award_type: teammate_award_type, issuer: teammate) }
+    let!(:awarded_project) { create(:award, account: account).project }
+    let!(:award_from_awarded_project) { create(:award, award_type: create(:award_type, project: awarded_project)) }
 
     before do
       team.build_authentication_team authentication
@@ -526,6 +528,10 @@ describe Account do
 
     it 'returns admin awards' do
       expect(account.accessable_awards).to include(admin_award)
+    end
+
+    it 'returns awards from awarded projects' do
+      expect(account.accessable_awards).to include(award_from_awarded_project)
     end
   end
 
