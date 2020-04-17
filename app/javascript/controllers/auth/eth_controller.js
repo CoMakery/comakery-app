@@ -48,7 +48,7 @@ export default class extends EthereumController {
   }
 
   get nonce() {
-    if (typeof this._nonce === 'undefined') {
+    if (!this.data.has('nonce')) {
       fetch(this.noncePath, {
         credentials: 'same-origin',
         method     : 'POST',
@@ -67,7 +67,7 @@ export default class extends EthereumController {
       }).then(response => {
         if (response.status === 200) {
           response.json().then(r => {
-            this._nonce = r.nonce
+            this.data.set('nonce', r.nonce)
           })
         } else {
           return false
@@ -75,7 +75,7 @@ export default class extends EthereumController {
       })
     }
 
-    return this._nonce
+    return this.data.get('nonce')
   }
 
   get authPath() {
