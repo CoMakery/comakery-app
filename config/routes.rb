@@ -123,6 +123,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :auth, defaults: { format: :json } do
+    resources :eth, only: [:new, :create]
+  end
+
   namespace :api, defaults: { format: :json } do
     resources :accounts, only: [:create] do
       collection do
