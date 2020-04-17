@@ -5,13 +5,13 @@ class Auth::EthController < ApplicationController
 
   # GET /auth/eth/new
   def new
-    @nonce = "Authentication Request ##{rand(9999)}-#{Time.current.in_milliseconds}"
+    @nonce = Comakery::Auth::Eth.random_stamp("Authentication Request")
     Rails.cache.write("auth_eth::nonce::#{auth_params[:public_address]}", @nonce, expires_in: 1.hour)
   end
 
   # POST /auth/eth
   def create
-    auth = Comakery::EthAuth.new(
+    auth = Comakery::Auth::Eth.new(
       Rails.cache.read("auth_eth::nonce::#{auth_params[:public_address]}"),
       auth_params[:signature],
       auth_params[:public_address]

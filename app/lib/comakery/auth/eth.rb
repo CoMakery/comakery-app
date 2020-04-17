@@ -1,5 +1,9 @@
-class Comakery::EthAuth
+class Comakery::Auth::Eth
   attr_reader :nonce, :signature, :public_address
+
+  def self.random_stamp(message)
+    "#{messsage} ##{rand(999999999999)}-#{Time.current.in_milliseconds}"
+  end
 
   def initialize(nonce, signature, public_address)
     @nonce = nonce

@@ -1,4 +1,4 @@
-import EthereumController from './ethereum_controller'
+import EthereumController from '../ethereum_controller'
 
 export default class extends EthereumController {
   async auth() {
