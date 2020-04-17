@@ -5,7 +5,7 @@ class Auth::EthController < ApplicationController
 
   # GET /auth/eth/new
   def new
-    @nonce = "Authentication Request #{Time.current.in_milliseconds}"
+    @nonce = "Authentication Request ##{rand(9999)}-#{Time.current.in_milliseconds}"
     Rails.cache.write("auth_eth::nonce::#{auth_params[:public_address]}", @nonce, expires_in: 1.hour)
   end
 
