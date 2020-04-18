@@ -2,10 +2,11 @@ class Auth::EthController < ApplicationController
   skip_before_action :require_login, :check_age, :require_build_profile
   skip_after_action :verify_authorized, :verify_policy_scoped
   before_action :redirect_if_signed_in
+  before_action :validate_auth_params
 
   # GET /auth/eth/new
   def new
-    @nonce = Comakery::Auth::Eth.random_stamp("Authentication Request")
+    @nonce = Comakery::Auth::Eth.random_stamp('Authentication Request ')
     Rails.cache.write("auth_eth::nonce::#{auth_params[:public_address]}", @nonce, expires_in: 1.hour)
   end
 
@@ -35,5 +36,9 @@ class Auth::EthController < ApplicationController
         :public_address,
         :signature
       )
+    end
+
+    def validate_auth_params
+      head 400 unless auth_params[:public_address] && Eth::Address.new(auth_params[:public_address]).valid?
     end
 end
