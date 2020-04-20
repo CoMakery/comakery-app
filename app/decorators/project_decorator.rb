@@ -114,6 +114,12 @@ class ProjectDecorator < Draper::Decorator
       show_transfers: !require_confidentiality?,
       supports_transfer_rules: supports_transfer_rules?,
       whitelabel: whitelabel,
+      github_url: github_url,
+      documentation_url: documentation_url,
+      getting_started_url: getting_started_url,
+      governance_url: governance_url,
+      funding_url: funding_url,
+      video_conference_url: video_conference_url,
       present: true
     }
   end
