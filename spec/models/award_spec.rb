@@ -346,11 +346,10 @@ describe Award do
       expect(a).not_to be_valid
     end
 
-    it 'requires submission fields when in submitted status' do
+    it 'submission comment is not required' do
       a = create(:award_ready)
       a.update(status: 'submitted', account: create(:account))
-      expect(a).not_to be_valid
-      expect(a.errors.full_messages).to eq(["Submission comment can't be blank"])
+      expect(a).to be_valid
     end
 
     it 'requires submission_url to include protocol' do

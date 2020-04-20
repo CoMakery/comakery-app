@@ -1999,7 +1999,7 @@ input.button--right-space {
 }
 
 .input-field__description-middle .input-field--content__text {
-  height: 70px;
+  height: 150px;
   resize: none;
 }
 
@@ -4098,6 +4098,7 @@ input.button--right-space {
 }
 
 .project-skill-container {
+  margin: auto;
   margin-top: 40px;
   box-sizing: border-box;
   max-width: 680px;
