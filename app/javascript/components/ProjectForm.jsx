@@ -81,6 +81,12 @@ class ProjectForm extends React.Component {
       'project[description]'            : this.props.project.description || '',
       'project[maximum_tokens]'         : this.props.project.maximumTokens || '',
       'project[video_url]'              : this.props.project.videoUrl || '',
+      'project[github_url]'             : this.props.project.githubUrl || '',
+      'project[documentation_url]'      : this.props.project.documentationUrl || '',
+      'project[getting_started_url]'    : this.props.project.gettingStartedUrl || '',
+      'project[governance_url]'         : this.props.project.governanceUrl || '',
+      'project[funding_url]'            : this.props.project.fundingUrl || '',
+      'project[video_conference_url]'   : this.props.project.videoConferenceUrl || '',
       'project[legal_project_owner]'    : this.props.project.legalProjectOwner || '',
       'project[exclusive_contributions]': this.props.project.exclusiveContributions ? 'true' : 'false',
       'project[confidentiality]'        : this.props.project.confidentiality ? 'true' : 'false',
@@ -375,7 +381,62 @@ class ProjectForm extends React.Component {
               name="project[video_url]"
               value={this.state['project[video_url]']}
               errorText={this.state.errors['project[video_url]']}
-              placeholder="Paste in a link to a YouTube or Vimeo video detailing the project"
+              placeholder="Link to a YouTube or Vimeo video describing the project"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="getting started url"
+              recommended
+              name="project[getting_started_url]"
+              value={this.state['project[getting_started_url]']}
+              errorText={this.state.errors['project[getting_started_url]']}
+              placeholder="Link to how to get started with your project"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="github project url"
+              name="project[github_url]"
+              value={this.state['project[github_url]']}
+              errorText={this.state.errors['project[github_url]']}
+              placeholder="Link to a GitHub repository"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="documentation url"
+              name="project[documentation_url]"
+              value={this.state['project[documentation_url]']}
+              errorText={this.state.errors['project[documentation_url]']}
+              placeholder="Link to your projects documentation"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="governance url"
+              name="project[governance_url]"
+              value={this.state['project[governance_url]']}
+              errorText={this.state.errors['project[governance_url]']}
+              placeholder="Link to your project governance (e.g. Loomio.com or DAOstack.io"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="funding url"
+              name="project[funding_url]"
+              value={this.state['project[funding_url]']}
+              errorText={this.state.errors['project[funding_url]']}
+              placeholder="Link to your funding (e.g. Open Collective or a DAO funding url)"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="video conference url"
+              name="project[video_conference_url]"
+              value={this.state['project[video_conference_url]']}
+              errorText={this.state.errors['project[video_conference_url]']}
+              placeholder="Link to your teams video conference url"
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
@@ -549,61 +610,61 @@ class ProjectForm extends React.Component {
               symbolLimit={0}
             />
 
-            {/*<div className="project-form--form--terms--header">*/}
-            {/*  TERMS & CONDITIONS*/}
-            {/*</div>*/}
+            {/* <div className="project-form--form--terms--header"> */}
+            {/*  TERMS & CONDITIONS */}
+            {/* </div> */}
 
-            {/*<div className="project-form--form--terms--content">*/}
-            {/*  <InputFieldInline*/}
-            {/*    required*/}
-            {/*    readOnly={this.props.termsReadonly}*/}
-            {/*    name="project[legal_project_owner]"*/}
-            {/*    value={this.state['project[legal_project_owner]']}*/}
-            {/*    errorText={this.state.errors['project[legalProjectOwner]']}*/}
-            {/*    placeholder="Provide a legal entity or individual owner's name"*/}
-            {/*    eventHandler={this.handleFieldChange}*/}
-            {/*  />*/}
+            {/* <div className="project-form--form--terms--content"> */}
+            {/*  <InputFieldInline */}
+            {/*    required */}
+            {/*    readOnly={this.props.termsReadonly} */}
+            {/*    name="project[legal_project_owner]" */}
+            {/*    value={this.state['project[legal_project_owner]']} */}
+            {/*    errorText={this.state.errors['project[legalProjectOwner]']} */}
+            {/*    placeholder="Provide a legal entity or individual owner's name" */}
+            {/*    eventHandler={this.handleFieldChange} */}
+            {/*  /> */}
 
-            {/*  { !this.props.isWhitelabel &&*/}
-            {/*    <React.Fragment>*/}
-            {/*      ("You", the "Project Owner") agree to the <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>*/}
-            {/*      <br />*/}
+            {/*  { !this.props.isWhitelabel && */}
+            {/*    <React.Fragment> */}
+            {/*      ("You", the "Project Owner") agree to the <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a> */}
+            {/*      <br /> */}
 
-            {/*      You agree that for this Project, Contributions are <InputFieldDropdownInline*/}
-            {/*        required*/}
-            {/*        disabled={this.props.termsReadonly}*/}
-            {/*        name="project[exclusive_contributions]"*/}
-            {/*        value={this.state['project[exclusive_contributions]']}*/}
-            {/*        errorText={this.state.errors['project[exclusiveContributions]']}*/}
-            {/*        eventHandler={this.handleFieldChange}*/}
-            {/*        selectEntries={Object.entries({*/}
-            {/*          'Exclusive'    : 'true',*/}
-            {/*          'Not Exclusive': 'false'*/}
-            {/*        })}*/}
-            {/*      />*/}
-            {/*      <br />*/}
+            {/*      You agree that for this Project, Contributions are <InputFieldDropdownInline */}
+            {/*        required */}
+            {/*        disabled={this.props.termsReadonly} */}
+            {/*        name="project[exclusive_contributions]" */}
+            {/*        value={this.state['project[exclusive_contributions]']} */}
+            {/*        errorText={this.state.errors['project[exclusiveContributions]']} */}
+            {/*        eventHandler={this.handleFieldChange} */}
+            {/*        selectEntries={Object.entries({ */}
+            {/*          'Exclusive'    : 'true', */}
+            {/*          'Not Exclusive': 'false' */}
+            {/*        })} */}
+            {/*      /> */}
+            {/*      <br /> */}
 
-            {/*      Project confidentiality and business confidentiality are <InputFieldDropdownInline*/}
-            {/*        required*/}
-            {/*        disabled={this.props.termsReadonly}*/}
-            {/*        name="project[confidentiality]"*/}
-            {/*        value={this.state['project[confidentiality]']}*/}
-            {/*        errorText={this.state.errors['project[confidentiality]']}*/}
-            {/*        eventHandler={this.handleFieldChange}*/}
-            {/*        selectEntries={Object.entries({*/}
-            {/*          'Required'    : 'true',*/}
-            {/*          'Not Required': 'false'*/}
-            {/*        })}*/}
-            {/*      /> and at the time that you indicate a Task is complete you agree to pay the Contributor the Award for the Task.*/}
-            {/*      <br />*/}
+            {/*      Project confidentiality and business confidentiality are <InputFieldDropdownInline */}
+            {/*        required */}
+            {/*        disabled={this.props.termsReadonly} */}
+            {/*        name="project[confidentiality]" */}
+            {/*        value={this.state['project[confidentiality]']} */}
+            {/*        errorText={this.state.errors['project[confidentiality]']} */}
+            {/*        eventHandler={this.handleFieldChange} */}
+            {/*        selectEntries={Object.entries({ */}
+            {/*          'Required'    : 'true', */}
+            {/*          'Not Required': 'false' */}
+            {/*        })} */}
+            {/*      /> and at the time that you indicate a Task is complete you agree to pay the Contributor the Award for the Task. */}
+            {/*      <br /> */}
 
-            {/*      By {this.state.formAction === 'POST' ? 'creating this Project (clicking CREATE & CLOSE or CREATE)' : 'updating this Project (clicking SAVE & CLOSE or SAVE)'}, you agree to these Terms & Conditions.*/}
-            {/*      <br />*/}
+            {/*      By {this.state.formAction === 'POST' ? 'creating this Project (clicking CREATE & CLOSE or CREATE)' : 'updating this Project (clicking SAVE & CLOSE or SAVE)'}, you agree to these Terms & Conditions. */}
+            {/*      <br /> */}
 
-            {/*      You may modify these Terms & Conditions until the first Project Task has been started by a Contributor.*/}
-            {/*    </React.Fragment>*/}
-            {/*  }*/}
-            {/*</div>*/}
+            {/*      You may modify these Terms & Conditions until the first Project Task has been started by a Contributor. */}
+            {/*    </React.Fragment> */}
+            {/*  } */}
+            {/* </div> */}
 
           </form>
         </ProjectSetup>

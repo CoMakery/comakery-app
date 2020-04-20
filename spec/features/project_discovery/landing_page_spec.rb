@@ -51,34 +51,4 @@ describe 'landing page' do
     expect(page.all('.project').size).to eq(0)
     expect(page.current_path).to eq('/accounts/new')
   end
-
-  it 'when optional project links are configured they should be displayed on the project landing page' do
-    project = create(:project, title: 'Project',
-                               visibility: 'member',
-                               account: account1)
-
-    login(account1)
-    visit project_path(project)
-    expect(page).not_to have_content 'GitHub'
-    expect(page).not_to have_content 'Documentation'
-    expect(page).not_to have_content 'Getting Started'
-    expect(page).not_to have_content 'Governance'
-    expect(page).not_to have_content 'Funding'
-    expect(page).not_to have_content 'Video Conference'
-
-    project.update_attributes github_url: 'https://www.github.com/comakery',
-                              documentation_url: 'https://www.wiki.com/example',
-                              getting_started_url: 'https://drive.google.com/example',
-                              governance_url: 'https://loomio.org/example',
-                              funding_url: 'https://opencollective.org/example',
-                              video_conference_url: 'https://loomio.org/example'
-
-    visit project_path(project)
-    expect(page).to have_link 'GitHub', href: 'https://www.github.com/comakery'
-    expect(page).to have_link 'Documentation', href: 'https://www.wiki.com/example'
-    expect(page).to have_link 'Getting Started', href: 'https://drive.google.com/example'
-    expect(page).to have_link 'Governance', href: 'https://loomio.org/example'
-    expect(page).to have_link 'Funding', href: 'https://opencollective.org/example'
-    expect(page).to have_link 'Video Conference', href: 'https://loomio.org/example'
-  end
 end
