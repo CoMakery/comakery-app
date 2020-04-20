@@ -1048,7 +1048,7 @@ exports[`ProjectForm renders correctly without props 1`] = `
                 <InputFieldWhiteDark
                   eventHandler={[Function]}
                   name="project[governance_url]"
-                  placeholder="Link to your project governance (e.g. Loomio.com or DAOstack.io"
+                  placeholder="Link to your project governance (e.g. Loomio.com or DAOstack.io)"
                   symbolLimit={0}
                   title="governance url"
                   value=""
