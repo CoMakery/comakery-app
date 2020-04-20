@@ -295,7 +295,7 @@ class TaskShow extends React.Component {
 
             <div className="task-award-form--form--field">
               <div className="task-award-form--form--field--title">
-                {`total award amount (${this.props.token.symbol ? this.props.token.symbol : 'TOKEN NOT SPECIFIED'})`}
+                {`total award amount (${this.props.token.symbol ? this.props.token.symbol : 'POINTS - TOKEN NOT SPECIFIED'})`}
               </div>
               <div className="task-award-form--form--field--value">
                 {
