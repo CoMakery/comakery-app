@@ -3977,8 +3977,8 @@ input.button--right-space {
 
 .project-description__video__iframe {
   margin: auto;
-  width: 640px;
-  height: 360px;
+  width: 680px;
+  height: 382px;
 }
 
 @media screen and (max-width: 815px) {
@@ -4003,7 +4003,6 @@ input.button--right-space {
   .project-description__text {
     width: 100%;
     padding: 0;
-    font-size: 16px;
     margin-bottom: 20px;
   }
 }
@@ -4068,7 +4067,6 @@ input.button--right-space {
   max-width: 1440px;
   margin: auto;
   width: 100%;
-  padding: 60px 345px;
 }
 
 .project-skills__title {
@@ -4086,7 +4084,7 @@ input.button--right-space {
 
 .project-skills__subtitle {
   font-family: Georgia, sans-serif;
-  font-size: 16px;
+  font-size: 21px;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -4109,7 +4107,6 @@ input.button--right-space {
 
 .project-skill__background {
   position: relative;
-  width: 100%;
   //width: 680px;
   height: auto;
 }
@@ -4187,10 +4184,6 @@ input.button--right-space {
     margin-bottom: 15px;
   }
 
-  .project-skills__subtitle {
-    font-size: 12px;
-  }
-
   .project-skill__background__img {
     //height: 80px;
   }
@@ -4219,12 +4212,6 @@ input.button--right-space {
   //.project-skills {
   //  padding: 80px 30px 60px 30px;
   //}
-
-  .project-skills__subtitle {
-    font-size: 16px;
-    line-height: 1.63;
-    margin: 0 0 40px 0;
-  }
 
   .project-skill__background__img {
     //height: 125px;

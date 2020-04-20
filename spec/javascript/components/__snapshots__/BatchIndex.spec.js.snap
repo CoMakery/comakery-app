@@ -123,7 +123,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-bdVaJa",
                         "isStatic": false,
-                        "lastClassName": "ezfsJd",
+                        "lastClassName": "dzrTPI",
                         "rules": Array [
                           "
   font-size: 16px;
@@ -164,7 +164,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-bdVaJa ezfsJd"
+                    className="sc-bdVaJa dzrTPI"
                   >
                     <styled.div>
                       <StyledComponent
@@ -175,13 +175,12 @@ exports[`BatchIndex renders correctly without props 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-bwzfXH",
                               "isStatic": true,
-                              "lastClassName": "fFBqGW",
+                              "lastClassName": "iAeZeg",
                               "rules": Array [
                                 "
   display: flex;
-  flex-direction: row;
+  flex-flow: row;
   justify-content: space-between;
-  flex-wrap: wrap;
   margin: 0.7em;
 
   @media (max-width: 1024px) {
@@ -203,7 +202,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-bwzfXH fFBqGW"
+                          className="sc-bwzfXH iAeZeg"
                         />
                       </StyledComponent>
                     </styled.div>
