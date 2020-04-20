@@ -22,11 +22,11 @@ describe('BatchForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDescriptionMiddle[title="the goal of the batch"][required][name="batch[goal]"]'
+      'InputFieldDescriptionMiddle[title="the goal of the batch"][name="batch[goal]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDescription[title="description"][required][name="batch[description]"]'
+      'InputFieldDescription[title="description"][name="batch[description]"]'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -55,11 +55,11 @@ describe('BatchForm', () => {
     ).props().value).toBe('Batch name')
 
     expect(wrapper.find(
-      'InputFieldDescriptionMiddle[title="the goal of the batch"][required][name="batch[goal]"]'
+      'InputFieldDescriptionMiddle[title="the goal of the batch"][name="batch[goal]"]'
     ).props().value).toBe('Batch goal')
 
     expect(wrapper.find(
-      'InputFieldDescription[title="description"][required][name="batch[description]"]'
+      'InputFieldDescription[title="description"][name="batch[description]"]'
     ).props().value).toBe('Batch description')
   })
 
@@ -131,7 +131,7 @@ describe('BatchForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldDescription[errorText="description error"][title="description"][required][name="batch[description]"]'
+      'InputFieldDescription[errorText="description error"][title="description"][name="batch[description]"]'
     )).toBe(true)
   })
 })

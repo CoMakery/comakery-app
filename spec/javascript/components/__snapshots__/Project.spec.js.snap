@@ -249,11 +249,7 @@ exports[`Project renders correctly without props 1`] = `
     >
       <div
         className="project-description__video"
-      >
-        <img
-          width="100%"
-        />
-      </div>
+      />
       <div
         className="project-description__text"
       >
