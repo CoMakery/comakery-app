@@ -182,6 +182,36 @@ class ProjectSetupHeader extends React.Component {
                   transfer rules
                 </NavLink>
               }
+              {project.githubUrl &&
+                <NavLink current={false} href={project.githubUrl}>
+                  GitHub
+                </NavLink>
+              }
+              {project.documentationUrl &&
+                <NavLink current={false} href={project.documentationUrl}>
+                  Documentation
+                </NavLink>
+              }
+              {project.gettingStartedUrl &&
+                <NavLink current={false} href={project.gettingStartedUrl}>
+                  Getting Started
+                </NavLink>
+              }
+              {project.governanceUrl &&
+                <NavLink current={false} href={project.governanceUrl}>
+                  Governance
+                </NavLink>
+              }
+              {project.fundingUrl &&
+                <NavLink current={false} href={project.fundingUrl}>
+                  Funding
+                </NavLink>
+              }
+              {project.videoConferenceUrl &&
+                <NavLink current={false} href={project.videoConferenceUrl}>
+                  Video Conference
+                </NavLink>
+              }
             </ProjectNav>
           }
         </Navigation>
@@ -221,7 +251,13 @@ ProjectSetupHeader.defaultProps = {
     owner          : '',
     showBatches    : true,
     showTransfers  : true,
-    present        : true
+    present        : true,
+    githubUrl      : '',
+    documentationUrl: '',
+    gettingStartedUrl: '',
+    governanceUrl: '',
+    fundingUrl: '',
+    videoConferenceUrl: ''
   },
   owner   : true,
   current : '',
