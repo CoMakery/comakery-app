@@ -418,7 +418,7 @@ class ProjectForm extends React.Component {
               name="project[governance_url]"
               value={this.state['project[governance_url]']}
               errorText={this.state.errors['project[governance_url]']}
-              placeholder="Link to your project governance (e.g. Loomio.com or DAOstack.io"
+              placeholder="Link to your project governance (e.g. Loomio.com or DAOstack.io)"
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
