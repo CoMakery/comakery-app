@@ -51,7 +51,7 @@
       }
     )%>
 
-    <%= render partial: 'layouts/project_search_form' unless @whitelabel_mission %>
+    <%= render partial: 'layouts/project_search_form' unless @whitelabel_mission || @skip_search_box %>
 
     <div class="react-container">
       <%= react_component(

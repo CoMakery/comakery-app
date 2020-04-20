@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import ProjectSetup from './layouts/ProjectSetup'
 import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
-import InputFieldDescription from './styleguide/InputFieldDescription'
-import InputFieldDescriptionLarge from './styleguide/InputFieldDescriptionLarge'
+import InputFieldDescriptionMiddle from './styleguide/InputFieldDescriptionMiddle'
 import InputFieldUploadFile from './styleguide/InputFieldUploadFile'
 import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import Button from './styleguide/Button'
@@ -216,17 +215,41 @@ class TaskForm extends React.Component {
               symbolLimit={100}
             />
 
-            <InputFieldDescription
+            <InputFieldWhiteDark
+              title={`award amount (${this.props.token.symbol || 'points - no token'})`}
+              required
+              name="task[amount]"
+              value={this.state['task[amount]']}
+              errorText={this.state.errors['task[amount]']}
+              eventHandler={this.handleFieldChange}
+              type="number"
+              min="0"
+              step={`${1.0 / (10 ** this.props.token.decimalPlaces)}`}
+              placeholder="The total amount of tokens or coins you are paying for this task to be completed"
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="URL where to submit completed work"
+              name="task[proof_link]"
+              value={this.state['task[proof_link]']}
+              errorText={this.state.errors['task[proofLink]']}
+              eventHandler={this.handleFieldChange}
+              placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
+              symbolLimit={150}
+            />
+
+            <InputFieldDescriptionMiddle
               title="WHAT IS THE EXPECTED BENEFIT"
               name="task[why]"
               value={this.state['task[why]']}
               errorText={this.state.errors['task[why]']}
               eventHandler={this.handleFieldChange}
-              placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
+              placeholder="Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
               symbolLimit={500}
             />
 
-            <InputFieldDescriptionLarge
+            <InputFieldDescriptionMiddle
               title="acceptance requirements"
               name="task[requirements]"
               value={this.state['task[requirements]']}
@@ -236,7 +259,7 @@ class TaskForm extends React.Component {
               symbolLimit={1000}
             />
 
-            <InputFieldDescriptionLarge
+            <InputFieldDescriptionMiddle
               title="description"
               name="task[description]"
               value={this.state['task[description]']}
@@ -263,6 +286,8 @@ class TaskForm extends React.Component {
               />
             }
 
+            <h2>Advanced</h2>
+
             <InputFieldDropdown
               title="specialty"
               required
@@ -282,20 +307,6 @@ class TaskForm extends React.Component {
               errorText={this.state.errors['task[experienceLevel]']}
               eventHandler={this.handleFieldChange}
               selectEntries={Object.entries(this.props.experienceLevels)}
-              symbolLimit={0}
-            />
-
-            <InputFieldWhiteDark
-              title={`award amount (${this.props.token.symbol || 'no token'})`}
-              required
-              name="task[amount]"
-              value={this.state['task[amount]']}
-              errorText={this.state.errors['task[amount]']}
-              eventHandler={this.handleFieldChange}
-              type="number"
-              min="0"
-              step={`${1.0 / (10 ** this.props.token.decimalPlaces)}`}
-              placeholder="The total amount of tokens or coins you are paying for this task to be completed"
               symbolLimit={0}
             />
 
@@ -340,16 +351,6 @@ class TaskForm extends React.Component {
               step="1"
               placeholder="10"
               symbolLimit={0}
-            />
-
-            <InputFieldWhiteDark
-              title="URL where to submit completed work"
-              name="task[proof_link]"
-              value={this.state['task[proof_link]']}
-              errorText={this.state.errors['task[proofLink]']}
-              eventHandler={this.handleFieldChange}
-              placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
-              symbolLimit={150}
             />
 
             <input

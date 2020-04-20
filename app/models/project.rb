@@ -35,7 +35,7 @@ class Project < ApplicationRecord
   enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
   enum status: %i[active passive]
 
-  validates :description, :account, :title, :legal_project_owner, presence: true
+  validates :description, :account, :title, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
   validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
   validates :maximum_tokens, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true

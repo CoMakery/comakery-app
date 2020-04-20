@@ -166,7 +166,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-bdVaJa",
                         "isStatic": false,
-                        "lastClassName": "ezfsJd",
+                        "lastClassName": "cEejpX",
                         "rules": Array [
                           "
   font-size: 16px;
@@ -207,7 +207,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-bdVaJa ezfsJd"
+                    className="sc-bdVaJa cEejpX"
                   >
                     <styled.div>
                       <StyledComponent
@@ -218,13 +218,12 @@ exports[`BatchForm renders correctly without props 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-bwzfXH",
                               "isStatic": true,
-                              "lastClassName": "fFBqGW",
+                              "lastClassName": "iAeZeg",
                               "rules": Array [
                                 "
   display: flex;
-  flex-direction: row;
+  flex-flow: row;
   justify-content: space-between;
-  flex-wrap: wrap;
   margin: 0.7em;
 
   @media (max-width: 1024px) {
@@ -246,7 +245,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-bwzfXH fFBqGW"
+                          className="sc-bwzfXH iAeZeg"
                         />
                       </StyledComponent>
                     </styled.div>
@@ -572,7 +571,6 @@ exports[`BatchForm renders correctly without props 1`] = `
                   eventHandler={[Function]}
                   name="batch[goal]"
                   placeholder="Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)"
-                  required={true}
                   symbolLimit={250}
                   title="the goal of the batch"
                   value=""
@@ -597,7 +595,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                     placeholder="Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)"
                     readOnly={false}
                     recommended={false}
-                    required={true}
+                    required={false}
                     selectEntries={Array []}
                     step=""
                     symbolLimit={250}
@@ -619,7 +617,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--required"
                         >
-                          required
+                          optional
                         </span>
                         <span
                           className="input-field--title--counter"
@@ -639,7 +637,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                           pattern=".*"
                           placeholder="Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)"
                           readOnly={false}
-                          required={true}
+                          required={false}
                           value=""
                         />
                       </div>
@@ -650,7 +648,6 @@ exports[`BatchForm renders correctly without props 1`] = `
                   eventHandler={[Function]}
                   name="batch[description]"
                   placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
-                  required={true}
                   symbolLimit={750}
                   title="description"
                   value=""
@@ -675,7 +672,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                     placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
                     readOnly={false}
                     recommended={false}
-                    required={true}
+                    required={false}
                     selectEntries={Array []}
                     step=""
                     symbolLimit={750}
@@ -697,7 +694,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                         <span
                           className="input-field--title--required"
                         >
-                          required
+                          optional
                         </span>
                         <span
                           className="input-field--title--counter"
@@ -717,7 +714,7 @@ exports[`BatchForm renders correctly without props 1`] = `
                           pattern=".*"
                           placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
                           readOnly={false}
-                          required={true}
+                          required={false}
                           value=""
                         />
                       </div>

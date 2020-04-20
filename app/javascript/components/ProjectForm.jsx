@@ -81,6 +81,12 @@ class ProjectForm extends React.Component {
       'project[description]'            : this.props.project.description || '',
       'project[maximum_tokens]'         : this.props.project.maximumTokens || '',
       'project[video_url]'              : this.props.project.videoUrl || '',
+      'project[github_url]'             : this.props.project.githubUrl || '',
+      'project[documentation_url]'      : this.props.project.documentationUrl || '',
+      'project[getting_started_url]'    : this.props.project.gettingStartedUrl || '',
+      'project[governance_url]'         : this.props.project.governanceUrl || '',
+      'project[funding_url]'            : this.props.project.fundingUrl || '',
+      'project[video_conference_url]'   : this.props.project.videoConferenceUrl || '',
       'project[legal_project_owner]'    : this.props.project.legalProjectOwner || '',
       'project[exclusive_contributions]': this.props.project.exclusiveContributions ? 'true' : 'false',
       'project[confidentiality]'        : this.props.project.confidentiality ? 'true' : 'false',
@@ -310,17 +316,6 @@ class ProjectForm extends React.Component {
               />
             }
 
-            <InputFieldDropdown
-              title="token"
-              name="project[token_id]"
-              value={this.state['project[token_id]'] ? this.state['project[token_id]'].toString() : null}
-              errorText={this.state.errors['project[token_id]']}
-              disabled={this.state.disabled['project[token_id]']}
-              eventHandler={this.handleFieldChange}
-              selectEntries={Object.entries(this.props.tokens)}
-              symbolLimit={0}
-            />
-
             <InputFieldWhiteDark
               title="title"
               required
@@ -341,79 +336,6 @@ class ProjectForm extends React.Component {
               placeholder="Explain the outline and goal of the project, and why people should be excited about helping to execute the vision"
               eventHandler={this.handleFieldChange}
               symbolLimit={20000}
-            />
-
-            <InputFieldWhiteDark
-              title="narrated video overview"
-              recommended
-              name="project[video_url]"
-              value={this.state['project[video_url]']}
-              errorText={this.state.errors['project[video_url]']}
-              placeholder="Paste in a link to a YouTube or Vimeo video detailing the project"
-              eventHandler={this.handleFieldChange}
-              symbolLimit={0}
-            />
-
-            <InputFieldWhiteDark
-              title="total budget"
-              name="project[maximum_tokens]"
-              value={this.state['project[maximum_tokens]'] ? this.state['project[maximum_tokens]'].toString() : ''}
-              errorText={this.state.errors['project[maximum_tokens]']}
-              placeholder="Provide the budget for completing the entire project"
-              pattern="\d+"
-              eventHandler={this.handleFieldChange}
-              type="number"
-              min="0"
-              step={`${1.0 / (10 ** (this.props.decimalPlaces.find(t => t.id.toString() === this.state['project[token_id]'].toString()) ? this.props.decimalPlaces.find(t => t.id.toString() === this.state['project[token_id]'].toString()).decimal_places : 0))}`}
-              symbolLimit={0}
-            />
-
-            <InputFieldDropdown
-              title="project visibility"
-              required
-              name="project[visibility]"
-              value={this.state['project[visibility]']}
-              errorText={this.state.errors['project[visibility]']}
-              disabled={this.state.disabled['project[visibility]']}
-              eventHandler={this.handleFieldChange}
-              selectEntries={Object.entries(this.state.visibilitiesPretty)}
-              symbolLimit={0}
-            />
-
-            <InputFieldWhiteDark
-              title="project url"
-              required
-              readOnly
-              copyOnClick
-              name="project[url]"
-              value={this.state['project[url]']}
-              errorText={this.state.errors['project[url]']}
-              eventHandler={this.handleFieldChange}
-              symbolLimit={0}
-            />
-
-            <InputFieldDropdown
-              title="awards visibility"
-              required
-              name="project[require_confidentiality]"
-              value={this.state['project[require_confidentiality]']}
-              errorText={this.state.errors['project[require_confidentiality]']}
-              disabled={this.state.disabled['project[require_confidentiality]']}
-              eventHandler={this.handleFieldChange}
-              selectEntries={Object.entries(this.state.awardVisibilitiesPretty)}
-              symbolLimit={0}
-            />
-
-            <InputFieldDropdown
-              title="display team on project page"
-              required
-              name="project[display_team]"
-              value={this.state['project[display_team]']}
-              errorText={this.state.errors['project[displayTeam]']}
-              disabled={this.state.disabled['project[display_team]']}
-              eventHandler={this.handleFieldChange}
-              selectEntries={Object.entries({'Yes': 'true', 'No': 'false'})}
-              symbolLimit={0}
             />
 
             <InputFieldUploadFile
@@ -452,158 +374,297 @@ class ProjectForm extends React.Component {
               readOnly
             />
 
+            <h2>Links</h2>
+            <InputFieldWhiteDark
+              title="narrated video overview"
+              recommended
+              name="project[video_url]"
+              value={this.state['project[video_url]']}
+              errorText={this.state.errors['project[video_url]']}
+              placeholder="Link to a YouTube or Vimeo video describing the project"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="getting started url"
+              recommended
+              name="project[getting_started_url]"
+              value={this.state['project[getting_started_url]']}
+              errorText={this.state.errors['project[getting_started_url]']}
+              placeholder="Link to how to get started with your project"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="github project url"
+              name="project[github_url]"
+              value={this.state['project[github_url]']}
+              errorText={this.state.errors['project[github_url]']}
+              placeholder="Link to a GitHub repository"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="documentation url"
+              name="project[documentation_url]"
+              value={this.state['project[documentation_url]']}
+              errorText={this.state.errors['project[documentation_url]']}
+              placeholder="Link to your projects documentation"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="governance url"
+              name="project[governance_url]"
+              value={this.state['project[governance_url]']}
+              errorText={this.state.errors['project[governance_url]']}
+              placeholder="Link to your project governance (e.g. Loomio.com or DAOstack.io)"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="funding url"
+              name="project[funding_url]"
+              value={this.state['project[funding_url]']}
+              errorText={this.state.errors['project[funding_url]']}
+              placeholder="Link to your funding (e.g. Open Collective or a DAO funding url)"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <InputFieldWhiteDark
+              title="video conference url"
+              name="project[video_conference_url]"
+              value={this.state['project[video_conference_url]']}
+              errorText={this.state.errors['project[video_conference_url]']}
+              placeholder="Link to your teams video conference url"
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
+            <h2>Tokens</h2>
+
+            <InputFieldDropdown
+              title="token"
+              name="project[token_id]"
+              value={this.state['project[token_id]'] ? this.state['project[token_id]'].toString() : null}
+              errorText={this.state.errors['project[token_id]']}
+              disabled={this.state.disabled['project[token_id]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.props.tokens)}
+              symbolLimit={0}
+            />
+
+            <InputFieldWhiteDark
+              title="total budget"
+              name="project[maximum_tokens]"
+              value={this.state['project[maximum_tokens]'] ? this.state['project[maximum_tokens]'].toString() : ''}
+              errorText={this.state.errors['project[maximum_tokens]']}
+              placeholder="Provide the budget for completing the entire project"
+              pattern="\d+"
+              eventHandler={this.handleFieldChange}
+              type="number"
+              min="0"
+              step={`${1.0 / (10 ** (this.props.decimalPlaces.find(t => t.id.toString() === this.state['project[token_id]'].toString()) ? this.props.decimalPlaces.find(t => t.id.toString() === this.state['project[token_id]'].toString()).decimal_places : 0))}`}
+              symbolLimit={0}
+            />
             { !this.props.isWhitelabel &&
-              <React.Fragment>
-                <div className="project-form--form--channels--header">
-                  COMMUNICATION CHANNELS
-                </div>
+            <React.Fragment>
+              <h2>Communication Channels</h2>
 
-                {this.props.teams.length > 0 && this.state['project[channels]'].map((c, i) =>
-                  <div className="project-form--form--channels--channel" key={i}>
-                    <input
-                      type="hidden"
-                      name={`project[channels_attributes][${c.id}][id]`}
-                      value={c.new ? '' : c.id}
+              {this.props.teams.length > 0 && this.state['project[channels]'].map((c, i) =>
+                <div className="project-form--form--channels--channel" key={i}>
+                  <input
+                    type="hidden"
+                    name={`project[channels_attributes][${c.id}][id]`}
+                    value={c.new ? '' : c.id}
+                  />
+
+                  {!c.destroy && !c.new &&
+                  <React.Fragment>
+                    <InputFieldWhiteDark
+                      required
+                      disabled
+                      className="project-form--form--channels--channel--select"
+                      title="channel"
+                      name={`project[channels_attributes][${c.id}][channel_id]`}
+                      value={c.nameWithProvider}
+                      symbolLimit={0}
+                      style={{'opacity': '0.7', 'cursor': 'not-allowed'}}
                     />
+                    <div className="project-form--form--channels--channel--del" onClick={(e) => this.destroyChannel(e, i)}>
+                      <Icon name="iconTrash.svg" />
+                    </div>
+                  </React.Fragment>
+                  }
 
-                    {!c.destroy && !c.new &&
-                      <React.Fragment>
-                        <InputFieldWhiteDark
-                          required
-                          disabled
-                          className="project-form--form--channels--channel--select"
-                          title="channel"
-                          name={`project[channels_attributes][${c.id}][channel_id]`}
-                          value={c.nameWithProvider}
-                          symbolLimit={0}
-                          style={{'opacity': '0.7', 'cursor': 'not-allowed'}}
-                        />
-                        <div className="project-form--form--channels--channel--del" onClick={(e) => this.destroyChannel(e, i)}>
-                          <Icon name="iconTrash.svg" />
-                        </div>
-                      </React.Fragment>
-                    }
+                  {!c.destroy && c.new &&
+                  <React.Fragment>
+                    <InputFieldDropdownHalfed
+                      required
+                      className="project-form--form--channels--channel--select"
+                      title="team or guild"
+                      name={`project[channels_attributes][${c.id}][team_id]`}
+                      value={this.state['project[channels]'][i].teamId}
+                      eventHandler={(e) => this.handleChannelFieldChange(e, i)}
+                      selectEntries={this.props.teams.map(t => [t.team, t.teamId])}
+                    />
+                    <InputFieldDropdownHalfed
+                      required
+                      className="project-form--form--channels--channel--select"
+                      title="channel"
+                      name={`project[channels_attributes][${c.id}][channel_id]`}
+                      value={this.state['project[channels]'][i].channelId}
+                      eventHandler={(e) => this.handleChannelFieldChange(e, i)}
+                      selectEntries={c.teamId && this.props.teams.find(t => t.teamId === c.teamId) ? this.props.teams.find(t => t.teamId === c.teamId).channels.map(ch => [ch.channel, ch.channelId]) : []}
+                    />
+                    <div className="project-form--form--channels--channel--del" onClick={(e) => this.destroyChannel(e, i)}>
+                      <Icon name="iconTrash.svg" />
+                    </div>
+                  </React.Fragment>
+                  }
 
-                    {!c.destroy && c.new &&
-                      <React.Fragment>
-                        <InputFieldDropdownHalfed
-                          required
-                          className="project-form--form--channels--channel--select"
-                          title="team or guild"
-                          name={`project[channels_attributes][${c.id}][team_id]`}
-                          value={this.state['project[channels]'][i].teamId}
-                          eventHandler={(e) => this.handleChannelFieldChange(e, i)}
-                          selectEntries={this.props.teams.map(t => [t.team, t.teamId])}
-                        />
-                        <InputFieldDropdownHalfed
-                          required
-                          className="project-form--form--channels--channel--select"
-                          title="channel"
-                          name={`project[channels_attributes][${c.id}][channel_id]`}
-                          value={this.state['project[channels]'][i].channelId}
-                          eventHandler={(e) => this.handleChannelFieldChange(e, i)}
-                          selectEntries={c.teamId && this.props.teams.find(t => t.teamId === c.teamId) ? this.props.teams.find(t => t.teamId === c.teamId).channels.map(ch => [ch.channel, ch.channelId]) : []}
-                        />
-                        <div className="project-form--form--channels--channel--del" onClick={(e) => this.destroyChannel(e, i)}>
-                          <Icon name="iconTrash.svg" />
-                        </div>
-                      </React.Fragment>
-                    }
+                  {c.destroy && !c.new &&
+                  <input
+                    type="hidden"
+                    name={`project[channels_attributes][${c.id}][_destroy]`}
+                    value="1"
+                  />
+                  }
+                </div>
+              )}
 
-                    {c.destroy && !c.new &&
-                      <input
-                        type="hidden"
-                        name={`project[channels_attributes][${c.id}][_destroy]`}
-                        value="1"
-                      />
-                    }
-                  </div>
-                )}
+              {this.props.teams.length > 0 &&
+              <div className="project-form--form--channels--add" onClick={this.addChannel}>
+                Add Channel +
+              </div>
+              }
 
-                {this.props.teams.length > 0 &&
-                  <div className="project-form--form--channels--add" onClick={this.addChannel}>
-                    Add Channel +
-                  </div>
+              {this.props.discordBotUrl &&
+              <div className="project-form--form--channels--discord-link">
+                {!this.state.discordUrlActivated &&
+                <a target="_blank" href={this.props.discordBotUrl} onClick={() => this.setState({discordUrlActivated: true})}>
+                  Allow Access to Discord Channels →
+                </a>
                 }
-
-                {this.props.discordBotUrl &&
-                  <div className="project-form--form--channels--discord-link">
-                    {!this.state.discordUrlActivated &&
-                      <a target="_blank" href={this.props.discordBotUrl} onClick={() => this.setState({discordUrlActivated: true})}>
-                        Allow Access to Discord Channels →
-                      </a>
-                    }
-                    {this.state.discordUrlActivated &&
-                      <a href="">
-                        Refresh the page after Discord access is confirmed ↻
-                      </a>
-                    }
-                  </div>
+                {this.state.discordUrlActivated &&
+                <a href="">
+                  Refresh the page after Discord access is confirmed ↻
+                </a>
                 }
+              </div>
+              }
 
-                {this.props.teams.length === 0 && !this.props.discordBotUrl &&
-                  <div className="project-form--form--channels--empty">
-                    Start adding channels by signing in with Slack or Discord
-                  </div>
-                }
-              </React.Fragment>
+              {this.props.teams.length === 0 && !this.props.discordBotUrl &&
+              <div className="project-form--form--channels--empty">
+                Start adding channels by signing in with Slack or Discord
+              </div>
+              }
+            </React.Fragment>
             }
 
-            <div className="project-form--form--terms--header">
-              TERMS & CONDITIONS
-            </div>
+            <h2>Permissions & Visibility</h2>
+            <InputFieldDropdown
+              title="awards visibility"
+              required
+              name="project[require_confidentiality]"
+              value={this.state['project[require_confidentiality]']}
+              errorText={this.state.errors['project[require_confidentiality]']}
+              disabled={this.state.disabled['project[require_confidentiality]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.state.awardVisibilitiesPretty)}
+              symbolLimit={0}
+            />
 
-            <div className="project-form--form--terms--content">
-              <InputFieldInline
-                required
-                readOnly={this.props.termsReadonly}
-                name="project[legal_project_owner]"
-                value={this.state['project[legal_project_owner]']}
-                errorText={this.state.errors['project[legalProjectOwner]']}
-                placeholder="Provide a legal entity or individual owner's name"
-                eventHandler={this.handleFieldChange}
-              />
+            <InputFieldDropdown
+              title="display team on project page"
+              required
+              name="project[display_team]"
+              value={this.state['project[display_team]']}
+              errorText={this.state.errors['project[displayTeam]']}
+              disabled={this.state.disabled['project[display_team]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries({'Yes': 'true', 'No': 'false'})}
+              symbolLimit={0}
+            />
 
-              { !this.props.isWhitelabel &&
-                <React.Fragment>
-                  ("You", the "Project Owner") agree to the <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>
-                  <br />
+            <InputFieldDropdown
+              title="project visibility"
+              required
+              name="project[visibility]"
+              value={this.state['project[visibility]']}
+              errorText={this.state.errors['project[visibility]']}
+              disabled={this.state.disabled['project[visibility]']}
+              eventHandler={this.handleFieldChange}
+              selectEntries={Object.entries(this.state.visibilitiesPretty)}
+              symbolLimit={0}
+            />
 
-                  You agree that for this Project, Contributions are <InputFieldDropdownInline
-                    required
-                    disabled={this.props.termsReadonly}
-                    name="project[exclusive_contributions]"
-                    value={this.state['project[exclusive_contributions]']}
-                    errorText={this.state.errors['project[exclusiveContributions]']}
-                    eventHandler={this.handleFieldChange}
-                    selectEntries={Object.entries({
-                      'Exclusive'    : 'true',
-                      'Not Exclusive': 'false'
-                    })}
-                  />
-                  <br />
+            <InputFieldWhiteDark
+              title="project url"
+              required
+              readOnly
+              copyOnClick
+              name="project[url]"
+              value={this.state['project[url]']}
+              errorText={this.state.errors['project[url]']}
+              eventHandler={this.handleFieldChange}
+              symbolLimit={0}
+            />
 
-                  Project confidentiality and business confidentiality are <InputFieldDropdownInline
-                    required
-                    disabled={this.props.termsReadonly}
-                    name="project[confidentiality]"
-                    value={this.state['project[confidentiality]']}
-                    errorText={this.state.errors['project[confidentiality]']}
-                    eventHandler={this.handleFieldChange}
-                    selectEntries={Object.entries({
-                      'Required'    : 'true',
-                      'Not Required': 'false'
-                    })}
-                  /> and at the time that you indicate a Task is complete you agree to pay the Contributor the Award for the Task.
-                  <br />
+            {/* <div className="project-form--form--terms--header"> */}
+            {/*  TERMS & CONDITIONS */}
+            {/* </div> */}
 
-                  By {this.state.formAction === 'POST' ? 'creating this Project (clicking CREATE & CLOSE or CREATE)' : 'updating this Project (clicking SAVE & CLOSE or SAVE)'}, you agree to these Terms & Conditions.
-                  <br />
+            {/* <div className="project-form--form--terms--content"> */}
+            {/*  <InputFieldInline */}
+            {/*    required */}
+            {/*    readOnly={this.props.termsReadonly} */}
+            {/*    name="project[legal_project_owner]" */}
+            {/*    value={this.state['project[legal_project_owner]']} */}
+            {/*    errorText={this.state.errors['project[legalProjectOwner]']} */}
+            {/*    placeholder="Provide a legal entity or individual owner's name" */}
+            {/*    eventHandler={this.handleFieldChange} */}
+            {/*  /> */}
 
-                  You may modify these Terms & Conditions until the first Project Task has been started by a Contributor.
-                </React.Fragment>
-              }
-            </div>
+            {/*  { !this.props.isWhitelabel && */}
+            {/*    <React.Fragment> */}
+            {/*      ("You", the "Project Owner") agree to the <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a> */}
+            {/*      <br /> */}
+
+            {/*      You agree that for this Project, Contributions are <InputFieldDropdownInline */}
+            {/*        required */}
+            {/*        disabled={this.props.termsReadonly} */}
+            {/*        name="project[exclusive_contributions]" */}
+            {/*        value={this.state['project[exclusive_contributions]']} */}
+            {/*        errorText={this.state.errors['project[exclusiveContributions]']} */}
+            {/*        eventHandler={this.handleFieldChange} */}
+            {/*        selectEntries={Object.entries({ */}
+            {/*          'Exclusive'    : 'true', */}
+            {/*          'Not Exclusive': 'false' */}
+            {/*        })} */}
+            {/*      /> */}
+            {/*      <br /> */}
+
+            {/*      Project confidentiality and business confidentiality are <InputFieldDropdownInline */}
+            {/*        required */}
+            {/*        disabled={this.props.termsReadonly} */}
+            {/*        name="project[confidentiality]" */}
+            {/*        value={this.state['project[confidentiality]']} */}
+            {/*        errorText={this.state.errors['project[confidentiality]']} */}
+            {/*        eventHandler={this.handleFieldChange} */}
+            {/*        selectEntries={Object.entries({ */}
+            {/*          'Required'    : 'true', */}
+            {/*          'Not Required': 'false' */}
+            {/*        })} */}
+            {/*      /> and at the time that you indicate a Task is complete you agree to pay the Contributor the Award for the Task. */}
+            {/*      <br /> */}
+
+            {/*      By {this.state.formAction === 'POST' ? 'creating this Project (clicking CREATE & CLOSE or CREATE)' : 'updating this Project (clicking SAVE & CLOSE or SAVE)'}, you agree to these Terms & Conditions. */}
+            {/*      <br /> */}
+
+            {/*      You may modify these Terms & Conditions until the first Project Task has been started by a Contributor. */}
+            {/*    </React.Fragment> */}
+            {/*  } */}
+            {/* </div> */}
 
           </form>
         </ProjectSetup>

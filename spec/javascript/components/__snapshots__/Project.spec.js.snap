@@ -110,13 +110,12 @@ exports[`Project renders correctly without props 1`] = `
                     "componentStyle": ComponentStyle {
                       "componentId": "sc-dnqmqq",
                       "isStatic": true,
-                      "lastClassName": "kDnxSr",
+                      "lastClassName": "gptFPq",
                       "rules": Array [
                         "
   display: flex;
-  flex-direction: row;
+  flex-flow: row;
   justify-content: space-between;
-  flex-wrap: wrap;
   margin: 0.7em;
 
   @media (max-width: 1024px) {
@@ -138,7 +137,7 @@ exports[`Project renders correctly without props 1`] = `
                 forwardedRef={null}
               >
                 <div
-                  className="sc-dnqmqq kDnxSr"
+                  className="sc-dnqmqq gptFPq"
                 />
               </StyledComponent>
             </styled.div>
@@ -249,11 +248,7 @@ exports[`Project renders correctly without props 1`] = `
     >
       <div
         className="project-description__video"
-      >
-        <img
-          width="100%"
-        />
-      </div>
+      />
       <div
         className="project-description__text"
       >

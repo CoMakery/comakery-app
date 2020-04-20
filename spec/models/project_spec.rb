@@ -28,7 +28,6 @@ describe Project do
         .to eq(["Description can't be blank",
                 "Account can't be blank",
                 "Title can't be blank",
-                "Legal project owner can't be blank",
                 "Long identifier can't be blank"].sort)
     end
 

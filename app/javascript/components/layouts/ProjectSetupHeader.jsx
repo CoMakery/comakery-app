@@ -25,19 +25,13 @@ const Wrapper = styled.div`
     margin-right: -150px;
     margin-top: -25px;
     margin-bottom: 25px;
-
-    @media (max-width: 1024px) {
-      margin-left: -25px;
-      margin-right: -25px;
-    }
   `}
 `
 
 const Navigation = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-flow: row;
   justify-content: space-between;
-  flex-wrap: wrap;
   margin: 0.7em;
 
   @media (max-width: 1024px) {
@@ -73,6 +67,7 @@ const ProjectNav = styled.div`
   flex-wrap: wrap;
   display: flex;
   margin-left: auto;
+  justify-content: flex-end;
 
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -142,27 +137,44 @@ class ProjectSetupHeader extends React.Component {
           {project && project.title &&
             <ProjectNav>
               {!project.whitelabel &&
-                <NavLink current={current === 'overview'} href={project.landingUrl}>
-                  overview
-                </NavLink>
+              <NavLink current={current === 'overview'} href={project.landingUrl}>
+                overview
+              </NavLink>
               }
-
-              {owner &&
-                <NavLink current={current === 'form'} href={project.settingsUrl}>
-                  settings
-                </NavLink>
+              {project.fundingUrl &&
+              <NavLink current={false} target={'_blank'} href={project.fundingUrl}>
+                Funding
+              </NavLink>
               }
-
-              {owner &&
-                <NavLink current={current === 'admins'} href={project.adminsUrl}>
-                  admins
-                </NavLink>
+              {project.gettingStartedUrl &&
+              <NavLink current={false} target={'_blank'} href={project.gettingStartedUrl}>
+                Getting Started
+              </NavLink>
               }
-
+              {project.documentationUrl &&
+              <NavLink current={false} target={'_blank'} href={project.documentationUrl}>
+                Documentation
+              </NavLink>
+              }
+              {project.githubUrl &&
+              <NavLink current={false} target={'_blank'} href={project.githubUrl}>
+                GitHub
+              </NavLink>
+              }
               {(owner || project.showBatches) &&
-                <NavLink current={current === 'batches'} href={project.batchesUrl}>
-                  batches & tasks
-                </NavLink>
+              <NavLink current={current === 'batches'} href={project.batchesUrl}>
+                tasks
+              </NavLink>
+              }
+              {project.governanceUrl &&
+              <NavLink current={false} target={'_blank'} href={project.governanceUrl}>
+                Governance
+              </NavLink>
+              }
+              {project.videoConferenceUrl &&
+              <NavLink current={false} target={'_blank'} href={project.videoConferenceUrl}>
+                Video Conference
+              </NavLink>
               }
 
               {(owner || project.showTransfers) &&
@@ -181,6 +193,16 @@ class ProjectSetupHeader extends React.Component {
                 <NavLink current={current === 'transfer_rules'} href={project.transferRulesUrl}>
                   transfer rules
                 </NavLink>
+              }
+              {owner &&
+              <NavLink current={current === 'admins'} href={project.adminsUrl}>
+                admins
+              </NavLink>
+              }
+              {owner &&
+              <NavLink current={current === 'form'} href={project.settingsUrl}>
+                settings
+              </NavLink>
               }
             </ProjectNav>
           }
@@ -221,7 +243,13 @@ ProjectSetupHeader.defaultProps = {
     owner          : '',
     showBatches    : true,
     showTransfers  : true,
-    present        : true
+    present        : true,
+    githubUrl      : '',
+    documentationUrl: '',
+    gettingStartedUrl: '',
+    governanceUrl: '',
+    fundingUrl: '',
+    videoConferenceUrl: ''
   },
   owner   : true,
   current : '',

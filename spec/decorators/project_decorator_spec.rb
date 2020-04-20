@@ -17,43 +17,37 @@ describe ProjectDecorator do
     end
   end
 
-  describe '#description_html_truncated' do
+  describe '#description_text_truncated' do
     let(:project) do
       create(:project,
-        description: 'a' * 1000)
+        description: '[Hola](http://google.com) ' + 'a' * 1000)
         .decorate
     end
 
     specify do
-      length_including_dots = 503
-      expect(project.description_html_truncated(500).length).to eq(length_including_dots)
+      length_including_dots = 500
+      expect(project.description_text_truncated(500).length).to eq(length_including_dots)
     end
 
-    specify do
-      truncated_description = project.description_html_truncated
+    it 'ends with "..."' do
+      truncated_description = project.description_text_truncated
       last_char = truncated_description.length
       start_of_end = last_char - 4
       expect(truncated_description[start_of_end, last_char]).to eq('a...')
     end
 
-    it 'outputs the content of the html without links' do
-      string_with_html = ('a' * 499) + "<a href='#'>1234</a>"
-      project_with_html_description = create(:project, description: string_with_html).decorate
-
-      truncated_description = project_with_html_description.description_html_truncated
-      last_char = truncated_description.length
-      start_of_end = last_char - 4
-      expect(truncated_description[start_of_end, last_char]).to eq('1...')
-      expect(truncated_description.size).to eq(503)
+    it 'does not include html' do
+      expect(project.description_text_truncated).not_to include("<a href='http://google.com'")
+      expect(project.description_text_truncated).to include('Hola')
     end
 
     it 'can pass in a max length' do
-      expect(project.description_html_truncated(8)).to eq('aaaaaaaa...')
+      expect(project.description_text_truncated(8)).to eq('Hola ...')
     end
 
     it 'can use a length longer than the string length' do
       project = create(:project, description: 'hola').decorate
-      expect(project.description_html_truncated(100)).to eq('hola')
+      expect(project.description_text_truncated(100)).to eq('hola')
     end
   end
 
@@ -199,11 +193,6 @@ describe ProjectDecorator do
       expect(project.total_awarded_to_user(account))
         .to eq('1,337')
     end
-  end
-
-  it '#description_text' do
-    expect(project.decorate.description_html_truncated(12)).to eq 'We are going...'
-    expect(project.decorate.description_html_truncated(4)).to eq 'We a...'
   end
 
   it '#contributors_by_award_amount' do
