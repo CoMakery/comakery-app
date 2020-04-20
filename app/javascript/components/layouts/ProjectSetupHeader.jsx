@@ -142,22 +142,22 @@ class ProjectSetupHeader extends React.Component {
               </NavLink>
               }
               {project.fundingUrl &&
-              <NavLink current={false} href={project.fundingUrl}>
+              <NavLink current={false} target={'_blank'} href={project.fundingUrl}>
                 Funding
               </NavLink>
               }
               {project.gettingStartedUrl &&
-              <NavLink current={false} href={project.gettingStartedUrl}>
+              <NavLink current={false} target={'_blank'} href={project.gettingStartedUrl}>
                 Getting Started
               </NavLink>
               }
               {project.documentationUrl &&
-              <NavLink current={false} href={project.documentationUrl}>
+              <NavLink current={false} target={'_blank'} href={project.documentationUrl}>
                 Documentation
               </NavLink>
               }
               {project.githubUrl &&
-              <NavLink current={false} href={project.githubUrl}>
+              <NavLink current={false} target={'_blank'} href={project.githubUrl}>
                 GitHub
               </NavLink>
               }
@@ -167,12 +167,12 @@ class ProjectSetupHeader extends React.Component {
               </NavLink>
               }
               {project.governanceUrl &&
-              <NavLink current={false} href={project.governanceUrl}>
+              <NavLink current={false} target={'_blank'} href={project.governanceUrl}>
                 Governance
               </NavLink>
               }
               {project.videoConferenceUrl &&
-              <NavLink current={false} href={project.videoConferenceUrl}>
+              <NavLink current={false} target={'_blank'} href={project.videoConferenceUrl}>
                 Video Conference
               </NavLink>
               }

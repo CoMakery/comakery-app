@@ -123,7 +123,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-bdVaJa",
                         "isStatic": false,
-                        "lastClassName": "dzrTPI",
+                        "lastClassName": "cEejpX",
                         "rules": Array [
                           "
   font-size: 16px;
@@ -164,7 +164,7 @@ exports[`BatchIndex renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-bdVaJa dzrTPI"
+                    className="sc-bdVaJa cEejpX"
                   >
                     <styled.div>
                       <StyledComponent
