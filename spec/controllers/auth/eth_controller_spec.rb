@@ -3,7 +3,9 @@ require 'rails_helper'
 RSpec.describe Auth::EthController, type: :controller do
   let(:valid_public_address) { '0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1' }
   let(:invalid_public_address) { '0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B' }
-  let(:valid_signature) { '0x62949f93af21d260a9794ef97a4d6c099b8fe65d391604cc86555ded69c21a5b39bcb6ca672d11b55254c594c8921d6293b0a639510e6ee61177ddfa1490a9291b' }
+  let(:valid_nonce) { 'Authentication Request #1587583522817-09f09af12698' }
+  let(:valid_timestamp) { 1587583523 }
+  let(:valid_signature) { '0x661c02f55ed2804d3948b36fdbed266f710074916059b0591c908ea9a30af0e542dea325acafc71ac84abfdfb44d279318286522c862dc78ff282f9bc74a3ebc1c' }
   let(:invalid_signature) { '0x' }
   let(:valid_session) { {} }
 
@@ -33,9 +35,14 @@ RSpec.describe Auth::EthController, type: :controller do
   end
 
   describe 'POST #create' do
-    context 'with valid signature' do
+    context 'with valid signature and timestamp' do
       before do
-        Rails.cache.write("auth_eth::nonce::#{valid_public_address}", 'test', expires_in: 1.hour)
+        Rails.cache.write("auth_eth::nonce::#{valid_public_address}", valid_nonce, expires_in: 1.hour)
+        travel_to Time.zone.at(valid_timestamp)
+      end
+
+      after do
+        travel_back
       end
 
       context 'with existing account' do
