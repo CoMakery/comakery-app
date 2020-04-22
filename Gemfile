@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.6.5'
 
+gem 'actionview', '>= 6.0.2.2'
 gem 'airbrake', '~> 9.4'
 gem 'awesome_print'
 gem 'bcrypt'
@@ -144,3 +145,5 @@ gem 'eth', '~> 0.4.10'
 gem 'vcr', '~> 5.1'
 
 gem 'truncato', '~> 0.7.11'
+
+gem 'validate_url', '~> 1.0'

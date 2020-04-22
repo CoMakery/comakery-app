@@ -3692,6 +3692,7 @@ input.button--right-space {
   flex-direction: column;
   align-items: center;
   padding: 0px 150px;
+  margin-bottom: 20px;
   color: var(--black);
   text-align: center;
 }
@@ -3796,9 +3797,6 @@ input.button--right-space {
 }
 
 @media screen and (max-width: 650px) {
-  .project-award {
-    padding: 0px 30px;
-  }
 
   .project-award__token {
     flex-direction: column;
@@ -4025,7 +4023,6 @@ input.button--right-space {
   width: 230px;
   height: 40px;
   font-size: 18px;
-  margin-right: 0;
 }
 
 .project-interest__text {
@@ -4053,10 +4050,6 @@ input.button--right-space {
 }
 
 @media screen and (max-width: 650px) {
-  .project-interest {
-    padding: 30px;
-  }
-
   .project-interest__text {
     font-size: 16px;
   }
