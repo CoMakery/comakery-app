@@ -32,11 +32,9 @@ describe Project do
     end
 
     describe 'link validations' do
-
       shared_examples :validate_url do |method, protocol_and_url|
         describe "for #{method} '#{protocol_and_url}'" do
           let(:project) { build :project }
-
 
           it "#{method} allows blank entry" do
             project.send(method, '')
@@ -55,12 +53,12 @@ describe Project do
 
           it "#{method} requires a valid protocol" do
             project.send(method, 'h:')
-            expect(project).to_not be_valid
+            expect(project).not_to be_valid
           end
 
           it "#{method} requires a real url" do
             project.send(method, 'https://')
-            expect(project).to_not be_valid
+            expect(project).not_to be_valid
           end
 
           it "#{method} cannot pass in html tags (injection safety)" do
@@ -106,7 +104,7 @@ describe Project do
           project.send(method, url)
           project.github_url = url
           project.valid?
-          expect(project).to_not be_valid
+          expect(project).not_to be_valid
         end
       end
     end
