@@ -128,13 +128,6 @@ Rails.application.routes.draw do
   end
 
   namespace :api, defaults: { format: :json } do
-    resources :accounts, only: [:create] do
-      collection do
-        get :find_by_public_address
-        post :auth
-      end
-    end
-
     namespace :v1 do
       resources :accounts, only: [:show, :update, :create] do
         resources :interests, only: [:index, :create, :destroy]
