@@ -20,6 +20,6 @@ class Comakery::Auth::Eth
   end
 
   def valid?
-    public_address == recovered_public_address
+    public_address.casecmp?(recovered_public_address)
   end
 end

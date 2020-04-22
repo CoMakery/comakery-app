@@ -25,7 +25,7 @@ export default class extends Controller {
     await this._startDapp()
   }
 
-  async _personalSign(text) {
+  async _personalSign(text, func) {
     let msg = bufferToHex(new Buffer(text, 'utf8'))
     let from = this.coinBase
     let params = [msg, from]
@@ -46,7 +46,7 @@ export default class extends Controller {
         return false
       }
 
-      return JSON.stringify(response.result)
+      func(response.result)
     })
   }
 
@@ -229,7 +229,6 @@ export default class extends Controller {
     if (typeof window.ethereum === 'undefined') {
       this._showError('You need a Dapp browser to proceed with the transaction. Consider installing MetaMask.')
       this._markButtonAsReady()
-      return false
     } else {
       await window.ethereum.enable()
         .catch((reason) => {
