@@ -26,6 +26,11 @@ const Wrapper = styled.div`
     margin-top: -25px;
     margin-bottom: 25px;
   `}
+  
+    @media (max-width: 640px) {
+      margin-left: -25px;
+      margin-right: -25px;
+    }
 `
 
 const Navigation = styled.div`
@@ -34,7 +39,7 @@ const Navigation = styled.div`
   justify-content: space-between;
   margin: 0.7em;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 640px) {
     flex-direction: column;
   }
 `
