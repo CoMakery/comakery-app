@@ -3,6 +3,7 @@ import Web3 from 'web3'
 import Turbolinks from 'turbolinks'
 import { fetch } from 'whatwg-fetch'
 import { Decimal } from 'decimal.js'
+import { bufferToHex } from 'ethereumjs-util'
 
 export default class extends Controller {
   static targets = [ 'button' ]
@@ -22,6 +23,31 @@ export default class extends Controller {
     }
 
     await this._startDapp()
+  }
+
+  async _personalSign(text, func) {
+    let msg = bufferToHex(new Buffer(text, 'utf8'))
+    let from = this.coinBase
+    let params = [msg, from]
+    let method = 'personal_sign'
+
+    window.ethereum.sendAsync({
+      method,
+      params,
+      from,
+    }, (err, response) => {
+      if (err) {
+        this._showError(err)
+        return false
+      }
+
+      if (response.error) {
+        this._showError(response.error)
+        return false
+      }
+
+      func(response.result)
+    })
   }
 
   _markButtonAsCreating() {
@@ -195,10 +221,10 @@ export default class extends Controller {
     Turbolinks.visit(window.location.toString())
   }
 
-  // TODO: Following Metamask initialization deprecates in Q2 2020
+  // TODO: Following Metamask initialization deprecates in 2020
   //
-  // https://metamask.github.io/metamask-docs/API_Reference/Ethereum_Provider#new-api
   // https://gist.github.com/rekmarks/d318677c8fc89e5f7a2f526e00a0768a
+  // https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
   async _startDapp() {
     if (typeof window.ethereum === 'undefined') {
       this._showError('You need a Dapp browser to proceed with the transaction. Consider installing MetaMask.')
@@ -308,7 +334,9 @@ export default class extends Controller {
     return this.web3.utils.toWei('1', 'gwei')
   }
 
-  // TODO: Following Metamask call deprecates in Q2 2020
+  // TODO: Following call deprecates in 2020
+  //
+  // https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
   get coinBase() {
     return window.web3.currentProvider.selectedAddress
   }
