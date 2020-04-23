@@ -180,7 +180,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-bdVaJa",
                         "isStatic": false,
-                        "lastClassName": "ezfsJd",
+                        "lastClassName": "cvNMCl",
                         "rules": Array [
                           "
   font-size: 16px;
@@ -205,6 +205,11 @@ exports[`TaskForm renders correctly without props 1`] = `
   ",
                           [Function],
                           "
+  
+    @media (max-width: 640px) {
+      margin-left: -25px;
+      margin-right: -25px;
+    }
 ",
                         ],
                       },
@@ -221,7 +226,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-bdVaJa ezfsJd"
+                    className="sc-bdVaJa cvNMCl"
                   >
                     <styled.div>
                       <StyledComponent
@@ -232,16 +237,15 @@ exports[`TaskForm renders correctly without props 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-bwzfXH",
                               "isStatic": true,
-                              "lastClassName": "fFBqGW",
+                              "lastClassName": "kAVJJi",
                               "rules": Array [
                                 "
   display: flex;
-  flex-direction: row;
+  flex-flow: row;
   justify-content: space-between;
-  flex-wrap: wrap;
   margin: 0.7em;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 640px) {
     flex-direction: column;
   }
 ",
@@ -260,7 +264,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-bwzfXH fFBqGW"
+                          className="sc-bwzfXH kAVJJi"
                         />
                       </StyledComponent>
                     </styled.div>
@@ -493,10 +497,167 @@ exports[`TaskForm renders correctly without props 1`] = `
                     </div>
                   </InputField>
                 </InputFieldWhiteDark>
-                <InputFieldDescription
+                <InputFieldWhiteDark
+                  eventHandler={[Function]}
+                  min="0"
+                  name="task[amount]"
+                  placeholder="The total amount of tokens or coins you are paying for this task to be completed"
+                  required={true}
+                  step="NaN"
+                  symbolLimit={0}
+                  title="award amount (points - no token)"
+                  type="number"
+                  value=""
+                >
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__white__dark"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min="0"
+                    name="task[amount]"
+                    pattern=".*"
+                    placeholder="The total amount of tokens or coins you are paying for this task to be completed"
+                    readOnly={false}
+                    recommended={false}
+                    required={true}
+                    selectEntries={Array []}
+                    step="NaN"
+                    symbolLimit={0}
+                    title="award amount (points - no token)"
+                    type="number"
+                    value=""
+                  >
+                    <div
+                      className="input-field input-field__white__dark"
+                    >
+                      <div
+                        className="input-field--title"
+                      >
+                        <span
+                          className="input-field--title--title"
+                        >
+                          award amount (points - no token)
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          required
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
+                      >
+                        <input
+                          className="input-field--content__text"
+                          max=""
+                          min="0"
+                          name="task[amount]"
+                          onChange={[Function]}
+                          onClick={null}
+                          placeholder="The total amount of tokens or coins you are paying for this task to be completed"
+                          readOnly={false}
+                          required={true}
+                          step="NaN"
+                          type="number"
+                          value=""
+                        />
+                      </div>
+                    </div>
+                  </InputField>
+                </InputFieldWhiteDark>
+                <InputFieldWhiteDark
+                  eventHandler={[Function]}
+                  name="task[proof_link]"
+                  placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
+                  symbolLimit={150}
+                  title="URL where to submit completed work"
+                  value=""
+                >
+                  <InputField
+                    checkboxText=""
+                    checked={false}
+                    className="input-field__white__dark"
+                    copyOnClick={false}
+                    disabled={false}
+                    errorText=""
+                    eventHandler={[Function]}
+                    imgInputRef={null}
+                    imgPreviewDimensions="40x40"
+                    imgPreviewUrl=""
+                    imgRequirements=""
+                    imgVerifier={[Function]}
+                    max=""
+                    min=""
+                    name="task[proof_link]"
+                    pattern=".*"
+                    placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
+                    readOnly={false}
+                    recommended={false}
+                    required={false}
+                    selectEntries={Array []}
+                    step=""
+                    symbolLimit={150}
+                    title="URL where to submit completed work"
+                    type="text"
+                    value=""
+                  >
+                    <div
+                      className="input-field input-field__white__dark"
+                    >
+                      <div
+                        className="input-field--title"
+                      >
+                        <span
+                          className="input-field--title--title"
+                        >
+                          URL where to submit completed work
+                        </span>
+                        <span
+                          className="input-field--title--required"
+                        >
+                          optional
+                        </span>
+                        <span
+                          className="input-field--title--counter"
+                        >
+                          0
+                          /
+                          150
+                        </span>
+                      </div>
+                      <div
+                        className="input-field--content"
+                      >
+                        <input
+                          className="input-field--content__text"
+                          name="task[proof_link]"
+                          onChange={[Function]}
+                          onClick={null}
+                          pattern=".*"
+                          placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
+                          readOnly={false}
+                          required={false}
+                          type="text"
+                          value=""
+                        />
+                      </div>
+                    </div>
+                  </InputField>
+                </InputFieldWhiteDark>
+                <InputFieldDescriptionMiddle
                   eventHandler={[Function]}
                   name="task[why]"
-                  placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
+                  placeholder="Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                   symbolLimit={500}
                   title="WHAT IS THE EXPECTED BENEFIT"
                   value=""
@@ -504,7 +665,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                   <InputField
                     checkboxText=""
                     checked={false}
-                    className="input-field__description"
+                    className="input-field__description-middle"
                     copyOnClick={false}
                     disabled={false}
                     errorText=""
@@ -518,7 +679,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     min=""
                     name="task[why]"
                     pattern=".*"
-                    placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
+                    placeholder="Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                     readOnly={false}
                     recommended={false}
                     required={false}
@@ -530,7 +691,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     value=""
                   >
                     <div
-                      className="input-field input-field__description"
+                      className="input-field input-field__description-middle"
                     >
                       <div
                         className="input-field--title"
@@ -561,7 +722,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                           name="task[why]"
                           onChange={[Function]}
                           pattern=".*"
-                          placeholder="Use the following format to describe the expected benefit of this task being completed: As a ___, I want to ___,  So I can  ___. Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
+                          placeholder="Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
                           readOnly={false}
                           required={false}
                           value=""
@@ -569,8 +730,8 @@ exports[`TaskForm renders correctly without props 1`] = `
                       </div>
                     </div>
                   </InputField>
-                </InputFieldDescription>
-                <InputFieldDescriptionLarge
+                </InputFieldDescriptionMiddle>
+                <InputFieldDescriptionMiddle
                   eventHandler={[Function]}
                   name="task[requirements]"
                   placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
@@ -581,7 +742,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                   <InputField
                     checkboxText=""
                     checked={false}
-                    className="input-field__description-large"
+                    className="input-field__description-middle"
                     copyOnClick={false}
                     disabled={false}
                     errorText=""
@@ -607,7 +768,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     value=""
                   >
                     <div
-                      className="input-field input-field__description-large"
+                      className="input-field input-field__description-middle"
                     >
                       <div
                         className="input-field--title"
@@ -646,8 +807,8 @@ exports[`TaskForm renders correctly without props 1`] = `
                       </div>
                     </div>
                   </InputField>
-                </InputFieldDescriptionLarge>
-                <InputFieldDescriptionLarge
+                </InputFieldDescriptionMiddle>
+                <InputFieldDescriptionMiddle
                   eventHandler={[Function]}
                   name="task[description]"
                   placeholder="Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch"
@@ -658,7 +819,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                   <InputField
                     checkboxText=""
                     checked={false}
-                    className="input-field__description-large"
+                    className="input-field__description-middle"
                     copyOnClick={false}
                     disabled={false}
                     errorText=""
@@ -684,7 +845,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                     value=""
                   >
                     <div
-                      className="input-field input-field__description-large"
+                      className="input-field input-field__description-middle"
                     >
                       <div
                         className="input-field--title"
@@ -723,7 +884,7 @@ exports[`TaskForm renders correctly without props 1`] = `
                       </div>
                     </div>
                   </InputField>
-                </InputFieldDescriptionLarge>
+                </InputFieldDescriptionMiddle>
                 <InputFieldUploadFile
                   imgPreviewDimensions="100x100"
                   name="task[image]"
@@ -792,6 +953,9 @@ exports[`TaskForm renders correctly without props 1`] = `
                     </div>
                   </InputField>
                 </InputFieldUploadFile>
+                <h2>
+                  Advanced
+                </h2>
                 <InputFieldDropdown
                   eventHandler={[Function]}
                   name="task[specialty_id]"
@@ -972,84 +1136,6 @@ exports[`TaskForm renders correctly without props 1`] = `
                     </div>
                   </InputField>
                 </InputFieldDropdown>
-                <InputFieldWhiteDark
-                  eventHandler={[Function]}
-                  min="0"
-                  name="task[amount]"
-                  placeholder="The total amount of tokens or coins you are paying for this task to be completed"
-                  required={true}
-                  step="NaN"
-                  symbolLimit={0}
-                  title="award amount (no token)"
-                  type="number"
-                  value=""
-                >
-                  <InputField
-                    checkboxText=""
-                    checked={false}
-                    className="input-field__white__dark"
-                    copyOnClick={false}
-                    disabled={false}
-                    errorText=""
-                    eventHandler={[Function]}
-                    imgInputRef={null}
-                    imgPreviewDimensions="40x40"
-                    imgPreviewUrl=""
-                    imgRequirements=""
-                    imgVerifier={[Function]}
-                    max=""
-                    min="0"
-                    name="task[amount]"
-                    pattern=".*"
-                    placeholder="The total amount of tokens or coins you are paying for this task to be completed"
-                    readOnly={false}
-                    recommended={false}
-                    required={true}
-                    selectEntries={Array []}
-                    step="NaN"
-                    symbolLimit={0}
-                    title="award amount (no token)"
-                    type="number"
-                    value=""
-                  >
-                    <div
-                      className="input-field input-field__white__dark"
-                    >
-                      <div
-                        className="input-field--title"
-                      >
-                        <span
-                          className="input-field--title--title"
-                        >
-                          award amount (no token)
-                        </span>
-                        <span
-                          className="input-field--title--required"
-                        >
-                          required
-                        </span>
-                      </div>
-                      <div
-                        className="input-field--content"
-                      >
-                        <input
-                          className="input-field--content__text"
-                          max=""
-                          min="0"
-                          name="task[amount]"
-                          onChange={[Function]}
-                          onClick={null}
-                          placeholder="The total amount of tokens or coins you are paying for this task to be completed"
-                          readOnly={false}
-                          required={true}
-                          step="NaN"
-                          type="number"
-                          value=""
-                        />
-                      </div>
-                    </div>
-                  </InputField>
-                </InputFieldWhiteDark>
                 <InputFieldWhiteDark
                   eventHandler={[Function]}
                   min="1"
@@ -1280,85 +1366,6 @@ exports[`TaskForm renders correctly without props 1`] = `
                           step="1"
                           type="number"
                           value={10}
-                        />
-                      </div>
-                    </div>
-                  </InputField>
-                </InputFieldWhiteDark>
-                <InputFieldWhiteDark
-                  eventHandler={[Function]}
-                  name="task[proof_link]"
-                  placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
-                  symbolLimit={150}
-                  title="URL where to submit completed work"
-                  value=""
-                >
-                  <InputField
-                    checkboxText=""
-                    checked={false}
-                    className="input-field__white__dark"
-                    copyOnClick={false}
-                    disabled={false}
-                    errorText=""
-                    eventHandler={[Function]}
-                    imgInputRef={null}
-                    imgPreviewDimensions="40x40"
-                    imgPreviewUrl=""
-                    imgRequirements=""
-                    imgVerifier={[Function]}
-                    max=""
-                    min=""
-                    name="task[proof_link]"
-                    pattern=".*"
-                    placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
-                    readOnly={false}
-                    recommended={false}
-                    required={false}
-                    selectEntries={Array []}
-                    step=""
-                    symbolLimit={150}
-                    title="URL where to submit completed work"
-                    type="text"
-                    value=""
-                  >
-                    <div
-                      className="input-field input-field__white__dark"
-                    >
-                      <div
-                        className="input-field--title"
-                      >
-                        <span
-                          className="input-field--title--title"
-                        >
-                          URL where to submit completed work
-                        </span>
-                        <span
-                          className="input-field--title--required"
-                        >
-                          optional
-                        </span>
-                        <span
-                          className="input-field--title--counter"
-                        >
-                          0
-                          /
-                          150
-                        </span>
-                      </div>
-                      <div
-                        className="input-field--content"
-                      >
-                        <input
-                          className="input-field--content__text"
-                          name="task[proof_link]"
-                          onChange={[Function]}
-                          onClick={null}
-                          pattern=".*"
-                          placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
-                          readOnly={false}
-                          required={false}
-                          type="text"
-                          value=""
                         />
                       </div>
                     </div>

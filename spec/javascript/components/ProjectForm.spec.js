@@ -53,18 +53,6 @@ describe('ProjectForm', () => {
     )).toBe(true)
 
     expect(wrapper.exists(
-      'InputFieldInline[required][name="project[legal_project_owner]"]'
-    )).toBe(true)
-
-    expect(wrapper.exists(
-      'InputFieldDropdownInline[required][name="project[exclusive_contributions]"]'
-    )).toBe(true)
-
-    expect(wrapper.exists(
-      'InputFieldDropdownInline[required][name="project[confidentiality]"]'
-    )).toBe(true)
-
-    expect(wrapper.exists(
       'InputFieldUploadFile[title="project image"][name="project[square_image]"]'
     )).toBe(true)
 
@@ -78,10 +66,6 @@ describe('ProjectForm', () => {
 
     expect(wrapper.exists(
       'input[type="hidden"][name="authenticity_token"]'
-    )).toBe(true)
-
-    expect(wrapper.exists(
-      '.project-form--form--channels--header'
     )).toBe(true)
 
     expect(wrapper.exists(
@@ -328,18 +312,6 @@ describe('ProjectForm', () => {
 
     expect(wrapper.find(
       'InputFieldDropdown[title="awards visibility"][required][name="project[require_confidentiality]"]'
-    ).props().value).toBe('false')
-
-    expect(wrapper.find(
-      'InputFieldInline[required][name="project[legal_project_owner]"]'
-    ).props().value).toBe('CoMakery')
-
-    expect(wrapper.find(
-      'InputFieldDropdownInline[required][name="project[exclusive_contributions]"]'
-    ).props().value).toBe('false')
-
-    expect(wrapper.find(
-      'InputFieldDropdownInline[required][name="project[confidentiality]"]'
     ).props().value).toBe('false')
 
     expect(wrapper.find(

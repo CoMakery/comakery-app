@@ -28,8 +28,85 @@ describe Project do
         .to eq(["Description can't be blank",
                 "Account can't be blank",
                 "Title can't be blank",
-                "Legal project owner can't be blank",
                 "Long identifier can't be blank"].sort)
+    end
+
+    describe 'link validations' do
+      shared_examples :validate_url do |method, protocol_and_url|
+        describe "for #{method} '#{protocol_and_url}'" do
+          let(:project) { build :project }
+
+          it "#{method} allows blank entry" do
+            project.send(method, '')
+            expect(project).to be_valid
+          end
+
+          it "#{method} allows nil entry" do
+            project.send(method, nil)
+            expect(project).to be_valid
+          end
+
+          it "#{method} allows valid link" do
+            project.send(method, protocol_and_url)
+            expect(project).to be_valid
+          end
+
+          it "#{method} requires a valid protocol" do
+            project.send(method, 'h:')
+            expect(project).not_to be_valid
+          end
+
+          it "#{method} requires a real url" do
+            project.send(method, 'https://')
+            expect(project).not_to be_valid
+          end
+
+          it "#{method} cannot pass in html tags (injection safety)" do
+            project.send(method, protocol_and_url + '/<script></script>')
+            expect(project).not_to be_valid
+          end
+        end
+      end
+
+      it_behaves_like :validate_url, :github_url=, 'https://github.com/comakery'
+      it_behaves_like :validate_url, :documentation_url=, 'http://www.anything.com'
+      it_behaves_like :validate_url, :getting_started_url=, 'http://www.anything.com'
+      it_behaves_like :validate_url, :governance_url=, 'http://www.anything.com'
+      it_behaves_like :validate_url, :funding_url=, 'http://www.anything.com'
+      it_behaves_like :validate_url, :video_conference_url=, 'http://www.anything.com'
+
+      let(:project) { build :project }
+
+      describe 'github_url' do
+        it 'github_url must use the correct url' do
+          project.github_url = 'https://www.google.com'
+          expect(project).not_to be_valid
+        end
+
+        specify { expect_valid(project, :github_url=, nil) }
+        specify { expect_valid(project, :github_url=, '') }
+        specify { expect_valid(project, :github_url=, 'https://github.com/foo') }
+        specify { expect_valid(project, :github_url=, 'http://github.com/foo') }
+        specify { expect_valid(project, :github_url=, 'https://www.github.com/foo') }
+        specify { expect_valid(project, :github_url=, 'http://www.github.com/foo') }
+        specify { expect_invalid(project, :github_url=, 'https://www.google.com/foo') }
+        specify { expect_invalid(project, :github_url=, 'https://www.github.com/') }
+        specify { expect_invalid(project, :github_url=, 'https://www.github.com') }
+
+        def expect_valid(project, method, url)
+          project.send(method, url)
+          project.github_url = url
+          project.valid?
+          expect(project.errors.full_messages).to eq([])
+        end
+
+        def expect_invalid(project, method, url)
+          project.send(method, url)
+          project.github_url = url
+          project.valid?
+          expect(project).not_to be_valid
+        end
+      end
     end
 
     describe 'payment types' do

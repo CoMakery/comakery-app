@@ -233,6 +233,12 @@ class ProjectsController < ApplicationController
               name_with_provider: channel&.name_with_provider
             }
           end,
+          github_url: @project.github_url,
+          documentation_url: @project.documentation_url,
+          getting_started_url: @project.getting_started_url,
+          governance_url: @project.governance_url,
+          funding_url: @project.funding_url,
+          video_conference_url: @project.video_conference_url,
           url: unlisted_project_url(@project.long_id)
         }
       ),
@@ -301,6 +307,12 @@ class ProjectsController < ApplicationController
       :title,
       :tracker,
       :video_url,
+      :github_url,
+      :documentation_url,
+      :getting_started_url,
+      :governance_url,
+      :funding_url,
+      :video_conference_url,
       :payment_type,
       :exclusive_contributions,
       :legal_project_owner,

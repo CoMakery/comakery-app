@@ -58,7 +58,7 @@ exports[`Project renders correctly without props 1`] = `
               "componentStyle": ComponentStyle {
                 "componentId": "sc-htoDjs",
                 "isStatic": false,
-                "lastClassName": "imshEc",
+                "lastClassName": "eAvYzW",
                 "rules": Array [
                   "
   font-size: 16px;
@@ -83,6 +83,11 @@ exports[`Project renders correctly without props 1`] = `
   ",
                   [Function],
                   "
+  
+    @media (max-width: 640px) {
+      margin-left: -25px;
+      margin-right: -25px;
+    }
 ",
                 ],
               },
@@ -99,7 +104,7 @@ exports[`Project renders correctly without props 1`] = `
           forwardedRef={null}
         >
           <div
-            className="sc-htoDjs imshEc"
+            className="sc-htoDjs eAvYzW"
           >
             <styled.div>
               <StyledComponent
@@ -110,16 +115,15 @@ exports[`Project renders correctly without props 1`] = `
                     "componentStyle": ComponentStyle {
                       "componentId": "sc-dnqmqq",
                       "isStatic": true,
-                      "lastClassName": "kDnxSr",
+                      "lastClassName": "hzJpwN",
                       "rules": Array [
                         "
   display: flex;
-  flex-direction: row;
+  flex-flow: row;
   justify-content: space-between;
-  flex-wrap: wrap;
   margin: 0.7em;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 640px) {
     flex-direction: column;
   }
 ",
@@ -138,7 +142,7 @@ exports[`Project renders correctly without props 1`] = `
                 forwardedRef={null}
               >
                 <div
-                  className="sc-dnqmqq kDnxSr"
+                  className="sc-dnqmqq hzJpwN"
                 />
               </StyledComponent>
             </styled.div>
@@ -249,11 +253,7 @@ exports[`Project renders correctly without props 1`] = `
     >
       <div
         className="project-description__video"
-      >
-        <img
-          width="100%"
-        />
-      </div>
+      />
       <div
         className="project-description__text"
       >

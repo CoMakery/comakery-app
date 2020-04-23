@@ -350,12 +350,11 @@ RSpec.describe AwardsController, type: :controller do
         award_type_id: award.award_type.to_param,
         award_id: award.to_param,
         task: {
-          submission_url: 'http://test',
-          submission_comment: ' '
+
         }
       }
       expect(response).to redirect_to(project_award_type_award_path(award.project, award.award_type, award))
-      expect(flash[:error]).to eq("Submission comment can't be blank")
+      expect(flash[:error]).to eq('You must submit a comment, image or URL documenting your work.')
       expect(award.reload.submitted?).to be false
     end
   end
