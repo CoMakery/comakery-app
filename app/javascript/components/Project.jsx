@@ -1,13 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Icon from '../components/styleguide/Icon'
 import ProfileModal from '../components/ProfileModal'
 import ProjectSetupHeader from './layouts/ProjectSetupHeader'
 import MyTask from './MyTask'
-import Pluralize from 'react-pluralize'
 import d3 from 'd3/d3'
-import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import styled from 'styled-components'
+import InterestsController from '../controllers/interests_controller'
 
 const Tasks = styled.div`
   padding: 15px;
@@ -197,31 +195,31 @@ export default class Project extends React.Component {
     }.bind(this)
   }
 
-  addInterest(projectId, specialtyId = null) { // protocol = mission name
-    const { missionData } = this.props
+  addInterest(projectId, specialtyId = null) {
     const { specialtyInterested } = this.state
-    fetchPolyfill('/add-interest', {
-      credentials: 'same-origin',
-      method     : 'POST',
-      body       : JSON.stringify({
-        'project_id'        : projectId,
-        'specialty_id'      : specialtyId,
-        'protocol'          : (missionData ? missionData.name : null),
-        'authenticity_token': this.props.csrfToken
-      }),
-      headers: {
-        'Accept'      : 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).then(response => {
+    new InterestsController().follow(projectId, specialtyId).then(response => {
       if (response.status === 200) {
         if (specialtyId) {
           const newSpecialtyInterested = [...specialtyInterested]
           newSpecialtyInterested[specialtyId - 1] = true
-          this.setState({ specialtyInterested: [...newSpecialtyInterested] })
+          this.setState({ specialtyInterested: [...newSpecialtyInterested], interested: true })
         } else {
           this.setState({ interested: true })
         }
+      } else if (response.status === 401) {
+        window.location = '/accounts/new'
+      } else {
+        throw Error(response.text())
+      }
+    })
+  }
+
+  removeInterest(projectId) {
+    const { specialtyInterested } = this.state
+    new InterestsController().unfollow(projectId).then(response => {
+      if (response.status === 200) {
+        let newSpecialtyInterested = [...specialtyInterested].map(_ => false)
+        this.setState({ specialtyInterested: [...newSpecialtyInterested], interested: false })
       } else if (response.status === 401) {
         window.location = '/accounts/new'
       } else {
@@ -255,8 +253,22 @@ export default class Project extends React.Component {
       />
 
       <div className="project-award">
-        {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
-        {interested && <button className="button project-interest__button" disabled>Following</button>}
+        {!interested &&
+          <button
+            className="button project-interest__button"
+            onClick={() => this.addInterest(projectData.id)}
+          >
+            Follow
+          </button>
+        }
+        {interested &&
+          <button
+            className="button project-interest__button"
+            onClick={() => this.removeInterest(projectData.id)}
+          >
+            Unfollow
+          </button>
+        }
         {projectData.displayTeam &&
           <div className="project-team">
             <div className="project-team__container">
@@ -355,8 +367,23 @@ export default class Project extends React.Component {
                 </div>
               </div>
               <div className="project-skill__interest">
-                {!specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button" onClick={() => this.addInterest(projectData.id, skillIds[index])}>I'm Interested</div>}
-                {specialtyInterested[skillIds[index] - 1] && <div className="project-skill__interest__button">Following</div>}
+                {!specialtyInterested[skillIds[index] - 1] &&
+                  <div
+                    className="project-skill__interest__button"
+                    onClick={() => this.addInterest(projectData.id, skillIds[index])}
+                  >
+                    I'm Interested
+                  </div>
+                }
+
+                {specialtyInterested[skillIds[index] - 1] &&
+                  <div
+                    className="project-skill__interest__button"
+                    onClick={() => this.removeInterest(projectData.id)}
+                  >
+                    Following
+                  </div>
+                }
               </div>
             </div>
           )}

@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {fetch as fetchPolyfill} from 'whatwg-fetch'
+import InterestsController from '../controllers/interests_controller'
 
 export default class FeaturedMission extends React.Component {
   constructor(props) {
     super(props)
 
     this.addInterest = this.addInterest.bind(this)
+    this.removeInterest = this.removeInterest.bind(this)
     this.state = {
       name       : props.name,
       description: props.description,
@@ -16,21 +17,28 @@ export default class FeaturedMission extends React.Component {
   }
 
   addInterest(projectId) {
-    fetchPolyfill('/add-interest', {
-      credentials: 'same-origin',
-      method     : 'POST',
-      body       : JSON.stringify({'project_id': projectId, 'protocol': this.props.name, 'authenticity_token': this.props.csrfToken}),
-      headers    : {
-        'Accept'      : 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).then(response => {
+    new InterestsController().follow(projectId).then(response => {
       if (response.status === 200) {
         let newProjects = Array.from(this.state.projects)
         const index = newProjects.findIndex(project => project.id === projectId)
         newProjects[index].interested = true
         this.setState({projects: newProjects})
       } if (response.status === 401) {
+        window.location = '/accounts/new'
+      } else {
+        throw Error(response.text())
+      }
+    })
+  }
+
+  removeInterest(projectId) {
+    new InterestsController().unfollow(projectId).then(response => {
+      if (response.status === 200) {
+        let newProjects = Array.from(this.state.projects)
+        const index = newProjects.findIndex(project => project.id === projectId)
+        newProjects[index].interested = false
+        this.setState({projects: newProjects})
+      } else if (response.status === 401) {
         window.location = '/accounts/new'
       } else {
         throw Error(response.text())
@@ -55,9 +63,21 @@ export default class FeaturedMission extends React.Component {
           <div className="featured-mission__description">{description}</div>
           {projects.map(project => <div key={project.id} className="featured-mission__project">
             <a href={`/projects/${project.id}`} className="featured-mission__project__title">{project.title}</a>
-            {project.interested && <div className="featured-mission__project__interest featured-mission__project__interest--sent">Following</div>}
+            {project.interested &&
+              <div
+                className="featured-mission__project__interest featured-mission__project__interest"
+                onClick={() => { this.removeInterest(project.id) }}
+              >
+                Unfollow
+              </div>
+            }
             {!project.interested &&
-            <div className="featured-mission__project__interest" onClick={() => { this.addInterest(project.id) }}>I’m interested</div>
+              <div
+                className="featured-mission__project__interest"
+                onClick={() => { this.addInterest(project.id) }}
+              >
+                Follow
+              </div>
             }
           </div>)}
           <a href={`/projects/new${this.props.id ? `?mission_id=${this.props.id}` : ''}`} className="featured-mission__create-project">Create New Project</a>

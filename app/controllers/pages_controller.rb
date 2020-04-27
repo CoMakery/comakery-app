@@ -1,9 +1,8 @@
 class PagesController < ApplicationController
   before_action :unavailable_for_whitelabel
 
-  skip_before_action :require_login, except: %i[add_interest]
-  skip_before_action :require_email_confirmation, except: %i[add_interest]
-
+  skip_before_action :require_login
+  skip_before_action :require_email_confirmation
   skip_after_action :verify_authorized
 
   layout 'legacy', except: %i[styleguide featured]
@@ -22,17 +21,6 @@ class PagesController < ApplicationController
       more_missions: more_missions.map { |mission| more_mission_props(mission) },
       is_confirmed: current_account.nil? ? true : current_account.confirmed?
     }
-  end
-
-  def add_interest
-    @interest = current_user.interests.new
-    @interest.project_id = params[:project_id]
-    @interest.specialty_id = params[:specialty_id]
-    @interest.protocol = params[:protocol] || 'No mission assigned to the project' # mission name
-    @interest.save
-    respond_to do |format|
-      format.json { render json: @interest.to_json }
-    end
   end
 
   def contribution_licenses
