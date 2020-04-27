@@ -55,9 +55,6 @@ describe('Project', () => {
       editPath        : '/projects/1/edit'
     }
     const wrapper = mount(<Project {...props} />)
-
-    console.log(wrapper.html())
-
-    expect(wrapper.find('.project-interest__button').first().text()).toBe('Following')
+    expect(wrapper.find('.project-interest__button').first().text()).toBe('Unfollow')
   })
 })
