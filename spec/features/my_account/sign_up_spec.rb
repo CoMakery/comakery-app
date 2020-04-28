@@ -101,7 +101,7 @@ describe 'my account', js: true do
     find('.featured-mission__project__interest').click
     sleep 2
     expect(confirmed_account.interests.count).to be > 0
-    expect(page).to have_content('FOLLOWING')
+    expect(page).to have_content('UNFOLLOW')
   end
 
   scenario 'account page is available after signup' do
