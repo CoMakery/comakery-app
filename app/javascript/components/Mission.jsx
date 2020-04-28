@@ -2,13 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Icon from '../components/styleguide/Icon'
 import ProfileModal from '../components/ProfileModal'
-import {fetch as fetchPolyfill} from 'whatwg-fetch'
 import Pluralize from 'react-pluralize'
+import InterestsController from '../controllers/interests_controller'
 
 export default class Mission extends React.Component {
   constructor(props) {
     super(props)
     this.addInterest = this.addInterest.bind(this)
+    this.removeInterest = this.removeInterest.bind(this)
 
     const interests = {}
     props.projects.forEach(project => {
@@ -19,32 +20,27 @@ export default class Mission extends React.Component {
     this.state = { interests }
   }
 
-  addInterest(projectId, specialtyId = null) { // protocol = mission name
-    const { mission } = this.props
-
-    fetchPolyfill('/add-interest', {
-      credentials: 'same-origin',
-      method     : 'POST',
-      body       : JSON.stringify({
-        'project_id'        : projectId,
-        'specialty_id'      : specialtyId,
-        'protocol'          : (mission ? mission.name : null),
-        'authenticity_token': this.props.csrfToken
-      }),
-      headers: {
-        'Accept'      : 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).then(response => {
+  addInterest(projectId, specialtyId = null) {
+    new InterestsController().follow(projectId, specialtyId).then(response => {
       if (response.status === 200) {
-        return response.json()
+        this.setState({ interests: {...this.state.interests, [projectId]: true} })
       } else if (response.status === 401) {
         window.location = '/accounts/new'
       } else {
         throw Error(response.text())
       }
-    }).then(response => {
-      this.setState({ interests: {...this.state.interests, [response.projectId]: true} })
+    })
+  }
+
+  removeInterest(projectId) {
+    new InterestsController().unfollow(projectId).then(response => {
+      if (response.status === 200) {
+        this.setState({ interests: {...this.state.interests, [projectId]: false} })
+      } else if (response.status === 401) {
+        window.location = '/accounts/new'
+      } else {
+        throw Error(response.text())
+      }
     })
   }
 
@@ -174,12 +170,22 @@ export default class Mission extends React.Component {
 
                   <div className="mission-projects__single__card__info__interest">
                     {project.editable && <a className="mission-projects__single__card__info__interest__link" href={`/projects/${project.projectData.id}/edit`}>EDIT PROJECT</a>}
-                    {!project.editable && interests[project.projectData.id] && <div className="mission-projects__single__card__info__interest__link" style={{opacity: 0.2}}>Following</div>}
+                    {!project.editable && interests[project.projectData.id] &&
+                      <div
+                        className="mission-projects__single__card__info__interest__link"
+                        style={{opacity: 0.7}}
+                        onClick={() => { this.removeInterest(project.projectData.id) }}
+                      >
+                        Unfollow
+                      </div>
+                    }
                     {!project.editable && !interests[project.projectData.id] &&
-                    <div
-                      className="mission-projects__single__card__info__interest__link"
-                      onClick={() => { this.addInterest(project.projectData.id) }}
-                    >I'M INTERESTED</div>
+                      <div
+                        className="mission-projects__single__card__info__interest__link"
+                        onClick={() => { this.addInterest(project.projectData.id) }}
+                      >
+                        Follow
+                      </div>
                     }
                     <a className="mission-projects__single__card__info__interest__link" href={`/projects/${project.projectData.id}`}>See details</a>
                   </div>
@@ -190,12 +196,22 @@ export default class Mission extends React.Component {
                 <div dangerouslySetInnerHTML={{__html: project.projectData.description}} />
                 <div className="mission-projects__single__card__info__interest mission-projects__single__card__info__interest--mobile">
                   {project.editable && <a className="mission-projects__single__card__info__interest__link" href={`/projects/${project.projectData.id}/edit`}>EDIT PROJECT</a>}
-                  {!project.editable && interests[project.projectData.id] && <div className="mission-projects__single__card__info__interest__link" style={{opacity: 0.2}}>Following</div>}
+                  {!project.editable && interests[project.projectData.id] &&
+                  <div
+                    className="mission-projects__single__card__info__interest__link"
+                    style={{opacity: 0.7}}
+                    onClick={() => { this.removeInterest(project.projectData.id) }}
+                  >
+                        Unfollow
+                  </div>
+                  }
                   {!project.editable && !interests[project.projectData.id] &&
-                    <div
-                      className="mission-projects__single__card__info__interest__link"
-                      onClick={() => { this.addInterest(project.projectData.id) }}
-                    >I'M INTERESTED</div>
+                  <div
+                    className="mission-projects__single__card__info__interest__link"
+                    onClick={() => { this.addInterest(project.projectData.id) }}
+                  >
+                        Follow
+                  </div>
                   }
                   <a className="mission-projects__single__card__info__interest__link" href={`/projects/${project.projectData.id}`}>See details</a>
                 </div>
