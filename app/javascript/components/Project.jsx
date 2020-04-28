@@ -423,8 +423,22 @@ export default class Project extends React.Component {
 
       <div className="project-interest">
         <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
-        {!interested && <button className="button project-interest__button" onClick={() => this.addInterest(projectData.id)}>I’m Interested</button>}
-        {interested && <button className="button project-interest__button" disabled>Following</button>}
+        {!interested &&
+          <button
+            className="button project-interest__button"
+            onClick={() => this.addInterest(projectData.id)}
+          >
+            Follow
+          </button>
+        }
+        {interested &&
+          <button
+            className="button project-interest__button"
+            onClick={() => this.removeInterest(projectData.id)}
+          >
+            Unfollow
+          </button>
+        }
       </div>
     </div>
   }
