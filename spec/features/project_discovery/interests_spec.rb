@@ -16,6 +16,8 @@ describe 'interests', js: true do
       expect(page).to have_content 'FOLLOW'
       first('button.project-interest__button').click
       expect(page).to have_content 'UNFOLLOW'
+      first('button.project-interest__button').click
+      expect(page).to have_content 'FOLLOW'
     end
   end
 
@@ -26,6 +28,8 @@ describe 'interests', js: true do
       expect(page).to have_content 'FOLLOW'
       first('.mission-projects__single__card__info__interest__link').click
       expect(page).to have_content 'UNFOLLOW'
+      first('.mission-projects__single__card__info__interest__link').click
+      expect(page).to have_content 'FOLLOW'
     end
   end
 
@@ -36,6 +40,8 @@ describe 'interests', js: true do
       expect(page).to have_content 'FOLLOW'
       first('.featured-mission__project__interest').click
       expect(page).to have_content 'UNFOLLOW'
+      first('.featured-mission__project__interest').click
+      expect(page).to have_content 'FOLLOW'
     end
   end
 end
