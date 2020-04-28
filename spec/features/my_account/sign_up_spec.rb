@@ -73,7 +73,7 @@ describe 'my account', js: true do
     confirmed_account.update_column('email', nil)
     login(confirmed_account)
     visit build_profile_accounts_path
-    expect(page).to have_content('E-mail: *')
+    expect(page).to have_content('E-mail *')
   end
 
   scenario 'Sign up flow with metamask' do
@@ -82,7 +82,7 @@ describe 'my account', js: true do
     login(metamask_account)
     visit build_profile_accounts_path
     expect(page).not_to have_content("can't be blank")
-    click_on 'SAVE YOUR PROFILE'
+    click_on 'Save'
     expect(page).to have_content("Email can't be blank, Email is invalid")
   end
 

@@ -231,6 +231,9 @@ export default class extends Controller {
       this._markButtonAsReady()
     } else {
       await window.ethereum.enable()
+        .then((accounts) => {
+          this.data.set('coinBase', accounts[0])
+        })
         .catch((reason) => {
           if (reason === 'User rejected provider access') {
             this._showError('Access rejected. Please reload the page and try again if you want to proceed.')
@@ -334,10 +337,7 @@ export default class extends Controller {
     return this.web3.utils.toWei('1', 'gwei')
   }
 
-  // TODO: Following call deprecates in 2020
-  //
-  // https://docs.metamask.io/guide/ethereum-provider.html#methods-new-api
   get coinBase() {
-    return window.web3.currentProvider.selectedAddress
+    return this.data.get('coinBase')
   }
 }

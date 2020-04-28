@@ -3,8 +3,6 @@
 .callout {
   margin: 0 0 0 0;
   border: 0;
-  font-size: 18px;
-  transition: 1.5s;
   padding-left: 1.4rem;
   padding-right: 1.4rem;
   
@@ -28,8 +26,4 @@
 
 .callout.error {
   background-color: #FFF3F7;
-  color: $error-color;
-  .close-button {
-    color: $error-color;
-  }
 }

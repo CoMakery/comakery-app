@@ -8,19 +8,17 @@ class Views::Accounts::BuildProfile < Views::Base
 
         form_for account, url: update_profile_accounts_path do |f|
           row do
-            if account.email.blank?
-              column('large-12') do
-                if skip_validation
+            column('large-12') do
+              if skip_validation
+                label do
+                  text 'E-mail *'
+                  f.email_field :email
+                end
+              else
+                with_errors(account, :email) do
                   label do
-                    text 'E-mail: *'
+                    text 'E-mail *'
                     f.email_field :email
-                  end
-                else
-                  with_errors(account, :email) do
-                    label do
-                      text 'E-mail: *'
-                      f.email_field :email
-                    end
                   end
                 end
               end
@@ -29,7 +27,7 @@ class Views::Accounts::BuildProfile < Views::Base
             column('large-12') do
               with_errors(account, :first_name) do
                 label do
-                  text 'First Name: *'
+                  text 'First Name *'
                   f.text_field :first_name
                 end
               end
@@ -38,7 +36,7 @@ class Views::Accounts::BuildProfile < Views::Base
             column('large-12') do
               with_errors(account, :last_name) do
                 label do
-                  text 'Last Name: *'
+                  text 'Last Name *'
                   f.text_field :last_name
                 end
               end
@@ -47,7 +45,7 @@ class Views::Accounts::BuildProfile < Views::Base
             column('large-12') do
               with_errors(account, :nickname) do
                 label do
-                  text 'Nickname:'
+                  text 'Nickname'
                   f.text_field :nickname
                 end
               end
@@ -56,7 +54,7 @@ class Views::Accounts::BuildProfile < Views::Base
             column('large-12') do
               with_errors(account, :date_of_birth) do
                 label do
-                  text 'Date of Birth: *'
+                  text 'Date of Birth *'
                   f.text_field :date_of_birth, placeholder: 'mm/dd/yyyy', class: 'datepicker'
                 end
               end
@@ -66,7 +64,7 @@ class Views::Accounts::BuildProfile < Views::Base
               f.object.country ||= 'United States of America'
               with_errors(account, :country) do
                 label do
-                  text 'Country: *'
+                  text 'Country *'
                   f.select :country, Country.all.sort
                 end
               end
@@ -127,7 +125,7 @@ class Views::Accounts::BuildProfile < Views::Base
             end
 
             column('large-12 agreement') do
-              f.submit 'SAVE YOUR PROFILE', class: buttonish(:medium), style: 'margin: 0'
+              f.submit 'Save', class: buttonish(:medium), style: 'margin: 0'
             end
           end
         end
