@@ -2,7 +2,7 @@ import { Controller } from 'stimulus'
 import { Decimal } from 'decimal.js'
 
 export default class extends Controller {
-  static targets = [ 'amount', 'quantity', 'total', 'form', 'create' ]
+  static targets = [ 'amount', 'quantity', 'total', 'form', 'formChild', 'create' ]
 
   calculateTotal() {
     this.totalTarget.textContent = Decimal.mul(
@@ -18,7 +18,7 @@ export default class extends Controller {
   }
 
   showForm() {
-    this.formTarget.style.display = 'flex'
+    this.formChildTarget.style.display = 'flex'
     this.createTarget.disabled = true
 
     this.transfers.forEach((transfer) => {
@@ -28,7 +28,8 @@ export default class extends Controller {
   }
 
   hideForm() {
-    this.formTarget.style.display = 'none'
+    this.formChildTarget.style.display = 'none'
+    this.formTarget.reset()
     this.createTarget.disabled = false
 
     this.transfers.forEach((transfer) => {

@@ -10,6 +10,7 @@ export default class extends Controller {
 
   hideForm() {
     this.formTarget.style.display = 'none'
+    this.formTarget.reset()
     this.createTarget.disabled = false
   }
 }

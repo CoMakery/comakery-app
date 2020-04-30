@@ -47,6 +47,7 @@ export default class extends ComakerySecurityTokenController {
 
   hideForm() {
     this.formTarget.classList.add('hidden')
+    this.formTarget.reset()
     this.formTarget.classList.remove('transfer-rule-form--active')
   }
 

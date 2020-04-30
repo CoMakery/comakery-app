@@ -12,6 +12,7 @@ export default class extends Controller {
   hideForm() {
     this.buttonTarget.disabled = false
     this.formTarget.classList.add('hidden')
+    this.formTarget.reset()
     this.formTarget.classList.remove('transfer-rule-form--active')
   }
 }
