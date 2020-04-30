@@ -87,6 +87,7 @@ class AccountsController < ApplicationController
         session.delete(:account_id)
         @current_account = nil
         flash[:warning] = 'Please confirm your email address to continue'
+        @account.set_email_confirm_token
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
       end
       redirect_to my_tasks_path
