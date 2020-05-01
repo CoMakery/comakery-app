@@ -297,6 +297,11 @@ class Account < ApplicationRecord
 
   after_update :check_email_update
 
+  def set_email_confirm_token
+    # rubocop:disable SkipsModelValidations
+    update_column :email_confirm_token, SecureRandom.hex
+  end
+
   private
 
   def validate_age
@@ -311,10 +316,7 @@ class Account < ApplicationRecord
   end
 
   def check_email_update
-    if saved_change_to_email?
-      # rubocop:disable SkipsModelValidations
-      update_column :email_confirm_token, SecureRandom.hex
-    end
+    set_email_confirm_token if saved_change_to_email?
   end
 
   def populate_managed_account_id

@@ -1,5 +1,5 @@
-<%= form_with model: Award.new, url: project_dashboard_transfers_path(@project), class: 'transfers-table__form' do |f| %>
-  <div class="transfers-table__transfer transfers-table__transfer--new" data-target="transfer-form.form">
+<%= form_with model: Award.new, url: project_dashboard_transfers_path(@project), class: 'transfers-table__form', data: {target: 'transfer-form.form'} do |f| %>
+  <div class="transfers-table__transfer transfers-table__transfer--new" data-target="transfer-form.formChild">
     <label>create transfer</label>
 
     <div class="transfers-table__transfer__name">

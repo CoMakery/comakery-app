@@ -13,6 +13,7 @@ export default class extends Controller {
 
   hideForm() {
     this.formTarget.classList.add('hidden')
+    this.formTarget.reset()
 
     this.showTargets.forEach((e) => {
       e.classList.remove('hidden')

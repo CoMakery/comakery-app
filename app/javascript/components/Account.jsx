@@ -144,7 +144,7 @@ export default class Account extends React.Component {
     const downloadWidget = (
       <div className="row">
         <div className="columns small-12 no-h-pad">
-          <a href="/accounts/download_data.zip">
+          <a className="download-data" href="/accounts/download_data.zip">
             Download My Data&nbsp;
             <i className="fa fa-download" />
           </a>
