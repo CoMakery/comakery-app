@@ -35,8 +35,11 @@ class Dashboard::TransfersController < ApplicationController
       @page = (params[:page] || 1).to_i
       @q = @project.awards.completed.ransack(params[:q])
       @transfers_all = @q.result.includes(:issuer, :project, :award_type, :token, :latest_blockchain_transaction, account: %i[verifications latest_verification])
+      @transfers_all.size
       @transfers = @transfers_all.page(@page).per(10)
       redirect_to '/404.html' if (@page > 1) && @transfers.out_of_range?
+    rescue ActiveRecord::StatementInvalid
+      head 404
     end
 
     def set_award_type
