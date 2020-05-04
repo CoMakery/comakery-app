@@ -36,6 +36,7 @@ jobs:
       AWS_API_SECRET: dummy
       REFILE_S3_REGION: dummy
       REFILE_S3_BUCKET: dummy
+      ETHEREUM_EXPLORER_SITE: dummy
       DATABASE_URL: postgres://rails@localhost:5432/rails
       INFURA_PROJECT_ID: 39f6ad316c5a4b87a0f90956333c3666
       # Settings -> Secrets
@@ -106,8 +107,11 @@ jobs:
     - name: Install OS dependenices
       run: sudo apt-get install libpq-dev libssl1.0-dev
     
+    - name: Set up Bundler to use cache
+      run: bundle config set path 'vendor/bundle'
+      
     - name: Install Ruby dependencies
-      run: bundle install --path vendor/bundle
+      run: bundle install
 
     - name: Run Rubocop
       run: bin/rubocop
@@ -126,3 +130,15 @@ jobs:
       
     - name: Run Rspec
       run: env RAILS_ENV=test RACK_ENV=test bundle exec rspec --format documentation
+
+    - name: Archive capybara screenshots
+      uses: actions/upload-artifact@v1
+      with:
+        name: capybara-screenshots
+        path: ./tmp/capybara
+    
+    - name: Archive code coverage report
+      uses: actions/upload-artifact@v1
+      with:
+        name: code-coverage-report
+        path: coverage
