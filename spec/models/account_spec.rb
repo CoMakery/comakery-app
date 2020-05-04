@@ -189,6 +189,16 @@ describe Account do
         end
       end
     end
+
+    describe 'normalize_ethereum_auth_address' do
+      context 'with valid address' do
+        let!(:account) { create(:account, ethereum_auth_address: '0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1') }
+
+        it 'applies checksum to address' do
+          expect(account.ethereum_auth_address).to eq('0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1')
+        end
+      end
+    end
   end
 
   it 'enforces unique emails, case-insensitively' do

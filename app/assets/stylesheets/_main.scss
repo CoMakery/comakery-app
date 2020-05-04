@@ -120,10 +120,10 @@ select {
 }
 
 .fake-link--input {
-	border: none;
+	border: none !important;
 	box-shadow: unset;
 	display: unset;
-	width: 390px;
+	width: 390px !important;
 	cursor: pointer !important;
 	background-color: unset !important;
 	padding: 2px 0;

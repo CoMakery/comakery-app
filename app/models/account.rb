@@ -66,6 +66,7 @@ class Account < ApplicationRecord
   validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
+  validates :ethereum_auth_address, ethereum_address: { type: :account }, uniqueness: true, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
   validates :qtum_wallet, qtum_address: true # see QtumAddressable
   validates :cardano_wallet, cardano_address: true # see CardanoAddressable
@@ -84,9 +85,8 @@ class Account < ApplicationRecord
   end
 
   validate :validate_age, on: :create
-
   before_validation :populate_managed_account_id, if: -> { managed_mission.present? }
-
+  after_validation :normalize_ethereum_auth_address
   before_save :reset_latest_verification, if: -> { will_save_change_to_first_name? || will_save_change_to_last_name? || will_save_change_to_date_of_birth? || will_save_change_to_country? }
 
   after_create :populate_awards
@@ -321,6 +321,10 @@ class Account < ApplicationRecord
 
   def populate_managed_account_id
     self.managed_account_id ||= SecureRandom.uuid
+  end
+
+  def normalize_ethereum_auth_address
+    self.ethereum_auth_address = Eth::Address.new(ethereum_auth_address).checksummed if ethereum_auth_address
   end
 
   def reset_latest_verification

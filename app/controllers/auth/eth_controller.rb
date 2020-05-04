@@ -19,8 +19,11 @@ class Auth::EthController < ApplicationController
     )
 
     if auth.valid?
-      account = Account.find_or_initialize_by(ethereum_wallet: auth_params[:public_address])
-      account.save(validate: false) if account.new_record?
+      account = Account.find_or_initialize_by(ethereum_auth_address: Eth::Address.new(auth_params[:public_address]).checksummed)
+      if account.new_record?
+        account.ethereum_wallet = Eth::Address.new(auth_params[:public_address]).checksummed
+        account.save(validate: false)
+      end
 
       session[:account_id] = account.id
       redirect_to my_tasks_path

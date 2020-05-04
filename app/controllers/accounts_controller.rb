@@ -182,7 +182,29 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :cardano_wallet, :bitcoin_wallet, :eos_wallet, :tezos_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password, :specialty_id, :occupation, :linkedin_url, :github_url, :dribble_url, :behance_url)
+    result = params.require(:account).permit(
+      :email,
+      :ethereum_auth_address,
+      :ethereum_wallet,
+      :qtum_wallet,
+      :cardano_wallet,
+      :bitcoin_wallet,
+      :eos_wallet,
+      :tezos_wallet,
+      :first_name,
+      :last_name,
+      :nickname,
+      :country,
+      :date_of_birth,
+      :image,
+      :password,
+      :specialty_id,
+      :occupation,
+      :linkedin_url,
+      :github_url,
+      :dribble_url,
+      :behance_url
+    )
 
     if result[:date_of_birth].present?
       begin
@@ -213,7 +235,7 @@ class AccountsController < ApplicationController
   end
 
   def account_decorate(account)
-    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet]).merge(
+    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_auth_address ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet]).merge(
       etherscan_address: account.decorate.etherscan_address,
       qtum_address: account.decorate.qtum_wallet_url,
       cardano_address: account.decorate.cardano_wallet_url,
