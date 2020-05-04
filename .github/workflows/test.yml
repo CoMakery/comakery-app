@@ -9,10 +9,10 @@ name: Test
 
 on:
   push:
-  pull_request:
-    branches: [ acceptance, master ]
-  schedule:
-    - cron: "0 2 * * 1-5"
+#   pull_request:
+#     branches: [ acceptance, master ]
+#   schedule:
+#     - cron: "0 2 * * 1-5"
 
 jobs:    
   test:
@@ -74,16 +74,22 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node }}
-        
+
+    - name: Use a specific Yarn version
+      run: yarn policies set-version 1.12.3
+    
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    
     - name: Cache Node dependencies
       uses: actions/cache@v1.1.2
       with:
-        path: node_modules
-        key: ${{ matrix.node }}-${{ hashFiles('yarn.lock')}}
-    
-    - name: Use a specific Yarn version
-      run: yarn policies set-version 1.12.3
-
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ matrix.node }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ matrix.node }}-yarn-
+          
     - name: Install Node dependencies
       run: yarn install
       
@@ -102,16 +108,17 @@ jobs:
       uses: actions/cache@v1.1.2
       with:
         path: vendor/bundle
-        key: ${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock')}}
+        key: ${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock')}}
+        restore-keys: ${{ matrix.ruby }}-gems-
     
     - name: Install OS dependenices
       run: sudo apt-get install libpq-dev libssl1.0-dev
     
     - name: Set up Bundler to use cache
-      run: bundle config set path 'vendor/bundle'
+      run: bundle config path 'vendor/bundle'
       
     - name: Install Ruby dependencies
-      run: bundle install
+      run: bundle install --jobs 4 --retry 3
 
     - name: Run Rubocop
       run: bin/rubocop
