@@ -1,0 +1,132 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: Test
+
+on:
+  push:
+  pull_request:
+    branches: [ acceptance, master ]
+  schedule:
+    - cron: "0 2 * * 1-5"
+
+jobs:    
+  test:
+    strategy:
+      matrix:
+        ruby: [2.6.5]
+        node: [10.13.0]
+    
+    name: Lints, Specs and Security Checks
+    runs-on: ubuntu-latest
+    
+    env:
+      BUNDLER_VERSION: 2.0.1
+      RACK_ENV: production
+      RAILS_ENV: production
+      APP_NAME: production
+      AIRBRAKE_API_KEY: dummy
+      AIRBRAKE_PROJECT_ID: dummy
+      SECRET_KEY_BASE: dummy
+      AWS_API_KEY: dummy
+      AWS_API_SECRET: dummy
+      REFILE_S3_REGION: dummy
+      REFILE_S3_BUCKET: dummy
+      ETHEREUM_EXPLORER_SITE: dummy
+      DATABASE_URL: postgres://rails@localhost:5432/rails
+      INFURA_PROJECT_ID: 39f6ad316c5a4b87a0f90956333c3666
+      # Settings -> Secrets
+      # INFURA_PROJECT_ID: ${{ secrets.InfuraProjectId }}
+
+    services:
+      postgres:
+        image: postgres:10.1-alpine
+        env:
+          POSTGRES_USER: rails
+          POSTGRES_DB: rails
+          POSTGRES_PASSWORD: ""
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+        - 5432:5432
+      
+      redis:
+        image: redis:5.0.6-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+         
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+        
+    - name: Cache Node dependencies
+      uses: actions/cache@v1.1.2
+      with:
+        path: node_modules
+        key: ${{ matrix.node }}-${{ hashFiles('yarn.lock')}}
+    
+    - name: Use a specific Yarn version
+      run: yarn policies set-version 1.12.3
+
+    - name: Install Node dependencies
+      run: yarn install
+      
+    - name: Run Eslint
+      run: yarn lint
+      
+    - name: Run Jest
+      run: yarn test
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        
+    - name: Cache Ruby dependencies
+      uses: actions/cache@v1.1.2
+      with:
+        path: vendor/bundle
+        key: ${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock')}}
+    
+    - name: Install OS dependenices
+      run: sudo apt-get install libpq-dev libssl1.0-dev
+    
+    - name: Set up Bundler to use cache
+      run: bundle config set path 'vendor/bundle'
+      
+    - name: Install Ruby dependencies
+      run: bundle install
+
+    - name: Run Rubocop
+      run: bin/rubocop
+      
+    - name: Run Brakeman
+      run: bundle exec brakeman --exit-on-warn --quiet
+      
+    - name: Precompile assets
+      run: bundle exec rails assets:precompile
+      
+    - name: Setup database
+      run: bundle exec rails db:setup
+      
+    - name: Run data migrations
+      run: bundle exec rails data:migrate
+      
+    - name: Run Rspec
+      run: env RAILS_ENV=test RACK_ENV=test bundle exec rspec --format documentation
