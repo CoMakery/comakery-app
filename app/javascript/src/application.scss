@@ -830,7 +830,7 @@ button.reg-groups-create {
     margin-right: initial;
     display: none;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       display: block;
     }
   }
@@ -866,7 +866,7 @@ button.reg-groups-create {
       margin: 1.5em;
     }
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       height: auto;
     }
   }
@@ -884,7 +884,7 @@ button.reg-groups-create {
       margin: 1.5em;
     }
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       height: auto;
     }
   }
@@ -910,7 +910,7 @@ button.reg-groups-create {
       flex-wrap: nowrap;
       justify-content: flex-end;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         align-items: flex-end;
       }
     }
@@ -920,7 +920,7 @@ button.reg-groups-create {
       margin-left: -1.7em;
       font-weight: bold;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         display: none;
       }
     }
@@ -931,7 +931,7 @@ button.reg-groups-create {
       margin-right: 0.5em;
       font-weight: bold;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         display: none;
       }
     }
@@ -960,7 +960,7 @@ button.reg-groups-create {
     select {
       width: initial;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         width: 100%;
       }
     }
@@ -1022,7 +1022,7 @@ button.reg-groups-create {
     padding: 0px;
     cursor: pointer;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       margin-left: 20em;
     }
   }
@@ -1037,7 +1037,7 @@ button.reg-groups-create {
     margin-top: -1px;
     padding-right: 1em;
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       margin-top: -15px;
     }
   }
@@ -1063,7 +1063,7 @@ button.reg-groups-create {
       padding: 1em 0em 1em 2em;
       word-break: break-all;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         margin-bottom: 0.5em;
         flex-direction: column;
         align-items: flex-start;
@@ -1114,7 +1114,7 @@ button.reg-groups-create {
       text-overflow: ellipsis;
       align-self: center;
 
-      @media (max-width: 1280px) {
+      @media (max-width: 1215px) {
         max-width: initial;
         align-self: initial;
       }
@@ -1217,7 +1217,7 @@ button.reg-groups-create {
       }
     }
 
-    @media (max-width: 1280px) {
+    @media (max-width: 1215px) {
       flex-direction: column;
       padding: 1em 1em 1em 0;
       margin-bottom: 1em;
@@ -1999,7 +1999,7 @@ input.button--right-space {
 }
 
 .input-field__description-middle .input-field--content__text {
-  height: 70px;
+  height: 150px;
   resize: none;
 }
 
@@ -3692,6 +3692,7 @@ input.button--right-space {
   flex-direction: column;
   align-items: center;
   padding: 0px 150px;
+  margin-bottom: 20px;
   color: var(--black);
   text-align: center;
 }
@@ -3796,9 +3797,6 @@ input.button--right-space {
 }
 
 @media screen and (max-width: 650px) {
-  .project-award {
-    padding: 0px 30px;
-  }
 
   .project-award__token {
     flex-direction: column;
@@ -3977,8 +3975,8 @@ input.button--right-space {
 
 .project-description__video__iframe {
   margin: auto;
-  width: 640px;
-  height: 360px;
+  width: 680px;
+  height: 382px;
 }
 
 @media screen and (max-width: 815px) {
@@ -4003,7 +4001,6 @@ input.button--right-space {
   .project-description__text {
     width: 100%;
     padding: 0;
-    font-size: 16px;
     margin-bottom: 20px;
   }
 }
@@ -4026,7 +4023,6 @@ input.button--right-space {
   width: 230px;
   height: 40px;
   font-size: 18px;
-  margin-right: 0;
 }
 
 .project-interest__text {
@@ -4054,10 +4050,6 @@ input.button--right-space {
 }
 
 @media screen and (max-width: 650px) {
-  .project-interest {
-    padding: 30px;
-  }
-
   .project-interest__text {
     font-size: 16px;
   }
@@ -4068,7 +4060,6 @@ input.button--right-space {
   max-width: 1440px;
   margin: auto;
   width: 100%;
-  padding: 60px 345px;
 }
 
 .project-skills__title {
@@ -4086,7 +4077,7 @@ input.button--right-space {
 
 .project-skills__subtitle {
   font-family: Georgia, sans-serif;
-  font-size: 16px;
+  font-size: 21px;
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -4098,6 +4089,7 @@ input.button--right-space {
 }
 
 .project-skill-container {
+  margin: auto;
   margin-top: 40px;
   box-sizing: border-box;
   max-width: 680px;
@@ -4108,7 +4100,6 @@ input.button--right-space {
 
 .project-skill__background {
   position: relative;
-  width: 100%;
   //width: 680px;
   height: auto;
 }
@@ -4186,10 +4177,6 @@ input.button--right-space {
     margin-bottom: 15px;
   }
 
-  .project-skills__subtitle {
-    font-size: 12px;
-  }
-
   .project-skill__background__img {
     //height: 80px;
   }
@@ -4218,12 +4205,6 @@ input.button--right-space {
   //.project-skills {
   //  padding: 80px 30px 60px 30px;
   //}
-
-  .project-skills__subtitle {
-    font-size: 16px;
-    line-height: 1.63;
-    margin: 0 0 40px 0;
-  }
 
   .project-skill__background__img {
     //height: 125px;

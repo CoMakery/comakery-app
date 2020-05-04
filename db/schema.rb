@@ -374,6 +374,12 @@ ActiveRecord::Schema.define(version: 2020_05_01_205019) do
     t.bigint "interests_count"
     t.boolean "whitelabel", default: false, null: false
     t.boolean "auto_add_interest", default: false, null: false
+    t.text "github_url"
+    t.text "documentation_url"
+    t.text "getting_started_url"
+    t.text "governance_url"
+    t.text "funding_url"
+    t.text "video_conference_url"
     t.index ["account_id"], name: "index_projects_on_account_id"
     t.index ["mission_id"], name: "index_projects_on_mission_id"
     t.index ["public"], name: "index_projects_on_public"

@@ -35,7 +35,7 @@ class Project < ApplicationRecord
   enum visibility: %i[member public_listed member_unlisted public_unlisted archived]
   enum status: %i[active passive]
 
-  validates :description, :account, :title, :legal_project_owner, presence: true
+  validates :description, :account, :title, presence: true
   validates :long_id, presence: { message: "identifier can't be blank" }
   validates :long_id, uniqueness: { message: "identifier can't be blank or not unique" }
   validates :maximum_tokens, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
@@ -64,6 +64,12 @@ class Project < ApplicationRecord
   delegate :decimal_places_value, to: :token, allow_nil: true
   delegate :populate_token?, to: :token, allow_nil: true
   delegate :total_awarded, to: :awards, allow_nil: true
+
+  validates :github_url, format: { with: %r{\Ahttps?:\/\/(www\.)?github\.com\/..*\z} }, allow_blank: true
+  validates_url :documentation_url, :getting_started_url, :governance_url, :funding_url, :video_conference_url, allow_blank: true
+  validates_each :github_url, :documentation_url, :getting_started_url, :governance_url, :funding_url, :video_conference_url, allow_blank: true do |record, attr, value|
+    record.errors.add(attr, 'is unsafe') if ApplicationController.helpers.sanitize(value) != value
+  end
 
   def self.assign_project_owner_from(project_or_project_id, email)
     project = project_or_project_id.is_a?(Integer) ? Project.find(project_or_project_id) : project_or_project_id

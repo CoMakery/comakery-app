@@ -46,6 +46,7 @@ class AwardsController < ApplicationController
   end
 
   def show
+    @skip_search_box = true
     render component: 'TaskDetails', props: @props
   end
 
@@ -121,7 +122,12 @@ class AwardsController < ApplicationController
   end
 
   def submit
-    if @award.update(submit_params.merge(status: 'submitted'))
+    if submit_params[:submission_url].blank? &&
+       submit_params[:submission_comment].blank? &&
+       submit_params[:submission_image].blank?
+
+      redirect_to project_award_type_award_path(@project, @award_type, @award), flash: { error: 'You must submit a comment, image or URL documenting your work.' }
+    elsif @award.update(submit_params.merge(status: 'submitted'))
       TaskMailer.with(award: @award, whitelabel_mission: @whitelabel_mission).task_submitted.deliver_now
       redirect_to my_tasks_path(filter: 'submitted'), notice: 'Task submitted'
     else

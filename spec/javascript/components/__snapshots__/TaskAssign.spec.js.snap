@@ -140,7 +140,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                       "componentStyle": ComponentStyle {
                         "componentId": "sc-bdVaJa",
                         "isStatic": false,
-                        "lastClassName": "ezfsJd",
+                        "lastClassName": "cvNMCl",
                         "rules": Array [
                           "
   font-size: 16px;
@@ -165,6 +165,11 @@ exports[`TaskAssign renders correctly without props 1`] = `
   ",
                           [Function],
                           "
+  
+    @media (max-width: 640px) {
+      margin-left: -25px;
+      margin-right: -25px;
+    }
 ",
                         ],
                       },
@@ -181,7 +186,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                   forwardedRef={null}
                 >
                   <div
-                    className="sc-bdVaJa ezfsJd"
+                    className="sc-bdVaJa cvNMCl"
                   >
                     <styled.div>
                       <StyledComponent
@@ -192,16 +197,15 @@ exports[`TaskAssign renders correctly without props 1`] = `
                             "componentStyle": ComponentStyle {
                               "componentId": "sc-bwzfXH",
                               "isStatic": true,
-                              "lastClassName": "fFBqGW",
+                              "lastClassName": "kAVJJi",
                               "rules": Array [
                                 "
   display: flex;
-  flex-direction: row;
+  flex-flow: row;
   justify-content: space-between;
-  flex-wrap: wrap;
   margin: 0.7em;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 640px) {
     flex-direction: column;
   }
 ",
@@ -220,7 +224,7 @@ exports[`TaskAssign renders correctly without props 1`] = `
                         forwardedRef={null}
                       >
                         <div
-                          className="sc-bwzfXH fFBqGW"
+                          className="sc-bwzfXH kAVJJi"
                         />
                       </StyledComponent>
                     </styled.div>

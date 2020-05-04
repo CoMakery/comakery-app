@@ -219,7 +219,6 @@ class BatchForm extends React.Component {
 
             <InputFieldDescriptionMiddle
               title="the goal of the batch"
-              required
               name="batch[goal]"
               value={this.state['batch[goal]']}
               errorText={this.state.errors['batch[goal]']}
@@ -230,7 +229,6 @@ class BatchForm extends React.Component {
 
             <InputFieldDescription
               title="description"
-              required
               name="batch[description]"
               value={this.state['batch[description]']}
               errorText={this.state.errors['batch[description]']}
