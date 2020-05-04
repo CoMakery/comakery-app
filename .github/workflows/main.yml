@@ -21,7 +21,7 @@ jobs:
         ruby: [2.6.5]
         node: [10.13.0]
     
-    name: Rspec + Jest
+    name: Lints, Specs and Security Checks
     runs-on: ubuntu-latest
     
     env:
@@ -74,12 +74,15 @@ jobs:
       with:
         node-version: ${{ matrix.node }}
         
-    - name: Cache Node Dependencies
+    - name: Cache Node dependencies
       uses: actions/cache@v1.1.2
       with:
         path: node_modules
         key: ${{ matrix.node }}-${{ hashFiles('yarn.lock')}}
     
+    - name: Use a specific Yarn version
+      run: yarn policies set-version 1.12.3
+
     - name: Install Node dependencies
       run: yarn install
       
@@ -94,7 +97,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         
-    - name: Cache Ruby Dependencies
+    - name: Cache Ruby dependencies
       uses: actions/cache@v1.1.2
       with:
         path: vendor/bundle
@@ -112,7 +115,7 @@ jobs:
     - name: Run Brakeman
       run: bundle exec brakeman --exit-on-warn --quiet
       
-    - name: Precompile Assets
+    - name: Precompile assets
       run: bundle exec rails assets:precompile
       
     - name: Setup database
