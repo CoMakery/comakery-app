@@ -324,7 +324,7 @@ class Account < ApplicationRecord
   end
 
   def normalize_ethereum_auth_address
-    self.ethereum_auth_address = Eth::Address.new(ethereum_auth_address).checksummed if ethereum_auth_address
+    self.ethereum_auth_address = Eth::Address.new(ethereum_auth_address).checksummed if ethereum_auth_address.present?
   end
 
   def reset_latest_verification
