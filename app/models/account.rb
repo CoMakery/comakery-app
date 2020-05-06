@@ -146,7 +146,19 @@ class Account < ApplicationRecord
         project.safe_add_interested(account)
       end
     end
+
+    def migrate_ethereum_wallet_to_ethereum_auth_address
+      # Allow usage of update_column to update even invalid records:
+      # rubocop:disable Rails/SkipsModelValidations
+
+      Account.where.not(nonce: nil).find_each do |a|
+        if a.ethereum_wallet.present? && a.email.present? && !a.email.match?(/0x.+@comakery.com/)
+          a.update_column(:ethereum_auth_address, a.ethereum_wallet)
+        end
+      end
+    end
   end
+
   before_save :downcase_email
 
   def whitelabel_interested_projects(whitelabel_mission)
@@ -298,7 +310,6 @@ class Account < ApplicationRecord
   after_update :check_email_update
 
   def set_email_confirm_token
-    # rubocop:disable SkipsModelValidations
     update_column :email_confirm_token, SecureRandom.hex
   end
 
