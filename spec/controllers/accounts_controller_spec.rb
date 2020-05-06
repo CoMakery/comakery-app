@@ -277,6 +277,16 @@ describe AccountsController do
       expect(response).to redirect_to my_tasks_path
       expect(assigns[:current_account]).to eq nil
     end
+
+    it 'triggers email confirmation if email is updated' do
+      post :update_profile, params: {
+        account: {
+          email: 'new_email@comakery.com'
+        }
+      }
+      expect(response).to redirect_to my_tasks_path
+      expect(account.reload.email_confirm_token).not_to be_nil
+    end
   end
 
   describe '#confirm_authentication' do

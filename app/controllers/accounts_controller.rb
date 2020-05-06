@@ -80,6 +80,7 @@ class AccountsController < ApplicationController
   def update_profile
     @account = current_account
     authorize @account
+    old_email = @account.email
 
     if @account.update(account_params.merge(name_required: true))
       authentication_id = session.delete(:authentication_id)
@@ -87,9 +88,13 @@ class AccountsController < ApplicationController
         session.delete(:account_id)
         @current_account = nil
         flash[:warning] = 'Please confirm your email address to continue'
+      end
+
+      if old_email != @account.email
         @account.set_email_confirm_token
         UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
       end
+
       redirect_to my_tasks_path
     else
       error_msg = @account.errors.full_messages.join(', ')
