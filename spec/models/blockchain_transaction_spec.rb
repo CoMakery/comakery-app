@@ -157,6 +157,7 @@ describe BlockchainTransaction do
       failed_blockchain_transaction.sync
 
       expect(failed_blockchain_transaction.reload.status).to eq('failed')
+      expect(failed_blockchain_transaction.reload.status_message).to eq('Failed on chain')
     end
 
     it 'returns false for unconfirmed transaction' do

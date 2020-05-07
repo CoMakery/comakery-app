@@ -77,7 +77,7 @@ Rails.application.routes.draw do
     resources :interests, only: [:create, :destroy], defaults: { format: :json }
 
     namespace :dashboard do
-      resources :transfers, only: [:index, :create]
+      resources :transfers, only: [:index, :show, :create]
       resources :accounts, only: [:index, :update]
       resources :reg_groups, only: [:create, :update, :destroy]
       resources :transfer_rules, only: [:create, :destroy, :index] do

@@ -1,0 +1,20 @@
+<%= render layout: 'projects/project_settings' do %>
+  <div class="transfers-filters">
+    <h2>Transfer Transactions</h2>
+
+    <div class="transfers-filters--filter">
+      <h3>transfer id</h3>
+
+      <div class="transfers-filters--filter--options">
+        <div class="transfers-filters--filter--options__active">
+          #<%= @transfer.id %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%= render partial: "transfer_history", locals: {transfer: @transfer} %>
+
+  <div class="transfers-pages">
+  </div>
+<% end %>
