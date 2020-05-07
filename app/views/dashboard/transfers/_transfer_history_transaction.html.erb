@@ -1,0 +1,27 @@
+<div class="transfers-table__transfer">
+  <div class="transfers-table__transfer__trid">
+    <%= transaction.id %>
+  </div>
+
+  <div class="transfers-table__transfer__created_at">
+    <%= transaction.created_at.strftime("%b %e, %Y") %>
+    <br>
+    <%= transaction.created_at.strftime("%r UTC") %>
+  </div>
+
+  <div class="transfers-table__transfer__status">
+    <%= transaction.status.to_s.capitalize %>
+
+    <% if transaction.status_message %>
+      <%= "– " + transaction.status_message %>
+    <% end %>
+  </div>
+
+  <div class="transfers-table__transfer__link">
+    <% if transaction.tx_hash %>
+      <%= link_to "#{transaction.tx_hash[0...20]}...", ethereum_explorer_tx_url(transaction.token, transaction.tx_hash), target: '_blank' %>
+    <% else %>
+      –
+    <% end %>
+  </div>
+</div>

@@ -45,7 +45,7 @@ class BlockchainTransaction < ApplicationRecord
     if valid_on_chain?
       update_status(:succeed)
     else
-      update_status(:failed)
+      update_status(:failed, 'Failed on chain')
     end
   ensure
     update_number_of_syncs

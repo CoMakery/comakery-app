@@ -14,4 +14,19 @@ module ApplicationHelper
       controller_name
     end
   end
+
+  def ethereum_explorer_domain(token)
+    case token&.ethereum_network
+    when nil
+      Rails.application.config.ethereum_explorer_site
+    when 'main'
+      'etherscan.io'
+    else
+      "#{token.ethereum_network}.etherscan.io"
+    end
+  end
+
+  def ethereum_explorer_tx_url(token, tx)
+    "https://#{ethereum_explorer_domain(token)}/tx/#{tx}"
+  end
 end

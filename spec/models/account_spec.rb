@@ -189,6 +189,16 @@ describe Account do
         end
       end
     end
+
+    describe 'normalize_ethereum_auth_address' do
+      context 'with valid address' do
+        let!(:account) { create(:account, ethereum_auth_address: '0xf4258b3415cab41fc9ce5f9b159ab21ede0501b1') }
+
+        it 'applies checksum to address' do
+          expect(account.ethereum_auth_address).to eq('0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1')
+        end
+      end
+    end
   end
 
   it 'enforces unique emails, case-insensitively' do
@@ -769,6 +779,37 @@ describe Account do
     it 'doesnt reset latest verification if non-sensitive info is updated' do
       account.update(nickname: 'new nickname')
       expect(account.reload.latest_verification).not_to be_nil
+    end
+  end
+
+  describe '.migrate_ethereum_wallet_to_ethereum_auth_address' do
+    context 'when metamask auth was used' do
+      context 'with a valid account' do
+        let!(:account) { create(:account, nonce: 0, ethereum_wallet: '0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1') }
+
+        it 'copies ethereum_wallet to ethereum_auth_address' do
+          described_class.migrate_ethereum_wallet_to_ethereum_auth_address
+          expect(account.reload.ethereum_auth_address).to eq(account.ethereum_wallet)
+        end
+      end
+
+      context 'with an unfinished account' do
+        let!(:account) { create(:account, nonce: 0, email: '0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1@comakery.com', ethereum_wallet: '0xF4258B3415Cab41Fc9cE5f9b159Ab21ede0501B1') }
+
+        it 'does nothing' do
+          described_class.migrate_ethereum_wallet_to_ethereum_auth_address
+          expect(account.reload.ethereum_auth_address).to be_nil
+        end
+      end
+    end
+
+    context 'when metamask auth wasnt used' do
+      let!(:account) { create(:account) }
+
+      it 'does nothing' do
+        described_class.migrate_ethereum_wallet_to_ethereum_auth_address
+        expect(account.reload.ethereum_auth_address).to be_nil
+      end
     end
   end
 end

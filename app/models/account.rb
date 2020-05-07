@@ -66,6 +66,7 @@ class Account < ApplicationRecord
   validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
+  validates :ethereum_auth_address, ethereum_address: { type: :account }, uniqueness: true, allow_nil: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
   validates :qtum_wallet, qtum_address: true # see QtumAddressable
   validates :cardano_wallet, cardano_address: true # see CardanoAddressable
@@ -84,9 +85,8 @@ class Account < ApplicationRecord
   end
 
   validate :validate_age, on: :create
-
   before_validation :populate_managed_account_id, if: -> { managed_mission.present? }
-
+  after_validation :normalize_ethereum_auth_address
   before_save :reset_latest_verification, if: -> { will_save_change_to_first_name? || will_save_change_to_last_name? || will_save_change_to_date_of_birth? || will_save_change_to_country? }
 
   after_create :populate_awards
@@ -146,7 +146,19 @@ class Account < ApplicationRecord
         project.safe_add_interested(account)
       end
     end
+
+    def migrate_ethereum_wallet_to_ethereum_auth_address
+      # Allow usage of update_column to update even invalid records:
+      # rubocop:disable Rails/SkipsModelValidations
+
+      Account.where.not(nonce: nil).find_each do |a|
+        if a.ethereum_wallet.present? && a.email.present? && !a.email.match?(/0x.+@comakery.com/)
+          a.update_column(:ethereum_auth_address, a.ethereum_wallet)
+        end
+      end
+    end
   end
+
   before_save :downcase_email
 
   def whitelabel_interested_projects(whitelabel_mission)
@@ -298,7 +310,6 @@ class Account < ApplicationRecord
   after_update :check_email_update
 
   def set_email_confirm_token
-    # rubocop:disable SkipsModelValidations
     update_column :email_confirm_token, SecureRandom.hex
   end
 
@@ -321,6 +332,10 @@ class Account < ApplicationRecord
 
   def populate_managed_account_id
     self.managed_account_id ||= SecureRandom.uuid
+  end
+
+  def normalize_ethereum_auth_address
+    self.ethereum_auth_address = Eth::Address.new(ethereum_auth_address).checksummed if ethereum_auth_address.present?
   end
 
   def reset_latest_verification

@@ -46,7 +46,7 @@ RSpec.describe Auth::EthController, type: :controller do
       end
 
       context 'with existing account' do
-        let!(:account) { create(:account, ethereum_wallet: valid_public_address) }
+        let!(:account) { create(:account, ethereum_auth_address: valid_public_address) }
 
         it 'authenticates' do
           expect do
@@ -59,13 +59,15 @@ RSpec.describe Auth::EthController, type: :controller do
       end
 
       context 'with new account' do
-        it 'creates account and authenticates' do
+        it 'creates account, populating wallet address, and authenticates' do
           expect do
             params = build(:api_signed_request, { auth_eth: { public_address: valid_public_address, signature: valid_signature } }, auth_eth_index_path, 'POST')
             post :create, params: params, session: valid_session
 
             expect(response).to redirect_to my_tasks_path
           end.to change(Account.all, :count).by(1)
+
+          expect(Account.last.ethereum_wallet).to eq(valid_public_address)
         end
       end
     end

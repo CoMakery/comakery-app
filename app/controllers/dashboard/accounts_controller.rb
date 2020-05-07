@@ -35,8 +35,11 @@ class Dashboard::AccountsController < ApplicationController
       @page = (params[:page] || 1).to_i
       @q = @project.interested.includes(:verifications, :awards, :latest_verification, account_token_records: [:reg_group]).ransack(params[:q])
       @accounts_all = @q.result
+      @accounts_all.size
       @accounts = @accounts_all.page(@page).per(10)
       redirect_to '/404.html' if (@page > 1) && @accounts.out_of_range?
+    rescue ActiveRecord::StatementInvalid
+      head 404
     end
 
     def create_token_records
