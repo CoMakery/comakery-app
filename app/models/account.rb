@@ -219,7 +219,7 @@ class Account < ApplicationRecord
   end
 
   def related_projects(scope = nil)
-    (scope || Project).left_outer_joins(:admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR authentication_teams.account_id = :id OR accounts_projects.account_id = :id', id: id)
+    (scope || Project).left_outer_joins(:admins, channels: [team: [:authentication_teams]]).distinct.where('projects.account_id = :id OR ((authentication_teams.account_id = :id OR accounts_projects.account_id = :id) AND projects.visibility NOT in(4))', id: id)
   end
 
   def accessable_award_types(project_scope = nil)
@@ -227,7 +227,7 @@ class Account < ApplicationRecord
   end
 
   def related_award_types(project_scope = nil)
-    AwardType.where(project: related_projects(project_scope)).or(AwardType.where(project: award_projects))
+    AwardType.where(project: related_projects(project_scope)).or(AwardType.where(project: award_projects.where.not(visibility: :archived)))
   end
 
   def awards_matching_experience(project_scope = nil)
