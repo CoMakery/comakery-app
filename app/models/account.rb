@@ -223,11 +223,11 @@ class Account < ApplicationRecord
   end
 
   def accessable_award_types(project_scope = nil)
-    AwardType.where(project: accessable_projects(project_scope))
+    AwardType.where(project: accessable_projects(project_scope)).or(AwardType.where(project: award_projects.where.not(visibility: :archived)))
   end
 
   def related_award_types(project_scope = nil)
-    AwardType.where(project: related_projects(project_scope)).or(AwardType.where(project: award_projects.where.not(visibility: :archived)))
+    AwardType.where(project: related_projects(project_scope))
   end
 
   def awards_matching_experience(project_scope = nil)
