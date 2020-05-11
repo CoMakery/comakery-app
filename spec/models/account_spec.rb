@@ -515,7 +515,14 @@ describe Account do
     let!(:teammate_award_type) { create(:award_type, project: teammate_project) }
     let!(:teammate_award) { create(:award, award_type: teammate_award_type, issuer: teammate) }
     let!(:awarded_project) { create(:award, account: account).project }
-    let!(:award_from_awarded_project) { create(:award, award_type: create(:award_type, project: awarded_project)) }
+    let!(:award_from_awarded_project) { create(:award, status: :ready, award_type: create(:award_type, project: awarded_project)) }
+    let!(:award_w_not_matching_exp_from_awarded_project) { create(:award, status: :ready, experience_level: 10, award_type: create(:award_type, project: awarded_project)) }
+    let!(:archived_awarded_project) do
+      pr = create(:award, account: account).project
+      pr.archived!
+      pr
+    end
+    let!(:award_from_archived_awarded_project) { create(:award, status: :ready, award_type: create(:award_type, project: archived_awarded_project)) }
 
     before do
       team.build_authentication_team authentication
@@ -542,6 +549,14 @@ describe Account do
 
     it 'returns awards from awarded projects' do
       expect(account.accessable_awards).to include(award_from_awarded_project)
+    end
+
+    it 'doesnt return awards with not matching exp from awarded projects' do
+      expect(account.accessable_awards).not_to include(award_w_not_matching_exp_from_awarded_project)
+    end
+
+    it 'doesnt return awards from archived awarded projects' do
+      expect(account.accessable_awards).not_to include(award_from_archived_awarded_project)
     end
   end
 
