@@ -278,11 +278,11 @@ exports[`Project renders correctly without props 1`] = `
             "componentStyle": ComponentStyle {
               "componentId": "sc-jDwBTQ",
               "isStatic": true,
-              "lastClassName": "hkJMHo",
+              "lastClassName": "fvqpoU",
               "rules": Array [
                 "
   padding: 15px;
-  max-width: 980px;
+  max-width: 680px;
   margin: auto;
 ",
               ],
@@ -300,7 +300,7 @@ exports[`Project renders correctly without props 1`] = `
         forwardedRef={null}
       >
         <div
-          className="sc-jDwBTQ hkJMHo"
+          className="sc-jDwBTQ fvqpoU"
         >
           <styled.div>
             <StyledComponent
