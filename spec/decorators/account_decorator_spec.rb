@@ -237,4 +237,42 @@ describe AccountDecorator do
       expect(account.decorate.total_received_in(token)).to eq(3)
     end
   end
+
+  describe 'total_accepted_in' do
+    let!(:account) { create(:account) }
+    let!(:token) { create(:token) }
+    let!(:token2) { create(:token) }
+    let!(:award_type) { create(:award_type, project: create(:project, token: token)) }
+    let!(:award_type2) { create(:award_type, project: create(:project, token: token2)) }
+
+    before do
+      create(:award, account: account, status: :accepted, amount: 1, award_type: award_type)
+      create(:award, account: account, status: :accepted, amount: 2, award_type: award_type)
+      create(:award, account: account, status: :rejected, amount: 4, award_type: award_type)
+      create(:award, account: account, status: :accepted, amount: 8, award_type: award_type2)
+    end
+
+    it 'sums up total_amounts of account accepted tasks from projects using given token' do
+      expect(account.decorate.total_accepted_in(token)).to eq(3)
+    end
+  end
+
+  describe 'total_received_and_accepted_in' do
+    let!(:account) { create(:account) }
+    let!(:token) { create(:token) }
+    let!(:token2) { create(:token) }
+    let!(:award_type) { create(:award_type, project: create(:project, token: token)) }
+    let!(:award_type2) { create(:award_type, project: create(:project, token: token2)) }
+
+    before do
+      create(:award, account: account, status: :accepted, amount: 1, award_type: award_type)
+      create(:award, account: account, status: :paid, amount: 2, award_type: award_type)
+      create(:award, account: account, status: :rejected, amount: 4, award_type: award_type)
+      create(:award, account: account, status: :accepted, amount: 8, award_type: award_type2)
+    end
+
+    it 'sums up total_amounts of account accepted and paid tasks from projects using given token' do
+      expect(account.decorate.total_received_and_accepted_in(token)).to eq(3)
+    end
+  end
 end

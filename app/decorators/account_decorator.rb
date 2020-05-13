@@ -107,4 +107,12 @@ class AccountDecorator < Draper::Decorator
   def total_received_in(token)
     awards.paid.joins(:project).where('projects.token_id = :id', id: token.id).sum(:total_amount)
   end
+
+  def total_accepted_in(token)
+    awards.accepted.joins(:project).where('projects.token_id = :id', id: token.id).sum(:total_amount)
+  end
+
+  def total_received_and_accepted_in(token)
+    total_received_in(token) + total_accepted_in(token)
+  end
 end
