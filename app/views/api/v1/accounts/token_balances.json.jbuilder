@@ -15,4 +15,5 @@ json.array! Token.all do |token|
   end
 
   json.total_received @account.decorate.total_received_in(token)
+  json.total_received_and_accepted_in @account.decorate.total_received_and_accepted_in(token)
 end

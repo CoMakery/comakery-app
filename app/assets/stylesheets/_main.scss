@@ -94,7 +94,9 @@ a .button.take-action {
 }
 
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="text"],
+select {
   border-radius: 6px;
   border: solid 1px #e6e8ed;
   height: 35px;
@@ -105,7 +107,8 @@ input[type="password"] {
   width: 100%;
   min-width: initial;
   font-weight: 500;
-  margin-right: 0.5em;
+	margin-right: 0.5em;
+	background: none;
 }
 
 .fake-link {
@@ -117,10 +120,10 @@ input[type="password"] {
 }
 
 .fake-link--input {
-	border: none;
+	border: none !important;
 	box-shadow: unset;
 	display: unset;
-	width: 390px;
+	width: 390px !important;
 	cursor: pointer !important;
 	background-color: unset !important;
 	padding: 2px 0;
@@ -358,14 +361,12 @@ ul {
 }
 
 .error {
-	select {
-		border: 2px solid $error-color;
-	}
 	small.error {
 		color: $error-color;
 		display: block;
 		margin-top: -1em;
 		margin-bottom: 1em;
+		text-align: right;
 	}
 }
 
@@ -536,8 +537,6 @@ progress {
 
 .auth-button {
 	float: left;
-	border: 1px solid #ccc;
-	border-radius: 5px;
 	padding: 8px;
 	padding-left: 60px;
 	width: 180px;
@@ -546,10 +545,13 @@ progress {
 	background-repeat: no-repeat;
 	background-size: 28px;
 	background-position: 8px;
-}
-
-.sessions-new .auth-button {
-	width: 237px;
+	border-radius: 6px;
+	border: solid 1px #e6e8ed;
+	height: 35px;
+	font-family: Montserrat, sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .auth-button.metamask {

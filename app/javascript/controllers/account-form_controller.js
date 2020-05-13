@@ -60,6 +60,7 @@ export default class extends ComakerySecurityTokenController {
     })
 
     this.formTarget.classList.remove('account-form--active')
+    this.formTarget.reset()
   }
 
   _submitTransaction(_) {

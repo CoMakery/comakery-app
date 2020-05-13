@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe BlockchainTransaction do
+describe BlockchainTransaction, vcr: true do
   describe 'associations' do
     let!(:blockchain_transaction) { create(:blockchain_transaction) }
     let!(:blockchain_transaction_update) { create(:blockchain_transaction_update, blockchain_transaction: blockchain_transaction) }
@@ -20,7 +20,7 @@ describe BlockchainTransaction do
 
   describe 'validations' do
     it 'makes attributes readonly' do
-      %i[amount source destination network contract_address].each do |attr|
+      %i[amount source destination network contract_address current_block].each do |attr|
         expect(described_class.readonly_attributes).to include(attr.to_s)
       end
     end
@@ -55,6 +55,10 @@ describe BlockchainTransaction do
       expect(blockchain_transaction.destination).to eq(blockchain_transaction.award.recipient_address)
       expect(blockchain_transaction.network).to eq(blockchain_transaction.token.ethereum_network)
       expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.ethereum_contract_address)
+    end
+
+    it 'sets current block' do
+      expect(blockchain_transaction.current_block).to eq(7890718)
     end
 
     context 'with comakery token and nonce provided' do
@@ -140,12 +144,12 @@ describe BlockchainTransaction do
         source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
         destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
         amount: 100,
-        created_at: Time.zone.at(0)
+        current_block: 0
       )
     end
 
-    let!(:failed_blockchain_transaction) { create(:blockchain_transaction, nonce: 1, tx_hash: '0x94f00ce58c31913178e1aeab790967f7f62545126de118a064249a883c4159d4') }
-    let!(:unconfirmed_blockchain_transaction) { create(:blockchain_transaction, nonce: 1, tx_hash: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff') }
+    let!(:failed_blockchain_transaction) { create(:blockchain_transaction, nonce: 1, tx_hash: '0x94f00ce58c31913178e1aeab790967f7f62545126de118a064249a883c4159d4', current_block: 0) }
+    let!(:unconfirmed_blockchain_transaction) { create(:blockchain_transaction, nonce: 1, tx_hash: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff', current_block: 0) }
 
     it 'udpates status to succeed for successfull transaction' do
       succeed_blockchain_transaction.sync
@@ -157,6 +161,7 @@ describe BlockchainTransaction do
       failed_blockchain_transaction.sync
 
       expect(failed_blockchain_transaction.reload.status).to eq('failed')
+      expect(failed_blockchain_transaction.reload.status_message).to eq('Failed on chain')
     end
 
     it 'returns false for unconfirmed transaction' do
@@ -249,7 +254,7 @@ describe BlockchainTransaction do
           destination: '0xbbc7e3ee37977ca508f63230471d1001d22bfdd5',
           source: '0x81b7e08f65bdf5648606c89998a9cc8164397647',
           amount: 1,
-          created_at: Time.zone.at(0)
+          current_block: 0
         )
       end
 
@@ -278,7 +283,7 @@ describe BlockchainTransaction do
           destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
           source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
           amount: 100,
-          created_at: Time.zone.at(0)
+          current_block: 0
         )
       end
 

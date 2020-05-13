@@ -45,17 +45,6 @@ RSpec.describe PagesController, type: :controller do
     expect(response.status).to eq(200)
   end
 
-  it 'create interest' do
-    account = create :account
-    project = create :project
-    login account
-    stub_airtable
-    post :add_interest, params: { project_id: project.id, protocol: 'Vevue', format: :json }
-    interest = assigns['interest']
-    expect(interest.project).to eq project
-    expect(interest.protocol).to eq 'Vevue'
-  end
-
   it 'basic auth' do
     ENV.stub(:key?) { 'test:test' }
     ENV.stub(:fetch) { 'test:test' }

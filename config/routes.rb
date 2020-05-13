@@ -35,8 +35,6 @@ Rails.application.routes.draw do
 
   get '/logout', to: "sessions#destroy"
 
-  post '/add-interest' => "pages#add_interest", as: :add_interest
-
   get '/joinus' => "pages#join_us"
   get '/user-agreement' => "pages#user_agreement"
   get '/e-sign-disclosure' => "pages#e_sign_disclosure"
@@ -76,9 +74,10 @@ Rails.application.routes.draw do
       end
     end
     resources :contributors, only: [:index]
+    resources :interests, only: [:create, :destroy], defaults: { format: :json }
 
     namespace :dashboard do
-      resources :transfers, only: [:index, :create]
+      resources :transfers, only: [:index, :show, :create]
       resources :accounts, only: [:index, :update]
       resources :reg_groups, only: [:create, :update, :destroy]
       resources :transfer_rules, only: [:create, :destroy, :index] do
@@ -123,14 +122,11 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :api, defaults: { format: :json } do
-    resources :accounts, only: [:create] do
-      collection do
-        get :find_by_public_address
-        post :auth
-      end
-    end
+  namespace :auth, defaults: { format: :json } do
+    resources :eth, only: [:new, :create]
+  end
 
+  namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :accounts, only: [:show, :update, :create] do
         resources :interests, only: [:index, :create, :destroy]

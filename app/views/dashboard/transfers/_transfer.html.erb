@@ -60,6 +60,10 @@
       <label>transfer</label>
 
       <%= render partial: "shared/transfer_button", locals: {transfer: transfer} %>
+
+      <% if transfer.blockchain_transactions.size > 0 %>
+        <%= link_to "#{transfer.blockchain_transactions.size} Tx ➔", project_dashboard_transfer_path(transfer.project, transfer), class: 'transfers-table__transfer__button__history' %>
+      <% end %>
     </div>
   <% end %>
 

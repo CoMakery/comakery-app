@@ -71,6 +71,11 @@ or if you want to run with delayed jobs:
 ```sh
 bin/server
 ```
+
+Enable caching (required for Metamask Auth and Rack-Attack):
+```sh
+rails dev:cache
+```
 ## React on Rails
 
 ###  Webpacker

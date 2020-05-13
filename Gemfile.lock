@@ -455,6 +455,7 @@ GEM
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
+    rails_autoscale_agent (0.8.1)
     rails_serve_static_assets (0.0.5)
     rails_stdout_logging (0.0.5)
     railties (6.0.2.2)
@@ -732,6 +733,7 @@ DEPENDENCIES
   rails-data-migrations
   rails-html-sanitizer
   rails_12factor
+  rails_autoscale_agent
   ransack (~> 2.3)
   react-rails
   redcarpet

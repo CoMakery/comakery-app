@@ -55,11 +55,12 @@ export default class Account extends React.Component {
     formData.append('account[nickname]', this.state.nickname || '')
     formData.append('account[date_of_birth]', this.dateInput.current.value || '')
     formData.append('account[country]', this.state.country || '')
+    formData.append('account[ethereum_auth_address]', this.state.ethereumAuthAddress || '')
+    formData.append('account[ethereum_wallet]', this.state.ethereumWallet || '')
     formData.append('account[eos_wallet]', this.state.eosWallet || '')
     formData.append('account[bitcoin_wallet]', this.state.bitcoinWallet || '')
     formData.append('account[cardano_wallet]', this.state.cardanoWallet || '')
     formData.append('account[qtum_wallet]', this.state.qtumWallet || '')
-    formData.append('account[ethereum_wallet]', this.state.ethereumWallet || '')
     formData.append('account[tezos_wallet]', this.state.tezosWallet || '')
     formData.append('account[specialty_id]', this.state.specialtyId || '')
     formData.append('account[occupation]', this.state.occupation || '')
@@ -144,7 +145,7 @@ export default class Account extends React.Component {
     const downloadWidget = (
       <div className="row">
         <div className="columns small-12 no-h-pad">
-          <a href="/accounts/download_data.zip">
+          <a className="download-data" href="/accounts/download_data.zip">
             Download My Data&nbsp;
             <i className="fa fa-download" />
           </a>
@@ -163,7 +164,7 @@ export default class Account extends React.Component {
       <div className="ethereum_wallet m-t-10">
         <div className={`${this.state.isEdit ? '' : 'hide'} edit-ethereum-wallet`}>
           <h4 style={{ border: 'none' }}>
-            Account Detail (
+            Account Details (
             <a href="#" onClick={this.handleChangeEditMode}>
               Cancel
             </a>
@@ -175,6 +176,7 @@ export default class Account extends React.Component {
               <FormField fieldLabel="First Name" fieldName="firstName" fieldValue={this.state.firstName} handleChange={this.handleChangeAccountFormData} error={this.state.errors.firstName} />
               <FormField fieldLabel="Last Name" fieldName="lastName" fieldValue={this.state.lastName} handleChange={this.handleChangeAccountFormData} error={this.state.errors.lastName} />
               <FormField fieldLabel="Nickname" fieldName="nickname" fieldValue={this.state.nickname} handleChange={this.handleChangeAccountFormData} error={this.state.errors.nickname} />
+              <FormField fieldLabel="Ethereum Auth Address" fieldName="ethereumAuthAddress" fieldValue={this.state.ethereumAuthAddress} handleChange={this.handleChangeAccountFormData} error={this.state.errors.ethereumAuthAddress} />
               <div className="columns small-3">
                 <label>Date of Birth</label>
               </div>
@@ -264,6 +266,7 @@ export default class Account extends React.Component {
             <DataField fieldName="First Name" fieldValue={this.state.accountData.firstName} />
             <DataField fieldName="Last Name" fieldValue={this.state.accountData.lastName} />
             <DataField fieldName="Nickname" fieldValue={this.state.accountData.nickname} />
+            <DataField fieldName="Ethereum Auth Address" fieldValue={this.state.ethereumAuthAddress} />
             <DataField fieldName="Date of Birth" fieldValue={this.state.accountData.dateOfBirth} />
             <DataField fieldName="Country" fieldValue={this.state.accountData.country} />
 

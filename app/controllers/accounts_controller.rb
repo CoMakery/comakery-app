@@ -80,6 +80,7 @@ class AccountsController < ApplicationController
   def update_profile
     @account = current_account
     authorize @account
+    old_email = @account.email
 
     if @account.update(account_params.merge(name_required: true))
       authentication_id = session.delete(:authentication_id)
@@ -88,6 +89,12 @@ class AccountsController < ApplicationController
         @current_account = nil
         flash[:warning] = 'Please confirm your email address to continue'
       end
+
+      if old_email != @account.email
+        @account.set_email_confirm_token
+        UserMailer.with(whitelabel_mission: @whitelabel_mission).confirm_email(@account).deliver
+      end
+
       redirect_to my_tasks_path
     else
       error_msg = @account.errors.full_messages.join(', ')
@@ -180,7 +187,29 @@ class AccountsController < ApplicationController
   protected
 
   def account_params
-    result = params.require(:account).permit(:email, :ethereum_wallet, :qtum_wallet, :cardano_wallet, :bitcoin_wallet, :eos_wallet, :tezos_wallet, :first_name, :last_name, :nickname, :country, :date_of_birth, :image, :password, :specialty_id, :occupation, :linkedin_url, :github_url, :dribble_url, :behance_url)
+    result = params.require(:account).permit(
+      :email,
+      :ethereum_auth_address,
+      :ethereum_wallet,
+      :qtum_wallet,
+      :cardano_wallet,
+      :bitcoin_wallet,
+      :eos_wallet,
+      :tezos_wallet,
+      :first_name,
+      :last_name,
+      :nickname,
+      :country,
+      :date_of_birth,
+      :image,
+      :password,
+      :specialty_id,
+      :occupation,
+      :linkedin_url,
+      :github_url,
+      :dribble_url,
+      :behance_url
+    )
 
     if result[:date_of_birth].present?
       begin
@@ -211,7 +240,7 @@ class AccountsController < ApplicationController
   end
 
   def account_decorate(account)
-    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet]).merge(
+    account.as_json(only: %i[email first_name last_name nickname date_of_birth country qtum_wallet ethereum_auth_address ethereum_wallet cardano_wallet bitcoin_wallet eos_wallet tezos_wallet]).merge(
       etherscan_address: account.decorate.etherscan_address,
       qtum_address: account.decorate.qtum_wallet_url,
       cardano_address: account.decorate.cardano_wallet_url,

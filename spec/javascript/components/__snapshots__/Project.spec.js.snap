@@ -230,7 +230,7 @@ exports[`Project renders correctly without props 1`] = `
         className="button project-interest__button"
         onClick={[Function]}
       >
-        I’m Interested
+        Follow
       </button>
       <div
         className="project-team"
@@ -530,7 +530,7 @@ exports[`Project renders correctly without props 1`] = `
         className="button project-interest__button"
         onClick={[Function]}
       >
-        I’m Interested
+        Follow
       </button>
     </div>
   </div>

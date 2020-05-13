@@ -5,6 +5,43 @@ http_interactions:
     uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
     body:
       encoding: UTF-8
+      string: '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - ropsten.infura.io
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 13 May 2020 13:20:08 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '44'
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x787a27"}'
+    http_version: null
+  recorded_at: Wed, 13 May 2020 13:20:08 GMT
+- request:
+    method: post
+    uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
+    body:
+      encoding: UTF-8
       string: '{"jsonrpc":"2.0","method":"eth_accounts","params":[],"id":1}'
     headers:
       Content-Type:
@@ -23,7 +60,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 27 Mar 2020 14:11:57 GMT
+      - Wed, 13 May 2020 13:20:08 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -36,5 +73,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"jsonrpc":"2.0","id":1,"result":[]}'
     http_version: null
-  recorded_at: Fri, 27 Mar 2020 14:11:57 GMT
+  recorded_at: Wed, 13 May 2020 13:20:08 GMT
 recorded_with: VCR 5.1.0

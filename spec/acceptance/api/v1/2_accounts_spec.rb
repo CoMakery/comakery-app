@@ -365,6 +365,7 @@ resource 'II. Accounts' do
 
     with_options with_example: true do
       response_field 'total_received', 'total received on platform', type: :integer
+      response_field 'total_received_and_accepted_in', 'total received and accepted on platform', type: :integer
       response_field 'blockchain[address]', 'blockchain address', type: :string
       response_field 'blockchain[balance]', 'blockchain balance', type: :string
       response_field 'blockchain[maxBalance]', 'blockchain max balance', type: :integer
