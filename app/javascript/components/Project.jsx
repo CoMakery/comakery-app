@@ -9,7 +9,7 @@ import InterestsController from '../controllers/interests_controller'
 
 const Tasks = styled.div`
   padding: 15px;
-  max-width: 980px;
+  max-width: 680px;
   margin: auto;
 `
 
