@@ -143,20 +143,20 @@ describe Comakery::EthTx, vcr: true do
     end
   end
 
-  describe 'valid_block_time?' do
-    context 'for transaction block mined before the supplied time' do
+  describe 'valid_block?' do
+    context 'for transaction block mined before the supplied one' do
       let!(:eth_tx) { build(:eth_tx) }
 
       it 'returns false' do
-        expect(eth_tx.valid_block_time?(Time.current)).to be_falsey
+        expect(eth_tx.valid_block?(2**256 - 1)).to be_falsey
       end
     end
 
-    context 'for transaction block mined after the supplied time' do
+    context 'for transaction block mined after the supplied one' do
       let!(:eth_tx) { build(:eth_tx) }
 
       it 'returns true' do
-        expect(eth_tx.valid_block_time?(Time.zone.at(0))).to be_truthy
+        expect(eth_tx.valid_block?(1)).to be_truthy
       end
     end
   end
@@ -166,15 +166,15 @@ describe Comakery::EthTx, vcr: true do
       let!(:eth_tx) { build(:eth_tx) }
 
       it 'returns false' do
-        expect(eth_tx.valid?('0x66ebd5cdf54743a6164b0138330f74dce436d842', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 100, Time.zone.at(0))).to be_falsey
+        expect(eth_tx.valid?('0x66ebd5cdf54743a6164b0138330f74dce436d842', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 100, 1)).to be_falsey
       end
     end
 
-    context 'for transaction with incorrect block time' do
+    context 'for transaction with incorrect block number' do
       let!(:eth_tx) { build(:eth_tx) }
 
       it 'returns false' do
-        expect(eth_tx.valid?('0x66ebd5cdf54743a6164b0138330f74dce436d842', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 0, Time.current)).to be_falsey
+        expect(eth_tx.valid?('0x66ebd5cdf54743a6164b0138330f74dce436d842', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 0, 2**256 - 1)).to be_falsey
       end
     end
 
@@ -182,7 +182,7 @@ describe Comakery::EthTx, vcr: true do
       let!(:eth_tx) { build(:eth_tx) }
 
       it 'returns true' do
-        expect(eth_tx.valid?('0x66ebd5cdf54743a6164b0138330f74dce436d842', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 0, Time.zone.at(0))).to be_truthy
+        expect(eth_tx.valid?('0x66ebd5cdf54743a6164b0138330f74dce436d842', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 0, 1)).to be_truthy
       end
     end
   end
