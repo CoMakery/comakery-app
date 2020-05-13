@@ -81,6 +81,15 @@ describe ProjectsController do
       expect(flash[:error]).not_to be_nil
       expect(project.admins).to match_array([project_admin])
     end
+
+    it 'returns an error if admin is project owner' do
+      post :add_admin, params: { id: project.to_param, email: project.account.email }
+      project.reload
+
+      expect(response).to redirect_to(admins_project_path(project))
+      expect(flash[:error]).not_to be_nil
+      expect(project.admins).to match_array([])
+    end
   end
 
   describe '#remove_admin' do
