@@ -5,7 +5,7 @@ http_interactions:
     uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","method":"eth_getTransactionByHash","params":["0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"],"id":1}'
+      string: '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
     headers:
       Content-Type:
       - application/json
@@ -23,18 +23,18 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 13 May 2020 00:01:13 GMT
+      - Tue, 12 May 2020 23:32:39 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '38'
+      - '44'
       Connection:
       - keep-alive
       Vary:
       - Origin
     body:
       encoding: UTF-8
-      string: '{"jsonrpc":"2.0","id":1,"result":null}'
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x78665f"}'
     http_version: null
-  recorded_at: Wed, 13 May 2020 00:01:13 GMT
+  recorded_at: Tue, 12 May 2020 23:32:39 GMT
 recorded_with: VCR 5.1.0

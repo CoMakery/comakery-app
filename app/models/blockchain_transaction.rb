@@ -6,9 +6,9 @@ class BlockchainTransaction < ApplicationRecord
   before_validation :populate_data
   before_validation :generate_transaction
 
-  attr_readonly :amount, :source, :destination, :network, :contract_address
+  attr_readonly :amount, :source, :destination, :network, :contract_address, :current_block
   validates_with EthereumTokenValidator
-  validates :amount, :source, :destination, :network, :status, presence: true
+  validates :amount, :source, :destination, :network, :status, :current_block, presence: true
   validates :contract_address, presence: true, if: -> { token.coin_type_token? }
   validates :tx_raw, :tx_hash, presence: true, if: -> { token.coin_type_comakery? && nonce.present? }
 
@@ -90,9 +90,9 @@ class BlockchainTransaction < ApplicationRecord
   def valid_on_chain?
     case on_chain
     when Comakery::Erc20Mint, Comakery::Erc20Burn, Comakery::Erc20Transfer
-      on_chain.valid?(source, contract_address, destination, amount, created_at)
+      on_chain.valid?(source, contract_address, destination, amount, current_block)
     when Comakery::EthTx
-      on_chain.valid?(source, destination, amount, created_at)
+      on_chain.valid?(source, destination, amount, current_block)
     end
   end
 
@@ -103,6 +103,7 @@ class BlockchainTransaction < ApplicationRecord
       self.destination = award.recipient_address
       self.network = token.ethereum_network
       self.contract_address = token.ethereum_contract_address
+      self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
     end
 
     def contract

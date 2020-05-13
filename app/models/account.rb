@@ -66,7 +66,7 @@ class Account < ApplicationRecord
   validates :managed_account_id, presence: true, length: { maximum: 256 }, uniqueness: { scope: %i[managed_mission] }, if: -> { managed_mission.present? }
 
   validates :public_address, uniqueness: { case_sensitive: false }, allow_nil: true
-  validates :ethereum_auth_address, ethereum_address: { type: :account }, uniqueness: true, allow_nil: true
+  validates :ethereum_auth_address, ethereum_address: { type: :account }, uniqueness: true, allow_blank: true
   validates :ethereum_wallet, ethereum_address: { type: :account } # see EthereumAddressable
   validates :qtum_wallet, qtum_address: true # see QtumAddressable
   validates :cardano_wallet, cardano_address: true # see CardanoAddressable
