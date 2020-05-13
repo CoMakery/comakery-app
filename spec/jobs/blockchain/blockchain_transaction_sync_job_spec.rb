@@ -9,7 +9,7 @@ RSpec.describe Blockchain::BlockchainTransactionSyncJob, type: :job, vcr: true d
       source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
       destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
       amount: 100,
-      created_at: Time.zone.at(0),
+      current_block: 1,
       status: :pending
     )
   end
