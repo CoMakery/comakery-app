@@ -78,7 +78,6 @@ group(:development, :test) do
 end
 
 group(:development) do
-  gem 'better_errors'
   gem 'git-storyid'
   # gem 'html2fortitude'  # requires old ruby_parser, try global "gem install html2fortitude" instead
   gem 'letter_opener'

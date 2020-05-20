@@ -1,6 +1,6 @@
 class BlockchainTransaction < ApplicationRecord
-  belongs_to :award
-  has_one :token, through: :award
+  belongs_to :blockchain_transactable, polymorphic: true
+  delegate :token, to: :blockchain_transactable
   has_many :updates, class_name: 'BlockchainTransactionUpdate'
 
   before_validation :populate_data
@@ -35,7 +35,9 @@ class BlockchainTransaction < ApplicationRecord
     if update!(status: new_status, status_message: new_message)
       updates.create!(status: status, status_message: status_message)
 
-      award.update!(status: :paid) if status.to_s == 'succeed'
+      if blockchain_transactable.is_a?(Award)
+        blockchain_transactable.update!(status: :paid) if status.to_s == 'succeed'
+      end
     end
   end
 
@@ -70,16 +72,16 @@ class BlockchainTransaction < ApplicationRecord
 
   def on_chain
     @on_chain ||= if token.coin_type_token?
-      case award.source
+      case blockchain_transactable.source
       when 'mint'
-        Comakery::Erc20Mint.new(network, tx_hash)
+        Comakery::Eth::Tx::Erc20::Mint.new(network, tx_hash)
       when 'burn'
-        Comakery::Erc20Burn.new(network, tx_hash)
+        Comakery::Eth::Tx::Erc20::Burn.new(network, tx_hash)
       else
-        Comakery::Erc20Transfer.new(network, tx_hash)
+        Comakery::Eth::Tx::Erc20::Transfer.new(network, tx_hash)
       end
     else
-      Comakery::EthTx.new(network, tx_hash)
+      Comakery::Eth::Tx.new(network, tx_hash)
     end
   end
 
@@ -89,9 +91,9 @@ class BlockchainTransaction < ApplicationRecord
 
   def valid_on_chain?
     case on_chain
-    when Comakery::Erc20Mint, Comakery::Erc20Burn, Comakery::Erc20Transfer
+    when Comakery::Eth::Tx::Erc20::Mint, Comakery::Eth::Tx::Erc20::Burn, Comakery::Eth::Tx::Erc20::Transfer
       on_chain.valid?(source, contract_address, destination, amount, current_block)
-    when Comakery::EthTx
+    when Comakery::Eth::Tx
       on_chain.valid?(source, destination, amount, current_block)
     end
   end
@@ -99,25 +101,31 @@ class BlockchainTransaction < ApplicationRecord
   private
 
     def populate_data
-      self.amount = token.to_base_unit(award.total_amount)
-      self.destination = award.recipient_address
-      self.network = token.ethereum_network
-      self.contract_address = token.ethereum_contract_address
-      self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
+      case blockchain_transactable
+      when Award
+        self.amount = token.to_base_unit(blockchain_transactable.total_amount)
+        self.destination = blockchain_transactable.recipient_address
+        self.network = token.ethereum_network
+        self.contract_address = token.ethereum_contract_address
+        self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
+      end
     end
 
     def contract
-      @contract ||= Comakery::Erc20.new(contract_address, token.abi, network, nonce)
+      @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, token.abi, network, nonce)
     end
 
     def tx
-      @tx ||= case award.source
-              when 'mint'
-                contract.mint(destination, amount)
-              when 'burn'
-                contract.burn(destination, amount)
-              else
-                contract.transfer(destination, amount)
+      @tx ||= case blockchain_transactable
+              when Award
+                case blockchain_transactable.source
+                when 'mint'
+                  contract.mint(destination, amount)
+                when 'burn'
+                  contract.burn(destination, amount)
+                else
+                  contract.transfer(destination, amount)
+                end
       end
     end
 
