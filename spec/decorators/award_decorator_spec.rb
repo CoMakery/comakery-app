@@ -234,9 +234,9 @@ describe AwardDecorator do
   end
 
   describe 'transfer_button_state_class' do
-    let!(:award_created_not_expired) { create(:blockchain_transaction, status: :created, created_at: 1.year.from_now).award }
-    let!(:award_pending) { create(:blockchain_transaction, status: :pending).award }
-    let!(:award_created_expired) { create(:blockchain_transaction, status: :created, created_at: 1.year.ago).award }
+    let!(:award_created_not_expired) { create(:blockchain_transaction, status: :created, created_at: 1.year.from_now).blockchain_transactable }
+    let!(:award_pending) { create(:blockchain_transaction, status: :pending).blockchain_transactable }
+    let!(:award_created_expired) { create(:blockchain_transaction, status: :created, created_at: 1.year.ago).blockchain_transactable }
     let!(:award) { create(:award) }
 
     it 'returns css class for award with created blockchain_transaction' do
