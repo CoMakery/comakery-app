@@ -5,8 +5,8 @@ describe BlockchainTransaction, vcr: true do
     let!(:blockchain_transaction) { create(:blockchain_transaction) }
     let!(:blockchain_transaction_update) { create(:blockchain_transaction_update, blockchain_transaction: blockchain_transaction) }
 
-    it 'belongs to award' do
-      expect(blockchain_transaction.award).to be_an(Award)
+    it 'belongs to blockchain_transactable' do
+      expect(blockchain_transaction.blockchain_transactable).to be_an(Award)
     end
 
     it 'has_one token' do
@@ -29,17 +29,17 @@ describe BlockchainTransaction, vcr: true do
   describe 'callbacks' do
     let!(:blockchain_transaction) { create(:blockchain_transaction, nonce: 0) }
     let!(:award_mint) do
-      a = blockchain_transaction.award.dup
+      a = blockchain_transaction.blockchain_transactable.dup
       a.update(source: :mint)
       a
     end
     let!(:award_burn) do
-      a = blockchain_transaction.award.dup
+      a = blockchain_transaction.blockchain_transactable.dup
       a.update(source: :burn)
       a
     end
-    let!(:blockchain_transaction_mint) { create(:blockchain_transaction, nonce: 0, award: award_mint) }
-    let!(:blockchain_transaction_burn) { create(:blockchain_transaction, nonce: 0, award: award_burn) }
+    let!(:blockchain_transaction_mint) { create(:blockchain_transaction, nonce: 0, blockchain_transactable: award_mint) }
+    let!(:blockchain_transaction_burn) { create(:blockchain_transaction, nonce: 0, blockchain_transactable: award_burn) }
     let!(:contract) do
       build(
         :erc20_contract,
@@ -51,8 +51,8 @@ describe BlockchainTransaction, vcr: true do
     end
 
     it 'populates transaction data from award and token' do
-      expect(blockchain_transaction.amount).to eq(blockchain_transaction.token.to_base_unit(blockchain_transaction.award.amount))
-      expect(blockchain_transaction.destination).to eq(blockchain_transaction.award.recipient_address)
+      expect(blockchain_transaction.amount).to eq(blockchain_transaction.token.to_base_unit(blockchain_transaction.blockchain_transactable.amount))
+      expect(blockchain_transaction.destination).to eq(blockchain_transaction.blockchain_transactable.recipient_address)
       expect(blockchain_transaction.network).to eq(blockchain_transaction.token.ethereum_network)
       expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.ethereum_contract_address)
     end
@@ -132,7 +132,7 @@ describe BlockchainTransaction, vcr: true do
     it 'marks award as paid if status succeed' do
       blockchain_transaction.update_status(:succeed)
 
-      expect(blockchain_transaction.award.status).to eq('paid')
+      expect(blockchain_transaction.blockchain_transactable.status).to eq('paid')
     end
   end
 
@@ -187,7 +187,7 @@ describe BlockchainTransaction, vcr: true do
           )
         )
 
-        expect(blockchain_transaction.on_chain).to be_an(Comakery::EthTx)
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx)
       end
     end
 
@@ -195,25 +195,25 @@ describe BlockchainTransaction, vcr: true do
       it 'returns Comakery::Erc20Transfer' do
         blockchain_transaction = build(:blockchain_transaction)
 
-        expect(blockchain_transaction.on_chain).to be_an(Comakery::Erc20Transfer)
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Transfer)
       end
     end
 
     context 'with erc20 mint' do
       it 'returns Comakery::Erc20Mint' do
         blockchain_transaction = build(:blockchain_transaction)
-        blockchain_transaction.award.update(source: :mint)
+        blockchain_transaction.blockchain_transactable.update(source: :mint)
 
-        expect(blockchain_transaction.on_chain).to be_an(Comakery::Erc20Mint)
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Mint)
       end
     end
 
     context 'with erc20 burn' do
       it 'returns Comakery::Erc20Burn' do
         blockchain_transaction = build(:blockchain_transaction)
-        blockchain_transaction.award.update(source: :burn)
+        blockchain_transaction.blockchain_transactable.update(source: :burn)
 
-        expect(blockchain_transaction.on_chain).to be_an(Comakery::Erc20Burn)
+        expect(blockchain_transaction.on_chain).to be_an(Comakery::Eth::Tx::Erc20::Burn)
       end
     end
   end
@@ -430,6 +430,35 @@ describe BlockchainTransaction, vcr: true do
       blockchain_transaction.reload
 
       expect(blockchain_transaction.status).to eq('cancelled')
+    end
+  end
+
+  describe '.migrate_awards_to_blockchain_transactable' do
+    context 'when transaction belongs to an award' do
+      let!(:blockchain_transaction) do
+        create(
+          :blockchain_transaction,
+          award_id: create(
+            :blockchain_transaction_award,
+            token: create(:blockchain_transaction).token
+          ).id
+        )
+      end
+
+      it 'copies award_id to blockchain_transactable_id and populates blockchain_transactable_type' do
+        described_class.migrate_awards_to_blockchain_transactable
+        expect(blockchain_transaction.reload.blockchain_transactable_id).to eq(blockchain_transaction.award_id)
+        expect(blockchain_transaction.reload.blockchain_transactable_type).to eq('Award')
+      end
+    end
+
+    context 'when transaction doesnt belong to an award' do
+      let!(:blockchain_transaction) { create(:blockchain_transaction) }
+
+      it 'does nothing' do
+        described_class.migrate_awards_to_blockchain_transactable
+        expect(blockchain_transaction.reload.blockchain_transactable_id).not_to eq(blockchain_transaction.award_id)
+      end
     end
   end
 end

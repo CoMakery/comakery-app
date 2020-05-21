@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
   let!(:active_whitelabel_mission) { create(:active_whitelabel_mission) }
   let!(:blockchain_transaction) { create(:blockchain_transaction) }
-  let!(:project) { blockchain_transaction.award.project }
+  let!(:project) { blockchain_transaction.blockchain_transactable.project }
 
   let!(:valid_create_attributes) do
     {

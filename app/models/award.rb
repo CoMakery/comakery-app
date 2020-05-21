@@ -5,6 +5,7 @@ class Award < ApplicationRecord
 
   include EthereumAddressable
   include QtumTransactionAddressable
+  include BlockchainTransactable
 
   EXPERIENCE_LEVELS = {
     'New Contributor' => 0,
@@ -31,8 +32,6 @@ class Award < ApplicationRecord
   has_one :team, through: :channel
   has_one :project, through: :award_type
   has_one :token, through: :project
-  has_many :blockchain_transactions
-  has_one :latest_blockchain_transaction, -> { order created_at: :desc }, class_name: 'BlockchainTransaction', foreign_key: :award_id
 
   validates :proof_id, :award_type, :name, presence: true
   validates :amount, numericality: { greater_than_or_equal_to: 0 }
@@ -85,7 +84,7 @@ class Award < ApplicationRecord
   # – Latest blockchain transaction state is "created" and transaction is created more than 10 minutes ago
   scope :ready_for_blockchain_transaction, lambda {
     accepted
-      .joins('LEFT JOIN blockchain_transactions ON blockchain_transactions.award_id = awards.id AND blockchain_transactions.id = (SELECT MAX(id) FROM blockchain_transactions WHERE blockchain_transactions.award_id = awards.id)')
+      .joins('LEFT JOIN blockchain_transactions ON blockchain_transactions.blockchain_transactable_id = awards.id AND blockchain_transactions.id = (SELECT MAX(id) FROM blockchain_transactions WHERE blockchain_transactions.blockchain_transactable_id = awards.id)')
       .distinct
       .where('(blockchain_transactions.id IS NULL) OR (blockchain_transactions.status = 2) OR (blockchain_transactions.status = 0 AND blockchain_transactions.created_at < :timestamp)', timestamp: 10.minutes.ago)
   }
@@ -97,7 +96,7 @@ class Award < ApplicationRecord
   # – Latest blockchain transaction state is "created" and transaction is created more than 10 minutes ago
   scope :ready_for_manual_blockchain_transaction, lambda {
     accepted
-      .joins('LEFT JOIN blockchain_transactions ON blockchain_transactions.award_id = awards.id AND blockchain_transactions.id = (SELECT MAX(id) FROM blockchain_transactions WHERE blockchain_transactions.award_id = awards.id)')
+      .joins('LEFT JOIN blockchain_transactions ON blockchain_transactions.blockchain_transactable_id = awards.id AND blockchain_transactions.id = (SELECT MAX(id) FROM blockchain_transactions WHERE blockchain_transactions.blockchain_transactable_id = awards.id)')
       .distinct
       .where('(blockchain_transactions.id IS NULL) OR (blockchain_transactions.status = 2) OR (blockchain_transactions.status = 4) OR (blockchain_transactions.status = 0 AND blockchain_transactions.created_at < :timestamp)', timestamp: 10.minutes.ago)
   }

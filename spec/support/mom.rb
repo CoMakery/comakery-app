@@ -95,7 +95,7 @@ class Mom
     attrs.delete(:award)
 
     defaults = {
-      award: award,
+      blockchain_transactable: award,
       amount: 1,
       source: build(:ethereum_address_1),
       nonce: token.coin_type_token? ? rand(1_000_000) : nil,
@@ -402,7 +402,7 @@ class Mom
     network = attrs[:network] || :ropsten
     hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
 
-    Comakery::EthTx.new(
+    Comakery::Eth::Tx.new(
       network,
       hash
     )
@@ -412,7 +412,7 @@ class Mom
     network = attrs[:network] || :ropsten
     hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
 
-    Comakery::Erc20Transfer.new(
+    Comakery::Eth::Tx::Erc20::Transfer.new(
       network,
       hash
     )
@@ -422,7 +422,7 @@ class Mom
     network = attrs[:network] || :ropsten
     hash = attrs[:hash] || '0x02286b586b53784715e7eda288744e1c14a5f2d691d43160d4e3c4d5f8825ad0'
 
-    Comakery::Erc20Mint.new(
+    Comakery::Eth::Tx::Erc20::Mint.new(
       network,
       hash
     )
@@ -432,7 +432,45 @@ class Mom
     network = attrs[:network] || :ropsten
     hash = attrs[:hash] || '0x1007e9116efab368169683b81ae576bd48e168bef2be1fea5ef096ccc9e5dcc0'
 
-    Comakery::Erc20Burn.new(
+    Comakery::Eth::Tx::Erc20::Burn.new(
+      network,
+      hash
+    )
+  end
+
+  def security_token_set_allow_group_transfer(**attrs)
+    network = attrs[:network] || :ropsten
+    hash = attrs[:hash] || '0xdd2d8399654bf4b12308cacd013c63343fdd474eea902ff8738138a34c4ec582'
+
+    # Inputs:
+    # 0	from	uint256	0
+    # 1	to	uint256	0
+    # 2	lockedUntil	uint256	1586908800
+    #
+    # From:
+    # 0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b
+
+    Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer.new(
+      network,
+      hash
+    )
+  end
+
+  def security_token_set_address_permissions(**attrs)
+    network = attrs[:network] || :ropsten
+    hash = attrs[:hash] || '0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d'
+
+    # Inputs:
+    # 0	addr	address	8599d17ac1cec71ca30264ddfaaca83c334f8451
+    # 1	groupID	uint256	0
+    # 2	timeLockUntil	uint256	86400
+    # 3	maxBalance	uint256	100000000000000000000000000
+    # 4	status	bool	false
+    #
+    # From:
+    # 0x8599d17ac1cec71ca30264ddfaaca83c334f8451
+
+    Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(
       network,
       hash
     )
@@ -454,7 +492,7 @@ class Mom
     nonce = attrs[:nonce] || rand(1_000_000)
 
     VCR.use_cassette("infura/#{network}/#{contract_address}/contract_init") do
-      Comakery::Erc20.new(
+      Comakery::Eth::Contract::Erc20.new(
         contract_address,
         abi,
         network,

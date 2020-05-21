@@ -8,7 +8,7 @@ resource 'V. Blockchain Transactions' do
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
   let!(:blockchain_transaction) { create(:blockchain_transaction) }
-  let!(:project) { blockchain_transaction.award.project }
+  let!(:project) { blockchain_transaction.blockchain_transactable.project }
 
   before do
     project.update(mission: active_whitelabel_mission)
@@ -26,7 +26,7 @@ resource 'V. Blockchain Transactions' do
 
     with_options with_example: true do
       response_field :id, 'transaction id', type: :integer
-      response_field :award_id, 'transfer id', type: :integer
+      response_field :blockchain_transactable_id, 'transfer id', type: :integer
       response_field :amount, 'transaction amount', type: :string
       response_field :destination, 'transaction destination', type: :string
       response_field :source, 'transaction source', type: :string
