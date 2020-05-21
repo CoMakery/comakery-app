@@ -432,4 +432,33 @@ describe BlockchainTransaction, vcr: true do
       expect(blockchain_transaction.status).to eq('cancelled')
     end
   end
+
+  describe '.migrate_awards_to_blockchain_transactable' do
+    context 'when transaction belongs to an award' do
+      let!(:blockchain_transaction) do
+        create(
+          :blockchain_transaction,
+          award_id: create(
+            :blockchain_transaction_award,
+            token: create(:blockchain_transaction).token
+          ).id
+        )
+      end
+
+      it 'copies award_id to blockchain_transactable_id and populates blockchain_transactable_type' do
+        described_class.migrate_awards_to_blockchain_transactable
+        expect(blockchain_transaction.reload.blockchain_transactable_id).to eq(blockchain_transaction.award_id)
+        expect(blockchain_transaction.reload.blockchain_transactable_type).to eq('Award')
+      end
+    end
+
+    context 'when transaction doesnt belong to an award' do
+      let!(:blockchain_transaction) { create(:blockchain_transaction) }
+
+      it 'does nothing' do
+        described_class.migrate_awards_to_blockchain_transactable
+        expect(blockchain_transaction.reload.blockchain_transactable_id).not_to eq(blockchain_transaction.award_id)
+      end
+    end
+  end
 end

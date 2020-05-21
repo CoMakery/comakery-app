@@ -31,6 +31,12 @@ class BlockchainTransaction < ApplicationRecord
     ENV.fetch('BLOCKCHAIN_TX__MAX_SYNCS', 60).to_i
   end
 
+  def self.migrate_awards_to_blockchain_transactable
+    BlockchainTransaction.where.not(award_id: nil).find_each do |t|
+      t.update!(blockchain_transactable_id: t.award_id, blockchain_transactable_type: 'Award')
+    end
+  end
+
   def update_status(new_status, new_message = nil)
     if update!(status: new_status, status_message: new_message)
       updates.create!(status: status, status_message: status_message)
