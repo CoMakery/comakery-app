@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'models/concerns/blockchain_transactable_spec'
 
 describe Award do
+  it_behaves_like 'blockchain_transactable'
+
   describe 'associations' do
     let(:specialty) { create(:specialty) }
     let(:award) { create(:award, specialty: specialty) }

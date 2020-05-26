@@ -850,7 +850,7 @@ exports[`MyTask renders component correctly 1`] = `
                           className="sc-chPdSV hQDLDr"
                           id="product-tour-my-tasks-step1"
                         >
-                          View Task Details 
+                          Details 
                           <Icon
                             className=""
                             name="DROP_DOWN.svg"
