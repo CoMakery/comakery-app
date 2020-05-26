@@ -414,28 +414,28 @@ class TaskDetails extends React.Component {
                 <React.Fragment>
                   {this.props.taskAllowedToStart &&
                     <React.Fragment>
-                      {/*<ContentBlock title="terms & conditions">*/}
-                      {/*  This is the Award Form referenced by this <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>.&nbsp;*/}
-                      {/*  This agreement is made between {this.props.accountName} ("You", the "Contributor") and {task.project.legalProjectOwner} (the "Project Owner").&nbsp;*/}
-                      {/*  Your contribution is {task.project.exclusiveContributions ? 'exclusive' : 'not exclusive'}.&nbsp;*/}
-                      {/*  Project confidentiality and business confidentiality are {task.project.confidentiality ? 'required' : 'not required'}.&nbsp;*/}
+                      {/* <ContentBlock title="terms & conditions"> */}
+                      {/*  This is the Award Form referenced by this <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>.&nbsp; */}
+                      {/*  This agreement is made between {this.props.accountName} ("You", the "Contributor") and {task.project.legalProjectOwner} (the "Project Owner").&nbsp; */}
+                      {/*  Your contribution is {task.project.exclusiveContributions ? 'exclusive' : 'not exclusive'}.&nbsp; */}
+                      {/*  Project confidentiality and business confidentiality are {task.project.confidentiality ? 'required' : 'not required'}.&nbsp; */}
 
-                      {/*  {task.token.currency &&*/}
-                      {/*    <React.Fragment>*/}
-                      {/*      If this Task is accepted for use by the Project Owner, the Project Owner agrees to pay you {task.totalAmount} {task.token.currency}.&nbsp;*/}
-                      {/*    </React.Fragment>*/}
-                      {/*  }*/}
+                      {/*  {task.token.currency && */}
+                      {/*    <React.Fragment> */}
+                      {/*      If this Task is accepted for use by the Project Owner, the Project Owner agrees to pay you {task.totalAmount} {task.token.currency}.&nbsp; */}
+                      {/*    </React.Fragment> */}
+                      {/*  } */}
 
-                      {/*  {!task.token.currency &&*/}
-                      {/*    <React.Fragment>*/}
-                      {/*      If this task is accepted for use by the Project Owner, You will not receive any payment for this task.&nbsp;*/}
-                      {/*    </React.Fragment>*/}
-                      {/*  }*/}
+                      {/*  {!task.token.currency && */}
+                      {/*    <React.Fragment> */}
+                      {/*      If this task is accepted for use by the Project Owner, You will not receive any payment for this task.&nbsp; */}
+                      {/*    </React.Fragment> */}
+                      {/*  } */}
 
-                      {/*  <br />*/}
-                      {/*  <br />*/}
-                      {/*  By starting this Task (clicking START), you confirm that you have read and agree to this <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>.&nbsp;*/}
-                      {/*</ContentBlock>*/}
+                      {/*  <br /> */}
+                      {/*  <br /> */}
+                      {/*  By starting this Task (clicking START), you confirm that you have read and agree to this <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>.&nbsp; */}
+                      {/* </ContentBlock> */}
 
                       <form action={task.startUrl} method="post">
                         <input

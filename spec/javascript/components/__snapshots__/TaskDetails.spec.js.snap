@@ -967,7 +967,7 @@ exports[`TaskDetails renders component correctly 1`] = `
                                         href={null}
                                         id="product-tour-my-tasks-step1"
                                       >
-                                        View Task Details 
+                                        Details 
                                         <Icon
                                           className=""
                                           name="DROP_DOWN.svg"
