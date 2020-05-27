@@ -1,7 +1,7 @@
 json.call(
   transaction,
   :id,
-  :award_id,
+  :blockchain_transactable_id,
   :destination,
   :source,
   :amount,

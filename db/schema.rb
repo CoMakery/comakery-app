@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_12_231614) do
+ActiveRecord::Schema.define(version: 2020_05_14_213356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -225,7 +225,10 @@ ActiveRecord::Schema.define(version: 2020_05_12_231614) do
     t.datetime "synced_at"
     t.integer "number_of_syncs", default: 0
     t.decimal "current_block", precision: 78
+    t.string "blockchain_transactable_type"
+    t.bigint "blockchain_transactable_id"
     t.index ["award_id"], name: "index_blockchain_transactions_on_award_id"
+    t.index ["blockchain_transactable_type", "blockchain_transactable_id"], name: "index_bc_txs_on_bc_txble_type_and_bc_txble_id"
   end
 
   create_table "channels", force: :cascade do |t|

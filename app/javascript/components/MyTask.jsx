@@ -472,22 +472,26 @@ class MyTask extends React.Component {
             </SecondRow>
 
             <ThirdRow>
-              <Status>
-                <b>{task.status} </b>
-                {task.updatedAt} ago
-              </Status>
+              {this.props.displayParents &&
+                <React.Fragment>
+                  <Status>
+                    <b>{task.status} </b>
+                    {task.updatedAt} ago
+                  </Status>
 
-              {task.expiresAt &&
-                <Status>
-                  <b>EXPIRES IN </b>
-                  {task.expiresAt}
-                </Status>
+                  {task.expiresAt &&
+                    <Status>
+                      <b>EXPIRES IN </b>
+                      {task.expiresAt}
+                    </Status>
+                  }
+
+                  <Type>
+                    <b>TYPE </b>
+                    {task.specialty || 'General'}
+                  </Type>
+                </React.Fragment>
               }
-
-              <Type>
-                <b>TYPE </b>
-                {task.specialty || 'General'}
-              </Type>
 
               {task.status !== 'ready' && task.contributor.name &&
                 <Contributor>
@@ -512,7 +516,7 @@ class MyTask extends React.Component {
               }
 
               <TaskDetails id="product-tour-my-tasks-step1" displayActions={this.props.displayActions} href={this.props.displayActions ? task.detailsUrl : null}>
-                View Task Details <Icon name="DROP_DOWN.svg" />
+                Details <Icon name="DROP_DOWN.svg" />
               </TaskDetails>
 
               {this.props.displayActions &&

@@ -1,4 +1,4 @@
 <div class="transfers-table animated fadeIn faster">
   <%= render partial: "transfer_history_header" %>
-  <%= render partial: "transfer_history_transaction", collection: transfer.blockchain_transactions.includes([:token]).order(id: :desc), as: :transaction, cached: true %>
+  <%= render partial: "transfer_history_transaction", collection: transfer.blockchain_transactions.order(id: :desc), as: :transaction, cached: true %>
 </div>

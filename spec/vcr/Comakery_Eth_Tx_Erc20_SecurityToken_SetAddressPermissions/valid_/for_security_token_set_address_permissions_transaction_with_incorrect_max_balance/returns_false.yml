@@ -1,0 +1,77 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params":["0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d"],"id":1}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - ropsten.infura.io
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 20 May 2020 15:10:25 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x89d136b9cf3afb4d754860032719103ef4be353d15af655f931bcfc1ac50c115","blockNumber":"0x787dbe","contractAddress":null,"cumulativeGasUsed":"0x389c39","from":"0x8599d17ac1cec71ca30264ddfaaca83c334f8451","gasUsed":"0x7150","logs":[{"address":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","blockHash":"0x89d136b9cf3afb4d754860032719103ef4be353d15af655f931bcfc1ac50c115","blockNumber":"0x787dbe","data":"0x","logIndex":"0x19","removed":false,"topics":["0xf213aa445739b8d5bb514c5e3142fe13baacfa991314172ceaf756996259b8b3","0x0000000000000000000000008599d17ac1cec71ca30264ddfaaca83c334f8451","0x0000000000000000000000008599d17ac1cec71ca30264ddfaaca83c334f8451","0x0000000000000000000000000000000000000000000000000000000000000000"],"transactionHash":"0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d","transactionIndex":"0x1f"},{"address":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","blockHash":"0x89d136b9cf3afb4d754860032719103ef4be353d15af655f931bcfc1ac50c115","blockNumber":"0x787dbe","data":"0x","logIndex":"0x1a","removed":false,"topics":["0xb52d7c619ff55f3f330a200dfb412b8dae21bbabf8fecf8d1b6626e47560c8dc","0x0000000000000000000000008599d17ac1cec71ca30264ddfaaca83c334f8451","0x0000000000000000000000008599d17ac1cec71ca30264ddfaaca83c334f8451","0x0000000000000000000000000000000000000000000000000000000000015180"],"transactionHash":"0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d","transactionIndex":"0x1f"},{"address":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","blockHash":"0x89d136b9cf3afb4d754860032719103ef4be353d15af655f931bcfc1ac50c115","blockNumber":"0x787dbe","data":"0x","logIndex":"0x1b","removed":false,"topics":["0x0765aaf231b09368f07b83425559b145d7d386b1ff8f16c157a2ff2c7b9896fe","0x0000000000000000000000008599d17ac1cec71ca30264ddfaaca83c334f8451","0x0000000000000000000000008599d17ac1cec71ca30264ddfaaca83c334f8451","0x00000000000000000000000000000000000000000052b7d2dcc80cd2e4000000"],"transactionHash":"0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d","transactionIndex":"0x1f"},{"address":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","blockHash":"0x89d136b9cf3afb4d754860032719103ef4be353d15af655f931bcfc1ac50c115","blockNumber":"0x787dbe","data":"0x","logIndex":"0x1c","removed":false,"topics":["0x17ec2643977f0865dd45350e9efdcdfead258c9220974e67d1a37ca144772293","0x0000000000000000000000008599d17ac1cec71ca30264ddfaaca83c334f8451","0x0000000000000000000000008599d17ac1cec71ca30264ddfaaca83c334f8451","0x0000000000000000000000000000000000000000000000000000000000000000"],"transactionHash":"0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d","transactionIndex":"0x1f"}],"logsBloom":"0x00000000000000000000000000000000000000200000010000000000000000001000004000000000000000000000000000000000008000000000000420104000000000000000000000000000000000000000000000000001000000000000000000010000020000000000000010000800000000000000000000000000000000000000000000000000000000000004000000000000008000000001100000000000000000000000000080000000000000000000800000000000000800000000000000000000000000000100001200010000000000000000000002000000000020000000000000000000000000000000000000000000000000000000000000000000","status":"0x1","to":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","transactionHash":"0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d","transactionIndex":"0x1f"}}'
+    http_version: null
+  recorded_at: Wed, 20 May 2020 15:10:25 GMT
+- request:
+    method: post
+    uri: https://ropsten.infura.io/v3/39f6ad316c5a4b87a0f90956333c3666
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","method":"eth_getTransactionByHash","params":["0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d"],"id":1}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - ropsten.infura.io
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Wed, 20 May 2020 15:10:26 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '912'
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x89d136b9cf3afb4d754860032719103ef4be353d15af655f931bcfc1ac50c115","blockNumber":"0x787dbe","from":"0x8599d17ac1cec71ca30264ddfaaca83c334f8451","gas":"0x101dc","gasPrice":"0x3b9aca00","hash":"0x9a5af207b43c656531363d46ed899bef73445e4a31cc65832df6ee7b9aad948d","input":"0x45d112990000000000000000000000008599d17ac1cec71ca30264ddfaaca83c334f84510000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001518000000000000000000000000000000000000000000052b7d2dcc80cd2e40000000000000000000000000000000000000000000000000000000000000000000000","nonce":"0xde","r":"0x6a50dafaba8252a5f57cb70bd6e5a2ccd743416ce8c013bb5706dd93c25ae80b","s":"0x430930166670629e0ed1aff12b476d0df749c3fbf0e0c408121c70c7f7306f62","to":"0x1d1592c28fff3d3e71b1d29e31147846026a0a37","transactionIndex":"0x1f","v":"0x29","value":"0x0"}}'
+    http_version: null
+  recorded_at: Wed, 20 May 2020 15:10:26 GMT
+recorded_with: VCR 5.1.0

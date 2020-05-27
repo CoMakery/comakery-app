@@ -114,18 +114,23 @@ class ProjectsController < ApplicationController
 
   def add_admin
     authorize @project
-
     account = Account.find_by(email: params[:email])
 
-    if account && !@project.admins.include?(account)
-      @project.admins << account
-      @project.interested << account unless account.interested?(@project.id)
-      redirect_to admins_project_path(@project), notice: "#{account.decorate.name} added as a project admin"
-    elsif @project.admins.include?(account)
-      redirect_to admins_project_path(@project), flash: { error: "#{account.decorate.name} is already a project admin" }
-    else
-      redirect_to admins_project_path(@project), flash: { error: 'Account is not found on Comakery' }
+    unless account
+      return redirect_to admins_project_path(@project), flash: { error: 'Account is not found on Comakery' }
     end
+
+    if @project.account == account
+      return redirect_to admins_project_path(@project), flash: { error: 'Project owner cannot be added as a project admin' }
+    end
+
+    if @project.admins.include?(account)
+      return redirect_to admins_project_path(@project), flash: { error: "#{account.decorate.name} is already a project admin" }
+    end
+
+    @project.admins << account
+    @project.interested << account unless account.interested?(@project.id)
+    redirect_to admins_project_path(@project), notice: "#{account.decorate.name} added as a project admin"
   end
 
   def remove_admin

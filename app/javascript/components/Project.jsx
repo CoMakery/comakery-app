@@ -9,7 +9,7 @@ import InterestsController from '../controllers/interests_controller'
 
 const Tasks = styled.div`
   padding: 15px;
-  max-width: 980px;
+  max-width: 680px;
   margin: auto;
 `
 
@@ -295,9 +295,9 @@ export default class Project extends React.Component {
           {projectData.videoId &&
             <iframe className="project-description__video__iframe" src={`//www.youtube.com/embed/${projectData.videoId}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0`} frameBorder="0" />
           }
-          {/*{!projectData.videoId &&*/}
-          {/*  <img src={projectData.squareImageUrl} width="100%" />*/}
-          {/*}*/}
+          {/* {!projectData.videoId && */}
+          {/*  <img src={projectData.squareImageUrl} width="100%" /> */}
+          {/* } */}
         </div>
         <div className="project-description__text">
           <div dangerouslySetInnerHTML={{__html: projectData.descriptionHtml}} />
