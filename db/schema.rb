@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_14_213356) do
+ActiveRecord::Schema.define(version: 2020_05_26_164120) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2020_05_14_213356) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "balance", precision: 78
+    t.integer "status", default: 0
     t.index ["account_id"], name: "index_account_token_records_on_account_id"
     t.index ["reg_group_id"], name: "index_account_token_records_on_reg_group_id"
     t.index ["token_id"], name: "index_account_token_records_on_token_id"
@@ -457,6 +458,7 @@ ActiveRecord::Schema.define(version: 2020_05_14_213356) do
     t.datetime "synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "status", default: 0
     t.index ["token_id"], name: "index_transfer_rules_on_token_id"
   end
 

@@ -1,0 +1,1 @@
+json.partial! 'api_v1_account_token_records/api_v1_account_token_record', api_v1_account_token_record: @api_v1_account_token_record
