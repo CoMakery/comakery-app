@@ -41,8 +41,13 @@ class BlockchainTransaction < ApplicationRecord
     if update!(status: new_status, status_message: new_message)
       updates.create!(status: status, status_message: status_message)
 
-      if blockchain_transactable.is_a?(Award)
-        blockchain_transactable.update!(status: :paid) if status.to_s == 'succeed'
+      if succeed?
+        case blockchain_transactable_type
+        when 'Award'
+          blockchain_transactable.update!(status: :paid)
+        when 'TransferRule', 'AccountTokenRecord'
+          blockchain_transactable.update!(status: :synced)
+        end
       end
     end
   end
@@ -77,7 +82,18 @@ class BlockchainTransaction < ApplicationRecord
   end
 
   def on_chain
-    @on_chain ||= if token.coin_type_token?
+    @on_chain ||= case blockchain_transactable_type
+                  when 'Award'
+                    on_chain_award
+                  when 'TransferRule'
+                    Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer.new(network, tx_hash)
+                  when 'AccountTokenRecord'
+                    Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(network, tx_hash)
+    end
+  end
+
+  def on_chain_award
+    if token.coin_type_token?
       case blockchain_transactable.source
       when 'mint'
         Comakery::Eth::Tx::Erc20::Mint.new(network, tx_hash)
@@ -97,6 +113,26 @@ class BlockchainTransaction < ApplicationRecord
 
   def valid_on_chain?
     case on_chain
+    when Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer
+      on_chain.valid?(
+        source,
+        contract_address,
+        current_block,
+        blockchain_transactable.sending_group.blockchain_id,
+        blockchain_transactable.receiving_group.blockchain_id,
+        blockchain_transactable.lockup_until
+      )
+    when Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions
+      on_chain.valid?(
+        source,
+        contract_address,
+        current_block,
+        blockchain_transactable.account.ethereum_wallet,
+        blockchain_transactable.reg_group.blockchain_id,
+        blockchain_transactable.lockup_until,
+        blockchain_transactable.max_balance,
+        blockchain_transactable.account_frozen
+      )
     when Comakery::Eth::Tx::Erc20::Mint, Comakery::Eth::Tx::Erc20::Burn, Comakery::Eth::Tx::Erc20::Transfer
       on_chain.valid?(source, contract_address, destination, amount, current_block)
     when Comakery::Eth::Tx
@@ -107,14 +143,15 @@ class BlockchainTransaction < ApplicationRecord
   private
 
     def populate_data
-      case blockchain_transactable
-      when Award
+      case blockchain_transactable_type
+      when 'Award'
         self.amount = token.to_base_unit(blockchain_transactable.total_amount)
         self.destination = blockchain_transactable.recipient_address
-        self.network = token.ethereum_network
-        self.contract_address = token.ethereum_contract_address
-        self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
       end
+
+      self.network = token.ethereum_network
+      self.contract_address = token.ethereum_contract_address
+      self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
     end
 
     def contract
@@ -122,16 +159,34 @@ class BlockchainTransaction < ApplicationRecord
     end
 
     def tx
-      @tx ||= case blockchain_transactable
-              when Award
-                case blockchain_transactable.source
-                when 'mint'
-                  contract.mint(destination, amount)
-                when 'burn'
-                  contract.burn(destination, amount)
-                else
-                  contract.transfer(destination, amount)
-                end
+      @tx ||= case blockchain_transactable_type
+              when 'Award'
+                tx_award
+              when 'TransferRule'
+                contract.setAllowGroupTransfer(
+                  blockchain_transactable.sending_group.blockchain_id,
+                  blockchain_transactable.receiving_group.blockchain_id,
+                  blockchain_transactable.lockup_until
+                )
+              when 'AccountTokenRecord'
+                contract.setAddressPermissions(
+                  blockchain_transactable.account.ethereum_wallet,
+                  blockchain_transactable.reg_group.blockchain_id,
+                  blockchain_transactable.lockup_until,
+                  blockchain_transactable.max_balance,
+                  blockchain_transactable.account_frozen
+                )
+      end
+    end
+
+    def tx_award
+      case blockchain_transactable.source
+      when 'mint'
+        contract.mint(destination, amount)
+      when 'burn'
+        contract.burn(destination, amount)
+      else
+        contract.transfer(destination, amount)
       end
     end
 

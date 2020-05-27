@@ -38,6 +38,7 @@ class Account < ApplicationRecord
   has_many :provided_verifications, class_name: 'Verification', foreign_key: 'provider_id'
   belongs_to :latest_verification, class_name: 'Verification'
   has_many :account_token_records
+  has_many :account_token_records_synced, -> { where synced: true }
 
   belongs_to :specialty
   belongs_to :managed_mission, class_name: 'Mission'
