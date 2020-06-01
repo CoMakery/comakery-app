@@ -23,16 +23,15 @@ class Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions < Comakery:
     lookup_method_arg(4) == 1
   end
 
-  # Allow longer list of params for validation:
-  # rubocop:disable Metrics/ParameterLists
+  # Allow longer list of values for validation:
   # rubocop:disable Metrics/CyclomaticComplexity
-  def valid?(source, token_contract_address, time, address, group_id, time_lock_until, max_balance, status)
-    return false unless super(source, token_contract_address, 0, time)
-    return false if method_arg_0 != address.downcase
-    return false if method_arg_1 != group_id
-    return false if method_arg_2 != time_lock_until.to_i
-    return false if method_arg_3 != max_balance
-    return false if method_arg_4 != status
+  def valid?(blockchain_transaction)
+    return false unless super
+    return false if method_arg_0 != blockchain_transaction.blockchain_transactable.account.ethereum_wallet.downcase
+    return false if method_arg_1 != blockchain_transaction.blockchain_transactable.reg_group.blockchain_id
+    return false if method_arg_2 != blockchain_transaction.blockchain_transactable.lockup_until.to_i
+    return false if method_arg_3 != blockchain_transaction.blockchain_transactable.max_balance
+    return false if method_arg_4 != blockchain_transaction.blockchain_transactable.account_frozen
     true
   end
 end

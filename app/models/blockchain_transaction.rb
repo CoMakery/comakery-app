@@ -41,16 +41,13 @@ class BlockchainTransaction < ApplicationRecord
     if update!(status: new_status, status_message: new_message)
       updates.create!(status: status, status_message: status_message)
 
-      if succeed?
-        case blockchain_transactable_type
-        when 'Award'
-          blockchain_transactable.update!(status: :paid)
-        when 'TransferRule', 'AccountTokenRecord'
-          blockchain_transactable.update!(status: :synced)
-        end
-      end
+      update_transactable_status if succeed?
     end
   end
+
+  # @abstract Subclass is expected to implement #update_transactable_status
+  # @!method update_transactable_status
+  #    Update status of blockchain_transactable record
 
   def sync
     return false unless confirmed_on_chain?
@@ -81,74 +78,21 @@ class BlockchainTransaction < ApplicationRecord
     update_status(:cancelled, 'max_syncs') if pending? && reached_max_syncs?
   end
 
-  def on_chain
-    @on_chain ||= case blockchain_transactable_type
-                  when 'Award'
-                    on_chain_award
-                  when 'TransferRule'
-                    Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer.new(network, tx_hash)
-                  when 'AccountTokenRecord'
-                    Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions.new(network, tx_hash)
-    end
-  end
-
-  def on_chain_award
-    if token.coin_type_token?
-      case blockchain_transactable.source
-      when 'mint'
-        Comakery::Eth::Tx::Erc20::Mint.new(network, tx_hash)
-      when 'burn'
-        Comakery::Eth::Tx::Erc20::Burn.new(network, tx_hash)
-      else
-        Comakery::Eth::Tx::Erc20::Transfer.new(network, tx_hash)
-      end
-    else
-      Comakery::Eth::Tx.new(network, tx_hash)
-    end
-  end
+  # @abstract Subclass is expected to implement #on_chain
+  # @!method on_chain
+  #    Return Comakery::Eth::Tx:: instance for blockchain_transactable record
 
   def confirmed_on_chain?
     on_chain.confirmed?(self.class.number_of_confirmations)
   end
 
   def valid_on_chain?
-    case on_chain
-    when Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer
-      on_chain.valid?(
-        source,
-        contract_address,
-        current_block,
-        blockchain_transactable.sending_group.blockchain_id,
-        blockchain_transactable.receiving_group.blockchain_id,
-        blockchain_transactable.lockup_until
-      )
-    when Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions
-      on_chain.valid?(
-        source,
-        contract_address,
-        current_block,
-        blockchain_transactable.account.ethereum_wallet,
-        blockchain_transactable.reg_group.blockchain_id,
-        blockchain_transactable.lockup_until,
-        blockchain_transactable.max_balance,
-        blockchain_transactable.account_frozen
-      )
-    when Comakery::Eth::Tx::Erc20::Mint, Comakery::Eth::Tx::Erc20::Burn, Comakery::Eth::Tx::Erc20::Transfer
-      on_chain.valid?(source, contract_address, destination, amount, current_block)
-    when Comakery::Eth::Tx
-      on_chain.valid?(source, destination, amount, current_block)
-    end
+    on_chain.valid?(self)
   end
 
   private
 
     def populate_data
-      case blockchain_transactable_type
-      when 'Award'
-        self.amount = token.to_base_unit(blockchain_transactable.total_amount)
-        self.destination = blockchain_transactable.recipient_address
-      end
-
       self.network = token.ethereum_network
       self.contract_address = token.ethereum_contract_address
       self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
@@ -158,37 +102,9 @@ class BlockchainTransaction < ApplicationRecord
       @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, token.abi, network, nonce)
     end
 
-    def tx
-      @tx ||= case blockchain_transactable_type
-              when 'Award'
-                tx_award
-              when 'TransferRule'
-                contract.setAllowGroupTransfer(
-                  blockchain_transactable.sending_group.blockchain_id,
-                  blockchain_transactable.receiving_group.blockchain_id,
-                  blockchain_transactable.lockup_until
-                )
-              when 'AccountTokenRecord'
-                contract.setAddressPermissions(
-                  blockchain_transactable.account.ethereum_wallet,
-                  blockchain_transactable.reg_group.blockchain_id,
-                  blockchain_transactable.lockup_until,
-                  blockchain_transactable.max_balance,
-                  blockchain_transactable.account_frozen
-                )
-      end
-    end
-
-    def tx_award
-      case blockchain_transactable.source
-      when 'mint'
-        contract.mint(destination, amount)
-      when 'burn'
-        contract.burn(destination, amount)
-      else
-        contract.transfer(destination, amount)
-      end
-    end
+    # @abstract Subclass is expected to implement #tx
+    # @!method tx
+    #    Return a new contract transaction instance for blockchain_transactable record
 
     def generate_transaction
       if token.coin_type_comakery? && nonce.present?
