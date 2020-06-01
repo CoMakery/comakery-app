@@ -11,10 +11,9 @@ class Comakery::Eth::Tx::Erc20::Transfer < Comakery::Eth::Tx::Erc20
     lookup_method_arg(1)
   end
 
-  def valid?(source, token_contract_address, destination, amount, time)
-    return false unless super(source, token_contract_address, 0, time)
-    return false if method_arg_0 != destination.downcase
-    return false if method_arg_1 != amount
+  def valid?(blockchain_transaction)
+    return false if method_arg_0 != blockchain_transaction.destination.downcase
+    return false if method_arg_1 != blockchain_transaction.amount
     true
   end
 end

@@ -402,6 +402,15 @@ class Mom
     network = attrs[:network] || :ropsten
     hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
 
+    # From:
+    # 0x66ebd5cdf54743a6164b0138330f74dce436d842
+    # Contract:
+    # 0x1d1592c28fff3d3e71b1d29e31147846026a0a37
+    # To:
+    # 0x8599d17ac1cec71ca30264ddfaaca83c334f8451
+    # Amount:
+    # 100
+
     Comakery::Eth::Tx.new(
       network,
       hash
@@ -411,6 +420,15 @@ class Mom
   def erc20_transfer(**attrs)
     network = attrs[:network] || :ropsten
     hash = attrs[:hash] || '0x5d372aec64aab2fc031b58a872fb6c5e11006c5eb703ef1dd38b4bcac2a9977d'
+
+    # From:
+    # 0x66ebd5cdf54743a6164b0138330f74dce436d842
+    # Contract:
+    # 0x1d1592c28fff3d3e71b1d29e31147846026a0a37
+    # To:
+    # 0x8599d17ac1cec71ca30264ddfaaca83c334f8451
+    # Amount:
+    # 100
 
     Comakery::Eth::Tx::Erc20::Transfer.new(
       network,

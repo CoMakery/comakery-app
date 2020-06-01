@@ -57,7 +57,7 @@ describe BlockchainTransaction, vcr: true do
       expect(blockchain_transaction.contract_address).to eq(blockchain_transaction.token.ethereum_contract_address)
     end
 
-    context 'for award transactable'
+    context 'for award transactable' do
       it 'populates transaction data from award' do
         expect(blockchain_transaction.amount).to eq(blockchain_transaction.token.to_base_unit(blockchain_transaction.blockchain_transactable.amount))
         expect(blockchain_transaction.destination).to eq(blockchain_transaction.blockchain_transactable.recipient_address)
@@ -97,30 +97,6 @@ describe BlockchainTransaction, vcr: true do
 
         expect(blockchain_transaction_burn.tx_hash).to eq(tx.hash)
         expect(blockchain_transaction_burn.tx_raw).to eq(tx.hex)
-      end
-
-      it 'generates blockchain transaction data for setAllowGroupTransfer' do
-        tx = contract.setAllowGroupTransfer(
-          blockchain_transaction_rule.blockchain_transactable.sending_group.blockchain_id,
-          blockchain_transaction_rule.blockchain_transactable.receiving_group.blockchain_id,
-          blockchain_transaction_rule.blockchain_transactable.lockup_until
-        )
-
-        expect(blockchain_transaction_rule.tx_hash).to eq(tx.hash)
-        expect(blockchain_transaction_rule.tx_raw).to eq(tx.hex)
-      end
-
-      it 'generates blockchain transaction data for setAddressPermissions' do
-        tx = contract.setAddressPermissions(
-          blockchain_transaction_account.blockchain_transactable.account.ethereum_wallet,
-          blockchain_transaction_account.blockchain_transactable.reg_group.blockchain_id,
-          blockchain_transaction_account.blockchain_transactable.lockup_until,
-          blockchain_transaction_account.blockchain_transactable.max_balance,
-          blockchain_transaction_account.blockchain_transactable.account_frozen
-        )
-
-        expect(blockchain_transaction_account.tx_hash).to eq(tx.hash)
-        expect(blockchain_transaction_account.tx_raw).to eq(tx.hex)
       end
     end
 
