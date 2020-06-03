@@ -13,7 +13,7 @@ class BlockchainTransactionTransferRule < BlockchainTransaction
       @tx ||= contract.setAllowGroupTransfer(
         blockchain_transactable.sending_group.blockchain_id,
         blockchain_transactable.receiving_group.blockchain_id,
-        blockchain_transactable.lockup_until
+        blockchain_transactable.lockup_until.to_i
       )
     end
 end
