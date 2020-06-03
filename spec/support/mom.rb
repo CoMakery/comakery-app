@@ -43,7 +43,7 @@ class Mom
   end
 
   def reg_group(**attrs)
-    token = attrs[:token] || create(:token, coin_type: :comakery)
+    token = attrs[:token] || create(:comakery_dummy_token)
 
     defaults = {
       token: token,
@@ -54,7 +54,7 @@ class Mom
   end
 
   def transfer_rule(**attrs)
-    token = attrs[:token] || create(:token, coin_type: :comakery)
+    token = attrs[:token] || create(:comakery_dummy_token)
 
     defaults = {
       token: token,
@@ -66,7 +66,7 @@ class Mom
   end
 
   def account_token_record(**attrs)
-    token = attrs[:token] || create(:token, coin_type: :comakery)
+    token = attrs[:token] || build(:comakery_dummy_token)
 
     defaults = {
       account: create(:account),
@@ -81,17 +81,10 @@ class Mom
   end
 
   def blockchain_transaction(**attrs)
-    token = attrs[:token] || create(
-      :token,
-      coin_type: :comakery,
-      ethereum_network: :ropsten,
-      ethereum_contract_address: build(:ethereum_contract_address),
-      symbol: 'DUM',
-      decimal_places: 0
-    )
+    token = attrs[:token] || create(:comakery_dummy_token)
     attrs.delete(:token)
 
-    award = blockchain_transaction_award(attrs.merge(token: token))
+    award = blockchain_transaction__award(attrs.merge(token: token))
     attrs.delete(:award)
 
     defaults = {
@@ -108,7 +101,43 @@ class Mom
     end
   end
 
-  def blockchain_transaction_award(**attrs)
+  def blockchain_transaction_transfer_rule(**attrs)
+    token = attrs[:token] || create(:comakery_dummy_token)
+    attrs.delete(:token)
+
+    defaults = {
+      blockchain_transactable: create(:transfer_rule),
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token.coin_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
+      BlockchainTransactionTransferRule.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction_account_token_record(**attrs)
+    token = attrs[:token] || create(:comakery_dummy_token)
+    attrs.delete(:token)
+
+    defaults = {
+      blockchain_transactable: create(:account_token_record),
+      amount: 1,
+      source: build(:ethereum_address_1),
+      nonce: token.coin_type_token? ? rand(1_000_000) : nil,
+      status: :created,
+      status_message: 'dummy'
+    }
+
+    VCR.use_cassette("infura/#{token.ethereum_network}/#{token.ethereum_contract_address}/contract_init") do
+      BlockchainTransactionAccountTokenRecord.create!(defaults.merge(attrs))
+    end
+  end
+
+  def blockchain_transaction__award(**attrs)
     attrs[:award] || create(
       :award,
       amount: attrs[:amount] || 1,
@@ -184,7 +213,7 @@ class Mom
       exclusive_contributions: false,
       visibility: 'member',
       long_id: SecureRandom.hex(20),
-      maximum_tokens: 1_000_000_000,
+      maximum_tokens: 1_000_000_000_000_000_000,
       token: create(:token),
       mission: create(:mission),
       square_image: Refile::FileDouble.new('dummy_image', 'image.png', content_type: 'image/png'),
@@ -211,6 +240,19 @@ class Mom
       decimal_places: 18,
       ethereum_network: :ropsten,
       ethereum_contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37'
+    }
+    Token.new(defaults.merge(attrs))
+  end
+
+  def comakery_dummy_token(**attrs)
+    defaults = {
+      name: "ComakeryDummyToken-#{SecureRandom.hex(20)}",
+      symbol: "DUM#{SecureRandom.hex(20)}",
+      logo_image: dummy_image,
+      ethereum_network: :ropsten,
+      ethereum_contract_address: '0x1D1592c28FFF3d3E71b1d29E31147846026A0a37',
+      coin_type: :comakery,
+      decimal_places: 0
     }
     Token.new(defaults.merge(attrs))
   end

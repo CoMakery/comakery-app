@@ -22,8 +22,8 @@ class BlockchainTransactionAward < BlockchainTransaction
 
     def populate_data
       super
-      self.amount = token.to_base_unit(blockchain_transactable.total_amount)
-      self.destination = blockchain_transactable.recipient_address
+      self.amount ||= token.to_base_unit(blockchain_transactable.total_amount)
+      self.destination ||= blockchain_transactable.recipient_address
     end
 
     def tx

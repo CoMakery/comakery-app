@@ -12,6 +12,7 @@ class Comakery::Eth::Tx::Erc20::Transfer < Comakery::Eth::Tx::Erc20
   end
 
   def valid?(blockchain_transaction)
+    return false unless super
     return false if method_arg_0 != blockchain_transaction.destination.downcase
     return false if method_arg_1 != blockchain_transaction.amount
     true

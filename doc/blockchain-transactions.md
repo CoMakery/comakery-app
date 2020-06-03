@@ -49,10 +49,8 @@ class "BlockchainTransactionUpdate" as BlockchainTransactionUpdate <<rectangle>>
 
 BlockchainTransactionTable }-down- BlockchainTransactable : polymorphically belongs_to via `blockchain_transactable_type` and `blockchain_transactable_id`
 BlockchainTransactionTable }-right- BlockchainTransactionUpdate : has_many
-BlockchainTransaction }-down- BlockchainTransactionAward : STI via `type`
-BlockchainTransaction }-down- BlockchainTransactionAccountTokenRecord : STI via `type`
-BlockchainTransaction }-down- BlockchainTransactionTransferRule : STI via `type`
-
-
+BlockchainTransaction <|-down- BlockchainTransactionAward : STI via `type`
+BlockchainTransaction <|-down- BlockchainTransactionAccountTokenRecord : STI via `type`
+BlockchainTransaction <|-down- BlockchainTransactionTransferRule : STI via `type`
 @enduml
 ```

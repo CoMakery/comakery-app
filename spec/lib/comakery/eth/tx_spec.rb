@@ -167,13 +167,13 @@ describe Comakery::Eth::Tx, vcr: true do
 
       it 'returns false' do
         expect(eth_tx.valid?(
-          create(
-            :blockchain_transaction,
-            source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
-            destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            amount: 0,
-            current_block: 1
-          )
+                 create(
+                   :blockchain_transaction,
+                   source: '0x66ebd5cdf54743a6164b0138330f74dce436d843',
+                   destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   amount: 0,
+                   current_block: 1
+                 )
         )).to be_falsey
       end
     end
@@ -183,13 +183,13 @@ describe Comakery::Eth::Tx, vcr: true do
 
       it 'returns false' do
         expect(eth_tx.valid?(
-          create(
-            :blockchain_transaction,
-            source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
-            destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            amount: 100,
-            current_block: 2**256 - 1
-          )
+                 create(
+                   :blockchain_transaction,
+                   source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
+                   destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   amount: 100,
+                   current_block: 2**256 - 1
+                 )
         )).to be_falsey
       end
     end
@@ -199,13 +199,13 @@ describe Comakery::Eth::Tx, vcr: true do
 
       it 'returns true' do
         expect(eth_tx.valid?(
-          create(
-            :blockchain_transaction,
-            source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
-            destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            amount: 100,
-            current_block: 1
-          )
+                 create(
+                   :blockchain_transaction,
+                   source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
+                   destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   amount: 100,
+                   current_block: 1
+                 )
         )).to be_truthy
       end
     end

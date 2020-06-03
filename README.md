@@ -250,6 +250,10 @@ Mostly up to date partial overview of table relationships.
 
 ![new schema](doc/schema-with-batches/skill-interest-schema.png)
 
+## Blockchain Transactions Schema Overview
+
+![schema](doc/blockchain-transactions.svg)
+
 ## API documentaion
 
 API documentaion is generated with `rspec_api_documentation` gem from `spec/acceptance/*` specs
