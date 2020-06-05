@@ -66,4 +66,32 @@ describe TransferRule do
       expect(transfer_rule.reload.lockup_until).to eq(Time.zone.at(max_uint256))
     end
   end
+
+  describe 'replace_existing_rule' do
+    let!(:transfer_rule) { create(:transfer_rule) }
+    let!(:transfer_rule_dup) { create(:transfer_rule, token: transfer_rule.token, sending_group: transfer_rule.sending_group, receiving_group: transfer_rule.receiving_group, status: :synced) }
+    let!(:transfer_rule_dup_token) { create(:transfer_rule, token: transfer_rule.token, status: :synced) }
+
+    context 'when status synced' do
+      before do
+        transfer_rule.synced!
+      end
+
+      it 'deletes all synced rules with the same combination of token, receiving/sending groups' do
+        expect { transfer_rule_dup.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+
+      it 'doesnt delete rules with same token but different receiving/sending groups' do
+        expect { transfer_rule_dup_token.reload }.not_to raise_error
+      end
+    end
+
+    context 'when status not synced' do
+      it 'does nothing' do
+        expect { transfer_rule.reload }.not_to raise_error
+        expect { transfer_rule_dup.reload }.not_to raise_error
+        expect { transfer_rule_dup_token.reload }.not_to raise_error
+      end
+    end
+  end
 end
