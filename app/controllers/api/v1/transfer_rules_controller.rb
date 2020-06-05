@@ -1,73 +1,54 @@
 class Api::V1::TransferRulesController < Api::V1::ApiController
-  before_action :set_api_v1_transfer_rule, only: %i[show edit update destroy]
-
-  # GET /api/v1/transfer_rules
-  # GET /api/v1/transfer_rules.json
+  # GET /api/v1/projects/1/transfer_rules
   def index
-    @api_v1_transfer_rules = Api::V1::TransferRule.all
+    fresh_when transfer_rules, public: true
   end
 
-  # GET /api/v1/transfer_rules/1
-  # GET /api/v1/transfer_rules/1.json
-  def show; end
-
-  # GET /api/v1/transfer_rules/new
-  def new
-    @api_v1_transfer_rule = Api::V1::TransferRule.new
+  # GET /api/v1/projects/1/transfer_rules/1
+  def show
+    fresh_when transfer_rule, public: true
   end
 
-  # GET /api/v1/transfer_rules/1/edit
-  def edit; end
-
-  # POST /api/v1/transfer_rules
-  # POST /api/v1/transfer_rules.json
+  # POST /api/v1/projects/1/transfer_rules
   def create
-    @api_v1_transfer_rule = Api::V1::TransferRule.new(api_v1_transfer_rule_params)
+    transfer_rule = project.token.transfer_rules.create(transfer_rule_params)
 
-    respond_to do |format|
-      if @api_v1_transfer_rule.save
-        format.html { redirect_to @api_v1_transfer_rule, notice: 'Transfer rule was successfully created.' }
-        format.json { render :show, status: :created, location: @api_v1_transfer_rule }
-      else
-        format.html { render :new }
-        format.json { render json: @api_v1_transfer_rule.errors, status: :unprocessable_entity }
-      end
+    if transfer_rule.save
+      @transfer_rule = transfer_rule
+
+      render 'show.json', status: 201
+    else
+      @errors = transfer_rule.errors
+
+      render 'api/v1/error.json', status: 400
     end
   end
 
-  # PATCH/PUT /api/v1/transfer_rules/1
-  # PATCH/PUT /api/v1/transfer_rules/1.json
-  def update
-    respond_to do |format|
-      if @api_v1_transfer_rule.update(api_v1_transfer_rule_params)
-        format.html { redirect_to @api_v1_transfer_rule, notice: 'Transfer rule was successfully updated.' }
-        format.json { render :show, status: :ok, location: @api_v1_transfer_rule }
-      else
-        format.html { render :edit }
-        format.json { render json: @api_v1_transfer_rule.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /api/v1/transfer_rules/1
-  # DELETE /api/v1/transfer_rules/1.json
+  # DELETE /api/v1/projects/1/transfer_rules/1
   def destroy
-    @api_v1_transfer_rule.destroy
-    respond_to do |format|
-      format.html { redirect_to api_v1_transfer_rules_url, notice: 'Transfer rule was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    transfer_rule.destroy
+    render 'index.json', status: 200
   end
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_api_v1_transfer_rule
-      @api_v1_transfer_rule = Api::V1::TransferRule.find(params[:id])
+    def project
+      @project ||= project_scope.find(params[:project_id])
     end
 
-    # Only allow a list of trusted parameters through.
-    def api_v1_transfer_rule_params
-      params.fetch(:api_v1_transfer_rule, {})
+    def transfer_rules
+      @transfer_rules ||= paginate(project.token.transfer_rules)
+    end
+
+    def transfer_rule
+      @transfer_rule ||= project.token.transfer_rules.find(params[:id])
+    end
+
+    def transfer_rule_params
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:transfer_rule, {}).permit(
+        :sending_group_id,
+        :receiving_group_id,
+        :lockup_until
+      )
     end
 end

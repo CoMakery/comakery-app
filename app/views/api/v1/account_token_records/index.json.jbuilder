@@ -1,1 +1,1 @@
-json.array! @api_v1_account_token_records, partial: 'api_v1_account_token_records/api_v1_account_token_record', as: :api_v1_account_token_record
+json.array! @account_token_records, partial: 'account_token_record', as: :account_token_record
