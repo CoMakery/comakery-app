@@ -11,7 +11,10 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
 
   # POST /api/v1/projects/1/account_token_records
   def create
-    account_token_record = project.token.account_token_records.create(account_token_record_params)
+    account_token_record = project.token.account_token_records.new(account_token_record_params)
+    account_token_record.account = Account.find(
+      params.fetch(:body, {}).fetch(:data, {}).fetch(:account_token_record, {}).fetch(:account_id, nil)
+    )
 
     if account_token_record.save
       @account_token_record = account_token_record
@@ -49,7 +52,6 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
         :max_balance,
         :lockup_until,
         :reg_group_id,
-        :account_id,
         :account_frozen
       )
     end
