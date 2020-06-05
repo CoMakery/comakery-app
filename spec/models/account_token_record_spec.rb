@@ -36,14 +36,6 @@ describe AccountTokenRecord do
       expect(account_token_record).not_to be_valid
     end
 
-    it 'requires account to be unique per token' do
-      account_token_record = create(:account_token_record)
-      create(:account_token_record, account: account_token_record.account)
-      account_token_record2 = build(:account_token_record, token: account_token_record.token, account: account_token_record.account)
-
-      expect(account_token_record2).not_to be_valid
-    end
-
     it 'requires lockup_until to be not less than min value' do
       account_token_record = build(:account_token_record, lockup_until: described_class::LOCKUP_UNTIL_MIN - 1)
       expect(account_token_record).not_to be_valid
@@ -76,13 +68,10 @@ describe AccountTokenRecord do
   end
 
   describe 'lockup_until' do
-    let!(:account_token_record) { create(:account_token_record) }
     let!(:max_uint256) { 115792089237316195423570985008687907853269984665640564039458 }
+    let!(:account_token_record) { create(:account_token_record, lockup_until: Time.zone.at(max_uint256)) }
 
     it 'stores Time as a high precision decimal (which able to fit uint256) and returns Time object initialized from decimal' do
-      account_token_record.lockup_until = Time.zone.at(max_uint256)
-      account_token_record.save!
-
       expect(account_token_record.reload.lockup_until).to eq(Time.zone.at(max_uint256))
     end
   end
