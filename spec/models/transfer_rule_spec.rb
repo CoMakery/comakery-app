@@ -35,15 +35,6 @@ describe TransferRule do
       expect(transfer_rule).not_to be_valid
     end
 
-    it 'requires sending_group and receiving_group combination to be unique' do
-      transfer_rule1 = create(:transfer_rule)
-      create(:transfer_rule, sending_group: create(:reg_group, token: transfer_rule1.token), receiving_group: transfer_rule1.receiving_group, token: transfer_rule1.token)
-      create(:transfer_rule, receiving_group: create(:reg_group, token: transfer_rule1.token), sending_group: transfer_rule1.sending_group, token: transfer_rule1.token)
-      transfer_rule4 = build(:transfer_rule, sending_group: transfer_rule1.sending_group, receiving_group: transfer_rule1.receiving_group, token: transfer_rule1.token)
-
-      expect(transfer_rule4).not_to be_valid
-    end
-
     it 'requires sending_group to belong to same token' do
       sending_group = create(:reg_group)
       transfer_rule = build(:transfer_rule, sending_group: sending_group)
@@ -68,14 +59,94 @@ describe TransferRule do
   end
 
   describe 'lockup_until' do
-    let!(:transfer_rule) { create(:transfer_rule) }
     let!(:max_uint256) { 115792089237316195423570985008687907853269984665640564039458 }
+    let!(:transfer_rule) { create(:transfer_rule, lockup_until: Time.zone.at(max_uint256)) }
 
     it 'stores Time as a high precision decimal (which able to fit uint256) and returns Time object initialized from decimal' do
-      transfer_rule.lockup_until = Time.zone.at(max_uint256)
-      transfer_rule.save!
-
       expect(transfer_rule.reload.lockup_until).to eq(Time.zone.at(max_uint256))
+    end
+  end
+
+  describe 'replace_existing_rule' do
+    let!(:transfer_rule) { create(:transfer_rule) }
+    let!(:transfer_rule_dup) { create(:transfer_rule, token: transfer_rule.token, sending_group: transfer_rule.sending_group, receiving_group: transfer_rule.receiving_group, status: :synced) }
+    let!(:transfer_rule_dup_token) { create(:transfer_rule, token: transfer_rule.token, status: :synced) }
+
+    context 'when status synced' do
+      before do
+        transfer_rule.synced!
+      end
+
+      it 'deletes all synced rules with the same combination of token, receiving/sending groups' do
+        expect { transfer_rule_dup.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+
+      it 'doesnt delete rules with same token but different receiving/sending groups' do
+        expect { transfer_rule_dup_token.reload }.not_to raise_error
+      end
+    end
+
+    context 'when status not synced' do
+      it 'does nothing' do
+        expect { transfer_rule.reload }.not_to raise_error
+        expect { transfer_rule_dup.reload }.not_to raise_error
+        expect { transfer_rule_dup_token.reload }.not_to raise_error
+      end
+    end
+  end
+
+  describe 'ready_for_blockchain_transaction scope' do
+    let!(:transfer_rule) { create(:transfer_rule) }
+    let!(:blockchain_transaction) { create(:blockchain_transaction_transfer_rule) }
+
+    it 'returns transfer_rules without blockchain_transaction' do
+      expect(described_class.ready_for_blockchain_transaction).to include(transfer_rule)
+    end
+
+    it 'returns transfer_rules with latest blockchain_transaction Cancelled' do
+      create(:blockchain_transaction_transfer_rule, status: :cancelled, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+
+      expect(described_class.ready_for_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
+    end
+
+    it 'returns transfer_rules with latest blockchain_transaction Created more than 10 minutes ago' do
+      create(:blockchain_transaction_transfer_rule, blockchain_transactable: blockchain_transaction.blockchain_transactable, created_at: 20.minutes.ago)
+
+      expect(described_class.ready_for_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
+    end
+
+    it 'doesnt return transfer_rules with lates blockchain_transaction Created less than 10 minutes ago' do
+      create(:blockchain_transaction_transfer_rule, blockchain_transactable: blockchain_transaction.blockchain_transactable, created_at: 1.second.ago)
+
+      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
+    end
+
+    it 'doesnt return transfer_rules with latest blockchain_transaction Pending' do
+      create(:blockchain_transaction_transfer_rule, status: :pending, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+
+      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
+    end
+
+    it 'doesnt return transfer_rules with latest blockchain_transaction Succeed' do
+      create(:blockchain_transaction_transfer_rule, status: :succeed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+
+      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
+    end
+
+    it 'doesnt return transfer_rules with latest blockchain_transaction Failed' do
+      create(:blockchain_transaction_transfer_rule, status: :failed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+
+      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
+    end
+  end
+
+  describe 'ready_for_manual_blockchain_transaction scope' do
+    let!(:blockchain_transaction) { create(:blockchain_transaction_transfer_rule) }
+
+    it 'returns transfer_rules with latest blockchain_transaction Failed' do
+      create(:blockchain_transaction_transfer_rule, status: :failed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+
+      expect(described_class.ready_for_manual_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
     end
   end
 end

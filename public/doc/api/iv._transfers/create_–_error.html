@@ -215,14 +215,20 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transfer":{"account_id":"f2aed1b8-a8a3-473a-a580-e42c073bbcd2","amount":"-1.00"}},"method":"POST","nonce":"fbb86e15fcd02ae08f66faf71e1ba04d","timestamp":"1590077304","url":"http://example.org/api/v1/projects/43/transfers"},"proof":{"signature":"K/W5KNda8Lfy1wAwOd+8s/NJmtgpizLXTRsK8zMoq7FMu2D++RQnSY6435vXzv5u8Mqt/XJv3YnSp/9ejKpwBQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"transfer":{"account_id":"35617bda-6fd7-4ecc-ada7-5de553937252","amount":"-1.00"}},"method":"POST","nonce":"110bb1a067f05d0a15dc9180b0606573","timestamp":"1591625853","url":"http://example.org/api/v1/projects/43/transfers"},"proof":{"signature":"AYxTXOTuXcnRAyHFzV8HhX6P6K+utMJi3X5nqnxscHUPNA1FcUty2jN9yJlRyS9bGTmcNgHQICzSnnaJPOR+DA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;amount&quot;: [
+      &quot;has incorrect precision (should be 8)&quot;
+    ]
+  }
+}</pre>
       </div>
     </div>
   </body>

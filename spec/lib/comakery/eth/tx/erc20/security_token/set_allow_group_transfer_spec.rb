@@ -46,49 +46,141 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAllowGroupTransfer, vcr: tr
   describe 'valid?' do
     context 'for invalid eth transaction' do
       let!(:security_token_set_allow_group_transfer) { build(:security_token_set_allow_group_transfer) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns false' do
-        expect(security_token_set_allow_group_transfer.valid?('0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 2**256 - 1, 0, 0, 1586908800)).to be_falsey
+        expect(security_token_set_allow_group_transfer.valid?(
+                 create(
+                   :blockchain_transaction_transfer_rule,
+                   source: '0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 2**256 - 1,
+                   blockchain_transactable: create(
+                     :transfer_rule,
+                     sending_group: reg_group,
+                     receiving_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 1586908800
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for other erc20 transaction' do
       let!(:security_token_set_allow_group_transfer) { build(:security_token_set_allow_group_transfer, hash: '0x1007e9116efab368169683b81ae576bd48e168bef2be1fea5ef096ccc9e5dcc0') }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns false' do
-        expect(security_token_set_allow_group_transfer.valid?('0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 1, 0, 0, 1586908800)).to be_falsey
+        expect(security_token_set_allow_group_transfer.valid?(
+                 create(
+                   :blockchain_transaction_transfer_rule,
+                   source: '0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :transfer_rule,
+                     sending_group: reg_group,
+                     receiving_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 1586908800
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for security_token_set_allow_group_transfer transfer with incorrect from' do
       let!(:security_token_set_allow_group_transfer) { build(:security_token_set_allow_group_transfer) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
+      let!(:reg_group2) { build(:reg_group, blockchain_id: 10, token: reg_group.token) }
 
       it 'returns false' do
-        expect(security_token_set_allow_group_transfer.valid?('0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 1, 10, 0, 1586908800)).to be_falsey
+        expect(security_token_set_allow_group_transfer.valid?(
+                 create(
+                   :blockchain_transaction_transfer_rule,
+                   source: '0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :transfer_rule,
+                     sending_group: reg_group2,
+                     receiving_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 1586908800
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for security_token_set_allow_group_transfer transaction with incorrect to' do
       let!(:security_token_set_allow_group_transfer) { build(:security_token_set_allow_group_transfer) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
+      let!(:reg_group2) { build(:reg_group, blockchain_id: 10, token: reg_group.token) }
 
       it 'returns false' do
-        expect(security_token_set_allow_group_transfer.valid?('0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 1, 0, 10, 1586908800)).to be_falsey
+        expect(security_token_set_allow_group_transfer.valid?(
+                 create(
+                   :blockchain_transaction_transfer_rule,
+                   source: '0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :transfer_rule,
+                     sending_group: reg_group,
+                     receiving_group: reg_group2,
+                     token: reg_group.token,
+                     lockup_until: 1586908800
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for security_token_set_allow_group_transfer transaction with incorrect lockedUntil' do
       let!(:security_token_set_allow_group_transfer) { build(:security_token_set_allow_group_transfer) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns false' do
-        expect(security_token_set_allow_group_transfer.valid?('0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 1, 0, 0, 1586908801)).to be_falsey
+        expect(security_token_set_allow_group_transfer.valid?(
+                 create(
+                   :blockchain_transaction_transfer_rule,
+                   source: '0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :transfer_rule,
+                     sending_group: reg_group,
+                     receiving_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 1586908801
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for correct security_token_set_allow_group_transfer' do
       let!(:security_token_set_allow_group_transfer) { build(:security_token_set_allow_group_transfer) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns true' do
-        expect(security_token_set_allow_group_transfer.valid?('0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 1, 0, 0, 1586908800)).to be_truthy
+        expect(security_token_set_allow_group_transfer.valid?(
+                 create(
+                   :blockchain_transaction_transfer_rule,
+                   source: '0x75f538eafdb14a2dc9f3909aa1e0ea19727ff44b',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :transfer_rule,
+                     sending_group: reg_group,
+                     receiving_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 1586908800
+                   )
+                 )
+        )).to be_truthy
       end
     end
   end

@@ -80,7 +80,7 @@ export default class extends Controller {
         body: {
           data: {
             transaction: {
-              'award_id': this.id,
+              'blockchain_transactable_id': this.id,
               'source'  : this.coinBase
             }
           }

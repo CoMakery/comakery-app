@@ -275,18 +275,24 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">PUT /api/v1/accounts/a82d2ce3-f8e8-4fbd-8b84-937120853cfe</pre>
+          <pre class="request route highlight">PUT /api/v1/accounts/6f1aee11-918d-4738-8dec-a2d473b3295c</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"account":{"ethereum_wallet":"0x"}},"method":"PUT","nonce":"d998746ff65d890fb253c1632e1fd586","timestamp":"1590077297","url":"http://example.org/api/v1/accounts/a82d2ce3-f8e8-4fbd-8b84-937120853cfe"},"proof":{"signature":"nPlvW3MZBEDVnq0umVcbcD6M027WdzT8gSLiAyDCJh7Amed8rifNSK0kfpguZcvXgszy6yrJKoM2SOL1IxyrBQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"account":{"ethereum_wallet":"0x"}},"method":"PUT","nonce":"fa3e17b36fc422ddef0465907bcfccbf","timestamp":"1591625847","url":"http://example.org/api/v1/accounts/6f1aee11-918d-4738-8dec-a2d473b3295c"},"proof":{"signature":"t+JS+qjTe8fZuhVbAtdVDca6tcnKiGwb5qdKSce/7FWTmnb65gHc2omQ/9tc8JrFXqARzk9Yd7ZURiEEennIBQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;ethereumWallet&quot;: [
+      &quot;should start with &#39;0x&#39;, followed by a 40 character ethereum address&quot;
+    ]
+  }
+}</pre>
       </div>
     </div>
   </body>

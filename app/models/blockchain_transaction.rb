@@ -1,6 +1,6 @@
 class BlockchainTransaction < ApplicationRecord
   belongs_to :blockchain_transactable, polymorphic: true
-  delegate :token, to: :blockchain_transactable
+  belongs_to :token
   has_many :updates, class_name: 'BlockchainTransactionUpdate'
 
   before_validation :populate_data
@@ -8,7 +8,7 @@ class BlockchainTransaction < ApplicationRecord
 
   attr_readonly :amount, :source, :destination, :network, :contract_address, :current_block
   validates_with EthereumTokenValidator
-  validates :amount, :source, :destination, :network, :status, :current_block, presence: true
+  validates :source, :network, :status, :current_block, presence: true
   validates :contract_address, presence: true, if: -> { token.coin_type_token? }
   validates :tx_raw, :tx_hash, presence: true, if: -> { token.coin_type_comakery? && nonce.present? }
 
@@ -41,11 +41,13 @@ class BlockchainTransaction < ApplicationRecord
     if update!(status: new_status, status_message: new_message)
       updates.create!(status: status, status_message: status_message)
 
-      if blockchain_transactable.is_a?(Award)
-        blockchain_transactable.update!(status: :paid) if status.to_s == 'succeed'
-      end
+      update_transactable_status if succeed?
     end
   end
+
+  # @abstract Subclass is expected to implement #update_transactable_status
+  # @!method update_transactable_status
+  #    Update status of blockchain_transactable record
 
   def sync
     return false unless confirmed_on_chain?
@@ -76,64 +78,34 @@ class BlockchainTransaction < ApplicationRecord
     update_status(:cancelled, 'max_syncs') if pending? && reached_max_syncs?
   end
 
-  def on_chain
-    @on_chain ||= if token.coin_type_token?
-      case blockchain_transactable.source
-      when 'mint'
-        Comakery::Eth::Tx::Erc20::Mint.new(network, tx_hash)
-      when 'burn'
-        Comakery::Eth::Tx::Erc20::Burn.new(network, tx_hash)
-      else
-        Comakery::Eth::Tx::Erc20::Transfer.new(network, tx_hash)
-      end
-    else
-      Comakery::Eth::Tx.new(network, tx_hash)
-    end
-  end
+  # @abstract Subclass is expected to implement #on_chain
+  # @!method on_chain
+  #    Return Comakery::Eth::Tx:: instance for blockchain_transactable record
 
   def confirmed_on_chain?
     on_chain.confirmed?(self.class.number_of_confirmations)
   end
 
   def valid_on_chain?
-    case on_chain
-    when Comakery::Eth::Tx::Erc20::Mint, Comakery::Eth::Tx::Erc20::Burn, Comakery::Eth::Tx::Erc20::Transfer
-      on_chain.valid?(source, contract_address, destination, amount, current_block)
-    when Comakery::Eth::Tx
-      on_chain.valid?(source, destination, amount, current_block)
-    end
+    on_chain.valid?(self)
   end
 
   private
 
     def populate_data
-      case blockchain_transactable
-      when Award
-        self.amount = token.to_base_unit(blockchain_transactable.total_amount)
-        self.destination = blockchain_transactable.recipient_address
-        self.network = token.ethereum_network
-        self.contract_address = token.ethereum_contract_address
-        self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
-      end
+      self.token ||= blockchain_transactable.token
+      self.network ||= token.ethereum_network
+      self.contract_address ||= token.ethereum_contract_address
+      self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block
     end
 
     def contract
       @contract ||= Comakery::Eth::Contract::Erc20.new(contract_address, token.abi, network, nonce)
     end
 
-    def tx
-      @tx ||= case blockchain_transactable
-              when Award
-                case blockchain_transactable.source
-                when 'mint'
-                  contract.mint(destination, amount)
-                when 'burn'
-                  contract.burn(destination, amount)
-                else
-                  contract.transfer(destination, amount)
-                end
-      end
-    end
+    # @abstract Subclass is expected to implement #tx
+    # @!method tx
+    #    Return a new contract transaction instance for blockchain_transactable record
 
     def generate_transaction
       if token.coin_type_comakery? && nonce.present?

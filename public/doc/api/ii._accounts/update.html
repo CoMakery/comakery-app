@@ -275,20 +275,40 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">PUT /api/v1/accounts/bd2b61b1-d4ad-4385-bc85-c4a8839e3753</pre>
+          <pre class="request route highlight">PUT /api/v1/accounts/123e3e50-1313-41dd-a791-4a2ec13580a8</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"account":{"first_name":"Alex"}},"method":"PUT","nonce":"b002215396742e0aedf0c0d1a367e444","timestamp":"1590077297","url":"http://example.org/api/v1/accounts/bd2b61b1-d4ad-4385-bc85-c4a8839e3753"},"proof":{"signature":"P9Gg+fmG/ypHR1Ap1sMd20Wz+2aL8yoO1iaygswbjlApuP1S6SXw/kAgu5kyiE4+E9tk1KE1xFkhAcHfL25GAA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"account":{"first_name":"Alex"}},"method":"PUT","nonce":"fa4e7ac20279c4bdfab2138655664aa5","timestamp":"1591625846","url":"http://example.org/api/v1/accounts/123e3e50-1313-41dd-a791-4a2ec13580a8"},"proof":{"signature":"71Y0m/yzteLFixsm2hX2czhtnxZvZeEAsjRZdKeKD3of1+aLfjymVWMHVv6AtxvvF2Sr7fM5to9oJxeYDEc1Dw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;b4c3061a7bd6d5a4a860b469253ba600&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;6288904aa259d182ff05ada2e4f51146&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;email&quot;: &quot;me+8838b9c82820a1dd9fcd7d9c52de0bfbf20b105a@example.com&quot;,
+  &quot;managedAccountId&quot;: &quot;123e3e50-1313-41dd-a791-4a2ec13580a8&quot;,
+  &quot;firstName&quot;: &quot;Alex&quot;,
+  &quot;lastName&quot;: &quot;Smith&quot;,
+  &quot;nickname&quot;: &quot;hunter-ed413acb979151ae345278507a48e59ee1cc57da&quot;,
+  &quot;imageUrl&quot;: &quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,
+  &quot;country&quot;: &quot;United States of America&quot;,
+  &quot;dateOfBirth&quot;: &quot;1990-01-01&quot;,
+  &quot;ethereumWallet&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
+  &quot;qtumWallet&quot;: null,
+  &quot;cardanoWallet&quot;: null,
+  &quot;bitcoinWallet&quot;: null,
+  &quot;eosWallet&quot;: null,
+  &quot;tezosWallet&quot;: null,
+  &quot;verificationState&quot;: &quot;unknown&quot;,
+  &quot;verificationDate&quot;: null,
+  &quot;verificationMaxInvestmentUsd&quot;: null,
+  &quot;createdAt&quot;: &quot;2020-06-08T14:17:26.534Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-06-08T14:17:26.810Z&quot;
+}</pre>
       </div>
     </div>
   </body>

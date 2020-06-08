@@ -215,16 +215,29 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transfer":{"account_id":"cdec0081-af49-4f59-9f72-0513bea425eb","amount":"1000.00000000","description":"investor","quantity":"2.00","source":"bought","total_amount":"2000.00000000"}},"method":"POST","nonce":"0b1db7630daa55b7f257cc12a6c2dbb1","timestamp":"1590077303","url":"http://example.org/api/v1/projects/42/transfers"},"proof":{"signature":"Q4xugf2cIqd3EvsZ8aRorxqvlNiHj099wi7Uff8iYBn/xE2tkxCKRufRZMbO/fCco3nhiX9Ue/qutMcua7ZsDw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"transfer":{"account_id":"69f757fd-1958-4271-b626-7e6b036b03aa","amount":"1000.00000000","description":"investor","quantity":"2.00","source":"bought","total_amount":"2000.00000000"}},"method":"POST","nonce":"cca3082e4a13222f1e01e68baf330e69","timestamp":"1591625852","url":"http://example.org/api/v1/projects/42/transfers"},"proof":{"signature":"I4U8fuChxsvB4UZ/4EHfWRrOi7MRIxZRH5IOBWnaOdKx3bQ9mHJqOVDdDLszHkf1QPzMU+lNtCM9rrP4cmb4BA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;a5ba9c663a004f481c023b3d9ad99005&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;23eb8cb389cf52b8b4b9afbd92f0e91d&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 13,
+  &quot;source&quot;: &quot;bought&quot;,
+  &quot;amount&quot;: &quot;1000.0&quot;,
+  &quot;quantity&quot;: &quot;2.0&quot;,
+  &quot;totalAmount&quot;: &quot;2000.0&quot;,
+  &quot;description&quot;: &quot;investor&quot;,
+  &quot;ethereumTransactionAddress&quot;: null,
+  &quot;ethereumTransactionError&quot;: null,
+  &quot;status&quot;: &quot;accepted&quot;,
+  &quot;createdAt&quot;: &quot;2020-06-08T14:17:32.864Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-06-08T14:17:32.864Z&quot;,
+  &quot;accountId&quot;: &quot;69f757fd-1958-4271-b626-7e6b036b03aa&quot;
+}</pre>
       </div>
     </div>
   </body>
