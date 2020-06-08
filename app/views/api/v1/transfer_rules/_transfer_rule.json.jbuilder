@@ -1,5 +1,6 @@
 json.call(
-  reg_group,
+  transfer_rule,
+  :id,
   :token_id,
   :sending_group_id,
   :receiving_group_id,

@@ -17,7 +17,6 @@ class TransferRule < ApplicationRecord
   validate :groups_belong_to_same_token
 
   enum status: %i[created pending synced failed]
-  scope :ready_for_blockchain_transaction, -> { where status: :created }
 
   def lockup_until
     super && Time.zone.at(super)

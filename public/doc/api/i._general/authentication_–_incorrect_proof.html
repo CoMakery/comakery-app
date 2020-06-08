@@ -125,11 +125,11 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample1.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=91ba39dae1bec55f05cad6cef6bc923b&amp;body[timestamp]=1590077295&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=0wpRx2mKi3K1FlM8wBl%2FFyqJvgiAfyTFRpuygVCdm9%2BnAy3qqTpuqfye2%2FY9%2BKHMblJbaJIhZKNAiiyxWVfZAw%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects?body[data]=&amp;body[url]=http%3A%2F%2Fexample1.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=3dd3fd4d7f36e69711f16e290d06ca6d&amp;body[timestamp]=1591625844&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=jlKAzsep9u3UnLgEpX8iC9Nv9vW%2FfygWZsyYdfMjDdxS590MfQ%2BLkSNs1liy6NSJdMy9hYoc8VVqg8jwdKzSBg%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example1.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;91ba39dae1bec55f05cad6cef6bc923b&quot;, &quot;timestamp&quot;=&gt;&quot;1590077295&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;0wpRx2mKi3K1FlM8wBl/FyqJvgiAfyTFRpuygVCdm9+nAy3qqTpuqfye2/Y9+KHMblJbaJIhZKNAiiyxWVfZAw==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example1.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;3dd3fd4d7f36e69711f16e290d06ca6d&quot;, &quot;timestamp&quot;=&gt;&quot;1591625844&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;jlKAzsep9u3UnLgEpX8iC9Nv9vW/fygWZsyYdfMjDdxS590MfQ+LkSNs1liy6NSJdMy9hYoc8VVqg8jwdKzSBg==&quot;}</pre>
 
 
 
@@ -137,7 +137,11 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
             <h4>Status</h4>
             <pre class="response status">401 Unauthorized</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;authentication&quot;: &quot;Invalid URL&quot;
+  }
+}</pre>
       </div>
     </div>
   </body>

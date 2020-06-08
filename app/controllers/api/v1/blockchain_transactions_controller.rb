@@ -7,18 +7,18 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
 
   # POST /api/v1/projects/1/blockchain_transactions
   def create
-    award = if transaction_create_params[:award_id]
-      project.awards.ready_for_manual_blockchain_transaction.find(transaction_create_params[:award_id])
-    else
-      project.awards.ready_for_blockchain_transaction.first
+    if transactable
+      @transaction = type.create(
+        transaction_create_params.merge(
+          blockchain_transactable: transactable
+        )
+      )
     end
-
-    @transaction = award&.blockchain_transactions&.create(transaction_create_params)
 
     if @transaction&.persisted?
       render 'show.json', status: 201
     else
-      @errors = { blockchain_transaction: 'No transfers available' }
+      @errors = { blockchain_transaction: 'No transactables available' }
 
       render 'api/v1/error.json', status: 204
     end
@@ -51,11 +51,40 @@ class Api::V1::BlockchainTransactionsController < Api::V1::ApiController
       @transaction ||= project.blockchain_transactions.find(params[:id])
     end
 
+    def type
+      @type ||= case params.fetch(:body, {}).fetch(:data, {}).fetch(:blockchain_transactable_type, nil)
+                when 'TransferRule'
+                  BlockchainTransactionTransferRule
+                when 'AccountTokenRecord'
+                  BlockchainTransactionAccountTokenRecord
+                else
+                  BlockchainTransactionAward
+      end
+    end
+
+    def transactables
+      @transactables ||= case params.fetch(:body, {}).fetch(:data, {}).fetch(:blockchain_transactable_type, nil)
+                         when 'TransferRule'
+                           project.token.transfer_rules
+                         when 'AccountTokenRecord'
+                           project.token.account_token_records
+                         else
+                           project.awards
+      end
+    end
+
+    def transactable
+      @transactable ||= if params.fetch(:body, {}).fetch(:data, {}).fetch(:blockchain_transactable_id, nil)
+        transactables.ready_for_manual_blockchain_transaction.find_by(id: params.fetch(:body, {}).fetch(:data, {}).fetch(:blockchain_transactable_id, nil))
+      else
+        transactables.ready_for_blockchain_transaction.first
+      end
+    end
+
     def transaction_create_params
       params.fetch(:body, {}).fetch(:data, {}).fetch(:transaction, {}).permit(
         :source,
-        :nonce,
-        :award_id
+        :nonce
       )
     end
 

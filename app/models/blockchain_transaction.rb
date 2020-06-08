@@ -1,6 +1,6 @@
 class BlockchainTransaction < ApplicationRecord
   belongs_to :blockchain_transactable, polymorphic: true
-  delegate :token, to: :blockchain_transactable
+  belongs_to :token
   has_many :updates, class_name: 'BlockchainTransactionUpdate'
 
   before_validation :populate_data
@@ -93,6 +93,7 @@ class BlockchainTransaction < ApplicationRecord
   private
 
     def populate_data
+      self.token ||= blockchain_transactable.token
       self.network ||= token.ethereum_network
       self.contract_address ||= token.ethereum_contract_address
       self.current_block ||= Comakery::Eth.new(token.ethereum_network).current_block

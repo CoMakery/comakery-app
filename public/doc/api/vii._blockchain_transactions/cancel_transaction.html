@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>V. Blockchain Transactions API</title>
+    <title>VII. Blockchain Transactions API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>V. Blockchain Transactions API</h1>
+      <h1>VII. Blockchain Transactions API</h1>
 
         <p class="explanation">Generate blockchain transactions for project to process and submit to blockchain.</p>
 
       <div class="article">
-        <h2>SUBMIT TRANSACTION</h2>
-        <h3>PUT /api/v1/projects/:project_id/blockchain_transactions/:id</h3>
+        <h2>CANCEL TRANSACTION</h2>
+        <h3>DELETE /api/v1/projects/:project_id/blockchain_transactions/:id</h3>
           <p class="explanation">
-            Marks transaction as pending and returns transaction details, see GENERATE TRANSACTION for response fields
+            Marks transaction as cancelled and releases transfer for a new transaction, see GENERATE TRANSACTION for response fields
           </p>
 
           <h3>Parameters</h3>
@@ -150,6 +150,14 @@ table th, table td {
                   <span class="description">transaction hash</span>
                 </td>
               </tr>
+              <tr>
+                <td>
+                    <span class="name">transaction[status_message]</span>
+                </td>
+                <td>
+                  <span class="description">transaction status message</span>
+                </td>
+              </tr>
             </tbody>
           </table>
 
@@ -160,20 +168,36 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">PUT /api/v1/projects/48/blockchain_transactions/4</pre>
+          <pre class="request route highlight">DELETE /api/v1/projects/62/blockchain_transactions/10</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transaction":{"tx_hash":"0x4009e1e2bc3bb3eeaea5692ed2829fcc0732c195887e19b1acd7381c57d064eb"}},"method":"PUT","nonce":"94b68cff047301f2569cce00880cf052","timestamp":"1590077306","url":"http://example.org/api/v1/projects/48/blockchain_transactions/4"},"proof":{"signature":"yfkPair3YH+Q0+T1n4vEmZ3tLkRbzOWTwxOa5YNruaeQqa/1lgI/bEbclTdkReSd8Y4bwJV8RlOxSyYoXoKFBA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"transaction":{"status_message":"hot wallet error: crash","tx_hash":"0xd1caa9d0aa4f4e37c34173da03d4752ba752a56ebf6869f6d74858eff91bdda0"}},"method":"DELETE","nonce":"6013b0ef3e418f8b8468d2402927b9c2","timestamp":"1591625860","url":"http://example.org/api/v1/projects/62/blockchain_transactions/10"},"proof":{"signature":"hNF1160M8SIOjeUaZebv5KKzFVG9tKyoyHJ2grTk81LdorEkXTy9EN/kwCHjGaRxUDp7XWk5u3XRsADEkcKNCw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;afc00d3b6c9ffa5f1ae7c6cf1bf08e09&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;396d9890cdce0cf1acb8a25336824eab&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 10,
+  &quot;blockchainTransactableId&quot;: 32,
+  &quot;destination&quot;: &quot;0xB4252b39f8506A711205B0b1C4170f0034065b46&quot;,
+  &quot;source&quot;: &quot;0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB&quot;,
+  &quot;amount&quot;: 1,
+  &quot;nonce&quot;: 207849,
+  &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+  &quot;network&quot;: &quot;ropsten&quot;,
+  &quot;txHash&quot;: &quot;0xd1caa9d0aa4f4e37c34173da03d4752ba752a56ebf6869f6d74858eff91bdda0&quot;,
+  &quot;txRaw&quot;: &quot;0xf86a83032be9822710830186a0941d1592c28fff3d3e71b1d29e31147846026a0a3780b844a9059cbb000000000000000000000000b4252b39f8506a711205b0b1c4170f0034065b460000000000000000000000000000000000000000000000000000000000000001808080&quot;,
+  &quot;status&quot;: &quot;cancelled&quot;,
+  &quot;statusMessage&quot;: &quot;hot wallet error: crash&quot;,
+  &quot;createdAt&quot;: &quot;2020-06-08T14:17:40.398Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-06-08T14:17:40.461Z&quot;,
+  &quot;syncedAt&quot;: null
+}</pre>
       </div>
     </div>
   </body>

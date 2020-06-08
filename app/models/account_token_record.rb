@@ -7,6 +7,7 @@ class AccountTokenRecord < ApplicationRecord
 
   after_initialize :set_defaults
   before_save :touch_account
+  after_save :replace_existing_record, if: -> { synced? }
 
   LOCKUP_UNTIL_MAX = Time.zone.at(2.pow(256) - 1)
   LOCKUP_UNTIL_MIN = Time.zone.at(0)
@@ -20,7 +21,6 @@ class AccountTokenRecord < ApplicationRecord
   validates :max_balance, inclusion: { in: BALANCE_MIN..BALANCE_MAX }, allow_nil: true
 
   enum status: %i[created pending synced failed]
-  scope :ready_for_blockchain_transaction, -> { where status: :created }
 
   def lockup_until
     super && Time.zone.at(super)
@@ -39,5 +39,9 @@ class AccountTokenRecord < ApplicationRecord
 
     def touch_account
       account.touch # rubocop:disable Rails/SkipsModelValidations
+    end
+
+    def replace_existing_record
+      AccountTokenRecord.where(account_id: account_id, token_id: token_id, status: :synced).where.not(id: id).destroy_all
     end
 end

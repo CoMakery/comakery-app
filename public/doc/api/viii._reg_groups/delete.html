@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>V. Blockchain Transactions API</title>
+    <title>VIII. Reg Groups API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>V. Blockchain Transactions API</h1>
+      <h1>VIII. Reg Groups API</h1>
 
-        <p class="explanation">Generate blockchain transactions for project to process and submit to blockchain.</p>
+        <p class="explanation">Create and delete reg groups, retrieve reg group data.</p>
 
       <div class="article">
-        <h2>SUBMIT TRANSACTION – HASH MISMATCH</h2>
-        <h3>PUT /api/v1/projects/:project_id/blockchain_transactions/:id</h3>
+        <h2>DELETE</h2>
+        <h3>DELETE /api/v1/projects/:project_id/reg_groups/:id</h3>
           <p class="explanation">
-            Returns an error if submitted transaction hash differs from generated on backend
+            Delete the reg group and returns an array of present reg groups (See GET for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -128,26 +128,18 @@ table th, table td {
             <tbody>
               <tr>
                 <td class="required">
+                    <span class="name">id</span>
+                </td>
+                <td>
+                  <span class="description">reg group id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
                     <span class="name">project_id</span>
                 </td>
                 <td>
                   <span class="description">project id</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">id</span>
-                </td>
-                <td>
-                  <span class="description">transaction id</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">transaction[tx_hash]</span>
-                </td>
-                <td>
-                  <span class="description">transaction hash</span>
                 </td>
               </tr>
             </tbody>
@@ -160,18 +152,22 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">PUT /api/v1/projects/49/blockchain_transactions/5</pre>
+          <pre class="request route highlight">DELETE /api/v1/projects/67/reg_groups/64</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transaction":{"tx_hash":"0x"}},"method":"PUT","nonce":"8bed9e7eec8aa24f73df269db168713a","timestamp":"1590077307","url":"http://example.org/api/v1/projects/49/blockchain_transactions/5"},"proof":{"signature":"Zc+gvv/5PkKtXn9wGJhtT6D8PlrvsD4kka6pmJQ7JIbIIV56MBd7Kw0hMDzpw4vh2GA8dyd6WmgZbAwbojnQAQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"407b72427971b62ebfb8c7744bfa53ce","timestamp":"1591625861","url":"http://example.org/api/v1/projects/67/reg_groups/64"},"proof":{"signature":"sOt3YBH0exYds/H+QXBz79MdNGDni3H25RrspVvvdxZC7wxDcazmyEp6qKLtaLB28NEGSnnEQ1EzFPuxKXHwCg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;4f53cda18c2baa0c0354bb5f9a3ecbe5&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">400 Bad Request</pre>
+            <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">[
+
+]</pre>
       </div>
     </div>
   </body>

@@ -271,16 +271,36 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"account":{"country":"United States of America","date_of_birth":"1990/01/01","email":"me+213d7837914468594b0c7648695f08352a5f9b0a@example.com","ethereum_wallet":"0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B","first_name":"Eva","last_name":"Smith","managed_account_id":"b01a6702-5584-4f08-ac35-a45b322c7f08","nickname":"hunter-3fd294e69dfc1f24ed9b6ef62c2bcc5d63e5de83"}},"method":"POST","nonce":"c3630e93cf9854f7fbb5a66899d85255","timestamp":"1590077296","url":"http://example.org/api/v1/accounts"},"proof":{"signature":"gVY5ISSDprUBF+rifDFnFjaOfPw1NcvfjeepOgiECUrKXVKdfAAwQsHu5EuTnDVGKc8U2uyNP8mNa934Gy3ADA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"account":{"country":"United States of America","date_of_birth":"1990/01/01","email":"me+0ed1e7dbbe1b7ef58cc676d424958891270a4e4f@example.com","ethereum_wallet":"0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B","first_name":"Eva","last_name":"Smith","managed_account_id":"bb36ada4-1c63-4dfe-ae80-66f30ff4af72","nickname":"hunter-7d8ec50d24d3d3de3989c0f3b4151d692cf49030"}},"method":"POST","nonce":"49fd56a2d666a1be242816c9339ba824","timestamp":"1591625846","url":"http://example.org/api/v1/accounts"},"proof":{"signature":"E9d8VzqmtrSUXbQ3F3Kzvt/swA9zHbiRVITPMB9lthS30mxoAUMpu97pGB7FwfXt1tGUvJCSN+RQELFIeCETAA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;0aa8c341dcda0ce415f2b0160bf1636d&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;aeb2446370cef1d2202c985697001cd7&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;email&quot;: &quot;me+0ed1e7dbbe1b7ef58cc676d424958891270a4e4f@example.com&quot;,
+  &quot;managedAccountId&quot;: &quot;bb36ada4-1c63-4dfe-ae80-66f30ff4af72&quot;,
+  &quot;firstName&quot;: &quot;Eva&quot;,
+  &quot;lastName&quot;: &quot;Smith&quot;,
+  &quot;nickname&quot;: &quot;hunter-7d8ec50d24d3d3de3989c0f3b4151d692cf49030&quot;,
+  &quot;imageUrl&quot;: &quot;http://example.org/assets/default_account_image-eee1531b23fb9820d114c626a7e4212a9c54f7cf8522720d6ba1454787299a53.jpg&quot;,
+  &quot;country&quot;: &quot;United States of America&quot;,
+  &quot;dateOfBirth&quot;: &quot;1990-01-01&quot;,
+  &quot;ethereumWallet&quot;: &quot;0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B&quot;,
+  &quot;qtumWallet&quot;: null,
+  &quot;cardanoWallet&quot;: null,
+  &quot;bitcoinWallet&quot;: null,
+  &quot;eosWallet&quot;: null,
+  &quot;tezosWallet&quot;: null,
+  &quot;verificationState&quot;: &quot;unknown&quot;,
+  &quot;verificationDate&quot;: null,
+  &quot;verificationMaxInvestmentUsd&quot;: null,
+  &quot;createdAt&quot;: &quot;2020-06-08T14:17:26.061Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-06-08T14:17:26.103Z&quot;
+}</pre>
       </div>
     </div>
   </body>

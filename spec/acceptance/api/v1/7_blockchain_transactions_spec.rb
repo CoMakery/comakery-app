@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'V. Blockchain Transactions' do
+resource 'VII. Blockchain Transactions' do
   include Rails.application.routes.url_helpers
 
   let!(:active_whitelabel_mission) { create(:mission, whitelabel: true, whitelabel_domain: 'example.org', whitelabel_api_public_key: build(:api_public_key), whitelabel_api_key: build(:api_key)) }
@@ -26,7 +26,7 @@ resource 'V. Blockchain Transactions' do
 
     with_options with_example: true do
       response_field :id, 'transaction id', type: :integer
-      response_field :blockchain_transactable_id, 'transfer id', type: :integer
+      response_field :blockchain_transactable_id, 'transactable id', type: :integer
       response_field :amount, 'transaction amount', type: :string
       response_field :destination, 'transaction destination', type: :string
       response_field :source, 'transaction source', type: :string
@@ -46,6 +46,11 @@ resource 'V. Blockchain Transactions' do
       parameter :nonce, 'transaction nonce', required: true, type: :string
     end
 
+    with_options with_example: true do
+      parameter :blockchain_transactable_id, 'transactable id to generate transaction for', required: false, type: :string
+      parameter :blockchain_transactable_type, 'transactable type to generate transaction for – Award (Default), TransferRule, AccountTokenRecord', required: false, type: :string
+    end
+
     context '201' do
       let!(:project_id) { project.id }
       let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
@@ -58,9 +63,33 @@ resource 'V. Blockchain Transactions' do
       end
 
       example 'GENERATE TRANSACTION' do
-        explanation 'Generates a new blockchain transaction for a transfer and locks the transfer for 10 minutes'
+        explanation 'Generates a new blockchain transaction for a transactable and locks the transactable for 10 minutes'
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
+
+        VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
+          do_request(request)
+        end
+
+        expect(status).to eq(201)
+      end
+
+      example 'GENERATE TRANSACTION – TRANSACTABLE ID' do
+        explanation 'Generates a new blockchain transaction for transactable with supplied id and locks the transactable for 10 minutes'
+
+        request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_id: award.id }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
+
+        VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
+          do_request(request)
+        end
+
+        expect(status).to eq(201)
+      end
+
+      example 'GENERATE TRANSACTION – TRANSACTABLE TYPE' do
+        explanation 'Generates a new blockchain transaction for transactable with supplied type and locks the transactable for 10 minutes'
+
+        request = build(:api_signed_request, { transaction: transaction, blockchain_transactable_type: create(:transfer_rule, token: project.token) && 'TransferRule' }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
 
         VCR.use_cassette("infura/#{project.token.ethereum_network}/#{project.token.ethereum_contract_address}/contract_init") do
           do_request(request)
@@ -81,7 +110,7 @@ resource 'V. Blockchain Transactions' do
       end
 
       example 'GENERATE TRANSACTION - NO TRANSFERS' do
-        explanation 'Returns empty response if no transfers available for transaction'
+        explanation 'Returns empty response if no transactables available for transaction'
 
         request = build(:api_signed_request, { transaction: transaction }, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST', 'example.org')
         do_request(request)

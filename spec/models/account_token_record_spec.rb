@@ -75,4 +75,87 @@ describe AccountTokenRecord do
       expect(account_token_record.reload.lockup_until).to eq(Time.zone.at(max_uint256))
     end
   end
+
+  describe 'ready_for_blockchain_transaction scope' do
+    let!(:account_token_record) { create(:account_token_record) }
+    let!(:blockchain_transaction) { create(:blockchain_transaction_account_token_record) }
+
+    it 'returns account_token_records without blockchain_transaction' do
+      expect(described_class.ready_for_blockchain_transaction).to include(account_token_record)
+    end
+
+    it 'returns account_token_records with latest blockchain_transaction Cancelled' do
+      create(:blockchain_transaction_account_token_record, status: :cancelled, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+
+      expect(described_class.ready_for_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
+    end
+
+    it 'returns account_token_records with latest blockchain_transaction Created more than 10 minutes ago' do
+      create(:blockchain_transaction_account_token_record, blockchain_transactable: blockchain_transaction.blockchain_transactable, created_at: 20.minutes.ago)
+
+      expect(described_class.ready_for_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
+    end
+
+    it 'doesnt return account_token_records with lates blockchain_transaction Created less than 10 minutes ago' do
+      create(:blockchain_transaction_account_token_record, blockchain_transactable: blockchain_transaction.blockchain_transactable, created_at: 1.second.ago)
+
+      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
+    end
+
+    it 'doesnt return account_token_records with latest blockchain_transaction Pending' do
+      create(:blockchain_transaction_account_token_record, status: :pending, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+
+      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
+    end
+
+    it 'doesnt return account_token_records with latest blockchain_transaction Succeed' do
+      create(:blockchain_transaction_account_token_record, status: :succeed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+
+      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
+    end
+
+    it 'doesnt return account_token_records with latest blockchain_transaction Failed' do
+      create(:blockchain_transaction_account_token_record, status: :failed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+
+      expect(described_class.ready_for_blockchain_transaction).not_to include(blockchain_transaction.blockchain_transactable)
+    end
+  end
+
+  describe 'ready_for_manual_blockchain_transaction scope' do
+    let!(:blockchain_transaction) { create(:blockchain_transaction_account_token_record) }
+
+    it 'returns account_token_records with latest blockchain_transaction Failed' do
+      create(:blockchain_transaction_account_token_record, status: :failed, blockchain_transactable: blockchain_transaction.blockchain_transactable)
+
+      expect(described_class.ready_for_manual_blockchain_transaction).to include(blockchain_transaction.blockchain_transactable)
+    end
+  end
+
+  describe 'replace_existing_record' do
+    let!(:account_token_record) { create(:account_token_record) }
+    let!(:account_token_record_dup) { create(:account_token_record, token: account_token_record.token, account: account_token_record.account, status: :synced) }
+    let!(:account_token_record_dup_account) { create(:account_token_record, account: account_token_record.account, status: :synced) }
+
+    context 'when status synced' do
+      before do
+        account_token_record.synced!
+      end
+
+      it 'deletes all synced records with the same combination of token and account' do
+        expect { account_token_record_dup.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+
+      it 'doesnt delete records with same account but different token' do
+        expect { account_token_record_dup_account.reload }.not_to raise_error
+      end
+    end
+
+    context 'when status not synced' do
+      it 'does nothing' do
+        expect { account_token_record.reload }.not_to raise_error
+        expect { account_token_record_dup.reload }.not_to raise_error
+        expect { account_token_record_dup_account.reload }.not_to raise_error
+      end
+    end
+  end
 end

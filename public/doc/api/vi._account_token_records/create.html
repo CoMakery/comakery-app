@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>V. Blockchain Transactions API</title>
+    <title>VI. Account Token Records API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>V. Blockchain Transactions API</h1>
+      <h1>VI. Account Token Records API</h1>
 
-        <p class="explanation">Generate blockchain transactions for project to process and submit to blockchain.</p>
+        <p class="explanation">Create and delete account token records, retrieve account token record data.</p>
 
       <div class="article">
-        <h2>CANCEL TRANSACTION</h2>
-        <h3>DELETE /api/v1/projects/:project_id/blockchain_transactions/:id</h3>
+        <h2>CREATE</h2>
+        <h3>POST /api/v1/projects/:project_id/account_token_records</h3>
           <p class="explanation">
-            Marks transaction as cancelled and releases transfer for a new transaction, see GENERATE TRANSACTION for response fields
+            Returns created account token record details (See GET for response details)
           </p>
 
           <h3>Parameters</h3>
@@ -136,31 +136,58 @@ table th, table td {
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">id</span>
+                    <span class="name">account_token_record[max_balance]</span>
                 </td>
                 <td>
-                  <span class="description">transaction id</span>
+                  <span class="description">max balance</span>
                 </td>
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">transaction[tx_hash]</span>
+                    <span class="name">account_token_record[lockup_until]</span>
                 </td>
                 <td>
-                  <span class="description">transaction hash</span>
+                  <span class="description">lockup until</span>
                 </td>
               </tr>
               <tr>
-                <td>
-                    <span class="name">transaction[status_message]</span>
+                <td class="required">
+                    <span class="name">account_token_record[reg_group_id]</span>
                 </td>
                 <td>
-                  <span class="description">transaction status message</span>
+                  <span class="description">reg group id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">account_token_record[account_frozen]</span>
+                </td>
+                <td>
+                  <span class="description">frozen</span>
                 </td>
               </tr>
             </tbody>
           </table>
 
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">errors</span>
+                </td>
+                <td>
+                  <span class="description">array of errors</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
           <h3>Request</h3>
 
@@ -168,20 +195,31 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/v1/projects/50/blockchain_transactions/6</pre>
+          <pre class="request route highlight">POST /api/v1/projects/53/account_token_records</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transaction":{"status_message":"hot wallet error: crash","tx_hash":"0x5c74f88eb1ccd70d2b0ffe29f4f8f681079063c25f74a9cd88e21931101c4cd6"}},"method":"DELETE","nonce":"eccd2c0089f33f996b6c89ae12832690","timestamp":"1590077307","url":"http://example.org/api/v1/projects/50/blockchain_transactions/6"},"proof":{"signature":"HiowGCJjROHMNerkqMxBcU72y4PP8rDYAuYPgNz8NieYbIy5AguRJo6aYo65xXRfFxJAyB3BaZzEeJsPOwK4AQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"account_token_record":{"account_frozen":"false","account_id":"164","lockup_until":"1","max_balance":"100","reg_group_id":"39"}},"method":"POST","nonce":"99a5ddad5ba7e7dd6bfef6414c1b6949","timestamp":"1591625855","url":"http://example.org/api/v1/projects/53/account_token_records"},"proof":{"signature":"Y6R2xOk4y/IL5qNUBVcS/GF0CMRhE1rqo9StOWv8+qiJz71ehNAhG9nm95TSt43nWx8cJdmhnskvaNbsWDu2Bg==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;9b5b2e885173bb271134afef2b35417e&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;8d5678bbcb4f2d79f194bde906da22c3&quot;</pre>
             <h4>Status</h4>
-            <pre class="response status">200 OK</pre>
+            <pre class="response status">201 Created</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 6,
+  &quot;accountId&quot;: 164,
+  &quot;tokenId&quot;: 79,
+  &quot;maxBalance&quot;: 100,
+  &quot;lockupUntil&quot;: &quot;1970-01-01T00:00:01.000Z&quot;,
+  &quot;regGroupId&quot;: 39,
+  &quot;accountFrozen&quot;: false,
+  &quot;status&quot;: &quot;created&quot;,
+  &quot;createdAt&quot;: &quot;2020-06-08T14:17:35.837Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-06-08T14:17:35.837Z&quot;
+}</pre>
       </div>
     </div>
   </body>
