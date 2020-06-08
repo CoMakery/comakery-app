@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_28_155545) do
+ActiveRecord::Schema.define(version: 2020_06_08_140014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -229,8 +229,10 @@ ActiveRecord::Schema.define(version: 2020_05_28_155545) do
     t.string "blockchain_transactable_type"
     t.bigint "blockchain_transactable_id"
     t.string "type", default: "BlockchainTransactionAward", null: false
+    t.bigint "token_id"
     t.index ["award_id"], name: "index_blockchain_transactions_on_award_id"
     t.index ["blockchain_transactable_type", "blockchain_transactable_id"], name: "index_bc_txs_on_bc_txble_type_and_bc_txble_id"
+    t.index ["token_id"], name: "index_blockchain_transactions_on_token_id"
   end
 
   create_table "channels", force: :cascade do |t|
@@ -489,6 +491,7 @@ ActiveRecord::Schema.define(version: 2020_05_28_155545) do
   add_foreign_key "awards", "specialties"
   add_foreign_key "blockchain_transaction_updates", "blockchain_transactions"
   add_foreign_key "blockchain_transactions", "awards"
+  add_foreign_key "blockchain_transactions", "tokens"
   add_foreign_key "experiences", "accounts"
   add_foreign_key "experiences", "specialties"
   add_foreign_key "interests", "accounts"

@@ -175,14 +175,20 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"2f14e6204f73dd084b7a61fa8c9a98ac","timestamp":"1590077305","url":"http://example.org/api/v1/projects/45/transfers/21"},"proof":{"signature":"zAX/8PTK3GQ2SlXRQn7rA4qcFzjXxiUd97hoTQOAazOi0M345v4iRD86k7KWYruZGbFJUFyjdvP1hDylCts4Bw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"472f2731e4f600e36f6cd97e66e1cf6e","timestamp":"1591625854","url":"http://example.org/api/v1/projects/45/transfers/21"},"proof":{"signature":"lWxzwcCqvg/EBXJSSaHtJGqCtDKZi3OLw95Lv+oVBDZHJi7T6QPMAhowowFM/bwQ4L+n7HsFCGVfQBnuBKaQDA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;base&quot;: [
+      &quot;Paid task/transfer can&#39;t be cancelled&quot;
+    ]
+  }
+}</pre>
       </div>
     </div>
   </body>

@@ -16,6 +16,7 @@ class Dashboard::AccountsController < ApplicationController
 
   def update
     authorize @project, :edit_accounts?
+    @account = @account.dup
 
     if @account.update(
       account_params.merge(

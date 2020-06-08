@@ -271,14 +271,32 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"account":{"managed_account_id":"6e89bbaa-3c51-4a25-8efb-a38828debc47"}},"method":"POST","nonce":"2349b4efc9f851522ea5f183bcfcb026","timestamp":"1590077297","url":"http://example.org/api/v1/accounts"},"proof":{"signature":"8rIlsA0zK6ajk0oiwzG+8o3o2CvPYupwrkerhAlBwJ6BPcIZ1Hk9IFGVS/sMoc/IXoRnbpquJfPS8xOFpRYjAA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":{"account":{"managed_account_id":"16378660-49da-4192-876e-74c70f258cdb"}},"method":"POST","nonce":"ed4d9448bcf921568b54f03f4afcccb0","timestamp":"1591625846","url":"http://example.org/api/v1/accounts"},"proof":{"signature":"BWtcyWl05E8ZX5HVl0EJNsfML0bzP84WPOzrqtDJ+d6IcTeZw9dQS1OxC39dU0bKusDcBKqiCCRX7Z8moxRDAw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
             <h4>Status</h4>
             <pre class="response status">400 Bad Request</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;errors&quot;: {
+    &quot;email&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;firstName&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;lastName&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;country&quot;: [
+      &quot;can&#39;t be blank&quot;
+    ],
+    &quot;dateOfBirth&quot;: [
+      &quot;should be present in correct format (MM/DD/YYYY)&quot;
+    ]
+  }
+}</pre>
       </div>
     </div>
   </body>

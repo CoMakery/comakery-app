@@ -1,5 +1,6 @@
 json.call(
   account_token_record,
+  :id,
   :account_id,
   :token_id,
   :max_balance,

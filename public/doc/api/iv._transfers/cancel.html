@@ -175,16 +175,29 @@ table th, table td {
 
 
             <h4>Body</h4>
-            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"77de4c9d14bbb45ea03b9f0f87433c38","timestamp":"1590077304","url":"http://example.org/api/v1/projects/44/transfers/17"},"proof":{"signature":"FYo2DU7lvouksKc0laQxdV7jhqeMb677GM1Jviy3xc5lkcUgZ9vcV+U7nEGqiUknNn/umJkb9jKkSVI6qfkgAw==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+            <pre class="request body">{"body":{"data":"","method":"DELETE","nonce":"efb0322e0897b3187845e258f00ae9b7","timestamp":"1591625853","url":"http://example.org/api/v1/projects/44/transfers/17"},"proof":{"signature":"SMMCNiD/LTKZVHJudLLhDDPGx12GFrVMa8wgZgz7Ecp7F5NeQZ5EOwaL/ZbdYlwg6HiaY0F+gloRZhoDvpd6AQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;372288ca99484a38b82d0822491d53f6&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;bf4394694936560836cfb054b72ec8aa&quot;</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 17,
+  &quot;source&quot;: &quot;earned&quot;,
+  &quot;amount&quot;: &quot;1000.0&quot;,
+  &quot;quantity&quot;: &quot;2.0&quot;,
+  &quot;totalAmount&quot;: &quot;2000.0&quot;,
+  &quot;description&quot;: &quot;Award to a team member&quot;,
+  &quot;ethereumTransactionAddress&quot;: null,
+  &quot;ethereumTransactionError&quot;: null,
+  &quot;status&quot;: &quot;cancelled&quot;,
+  &quot;createdAt&quot;: &quot;2020-06-08T14:17:33.537Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-06-08T14:17:33.803Z&quot;,
+  &quot;accountId&quot;: &quot;08fe0a2e-3edd-4037-b2c2-5cf91f2858e7&quot;
+}</pre>
       </div>
     </div>
   </body>

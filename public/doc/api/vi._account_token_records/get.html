@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>V. Blockchain Transactions API</title>
+    <title>VI. Account Token Records API</title>
     <meta charset="utf-8">
     <style>
       
@@ -106,15 +106,15 @@ table th, table td {
   </head>
   <body>
     <div class="container">
-      <h1>V. Blockchain Transactions API</h1>
+      <h1>VI. Account Token Records API</h1>
 
-        <p class="explanation">Generate blockchain transactions for project to process and submit to blockchain.</p>
+        <p class="explanation">Create and delete account token records, retrieve account token record data.</p>
 
       <div class="article">
-        <h2>GENERATE TRANSACTION</h2>
-        <h3>POST /api/v1/projects/:project_id/blockchain_transactions</h3>
+        <h2>GET</h2>
+        <h3>GET /api/v1/projects/:project_id/account_token_records/:id</h3>
           <p class="explanation">
-            Generates a new blockchain transaction for a transfer and locks the transfer for 10 minutes
+            Returns data for a single account token record.
           </p>
 
           <h3>Parameters</h3>
@@ -136,18 +136,10 @@ table th, table td {
               </tr>
               <tr>
                 <td class="required">
-                    <span class="name">transaction[source]</span>
+                    <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">transaction source wallet address</span>
-                </td>
-              </tr>
-              <tr>
-                <td class="required">
-                    <span class="name">transaction[nonce]</span>
-                </td>
-                <td>
-                  <span class="description">transaction nonce</span>
+                  <span class="description">account token record id</span>
                 </td>
               </tr>
             </tbody>
@@ -167,79 +159,55 @@ table th, table td {
                     <span class="name">id</span>
                 </td>
                 <td>
-                  <span class="description">transaction id</span>
+                  <span class="description">account token record id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">blockchain_transactable_id</span>
+                    <span class="name">account_id</span>
                 </td>
                 <td>
-                  <span class="description">transfer id</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">amount</span>
-                </td>
-                <td>
-                  <span class="description">transaction amount</span>
+                  <span class="description">account id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">destination</span>
+                    <span class="name">token_id</span>
                 </td>
                 <td>
-                  <span class="description">transaction destination</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">source</span>
-                </td>
-                <td>
-                  <span class="description">transaction source</span>
+                  <span class="description">token id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">nonce</span>
+                    <span class="name">reg_group_id</span>
                 </td>
                 <td>
-                  <span class="description">transaction nonce</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">contract_address</span>
-                </td>
-                <td>
-                  <span class="description">token contract address</span>
+                  <span class="description">reg group id</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">network</span>
+                    <span class="name">lockup_until</span>
                 </td>
                 <td>
-                  <span class="description">token network</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">tx_hash</span>
-                </td>
-                <td>
-                  <span class="description">transaction hash</span>
+                  <span class="description">lockup until</span>
                 </td>
               </tr>
               <tr>
                 <td>
-                    <span class="name">tx_raw</span>
+                    <span class="name">max_balance</span>
                 </td>
                 <td>
-                  <span class="description">transaction in HEX</span>
+                  <span class="description">max balance</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">account_frozen</span>
+                </td>
+                <td>
+                  <span class="description">account frozen</span>
                 </td>
               </tr>
               <tr>
@@ -247,15 +215,7 @@ table th, table td {
                     <span class="name">status</span>
                 </td>
                 <td>
-                  <span class="description">transaction status (created pending cancelled succeed failed)</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                    <span class="name">status_message</span>
-                </td>
-                <td>
-                  <span class="description">transaction status message</span>
+                  <span class="description">account token record status (created synced)</span>
                 </td>
               </tr>
               <tr>
@@ -263,7 +223,7 @@ table th, table td {
                     <span class="name">createdAt</span>
                 </td>
                 <td>
-                  <span class="description">transaction creation timestamp</span>
+                  <span class="description">creation timestamp</span>
                 </td>
               </tr>
               <tr>
@@ -271,7 +231,7 @@ table th, table td {
                     <span class="name">updatedAt</span>
                 </td>
                 <td>
-                  <span class="description">transaction update timestamp</span>
+                  <span class="description">update timestamp</span>
                 </td>
               </tr>
             </tbody>
@@ -283,20 +243,33 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/v1/projects/46/blockchain_transactions</pre>
+          <pre class="request route highlight">GET /api/v1/projects/52/account_token_records/4?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F52%2Faccount_token_records%2F4&amp;body[method]=GET&amp;body[nonce]=adde153bcdd20ceed171a5ef751e3ffc&amp;body[timestamp]=1591625855&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=I%2BzRF5khlY5Yipo0giydyzf2NzDvPU1Mv42hefgojDlJiYGQGO0X3Rj%2FgF0X%2Frde14l1iTG2EZmP0RwphcmXCg%3D%3D</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/52/account_token_records/4&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;adde153bcdd20ceed171a5ef751e3ffc&quot;, &quot;timestamp&quot;=&gt;&quot;1591625855&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;I+zRF5khlY5Yipo0giydyzf2NzDvPU1Mv42hefgojDlJiYGQGO0X3Rj/gF0X/rde14l1iTG2EZmP0RwphcmXCg==&quot;}</pre>
 
-            <h4>Body</h4>
-            <pre class="request body">{"body":{"data":{"transaction":{"nonce":1,"source":"0x42D00fC2Efdace4859187DE4865Df9BaA320D5dB"}},"method":"POST","nonce":"60a86075990b7fa333f245d4f9de5f16","timestamp":"1590077305","url":"http://example.org/api/v1/projects/46/blockchain_transactions"},"proof":{"signature":"Rc/7x6NSOqEWcFilapPwbSjbH4kOW58QAZgHFy79muNH2XHotuZNYV4YHgkaqS4cAJpB/WfbdrXYocMjEy/eBA==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
 
 
             <h3>Response</h3>
               <h4>Headers</h4>
-              <pre class="response headers">ETag: W/&quot;5007816700e1247990afee0b39c0d66c&quot;</pre>
+              <pre class="response headers">ETag: W/&quot;bb005abae2b7be78fdda2b9f9ec7afde&quot;
+Last-Modified: Mon, 08 Jun 2020 14:17:35 GMT</pre>
             <h4>Status</h4>
-            <pre class="response status">201 Created</pre>
+            <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 4,
+  &quot;accountId&quot;: 160,
+  &quot;tokenId&quot;: 77,
+  &quot;maxBalance&quot;: 100000,
+  &quot;lockupUntil&quot;: &quot;2020-06-07T14:17:35.000Z&quot;,
+  &quot;regGroupId&quot;: 36,
+  &quot;accountFrozen&quot;: false,
+  &quot;status&quot;: &quot;created&quot;,
+  &quot;createdAt&quot;: &quot;2020-06-08T14:17:35.477Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-06-08T14:17:35.477Z&quot;
+}</pre>
       </div>
     </div>
   </body>

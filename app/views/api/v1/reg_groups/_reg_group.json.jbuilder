@@ -1,9 +1,9 @@
 json.call(
   reg_group,
+  :id,
   :name,
   :token_id,
   :blockchain_id,
-  :status,
   :created_at,
   :updated_at
 )

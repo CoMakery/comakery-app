@@ -291,11 +291,11 @@ table th, table td {
             <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/v1/projects/38?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F38&amp;body[method]=GET&amp;body[nonce]=85da2b607fb78548c067c7d35ad0e173&amp;body[timestamp]=1590077302&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=8lJnS0%2FKQoM30kgh0QlIOZpu00EAkHvMwIqVhdi%2BlfO98qyGGeYvwaEy9vtE0D0XFQCE0Fb162GILwRBIlMVCw%3D%3D</pre>
+          <pre class="request route highlight">GET /api/v1/projects/38?body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F38&amp;body[method]=GET&amp;body[nonce]=509c6544629026ac74f0ba34cdfd7f08&amp;body[timestamp]=1591625850&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=fRlNjrI9MNOLfweMS7qQ%2F4BPnTwGM8ej5ecrs7llSWVcT1PE83GbiA4dDOqGIIUMlYVme0VEFd68CuIl8Se1Cg%3D%3D</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/38&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;85da2b607fb78548c067c7d35ad0e173&quot;, &quot;timestamp&quot;=&gt;&quot;1590077302&quot;}
-proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;8lJnS0/KQoM30kgh0QlIOZpu00EAkHvMwIqVhdi+lfO98qyGGeYvwaEy9vtE0D0XFQCE0Fb162GILwRBIlMVCw==&quot;}</pre>
+            <pre class="request query_parameters highlight">body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/38&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;509c6544629026ac74f0ba34cdfd7f08&quot;, &quot;timestamp&quot;=&gt;&quot;1591625850&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;fRlNjrI9MNOLfweMS7qQ/4BPnTwGM8ej5ecrs7llSWVcT1PE83GbiA4dDOqGIIUMlYVme0VEFd68CuIl8Se1Cg==&quot;}</pre>
 
 
 
@@ -303,12 +303,36 @@ proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificatio
               <h4>Headers</h4>
               <pre class="response headers">Per-Page: 25
 Total: 2
-ETag: W/&quot;cab9a89c33296fa51682250599a8c349&quot;
-Last-Modified: Thu, 21 May 2020 16:08:21 GMT</pre>
+ETag: W/&quot;dee71116c7dfe7f832f4bd7ee63ac04f&quot;
+Last-Modified: Mon, 08 Jun 2020 14:17:30 GMT</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[binary data]</pre>
+              <pre class="response body">{
+  &quot;id&quot;: 38,
+  &quot;title&quot;: &quot;Uber for Cats&quot;,
+  &quot;description&quot;: &quot;We are going to build amazing&quot;,
+  &quot;imageUrl&quot;: &quot;/attachments/5dcd03ac20147841b4ba86b90e9d9395d972273e/store/fill/1000/1000/9ddf405e7ca845c3de55c02fa5d3772b0b985dddaa1583b15b751a5803dc/image.png&quot;,
+  &quot;createdAt&quot;: &quot;2020-06-08T14:17:30.718Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-06-08T14:17:30.718Z&quot;,
+  &quot;accountId&quot;: &quot;b5b1da2a-4298-4e61-9708-74c60c1eacae&quot;,
+  &quot;adminIds&quot;: [
+    &quot;e35db1b9-63e2-4859-94b1-61dd828fe49f&quot;,
+    &quot;73051eec-1f27-4a4b-b536-6b2788f09a0c&quot;,
+    &quot;fa38e905-9a17-4827-939e-eb6d6513af18&quot;
+  ],
+  &quot;token&quot;: {
+    &quot;id&quot;: 49,
+    &quot;name&quot;: &quot;ComakeryToken-2278a8f45e77a5efc97a723a550cde11a6d2154c&quot;,
+    &quot;symbol&quot;: &quot;XYZ96b1b81a3f4d58f8fcc768fbc70e3e81347d7e28&quot;,
+    &quot;network&quot;: &quot;ropsten&quot;,
+    &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+    &quot;decimalPlaces&quot;: 18,
+    &quot;logoUrl&quot;: &quot;/attachments/6135c956c46fc62545845766b590689f46f25e10/store/fill/100/100/20a3f840ca9005098260932e44aafcc1eb2af5991c3b141f0c1d7aebc838/dummy_image.png&quot;,
+    &quot;createdAt&quot;: &quot;2020-06-08T14:17:30.650Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-06-08T14:17:30.723Z&quot;
+  }
+}</pre>
       </div>
     </div>
   </body>
