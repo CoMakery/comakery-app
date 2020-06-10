@@ -12,7 +12,7 @@ To achieve your big mission you need to bring people together around a common vi
 * [Launching a project on CoMakery](http://support.comakery.com/en/collections/2013276-launching-a-project)
 * [The CoMakery REST API](https://www.comakery.com/doc/api/index.html)
 * [CoMakery Security Token (Open Source ERC-1404)](https://github.com/CoMakery/comakery-security-token)
-* [Setting up the CoMakery platform development environment](#local-development) 
+* [Setting up the CoMakery platform development environment](#development-setup) 
 
 ## Try out CoMakery
 
