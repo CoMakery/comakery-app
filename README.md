@@ -1,10 +1,10 @@
 [![CoMakery](./public/Logo-Header.svg)](https://comakery.com)
 
-CoMakery helps you gather a tribe to achieve big missions. To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.
+## CoMakery helps you gather a tribe to achieve big missions. 
+
+To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.
 
 [![About CoMakery](./public/video-preview.png)](https://vimeo.com/345071697)
-
-CoMakery is written using Ruby on Rails, React, Ethereum and other blockchains.
 
 ## Getting Started
 * [Using the CoMakery platform](http://support.comakery.com/en/collections/2015024-getting-started-on-comakery)
@@ -40,14 +40,15 @@ Here's where you can connect with the community:
 * Join CoMakery and hit the follow button on the [CoMakery MetaProject](https://www.comakery.com/projects/2)
 * Create a GitHub issue or comment on one 
 
-# Installation
+# Development Setup
 
+CoMakery is written for Ruby on Rails, React, Postgres, MetaMask, Ethereum and other blockchains.
+  
 ## Configuration
 
-We use environment variables for app "secrets", and values which vary between environments,
-eg staging and production.
+We use environment variables for app "secrets", and values which vary between environments - such as staging and production.
 
-## Local development
+## Install
 
 Prerequisites:
 
@@ -179,12 +180,6 @@ The `bin/deploy` script does the following:
 5. Run `rake data:migrate` to migrate data
 6. Restart the apps with `heroku restart`
 7. Turn off the down for maintenance page 
-
-
-The old method of deploying that still can be used as a backup is:
-```
-citizen deploy production master comakery
-```
 
 ## Data migrations
 
