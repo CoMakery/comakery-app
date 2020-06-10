@@ -7,6 +7,7 @@ To achieve your big mission you need to bring people together around a common vi
 [![About CoMakery](./public/video-preview.png)](https://vimeo.com/345071697)
 
 ## Getting Started
+* [Join the CoMakery Community](https://www.comakery.com) - follow some projects, get to know us.
 * [Using the CoMakery platform](http://support.comakery.com/en/collections/2015024-getting-started-on-comakery)
 * [Launching a project on CoMakery](http://support.comakery.com/en/collections/2013276-launching-a-project)
 * [The CoMakery REST API](https://www.comakery.com/doc/api/index.html)
