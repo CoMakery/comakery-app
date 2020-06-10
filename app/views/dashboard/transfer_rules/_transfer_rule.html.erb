@@ -1,6 +1,6 @@
-<%= form_with model: transfer_rule, method: :delete, url: project_dashboard_transfer_rule_path(@project, transfer_rule), data: {controller: "transfer-rule-form", target: "transfer-rule-form.form"}.merge(transfer_rule.decorate.eth_data).merge(@project.token.decorate.eth_data('transfer-rule-form')), class: 'transfer-rule-form' do |f| %>
+<%= form_with model: transfer_rule, method: :delete, url: project_dashboard_transfer_rule_path(@project, transfer_rule), data: {controller: "transfer-rule-form", target: "transfer-rule-form.form", 'transfer-rule-form-transfer-rules-path' => api_v1_project_transfer_rules_path(project_id: @project.id), 'transfer-rule-form-transactions-path' => api_v1_project_blockchain_transactions_path(project_id: @project.id)}.merge(transfer_rule.decorate.eth_data).merge(@project.token.decorate.eth_data('transfer-rule-form')), class: 'transfer-rule-form' do |f| %>
 
-  <div class="transfers-table__transfer">
+  <div class="transfers-table__transfer <%= transfer_rule.synced? ? nil : 'transfers-table__transfer--processing' %>">
     <div class="transfers-table__transfer__sending_group">
       <label>sending group</label>
 
@@ -33,14 +33,14 @@
 
     <% if policy(@project).edit_transfer_rules? %>
       <div class="transfers-table__transfer__action transfers-table__transfer__action--warn">
-        <div class='transfer-button'>
+        <div class="transfer-button <%= transfer_rule.synced? ? nil : 'in-progress--metamask in-progress--metamask__paid' %>">
           <% if @project.token&.token_frozen? %>
             frozen
 
           <% else %>
             <%= link_to 'javascript:void(0)', data: {action: 'transfer-rule-form#delete', target: 'transfer-rule-form.button'}, class: 'transfer-tokens-btn transfer-tokens-btn-skip-legacy' do %>
               <%= render partial: "shared/wallet_logo", locals: { project: @project, size: 12 } %>
-              <span>Delete</span>
+              <span><%= transfer_rule.synced? ? 'Reset' : 'Processing' %></span>
             <% end %>
 
           <% end %>

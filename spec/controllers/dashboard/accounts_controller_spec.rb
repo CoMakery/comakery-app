@@ -17,28 +17,4 @@ RSpec.describe Dashboard::AccountsController, type: :controller do
       end
     end
   end
-
-  describe 'PUT #update' do
-    before do
-      login(project.account)
-    end
-
-    context 'with valid params' do
-      it 'creates a new record for the account' do
-        expect do
-          put :update, params: { account_token_record: { max_balance: 1 }, id: account.to_param, project_id: project.to_param }
-          expect(response).to redirect_to(project_dashboard_accounts_path(project))
-          expect(account.account.account_token_records.last.max_balance).to eq(1)
-        end.to change(account.account.account_token_records, :count).by(1)
-      end
-    end
-
-    context 'with invalid params' do
-      it 'redirects to index with error' do
-        put :update, params: { account_token_record: { token_id: create(:token).to_param }, id: account.to_param, project_id: project.to_param }
-        expect(response).to redirect_to(project_dashboard_accounts_path(project))
-        expect(account.reload.token).to eq(project.token)
-      end
-    end
-  end
 end

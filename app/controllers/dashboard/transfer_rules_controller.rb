@@ -14,22 +14,6 @@ class Dashboard::TransferRulesController < ApplicationController
     authorize @project, :show_transfer_rules?
   end
 
-  def create
-    authorize @project, :edit_transfer_rules?
-
-    @transfer_rule = @project.token.transfer_rules.new(
-      transfer_rule_params.merge(
-        lockup_until: Date.parse(transfer_rule_params[:lockup_until])&.in_time_zone
-      )
-    )
-
-    if @transfer_rule.save
-      redirect_to project_dashboard_transfer_rules_path(@project), notice: 'Transfer rule created'
-    else
-      redirect_to project_dashboard_transfer_rules_path(@project), flash: { error: @transfer_rule.errors.full_messages.join(', ') }
-    end
-  end
-
   def destroy
     authorize @project, :edit_transfer_rules?
 
@@ -78,13 +62,5 @@ class Dashboard::TransferRulesController < ApplicationController
 
     def set_transfer_rule
       @transfer_rule = @project.token.transfer_rules.find(params[:id])
-    end
-
-    def transfer_rule_params
-      params.fetch(:transfer_rule, {}).permit(
-        :sending_group_id,
-        :receiving_group_id,
-        :lockup_until
-      )
     end
 end

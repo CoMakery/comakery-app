@@ -7,6 +7,7 @@ class TransferRule < ApplicationRecord
 
   after_initialize :set_defaults
   after_save :replace_existing_rule, if: -> { synced? }
+  after_save :destroy_self_if_lockup_zero, if: -> { synced? }
 
   LOCKUP_UNTIL_MAX = Time.zone.at(2.pow(256) - 1)
   LOCKUP_UNTIL_MIN = Time.zone.at(0)
@@ -44,5 +45,9 @@ class TransferRule < ApplicationRecord
 
     def replace_existing_rule
       TransferRule.where(sending_group: sending_group, receiving_group: receiving_group, status: :synced).where.not(id: id).destroy_all
+    end
+
+    def destroy_self_if_lockup_zero
+      destroy if lockup_until.to_i.zero?
     end
 end

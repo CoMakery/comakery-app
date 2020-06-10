@@ -79,8 +79,8 @@ export default class extends Controller {
       body       : JSON.stringify({
         body: {
           data: {
+            'blockchain_transactable_id': this.id,
             transaction: {
-              'blockchain_transactable_id': this.id,
               'source'  : this.coinBase
             }
           }

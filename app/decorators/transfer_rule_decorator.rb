@@ -3,8 +3,10 @@ class TransferRuleDecorator < Draper::Decorator
 
   def eth_data(controller = 'transfer-rule-form')
     {
-      "#{controller}-rule-from-group-id" => sending_group.blockchain_id,
-      "#{controller}-rule-to-group-id" => receiving_group.blockchain_id,
+      "#{controller}-rule-from-group-id" => sending_group.id,
+      "#{controller}-rule-to-group-id" => receiving_group.id,
+      "#{controller}-rule-from-group-blockchain-id" => sending_group.blockchain_id,
+      "#{controller}-rule-to-group-blockchain-id" => receiving_group.blockchain_id,
       "#{controller}-rule-lockup-until" => lockup_until.strftime('%b %e, %Y')
     }
   end
