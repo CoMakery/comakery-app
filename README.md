@@ -1,8 +1,10 @@
 [![CoMakery](./public/Logo-Header.svg)](https://comakery.com)
 
-The CoMakery platform helps coordinate blockchain missions, projects, tasks and payments.
+CoMakery helps you gather a tribe to achieve big missions. To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.
 
-CoMakery is written using Ruby on Rails and React. It integrates with Ethereum and other blockchains.
+[![About CoMakery](./public/video-preview.png)](https://vimeo.com/345071697)
+
+CoMakery is written using Ruby on Rails, React, Ethereum and other blockchains.
 
 ## Getting Started
 * [Using the CoMakery platform](http://support.comakery.com/en/collections/2015024-getting-started-on-comakery)
@@ -32,7 +34,11 @@ Your payments help support the philanthropic organizations who use the platform 
 
 ## Get Involved
 
-We will be using CoMakery to build CoMakery. More updates on this soon! If you are interested join CoMakery and follow the [CoMakery MetaProject](https://www.comakery.com/projects/2).
+We will be using CoMakery to build CoMakery! 
+
+Here's where you can connect with the community:
+* Join CoMakery and hit the follow button on the [CoMakery MetaProject](https://www.comakery.com/projects/2)
+* Create a GitHub issue or comment on one 
 
 # Installation
 
