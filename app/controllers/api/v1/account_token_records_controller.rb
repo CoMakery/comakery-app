@@ -1,4 +1,9 @@
 class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
+  skip_before_action :verify_signature
+  skip_before_action :verify_public_key
+  skip_before_action :allow_only_whitelabel
+  before_action :verify_public_key_or_policy
+
   # GET /api/v1/projects/1/account_token_records
   def index
     fresh_when account_token_records, public: true

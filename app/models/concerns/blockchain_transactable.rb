@@ -2,7 +2,7 @@ module BlockchainTransactable
   extend ActiveSupport::Concern
 
   included do
-    has_many :blockchain_transactions, as: :blockchain_transactable
+    has_many :blockchain_transactions, as: :blockchain_transactable, dependent: :destroy
     has_one :latest_blockchain_transaction, -> { order created_at: :desc }, class_name: 'BlockchainTransaction', foreign_key: :blockchain_transactable_id
 
     # Return accepted awards matching at least one of the following conditions:

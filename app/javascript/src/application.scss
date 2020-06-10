@@ -450,6 +450,7 @@ form.form-with-submit-button {
   width: intrinsic;
   border-radius: 3px;
   height: 14px;
+  margin-left: 0.15em;
 
   .transfer-tokens-btn {
     flex-direction: row;
@@ -845,6 +846,10 @@ button.reg-groups-create {
 
   .transfers-table__transfer--ready {
     border-left: 4px solid #ffbf00;
+  }
+
+  .transfers-table__transfer--processing {
+    opacity: 0.5;
   }
 
   .transfers-table__transfer--header {
