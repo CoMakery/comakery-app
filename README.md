@@ -1,7 +1,40 @@
-# CoMakery
+[![CoMakery](./public/Logo-Header.svg)](https://comakery.com)
 
-CoMakery helps coordinate blockchain missions, projects, tasks and payments.
+The CoMakery platform helps coordinate blockchain missions, projects, tasks and payments.
 
+CoMakery is written using Ruby on Rails and React. It integrates with Ethereum and other blockchains.
+
+## Getting Started
+* [Using the CoMakery platform](http://support.comakery.com/en/collections/2015024-getting-started-on-comakery)
+* [Launching a project on CoMakery](http://support.comakery.com/en/collections/2013276-launching-a-project)
+* [The CoMakery REST API](https://www.comakery.com/doc/api/index.html)
+* [CoMakery Security Token (Open Source ERC-1404)](https://github.com/CoMakery/comakery-security-token)
+* [Setting up the CoMakery platform development environment](#local-development) 
+
+## Try out CoMakery
+
+You can join the CoMakery community for free at [CoMakery.com](https://www.comakery.com) or host your own version for your community.
+
+## Free For Non-Commercial Use
+[Our license](LICENSE.md) allows you to use, modify and share this software for non-commercial purposes for free. If you are an academic, environmental organizer, hobbyist community builder or non-profit we are proud to support the work you do by allowing you free use of CoMakery. Thank you for your hard work towards benefitting society.
+
+## 30 Day Free Commercial Trial
+
+If you are a company [our license](LICENSE.md) allows you to use this software for thirty days.
+
+Get in touch with CoMakery at [noah@comakery.com](mailto:noah@comakery.com) about: 
+* A commercial license for self-hosting
+* White label hosting
+* Platform customization
+* Coop discount
+
+Your payments help support the philanthropic organizations who use the platform for free. 
+
+## Get Involved
+
+We will be using CoMakery to build CoMakery. More updates on this soon! If you are interested join CoMakery and follow the [CoMakery MetaProject](https://www.comakery.com/projects/2).
+
+# Installation
 
 ## Configuration
 
