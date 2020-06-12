@@ -41,6 +41,8 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
 
   before do
     request.headers.merge! valid_headers
+
+    project.safe_add_interested(account_token_record.account)
   end
 
   describe 'GET #index' do
@@ -90,6 +92,14 @@ RSpec.describe Api::V1::AccountTokenRecordsController, type: :controller do
 
         post :create, params: params, session: valid_session
         expect(response).to have_http_status(:created)
+      end
+
+      it 'adds record account to project interested' do
+        params = build(:api_signed_request, { account_token_record: valid_attributes }, api_v1_project_account_token_records_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params, session: valid_session
+        expect(project.interested).to include(AccountTokenRecord.last.account)
       end
     end
 

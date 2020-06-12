@@ -22,6 +22,7 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
     )
 
     if account_token_record.save
+      project.safe_add_interested(account_token_record.account)
       @account_token_record = account_token_record
 
       render 'show.json', status: 201
@@ -45,11 +46,11 @@ class Api::V1::AccountTokenRecordsController < Api::V1::ApiController
     end
 
     def account_token_records
-      @account_token_records ||= paginate(project.token.account_token_records)
+      @account_token_records ||= paginate(project.account_token_records)
     end
 
     def account_token_record
-      @account_token_record ||= project.token.account_token_records.find(params[:id])
+      @account_token_record ||= project.account_token_records.find(params[:id])
     end
 
     def account_token_record_params
