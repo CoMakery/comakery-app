@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>I. General API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>I. General API</h1>
+
+        <p class="explanation">Details on authentication, caching, throttling, inflection and pagination.</p>
+
+      <div class="article">
+        <h2>PAGINATION</h2>
+        <h3>GET /api/v1/projects</h3>
+          <p class="explanation">
+            Pagination is implemented according RFC-8288 (`Page` request parameter; `Link`, `Total`, `Per-Page` response headers).
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">GET /api/v1/projects?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects&amp;body[method]=GET&amp;body[nonce]=384db74d0b2227cc5745a31a1d64035a&amp;body[timestamp]=1591977965&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=4Smu0dw%2FlaItYNJxJ9qWyUQe0BgH1%2BuzPSl86ORimivsyVXGAH9xiR1DSgJ9ocPo7wGjaUd69ZR%2FiIxBu9QlAA%3D%3D</pre>
+
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;384db74d0b2227cc5745a31a1d64035a&quot;, &quot;timestamp&quot;=&gt;&quot;1591977965&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;4Smu0dw/laItYNJxJ9qWyUQe0BgH1+uzPSl86ORimivsyVXGAH9xiR1DSgJ9ocPo7wGjaUd69ZR/iIxBu9QlAA==&quot;}</pre>
+
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 25
+Total: 1
+ETag: W/&quot;6fd3982e3eb95496e30fb6eb2f02a25c&quot;
+Last-Modified: Fri, 12 Jun 2020 16:06:05 GMT</pre>
+            <h4>Status</h4>
+            <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 7,
+    &quot;title&quot;: &quot;Uber for Cats&quot;,
+    &quot;description&quot;: &quot;We are going to build amazing&quot;,
+    &quot;imageUrl&quot;: &quot;/attachments/42279fff68b474895a45af9df0ca3fa6acc6b55f/store/fill/1000/1000/07cc0050665425c2a466a962dda08adda471607ba84b9786da6ab3aeb0cd/image.png&quot;,
+    &quot;createdAt&quot;: &quot;2020-06-12T16:06:05.187Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-06-12T16:06:05.187Z&quot;,
+    &quot;accountId&quot;: null,
+    &quot;adminIds&quot;: [
+
+    ],
+    &quot;token&quot;: {
+      &quot;id&quot;: 13,
+      &quot;name&quot;: &quot;ComakeryToken-4ff856917ec75f144ed8de966c4e09347e85cce1&quot;,
+      &quot;symbol&quot;: &quot;XYZa71ab0173f1c91ab1201b56bd2d56a210fb5f0d4&quot;,
+      &quot;network&quot;: &quot;ropsten&quot;,
+      &quot;contractAddress&quot;: &quot;0x1D1592c28FFF3d3E71b1d29E31147846026A0a37&quot;,
+      &quot;decimalPlaces&quot;: 18,
+      &quot;logoUrl&quot;: &quot;/attachments/1838a611c61c963301445fb4b8aae78f875862da/store/fill/100/100/7dd4a84ef9e7c058a248908eb2b66d15c751559d5e9c34ace063c6e4c2e7/dummy_image.png&quot;,
+      &quot;createdAt&quot;: &quot;2020-06-12T16:06:05.124Z&quot;,
+      &quot;updatedAt&quot;: &quot;2020-06-12T16:06:05.193Z&quot;
+    }
+  }
+]</pre>
+      </div>
+    </div>
+  </body>
+</html>
