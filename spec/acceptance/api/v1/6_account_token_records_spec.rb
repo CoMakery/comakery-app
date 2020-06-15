@@ -10,6 +10,10 @@ resource 'VI. Account Token Records' do
   let!(:account_token_record) { create(:account_token_record) }
   let!(:project) { create(:project, mission: active_whitelabel_mission, token: account_token_record.token) }
 
+  before do
+    project.safe_add_interested(account_token_record.account)
+  end
+
   explanation 'Create and delete account token records, retrieve account token record data.'
 
   header 'API-Key', build(:api_key)

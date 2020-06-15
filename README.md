@@ -260,7 +260,7 @@ API documentaion is generated with `rspec_api_documentation` gem from `spec/acce
 
 See `config/initializers/rspec_api.rb` for configuration
 
-Generated HTML is located in `/public/doc/api` directory and accessible on `https://www.comakery.com/doc/api/index.html` 
+Generated HTML is located in `/public/doc/api/v1` directory and accessible on `https://www.comakery.com/doc/api/v1/index.html` 
 
 ```
 rails docs:generate

@@ -14,6 +14,7 @@ class Project < ApplicationRecord
   belongs_to :token, optional: true, touch: true
   has_many :interests
   has_many :interested, -> { distinct }, through: :interests, source: :account
+  has_many :account_token_records, ->(project) { where token_id: project.token_id }, through: :interested, source: :account_token_records
 
   has_many :award_types, inverse_of: :project, dependent: :destroy
   has_many :ready_award_types, -> { where state: 'public' }, source: :award_types, class_name: 'AwardType'
