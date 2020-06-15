@@ -31,7 +31,17 @@ Get in touch with CoMakery at [noah@comakery.com](mailto:noah@comakery.com) abou
 * Platform customization
 * Coop discount
 
-Your payments help support the philanthropic organizations who use the platform for free. 
+Your payments help support the philanthropic organizations who use the platform for free.
+
+## Improving The Software
+
+You are free to modify the software. We'd love it if you share your code back with the community, but you are not obligated to. 
+
+There's no restriction on receiving money to improve the software. 
+
+## Hosting CoMakery
+
+If you want to setup a paid hosting service - great! Although this is considered commercial use, we're excited about hosting partnerships. Contact license@comakery.com to setup a hosting partnership.
 
 ## Get Involved
 
