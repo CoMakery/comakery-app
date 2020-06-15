@@ -37,7 +37,7 @@ Your payments help support the philanthropic organizations who use the platform 
 
 You are free to modify the software. We'd love it if you share your code back with the community, but you are not obligated to. 
 
-There's no restriction on receiving money to improve the software. 
+There's no restriction on receiving money to improve the software. If you are a software developer or software development company we look forward to improving the platform and serving the community with you.
 
 ## Web Hosting For CoMakery
 
