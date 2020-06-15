@@ -39,9 +39,9 @@ You are free to modify the software. We'd love it if you share your code back wi
 
 There's no restriction on receiving money to improve the software. 
 
-## Hosting CoMakery
+## Web Hosting For CoMakery
 
-If you want to setup a paid hosting service - great! Although this is considered commercial use, we're excited about hosting partnerships. Contact license@comakery.com to setup a hosting partnership.
+If you want to setup a paid hosting service - great! People need help with hosting and you should get paid for your labor. Although this falls under commercial use, we're excited about hosting partnerships. Contact license@comakery.com to discuss a hosting partnership.
 
 ## Get Involved
 
