@@ -23,7 +23,7 @@ You can join the CoMakery community for free at [CoMakery.com](https://www.comak
 
 ## 30 Day Free Commercial Trial
 
-If you are a company [our license](LICENSE.md) allows you to use this software for thirty days.
+If you are a company [our license](LICENSE.md) allows you to use this software for free for thirty days.
 
 Get in touch with CoMakery at [license@comakery.com](mailto:license@comakery.com) about: 
 * A commercial license for self-hosting
