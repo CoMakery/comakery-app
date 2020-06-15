@@ -19,7 +19,7 @@ To achieve your big mission you need to bring people together around a common vi
 You can join the CoMakery community for free at [CoMakery.com](https://www.comakery.com) or host your own version for your community.
 
 ## Free For Non-Commercial Use
-[Our license](LICENSE.md) allows you to use, modify and share this software for non-commercial purposes for free. If you are an academic, environmental organizer, hobbyist community builder or non-profit we are proud to support the work you do by allowing you free use of CoMakery. Thank you for your hard work towards benefitting society.
+[Our license](LICENSE.md) allows you to use, modify and share this software for non-commercial purposes for free. If you are an academic, environmental organizer, hobbyist community builder or non-profit we are proud to support the work you do with free use of CoMakery. Thank you for your hard work towards benefitting society.
 
 ## 30 Day Free Commercial Trial
 
