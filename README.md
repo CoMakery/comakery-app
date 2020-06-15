@@ -25,11 +25,11 @@ You can join the CoMakery community for free at [CoMakery.com](https://www.comak
 
 If you are a company [our license](LICENSE.md) allows you to use this software for thirty days.
 
-Get in touch with CoMakery at [noah@comakery.com](mailto:noah@comakery.com) about: 
+Get in touch with CoMakery at [license@comakery.com](mailto:license@comakery.com) about: 
 * A commercial license for self-hosting
 * White label hosting
 * Platform customization
-* Coop discount
+* Coop & L3C license discount
 
 Your payments help support the philanthropic organizations who use the platform for free.
 
