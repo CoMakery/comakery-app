@@ -41,6 +41,8 @@ There's no restriction on receiving money to improve the software. If you are a 
 
 ## Web Hosting For CoMakery
 
+Contact support@comakery.com for information about web hosting provided by CoMakery.
+
 If you want to setup a paid hosting service - great! People need help with hosting and you should get paid for your labor. Although this falls under commercial use, we're excited about hosting partnerships. Contact license@comakery.com to discuss a hosting partnership.
 
 ## Get Involved
