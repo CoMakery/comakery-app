@@ -54,9 +54,9 @@ describe('MissionIndex', () => {
             'id'    : 2,
             'title' : 'project2',
             'status': 'passive'
-          },
+          }
         ]
-      },
+      }
     ]
     const wrapper = mount(<MissionIndex missions={missions} />)
 
@@ -110,9 +110,9 @@ describe('MissionIndex', () => {
             'id'    : 2,
             'title' : 'project2',
             'status': 'passive'
-          },
+          }
         ]
-      },
+      }
     ]
     const wrapper = mount(<MissionIndex missions={missions} />)
 

@@ -21,7 +21,7 @@ export default class Account extends React.Component {
       message    : null, // notify sucess or error after account info update
       messageType: 'notice',
       showMessage: false, // show or hide message
-      errors     : {}, // error hash for account form
+      errors     : {} // error hash for account form
     } // edit-ethereum or view-ethereum // summary or history view // start from 0 -> rails side starts from 1
     this.fileInput = React.createRef() // file upload
     this.dateInput = React.createRef() // dateOfBirth
@@ -97,9 +97,9 @@ export default class Account extends React.Component {
           message    : response.message,
           messageType: 'alert',
           showMessage: true,
-          errors     : response.errors,
+          errors     : response.errors
         })
-      },
+      }
     })
   };
 
@@ -109,7 +109,7 @@ export default class Account extends React.Component {
     const name = target.name
 
     this.setState({
-      [name]: value,
+      [name]: value
     })
   };
 
@@ -126,7 +126,7 @@ export default class Account extends React.Component {
       url : '/account',
       data: {
         award_page  : this.state.awardPage + 1,
-        project_page: this.state.projectPage + 1,
+        project_page: this.state.projectPage + 1
       },
       dataType: 'json',
       type    : 'GET',
@@ -137,7 +137,7 @@ export default class Account extends React.Component {
 
       error: (xhr, status, err) => {
         console.error(status, err.toString())
-      },
+      }
     })
   }
 

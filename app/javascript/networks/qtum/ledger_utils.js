@@ -22,7 +22,7 @@ const transferQtumCoins = async function(award) { // award in JSON
     }
   } catch (err) {
     console.log(err)
-    alert( err.message || 'The transaction failed')
+    alert(err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
   if (txHash) {

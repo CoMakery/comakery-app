@@ -69,5 +69,5 @@ HistoryTable.propTypes = {
   awards          : PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   pageCount       : PropTypes.number.isRequired,
   currentPage     : PropTypes.number.isRequired,
-  handlePageChange: PropTypes.func.isRequired,
+  handlePageChange: PropTypes.func.isRequired
 }

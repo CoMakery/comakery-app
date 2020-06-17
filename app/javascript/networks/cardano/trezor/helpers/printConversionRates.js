@@ -1,7 +1,7 @@
 const addThousandsCommas = (amount, fractionDigits) =>
   parseFloat(amount).toLocaleString('en-US', {
     minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits
   })
 
 const formatFiat = (amount, maxDigits) => {

@@ -99,7 +99,7 @@ describe('MissionForm', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 

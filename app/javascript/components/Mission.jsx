@@ -228,12 +228,12 @@ Mission.propTypes = {
   mission : PropTypes.shape({}),
   projects: PropTypes.array,
   leaders : PropTypes.array,
-  tokens  : PropTypes.shape({}),
+  tokens  : PropTypes.shape({})
 }
 
 Mission.defaultProps = {
   mission : { stats: {} },
   projects: [],
   leaders : [],
-  tokens  : { tokens: [] },
+  tokens  : { tokens: [] }
 }

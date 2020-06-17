@@ -40,7 +40,7 @@ class TaskShow extends React.Component {
   goBack() {
     if (this.state.detailsFetched) {
       this.setState({
-        detailsFetched: false,
+        detailsFetched: false
       })
     } else {
       typeof window === 'undefined' ? null : window.history.back()
@@ -108,7 +108,7 @@ class TaskShow extends React.Component {
     }).then(data => {
       this.setState({
         'task[recipient_address]'    : data.address,
-        'task[recipient_address_url]': data.walletUrl,
+        'task[recipient_address_url]': data.walletUrl
       })
     })
   }
@@ -383,7 +383,7 @@ TaskShow.defaultProps = {
   project: {'default': '_'},
   token  : {
     'symbol'       : 'DMT',
-    'decimalPlaces': 8,
+    'decimalPlaces': 8
   },
   channels           : {'email': '', 'default': '1'},
   members            : {'1': {'default': '_'}},

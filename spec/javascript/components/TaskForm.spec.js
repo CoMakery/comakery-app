@@ -77,11 +77,11 @@ describe('TaskForm', () => {
       'name'        : 'Task name',
       'why'         : 'Task why',
       'requirements': 'Task requirements',
-      'amount'      : '100.0',
+      'amount'      : '100.0'
     }
     const token = {
       'symbol'       : 'DMT',
-      'decimalPlaces': 8,
+      'decimalPlaces': 8
     }
 
     const wrapper = mount(<TaskForm
@@ -156,7 +156,7 @@ describe('TaskForm', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 
@@ -171,7 +171,7 @@ describe('TaskForm', () => {
     wrapper.setState({
       errors: {
         'task[name]'       : 'name error',
-        'task[description]': 'description error',
+        'task[description]': 'description error'
       }
     })
 

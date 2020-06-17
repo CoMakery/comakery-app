@@ -32,5 +32,5 @@ FormField.propTypes = {
   fieldName   : PropTypes.string.isRequired,
   fieldValue  : PropTypes.string,
   handleChange: PropTypes.func.isRequired,
-  error       : PropTypes.string,
+  error       : PropTypes.string
 }

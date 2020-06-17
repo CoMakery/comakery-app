@@ -22,7 +22,7 @@ const transferQrc20Tokens = async function(award) { // award in JSON
     if (jQuery('body.projects-show').length > 0) {
       jQuery('.flash-msg').html('The tokens have been awarded but not transferred because you are not logged in to the Qrypto wallet browser extension. You can transfer tokens on the blockchain with Qrypto on the <a href="/projects/' + award.project.id + '/awards">awards</a> page.')
     }
-    alert( 'Not logged in. Please log in to Qrypto first')
+    alert('Not logged in. Please log in to Qrypto first')
     return
   }
   const network = award.token.blockchain_network.replace('qtum_', '')
@@ -32,7 +32,7 @@ const transferQrc20Tokens = async function(award) { // award in JSON
   const balance = await getQtumBalance(contract, window.qrypto.account.address)
   debugLog(balance)
   if (balance < amount) {
-    alert( "You don't have sufficient Tokens to send")
+    alert("You don't have sufficient Tokens to send")
     return
   }
   let rs
@@ -41,13 +41,13 @@ const transferQrc20Tokens = async function(award) { // award in JSON
       methodArgs   : [recipientAddress, amount],
       gasPrice     : 0.00000040,
       gasLimit     : 1000000,
-      senderAddress: window.qrypto.account.address,
+      senderAddress: window.qrypto.account.address
     })
     if (rs && rs.txid) {
     }
   } catch (err) {
     console.error(err)
-    alert( customErrorMessage(err) || 'The transaction failed')
+    alert(customErrorMessage(err) || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
   if (rs && rs.txid) {

@@ -22,7 +22,7 @@ function PseudoRandom(seed) {
 
   return {
     nextInt,
-    nextFloat,
+    nextFloat
   }
 }
 

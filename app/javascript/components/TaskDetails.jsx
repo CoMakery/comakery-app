@@ -525,7 +525,7 @@ TaskDetails.defaultProps = {
       submit: true,
       review: true,
       pay   : true
-    },
+    }
   },
   taskAllowedToStart: true,
   tasksToUnlock     : 0,

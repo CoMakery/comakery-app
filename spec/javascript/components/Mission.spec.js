@@ -119,7 +119,7 @@ describe('Mission', () => {
               imageUrl : '/attachments/test.jpg',
               lastName : 'Test',
               nickname : ''
-            },
+            }
           },
           tokenData: {
             logoUrl: '/attachments/token image',
@@ -150,15 +150,15 @@ describe('Mission', () => {
               imageUrl : '/attachments/test.jpg',
               lastName : 'Test',
               nickname : ''
-            },
+            }
           },
           tokenData: {
             logoUrl: '/attachments/token image2',
             name   : 'QRC Token2'
           }
-        },
+        }
       ],
-      newProjectUrl: '/projects/new?mission_id=test',
+      newProjectUrl: '/projects/new?mission_id=test'
 
     }
     const wrapper = mount(<Mission {...props} />)

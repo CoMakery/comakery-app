@@ -8,10 +8,10 @@ export default class extends EthereumController {
       body       : JSON.stringify({
         body: {
           data: {
-            'blockchain_transactable_id': this.id,
+            'blockchain_transactable_id'  : this.id,
             'blockchain_transactable_type': this.type,
-            transaction: {
-              'source'  : this.coinBase
+            transaction                   : {
+              'source': this.coinBase
             }
           }
         }

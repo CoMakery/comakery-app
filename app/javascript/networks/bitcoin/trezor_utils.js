@@ -23,7 +23,7 @@ const transferBtcCoins = async function(award) { // award in JSON
     }
   } catch (err) {
     console.log(err)
-    alert( err.message || 'The transaction failed')
+    alert(err.message || 'The transaction failed')
     helpers.showMessageWhenTransactionFailed(award)
   }
   if (txHash) {

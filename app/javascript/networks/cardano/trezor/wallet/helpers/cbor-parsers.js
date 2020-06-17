@@ -6,7 +6,7 @@ const {
   TxOutput,
   TxAux,
   SignedTransactionStructured,
-  TxWitness,
+  TxWitness
 } = require('../transaction')
 
 const parseTxHash = (val) => Buffer.from(val).toString('hex')
@@ -24,7 +24,7 @@ const parseTxInput = (val) => {
   const utxo = {
     type,
     txHash,
-    outputIndex,
+    outputIndex
   }
   return TxInputFromUtxo(utxo)
 }
@@ -86,5 +86,5 @@ const parseTx = (txRaw) => {
 
 module.exports = {
   parseTxAux,
-  parseTx,
+  parseTx
 }

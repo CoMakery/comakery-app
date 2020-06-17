@@ -155,7 +155,7 @@ describe('ProjectForm', () => {
           {
             'channel'  : 'ch2Name',
             'channelId': 'ch2Id'
-          },
+          }
         ]
       },
       {
@@ -169,7 +169,7 @@ describe('ProjectForm', () => {
           {
             'channel'  : 'ch4Name',
             'channelId': 'ch4Id'
-          },
+          }
         ]
       }
     ]
@@ -266,7 +266,7 @@ describe('ProjectForm', () => {
           {
             'channel'  : 'ch2Name',
             'channelId': 'ch2Id'
-          },
+          }
         ]
       }
     ]
@@ -381,7 +381,7 @@ describe('ProjectForm', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 

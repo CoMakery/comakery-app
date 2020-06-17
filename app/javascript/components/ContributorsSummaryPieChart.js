@@ -65,14 +65,14 @@ class ContributorsSummaryPieChart extends React.Component {
             'format': 'percentage'
           },
           'mainLabel': {
-            'fontSize': 12,
+            'fontSize': 12
           },
           'percentage': {
             'color'        : '#e1e1e1',
             'decimalPlaces': 2
           },
           'value': {
-            'color': '#e1e1e1',
+            'color': '#e1e1e1'
           },
           'lines': {
             'enabled': true,

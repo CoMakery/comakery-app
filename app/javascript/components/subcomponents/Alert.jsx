@@ -23,5 +23,5 @@ Alert.propTypes = {
   message      : PropTypes.string,
   messageType  : PropTypes.string.isRequired,
   isVisible    : PropTypes.bool.isRequired,
-  toggleVisible: PropTypes.func.isRequired,
+  toggleVisible: PropTypes.func.isRequired
 }

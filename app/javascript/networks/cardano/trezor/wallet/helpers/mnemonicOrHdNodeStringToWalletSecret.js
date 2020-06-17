@@ -34,7 +34,7 @@ const mnemonicOrHdNodeStringToWalletSecret = async (
 
   return {
     walletSecret,
-    derivationScheme,
+    derivationScheme
   }
 }
 

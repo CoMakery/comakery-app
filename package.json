@@ -8,7 +8,30 @@
     "lint": "yarn lint:ci --fix",
     "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript spec/javascript",
     "stylelint": "stylelint 'app/javascript/**/*.css' --fix",
+    "standart": "standart ./app/javascript/**/*.js ./app/javascript/**/*.jsx ./spec/javascript/**/*.js",
     "test": "jest"
+  },
+  "standard": {
+    "ignore": [
+      "**/node_modules/**"
+    ],
+    "env": [
+      "jest",
+      "es6",
+      "browser",
+      "jquery",
+      "node"
+    ],
+    "plugins": [
+      "react-hooks"
+    ],
+    "globals": [
+      "App",
+      "ActionCable",
+      "Utils",
+      "window"
+    ],
+    "parser": "babel-eslint"
   },
   "dependencies": {
     "@babel/cli": "^7.4.4",
@@ -104,6 +127,7 @@
     "jest-fetch-mock": "^2.1.0",
     "react-test-renderer": "^16.6.0",
     "regenerator-runtime": "^0.13.2",
+    "standart": "^6.1.0",
     "stylelint": "^9.9.0",
     "stylelint-config-recommended": "^2.1.0",
     "webpack-dev-server": "^3.3.1"

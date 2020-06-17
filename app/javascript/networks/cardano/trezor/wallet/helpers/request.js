@@ -4,7 +4,7 @@ const debugLog = require('../../helpers/debugLog')
 const request = async function request(url, method = 'GET', body = null, headers = {}) {
   let requestParams = {
     method,
-    headers,
+    headers
   }
   if (method.toUpperCase() !== 'GET') {
     requestParams = Object.assign({}, requestParams, {body})

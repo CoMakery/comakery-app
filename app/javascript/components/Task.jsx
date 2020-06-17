@@ -321,7 +321,7 @@ class Task extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showDetailsBox: false,
+      showDetailsBox: false
     }
   }
 

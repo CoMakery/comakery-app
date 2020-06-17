@@ -43,7 +43,7 @@ describe('BatchForm', () => {
       'id'         : 10,
       'name'       : 'Batch name',
       'description': 'Batch description',
-      'goal'       : 'Batch goal',
+      'goal'       : 'Batch goal'
     }
 
     const wrapper = mount(<BatchForm
@@ -105,7 +105,7 @@ describe('BatchForm', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 
@@ -120,7 +120,7 @@ describe('BatchForm', () => {
     wrapper.setState({
       errors: {
         'batch[name]'       : 'name error',
-        'batch[description]': 'description error',
+        'batch[description]': 'description error'
       }
     })
 

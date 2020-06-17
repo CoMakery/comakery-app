@@ -29,5 +29,5 @@ function toBip32StringPath(derivationPath) {
 module.exports = {
   toBip32Path,
   fromBip32Path,
-  toBip32StringPath,
+  toBip32StringPath
 }

@@ -6,7 +6,7 @@ const CardanoTrezorCryptoProvider = (ADALITE_CONFIG, walletState) => {
   const state = Object.assign(walletState, {
     derivedXpubs: {},
     rootHdPassphrase: null,
-    derivedAddresses: {},
+    derivedAddresses: {}
   })
 
   if (state.derivationScheme.type !== 'v2') {
@@ -16,13 +16,13 @@ const CardanoTrezorCryptoProvider = (ADALITE_CONFIG, walletState) => {
   async function trezorDeriveAddress(absDerivationPath, displayConfirmation) {
     const response = await TrezorConnect.cardanoGetAddress({
       path: absDerivationPath,
-      showOnTrezor: displayConfirmation,
+      showOnTrezor: displayConfirmation
     })
 
     if (response.success) {
       state.derivedAddresses[JSON.stringify(absDerivationPath)] = {
         derivationPath: absDerivationPath,
-        address: response.payload.address,
+        address: response.payload.address
       }
       return response.payload.address
     }
@@ -54,7 +54,7 @@ const CardanoTrezorCryptoProvider = (ADALITE_CONFIG, walletState) => {
   function deriveXpubHardened(absDerivationPath) {
     return TrezorConnect.cardanoGetPublicKey({
       path: absDerivationPath,
-      showOnTrezor: false,
+      showOnTrezor: false
     }).then((response) => {
       if (response.error || !response.success) {
         return Promise.reject(response || 'operation failed')
@@ -88,7 +88,7 @@ const CardanoTrezorCryptoProvider = (ADALITE_CONFIG, walletState) => {
       prev_hash: input.txHash,
       prev_index: input.outputIndex,
       type: 0,
-      path: addressToAbsPathMapper(input.utxo.address),
+      path: addressToAbsPathMapper(input.utxo.address)
     }
 
     return data
@@ -96,7 +96,7 @@ const CardanoTrezorCryptoProvider = (ADALITE_CONFIG, walletState) => {
 
   function prepareOutput(output, addressToAbsPathMapper) {
     const data = {
-      amount: `${output.coins}`,
+      amount: `${output.coins}`
     }
 
     if (output.isChange) {
@@ -139,13 +139,13 @@ const CardanoTrezorCryptoProvider = (ADALITE_CONFIG, walletState) => {
       inputs,
       outputs,
       transactions,
-      network: getNetworkInt(state.network),
+      network: getNetworkInt(state.network)
     })
 
     if (response.success) {
       return {
         txHash: response.payload.hash,
-        txBody: response.payload.body,
+        txBody: response.payload.body
       }
     } else {
       throw new Error(response.payload.error)
@@ -162,7 +162,7 @@ const CardanoTrezorCryptoProvider = (ADALITE_CONFIG, walletState) => {
     trezorVerifyAddress,
     deriveXpub,
     _sign: sign,
-    _deriveHdNode: deriveHdNode,
+    _deriveHdNode: deriveHdNode
   }
 }
 

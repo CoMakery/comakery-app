@@ -12,7 +12,7 @@ export default class extends ComakerySecurityTokenController {
   }
 
   async delete() {
-    this.data.set('ruleLockupUntil', 0) 
+    this.data.set('ruleLockupUntil', 0)
     await this._initialize()
     this._createTransferRule()
   }
@@ -25,9 +25,9 @@ export default class extends ComakerySecurityTokenController {
         body: {
           data: {
             transfer_rule: {
-              'sending_group_id': this.data.get('ruleFromGroupId'),
+              'sending_group_id'  : this.data.get('ruleFromGroupId'),
               'receiving_group_id': this.data.get('ruleToGroupId'),
-              'lockup_until': this.data.get('ruleLockupUntil')
+              'lockup_until'      : this.data.get('ruleLockupUntil')
             }
           }
         }
@@ -53,7 +53,7 @@ export default class extends ComakerySecurityTokenController {
       this._showError('Allowed After Date field is required')
       return false
     } else {
-      this.data.set('ruleFromGroupId', parseInt(this.ruleFromGroupIdTarget.value|| 0))
+      this.data.set('ruleFromGroupId', parseInt(this.ruleFromGroupIdTarget.value || 0))
       this.data.set('ruleToGroupId', parseInt(this.ruleToGroupIdTarget.value || 0))
       this.data.set('ruleFromGroupBlockchainId', parseInt(this.ruleFromGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
       this.data.set('ruleToGroupBlockchainId', parseInt(this.ruleToGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))

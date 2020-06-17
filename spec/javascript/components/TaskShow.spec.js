@@ -137,7 +137,7 @@ describe('TaskShow', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 
@@ -152,7 +152,7 @@ describe('TaskShow', () => {
     wrapper.setState({
       errors: {
         'task[channel_id]': 'channel_id error',
-        'task[message]'   : 'message error',
+        'task[message]'   : 'message error'
       }
     })
 

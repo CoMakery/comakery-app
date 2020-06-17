@@ -31,7 +31,7 @@ async function verifyPassword(passwordToVerify, passwordHash) {
         p,
         dkLen: expectedHash.length,
         encoding: 'base64',
-        interruptStep: 1000,
+        interruptStep: 1000
       },
       (hash) => resolve(hash)
     )
@@ -59,7 +59,7 @@ async function hashPasswordAndPack(password, salt) {
         p,
         dkLen: hashLen,
         encoding: 'base64',
-        interruptStep: 1000,
+        interruptStep: 1000
       },
       (hash) => resolve(hash)
     )
@@ -90,7 +90,7 @@ function parseWalletExportObj(walletExportObj) {
 
   return {
     passwordHash,
-    walletSecret,
+    walletSecret
   }
 }
 
@@ -125,24 +125,24 @@ async function exportWalletSecret(walletSecret, password, walletName) {
       accounts: [
         {
           name: 'Initial account',
-          index: HARDENED_THRESHOLD,
-        },
+          index: HARDENED_THRESHOLD
+        }
       ],
       walletSecretKey: cbor.encode(encryptedWalletSecret).toString('base64'),
       walletMeta: {
         name: walletName,
         assurance: 'normal',
-        unit: 'ADA',
+        unit: 'ADA'
       },
-      passwordHash: cbor.encode(Buffer.from(packedPasswordHash, 'ascii')).toString('base64'),
+      passwordHash: cbor.encode(Buffer.from(packedPasswordHash, 'ascii')).toString('base64')
     },
     fileType: 'WALLETS_EXPORT',
-    fileVersion: '1.0.0',
+    fileVersion: '1.0.0'
   }
 }
 
 module.exports = {
   importWalletSecret,
   exportWalletSecret,
-  isWalletExportEncrypted,
+  isWalletExportEncrypted
 }

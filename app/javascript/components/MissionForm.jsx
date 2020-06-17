@@ -56,7 +56,7 @@ export default class MissionForm extends React.Component {
       whitelabelFavicon        : null,
       whitelabelLogoPreview    : props.mission.whitelabelLogoUrl,
       whitelabelLogoDarkPreview: props.mission.whitelabelLogoDarkUrl,
-      whitelabelFaviconPreview : props.mission.whitelabelFaviconUrl,
+      whitelabelFaviconPreview : props.mission.whitelabelFaviconUrl
     }
     this.mounted = false
   }
@@ -84,7 +84,7 @@ export default class MissionForm extends React.Component {
     }
     const name = target.name
     this.setState({
-      [name]: value,
+      [name]: value
     })
 
     if (!e.target.checkValidity()) {

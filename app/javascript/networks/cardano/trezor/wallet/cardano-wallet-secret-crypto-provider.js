@@ -4,7 +4,7 @@ const {
   sign: signMsg,
   derivePublic,
   derivePrivate,
-  xpubToHdPassphrase,
+  xpubToHdPassphrase
 } = require('cardano-crypto.js')
 
 const {TxWitness, SignedTransactionStructured} = require('./transaction')
@@ -21,7 +21,7 @@ const CardanoWalletSecretCryptoProvider = (params, walletState, disableCaching =
     derivedXpubs: {},
     derivedAddresses: {},
     network: params.network,
-    derivationScheme: params.derivationScheme,
+    derivationScheme: params.derivationScheme
   })
 
   function getWalletSecret() {
@@ -73,7 +73,7 @@ const CardanoWalletSecretCryptoProvider = (params, walletState, disableCaching =
     return HdNode({
       secretKey: result.slice(0, 64),
       publicKey: result.slice(64, 96),
-      chainCode: result.slice(96, 128),
+      chainCode: result.slice(96, 128)
     })
   }
 
@@ -108,7 +108,7 @@ const CardanoWalletSecretCryptoProvider = (params, walletState, disableCaching =
 
     return {
       txHash: signedTxStructured.getId(),
-      txBody: cbor.encode(signedTxStructured).toString('hex'),
+      txBody: cbor.encode(signedTxStructured).toString('hex')
     }
   }
 
@@ -128,7 +128,7 @@ const CardanoWalletSecretCryptoProvider = (params, walletState, disableCaching =
         const txSignMessagePrefix = Buffer.concat([
           Buffer.from('01', 'hex'),
           cbor.encode(protocolMagic),
-          Buffer.from('5820', 'hex'),
+          Buffer.from('5820', 'hex')
         ]).toString('hex')
 
         const signature = await sign(`${txSignMessagePrefix}${txHash}`, absoluteDerivationPath)
@@ -149,7 +149,7 @@ const CardanoWalletSecretCryptoProvider = (params, walletState, disableCaching =
     _checkTxInputsIntegrity: checkTxInputsIntegrity,
     _deriveHdNodeFromRoot: deriveHdNode,
     _deriveChildHdNode: deriveChildHdNode,
-    _signTxGetStructured: signTxGetStructured,
+    _signTxGetStructured: signTxGetStructured
   }
 }
 

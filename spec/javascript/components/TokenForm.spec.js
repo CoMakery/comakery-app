@@ -269,7 +269,7 @@ describe('TokenForm', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 
