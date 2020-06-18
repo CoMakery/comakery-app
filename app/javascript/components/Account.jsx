@@ -26,6 +26,14 @@ export default class Account extends React.Component {
     this.fileInput = React.createRef() // file upload
     this.dateInput = React.createRef() // dateOfBirth
     this.mounted = false
+
+    this.handleChangeEditMode = this.handleChangeEditMode.bind(this)
+    this.handleChangeTableView = this.handleChangeTableView.bind(this)
+    this.handleUpdateAccountInfo = this.handleUpdateAccountInfo.bind(this)
+    this.handleChangeAccountFormData = this.handleChangeAccountFormData.bind(this)
+    this.handleChangeAwardPage = this.handleChangeAwardPage.bind(this)
+    this.handleChangeProjectPage = this.handleChangeProjectPage.bind(this)
+    this.loadDataFromServer = this.loadDataFromServer.bind(this)
   }
 
   componentDidMount() {
