@@ -45,5 +45,5 @@ module.exports = {
   generateMnemonic,
   validateMnemonic,
   validatePaperWalletMnemonic,
-  isMnemonicInPaperWalletFormat,
+  isMnemonicInPaperWalletFormat
 }

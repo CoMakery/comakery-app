@@ -8,9 +8,7 @@ import ButtonBorder from './styleguide/ButtonBorder'
 import Flash from './layouts/Flash'
 import InputFieldDropdown from './styleguide/InputFieldDropdown'
 import InputFieldDropdownHalfed from './styleguide/InputFieldDropdownHalfed'
-import InputFieldDropdownInline from './styleguide/InputFieldDropdownInline'
 import InputFieldWhiteDark from './styleguide/InputFieldWhiteDark'
-import InputFieldInline from './styleguide/InputFieldInline'
 import InputFieldDescription from './styleguide/InputFieldDescription'
 import Icon from './styleguide/Icon'
 
@@ -111,7 +109,7 @@ class ProjectForm extends React.Component {
 
   disable(a) {
     let d = this.state.disabled
-    a.forEach(n => d = Object.assign({}, d, {[n]: true}))
+    a.forEach(n => (d = Object.assign({}, d, {[n]: true})))
     this.setState({
       disabled: d
     })
@@ -272,29 +270,29 @@ class ProjectForm extends React.Component {
     return (
       <React.Fragment>
         <ProjectSetup
-          className="project-form"
+          className='project-form'
           projectForHeader={this.props.projectForHeader}
           missionForHeader={!this.props.isWhitelabel && this.props.missionForHeader}
           owner
-          current="form"
+          current='form'
           subfooter={
             <React.Fragment>
               <Button
                 value={this.state.formAction === 'POST' ? 'create & close' : 'save & close'}
-                type="submit"
-                form="project-form--form"
+                type='submit'
+                form='project-form--form'
                 disabled={this.state.disabled['project[submit_and_close]']}
                 onClick={() => this.setState({closeOnSuccess: true})}
               />
               <ButtonBorder
                 value={this.state.formAction === 'POST' ? 'create' : 'save'}
-                type="submit"
-                form="project-form--form"
+                type='submit'
+                form='project-form--form'
                 disabled={this.state.disabled['project[submit]']}
                 onClick={() => this.setState({closeOnSuccess: false})}
               />
               <ButtonBorder
-                value="cancel"
+                value='cancel'
                 onClick={this.goBack}
               />
             </React.Fragment>
@@ -302,11 +300,11 @@ class ProjectForm extends React.Component {
         >
           <Flash messages={this.state.flashMessages} />
 
-          <form className="project-form--form" id="project-form--form" onSubmit={this.handleSubmit}>
+          <form className='project-form--form' id='project-form--form' onSubmit={this.handleSubmit}>
             { !this.props.isWhitelabel &&
               <InputFieldDropdown
-                title="mission"
-                name="project[mission_id]"
+                title='mission'
+                name='project[mission_id]'
                 value={this.state['project[mission_id]'] ? this.state['project[mission_id]'].toString() : null}
                 errorText={this.state.errors['project[mission_id]']}
                 disabled={this.state.disabled['project[mission_id]']}
@@ -317,134 +315,134 @@ class ProjectForm extends React.Component {
             }
 
             <InputFieldWhiteDark
-              title="title"
+              title='title'
               required
-              name="project[title]"
+              name='project[title]'
               value={this.state['project[title]']}
               errorText={this.state.errors['project[title]']}
-              placeholder="Provide a name for the project"
+              placeholder='Provide a name for the project'
               eventHandler={this.handleFieldChange}
               symbolLimit={100}
             />
 
             <InputFieldDescription
-              title="description"
+              title='description'
               required
-              name="project[description]"
+              name='project[description]'
               value={this.state['project[description]']}
               errorText={this.state.errors['project[description]']}
-              placeholder="Explain the outline and goal of the project, and why people should be excited about helping to execute the vision"
+              placeholder='Explain the outline and goal of the project, and why people should be excited about helping to execute the vision'
               eventHandler={this.handleFieldChange}
               symbolLimit={20000}
             />
 
             <InputFieldUploadFile
-              title="project image"
-              name="project[square_image]"
+              title='project image'
+              name='project[square_image]'
               errorText={this.state.errors['project[square_image]']}
               imgPreviewUrl={this.props.project.squareImageUrl}
-              imgPreviewDimensions="150x100"
-              imgRequirements="Image should be at least 1200px x 800px"
+              imgPreviewDimensions='150x100'
+              imgRequirements='Image should be at least 1200px x 800px'
               imgVerifier={this.verifySquareImgRes}
               imgInputRef={this.squareImgInputRef}
             />
 
             <InputFieldUploadFile
-              title="project image – panoramic"
-              name="project[panoramic_image]"
+              title='project image – panoramic'
+              name='project[panoramic_image]'
               errorText={this.state.errors['project[panoramic_image]']}
               imgPreviewUrl={this.props.project.panoramicImageUrl}
-              imgPreviewDimensions="375x75"
-              imgRequirements="Image should be at least 1500px x 300px"
+              imgPreviewDimensions='375x75'
+              imgRequirements='Image should be at least 1500px x 300px'
               imgVerifier={this.verifyPanoramicImgRes}
               imgInputRef={this.panoramicImgInputRef}
             />
 
             <input
-              type="hidden"
-              name="project[long_id]"
+              type='hidden'
+              name='project[long_id]'
               value={this.props.project.longId}
               readOnly
             />
 
             <input
-              type="hidden"
-              name="authenticity_token"
+              type='hidden'
+              name='authenticity_token'
               value={this.props.csrfToken}
               readOnly
             />
 
             <h2>Links</h2>
             <InputFieldWhiteDark
-              title="narrated video overview"
+              title='narrated video overview'
               recommended
-              name="project[video_url]"
+              name='project[video_url]'
               value={this.state['project[video_url]']}
               errorText={this.state.errors['project[video_url]']}
-              placeholder="Link to a YouTube or Vimeo video describing the project"
+              placeholder='Link to a YouTube or Vimeo video describing the project'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
             <InputFieldWhiteDark
-              title="getting started url"
+              title='getting started url'
               recommended
-              name="project[getting_started_url]"
+              name='project[getting_started_url]'
               value={this.state['project[getting_started_url]']}
               errorText={this.state.errors['project[getting_started_url]']}
-              placeholder="Link to how to get started with your project"
+              placeholder='Link to how to get started with your project'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
             <InputFieldWhiteDark
-              title="github project url"
-              name="project[github_url]"
+              title='github project url'
+              name='project[github_url]'
               value={this.state['project[github_url]']}
               errorText={this.state.errors['project[github_url]']}
-              placeholder="Link to a GitHub repository"
+              placeholder='Link to a GitHub repository'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
             <InputFieldWhiteDark
-              title="documentation url"
-              name="project[documentation_url]"
+              title='documentation url'
+              name='project[documentation_url]'
               value={this.state['project[documentation_url]']}
               errorText={this.state.errors['project[documentation_url]']}
-              placeholder="Link to your projects documentation"
+              placeholder='Link to your projects documentation'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
             <InputFieldWhiteDark
-              title="governance url"
-              name="project[governance_url]"
+              title='governance url'
+              name='project[governance_url]'
               value={this.state['project[governance_url]']}
               errorText={this.state.errors['project[governance_url]']}
-              placeholder="Link to your project governance (e.g. Loomio.com or DAOstack.io)"
+              placeholder='Link to your project governance (e.g. Loomio.com or DAOstack.io)'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
             <InputFieldWhiteDark
-              title="funding url"
-              name="project[funding_url]"
+              title='funding url'
+              name='project[funding_url]'
               value={this.state['project[funding_url]']}
               errorText={this.state.errors['project[funding_url]']}
-              placeholder="Link to your funding (e.g. Open Collective or a DAO funding url)"
+              placeholder='Link to your funding (e.g. Open Collective or a DAO funding url)'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
             <InputFieldWhiteDark
-              title="video conference url"
-              name="project[video_conference_url]"
+              title='video conference url'
+              name='project[video_conference_url]'
               value={this.state['project[video_conference_url]']}
               errorText={this.state.errors['project[video_conference_url]']}
-              placeholder="Link to your teams video conference url"
+              placeholder='Link to your teams video conference url'
               eventHandler={this.handleFieldChange}
               symbolLimit={0}
             />
             <h2>Tokens</h2>
 
             <InputFieldDropdown
-              title="token"
-              name="project[token_id]"
+              title='token'
+              name='project[token_id]'
               value={this.state['project[token_id]'] ? this.state['project[token_id]'].toString() : null}
               errorText={this.state.errors['project[token_id]']}
               disabled={this.state.disabled['project[token_id]']}
@@ -454,15 +452,15 @@ class ProjectForm extends React.Component {
             />
 
             <InputFieldWhiteDark
-              title="total budget"
-              name="project[maximum_tokens]"
+              title='total budget'
+              name='project[maximum_tokens]'
               value={this.state['project[maximum_tokens]'] ? this.state['project[maximum_tokens]'].toString() : ''}
               errorText={this.state.errors['project[maximum_tokens]']}
-              placeholder="Provide the budget for completing the entire project"
-              pattern="\d+"
+              placeholder='Provide the budget for completing the entire project'
+              pattern='\d+'
               eventHandler={this.handleFieldChange}
-              type="number"
-              min="0"
+              type='number'
+              min='0'
               step={`${1.0 / (10 ** (this.props.decimalPlaces.find(t => t.id.toString() === this.state['project[token_id]'].toString()) ? this.props.decimalPlaces.find(t => t.id.toString() === this.state['project[token_id]'].toString()).decimal_places : 0))}`}
               symbolLimit={0}
             />
@@ -471,9 +469,9 @@ class ProjectForm extends React.Component {
               <h2>Communication Channels</h2>
 
               {this.props.teams.length > 0 && this.state['project[channels]'].map((c, i) =>
-                <div className="project-form--form--channels--channel" key={i}>
+                <div className='project-form--form--channels--channel' key={i}>
                   <input
-                    type="hidden"
+                    type='hidden'
                     name={`project[channels_attributes][${c.id}][id]`}
                     value={c.new ? '' : c.id}
                   />
@@ -483,15 +481,15 @@ class ProjectForm extends React.Component {
                     <InputFieldWhiteDark
                       required
                       disabled
-                      className="project-form--form--channels--channel--select"
-                      title="channel"
+                      className='project-form--form--channels--channel--select'
+                      title='channel'
                       name={`project[channels_attributes][${c.id}][channel_id]`}
                       value={c.nameWithProvider}
                       symbolLimit={0}
                       style={{'opacity': '0.7', 'cursor': 'not-allowed'}}
                     />
-                    <div className="project-form--form--channels--channel--del" onClick={(e) => this.destroyChannel(e, i)}>
-                      <Icon name="iconTrash.svg" />
+                    <div className='project-form--form--channels--channel--del' onClick={(e) => this.destroyChannel(e, i)}>
+                      <Icon name='iconTrash.svg' />
                     </div>
                   </React.Fragment>
                   }
@@ -500,8 +498,8 @@ class ProjectForm extends React.Component {
                   <React.Fragment>
                     <InputFieldDropdownHalfed
                       required
-                      className="project-form--form--channels--channel--select"
-                      title="team or guild"
+                      className='project-form--form--channels--channel--select'
+                      title='team or guild'
                       name={`project[channels_attributes][${c.id}][team_id]`}
                       value={this.state['project[channels]'][i].teamId}
                       eventHandler={(e) => this.handleChannelFieldChange(e, i)}
@@ -509,44 +507,44 @@ class ProjectForm extends React.Component {
                     />
                     <InputFieldDropdownHalfed
                       required
-                      className="project-form--form--channels--channel--select"
-                      title="channel"
+                      className='project-form--form--channels--channel--select'
+                      title='channel'
                       name={`project[channels_attributes][${c.id}][channel_id]`}
                       value={this.state['project[channels]'][i].channelId}
                       eventHandler={(e) => this.handleChannelFieldChange(e, i)}
                       selectEntries={c.teamId && this.props.teams.find(t => t.teamId === c.teamId) ? this.props.teams.find(t => t.teamId === c.teamId).channels.map(ch => [ch.channel, ch.channelId]) : []}
                     />
-                    <div className="project-form--form--channels--channel--del" onClick={(e) => this.destroyChannel(e, i)}>
-                      <Icon name="iconTrash.svg" />
+                    <div className='project-form--form--channels--channel--del' onClick={(e) => this.destroyChannel(e, i)}>
+                      <Icon name='iconTrash.svg' />
                     </div>
                   </React.Fragment>
                   }
 
                   {c.destroy && !c.new &&
                   <input
-                    type="hidden"
+                    type='hidden'
                     name={`project[channels_attributes][${c.id}][_destroy]`}
-                    value="1"
+                    value='1'
                   />
                   }
                 </div>
               )}
 
               {this.props.teams.length > 0 &&
-              <div className="project-form--form--channels--add" onClick={this.addChannel}>
+              <div className='project-form--form--channels--add' onClick={this.addChannel}>
                 Add Channel +
               </div>
               }
 
               {this.props.discordBotUrl &&
-              <div className="project-form--form--channels--discord-link">
+              <div className='project-form--form--channels--discord-link'>
                 {!this.state.discordUrlActivated &&
-                <a target="_blank" href={this.props.discordBotUrl} onClick={() => this.setState({discordUrlActivated: true})}>
+                <a target='_blank' href={this.props.discordBotUrl} onClick={() => this.setState({discordUrlActivated: true})}>
                   Allow Access to Discord Channels →
                 </a>
                 }
                 {this.state.discordUrlActivated &&
-                <a href="">
+                <a href=''>
                   Refresh the page after Discord access is confirmed ↻
                 </a>
                 }
@@ -554,7 +552,7 @@ class ProjectForm extends React.Component {
               }
 
               {this.props.teams.length === 0 && !this.props.discordBotUrl &&
-              <div className="project-form--form--channels--empty">
+              <div className='project-form--form--channels--empty'>
                 Start adding channels by signing in with Slack or Discord
               </div>
               }
@@ -563,9 +561,9 @@ class ProjectForm extends React.Component {
 
             <h2>Permissions & Visibility</h2>
             <InputFieldDropdown
-              title="awards visibility"
+              title='awards visibility'
               required
-              name="project[require_confidentiality]"
+              name='project[require_confidentiality]'
               value={this.state['project[require_confidentiality]']}
               errorText={this.state.errors['project[require_confidentiality]']}
               disabled={this.state.disabled['project[require_confidentiality]']}
@@ -575,9 +573,9 @@ class ProjectForm extends React.Component {
             />
 
             <InputFieldDropdown
-              title="display team on project page"
+              title='display team on project page'
               required
-              name="project[display_team]"
+              name='project[display_team]'
               value={this.state['project[display_team]']}
               errorText={this.state.errors['project[displayTeam]']}
               disabled={this.state.disabled['project[display_team]']}
@@ -587,9 +585,9 @@ class ProjectForm extends React.Component {
             />
 
             <InputFieldDropdown
-              title="project visibility"
+              title='project visibility'
               required
-              name="project[visibility]"
+              name='project[visibility]'
               value={this.state['project[visibility]']}
               errorText={this.state.errors['project[visibility]']}
               disabled={this.state.disabled['project[visibility]']}
@@ -599,11 +597,11 @@ class ProjectForm extends React.Component {
             />
 
             <InputFieldWhiteDark
-              title="project url"
+              title='project url'
               required
               readOnly
               copyOnClick
-              name="project[url]"
+              name='project[url]'
               value={this.state['project[url]']}
               errorText={this.state.errors['project[url]']}
               eventHandler={this.handleFieldChange}

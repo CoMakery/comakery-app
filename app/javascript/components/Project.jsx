@@ -243,19 +243,19 @@ export default class Project extends React.Component {
     }
     const skillIds = [5, 6, 8, 2, 3, 1, 7, 4]
 
-    return <div className="project-container animated fadeIn faster">
+    return <div className='project-container animated fadeIn faster'>
       <ProjectSetupHeader
         projectForHeader={this.props.projectForHeader}
         missionForHeader={this.props.missionForHeader}
         owner={this.props.editable}
-        current="overview"
+        current='overview'
         expanded
       />
 
-      <div className="project-award">
+      <div className='project-award'>
         {!interested &&
           <button
-            className="button project-interest__button"
+            className='button project-interest__button'
             onClick={() => this.addInterest(projectData.id)}
           >
             Follow
@@ -263,59 +263,59 @@ export default class Project extends React.Component {
         }
         {interested &&
           <button
-            className="button project-interest__button"
+            className='button project-interest__button'
             onClick={() => this.removeInterest(projectData.id)}
           >
             Unfollow
           </button>
         }
         {projectData.displayTeam &&
-          <div className="project-team">
-            <div className="project-team__container">
-              <div className="project-team__contributors-container">
-                <div className="project-team__contributors" >
+          <div className='project-team'>
+            <div className='project-team__container'>
+              <div className='project-team__contributors-container'>
+                <div className='project-team__contributors' >
                   {projectData.team.map((contributor, index) =>
-                    <div key={contributor.id} className="project-team__contributor-container">
+                    <div key={contributor.id} className='project-team__contributor-container'>
                       <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: projectData.team.length - index}} src={contributor.imageUrl} />
-                      <div className="project-team__contributor__modal">
+                      <div className='project-team__contributor__modal'>
                         <ProfileModal profile={contributor} />
                       </div>
                     </div>
                   )}
                 </div>
-                {projectData.teamSize > projectData.team.length && <div className="project-team__contributors__more">+{projectData.teamSize - projectData.team.length}</div>}
+                {projectData.teamSize > projectData.team.length && <div className='project-team__contributors__more'>+{projectData.teamSize - projectData.team.length}</div>}
               </div>
             </div>
           </div>
         }
       </div>
 
-      <div className="project-description">
-        <div className="project-description__video">
+      <div className='project-description'>
+        <div className='project-description__video'>
           {projectData.videoId &&
-            <iframe className="project-description__video__iframe" src={`//www.youtube.com/embed/${projectData.videoId}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0`} frameBorder="0" />
+            <iframe className='project-description__video__iframe' src={`//www.youtube.com/embed/${projectData.videoId}?modestbranding=1&iv_load_policy=3&rel=0&showinfo=0&color=white&autohide=0`} frameBorder='0' />
           }
           {/* {!projectData.videoId && */}
           {/*  <img src={projectData.squareImageUrl} width="100%" /> */}
           {/* } */}
         </div>
-        <div className="project-description__text">
+        <div className='project-description__text'>
           <div dangerouslySetInnerHTML={{__html: projectData.descriptionHtml}} />
         </div>
       </div>
 
-      <div className="project-award">
+      <div className='project-award'>
         {tokenData && projectData.awardedTokens > 0 && projectData.maximumTokens > 0 &&
-        <div className="project-award__progress">
-          <div className="project-award__progress__stats">
+        <div className='project-award__progress'>
+          <div className='project-award__progress__stats'>
             <div>
               Tokens awarded:
-              <strong className="project-award__percent"> {projectData.tokenPercentage}</strong> — {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}
+              <strong className='project-award__percent'> {projectData.tokenPercentage}</strong> — {projectData.awardedTokens} out of {projectData.maximumTokens} {tokenData.symbol}
             </div>
           </div>
-          <div className="project-award__progress__bar-container">
-            <div className="project-award__progress__bar-line" />
-            <div className="project-award__progress__bar-gradient" style={{width: `${projectData.tokenPercentage}`}} />
+          <div className='project-award__progress__bar-container'>
+            <div className='project-award__progress__bar-line' />
+            <div className='project-award__progress__bar-gradient' style={{width: `${projectData.tokenPercentage}`}} />
           </div>
         </div>
         }
@@ -350,26 +350,26 @@ export default class Project extends React.Component {
       }
 
       {this.props.tasksBySpecialty.length === 0 &&
-        <div className="project-skills">
-          <div className="project-skills__title">SKILLS NEEDED</div>
-          <div className="project-skills__subtitle">Which of your skills are you interesed in contributing?</div>
+        <div className='project-skills'>
+          <div className='project-skills__title'>SKILLS NEEDED</div>
+          <div className='project-skills__subtitle'>Which of your skills are you interesed in contributing?</div>
 
           {Object.keys(skills).map((skill, index) =>
-            <div key={skill} className="project-skill-container">
-              <div className="project-skill__background">
-                <img className="project-skill__background__img" src={require(`src/images/project/${skill}.jpg`)} />
-                <div className="project-skill__background__title">
+            <div key={skill} className='project-skill-container'>
+              <div className='project-skill__background'>
+                <img className='project-skill__background__img' src={require(`src/images/project/${skill}.jpg`)} />
+                <div className='project-skill__background__title'>
                   {skills[skill]}
-                  <div className="project-skill__background__icon">
-                    <img className="skill-icon--background" src={require(`src/images/project/background.svg`)} />
-                    <img className="skill-icon" src={require(`src/images/project/${skill}.svg`)} />
+                  <div className='project-skill__background__icon'>
+                    <img className='skill-icon--background' src={require(`src/images/project/background.svg`)} />
+                    <img className='skill-icon' src={require(`src/images/project/${skill}.svg`)} />
                   </div>
                 </div>
               </div>
-              <div className="project-skill__interest">
+              <div className='project-skill__interest'>
                 {!specialtyInterested[skillIds[index] - 1] &&
                   <div
-                    className="project-skill__interest__button"
+                    className='project-skill__interest__button'
                     onClick={() => this.addInterest(projectData.id, skillIds[index])}
                   >
                     I'm Interested
@@ -378,7 +378,7 @@ export default class Project extends React.Component {
 
                 {specialtyInterested[skillIds[index] - 1] &&
                   <div
-                    className="project-skill__interest__button"
+                    className='project-skill__interest__button'
                     onClick={() => this.removeInterest(projectData.id)}
                   >
                     Following
@@ -391,41 +391,41 @@ export default class Project extends React.Component {
       }
 
       {projectData.displayTeam &&
-        <div className="project-team">
-          <div className="project-team__container">
-            <div className="project-team__title">The Team</div>
-            <div className="project-team__subtitle">Great projects are the result of dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
+        <div className='project-team'>
+          <div className='project-team__container'>
+            <div className='project-team__title'>The Team</div>
+            <div className='project-team__subtitle'>Great projects are the result of dozens to hundreds of individual tasks being completed with skill and care. Check out the people that have made this project special with their individual contributions.</div>
 
-            <div className="project-chart">
-              <div id="tooltip" className="tooltip-hidden">
+            <div className='project-chart'>
+              <div id='tooltip' className='tooltip-hidden'>
                 {this.state.tooltipContributor &&
                   <ProfileModal profile={this.state.tooltipContributor} />
                 }
               </div>
             </div>
 
-            <div className="project-team__contributors-container">
-              <div className="project-team__contributors" >
+            <div className='project-team__contributors-container'>
+              <div className='project-team__contributors' >
                 {projectData.team.map((contributor, index) =>
-                  <div key={contributor.id} className="project-team__contributor-container">
+                  <div key={contributor.id} className='project-team__contributor-container'>
                     <img className={(contributor.specialty && contributor.specialty.name === 'Team Leader') ? 'project-team__contributor__avatar--team-leader' : 'project-team__contributor__avatar'} style={{zIndex: projectData.team.length - index}} src={contributor.imageUrl} />
-                    <div className="project-team__contributor__modal">
+                    <div className='project-team__contributor__modal'>
                       <ProfileModal profile={contributor} />
                     </div>
                   </div>
                 )}
               </div>
-              {projectData.teamSize > projectData.team.length && <div className="project-team__contributors__more">+{projectData.teamSize - projectData.team.length}</div>}
+              {projectData.teamSize > projectData.team.length && <div className='project-team__contributors__more'>+{projectData.teamSize - projectData.team.length}</div>}
             </div>
           </div>
         </div>
       }
 
-      <div className="project-interest">
-        <p className="project-interest__text">Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
+      <div className='project-interest'>
+        <p className='project-interest__text'>Let the project leaders know that you are interested in the project so they can invite you to tasks that you are qualified for.</p>
         {!interested &&
           <button
-            className="button project-interest__button"
+            className='button project-interest__button'
             onClick={() => this.addInterest(projectData.id)}
           >
             Follow
@@ -433,7 +433,7 @@ export default class Project extends React.Component {
         }
         {interested &&
           <button
-            className="button project-interest__button"
+            className='button project-interest__button'
             onClick={() => this.removeInterest(projectData.id)}
           >
             Unfollow

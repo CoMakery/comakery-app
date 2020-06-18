@@ -6,7 +6,7 @@ const debugLog = require('../helpers/debugLog')
 const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
   const state = Object.assign(walletState, {
     ownUtxos: {},
-    addressInfos: {},
+    addressInfos: {}
   })
 
   async function getTxHistory(addresses) {
@@ -20,7 +20,7 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
     })
 
     for (const t of Object.values(transactions)) {
-      let effect = 0 //effect on wallet balance accumulated
+      let effect = 0 // effect on wallet balance accumulated
       for (const input of t.ctbInputs) {
         if (addresses.includes(input[0])) {
           effect -= +input[1].getCoin
@@ -94,7 +94,7 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
     if (!addressInfo || Date.now() - addressInfo.timestamp > maxAddressInfoAge) {
       state.addressInfos[address] = {
         timestamp: Date.now(),
-        data: fetchAddressInfo(address),
+        data: fetchAddressInfo(address)
       }
     }
 
@@ -113,10 +113,10 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
       'POST',
       JSON.stringify({
         txHash,
-        txBody,
+        txBody
       }),
       {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       }
     )
 
@@ -139,11 +139,11 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
           url,
           'POST',
           JSON.stringify({
-            addresses: nonemptyAddresses.slice(index, 10),
+            addresses: nonemptyAddresses.slice(index, 10)
           }),
           {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           }
         )
       })
@@ -154,7 +154,7 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
         txHash: elem.tx_hash,
         address: elem.receiver,
         coins: parseInt(elem.amount, 10),
-        outputIndex: elem.tx_index,
+        outputIndex: elem.tx_index
       }
     })
   }
@@ -176,7 +176,7 @@ const blockchainExplorer = (ADALITE_CONFIG, walletState) => {
     selectUnusedAddresses,
     submitTxRaw,
     getBalance,
-    fetchTxInfo,
+    fetchTxInfo
   }
 }
 

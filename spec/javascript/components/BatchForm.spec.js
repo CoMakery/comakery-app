@@ -43,7 +43,7 @@ describe('BatchForm', () => {
       'id'         : 10,
       'name'       : 'Batch name',
       'description': 'Batch description',
-      'goal'       : 'Batch goal',
+      'goal'       : 'Batch goal'
     }
 
     const wrapper = mount(<BatchForm
@@ -64,7 +64,7 @@ describe('BatchForm', () => {
   })
 
   it('renders correctly with csrfToken', () => {
-    const wrapper = mount(<BatchForm csrfToken="test" />)
+    const wrapper = mount(<BatchForm csrfToken='test' />)
 
     expect(wrapper.find(
       'input[type="hidden"][name="authenticity_token"]'
@@ -72,19 +72,19 @@ describe('BatchForm', () => {
   })
 
   it('uses formUrl', () => {
-    const wrapper = mount(<BatchForm formUrl="/test" />)
+    const wrapper = mount(<BatchForm formUrl='/test' />)
 
     expect(wrapper.state('formUrl')).toBe('/test')
   })
 
   it('uses formAction', () => {
-    const wrapper = mount(<BatchForm formAction="PUT" />)
+    const wrapper = mount(<BatchForm formAction='PUT' />)
 
     expect(wrapper.state('formAction')).toBe('PUT')
   })
 
   it('uses urlOnSuccess', () => {
-    const wrapper = mount(<BatchForm urlOnSuccess="/test" />)
+    const wrapper = mount(<BatchForm urlOnSuccess='/test' />)
 
     expect(wrapper.props().urlOnSuccess).toBe('/test')
   })
@@ -105,7 +105,7 @@ describe('BatchForm', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 
@@ -120,7 +120,7 @@ describe('BatchForm', () => {
     wrapper.setState({
       errors: {
         'batch[name]'       : 'name error',
-        'batch[description]': 'description error',
+        'batch[description]': 'description error'
       }
     })
 

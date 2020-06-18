@@ -88,16 +88,16 @@ class ProfileModal extends React.Component {
 
             <Links>
               {profile.linkedinUrl &&
-                <Link target="_blank" href={profile.linkedinUrl}><img src={require(`src/images/social-color-icons/linkedin.svg`)} /></Link>
+                <Link target='_blank' href={profile.linkedinUrl}><img src={require(`src/images/social-color-icons/linkedin.svg`)} /></Link>
               }
               {profile.githubUrl &&
-                <Link target="_blank" href={profile.githubUrl}><img src={require(`src/images/social-color-icons/github.svg`)} /></Link>
+                <Link target='_blank' href={profile.githubUrl}><img src={require(`src/images/social-color-icons/github.svg`)} /></Link>
               }
               {profile.behanceUrl &&
-                <Link target="_blank" href={profile.behanceUrl}><img src={require(`src/images/social-color-icons/behance.svg`)} /></Link>
+                <Link target='_blank' href={profile.behanceUrl}><img src={require(`src/images/social-color-icons/behance.svg`)} /></Link>
               }
               {profile.dribbleUrl &&
-                <Link target="_blank" href={profile.dribbleUrl}><img src={require(`src/images/social-color-icons/dribbble.svg`)} /></Link>
+                <Link target='_blank' href={profile.dribbleUrl}><img src={require(`src/images/social-color-icons/dribbble.svg`)} /></Link>
               }
             </Links>
           </Info>

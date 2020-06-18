@@ -35,6 +35,7 @@ Basics :
 source .env
 bundle install
 yarn install
+overcommit --install
 rails db:setup
 rails data:migrate
 ```
@@ -176,7 +177,7 @@ that environment variable exists.
 
 This is useful if you want to create a new environment.
 
-- [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
 - During setup update API keys and secrets according to environment
 - After deployment manually update formation and addons plans according to environment
 - Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`

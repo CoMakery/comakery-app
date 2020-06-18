@@ -5,10 +5,10 @@ class ContributorsTable extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div className="table-scroll table-box contributors">
-          <table className="table-scroll" style={{width: '100%'}}>
+        <div className='table-scroll table-box contributors'>
+          <table className='table-scroll' style={{width: '100%'}}>
             <tbody>
-              <tr className="header-row">
+              <tr className='header-row'>
                 <th>
                   Contributors
                 </th>
@@ -18,12 +18,12 @@ class ContributorsTable extends React.Component {
               </tr>
 
               {this.props.tableData.map((t) =>
-                <tr className="award-row" key={t.name}>
-                  <td className="contributor">
-                    <img src={t.imageUrl} className="icon avatar-img" />
-                    <div className="margin-small margin-collapse inline-block">
+                <tr className='award-row' key={t.name}>
+                  <td className='contributor'>
+                    <img src={t.imageUrl} className='icon avatar-img' />
+                    <div className='margin-small margin-collapse inline-block'>
                       {t.name}
-                      <table className="table-scroll table-box overlay" style={{display: 'none'}}>
+                      <table className='table-scroll table-box overlay' style={{display: 'none'}}>
                         <tbody>
                           <tr>
                             <th style={{paddingBottom: '20px'}}>
@@ -46,8 +46,8 @@ class ContributorsTable extends React.Component {
                     </div>
                   </td>
 
-                  <td className="awards-earned financial">
-                    <span className="margin-small">{t.total}</span>
+                  <td className='awards-earned financial'>
+                    <span className='margin-small'>{t.total}</span>
                   </td>
                 </tr>
               )}

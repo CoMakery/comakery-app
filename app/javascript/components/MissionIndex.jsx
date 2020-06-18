@@ -151,18 +151,18 @@ export default class MissionIndex extends React.Component {
     return (
       <React.Fragment>
         <Layout
-          className="mission-index"
-          category="Missions > "
-          title="Configure mission’s landing page"
+          className='mission-index'
+          category='Missions > '
+          title='Configure mission’s landing page'
           sidebar={
             <React.Fragment>
-              <div className="mission-index--sidebar">
-                <a href="/missions/new">
+              <div className='mission-index--sidebar'>
+                <a href='/missions/new'>
                   <SidebarItemBold
-                    className="mission-index--sidebar--item__bold"
-                    iconLeftName="MISSION/WHITE.svg"
-                    iconRightName="PLUS.svg"
-                    text="Create a Mission"
+                    className='mission-index--sidebar--item__bold'
+                    iconLeftName='MISSION/WHITE.svg'
+                    iconRightName='PLUS.svg'
+                    text='Create a Mission'
                   />
                 </a>
 
@@ -170,12 +170,12 @@ export default class MissionIndex extends React.Component {
                   <React.Fragment>
                     <hr />
 
-                    <div className="mission-index--sidebar--info">
+                    <div className='mission-index--sidebar--info'>
                       Please select or rearrange missions you want to display on landing page:
                     </div>
 
                     <DragDropContext onDragEnd={this.onDragEnd}>
-                      <Droppable droppableId="droppable">
+                      <Droppable droppableId='droppable'>
                         {(provided, _) => (
                           <div
                             ref={provided.innerRef}
@@ -189,15 +189,15 @@ export default class MissionIndex extends React.Component {
                                     {...provided.dragHandleProps}
                                   >
                                     <SidebarItem
-                                      className="mission-index--sidebar--item"
+                                      className='mission-index--sidebar--item'
                                       key={mission.id}
-                                      iconRightName="REARRANGE.svg"
+                                      iconRightName='REARRANGE.svg'
                                       text={mission.name}
                                       leftChild={
                                         <React.Fragment>
                                           <InputField
-                                            type="checkbox"
-                                            className="mission-index--sidebar--item-check"
+                                            type='checkbox'
+                                            className='mission-index--sidebar--item-check'
                                             checked={mission.status === 'active'}
                                             eventHandler={() => this.updateMissionStatus(index)}
                                           />
@@ -222,43 +222,43 @@ export default class MissionIndex extends React.Component {
           }
         >
           {selectedMission !== null &&
-            <div className="mission-index--view">
-              <div className="mission-index--view--logo">
+            <div className='mission-index--view'>
+              <div className='mission-index--view--logo'>
                 <img
                   src={selectedMission.imagePreview}
                 />
               </div>
 
-              <div className="mission-index--view--info">
-                <div className="mission-index--view--info--item">
-                  <div className="mission-index--view--info--item--name">
+              <div className='mission-index--view--info'>
+                <div className='mission-index--view--info--item'>
+                  <div className='mission-index--view--info--item--name'>
                     name
                   </div>
-                  <div className="mission-index--view--info--item--value">
+                  <div className='mission-index--view--info--item--value'>
                     {selectedMission.name}
                   </div>
                 </div>
 
-                <div className="mission-index--view--info--item">
-                  <div className="mission-index--view--info--item--name">
+                <div className='mission-index--view--info--item'>
+                  <div className='mission-index--view--info--item--name'>
                     subtitle
                   </div>
-                  <div className="mission-index--view--info--item--value">
+                  <div className='mission-index--view--info--item--value'>
                     {selectedMission.subtitle}
                   </div>
                 </div>
 
-                <div className="mission-index--view--info--item">
-                  <div className="mission-index--view--info--item--name">
+                <div className='mission-index--view--info--item'>
+                  <div className='mission-index--view--info--item--name'>
                     description
                   </div>
-                  <div className="mission-index--view--info--item--value">
+                  <div className='mission-index--view--info--item--value'>
                     {selectedMission.description}
                   </div>
                 </div>
               </div>
 
-              <div className="mission-index--view--link">
+              <div className='mission-index--view--link'>
                 <span>Please select projects you want to display within selected mission:</span>
                 <a
                   href={`/missions/${selectedMission.id}/edit`}
@@ -270,19 +270,19 @@ export default class MissionIndex extends React.Component {
           }
 
           {selectedMission !== null && selectedMission.projects.length > 0 &&
-            <div className="mission-index--projects">
+            <div className='mission-index--projects'>
               {selectedMission.projects.map((p, index) =>
-                <div key={p.id} className="mission-index--project-single">
-                  <div className="mission-index--project-single--left">
+                <div key={p.id} className='mission-index--project-single'>
+                  <div className='mission-index--project-single--left'>
                     <InputField
-                      type="checkbox"
-                      className="mission-index--project-single--check"
+                      type='checkbox'
+                      className='mission-index--project-single--check'
                       checked={p.status === 'active'}
                       eventHandler={() => this.updateProjectStatus(index)}
                     />
                     {p.title}
                   </div>
-                  <Icon name="iconDropDownCopy.svg" className="styleguide-index--icon mission-index--project-dropdown" />
+                  <Icon name='iconDropDownCopy.svg' className='styleguide-index--icon mission-index--project-dropdown' />
                 </div>
               )}
             </div>

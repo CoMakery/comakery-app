@@ -39,5 +39,5 @@ export default {
         pos          : item.tx_output_n
       }
     })
-  },
+  }
 }

@@ -56,16 +56,16 @@ export default class FeaturedMission extends React.Component {
           <img src={imageUrl} />
           <span>view mission</span>
         </a>
-        <div className="featured-mission__detail">
-          <div className="featured-mission__name">
+        <div className='featured-mission__detail'>
+          <div className='featured-mission__name'>
             <a href={missionUrl}>{name}</a>
           </div>
-          <div className="featured-mission__description">{description}</div>
-          {projects.map(project => <div key={project.id} className="featured-mission__project">
-            <a href={`/projects/${project.id}`} className="featured-mission__project__title">{project.title}</a>
+          <div className='featured-mission__description'>{description}</div>
+          {projects.map(project => <div key={project.id} className='featured-mission__project'>
+            <a href={`/projects/${project.id}`} className='featured-mission__project__title'>{project.title}</a>
             {project.interested &&
               <div
-                className="featured-mission__project__interest featured-mission__project__interest"
+                className='featured-mission__project__interest featured-mission__project__interest'
                 onClick={() => { this.removeInterest(project.id) }}
               >
                 Unfollow
@@ -73,14 +73,14 @@ export default class FeaturedMission extends React.Component {
             }
             {!project.interested &&
               <div
-                className="featured-mission__project__interest"
+                className='featured-mission__project__interest'
                 onClick={() => { this.addInterest(project.id) }}
               >
                 Follow
               </div>
             }
           </div>)}
-          <a href={`/projects/new${this.props.id ? `?mission_id=${this.props.id}` : ''}`} className="featured-mission__create-project">Create New Project</a>
+          <a href={`/projects/new${this.props.id ? `?mission_id=${this.props.id}` : ''}`} className='featured-mission__create-project'>Create New Project</a>
         </div>
       </div>
     )

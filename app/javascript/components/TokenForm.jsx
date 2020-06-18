@@ -61,7 +61,7 @@ class TokenForm extends React.Component {
 
   disable(a) {
     let d = this.state.disabled
-    a.forEach(n => d = Object.assign({}, d, {[n]: true}))
+    a.forEach(n => (d = Object.assign({}, d, {[n]: true})))
     this.setState({
       disabled: d
     })
@@ -256,27 +256,27 @@ class TokenForm extends React.Component {
     return (
       <React.Fragment>
         <Layout
-          className="token-form"
+          className='token-form'
           title={this.state.formAction === 'POST' ? 'Create a New Token' : 'Edit Token'}
           hasBackButton
           subfooter={
             <React.Fragment>
               <Button
                 value={this.state.formAction === 'POST' ? 'create & close' : 'save & close'}
-                type="submit"
-                form="token-form--form"
+                type='submit'
+                form='token-form--form'
                 disabled={this.state.disabled['token[submit_and_close]']}
                 onClick={() => this.setState({closeOnSuccess: true})}
               />
               <ButtonBorder
                 value={this.state.formAction === 'POST' ? 'create' : 'save'}
-                type="submit"
-                form="token-form--form"
+                type='submit'
+                form='token-form--form'
                 disabled={this.state.disabled['token[submit]']}
                 onClick={() => this.setState({closeOnSuccess: false})}
               />
               <ButtonBorder
-                value="cancel"
+                value='cancel'
                 onClick={this.goBack}
               />
             </React.Fragment>
@@ -284,11 +284,11 @@ class TokenForm extends React.Component {
         >
           <Flash messages={this.state.flashMessages} />
 
-          <form className="token-form--form" id="token-form--form" onSubmit={this.handleSubmit}>
+          <form className='token-form--form' id='token-form--form' onSubmit={this.handleSubmit}>
             <InputFieldDropdownHalfed
-              title="payment type"
+              title='payment type'
               required
-              name="token[coin_type]"
+              name='token[coin_type]'
               value={this.state['token[coin_type]']}
               errorText={this.state.errors['token[coin_type]']}
               disabled={this.state.disabled['token[coin_type]']}
@@ -298,9 +298,9 @@ class TokenForm extends React.Component {
             />
 
             <InputFieldDropdownHalfed
-              title="visibility"
+              title='visibility'
               required
-              name="token[unlisted]"
+              name='token[unlisted]'
               value={this.state['token[unlisted]']}
               errorText={this.state.errors['token[unlisted]']}
               eventHandler={this.handleFieldChange}
@@ -312,12 +312,12 @@ class TokenForm extends React.Component {
 
             {this.state['token[coin_type]'].match(/erc20|qrc20|comakery/) &&
               <InputFieldHalfed
-                title="token name"
+                title='token name'
                 required
-                name="token[name]"
+                name='token[name]'
                 value={this.state['token[name]']}
                 errorText={this.state.errors['token[name]']}
-                placeholder="Bitcoin"
+                placeholder='Bitcoin'
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}
               />
@@ -325,14 +325,14 @@ class TokenForm extends React.Component {
 
             {this.state['token[coin_type]'] === 'qrc20' &&
               <InputFieldHalfed
-                title="contract address"
+                title='contract address'
                 required
-                name="token[contract_address]"
+                name='token[contract_address]'
                 value={this.state['token[contract_address]']}
                 errorText={this.state.errors['token[contract_address]']}
                 readOnly={this.state.disabled['token[contract_address]']}
-                placeholder="2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc"
-                pattern="[a-fA-F0-9]{40}"
+                placeholder='2c754a7b03927a5a30ca2e7c98a8fdfaf17d11fc'
+                pattern='[a-fA-F0-9]{40}'
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}
               />
@@ -340,14 +340,14 @@ class TokenForm extends React.Component {
 
             {this.state['token[coin_type]'].match(/erc20|comakery/) &&
               <InputFieldHalfed
-                title="contract address"
+                title='contract address'
                 required
-                name="token[ethereum_contract_address]"
+                name='token[ethereum_contract_address]'
                 value={this.state['token[ethereum_contract_address]']}
                 errorText={this.state.errors['token[ethereum_contract_address]']}
                 readOnly={this.state.disabled['token[ethereum_contract_address]']}
-                placeholder="0x6c6ee5e31d828de241282b9606c8e98ea48526e2"
-                pattern="0x[a-fA-F0-9]{40}"
+                placeholder='0x6c6ee5e31d828de241282b9606c8e98ea48526e2'
+                pattern='0x[a-fA-F0-9]{40}'
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}
               />
@@ -355,12 +355,12 @@ class TokenForm extends React.Component {
 
             {this.state['token[coin_type]'].match(/qrc20|erc20|comakery/) &&
               <InputFieldHalfed
-                title="token symbol"
+                title='token symbol'
                 required
-                name="token[symbol]"
+                name='token[symbol]'
                 value={this.state['token[symbol]']}
                 errorText={this.state.errors['token[symbol]']}
-                placeholder="..."
+                placeholder='...'
                 readOnly
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}
@@ -369,13 +369,13 @@ class TokenForm extends React.Component {
 
             {this.state['token[coin_type]'].match(/qrc20|erc20|comakery/) &&
               <InputFieldHalfed
-                title="decimal places"
+                title='decimal places'
                 required
-                name="token[decimal_places]"
+                name='token[decimal_places]'
                 value={this.state['token[decimal_places]']}
                 errorText={this.state.errors['token[decimal_places]']}
-                placeholder="..."
-                pattern="\d{1-2}"
+                placeholder='...'
+                pattern='\d{1-2}'
                 readOnly
                 eventHandler={this.handleFieldChange}
                 symbolLimit={0}
@@ -384,9 +384,9 @@ class TokenForm extends React.Component {
 
             {this.state['token[coin_type]'].match('qrc20|qtum|ada|btc|eos|xtz') &&
               <InputFieldDropdownHalfed
-                title="blockchain network"
+                title='blockchain network'
                 required
-                name="token[blockchain_network]"
+                name='token[blockchain_network]'
                 value={this.state['token[blockchain_network]']}
                 errorText={this.state.errors['token[blockchain_network]']}
                 disabled={this.state.disabled['token[blockchain_network]']}
@@ -397,9 +397,9 @@ class TokenForm extends React.Component {
 
             {this.state['token[coin_type]'].match(/eth|erc20|comakery/) &&
               <InputFieldDropdownHalfed
-                title="blockchain network"
+                title='blockchain network'
                 required
-                name="token[ethereum_network]"
+                name='token[ethereum_network]'
                 value={this.state['token[ethereum_network]']}
                 errorText={this.state.errors['token[ethereum_network]']}
                 disabled={this.state.disabled['token[ethereum_network]']}
@@ -409,19 +409,19 @@ class TokenForm extends React.Component {
             }
 
             <InputFieldUploadFile
-              title="token logo"
+              title='token logo'
               required
-              name="token[logo_image]"
+              name='token[logo_image]'
               errorText={this.state.errors['token[logo_image]']}
               imgPreviewUrl={this.props.token.logoUrl}
-              imgRequirements="Image should be at least 500px x 500px"
+              imgRequirements='Image should be at least 500px x 500px'
               imgVerifier={this.verifyImgRes}
               imgInputRef={this.lofoInputRef}
             />
 
             <input
-              type="hidden"
-              name="authenticity_token"
+              type='hidden'
+              name='authenticity_token'
               value={this.props.csrfToken}
               readOnly
             />

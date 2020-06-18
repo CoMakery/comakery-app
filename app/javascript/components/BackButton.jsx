@@ -22,7 +22,7 @@ class BackButton extends React.Component {
     return (
       <React.Fragment>
         <Wrapper>
-          <Icon name="iconCloseCopy.svg" onClick={this.goBack} />
+          <Icon name='iconCloseCopy.svg' onClick={this.goBack} />
         </Wrapper>
       </React.Fragment>
     )

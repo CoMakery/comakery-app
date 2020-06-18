@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="5" height="25" viewBox="0 0 5 25">
-    <g fill="#FFF" fill-rule="nonzero">
-        <circle cx="2.5" cy="2.5" r="2.5"/>
-        <circle cx="2.5" cy="12.5" r="2.5"/>
-        <circle cx="2.5" cy="22.5" r="2.5"/>
-    </g>
+<svg xmlns='http://www.w3.org/2000/svg' width='5' height='25' viewBox='0 0 5 25'>
+  <g fill='#FFF' fill-rule='nonzero'>
+    <circle cx='2.5' cy='2.5' r='2.5' />
+    <circle cx='2.5' cy='12.5' r='2.5' />
+    <circle cx='2.5' cy='22.5' r='2.5' />
+  </g>
 </svg>

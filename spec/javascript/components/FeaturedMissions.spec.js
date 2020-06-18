@@ -34,7 +34,7 @@ describe('FeaturedMissions', () => {
         projects   : [
           { id: 1, title: 'Project 1', interested: true },
           { id: 2, title: 'Project 2', interested: false }
-        ],
+        ]
       },
       {
         id         : 2,
@@ -44,7 +44,7 @@ describe('FeaturedMissions', () => {
         projects   : [
           { id: 3, title: 'Project 3', interested: true },
           { id: 4, title: 'Project 4', interested: false }
-        ],
+        ]
       }
     ]
     const moreMissions = [

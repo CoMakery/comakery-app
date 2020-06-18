@@ -11,7 +11,7 @@ function number2Buffer(num) {
   const buffer = []
   const neg = (num < 0)
   num = Math.abs(num)
-  while(num) {
+  while (num) {
     buffer[buffer.length] = num & 0xff
     num = num >> 8
   }
@@ -20,7 +20,7 @@ function number2Buffer(num) {
   if (top & 0x80) {
     buffer[buffer.length] = neg ? 0x80 : 0x00
   } else if (neg) {
-    buffer[buffer.length - 1] = top | 0x80;
+    buffer[buffer.length - 1] = top | 0x80
   }
   return Buffer.from(buffer)
 }
@@ -28,7 +28,7 @@ function number2Buffer(num) {
 function hex2Buffer(hexString) {
   const buffer = []
   for (let i = 0; i < hexString.length; i += 2) {
-    buffer[buffer.length] = (parseInt(hexString[i], 16) << 4) | parseInt(hexString[i+1], 16)
+    buffer[buffer.length] = (parseInt(hexString[i], 16) << 4) | parseInt(hexString[i + 1], 16)
   }
   return Buffer.from(buffer)
 }
@@ -64,7 +64,7 @@ export default class Ledger {
     const paths = []
     const selectUtxo = qtumJsLib.utils.selectTxs(utxoList, amount, fee)
     const rawTxCache = {}
-    for(let i = 0; i < selectUtxo.length; i++) {
+    for (let i = 0; i < selectUtxo.length; i++) {
       const item = selectUtxo[i]
       if (!rawTxCache[item.hash]) {
         rawTxCache[item.hash] = await rawTxFetchFunc(item.hash)
@@ -99,7 +99,7 @@ export default class Ledger {
     const paths = []
     const selectUtxo = qtumJsLib.utils.selectTxs(utxoList, amount, fee)
     const rawTxCache = {}
-    for(let i = 0; i < selectUtxo.length; i++) {
+    for (let i = 0; i < selectUtxo.length; i++) {
       const item = selectUtxo[i]
       if (!rawTxCache[item.hash]) {
         rawTxCache[item.hash] = await rawTxFetchFunc(item.hash)

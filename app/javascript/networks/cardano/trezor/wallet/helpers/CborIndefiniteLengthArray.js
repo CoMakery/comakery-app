@@ -9,7 +9,7 @@ module.exports = class CborIndefiniteLengthArray {
       Buffer.concat([
         Buffer.from([0x9f]), // indefinite array prefix
         ...this.elements.map((e) => cbor.encode(e)),
-        Buffer.from([0xff]), // end of array
+        Buffer.from([0xff]) // end of array
       ])
     )
   }

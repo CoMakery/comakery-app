@@ -7,7 +7,7 @@ async function getConversionRates(state) {
   if (!conversionRates || Date.now() - conversionRates.timestamp > maxConversionRatesAge) {
     conversionRates = {
       timestamp: Date.now(),
-      data: await fetchConversionRates(),
+      data: await fetchConversionRates()
     }
   }
 

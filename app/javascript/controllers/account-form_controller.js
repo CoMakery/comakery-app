@@ -18,11 +18,11 @@ export default class extends ComakerySecurityTokenController {
         body: {
           data: {
             account_token_record: {
-              'max_balance': this.data.get('addressMaxBalance'),
-              'lockup_until': this.data.get('addressLockupUntil'),
-              'reg_group_id': this.data.get('addressGroupId'),
+              'max_balance'   : this.data.get('addressMaxBalance'),
+              'lockup_until'  : this.data.get('addressLockupUntil'),
+              'reg_group_id'  : this.data.get('addressGroupId'),
               'account_frozen': this.data.get('addressFrozen'),
-              'account_id': this.data.get('accountId')
+              'account_id'    : this.data.get('accountId')
             }
           }
         }

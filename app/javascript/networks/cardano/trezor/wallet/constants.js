@@ -12,10 +12,10 @@ module.exports = {
   TX_WITNESS_SIZE_BYTES: 139,
   NETWORKS: {
     mainnet: {
-      protocolMagic: 764824073,
+      protocolMagic: 764824073
     },
     testnet: {
-      protocolMagic: 1097911063,
-    },
-  },
+      protocolMagic: 1097911063
+    }
+  }
 }

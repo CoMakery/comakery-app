@@ -200,22 +200,22 @@ class BatchIndex extends React.Component {
     return (
       <React.Fragment>
         <ProjectSetup
-          className="batch-index"
+          className='batch-index'
           projectForHeader={this.props.projectForHeader}
           missionForHeader={this.props.missionForHeader}
           owner={this.props.editable}
-          current="batches"
+          current='batches'
           sidebar={
             <React.Fragment>
-              <div className="batch-index--sidebar">
+              <div className='batch-index--sidebar'>
 
                 {this.props.editable &&
                   <a href={this.props.newBatchPath}>
                     <SidebarItemBold
-                      className="batch-index--sidebar--item__bold"
-                      iconLeftName="BATCH/WHITE.svg"
-                      iconRightName="PLUS.svg"
-                      text="Create a New Batch"
+                      className='batch-index--sidebar--item__bold'
+                      iconLeftName='BATCH/WHITE.svg'
+                      iconRightName='PLUS.svg'
+                      text='Create a New Batch'
                     />
                   </a>
                 }
@@ -244,7 +244,7 @@ class BatchIndex extends React.Component {
 
                 {this.props.batches.length > 0 &&
                   <React.Fragment>
-                    <hr className="batch-index--sidebar--hr" />
+                    <hr className='batch-index--sidebar--hr' />
 
                     <Title>
                       <TitleText>batches</TitleText>
@@ -252,7 +252,7 @@ class BatchIndex extends React.Component {
 
                     {this.props.batches.map((b, i) =>
                       <SidebarItem
-                        className="batch-index--sidebar--item"
+                        className='batch-index--sidebar--item'
                         key={i}
                         text={b.name}
                         subchild={

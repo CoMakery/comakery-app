@@ -18,7 +18,7 @@ const transferXtzCoins = async function(award) { // award in JSON
     }
   } catch (err) {
     console.error(err)
-    alert( err.message || 'The transaction failed')
+    alert(err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
 }
@@ -49,7 +49,7 @@ const submitTransaction = async function(award, network, to, amount) {
         display: 'Mainnet',
         url    : 'https://mainnet.simplestaking.com:3000',
         tzscan : {
-          url: 'http://tzscan.io/',
+          url: 'http://tzscan.io/'
         }
       },
       type: 'TREZOR_T',
@@ -62,7 +62,7 @@ const submitTransaction = async function(award, network, to, amount) {
       fee   : fee
     })),
     confirmOperation(state => ({
-      injectionOperation: state.injectionOperation,
+      injectionOperation: state.injectionOperation
     }))
   ).subscribe(
     state => {
@@ -73,7 +73,7 @@ const submitTransaction = async function(award, network, to, amount) {
     error => {
       console.error('transaction failed', error)
       utils.showMessageWhenTransactionFailed(award)
-      alert( error.message || 'The transaction failed')
+      alert(error.message || 'The transaction failed')
     }
   )
 }

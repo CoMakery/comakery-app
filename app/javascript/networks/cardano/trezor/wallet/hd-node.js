@@ -31,7 +31,7 @@ function HdNode({secret, secretKey, publicKey, chainCode}) {
     chainCode,
     extendedPublicKey,
     toBuffer,
-    toString,
+    toString
   }
 }
 

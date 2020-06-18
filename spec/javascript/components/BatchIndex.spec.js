@@ -63,7 +63,7 @@ describe('BatchIndex', () => {
               'name' : 'test',
               'image': 'http://test'
             }
-          },
+          }
         ]
       }
     ]
@@ -121,7 +121,7 @@ describe('BatchIndex', () => {
               'name' : 'test',
               'image': 'http://test'
             }
-          },
+          }
         ]
       },
       {

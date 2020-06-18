@@ -34,7 +34,7 @@ export default class extends Controller {
     window.ethereum.sendAsync({
       method,
       params,
-      from,
+      from
     }, (err, response) => {
       if (err) {
         this._showError(err)
@@ -80,8 +80,8 @@ export default class extends Controller {
         body: {
           data: {
             'blockchain_transactable_id': this.id,
-            transaction: {
-              'source'  : this.coinBase
+            transaction                 : {
+              'source': this.coinBase
             }
           }
         }

@@ -57,7 +57,7 @@ class BatchForm extends React.Component {
 
   disable(a) {
     let d = this.state.disabled
-    a.forEach(n => d = Object.assign({}, d, {[n]: true}))
+    a.forEach(n => (d = Object.assign({}, d, {[n]: true})))
     this.setState({
       disabled: d
     })
@@ -146,20 +146,20 @@ class BatchForm extends React.Component {
     return (
       <React.Fragment>
         <ProjectSetup
-          className="batch-form"
+          className='batch-form'
           projectForHeader={this.props.projectForHeader}
           missionForHeader={this.props.missionForHeader}
           owner
-          current="batches"
+          current='batches'
           sidebar={
             <React.Fragment>
-              <div className="batch-index--sidebar">
+              <div className='batch-index--sidebar'>
                 <SidebarItem
-                  className="batch-index--sidebar--item batch-index--sidebar--item__form"
+                  className='batch-index--sidebar--item batch-index--sidebar--item__form'
                   text={this.state['batch[name]'] || 'New Batch'}
                   selected
                 />
-                <hr className="batch-index--sidebar--hr" />
+                <hr className='batch-index--sidebar--hr' />
               </div>
             </React.Fragment>
           }
@@ -168,20 +168,20 @@ class BatchForm extends React.Component {
             <React.Fragment>
               <Button
                 value={this.state.formAction === 'POST' ? 'create & close' : 'save & close'}
-                type="submit"
-                form="batch-form--form"
+                type='submit'
+                form='batch-form--form'
                 disabled={this.state.disabled['batch[submit_and_close]']}
                 onClick={() => this.setState({closeOnSuccess: true})}
               />
               <ButtonBorder
                 value={this.state.formAction === 'POST' ? 'create' : 'save'}
-                type="submit"
-                form="batch-form--form"
+                type='submit'
+                form='batch-form--form'
                 disabled={this.state.disabled['batch[submit]']}
                 onClick={() => this.setState({closeOnSuccess: false})}
               />
               <ButtonBorder
-                value="cancel"
+                value='cancel'
                 onClick={this.goBack}
               />
             </React.Fragment>
@@ -189,15 +189,15 @@ class BatchForm extends React.Component {
         >
           <Flash messages={this.state.flashMessages} />
 
-          <div className="batch-form--form--title">
+          <div className='batch-form--form--title'>
             {this.state.formAction === 'POST' ? 'Create a New Batch' : 'Edit Batch'}
           </div>
 
-          <form className="batch-form--form" id="batch-form--form" onSubmit={this.handleSubmit}>
+          <form className='batch-form--form' id='batch-form--form' onSubmit={this.handleSubmit}>
             <InputFieldDropdown
-              title="State"
+              title='State'
               required
-              name="batch[state]"
+              name='batch[state]'
               value={this.state['batch[state]']}
               errorText={this.state.errors['batch[state]']}
               disabled={this.state.disabled['batch[state]']}
@@ -207,47 +207,47 @@ class BatchForm extends React.Component {
             />
 
             <InputFieldWhiteDark
-              title="name"
+              title='name'
               required
-              name="batch[name]"
+              name='batch[name]'
               value={this.state['batch[name]']}
               errorText={this.state.errors['batch[name]']}
               eventHandler={this.handleFieldChange}
-              placeholder="Provide a clear title for the batch"
+              placeholder='Provide a clear title for the batch'
               symbolLimit={100}
             />
 
             <InputFieldDescriptionMiddle
-              title="the goal of the batch"
-              name="batch[goal]"
+              title='the goal of the batch'
+              name='batch[goal]'
               value={this.state['batch[goal]']}
               errorText={this.state.errors['batch[goal]']}
               eventHandler={this.handleFieldChange}
-              placeholder="Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)"
+              placeholder='Let people know what will be the result of this batch being completed (ex: When this batch is finished, the xxxx will now do yyyy)'
               symbolLimit={250}
             />
 
             <InputFieldDescription
-              title="description"
-              name="batch[description]"
+              title='description'
+              name='batch[description]'
               value={this.state['batch[description]']}
               errorText={this.state.errors['batch[description]']}
               eventHandler={this.handleFieldChange}
-              placeholder="Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project"
+              placeholder='Provide a longer description about the batch focus, the type of work involved, and how it will relate to the larger project'
               symbolLimit={750}
             />
 
             <InputFieldUploadFile
-              title="diagram or screenshot"
-              name="batch[diagram]"
+              title='diagram or screenshot'
+              name='batch[diagram]'
               errorText={this.state.errors['batch[diagram]']}
               imgPreviewUrl={this.props.batch.diagramUrl}
-              imgPreviewDimensions="100x100"
+              imgPreviewDimensions='100x100'
             />
 
             <input
-              type="hidden"
-              name="authenticity_token"
+              type='hidden'
+              name='authenticity_token'
               value={this.props.csrfToken}
               readOnly
             />

@@ -65,14 +65,14 @@ class ContributorsSummaryPieChart extends React.Component {
             'format': 'percentage'
           },
           'mainLabel': {
-            'fontSize': 12,
+            'fontSize': 12
           },
           'percentage': {
             'color'        : '#e1e1e1',
             'decimalPlaces': 2
           },
           'value': {
-            'color': '#e1e1e1',
+            'color': '#e1e1e1'
           },
           'lines': {
             'enabled': true,
@@ -110,8 +110,8 @@ class ContributorsSummaryPieChart extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <div className="columns large-4 medium-12 summary float-left">
-          <div id="award-percentages" className="royalty-pie" />
+        <div className='columns large-4 medium-12 summary float-left'>
+          <div id='award-percentages' className='royalty-pie' />
         </div>
       </React.Fragment>
     )
