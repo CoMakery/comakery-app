@@ -35,6 +35,7 @@ Basics :
 source .env
 bundle install
 yarn install
+overcommit --install
 rails db:setup
 rails data:migrate
 ```
