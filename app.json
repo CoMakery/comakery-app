@@ -36,10 +36,17 @@
       "as": "DATABASE"
     },
     {
-      "plan": "redistogo:nano"
+      "plan": "heroku-redis:hobby-dev",
+      "as": "REDIS"
     },
     {
       "plan": "scheduler:standard"
+    },
+    {
+      "plan": "scout:chair"
+    },
+    {
+      "plan": "sentry:starter"
     },
     {
       "plan": "sendgrid:starter"
@@ -56,7 +63,7 @@
     "APP_NAME": "staging",
     "AWS_API_KEY": "UPDATE_ME",
     "AWS_API_SECRET": "UPDATE_ME",
-    "BASIC_AUTH": "comakery:now",
+    "BASIC_AUTH": "",
     "CLOUDFRONT_HOST": "dbqcjfphwazuc.cloudfront.net",
     "DISCORD_BOT_TOKEN": "UPDATE_ME",
     "DISCORD_CLIENT_ID": "UPDATE_ME",
@@ -68,6 +75,7 @@
     "git_ref": "07e9e34ceba36d2276198ddda248b257245e2ed7",
     "GOOGLE_ANALYTICS": "",
     "GOOGLE_TAG_MANAGER": "",
+    "INTERCOM_APP_ID": "",
     "REDIS_PROVIDER": "REDISTOGO_URL",
     "REFILE_S3_BUCKET": "comakery-staging-refile",
     "REFILE_S3_REGION": "us-east-1",
