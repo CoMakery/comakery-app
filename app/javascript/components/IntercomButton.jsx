@@ -21,7 +21,7 @@ class IntercomButton extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Button className="intercom intercom-button">
+        <Button className='intercom intercom-button'>
           <img src={chatImg} />
         </Button>
       </React.Fragment>

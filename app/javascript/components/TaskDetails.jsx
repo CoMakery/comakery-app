@@ -255,50 +255,50 @@ class TaskDetails extends React.Component {
                   Task Submission
                 </SubHeader>
 
-                <form action={task.submitUrl} encType="multipart/form-data" method="post">
+                <form action={task.submitUrl} encType='multipart/form-data' method='post'>
                   <InputFieldUploadFile
-                    title="Image attachement"
-                    name="task[submission_image]"
+                    title='Image attachement'
+                    name='task[submission_image]'
                     errorText={this.state.errors['task[submissionImage]']}
                     imgPreviewUrl={this.props.task.submissionImageUrl}
-                    imgPreviewDimensions="100x100"
+                    imgPreviewDimensions='100x100'
                   />
 
                   <InputFieldWhiteDark
-                    title="URL Where Completed Work Can Be Viewed"
-                    name="task[submission_url]"
+                    title='URL Where Completed Work Can Be Viewed'
+                    name='task[submission_url]'
                     value={this.state['task[submission_url]']}
                     eventHandler={this.handleFieldChange}
                     errorText={this.state.errors['task[submissionUrl]']}
-                    placeholder="Provide a URL"
+                    placeholder='Provide a URL'
                     symbolLimit={150}
                   />
 
                   <InputFieldDescriptionMiddle
-                    title="Additional Comments"
-                    name="task[submission_comment]"
+                    title='Additional Comments'
+                    name='task[submission_comment]'
                     value={this.state['task[submission_comment]']}
                     eventHandler={this.handleFieldChange}
                     errorText={this.state.errors['task[submissionComment]']}
-                    placeholder="Provide any required comments"
+                    placeholder='Provide any required comments'
                     symbolLimit={2000}
                   />
 
                   <input
-                    type="hidden"
-                    name="authenticity_token"
+                    type='hidden'
+                    name='authenticity_token'
                     value={this.props.csrfToken}
                     readOnly
                   />
 
                   <Button
-                    type="submit"
-                    value="submit task"
+                    type='submit'
+                    value='submit task'
                   />
 
                   <ButtonBorderGray
                     onClick={this.goBack}
-                    value="cancel"
+                    value='cancel'
                   />
                 </form>
               </Submission>
@@ -311,22 +311,22 @@ class TaskDetails extends React.Component {
                 </SubHeader>
 
                 {task.submissionUrl &&
-                  <ContentBlock title="URL WHERE COMPLETED WORK CAN BE VIEWED">
-                    <a target="_blank" href={task.submissionUrl}>
+                  <ContentBlock title='URL WHERE COMPLETED WORK CAN BE VIEWED'>
+                    <a target='_blank' href={task.submissionUrl}>
                       {task.submissionUrl}
                     </a>
                   </ContentBlock>
                 }
 
                 {task.submissionComment &&
-                  <ContentBlock title="ADDITIONAL COMMENTS">
+                  <ContentBlock title='ADDITIONAL COMMENTS'>
                     {task.submissionComment}
                   </ContentBlock>
                 }
 
                 {task.submissionImageUrl &&
-                  <ContentBlock title="ATTACHED IMAGE">
-                    <a target="_blank" href={task.submissionImageUrl}>
+                  <ContentBlock title='ATTACHED IMAGE'>
+                    <a target='_blank' href={task.submissionImageUrl}>
                       <img src={task.submissionImageUrl} />
                     </a>
                   </ContentBlock>
@@ -334,29 +334,29 @@ class TaskDetails extends React.Component {
 
                 {task.status === 'submitted' && task.policies.review &&
                   <React.Fragment>
-                    <form action={task.acceptUrl} method="post">
+                    <form action={task.acceptUrl} method='post'>
                       <input
-                        type="hidden"
-                        name="authenticity_token"
+                        type='hidden'
+                        name='authenticity_token'
                         value={this.props.csrfToken}
                         readOnly
                       />
                       <Button
-                        type="submit"
-                        value="accept"
+                        type='submit'
+                        value='accept'
                       />
                     </form>
 
-                    <form action={task.rejectUrl} method="post">
+                    <form action={task.rejectUrl} method='post'>
                       <input
-                        type="hidden"
-                        name="authenticity_token"
+                        type='hidden'
+                        name='authenticity_token'
                         value={this.props.csrfToken}
                         readOnly
                       />
                       <ButtonBorderGray
-                        type="submit"
-                        value="reject & end"
+                        type='submit'
+                        value='reject & end'
                       />
                     </form>
                   </React.Fragment>
@@ -369,42 +369,42 @@ class TaskDetails extends React.Component {
                 Task Details
               </SubHeader>
 
-              <ContentBlock title="what is the expected benefit">
+              <ContentBlock title='what is the expected benefit'>
                 {task.why}
               </ContentBlock>
 
-              <ContentBlock title="description">
+              <ContentBlock title='description'>
                 <div dangerouslySetInnerHTML={{__html: task.descriptionHtml}} />
               </ContentBlock>
 
               {task.imageUrl &&
                 <ContentBlock>
-                  <a target="_blank" href={task.imageUrl}>
+                  <a target='_blank' href={task.imageUrl}>
                     <img src={task.imageUrl} />
                   </a>
                 </ContentBlock>
               }
 
-              <ContentBlock title="acceptance criteria">
+              <ContentBlock title='acceptance criteria'>
                 <div dangerouslySetInnerHTML={{__html: task.requirementsHtml}} />
               </ContentBlock>
 
-              <ContentBlock title="days till task expires (after starting)">
-                <Pluralize singular="day" count={task.expiresInDays} />
+              <ContentBlock title='days till task expires (after starting)'>
+                <Pluralize singular='day' count={task.expiresInDays} />
               </ContentBlock>
 
               {task.proofLink &&
-                <ContentBlock title="URL where to submit completed work">
-                  <a href={task.proofLink} target="_blank">{task.proofLink}</a>
+                <ContentBlock title='URL where to submit completed work'>
+                  <a href={task.proofLink} target='_blank'>{task.proofLink}</a>
                 </ContentBlock>
               }
 
               {task.project.channels.length > 0 &&
-                <ContentBlock title="chat with the project owner">
+                <ContentBlock title='chat with the project owner'>
                   {task.project.channels.map(channel =>
                     <Channel key={channel.id}>
                       <Icon name={`channel_${channel.type}.svg`} />
-                      <a target="_blank" href={channel.url}>{channel.url}</a>
+                      <a target='_blank' href={channel.url}>{channel.url}</a>
                     </Channel>
                   )}
                 </ContentBlock>
@@ -437,22 +437,22 @@ class TaskDetails extends React.Component {
                       {/*  By starting this Task (clicking START), you confirm that you have read and agree to this <a target="_blank" href={this.props.licenseUrl}>Comakery Contribution License</a>.&nbsp; */}
                       {/* </ContentBlock> */}
 
-                      <form action={task.startUrl} method="post">
+                      <form action={task.startUrl} method='post'>
                         <input
-                          type="hidden"
-                          name="authenticity_token"
+                          type='hidden'
+                          name='authenticity_token'
                           value={this.props.csrfToken}
                           readOnly
                         />
 
                         <Button
-                          type="submit"
-                          value="start task"
+                          type='submit'
+                          value='start task'
                         />
 
                         <ButtonBorderGray
                           onClick={this.goBack}
-                          value="cancel"
+                          value='cancel'
                         />
                       </form>
                     </React.Fragment>
@@ -460,7 +460,7 @@ class TaskDetails extends React.Component {
 
                   {!this.props.taskAllowedToStart && !this.props.taskReachedMaximumAssignments &&
                     <LockedMessage>
-                      <Icon name="NO-SKILLS.svg" />
+                      <Icon name='NO-SKILLS.svg' />
                       <div>
                         This task has experince level requirement – {task.experienceLevelName}.
                         <br />
@@ -471,7 +471,7 @@ class TaskDetails extends React.Component {
 
                   {!this.props.taskAllowedToStart && this.props.taskReachedMaximumAssignments &&
                     <LockedMessage>
-                      <Icon name="NO-SKILLS.svg" />
+                      <Icon name='NO-SKILLS.svg' />
                       <div>
                         You already completed this task maximum number of times allowed.
                       </div>

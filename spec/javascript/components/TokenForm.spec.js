@@ -228,7 +228,7 @@ describe('TokenForm', () => {
   })
 
   it('renders correctly with csrfToken', () => {
-    const wrapper = mount(<TokenForm csrfToken="test" />)
+    const wrapper = mount(<TokenForm csrfToken='test' />)
 
     expect(wrapper.find(
       'input[type="hidden"][name="authenticity_token"]'
@@ -236,19 +236,19 @@ describe('TokenForm', () => {
   })
 
   it('uses formUrl', () => {
-    const wrapper = mount(<TokenForm formUrl="/test" />)
+    const wrapper = mount(<TokenForm formUrl='/test' />)
 
     expect(wrapper.state('formUrl')).toBe('/test')
   })
 
   it('uses formAction', () => {
-    const wrapper = mount(<TokenForm formAction="PUT" />)
+    const wrapper = mount(<TokenForm formAction='PUT' />)
 
     expect(wrapper.state('formAction')).toBe('PUT')
   })
 
   it('uses urlOnSuccess', () => {
-    const wrapper = mount(<TokenForm urlOnSuccess="/test" />)
+    const wrapper = mount(<TokenForm urlOnSuccess='/test' />)
 
     expect(wrapper.props().urlOnSuccess).toBe('/test')
   })

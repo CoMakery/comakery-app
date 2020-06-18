@@ -168,9 +168,9 @@ describe('Mission', () => {
     expect(wrapper.find('.mission-details__description').text()).toBe('Holochain Description')
 
     expect(wrapper.find('.mission-leaders__individual')).toHaveLength(3)
-    expect(wrapper.contains(<div className="mission-leaders__individual__info__name">User1 Last1</div>)).toEqual(true)
-    expect(wrapper.contains(<div className="mission-leaders__individual__info__name">User2 Last2</div>)).toEqual(true)
-    expect(wrapper.contains(<div className="mission-leaders__individual__info__name">User3 Last3</div>)).toEqual(true)
+    expect(wrapper.contains(<div className='mission-leaders__individual__info__name'>User1 Last1</div>)).toEqual(true)
+    expect(wrapper.contains(<div className='mission-leaders__individual__info__name'>User2 Last2</div>)).toEqual(true)
+    expect(wrapper.contains(<div className='mission-leaders__individual__info__name'>User3 Last3</div>)).toEqual(true)
 
     expect(wrapper.find('.mission-stats__kpi')).toHaveLength(3)
     expect(wrapper.find('.mission-projects__single')).toHaveLength(2)

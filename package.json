@@ -5,33 +5,14 @@
     "yarn": "1.12.3"
   },
   "scripts": {
-    "lint": "yarn lint:ci --fix",
-    "lint:ci": "eslint --ext .js,.jsx --ignore-pattern '!.eslintrc.js' .eslintrc.js app/javascript spec/javascript",
+    "lint": "standart ./app/javascript/**/*.js ./app/javascript/**/*.jsx ./spec/javascript/**/*.js --env jest --env es6 --env browser  --env node --env jquery --parser babel-eslint --global targets --fix",
     "stylelint": "stylelint 'app/javascript/**/*.css' --fix",
-    "standart": "standart ./app/javascript/**/*.js ./app/javascript/**/*.jsx ./spec/javascript/**/*.js",
     "test": "jest"
   },
   "standard": {
     "ignore": [
       "**/node_modules/**"
-    ],
-    "env": [
-      "jest",
-      "es6",
-      "browser",
-      "jquery",
-      "node"
-    ],
-    "plugins": [
-      "react-hooks"
-    ],
-    "globals": [
-      "App",
-      "ActionCable",
-      "Utils",
-      "window"
-    ],
-    "parser": "babel-eslint"
+    ]
   },
   "dependencies": {
     "@babel/cli": "^7.4.4",
@@ -111,8 +92,6 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "enzyme-to-json": "^3.3.5",
-    "eslint": "^4.7.1",
-    "eslint-config-comakery": "^0.0.4",
     "eslint-config-react-app": "^0.6.2",
     "eslint-loader": "^1.7.1",
     "eslint-plugin-flowtype": "^2.30.4",

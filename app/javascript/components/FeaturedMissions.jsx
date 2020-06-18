@@ -67,36 +67,36 @@ export default class FeaturedMissions extends React.Component {
       ]
     }
     return (
-      <div className="featured-missions">
+      <div className='featured-missions'>
         {!this.props.isConfirmed &&
-          <div className="grayed-page" />
+          <div className='grayed-page' />
         }
-        <div className="featured-missions__header">
-          <div className="featured-missions__header_container">
+        <div className='featured-missions__header'>
+          <div className='featured-missions__header_container'>
 
             <VideoHowItWorks>
-              <iframe src="https://player.vimeo.com/video/345071697?byline=0&title=false&portrait=0&color=ffffff" frameBorder="0" allow="autoplay; fullscreen" allowFullScreen />
+              <iframe src='https://player.vimeo.com/video/345071697?byline=0&title=false&portrait=0&color=ffffff' frameBorder='0' allow='autoplay; fullscreen' allowFullScreen />
             </VideoHowItWorks>
 
-            <script async src="https://player.vimeo.com/api/player.js" />
+            <script async src='https://player.vimeo.com/api/player.js' />
 
-            <div className="featured-missions__header__description">
-              <img className="featured-missions__header__logo" src={logo} />
-              <div className="featured-missions__header__title">
+            <div className='featured-missions__header__description'>
+              <img className='featured-missions__header__logo' src={logo} />
+              <div className='featured-missions__header__title'>
                 Gather a Tribe.<br />
                 Achieve Big Missions.
               </div>
-              <div className="featured-missions__header__subtitle">Bring people together around a common vision.</div>
+              <div className='featured-missions__header__subtitle'>Bring people together around a common vision.</div>
             </div>
           </div>
         </div>
 
-        <div className="featured-missions__content">
-          <p className="featured-missions__content__title">
+        <div className='featured-missions__content'>
+          <p className='featured-missions__content__title'>
               Featured<br />
-            <span className="featured-missions__content__title--big">missions</span>
+            <span className='featured-missions__content__title--big'>missions</span>
           </p>
-          <p className="featured-missions__content__description" />
+          <p className='featured-missions__content__description' />
           {
             topMissions.map((mission, index) =>
               <FeaturedMission
@@ -113,26 +113,26 @@ export default class FeaturedMissions extends React.Component {
             )
           }
         </div>
-        <div className="featured-missions__more">
-          <div className="featured-missions__more_container">
+        <div className='featured-missions__more'>
+          <div className='featured-missions__more_container'>
             {/* <p className="featured-missions__more__title">
               40+<br />
               <span className="featured-missions__more__title--big">missions</span>
             </p> */}
-            <p className="featured-missions__more__description">Discover Missions With Cutting Edge Projects</p>
-            <Slider className="featured-missions__gallery" {...settings}>
+            <p className='featured-missions__more__description'>Discover Missions With Cutting Edge Projects</p>
+            <Slider className='featured-missions__gallery' {...settings}>
               { moreMissions.map((mission) =>
                 <div key={mission.id}>
-                  <div className="gallery-content">
-                    <div className="gallery-content__image">
+                  <div className='gallery-content'>
+                    <div className='gallery-content__image'>
                       <a href={mission.missionUrl}>
                         <img src={mission.imageUrl} />
                       </a>
                     </div>
-                    <div className="gallery-content__title">
+                    <div className='gallery-content__title'>
                       <a href={mission.missionUrl}>{mission.name}</a>
                     </div>
-                    <div className="gallery-content__description">
+                    <div className='gallery-content__description'>
                       {mission.projectsCount === 0 && 'No projects'}
                       {mission.projectsCount > 0 && `${mission.projectsCount} ${mission.projectsCount === 1 ? 'project' : 'projects'}` }
                     </div>
@@ -142,23 +142,23 @@ export default class FeaturedMissions extends React.Component {
             </Slider>
           </div>
         </div>
-        <div className="featured-missions__footer">
-          <div className="featured-missions__footer_container">
-            <div className="featured-missions__footer__stat">
-              <div className="featured-missions__footer__stat__num">1000+</div>
-              <div className="featured-missions__footer__stat__name">Contributors</div>
+        <div className='featured-missions__footer'>
+          <div className='featured-missions__footer_container'>
+            <div className='featured-missions__footer__stat'>
+              <div className='featured-missions__footer__stat__num'>1000+</div>
+              <div className='featured-missions__footer__stat__name'>Contributors</div>
             </div>
-            <img src={communityManagersImg} className="hide-on-mobile" />
-            <div className="featured-missions__footer__stat">
-              <div className="featured-missions__footer__stat__num">500+</div>
-              <div className="featured-missions__footer__stat__name">PROJECTS</div>
+            <img src={communityManagersImg} className='hide-on-mobile' />
+            <div className='featured-missions__footer__stat'>
+              <div className='featured-missions__footer__stat__num'>500+</div>
+              <div className='featured-missions__footer__stat__name'>PROJECTS</div>
             </div>
-            <img src={developersImg} className="hide-on-mobile" />
-            <div className="featured-missions__footer__stat">
-              <div className="featured-missions__footer__stat__num">1,000,000+</div>
-              <div className="featured-missions__footer__stat__name">TOKENS AWARDED</div>
+            <img src={developersImg} className='hide-on-mobile' />
+            <div className='featured-missions__footer__stat'>
+              <div className='featured-missions__footer__stat__num'>1,000,000+</div>
+              <div className='featured-missions__footer__stat__name'>TOKENS AWARDED</div>
             </div>
-            <div className="featured-missions__footer__mobile">
+            <div className='featured-missions__footer__mobile'>
               <img src={communityManagersImg} />
               <img src={developersImg} style={{marginLeft: -30}} />
             </div>

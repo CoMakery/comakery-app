@@ -360,36 +360,36 @@ class Task extends React.Component {
 
                   {(task.status === 'ready' || task.status === 'invite ready') &&
                     <a href={task.assignPath}>
-                      <StyledIcon name="INVITE_USER.svg" />
+                      <StyledIcon name='INVITE_USER.svg' />
                     </a>
                   }
 
                   {!(task.status === 'ready' || task.status === 'invite ready') &&
-                    <IconPlaceholder name="INVITE_USER.svg" />
+                    <IconPlaceholder name='INVITE_USER.svg' />
                   }
 
                   <a href={task.clonePath}>
-                    <StyledIcon name="DUPLICATE.svg" />
+                    <StyledIcon name='DUPLICATE.svg' />
                   </a>
 
                   {task.editPath &&
                     <a href={task.editPath}>
-                      <StyledIcon name="iconEdit.svg" />
+                      <StyledIcon name='iconEdit.svg' />
                     </a>
                   }
 
                   {!task.editPath &&
-                    <IconPlaceholder name="iconEdit.svg" />
+                    <IconPlaceholder name='iconEdit.svg' />
                   }
 
                   {task.destroyPath &&
-                    <a rel="nofollow" data-method="delete" href={task.destroyPath}>
-                      <StyledIcon name="iconTrash.svg" />
+                    <a rel='nofollow' data-method='delete' href={task.destroyPath}>
+                      <StyledIcon name='iconTrash.svg' />
                     </a>
                   }
 
                   {!task.destroyPath &&
-                    <IconPlaceholder name="iconTrash.svg" />
+                    <IconPlaceholder name='iconTrash.svg' />
                   }
                 </Buttons>
               }
@@ -424,40 +424,40 @@ class Task extends React.Component {
             </StatusWrapper>
 
             <TaskDetails rotateIcon={this.state.showDetailsBox} onClick={(_) => this.setState({showDetailsBox: (!this.state.showDetailsBox)})}>
-              Details <Icon name="DROP_DOWN.svg" />
+              Details <Icon name='DROP_DOWN.svg' />
             </TaskDetails>
           </BottomWrapper>
         </Wrapper>
 
         {this.state.showDetailsBox &&
           <DetailsBox>
-            <ContentBlock title="what is the expected benefit">
+            <ContentBlock title='what is the expected benefit'>
               {task.why}
             </ContentBlock>
 
-            <ContentBlock title="description">
+            <ContentBlock title='description'>
               <div dangerouslySetInnerHTML={{__html: task.descriptionHtml}} />
             </ContentBlock>
 
             {task.imageUrl &&
               <ContentBlock>
-                <a target="_blank" href={task.imageUrl}>
+                <a target='_blank' href={task.imageUrl}>
                   <img src={task.imageUrl} />
                 </a>
               </ContentBlock>
             }
 
-            <ContentBlock title="acceptance criteria">
+            <ContentBlock title='acceptance criteria'>
               <div dangerouslySetInnerHTML={{__html: task.requirementsHtml}} />
             </ContentBlock>
 
-            <ContentBlock title="days till task expires (after starting)">
-              <Pluralize singular="day" count={task.expiresInDays} />
+            <ContentBlock title='days till task expires (after starting)'>
+              <Pluralize singular='day' count={task.expiresInDays} />
             </ContentBlock>
 
             {task.proofLink &&
-              <ContentBlock title="URL where to submit completed work">
-                <a href={task.proofLink} target="_blank">{task.proofLink}</a>
+              <ContentBlock title='URL where to submit completed work'>
+                <a href={task.proofLink} target='_blank'>{task.proofLink}</a>
               </ContentBlock>
             }
           </DetailsBox>

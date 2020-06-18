@@ -118,7 +118,7 @@ class Batch extends React.Component {
           </StateFlag>
 
           {this.props.batch.diagramUrl &&
-            <Image src={this.props.batch.diagramUrl} alt="Batch Image" />
+            <Image src={this.props.batch.diagramUrl} alt='Batch Image' />
           }
           <Info>
             <Title>
@@ -134,25 +134,25 @@ class Batch extends React.Component {
             </Title>
 
             <Details>
-              <ContentElement title="progress">
+              <ContentElement title='progress'>
                 {`${this.props.batch.completedTasks} / ${this.props.batch.totalTasks} Completed`}
               </ContentElement>
 
-              <ContentElement title="team members">
+              <ContentElement title='team members'>
                 <Userpics pics={this.props.batch.teamPics} limit={3} />
               </ContentElement>
 
-              <ContentElement title="interested">
+              <ContentElement title='interested'>
                 <Userpics pics={this.props.batch.interestedPics} limit={3} />
               </ContentElement>
 
               {this.props.editable &&
                 <Buttons>
                   <a href={this.props.batch.editPath}>
-                    <StyledIcon name="iconEdit.svg" />
+                    <StyledIcon name='iconEdit.svg' />
                   </a>
-                  <a rel="nofollow" data-method="delete" href={this.props.batch.destroyPath}>
-                    <StyledIcon name="iconTrash.svg" />
+                  <a rel='nofollow' data-method='delete' href={this.props.batch.destroyPath}>
+                    <StyledIcon name='iconTrash.svg' />
                   </a>
                 </Buttons>
               }

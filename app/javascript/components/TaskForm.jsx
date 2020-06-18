@@ -63,7 +63,7 @@ class TaskForm extends React.Component {
 
   disable(a) {
     let d = this.state.disabled
-    a.forEach(n => d = Object.assign({}, d, {[n]: true}))
+    a.forEach(n => (d = Object.assign({}, d, {[n]: true})))
     this.setState({
       disabled: d
     })
@@ -156,131 +156,131 @@ class TaskForm extends React.Component {
     return (
       <React.Fragment>
         <ProjectSetup
-          className="task-form"
+          className='task-form'
           projectForHeader={this.props.projectForHeader}
           missionForHeader={this.props.missionForHeader}
           owner
-          current="batches"
+          current='batches'
           hasBackButton
           subfooter={
             <React.Fragment>
               <Button
                 value={this.state.formAction === 'POST' ? 'create & close' : 'save & close'}
-                type="submit"
-                form="task-form--form"
+                type='submit'
+                form='task-form--form'
                 disabled={this.state.disabled['task[submit_and_close]']}
                 onClick={() => this.setState({closeOnSuccess: true})}
               />
               <ButtonBorder
                 value={this.state.formAction === 'POST' ? 'create' : 'save'}
-                type="submit"
-                form="task-form--form"
+                type='submit'
+                form='task-form--form'
                 disabled={this.state.disabled['task[submit]']}
                 onClick={() => this.setState({closeOnSuccess: false})}
               />
               <ButtonBorder
-                value="cancel"
+                value='cancel'
                 onClick={this.goBack}
               />
             </React.Fragment>
           }
           sidebar={
             <React.Fragment>
-              <div className="batch-index--sidebar">
+              <div className='batch-index--sidebar'>
                 <SidebarItem
-                  className="batch-index--sidebar--item batch-index--sidebar--item__form"
+                  className='batch-index--sidebar--item batch-index--sidebar--item__form'
                   text={this.props.batch.name}
                   selected
                 />
-                <hr className="batch-index--sidebar--hr" />
+                <hr className='batch-index--sidebar--hr' />
               </div>
             </React.Fragment>
           }
         >
           <Flash messages={this.state.flashMessages} />
 
-          <div className="task-form--form--title">
+          <div className='task-form--form--title'>
             {this.state.formAction === 'POST' ? 'Create a New Task' : 'Edit Task'}
           </div>
 
-          <form className="task-form--form" id="task-form--form" onSubmit={this.handleSubmit}>
+          <form className='task-form--form' id='task-form--form' onSubmit={this.handleSubmit}>
             <InputFieldWhiteDark
-              title="name"
+              title='name'
               required
-              name="task[name]"
+              name='task[name]'
               value={this.state['task[name]']}
               errorText={this.state.errors['task[name]']}
               eventHandler={this.handleFieldChange}
-              placeholder="Provide a clear title for the Task"
+              placeholder='Provide a clear title for the Task'
               symbolLimit={100}
             />
 
             <InputFieldWhiteDark
               title={`award amount (${this.props.token.symbol || 'points - no token'})`}
               required
-              name="task[amount]"
+              name='task[amount]'
               value={this.state['task[amount]']}
               errorText={this.state.errors['task[amount]']}
               eventHandler={this.handleFieldChange}
-              type="number"
-              min="0"
+              type='number'
+              min='0'
               step={`${1.0 / (10 ** this.props.token.decimalPlaces)}`}
-              placeholder="The total amount of tokens or coins you are paying for this task to be completed"
+              placeholder='The total amount of tokens or coins you are paying for this task to be completed'
               symbolLimit={0}
             />
 
             <InputFieldWhiteDark
-              title="URL where to submit completed work"
-              name="task[proof_link]"
+              title='URL where to submit completed work'
+              name='task[proof_link]'
               value={this.state['task[proof_link]']}
               errorText={this.state.errors['task[proofLink]']}
               eventHandler={this.handleFieldChange}
-              placeholder="URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)"
+              placeholder='URL to a Dropbox or Drive Folder, or a GitHub Repo (http://example.com)'
               symbolLimit={150}
             />
 
             <InputFieldDescriptionMiddle
-              title="WHAT IS THE EXPECTED BENEFIT"
-              name="task[why]"
+              title='WHAT IS THE EXPECTED BENEFIT'
+              name='task[why]'
               value={this.state['task[why]']}
               errorText={this.state.errors['task[why]']}
               eventHandler={this.handleFieldChange}
-              placeholder="Example: As a new user, I want to be able to sign up, so I can claim my 10% discount."
+              placeholder='Example: As a new user, I want to be able to sign up, so I can claim my 10% discount.'
               symbolLimit={500}
             />
 
             <InputFieldDescriptionMiddle
-              title="acceptance requirements"
-              name="task[requirements]"
+              title='acceptance requirements'
+              name='task[requirements]'
               value={this.state['task[requirements]']}
               errorText={this.state.errors['task[requirements]']}
               eventHandler={this.handleFieldChange}
-              placeholder="Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work."
+              placeholder='Create bullet points for each acceptance criteria by starting a line with an asterisk (markdown format). These bullet points will be used by reviewers to verify the work.'
               symbolLimit={1000}
             />
 
             <InputFieldDescriptionMiddle
-              title="description"
-              name="task[description]"
+              title='description'
+              name='task[description]'
               value={this.state['task[description]']}
               errorText={this.state.errors['task[description]']}
               eventHandler={this.handleFieldChange}
-              placeholder="Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch"
+              placeholder='Provide a longer description about the task, the type of work involved, and how it will relate to the larger batch'
               symbolLimit={500}
             />
 
             <InputFieldUploadFile
-              title="image asset to help guide the task"
-              name="task[image]"
+              title='image asset to help guide the task'
+              name='task[image]'
               errorText={this.state.errors['task[image]']}
               imgPreviewUrl={this.props.task.imageUrl}
-              imgPreviewDimensions="100x100"
+              imgPreviewDimensions='100x100'
             />
 
             {this.props.task.imageFromId &&
               <input
-                type="hidden"
-                name="task[image_from_id]"
+                type='hidden'
+                name='task[image_from_id]'
                 value={this.props.task.imageFromId}
                 readOnly
               />
@@ -289,9 +289,9 @@ class TaskForm extends React.Component {
             <h2>Advanced</h2>
 
             <InputFieldDropdown
-              title="specialty"
+              title='specialty'
               required
-              name="task[specialty_id]"
+              name='task[specialty_id]'
               value={this.state['task[specialty_id]']}
               errorText={this.state.errors['task[specialtyId]']}
               eventHandler={this.handleFieldChange}
@@ -300,9 +300,9 @@ class TaskForm extends React.Component {
             />
 
             <InputFieldDropdown
-              title="skill confirmations required"
+              title='skill confirmations required'
               required
-              name="task[experience_level]"
+              name='task[experience_level]'
               value={this.state['task[experience_level]']}
               errorText={this.state.errors['task[experienceLevel]']}
               eventHandler={this.handleFieldChange}
@@ -311,51 +311,51 @@ class TaskForm extends React.Component {
             />
 
             <InputFieldWhiteDark
-              title="how many times can this task be done"
+              title='how many times can this task be done'
               required
-              name="task[number_of_assignments]"
+              name='task[number_of_assignments]'
               value={this.state['task[number_of_assignments]']}
               errorText={this.state.errors['task[numberOfAssignments]']}
               eventHandler={this.handleFieldChange}
-              type="number"
-              min="1"
-              step="1"
-              placeholder="1"
+              type='number'
+              min='1'
+              step='1'
+              placeholder='1'
               symbolLimit={0}
             />
 
             <InputFieldWhiteDark
-              title="how many times can this task be done by a single user"
+              title='how many times can this task be done by a single user'
               required
-              name="task[number_of_assignments_per_user]"
+              name='task[number_of_assignments_per_user]'
               value={this.state['task[number_of_assignments_per_user]']}
               errorText={this.state.errors['task[numberOfAssignmentsPerUser]']}
               eventHandler={this.handleFieldChange}
-              type="number"
+              type='number'
               readOnly={this.state['task[number_of_assignments]'] === '1'}
-              min="1"
-              step="1"
-              placeholder="1"
+              min='1'
+              step='1'
+              placeholder='1'
               symbolLimit={0}
             />
 
             <InputFieldWhiteDark
-              title="days till task expires (after starting)"
+              title='days till task expires (after starting)'
               required
-              name="task[expires_in_days]"
+              name='task[expires_in_days]'
               value={this.state['task[expires_in_days]']}
               errorText={this.state.errors['task[expiresInDays]']}
               eventHandler={this.handleFieldChange}
-              type="number"
-              min="1"
-              step="1"
-              placeholder="10"
+              type='number'
+              min='1'
+              step='1'
+              placeholder='10'
               symbolLimit={0}
             />
 
             <input
-              type="hidden"
-              name="authenticity_token"
+              type='hidden'
+              name='authenticity_token'
               value={this.props.csrfToken}
               readOnly
             />
