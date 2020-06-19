@@ -1,3 +1,11 @@
+module RspecApiDocumentation
+  class RackTestClient < ClientBase
+    def response_body
+      last_response.body.encode("utf-8")
+    end
+  end
+end
+
 RspecApiDocumentation.configure do |config|
   # Set the application that Rack::Test uses
   config.app = Rails.application
@@ -6,7 +14,7 @@ RspecApiDocumentation.configure do |config|
   # config.configurations_dir = Rails.root.join("doc", "configurations", "api")
 
   # Output folder
-  config.docs_dir = Rails.root.join("public", "doc", "api")
+  config.docs_dir = Rails.root.join("public", "doc", "api", "v1")
 
   # An array of output format(s).
   # Possible values are :json, :html, :combined_text, :combined_json,

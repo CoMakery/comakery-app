@@ -5,7 +5,7 @@ import Cardano from 'networks/cardano/trezor/wallet/cardano-wallet'
 import utils from 'networks/helpers/utils'
 import {
   sendAddressValidator,
-  sendAmountValidator,
+  sendAmountValidator
 } from 'networks/cardano/trezor/helpers/validators'
 
 const transferAdaCoins = async function(award) { // award in JSON
@@ -25,7 +25,7 @@ const transferAdaCoins = async function(award) { // award in JSON
     }
   } catch (err) {
     console.error(err)
-    alert( err.message || 'The transaction failed')
+    alert(err.message || 'The transaction failed')
     utils.showMessageWhenTransactionFailed(award)
   }
   if (txHash) {
@@ -42,7 +42,7 @@ const submitTransaction = async function(network, address, amount) {
     cryptoProvider  : 'trezor',
     config          : ADALITE_CONFIG,
     network         : network,
-    derivationScheme: derivationSchemes.v2,
+    derivationScheme: derivationSchemes.v2
   })
   try {
     const signedTx = await wallet.prepareSignedTx(address, amount)

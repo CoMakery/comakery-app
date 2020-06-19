@@ -186,7 +186,7 @@ class MyTasks extends React.Component {
   render() {
     if (!this.state.ready) {
       return (
-        <div className="loading-placeholder" />
+        <div className='loading-placeholder' />
       )
     }
     let filter = this.props.filters.find(f => f.current).name
@@ -219,7 +219,7 @@ class MyTasks extends React.Component {
 
                   <a href={location ? location.pathname + '?all=true' : ''}>
                     {this.props.project.title}
-                    <Icon name="iconCloseCopy.svg" />
+                    <Icon name='iconCloseCopy.svg' />
                   </a>
                 </ProjectFilter>
               }
@@ -227,7 +227,7 @@ class MyTasks extends React.Component {
               <Pagination dangerouslySetInnerHTML={{__html: this.props.paginationHtml}} />
             </SubHeader>
 
-            <div className="animated fadeIn faster">
+            <div className='animated fadeIn faster'>
               {this.props.tasks.map(task =>
                 <MyTask
                   key={task.id}

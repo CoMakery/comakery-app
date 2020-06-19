@@ -6,7 +6,41 @@ export default class extends ComakerySecurityTokenController {
   async save() {
     this._disableEditing()
     this._setData()
-    await this.setAddressPermissions()
+    await this._initialize()
+    this._createAccountTokenRecord()
+  }
+
+  _createAccountTokenRecord() {
+    fetch(this.accountTokenRecordsPath, {
+      credentials: 'same-origin',
+      method     : 'POST',
+      body       : JSON.stringify({
+        body: {
+          data: {
+            account_token_record: {
+              'max_balance'   : this.data.get('addressMaxBalance'),
+              'lockup_until'  : this.data.get('addressLockupUntil'),
+              'reg_group_id'  : this.data.get('addressGroupId'),
+              'account_frozen': this.data.get('addressFrozen'),
+              'account_id'    : this.data.get('accountId')
+            }
+          }
+        }
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      if (response.status === 201) {
+        response.json().then(r => {
+          this.data.set('id', r.id)
+          this.data.set('type', 'AccountTokenRecord')
+          this._createTransaction('setAddressPermissions')
+        })
+      } else {
+        this._showError('Unable to create account token record. Please contact support.')
+      }
+    })
   }
 
   _setData() {
@@ -63,26 +97,7 @@ export default class extends ComakerySecurityTokenController {
     this.formTarget.reset()
   }
 
-  _submitTransaction(_) {
-    // do nothing
-  }
-
-  _submitConfirmation(_) {
-    // do nothing
-  }
-
-  _cancelTransaction(_) {
-    this._markButtonAsReady()
-    this._enableEditing()
-  }
-
-  _submitReceipt(receipt) {
-    if (receipt.status) {
-      this.formTarget.submit()
-    }
-  }
-
-  _submitError(_) {
-    // do nothing
+  get accountTokenRecordsPath() {
+    return this.data.get('accountTokenRecordsPath')
   }
 }

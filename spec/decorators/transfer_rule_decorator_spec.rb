@@ -7,8 +7,10 @@ RSpec.describe TransferRuleDecorator do
     it 'returns data for transfer-rule-form_controller.js' do
       data = transfer_rule.decorate.eth_data
 
-      expect(data['transfer-rule-form-rule-from-group-id']).to eq(transfer_rule.sending_group.blockchain_id)
-      expect(data['transfer-rule-form-rule-to-group-id']).to eq(transfer_rule.receiving_group.blockchain_id)
+      expect(data['transfer-rule-form-rule-from-group-id']).to eq(transfer_rule.sending_group.id)
+      expect(data['transfer-rule-form-rule-to-group-id']).to eq(transfer_rule.receiving_group.id)
+      expect(data['transfer-rule-form-rule-from-group-blockchain-id']).to eq(transfer_rule.sending_group.blockchain_id)
+      expect(data['transfer-rule-form-rule-to-group-blockchain-id']).to eq(transfer_rule.receiving_group.blockchain_id)
       expect(data['transfer-rule-form-rule-lockup-until']).to eq(transfer_rule.lockup_until.strftime('%b %e, %Y'))
     end
   end

@@ -34,7 +34,7 @@ const CardanoWallet = async (options) => {
     overallTxCountSinceLastUtxoFetch: 0,
     accountIndex: HARDENED_THRESHOLD,
     network,
-    derivationScheme: options.derivationScheme || derivationSchemes.v2,
+    derivationScheme: options.derivationScheme || derivationSchemes.v2
   }
 
   const blockchainExplorer = BlockchainExplorer(config, state)
@@ -53,7 +53,7 @@ const CardanoWallet = async (options) => {
       {
         walletSecret,
         derivationScheme,
-        network,
+        network
       },
       state
     )
@@ -66,7 +66,7 @@ const CardanoWallet = async (options) => {
     addressLimit: config.ADALITE_WALLET_ADDRESS_LIMIT,
     cryptoProvider,
     derivationScheme: state.derivationScheme,
-    isChange: false,
+    isChange: false
   })
 
   const changeAddressManager = AddressManager({
@@ -78,7 +78,7 @@ const CardanoWallet = async (options) => {
     * we disable discovering actual change addresses for now
     * when we decide to include them, we just need to set isChange to true
     */
-    isChange: false,
+    isChange: false
   })
 
   // fetch unspent outputs list asynchronously
@@ -91,7 +91,7 @@ const CardanoWallet = async (options) => {
       throw NamedError('TransactionRejectedByNetwork')
     })
 
-    //TODO: refactor signing process so we dont need to reparse signed transaction for this
+    // TODO: refactor signing process so we dont need to reparse signed transaction for this
     const {txAux} = parseTx(Buffer.from(txBody, 'hex'))
     await updateUtxosFromTxAux(txAux)
 
@@ -237,7 +237,7 @@ const CardanoWallet = async (options) => {
       return acc + elem.coins
     }, 0)
 
-    //first we try one output transaction
+    // first we try one output transaction
     const oneOutputFee = txFeeFunction(estimateTxSize(txInputs, address, coins, false))
 
     /*
@@ -248,11 +248,11 @@ const CardanoWallet = async (options) => {
     if (coins + oneOutputFee >= txInputsCoinsSum) {
       return oneOutputFee
     } else {
-      //we try to compute fee for 2 output tx
+      // we try to compute fee for 2 output tx
       const twoOutputFee = txFeeFunction(estimateTxSize(txInputs, address, coins, true))
       if (coins + twoOutputFee > txInputsCoinsSum) {
-        //means one output transaction was possible, while 2 output is not
-        //so we return fee equal to inputs - coins which is guaranteed to pass
+        // means one output transaction was possible, while 2 output is not
+        // so we return fee equal to inputs - coins which is guaranteed to pass
         return txInputsCoinsSum - coins
       } else {
         return twoOutputFee
@@ -264,14 +264,14 @@ const CardanoWallet = async (options) => {
     const txInputsSize = cbor.encode(new CborIndefiniteLengthArray(txInputs)).length
     const outAddressSize = base58.decode(outAddress).length
 
-    //size of addresses used by AdaLite
+    // size of addresses used by AdaLite
     const ownAddressSize = 76
 
     /*
     * we assume that at most two outputs (destination and change address) will be present
     * encoded in an indefinite length array
     */
-    const maxCborCoinsLen = 9 //length of CBOR encoded 64 bit integer, currently max supported
+    const maxCborCoinsLen = 9 // length of CBOR encoded 64 bit integer, currently max supported
     const txOutputsSize = hasChange
       ? outAddressSize + ownAddressSize + maxCborCoinsLen * 2 + 2
       : outAddressSize + maxCborCoinsLen + 2
@@ -356,7 +356,7 @@ const CardanoWallet = async (options) => {
           address: txAux.outputs[i].address,
           coins: txAux.outputs[i].coins,
           txHash: txAux.getId(),
-          outputIndex: i,
+          outputIndex: i
         })
       }
     }

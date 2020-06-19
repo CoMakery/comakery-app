@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>V. Transfer Rules API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>V. Transfer Rules API</h1>
+
+        <p class="explanation">Create and delete transfer rules, retrieve transfer rules data.</p>
+
+      <div class="article">
+        <h2>CREATE</h2>
+        <h3>POST /api/v1/projects/:project_id/transfer_rules</h3>
+          <p class="explanation">
+            Returns created transfer rule details (See GET for response details)
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="required">
+                    <span class="name">project_id</span>
+                </td>
+                <td>
+                  <span class="description">project id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transfer_rule[sending_group_id]</span>
+                </td>
+                <td>
+                  <span class="description">sending reg group id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transfer_rule[receiving_group_id]</span>
+                </td>
+                <td>
+                  <span class="description">receiving reg group id</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="required">
+                    <span class="name">transfer_rule[lockup_until]</span>
+                </td>
+                <td>
+                  <span class="description">lockup until</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Response Fields</h3>
+          <table class="response-fields table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                    <span class="name">errors</span>
+                </td>
+                <td>
+                  <span class="description">array of errors</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">POST /api/v1/projects/48/transfer_rules</pre>
+
+
+            <h4>Body</h4>
+            <pre class="request body">{"body":{"data":{"transfer_rule":{"lockup_until":"1","receiving_group_id":"26","sending_group_id":"25"}},"method":"POST","nonce":"541f441121d4b00a77b52de07f9a12ca","timestamp":"1591977975","url":"http://example.org/api/v1/projects/48/transfer_rules"},"proof":{"signature":"Yo8gPTkZCTilVtT2DX8t0yr/mlDyLw/mqKcxPRc8jSyhLYjcfuCfwMwMfrzrf42WLp1MzC5eNrIP8e5ECgiODQ==","type":"Ed25519Signature2018","verificationMethod":"O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA="}}</pre>
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">ETag: W/&quot;736f7539ec8023056d25a9d2b7c7833a&quot;</pre>
+            <h4>Status</h4>
+            <pre class="response status">201 Created</pre>
+              <h4>Body</h4>
+              <pre class="response body">{
+  &quot;id&quot;: 4,
+  &quot;tokenId&quot;: 69,
+  &quot;sendingGroupId&quot;: 25,
+  &quot;receivingGroupId&quot;: 26,
+  &quot;lockupUntil&quot;: &quot;1970-01-01T00:00:01.000Z&quot;,
+  &quot;status&quot;: &quot;created&quot;,
+  &quot;createdAt&quot;: &quot;2020-06-12T16:06:15.515Z&quot;,
+  &quot;updatedAt&quot;: &quot;2020-06-12T16:06:15.515Z&quot;
+}</pre>
+      </div>
+    </div>
+  </body>
+</html>

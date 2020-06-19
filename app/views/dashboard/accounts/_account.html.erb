@@ -1,7 +1,7 @@
 <% account = account.decorate %>
-<% record = account.account_token_records.find_by(token: @project.token) %>
+<% record = account.account_token_records.where(token: @project.token).last %>
 <% form_url = record ? project_dashboard_account_path(@project, record) : root_path %>
-<% form_data = record ? { controller: "account-form", target: "account-form.form", 'account-form-address' => account.ethereum_wallet }.merge(@project.token.decorate.eth_data('account-form')) : nil %>
+<% form_data = record ? { controller: "account-form", target: "account-form.form", 'account-form-address' => account.ethereum_wallet, 'account-form-account-id' => account.id, 'account-form-account-token-records-path' => api_v1_project_account_token_records_path(project_id: @project.id), 'account-form-transactions-path' => api_v1_project_blockchain_transactions_path(project_id: @project.id)}.merge(@project.token.decorate.eth_data('account-form')) : nil %>
 
 <%= form_with model: record, url: form_url, data: form_data, class: 'account-form' do |f| %>
 	
@@ -104,7 +104,13 @@
 	
   <% if policy(@project).edit_accounts? && record && account.ethereum_wallet %>
   	<div class="transfers-table--edit-save hidden" data-target="account-form.inputs">
-  		<div class='transfer-button'>
+			<% if record.latest_blockchain_transaction&.tx_hash %>
+				<div class="transfer-button <%= record.synced? ? nil : 'in-progress--metamask in-progress--metamask__paid' %>">
+					<%= link_to (record.synced? ? "Tx ➔" : "Tx processing"), ethereum_explorer_tx_url(record.token, record.latest_blockchain_transaction.tx_hash), target: '_blank', class: 'transfers-table__transfer__button__history' %>
+				</div>
+      <% end %>
+  		
+			<div class='transfer-button'>
         <% if @project.token&.token_frozen? %>
           frozen
 

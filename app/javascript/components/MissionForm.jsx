@@ -56,7 +56,7 @@ export default class MissionForm extends React.Component {
       whitelabelFavicon        : null,
       whitelabelLogoPreview    : props.mission.whitelabelLogoUrl,
       whitelabelLogoDarkPreview: props.mission.whitelabelLogoDarkUrl,
-      whitelabelFaviconPreview : props.mission.whitelabelFaviconUrl,
+      whitelabelFaviconPreview : props.mission.whitelabelFaviconUrl
     }
     this.mounted = false
   }
@@ -84,7 +84,7 @@ export default class MissionForm extends React.Component {
     }
     const name = target.name
     this.setState({
-      [name]: value,
+      [name]: value
     })
 
     if (!e.target.checkValidity()) {
@@ -232,7 +232,7 @@ export default class MissionForm extends React.Component {
 
   disable(a) {
     let d = this.state.disabled
-    a.forEach(n => d = Object.assign({}, d, {[n]: true}))
+    a.forEach(n => (d = Object.assign({}, d, {[n]: true})))
     this.setState({
       disabled: d
     })
@@ -255,29 +255,29 @@ export default class MissionForm extends React.Component {
 
     return <React.Fragment>
       <Layout
-        className="mission-form"
+        className='mission-form'
         title={this.state.formAction === 'POST' ? 'Create a New Mission' : 'Edit Mission'}
         hasBackButton
         subfooter={
           <React.Fragment>
             <Button
               value={this.state.formAction === 'POST' ? 'create & close' : 'save & close'}
-              type="submit"
-              form="mission-form--form"
-              className="button--right-space"
+              type='submit'
+              form='mission-form--form'
+              className='button--right-space'
               disabled={this.state.disabled.submit_and_close}
               onClick={() => this.setState({closeOnSuccess: true})}
             />
             <ButtonBorder
               value={this.state.formAction === 'POST' ? 'create' : 'save'}
-              type="submit"
-              form="mission-form--form"
-              className="button--right-space"
+              type='submit'
+              form='mission-form--form'
+              className='button--right-space'
               disabled={this.state.disabled.submit}
               onClick={() => this.setState({closeOnSuccess: false})}
             />
             <ButtonBorder
-              value="cancel"
+              value='cancel'
               onClick={this.goBack}
             />
           </React.Fragment>
@@ -286,32 +286,32 @@ export default class MissionForm extends React.Component {
 
         <Flash messages={this.state.flashMessages} />
 
-        <form id="mission-form--form" className="mission-form--form" onSubmit={this.handleSaveMission}>
+        <form id='mission-form--form' className='mission-form--form' onSubmit={this.handleSaveMission}>
           <InputFieldWhiteDark
-            name="name" title="Name" symbolLimit={100} required value={name}
-            placeholder="Unicoin"
+            name='name' title='Name' symbolLimit={100} required value={name}
+            placeholder='Unicoin'
             eventHandler={this.handleChangeFormData}
             errorText={errors.name} />
 
           <InputFieldWhiteDark
-            name="subtitle" title="Subtitle" symbolLimit={140} required value={subtitle}
-            placeholder="Unicoin is the future of tokenizing fantastical beast networks"
+            name='subtitle' title='Subtitle' symbolLimit={140} required value={subtitle}
+            placeholder='Unicoin is the future of tokenizing fantastical beast networks'
             eventHandler={this.handleChangeFormData}
             errorText={errors.subtitle} />
 
           <InputFieldDescription
-            name="description" title="Description" symbolLimit={500} required value={description}
-            placeholder="Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity."
+            name='description' title='Description' symbolLimit={500} required value={description}
+            placeholder='Here will be templated text but with lower opacity as lower opacity indicates that it is a placeholder. When user start to type within field, text should have 100% opacity.'
             eventHandler={this.handleChangeFormData}
             errorText={errors.description}
           />
 
           <InputFieldUploadFile
-            name="logo" title="Mission Logo"
+            name='logo' title='Mission Logo'
             required
-            imgPreviewDimensions="100x100"
+            imgPreviewDimensions='100x100'
             imgPreviewUrl={logoPreview}
-            imgRequirements="Image should be at least 800px x 800px"
+            imgRequirements='Image should be at least 800px x 800px'
             imgVerifier={this.verifyLogoRes}
             imgInputRef={this.logoInputRef}
             eventHandler={this.handleChangeFormData}
@@ -319,11 +319,11 @@ export default class MissionForm extends React.Component {
           />
 
           <InputFieldUploadFile
-            name="image" title="Mission Image"
+            name='image' title='Mission Image'
             required
-            imgPreviewDimensions="150x100"
+            imgPreviewDimensions='150x100'
             imgPreviewUrl={imagePreview}
-            imgRequirements="Image should be at least 1200px x 800px"
+            imgRequirements='Image should be at least 1200px x 800px'
             imgVerifier={this.verifyImageRes}
             imgInputRef={this.imageInputRef}
             eventHandler={this.handleChangeFormData}
@@ -331,9 +331,9 @@ export default class MissionForm extends React.Component {
           />
 
           <InputFieldDropdown
-            title="Whitelabel"
+            title='Whitelabel'
             required
-            name="whitelabel"
+            name='whitelabel'
             value={whitelabel}
             eventHandler={this.handleChangeFormData}
             selectEntries={Object.entries({'Enabled': 'true', 'Disabled': 'false'})}
@@ -341,24 +341,24 @@ export default class MissionForm extends React.Component {
           />
 
           <InputFieldWhiteDark
-            name="whitelabelDomain"
-            title="Whitelabel Domain"
+            name='whitelabelDomain'
+            title='Whitelabel Domain'
             symbolLimit={140}
             value={whitelabelDomain}
             eventHandler={this.handleChangeFormData}
           />
 
           <InputFieldWhiteDark
-            name="whitelabelContactEmail"
-            title="Whitelabel Contact Email"
+            name='whitelabelContactEmail'
+            title='Whitelabel Contact Email'
             symbolLimit={140}
             value={whitelabelContactEmail}
             eventHandler={this.handleChangeFormData}
           />
 
           <InputFieldWhiteDark
-            name="whitelabelApiPublicKey"
-            title="Whitelabel API Public Key"
+            name='whitelabelApiPublicKey'
+            title='Whitelabel API Public Key'
             symbolLimit={140}
             value={whitelabelApiPublicKey}
             readOnly={this.props.mission.whitelabelApiPublicKey}
@@ -366,11 +366,11 @@ export default class MissionForm extends React.Component {
           />
 
           <InputFieldUploadFile
-            name="whitelabelLogo"
-            title="Mission Whitelabel Logo"
-            imgPreviewDimensions="150x100"
+            name='whitelabelLogo'
+            title='Mission Whitelabel Logo'
+            imgPreviewDimensions='150x100'
             imgPreviewUrl={whitelabelLogoPreview}
-            imgRequirements="Image should be at least 1000px x 200px"
+            imgRequirements='Image should be at least 1000px x 200px'
             imgVerifier={this.verifyWhitelableLogoRes}
             imgInputRef={this.whitelabelLogoInputRef}
             eventHandler={this.handleChangeFormData}
@@ -378,11 +378,11 @@ export default class MissionForm extends React.Component {
           />
 
           <InputFieldUploadFile
-            name="whitelabelLogoDark"
-            title="Mission Whitelabel Logo Dark"
-            imgPreviewDimensions="150x100"
+            name='whitelabelLogoDark'
+            title='Mission Whitelabel Logo Dark'
+            imgPreviewDimensions='150x100'
             imgPreviewUrl={whitelabelLogoDarkPreview}
-            imgRequirements="Image should be at least 1000px x 200px"
+            imgRequirements='Image should be at least 1000px x 200px'
             imgVerifier={this.verifyWhitelableLogoDarkRes}
             imgInputRef={this.whitelabelLogoDarkInputRef}
             eventHandler={this.handleChangeFormData}
@@ -390,11 +390,11 @@ export default class MissionForm extends React.Component {
           />
 
           <InputFieldUploadFile
-            name="whitelabelFavicon"
-            title="Mission Whitelabel Favicon"
-            imgPreviewDimensions="100x100"
+            name='whitelabelFavicon'
+            title='Mission Whitelabel Favicon'
+            imgPreviewDimensions='100x100'
             imgPreviewUrl={whitelabelFaviconPreview}
-            imgRequirements="Image should be at least 64px x 64px"
+            imgRequirements='Image should be at least 64px x 64px'
             imgVerifier={this.verifyWhitelabelFaviconRes}
             imgInputRef={this.whitelabelFaviconInputRef}
             eventHandler={this.handleChangeFormData}

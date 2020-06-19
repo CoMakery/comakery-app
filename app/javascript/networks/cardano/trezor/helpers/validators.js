@@ -7,7 +7,7 @@ const parseCoins = (str) => Math.trunc(parseFloat(str) * 1000000)
 export const sendAddressValidator = (fieldValue) => {
   return {
     fieldValue,
-    validationError: !isValidAddress(fieldValue) ? {code: 'SendAddressInvalidAddress'} : null,
+    validationError: !isValidAddress(fieldValue) ? {code: 'SendAddressInvalidAddress'} : null
   }
 }
 
@@ -37,7 +37,7 @@ export const feeValidator = (sendAmount, transactionFee, balance) => {
   if (sendAmount + transactionFee > balance) {
     validationError = {
       code: 'SendAmountInsufficientFunds',
-      params: {balance},
+      params: {balance}
     }
   }
 
@@ -49,7 +49,7 @@ export const mnemonicValidator = async (mnemonic) => {
 
   if (!validateMnemonic(mnemonic) && !(await validatePaperWalletMnemonic(mnemonic))) {
     validationError = {
-      code: 'InvalidMnemonic',
+      code: 'InvalidMnemonic'
     }
   }
 

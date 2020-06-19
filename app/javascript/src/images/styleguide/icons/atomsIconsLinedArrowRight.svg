@@ -1,14 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
-    <defs>
-        <path id="a" d="M12 24C5.373 24 0 18.627 0 12S5.373 0 12 0s12 5.373 12 12-5.373 12-12 12zm0-.96c6.097 0 11.04-4.943 11.04-11.04C23.04 5.903 18.097.96 12 .96 5.903.96.96 5.903.96 12c0 6.097 4.943 11.04 11.04 11.04zM10.41 6l6 6-6 6L9 16.59 13.58 12 9 7.41 10.41 6z"/>
-    </defs>
-    <g fill="none" fill-rule="evenodd">
-        <mask id="b" fill="#fff">
-            <use xlink:href="#a"/>
-        </mask>
-        <use fill="#379FE3" fill-rule="nonzero" xlink:href="#a"/>
-        <g fill="#2AB5CA" mask="url(#b)">
-            <path d="M0 0h24v24H0z"/>
-        </g>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24' viewBox='0 0 24 24'>
+  <defs>
+    <path id='a' d='M12 24C5.373 24 0 18.627 0 12S5.373 0 12 0s12 5.373 12 12-5.373 12-12 12zm0-.96c6.097 0 11.04-4.943 11.04-11.04C23.04 5.903 18.097.96 12 .96 5.903.96.96 5.903.96 12c0 6.097 4.943 11.04 11.04 11.04zM10.41 6l6 6-6 6L9 16.59 13.58 12 9 7.41 10.41 6z' />
+  </defs>
+  <g fill='none' fill-rule='evenodd'>
+    <mask id='b' fill='#fff'>
+      <use xlink:href='#a' />
+    </mask>
+    <use fill='#379FE3' fill-rule='nonzero' xlink:href='#a' />
+    <g fill='#2AB5CA' mask='url(#b)'>
+      <path d='M0 0h24v24H0z' />
     </g>
+  </g>
 </svg>

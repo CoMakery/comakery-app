@@ -12,7 +12,7 @@ function TxAux(inputs, outputs, attributes) {
     return encoder.pushAny([
       new CborIndefiniteLengthArray(inputs),
       new CborIndefiniteLengthArray(outputs),
-      attributes,
+      attributes
     ])
   }
 
@@ -21,7 +21,7 @@ function TxAux(inputs, outputs, attributes) {
     inputs,
     outputs,
     attributes,
-    encodeCBOR,
+    encodeCBOR
   }
 }
 
@@ -36,7 +36,7 @@ function TxWitness(extendedPublicKey, signature) {
   return {
     extendedPublicKey,
     signature,
-    encodeCBOR,
+    encodeCBOR
   }
 }
 
@@ -50,7 +50,7 @@ function TxInputFromUtxo(utxo) {
   function encodeCBOR(encoder) {
     return encoder.pushAny([
       type,
-      new cbor.Tagged(24, cbor.encode([Buffer.from(txHash, 'hex'), outputIndex])),
+      new cbor.Tagged(24, cbor.encode([Buffer.from(txHash, 'hex'), outputIndex]))
     ])
   }
 
@@ -59,7 +59,7 @@ function TxInputFromUtxo(utxo) {
     txHash,
     outputIndex,
     utxo,
-    encodeCBOR,
+    encodeCBOR
   }
 }
 
@@ -67,7 +67,7 @@ function TxInput(type, txHash, outputIndex) {
   function encodeCBOR(encoder) {
     return encoder.pushAny([
       type,
-      new cbor.Tagged(24, cbor.encode([Buffer.from(txHash, 'hex'), outputIndex])),
+      new cbor.Tagged(24, cbor.encode([Buffer.from(txHash, 'hex'), outputIndex]))
     ])
   }
 
@@ -75,7 +75,7 @@ function TxInput(type, txHash, outputIndex) {
     type,
     txHash,
     outputIndex,
-    encodeCBOR,
+    encodeCBOR
   }
 }
 
@@ -88,7 +88,7 @@ function TxOutput(address, coins, isChange) {
     address,
     coins,
     isChange,
-    encodeCBOR,
+    encodeCBOR
   }
 }
 
@@ -99,7 +99,7 @@ function AddressCborWrapper(address) {
 
   return {
     address,
-    encodeCBOR,
+    encodeCBOR
   }
 }
 
@@ -116,7 +116,7 @@ function SignedTransactionStructured(txAux, witnesses) {
     getId,
     witnesses,
     txAux,
-    encodeCBOR,
+    encodeCBOR
   }
 }
 
@@ -126,5 +126,5 @@ module.exports = {
   TxOutput,
   SignedTransactionStructured,
   TxAux,
-  TxWitness,
+  TxWitness
 }

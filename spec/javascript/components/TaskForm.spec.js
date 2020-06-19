@@ -77,11 +77,11 @@ describe('TaskForm', () => {
       'name'        : 'Task name',
       'why'         : 'Task why',
       'requirements': 'Task requirements',
-      'amount'      : '100.0',
+      'amount'      : '100.0'
     }
     const token = {
       'symbol'       : 'DMT',
-      'decimalPlaces': 8,
+      'decimalPlaces': 8
     }
 
     const wrapper = mount(<TaskForm
@@ -115,7 +115,7 @@ describe('TaskForm', () => {
   })
 
   it('renders correctly with csrfToken', () => {
-    const wrapper = mount(<TaskForm csrfToken="test" />)
+    const wrapper = mount(<TaskForm csrfToken='test' />)
 
     expect(wrapper.find(
       'input[type="hidden"][name="authenticity_token"]'
@@ -123,19 +123,19 @@ describe('TaskForm', () => {
   })
 
   it('uses formUrl', () => {
-    const wrapper = mount(<TaskForm formUrl="/test" />)
+    const wrapper = mount(<TaskForm formUrl='/test' />)
 
     expect(wrapper.state('formUrl')).toBe('/test')
   })
 
   it('uses formAction', () => {
-    const wrapper = mount(<TaskForm formAction="PUT" />)
+    const wrapper = mount(<TaskForm formAction='PUT' />)
 
     expect(wrapper.state('formAction')).toBe('PUT')
   })
 
   it('uses urlOnSuccess', () => {
-    const wrapper = mount(<TaskForm urlOnSuccess="/test" />)
+    const wrapper = mount(<TaskForm urlOnSuccess='/test' />)
 
     expect(wrapper.props().urlOnSuccess).toBe('/test')
   })
@@ -156,7 +156,7 @@ describe('TaskForm', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 
@@ -171,7 +171,7 @@ describe('TaskForm', () => {
     wrapper.setState({
       errors: {
         'task[name]'       : 'name error',
-        'task[description]': 'description error',
+        'task[description]': 'description error'
       }
     })
 

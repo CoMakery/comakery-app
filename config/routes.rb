@@ -135,8 +135,11 @@ Rails.application.routes.draw do
       end
 
       resources :projects, only: [:show, :index] do
-        resources :transfers, only: [:index, :show, :create, :destroy]
         resources :blockchain_transactions, only: [:create, :update, :destroy]
+        resources :transfers, only: [:index, :show, :create, :destroy]
+        resources :account_token_records, only: [:index, :show, :create, :destroy]
+        resources :transfer_rules, only: [:index, :show, :create, :destroy]
+        resources :reg_groups, only: [:index, :show, :create, :destroy]
       end
     end
   end

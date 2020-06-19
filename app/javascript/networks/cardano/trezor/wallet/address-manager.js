@@ -8,10 +8,10 @@ const AddressManager = ({
   cryptoProvider,
   derivationScheme,
   disableCaching, // good for tests
-  isChange,
+  isChange
 }) => {
   const state = {
-    deriveAddressMemo: {},
+    deriveAddressMemo: {}
   }
 
   function discoverAddresses() {
@@ -28,7 +28,7 @@ const AddressManager = ({
     return (await discoverAddresses()).map((address) => {
       return {
         address,
-        bip32StringPath: toBip32StringPath(getAddressToAbsPathMapping()[address]),
+        bip32StringPath: toBip32StringPath(getAddressToAbsPathMapping()[address])
       }
     })
   }
@@ -71,7 +71,7 @@ const AddressManager = ({
     discoverAddressesWithMeta,
     getAddressToAbsPathMapping,
     _deriveAddress: deriveAddress,
-    _deriveAddresses: deriveAddresses,
+    _deriveAddresses: deriveAddresses
   }
 }
 

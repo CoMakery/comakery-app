@@ -66,19 +66,19 @@ describe('MissionForm', () => {
   })
 
   it('uses formUrl', () => {
-    const wrapper = mount(<MissionForm formUrl="/test" />)
+    const wrapper = mount(<MissionForm formUrl='/test' />)
 
     expect(wrapper.state('formUrl')).toBe('/test')
   })
 
   it('uses formAction', () => {
-    const wrapper = mount(<MissionForm formAction="PUT" />)
+    const wrapper = mount(<MissionForm formAction='PUT' />)
 
     expect(wrapper.state('formAction')).toBe('PUT')
   })
 
   it('uses urlOnSuccess', () => {
-    const wrapper = mount(<MissionForm urlOnSuccess="/test" />)
+    const wrapper = mount(<MissionForm urlOnSuccess='/test' />)
 
     expect(wrapper.props().urlOnSuccess).toBe('/test')
   })
@@ -99,7 +99,7 @@ describe('MissionForm', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 

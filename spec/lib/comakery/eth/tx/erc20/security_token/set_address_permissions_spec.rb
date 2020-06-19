@@ -62,153 +62,201 @@ describe Comakery::Eth::Tx::Erc20::SecurityToken::SetAddressPermissions, vcr: tr
   describe 'valid?' do
     context 'for invalid eth transaction' do
       let!(:security_token_set_address_permissions) { build(:security_token_set_address_permissions) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns false' do
-        expect(
-          security_token_set_address_permissions.valid?(
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
-            2**256 - 1,
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            0,
-            86400,
-            100000000000000000000000000,
-            false
-          )
-        ).to be_falsey
+        expect(security_token_set_address_permissions.valid?(
+                 create(
+                   :blockchain_transaction_account_token_record,
+                   source: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 2**256 - 1,
+                   blockchain_transactable: create(
+                     :account_token_record,
+                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     max_balance: 100000000000000000000000000,
+                     account_frozen: false,
+                     reg_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 86400
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for other erc20 transaction' do
       let!(:security_token_set_address_permissions) { build(:security_token_set_address_permissions, hash: '0x1007e9116efab368169683b81ae576bd48e168bef2be1fea5ef096ccc9e5dcc0') }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns false' do
-        expect(
-          security_token_set_address_permissions.valid?(
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
-            1,
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            0,
-            86400,
-            100000000000000000000000000,
-            false
-          )
-        ).to be_falsey
+        expect(security_token_set_address_permissions.valid?(
+                 create(
+                   :blockchain_transaction_account_token_record,
+                   source: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :account_token_record,
+                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     max_balance: 100000000000000000000000000,
+                     account_frozen: false,
+                     reg_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 86400
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for security_token_set_address_permissions transaction with incorrect address' do
       let!(:security_token_set_address_permissions) { build(:security_token_set_address_permissions) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns false' do
-        expect(
-          security_token_set_address_permissions.valid?(
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
-            1,
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8452',
-            0,
-            86400,
-            100000000000000000000000000,
-            false
-          )
-        ).to be_falsey
+        expect(security_token_set_address_permissions.valid?(
+                 create(
+                   :blockchain_transaction_account_token_record,
+                   source: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :account_token_record,
+                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8452'),
+                     max_balance: 100000000000000000000000000,
+                     account_frozen: false,
+                     reg_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 86400
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for security_token_set_address_permissions transaction with incorrect group_id' do
       let!(:security_token_set_address_permissions) { build(:security_token_set_address_permissions) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 1) }
 
       it 'returns false' do
-        expect(
-          security_token_set_address_permissions.valid?(
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
-            1,
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            1,
-            86400,
-            100000000000000000000000000,
-            false
-          )
-        ).to be_falsey
+        expect(security_token_set_address_permissions.valid?(
+                 create(
+                   :blockchain_transaction_account_token_record,
+                   source: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :account_token_record,
+                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     max_balance: 100000000000000000000000000,
+                     account_frozen: false,
+                     reg_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 86400
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for security_token_set_address_permissions transaction with incorrect time_lock_until' do
       let!(:security_token_set_address_permissions) { build(:security_token_set_address_permissions) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns false' do
-        expect(
-          security_token_set_address_permissions.valid?(
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
-            1,
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            0,
-            86401,
-            100000000000000000000000000,
-            false
-          )
-        ).to be_falsey
+        expect(security_token_set_address_permissions.valid?(
+                 create(
+                   :blockchain_transaction_account_token_record,
+                   source: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :account_token_record,
+                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     max_balance: 100000000000000000000000000,
+                     account_frozen: false,
+                     reg_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 86401
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for security_token_set_address_permissions transaction with incorrect max_balance' do
       let!(:security_token_set_address_permissions) { build(:security_token_set_address_permissions) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns false' do
-        expect(
-          security_token_set_address_permissions.valid?(
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
-            1,
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            0,
-            86400,
-            100000000000000000000000001,
-            false
-          )
-        ).to be_falsey
+        expect(security_token_set_address_permissions.valid?(
+                 create(
+                   :blockchain_transaction_account_token_record,
+                   source: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :account_token_record,
+                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     max_balance: 100000000000000000000000001,
+                     account_frozen: false,
+                     reg_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 86400
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for security_token_set_address_permissions transaction with incorrect status' do
       let!(:security_token_set_address_permissions) { build(:security_token_set_address_permissions) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns false' do
-        expect(
-          security_token_set_address_permissions.valid?(
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
-            1,
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            0,
-            86400,
-            100000000000000000000000000,
-            true
-          )
-        ).to be_falsey
+        expect(security_token_set_address_permissions.valid?(
+                 create(
+                   :blockchain_transaction_account_token_record,
+                   source: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :account_token_record,
+                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     max_balance: 100000000000000000000000000,
+                     account_frozen: true,
+                     reg_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 86400
+                   )
+                 )
+        )).to be_falsey
       end
     end
 
     context 'for correct security_token_set_address_permissions transaction' do
       let!(:security_token_set_address_permissions) { build(:security_token_set_address_permissions) }
+      let!(:reg_group) { build(:reg_group, blockchain_id: 0) }
 
       it 'returns true' do
-        expect(
-          security_token_set_address_permissions.valid?(
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
-            1,
-            '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
-            0,
-            86400,
-            100000000000000000000000000,
-            false
-          )
-        ).to be_truthy
+        expect(security_token_set_address_permissions.valid?(
+                 create(
+                   :blockchain_transaction_account_token_record,
+                   source: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   contract_address: '0x1d1592c28fff3d3e71b1d29e31147846026a0a37',
+                   current_block: 1,
+                   blockchain_transactable: create(
+                     :account_token_record,
+                     account: create(:account, ethereum_wallet: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451'),
+                     max_balance: 100000000000000000000000000,
+                     account_frozen: false,
+                     reg_group: reg_group,
+                     token: reg_group.token,
+                     lockup_until: 86400
+                   )
+                 )
+        )).to be_truthy
       end
     end
   end

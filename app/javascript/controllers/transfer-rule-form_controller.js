@@ -6,12 +6,46 @@ export default class extends ComakerySecurityTokenController {
   async create() {
     if (this._setData()) {
       this._disableEditing()
-      await this.setAllowGroupTransfer()
+      await this._initialize()
+      this._createTransferRule()
     }
   }
 
   async delete() {
-    await this.resetAllowGroupTransfer()
+    this.data.set('ruleLockupUntil', 0)
+    await this._initialize()
+    this._createTransferRule()
+  }
+
+  _createTransferRule() {
+    fetch(this.transferRulesPath, {
+      credentials: 'same-origin',
+      method     : 'POST',
+      body       : JSON.stringify({
+        body: {
+          data: {
+            transfer_rule: {
+              'sending_group_id'  : this.data.get('ruleFromGroupId'),
+              'receiving_group_id': this.data.get('ruleToGroupId'),
+              'lockup_until'      : this.data.get('ruleLockupUntil')
+            }
+          }
+        }
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      if (response.status === 201) {
+        response.json().then(r => {
+          this.data.set('type', 'TransferRule')
+          this.data.set('id', r.id)
+          this._createTransaction('setAllowGroupTransfer')
+        })
+      } else {
+        this._showError('Unable to create transfer rule. Please contact support.')
+      }
+    })
   }
 
   _setData() {
@@ -19,8 +53,10 @@ export default class extends ComakerySecurityTokenController {
       this._showError('Allowed After Date field is required')
       return false
     } else {
-      this.data.set('ruleFromGroupId', parseInt(this.ruleFromGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
-      this.data.set('ruleToGroupId', parseInt(this.ruleToGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
+      this.data.set('ruleFromGroupId', parseInt(this.ruleFromGroupIdTarget.value || 0))
+      this.data.set('ruleToGroupId', parseInt(this.ruleToGroupIdTarget.value || 0))
+      this.data.set('ruleFromGroupBlockchainId', parseInt(this.ruleFromGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
+      this.data.set('ruleToGroupBlockchainId', parseInt(this.ruleToGroupIdTarget.selectedOptions[0].text.match(/\((\d+)\)$/)[1] || 0))
       this.data.set('ruleLockupUntil', (new Date(this.ruleLockupUntilTarget.value).getTime() / 1000) || 0)
       return true
     }
@@ -51,26 +87,7 @@ export default class extends ComakerySecurityTokenController {
     this.formTarget.classList.remove('transfer-rule-form--active')
   }
 
-  _submitTransaction(_) {
-    // do nothing
-  }
-
-  _submitConfirmation(_) {
-    // do nothing
-  }
-
-  _cancelTransaction(_) {
-    this._markButtonAsReady()
-    this._enableEditing()
-  }
-
-  _submitReceipt(receipt) {
-    if (receipt.status) {
-      this.formTarget.submit()
-    }
-  }
-
-  _submitError(_) {
-    // do nothing
+  get transferRulesPath() {
+    return this.data.get('transferRulesPath')
   }
 }

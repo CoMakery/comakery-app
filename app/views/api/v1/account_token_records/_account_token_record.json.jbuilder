@@ -1,0 +1,13 @@
+json.call(
+  account_token_record,
+  :id,
+  :account_id,
+  :token_id,
+  :max_balance,
+  :lockup_until,
+  :reg_group_id,
+  :account_frozen,
+  :status,
+  :created_at,
+  :updated_at
+)

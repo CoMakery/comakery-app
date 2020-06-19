@@ -1,4 +1,4 @@
-<%= form_with model: TransferRule.new, url: project_dashboard_transfer_rules_path(@project), data: {controller: "transfer-rule-form", target: "transfer-rule-form.form transfer-rules.form"}.merge(@project.token.decorate.eth_data('transfer-rule-form')), class: 'transfer-rule-form hidden' do |f| %>
+<%= form_with model: TransferRule.new, url: project_dashboard_transfer_rules_path(@project), data: {controller: "transfer-rule-form", target: "transfer-rule-form.form transfer-rules.form", 'transfer-rule-form-transfer-rules-path' => api_v1_project_transfer_rules_path(project_id: @project.id), 'transfer-rule-form-transactions-path' => api_v1_project_blockchain_transactions_path(project_id: @project.id)}.merge(@project.token.decorate.eth_data('transfer-rule-form')), class: 'transfer-rule-form hidden' do |f| %>
 
   <%= image_tag 'iconCloseDark.svg', data: {action: 'click->transfer-rules#hideForm'}, class: 'transfers-table--edit-icon' %>
 

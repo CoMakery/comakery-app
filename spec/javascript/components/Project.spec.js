@@ -32,7 +32,8 @@ describe('Project', () => {
         teamLeader       : {
           id       : 1,
           firstName: 'User Leader',
-          nickname : 'Nickname Leader', imageUrl : 'leader_image.jpg',
+          nickname : 'Nickname Leader',
+          imageUrl : 'leader_image.jpg',
           specialty: 'Community Development'
         },
         contributorsNumber: 4,

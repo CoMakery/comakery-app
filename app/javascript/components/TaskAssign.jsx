@@ -128,33 +128,33 @@ class TaskAssign extends React.Component {
           projectForHeader={this.props.projectForHeader}
           missionForHeader={this.props.missionForHeader}
           owner
-          current="batches"
+          current='batches'
           hasBackButton
           subfooter={
             <React.Fragment>
               {this.state.interestedPresent &&
                 <Button
-                  value="send invitation"
-                  type="submit"
-                  form="task-assign-form"
-                  data-disable="true"
+                  value='send invitation'
+                  type='submit'
+                  form='task-assign-form'
+                  data-disable='true'
                 />
               }
               <ButtonBorder
-                value="cancel"
+                value='cancel'
                 onClick={this.goBack}
               />
             </React.Fragment>
           }
           sidebar={
             <React.Fragment>
-              <div className="batch-index--sidebar">
+              <div className='batch-index--sidebar'>
                 <SidebarItem
-                  className="batch-index--sidebar--item batch-index--sidebar--item__form"
+                  className='batch-index--sidebar--item batch-index--sidebar--item__form'
                   text={this.props.batch.name}
                   selected
                 />
-                <hr className="batch-index--sidebar--hr" />
+                <hr className='batch-index--sidebar--hr' />
               </div>
             </React.Fragment>
           }
@@ -174,7 +174,7 @@ class TaskAssign extends React.Component {
           {this.props.project['public?'] &&
             <Link>
               <InputFieldWhiteDark
-                title="project link to share"
+                title='project link to share'
                 readOnly
                 copyOnClick
                 value={this.props.project.url}
@@ -190,10 +190,10 @@ class TaskAssign extends React.Component {
           }
 
           {this.state.interestedPresent &&
-            <form id="task-assign-form" action={this.props.formUrl} encType="multipart/form-data" method="post">
+            <form id='task-assign-form' action={this.props.formUrl} encType='multipart/form-data' method='post'>
               <InputFieldDropdown
-                title="select user"
-                name="account_id"
+                title='select user'
+                name='account_id'
                 required
                 value={this.state.account_id}
                 eventHandler={this.handleFieldChange}
@@ -207,8 +207,8 @@ class TaskAssign extends React.Component {
               }
 
               <input
-                type="hidden"
-                name="authenticity_token"
+                type='hidden'
+                name='authenticity_token'
                 value={this.props.csrfToken}
                 readOnly
               />

@@ -96,7 +96,7 @@ describe('TaskShow', () => {
   })
 
   it('renders correctly with csrfToken', () => {
-    const wrapper = mount(<TaskShow csrfToken="test" />)
+    const wrapper = mount(<TaskShow csrfToken='test' />)
 
     expect(wrapper.find(
       'input[type="hidden"][name="authenticity_token"]'
@@ -104,19 +104,19 @@ describe('TaskShow', () => {
   })
 
   it('uses formUrl', () => {
-    const wrapper = mount(<TaskShow formUrl="/test" />)
+    const wrapper = mount(<TaskShow formUrl='/test' />)
 
     expect(wrapper.state('formUrl')).toBe('/test')
   })
 
   it('uses formAction', () => {
-    const wrapper = mount(<TaskShow formAction="PUT" />)
+    const wrapper = mount(<TaskShow formAction='PUT' />)
 
     expect(wrapper.state('formAction')).toBe('PUT')
   })
 
   it('uses urlOnSuccess', () => {
-    const wrapper = mount(<TaskShow urlOnSuccess="/test" />)
+    const wrapper = mount(<TaskShow urlOnSuccess='/test' />)
 
     expect(wrapper.props().urlOnSuccess).toBe('/test')
   })
@@ -137,7 +137,7 @@ describe('TaskShow', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 
@@ -152,7 +152,7 @@ describe('TaskShow', () => {
     wrapper.setState({
       errors: {
         'task[channel_id]': 'channel_id error',
-        'task[message]'   : 'message error',
+        'task[message]'   : 'message error'
       }
     })
 

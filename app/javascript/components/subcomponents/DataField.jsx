@@ -18,5 +18,5 @@ export default class DataField extends React.Component {
 
 DataField.propTypes = {
   fieldName : PropTypes.string,
-  fieldValue: PropTypes.string,
+  fieldValue: PropTypes.string
 }

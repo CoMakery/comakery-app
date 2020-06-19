@@ -66,9 +66,15 @@ class Comakery::Eth::Tx
     true
   end
 
-  def valid?(source, destination, amount, block_n)
-    return false unless valid_data?(source, destination, amount)
-    return false unless valid_block?(block_n)
+  def valid?(blockchain_transaction)
+    return false unless valid_block?(blockchain_transaction.current_block)
+
+    if blockchain_transaction.contract_address.present?
+      return false unless valid_data?(blockchain_transaction.source, blockchain_transaction.contract_address, 0)
+    else
+      return false unless valid_data?(blockchain_transaction.source, blockchain_transaction.destination, blockchain_transaction.amount)
+    end
+
     true
   end
 end

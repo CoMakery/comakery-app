@@ -35,6 +35,7 @@ Basics :
 source .env
 bundle install
 yarn install
+overcommit --install
 rails db:setup
 rails data:migrate
 ```
@@ -176,7 +177,7 @@ that environment variable exists.
 
 This is useful if you want to create a new environment.
 
-- [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
 - During setup update API keys and secrets according to environment
 - After deployment manually update formation and addons plans according to environment
 - Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
@@ -250,13 +251,17 @@ Mostly up to date partial overview of table relationships.
 
 ![new schema](doc/schema-with-batches/skill-interest-schema.png)
 
+## Blockchain Transactions Schema Overview
+
+![schema](doc/blockchain-transactions.svg)
+
 ## API documentaion
 
 API documentaion is generated with `rspec_api_documentation` gem from `spec/acceptance/*` specs
 
 See `config/initializers/rspec_api.rb` for configuration
 
-Generated HTML is located in `/public/doc/api` directory and accessible on `https://www.comakery.com/doc/api/index.html` 
+Generated HTML is located in `/public/doc/api/v1` directory and accessible on `https://www.comakery.com/doc/api/v1/index.html` 
 
 ```
 rails docs:generate

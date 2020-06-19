@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>IV. Transfers API</title>
+    <meta charset="utf-8">
+    <style>
+      
+body {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 18px;
+  color: #404040;
+}
+
+.container {
+  width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+  zoom: 1;
+}
+
+pre {
+  background-color: #f5f5f5;
+  display: block;
+  padding: 8.5px;
+  margin: 0 0 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+td.required .name:after {
+  float: right;
+  content: "required";
+  font-weight: normal;
+  color: #F08080;
+}
+
+a{
+  color: #0069d6;
+  text-decoration: none;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  color: #404040;
+}
+
+h1 {
+  margin-bottom: 18px;
+  font-size: 30px;
+  line-height: 36px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+h3{
+  font-size: 18px;
+  line-height: 36px;
+}
+h4 {
+  font-size: 16px;
+  line-height: 36px;
+}
+
+table{
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 0;
+  border-collapse: separate;
+  font-size: 13px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+}
+
+table th {
+  padding-top: 9px;
+  font-weight: bold;
+  vertical-align: middle;
+  border-bottom: 1px solid #ddd;
+}
+table th+th, table td+td {
+  border-left: 1px solid #ddd;
+}
+table th, table td {
+  padding: 10px 10px 9px;
+  line-height: 18px;
+  text-align: left;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>IV. Transfers API</h1>
+
+        <p class="explanation">Create and cancel transfers, retrieve transfer data.</p>
+
+      <div class="article">
+        <h2>INDEX</h2>
+        <h3>GET /api/v1/projects/:project_id/transfers</h3>
+          <p class="explanation">
+            Returns an array of transfers. See GET for response fields description.
+          </p>
+
+          <h3>Parameters</h3>
+          <table class="parameters table table-striped table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="required">
+                    <span class="name">project_id</span>
+                </td>
+                <td>
+                  <span class="description">project id</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                    <span class="name">page</span>
+                </td>
+                <td>
+                  <span class="description">page number</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <h3>Request</h3>
+
+            <h4>Headers</h4>
+            <pre class="request headers">Api-Key: 28ieQrVqi5ZQXd77y+pgiuJGLsFfwkWO</pre>
+
+          <h4>Route</h4>
+          <pre class="request route highlight">GET /api/v1/projects/40/transfers?page=1&amp;body[data]=&amp;body[url]=http%3A%2F%2Fexample.org%2Fapi%2Fv1%2Fprojects%2F40%2Ftransfers&amp;body[method]=GET&amp;body[nonce]=ea2932f947f93520310348f432d8ca2c&amp;body[timestamp]=1591977971&amp;proof[type]=Ed25519Signature2018&amp;proof[verificationMethod]=O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi%2FzgVCVpA%3D&amp;proof[signature]=qnoAwEVxqmNRC5zBozthDR%2BI8qBzgRpKEKSQq3MY90kKrAccZyRlATysgr8ofgIFidYxVDSHF2cXtsliDsn6Aw%3D%3D</pre>
+
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">page: 1
+body: {&quot;data&quot;=&gt;&quot;&quot;, &quot;url&quot;=&gt;&quot;http://example.org/api/v1/projects/40/transfers&quot;, &quot;method&quot;=&gt;&quot;GET&quot;, &quot;nonce&quot;=&gt;&quot;ea2932f947f93520310348f432d8ca2c&quot;, &quot;timestamp&quot;=&gt;&quot;1591977971&quot;}
+proof: {&quot;type&quot;=&gt;&quot;Ed25519Signature2018&quot;, &quot;verificationMethod&quot;=&gt;&quot;O7zTH4xHnD1jRKheBTrpNN24Fg1ddL8DHKi/zgVCVpA=&quot;, &quot;signature&quot;=&gt;&quot;qnoAwEVxqmNRC5zBozthDR+I8qBzgRpKEKSQq3MY90kKrAccZyRlATysgr8ofgIFidYxVDSHF2cXtsliDsn6Aw==&quot;}</pre>
+
+
+
+            <h3>Response</h3>
+              <h4>Headers</h4>
+              <pre class="response headers">Per-Page: 50
+Total: 3
+ETag: W/&quot;5fe094e6e98cb528e019fff628a9aea4&quot;
+Last-Modified: Fri, 12 Jun 2020 16:06:11 GMT</pre>
+            <h4>Status</h4>
+            <pre class="response status">200 OK</pre>
+              <h4>Body</h4>
+              <pre class="response body">[
+  {
+    &quot;id&quot;: 6,
+    &quot;source&quot;: &quot;bought&quot;,
+    &quot;amount&quot;: &quot;50.0&quot;,
+    &quot;quantity&quot;: &quot;1.0&quot;,
+    &quot;totalAmount&quot;: &quot;50.0&quot;,
+    &quot;description&quot;: &quot;Investment&quot;,
+    &quot;ethereumTransactionAddress&quot;: null,
+    &quot;ethereumTransactionError&quot;: &quot;MetaMask Tx Signature: User denied transaction signature.&quot;,
+    &quot;status&quot;: &quot;cancelled&quot;,
+    &quot;createdAt&quot;: &quot;2020-06-12T16:06:11.824Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-06-12T16:06:11.824Z&quot;,
+    &quot;accountId&quot;: &quot;c1be369c-7946-4d2c-9cf3-35a436d03da8&quot;
+  },
+  {
+    &quot;id&quot;: 5,
+    &quot;source&quot;: &quot;bought&quot;,
+    &quot;amount&quot;: &quot;50.0&quot;,
+    &quot;quantity&quot;: &quot;1.0&quot;,
+    &quot;totalAmount&quot;: &quot;50.0&quot;,
+    &quot;description&quot;: &quot;Investment&quot;,
+    &quot;ethereumTransactionAddress&quot;: &quot;0x7709dbc577122d8db3522872944cefcb97408d5f74105a1fbb1fd3fb51cc496c&quot;,
+    &quot;ethereumTransactionError&quot;: null,
+    &quot;status&quot;: &quot;paid&quot;,
+    &quot;createdAt&quot;: &quot;2020-06-12T16:06:11.720Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-06-12T16:06:11.707Z&quot;,
+    &quot;accountId&quot;: &quot;a91806eb-b51e-49fe-8dba-366d3019e66f&quot;
+  },
+  {
+    &quot;id&quot;: 4,
+    &quot;source&quot;: &quot;earned&quot;,
+    &quot;amount&quot;: &quot;1000.0&quot;,
+    &quot;quantity&quot;: &quot;2.0&quot;,
+    &quot;totalAmount&quot;: &quot;2000.0&quot;,
+    &quot;description&quot;: &quot;Award to a team member&quot;,
+    &quot;ethereumTransactionAddress&quot;: null,
+    &quot;ethereumTransactionError&quot;: null,
+    &quot;status&quot;: &quot;accepted&quot;,
+    &quot;createdAt&quot;: &quot;2020-06-12T16:06:11.611Z&quot;,
+    &quot;updatedAt&quot;: &quot;2020-06-12T16:06:11.611Z&quot;,
+    &quot;accountId&quot;: &quot;e0aefdc7-2420-4cf3-b437-81c2bdc1a0b1&quot;
+  }
+]</pre>
+      </div>
+    </div>
+  </body>
+</html>

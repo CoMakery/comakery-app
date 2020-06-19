@@ -26,7 +26,7 @@ describe('Flash', () => {
       {
         'severity': 'error',
         'text'    : 'error text'
-      },
+      }
     ]
     const wrapper = mount(<Flash messages={messages} />)
 
@@ -51,7 +51,7 @@ describe('Flash', () => {
       {
         'severity': 'error',
         'text'    : 'error text'
-      },
+      }
     ]
     const wrapper = mount(<Flash messages={messages} />)
 

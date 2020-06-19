@@ -166,7 +166,15 @@ describe Comakery::Eth::Tx, vcr: true do
       let!(:eth_tx) { build(:eth_tx) }
 
       it 'returns false' do
-        expect(eth_tx.valid?('0x66ebd5cdf54743a6164b0138330f74dce436d842', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 100, 1)).to be_falsey
+        expect(eth_tx.valid?(
+                 create(
+                   :blockchain_transaction,
+                   source: '0x66ebd5cdf54743a6164b0138330f74dce436d843',
+                   destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   amount: 0,
+                   current_block: 1
+                 )
+        )).to be_falsey
       end
     end
 
@@ -174,7 +182,15 @@ describe Comakery::Eth::Tx, vcr: true do
       let!(:eth_tx) { build(:eth_tx) }
 
       it 'returns false' do
-        expect(eth_tx.valid?('0x66ebd5cdf54743a6164b0138330f74dce436d842', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 0, 2**256 - 1)).to be_falsey
+        expect(eth_tx.valid?(
+                 create(
+                   :blockchain_transaction,
+                   source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
+                   destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   amount: 100,
+                   current_block: 2**256 - 1
+                 )
+        )).to be_falsey
       end
     end
 
@@ -182,7 +198,15 @@ describe Comakery::Eth::Tx, vcr: true do
       let!(:eth_tx) { build(:eth_tx) }
 
       it 'returns true' do
-        expect(eth_tx.valid?('0x66ebd5cdf54743a6164b0138330f74dce436d842', '0x1d1592c28fff3d3e71b1d29e31147846026a0a37', 0, 1)).to be_truthy
+        expect(eth_tx.valid?(
+                 create(
+                   :blockchain_transaction,
+                   source: '0x66ebd5cdf54743a6164b0138330f74dce436d842',
+                   destination: '0x8599d17ac1cec71ca30264ddfaaca83c334f8451',
+                   amount: 100,
+                   current_block: 1
+                 )
+        )).to be_truthy
       end
     end
   end

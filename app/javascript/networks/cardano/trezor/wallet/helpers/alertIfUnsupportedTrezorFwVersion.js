@@ -75,7 +75,7 @@ async function getTrezorInfo() {
 
   return {
     model: features.model,
-    fwVersion,
+    fwVersion
   }
 }
 

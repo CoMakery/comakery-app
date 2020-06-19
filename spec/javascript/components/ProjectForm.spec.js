@@ -135,7 +135,7 @@ describe('ProjectForm', () => {
   })
 
   it('renders discord auth link when supplied with one', () => {
-    const wrapper = mount(<ProjectForm discordBotUrl="http://null" />)
+    const wrapper = mount(<ProjectForm discordBotUrl='http://null' />)
 
     expect(wrapper.exists(
       '.project-form--form--channels--discord-link'
@@ -155,7 +155,7 @@ describe('ProjectForm', () => {
           {
             'channel'  : 'ch2Name',
             'channelId': 'ch2Id'
-          },
+          }
         ]
       },
       {
@@ -169,7 +169,7 @@ describe('ProjectForm', () => {
           {
             'channel'  : 'ch4Name',
             'channelId': 'ch4Id'
-          },
+          }
         ]
       }
     ]
@@ -266,7 +266,7 @@ describe('ProjectForm', () => {
           {
             'channel'  : 'ch2Name',
             'channelId': 'ch2Id'
-          },
+          }
         ]
       }
     ]
@@ -340,7 +340,7 @@ describe('ProjectForm', () => {
   })
 
   it('renders correctly with csrfToken', () => {
-    const wrapper = mount(<ProjectForm csrfToken="test" />)
+    const wrapper = mount(<ProjectForm csrfToken='test' />)
 
     expect(wrapper.find(
       'input[type="hidden"][name="authenticity_token"]'
@@ -348,19 +348,19 @@ describe('ProjectForm', () => {
   })
 
   it('uses formUrl', () => {
-    const wrapper = mount(<ProjectForm formUrl="/test" />)
+    const wrapper = mount(<ProjectForm formUrl='/test' />)
 
     expect(wrapper.state('formUrl')).toBe('/test')
   })
 
   it('uses formAction', () => {
-    const wrapper = mount(<ProjectForm formAction="PUT" />)
+    const wrapper = mount(<ProjectForm formAction='PUT' />)
 
     expect(wrapper.state('formAction')).toBe('PUT')
   })
 
   it('uses urlOnSuccess', () => {
-    const wrapper = mount(<ProjectForm urlOnSuccess="/test" />)
+    const wrapper = mount(<ProjectForm urlOnSuccess='/test' />)
 
     expect(wrapper.props().urlOnSuccess).toBe('/test')
   })
@@ -381,7 +381,7 @@ describe('ProjectForm', () => {
         {
           'severity': 'error',
           'text'    : 'error text'
-        },
+        }
       ]
     })
 

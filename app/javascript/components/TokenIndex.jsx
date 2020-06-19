@@ -23,17 +23,17 @@ class TokenIndex extends React.Component {
     return (
       <React.Fragment>
         <Layout
-          className="token-index"
-          title="Tokens"
+          className='token-index'
+          title='Tokens'
           sidebar={
             <React.Fragment>
-              <div className="token-index--sidebar">
-                <a href="/tokens/new">
+              <div className='token-index--sidebar'>
+                <a href='/tokens/new'>
                   <SidebarItemBold
-                    className="token-index--sidebar--item__bold"
-                    iconLeftName="MARK-WHITE.svg"
-                    iconRightName="PLUS.svg"
-                    text="Create a Token"
+                    className='token-index--sidebar--item__bold'
+                    iconLeftName='MARK-WHITE.svg'
+                    iconRightName='PLUS.svg'
+                    text='Create a Token'
                   />
                 </a>
 
@@ -41,13 +41,13 @@ class TokenIndex extends React.Component {
                   <React.Fragment>
                     <hr />
 
-                    <div className="token-index--sidebar--info">
+                    <div className='token-index--sidebar--info'>
                       Please select token:
                     </div>
 
                     {this.props.tokens.map((t) =>
                       <SidebarItem
-                        className="token-index--sidebar--item"
+                        className='token-index--sidebar--item'
                         key={t.id}
                         iconLeftUrl={t.logoUrl}
                         text={t.symbol ? `${t.name} (${t.symbol})` : `${t.name}`}
@@ -62,71 +62,71 @@ class TokenIndex extends React.Component {
           }
         >
           {this.state.selectedToken &&
-            <div className="token-index--view">
-              <div className="token-index--view--logo">
+            <div className='token-index--view'>
+              <div className='token-index--view--logo'>
                 <img
                   src={this.state.selectedToken.logoUrl}
                 />
               </div>
 
-              <div className="token-index--view--info">
-                <div className="token-index--view--info--item">
-                  <div className="token-index--view--info--item--name">
+              <div className='token-index--view--info'>
+                <div className='token-index--view--info--item'>
+                  <div className='token-index--view--info--item--name'>
                     token name
                   </div>
-                  <div className="token-index--view--info--item--value">
+                  <div className='token-index--view--info--item--value'>
                     {this.state.selectedToken.name}
                   </div>
                 </div>
 
-                <div className="token-index--view--info--item">
-                  <div className="token-index--view--info--item--name">
+                <div className='token-index--view--info--item'>
+                  <div className='token-index--view--info--item--name'>
                     payment type
                   </div>
-                  <div className="token-index--view--info--item--value">
+                  <div className='token-index--view--info--item--value'>
                     {this.state.selectedToken.coinType ? this.state.selectedToken.coinType.toUpperCase() : null}
                   </div>
                 </div>
 
                 { this.state.selectedToken.symbol &&
-                  <div className="token-index--view--info--item">
-                    <div className="token-index--view--info--item--name">
+                  <div className='token-index--view--info--item'>
+                    <div className='token-index--view--info--item--name'>
                       token symbol
                     </div>
-                    <div className="token-index--view--info--item--value">
+                    <div className='token-index--view--info--item--value'>
                       {this.state.selectedToken.symbol}
                     </div>
                   </div>
                 }
 
                 { this.state.selectedToken.contractAddress &&
-                  <div className="token-index--view--info--item">
-                    <div className="token-index--view--info--item--name">
+                  <div className='token-index--view--info--item'>
+                    <div className='token-index--view--info--item--name'>
                       contract address
                     </div>
-                    <div className="token-index--view--info--item--value">
+                    <div className='token-index--view--info--item--value'>
                       {this.state.selectedToken.contractAddress}
                     </div>
                   </div>
                 }
 
                 { this.state.selectedToken.ethereumContractAddress &&
-                  <div className="token-index--view--info--item">
-                    <div className="token-index--view--info--item--name">
+                  <div className='token-index--view--info--item'>
+                    <div className='token-index--view--info--item--name'>
                       contract address
                     </div>
-                    <div className="token-index--view--info--item--value">
+                    <div className='token-index--view--info--item--value'>
                       {this.state.selectedToken.ethereumContractAddress}
                     </div>
                   </div>
                 }
 
                 { this.state.selectedToken.blockchainNetwork &&
-                  <div className="token-index--view--info--item">
-                    <div className="token-index--view--info--item--name">
+                  <div className='token-index--view--info--item'>
+                    <div className='token-index--view--info--item--name'>
                       blockchain network
                     </div>
-                    <div className="token-index--view--info--item--value">
+                    <div className='token-index--view--info--item--value'>
                       { (() => {
                         switch (this.state.selectedToken.blockchainNetwork) {
                           case 'qtum_mainnet':
@@ -143,11 +143,11 @@ class TokenIndex extends React.Component {
                 }
 
                 { this.state.selectedToken.ethereumNetwork &&
-                  <div className="token-index--view--info--item">
-                    <div className="token-index--view--info--item--name">
+                  <div className='token-index--view--info--item'>
+                    <div className='token-index--view--info--item--name'>
                       blockchain network
                     </div>
-                    <div className="token-index--view--info--item--value">
+                    <div className='token-index--view--info--item--value'>
                       { (() => {
                         switch (this.state.selectedToken.ethereumNetwork) {
                           case 'main':
@@ -168,7 +168,7 @@ class TokenIndex extends React.Component {
                 }
               </div>
 
-              <div className="token-index--view--link">
+              <div className='token-index--view--link'>
                 <a
                   href={`/tokens/${this.state.selectedToken.id}`}
                 >

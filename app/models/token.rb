@@ -40,6 +40,8 @@ class Token < ApplicationRecord
   has_many :account_token_records
   has_many :reg_groups
   has_many :transfer_rules
+  has_many :transfer_rules_synced, -> { where synced: true }
+  has_many :blockchain_transactions
 
   # TODO: Uncomment when according migrations are finished (TASKS, BATCHES)
   # has_many :batches

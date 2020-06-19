@@ -49,7 +49,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       end
     end
 
-    context 'without transfers available for transaction' do
+    context 'without transactables available for transaction' do
       it 'returns an error' do
         params = build(:api_signed_request, valid_create_attributes, api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
@@ -73,11 +73,11 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       end
     end
 
-    context 'with supplied valid transfer id' do
-      let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
+    context 'with supplied custom blockchain_transactable_type' do
+      let!(:transfer_rule) { create(:transfer_rule, token: project.token) }
 
-      it 'creates a new BlockchainTransaction for the transfer id' do
-        params = build(:api_signed_request, valid_create_attributes.merge(award_id: award.id), api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+      it 'creates a new BlockchainTransaction for the blockchain_transactable_type' do
+        params = build(:api_signed_request, valid_create_attributes.merge(blockchain_transactable_type: 'TransferRule'), api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
 
         expect do
@@ -86,7 +86,7 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       end
 
       it 'returns a success response' do
-        params = build(:api_signed_request, valid_create_attributes.merge(award_id: award.id), api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+        params = build(:api_signed_request, valid_create_attributes.merge(blockchain_transactable_type: 'TransferRule'), api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
 
         post :create, params: params, session: valid_session
@@ -94,9 +94,30 @@ RSpec.describe Api::V1::BlockchainTransactionsController, type: :controller do
       end
     end
 
-    context 'with supplied invalid transfer id' do
+    context 'with supplied valid blockchain_transactable_id' do
+      let!(:award) { create(:award, status: :accepted, award_type: create(:award_type, project: project)) }
+
+      it 'creates a new BlockchainTransaction for the blockchain_transactable_id' do
+        params = build(:api_signed_request, valid_create_attributes.merge(blockchain_transactable_id: award.id), api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        expect do
+          post :create, params: params, session: valid_session
+        end.to change(project.blockchain_transactions, :count).by(1)
+      end
+
+      it 'returns a success response' do
+        params = build(:api_signed_request, valid_create_attributes.merge(blockchain_transactable_id: award.id), api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+        params[:project_id] = project.id
+
+        post :create, params: params, session: valid_session
+        expect(response).to have_http_status(:created)
+      end
+    end
+
+    context 'with supplied invalid blockchain_transactable_id' do
       it 'returns an error' do
-        params = build(:api_signed_request, valid_create_attributes.merge(award_id: 0), api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
+        params = build(:api_signed_request, valid_create_attributes.merge(blockchain_transactable_id: 0), api_v1_project_blockchain_transactions_path(project_id: project.id), 'POST')
         params[:project_id] = project.id
 
         post :create, params: params, session: valid_session
