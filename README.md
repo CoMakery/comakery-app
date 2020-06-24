@@ -1,14 +1,67 @@
-# CoMakery
+[![CoMakery](./public/Logo-Header.svg)](https://comakery.com)
 
-CoMakery helps coordinate blockchain missions, projects, tasks and payments.
+## CoMakery helps you gather a tribe to achieve big missions. 
 
+To achieve your big mission you need to bring people together around a common vision, let them know what they will get by contributing, and organize the work. The CoMakery platform helps you do this with missions, projects, task workflows, tokens & payments.
 
+[![About CoMakery](./public/video-preview.png)](https://vimeo.com/345071697)
+
+## Getting Started
+* [Join the CoMakery Community](https://www.comakery.com) - follow some projects, get to know us.
+* [Using the CoMakery platform](http://support.comakery.com/en/collections/2015024-getting-started-on-comakery)
+* [Launching a project on CoMakery](http://support.comakery.com/en/collections/2013276-launching-a-project)
+* [The CoMakery REST API](https://www.comakery.com/doc/api/index.html)
+* [CoMakery Security Token (Open Source ERC-1404)](https://github.com/CoMakery/comakery-security-token)
+* [Setting up the CoMakery platform development environment](#development-setup) 
+
+## Try out CoMakery
+
+You can join the CoMakery community for free at [CoMakery.com](https://www.comakery.com) or host your own version for your community.
+
+## Free For Non-Commercial Use
+[Our noncommercial license](LICENSE.md) allows you to use, modify and share this software for noncommercial purposes for free. If you are an academic, environmental organizer, hobbyist community builder or non-profit we are proud to support the work you do with free use of CoMakery. Thank you for your hard work towards benefitting society.
+
+## 30 Day Free Commercial Trial
+
+If you are a company [our license](LICENSE.md) allows you to use this software for free for thirty days.
+
+Get in touch with CoMakery at [license@comakery.com](mailto:license@comakery.com) about: 
+* A commercial license for self-hosting
+* White label hosting
+* Platform customization
+* Coop & L3C license discount
+
+Your payments help support the philanthropic organizations who use the platform for free.
+
+## Improving The Software
+
+You are free to modify the software. We'd love it if you share your code back with the community, but you are not obligated to. 
+
+There's no restriction on receiving money to improve the software. If you are a software developer or software development company we look forward to improving the platform and serving the community with you.
+
+## Web Hosting For CoMakery
+
+Contact support@comakery.com for information about web hosting provided by CoMakery.
+
+If you want to setup a paid hosting service - great! People need help with hosting and you should get paid for your labor. Although this falls under commercial use, we're excited about hosting partnerships. Contact license@comakery.com to discuss a hosting partnership.
+
+## Get Involved
+
+We will be using CoMakery to build CoMakery! 
+
+Here's where you can connect with the community:
+* Join CoMakery and hit the follow button on the [CoMakery MetaProject](https://www.comakery.com/projects/2)
+* Create a GitHub issue or comment on one 
+
+# Development Setup
+
+CoMakery is written for Ruby on Rails, React, Postgres, MetaMask, Ethereum and other blockchains.
+  
 ## Configuration
 
-We use environment variables for app "secrets", and values which vary between environments,
-eg staging and production.
+We use environment variables for app "secrets", and values which vary between environments - such as staging and production.
 
-## Local development
+## Install
 
 Prerequisites:
 
@@ -35,7 +88,6 @@ Basics :
 source .env
 bundle install
 yarn install
-overcommit --install
 rails db:setup
 rails data:migrate
 ```
@@ -142,12 +194,6 @@ The `bin/deploy` script does the following:
 6. Restart the apps with `heroku restart`
 7. Turn off the down for maintenance page 
 
-
-The old method of deploying that still can be used as a backup is:
-```
-citizen deploy production master comakery
-```
-
 ## Data migrations
 
 We are using the data-migrate gem to load static table data or transform data. data migrate works similarly to schema migrations - they run in sequence, are run only once, track the last database migration that was run in the database, and can be run with rake.
@@ -177,7 +223,7 @@ that environment variable exists.
 
 This is useful if you want to create a new environment.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
+- [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/CoMakery/comakery-app)
 - During setup update API keys and secrets according to environment
 - After deployment manually update formation and addons plans according to environment
 - Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
@@ -261,7 +307,7 @@ API documentaion is generated with `rspec_api_documentation` gem from `spec/acce
 
 See `config/initializers/rspec_api.rb` for configuration
 
-Generated HTML is located in `/public/doc/api/v1` directory and accessible on `https://www.comakery.com/doc/api/v1/index.html` 
+Generated HTML is located in `/public/doc/api` directory and accessible on `https://www.comakery.com/doc/api/index.html` 
 
 ```
 rails docs:generate
