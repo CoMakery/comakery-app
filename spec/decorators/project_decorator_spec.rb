@@ -291,4 +291,46 @@ describe ProjectDecorator do
       expect(project.reload.decorate.image_url).to include('defaul_project')
     end
   end
+
+  describe 'transfers_stacked_chart' do
+    let!(:project) { create :project }
+
+    before do
+      create(:award, amount: 1, source: :mint, award_type: create(:award_type, project: project))
+      create(:award, amount: 2, source: :mint, award_type: create(:award_type, project: project))
+      create(:award, amount: 5, source: :burn, award_type: create(:award_type, project: project))
+    end
+
+    it 'sums awards by timeframe' do
+      r = project.decorate.transfers_stacked_chart_day(project.awards.completed)
+      expect(r.first['mint']).to eq(3)
+      expect(r.first['burn']).to eq(5)
+    end
+
+    it 'sets defaults' do
+      r = project.decorate.transfers_stacked_chart_day(project.awards.completed)
+      expect(r.first['earned']).to eq(0)
+    end
+  end
+
+  describe 'transfers_donut_chart' do
+    let!(:project) { create :project }
+
+    before do
+      create(:award, amount: 1, source: :mint, award_type: create(:award_type, project: project))
+      create(:award, amount: 2, source: :mint, award_type: create(:award_type, project: project))
+      create(:award, amount: 5, source: :burn, award_type: create(:award_type, project: project))
+    end
+
+    it 'sums awards by source' do
+      r = project.decorate.transfers_donut_chart(project.awards.completed)
+      expect(r.find { |x| x[:name] == 'mint' }[:value]).to eq(3)
+      expect(r.find { |x| x[:name] == 'burn' }[:value]).to eq(5)
+    end
+
+    it 'sets defaults' do
+      r = project.decorate.transfers_donut_chart(project.awards.completed)
+      expect(r.find { |x| x[:name] == 'earned' }[:value]).to eq(0)
+    end
+  end
 end

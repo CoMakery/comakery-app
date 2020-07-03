@@ -8,6 +8,7 @@ class MissionsController < ApplicationController
   before_action :set_missions, only: %i[index rearrange]
 
   def index
+    authorize Mission.new
     render component: 'MissionIndex', props: { csrf_token: form_authenticity_token, missions: @missions }
   end
 

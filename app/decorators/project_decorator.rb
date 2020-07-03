@@ -158,6 +158,83 @@ class ProjectDecorator < Draper::Decorator
     helpers.attachment_url(self, :square_image, :fill, size, size, fallback: 'defaul_project.jpg')
   end
 
+  def transfers_chart_sources
+    Award.sources.keys.map { |k| [k, 0] }.to_h
+  end
+
+  def transfers_stacked_chart(transfers, limit, grouping, date_modifier, empty)
+    chart = transfers.where('awards.created_at > ?', limit).group_by { |r| r.created_at.send(grouping) }.map do |timeframe, set|
+      transfers_chart_sources.merge(
+        set.group_by(&:source).map { |k, v| [k, v.sum(&:total_amount)] }.to_h.merge(
+          timeframe: timeframe.strftime(date_modifier),
+          i: timeframe.to_i
+        )
+      )
+    end
+
+    chart.concat(empty).uniq { |x| x[:timeframe] }.sort_by { |x| -x[:i] }
+  end
+
+  def transfers_stacked_chart_year(transfers)
+    transfers_stacked_chart(
+      transfers,
+      10.years.ago,
+      :beginning_of_year,
+      '%Y',
+      (10.years.ago.year..Time.current.year).map { |k| transfers_chart_sources.merge(timeframe: k.to_s, i: DateTime.strptime(k.to_s, '%Y').to_i) }
+    )
+  end
+
+  def transfers_stacked_chart_month(transfers)
+    transfers_stacked_chart(
+      transfers,
+      1.year.ago,
+      :beginning_of_month,
+      "%b%t'%y",
+      (1.year.ago.beginning_of_month.to_date..Time.current.to_date).select { |d| d.day == 1 }.map { |k| transfers_chart_sources.merge(timeframe: k.strftime("%b%t'%y"), i: k.to_time.to_i) }
+    )
+  end
+
+  def transfers_stacked_chart_week(transfers)
+    transfers_stacked_chart(
+      transfers,
+      12.weeks.ago,
+      :beginning_of_week,
+      '%d%t%b',
+      (12.weeks.ago.beginning_of_week.to_date..Time.current.to_date).each_slice(7).map { |k| transfers_chart_sources.merge(timeframe: k.first.strftime('%d%t%b'), i: k.first.to_time.to_i) }
+    )
+  end
+
+  def transfers_stacked_chart_day(transfers)
+    transfers_stacked_chart(
+      transfers,
+      1.week.ago,
+      :beginning_of_day,
+      '%a',
+      (1.week.ago.to_date..Time.current.to_date).map { |k| transfers_chart_sources.merge(timeframe: k.strftime('%a'), i: k.to_time.to_i) }
+    )
+  end
+
+  def transfers_donut_chart(transfers)
+    chart = transfers.group_by(&:source).map do |source, set|
+      {
+        name: source,
+        value: set.sum(&:total_amount),
+        ratio: (set.sum(&:total_amount) / transfers.sum(&:total_amount)).round(2)
+      }
+    end
+
+    chart.concat(
+      transfers_chart_sources.map do |k, _|
+        {
+          name: k,
+          value: 0,
+          ratio: 0
+        }
+      end
+    ).uniq { |x| x[:name] }
+  end
+
   private
 
   def self.pretty_number(*currency_methods)

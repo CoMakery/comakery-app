@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ProfileModal from '../components/ProfileModal'
 import ProjectSetupHeader from './layouts/ProjectSetupHeader'
 import MyTask from './MyTask'
-import d3 from 'd3/d3'
+import * as d3 from 'd3'
 import styled from 'styled-components'
 import InterestsController from '../controllers/interests_controller'
 
@@ -136,11 +136,11 @@ export default class Project extends React.Component {
     let outerRadius = height / 2 - 10
     let innerRadius = outerRadius / 3
 
-    let pie = d3.layout.pie()
+    let pie = d3.pie()
       .value((d) => { return d.value })
       .padAngle(0.02)
 
-    let arc = d3.svg.arc()
+    let arc = d3.arc()
       .padRadius(outerRadius)
       .innerRadius(innerRadius)
 

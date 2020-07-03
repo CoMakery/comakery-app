@@ -1,11 +1,11 @@
 {
   "engines": {
     "npm": "6.x",
-    "node": "10.13.0",
+    "node": "12",
     "yarn": "1.12.3"
   },
   "scripts": {
-    "lint": "standart ./app/javascript/**/*.js ./app/javascript/**/*.jsx ./spec/javascript/**/*.js --env jest --env es6 --env browser  --env node --env jquery --parser babel-eslint --global targets --fix",
+    "lint": "standart ./app/javascript/**/*.js ./app/javascript/**/*.jsx ./spec/javascript/**/*.js --env jest --env es6 --env browser  --env node --env jquery --parser babel-eslint --global targets --global DOM --fix",
     "stylelint": "stylelint 'app/javascript/**/*.css' --fix",
     "test": "jest"
   },
@@ -39,7 +39,7 @@
     "classnames": "^2.2.6",
     "coffeescript": "1.12.7",
     "core-js": "2",
-    "d3": "3",
+    "d3": "5.16.0",
     "d3pie": "^0.1.9",
     "decimal.js": "^10.1.1",
     "eosjs": "^16.0.9",
