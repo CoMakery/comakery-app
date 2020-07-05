@@ -14,12 +14,13 @@ To achieve your big mission you need to bring people together around a common vi
 * [CoMakery Security Token (Open Source ERC-1404)](https://github.com/CoMakery/comakery-security-token)
 * [Setting up the CoMakery platform development environment](#development-setup) 
 
-## Try out CoMakery
+## Try Out CoMakery
 
-You can join the CoMakery community for free at [CoMakery.com](https://www.comakery.com) or host your own version for your community.
+You can join the CoMakery community and try using the platform for free at [CoMakery.com](https://www.comakery.com) or host your own version for your community.
 
 ## Free For Non-Commercial Use
-[Our noncommercial license](LICENSE.md) allows you to use, modify and share this software for noncommercial purposes for free. If you are an academic, environmental organizer, hobbyist community builder or non-profit we are proud to support the work you do with free use of CoMakery. Thank you for your hard work towards benefitting society.
+
+Our [license](LICENSE.md) allows you to use and share this software for noncommercial nonviolent purposes for free and to try this software for commercial nonviolent purposes for thirty days. If you are an academic, environmental organizer, hobbyist community builder or non-profit we are proud to support the work you do with free use of CoMakery. Thank you for your hard work towards benefitting society.
 
 ## 30 Day Free Commercial Trial
 
@@ -38,12 +39,6 @@ Your payments help support the philanthropic organizations who use the platform 
 You are free to modify the software. We'd love it if you share your code back with the community, but you are not obligated to. 
 
 There's no restriction on receiving money to improve the software. If you are a software developer or software development company we look forward to improving the platform and serving the community with you.
-
-## Web Hosting For CoMakery
-
-Contact support@comakery.com for information about web hosting provided by CoMakery.
-
-If you want to setup a paid hosting service - great! People need help with hosting and you should get paid for your labor. Although this falls under commercial use, we're excited about hosting partnerships. Contact license@comakery.com to discuss a hosting partnership.
 
 ## Get Involved
 
