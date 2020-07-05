@@ -56,8 +56,6 @@ CoMakery is written for Ruby on Rails, React, Postgres, MetaMask, Ethereum and o
 
 We use environment variables for app "secrets", and values which vary between environments - such as staging and production.
 
-## Install
-
 Prerequisites:
 
 - PostgreSQL
