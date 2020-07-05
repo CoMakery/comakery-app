@@ -81,10 +81,4 @@ Rails.application.configure do
     Bullet.rails_logger = true
     Bullet.unused_eager_loading_enable = false
   end
-
-  if ENV['NO_LOGS'].presence
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
-  end
 end

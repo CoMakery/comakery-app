@@ -56,6 +56,28 @@ CoMakery is written for Ruby on Rails, React, Postgres, MetaMask, Ethereum and o
 
 We use environment variables for app "secrets", and values which vary between environments - such as staging and production.
 
+## Local development with Docker
+#### Setup development environment
+```
+$ docker-compose run runner bundle exec ./bin/setup
+```
+
+#### Example: Running the app
+```
+$ docker-compose run --service-ports rails
+$ docker-compose run --service-ports webpacker
+$ docker-compose run --service-ports sidekiq
+```
+
+#### Example: Attaching console and running specs
+```
+$ docker-compose run runner
+$ RAILS_ENV=test bundle exec rspec
+$ NODE_ENV=test yarn test
+```
+
+## Local development
+
 Prerequisites:
 
 - PostgreSQL

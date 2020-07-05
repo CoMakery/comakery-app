@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         ruby: [2.6.5]
-        node: [10.13.0]
+        node: [12.x]
     
     name: Lints, Specs and Security Checks
     runs-on: ubuntu-latest
