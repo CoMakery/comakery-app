@@ -60,9 +60,7 @@ This is useful if you want to create a new environment.
 - During setup update API keys and secrets according to environment
 - After deployment manually update formation and addons plans according to environment
 - Re-run migrations using Heroku CLI, if `heroku-postgresql` plan is upgraded from `hobby-dev`
-- Setup DNS and install the following addons for production or staging environments:
-  - https://elements.heroku.com/addons/ssl
-  - https://elements.heroku.com/addons/expeditedssl
+- Setup DNS and add SSL 
 - Update Cloudfront and Airbrake settings
 
 ## Basic Auth
